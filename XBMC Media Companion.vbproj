@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -18,7 +18,7 @@
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
-    <ApplicationIcon>Media Companion icon5.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Media Companion icon5.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -34,6 +34,10 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,12 +47,12 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>42353,42354,42355</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>
     </WarningsAsErrors>
     <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,12 +62,12 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>42353,42354,42355</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>
     </WarningsAsErrors>
     <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="class_mpdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -119,77 +123,98 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="actors.vb" />
-    <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="batch_scraper.Designer.vb">
-      <DependentUpon>batch_scraper.vb</DependentUpon>
+    <Compile Include="Classes\BasicEpisodeNFO.vb" />
+    <Compile Include="Classes\BasicTvShowNFO.vb" />
+    <Compile Include="Classes\Profiles.vb" />
+    <Compile Include="Structures\ListOfProfiles.vb" />
+    <Compile Include="Structures\BatchWizard.vb" />
+    <Compile Include="Classes\MediaInfoDLLComplete.vb" />
+    <Compile Include="Structures\MediaNFOVideo.vb" />
+    <Compile Include="Structures\MediaNFOSubtitles.vb" />
+    <Compile Include="Structures\MediaNFOAudio.vb" />
+    <Compile Include="Structures\RunningThreads.vb" />
+    <Compile Include="Structures\ComboList.vb" />
+    <Compile Include="Classes\EpisodeInfo.vb" />
+    <Compile Include="Structures\NewMovie.vb" />
+    <Compile Include="Structures\FileDetails.vb" />
+    <Compile Include="Classes\FullFileDetails.vb" />
+    <Compile Include="Classes\FullMovieDetails.vb" />
+    <Compile Include="Structures\MovieActors.vb" />
+    <Compile Include="Structures\BasicMovieNFO.vb" />
+    <Compile Include="Structures\ActorDatabase.vb" />
+    <Compile Include="Classes\Actors.vb" />
+    <Compile Include="Classes\ApplicationEvents.vb" />
+    <Compile Include="Forms\frnBatchScraper.Designer.vb">
+      <DependentUpon>frnBatchScraper.vb</DependentUpon>
     </Compile>
-    <Compile Include="batch_scraper.vb">
+    <Compile Include="Forms\frnBatchScraper.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="copyprogress.Designer.vb">
-      <DependentUpon>copyprogress.vb</DependentUpon>
+    <Compile Include="Forms\frmCopyProgress.Designer.vb">
+      <DependentUpon>frmCopyProgress.vb</DependentUpon>
     </Compile>
-    <Compile Include="copyprogress.vb">
+    <Compile Include="Forms\frmCopyProgress.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="coverart.Designer.vb">
-      <DependentUpon>coverart.vb</DependentUpon>
+    <Compile Include="Forms\frmCoverArt.Designer.vb">
+      <DependentUpon>frmCoverArt.vb</DependentUpon>
     </Compile>
-    <Compile Include="coverart.vb">
+    <Compile Include="Forms\frmCoverArt.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="createscreenshot.vb" />
-    <Compile Include="Delete Dialogue.Designer.vb">
-      <DependentUpon>Delete Dialogue.vb</DependentUpon>
+    <Compile Include="Classes\CreateScreenshot.vb" />
+    <Compile Include="Forms\frmDeleteDialogue.Designer.vb">
+      <DependentUpon>frmDeleteDialogue.vb</DependentUpon>
     </Compile>
-    <Compile Include="Delete Dialogue.vb">
+    <Compile Include="Forms\frmDeleteDialogue.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialog1.Designer.vb">
-      <DependentUpon>Dialog1.vb</DependentUpon>
+    <Compile Include="Forms\frmDialog1.Designer.vb">
+      <DependentUpon>frmDialog1.vb</DependentUpon>
     </Compile>
-    <Compile Include="Dialog1.vb">
+    <Compile Include="Forms\frmDialog1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="fileandfolderfunctions.vb" />
-    <Compile Include="manipulateimages.vb" />
-    <Compile Include="InputOutput.vb" />
-    <Compile Include="messagebox.Designer.vb">
-      <DependentUpon>messagebox.vb</DependentUpon>
+    <Compile Include="Classes\FileAndFolderFunctions.vb" />
+    <Compile Include="Structures\ListOfPosters.vb" />
+    <Compile Include="Structures\ListOfCommands.vb" />
+    <Compile Include="Classes\ManipulateImages.vb" />
+    <Compile Include="Classes\InputOutput.vb" />
+    <Compile Include="Forms\frmMessageBox.Designer.vb">
+      <DependentUpon>frmMessageBox.vb</DependentUpon>
     </Compile>
-    <Compile Include="messagebox.vb">
+    <Compile Include="Forms\frmMessageBox.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="moviefanart.Designer.vb">
-      <DependentUpon>moviefanart.vb</DependentUpon>
+    <Compile Include="Forms\frmMovieFanart.Designer.vb">
+      <DependentUpon>frmMovieFanart.vb</DependentUpon>
     </Compile>
-    <Compile Include="moviefanart.vb">
+    <Compile Include="Forms\frmMovieFanart.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="preferences.vb" />
-    <Compile Include="scraper.vb" />
-    <Compile Include="Scraper_Functions.vb" />
-    <Compile Include="Form1.vb">
+    <Compile Include="Classes\Preferences.vb" />
+    <Compile Include="Classes\Scraper.vb" />
+    <Compile Include="Classes\ScraperFunctions.vb" />
+    <Compile Include="Forms\Form1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.vb">
+    <Compile Include="Forms\Form1.Designer.vb">
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.vb">
+    <Compile Include="Forms\Form2.Designer.vb">
       <DependentUpon>Form2.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form2.vb">
+    <Compile Include="Forms\Form2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmoutputlog.Designer.vb">
-      <DependentUpon>frmoutputlog.vb</DependentUpon>
+    <Compile Include="Forms\frmOutputLog.Designer.vb">
+      <DependentUpon>frmOutputLog.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmoutputlog.vb">
+    <Compile Include="Forms\frmOutputLog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="medianfo.vb" />
+    <Compile Include="Classes\MediaNFO.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -205,91 +230,96 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="options.Designer.vb">
-      <DependentUpon>options.vb</DependentUpon>
+    <Compile Include="Forms\frmOptions.Designer.vb">
+      <DependentUpon>frmOptions.vb</DependentUpon>
     </Compile>
-    <Compile Include="options.vb">
+    <Compile Include="Forms\frmOptions.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="splashscreen.Designer.vb">
-      <DependentUpon>splashscreen.vb</DependentUpon>
+    <Compile Include="Forms\frmSplashscreen.Designer.vb">
+      <DependentUpon>frmSplashscreen.vb</DependentUpon>
     </Compile>
-    <Compile Include="splashscreen.vb">
+    <Compile Include="Forms\frmSplashscreen.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="structures.vb" />
-    <Compile Include="tv batch wizard.Designer.vb">
-      <DependentUpon>tv batch wizard.vb</DependentUpon>
+    <Compile Include="Classes\Structures.vb" />
+    <Compile Include="Forms\frmTvBatchWizard.Designer.vb">
+      <DependentUpon>frmTvBatchWizard.vb</DependentUpon>
     </Compile>
-    <Compile Include="tv batch wizard.vb">
+    <Compile Include="Forms\frmTvBatchWizard.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tvedit.Designer.vb">
-      <DependentUpon>tvedit.vb</DependentUpon>
+    <Compile Include="Forms\frmTvEdit.Designer.vb">
+      <DependentUpon>frmTvEdit.vb</DependentUpon>
     </Compile>
-    <Compile Include="tvedit.vb">
+    <Compile Include="Forms\frmTvEdit.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tvfanart.Designer.vb">
-      <DependentUpon>tvfanart.vb</DependentUpon>
+    <Compile Include="Forms\frmTvFanart.Designer.vb">
+      <DependentUpon>frmTvFanart.vb</DependentUpon>
     </Compile>
-    <Compile Include="tvfanart.vb">
+    <Compile Include="Forms\frmTvFanart.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tvposters.Designer.vb">
-      <DependentUpon>tvposters.vb</DependentUpon>
+    <Compile Include="Forms\frmTvPosters.Designer.vb">
+      <DependentUpon>frmTvPosters.vb</DependentUpon>
     </Compile>
-    <Compile Include="tvposters.vb">
+    <Compile Include="Forms\frmTvPosters.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TVShowBrowser.Designer.vb">
-      <DependentUpon>TVShowBrowser.vb</DependentUpon>
+    <Compile Include="Forms\frmTVShowBrowser.Designer.vb">
+      <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
     </Compile>
-    <Compile Include="TVShowBrowser.vb">
+    <Compile Include="Forms\frmTVShowBrowser.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WebFileDownloader.vb" />
-    <Compile Include="workingwithnfofiles.vb" />
+    <Compile Include="Structures\TvPosterType.vb" />
+    <Compile Include="Structures\TvPosterSeason.vb" />
+    <Compile Include="Classes\TvArt.vb" />
+    <Compile Include="Structures\TvShowBatchWizard.vb" />
+    <Compile Include="Classes\TvShowNFO.vb" />
+    <Compile Include="Classes\WebFileDownloader.vb" />
+    <Compile Include="Classes\WorkingWithNfoFiles.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="batch_scraper.resx">
-      <DependentUpon>batch_scraper.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frnBatchScraper.resx">
+      <DependentUpon>frnBatchScraper.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="copyprogress.resx">
-      <DependentUpon>copyprogress.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmCopyProgress.resx">
+      <DependentUpon>frmCopyProgress.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="coverart.resx">
-      <DependentUpon>coverart.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmCoverArt.resx">
+      <DependentUpon>frmCoverArt.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Delete Dialogue.resx">
-      <DependentUpon>Delete Dialogue.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmDeleteDialogue.resx">
+      <DependentUpon>frmDeleteDialogue.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialog1.resx">
-      <DependentUpon>Dialog1.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmDialog1.resx">
+      <DependentUpon>frmDialog1.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
+    <EmbeddedResource Include="Forms\Form2.resx">
       <DependentUpon>Form2.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmoutputlog.resx">
-      <DependentUpon>frmoutputlog.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmOutputLog.resx">
+      <DependentUpon>frmOutputLog.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="messagebox.resx">
-      <DependentUpon>messagebox.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmMessageBox.resx">
+      <DependentUpon>frmMessageBox.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="moviefanart.resx">
-      <DependentUpon>moviefanart.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmMovieFanart.resx">
+      <DependentUpon>frmMovieFanart.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -298,32 +328,32 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="options.resx">
-      <DependentUpon>options.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmOptions.resx">
+      <DependentUpon>frmOptions.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="splashscreen.resx">
-      <DependentUpon>splashscreen.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmSplashscreen.resx">
+      <DependentUpon>frmSplashscreen.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="tv batch wizard.resx">
-      <DependentUpon>tv batch wizard.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmTvBatchWizard.resx">
+      <DependentUpon>frmTvBatchWizard.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="tvedit.resx">
-      <DependentUpon>tvedit.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmTvEdit.resx">
+      <DependentUpon>frmTvEdit.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="tvfanart.resx">
-      <DependentUpon>tvfanart.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmTvFanart.resx">
+      <DependentUpon>frmTvFanart.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="tvposters.resx">
-      <DependentUpon>tvposters.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmTvPosters.resx">
+      <DependentUpon>frmTvPosters.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TVShowBrowser.resx">
-      <DependentUpon>TVShowBrowser.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmTVShowBrowser.resx">
+      <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -389,7 +419,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Media Companion icon5.ico" />
+    <Content Include="Assets\Media Companion icon5.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -418,6 +448,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

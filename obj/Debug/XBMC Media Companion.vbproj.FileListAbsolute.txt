@@ -276,3 +276,38 @@ C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Compa
 C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
 C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
 C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Media Companion.exe.config
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Interop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media Companion.exe
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media Companion.pdb
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Media Companion.exe
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Media Companion.pdb
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Interop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Form1.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Form2.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.message_box.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Resources.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.tv_batch_wizard.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\GenerateResource-ResGen.write.1.tlog
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frnBatchScraper.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmCopyProgress.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmCoverArt.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmMovieFanart.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmDialog1.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmOptions.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmSplashscreen.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvEdit.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvFanart.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvPosters.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTVShowBrowser.resources
