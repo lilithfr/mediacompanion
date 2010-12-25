@@ -51,7 +51,8 @@ Public Class actors
                             tvtempint = tvdbwebsource(g).IndexOf("<a href=""/title/")
                             If tvtempint <> -1 Then
                                 tvtempstring = tvdbwebsource(g).Substring(tvtempint + 16, 9)
-                                Dim scraperfunction As New imdb.Classimdbscraper
+                                '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
+                                Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
                                 actorlist = scraperfunction.getimdbactors(Form1.userprefs.imdbmirror, tvtempstring, , Form1.userprefs.maxactors)
                                 Dim thumbstring As New XmlDocument

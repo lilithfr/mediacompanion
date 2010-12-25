@@ -208,7 +208,8 @@ Public Class Form2
             votestxt.Text = Nothing
             idtxt.Text = tempstring
             Panel2.Visible = False
-            Dim scraperfunction As New imdb.Classimdbscraper
+            '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
+            Dim scraperfunction As New Classimdb
             Dim body As String = ""
             Dim certificates As New List(Of String)
             body = scraperfunction.getimdbbody("", "", tempstring, Form1.userprefs.imdbmirror)

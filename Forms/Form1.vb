@@ -8,7 +8,7 @@ Imports Media_Companion.ScraperFunctions
 Imports System.Management
 Imports Media_Companion._preferences
 Imports System.Xml
-Imports imdb.Classimdbscraper
+'Imports imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
 Imports System.Reflection
 Imports System.ComponentModel
 Imports System
@@ -121,6 +121,10 @@ Public Class Form1
     Dim NewMovieFoundFilename As String = ""
 
 
+    Private Function GetResourceStream(ByVal resfile As String) As Stream
+        Dim asm As Assembly = Assembly.GetExecutingAssembly
+        Return asm.GetManifestResourceStream(resfile)
+    End Function
 
   
     Private Sub batchupdate()
@@ -1199,6 +1203,12 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim asm As Assembly = Assembly.GetExecutingAssembly
+        Dim InternalResourceNames() As String = asm.GetManifestResourceNames
+
+        For Each Temp In InternalResourceNames
+            Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
+        Next
         ComboBox11.SelectedIndex = 0
         RadioButton45.Checked = True
         'Try
@@ -1415,7 +1425,7 @@ Public Class Form1
         End Select
         '----------------------------------------------------------
 
-        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "scrapers"))
+        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
         '----------------------------------------------------------
         If Not IO.File.Exists(workingprofile.moviecache) Or userprefs.startupcache = False Then
             loadinginfo = "Status :- Building Movie Database"
@@ -3393,7 +3403,7 @@ Public Class Form1
                 title = filefunction.cleanfilename(title, False)
                 scraperlog = scraperlog & "Cleaned Title for search :- " & title & vbCrLf
                 Dim newmovie As New fullmoviedetails
-                '                Dim scraperfunction As New imdb.Classimdbscraper
+                '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                 Dim scraperfunction As New Classimdb
                 Dim body As String
                 Dim actors As String
@@ -3798,7 +3808,7 @@ Public Class Form1
                     title = filefunction.cleanfilename(title, False)
                     scraperlog = scraperlog & "Cleaned Title for search :- " & title & vbCrLf
                     Dim newmovie As New fullmoviedetails
-                    '                Dim scraperfunction As New imdb.Classimdbscraper
+                    '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                     Dim scraperfunction As New Classimdb
                     Dim body As String
                     Dim actors As String
@@ -8006,7 +8016,7 @@ Public Class Form1
 
                 movietoalter = nfofunction.loadfullmovienfo(tempmovielist(f))
                 If Not movietoalter Is Nothing Then
-                    '                    Dim scraperfunction As New imdb.Classimdbscraper
+                    '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                     Dim scraperfunction As New Classimdb
                     If bodyscraper = True Then
                         Dim certificates As New List(Of String)
@@ -9004,7 +9014,7 @@ Public Class Form1
                         End If
                         newdetails.title = filefunction.cleanfilename(newdetails.title)
                         If bckgrounddroppedfiles.CancellationPending Then Exit Sub
-                        '                    Dim scraperfunction As New imdb.Classimdbscraper
+                        '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                         Dim scraperfunction As New Classimdb
                         Dim body As String
                         Dim actors As String
@@ -11026,7 +11036,7 @@ Public Class Form1
 
     Private Sub loadfanart()
 
-        '                    Dim scraperfunction As New imdb.Classimdbscraper
+        '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
         Dim scraperfunction As New Classimdb
         Dim tmdbposterscraper As New tmdb_posters.Class1
         fanartarray.Clear()
@@ -11783,7 +11793,7 @@ Public Class Form1
         Try
 
 
-            '                    Dim scraperfunction As New imdb.Classimdbscraper
+            '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
             Dim scraperfunction As New Classimdb
             Dim tmdbposterscraper As New tmdb_posters.Class1
 
@@ -17368,7 +17378,7 @@ Public Class Form1
                             tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
                             If tvtempint <> -1 Then
                                 tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
-                                '                    Dim scraperfunction As New imdb.Classimdbscraper
+                                '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                                 Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
                                 actorlist = scraperfunction.getimdbactors(userprefs.imdbmirror, tvtempstring, , userprefs.maxactors)
@@ -20820,7 +20830,7 @@ Public Class Form1
                                                 tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
                                                 If tvtempint <> -1 Then
                                                     tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
-                                                    '                    Dim scraperfunction As New imdb.Classimdbscraper
+                                                    '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                                                     Dim scraperfunction As New Classimdb
                                                     Dim actorlist As String = ""
                                                     actorlist = scraperfunction.getimdbactors(userprefs.imdbmirror, tvtempstring, , userprefs.maxactors)
