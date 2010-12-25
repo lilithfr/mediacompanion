@@ -14,7 +14,6 @@ Public Class WebFileDownloader
             Return mCurrentFile
         End Get
     End Property
-
     Public Function DownloadFile(ByVal URL As String, ByVal Location As String) As Boolean
         Try
             mCurrentFile = GetFileName(URL)
@@ -35,7 +34,6 @@ Public Class WebFileDownloader
             Return URL
         End Try
     End Function
-
     Public Function DownloadFileWithProgress(ByVal URL As String, ByVal Location As String) As Boolean
         Dim FS As FileStream
         Try

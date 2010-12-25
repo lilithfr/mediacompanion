@@ -48,39 +48,30 @@ Public Class mediainfo
     Sub New()
         Handle = MediaInfo_New()
     End Sub
-
     Protected Overrides Sub Finalize()
         MediaInfo_Delete(Handle)
     End Sub
-
     Function Open(ByVal FileName As String) As Integer
         Return MediaInfo_Open(Handle, FileName)
     End Function
-
     Sub Close()
         MediaInfo_Close(Handle)
     End Sub
-
     Function Inform() As String
         Return Marshal.PtrToStringUni(MediaInfo_Inform(Handle, 0))
     End Function
-
     Function Get_(ByVal StreamKind As StreamKind, ByVal StreamNumber As Integer, ByVal Parameter As Integer, Optional ByVal KindOfInfo As InfoKind = InfoKind.Text) As String
         Return Marshal.PtrToStringUni(MediaInfo_GetI(Handle, StreamKind, StreamNumber, Parameter, KindOfInfo))
     End Function
-
     Function Get_(ByVal StreamKind As StreamKind, ByVal StreamNumber As Integer, ByVal Parameter As String, Optional ByVal KindOfInfo As InfoKind = InfoKind.Text, Optional ByVal KindOfSearch As InfoKind = InfoKind.Name) As String
         Return Marshal.PtrToStringUni(MediaInfo_Get(Handle, StreamKind, StreamNumber, Parameter, KindOfInfo, KindOfSearch))
     End Function
-
     Function Option_(ByVal Option__ As String, Optional ByVal Value As String = "") As String
         Return Marshal.PtrToStringUni(MediaInfo_Option(Handle, Option__, Value))
     End Function
-
     Function State_Get() As Integer
         Return MediaInfo_State_Get(Handle)
     End Function
-
     Function Count_Get(ByVal StreamKind As StreamKind, Optional ByVal StreamNumber As UInteger = UInteger.MaxValue) As Integer
         If StreamNumber = UInteger.MaxValue Then
             Dim A As Long

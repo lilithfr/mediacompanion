@@ -22,746 +22,761 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-Me.components = New System.ComponentModel.Container
+Me.components = New System.ComponentModel.Container()
 Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
-Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
-Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle
-Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
+Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
 Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-Me.TextBox1 = New System.Windows.Forms.TextBox
-Me.txt_titlesearch = New System.Windows.Forms.TextBox
-Me.PictureBox7 = New System.Windows.Forms.PictureBox
+Me.TextBox1 = New System.Windows.Forms.TextBox()
+Me.txt_titlesearch = New System.Windows.Forms.TextBox()
+Me.PictureBox7 = New System.Windows.Forms.PictureBox()
 Me.ContextMenuStrip4 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-Me.RescrapeFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownloadFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RescrapePToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RescrapePosterFromTMDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RescraToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.PeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownloadPosterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownloadPosterFromTMDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownloadPosterFromMPDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownloadPosterFromIMDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.moviethumb = New System.Windows.Forms.PictureBox
-Me.Button6 = New System.Windows.Forms.Button
-Me.CheckBox1 = New System.Windows.Forms.CheckBox
-Me.Button16 = New System.Windows.Forms.Button
-Me.Button17 = New System.Windows.Forms.Button
-Me.Button18 = New System.Windows.Forms.Button
-Me.Button19 = New System.Windows.Forms.Button
-Me.Button22 = New System.Windows.Forms.Button
-Me.TreeView1 = New System.Windows.Forms.TreeView
+Me.RescrapeFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RescrapePToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RescrapePosterFromTMDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RescraToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.PeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadPosterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadPosterFromTMDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadPosterFromMPDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadPosterFromIMDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.moviethumb = New System.Windows.Forms.PictureBox()
+Me.Button6 = New System.Windows.Forms.Button()
+Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+Me.Button16 = New System.Windows.Forms.Button()
+Me.Button17 = New System.Windows.Forms.Button()
+Me.Button18 = New System.Windows.Forms.Button()
+Me.Button19 = New System.Windows.Forms.Button()
+Me.Button22 = New System.Windows.Forms.Button()
+Me.TreeView1 = New System.Windows.Forms.TreeView()
 Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator
-Me.ExpandSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.CollapseSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.CollapseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.LockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.UnlockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
-Me.SearchThisShowForNewEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ReloadItemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RenameTVShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RebuildThisShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.MissingepisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+Me.ExpandSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.CollapseSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.CollapseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.LockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.UnlockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+Me.SearchThisShowForNewEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ReloadItemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RenameTVShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RebuildThisShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.MissingepisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
-Me.Button34 = New System.Windows.Forms.Button
-Me.Button43 = New System.Windows.Forms.Button
-Me.Button44 = New System.Windows.Forms.Button
-Me.Label3 = New System.Windows.Forms.Label
-Me.Button52 = New System.Windows.Forms.Button
-Me.Button53 = New System.Windows.Forms.Button
-Me.Button62 = New System.Windows.Forms.Button
-Me.GroupBox11 = New System.Windows.Forms.GroupBox
-Me.Label95 = New System.Windows.Forms.Label
-Me.Button74 = New System.Windows.Forms.Button
-Me.Button75 = New System.Windows.Forms.Button
-Me.Label94 = New System.Windows.Forms.Label
-Me.ListBox11 = New System.Windows.Forms.ListBox
-Me.Button76 = New System.Windows.Forms.Button
-Me.GroupBox12 = New System.Windows.Forms.GroupBox
-Me.Label104 = New System.Windows.Forms.Label
-Me.Label103 = New System.Windows.Forms.Label
-Me.Label101 = New System.Windows.Forms.Label
-Me.Label96 = New System.Windows.Forms.Label
-Me.Button77 = New System.Windows.Forms.Button
-Me.xbmcactorpath = New System.Windows.Forms.TextBox
-Me.Label97 = New System.Windows.Forms.Label
-Me.localactorpath = New System.Windows.Forms.TextBox
-Me.saveactorchkbx = New System.Windows.Forms.CheckBox
-Me.Button84 = New System.Windows.Forms.Button
-Me.ComboBox6 = New System.Windows.Forms.ComboBox
-Me.ComboBox7 = New System.Windows.Forms.ComboBox
-Me.Button95 = New System.Windows.Forms.Button
-Me.Button94 = New System.Windows.Forms.Button
-Me.Button99 = New System.Windows.Forms.Button
-Me.Button98 = New System.Windows.Forms.Button
-Me.Cmbobx_tablewatched = New System.Windows.Forms.ComboBox
-Me.cmbobx_tablesets = New System.Windows.Forms.ComboBox
-Me.txt_tabletop250 = New System.Windows.Forms.TextBox
-Me.txt_tableruntime = New System.Windows.Forms.TextBox
-Me.txt_tablerating = New System.Windows.Forms.TextBox
-Me.txt_tableoutline = New System.Windows.Forms.TextBox
-Me.txt_tablegenre = New System.Windows.Forms.TextBox
-Me.txt_tablesorttitle = New System.Windows.Forms.TextBox
-Me.txt_tableyear = New System.Windows.Forms.TextBox
-Me.txt_tabletitle = New System.Windows.Forms.TextBox
-Me.Button66 = New System.Windows.Forms.Button
-Me.ComboBox1 = New System.Windows.Forms.ListBox
+Me.Button34 = New System.Windows.Forms.Button()
+Me.Button43 = New System.Windows.Forms.Button()
+Me.Button44 = New System.Windows.Forms.Button()
+Me.Label3 = New System.Windows.Forms.Label()
+Me.Button52 = New System.Windows.Forms.Button()
+Me.Button53 = New System.Windows.Forms.Button()
+Me.Button62 = New System.Windows.Forms.Button()
+Me.GroupBox11 = New System.Windows.Forms.GroupBox()
+Me.Label95 = New System.Windows.Forms.Label()
+Me.Button74 = New System.Windows.Forms.Button()
+Me.Button75 = New System.Windows.Forms.Button()
+Me.Label94 = New System.Windows.Forms.Label()
+Me.ListBox11 = New System.Windows.Forms.ListBox()
+Me.Button76 = New System.Windows.Forms.Button()
+Me.GroupBox12 = New System.Windows.Forms.GroupBox()
+Me.Label104 = New System.Windows.Forms.Label()
+Me.Label103 = New System.Windows.Forms.Label()
+Me.Label101 = New System.Windows.Forms.Label()
+Me.Label96 = New System.Windows.Forms.Label()
+Me.Button77 = New System.Windows.Forms.Button()
+Me.xbmcactorpath = New System.Windows.Forms.TextBox()
+Me.Label97 = New System.Windows.Forms.Label()
+Me.localactorpath = New System.Windows.Forms.TextBox()
+Me.saveactorchkbx = New System.Windows.Forms.CheckBox()
+Me.Button84 = New System.Windows.Forms.Button()
+Me.ComboBox6 = New System.Windows.Forms.ComboBox()
+Me.ComboBox7 = New System.Windows.Forms.ComboBox()
+Me.Button95 = New System.Windows.Forms.Button()
+Me.Button94 = New System.Windows.Forms.Button()
+Me.Button99 = New System.Windows.Forms.Button()
+Me.Button98 = New System.Windows.Forms.Button()
+Me.Cmbobx_tablewatched = New System.Windows.Forms.ComboBox()
+Me.cmbobx_tablesets = New System.Windows.Forms.ComboBox()
+Me.txt_tabletop250 = New System.Windows.Forms.TextBox()
+Me.txt_tableruntime = New System.Windows.Forms.TextBox()
+Me.txt_tablerating = New System.Windows.Forms.TextBox()
+Me.txt_tableoutline = New System.Windows.Forms.TextBox()
+Me.txt_tablegenre = New System.Windows.Forms.TextBox()
+Me.txt_tablesorttitle = New System.Windows.Forms.TextBox()
+Me.txt_tableyear = New System.Windows.Forms.TextBox()
+Me.txt_tabletitle = New System.Windows.Forms.TextBox()
+Me.TextBox_GenreFilter = New System.Windows.Forms.TextBox()
+Me.Button66 = New System.Windows.Forms.Button()
+Me.ComboBox1 = New System.Windows.Forms.ListBox()
 Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-Me.SetMovieAsWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RescrapeMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator
-Me.ReloadItemToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator
-Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem8 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem9 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem10 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem11 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem12 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem13 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem14 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem19 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem20 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator
-Me.ToolStripMenuItem16 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem17 = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripMenuItem18 = New System.Windows.Forms.ToolStripMenuItem
-Me.BrowseFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.PosterBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.EditMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ExportmoviesMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.TabPage3 = New System.Windows.Forms.TabPage
-Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
-Me.SplitContainer5 = New System.Windows.Forms.SplitContainer
-Me.ComboBox10 = New System.Windows.Forms.ComboBox
-Me.Label31 = New System.Windows.Forms.Label
-Me.Button2 = New System.Windows.Forms.Button
-Me.Label39 = New System.Windows.Forms.Label
-Me.Panel5 = New System.Windows.Forms.Panel
-Me.RadioButton21 = New System.Windows.Forms.RadioButton
-Me.RadioButton20 = New System.Windows.Forms.RadioButton
-Me.RadioButton19 = New System.Windows.Forms.RadioButton
-Me.btnreverse = New System.Windows.Forms.CheckBox
-Me.RadioButton7 = New System.Windows.Forms.RadioButton
-Me.RadioButton5 = New System.Windows.Forms.RadioButton
-Me.RadioButton4 = New System.Windows.Forms.RadioButton
-Me.RadioButton3 = New System.Windows.Forms.RadioButton
-Me.Panel1 = New System.Windows.Forms.Panel
-Me.RadioButton6 = New System.Windows.Forms.RadioButton
-Me.RadioButton2 = New System.Windows.Forms.RadioButton
-Me.RadioButton1 = New System.Windows.Forms.RadioButton
-Me.Label1 = New System.Windows.Forms.Label
-Me.Label30 = New System.Windows.Forms.Label
-Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox
-Me.ListBox2 = New System.Windows.Forms.ListBox
-Me.Label128 = New System.Windows.Forms.Label
-Me.Label127 = New System.Windows.Forms.Label
-Me.titletxt = New System.Windows.Forms.ComboBox
-Me.ComboBox3 = New System.Windows.Forms.ComboBox
-Me.studiotxt = New System.Windows.Forms.TextBox
-Me.studio = New System.Windows.Forms.Label
-Me.Label5 = New System.Windows.Forms.Label
-Me.Label75 = New System.Windows.Forms.Label
-Me.TextBox34 = New System.Windows.Forms.TextBox
-Me.trailerdownloadpanel = New System.Windows.Forms.Panel
-Me.Label32 = New System.Windows.Forms.Label
-Me.lblProgress = New System.Windows.Forms.Label
-Me.ProgBar = New System.Windows.Forms.ProgressBar
-Me.SplitContainer2 = New System.Windows.Forms.SplitContainer
-Me.genretxt = New System.Windows.Forms.TextBox
-Me.roletxt = New System.Windows.Forms.TextBox
-Me.creditstxt = New System.Windows.Forms.TextBox
-Me.directortxt = New System.Windows.Forms.TextBox
-Me.taglinetxt = New System.Windows.Forms.TextBox
-Me.plottxt = New System.Windows.Forms.TextBox
-Me.outlinetxt = New System.Windows.Forms.TextBox
-Me.Button13 = New System.Windows.Forms.Button
-Me.Button3 = New System.Windows.Forms.Button
-Me.Label37 = New System.Windows.Forms.Label
-Me.Button11 = New System.Windows.Forms.Button
-Me.ratingtxt = New System.Windows.Forms.TextBox
-Me.PictureBox1 = New System.Windows.Forms.PictureBox
-Me.certtxt = New System.Windows.Forms.TextBox
-Me.runtimetxt = New System.Windows.Forms.TextBox
-Me.votestxt = New System.Windows.Forms.TextBox
-Me.path = New System.Windows.Forms.Label
-Me.director = New System.Windows.Forms.Label
-Me.genre = New System.Windows.Forms.Label
-Me.credits = New System.Windows.Forms.Label
-Me.outline = New System.Windows.Forms.Label
-Me.plot = New System.Windows.Forms.Label
-Me.tagline = New System.Windows.Forms.Label
-Me.actorcb = New System.Windows.Forms.ComboBox
-Me.Label4 = New System.Windows.Forms.Label
-Me.pathtxt = New System.Windows.Forms.TextBox
-Me.Label38 = New System.Windows.Forms.Label
-Me.Label27 = New System.Windows.Forms.Label
-Me.Label2 = New System.Windows.Forms.Label
-Me.TabPage5 = New System.Windows.Forms.TabPage
-Me.Panel3 = New System.Windows.Forms.Panel
-Me.btnthumbbrowse = New System.Windows.Forms.Button
-Me.btncancelgetthumburl = New System.Windows.Forms.Button
-Me.btngetthumb = New System.Windows.Forms.Button
-Me.TextBox5 = New System.Windows.Forms.TextBox
-Me.Label9 = New System.Windows.Forms.Label
-Me.TextBox3 = New System.Windows.Forms.TextBox
-Me.Label17 = New System.Windows.Forms.Label
-Me.Label16 = New System.Windows.Forms.Label
-Me.Label14 = New System.Windows.Forms.Label
-Me.Label13 = New System.Windows.Forms.Label
-Me.Label12 = New System.Windows.Forms.Label
-Me.Label10 = New System.Windows.Forms.Label
-Me.btncroptop = New System.Windows.Forms.Button
-Me.btncropbottom = New System.Windows.Forms.Button
-Me.btncropright = New System.Windows.Forms.Button
-Me.btncropleft = New System.Windows.Forms.Button
-Me.btnsavecropped = New System.Windows.Forms.Button
-Me.btnresetimage = New System.Windows.Forms.Button
-Me.GroupBox1 = New System.Windows.Forms.GroupBox
-Me.PictureBox2 = New System.Windows.Forms.PictureBox
-Me.Button1 = New System.Windows.Forms.Button
-Me.Button4 = New System.Windows.Forms.Button
-Me.Label7 = New System.Windows.Forms.Label
-Me.Panel2 = New System.Windows.Forms.Panel
-Me.Button104 = New System.Windows.Forms.Button
-Me.TabPage6 = New System.Windows.Forms.TabPage
-Me.Panel6 = New System.Windows.Forms.Panel
-Me.Button5 = New System.Windows.Forms.Button
-Me.Button7 = New System.Windows.Forms.Button
-Me.Button8 = New System.Windows.Forms.Button
-Me.TextBox4 = New System.Windows.Forms.TextBox
-Me.Label11 = New System.Windows.Forms.Label
-Me.TextBox7 = New System.Windows.Forms.TextBox
-Me.Label20 = New System.Windows.Forms.Label
-Me.Button23 = New System.Windows.Forms.Button
-Me.Button24 = New System.Windows.Forms.Button
-Me.Button25 = New System.Windows.Forms.Button
-Me.Button26 = New System.Windows.Forms.Button
-Me.Button27 = New System.Windows.Forms.Button
-Me.Button28 = New System.Windows.Forms.Button
-Me.Label18 = New System.Windows.Forms.Label
-Me.Label24 = New System.Windows.Forms.Label
-Me.Button9 = New System.Windows.Forms.Button
-Me.Button10 = New System.Windows.Forms.Button
-Me.Panel8 = New System.Windows.Forms.Panel
-Me.TextBox6 = New System.Windows.Forms.TextBox
-Me.Label19 = New System.Windows.Forms.Label
-Me.Panel7 = New System.Windows.Forms.Panel
-Me.PictureBox3 = New System.Windows.Forms.PictureBox
-Me.Label23 = New System.Windows.Forms.Label
-Me.Button15 = New System.Windows.Forms.Button
-Me.Button20 = New System.Windows.Forms.Button
-Me.Label22 = New System.Windows.Forms.Label
-Me.TabPage4 = New System.Windows.Forms.TabPage
-Me.Button12 = New System.Windows.Forms.Button
-Me.Button21 = New System.Windows.Forms.Button
-Me.Label15 = New System.Windows.Forms.Label
-Me.CheckBox2 = New System.Windows.Forms.CheckBox
-Me.WebBrowser1 = New System.Windows.Forms.WebBrowser
-Me.TabPage7 = New System.Windows.Forms.TabPage
-Me.WebBrowser2 = New System.Windows.Forms.WebBrowser
-Me.TabPage8 = New System.Windows.Forms.TabPage
-Me.TextBox37 = New System.Windows.Forms.TextBox
-Me.TextBox36 = New System.Windows.Forms.TextBox
-Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox
-Me.Panel18 = New System.Windows.Forms.Panel
-Me.RadioButton22 = New System.Windows.Forms.RadioButton
-Me.RadioButton23 = New System.Windows.Forms.RadioButton
-Me.RadioButton24 = New System.Windows.Forms.RadioButton
-Me.CheckBox9 = New System.Windows.Forms.CheckBox
-Me.RadioButton25 = New System.Windows.Forms.RadioButton
-Me.RadioButton26 = New System.Windows.Forms.RadioButton
-Me.RadioButton27 = New System.Windows.Forms.RadioButton
-Me.RadioButton28 = New System.Windows.Forms.RadioButton
-Me.TextBox8 = New System.Windows.Forms.TextBox
+Me.SetMovieAsWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RescrapeMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+Me.ReloadItemToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem8 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem9 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem10 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem11 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem12 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem13 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem14 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem19 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem20 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+Me.ToolStripMenuItem16 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem17 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem18 = New System.Windows.Forms.ToolStripMenuItem()
+Me.BrowseFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.PosterBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.EditMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ExportmoviesMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.TabPage3 = New System.Windows.Forms.TabPage()
+Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
+Me.ComboBox10 = New System.Windows.Forms.ComboBox()
+Me.Label31 = New System.Windows.Forms.Label()
+Me.Button2 = New System.Windows.Forms.Button()
+Me.Label39 = New System.Windows.Forms.Label()
+Me.Panel5 = New System.Windows.Forms.Panel()
+Me.RadioButton21 = New System.Windows.Forms.RadioButton()
+Me.RadioButton20 = New System.Windows.Forms.RadioButton()
+Me.RadioButton19 = New System.Windows.Forms.RadioButton()
+Me.btnreverse = New System.Windows.Forms.CheckBox()
+Me.RadioButton7 = New System.Windows.Forms.RadioButton()
+Me.RadioButton5 = New System.Windows.Forms.RadioButton()
+Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+Me.RadioButton3 = New System.Windows.Forms.RadioButton()
+Me.Panel1 = New System.Windows.Forms.Panel()
+Me.RadioButton6 = New System.Windows.Forms.RadioButton()
+Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+Me.Label1 = New System.Windows.Forms.Label()
+Me.Panel4 = New System.Windows.Forms.Panel()
+Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
+Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+Me.GroupBox21 = New System.Windows.Forms.GroupBox()
+Me.RadioButton50 = New System.Windows.Forms.RadioButton()
+Me.RadioButton45 = New System.Windows.Forms.RadioButton()
+Me.RadioButton49 = New System.Windows.Forms.RadioButton()
+Me.RadioButton46 = New System.Windows.Forms.RadioButton()
+Me.RadioButton48 = New System.Windows.Forms.RadioButton()
+Me.RadioButton47 = New System.Windows.Forms.RadioButton()
+Me.ComboBox11 = New System.Windows.Forms.ComboBox()
+Me.ListBox2 = New System.Windows.Forms.ListBox()
+Me.Label128 = New System.Windows.Forms.Label()
+Me.Label127 = New System.Windows.Forms.Label()
+Me.titletxt = New System.Windows.Forms.ComboBox()
+Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+Me.studiotxt = New System.Windows.Forms.TextBox()
+Me.studio = New System.Windows.Forms.Label()
+Me.Label5 = New System.Windows.Forms.Label()
+Me.Label75 = New System.Windows.Forms.Label()
+Me.TextBox34 = New System.Windows.Forms.TextBox()
+Me.trailerdownloadpanel = New System.Windows.Forms.Panel()
+Me.Label32 = New System.Windows.Forms.Label()
+Me.lblProgress = New System.Windows.Forms.Label()
+Me.ProgBar = New System.Windows.Forms.ProgressBar()
+Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+Me.genretxt = New System.Windows.Forms.TextBox()
+Me.roletxt = New System.Windows.Forms.TextBox()
+Me.creditstxt = New System.Windows.Forms.TextBox()
+Me.directortxt = New System.Windows.Forms.TextBox()
+Me.taglinetxt = New System.Windows.Forms.TextBox()
+Me.plottxt = New System.Windows.Forms.TextBox()
+Me.outlinetxt = New System.Windows.Forms.TextBox()
+Me.Button13 = New System.Windows.Forms.Button()
+Me.Button3 = New System.Windows.Forms.Button()
+Me.Label37 = New System.Windows.Forms.Label()
+Me.Button11 = New System.Windows.Forms.Button()
+Me.ratingtxt = New System.Windows.Forms.TextBox()
+Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+Me.certtxt = New System.Windows.Forms.TextBox()
+Me.runtimetxt = New System.Windows.Forms.TextBox()
+Me.votestxt = New System.Windows.Forms.TextBox()
+Me.path = New System.Windows.Forms.Label()
+Me.director = New System.Windows.Forms.Label()
+Me.genre = New System.Windows.Forms.Label()
+Me.credits = New System.Windows.Forms.Label()
+Me.outline = New System.Windows.Forms.Label()
+Me.plot = New System.Windows.Forms.Label()
+Me.tagline = New System.Windows.Forms.Label()
+Me.actorcb = New System.Windows.Forms.ComboBox()
+Me.Label4 = New System.Windows.Forms.Label()
+Me.pathtxt = New System.Windows.Forms.TextBox()
+Me.Label38 = New System.Windows.Forms.Label()
+Me.Label27 = New System.Windows.Forms.Label()
+Me.Label2 = New System.Windows.Forms.Label()
+Me.TabPage5 = New System.Windows.Forms.TabPage()
+Me.Panel3 = New System.Windows.Forms.Panel()
+Me.btnthumbbrowse = New System.Windows.Forms.Button()
+Me.btncancelgetthumburl = New System.Windows.Forms.Button()
+Me.btngetthumb = New System.Windows.Forms.Button()
+Me.TextBox5 = New System.Windows.Forms.TextBox()
+Me.Label9 = New System.Windows.Forms.Label()
+Me.TextBox3 = New System.Windows.Forms.TextBox()
+Me.Label17 = New System.Windows.Forms.Label()
+Me.Label16 = New System.Windows.Forms.Label()
+Me.Label14 = New System.Windows.Forms.Label()
+Me.Label13 = New System.Windows.Forms.Label()
+Me.Label12 = New System.Windows.Forms.Label()
+Me.Label10 = New System.Windows.Forms.Label()
+Me.btncroptop = New System.Windows.Forms.Button()
+Me.btncropbottom = New System.Windows.Forms.Button()
+Me.btncropright = New System.Windows.Forms.Button()
+Me.btncropleft = New System.Windows.Forms.Button()
+Me.btnsavecropped = New System.Windows.Forms.Button()
+Me.btnresetimage = New System.Windows.Forms.Button()
+Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+Me.Button1 = New System.Windows.Forms.Button()
+Me.Button4 = New System.Windows.Forms.Button()
+Me.Label7 = New System.Windows.Forms.Label()
+Me.Panel2 = New System.Windows.Forms.Panel()
+Me.Button104 = New System.Windows.Forms.Button()
+Me.TabPage6 = New System.Windows.Forms.TabPage()
+Me.Panel6 = New System.Windows.Forms.Panel()
+Me.Button5 = New System.Windows.Forms.Button()
+Me.Button7 = New System.Windows.Forms.Button()
+Me.Button8 = New System.Windows.Forms.Button()
+Me.TextBox4 = New System.Windows.Forms.TextBox()
+Me.Label11 = New System.Windows.Forms.Label()
+Me.TextBox7 = New System.Windows.Forms.TextBox()
+Me.Label20 = New System.Windows.Forms.Label()
+Me.Button23 = New System.Windows.Forms.Button()
+Me.Button24 = New System.Windows.Forms.Button()
+Me.Button25 = New System.Windows.Forms.Button()
+Me.Button26 = New System.Windows.Forms.Button()
+Me.Button27 = New System.Windows.Forms.Button()
+Me.Button28 = New System.Windows.Forms.Button()
+Me.Label18 = New System.Windows.Forms.Label()
+Me.Label24 = New System.Windows.Forms.Label()
+Me.Button9 = New System.Windows.Forms.Button()
+Me.Button10 = New System.Windows.Forms.Button()
+Me.Panel8 = New System.Windows.Forms.Panel()
+Me.TextBox6 = New System.Windows.Forms.TextBox()
+Me.Label19 = New System.Windows.Forms.Label()
+Me.Panel7 = New System.Windows.Forms.Panel()
+Me.PictureBox3 = New System.Windows.Forms.PictureBox()
+Me.Label23 = New System.Windows.Forms.Label()
+Me.Button15 = New System.Windows.Forms.Button()
+Me.Button20 = New System.Windows.Forms.Button()
+Me.Label22 = New System.Windows.Forms.Label()
+Me.TabPage4 = New System.Windows.Forms.TabPage()
+Me.Button12 = New System.Windows.Forms.Button()
+Me.Button21 = New System.Windows.Forms.Button()
+Me.Label15 = New System.Windows.Forms.Label()
+Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
+Me.TabPage7 = New System.Windows.Forms.TabPage()
+Me.WebBrowser2 = New System.Windows.Forms.WebBrowser()
+Me.TabPage8 = New System.Windows.Forms.TabPage()
+Me.TextBox37 = New System.Windows.Forms.TextBox()
+Me.TextBox36 = New System.Windows.Forms.TextBox()
+Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox()
+Me.Panel18 = New System.Windows.Forms.Panel()
+Me.RadioButton22 = New System.Windows.Forms.RadioButton()
+Me.RadioButton23 = New System.Windows.Forms.RadioButton()
+Me.RadioButton24 = New System.Windows.Forms.RadioButton()
+Me.CheckBox9 = New System.Windows.Forms.CheckBox()
+Me.RadioButton25 = New System.Windows.Forms.RadioButton()
+Me.RadioButton26 = New System.Windows.Forms.RadioButton()
+Me.RadioButton27 = New System.Windows.Forms.RadioButton()
+Me.RadioButton28 = New System.Windows.Forms.RadioButton()
+Me.TextBox8 = New System.Windows.Forms.TextBox()
 Me.ToolTip2 = New System.Windows.Forms.ToolTip(Me.components)
-Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
-Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
-Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar
-Me.ToolStripStatusLabel6 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar5 = New System.Windows.Forms.ToolStripProgressBar
-Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar2 = New System.Windows.Forms.ToolStripProgressBar
-Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar3 = New System.Windows.Forms.ToolStripProgressBar
-Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar4 = New System.Windows.Forms.ToolStripProgressBar
-Me.ToolStripStatusLabel7 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar6 = New System.Windows.Forms.ToolStripProgressBar
-Me.ToolStripStatusLabel5 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripStatusLabel8 = New System.Windows.Forms.ToolStripStatusLabel
-Me.ToolStripProgressBar7 = New System.Windows.Forms.ToolStripProgressBar
-Me.BckWrkScnMovies = New System.ComponentModel.BackgroundWorker
-Me.bckgroundversion = New System.ComponentModel.BackgroundWorker
-Me.bckgroundscanepisodes = New System.ComponentModel.BackgroundWorker
-Me.bckgroundfanart = New System.ComponentModel.BackgroundWorker
-Me.bckgrounddroppedfiles = New System.ComponentModel.BackgroundWorker
-Me.bckgroundexit = New System.ComponentModel.BackgroundWorker
-Me.bckepisodethumb = New System.ComponentModel.BackgroundWorker
-Me.bckrescrapewizard = New System.ComponentModel.BackgroundWorker
-Me.TabControl1 = New System.Windows.Forms.TabControl
-Me.TabPage1 = New System.Windows.Forms.TabPage
-Me.TabControl2 = New System.Windows.Forms.TabControl
-Me.TabPage22 = New System.Windows.Forms.TabPage
-Me.TabPage32 = New System.Windows.Forms.TabPage
-Me.Button100 = New System.Windows.Forms.Button
-Me.CheckBox32 = New System.Windows.Forms.CheckBox
-Me.CheckBox31 = New System.Windows.Forms.CheckBox
-Me.Label131 = New System.Windows.Forms.Label
-Me.CheckBox30 = New System.Windows.Forms.CheckBox
-Me.CheckBox29 = New System.Windows.Forms.CheckBox
-Me.CheckBox28 = New System.Windows.Forms.CheckBox
-Me.CheckBox27 = New System.Windows.Forms.CheckBox
-Me.CheckBox26 = New System.Windows.Forms.CheckBox
-Me.CheckBox25 = New System.Windows.Forms.CheckBox
-Me.CheckBox24 = New System.Windows.Forms.CheckBox
-Me.CheckBox23 = New System.Windows.Forms.CheckBox
-Me.CheckBox21 = New System.Windows.Forms.CheckBox
-Me.Button97 = New System.Windows.Forms.Button
-Me.DataGridView1 = New System.Windows.Forms.DataGridView
+Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel6 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar5 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar2 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar3 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar4 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel7 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar6 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel5 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripStatusLabel8 = New System.Windows.Forms.ToolStripStatusLabel()
+Me.ToolStripProgressBar7 = New System.Windows.Forms.ToolStripProgressBar()
+Me.BckWrkScnMovies = New System.ComponentModel.BackgroundWorker()
+Me.bckgroundversion = New System.ComponentModel.BackgroundWorker()
+Me.bckgroundscanepisodes = New System.ComponentModel.BackgroundWorker()
+Me.bckgroundfanart = New System.ComponentModel.BackgroundWorker()
+Me.bckgrounddroppedfiles = New System.ComponentModel.BackgroundWorker()
+Me.bckgroundexit = New System.ComponentModel.BackgroundWorker()
+Me.bckepisodethumb = New System.ComponentModel.BackgroundWorker()
+Me.bckrescrapewizard = New System.ComponentModel.BackgroundWorker()
+Me.TabControl1 = New System.Windows.Forms.TabControl()
+Me.TabPage1 = New System.Windows.Forms.TabPage()
+Me.TabControl2 = New System.Windows.Forms.TabControl()
+Me.TabPage22 = New System.Windows.Forms.TabPage()
+Me.TabPage32 = New System.Windows.Forms.TabPage()
+Me.Button100 = New System.Windows.Forms.Button()
+Me.CheckBox32 = New System.Windows.Forms.CheckBox()
+Me.CheckBox31 = New System.Windows.Forms.CheckBox()
+Me.Label131 = New System.Windows.Forms.Label()
+Me.CheckBox30 = New System.Windows.Forms.CheckBox()
+Me.CheckBox29 = New System.Windows.Forms.CheckBox()
+Me.CheckBox28 = New System.Windows.Forms.CheckBox()
+Me.CheckBox27 = New System.Windows.Forms.CheckBox()
+Me.CheckBox26 = New System.Windows.Forms.CheckBox()
+Me.CheckBox25 = New System.Windows.Forms.CheckBox()
+Me.CheckBox24 = New System.Windows.Forms.CheckBox()
+Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+Me.CheckBox21 = New System.Windows.Forms.CheckBox()
+Me.Button97 = New System.Windows.Forms.Button()
+Me.DataGridView1 = New System.Windows.Forms.DataGridView()
 Me.ContextMenuStrip_table = New System.Windows.Forms.ContextMenuStrip(Me.components)
-Me.MarkAllSelectedAsWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.MarkAllSelectedAsUnWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.GoToToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.GoToSelectedMoviePosterSelectorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.GoToSelectedMovieFanartSelectorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.Label132 = New System.Windows.Forms.Label
-Me.TabPage9 = New System.Windows.Forms.TabPage
-Me.Button65 = New System.Windows.Forms.Button
-Me.TextBox38 = New System.Windows.Forms.TextBox
-Me.Button14 = New System.Windows.Forms.Button
-Me.Label79 = New System.Windows.Forms.Label
-Me.Label68 = New System.Windows.Forms.Label
-Me.ListBox4 = New System.Windows.Forms.ListBox
-Me.TabPage14 = New System.Windows.Forms.TabPage
-Me.TabPage10 = New System.Windows.Forms.TabPage
-Me.TabPage25 = New System.Windows.Forms.TabPage
-Me.SplitContainer7 = New System.Windows.Forms.SplitContainer
-Me.ListBox7 = New System.Windows.Forms.ListBox
-Me.Label134 = New System.Windows.Forms.Label
-Me.btn_removemoviefolder = New System.Windows.Forms.Button
-Me.btn_addmoviefolderdialogue = New System.Windows.Forms.Button
-Me.Label147 = New System.Windows.Forms.Label
-Me.Button108 = New System.Windows.Forms.Button
-Me.Label146 = New System.Windows.Forms.Label
-Me.Button107 = New System.Windows.Forms.Button
-Me.ListBox15 = New System.Windows.Forms.ListBox
-Me.Label145 = New System.Windows.Forms.Label
-Me.TextBox44 = New System.Windows.Forms.TextBox
-Me.Label144 = New System.Windows.Forms.Label
-Me.Label133 = New System.Windows.Forms.Label
-Me.Button102 = New System.Windows.Forms.Button
-Me.Button101 = New System.Windows.Forms.Button
-Me.Label135 = New System.Windows.Forms.Label
-Me.Label87 = New System.Windows.Forms.Label
-Me.Label86 = New System.Windows.Forms.Label
-Me.Label136 = New System.Windows.Forms.Label
-Me.TabPage26 = New System.Windows.Forms.TabPage
-Me.Button82 = New System.Windows.Forms.Button
-Me.TabControl4 = New System.Windows.Forms.TabControl
-Me.TabPage27 = New System.Windows.Forms.TabPage
-Me.CheckBox19 = New System.Windows.Forms.CheckBox
-Me.CheckBox16 = New System.Windows.Forms.CheckBox
-Me.Label98 = New System.Windows.Forms.Label
-Me.GroupBox8 = New System.Windows.Forms.GroupBox
-Me.RadioButton33 = New System.Windows.Forms.RadioButton
-Me.RadioButton34 = New System.Windows.Forms.RadioButton
-Me.RadioButton35 = New System.Windows.Forms.RadioButton
-Me.Panel19 = New System.Windows.Forms.Panel
-Me.Label102 = New System.Windows.Forms.Label
-Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox
-Me.Panel17 = New System.Windows.Forms.Panel
-Me.Label148 = New System.Windows.Forms.Label
-Me.CheckBox39 = New System.Windows.Forms.CheckBox
-Me.Label100 = New System.Windows.Forms.Label
-Me.chkbx_usefoldernames = New System.Windows.Forms.CheckBox
-Me.CheckBox13 = New System.Windows.Forms.CheckBox
-Me.Label92 = New System.Windows.Forms.Label
-Me.CheckBox11 = New System.Windows.Forms.CheckBox
-Me.GroupBox10 = New System.Windows.Forms.GroupBox
-Me.Label99 = New System.Windows.Forms.Label
-Me.Label93 = New System.Windows.Forms.Label
-Me.Button61 = New System.Windows.Forms.Button
-Me.Button73 = New System.Windows.Forms.Button
-Me.ListBox10 = New System.Windows.Forms.ListBox
-Me.CheckBox18 = New System.Windows.Forms.CheckBox
-Me.GroupBox9 = New System.Windows.Forms.GroupBox
-Me.Label90 = New System.Windows.Forms.Label
-Me.Label91 = New System.Windows.Forms.Label
-Me.ListBox9 = New System.Windows.Forms.ListBox
-Me.TabPage28 = New System.Windows.Forms.TabPage
-Me.GroupBox14 = New System.Windows.Forms.GroupBox
-Me.Label109 = New System.Windows.Forms.Label
-Me.chkbx_unstackfanartnames = New System.Windows.Forms.CheckBox
-Me.chkbx_unstackposternames = New System.Windows.Forms.CheckBox
-Me.Label110 = New System.Windows.Forms.Label
-Me.chkbx_basicsave = New System.Windows.Forms.CheckBox
-Me.GroupBox16 = New System.Windows.Forms.GroupBox
-Me.Label88 = New System.Windows.Forms.Label
-Me.imdb_chk = New System.Windows.Forms.CheckBox
-Me.mpdb_chk = New System.Windows.Forms.CheckBox
-Me.tmdb_chk = New System.Windows.Forms.CheckBox
-Me.IMPA_chk = New System.Windows.Forms.CheckBox
-Me.Label89 = New System.Windows.Forms.Label
-Me.CheckBox22 = New System.Windows.Forms.CheckBox
+Me.MarkAllSelectedAsWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.MarkAllSelectedAsUnWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.GoToToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.GoToSelectedMoviePosterSelectorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.GoToSelectedMovieFanartSelectorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.Label132 = New System.Windows.Forms.Label()
+Me.TabPage9 = New System.Windows.Forms.TabPage()
+Me.Button65 = New System.Windows.Forms.Button()
+Me.TextBox38 = New System.Windows.Forms.TextBox()
+Me.Button14 = New System.Windows.Forms.Button()
+Me.Label79 = New System.Windows.Forms.Label()
+Me.Label68 = New System.Windows.Forms.Label()
+Me.ListBox4 = New System.Windows.Forms.ListBox()
+Me.TabPage14 = New System.Windows.Forms.TabPage()
+Me.TabPage10 = New System.Windows.Forms.TabPage()
+Me.TabPage25 = New System.Windows.Forms.TabPage()
+Me.SplitContainer7 = New System.Windows.Forms.SplitContainer()
+Me.ListBox7 = New System.Windows.Forms.ListBox()
+Me.Label134 = New System.Windows.Forms.Label()
+Me.btn_removemoviefolder = New System.Windows.Forms.Button()
+Me.btn_addmoviefolderdialogue = New System.Windows.Forms.Button()
+Me.Label147 = New System.Windows.Forms.Label()
+Me.Button108 = New System.Windows.Forms.Button()
+Me.Label146 = New System.Windows.Forms.Label()
+Me.Button107 = New System.Windows.Forms.Button()
+Me.ListBox15 = New System.Windows.Forms.ListBox()
+Me.Label145 = New System.Windows.Forms.Label()
+Me.TextBox44 = New System.Windows.Forms.TextBox()
+Me.Label144 = New System.Windows.Forms.Label()
+Me.Label133 = New System.Windows.Forms.Label()
+Me.Button102 = New System.Windows.Forms.Button()
+Me.Button101 = New System.Windows.Forms.Button()
+Me.Label135 = New System.Windows.Forms.Label()
+Me.Label87 = New System.Windows.Forms.Label()
+Me.Label86 = New System.Windows.Forms.Label()
+Me.Label136 = New System.Windows.Forms.Label()
+Me.TabPage26 = New System.Windows.Forms.TabPage()
+Me.Button82 = New System.Windows.Forms.Button()
+Me.TabControl4 = New System.Windows.Forms.TabControl()
+Me.TabPage27 = New System.Windows.Forms.TabPage()
+Me.Panel22 = New System.Windows.Forms.Panel()
+Me.RadioButton52 = New System.Windows.Forms.RadioButton()
+Me.RadioButton51 = New System.Windows.Forms.RadioButton()
+Me.CheckBox_Use_XBMC_Scraper = New System.Windows.Forms.CheckBox()
+Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+Me.CheckBox16 = New System.Windows.Forms.CheckBox()
+Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+Me.Label98 = New System.Windows.Forms.Label()
+Me.GroupBox8 = New System.Windows.Forms.GroupBox()
+Me.RadioButton33 = New System.Windows.Forms.RadioButton()
+Me.RadioButton34 = New System.Windows.Forms.RadioButton()
+Me.RadioButton35 = New System.Windows.Forms.RadioButton()
+Me.Panel19 = New System.Windows.Forms.Panel()
+Me.Label102 = New System.Windows.Forms.Label()
+Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox()
+Me.Panel17 = New System.Windows.Forms.Panel()
+Me.Label148 = New System.Windows.Forms.Label()
+Me.CheckBox39 = New System.Windows.Forms.CheckBox()
+Me.Label100 = New System.Windows.Forms.Label()
+Me.chkbx_usefoldernames = New System.Windows.Forms.CheckBox()
+Me.CheckBox13 = New System.Windows.Forms.CheckBox()
+Me.Label92 = New System.Windows.Forms.Label()
+Me.GroupBox10 = New System.Windows.Forms.GroupBox()
+Me.Label99 = New System.Windows.Forms.Label()
+Me.Label93 = New System.Windows.Forms.Label()
+Me.Button61 = New System.Windows.Forms.Button()
+Me.Button73 = New System.Windows.Forms.Button()
+Me.ListBox10 = New System.Windows.Forms.ListBox()
+Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+Me.GroupBox9 = New System.Windows.Forms.GroupBox()
+Me.Label90 = New System.Windows.Forms.Label()
+Me.Label91 = New System.Windows.Forms.Label()
+Me.ListBox9 = New System.Windows.Forms.ListBox()
+Me.TabPage28 = New System.Windows.Forms.TabPage()
+Me.GroupBox14 = New System.Windows.Forms.GroupBox()
+Me.Label109 = New System.Windows.Forms.Label()
+Me.chkbx_unstackfanartnames = New System.Windows.Forms.CheckBox()
+Me.chkbx_unstackposternames = New System.Windows.Forms.CheckBox()
+Me.Label110 = New System.Windows.Forms.Label()
+Me.chkbx_basicsave = New System.Windows.Forms.CheckBox()
+Me.GroupBox16 = New System.Windows.Forms.GroupBox()
+Me.Label88 = New System.Windows.Forms.Label()
+Me.imdb_chk = New System.Windows.Forms.CheckBox()
+Me.mpdb_chk = New System.Windows.Forms.CheckBox()
+Me.tmdb_chk = New System.Windows.Forms.CheckBox()
+Me.IMPA_chk = New System.Windows.Forms.CheckBox()
+Me.Label89 = New System.Windows.Forms.Label()
+Me.CheckBox22 = New System.Windows.Forms.CheckBox()
 Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-Me.TabPage2 = New System.Windows.Forms.TabPage
-Me.TabControl3 = New System.Windows.Forms.TabControl
-Me.TabPage11 = New System.Windows.Forms.TabPage
-Me.SplitContainer3 = New System.Windows.Forms.SplitContainer
-Me.RadioButton44 = New System.Windows.Forms.RadioButton
-Me.RadioButton32 = New System.Windows.Forms.RadioButton
-Me.RadioButton31 = New System.Windows.Forms.RadioButton
-Me.RadioButton30 = New System.Windows.Forms.RadioButton
-Me.RadioButton29 = New System.Windows.Forms.RadioButton
-Me.TextBox33 = New System.Windows.Forms.TextBox
-Me.TextBox32 = New System.Windows.Forms.TextBox
-Me.Label74 = New System.Windows.Forms.Label
-Me.Label71 = New System.Windows.Forms.Label
-Me.Panel9 = New System.Windows.Forms.Panel
-Me.Button103 = New System.Windows.Forms.Button
-Me.Button48 = New System.Windows.Forms.Button
-Me.Label40 = New System.Windows.Forms.Label
-Me.TextBox29 = New System.Windows.Forms.TextBox
-Me.TextBox17 = New System.Windows.Forms.TextBox
-Me.Label36 = New System.Windows.Forms.Label
-Me.TextBox25 = New System.Windows.Forms.TextBox
-Me.ComboBox5 = New System.Windows.Forms.ComboBox
-Me.PictureBox8 = New System.Windows.Forms.PictureBox
-Me.Label51 = New System.Windows.Forms.Label
-Me.Label50 = New System.Windows.Forms.Label
-Me.TextBox24 = New System.Windows.Forms.TextBox
-Me.TextBox23 = New System.Windows.Forms.TextBox
-Me.TextBox22 = New System.Windows.Forms.TextBox
-Me.TextBox20 = New System.Windows.Forms.TextBox
-Me.Label49 = New System.Windows.Forms.Label
-Me.Label48 = New System.Windows.Forms.Label
-Me.Label47 = New System.Windows.Forms.Label
-Me.TextBox21 = New System.Windows.Forms.TextBox
-Me.Label46 = New System.Windows.Forms.Label
-Me.Label45 = New System.Windows.Forms.Label
-Me.Button46 = New System.Windows.Forms.Button
-Me.Label66 = New System.Windows.Forms.Label
-Me.Button60 = New System.Windows.Forms.Button
-Me.Label8 = New System.Windows.Forms.Label
-Me.Label44 = New System.Windows.Forms.Label
-Me.TextBox19 = New System.Windows.Forms.TextBox
-Me.Button47 = New System.Windows.Forms.Button
-Me.Label43 = New System.Windows.Forms.Label
-Me.PictureBox6 = New System.Windows.Forms.PictureBox
-Me.TextBox18 = New System.Windows.Forms.TextBox
-Me.Label42 = New System.Windows.Forms.Label
-Me.Button45 = New System.Windows.Forms.Button
-Me.ComboBox4 = New System.Windows.Forms.ComboBox
-Me.Label35 = New System.Windows.Forms.Label
-Me.Label67 = New System.Windows.Forms.Label
-Me.Label34 = New System.Windows.Forms.Label
-Me.TextBox16 = New System.Windows.Forms.TextBox
-Me.TextBox15 = New System.Windows.Forms.TextBox
-Me.Label33 = New System.Windows.Forms.Label
-Me.Label41 = New System.Windows.Forms.Label
-Me.Label29 = New System.Windows.Forms.Label
-Me.Label28 = New System.Windows.Forms.Label
-Me.Label26 = New System.Windows.Forms.Label
-Me.Label25 = New System.Windows.Forms.Label
-Me.Label21 = New System.Windows.Forms.Label
-Me.TextBox14 = New System.Windows.Forms.TextBox
-Me.TextBox13 = New System.Windows.Forms.TextBox
-Me.TextBox12 = New System.Windows.Forms.TextBox
-Me.TextBox11 = New System.Windows.Forms.TextBox
-Me.TextBox10 = New System.Windows.Forms.TextBox
-Me.TextBox9 = New System.Windows.Forms.TextBox
-Me.SplitContainer4 = New System.Windows.Forms.SplitContainer
-Me.PictureBox4 = New System.Windows.Forms.PictureBox
-Me.PictureBox5 = New System.Windows.Forms.PictureBox
-Me.TextBox2 = New System.Windows.Forms.TextBox
-Me.TabPage21 = New System.Windows.Forms.TabPage
-Me.PictureBox15 = New System.Windows.Forms.PictureBox
-Me.Label6 = New System.Windows.Forms.Label
-Me.TextBox35 = New System.Windows.Forms.TextBox
-Me.PictureBox14 = New System.Windows.Forms.PictureBox
-Me.Button64 = New System.Windows.Forms.Button
-Me.Button63 = New System.Windows.Forms.Button
-Me.TabPage12 = New System.Windows.Forms.TabPage
-Me.PictureBox11 = New System.Windows.Forms.PictureBox
-Me.Panel11 = New System.Windows.Forms.Panel
-Me.Button31 = New System.Windows.Forms.Button
-Me.Button32 = New System.Windows.Forms.Button
-Me.Button33 = New System.Windows.Forms.Button
-Me.TextBox27 = New System.Windows.Forms.TextBox
-Me.Label54 = New System.Windows.Forms.Label
-Me.Label58 = New System.Windows.Forms.Label
-Me.Label59 = New System.Windows.Forms.Label
-Me.Label60 = New System.Windows.Forms.Label
-Me.Label61 = New System.Windows.Forms.Label
-Me.Label62 = New System.Windows.Forms.Label
-Me.Label63 = New System.Windows.Forms.Label
-Me.Button35 = New System.Windows.Forms.Button
-Me.Button36 = New System.Windows.Forms.Button
-Me.Button37 = New System.Windows.Forms.Button
-Me.Button38 = New System.Windows.Forms.Button
-Me.Button39 = New System.Windows.Forms.Button
-Me.Button40 = New System.Windows.Forms.Button
-Me.TextBox28 = New System.Windows.Forms.TextBox
-Me.GroupBox6 = New System.Windows.Forms.GroupBox
-Me.Panel12 = New System.Windows.Forms.Panel
-Me.Label64 = New System.Windows.Forms.Label
-Me.PictureBox10 = New System.Windows.Forms.PictureBox
-Me.Button41 = New System.Windows.Forms.Button
-Me.Button42 = New System.Windows.Forms.Button
-Me.Label65 = New System.Windows.Forms.Label
-Me.Panel13 = New System.Windows.Forms.Panel
-Me.TabPage20 = New System.Windows.Forms.TabPage
-Me.Panel14 = New System.Windows.Forms.Panel
-Me.Button49 = New System.Windows.Forms.Button
-Me.Button50 = New System.Windows.Forms.Button
-Me.Button51 = New System.Windows.Forms.Button
-Me.TextBox30 = New System.Windows.Forms.TextBox
-Me.Label69 = New System.Windows.Forms.Label
-Me.PictureBox13 = New System.Windows.Forms.PictureBox
-Me.CheckBox8 = New System.Windows.Forms.CheckBox
-Me.Panel16 = New System.Windows.Forms.Panel
-Me.TextBox31 = New System.Windows.Forms.TextBox
-Me.Label70 = New System.Windows.Forms.Label
-Me.ComboBox2 = New System.Windows.Forms.ComboBox
-Me.Label72 = New System.Windows.Forms.Label
-Me.Button54 = New System.Windows.Forms.Button
-Me.Button55 = New System.Windows.Forms.Button
-Me.Button56 = New System.Windows.Forms.Button
-Me.Label73 = New System.Windows.Forms.Label
-Me.Panel15 = New System.Windows.Forms.Panel
-Me.PictureBox12 = New System.Windows.Forms.PictureBox
-Me.Label76 = New System.Windows.Forms.Label
-Me.Label77 = New System.Windows.Forms.Label
-Me.Label78 = New System.Windows.Forms.Label
-Me.Button57 = New System.Windows.Forms.Button
-Me.Button58 = New System.Windows.Forms.Button
-Me.Button59 = New System.Windows.Forms.Button
-Me.TabPage13 = New System.Windows.Forms.TabPage
-Me.PictureBox9 = New System.Windows.Forms.PictureBox
-Me.Panel10 = New System.Windows.Forms.Panel
-Me.GroupBox7 = New System.Windows.Forms.GroupBox
-Me.RadioButton18 = New System.Windows.Forms.RadioButton
-Me.RadioButton17 = New System.Windows.Forms.RadioButton
-Me.RadioButton16 = New System.Windows.Forms.RadioButton
-Me.CheckBox7 = New System.Windows.Forms.CheckBox
-Me.CheckBox6 = New System.Windows.Forms.CheckBox
-Me.CheckBox3 = New System.Windows.Forms.CheckBox
-Me.CheckBox4 = New System.Windows.Forms.CheckBox
-Me.CheckBox5 = New System.Windows.Forms.CheckBox
-Me.GroupBox4 = New System.Windows.Forms.GroupBox
-Me.RadioButton8 = New System.Windows.Forms.RadioButton
-Me.RadioButton9 = New System.Windows.Forms.RadioButton
-Me.Label52 = New System.Windows.Forms.Label
-Me.GroupBox3 = New System.Windows.Forms.GroupBox
-Me.RadioButton10 = New System.Windows.Forms.RadioButton
-Me.RadioButton11 = New System.Windows.Forms.RadioButton
-Me.GroupBox2 = New System.Windows.Forms.GroupBox
-Me.RadioButton12 = New System.Windows.Forms.RadioButton
-Me.RadioButton13 = New System.Windows.Forms.RadioButton
-Me.ListBox1 = New System.Windows.Forms.ListBox
-Me.GroupBox5 = New System.Windows.Forms.GroupBox
-Me.RadioButton14 = New System.Windows.Forms.RadioButton
-Me.RadioButton15 = New System.Windows.Forms.RadioButton
-Me.Label53 = New System.Windows.Forms.Label
-Me.Label55 = New System.Windows.Forms.Label
-Me.Label56 = New System.Windows.Forms.Label
-Me.ListBox3 = New System.Windows.Forms.ListBox
-Me.Button30 = New System.Windows.Forms.Button
-Me.TextBox26 = New System.Windows.Forms.TextBox
-Me.Label57 = New System.Windows.Forms.Label
-Me.Button29 = New System.Windows.Forms.Button
-Me.TabPage15 = New System.Windows.Forms.TabPage
-Me.TabPage16 = New System.Windows.Forms.TabPage
-Me.WebBrowser3 = New System.Windows.Forms.WebBrowser
-Me.TabPage17 = New System.Windows.Forms.TabPage
-Me.WebBrowser4 = New System.Windows.Forms.WebBrowser
-Me.TabPage23 = New System.Windows.Forms.TabPage
-Me.Button85 = New System.Windows.Forms.Button
-Me.Button83 = New System.Windows.Forms.Button
-Me.SplitContainer6 = New System.Windows.Forms.SplitContainer
-Me.Button69 = New System.Windows.Forms.Button
-Me.Button68 = New System.Windows.Forms.Button
-Me.Label80 = New System.Windows.Forms.Label
-Me.Label82 = New System.Windows.Forms.Label
-Me.ListBox5 = New System.Windows.Forms.ListBox
-Me.Button67 = New System.Windows.Forms.Button
-Me.Label81 = New System.Windows.Forms.Label
-Me.TextBox39 = New System.Windows.Forms.TextBox
-Me.Button72 = New System.Windows.Forms.Button
-Me.TextBox40 = New System.Windows.Forms.TextBox
-Me.Label85 = New System.Windows.Forms.Label
-Me.Button71 = New System.Windows.Forms.Button
-Me.Label84 = New System.Windows.Forms.Label
-Me.Button70 = New System.Windows.Forms.Button
-Me.Label83 = New System.Windows.Forms.Label
-Me.ListBox6 = New System.Windows.Forms.ListBox
-Me.TabPage24 = New System.Windows.Forms.TabPage
-Me.TabControl6 = New System.Windows.Forms.TabControl
-Me.TabPage30 = New System.Windows.Forms.TabPage
-Me.GroupBox17 = New System.Windows.Forms.GroupBox
-Me.CheckBox36 = New System.Windows.Forms.CheckBox
-Me.Label139 = New System.Windows.Forms.Label
-Me.GroupBox20 = New System.Windows.Forms.GroupBox
-Me.CheckBox14 = New System.Windows.Forms.CheckBox
-Me.CheckBox15 = New System.Windows.Forms.CheckBox
-Me.CheckBox10 = New System.Windows.Forms.CheckBox
-Me.GroupBox19 = New System.Windows.Forms.GroupBox
-Me.RadioButton39 = New System.Windows.Forms.RadioButton
-Me.RadioButton40 = New System.Windows.Forms.RadioButton
-Me.RadioButton41 = New System.Windows.Forms.RadioButton
-Me.Panel21 = New System.Windows.Forms.Panel
-Me.Label111 = New System.Windows.Forms.Label
-Me.bannerbtn = New System.Windows.Forms.RadioButton
-Me.posterbtn = New System.Windows.Forms.RadioButton
-Me.CheckBox35 = New System.Windows.Forms.CheckBox
-Me.CheckBox34 = New System.Windows.Forms.CheckBox
-Me.Label138 = New System.Windows.Forms.Label
-Me.GroupBox15 = New System.Windows.Forms.GroupBox
-Me.CheckBox40 = New System.Windows.Forms.CheckBox
-Me.CheckBox37 = New System.Windows.Forms.CheckBox
-Me.Label140 = New System.Windows.Forms.Label
-Me.ComboBox9 = New System.Windows.Forms.ComboBox
-Me.CheckBox20 = New System.Windows.Forms.CheckBox
-Me.CheckBox17 = New System.Windows.Forms.CheckBox
-Me.ListBox12 = New System.Windows.Forms.ListBox
-Me.Label122 = New System.Windows.Forms.Label
-Me.ComboBox8 = New System.Windows.Forms.ComboBox
-Me.Label123 = New System.Windows.Forms.Label
-Me.Label124 = New System.Windows.Forms.Label
-Me.RadioButton42 = New System.Windows.Forms.RadioButton
-Me.RadioButton43 = New System.Windows.Forms.RadioButton
-Me.Button91 = New System.Windows.Forms.Button
-Me.TabPage31 = New System.Windows.Forms.TabPage
-Me.Button89 = New System.Windows.Forms.Button
-Me.ListBox14 = New System.Windows.Forms.ListBox
-Me.Button90 = New System.Windows.Forms.Button
-Me.Button86 = New System.Windows.Forms.Button
-Me.GroupBox18 = New System.Windows.Forms.GroupBox
-Me.TextBox47 = New System.Windows.Forms.TextBox
-Me.Button88 = New System.Windows.Forms.Button
-Me.TextBox48 = New System.Windows.Forms.TextBox
-Me.Label118 = New System.Windows.Forms.Label
-Me.Button87 = New System.Windows.Forms.Button
-Me.TextBox46 = New System.Windows.Forms.TextBox
-Me.TextBox49 = New System.Windows.Forms.TextBox
-Me.Label117 = New System.Windows.Forms.Label
-Me.Label119 = New System.Windows.Forms.Label
-Me.Button92 = New System.Windows.Forms.Button
-Me.TabPage18 = New System.Windows.Forms.TabPage
-Me.Button81 = New System.Windows.Forms.Button
-Me.TabControl5 = New System.Windows.Forms.TabControl
-Me.TabPage29 = New System.Windows.Forms.TabPage
-Me.CheckBox38 = New System.Windows.Forms.CheckBox
-Me.Label137 = New System.Windows.Forms.Label
-Me.CheckBox33 = New System.Windows.Forms.CheckBox
-Me.Label130 = New System.Windows.Forms.Label
-Me.Button96 = New System.Windows.Forms.Button
-Me.Label129 = New System.Windows.Forms.Label
-Me.Panel20 = New System.Windows.Forms.Panel
-Me.Label126 = New System.Windows.Forms.Label
-Me.Label125 = New System.Windows.Forms.Label
-Me.Button93 = New System.Windows.Forms.Button
-Me.Label108 = New System.Windows.Forms.Label
-Me.ListBox13 = New System.Windows.Forms.ListBox
-Me.Label112 = New System.Windows.Forms.Label
-Me.Label113 = New System.Windows.Forms.Label
-Me.Button78 = New System.Windows.Forms.Button
-Me.TextBox42 = New System.Windows.Forms.TextBox
-Me.Label114 = New System.Windows.Forms.Label
-Me.Button79 = New System.Windows.Forms.Button
-Me.Label120 = New System.Windows.Forms.Label
-Me.Button80 = New System.Windows.Forms.Button
-Me.Label116 = New System.Windows.Forms.Label
-Me.GroupBox13 = New System.Windows.Forms.GroupBox
-Me.Label121 = New System.Windows.Forms.Label
-Me.Label115 = New System.Windows.Forms.Label
-Me.btn_custommediaplayer = New System.Windows.Forms.Button
-Me.RadioButton36 = New System.Windows.Forms.RadioButton
-Me.Label105 = New System.Windows.Forms.Label
-Me.Label106 = New System.Windows.Forms.Label
-Me.RadioButton37 = New System.Windows.Forms.RadioButton
-Me.RadioButton38 = New System.Windows.Forms.RadioButton
-Me.CheckBox12 = New System.Windows.Forms.CheckBox
-Me.chkbx_disablecache = New System.Windows.Forms.CheckBox
-Me.Label107 = New System.Windows.Forms.Label
-Me.txtbx_minrarsize = New System.Windows.Forms.TextBox
-Me.TabPage33 = New System.Windows.Forms.TabPage
-Me.ListBox17 = New System.Windows.Forms.ListBox
-Me.Button106 = New System.Windows.Forms.Button
-Me.ListBox16 = New System.Windows.Forms.ListBox
-Me.Label143 = New System.Windows.Forms.Label
-Me.Label142 = New System.Windows.Forms.Label
-Me.Button105 = New System.Windows.Forms.Button
-Me.TextBox43 = New System.Windows.Forms.TextBox
-Me.TextBox41 = New System.Windows.Forms.TextBox
-Me.Label141 = New System.Windows.Forms.Label
-Me.TabPage34 = New System.Windows.Forms.TabPage
-Me.Button109 = New System.Windows.Forms.Button
-Me.Label151 = New System.Windows.Forms.Label
-Me.Label150 = New System.Windows.Forms.Label
-Me.TextBox45 = New System.Windows.Forms.TextBox
-Me.Label149 = New System.Windows.Forms.Label
-Me.TabPage19 = New System.Windows.Forms.TabPage
-Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
-Me.MoviesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.SearchForNewMoviesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.BatchRescraperToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RebuildMoviesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
-Me.ReloadMovieCacheToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RebuildActorDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ListMoviesWithoutFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ListMoviesWithoutPostersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.OutputMovieListAsHTMLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RebuildMovieNfoFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.TVShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.SearchForNewEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.TVShowBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.CheckRootsForToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.RebuildShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ReloadShowCacheToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.SearchForMissingEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.BatchRescrapeWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.MediaCompanionForumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.XBMCMCThreadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ProfilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ExportToXBMCToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.openFD = New System.Windows.Forms.OpenFileDialog
+Me.TabPage2 = New System.Windows.Forms.TabPage()
+Me.TabControl3 = New System.Windows.Forms.TabControl()
+Me.TabPage11 = New System.Windows.Forms.TabPage()
+Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
+Me.RadioButton44 = New System.Windows.Forms.RadioButton()
+Me.RadioButton32 = New System.Windows.Forms.RadioButton()
+Me.RadioButton31 = New System.Windows.Forms.RadioButton()
+Me.RadioButton30 = New System.Windows.Forms.RadioButton()
+Me.RadioButton29 = New System.Windows.Forms.RadioButton()
+Me.TextBox33 = New System.Windows.Forms.TextBox()
+Me.TextBox32 = New System.Windows.Forms.TextBox()
+Me.Label74 = New System.Windows.Forms.Label()
+Me.Label71 = New System.Windows.Forms.Label()
+Me.Panel9 = New System.Windows.Forms.Panel()
+Me.Button103 = New System.Windows.Forms.Button()
+Me.Button48 = New System.Windows.Forms.Button()
+Me.Label40 = New System.Windows.Forms.Label()
+Me.TextBox29 = New System.Windows.Forms.TextBox()
+Me.TextBox17 = New System.Windows.Forms.TextBox()
+Me.Label36 = New System.Windows.Forms.Label()
+Me.TextBox25 = New System.Windows.Forms.TextBox()
+Me.ComboBox5 = New System.Windows.Forms.ComboBox()
+Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+Me.Label51 = New System.Windows.Forms.Label()
+Me.Label50 = New System.Windows.Forms.Label()
+Me.TextBox24 = New System.Windows.Forms.TextBox()
+Me.TextBox23 = New System.Windows.Forms.TextBox()
+Me.TextBox22 = New System.Windows.Forms.TextBox()
+Me.TextBox20 = New System.Windows.Forms.TextBox()
+Me.Label49 = New System.Windows.Forms.Label()
+Me.Label48 = New System.Windows.Forms.Label()
+Me.Label47 = New System.Windows.Forms.Label()
+Me.TextBox21 = New System.Windows.Forms.TextBox()
+Me.Label46 = New System.Windows.Forms.Label()
+Me.Label45 = New System.Windows.Forms.Label()
+Me.Button46 = New System.Windows.Forms.Button()
+Me.Label66 = New System.Windows.Forms.Label()
+Me.Button60 = New System.Windows.Forms.Button()
+Me.Label8 = New System.Windows.Forms.Label()
+Me.Label44 = New System.Windows.Forms.Label()
+Me.TextBox19 = New System.Windows.Forms.TextBox()
+Me.Button47 = New System.Windows.Forms.Button()
+Me.Label43 = New System.Windows.Forms.Label()
+Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+Me.TextBox18 = New System.Windows.Forms.TextBox()
+Me.Label42 = New System.Windows.Forms.Label()
+Me.Button45 = New System.Windows.Forms.Button()
+Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+Me.Label35 = New System.Windows.Forms.Label()
+Me.Label67 = New System.Windows.Forms.Label()
+Me.Label34 = New System.Windows.Forms.Label()
+Me.TextBox16 = New System.Windows.Forms.TextBox()
+Me.TextBox15 = New System.Windows.Forms.TextBox()
+Me.Label33 = New System.Windows.Forms.Label()
+Me.Label41 = New System.Windows.Forms.Label()
+Me.Label29 = New System.Windows.Forms.Label()
+Me.Label28 = New System.Windows.Forms.Label()
+Me.Label26 = New System.Windows.Forms.Label()
+Me.Label25 = New System.Windows.Forms.Label()
+Me.Label21 = New System.Windows.Forms.Label()
+Me.TextBox14 = New System.Windows.Forms.TextBox()
+Me.TextBox13 = New System.Windows.Forms.TextBox()
+Me.TextBox12 = New System.Windows.Forms.TextBox()
+Me.TextBox11 = New System.Windows.Forms.TextBox()
+Me.TextBox10 = New System.Windows.Forms.TextBox()
+Me.TextBox9 = New System.Windows.Forms.TextBox()
+Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
+Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+Me.TextBox2 = New System.Windows.Forms.TextBox()
+Me.TabPage21 = New System.Windows.Forms.TabPage()
+Me.PictureBox15 = New System.Windows.Forms.PictureBox()
+Me.Label6 = New System.Windows.Forms.Label()
+Me.TextBox35 = New System.Windows.Forms.TextBox()
+Me.PictureBox14 = New System.Windows.Forms.PictureBox()
+Me.Button64 = New System.Windows.Forms.Button()
+Me.Button63 = New System.Windows.Forms.Button()
+Me.TabPage12 = New System.Windows.Forms.TabPage()
+Me.PictureBox11 = New System.Windows.Forms.PictureBox()
+Me.Panel11 = New System.Windows.Forms.Panel()
+Me.Button31 = New System.Windows.Forms.Button()
+Me.Button32 = New System.Windows.Forms.Button()
+Me.Button33 = New System.Windows.Forms.Button()
+Me.TextBox27 = New System.Windows.Forms.TextBox()
+Me.Label54 = New System.Windows.Forms.Label()
+Me.Label58 = New System.Windows.Forms.Label()
+Me.Label59 = New System.Windows.Forms.Label()
+Me.Label60 = New System.Windows.Forms.Label()
+Me.Label61 = New System.Windows.Forms.Label()
+Me.Label62 = New System.Windows.Forms.Label()
+Me.Label63 = New System.Windows.Forms.Label()
+Me.Button35 = New System.Windows.Forms.Button()
+Me.Button36 = New System.Windows.Forms.Button()
+Me.Button37 = New System.Windows.Forms.Button()
+Me.Button38 = New System.Windows.Forms.Button()
+Me.Button39 = New System.Windows.Forms.Button()
+Me.Button40 = New System.Windows.Forms.Button()
+Me.TextBox28 = New System.Windows.Forms.TextBox()
+Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+Me.Panel12 = New System.Windows.Forms.Panel()
+Me.Label64 = New System.Windows.Forms.Label()
+Me.PictureBox10 = New System.Windows.Forms.PictureBox()
+Me.Button41 = New System.Windows.Forms.Button()
+Me.Button42 = New System.Windows.Forms.Button()
+Me.Label65 = New System.Windows.Forms.Label()
+Me.Panel13 = New System.Windows.Forms.Panel()
+Me.TabPage20 = New System.Windows.Forms.TabPage()
+Me.Panel14 = New System.Windows.Forms.Panel()
+Me.Button49 = New System.Windows.Forms.Button()
+Me.Button50 = New System.Windows.Forms.Button()
+Me.Button51 = New System.Windows.Forms.Button()
+Me.TextBox30 = New System.Windows.Forms.TextBox()
+Me.Label69 = New System.Windows.Forms.Label()
+Me.PictureBox13 = New System.Windows.Forms.PictureBox()
+Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+Me.Panel16 = New System.Windows.Forms.Panel()
+Me.TextBox31 = New System.Windows.Forms.TextBox()
+Me.Label70 = New System.Windows.Forms.Label()
+Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+Me.Label72 = New System.Windows.Forms.Label()
+Me.Button54 = New System.Windows.Forms.Button()
+Me.Button55 = New System.Windows.Forms.Button()
+Me.Button56 = New System.Windows.Forms.Button()
+Me.Label73 = New System.Windows.Forms.Label()
+Me.Panel15 = New System.Windows.Forms.Panel()
+Me.PictureBox12 = New System.Windows.Forms.PictureBox()
+Me.Label76 = New System.Windows.Forms.Label()
+Me.Label77 = New System.Windows.Forms.Label()
+Me.Label78 = New System.Windows.Forms.Label()
+Me.Button57 = New System.Windows.Forms.Button()
+Me.Button58 = New System.Windows.Forms.Button()
+Me.Button59 = New System.Windows.Forms.Button()
+Me.TabPage13 = New System.Windows.Forms.TabPage()
+Me.PictureBox9 = New System.Windows.Forms.PictureBox()
+Me.Panel10 = New System.Windows.Forms.Panel()
+Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+Me.RadioButton18 = New System.Windows.Forms.RadioButton()
+Me.RadioButton17 = New System.Windows.Forms.RadioButton()
+Me.RadioButton16 = New System.Windows.Forms.RadioButton()
+Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+Me.RadioButton8 = New System.Windows.Forms.RadioButton()
+Me.RadioButton9 = New System.Windows.Forms.RadioButton()
+Me.Label52 = New System.Windows.Forms.Label()
+Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+Me.RadioButton10 = New System.Windows.Forms.RadioButton()
+Me.RadioButton11 = New System.Windows.Forms.RadioButton()
+Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+Me.RadioButton12 = New System.Windows.Forms.RadioButton()
+Me.RadioButton13 = New System.Windows.Forms.RadioButton()
+Me.ListBox1 = New System.Windows.Forms.ListBox()
+Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+Me.RadioButton14 = New System.Windows.Forms.RadioButton()
+Me.RadioButton15 = New System.Windows.Forms.RadioButton()
+Me.Label53 = New System.Windows.Forms.Label()
+Me.Label55 = New System.Windows.Forms.Label()
+Me.Label56 = New System.Windows.Forms.Label()
+Me.ListBox3 = New System.Windows.Forms.ListBox()
+Me.Button30 = New System.Windows.Forms.Button()
+Me.TextBox26 = New System.Windows.Forms.TextBox()
+Me.Label57 = New System.Windows.Forms.Label()
+Me.Button29 = New System.Windows.Forms.Button()
+Me.TabPage15 = New System.Windows.Forms.TabPage()
+Me.TabPage16 = New System.Windows.Forms.TabPage()
+Me.WebBrowser3 = New System.Windows.Forms.WebBrowser()
+Me.TabPage17 = New System.Windows.Forms.TabPage()
+Me.WebBrowser4 = New System.Windows.Forms.WebBrowser()
+Me.TabPage23 = New System.Windows.Forms.TabPage()
+Me.Button85 = New System.Windows.Forms.Button()
+Me.Button83 = New System.Windows.Forms.Button()
+Me.SplitContainer6 = New System.Windows.Forms.SplitContainer()
+Me.Button69 = New System.Windows.Forms.Button()
+Me.Button68 = New System.Windows.Forms.Button()
+Me.Label80 = New System.Windows.Forms.Label()
+Me.Label82 = New System.Windows.Forms.Label()
+Me.ListBox5 = New System.Windows.Forms.ListBox()
+Me.Button67 = New System.Windows.Forms.Button()
+Me.Label81 = New System.Windows.Forms.Label()
+Me.TextBox39 = New System.Windows.Forms.TextBox()
+Me.Button72 = New System.Windows.Forms.Button()
+Me.TextBox40 = New System.Windows.Forms.TextBox()
+Me.Label85 = New System.Windows.Forms.Label()
+Me.Button71 = New System.Windows.Forms.Button()
+Me.Label84 = New System.Windows.Forms.Label()
+Me.Button70 = New System.Windows.Forms.Button()
+Me.Label83 = New System.Windows.Forms.Label()
+Me.ListBox6 = New System.Windows.Forms.ListBox()
+Me.TabPage24 = New System.Windows.Forms.TabPage()
+Me.TabControl6 = New System.Windows.Forms.TabControl()
+Me.TabPage30 = New System.Windows.Forms.TabPage()
+Me.GroupBox17 = New System.Windows.Forms.GroupBox()
+Me.CheckBox36 = New System.Windows.Forms.CheckBox()
+Me.Label139 = New System.Windows.Forms.Label()
+Me.GroupBox20 = New System.Windows.Forms.GroupBox()
+Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+Me.CheckBox10 = New System.Windows.Forms.CheckBox()
+Me.GroupBox19 = New System.Windows.Forms.GroupBox()
+Me.RadioButton39 = New System.Windows.Forms.RadioButton()
+Me.RadioButton40 = New System.Windows.Forms.RadioButton()
+Me.RadioButton41 = New System.Windows.Forms.RadioButton()
+Me.Panel21 = New System.Windows.Forms.Panel()
+Me.Label111 = New System.Windows.Forms.Label()
+Me.bannerbtn = New System.Windows.Forms.RadioButton()
+Me.posterbtn = New System.Windows.Forms.RadioButton()
+Me.CheckBox35 = New System.Windows.Forms.CheckBox()
+Me.CheckBox34 = New System.Windows.Forms.CheckBox()
+Me.Label138 = New System.Windows.Forms.Label()
+Me.GroupBox15 = New System.Windows.Forms.GroupBox()
+Me.CheckBox40 = New System.Windows.Forms.CheckBox()
+Me.CheckBox37 = New System.Windows.Forms.CheckBox()
+Me.Label140 = New System.Windows.Forms.Label()
+Me.ComboBox9 = New System.Windows.Forms.ComboBox()
+Me.CheckBox20 = New System.Windows.Forms.CheckBox()
+Me.CheckBox17 = New System.Windows.Forms.CheckBox()
+Me.ListBox12 = New System.Windows.Forms.ListBox()
+Me.Label122 = New System.Windows.Forms.Label()
+Me.ComboBox8 = New System.Windows.Forms.ComboBox()
+Me.Label123 = New System.Windows.Forms.Label()
+Me.Label124 = New System.Windows.Forms.Label()
+Me.RadioButton42 = New System.Windows.Forms.RadioButton()
+Me.RadioButton43 = New System.Windows.Forms.RadioButton()
+Me.Button91 = New System.Windows.Forms.Button()
+Me.TabPage31 = New System.Windows.Forms.TabPage()
+Me.Button89 = New System.Windows.Forms.Button()
+Me.ListBox14 = New System.Windows.Forms.ListBox()
+Me.Button90 = New System.Windows.Forms.Button()
+Me.Button86 = New System.Windows.Forms.Button()
+Me.GroupBox18 = New System.Windows.Forms.GroupBox()
+Me.TextBox47 = New System.Windows.Forms.TextBox()
+Me.Button88 = New System.Windows.Forms.Button()
+Me.TextBox48 = New System.Windows.Forms.TextBox()
+Me.Label118 = New System.Windows.Forms.Label()
+Me.Button87 = New System.Windows.Forms.Button()
+Me.TextBox46 = New System.Windows.Forms.TextBox()
+Me.TextBox49 = New System.Windows.Forms.TextBox()
+Me.Label117 = New System.Windows.Forms.Label()
+Me.Label119 = New System.Windows.Forms.Label()
+Me.Button92 = New System.Windows.Forms.Button()
+Me.TabPage18 = New System.Windows.Forms.TabPage()
+Me.Button81 = New System.Windows.Forms.Button()
+Me.TabControl5 = New System.Windows.Forms.TabControl()
+Me.TabPage29 = New System.Windows.Forms.TabPage()
+Me.CheckBox41 = New System.Windows.Forms.CheckBox()
+Me.CheckBox38 = New System.Windows.Forms.CheckBox()
+Me.Label137 = New System.Windows.Forms.Label()
+Me.CheckBox33 = New System.Windows.Forms.CheckBox()
+Me.Label130 = New System.Windows.Forms.Label()
+Me.Button96 = New System.Windows.Forms.Button()
+Me.Label129 = New System.Windows.Forms.Label()
+Me.Panel20 = New System.Windows.Forms.Panel()
+Me.Label126 = New System.Windows.Forms.Label()
+Me.Label125 = New System.Windows.Forms.Label()
+Me.Button93 = New System.Windows.Forms.Button()
+Me.Label108 = New System.Windows.Forms.Label()
+Me.ListBox13 = New System.Windows.Forms.ListBox()
+Me.Label112 = New System.Windows.Forms.Label()
+Me.Label113 = New System.Windows.Forms.Label()
+Me.Button78 = New System.Windows.Forms.Button()
+Me.TextBox42 = New System.Windows.Forms.TextBox()
+Me.Label114 = New System.Windows.Forms.Label()
+Me.Button79 = New System.Windows.Forms.Button()
+Me.Label120 = New System.Windows.Forms.Label()
+Me.Button80 = New System.Windows.Forms.Button()
+Me.Label116 = New System.Windows.Forms.Label()
+Me.GroupBox13 = New System.Windows.Forms.GroupBox()
+Me.Label121 = New System.Windows.Forms.Label()
+Me.Label115 = New System.Windows.Forms.Label()
+Me.btn_custommediaplayer = New System.Windows.Forms.Button()
+Me.RadioButton36 = New System.Windows.Forms.RadioButton()
+Me.Label105 = New System.Windows.Forms.Label()
+Me.Label106 = New System.Windows.Forms.Label()
+Me.RadioButton37 = New System.Windows.Forms.RadioButton()
+Me.RadioButton38 = New System.Windows.Forms.RadioButton()
+Me.CheckBox12 = New System.Windows.Forms.CheckBox()
+Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
+Me.Label107 = New System.Windows.Forms.Label()
+Me.txtbx_minrarsize = New System.Windows.Forms.TextBox()
+Me.TabPage33 = New System.Windows.Forms.TabPage()
+Me.ListBox17 = New System.Windows.Forms.ListBox()
+Me.Button106 = New System.Windows.Forms.Button()
+Me.ListBox16 = New System.Windows.Forms.ListBox()
+Me.Label143 = New System.Windows.Forms.Label()
+Me.Label142 = New System.Windows.Forms.Label()
+Me.Button105 = New System.Windows.Forms.Button()
+Me.TextBox43 = New System.Windows.Forms.TextBox()
+Me.TextBox41 = New System.Windows.Forms.TextBox()
+Me.Label141 = New System.Windows.Forms.Label()
+Me.TabPage34 = New System.Windows.Forms.TabPage()
+Me.Button109 = New System.Windows.Forms.Button()
+Me.Label151 = New System.Windows.Forms.Label()
+Me.Label150 = New System.Windows.Forms.Label()
+Me.TextBox45 = New System.Windows.Forms.TextBox()
+Me.Label149 = New System.Windows.Forms.Label()
+Me.TabPage19 = New System.Windows.Forms.TabPage()
+Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+Me.MoviesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.SearchForNewMoviesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.BatchRescraperToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RebuildMoviesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ReloadMovieCacheToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RebuildActorDBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ListMoviesWithoutFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ListMoviesWithoutPostersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.OutputMovieListAsHTMLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RebuildMovieNfoFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.TVShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.SearchForNewEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.TVShowBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.CheckRootsForToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RebuildShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ReloadShowCacheToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.SearchForMissingEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.BatchRescrapeWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.MediaCompanionForumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.XBMCMCThreadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ProfilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ExportToXBMCToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.openFD = New System.Windows.Forms.OpenFileDialog()
 Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
 Me.Timer3 = New System.Windows.Forms.Timer(Me.components)
 Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
 Me.Timer4 = New System.Windows.Forms.Timer(Me.components)
 Me.ContextMenuStrip3 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-Me.PlayMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator
-Me.EditMovieToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
-Me.DToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-Me.OpenFolderToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
-Me.ListBox8 = New System.Windows.Forms.ListBox
-Me.bckgrnd_tvshowscraper = New System.ComponentModel.BackgroundWorker
-Me.FontDialog1 = New System.Windows.Forms.FontDialog
-Me.Bckgrndfindmissingepisodes = New System.ComponentModel.BackgroundWorker
-Me.HelpProvider1 = New System.Windows.Forms.HelpProvider
-Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker
+Me.PlayMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+Me.EditMovieToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.DToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.OpenFolderToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ListBox8 = New System.Windows.Forms.ListBox()
+Me.bckgrnd_tvshowscraper = New System.ComponentModel.BackgroundWorker()
+Me.FontDialog1 = New System.Windows.Forms.FontDialog()
+Me.Bckgrndfindmissingepisodes = New System.ComponentModel.BackgroundWorker()
+Me.HelpProvider1 = New System.Windows.Forms.HelpProvider()
+Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
@@ -781,6 +796,8 @@ Me.SplitContainer5.Panel2.SuspendLayout
 Me.SplitContainer5.SuspendLayout
 Me.Panel5.SuspendLayout
 Me.Panel1.SuspendLayout
+Me.Panel4.SuspendLayout
+Me.GroupBox21.SuspendLayout
 Me.trailerdownloadpanel.SuspendLayout
 Me.SplitContainer2.Panel1.SuspendLayout
 Me.SplitContainer2.Panel2.SuspendLayout
@@ -813,6 +830,7 @@ Me.SplitContainer7.SuspendLayout
 Me.TabPage26.SuspendLayout
 Me.TabControl4.SuspendLayout
 Me.TabPage27.SuspendLayout
+Me.Panel22.SuspendLayout
 Me.GroupBox8.SuspendLayout
 Me.Panel19.SuspendLayout
 Me.Panel17.SuspendLayout
@@ -1660,6 +1678,16 @@ Me.txt_tabletitle.Size = New System.Drawing.Size(90, 20)
 Me.txt_tabletitle.TabIndex = 18
 Me.ToolTip1.SetToolTip(Me.txt_tabletitle, "Edit Title of the selected Movies")
 '
+'TextBox_GenreFilter
+'
+Me.TextBox_GenreFilter.Location = New System.Drawing.Point(144, 4)
+Me.TextBox_GenreFilter.Name = "TextBox_GenreFilter"
+Me.TextBox_GenreFilter.ReadOnly = true
+Me.TextBox_GenreFilter.Size = New System.Drawing.Size(155, 20)
+Me.TextBox_GenreFilter.TabIndex = 61
+Me.TextBox_GenreFilter.Text = "Genre Filter (AND)"
+Me.ToolTip1.SetToolTip(Me.TextBox_GenreFilter, "Click me to Lock the Genre List")
+'
 'Button66
 '
 Me.Button66.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
@@ -1684,7 +1712,7 @@ Me.ComboBox1.FormattingEnabled = true
 Me.ComboBox1.Location = New System.Drawing.Point(3, 126)
 Me.ComboBox1.Name = "ComboBox1"
 Me.ComboBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ComboBox1.Size = New System.Drawing.Size(292, 160)
+Me.ComboBox1.Size = New System.Drawing.Size(292, 95)
 Me.ComboBox1.TabIndex = 53
 '
 'ContextMenuStrip1
@@ -1971,10 +1999,14 @@ Me.SplitContainer5.Panel1.Controls.Add(Me.Label1)
 '
 'SplitContainer5.Panel2
 '
-Me.SplitContainer5.Panel2.Controls.Add(Me.Label30)
-Me.SplitContainer5.Panel2.Controls.Add(Me.CheckedListBox1)
+Me.SplitContainer5.Panel2.Controls.Add(Me.Panel4)
+Me.SplitContainer5.Panel2.Controls.Add(Me.GroupBox21)
+Me.SplitContainer5.Panel2.Controls.Add(Me.TextBox_GenreFilter)
+Me.SplitContainer5.Panel2.Controls.Add(Me.ComboBox11)
+Me.SplitContainer5.Panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl
+Me.SplitContainer5.Panel2MinSize = 120
 Me.SplitContainer5.Size = New System.Drawing.Size(309, 463)
-Me.SplitContainer5.SplitterDistance = 295
+Me.SplitContainer5.SplitterDistance = 224
 Me.SplitContainer5.TabIndex = 68
 '
 'ComboBox10
@@ -2184,20 +2216,19 @@ Me.Label1.Size = New System.Drawing.Size(26, 13)
 Me.Label1.TabIndex = 59
 Me.Label1.Text = "Sort"
 '
-'Label30
+'Panel4
 '
-Me.Label30.AutoSize = true
-Me.Label30.Location = New System.Drawing.Point(3, 1)
-Me.Label30.Name = "Label30"
-Me.Label30.Size = New System.Drawing.Size(93, 13)
-Me.Label30.TabIndex = 60
-Me.Label30.Text = "Genre Filter (AND)"
+Me.Panel4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.Panel4.Controls.Add(Me.CheckedListBox1)
+Me.Panel4.Controls.Add(Me.LinkLabel1)
+Me.Panel4.Location = New System.Drawing.Point(136, 137)
+Me.Panel4.Name = "Panel4"
+Me.Panel4.Size = New System.Drawing.Size(155, 83)
+Me.Panel4.TabIndex = 63
+Me.Panel4.Visible = false
 '
 'CheckedListBox1
 '
-Me.CheckedListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.CheckedListBox1.BackColor = System.Drawing.SystemColors.ControlLight
 Me.CheckedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
 Me.CheckedListBox1.CheckOnClick = true
@@ -2205,14 +2236,112 @@ Me.CheckedListBox1.ColumnWidth = 85
 Me.CheckedListBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.CheckedListBox1.FormattingEnabled = true
 Me.CheckedListBox1.HorizontalExtent = 1000
-Me.CheckedListBox1.Items.AddRange(New Object() {"Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Short", "Sport", "Thriller", "War", "Western", "Top250", "Watched", "Unwatched", "Duplicates", "Missing Fanart", "Missing Posters", "Offline Movies"})
-Me.CheckedListBox1.Location = New System.Drawing.Point(3, 18)
-Me.CheckedListBox1.MinimumSize = New System.Drawing.Size(232, 0)
-Me.CheckedListBox1.MultiColumn = true
+Me.CheckedListBox1.Items.AddRange(New Object() {"Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Short", "Sport", "Thriller", "War", "Western", "Top250"})
+Me.CheckedListBox1.Location = New System.Drawing.Point(0, 1)
+Me.CheckedListBox1.MinimumSize = New System.Drawing.Size(150, 0)
 Me.CheckedListBox1.Name = "CheckedListBox1"
-Me.CheckedListBox1.Size = New System.Drawing.Size(299, 130)
+Me.CheckedListBox1.ScrollAlwaysVisible = true
+Me.CheckedListBox1.Size = New System.Drawing.Size(150, 65)
 Me.CheckedListBox1.TabIndex = 52
 Me.CheckedListBox1.ThreeDCheckBoxes = true
+'
+'LinkLabel1
+'
+Me.LinkLabel1.AutoSize = true
+Me.LinkLabel1.Location = New System.Drawing.Point(3, 69)
+Me.LinkLabel1.Name = "LinkLabel1"
+Me.LinkLabel1.Size = New System.Drawing.Size(105, 13)
+Me.LinkLabel1.TabIndex = 62
+Me.LinkLabel1.TabStop = true
+Me.LinkLabel1.Text = "Close Filter Selection"
+'
+'GroupBox21
+'
+Me.GroupBox21.Controls.Add(Me.RadioButton50)
+Me.GroupBox21.Controls.Add(Me.RadioButton45)
+Me.GroupBox21.Controls.Add(Me.RadioButton49)
+Me.GroupBox21.Controls.Add(Me.RadioButton46)
+Me.GroupBox21.Controls.Add(Me.RadioButton48)
+Me.GroupBox21.Controls.Add(Me.RadioButton47)
+Me.GroupBox21.Location = New System.Drawing.Point(3, 4)
+Me.GroupBox21.Name = "GroupBox21"
+Me.GroupBox21.Size = New System.Drawing.Size(124, 119)
+Me.GroupBox21.TabIndex = 65
+Me.GroupBox21.TabStop = false
+Me.GroupBox21.Text = "General Filters"
+'
+'RadioButton50
+'
+Me.RadioButton50.AutoSize = true
+Me.RadioButton50.Location = New System.Drawing.Point(6, 94)
+Me.RadioButton50.Name = "RadioButton50"
+Me.RadioButton50.Size = New System.Drawing.Size(93, 17)
+Me.RadioButton50.TabIndex = 5
+Me.RadioButton50.Text = "Missing Fanart"
+Me.RadioButton50.UseVisualStyleBackColor = true
+'
+'RadioButton45
+'
+Me.RadioButton45.AutoSize = true
+Me.RadioButton45.Location = New System.Drawing.Point(6, 15)
+Me.RadioButton45.Name = "RadioButton45"
+Me.RadioButton45.Size = New System.Drawing.Size(36, 17)
+Me.RadioButton45.TabIndex = 0
+Me.RadioButton45.Text = "All"
+Me.RadioButton45.UseVisualStyleBackColor = true
+'
+'RadioButton49
+'
+Me.RadioButton49.AutoSize = true
+Me.RadioButton49.Location = New System.Drawing.Point(6, 78)
+Me.RadioButton49.Name = "RadioButton49"
+Me.RadioButton49.Size = New System.Drawing.Size(98, 17)
+Me.RadioButton49.TabIndex = 4
+Me.RadioButton49.Text = "Missing Posters"
+Me.RadioButton49.UseVisualStyleBackColor = true
+'
+'RadioButton46
+'
+Me.RadioButton46.AutoSize = true
+Me.RadioButton46.Location = New System.Drawing.Point(6, 31)
+Me.RadioButton46.Name = "RadioButton46"
+Me.RadioButton46.Size = New System.Drawing.Size(69, 17)
+Me.RadioButton46.TabIndex = 1
+Me.RadioButton46.Text = "Watched"
+Me.RadioButton46.UseVisualStyleBackColor = true
+'
+'RadioButton48
+'
+Me.RadioButton48.AutoSize = true
+Me.RadioButton48.Location = New System.Drawing.Point(6, 62)
+Me.RadioButton48.Name = "RadioButton48"
+Me.RadioButton48.Size = New System.Drawing.Size(75, 17)
+Me.RadioButton48.TabIndex = 3
+Me.RadioButton48.Text = "Duplicates"
+Me.RadioButton48.UseVisualStyleBackColor = true
+'
+'RadioButton47
+'
+Me.RadioButton47.AutoSize = true
+Me.RadioButton47.Location = New System.Drawing.Point(6, 47)
+Me.RadioButton47.Name = "RadioButton47"
+Me.RadioButton47.Size = New System.Drawing.Size(83, 17)
+Me.RadioButton47.TabIndex = 2
+Me.RadioButton47.Text = "UnWatched"
+Me.RadioButton47.UseVisualStyleBackColor = true
+'
+'ComboBox11
+'
+Me.ComboBox11.BackColor = System.Drawing.SystemColors.Control
+Me.ComboBox11.DropDownHeight = 65
+Me.ComboBox11.FormattingEnabled = true
+Me.ComboBox11.IntegralHeight = false
+Me.ComboBox11.Items.AddRange(New Object() {"All", "DVDRip", "DVDR5", "DVDScreener", "Bluray", "Telesync", "CAM", "PDTV"})
+Me.ComboBox11.Location = New System.Drawing.Point(144, 47)
+Me.ComboBox11.MaxDropDownItems = 5
+Me.ComboBox11.Name = "ComboBox11"
+Me.ComboBox11.Size = New System.Drawing.Size(155, 21)
+Me.ComboBox11.TabIndex = 66
 '
 'ListBox2
 '
@@ -3616,7 +3745,7 @@ Me.TextBox8.Dock = System.Windows.Forms.DockStyle.Fill
 Me.TextBox8.Location = New System.Drawing.Point(0, 0)
 Me.TextBox8.Multiline = true
 Me.TextBox8.Name = "TextBox8"
-Me.TextBox8.Size = New System.Drawing.Size(958, 800)
+Me.TextBox8.Size = New System.Drawing.Size(975, 800)
 Me.TextBox8.TabIndex = 0
 '
 'ToolTip2
@@ -4497,7 +4626,7 @@ Me.TabPage26.UseVisualStyleBackColor = true
 '
 Me.Button82.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button82.Location = New System.Drawing.Point(434, 423)
+Me.Button82.Location = New System.Drawing.Point(432, 437)
 Me.Button82.Name = "Button82"
 Me.Button82.Size = New System.Drawing.Size(113, 23)
 Me.Button82.TabIndex = 51
@@ -4522,8 +4651,7 @@ Me.TabControl4.TabIndex = 50
 Me.TabPage27.AutoScroll = true
 Me.TabPage27.AutoScrollMinSize = New System.Drawing.Size(928, 370)
 Me.TabPage27.BackColor = System.Drawing.SystemColors.Control
-Me.TabPage27.Controls.Add(Me.CheckBox19)
-Me.TabPage27.Controls.Add(Me.CheckBox16)
+Me.TabPage27.Controls.Add(Me.Panel22)
 Me.TabPage27.Controls.Add(Me.Label98)
 Me.TabPage27.Controls.Add(Me.ComboBox7)
 Me.TabPage27.Controls.Add(Me.GroupBox8)
@@ -4531,7 +4659,6 @@ Me.TabPage27.Controls.Add(Me.Panel19)
 Me.TabPage27.Controls.Add(Me.Panel17)
 Me.TabPage27.Controls.Add(Me.CheckBox13)
 Me.TabPage27.Controls.Add(Me.Label92)
-Me.TabPage27.Controls.Add(Me.CheckBox11)
 Me.TabPage27.Controls.Add(Me.ComboBox6)
 Me.TabPage27.Controls.Add(Me.GroupBox10)
 Me.TabPage27.Controls.Add(Me.GroupBox11)
@@ -4543,25 +4670,78 @@ Me.TabPage27.Size = New System.Drawing.Size(969, 391)
 Me.TabPage27.TabIndex = 0
 Me.TabPage27.Text = "General"
 '
-'CheckBox19
+'Panel22
 '
-Me.CheckBox19.AutoSize = true
-Me.CheckBox19.Location = New System.Drawing.Point(6, 334)
-Me.CheckBox19.Name = "CheckBox19"
-Me.CheckBox19.Size = New System.Drawing.Size(224, 17)
-Me.CheckBox19.TabIndex = 64
-Me.CheckBox19.Text = "Enable MC to save Media Tags to nfo file."
-Me.CheckBox19.UseVisualStyleBackColor = true
+Me.Panel22.Controls.Add(Me.RadioButton52)
+Me.Panel22.Controls.Add(Me.RadioButton51)
+Me.Panel22.Controls.Add(Me.CheckBox_Use_XBMC_Scraper)
+Me.Panel22.Controls.Add(Me.CheckBox11)
+Me.Panel22.Controls.Add(Me.CheckBox16)
+Me.Panel22.Controls.Add(Me.CheckBox19)
+Me.Panel22.Location = New System.Drawing.Point(12, 286)
+Me.Panel22.Name = "Panel22"
+Me.Panel22.Size = New System.Drawing.Size(297, 125)
+Me.Panel22.TabIndex = 66
+'
+'RadioButton52
+'
+Me.RadioButton52.AutoSize = true
+Me.RadioButton52.Location = New System.Drawing.Point(25, 87)
+Me.RadioButton52.Name = "RadioButton52"
+Me.RadioButton52.Size = New System.Drawing.Size(151, 17)
+Me.RadioButton52.TabIndex = 67
+Me.RadioButton52.Text = "Use TMDB XBMC Scraper"
+Me.RadioButton52.UseVisualStyleBackColor = true
+'
+'RadioButton51
+'
+Me.RadioButton51.AutoSize = true
+Me.RadioButton51.Location = New System.Drawing.Point(25, 69)
+Me.RadioButton51.Name = "RadioButton51"
+Me.RadioButton51.Size = New System.Drawing.Size(147, 17)
+Me.RadioButton51.TabIndex = 66
+Me.RadioButton51.Text = "Use IMDB XBMC Scraper"
+Me.RadioButton51.UseVisualStyleBackColor = true
+'
+'CheckBox_Use_XBMC_Scraper
+'
+Me.CheckBox_Use_XBMC_Scraper.AutoSize = true
+Me.CheckBox_Use_XBMC_Scraper.Location = New System.Drawing.Point(3, 53)
+Me.CheckBox_Use_XBMC_Scraper.Name = "CheckBox_Use_XBMC_Scraper"
+Me.CheckBox_Use_XBMC_Scraper.Size = New System.Drawing.Size(118, 17)
+Me.CheckBox_Use_XBMC_Scraper.TabIndex = 65
+Me.CheckBox_Use_XBMC_Scraper.Text = "Use XBMC Scraper"
+Me.CheckBox_Use_XBMC_Scraper.UseVisualStyleBackColor = true
+'
+'CheckBox11
+'
+Me.CheckBox11.AutoSize = true
+Me.CheckBox11.Location = New System.Drawing.Point(3, 3)
+Me.CheckBox11.Name = "CheckBox11"
+Me.CheckBox11.Size = New System.Drawing.Size(251, 17)
+Me.CheckBox11.TabIndex = 49
+Me.CheckBox11.Text = "Include IMDB Movie Trailer url within the nfo file"
+Me.CheckBox11.UseVisualStyleBackColor = true
 '
 'CheckBox16
 '
 Me.CheckBox16.AutoSize = true
-Me.CheckBox16.Location = New System.Drawing.Point(6, 310)
+Me.CheckBox16.Location = New System.Drawing.Point(3, 19)
 Me.CheckBox16.Name = "CheckBox16"
 Me.CheckBox16.Size = New System.Drawing.Size(181, 17)
 Me.CheckBox16.TabIndex = 63
 Me.CheckBox16.Text = "Display log after scraping Movies"
 Me.CheckBox16.UseVisualStyleBackColor = true
+'
+'CheckBox19
+'
+Me.CheckBox19.AutoSize = true
+Me.CheckBox19.Location = New System.Drawing.Point(3, 36)
+Me.CheckBox19.Name = "CheckBox19"
+Me.CheckBox19.Size = New System.Drawing.Size(224, 17)
+Me.CheckBox19.TabIndex = 64
+Me.CheckBox19.Text = "Enable MC to save Media Tags to nfo file."
+Me.CheckBox19.UseVisualStyleBackColor = true
 '
 'Label98
 '
@@ -4711,16 +4891,6 @@ Me.Label92.Name = "Label92"
 Me.Label92.Size = New System.Drawing.Size(213, 13)
 Me.Label92.TabIndex = 45
 Me.Label92.Text = "Limit number of genres to scrape from IMDB"
-'
-'CheckBox11
-'
-Me.CheckBox11.AutoSize = true
-Me.CheckBox11.Location = New System.Drawing.Point(6, 286)
-Me.CheckBox11.Name = "CheckBox11"
-Me.CheckBox11.Size = New System.Drawing.Size(251, 17)
-Me.CheckBox11.TabIndex = 49
-Me.CheckBox11.Text = "Include IMDB Movie Trailer url within the nfo file"
-Me.CheckBox11.UseVisualStyleBackColor = true
 '
 'GroupBox10
 '
@@ -7841,6 +8011,7 @@ Me.TabControl5.TabIndex = 32
 'TabPage29
 '
 Me.TabPage29.BackColor = System.Drawing.Color.Transparent
+Me.TabPage29.Controls.Add(Me.CheckBox41)
 Me.TabPage29.Controls.Add(Me.CheckBox38)
 Me.TabPage29.Controls.Add(Me.Label137)
 Me.TabPage29.Controls.Add(Me.CheckBox33)
@@ -7862,10 +8033,20 @@ Me.TabPage29.TabIndex = 0
 Me.TabPage29.Text = "General"
 Me.TabPage29.UseVisualStyleBackColor = true
 '
+'CheckBox41
+'
+Me.CheckBox41.AutoSize = true
+Me.CheckBox41.Location = New System.Drawing.Point(5, 386)
+Me.CheckBox41.Name = "CheckBox41"
+Me.CheckBox41.Size = New System.Drawing.Size(214, 17)
+Me.CheckBox41.TabIndex = 40
+Me.CheckBox41.Text = "Ignore articles when sorting (e.g. ""The"")"
+Me.CheckBox41.UseVisualStyleBackColor = true
+'
 'CheckBox38
 '
 Me.CheckBox38.AutoSize = true
-Me.CheckBox38.Location = New System.Drawing.Point(5, 382)
+Me.CheckBox38.Location = New System.Drawing.Point(5, 337)
 Me.CheckBox38.Name = "CheckBox38"
 Me.CheckBox38.Size = New System.Drawing.Size(203, 17)
 Me.CheckBox38.TabIndex = 39
@@ -7875,7 +8056,7 @@ Me.CheckBox38.UseVisualStyleBackColor = true
 'Label137
 '
 Me.Label137.AutoSize = true
-Me.Label137.Location = New System.Drawing.Point(2, 326)
+Me.Label137.Location = New System.Drawing.Point(2, 291)
 Me.Label137.Name = "Label137"
 Me.Label137.Size = New System.Drawing.Size(406, 26)
 Me.Label137.TabIndex = 38
@@ -7886,7 +8067,7 @@ Me.Label137.Text = "Newer builds of Media Companion has the function to scrape a
 'CheckBox33
 '
 Me.CheckBox33.AutoSize = true
-Me.CheckBox33.Location = New System.Drawing.Point(6, 355)
+Me.CheckBox33.Location = New System.Drawing.Point(6, 320)
 Me.CheckBox33.Name = "CheckBox33"
 Me.CheckBox33.Size = New System.Drawing.Size(222, 17)
 Me.CheckBox33.TabIndex = 37
@@ -8064,7 +8245,7 @@ Me.Button80.UseVisualStyleBackColor = true
 'Label116
 '
 Me.Label116.AutoSize = true
-Me.Label116.Location = New System.Drawing.Point(3, 204)
+Me.Label116.Location = New System.Drawing.Point(3, 189)
 Me.Label116.Name = "Label116"
 Me.Label116.Size = New System.Drawing.Size(343, 39)
 Me.Label116.TabIndex = 32
@@ -8167,7 +8348,7 @@ Me.RadioButton38.UseVisualStyleBackColor = true
 'CheckBox12
 '
 Me.CheckBox12.AutoSize = true
-Me.CheckBox12.Location = New System.Drawing.Point(5, 272)
+Me.CheckBox12.Location = New System.Drawing.Point(5, 257)
 Me.CheckBox12.Name = "CheckBox12"
 Me.CheckBox12.Size = New System.Drawing.Size(289, 17)
 Me.CheckBox12.TabIndex = 31
@@ -8177,7 +8358,7 @@ Me.CheckBox12.UseVisualStyleBackColor = true
 'chkbx_disablecache
 '
 Me.chkbx_disablecache.AutoSize = true
-Me.chkbx_disablecache.Location = New System.Drawing.Point(5, 297)
+Me.chkbx_disablecache.Location = New System.Drawing.Point(5, 274)
 Me.chkbx_disablecache.Name = "chkbx_disablecache"
 Me.chkbx_disablecache.Size = New System.Drawing.Size(285, 17)
 Me.chkbx_disablecache.TabIndex = 30
@@ -8187,7 +8368,7 @@ Me.chkbx_disablecache.UseVisualStyleBackColor = true
 'Label107
 '
 Me.Label107.AutoSize = true
-Me.Label107.Location = New System.Drawing.Point(62, 249)
+Me.Label107.Location = New System.Drawing.Point(62, 234)
 Me.Label107.Name = "Label107"
 Me.Label107.Size = New System.Drawing.Size(311, 13)
 Me.Label107.TabIndex = 27
@@ -8195,7 +8376,7 @@ Me.Label107.Text = "Set number in MB, RAR archives smaller than this will be ign
 '
 'txtbx_minrarsize
 '
-Me.txtbx_minrarsize.Location = New System.Drawing.Point(5, 246)
+Me.txtbx_minrarsize.Location = New System.Drawing.Point(5, 231)
 Me.txtbx_minrarsize.Name = "txtbx_minrarsize"
 Me.txtbx_minrarsize.Size = New System.Drawing.Size(51, 20)
 Me.txtbx_minrarsize.TabIndex = 26
@@ -8635,11 +8816,11 @@ Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
 '
 'BasicmovienfoBindingSource1
 '
-        Me.BasicmovienfoBindingSource1.DataSource = GetType(Media_Companion.BasicMovieNFO)
-        '
-        'BasicmovienfoBindingSource
-        '
-        Me.BasicmovienfoBindingSource.DataSource = GetType(Media_Companion.BasicMovieNFO)
+Me.BasicmovienfoBindingSource1.DataSource = GetType(Media_Companion.BasicMovieNFO)
+'
+'BasicmovienfoBindingSource
+'
+Me.BasicmovienfoBindingSource.DataSource = GetType(Media_Companion.BasicMovieNFO)
 '
 'Form1
 '
@@ -8685,6 +8866,10 @@ Me.Panel5.ResumeLayout(false)
 Me.Panel5.PerformLayout
 Me.Panel1.ResumeLayout(false)
 Me.Panel1.PerformLayout
+Me.Panel4.ResumeLayout(false)
+Me.Panel4.PerformLayout
+Me.GroupBox21.ResumeLayout(false)
+Me.GroupBox21.PerformLayout
 Me.trailerdownloadpanel.ResumeLayout(false)
 Me.trailerdownloadpanel.PerformLayout
 Me.SplitContainer2.Panel1.ResumeLayout(false)
@@ -8733,6 +8918,8 @@ Me.TabPage26.PerformLayout
 Me.TabControl4.ResumeLayout(false)
 Me.TabPage27.ResumeLayout(false)
 Me.TabPage27.PerformLayout
+Me.Panel22.ResumeLayout(false)
+Me.Panel22.PerformLayout
 Me.GroupBox8.ResumeLayout(false)
 Me.GroupBox8.PerformLayout
 Me.Panel19.ResumeLayout(false)
@@ -8907,7 +9094,6 @@ End Sub
     Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents Label30 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents txt_titlesearch As System.Windows.Forms.TextBox
@@ -9585,6 +9771,22 @@ End Sub
     Friend WithEvents Label150 As System.Windows.Forms.Label
     Friend WithEvents TextBox45 As System.Windows.Forms.TextBox
     Friend WithEvents Button109 As System.Windows.Forms.Button
+    Friend WithEvents CheckBox41 As System.Windows.Forms.CheckBox
+    Friend WithEvents TextBox_GenreFilter As System.Windows.Forms.TextBox
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents RadioButton46 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton45 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton50 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton49 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton48 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton47 As System.Windows.Forms.RadioButton
+    Friend WithEvents GroupBox21 As System.Windows.Forms.GroupBox
+    Friend WithEvents ComboBox11 As System.Windows.Forms.ComboBox
+    Friend WithEvents CheckBox_Use_XBMC_Scraper As System.Windows.Forms.CheckBox
+    Friend WithEvents Panel22 As System.Windows.Forms.Panel
+    Friend WithEvents RadioButton52 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton51 As System.Windows.Forms.RadioButton
 
 
 

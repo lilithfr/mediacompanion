@@ -438,6 +438,18 @@ Public Class _preferences
             child.InnerText = Form1.userprefs.autoepisodescreenshot.ToString.ToLower
             root.AppendChild(child)
 
+            child = doc.CreateElement("ignorearticle")
+            child.InnerText = Form1.userprefs.ignorearticle.ToString.ToLower
+            root.AppendChild(child)
+
+            child = doc.CreateElement("moviesUseXBMCScraper")
+            child.InnerText = Form1.userprefs.movies_useXBMC_Scraper.ToString.ToLower
+            root.AppendChild(child)
+
+            child = doc.CreateElement("whatXBMCScraper")
+            child.InnerText = Form1.userprefs.XBMC_Scraper.ToString.ToLower
+            root.AppendChild(child)
+
             child = doc.CreateElement("startuptab")
             child.InnerText = Form1.userprefs.startuptab.ToString
             root.AppendChild(child)
@@ -894,6 +906,34 @@ Public Class _preferences
                     ElseIf thisresult.InnerXml = "false" Then
                         Form1.userprefs.autoepisodescreenshot = False
                     End If
+
+                Case "ignorearticle"
+                    If thisresult.InnerXml = "true" Then
+                        Form1.userprefs.ignorearticle = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Form1.userprefs.ignorearticle = False
+                    End If
+
+                Case "moviesUseXBMCScraper"
+                    If thisresult.InnerXml = "true" Then
+                        Form1.userprefs.movies_useXBMC_Scraper = True
+                        Form1.RadioButton51.Visible = True
+                        Form1.RadioButton52.Visible = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Form1.userprefs.movies_useXBMC_Scraper = False
+                        Form1.RadioButton51.Visible = False
+                        Form1.RadioButton52.Visible = False
+                    End If
+
+
+                Case "whatXBMCScraper"
+                    Form1.userprefs.XBMC_Scraper = thisresult.InnerXml
+                    If thisresult.InnerXml = "imdb" Then
+                        Form1.RadioButton51.Checked = True
+                    ElseIf thisresult.InnerXml = "tmdb" Then
+                        Form1.RadioButton52.Checked = True
+                    End If
+
 
                 Case "downloadtvposter"
                     If thisresult.InnerXml = "true" Then

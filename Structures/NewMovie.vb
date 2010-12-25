@@ -4,4 +4,5 @@ Public Structure NewMovie
     Dim nfopath As String
     Dim title As String
     Dim mediapathandfilename As String
+
 End Structure

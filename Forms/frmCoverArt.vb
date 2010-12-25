@@ -236,7 +236,48 @@ Public Class frmCoverArt
         Call initialise()
 
         Dim tempsimdbid As String
-        Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & tmdbid & "&api_key=3f026194412846e530a208cf8a39e9cb"
+        '------------------------------------
+        ''                                    Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
+        'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
+        'Dim apple2(2000) As String
+        'Dim fanartlinecount As Integer = 0
+        'Try
+        '    Dim wrGETURL As WebRequest
+        '    wrGETURL = WebRequest.Create(fanarturl)
+        '    Dim myProxy As New WebProxy("myproxy", 80)
+        '    myProxy.BypassProxyOnLocal = True
+        '    Dim objStream As Stream
+        '    objStream = wrGETURL.GetResponse.GetResponseStream()
+        '    Dim objReader As New StreamReader(objStream)
+        '    Dim sLine As String = ""
+        '    fanartlinecount = 0
+        '    Do While Not sLine Is Nothing
+        '        fanartlinecount += 1
+        '        sLine = objReader.ReadLine
+        '        apple2(fanartlinecount) = sLine
+        '    Loop
+        '    fanartlinecount -= 1
+        ''    Dim fanartfound As Boolean = False
+        '    For f = 1 To fanartlinecount
+        '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
+        '            If apple2(g).IndexOf("size=""original""") <> -1 Then
+        '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
+        '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
+        '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
+        '                apple2(g) = apple2(g).Trim
+        '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
+        '                    moviethumburl = apple2(g)
+        '                    fanartfound = True
+        '                End If
+        '            End If
+        '            Exit For
+        '        End If
+        '    Next
+        '    If fanartfound = False Then moviethumburl = ""
+        'Catch
+        'End Try
+        '------------------------------------
+        Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & tmdbid
         Dim apple2(2000) As String
         Dim fanartlinecount As Integer = 0
         Try
@@ -274,6 +315,57 @@ Public Class frmCoverArt
         fanartlinecount = 0
 
         fanarturl = "http://api.themoviedb.org/2.0/Movie.getInfo?id=" & tempsimdbid & "&api_key=3f026194412846e530a208cf8a39e9cb"
+
+        'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & tempsimdbid
+        'Dim apple2(2000) As String
+        'Dim fanartlinecount As Integer = 0
+        'Try
+        '    Dim wrGETURL As WebRequest
+
+        '    wrGETURL = WebRequest.Create(fanarturl)
+        '    Dim myProxy As New WebProxy("myproxy", 80)
+        '    myProxy.BypassProxyOnLocal = True
+        '    Dim objStream As Stream
+        '    objStream = wrGETURL.GetResponse.GetResponseStream()
+        '    Dim objReader As New StreamReader(objStream)
+        '    Dim sLine As String = ""
+        '    fanartlinecount = 0
+
+        '    Do While Not sLine Is Nothing
+        '        fanartlinecount += 1
+        '        sLine = objReader.ReadLine
+        '        apple2(fanartlinecount) = sLine
+        '    Loop
+
+        '    fanartlinecount -= 1
+        '    Dim fanartfound As Boolean = False
+        '    For g = 1 To fanartlinecount
+        '        ' vou mudar para ser compativel com api 2.1'                                           If apple2(g).IndexOf("<backdrop size=""original"">") <> -1 Then
+        '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
+        '            If apple2(g).IndexOf("size=""original""") <> -1 Then
+        '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
+        '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
+
+        '                '                                                    apple2(g) = apple2(g).Replace("<image type=""backdrop""", "")
+        '                '                                                    apple2(g) = apple2(g).Replace("</backdrop>", "")
+        '                '                                                    apple2(g) = apple2(g).Replace("  ", "")
+        '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
+        '                '                                                    Dim teste1 As String = apple2(g).Substring(posicaoinicial, 10)
+        '                '                                                    Dim teste2 As String = apple2(g).Substring(posicaoinicial, posicaofinal)
+        '                '                                                    Dim teste3 As String = apple2(g).Substring(posicaoinicial, ((posicaofinal - posicaoinicial) - 15))
+
+        '                apple2(g) = apple2(g).Trim
+        '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
+        '                    moviethumburl = apple2(g)
+        '                    fanartfound = True
+        '                End If
+        '            End If
+        '            Exit For
+        '        End If
+        '    Next
+        '    If fanartfound = False Then moviethumburl = ""
+        'Catch
+        'End Try
 
         Try
             Dim wrGETURL2 As WebRequest

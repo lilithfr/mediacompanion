@@ -1128,6 +1128,8 @@ Public Class frmOptions
                 Dim showlist As New XmlDocument
                 'Try
                 showlist.LoadXml(xmlfile)
+                objReader.Close()
+                objStream.Close()
                 Dim thisresult As XmlNode = Nothing
                 For Each thisresult In showlist("Languages")
                     Select Case thisresult.Name

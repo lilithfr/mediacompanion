@@ -345,7 +345,6 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
-
     End Function
 
     Public Function CharCount(ByVal OrigString As String, _
@@ -520,6 +519,8 @@ Public Class Classimdb
             Dim mpaacount As Integer = -1
             Dim webpage As New List(Of String)
             Dim mpaaresults(33, 1) As String
+            Dim OriginalTitle As Boolean = False
+            Dim FoundTitle As Boolean = False
             mpaaresults(0, 0) = "MPAA"
             mpaaresults(1, 0) = "UK"
             mpaaresults(2, 0) = "USA"
@@ -588,7 +589,7 @@ Public Class Classimdb
                 For f = 0 To webpage.Count - 1
                     webcounter = f
                     If webcounter > webpage.Count - 10 Then Exit For
-                    If webpage(f).IndexOf("<title>") <> -1 Then
+                    If (webpage(f).IndexOf("<title>") <> -1) And (OriginalTitle = False) Then
                         Try
                             Dim movieyear As String = ""
                             movienfoarray = webpage(f)
@@ -625,11 +626,69 @@ Public Class Classimdb
                             totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
                             totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
                             movienfoarray = ""
+                            FoundTitle = True
                         Catch
                             totalinfo = totalinfo & "<title>scraper error</title>" & vbCrLf
                             totalinfo = totalinfo & "<year>scraper error</year>" & vbCrLf
                         End Try
                     End If
+
+
+                    ' Original Title
+
+                    If (webpage(f).IndexOf("title-extra") <> -1) Then
+                        Try
+                            Dim movieyear As String = ""
+                            movienfoarray = webpage(f + 1)
+                            filterstring = movienfoarray
+                            movienfoarray = movienfoarray.Replace("<title>", "")
+                            movienfoarray = movienfoarray.Replace("</title>", "")
+                            If movienfoarray.IndexOf("(TV)") <> -1 Then
+                                movienfoarray = movienfoarray.Replace("(TV)", "")
+
+                            End If
+                            If movienfoarray.IndexOf("(VG)") <> -1 Then
+                                movienfoarray = movienfoarray.Replace("(VG)", "")
+                            End If
+
+                            first = movienfoarray.LastIndexOf("(")
+                            If first <> -1 Then
+                                If movienfoarray.Substring(first + 2, 1) = ")" Then
+                                    tempstring = movienfoarray.Substring(first, 3)
+                                    movienfoarray = movienfoarray.Replace(tempstring, "")
+                                    first = movienfoarray.LastIndexOf(")")
+                                End If
+                                If first <> -1 Then
+                                    first = movienfoarray.LastIndexOf(")")
+                                    movieyear = movienfoarray.Substring(first - 4, 4)
+                                    first = movienfoarray.LastIndexOf("(")
+                                    movienfoarray = movienfoarray.Substring(0, first)
+                                    movienfoarray = movienfoarray.Trim()
+                                End If
+                            End If
+
+                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = encodespecialchrs(movienfoarray)
+                            movieyear = encodespecialchrs(movieyear)
+                            If FoundTitle = False Then
+                                totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
+                                totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
+                            Else
+                                Dim FirstOcurrence As Integer = totalinfo.IndexOf("<title>")
+                                Dim SecondOcurrence As Integer = totalinfo.IndexOf("</title>")
+                                Dim OldTitle As String = totalinfo.Substring(FirstOcurrence, (SecondOcurrence + 8) - FirstOcurrence)
+                                totalinfo = totalinfo.Replace(OldTitle, "<title>" & movienfoarray & "</title>")
+                            End If
+                            OriginalTitle = True
+                            movienfoarray = ""
+                        Catch
+                            totalinfo = totalinfo & "<title>scraper error</title>" & vbCrLf
+                            totalinfo = totalinfo & "<year>scraper error</year>" & vbCrLf
+                        End Try
+                    End If
+
+
+
 
                     'rating
                     If webpage(f).IndexOf("<span>/10</span>") <> -1 Then
@@ -725,6 +784,8 @@ Public Class Classimdb
                                     movienfoarray = movienfoarray & " / " & listofwriters(g)
                                 End If
                             Next
+                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
                         Catch
                             totalinfo = totalinfo & "<credits>scraper error</credits>" & vbCrLf
@@ -1717,6 +1778,7 @@ Public Class Classimdb
             If filterstring.IndexOf("&#xFE;") <> -1 Then filterstring = filterstring.Replace("&#xFE;", "þ")
             If filterstring.IndexOf("&#xFF;") <> -1 Then filterstring = filterstring.Replace("&#xFF;", "ÿ")
             If filterstring.IndexOf("&oacute;") <> -1 Then filterstring = filterstring.Replace("&oacute;", "ó")
+            If filterstring.IndexOf("&eacute;") <> -1 Then filterstring = filterstring.Replace("&eacute;", "é")
             '
 
             Return filterstring

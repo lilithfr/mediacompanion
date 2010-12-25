@@ -4,6 +4,9 @@ Public Class Structures
     Public customcounter As Integer
     Public autorenameepisodes As Boolean
     Public autoepisodescreenshot As Boolean
+    Public ignorearticle As Boolean
+    Public movies_useXBMC_Scraper As Boolean
+    Public XBMC_Scraper As String = ""
     Public eprenamelowercase As Boolean
     Public tvshowautoquick As Boolean
     Public font As String
@@ -77,7 +80,7 @@ Public Class Structures
     Public externalbrowser As Boolean
     Public maximised As Boolean
     Public episodeacrorsource As String
-    Public copytvactorthumbs As Boolean
+    Public copytvactorthumbs As Boolean = False
     Public seasonall As String
     Public splt1 As Integer
     Public splt2 As Integer

@@ -173,7 +173,6 @@ Public Class ScraperFunctions
             Monitor.Exit(Me)
         End Try
     End Function
-
     Public Function mpdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
         Try
@@ -259,7 +258,6 @@ Public Class ScraperFunctions
             Monitor.Exit(Me)
         End Try
     End Function
-
     Public Function impathumb(ByVal title As String, ByVal year As String)
         Monitor.Enter(Me)
         Try
@@ -474,7 +472,6 @@ Public Class ScraperFunctions
             Monitor.Exit(Me)
         End Try
     End Function
-
     Public Function imdbthumb(ByVal posterimdbid As String)
 
         Monitor.Enter(Me)

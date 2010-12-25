@@ -132,7 +132,7 @@ Public Class frmMovieFanart
         End If
     End Sub
 
-
+ 
 
 
 
@@ -175,9 +175,11 @@ Public Class frmMovieFanart
         '    End If
         'End If
 
+
+
         Dim tmdbid As String
         Dim temp As String = Form1.workingmoviedetails.fullmoviebody.imdbid
-        Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
+        Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
         Dim apple2(2000) As String
         Dim fanartlinecount As Integer = 0
         Try

@@ -311,3 +311,38 @@ C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvEdit.res
 C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvFanart.resources
 C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvPosters.resources
 C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Media Companion.exe.config
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Interop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\AxInterop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media Companion.exe
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media Companion.pdb
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Media Companion.exe
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Media Companion.pdb
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Interop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\AxInterop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\ResolveAssemblyReference.cache
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmCopyProgress.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmCoverArt.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmDialog1.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Form1.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Form2.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmoutputlog.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.message_box.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmMovieFanart.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Resources.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmOptions.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmSplashscreen.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.tv_batch_wizard.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTvEdit.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTvFanart.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTvPosters.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\GenerateResource-ResGen.read.1.tlog
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\GenerateResource-ResGen.write.1.tlog
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmBatchScraper.resources

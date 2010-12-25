@@ -54,16 +54,22 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property Setting() As String
+         Global.System.Configuration.DefaultSettingValueAttribute(".\cache")>  _
+        Public ReadOnly Property CacheDirectory() As String
             Get
-                Return CType(Me("Setting"),String)
+                Return CType(Me("CacheDirectory"),String)
             End Get
-            Set
-                Me("Setting") = value
-            End Set
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute(".\settings")>  _
+        Public ReadOnly Property SettingsDirectory() As String
+            Get
+                Return CType(Me("SettingsDirectory"),String)
+            End Get
         End Property
     End Class
 End Namespace

@@ -34,7 +34,6 @@ Public Class FileAndFolderFunctions
             Monitor.Exit(Me)
         End Try
     End Function
-
     Public Function getposterpath(ByVal fullpath As String) As String
         Monitor.Enter(Me)
         Try
@@ -781,6 +780,45 @@ Public Class FileAndFolderFunctions
         End Try
         Return passed
     End Function
+    Public Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
+        Monitor.Enter(Me)
+        Dim cleanname As String = filename
+        Try
+            If withextension = True Then
+                Try
+                    cleanname = filename.Replace(IO.Path.GetExtension(cleanname), "")
+                Catch
+                End Try
+            End If
+            Dim movieyear As String
+            Dim S As String = cleanname
+            Dim M As Match
+            M = Regex.Match(S, "(\([\d]{4}\))")
+            If M.Success = True Then
+                movieyear = M.Value
+            Else
+                movieyear = Nothing
+            End If
+            If movieyear = Nothing Then
+                M = Regex.Match(S, "(\[[\d]{4}\])")
+                If M.Success = True Then
+                    movieyear = M.Value
+                Else
+                    movieyear = Nothing
+                End If
+            End If
+            Try
+                movieyear = movieyear.Trim
+                If movieyear.Length = 6 Then
+                    movieyear = movieyear.Remove(0, 1)
+                    movieyear = movieyear.Remove(4, 1)
+                End If
+            Catch
+            End Try
+            Return movieyear
+        Catch
+        End Try
+    End Function
     Public Function cleanfilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Monitor.Enter(Me)
         Dim cleanname As String = filename
@@ -957,13 +995,26 @@ Public Class FileAndFolderFunctions
                 If IsNumeric(workingfiledetails.filedetails_video.width) Then
                     If workingfiledetails.filedetails_video.height <> Nothing Then
                         If IsNumeric(workingfiledetails.filedetails_video.height) Then
-                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
-                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
-                            Dim aspect As Decimal
+                            '                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
+                            '                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
+                            '                            Dim aspect As Decimal
                             Try
-                                aspect = tempwidth / tempheight
-                                aspect = FormatNumber(aspect, 3)
-                                If aspect > 0 Then workingfiledetails.filedetails_video.aspect = aspect.ToString
+                                '                                aspect = tempwidth / tempheight  'Next three line are wrong for getting display aspect ratio
+                                '                                aspect = FormatNumber(aspect, 3)
+                                '                                If aspect > 0 Then workingfiledetails.filedetails_video.aspect = aspect.ToString
+
+                                Dim Information As String = MI.Inform
+                                Dim BeginString As Integer = Information.ToLower.IndexOf(":", Information.ToLower.IndexOf("display aspect ratio"))
+                                Dim EndString As Integer = Information.ToLower.IndexOf("frame rate")
+                                Dim SizeofString As Integer = EndString - BeginString
+                                Dim DisplayAspectRatio As String = Information.Substring(BeginString, SizeofString).Trim(" ", ":", Chr(10), Chr(13))
+                                'DisplayAspectRatio = DisplayAspectRatio.Substring(0, Len(DisplayAspectRatio) - 1)
+                                If Len(DisplayAspectRatio) > 0 Then
+                                    workingfiledetails.filedetails_video.aspect = DisplayAspectRatio
+                                Else
+                                    workingfiledetails.filedetails_video.aspect = "Unknown"
+                                End If
+
                             Catch ex As Exception
 
                             End Try
@@ -2592,4 +2643,34 @@ Public Class FileAndFolderFunctions
             Monitor.Exit(Me)
         End Try
     End Function
+    Public Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
+        Dim intCounter As Integer = 0
+        Dim lstStringFolders As New List(Of String)
+        Dim strSubFolders As String()
+
+        For Each SourceFolder In SourcePaths
+            lstStringFolders.Add(SourceFolder)
+        Next
+        Do Until intCounter = lstStringFolders.Count
+            strSubFolders = System.IO.Directory.GetDirectories(lstStringFolders.Item(intCounter))
+            lstStringFolders.AddRange(strSubFolders)
+            intCounter += 1
+        Loop
+        'sorts the folders so that related folders (parent/child) are together
+        lstStringFolders.Sort()
+        'Dim strFolder As String
+        'Dim SourcePathsCounter As Integer = SourcePaths.Count
+        'Dim n As Integer = 0
+        'Do Until n = SourcePathsCounter
+        '    For Each Folder In lstStringFolders
+        '        If Folder = SourcePaths(n) Then
+        '            lstStringFolders.Remove(Folder)
+        '            n += 1
+        '            Exit For
+        '        End If
+        '    Next
+        'Loop
+        Return lstStringFolders
+    End Function
+
 End Class

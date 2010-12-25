@@ -68,9 +68,12 @@ Public Class workingwithnfofiles
                             Case "title"
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
-                                If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                    tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                    tempstring = tempstring & ", The"
+                                '-------------- Aqui
+                                If Form1.userprefs.ignorearticle = True Then
+                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                        tempstring = tempstring & ", The"
+                                    End If
                                 End If
                                 newtvshow.title = tempstring
                             Case "episodeguideurl"
@@ -781,9 +784,12 @@ Public Class workingwithnfofiles
                             Case "title"
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
-                                If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                    tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                    tempstring = tempstring & ", The"
+                                '-------------- Aqui
+                                If Form1.userprefs.ignorearticle = True Then
+                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                        tempstring = tempstring & ", The"
+                                    End If
                                 End If
                                 newtvshow.title = tempstring
                             Case "episodeguide"
@@ -1731,9 +1737,12 @@ Public Class workingwithnfofiles
                                 Case "title"
                                     Dim tempstring As String = ""
                                     tempstring = thisresult.InnerText
-                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                        tempstring = tempstring & ", The"
+                                    '-------------- Aqui
+                                    If Form1.userprefs.ignorearticle = True Then
+                                        If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                            tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                            tempstring = tempstring & ", The"
+                                        End If
                                     End If
                                     newmovie.title = tempstring
                                 Case "set"

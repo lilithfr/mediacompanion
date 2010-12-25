@@ -12,7 +12,7 @@
     <AssemblyName>Media Companion</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>
     <OptionStrict>Off</OptionStrict>
@@ -20,6 +20,11 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Media Companion icon5.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -34,10 +39,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,7 +48,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
-    <NoWarn>42353,42354,42355</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>
     </WarningsAsErrors>
@@ -62,7 +63,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
-    <NoWarn>42353,42354,42355</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors>
     </WarningsAsErrors>
@@ -94,14 +95,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="tmdb_posters, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\tmdb_posters.dll</HintPath>
@@ -117,8 +114,8 @@
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
-    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
@@ -144,10 +141,10 @@
     <Compile Include="Structures\ActorDatabase.vb" />
     <Compile Include="Classes\Actors.vb" />
     <Compile Include="Classes\ApplicationEvents.vb" />
-    <Compile Include="Forms\frnBatchScraper.Designer.vb">
-      <DependentUpon>frnBatchScraper.vb</DependentUpon>
+    <Compile Include="Forms\frmBatchScraper.Designer.vb">
+      <DependentUpon>frmBatchScraper.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frnBatchScraper.vb">
+    <Compile Include="Forms\frmBatchScraper.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmCopyProgress.Designer.vb">
@@ -280,10 +277,17 @@
     <Compile Include="Classes\TvShowNFO.vb" />
     <Compile Include="Classes\WebFileDownloader.vb" />
     <Compile Include="Classes\WorkingWithNfoFiles.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\CacheManager.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\Exceptions.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\General.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\Scraper.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\ScraperManager.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\frnBatchScraper.resx">
-      <DependentUpon>frnBatchScraper.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmBatchScraper.resx">
+      <DependentUpon>frmBatchScraper.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCopyProgress.resx">
@@ -375,6 +379,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="AxMicrosoft.Vbe.Interop.Forms">
@@ -420,8 +425,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Media Companion icon5.ico" />
+    <Content Include="Classes\UseXBMCScrapers\readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
