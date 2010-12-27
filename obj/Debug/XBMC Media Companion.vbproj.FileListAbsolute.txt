@@ -406,4 +406,3 @@ D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\Medi
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Classes\Scraper.vb

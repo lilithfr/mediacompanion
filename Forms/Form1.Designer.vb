@@ -4781,7 +4781,7 @@ Me.RadioButton34.Location = New System.Drawing.Point(4, 42)
 Me.RadioButton34.Name = "RadioButton34"
 Me.RadioButton34.Size = New System.Drawing.Size(125, 17)
 Me.RadioButton34.TabIndex = 1
-Me.RadioButton34.Text = "Resize to 1280 x 720"
+Me.RadioButton34.Text = "Resize to 1280 x 960"
 Me.RadioButton34.UseVisualStyleBackColor = true
 '
 'RadioButton35
@@ -5075,6 +5075,7 @@ Me.Label110.Text = "If you are having an issue with your version of XBMC seeing 
 'chkbx_basicsave
 '
 Me.chkbx_basicsave.AutoSize = true
+Me.chkbx_basicsave.Enabled = false
 Me.chkbx_basicsave.Location = New System.Drawing.Point(9, 173)
 Me.chkbx_basicsave.Name = "chkbx_basicsave"
 Me.chkbx_basicsave.Size = New System.Drawing.Size(276, 17)

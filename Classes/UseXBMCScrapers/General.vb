@@ -6,9 +6,7 @@ Imports System.Xml
 
 
 Module General
-    Dim FileFolderFunctions As New fileandfolderfunctions
-
-
+    Dim FileFolderFunctions As New FileAndFolderFunctions
 
 #Region "Fields"
     Public mScraperManager As ScraperManager
@@ -17,7 +15,7 @@ Module General
     Public FinalScrapResult As String
 #End Region
 
-#Region "XBMC Scrapper Internal Routines"
+#Region "XBMC Scraper Internal Routines"
 
     Private Function RetrieveUrls(ByVal URLAddress As String) As String
         Dim Saida As String = ""
@@ -935,15 +933,103 @@ Module General
         Dim ImageFilename3 As String = Filename.Remove(ExtensionPosition, (Filename.Length - ExtensionPosition))
         ImageFilename3 &= "-fanart.jpg"
         Dim myWebClient As New System.Net.WebClient()
+        On Error Resume Next
         myWebClient.DownloadFile(MoviePosterURL, ImageFilename)
         File.Copy(ImageFilename, ImageFilename2)
         myWebClient.DownloadFile(MovieFanartURL, ImageFilename3)
+        On Error GoTo 0
+        '-----------------Start Resize Fanart
+        If Form1.userprefs.resizefanart = 2 Then
+            Dim FanartToBeResized As New Bitmap(ImageFilename3)
+            If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
+                Dim ResizedFanart As Bitmap = Form1.imagefunctions.resizeimage(FanartToBeResized, 1280, 960)
+                ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
+            Else
+                'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+            End If
+        ElseIf Form1.userprefs.resizefanart = 3 Then
+            Dim FanartToBeResized As New Bitmap(ImageFilename3)
+            If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
+                Dim ResizedFanart As Bitmap = Form1.imagefunctions.ResizeImage(FanartToBeResized, 960, 540)
+                ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
+            Else
+                'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+            End If
 
+        End If
+        '-----------------End Resize Fanart
         Return True
     End Function
+    Public Function SearchExtraIDinNFO(ByVal Filename As String) As String
+        Dim extrapossibleID As String = Nothing
+        Filename = Filename.Remove(Filename.Length - 3, 3) & "nfo"
+        If Not IO.File.Exists(Filename) Then
+            Filename = Filename.Remove(Filename.LastIndexOf("\"), (Filename.Length - Filename.LastIndexOf("\"))) & "\movie.nfo"
+        End If
+        extrapossibleID = Nothing
+        Dim T As String
+        Dim mat As Match
+
+        If IO.File.Exists(Filename) Then
+            '            scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
+            Dim tempinfo As String = ""
+            Dim objReader As New System.IO.StreamReader(Filename)
+            tempinfo = objReader.ReadToEnd
+            objReader.Close()
+            extrapossibleID = Nothing
+            T = tempinfo
+            mat = Nothing
+            mat = Regex.Match(T, "(tt\d{7})")
+            If mat.Success = True Then
+                '                scraperlog = scraperlog & "IMDB ID found in nfo file:- " & mat.Value & vbCrLf
+                extrapossibleID = mat.Value
+                Try
+                    If Not IO.File.Exists(Filename.Replace(".nfo", ".info")) Then
+                        IO.File.Move(Filename, Filename.Replace(".nfo", ".info"))
+                        '                    scraperlog = scraperlog & "renaming nfo file to:- " & Filename.Replace(".nfo", ".info") & vbCrLf
+                    Else
+                        '                    scraperlog = scraperlog & "Unable to rename file, """ & Filename & """ already exists" & vbCrLf
+                    End If
+                Catch
+                    '                scraperlog = scraperlog & "Unable to rename file, """ & Filename & """ already exists" & vbCrLf
+                End Try
+            Else
+                '                scraperlog = scraperlog & "No IMDB ID found" & vbCrLf
+                extrapossibleID = Nothing
+            End If
+        Else
+            Dim stackname As String = FileFolderFunctions.getstackname(Filename, Filename.Replace(IO.Path.GetFileName(Filename), ""))
+            Dim path As String = stackname & ".nfo"
+            If IO.File.Exists(path) Then
+                '                scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
+                Dim tempinfo As String = ""
+                Dim objReader As New System.IO.StreamReader(path)
+                tempinfo = objReader.ReadToEnd
+                objReader.Close()
+                extrapossibleID = Nothing
+                T = tempinfo
+                mat = Nothing
+                mat = Regex.Match(T, "(tt\d{7})")
+                If mat.Success = True Then
+                    '                    scraperlog = scraperlog & "IMDB ID found in nfo file:- " & mat.Value & vbCrLf
+                    extrapossibleID = mat.Value
+                Else
+                    '                    scraperlog = scraperlog & "No IMDB ID found" & vbCrLf
+                    extrapossibleID = Nothing
+                End If
+            Else
+                '                scraperlog = scraperlog & "NFO does not exist" & vbCrLf
+                extrapossibleID = Nothing
+            End If
+
+        End If
+        Return extrapossibleID
+    End Function
+
 #End Region
 
 #Region "nfoFileFunctions"
+
     Public Function CreateMovieNfo(ByVal Filename As String, ByVal FileContent As String) As Boolean
         Try
             Dim ExtensionPosition As Integer = Filename.LastIndexOf(".")
@@ -965,47 +1051,55 @@ Module General
             Return False
         End Try
     End Function
+
 #End Region
 
     Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
         ' 1st stage
-        If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
-        If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
-        ParametersForScraper(0) = cleanfilename(MovieName, False)
-        ParametersForScraper(1) = GetYearByFilename(MovieName, False)
-        FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper)
-        FinalScrapResult = FinalScrapResult.Replace("<url>", "")
-        FinalScrapResult = FinalScrapResult.Replace("</url>", "")
-        FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
-        ' 2st stage
-        ParametersForScraper(0) = FinalScrapResult
-        FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper)
-        Dim m_xmld As XmlDocument
-        Dim m_nodelist As XmlNodeList
-        Dim m_node As XmlNode
-        m_xmld = New XmlDocument()
-        m_xmld.LoadXml(FinalScrapResult)
-        m_nodelist = m_xmld.SelectNodes("/results/entity")
-        If Scraper = "metadata.imdb.com" Then
-            For Each m_node In m_nodelist
-                Dim Title = m_node.ChildNodes.Item(0).InnerText
-                Dim year = m_node.ChildNodes.Item(1).InnerText
-                Dim url = m_node.ChildNodes.Item(2).InnerText
-                Dim id = m_node.ChildNodes.Item(3).InnerText
-                ParametersForScraper(0) = url
-                ParametersForScraper(1) = id
-                Exit For
-            Next
-        ElseIf Scraper = "metadata.themoviedb.org" Then
-            For Each m_node In m_nodelist
-                Dim Title = m_node.ChildNodes.Item(0).InnerText
-                Dim id = m_node.ChildNodes.Item(1).InnerText
-                Dim year = m_node.ChildNodes.Item(2).InnerText
-                Dim url = m_node.ChildNodes.Item(3).InnerText
-                ParametersForScraper(0) = url
-                ParametersForScraper(1) = id
-                Exit For
-            Next
+        Dim ExtraID As String = SearchExtraIDinNFO(Filename)
+        If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
+            If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
+            If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
+            ParametersForScraper(0) = cleanfilename(MovieName, False)
+            ParametersForScraper(1) = GetYearByFilename(MovieName, False)
+            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper)
+            FinalScrapResult = FinalScrapResult.Replace("<url>", "")
+            FinalScrapResult = FinalScrapResult.Replace("</url>", "")
+            FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+            ' 2st stage
+            ParametersForScraper(0) = FinalScrapResult
+            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper)
+            Dim m_xmld As XmlDocument
+            Dim m_nodelist As XmlNodeList
+            Dim m_node As XmlNode
+            m_xmld = New XmlDocument()
+            m_xmld.LoadXml(FinalScrapResult)
+            m_nodelist = m_xmld.SelectNodes("/results/entity")
+            If Scraper = "metadata.imdb.com" Then
+                For Each m_node In m_nodelist
+                    Dim Title = m_node.ChildNodes.Item(0).InnerText
+                    Dim year = m_node.ChildNodes.Item(1).InnerText
+                    Dim url = m_node.ChildNodes.Item(2).InnerText
+                    Dim id = m_node.ChildNodes.Item(3).InnerText
+                    ParametersForScraper(0) = url
+                    ParametersForScraper(1) = id
+                    Exit For
+                Next
+            ElseIf Scraper = "metadata.themoviedb.org" Then
+                For Each m_node In m_nodelist
+                    Dim Title = m_node.ChildNodes.Item(0).InnerText
+                    Dim id = m_node.ChildNodes.Item(1).InnerText
+                    Dim year = m_node.ChildNodes.Item(2).InnerText
+                    Dim url = m_node.ChildNodes.Item(3).InnerText
+                    ParametersForScraper(0) = url
+                    ParametersForScraper(1) = id
+                    Exit For
+                Next
+            End If
+        Else
+            Scraper = "metadata.imdb.com"
+            ParametersForScraper(0) = "http://akas.imdb.com/title/" & ExtraID
+            ParametersForScraper(1) = ExtraID
         End If
         ' 3st stage
         FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper)
@@ -1038,11 +1132,11 @@ Module General
                 Exit Function
             End If
         End If
-            ' 3st stage
-            FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper)
-            FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
-            FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
-            Return FinalScrapResult
+        ' 3st stage
+        FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper)
+        FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+        FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
+        Return FinalScrapResult
     End Function
 
 End Module

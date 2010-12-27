@@ -119,6 +119,7 @@
     <Compile Include="Classes\BasicEpisodeNFO.vb" />
     <Compile Include="Classes\BasicTvShowNFO.vb" />
     <Compile Include="Classes\Profiles.vb" />
+    <Compile Include="Structures\HTMLTemplate.vb" />
     <Compile Include="Structures\ListOfProfiles.vb" />
     <Compile Include="Structures\BatchWizard.vb" />
     <Compile Include="Classes\MediaInfoDLLComplete.vb" />
@@ -280,6 +281,7 @@
     <Compile Include="Classes\UseXBMCScrapers\ScraperManager.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
+    <Compile Include="Structures\TVShows.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBatchScraper.resx">

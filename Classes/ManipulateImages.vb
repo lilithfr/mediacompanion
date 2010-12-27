@@ -2,7 +2,7 @@
 
 Public Class ManipulateImages
 
-    Public Function resizeimage(ByVal bmp As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
+    Public Function ResizeImage(ByVal bmp As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_source As New Bitmap(bmp)
         Dim bm_dest As New Bitmap(width, height)
         Dim gr As Graphics = Graphics.FromImage(bm_dest)
