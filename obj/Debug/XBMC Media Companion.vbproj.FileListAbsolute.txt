@@ -406,3 +406,98 @@ D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\Medi
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+I:\workingmc\bin\Debug\Media Companion.exe.config
+I:\workingmc\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\obj\Debug\Interop.WMPLib.dll
+I:\workingmc\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\obj\Debug\AxInterop.WMPLib.dll
+I:\workingmc\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+I:\workingmc\obj\Debug\Media Companion.exe
+I:\workingmc\obj\Debug\Media Companion.pdb
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.imdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.impa.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.impa.com\impa.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\imdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.mtv.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.mtv.com\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.mtv.com\mtv.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\daum-tv.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\LICENSE.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\ann.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\xbmc.core\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
+I:\workingmc\bin\Debug\Media Companion.exe
+I:\workingmc\bin\Debug\Media Companion.pdb
+I:\workingmc\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\bin\Debug\Interop.WMPLib.dll
+I:\workingmc\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\bin\Debug\AxInterop.WMPLib.dll
+I:\workingmc\obj\Debug\ResolveAssemblyReference.cache
+I:\workingmc\obj\Debug\Media_Companion.frmBatchScraper.resources
+I:\workingmc\obj\Debug\Media_Companion.frmCopyProgress.resources
+I:\workingmc\obj\Debug\Media_Companion.frmCoverArt.resources
+I:\workingmc\obj\Debug\Media_Companion.Delete_Dialogue.resources
+I:\workingmc\obj\Debug\Media_Companion.frmDialog1.resources
+I:\workingmc\obj\Debug\Media_Companion.Form1.resources
+I:\workingmc\obj\Debug\Media_Companion.Form2.resources
+I:\workingmc\obj\Debug\Media_Companion.frmoutputlog.resources
+I:\workingmc\obj\Debug\Media_Companion.message_box.resources
+I:\workingmc\obj\Debug\Media_Companion.frmMovieFanart.resources
+I:\workingmc\obj\Debug\Media_Companion.Resources.resources
+I:\workingmc\obj\Debug\Media_Companion.frmOptions.resources
+I:\workingmc\obj\Debug\Media_Companion.frmSplashscreen.resources
+I:\workingmc\obj\Debug\Media_Companion.tv_batch_wizard.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTvEdit.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTvFanart.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTvPosters.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+I:\workingmc\obj\Debug\ResGen.read.1.tlog
+I:\workingmc\obj\Debug\ResGen.write.1.tlog

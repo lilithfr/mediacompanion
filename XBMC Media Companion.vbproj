@@ -119,6 +119,7 @@
     <Compile Include="Classes\BasicEpisodeNFO.vb" />
     <Compile Include="Classes\BasicTvShowNFO.vb" />
     <Compile Include="Classes\Profiles.vb" />
+    <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Structures\HTMLTemplate.vb" />
     <Compile Include="Structures\ListOfProfiles.vb" />
     <Compile Include="Structures\BatchWizard.vb" />
