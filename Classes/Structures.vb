@@ -5,6 +5,7 @@ Public Class Structures
     Public autorenameepisodes As Boolean
     Public autoepisodescreenshot As Boolean
     Public ignorearticle As Boolean
+    Public tvshow_useXBMC_Scraper As Boolean
     Public movies_useXBMC_Scraper As Boolean
     Public XBMC_Scraper As String = ""
     Public eprenamelowercase As Boolean

@@ -96,7 +96,7 @@
   <copytvactorthumbs>true</copytvactorthumbs>
   <fanartnotstacked>false</fanartnotstacked>
   <posternotstacked>false</posternotstacked>
-  <lastpath>Z:\Filmes</lastpath>
+  <lastpath>Z:\Series\Fringe</lastpath>
   <downloadfanart>true</downloadfanart>
   <scrapemovieposters>true</scrapemovieposters>
   <usefanart>true</usefanart>
@@ -115,8 +115,8 @@
   <backgroundcolour>Silver</backgroundcolour>
   <forgroundcolour>#D3D9DC</forgroundcolour>
   <remembersize>false</remembersize>
-  <locx>0</locx>
-  <locy>0</locy>
+  <locx>-8</locx>
+  <locy>-8</locy>
   <formheight>725</formheight>
   <formwidth>1060</formwidth>
   <videoplaybackmode>1</videoplaybackmode>
@@ -149,11 +149,11 @@
   <moviethumbpriority>themoviedb.org|Movie Poster DB|Internet Movie Poster Awards|IMDB</moviethumbpriority>
   <tvdblanguage>en|English</tvdblanguage>
   <certificatepriority>MPAA|UK|USA|Portugal|Ireland|Australia|New Zealand|Norway|Singapore|South Korea|Philippines|Brazil|Netherlands|Malaysia|Argentina|Iceland|Canada (Quebec)|Canada (British Columbia/Ontario)|Canada (Alberta/Manitoba/Nova Scotia)|Peru|Sweden|South Africa|Denmark|Hong Kong|Finland|India|Mexico|France|Italy|Switzerland (canton of Vaud)|Switzerland (canton of Geneva)|Germany|Greece|Austria</certificatepriority>
-  <splitcontainer1>305</splitcontainer1>
-  <splitcontainer2>400</splitcontainer2>
-  <splitcontainer3>558</splitcontainer3>
-  <splitcontainer4>831</splitcontainer4>
-  <splitcontainer5>805</splitcontainer5>
+  <splitcontainer1>300</splitcontainer1>
+  <splitcontainer2>1033</splitcontainer2>
+  <splitcontainer3>304</splitcontainer3>
+  <splitcontainer4>1136</splitcontainer4>
+  <splitcontainer5>803</splitcontainer5>
   <seasonall>poster</seasonall>
   <maximised>true</maximised>
   <tvrename>0</tvrename>
@@ -163,8 +163,10 @@
   <moviedefaultlist>0</moviedefaultlist>
   <autoepisodescreenshot>false</autoepisodescreenshot>
   <ignorearticle>false</ignorearticle>
-  <moviesUseXBMCScraper>false</moviesUseXBMCScraper>
-  <startuptab>0</startuptab>
+  <TVShowUseXBMCScraper>true</TVShowUseXBMCScraper>
+  <moviesUseXBMCScraper>true</moviesUseXBMCScraper>
+  <whatXBMCScraper>imdb</whatXBMCScraper>
+  <startuptab>1</startuptab>
   <intruntime>true</intruntime>
   <font>Times New Roman, 9pt</font>
   <autorenameepisodes>false</autorenameepisodes>

@@ -4,6 +4,51 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 
 Public Class workingwithnfofiles
+
+    Public Function ChangeFieldTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String) As String
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+        Dim FinalString As String = "<tvshow>"
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Filename)
+        m_nodelist = m_xmld.SelectNodes("/tvshow")
+        For Each m_node In m_nodelist
+            If m_node.HasChildNodes Then
+                For Each node1 As XmlNode In m_node
+                    If node1.Name.ToLower = Field.ToLower Then
+                        node1.InnerText = ValueToAssign
+                    End If
+                    FinalString &= node1.OuterXml.ToString
+                Next
+            End If
+        Next
+        FinalString &= "</tvshow>"
+        Return FinalString
+    End Function
+    Public Function ChangeFieldEpisodeTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String) As String
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+        Dim FinalString As String = "<episodedetails>"
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Filename)
+        m_nodelist = m_xmld.SelectNodes("/episodedetails")
+        For Each m_node In m_nodelist
+            If m_node.HasChildNodes Then
+                For Each node1 As XmlNode In m_node
+                    If node1.Name.ToLower = Field.ToLower Then
+                        node1.InnerText = ValueToAssign
+                    End If
+                    FinalString &= node1.OuterXml.ToString
+                Next
+            End If
+        Next
+        FinalString &= "</episodedetails>"
+        Return FinalString
+    End Function
     Public Function validate_nfo(ByVal nfopath As String)
         Dim filepath As String
         Dim tempstring As String
@@ -774,6 +819,7 @@ Public Class workingwithnfofiles
 
                     Exit Function
                 End Try
+                newtvshow.genre = ""
                 newtvshow.status = "ok"
                 newtvshow.locked = False
                 Dim thisresult As XmlNode = Nothing
@@ -799,7 +845,11 @@ Public Class workingwithnfofiles
                             Case "year"
                                 newtvshow.year = thisresult.InnerText
                             Case "genre"
-                                newtvshow.genre = thisresult.InnerText
+                                If newtvshow.genre = "" Then
+                                    newtvshow.genre = thisresult.InnerText
+                                Else
+                                    newtvshow.genre &= " / " & thisresult.InnerText
+                                End If
                             Case "tvdbid"
                                 newtvshow.tvdbid = thisresult.InnerText
                             Case "id"
@@ -2037,7 +2087,7 @@ Public Class workingwithnfofiles
                         End Try
                     Loop
                 End If
-                Dim filefunction2 As New fileandfolderfunctions
+                Dim filefunction2 As New FileAndFolderFunctions
                 newmovie.fileinfo.fullpathandfilename = path
                 newmovie.fileinfo.filename = IO.Path.GetFileName(path)
                 newmovie.fileinfo.foldername = filefunction2.getlastfolder(path)

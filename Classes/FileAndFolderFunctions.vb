@@ -1,10 +1,57 @@
 ﻿Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports System.IO
+Imports ICSharpCode.SharpZipLib.Zip
+
 
 
 Public Class FileAndFolderFunctions
 
+    Private Sub unzip(ByVal filename As String, ByVal targetdir As String, ByVal overwrite As Boolean, Optional ByVal password As String = "")
+        Dim inputStrm As New ZipInputStream(File.OpenRead(filename))
+        inputStrm.Password = password
+        Dim nextEntry As ZipEntry = inputStrm.GetNextEntry()
+        'loop through every file in zip
+        While Not nextEntry Is Nothing
+            'if no slash at end of nextentry.name, file isn't a directory
+            If Not nextEntry.Name.LastIndexOf("/") = nextEntry.Name.Length - 1 Then
+                'checks to make SURE the directory exists, sometimes they arent specified prior to their contents
+                If nextEntry.Name.IndexOf("/") > 0 Then
+                    If Not Directory.Exists(targetdir & "\" & nextEntry.Name.Replace("/", "\").Substring(0, nextEntry.Name.Replace("/", "\").LastIndexOf("\"))) Then
+                        Directory.CreateDirectory(targetdir & "\" & nextEntry.Name.Replace("/", "\").Substring(0, nextEntry.Name.Replace("/", "\").LastIndexOf("\")))
+                    End If
+                End If
+                Dim tmpStrm As FileStream
+                Dim tmpBuffer(2048) As Byte
+                Dim tmpLength As Integer = -1
+
+                If overwrite = True Then
+                    tmpStrm = New FileStream(Path.Combine(targetdir, nextEntry.Name), FileMode.Create)
+                Else
+                    tmpStrm = New FileStream(Path.Combine(targetdir, nextEntry.Name), FileMode.CreateNew)
+                End If
+
+                While True
+                    tmpLength = inputStrm.Read(tmpBuffer, 0, tmpBuffer.Length)
+                    If tmpLength > 0 Then
+                        tmpStrm.Write(tmpBuffer, 0, tmpLength)
+                    Else
+                        Exit While
+                    End If
+                End While
+
+                tmpStrm.Flush()
+                tmpStrm.Close()
+
+                nextEntry = inputStrm.GetNextEntry()
+            Else
+                'else, is a directory... createdirectory ensures directory exists
+                Directory.CreateDirectory(targetdir & "\" & nextEntry.Name.Replace("/", "\"))
+                nextEntry = inputStrm.GetNextEntry()
+            End If
+        End While
+
+    End Sub
     Public Function GetCRC32(ByVal sFileName As String) As String
         Dim oCRC As Vbaccelerator.Components.Algorithms.CRC32 = New Vbaccelerator.Components.Algorithms.CRC32()
         Dim oEnc As System.Text.UTF7Encoding = New System.Text.UTF7Encoding()

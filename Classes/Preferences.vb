@@ -442,6 +442,10 @@ Public Class _preferences
             child.InnerText = Form1.userprefs.ignorearticle.ToString.ToLower
             root.AppendChild(child)
 
+            child = doc.CreateElement("TVShowUseXBMCScraper")
+            child.InnerText = Form1.userprefs.tvshow_useXBMC_Scraper.ToString.ToLower
+            root.AppendChild(child)
+
             child = doc.CreateElement("moviesUseXBMCScraper")
             child.InnerText = Form1.userprefs.movies_useXBMC_Scraper.ToString.ToLower
             root.AppendChild(child)
@@ -912,6 +916,13 @@ Public Class _preferences
                         Form1.userprefs.ignorearticle = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Form1.userprefs.ignorearticle = False
+                    End If
+
+                Case "TVShowUseXBMCScraper"
+                    If thisresult.InnerXml = "true" Then
+                        Form1.userprefs.tvshow_useXBMC_Scraper = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Form1.userprefs.tvshow_useXBMC_Scraper = False
                     End If
 
                 Case "moviesUseXBMCScraper"

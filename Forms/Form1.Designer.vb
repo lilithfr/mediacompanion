@@ -24,9 +24,9 @@ Partial Class Form1
     Private Sub InitializeComponent()
 Me.components = New System.ComponentModel.Container()
 Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
 Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
 Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
 Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -629,6 +629,7 @@ Me.TabControl6 = New System.Windows.Forms.TabControl()
 Me.TabPage30 = New System.Windows.Forms.TabPage()
 Me.GroupBox17 = New System.Windows.Forms.GroupBox()
 Me.CheckBox36 = New System.Windows.Forms.CheckBox()
+Me.CheckBox_Use_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
 Me.Label139 = New System.Windows.Forms.Label()
 Me.GroupBox20 = New System.Windows.Forms.GroupBox()
 Me.CheckBox14 = New System.Windows.Forms.CheckBox()
@@ -4182,35 +4183,35 @@ Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or Syst
             Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised
-DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
 Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
 Me.DataGridView1.ContextMenuStrip = Me.ContextMenuStrip_table
-DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle2
+DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
+DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
+DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle5
 Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
 Me.DataGridView1.Location = New System.Drawing.Point(0, 27)
 Me.DataGridView1.Name = "DataGridView1"
-DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
-DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
-DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-Me.DataGridView1.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
+DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
+DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+Me.DataGridView1.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
 Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
 Me.DataGridView1.Size = New System.Drawing.Size(975, 363)
 Me.DataGridView1.TabIndex = 0
@@ -5451,8 +5452,10 @@ Me.Label40.Text = "Filename"
 '
 Me.TextBox29.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.TextBox29.BackColor = System.Drawing.Color.White
 Me.TextBox29.Location = New System.Drawing.Point(58, 220)
 Me.TextBox29.Name = "TextBox29"
+Me.TextBox29.ReadOnly = true
 Me.TextBox29.Size = New System.Drawing.Size(373, 20)
 Me.TextBox29.TabIndex = 18
 '
@@ -5460,8 +5463,10 @@ Me.TextBox29.TabIndex = 18
 '
 Me.TextBox17.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.TextBox17.BackColor = System.Drawing.Color.White
 Me.TextBox17.Location = New System.Drawing.Point(58, 194)
 Me.TextBox17.Name = "TextBox17"
+Me.TextBox17.ReadOnly = true
 Me.TextBox17.Size = New System.Drawing.Size(373, 20)
 Me.TextBox17.TabIndex = 17
 '
@@ -5479,9 +5484,11 @@ Me.Label36.Text = "Path"
 '
 Me.TextBox25.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.TextBox25.BackColor = System.Drawing.Color.White
 Me.TextBox25.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.TextBox25.Location = New System.Drawing.Point(265, 7)
 Me.TextBox25.Name = "TextBox25"
+Me.TextBox25.ReadOnly = true
 Me.TextBox25.Size = New System.Drawing.Size(166, 21)
 Me.TextBox25.TabIndex = 14
 '
@@ -5540,18 +5547,22 @@ Me.TextBox24.TabIndex = 10
 '
 Me.TextBox23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.TextBox23.BackColor = System.Drawing.Color.White
 Me.TextBox23.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.TextBox23.Location = New System.Drawing.Point(265, 34)
 Me.TextBox23.Name = "TextBox23"
+Me.TextBox23.ReadOnly = true
 Me.TextBox23.Size = New System.Drawing.Size(166, 21)
 Me.TextBox23.TabIndex = 9
 '
 'TextBox22
 '
 Me.TextBox22.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+Me.TextBox22.BackColor = System.Drawing.Color.White
 Me.TextBox22.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.TextBox22.Location = New System.Drawing.Point(59, 34)
 Me.TextBox22.Name = "TextBox22"
+Me.TextBox22.ReadOnly = true
 Me.TextBox22.Size = New System.Drawing.Size(154, 21)
 Me.TextBox22.TabIndex = 8
 '
@@ -5932,9 +5943,11 @@ Me.TextBox12.TabIndex = 5
 '
 Me.TextBox11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.TextBox11.BackColor = System.Drawing.Color.White
 Me.TextBox11.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
 Me.TextBox11.Location = New System.Drawing.Point(288, 417)
 Me.TextBox11.Name = "TextBox11"
+Me.TextBox11.ReadOnly = true
 Me.TextBox11.Size = New System.Drawing.Size(169, 21)
 Me.TextBox11.TabIndex = 4
 '
@@ -7449,6 +7462,7 @@ Me.TabPage30.UseVisualStyleBackColor = true
 'GroupBox17
 '
 Me.GroupBox17.Controls.Add(Me.CheckBox36)
+Me.GroupBox17.Controls.Add(Me.CheckBox_Use_XBMC_TVDB_Scraper)
 Me.GroupBox17.Controls.Add(Me.Label139)
 Me.GroupBox17.Controls.Add(Me.GroupBox20)
 Me.GroupBox17.Controls.Add(Me.CheckBox35)
@@ -7481,6 +7495,16 @@ Me.CheckBox36.Size = New System.Drawing.Size(268, 17)
 Me.CheckBox36.TabIndex = 37
 Me.CheckBox36.Text = "Auto create screenshot if TVDB does not have one"
 Me.CheckBox36.UseVisualStyleBackColor = true
+'
+'CheckBox_Use_XBMC_TVDB_Scraper
+'
+Me.CheckBox_Use_XBMC_TVDB_Scraper.AutoSize = true
+Me.CheckBox_Use_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(99, 298)
+Me.CheckBox_Use_XBMC_TVDB_Scraper.Name = "CheckBox_Use_XBMC_TVDB_Scraper"
+Me.CheckBox_Use_XBMC_TVDB_Scraper.Size = New System.Drawing.Size(179, 17)
+Me.CheckBox_Use_XBMC_TVDB_Scraper.TabIndex = 65
+Me.CheckBox_Use_XBMC_TVDB_Scraper.Text = "Use XBMC ""TheTVDB"" Scraper"
+Me.CheckBox_Use_XBMC_TVDB_Scraper.UseVisualStyleBackColor = true
 '
 'Label139
 '
@@ -7633,7 +7657,7 @@ Me.CheckBox35.UseVisualStyleBackColor = true
 'CheckBox34
 '
 Me.CheckBox34.AutoSize = true
-Me.CheckBox34.Location = New System.Drawing.Point(98, 282)
+Me.CheckBox34.Location = New System.Drawing.Point(98, 252)
 Me.CheckBox34.Name = "CheckBox34"
 Me.CheckBox34.Size = New System.Drawing.Size(293, 30)
 Me.CheckBox34.TabIndex = 33
@@ -7643,7 +7667,7 @@ Me.CheckBox34.UseVisualStyleBackColor = true
 'Label138
 '
 Me.Label138.AutoSize = true
-Me.Label138.Location = New System.Drawing.Point(96, 149)
+Me.Label138.Location = New System.Drawing.Point(96, 119)
 Me.Label138.Name = "Label138"
 Me.Label138.Size = New System.Drawing.Size(299, 130)
 Me.Label138.TabIndex = 32
@@ -7762,7 +7786,7 @@ Me.Label123.Text = "If not selected English will be used"
 'Label124
 '
 Me.Label124.AutoSize = true
-Me.Label124.Location = New System.Drawing.Point(99, 79)
+Me.Label124.Location = New System.Drawing.Point(99, 66)
 Me.Label124.Name = "Label124"
 Me.Label124.Size = New System.Drawing.Size(96, 13)
 Me.Label124.TabIndex = 4
@@ -7771,7 +7795,7 @@ Me.Label124.Text = "Episode Sort Order"
 'RadioButton42
 '
 Me.RadioButton42.AutoSize = true
-Me.RadioButton42.Location = New System.Drawing.Point(102, 114)
+Me.RadioButton42.Location = New System.Drawing.Point(102, 100)
 Me.RadioButton42.Name = "RadioButton42"
 Me.RadioButton42.Size = New System.Drawing.Size(84, 17)
 Me.RadioButton42.TabIndex = 3
@@ -7782,7 +7806,7 @@ Me.RadioButton42.UseVisualStyleBackColor = true
 '
 Me.RadioButton43.AutoSize = true
 Me.RadioButton43.Checked = true
-Me.RadioButton43.Location = New System.Drawing.Point(102, 95)
+Me.RadioButton43.Location = New System.Drawing.Point(102, 81)
 Me.RadioButton43.Name = "RadioButton43"
 Me.RadioButton43.Size = New System.Drawing.Size(81, 17)
 Me.RadioButton43.TabIndex = 2
@@ -8815,14 +8839,6 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
 '
-'BasicmovienfoBindingSource1
-'
-Me.BasicmovienfoBindingSource1.DataSource = GetType(Media_Companion.BasicMovieNFO)
-'
-'BasicmovienfoBindingSource
-'
-Me.BasicmovienfoBindingSource.DataSource = GetType(Media_Companion.BasicMovieNFO)
-'
 'Form1
 '
 Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -9788,6 +9804,7 @@ End Sub
     Friend WithEvents Panel22 As System.Windows.Forms.Panel
     Friend WithEvents RadioButton52 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton51 As System.Windows.Forms.RadioButton
+    Friend WithEvents CheckBox_Use_XBMC_TVDB_Scraper As System.Windows.Forms.CheckBox
 
 
 

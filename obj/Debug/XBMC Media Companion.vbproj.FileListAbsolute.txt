@@ -389,19 +389,6 @@ D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\Medi
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\addon.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\changelog.txt
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\daum-tv.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\icon.png
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\LICENSE.txt
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\resources\settings.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\addon.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\ann.xml
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\icon.png
-D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\resources\settings.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.core\addon.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
@@ -501,3 +488,21 @@ I:\workingmc\obj\Debug\Media_Companion.frmTvPosters.resources
 I:\workingmc\obj\Debug\Media_Companion.frmTVShowBrowser.resources
 I:\workingmc\obj\Debug\ResGen.read.1.tlog
 I:\workingmc\obj\Debug\ResGen.write.1.tlog
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\changelog.txt
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\icon.png
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
