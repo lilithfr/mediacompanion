@@ -16185,16 +16185,14 @@ Public Class Form1
             Dim TVShowEpisodeNFOContent As String = nfofunction.ChangeAllFieldsEpisodeTVShow(tempworkingepisode)
             If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingepisode(0).episodepath, TVShowEpisodeNFOContent)
 
-            Dim MainNode As TreeNode
             For Each node As TreeNode In TreeView1.Nodes
-                For Each childnode In node.Nodes
+                For Each childnode As TreeNode In node.Nodes
                     Dim counter As Integer = -1
-                    For Each epie In childnode.nodes
+                    For Each epie In childnode.Nodes
                         If epie.Name = workingepisode(0).episodepath Then
                             counter += 1
                             If counter = workingepisodeindex Then
                                 Dim eps As String
-                                MainNode = node
                                 If workingepisode(workingepisodeindex).episodeno < 10 Then
                                     eps = "0" & workingepisode(workingepisodeindex).episodeno
                                 Else
@@ -16207,9 +16205,26 @@ Public Class Form1
                     Next
                 Next
             Next
-            reloadtvshow()
+            For Each item In basictvlist
+                For Each node In item.allepisodes
+                    If node.episodepath = workingepisode(0).episodepath Then
+                        item.allepisodes.Remove(node)
+                        For Each ep In workingepisode
+                            Dim newwp As New BasicEpisodeNFO
+                            newwp.episodeno = ep.episodeno
+                            newwp.episodepath = ep.episodepath
+                            newwp.playcount = "0"
+                            newwp.rating = ep.rating
+                            newwp.seasonno = ep.seasonno
+                            newwp.title = ep.title
+                            item.allepisodes.Add(newwp)
+                        Next
+                        Exit For
+                    End If
+                Next
+            Next
             Call savetvdata()
-            rebuildselectedshow(MainNode.Name.ToString)
+            '            rebuildselectedshow(MainNode.Name.ToString)
         End If
     End Sub
 

@@ -3746,7 +3746,7 @@ Me.TextBox8.Dock = System.Windows.Forms.DockStyle.Fill
 Me.TextBox8.Location = New System.Drawing.Point(0, 0)
 Me.TextBox8.Multiline = true
 Me.TextBox8.Name = "TextBox8"
-Me.TextBox8.Size = New System.Drawing.Size(958, 800)
+Me.TextBox8.Size = New System.Drawing.Size(975, 800)
 Me.TextBox8.TabIndex = 0
 '
 'ToolTip2
