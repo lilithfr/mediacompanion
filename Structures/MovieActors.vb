@@ -1,7 +1,7 @@
 
 Public Structure MovieActors
-    Dim actorname As String
-    Dim actorrole As String
-    Dim actorthumb As String
-    Dim actorid As String
+    Public actorname As String
+    Public actorrole As String
+    Public actorthumb As String
+    Public actorid As String
 End Structure

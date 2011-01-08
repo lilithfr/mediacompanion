@@ -70,6 +70,8 @@ Public Class Form1
     Public workingmoviedetails As fullmoviedetails
     Public workingtvshow As New tvshownfo
     Public workingepisode As New List(Of episodeinfo)
+    Public tempworkingtvshow As New TvShowNFO
+    Public tempworkingepisode As New EpisodeInfo
     Public workingepisodeindex As Integer
     Public workingmovie As New combolist
 
@@ -821,13 +823,15 @@ Public Class Form1
             child.AppendChild(childchild)
             childchild = doc.CreateElement("titleandyear")
             '---- aqui....
-            If movie.titleandyear.Length >= 5 Then
-                If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 12 Then
-                    Dim Temp As String = movie.titleandyear.Substring(movie.titleandyear.Length - 7, 7)
-                    movie.titleandyear = "The " & movie.titleandyear.Substring(0, movie.titleandyear.Length - 12) & Temp
+            Try
+                If movie.titleandyear.Length >= 5 Then
+                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 12 Then
+                        Dim Temp As String = movie.titleandyear.Substring(movie.titleandyear.Length - 7, 7)
+                        movie.titleandyear = "The " & movie.titleandyear.Substring(0, movie.titleandyear.Length - 12) & Temp
+                    End If
                 End If
-            End If
-
+            Catch
+            End Try
             childchild.InnerText = movie.titleandyear
             child.AppendChild(childchild)
             childchild = doc.CreateElement("runtime")
@@ -13468,8 +13472,17 @@ Public Class Form1
         TextBox24.Text = workingepisode(workingepisodeindex).aired
 
         For Each actor In workingepisode(workingepisodeindex).listactors
-            ComboBox5.Items.Add(actor.actorname)
+            If actor.actorname <> Nothing Then
+                ComboBox5.Items.Add(actor.actorname)
+            End If
         Next
+        If ComboBox5.Items.Count = 0 Then
+            For Each actor In workingtvshow.listactors
+                If actor.actorname <> Nothing Then
+                    ComboBox5.Items.Add(actor.actorname)
+                End If
+            Next
+        End If
         Try
             ComboBox5.SelectedIndex = 0
         Catch ex As Exception
@@ -16111,28 +16124,23 @@ Public Class Form1
                 End If
             End If
             'its a tvshow
-            Dim TVShowNFOContent As String = ""
+
             If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 And TextBox2.Text.Length > 5 Then
-                TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "title", "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5))
+                tempworkingtvshow.title = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
             Else
-                TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "title", TextBox2.Text)
+                tempworkingtvshow.title = TextBox2.Text
             End If
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "plot", TextBox19.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "runtime", TextBox15.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "premiered", TextBox10.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "studio", TextBox16.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "rating", TextBox13.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "id", TextBox12.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "tvdbid", TextBox9.Text)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            TVShowNFOContent = nfofunction.ChangeFieldTVShow(workingtvshow.path, "mpaa", TextBox14.Text)
+            workingtvshow.title = tempworkingtvshow.title
+            tempworkingtvshow.plot = TextBox19.Text : workingtvshow.plot = TextBox19.Text
+            tempworkingtvshow.runtime = TextBox15.Text : workingtvshow.runtime = TextBox15.Text
+            tempworkingtvshow.premiered = TextBox10.Text : workingtvshow.premiered = TextBox10.Text
+            tempworkingtvshow.studio = TextBox16.Text : workingtvshow.studio = TextBox16.Text
+            tempworkingtvshow.rating = TextBox13.Text : workingtvshow.rating = TextBox13.Text
+            tempworkingtvshow.imdbid = TextBox12.Text : workingtvshow.imdbid = TextBox12.Text
+            tempworkingtvshow.tvdbid = TextBox9.Text : workingtvshow.tvdbid = TextBox9.Text
+            tempworkingtvshow.mpaa = TextBox14.Text : workingtvshow.mpaa = TextBox14.Text
+            tempworkingtvshow.path = workingtvshow.path
+            Dim TVShowNFOContent As String = nfofunction.ChangeAllFieldsTVShow(tempworkingtvshow)
             If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
             'title(2)
             'plot(19)
@@ -16152,9 +16160,14 @@ Public Class Form1
                     Exit For
                 End If
             Next
+            reloadtvshow()
             Call savetvdata()
-            rebuildselectedshow(Node.Name.ToString)
-            'reloadtvshow()
+            On Error Resume Next
+            TreeView1.SelectedNode = TreeView1.SelectedNode.PrevNode
+            TreeView1.SelectedNode = TreeView1.SelectedNode.NextNode
+            TreeView1.SelectedNode = node
+            On Error GoTo 0
+            'rebuildselectedshow(Node.Name.ToString)
         Else
             'its an episode
 
@@ -16164,33 +16177,14 @@ Public Class Form1
             If trueseason.Length = 1 Then trueseason = "0" & trueseason
             If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
             tempstring = "S" & trueseason & "E" & trueepisode & " - "
-            Dim Temp As String = TextBox2.Text.Replace(tempstring, "")
-            Dim TVShowEpisodeNFOContent As String = ""
-            TVShowEpisodeNFOContent = nfofunction.ChangeFieldEpisodeTVShow(workingepisode(0).episodepath, "title", Temp)
+            tempworkingepisode.title = TextBox2.Text.Replace(tempstring, "") : workingepisode(0).title = tempworkingepisode.title
+            tempworkingepisode.plot = TextBox21.Text : workingepisode(0).plot = TextBox21.Text
+            tempworkingepisode.aired = TextBox24.Text : workingepisode(0).aired = TextBox24.Text
+            tempworkingepisode.rating = TextBox20.Text : workingepisode(0).rating = TextBox20.Text
+            tempworkingepisode.episodepath = workingepisode(0).episodepath
+            Dim TVShowEpisodeNFOContent As String = nfofunction.ChangeAllFieldsEpisodeTVShow(tempworkingepisode)
             If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingepisode(0).episodepath, TVShowEpisodeNFOContent)
 
-            TVShowEpisodeNFOContent = nfofunction.ChangeFieldEpisodeTVShow(workingepisode(0).episodepath, "plot", TextBox21.Text)
-            If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingepisode(0).episodepath, TVShowEpisodeNFOContent)
-
-            TVShowEpisodeNFOContent = nfofunction.ChangeFieldEpisodeTVShow(workingepisode(0).episodepath, "aired", TextBox24.Text)
-            If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingepisode(0).episodepath, TVShowEpisodeNFOContent)
-
-            TVShowEpisodeNFOContent = nfofunction.ChangeFieldEpisodeTVShow(workingepisode(0).episodepath, "rating", TextBox20.Text)
-            If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingepisode(0).episodepath, TVShowEpisodeNFOContent)
-
-            'workingepisode(workingepisodeindex).director = TextBox22.Text
-            'workingepisode(workingepisodeindex).aired = TextBox24.Text
-            'workingepisode(workingepisodeindex).credits = TextBox23.Text
-            'workingepisode(workingepisodeindex).plot = TextBox21.Text
-            'workingepisode(workingepisodeindex).rating = TextBox20.Text
-            ''workingepisode(workingepisodeindex).title = TextBox2.Text
-            'Dim trueseason As String = workingepisode(workingepisodeindex).seasonno
-            'Dim trueepisode As String = workingepisode(workingepisodeindex).episodeno
-            'If trueseason.Length = 1 Then trueseason = "0" & trueseason
-            'If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-            'tempstring = "S" & trueseason & "E" & trueepisode & " - "
-            'workingepisode(workingepisodeindex).title = TextBox2.Text.Replace(tempstring, "")
-            'Call nfofunction.saveepisodenfo(workingepisode, workingepisode(0).episodepath, workingepisode(workingepisodeindex).seasonno, workingepisode(workingepisodeindex).episodeno)
             Dim MainNode As TreeNode
             For Each node As TreeNode In TreeView1.Nodes
                 For Each childnode In node.Nodes
@@ -16213,7 +16207,8 @@ Public Class Form1
                     Next
                 Next
             Next
-            savetvdata()
+            reloadtvshow()
+            Call savetvdata()
             rebuildselectedshow(MainNode.Name.ToString)
         End If
     End Sub
@@ -16400,7 +16395,6 @@ Public Class Form1
                                                 bytesToRead -= size
                                                 bytesRead += size
                                             End While
-
                                             Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
                                             fstrm.Write(buffer, 0, bytesRead)
                                             contents.Close()
@@ -20035,7 +20029,7 @@ Public Class Form1
                 Dim realshowpath As String = ""
 
                 savepath = episodearray(0).episodepath
-
+                Dim EpisodeName As String = ""
                 For Each Shows In basictvlist
                     If bckgroundscanepisodes.CancellationPending Then
                         tvscraperlog = tvscraperlog & vbCrLf & "Operation Cancelled by user" & vbCrLf
@@ -20048,6 +20042,7 @@ Public Class Form1
                         TempTVDBiD = Shows.tvdbid
                         imdbid = Shows.imdbid
                         showtitle = Shows.title
+                        EpisodeName = Shows.title
                         realshowpath = Shows.fullpath
                         actorsource = Shows.episodeactorsource
                     End If
@@ -20103,10 +20098,15 @@ Public Class Form1
 
                             If userprefs.tvshow_useXBMC_Scraper = True Then
                                 Dim FinalResult As String = ""
-                                episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, singleepisode.seasonno, singleepisode.episodeno, singleepisode.mediaextension, language)
+                                episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
                                 If episodearray.Count >= 1 Then
+                                    For x As Integer = 0 To episodearray.Count - 1
+                                        tvscraperlog = tvscraperlog & "Scraping body of episode: " & episodearray(x).episodeno & " - OK" & vbCrLf
+                                    Next
                                     scrapedok = True
-
+                                Else
+                                    tvscraperlog = tvscraperlog & "Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                                    scrapedok = False
                                 End If
                                 Exit For
                             End If

@@ -9,6 +9,11 @@ Module General
     Dim FileFolderFunctions As New FileAndFolderFunctions
     Dim TempEpisode As New EpisodeInfo
     Dim episodeInformation As New List(Of EpisodeInfo)
+    Dim TempXMLEpisode As TempEpisodeInfo
+    Dim episodeXMLinformation As New List(Of TempEpisodeInfo)
+
+
+
 
 #Region "Fields"
     Public mScraperManager As ScraperManager
@@ -934,6 +939,8 @@ Module General
                 FileInfoString &= "</subtitle>" & vbLf
             End If
             FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
+        Else
+            FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
         End If
         FileInfoString &= "<playcount>0</playcount>" & vbLf
         FileInfoString &= "<createdate>" & Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString & "</createdate>" & vbLf
@@ -1077,6 +1084,37 @@ Module General
 
 #End Region
 #Region "Misc.TVShows Routines"
+
+    Public Function NeededConversion(ByVal entrada As TempEpisodeInfo) As EpisodeInfo
+        Dim Teste As New EpisodeInfo
+        Dim merda1 As MovieActors
+        Teste.aired = entrada.aired
+        Teste.credits = entrada.credits
+        Teste.director = entrada.director
+        Teste.episodeno = entrada.episodeno
+        Teste.episodepath = entrada.episodepath
+        Teste.fanartpath = entrada.fanartpath
+        Teste.filedetails = entrada.filedetails
+        Teste.genre = entrada.genre
+        For Each merda As TempMovieActors In entrada.listactors
+            merda1.actorid = merda.actorid
+            merda1.actorname = merda.actorname
+            merda1.actorrole = merda.actorrole
+            merda1.actorthumb = merda.actorthumb
+            Teste.listactors.Add(merda1)
+        Next
+        'Teste.listactors = entrada.listactors
+        'Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
+        Teste.mediaextension = entrada.mediaextension
+        Teste.playcount = entrada.playcount
+        Teste.plot = entrada.plot
+        Teste.rating = entrada.rating
+        Teste.runtime = entrada.runtime
+        Teste.seasonno = entrada.seasonno
+        Teste.thumb = entrada.thumb
+        Teste.title = entrada.title
+        Return Teste
+    End Function
 
     Public Function Clean_AddTVShowExtraFields(ByVal Entrada As String, ByVal Language As String, ByVal IMDB_ID As String) As String
         Dim m_xmld As XmlDocument
@@ -1228,92 +1266,122 @@ Module General
         Return True
     End Function
 
-    Public Function InsertFileEpisodeInformationTags(ByVal Entrada As String, ByVal Filename As String) As String
+    Public Function InsertFileEpisodeInformationTags(ByVal Entrada() As String, ByVal Filename As String) As String
         Dim WorkingFileDetails As FullFileDetails = get_hdtags(Filename)
-        Dim FileInfoString As String = "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
+        Dim FileInfoString As String = ""
+        Dim TempString As String = ""
 
-        If WorkingFileDetails.filedetails_video.width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.width & "</width>" & vbLf
-        If WorkingFileDetails.filedetails_video.height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.height & "</height>" & vbLf
-        If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
-        If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
-        If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
-        If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
-        If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.runtime = FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
-        If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
-        If WorkingFileDetails.filedetails_video.container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.container & "</container>" & vbLf
-        If WorkingFileDetails.filedetails_video.codecid <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.codecid & "</codecid>" & vbLf
-        If WorkingFileDetails.filedetails_video.codecinfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.codecinfo & "</codecinfo>" & vbLf
-        If WorkingFileDetails.filedetails_video.scantype <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.scantype & "</scantype>" & vbLf
-        FileInfoString &= "</video>" & vbLf
-        If WorkingFileDetails.filedetails_audio.Count > 0 Then
-            For Each item In WorkingFileDetails.filedetails_audio
-                FileInfoString &= "<audio>" & vbLf
-                If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
-                If item.codec <> Nothing Then FileInfoString &= "<codec>" & item.codec & "</codec>" & vbLf
-                If item.channels <> Nothing Then FileInfoString &= "<channels>" & item.channels & "</channels>" & vbLf
-                If item.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.bitrate & "</bitrate>" & vbLf
-                FileInfoString &= "</audio>" & vbLf
-            Next
-            If WorkingFileDetails.filedetails_subtitles.Count > 0 Then
-                FileInfoString &= "<subtitle>" & vbLf
-                For Each item In WorkingFileDetails.filedetails_subtitles
+        For n As Integer = 0 To Entrada.Length - 1
+            FileInfoString &= "<episodedetails>" & vbLf & "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
+
+            If WorkingFileDetails.filedetails_video.width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.width & "</width>" & vbLf
+            If WorkingFileDetails.filedetails_video.height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.height & "</height>" & vbLf
+            If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
+            If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
+            If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
+            If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
+            If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.runtime = FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
+            If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
+            If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
+            If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
+            If WorkingFileDetails.filedetails_video.container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.container & "</container>" & vbLf
+            If WorkingFileDetails.filedetails_video.codecid <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.codecid & "</codecid>" & vbLf
+            If WorkingFileDetails.filedetails_video.codecinfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.codecinfo & "</codecinfo>" & vbLf
+            If WorkingFileDetails.filedetails_video.scantype <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.scantype & "</scantype>" & vbLf
+            FileInfoString &= "</video>" & vbLf
+            If WorkingFileDetails.filedetails_audio.Count > 0 Then
+                For Each item In WorkingFileDetails.filedetails_audio
+                    FileInfoString &= "<audio>" & vbLf
                     If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
+                    If item.codec <> Nothing Then FileInfoString &= "<codec>" & item.codec & "</codec>" & vbLf
+                    If item.channels <> Nothing Then FileInfoString &= "<channels>" & item.channels & "</channels>" & vbLf
+                    If item.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.bitrate & "</bitrate>" & vbLf
+                    FileInfoString &= "</audio>" & vbLf
                 Next
-                FileInfoString &= "</subtitle>" & vbLf
+                If WorkingFileDetails.filedetails_subtitles.Count > 0 Then
+                    FileInfoString &= "<subtitle>" & vbLf
+                    For Each item In WorkingFileDetails.filedetails_subtitles
+                        If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
+                    Next
+                    FileInfoString &= "</subtitle>" & vbLf
+                End If
+                FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
             End If
-            FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
-        End If
-        FileInfoString &= "<createdate>" & Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString & "</createdate>" & vbLf
-        Dim TempString As String = Entrada.Substring(0, Entrada.IndexOf("</details>"))
-        TempString = TempString.Replace("<details>", "<episodedetails>")
-        TempString &= FileInfoString & "</episodedetails>"
+            FileInfoString &= "<createdate>" & Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString & "</createdate>" & vbLf
+            TempString = ""
+            TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))
+            TempString = TempString.Replace("<details>", "")
+            TempString = FileInfoString & TempString & "</episodedetails>"
+            If Entrada.Length > 1 Then TempString &= vbLf
+            FileInfoString = TempString
+        Next
+        If Entrada.Length > 1 Then TempString = "<multiepisodenfo>" & vbLf & TempString & vbLf & "</multiepisodenfo>"
         Return TempString
     End Function
 
-    Public Sub ProcessEpisodeFile(ByVal Entrada As String)
+    Public Function ProcessEpisodeFile(ByVal Entrada As String, ByVal HowManyEpisodes As Integer) As List(Of EpisodeInfo)
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
+        Dim newActor As New TempMovieActors
 
+        episodeXMLinformation.Clear()
         m_xmld = New XmlDocument()
         m_xmld.LoadXml(Entrada)
-        m_nodelist = m_xmld.SelectNodes("/episodedetails")
+        If HowManyEpisodes > 1 Then
+            m_nodelist = m_xmld.SelectNodes("/multiepisodenfo/episodedetails")
+        Else
+            m_nodelist = m_xmld.SelectNodes("/episodedetails")
+        End If
         Dim NodeChild As XmlNode
         Dim Nodechild1 As XmlNode
         Dim Nodechild2 As XmlNode
+        Dim Counter As Integer = 0
 
         For Each m_node In m_nodelist
+            TempXMLEpisode.aired = Nothing
+            TempXMLEpisode.credits = Nothing
+            TempXMLEpisode.director = Nothing
+            TempXMLEpisode.episodeno = Nothing
+            TempXMLEpisode.genre = Nothing
+            TempXMLEpisode.plot = Nothing
+            TempXMLEpisode.rating = Nothing
+            TempXMLEpisode.seasonno = Nothing
+            TempXMLEpisode.thumb = Nothing
+            TempXMLEpisode.title = Nothing
+            TempXMLEpisode.listactors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
-                        TempEpisode.aired = NodeChild.InnerText
+                        TempXMLEpisode.aired = NodeChild.InnerText
                     Case "credits"
-                        If TempEpisode.credits = Nothing Then
-                            TempEpisode.credits = NodeChild.InnerText
+                        If TempXMLEpisode.credits = Nothing Then
+                            TempXMLEpisode.credits = NodeChild.InnerText
                         Else
-                            TempEpisode.credits &= " / " & NodeChild.InnerText
+                            TempXMLEpisode.credits &= " / " & NodeChild.InnerText
                         End If
                     Case "director"
-                        TempEpisode.director = NodeChild.InnerText
+                        TempXMLEpisode.director = NodeChild.InnerText
                     Case "genre"
-                        If TempEpisode.genre = Nothing Then
-                            TempEpisode.genre = NodeChild.InnerText
+                        If TempXMLEpisode.genre = Nothing Then
+                            TempXMLEpisode.genre = NodeChild.InnerText
                         Else
-                            TempEpisode.genre &= " / " & NodeChild.InnerText
+                            TempXMLEpisode.genre &= " / " & NodeChild.InnerText
                         End If
                     Case "plot"
-                        TempEpisode.plot = NodeChild.InnerText
+                        TempXMLEpisode.plot = NodeChild.InnerText
                     Case "rating"
-                        TempEpisode.rating = NodeChild.InnerText
+                        TempXMLEpisode.rating = NodeChild.InnerText
                     Case "thumb"
-                        TempEpisode.thumb = NodeChild.InnerText
+                        TempXMLEpisode.thumb = NodeChild.InnerText
                     Case "title"
-                        TempEpisode.title = NodeChild.InnerText
+                        TempXMLEpisode.title = NodeChild.InnerText
+                    Case "season"
+                        TempXMLEpisode.seasonno = NodeChild.InnerText
+                    Case "episode"
+                        TempXMLEpisode.episodeno = NodeChild.InnerText
                     Case "actor"
                         For Each Nodechild1 In NodeChild.ChildNodes
-                            Dim newActor As MovieActors
                             Select Case Nodechild1.Name
                                 Case "name"
                                     newActor.actorname = Nodechild1.InnerText
@@ -1323,13 +1391,18 @@ Module General
                                     newActor.actorthumb = Nodechild1.InnerText
                                 Case "actorid"
                             End Select
-                            TempEpisode.listactors.Add(newActor)
                         Next
+                        If newActor.actorname <> Nothing Then TempXMLEpisode.listactors.Add(newActor)
                 End Select
             Next
+            episodeXMLinformation.Add(TempXMLEpisode)
         Next
-    End Sub
+        Dim Teste As New List(Of EpisodeInfo)
+        Teste = episodeXMLinformation.ConvertAll(New Converter(Of TempEpisodeInfo, EpisodeInfo)(AddressOf NeededConversion))
+        Return Teste
+    End Function
 #End Region
+
 
 #Region "nfoFileFunctions"
 
@@ -1358,27 +1431,53 @@ Module General
 #End Region
 
 
-    Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal SeasonID As String, ByVal EpisodeID As String, ByVal EpisodeFile As String, ByVal Language As String) As List(Of EpisodeInfo)
+    Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of EpisodeInfo), ByVal Language As String) As List(Of EpisodeInfo)
         episodeInformation.Clear()
-        TempEpisode.episodepath = EpisodeFile.Substring(0, EpisodeFile.LastIndexOf(".")) & ".nfo"
-        TempEpisode.episodeno = EpisodeID
-        TempEpisode.seasonno = SeasonID
-        TempEpisode.mediaextension = EpisodeFile
-        TempEpisode.playcount = "0"
-        ParametersForScraper(1) = TVDBId
-        ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
-        ParametersForScraper(4) = Nothing
-        ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & SeasonID & "/" & EpisodeID & "/" & Language & ".xml")
-        FinalScrapResult = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
-        FinalScrapResult = InsertFileEpisodeInformationTags(FinalScrapResult, EpisodeFile)
-        ProcessEpisodeFile(FinalScrapResult)
-        If TempEpisode.thumb <> Nothing Then
+        Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
+
+        For n As Integer = 0 To EpisodeArray.Count - 1
+            EpisodeArray(n).seasonno = CInt(EpisodeArray(n).seasonno)
+            EpisodeArray(n).episodeno = CInt(EpisodeArray(n).episodeno)
+            TempXMLEpisode.episodepath = EpisodeArray(n).mediaextension.Substring(0, EpisodeArray(n).mediaextension.LastIndexOf(".")) & ".nfo"
+            TempXMLEpisode.episodeno = EpisodeArray(n).episodeno
+            TempXMLEpisode.seasonno = EpisodeArray(n).seasonno
+            TempXMLEpisode.mediaextension = EpisodeArray(n).mediaextension
+            TempXMLEpisode.playcount = "0"
+            ParametersForScraper(1) = TVDBId
+            ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
+            ParametersForScraper(4) = Nothing
+            Try
+                For x As Integer = 0 To 20
+                    ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).seasonno & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
+                    If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
+                        Exit For
+                    Else
+                        If x = 20 Then
+                            episodeInformation.Clear()
+                            Return episodeInformation
+                            Exit Function
+                        End If
+                    End If
+                Next
+                EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
+            Catch
+                episodeInformation.Clear()
+                Return episodeInformation
+                Exit Function
+                'não achou o episodio
+            End Try
+        Next
+
+
+        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).mediaextension)
+        episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
+        If episodeInformation(0).thumb <> Nothing Then
             Dim myWebClient As New System.Net.WebClient()
-            Dim ImageFilename As String = EpisodeFile.Substring(0, EpisodeFile.LastIndexOf(".")) & ".tbn"
-            myWebClient.DownloadFile(TempEpisode.thumb, ImageFilename)
+            Dim ImageFilename As String = EpisodeArray(0).mediaextension.Substring(0, EpisodeArray(0).mediaextension.LastIndexOf(".")) & ".tbn"
+            myWebClient.DownloadFile(episodeInformation(0).thumb, ImageFilename)
         End If
-        Dim DidItWork As Boolean = CreateMovieNfo(TempEpisode.episodepath, FinalScrapResult)
-        episodeInformation.Add(TempEpisode)
+        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.episodepath, FinalScrapResult)
+
         Return episodeInformation
     End Function
 

@@ -27,6 +27,45 @@ Public Class workingwithnfofiles
         FinalString &= "</tvshow>"
         Return FinalString
     End Function
+    Public Function ChangeAllFieldsTVShow(ByVal TempTVShow As TvShowNFO) As String
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+        Dim FinalString As String = "<tvshow>"
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(TempTVShow.path)
+        m_nodelist = m_xmld.SelectNodes("/tvshow")
+        For Each m_node In m_nodelist
+            If m_node.HasChildNodes Then
+                For Each node1 As XmlNode In m_node
+                    Select Case node1.Name.ToLower
+                        Case "title"
+                            node1.InnerText = TempTVShow.title
+                        Case "plot"
+                            node1.InnerText = TempTVShow.plot
+                        Case "runtime"
+                            node1.InnerText = TempTVShow.runtime
+                        Case "premiered"
+                            node1.InnerText = TempTVShow.premiered
+                        Case "studio"
+                            node1.InnerText = TempTVShow.studio
+                        Case "rating"
+                            node1.InnerText = TempTVShow.rating
+                        Case "id"
+                            node1.InnerText = TempTVShow.imdbid
+                        Case "tvdbid"
+                            node1.InnerText = TempTVShow.tvdbid
+                        Case "mpaa"
+                            node1.InnerText = TempTVShow.mpaa
+                    End Select
+                    FinalString &= node1.OuterXml.ToString
+                Next
+            End If
+        Next
+        FinalString &= "</tvshow>"
+        Return FinalString
+    End Function
     Public Function ChangeFieldEpisodeTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
@@ -49,6 +88,40 @@ Public Class workingwithnfofiles
         FinalString &= "</episodedetails>"
         Return FinalString
     End Function
+    Public Function ChangeAllFieldsEpisodeTVShow(ByVal TempEpisode As EpisodeInfo) As String
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+        Dim FinalString As String = "<episodedetails>"
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(TempEpisode.episodepath)
+        m_nodelist = m_xmld.SelectNodes("/episodedetails")
+        For Each m_node In m_nodelist
+            If m_node.HasChildNodes Then
+                For Each node1 As XmlNode In m_node
+                    'If node1.Name.ToLower = Field.ToLower Then
+                    '    node1.InnerText = ValueToAssign
+                    'End If
+                    'FinalString &= node1.OuterXml.ToString
+                    Select Case node1.Name.ToLower
+                        Case "title"
+                            node1.InnerText = TempEpisode.title
+                        Case "plot"
+                            node1.InnerText = TempEpisode.plot
+                        Case "aired"
+                            node1.InnerText = TempEpisode.aired
+                        Case "rating"
+                            node1.InnerText = TempEpisode.rating
+                    End Select
+                    FinalString &= node1.OuterXml.ToString
+                Next
+            End If
+        Next
+        FinalString &= "</episodedetails>"
+        Return FinalString
+    End Function
+
     Public Function validate_nfo(ByVal nfopath As String)
         Dim filepath As String
         Dim tempstring As String
