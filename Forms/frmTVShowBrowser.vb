@@ -13,7 +13,7 @@ Public Class frmTVShowBrowser
     Dim urllinecount As Integer = 0
     Dim returnedresults(100, 2) As String
     Dim resultcount As Integer = 0
-    Dim languagecode As String = Form1.userprefs.tvdblanguagecode
+    Dim languagecode As String = Form1.userPrefs.tvdblanguagecode
     Dim actors(1000, 3) As String
 
 
@@ -696,9 +696,9 @@ Public Class frmTVShowBrowser
                             If tempstring.IndexOf("http") <> -1 And tempstring.IndexOf("jpg") <> -1 Then
                                 actors(f, 2) = tempstring.Substring(tempstring.IndexOf("http"), tempstring.IndexOf("jpg") - tempstring.IndexOf("http") + 3)
                                 Exit For
-                                If Form1.userprefs.actorsave = True Then
+                                If Form1.userPrefs.actorsave = True Then
                                     Dim workingpath As String = ""
-                                    Dim networkpath As String = Form1.userprefs.actorsavepath
+                                    Dim networkpath As String = Form1.userPrefs.actorsavepath
                                     If actors(f, 2) <> Nothing Then
                                         If actors(f, 2) <> "" Then
                                             Try
@@ -724,7 +724,7 @@ Public Class frmTVShowBrowser
                                                     contents.Close()
                                                     fstrm.Close()
                                                 End If
-                                                actors(f, 2) = IO.Path.Combine(Form1.userprefs.actornetworkpath, actors(f, 3) & ".jpg")
+                                                actors(f, 2) = IO.Path.Combine(Form1.userPrefs.actornetworkpath, actors(f, 3) & ".jpg")
                                             Catch
                                             End Try
                                         End If
@@ -792,9 +792,9 @@ Public Class frmTVShowBrowser
                 actors(f, 1) = specchars(actors(f, 1))
                 actors(f, 0) = encodespecialchrs(actors(f, 0))
                 actors(f, 1) = encodespecialchrs(actors(f, 1))
-                If Form1.userprefs.actorsave = True Then
+                If Form1.userPrefs.actorsave = True Then
                     Dim workingpath As String = ""
-                    Dim networkpath As String = Form1.userprefs.actorsavepath
+                    Dim networkpath As String = Form1.userPrefs.actorsavepath
                     If actors(f, 2) <> Nothing Then
                         If actors(f, 2) <> "" Then
                             'Try
@@ -821,7 +821,7 @@ Public Class frmTVShowBrowser
                                 contents.Close()
                                 fstrm.Close()
                             End If
-                            actors(f, 2) = IO.Path.Combine(Form1.userprefs.actornetworkpath, actors(f, 3) & ".jpg")
+                            actors(f, 2) = IO.Path.Combine(Form1.userPrefs.actornetworkpath, actors(f, 3) & ".jpg")
                             'Catch
                             'End Try
                         End If

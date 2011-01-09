@@ -158,17 +158,17 @@ Public Class Form2
         Dim tempstring2 As String
         Dim url As String
         Dim tempstring3 As String
-        If Form1.userprefs.usefoldernames = True Then
+        If Form1.userPrefs.usefoldernames = True Then
             tempstring = Form1.workingmovie.foldername
         Else
-            tempstring = Form1.filefunction.cleanfilename(IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename))
+            tempstring = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename))
         End If
 
         tempstring = tempstring.Replace(" ", "+")
         tempstring = tempstring.Replace("&", "%26")
 
 
-        url = Form1.userprefs.imdbmirror & "find?s=tt&q=" & tempstring
+        url = Form1.userPrefs.imdbmirror & "find?s=tt&q=" & tempstring
         WebBrowser2.Stop()
         WebBrowser2.ScriptErrorsSuppressed = True
         WebBrowser2.Navigate(url)
@@ -183,7 +183,7 @@ Public Class Form2
         Dim thumbstring As New XmlDocument
         WebBrowser2.ScriptErrorsSuppressed = True
         tempstring = WebBrowser2.Url.ToString
-        tempstring = tempstring.Replace(Form1.userprefs.imdbmirror & "title/", "")
+        tempstring = tempstring.Replace(Form1.userPrefs.imdbmirror & "title/", "")
         tempstring = tempstring.Replace("/", "")
         If tempstring.IndexOf("tt") <> -1 And tempstring.Length = 9 Then
             Dim messbox As message_box = New message_box("Please wait, Scraping Alternative Title", "", "This Will Take Longer If Scraping Fanart & Poster")
@@ -212,7 +212,7 @@ Public Class Form2
             Dim scraperfunction As New Classimdb
             Dim body As String = ""
             Dim certificates As New List(Of String)
-            body = scraperfunction.getimdbbody("", "", tempstring, Form1.userprefs.imdbmirror)
+            body = scraperfunction.getimdbbody("", "", tempstring, Form1.userPrefs.imdbmirror)
             Dim alternatemovie As New FullMovieDetails
             alternatemovie.fullmoviebody.imdbid = tempstring
             If body = "MIC" Then
@@ -222,17 +222,17 @@ Public Class Form2
                 For Each thisresult In thumbstring("movie")
                     Select Case thisresult.Name
                         Case "title"
-                            If Form1.userprefs.keepfoldername = False Then
+                            If Form1.userPrefs.keepfoldername = False Then
                                 alternatemovie.fullmoviebody.title = thisresult.InnerText
                             Else
-                                If Form1.userprefs.usefoldernames = False Then
+                                If Form1.userPrefs.usefoldernames = False Then
                                     Dim tempstring2 As String = IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename)
-                                    alternatemovie.fullmoviebody.title = Form1.filefunction.cleanfilename(tempstring2)
+                                    alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(tempstring2)
                                 Else
-                                    alternatemovie.fullmoviebody.title = Form1.filefunction.cleanfilename(Form1.workingmoviedetails.fileinfo.foldername)
+                                    alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(Form1.workingmoviedetails.fileinfo.foldername)
                                 End If
                             End If
-                            If Form1.userprefs.keepfoldername = False Then
+                            If Form1.userPrefs.keepfoldername = False Then
                                 alternatemovie.fullmoviebody.title = thisresult.InnerText
                             Else
                                 alternatemovie.fullmoviebody.title = Form1.workingmoviedetails.fileinfo.foldername
@@ -275,9 +275,9 @@ Public Class Form2
                 If alternatemovie.fullmoviebody.top250 = Nothing Then alternatemovie.fullmoviebody.top250 = "0"
 
                 Dim done As Boolean = False
-                For g = 0 To UBound(Form1.userprefs.certificatepriority)
+                For g = 0 To UBound(Form1.userPrefs.certificatepriority)
                     For Each cert In certificates
-                        If cert.IndexOf(Form1.userprefs.certificatepriority(g)) <> -1 Then
+                        If cert.IndexOf(Form1.userPrefs.certificatepriority(g)) <> -1 Then
                             alternatemovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
                             done = True
                             Exit For
@@ -288,7 +288,7 @@ Public Class Form2
 
                 Dim actorlist As String
 
-                actorlist = scraperfunction.getimdbactors(Form1.userprefs.imdbmirror, tempstring, "")
+                actorlist = scraperfunction.getimdbactors(Form1.userPrefs.imdbmirror, tempstring, "")
                 If actorlist <> Nothing Then
                     thumbstring.LoadXml(actorlist)
 
@@ -307,9 +307,9 @@ Public Class Form2
                                             newactor.actorthumb = detail.InnerText
                                         Case "actorid"
                                             If newactor.actorthumb <> Nothing Then
-                                                If Form1.userprefs.actorsave = True And detail.InnerText <> "" Then
+                                                If Form1.userPrefs.actorsave = True And detail.InnerText <> "" Then
                                                     Dim workingpath As String = ""
-                                                    Dim networkpath As String = Form1.userprefs.actorsavepath
+                                                    Dim networkpath As String = Form1.userPrefs.actorsavepath
                                                     Try
                                                         Dim tempstring2 As String = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
                                                         Dim hg As New IO.DirectoryInfo(tempstring2)
@@ -338,11 +338,11 @@ Public Class Form2
                                                             contents.Close()
                                                             fstrm.Close()
                                                         End If
-                                                        newactor.actorthumb = IO.Path.Combine(Form1.userprefs.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                                                        If Form1.userprefs.actornetworkpath.IndexOf("/") <> -1 Then
-                                                            newactor.actorthumb = Form1.userprefs.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                        newactor.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                                                        If Form1.userPrefs.actornetworkpath.IndexOf("/") <> -1 Then
+                                                            newactor.actorthumb = Form1.userPrefs.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                                                         Else
-                                                            newactor.actorthumb = Form1.userprefs.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                            newactor.actorthumb = Form1.userPrefs.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                         End If
                                                     Catch
                                                     End Try
@@ -353,7 +353,7 @@ Public Class Form2
                                 alternatemovie.listactors.Add(newactor)
                         End Select
                     Next
-                    While alternatemovie.listactors.Count > Form1.userprefs.maxactors
+                    While alternatemovie.listactors.Count > Form1.userPrefs.maxactors
                         alternatemovie.listactors.RemoveAt(alternatemovie.listactors.Count - 1)
                     End While
                 End If
@@ -362,16 +362,16 @@ Public Class Form2
 
 
                 Dim trailer As String = ""
-                If Form1.userprefs.gettrailer = True Then
-                    trailer = scraperfunction.gettrailerurl(alternatemovie.fullmoviebody.imdbid, Form1.userprefs.imdbmirror)
+                If Form1.userPrefs.gettrailer = True Then
+                    trailer = scraperfunction.gettrailerurl(alternatemovie.fullmoviebody.imdbid, Form1.userPrefs.imdbmirror)
                     If trailer <> Nothing Then
                         alternatemovie.fullmoviebody.trailer = trailer
                     End If
                 End If
-                If Form1.userprefs.nfoposterscraper <> 0 Then
+                If Form1.userPrefs.nfoposterscraper <> 0 Then
                     Dim thumbs As String = ""
 
-                    If Form1.userprefs.nfoposterscraper = 1 Or Form1.userprefs.nfoposterscraper = 3 Or Form1.userprefs.nfoposterscraper = 5 Or Form1.userprefs.nfoposterscraper = 7 Or Form1.userprefs.nfoposterscraper = 9 Or Form1.userprefs.nfoposterscraper = 11 Or Form1.userprefs.nfoposterscraper = 13 Or Form1.userprefs.nfoposterscraper = 15 Then
+                    If Form1.userPrefs.nfoposterscraper = 1 Or Form1.userPrefs.nfoposterscraper = 3 Or Form1.userPrefs.nfoposterscraper = 5 Or Form1.userPrefs.nfoposterscraper = 7 Or Form1.userPrefs.nfoposterscraper = 9 Or Form1.userPrefs.nfoposterscraper = 11 Or Form1.userPrefs.nfoposterscraper = 13 Or Form1.userPrefs.nfoposterscraper = 15 Then
                         Try
                             Dim newobject3 As New IMPA.getimpaposters
                             Dim teststring As New XmlDocument
@@ -385,7 +385,7 @@ Public Class Form2
                     End If
 
 
-                    If Form1.userprefs.nfoposterscraper = 2 Or Form1.userprefs.nfoposterscraper = 3 Or Form1.userprefs.nfoposterscraper = 6 Or Form1.userprefs.nfoposterscraper = 7 Or Form1.userprefs.nfoposterscraper = 10 Or Form1.userprefs.nfoposterscraper = 11 Or Form1.userprefs.nfoposterscraper = 14 Or Form1.userprefs.nfoposterscraper = 15 Then
+                    If Form1.userPrefs.nfoposterscraper = 2 Or Form1.userPrefs.nfoposterscraper = 3 Or Form1.userPrefs.nfoposterscraper = 6 Or Form1.userPrefs.nfoposterscraper = 7 Or Form1.userPrefs.nfoposterscraper = 10 Or Form1.userPrefs.nfoposterscraper = 11 Or Form1.userPrefs.nfoposterscraper = 14 Or Form1.userPrefs.nfoposterscraper = 15 Then
                         Try
                             Dim newobject2 As New tmdb_posters.Class1
                             Dim teststring As New XmlDocument
@@ -398,7 +398,7 @@ Public Class Form2
                         End Try
                     End If
 
-                    If Form1.userprefs.nfoposterscraper = 4 Or Form1.userprefs.nfoposterscraper = 5 Or Form1.userprefs.nfoposterscraper = 6 Or Form1.userprefs.nfoposterscraper = 7 Or Form1.userprefs.nfoposterscraper = 12 Or Form1.userprefs.nfoposterscraper = 13 Or Form1.userprefs.nfoposterscraper = 14 Or Form1.userprefs.nfoposterscraper = 15 Then
+                    If Form1.userPrefs.nfoposterscraper = 4 Or Form1.userPrefs.nfoposterscraper = 5 Or Form1.userPrefs.nfoposterscraper = 6 Or Form1.userPrefs.nfoposterscraper = 7 Or Form1.userPrefs.nfoposterscraper = 12 Or Form1.userPrefs.nfoposterscraper = 13 Or Form1.userPrefs.nfoposterscraper = 14 Or Form1.userPrefs.nfoposterscraper = 15 Then
                         Try
                             Dim newobject As New class_mpdb_thumbs.Class1
                             Dim teststring As New XmlDocument
@@ -411,7 +411,7 @@ Public Class Form2
                         End Try
                     End If
 
-                    If Form1.userprefs.nfoposterscraper = 8 Or Form1.userprefs.nfoposterscraper = 9 Or Form1.userprefs.nfoposterscraper = 10 Or Form1.userprefs.nfoposterscraper = 11 Or Form1.userprefs.nfoposterscraper = 12 Or Form1.userprefs.nfoposterscraper = 13 Or Form1.userprefs.nfoposterscraper = 14 Or Form1.userprefs.nfoposterscraper = 15 Then
+                    If Form1.userPrefs.nfoposterscraper = 8 Or Form1.userPrefs.nfoposterscraper = 9 Or Form1.userPrefs.nfoposterscraper = 10 Or Form1.userPrefs.nfoposterscraper = 11 Or Form1.userPrefs.nfoposterscraper = 12 Or Form1.userPrefs.nfoposterscraper = 13 Or Form1.userPrefs.nfoposterscraper = 14 Or Form1.userPrefs.nfoposterscraper = 15 Then
                         Try
                             Dim thumbscraper As New imdb_thumbs.Class1
                             Dim teststring As New XmlDocument
@@ -446,9 +446,9 @@ Public Class Form2
 
 
 
-                If Form1.userprefs.enablehdtags = True Then
+                If Form1.userPrefs.enablehdtags = True Then
                     If Form1.workingmoviedetails.filedetails.filedetails_video.container = Nothing Then
-                        alternatemovie.filedetails = Form1.filefunction.get_hdtags(tempstring)
+                        alternatemovie.filedetails = Form1.fileFunction.get_hdtags(tempstring)
                     End If
                 End If
 
@@ -462,32 +462,32 @@ Public Class Form2
                         If posterpath <> "" Then
                             If IO.File.Exists(posterpath) Then IO.File.Delete(posterpath)
                             Dim moviethumburl As String = ""
-                            If Form1.userprefs.scrapemovieposters = True Then
+                            If Form1.userPrefs.scrapemovieposters = True Then
                                 Try
-                                    Select Case Form1.userprefs.moviethumbpriority(0)
+                                    Select Case Form1.userPrefs.moviethumbpriority(0)
                                         Case "Internet Movie Poster Awards"
-                                            moviethumburl = Form1.scraperfunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
+                                            moviethumburl = Form1.scraperFunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
                                         Case "IMDB"
-                                            moviethumburl = Form1.scraperfunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                            moviethumburl = Form1.scraperFunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
                                         Case "Movie Poster DB"
-                                            moviethumburl = Form1.scraperfunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                            moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                         Case "themoviedb.org"
-                                            moviethumburl = Form1.scraperfunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                            moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
                                     End Select
                                 Catch
                                     moviethumburl = "na"
                                 End Try
                                 Try
                                     If moviethumburl = "na" Then
-                                        Select Case Form1.userprefs.moviethumbpriority(1)
+                                        Select Case Form1.userPrefs.moviethumbpriority(1)
                                             Case "Internet Movie Poster Awards"
-                                                moviethumburl = Form1.scraperfunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
+                                                moviethumburl = Form1.scraperFunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
                                             Case "IMDB"
-                                                moviethumburl = Form1.scraperfunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "Movie Poster DB"
-                                                moviethumburl = Form1.scraperfunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "themoviedb.org"
-                                                moviethumburl = Form1.scraperfunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
                                         End Select
                                     End If
                                 Catch
@@ -495,15 +495,15 @@ Public Class Form2
                                 End Try
                                 Try
                                     If moviethumburl = "na" Then
-                                        Select Case Form1.userprefs.moviethumbpriority(2)
+                                        Select Case Form1.userPrefs.moviethumbpriority(2)
                                             Case "Internet Movie Poster Awards"
-                                                moviethumburl = Form1.scraperfunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
+                                                moviethumburl = Form1.scraperFunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
                                             Case "IMDB"
-                                                moviethumburl = Form1.scraperfunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "Movie Poster DB"
-                                                moviethumburl = Form1.scraperfunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "themoviedb.org"
-                                                moviethumburl = Form1.scraperfunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
                                         End Select
                                     End If
                                 Catch
@@ -511,15 +511,15 @@ Public Class Form2
                                 End Try
                                 Try
                                     If moviethumburl = "na" Then
-                                        Select Case Form1.userprefs.moviethumbpriority(3)
+                                        Select Case Form1.userPrefs.moviethumbpriority(3)
                                             Case "Internet Movie Poster Awards"
-                                                moviethumburl = Form1.scraperfunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
+                                                moviethumburl = Form1.scraperFunction2.impathumb(alternatemovie.fullmoviebody.title, alternatemovie.fullmoviebody.year)
                                             Case "IMDB"
-                                                moviethumburl = Form1.scraperfunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.imdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "Movie Poster DB"
-                                                moviethumburl = Form1.scraperfunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "themoviedb.org"
-                                                moviethumburl = Form1.scraperfunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
                                         End Select
                                     End If
                                 Catch
@@ -548,7 +548,7 @@ Public Class Form2
                                             contents.Close()
                                             fstrm.Close()
 
-                                            If Form1.userprefs.createfolderjpg = True Then
+                                            If Form1.userPrefs.createfolderjpg = True Then
                                                 Dim fstrm2 As New FileStream(jpegpath, FileMode.OpenOrCreate, FileAccess.Write)
                                                 fstrm2.Write(buffer, 0, bytesRead)
                                                 contents.Close()
@@ -575,7 +575,7 @@ Public Class Form2
 
                                 Dim moviethumburl As String = ""
 
-                                If Form1.userprefs.savefanart = True Then
+                                If Form1.userPrefs.savefanart = True Then
 
                                     Dim temp As String = alternatemovie.fullmoviebody.imdbid
 
@@ -647,9 +647,9 @@ Public Class Form2
 
 
 
-                                            If Form1.userprefs.resizefanart = 1 Then
+                                            If Form1.userPrefs.resizefanart = 1 Then
                                                 bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                            ElseIf Form1.userprefs.resizefanart = 2 Then
+                                            ElseIf Form1.userPrefs.resizefanart = 2 Then
                                                 If bmp.Width > 1280 Or bmp.Height > 720 Then
                                                     Dim bm_source As New Bitmap(bmp)
                                                     Dim bm_dest As New Bitmap(1280, 720)
@@ -660,7 +660,7 @@ Public Class Form2
                                                 Else
                                                     bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                                                 End If
-                                            ElseIf Form1.userprefs.resizefanart = 3 Then
+                                            ElseIf Form1.userPrefs.resizefanart = 3 Then
                                                 If bmp.Width > 960 Or bmp.Height > 540 Then
                                                     Dim bm_source As New Bitmap(bmp)
                                                     Dim bm_dest As New Bitmap(960, 540)
@@ -955,7 +955,7 @@ Public Class Form2
         Form1.workingmoviedetails.fullmoviebody = workingmovieedit.fullmoviebody
         Form1.workingmoviedetails.listactors = workingmovieedit.listactors
         Form1.workingmoviedetails.listthumbs = workingmovieedit.listthumbs
-        Call Form1.nfofunction.savemovienfo(Form1.workingmoviedetails.fileinfo.fullpathandfilename, Form1.workingmoviedetails)
+        Call Form1.nfoFunction.savemovienfo(Form1.workingmoviedetails.fileinfo.fullpathandfilename, Form1.workingmoviedetails)
         Me.Close()
         'Dim oldactors(9999, 2)
         'Dim actorcount As Integer = 0

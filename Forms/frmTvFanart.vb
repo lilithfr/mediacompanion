@@ -21,7 +21,7 @@ Public Class frmTvFanart
     Dim title As String = Form1.titletxt.Text
     Dim itemnumber As Integer
     Dim rememberint As Integer
-    Dim maxthumbs As Integer = Form1.userprefs.maximumthumbs
+    Dim maxthumbs As Integer = Form1.userPrefs.maximumthumbs
     Dim pagecount As Integer = 0
     Dim currentpage As Integer = 1
     Dim downloadthumb(3000, 1) As String
@@ -128,18 +128,18 @@ Public Class frmTvFanart
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
                 maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                Form1.userprefs.maximumthumbs = maxthumbs
+                Form1.userPrefs.maximumthumbs = maxthumbs
             Else
                 MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
                 maxthumbs = 10
                 TextBox1.Text = "10"
-                Form1.userprefs.maximumthumbs = 10
+                Form1.userPrefs.maximumthumbs = 10
             End If
         Else
             MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
             maxthumbs = 10
             TextBox1.Text = "10"
-            Form1.userprefs.maximumthumbs = 10
+            Form1.userPrefs.maximumthumbs = 10
         End If
 
         Button5.Visible = False
