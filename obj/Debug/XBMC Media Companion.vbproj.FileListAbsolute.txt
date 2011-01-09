@@ -506,3 +506,104 @@ D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\Medi
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
 D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Media Companion.exe.config
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Interop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media Companion.pdb
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.imdb.com\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.impa.com\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.impa.com\impa.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\changelog.txt
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\icon.png
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\imdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.mtv.com\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.mtv.com\icon.png
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.mtv.com\mtv.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\icon.png
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\changelog.txt
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\icon.png
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.core\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Media Companion.exe
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Media Companion.pdb
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\Interop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanion\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmBatchScraper.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmCopyProgress.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmCoverArt.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmDialog1.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Form1.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Form2.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.message_box.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmMovieFanart.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Resources.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmOptions.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmSplashscreen.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.tv_batch_wizard.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmTvEdit.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmTvFanart.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmTvPosters.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\GenerateResource-ResGen.write.1.tlog
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media Companion.exe

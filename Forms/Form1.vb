@@ -28204,7 +28204,7 @@ Public Class Form1
             tvbatchlist.sh_rating = False
             tvbatchlist.sh_runtime = False
             tvbatchlist.sh_studio = False
-            tvbatchlist.sh_year = False
+            tvbatchlist.shYear = False
 
             tvbatchlist.includelocked = False
             tvbatchlist.activate = False
@@ -28296,7 +28296,7 @@ Public Class Form1
                                             editshow.mpaa = thisresult.InnerText
                                         End If
                                     Case "premiered"
-                                        If tvbatchlist.sh_year = True Then
+                                        If tvbatchlist.shYear = True Then
                                             editshow.premiered = thisresult.InnerText
                                         End If
                                     Case "genre"
@@ -28946,7 +28946,7 @@ Public Class Form1
 
                             Next
 
-                           
+
                         End If
 
 

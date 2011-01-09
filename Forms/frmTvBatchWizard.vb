@@ -92,9 +92,9 @@
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
         'year
         If CheckBox1.CheckState = CheckState.Checked Then
-            Form1.tvbatchlist.sh_year = True
+            Form1.tvbatchlist.shYear = True
         Else
-            Form1.tvbatchlist.sh_year = False
+            Form1.tvbatchlist.shYear = False
         End If
     End Sub
     Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged

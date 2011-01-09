@@ -1,6 +1,6 @@
 
 Public Structure TvShowBatchWizard
-    Dim sh_year As Boolean
+    Dim shYear As Boolean
     Dim sh_rating As Boolean
     Dim sh_plot As Boolean
     Dim sh_runtime As Boolean
