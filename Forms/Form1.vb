@@ -28182,42 +28182,42 @@ Public Class Form1
         If Not tvbckrescrapewizard.IsBusy Then
 
 
-            tvbatchlist.ep_actor = False
-            tvbatchlist.ep_aired = False
+            tvbatchlist.epActor = False
+            tvbatchlist.epAired = False
 
-            tvbatchlist.ep_credits = False
-            tvbatchlist.ep_director = False
-            tvbatchlist.ep_plot = False
-            tvbatchlist.ep_rating = False
-            tvbatchlist.ep_runtime = False
-            tvbatchlist.ep_screenshot = False
+            tvbatchlist.epCredits = False
+            tvbatchlist.epDirector = False
+            tvbatchlist.epPlot = False
+            tvbatchlist.epRating = False
+            tvbatchlist.epRuntime = False
+            tvbatchlist.epScreenshot = False
 
-            tvbatchlist.ep_streamdetails = False
-            tvbatchlist.ep_createscreenshot = False
+            tvbatchlist.epStreamDetails = False
+            tvbatchlist.epCreateScreenshot = False
 
-            tvbatchlist.sh_actor = False
-            tvbatchlist.sh_fanart = False
-            tvbatchlist.sh_genre = False
-            tvbatchlist.sh_posters = False
-            tvbatchlist.sh_mpaa = False
-            tvbatchlist.sh_plot = False
-            tvbatchlist.sh_rating = False
-            tvbatchlist.sh_runtime = False
-            tvbatchlist.sh_studio = False
+            tvbatchlist.shActor = False
+            tvbatchlist.shFanart = False
+            tvbatchlist.shGenre = False
+            tvbatchlist.shPosters = False
+            tvbatchlist.shMpaa = False
+            tvbatchlist.shPlot = False
+            tvbatchlist.shRating = False
+            tvbatchlist.shRuntime = False
+            tvbatchlist.shStudio = False
             tvbatchlist.shYear = False
 
-            tvbatchlist.includelocked = False
+            tvbatchlist.includeLocked = False
             tvbatchlist.activate = False
 
-            tvbatchlist.doshows = False
-            tvbatchlist.doepisodes = False
-            tvbatchlist.doshowart = False
-            tvbatchlist.doshowactors = False
-            tvbatchlist.doshowbody = False
-            tvbatchlist.doepisodeart = False
-            tvbatchlist.doepisodeactors = False
-            tvbatchlist.doepisodebody = False
-            tvbatchlist.doepisodemediatags = False
+            tvbatchlist.doShows = False
+            tvbatchlist.doEpisodes = False
+            tvbatchlist.doShowArt = False
+            tvbatchlist.doShowActors = False
+            tvbatchlist.doShowBody = False
+            tvbatchlist.doEpisodeArt = False
+            tvbatchlist.doEpisodeActors = False
+            tvbatchlist.doEpisodeBody = False
+            tvbatchlist.doEpisodeMediaTags = False
             ' doshowbody As Boolean
             'Dim doshowart As Boolean
             'Dim doshowactors As Boolean
@@ -28247,8 +28247,8 @@ Public Class Form1
         Dim progcount As Integer = 0
         Dim done As Integer = 0
         For f = basictvlist.Count - 1 To 0 Step -1
-            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvbatchlist.includelocked = True Then
-                If tvbatchlist.doepisodes = True Then
+            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvbatchlist.includeLocked = True Then
+                If tvbatchlist.doEpisodes = True Then
                     showprocesscount += basictvlist(f).allepisodes.Count
                     showprocesscount += 1
                     progcount += 1
@@ -28262,7 +28262,7 @@ Public Class Form1
         Dim showcounter As Integer = 0
         For f = basictvlist.Count - 1 To 0 Step -1
             showcounter += 1
-            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvbatchlist.includelocked = True Then
+            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvbatchlist.includeLocked = True Then
                 progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount
                 If done > 0 Then
                     progress = (100 / showprocesscount) * done
@@ -28270,12 +28270,12 @@ Public Class Form1
                     progress = 0
                 End If
                 tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                Dim editshow As New tvshownfo
+                Dim editshow As New TvShowNFO
                 editshow = nfofunction.loadfulltnshownfo(basictvlist(f).fullpath)
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
-                If tvbatchlist.doshows = True Then
-                    If tvbatchlist.doshowbody = True Or tvbatchlist.doshowactors = True Then
+                If tvbatchlist.doShows = True Then
+                    If tvbatchlist.doShowBody = True Or tvbatchlist.doShowActors = True Then
                         Dim language As String = editshow.language
                         If language = "" Then language = "en"
 
@@ -28292,7 +28292,7 @@ Public Class Form1
                                     Case "title"
                                         'thisresult.InnerText
                                     Case "mpaa"
-                                        If tvbatchlist.sh_mpaa = True Then
+                                        If tvbatchlist.shMpaa = True Then
                                             editshow.mpaa = thisresult.InnerText
                                         End If
                                     Case "premiered"
@@ -28305,31 +28305,31 @@ Public Class Form1
                                         newstring = newstring.TrimEnd("|")
                                         newstring = newstring.TrimStart("|")
                                         newstring = newstring.Replace("|", " / ")
-                                        If tvbatchlist.sh_genre = True Then
+                                        If tvbatchlist.shGenre = True Then
                                             editshow.genre = newstring
                                         End If
                                     Case "imdbid"
 
                                     Case "studio"
-                                        If tvbatchlist.sh_studio = True Then
+                                        If tvbatchlist.shStudio = True Then
                                             editshow.studio = thisresult.InnerText
                                         End If
                                     Case "plot"
-                                        If tvbatchlist.sh_plot = True Then
+                                        If tvbatchlist.shPlot = True Then
                                             editshow.plot = thisresult.InnerText
                                         End If
                                     Case "rating"
-                                        If tvbatchlist.sh_rating = True Then
+                                        If tvbatchlist.shRating = True Then
                                             editshow.rating = thisresult.InnerText
                                         End If
                                     Case "runtime"
-                                        If tvbatchlist.sh_runtime = True Then
+                                        If tvbatchlist.shRuntime = True Then
                                             editshow.runtime = thisresult.InnerText
                                         End If
                                     Case "episodeguideurl"
 
                                     Case "actor"
-                                        If editshow.tvshowactorsource = "tvdb" And tvbatchlist.doshowactors = True Then
+                                        If editshow.tvshowactorsource = "tvdb" And tvbatchlist.doShowActors = True Then
                                             If maxcount >= userprefs.maxactors Then
                                                 Exit For
                                             End If
@@ -28402,7 +28402,7 @@ Public Class Form1
                                         End If
                                 End Select
                             Next
-                            If tvbatchlist.doshowactors = True And editshow.tvshowactorsource = "imdb" Then
+                            If tvbatchlist.doShowActors = True And editshow.tvshowactorsource = "imdb" Then
                                 '                    Dim imdbscraper As New imdb.Classimdbscraper
                                 Dim imdbscraper As New Classimdb
                                 Dim actorlist2 As String
@@ -28521,7 +28521,7 @@ Public Class Form1
                                 Catch ex As Exception
                                 End Try
                             End If
-                            If tvbatchlist.doshowactors = True Then
+                            If tvbatchlist.doShowActors = True Then
                                 If actorlist.Count > 0 Then
                                     editshow.listactors.Clear()
                                     For Each act In actorlist
@@ -28541,7 +28541,7 @@ Public Class Form1
                     Dim showlist2 As New XmlDocument
                     Dim thisresult2 As XmlNode
                     Dim artdone As Boolean = False
-                    If tvbatchlist.doshowart = True Then
+                    If tvbatchlist.doShowArt = True Then
 
                         Dim thumblist As String = tvdbstuff.getposterlist(basictvlist(f).tvdbid)
                         showlist2.LoadXml(thumblist)
@@ -28596,7 +28596,7 @@ Public Class Form1
                                 Else
                                     tempstring = g.ToString
                                 End If
-                                If tvbatchlist.sh_posters = True Then
+                                If tvbatchlist.shPosters = True Then
                                     Dim seasonpath As String = basictvlist(f).fullpath.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season" & tempstring & ".tbn")
                                     If tempstring = "00" Then
                                         seasonpath = workingtvshow.path.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season-specials.tbn")
@@ -28647,7 +28647,7 @@ Public Class Form1
                                 End If
                             Next
                         End If
-                        If fanartposter <> "" And tvbatchlist.sh_fanart = True Then
+                        If fanartposter <> "" And tvbatchlist.shFanart = True Then
 
                             Dim seasonpath As String = basictvlist(f).fullpath.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "fanart.jpg")
                             If Not IO.File.Exists(seasonpath) Then
@@ -28750,7 +28750,7 @@ Public Class Form1
                                 End If
                             End If
                             Dim seasonpath As String = basictvlist(f).fullpath.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season-all.tbn")
-                            If Not IO.File.Exists(seasonpath) And tvbatchlist.sh_posters = True Then
+                            If Not IO.File.Exists(seasonpath) And tvbatchlist.shPosters = True Then
                                 Try
                                     Dim buffer(4000000) As Byte
                                     Dim size As Integer = 0
@@ -28782,7 +28782,7 @@ Public Class Form1
                         End If
                     End If
                 End If
-                If tvbatchlist.doepisodes = True Then
+                If tvbatchlist.doEpisodes = True Then
 
                     'progresstext = "Working on Episodes: " & basictvlist(f).title
                     'tvbckrescrapewizard.ReportProgress(999999, progresstext)
@@ -28795,13 +28795,13 @@ Public Class Form1
                             progress = 0
                         End If
                         tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                        If tvbatchlist.doepisodebody = True Or (tvbatchlist.doepisodeactors = True And basictvlist(f).episodeactorsource <> "") Or (tvbatchlist.doepisodeart = True) Then
-                            Dim listofnewepisodes As New List(Of episodeinfo)
+                        If tvbatchlist.doEpisodeBody = True Or (tvbatchlist.doEpisodeActors = True And basictvlist(f).episodeactorsource <> "") Or (tvbatchlist.doEpisodeArt = True) Then
+                            Dim listofnewepisodes As New List(Of EpisodeInfo)
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfofunction.loadfullepisodenfogeneric(basictvlist(f).allepisodes(g).episodepath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1
                                 If listofnewepisodes(h).seasonno = basictvlist(f).allepisodes(g).seasonno And listofnewepisodes(h).episodeno = basictvlist(f).allepisodes(g).episodeno Then
-                                    Dim newactors As New List(Of movieactors)
+                                    Dim newactors As New List(Of MovieActors)
                                     newactors.Clear()
                                     Dim sortorder As String = basictvlist(f).sortorder
                                     Dim language As String = basictvlist(f).language
@@ -28827,15 +28827,15 @@ Public Class Form1
                                                 Case "title"
                                                     'listofnewepisodes(h).title = thisresult.InnerText
                                                 Case "premiered"
-                                                    If tvbatchlist.ep_aired = True Then
+                                                    If tvbatchlist.epAired = True Then
                                                         listofnewepisodes(h).aired = thisresult.InnerText
                                                     End If
                                                 Case "plot"
-                                                    If tvbatchlist.ep_plot = True Then
+                                                    If tvbatchlist.epPlot = True Then
                                                         listofnewepisodes(h).plot = thisresult.InnerText
                                                     End If
                                                 Case "director"
-                                                    If tvbatchlist.ep_director = True Then
+                                                    If tvbatchlist.epDirector = True Then
                                                         Dim tempstring As String = ""
                                                         tempstring = thisresult.InnerText
                                                         tempstring = tempstring.TrimStart("|")
@@ -28845,7 +28845,7 @@ Public Class Form1
                                                     End If
                                                 Case "credits"
                                                     Dim tempstring As String = ""
-                                                    If tvbatchlist.ep_credits = True Then
+                                                    If tvbatchlist.epCredits = True Then
                                                         tempstring = thisresult.InnerText
                                                         tempstring = tempstring.TrimStart("|")
                                                         tempstring = tempstring.TrimEnd("|")
@@ -28853,14 +28853,14 @@ Public Class Form1
                                                         listofnewepisodes(h).credits = tempstring
                                                     End If
                                                 Case "rating"
-                                                    If tvbatchlist.ep_rating = True Then
+                                                    If tvbatchlist.epRating = True Then
                                                         listofnewepisodes(h).rating = thisresult.InnerText
                                                     End If
                                                     basictvlist(f).allepisodes(g).rating = thisresult.InnerText
                                                 Case "thumb"
                                                     episodescreenurl = thisresult.InnerText
                                                     Dim downloadok As Boolean = True
-                                                    If tvbatchlist.doepisodeart = True And tvbatchlist.ep_screenshot = True Then
+                                                    If tvbatchlist.doEpisodeArt = True And tvbatchlist.epScreenshot = True Then
                                                         If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
                                                             Try
                                                                 Dim screenshotpath As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
@@ -28891,7 +28891,7 @@ Public Class Form1
                                                         Else
                                                             Dim thumbpathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
                                                             Dim pathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), "")
-                                                            If Not IO.File.Exists(thumbpathandfilename) And tvbatchlist.ep_createscreenshot = True Then
+                                                            If Not IO.File.Exists(thumbpathandfilename) And tvbatchlist.epCreateScreenshot = True Then
                                                                 progresstext = listofnewepisodes(h).episodepath
                                                                 tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
@@ -28899,19 +28899,19 @@ Public Class Form1
                                                         If downloadok = False Then
                                                             Dim thumbpathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
                                                             Dim pathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), "")
-                                                            If Not IO.File.Exists(thumbpathandfilename) And tvbatchlist.ep_createscreenshot = True Then
+                                                            If Not IO.File.Exists(thumbpathandfilename) And tvbatchlist.epCreateScreenshot = True Then
                                                                 progresstext = listofnewepisodes(h).episodepath
                                                                 tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
                                                         End If
                                                     End If
                                                 Case "actor"
-                                                    If tvbatchlist.ep_actor = True And userprefs.episodeacrorsource = "tvdb" Then
+                                                    If tvbatchlist.epActor = True And userprefs.episodeacrorsource = "tvdb" Then
                                                         Dim actors As XmlNode = Nothing
                                                         For Each actorl In thisresult.ChildNodes
                                                             Select Case actorl.name
                                                                 Case "name"
-                                                                    Dim newactor As New movieactors
+                                                                    Dim newactor As New MovieActors
                                                                     newactor.actorname = actorl.innertext
                                                                     newactors.Add(newactor)
                                                             End Select
@@ -28920,16 +28920,16 @@ Public Class Form1
                                             End Select
                                         Next
                                         'newepisode.playcount = "0"
-                                        If userprefs.episodeacrorsource = "tvdb" And tvbatchlist.ep_actor = True And newactors.Count > 0 Then
+                                        If userprefs.episodeacrorsource = "tvdb" And tvbatchlist.epActor = True And newactors.Count > 0 Then
                                             listofnewepisodes(h).listactors.Clear()
                                             For Each act In newactors
                                                 listofnewepisodes(h).listactors.Add(act)
                                             Next
                                         End If
-                                        If basictvlist(f).episodeactorsource = "imdb" And tvbatchlist.ep_actor = True Then
+                                        If basictvlist(f).episodeactorsource = "imdb" And tvbatchlist.epActor = True Then
                                             Dim ac As New actors
-                                            Dim actorlist As New List(Of movieactors)
-                                            actorlist = ac.episodegetimdbactors(basictvlist(f).imdbid, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno)
+                                            Dim actorlist As New List(Of MovieActors)
+                                            actorlist = ac.EpisodeGetImdbActors(basictvlist(f).imdbid, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno)
                                             If userprefs.actorseasy = True Then
                                                 ac.savelocalactors(listofnewepisodes(h).episodepath, actorlist, basictvlist(f).fullpath, True)
                                             End If
@@ -28950,8 +28950,8 @@ Public Class Form1
                         End If
 
 
-                        If tvbatchlist.doepisodemediatags = True Then
-                            Dim listofnewepisodes As New List(Of episodeinfo)
+                        If tvbatchlist.doEpisodeMediaTags = True Then
+                            Dim listofnewepisodes As New List(Of EpisodeInfo)
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfofunction.loadfullepisodenfogeneric(basictvlist(f).allepisodes(g).episodepath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1

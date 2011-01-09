@@ -1,34 +1,34 @@
 
 Public Structure TvShowBatchWizard
     Dim shYear As Boolean
-    Dim sh_rating As Boolean
-    Dim sh_plot As Boolean
-    Dim sh_runtime As Boolean
-    Dim sh_mpaa As Boolean
-    Dim sh_genre As Boolean
-    Dim sh_studio As Boolean
-    Dim sh_actor As Boolean
-    Dim sh_posters As Boolean
-    Dim sh_fanart As Boolean
-    Dim ep_streamdetails As Boolean
-    Dim ep_aired As Boolean
-    Dim ep_plot As Boolean
-    Dim ep_director As Boolean
-    Dim ep_credits As Boolean
-    Dim ep_rating As Boolean
-    Dim ep_runtime As Boolean
-    Dim ep_actor As Boolean
-    Dim ep_screenshot As Boolean
-    Dim ep_createscreenshot As Boolean
-    Dim includelocked As Boolean
+    Dim shRating As Boolean
+    Dim shPlot As Boolean
+    Dim shRuntime As Boolean
+    Dim shMpaa As Boolean
+    Dim shGenre As Boolean
+    Dim shStudio As Boolean
+    Dim shActor As Boolean
+    Dim shPosters As Boolean
+    Dim shFanart As Boolean
+    Dim epStreamDetails As Boolean
+    Dim epAired As Boolean
+    Dim epPlot As Boolean
+    Dim epDirector As Boolean
+    Dim epCredits As Boolean
+    Dim epRating As Boolean
+    Dim epRuntime As Boolean
+    Dim epActor As Boolean
+    Dim epScreenshot As Boolean
+    Dim epCreateScreenshot As Boolean
+    Dim includeLocked As Boolean
     Dim activate As Boolean
-    Dim doepisodes As Boolean
-    Dim doshows As Boolean
-    Dim doshowbody As Boolean
-    Dim doshowart As Boolean
-    Dim doshowactors As Boolean
-    Dim doepisodebody As Boolean
-    Dim doepisodeart As Boolean
-    Dim doepisodeactors As Boolean
-    Dim doepisodemediatags As Boolean
+    Dim doEpisodes As Boolean
+    Dim doShows As Boolean
+    Dim doShowBody As Boolean
+    Dim doShowArt As Boolean
+    Dim doShowActors As Boolean
+    Dim doEpisodeBody As Boolean
+    Dim doEpisodeArt As Boolean
+    Dim doEpisodeActors As Boolean
+    Dim doEpisodeMediaTags As Boolean
 End Structure
