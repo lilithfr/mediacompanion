@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<profile>
+  <default>Default</default>
+  <startup>Default</startup>
+  <profiledetails>
+    <actorcache>D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\actorcache.xml</actorcache>
+    <config>D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\config.xml</config>
+    <moviecache>D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\moviecache.xml</moviecache>
+    <profilename>Default</profilename>
+    <regex>D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\regex.xml</regex>
+    <filters>D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\filters.txt</filters>
+    <tvcache>D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\tvcache.xml</tvcache>
+  </profiledetails>
+</profile>
