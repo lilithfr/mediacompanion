@@ -3,7 +3,7 @@ Imports System.IO
 Imports System.Threading
 Imports System.Text.RegularExpressions
 
-Public Class workingwithnfofiles
+Public Class WorkingWithNfoFiles
 
     Public Function ChangeFieldTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String) As String
         Dim m_xmld As XmlDocument
@@ -143,7 +143,7 @@ Public Class workingwithnfofiles
             Dim newtvshow As New BasicTvShowNFO
             If Not IO.File.Exists(path) Then
                 'Form1.tvrebuildlog(path & ", does not appear to exist")
-                newtvshow.title = Form1.filefunction.getlastfolder(path)
+                newtvshow.title = Form1.fileFunction.getlastfolder(path)
                 newtvshow.year = newtvshow.title & " (0000)"
                 newtvshow.fullpath = path
                 newtvshow.year = "0000"
@@ -161,7 +161,7 @@ Public Class workingwithnfofiles
                     'If Not validate_nfo(path) Then
                     '    Exit Function
                     'End If
-                    newtvshow.title = Form1.filefunction.getlastfolder(path)
+                    newtvshow.title = Form1.fileFunction.getlastfolder(path)
                     newtvshow.year = newtvshow.title & " (0000)"
                     newtvshow.status = "xml error"
                     newtvshow.fullpath = path
@@ -293,7 +293,7 @@ Public Class workingwithnfofiles
                 newtvshow.tvdbid = ""
                 newtvshow.episodepath = path
                 If newtvshow.episodeno = Nothing Or newtvshow.episodeno = Nothing Then
-                    For Each regexp In Form1.tvregex
+                    For Each regexp In Form1.tvRegex
 
                         Dim M As Match
                         M = Regex.Match(newtvshow.episodepath, regexp)
@@ -366,7 +366,7 @@ Public Class workingwithnfofiles
                 Next
 
                 If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvregex
+                    For Each regexp In Form1.tvRegex
 
                         Dim M As Match
                         M = Regex.Match(newtvepisode.episodepath, regexp)
@@ -435,7 +435,7 @@ Public Class workingwithnfofiles
                             Try
                                 anotherepisode.episodepath = path
                                 If anotherepisode.episodeno = Nothing Or anotherepisode.episodeno = Nothing Then
-                                    For Each regexp In Form1.tvregex
+                                    For Each regexp In Form1.tvRegex
 
                                         Dim M As Match
                                         M = Regex.Match(anotherepisode.episodepath, regexp)
@@ -484,7 +484,7 @@ Public Class workingwithnfofiles
             newepisode.episodepath = path
             newepisode.episodepath = path
             If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                For Each regexp In Form1.tvregex
+                For Each regexp In Form1.tvRegex
 
                     Dim M As Match
                     M = Regex.Match(newepisode.episodepath, regexp)
@@ -522,7 +522,7 @@ Public Class workingwithnfofiles
                 newepisode.episodepath = path
                 newepisode.episodepath = path
                 If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvregex
+                    For Each regexp In Form1.tvRegex
 
                         Dim M As Match
                         M = Regex.Match(newepisode.episodepath, regexp)
@@ -672,7 +672,7 @@ Public Class workingwithnfofiles
                 Next
 
                 If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvregex
+                    For Each regexp In Form1.tvRegex
 
                         Dim M As Match
                         M = Regex.Match(newtvepisode.episodepath, regexp)
@@ -857,7 +857,7 @@ Public Class workingwithnfofiles
 
             Dim newtvshow As New TvShowNFO
             If Not IO.File.Exists(path) Then
-                newtvshow.title = Form1.filefunction.getlastfolder(path)
+                newtvshow.title = Form1.fileFunction.getlastfolder(path)
                 newtvshow.year = newtvshow.title & " (0000)"
                 newtvshow.plot = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
                 newtvshow.status = "file does not exist"
@@ -876,7 +876,7 @@ Public Class workingwithnfofiles
                     'If Not validate_nfo(path) Then
                     '    Exit Function
                     'End If
-                    newtvshow.title = Form1.filefunction.getlastfolder(path)
+                    newtvshow.title = Form1.fileFunction.getlastfolder(path)
                     newtvshow.year = newtvshow.title & " (0000)"
                     newtvshow.plot = "problem loading tvshow.nfo / xml error"
                     newtvshow.status = "xml error"
@@ -1841,7 +1841,7 @@ Public Class workingwithnfofiles
                         newmovie.playcount = "0"
                         newmovie.filename = IO.Path.GetFileName(path)
                         newmovie.top250 = "0"
-                        newmovie.foldername = Form1.filefunction.getlastfolder(path)
+                        newmovie.foldername = Form1.fileFunction.getlastfolder(path)
                         newmovie.runtime = "0"
                         newmovie.createdate = "999999999999"
                         Return newmovie
@@ -1934,7 +1934,7 @@ Public Class workingwithnfofiles
                     'basicfilename = System.IO.Path.GetFileName(newmovie.fullpathandfilename)
                     'Dim filepath2 As String = newmovie.fullpathandfilename.Replace(basicfilename, "")
 
-                    newmovie.foldername = Form1.filefunction.getlastfolder(path)
+                    newmovie.foldername = Form1.fileFunction.getlastfolder(path)
 
                     If newmovie.top250 = Nothing Then newmovie.top250 = "0"
                     If newmovie.id = Nothing Then newmovie.id = ""
@@ -1965,7 +1965,7 @@ Public Class workingwithnfofiles
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
-                    newmovie.fullmoviebody.title = Form1.filefunction.cleanfilename(IO.Path.GetFileName(Form1.workingmovie.fullpathandfilename))
+                    newmovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingmovie.fullpathandfilename))
                     newmovie.fullmoviebody.year = "0000"
                     newmovie.fullmoviebody.top250 = "0"
                     newmovie.fullmoviebody.playcount = "0"
@@ -2276,7 +2276,7 @@ Public Class workingwithnfofiles
                                 filedetailschildchild = doc.CreateElement("duration")
                                 Dim temptemp As String = movietosave.filedetails.filedetails_video.duration
                                 If Form1.userprefs.intruntime = True Then
-                                    temptemp = Form1.filefunction.cleanruntime(movietosave.filedetails.filedetails_video.duration)
+                                    temptemp = Form1.fileFunction.cleanruntime(movietosave.filedetails.filedetails_video.duration)
                                     If IsNumeric(temptemp) Then
                                         filedetailschildchild.InnerText = temptemp
                                         filedetailschild.AppendChild(filedetailschildchild)
@@ -2783,7 +2783,7 @@ Public Class workingwithnfofiles
             newepisode.episodepath = path
             newepisode.episodepath = path
             If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                For Each regexp In Form1.tvregex
+                For Each regexp In Form1.tvRegex
 
                     Dim M As Match
                     M = Regex.Match(newepisode.episodepath, regexp)
@@ -2821,7 +2821,7 @@ Public Class workingwithnfofiles
                 newepisode.episodepath = path
                 newepisode.episodepath = path
                 If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvregex
+                    For Each regexp In Form1.tvRegex
 
                         Dim M As Match
                         M = Regex.Match(newepisode.episodepath, regexp)
@@ -2971,7 +2971,7 @@ Public Class workingwithnfofiles
                 Next
 
                 If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvregex
+                    For Each regexp In Form1.tvRegex
 
                         Dim M As Match
                         M = Regex.Match(newtvepisode.episodepath, regexp)

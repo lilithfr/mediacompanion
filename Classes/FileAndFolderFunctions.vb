@@ -109,7 +109,7 @@ Public Class FileAndFolderFunctions
                 End If
             End If
             If posterpath = "" Then
-                If Form1.userprefs.posternotstacked = True Then
+                If Form1.userPrefs.posternotstacked = True Then
                     posterpath = fullpath.Substring(0, fullpath.Length - 4) & ".tbn"
                 Else
                     posterpath = getstackname(IO.Path.GetFileName(fullpath), posterpath.Replace(IO.Path.GetFileName(fullpath), "")) & ".tbn"
@@ -119,7 +119,7 @@ Public Class FileAndFolderFunctions
                         posterpath = fullpath.Replace(IO.Path.GetFileName(fullpath), posterpath)
                     End If
                 End If
-                If Form1.userprefs.basicsavemode = True Then
+                If Form1.userPrefs.basicsavemode = True Then
                     posterpath = posterpath.Replace(IO.Path.GetFileName(fullpath), "movie.tbn")
                 End If
             End If
@@ -164,7 +164,7 @@ Public Class FileAndFolderFunctions
                 End If
             End If
             If posterpath = "" Then
-                If Form1.userprefs.fanartnotstacked = True Then
+                If Form1.userPrefs.fanartnotstacked = True Then
                     posterpath = fullpath.Substring(0, fullpath.Length - 4) & "-fanart.jpg"
                 Else
                     posterpath = getstackname(IO.Path.GetFileName(fullpath), fullpath) & "-fanart.jpg"
@@ -174,7 +174,7 @@ Public Class FileAndFolderFunctions
                         posterpath = fullpath.Replace(IO.Path.GetFileName(fullpath), posterpath)
                     End If
                 End If
-                If Form1.userprefs.basicsavemode = True Then
+                If Form1.userPrefs.basicsavemode = True Then
                     posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
                 End If
             End If
@@ -591,21 +591,21 @@ Public Class FileAndFolderFunctions
                 If Not (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
                     If validmoviedir(s) Then
                         Dim exists As Boolean = False
-                        For Each item In Form1.dlist
+                        For Each item In Form1.dList
                             If item = s Then exists = True
                         Next
                         If exists = False Then
-                            Form1.dlist.Add(s)
+                            Form1.dList.Add(s)
                         End If
                         EnumerateDirectory(s)
                     End If
                 End If
             Next s
-            Return Form1.dlist
+            Return Form1.dList
         Catch ex As Exception
             Dim t As String = ex.ToString
 
-            Return Form1.dlist
+            Return Form1.dList
         Finally
             Monitor.Exit(Me)
         End Try
@@ -2222,16 +2222,16 @@ Public Class FileAndFolderFunctions
                 Return location
                 Exit Function
             Else
-                If location.IndexOf(Form1.userprefs.actornetworkpath) <> -1 Then
-                    If Form1.userprefs.actornetworkpath <> Nothing And Form1.userprefs.actorsavepath <> Nothing Then
-                        If Form1.userprefs.actornetworkpath <> "" And Form1.userprefs.actorsavepath <> "" Then
+                If location.IndexOf(Form1.userPrefs.actornetworkpath) <> -1 Then
+                    If Form1.userPrefs.actornetworkpath <> Nothing And Form1.userPrefs.actorsavepath <> Nothing Then
+                        If Form1.userPrefs.actornetworkpath <> "" And Form1.userPrefs.actorsavepath <> "" Then
                             Dim filename As String = IO.Path.GetFileName(location)
-                            actualpath = IO.Path.Combine(Form1.userprefs.actorsavepath, filename)
+                            actualpath = IO.Path.Combine(Form1.userPrefs.actorsavepath, filename)
                             If Not IO.File.Exists(actualpath) Then
                                 Dim extension As String = IO.Path.GetExtension(location)
                                 Dim purename As String = IO.Path.GetFileName(location)
                                 purename = purename.Replace(extension, "")
-                                actualpath = Form1.userprefs.actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
+                                actualpath = Form1.userPrefs.actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
                             End If
                             If Not IO.File.Exists(actualpath) Then
                                 actualpath = "none"

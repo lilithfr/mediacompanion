@@ -445,14 +445,14 @@ Public Class frmMovieFanart
                     bytesToRead -= size
                     bytesRead += size
                 End While
-                If Form1.userprefs.resizefanart = 1 Then
+                If Form1.userPrefs.resizefanart = 1 Then
                     Try
                         Dim tempbitmap As Bitmap = bmp
                         tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                     Catch ex As Exception
                         tempstring = ex.Message.ToString
                     End Try
-                ElseIf Form1.userprefs.resizefanart = 2 Then
+                ElseIf Form1.userPrefs.resizefanart = 2 Then
                     If bmp.Width > 1280 Or bmp.Height > 720 Then
                         Dim bm_source As New Bitmap(bmp)
                         Dim bm_dest As New Bitmap(1280, 720)
@@ -465,7 +465,7 @@ Public Class frmMovieFanart
                         Threading.Thread.CurrentThread.Sleep(30)
                         bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                     End If
-                ElseIf Form1.userprefs.resizefanart = 3 Then
+                ElseIf Form1.userPrefs.resizefanart = 3 Then
                     If bmp.Width > 960 Or bmp.Height > 540 Then
                         Dim bm_source As New Bitmap(bmp)
                         Dim bm_dest As New Bitmap(960, 540)
@@ -557,14 +557,14 @@ Public Class frmMovieFanart
             Dim bmp As New Bitmap(ImageStream)
 
 
-            If Form1.userprefs.resizefanart = 1 Then
+            If Form1.userPrefs.resizefanart = 1 Then
                 Try
                     Dim tempbitmap As Bitmap = bmp
                     tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                 Catch ex As Exception
                     tempstring = ex.Message.ToString
                 End Try
-            ElseIf Form1.userprefs.resizefanart = 2 Then
+            ElseIf Form1.userPrefs.resizefanart = 2 Then
                 If bmp.Width > 1280 Or bmp.Height > 720 Then
                     Dim bm_source As New Bitmap(bmp)
                     Dim bm_dest As New Bitmap(1280, 720)
@@ -577,7 +577,7 @@ Public Class frmMovieFanart
                     Threading.Thread.CurrentThread.Sleep(30)
                     bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                 End If
-            ElseIf Form1.userprefs.resizefanart = 3 Then
+            ElseIf Form1.userPrefs.resizefanart = 3 Then
                 If bmp.Width > 960 Or bmp.Height > 540 Then
                     Dim bm_source As New Bitmap(bmp)
                     Dim bm_dest As New Bitmap(960, 540)

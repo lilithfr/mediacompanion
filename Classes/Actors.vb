@@ -54,7 +54,7 @@ Public Class actors
                                 '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                                 Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
-                                actorlist = scraperfunction.getimdbactors(Form1.userprefs.imdbmirror, tvtempstring, , Form1.userprefs.maxactors)
+                                actorlist = scraperfunction.getimdbactors(Form1.userPrefs.imdbmirror, tvtempstring, , Form1.userPrefs.maxactors)
                                 Dim thumbstring As New XmlDocument
                                 Dim thisresult As XmlNode = Nothing
                                 Try
@@ -64,11 +64,11 @@ Public Class actors
                                     For Each thisresult In thumbstring("actorlist")
                                         Select Case thisresult.Name
                                             Case "actor"
-                                                If countactors >= Form1.userprefs.maxactors Then
+                                                If countactors >= Form1.userPrefs.maxactors Then
                                                     Exit For
                                                 End If
                                                 countactors += 1
-                                                Dim newactor As New movieactors
+                                                Dim newactor As New MovieActors
                                                 Dim detail As XmlNode = Nothing
                                                 For Each detail In thisresult.ChildNodes
                                                     Select Case detail.Name
@@ -89,7 +89,7 @@ Public Class actors
 
                                 End Try
 
-                                While tempactorlist.Count > Form1.userprefs.maxactors
+                                While tempactorlist.Count > Form1.userPrefs.maxactors
                                     tempactorlist.RemoveAt(tempactorlist.Count - 1)
                                 End While
 
@@ -109,10 +109,10 @@ Public Class actors
         End Try
     End Function
 
-    Public Sub savelocalactors(ByVal path As String, ByVal listofactors As List(Of movieactors), Optional ByVal tvshowpath As String = "", Optional ByVal copyactorthumbs As Boolean = False)
+    Public Sub savelocalactors(ByVal path As String, ByVal listofactors As List(Of MovieActors), Optional ByVal tvshowpath As String = "", Optional ByVal copyactorthumbs As Boolean = False)
         Monitor.Enter(Me)
         Try
-            If Form1.userprefs.actorseasy = True Then
+            If Form1.userPrefs.actorseasy = True Then
                 Dim workingpath As String = path.Replace(IO.Path.GetFileName(path), "")
                 workingpath = workingpath & ".actors\"
                 Dim hg As New IO.DirectoryInfo(workingpath)
