@@ -22,7 +22,7 @@ Public Class Structures
     Public moviethumbpriority() As String
     Public certificatepriority() As String
     Public keepfoldername As Boolean
-    Public startupcache As Boolean
+    Public startupCache As Boolean
     Public ignoretrailers As Boolean
     Public ignoreactorthumbs As Boolean
     Public maxactors As Integer

@@ -136,7 +136,7 @@ Public Class frmOptions
             CheckBox4.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.startupcache = True Then
+        If Form1.userPrefs.startupCache = True Then
             chkbx_disablecache.CheckState = CheckState.Unchecked
         Else
             chkbx_disablecache.CheckState = CheckState.Checked
@@ -702,9 +702,9 @@ Public Class frmOptions
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         If chkbx_disablecache.CheckState = CheckState.Checked Then
-            Form1.userPrefs.startupcache = False
+            Form1.userPrefs.startupCache = False
         Else
-            Form1.userPrefs.startupcache = True
+            Form1.userPrefs.startupCache = True
         End If
     End Sub
 

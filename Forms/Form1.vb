@@ -427,7 +427,7 @@ Public Class Form1
 
         mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
         '----------------------------------------------------------
-        If Not IO.File.Exists(workingProfile.moviecache) Or userPrefs.startupcache = False Then
+        If Not IO.File.Exists(workingProfile.moviecache) Or userPrefs.startupCache = False Then
             loadinginfo = "Status :- Building Movie Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
@@ -445,10 +445,10 @@ Public Class Form1
             loadinginfo = "Status :- Loading Genrelist"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call loadgenrelist()
+            Call LoadGenreList()
         End If
 
-        If Not IO.File.Exists(workingProfile.tvcache) Or userPrefs.startupcache = False Then
+        If Not IO.File.Exists(workingProfile.tvcache) Or userPrefs.startupCache = False Then
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
@@ -459,7 +459,7 @@ Public Class Form1
             frmSplash.Label3.Refresh()
             Call loadtvcache()
         End If
-        If Not IO.File.Exists(workingProfile.actorcache) Or userPrefs.startupcache = False Then
+        If Not IO.File.Exists(workingProfile.actorcache) Or userPrefs.startupCache = False Then
             loadinginfo = "Status :- Building Actor Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
@@ -1428,23 +1428,28 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub loadregex()
+    Private Sub LoadRegex()
+
         Dim tempstring As String
         tempstring = workingProfile.regexlist
         tvRegex.Clear()
         Dim path As String = tempstring
-        If IO.File.Exists(path) Then
+
+        If File.Exists(path) Then
+
             Try
-                Dim regexlist As New XmlDocument
-                regexlist.Load(path)
-                If regexlist.DocumentElement.Name = "regexlist" Then
-                    For Each thisresult In regexlist("regexlist")
-                        Select Case thisresult.Name
+                Dim regexList As New XmlDocument
+                regexList.Load(path)
+
+                If regexList.DocumentElement.Name = "regexlist" Then
+                    For Each result As XmlElement In regexList("regexlist")
+                        Select Case result.Name
                             Case "tvregex"
-                                tvRegex.Add(thisresult.innertext)
+                                tvRegex.Add(result.InnerText)
                         End Select
                     Next
                 End If
+
             Catch
                 Call SaveRegex(True)
             End Try
@@ -1492,34 +1497,40 @@ Public Class Form1
 
     End Sub
 
-    Private Sub loadgenrelist()
-        If IO.File.Exists(workingProfile.filters) Or userPrefs.startupcache = False Then
+    Private Sub LoadGenreList()
+        If File.Exists(workingProfile.filters) Or userPrefs.startupCache = False Then
+
+            Dim line As String = String.Empty
             CheckedListBox1.Items.Clear()
             CheckedListBox2.Items.Clear()
-            Dim line As String
-            Try
 
-                Dim cfg2 As IO.StreamReader = IO.File.OpenText(workingProfile.filters)
+            Try
+                Dim userConfig As StreamReader = File.OpenText(workingProfile.filters)
+
                 Do
                     Try
-                        line = cfg2.ReadLine
+                        line = userConfig.ReadLine
+
                         If line <> Nothing Then
-                            Dim M As Match
-                            M = Regex.Match(line, "<([\d]{2,3})>")
-                            If M.Success = True Then
-                                If IsNumeric(M.Groups(1).Value) Then
-                                    CheckedListBox1.ColumnWidth = M.Groups(1).Value
+                            Dim regexMatch As Match
+                            regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+
+                            If regexMatch.Success = True Then
+                                If IsNumeric(regexMatch.Groups(1).Value) Then
+                                    CheckedListBox1.ColumnWidth = regexMatch.Groups(1).Value
                                 End If
                             Else
                                 CheckedListBox1.Items.Add(line)
                                 CheckedListBox2.Items.Add(line)
                             End If
-
                         End If
-                    Catch
+
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message)
                     End Try
                 Loop Until line = Nothing
             Catch ex As Exception
+                MessageBox.Show(ex.Message)
             End Try
         End If
     End Sub
@@ -5281,7 +5292,7 @@ Public Class Form1
         userPrefs.fanartnotstacked = False
         userPrefs.posternotstacked = False
         userPrefs.disablelogfiles = False
-        userPrefs.startupcache = True
+        userPrefs.startupCache = True
         userPrefs.rarsize = True = "8"
         userPrefs.ignoreactorthumbs = False
         userPrefs.actorsave = False
@@ -21896,7 +21907,7 @@ Public Class Form1
             CheckBox12.Checked = False
         End If
 
-        If userPrefs.startupcache = True Then
+        If userPrefs.startupCache = True Then
             chkbx_disablecache.Checked = False
         Else
             chkbx_disablecache.Checked = True
@@ -22014,9 +22025,9 @@ Public Class Form1
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         If chkbx_disablecache.Checked = True Then
-            userPrefs.startupcache = False
+            userPrefs.startupCache = False
         Else
-            userPrefs.startupcache = True
+            userPrefs.startupCache = True
         End If
         If prefsload = False Then generalprefschanged = True
     End Sub
@@ -24364,23 +24375,23 @@ Public Class Form1
             Call setuppreferences()
         End If
 
-        If Not IO.File.Exists(workingProfile.moviecache) Or userPrefs.startupcache = False Then
+        If Not IO.File.Exists(workingProfile.moviecache) Or userPrefs.startupCache = False Then
             Call rebuildmovies(movieFolders)
         Else
             Call reloadmoviecache()
         End If
 
         If IO.File.Exists(workingProfile.filters) Then
-            Call loadgenrelist()
+            Call LoadGenreList()
         End If
 
-        If Not IO.File.Exists(workingProfile.tvcache) Or userPrefs.startupcache = False Then
+        If Not IO.File.Exists(workingProfile.tvcache) Or userPrefs.startupCache = False Then
             Call rebuildtvshows()
         Else
             Call loadtvcache()
         End If
 
-        If Not IO.File.Exists(workingProfile.actorcache) Or userPrefs.startupcache = False Then
+        If Not IO.File.Exists(workingProfile.actorcache) Or userPrefs.startupCache = False Then
             Call rebuildactordb()
         Else
             Call loadactorcache()

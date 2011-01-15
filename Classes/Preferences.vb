@@ -58,7 +58,7 @@ Public Class Preferences
             root.AppendChild(child)
 
             child = doc.CreateElement("startupcache")
-            child.InnerText = Form1.userPrefs.startupcache.ToString.ToLower
+            child.InnerText = Form1.userPrefs.startupCache.ToString.ToLower
             root.AppendChild(child)
 
 
@@ -648,9 +648,9 @@ Public Class Preferences
 
                 Case "startupcache"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.startupcache = True
+                        Form1.userPrefs.startupCache = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.startupcache = False
+                        Form1.userPrefs.startupCache = False
                     End If
 
                 Case "ignoretrailers"
