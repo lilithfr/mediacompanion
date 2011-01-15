@@ -949,10 +949,16 @@ Public Class Form1
         Next
 
         doc.AppendChild(root)
-        Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+
+        Try
+            'TODO: Need to fix XmlTextWriter IO error.
+            'Surrounded object in Try...Catch to temporarly fix the error
+            Using output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8) With {.Formatting = Formatting.Indented}
+                doc.WriteTo(output)
+                output.Close()
+            End Using
+        Catch ex As Exception
+        End Try
 
     End Sub
 
@@ -1473,11 +1479,16 @@ Public Class Form1
 
         doc.AppendChild(root)
 
-        Using output As New XmlTextWriter(path, System.Text.Encoding.UTF8) With {.Formatting = Formatting.Indented}
-            '"D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\regex.xml"
-            doc.WriteTo(output)
-            output.Close()
-        End Using
+        Try
+            'TODO: Need to fix XmlTextWriter IO error.
+            'Surrounded object in Try...Catch to temporarly fix the error.
+            Using output As New XmlTextWriter(path, System.Text.Encoding.UTF8) With {.Formatting = Formatting.Indented}
+                '"D:\Dados de Utilizador\Freddy Krueger\Ambiente de Trabalho\MediaCompanion-EVRSOEIRANAS\Settings\regex.xml"
+                doc.WriteTo(output)
+                output.Close()
+            End Using
+        Catch ex As Exception
+        End Try
 
     End Sub
 
