@@ -186,7 +186,7 @@ Public Class Form2
         tempstring = tempstring.Replace(Form1.userPrefs.imdbmirror & "title/", "")
         tempstring = tempstring.Replace("/", "")
         If tempstring.IndexOf("tt") <> -1 And tempstring.Length = 9 Then
-            Dim messbox As message_box = New message_box("Please wait, Scraping Alternative Title", "", "This Will Take Longer If Scraping Fanart & Poster")
+            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, Scraping Alternative Title", "", "This Will Take Longer If Scraping Fanart & Poster")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()

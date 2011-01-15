@@ -30,7 +30,7 @@ Public Class frmOptions
             End If
         End If
 
-        Dim save As New _preferences
+        Dim save As New Preferences
         Call save.saveconfig()
     End Sub
 
@@ -116,13 +116,13 @@ Public Class frmOptions
             RadioButton19.Checked = True
         End If
 
-        moviefolders = Form1.moviefolders
-        tvfolders = Form1.tvfolders
+        moviefolders = Form1.movieFolders
+        tvfolders = Form1.tvFolders
 
 
 
         ListBox2.Items.Clear()
-        For Each item In Form1.moviefolders
+        For Each item In Form1.movieFolders
             ListBox2.Items.Add(item)
         Next
 
@@ -740,7 +740,7 @@ Public Class frmOptions
             Next
 
             If allok = True Then
-                Form1.moviefolders.Add(thefoldernames)
+                Form1.movieFolders.Add(thefoldernames)
                 ListBox2.Items.Add(thefoldernames)
                 ListBox2.Refresh()
             Else
@@ -752,10 +752,10 @@ Public Class frmOptions
     Private Sub btn_removemoviefolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_removemoviefolder.Click
         Dim folderstoremove As New ArrayList
         For i = 0 To ListBox2.SelectedItems.Count - 1
-            Form1.moviefolders.Remove(ListBox2.SelectedItems(i))
+            Form1.movieFolders.Remove(ListBox2.SelectedItems(i))
         Next
         ListBox2.Items.Clear()
-        For Each folder In Form1.moviefolders
+        For Each folder In Form1.movieFolders
             ListBox2.Items.Add(folder)
         Next
     End Sub
@@ -1069,14 +1069,14 @@ Public Class frmOptions
                                     tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders" & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, Each in it's own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                                     If tempint = DialogResult.Yes Then
                                         ListBox1.Items.Add(strfolder)
-                                        Form1.tvfolders.Add(strfolder)
+                                        Form1.tvFolders.Add(strfolder)
                                         cancelregex = True
                                     End If
                                     If tempint = DialogResult.No Then
                                         tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                                         If tempint2 = DialogResult.Yes Then
                                             ListBox1.Items.Add(thefoldernames)
-                                            Form1.tvfolders.Add(strfolder)
+                                            Form1.tvFolders.Add(strfolder)
                                             Exit Sub
                                         End If
                                         If tempint2 = DialogResult.No Then
@@ -1085,11 +1085,11 @@ Public Class frmOptions
                                     End If
                                 Else
                                     ListBox1.Items.Add(strfolder)
-                                    Form1.tvfolders.Add(strfolder)
+                                    Form1.tvFolders.Add(strfolder)
                                 End If
                             Else
                                 ListBox1.Items.Add(strfolder)
-                                Form1.tvfolders.Add(strfolder)
+                                Form1.tvFolders.Add(strfolder)
                             End If
                         End If
                     End If
@@ -1170,9 +1170,9 @@ Public Class frmOptions
         For i = 0 To ListBox1.SelectedItems.Count - 1
             Dim tempboolean As Boolean = False
             If ListBox1.SelectedItems(i) <> Nothing And ListBox1.SelectedItems(i) <> "" Then
-                For Each folder In Form1.tvfolders
+                For Each folder In Form1.tvFolders
                     If folder = ListBox1.SelectedItems(i) Then
-                        Form1.tvfolders.Remove(folder)
+                        Form1.tvFolders.Remove(folder)
                         Exit For
                     End If
                 Next
@@ -1180,7 +1180,7 @@ Public Class frmOptions
         Next
 
         ListBox1.Items.Clear()
-        For Each folder In Form1.tvfolders
+        For Each folder In Form1.tvFolders
             ListBox1.Items.Add(folder)
         Next
     End Sub
@@ -1202,7 +1202,7 @@ Public Class frmOptions
             Form1.userPrefs.lastpath = thefoldernames
             If allok = True Then
                 ListBox1.Items.Add(thefoldernames)
-                Form1.tvfolders.Add(thefoldernames)
+                Form1.tvFolders.Add(thefoldernames)
             Else
                 MsgBox("        Folder Already Exists")
             End If

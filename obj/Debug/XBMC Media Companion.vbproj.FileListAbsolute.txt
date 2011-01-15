@@ -594,7 +594,6 @@ C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmDialog1.resour
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Form1.resources
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Form2.resources
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmoutputlog.resources
-C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.message_box.resources
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmMovieFanart.resources
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.Resources.resources
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmOptions.resources
@@ -607,3 +606,4 @@ C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmTVShowBrowser.
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\GenerateResource-ResGen.read.1.tlog
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\GenerateResource-ResGen.write.1.tlog
 C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media Companion.exe
+C:\Users\Eric\Desktop\MediaCompanion\obj\Debug\Media_Companion.frmMessageBox.resources

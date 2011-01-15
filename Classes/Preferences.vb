@@ -3,7 +3,7 @@ Imports System.Xml
 Imports System.Threading
 
 
-Public Class _preferences
+Public Class Preferences
 
 
     Public Sub saveconfig()
@@ -21,19 +21,19 @@ Public Class _preferences
             root = doc.CreateElement("xbmc_media_companion_config_v1.0")
 
 
-            For Each path In Form1.tvfolders
+            For Each path In Form1.tvFolders
                 child = doc.CreateElement("tvfolder")
                 child.InnerText = path
                 root.AppendChild(child)
             Next
 
-            For Each path In Form1.tvrootfolders
+            For Each path In Form1.tvRootFolders
                 child = doc.CreateElement("tvrootfolder")
                 child.InnerText = path
                 root.AppendChild(child)
             Next
 
-            For Each path In Form1.moviefolders
+            For Each path In Form1.movieFolders
                 child = doc.CreateElement("nfofolder")
                 child.InnerText = path
                 root.AppendChild(child)
@@ -516,8 +516,8 @@ Public Class _preferences
 
 
             doc.AppendChild(root)
-            Dim tempstring2 As String = Form1.workingprofile.config
-            Dim output As New XmlTextWriter(Form1.workingprofile.config, System.Text.Encoding.UTF8)
+            Dim tempstring2 As String = Form1.workingProfile.config
+            Dim output As New XmlTextWriter(Form1.workingProfile.config, System.Text.Encoding.UTF8)
             output.Formatting = Formatting.Indented
             doc.WriteTo(output)
             output.Close()
@@ -534,18 +534,18 @@ Public Class _preferences
         Form1.userPrefs.commandlist.Clear()
         Form1.userPrefs.moviesets.Clear()
         Form1.userPrefs.moviesets.Add("None")
-        Form1.moviefolders.Clear()
-        Form1.tvfolders.Clear()
-        Form1.tvrootfolders.Clear()
+        Form1.movieFolders.Clear()
+        Form1.tvFolders.Clear()
+        Form1.tvRootFolders.Clear()
         Form1.userPrefs.tableview.Clear()
-        Dim tempstring As String = Form1.workingprofile.config
-        If Not IO.File.Exists(Form1.workingprofile.config) Then
+        Dim tempstring As String = Form1.workingProfile.config
+        If Not IO.File.Exists(Form1.workingProfile.config) Then
             Exit Sub
         End If
 
         Dim prefs As New XmlDocument
         Try
-            prefs.Load(Form1.workingprofile.config)
+            prefs.Load(Form1.workingProfile.config)
         Catch ex As Exception
             MsgBox("Error : pr24")
         End Try
@@ -611,16 +611,16 @@ Public Class _preferences
                     Form1.userPrefs.locy = Convert.ToInt32(thisresult.InnerText)
                 Case "nfofolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.moviefolders.Add(decodestring)
+                    Form1.movieFolders.Add(decodestring)
                 Case "offlinefolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
                     Form1.userPrefs.offlinefolders.Add(decodestring)
                 Case "tvfolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.tvfolders.Add(decodestring)
+                    Form1.tvFolders.Add(decodestring)
                 Case "tvrootfolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.tvrootfolders.Add(decodestring)
+                    Form1.tvRootFolders.Add(decodestring)
                 Case "gettrailer"
                     If thisresult.InnerXml = "true" Then
                         Form1.userPrefs.gettrailer = True
@@ -1093,7 +1093,7 @@ Public Class _preferences
 
     End Sub
 
-    
 
-   
+
+
 End Class

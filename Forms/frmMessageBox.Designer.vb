@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class message_box
+Partial Class frmMessageBox
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,9 +22,9 @@ Partial Class message_box
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TextBox1 = New System.Windows.Forms.TextBox
-        Me.TextBox2 = New System.Windows.Forms.TextBox
-        Me.TextBox3 = New System.Windows.Forms.TextBox
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'TextBox1
@@ -37,7 +37,7 @@ Partial Class message_box
         Me.TextBox1.ReadOnly = True
         Me.TextBox1.Size = New System.Drawing.Size(336, 15)
         Me.TextBox1.TabIndex = 1
-        Me.TextBox1.Text = "1"
+        Me.TextBox1.Text = "TextBox1"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBox2
@@ -50,7 +50,7 @@ Partial Class message_box
         Me.TextBox2.ReadOnly = True
         Me.TextBox2.Size = New System.Drawing.Size(336, 15)
         Me.TextBox2.TabIndex = 2
-        Me.TextBox2.Text = "1"
+        Me.TextBox2.Text = "TextBox2"
         Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBox3
@@ -63,10 +63,10 @@ Partial Class message_box
         Me.TextBox3.ReadOnly = True
         Me.TextBox3.Size = New System.Drawing.Size(336, 15)
         Me.TextBox3.TabIndex = 3
-        Me.TextBox3.Text = "1"
+        Me.TextBox3.Text = "TextBox3"
         Me.TextBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'message_box
+        'frmMessageBox
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -80,11 +80,11 @@ Partial Class message_box
         Me.MaximumSize = New System.Drawing.Size(350, 117)
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(350, 117)
-        Me.Name = "message_box"
+        Me.Name = "frmMessageBox"
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "messagebox"
+        Me.Text = "MessageBox"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
