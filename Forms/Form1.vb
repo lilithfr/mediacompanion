@@ -396,7 +396,7 @@ Public Class Form1
 
 
 
-        Call loadregex()
+        Call LoadRegex()
 
         Select Case userPrefs.moviedefaultlist
             Case 0
@@ -4889,13 +4889,13 @@ Public Class Form1
 
     End Sub
 
-    Private Sub _Downloader_FileDownloadSizeObtained(ByVal iFileSize As Long) Handles WebFileDownloader.FileDownloadSizeObtained
+    Private Sub _Downloader_FileDownloadSizeObtained(ByVal iFileSize As Long) Handles webFileDownloader.FileDownloadSizeObtained
         ProgBar.Value = 0
         ProgBar.Maximum = Convert.ToInt32(iFileSize)
     End Sub
 
     'FIRES WHEN DOWNLOAD IS COMPLETE
-    Private Sub _Downloader_FileDownloadComplete() Handles WebFileDownloader.FileDownloadComplete
+    Private Sub _Downloader_FileDownloadComplete() Handles webFileDownloader.FileDownloadComplete
         ProgBar.Value = ProgBar.Maximum
         ' message_box.Show("File Download Complete")
         trailerdownloadpanel.Visible = False
@@ -4904,17 +4904,18 @@ Public Class Form1
     End Sub
 
     'FIRES WHEN DOWNLOAD FAILES. PASSES IN EXCEPTION INFO
-    Private Sub _Downloader_FileDownloadFailed(ByVal ex As System.Exception) Handles WebFileDownloader.FileDownloadFailed
+    Private Sub _Downloader_FileDownloadFailed(ByVal ex As System.Exception) Handles webFileDownloader.FileDownloadFailed
         'message_box.Show("An error has occured during download: " & ex.Message)
     End Sub
 
     'FIRES WHEN MORE OF THE FILE HAS BEEN DOWNLOADED
-    Private Sub _Downloader_AmountDownloadedChanged(ByVal iNewProgress As Long) Handles WebFileDownloader.AmountDownloadedChanged
+    Private Sub _Downloader_AmountDownloadedChanged(ByVal iNewProgress As Long) Handles webFileDownloader.AmountDownloadedChanged
         ProgBar.Value = Convert.ToInt32(iNewProgress)
-        lblProgress.Text = WebFileDownloader.FormatFileSize(iNewProgress) & " of " & WebFileDownloader.FormatFileSize(ProgBar.Maximum) & " downloaded"
+        lblProgress.Text = webFileDownloader.FormatFileSize(iNewProgress) & " of " & webFileDownloader.FormatFileSize(ProgBar.Maximum) & " downloaded"
         ProgBar.Refresh()
         lblProgress.Refresh()
         Application.DoEvents()
+
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -4939,7 +4940,7 @@ Public Class Form1
         Dim MyFormObject As New frmOptions
         MyFormObject.ShowDialog()
 
-        Call saveregex()
+        Call SaveRegex()
 
         Dim load As New Preferences
         userPrefs.moviesets.Clear()
@@ -4998,7 +4999,7 @@ Public Class Form1
 
     Private Function getmovietags(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, Optional ByVal thumbpath As String = "")
         If text.IndexOf("<<smallimage>>") And thumbpath <> "" Then
-            Dim filename As String = filefunction.GetCRC32(movie.fullpathandfilename)
+            Dim filename As String = fileFunction.GetCRC32(movie.fullpathandfilename)
             If IO.File.Exists(IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")) Then
                 Try
                     IO.File.Copy(IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg"), IO.Path.Combine(thumbpath, filename & ".jpg"))
@@ -5011,9 +5012,9 @@ Public Class Form1
                 End Try
                 Dim tempstring As String = text
             Else
-                If IO.File.Exists(filefunction.getposterpath(movie.fullpathandfilename)) Then
+                If IO.File.Exists(fileFunction.getposterpath(movie.fullpathandfilename)) Then
                     Try
-                        Dim bitmap As New Bitmap(filefunction.getposterpath(movie.fullpathandfilename))
+                        Dim bitmap As New Bitmap(fileFunction.getposterpath(movie.fullpathandfilename))
                         Dim bitmap2 As New Bitmap(bitmap)
                         bitmap.Dispose()
                         bitmap2 = imageFunctions.ResizeImage(bitmap2, 150, 200)
@@ -5121,7 +5122,7 @@ Public Class Form1
                 ToolStripProgressBar1.ProgressBar.PerformStep()
                 ToolStripStatusLabel1.Text = e.UserState
             Else
-                Call applyfilters()
+                Call ApplyFilters()
             End If
         End If
     End Sub
@@ -5404,7 +5405,7 @@ Public Class Form1
                     Exit Sub
                 End If
                 If actor.actorthumb <> Nothing Then
-                    Dim actorthumbpath As String = filefunction.getactorthumbpath(actor.actorthumb)
+                    Dim actorthumbpath As String = fileFunction.getactorthumbpath(actor.actorthumb)
                     If actorthumbpath <> "none" Then
                         If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
                             PictureBox1.ImageLocation = actorthumbpath
@@ -6086,8 +6087,8 @@ Public Class Form1
     End Sub
 
     Private Sub zoomimage(ByVal file As Bitmap)
-        bigpanel = New Panel
-        With bigpanel
+        bigPanel = New Panel
+        With bigPanel
             .Width = Me.Width
             .Height = Me.Height
             .BringToFront()
@@ -6098,8 +6099,8 @@ Public Class Form1
 
         With bigPictureBox
             .Location = New Point(0, 0)
-            .Width = bigpanel.Width
-            .Height = bigpanel.Height
+            .Width = bigPanel.Width
+            .Height = bigPanel.Height
             .SizeMode = PictureBoxSizeMode.Zoom
             '.Image = sender.image
             .Image = file
@@ -6123,7 +6124,7 @@ Public Class Form1
             '   .BringToFront()
         End With
 
-        Me.bigpanel.Controls.Add(bigpanellabel)
+        Me.bigPanel.Controls.Add(bigpanellabel)
         bigpanellabel.BringToFront()
         Application.DoEvents()
 
@@ -6143,7 +6144,7 @@ Public Class Form1
                 .BackColor = Color.Transparent
             End With
 
-            Me.bigpanel.Controls.Add(resolutionlbl)
+            Me.bigPanel.Controls.Add(resolutionlbl)
             resolutionlbl.BringToFront()
             Me.Refresh()
             Application.DoEvents()
@@ -6153,9 +6154,9 @@ Public Class Form1
         End If
 
 
-        Me.Controls.Add(bigpanel)
-        bigpanel.BringToFront()
-        Me.bigpanel.Controls.Add(bigPictureBox)
+        Me.Controls.Add(bigPanel)
+        bigPanel.BringToFront()
+        Me.bigPanel.Controls.Add(bigPictureBox)
         Me.Refresh()
     End Sub
 
@@ -6172,7 +6173,7 @@ Public Class Form1
             '   .BringToFront()
         End With
 
-        Me.bigpanel.Controls.Add(bigpanellabel)
+        Me.bigPanel.Controls.Add(bigpanellabel)
         bigpanellabel.BringToFront()
         Application.DoEvents()
 
@@ -6192,7 +6193,7 @@ Public Class Form1
                 .BackColor = Color.Transparent
             End With
 
-            Me.bigpanel.Controls.Add(resolutionlbl)
+            Me.bigPanel.Controls.Add(resolutionlbl)
             resolutionlbl.BringToFront()
             Me.Refresh()
             Application.DoEvents()
@@ -6203,8 +6204,8 @@ Public Class Form1
     End Sub
 
     Private Sub closepicbox()
-        Me.Controls.Remove(bigpanel)
-        bigpanel = Nothing
+        Me.Controls.Remove(bigPanel)
+        bigPanel = Nothing
         Me.Controls.Remove(bigPictureBox)
         bigPictureBox = Nothing
         Me.ControlBox = True
@@ -6222,7 +6223,7 @@ Public Class Form1
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, False)
         Next
-        Call applyfilters()
+        Call ApplyFilters()
     End Sub
 
     'Medianfo.dll to outputlog
@@ -6252,7 +6253,7 @@ Public Class Form1
             Exit Sub
         End If
         'Try
-        tempstring = filefunction.getfilename(pathtxt.Text)
+        tempstring = fileFunction.getfilename(pathtxt.Text)
         If IO.Path.GetFileName(tempstring).ToLower = "video_ts.ifo" Then
             Dim temppath As String = tempstring.Replace(IO.Path.GetFileName(tempstring), "VTS_01_0.IFO")
             If IO.File.Exists(temppath) Then
@@ -6287,9 +6288,9 @@ Public Class Form1
     Private Sub TempStartMoviesReScraping()
         Dim FullFileContent As String = ""
         Dim Scraper As String = userPrefs.XBMC_Scraper
-        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingmoviedetails.fullmoviebody.imdbid, filefunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value))
+        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingmoviedetails.fullmoviebody.imdbid, fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value))
         If FullFileContent.ToLower <> "error" Then
-            Dim Teste As Boolean = CreateMovieNfo(filefunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value), FullFileContent)
+            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value), FullFileContent)
             RefreshMovieList()
         End If
         If messbox.Visible = True Then messbox.Close()
@@ -6438,9 +6439,9 @@ Public Class Form1
                                 Else
                                     If userPrefs.usefoldernames = False Then
                                         tempstring = IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename)
-                                        workingmoviedetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                        workingmoviedetails.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
                                     Else
-                                        workingmoviedetails.fullmoviebody.title = filefunction.cleanfilename(workingmoviedetails.fileinfo.foldername, False)
+                                        workingmoviedetails.fullmoviebody.title = fileFunction.cleanfilename(workingmoviedetails.fileinfo.foldername, False)
                                     End If
                                 End If
                             Case "country"
@@ -6589,7 +6590,7 @@ Public Class Form1
                                         Exit For
                                     End If
                                     actorcount += 1
-                                    Dim newactor As New movieactors
+                                    Dim newactor As New MovieActors
                                     Dim detail As XmlNode = Nothing
                                     For Each detail In thisresult.ChildNodes
                                         Select Case detail.Name
@@ -6685,7 +6686,7 @@ Public Class Form1
                                         End Select
                                     Next
                                     workingmoviedetails.listactors.Add(newactor)
-                                    Dim actornew As New actordatabase
+                                    Dim actornew As New ActorDatabase
                                     actornew.actorname = newactor.actorname
                                     actornew.movieid = workingmoviedetails.fullmoviebody.imdbid
                                     actorDB.Add(actornew)
@@ -6696,8 +6697,8 @@ Public Class Form1
                 End If
 
                 Try
-                    Dim tempname As String = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                    If tempname <> Nothing Then workingmoviedetails.filedetails = filefunction.get_hdtags(tempname)
+                    Dim tempname As String = fileFunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
+                    If tempname <> Nothing Then workingmoviedetails.filedetails = fileFunction.get_hdtags(tempname)
                     If workingmoviedetails.filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -6752,7 +6753,7 @@ Public Class Form1
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
 
-                        Dim newfullmovie As combolist
+                        Dim newfullmovie As ComboList
                         newfullmovie = fullMovieList(f)
                         '-------------- Aqui
                         If userPrefs.ignorearticle = True Then
@@ -7036,13 +7037,13 @@ Public Class Form1
             End If
             For Each item In ComboBox1.SelectedItems
                 Dim filepath As String = item.value
-                Dim movie As fullmoviedetails
+                Dim movie As FullMovieDetails
                 movie = nfoFunction.loadfullmovienfo(filepath)
                 movie.fullmoviebody.playcount = watched
                 nfoFunction.savemovienfo(filepath, movie, True)
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = filepath Then
-                        Dim newfullmovie As combolist
+                        Dim newfullmovie As ComboList
                         newfullmovie = fullMovieList(f)
                         newfullmovie.playcount = watched
                         fullMovieList.RemoveAt(f)
