@@ -25332,10 +25332,10 @@ Public Class Form1
         DataGridView1.EndEdit()
         userPrefs.tableview.Clear()
         For Each column In DataGridView1.Columns
-            Dim tempstring As String = column.name & "|" & column.width & "|" & column.displayindex & "|" & column.visible
+            Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
             userPrefs.tableview.Add(tempstring)
         Next
-        userPrefs.tablesortorder = DataGridView1.SortedColumn.HeaderText & "|" & DataGridView1.SortOrder.ToString
+        userPrefs.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
         Dim save As New Preferences
         save.saveconfig()
 
