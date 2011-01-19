@@ -6063,27 +6063,35 @@ Public Class Form1
 
     'zoom images
     Private Sub moviethumb_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moviethumb.DoubleClick
-        If workingmoviedetails.fileinfo.posterpath <> Nothing Then
-            If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
-                Me.ControlBox = False
-                MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(workingmoviedetails.fileinfo.posterpath)
-                Call zoomimage(newimage)
+        Try
+            If workingmoviedetails.fileinfo.posterpath <> Nothing Then
+                If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    Using newimage As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+                        zoomimage(newimage)
+                    End Using
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ' Silence exception
+        End Try
     End Sub
 
     Private Sub PictureBox7_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.DoubleClick
-        If workingmoviedetails.fileinfo.fanartpath <> Nothing Then
-            If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
-                Me.ControlBox = False
-                MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(workingmoviedetails.fileinfo.fanartpath)
-                Call zoomimage(newimage)
+        Try
+            If workingmoviedetails.fileinfo.fanartpath <> Nothing Then
+                If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    Using newimage As New Bitmap(workingmoviedetails.fileinfo.fanartpath)
+                        zoomimage(newimage)
+                    End Using
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ' Silence exception
+        End Try
     End Sub
 
     Private Sub zoomimage(ByVal file As Bitmap)
