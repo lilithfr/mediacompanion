@@ -202,6 +202,7 @@ Public Class Form1
         End If
     End Sub
 
+    'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -249,7 +250,7 @@ Public Class Form1
         Application.DoEvents()
         Dim tempstring As String
         tempstring = applicationpath & "\enablemultiple.set"
-        If Not IO.File.Exists(tempstring) Then
+        If Not File.Exists(tempstring) Then
             Dim tej As Integer = 0
             Dim processes() As Process
             Dim instance As Process
