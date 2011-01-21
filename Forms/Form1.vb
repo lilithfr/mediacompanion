@@ -202,6 +202,7 @@ Public Class Form1
         End If
     End Sub
 
+    'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -249,7 +250,7 @@ Public Class Form1
         Application.DoEvents()
         Dim tempstring As String
         tempstring = applicationpath & "\enablemultiple.set"
-        If Not IO.File.Exists(tempstring) Then
+        If Not File.Exists(tempstring) Then
             Dim tej As Integer = 0
             Dim processes() As Process
             Dim instance As Process
@@ -6063,27 +6064,35 @@ Public Class Form1
 
     'zoom images
     Private Sub moviethumb_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moviethumb.DoubleClick
-        If workingmoviedetails.fileinfo.posterpath <> Nothing Then
-            If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
-                Me.ControlBox = False
-                MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(workingmoviedetails.fileinfo.posterpath)
-                Call zoomimage(newimage)
+        Try
+            If workingmoviedetails.fileinfo.posterpath <> Nothing Then
+                If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    Using newimage As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+                        zoomimage(newimage)
+                    End Using
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ' Silence exception
+        End Try
     End Sub
 
     Private Sub PictureBox7_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.DoubleClick
-        If workingmoviedetails.fileinfo.fanartpath <> Nothing Then
-            If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
-                Me.ControlBox = False
-                MenuStrip1.Enabled = False
-                'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(workingmoviedetails.fileinfo.fanartpath)
-                Call zoomimage(newimage)
+        Try
+            If workingmoviedetails.fileinfo.fanartpath <> Nothing Then
+                If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    Using newimage As New Bitmap(workingmoviedetails.fileinfo.fanartpath)
+                        zoomimage(newimage)
+                    End Using
+                End If
             End If
-        End If
+        Catch ex As Exception
+            ' Silence exception
+        End Try
     End Sub
 
     Private Sub zoomimage(ByVal file As Bitmap)
@@ -25327,10 +25336,10 @@ Public Class Form1
             DataGridView1.EndEdit()
             userPrefs.tableview.Clear()
             For Each column In DataGridView1.Columns
-                Dim tempstring As String = column.name & "|" & column.width & "|" & column.displayindex & "|" & column.visible
+            Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
                 userPrefs.tableview.Add(tempstring)
             Next
-            userPrefs.tablesortorder = DataGridView1.SortedColumn.HeaderText & "|" & DataGridView1.SortOrder.ToString
+        userPrefs.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
             Dim save As New Preferences
             save.saveconfig()
 
