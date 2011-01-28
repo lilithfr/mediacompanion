@@ -53,7 +53,7 @@ Public Class Form2
         If actorcb.Text <> "" Then
             roletxt.Text = workingmovieedit.listactors(0).actorrole
         End If
-        posterpath = Form1.workingmoviedetails.fileinfo.posterpath
+        posterpath = Form1.workingMovieDetails.fileinfo.posterpath
         If posterpath <> Nothing Then
             If posterpath <> "" Then
                 If posterpath.ToLower.IndexOf(".jpg") <> -1 Or posterpath.ToLower.IndexOf(".tbn") <> -1 Then
@@ -70,7 +70,7 @@ Public Class Form2
 
     End Sub
     Private Sub Form2_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        workingmovieedit = Form1.workingmoviedetails
+        workingmovieedit = Form1.workingMovieDetails
         For Each actor In workingmovieedit.listactors
             If actor.actorname <> Nothing Then
                 actorcount += 1
@@ -104,7 +104,7 @@ Public Class Form2
             roletxt.Text = workingmovieedit.listactors(actorcb.SelectedIndex).actorrole
             If workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb <> Nothing Then
                 Try
-                    PictureBox1.ImageLocation = Form1.filefunction.getactorthumbpath(workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb)
+                    PictureBox1.ImageLocation = Form1.fileFunction.getactorthumbpath(workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb)
                 Catch ex As Exception
                     PictureBox1.Image = Nothing
                 End Try
@@ -159,9 +159,9 @@ Public Class Form2
         Dim url As String
         Dim tempstring3 As String
         If Form1.userPrefs.usefoldernames = True Then
-            tempstring = Form1.workingmovie.foldername
+            tempstring = Form1.workingMovie.foldername
         Else
-            tempstring = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename))
+            tempstring = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename))
         End If
 
         tempstring = tempstring.Replace(" ", "+")
@@ -226,16 +226,16 @@ Public Class Form2
                                 alternatemovie.fullmoviebody.title = thisresult.InnerText
                             Else
                                 If Form1.userPrefs.usefoldernames = False Then
-                                    Dim tempstring2 As String = IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename)
+                                    Dim tempstring2 As String = IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)
                                     alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(tempstring2)
                                 Else
-                                    alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(Form1.workingmoviedetails.fileinfo.foldername)
+                                    alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(Form1.workingMovieDetails.fileinfo.foldername)
                                 End If
                             End If
                             If Form1.userPrefs.keepfoldername = False Then
                                 alternatemovie.fullmoviebody.title = thisresult.InnerText
                             Else
-                                alternatemovie.fullmoviebody.title = Form1.workingmoviedetails.fileinfo.foldername
+                                alternatemovie.fullmoviebody.title = Form1.workingMovieDetails.fileinfo.foldername
                             End If
                         Case "credits"
                             alternatemovie.fullmoviebody.credits = thisresult.InnerText
@@ -447,17 +447,17 @@ Public Class Form2
 
 
                 If Form1.userPrefs.enablehdtags = True Then
-                    If Form1.workingmoviedetails.filedetails.filedetails_video.container = Nothing Then
+                    If Form1.workingMovieDetails.filedetails.filedetails_video.container = Nothing Then
                         alternatemovie.filedetails = Form1.fileFunction.get_hdtags(tempstring)
                     End If
                 End If
 
 
                 If CheckBox1.CheckState = CheckState.Checked Then
-                    Dim posterpath As String = Form1.workingmoviedetails.fileinfo.posterpath
+                    Dim posterpath As String = Form1.workingMovieDetails.fileinfo.posterpath
                     Dim jpegpath As String = posterpath.Replace(System.IO.Path.GetFileName(posterpath), "folder.jpg")
                     If IO.File.Exists(jpegpath) Then IO.File.Delete(jpegpath)
-                    Dim fanartpath As String = Form1.workingmoviedetails.fileinfo.fanartpath
+                    Dim fanartpath As String = Form1.workingMovieDetails.fileinfo.fanartpath
                     If posterpath <> Nothing Then
                         If posterpath <> "" Then
                             If IO.File.Exists(posterpath) Then IO.File.Delete(posterpath)
@@ -952,10 +952,10 @@ Public Class Form2
         workingmovieedit.fullmoviebody.votes = votestxt.Text
         workingmovieedit.fullmoviebody.outline = outlinetxt.Text
         workingmovieedit.fullmoviebody.tagline = taglinetxt.Text
-        Form1.workingmoviedetails.fullmoviebody = workingmovieedit.fullmoviebody
-        Form1.workingmoviedetails.listactors = workingmovieedit.listactors
-        Form1.workingmoviedetails.listthumbs = workingmovieedit.listthumbs
-        Call Form1.nfoFunction.savemovienfo(Form1.workingmoviedetails.fileinfo.fullpathandfilename, Form1.workingmoviedetails)
+        Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
+        Form1.workingMovieDetails.listactors = workingmovieedit.listactors
+        Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
+        Call Form1.nfoFunction.savemovienfo(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
         Me.Close()
         'Dim oldactors(9999, 2)
         'Dim actorcount As Integer = 0
@@ -988,10 +988,10 @@ Public Class Form2
         Dim exists As Boolean = False
         Label16.Text = moviethumb.Image.Width
         Label17.Text = moviethumb.Image.Height
-        exists = System.IO.File.Exists(Form1.workingmoviedetails.fileinfo.posterpath)
+        exists = System.IO.File.Exists(Form1.workingMovieDetails.fileinfo.posterpath)
         If exists = True Then
             Dim lngSizeOfFile As Decimal
-            lngSizeOfFile = FileLen(Form1.workingmoviedetails.fileinfo.posterpath)
+            lngSizeOfFile = FileLen(Form1.workingMovieDetails.fileinfo.posterpath)
             lngSizeOfFile = lngSizeOfFile / 1024
             lngSizeOfFile = lngSizeOfFile.Round(lngSizeOfFile, 2)
             Label18.Text = lngSizeOfFile & "kB"
@@ -1032,7 +1032,7 @@ Public Class Form2
     Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavecropped.Click
         thumbeditsmade = False
         Dim tempstring As String
-        tempstring = Form1.workingmoviedetails.fileinfo.posterpath
+        tempstring = Form1.workingMovieDetails.fileinfo.posterpath
         Try
             Dim stream As New System.IO.MemoryStream
             moviethumb.Image.Save(tempstring, System.Drawing.Imaging.ImageFormat.Jpeg)
@@ -1123,8 +1123,8 @@ Public Class Form2
         ratingtxt.Text = ""
         votestxt.Text = ""
         idtxt.Text = ""
-        workingmovieedit = Form1.workingmoviedetails
-        Dim newworkingmovieedit As FullMovieDetails = Form1.workingmoviedetails
+        workingmovieedit = Form1.workingMovieDetails
+        Dim newworkingmovieedit As FullMovieDetails = Form1.workingMovieDetails
         newworkingmovieedit.listactors.Clear()
         For f = 1 To actorcount
             Dim actor As New MovieActors

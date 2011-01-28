@@ -11,7 +11,7 @@ Public Class frmMovieFanart
     Dim WithEvents labels As Label
     Dim WithEvents savebutton As Button
     Dim fanarturls(1000, 1) As String
-    Dim fanartpath As String = Form1.workingmoviedetails.fileinfo.fanartpath
+    Dim fanartpath As String = Form1.workingMovieDetails.fileinfo.fanartpath
     Dim mainfanart As PictureBox
     Dim resolutionlbl As Label
 
@@ -132,7 +132,7 @@ Public Class frmMovieFanart
         End If
     End Sub
 
- 
+
 
 
 
@@ -178,7 +178,7 @@ Public Class frmMovieFanart
 
 
         Dim tmdbid As String
-        Dim temp As String = Form1.workingmoviedetails.fullmoviebody.imdbid
+        Dim temp As String = Form1.workingMovieDetails.fullmoviebody.imdbid
         Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
         Dim apple2(2000) As String
         Dim fanartlinecount As Integer = 0
@@ -530,7 +530,7 @@ Public Class frmMovieFanart
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
         'browse pc
-        openFD.InitialDirectory = Form1.workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename), "")
+        openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
         openFD.Title = "Select a jpeg image File"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
