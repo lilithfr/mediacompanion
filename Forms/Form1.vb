@@ -19,7 +19,6 @@ Public Class Form1
     Public Shared profiles As New List(Of ListOfProfiles)
     Public Shared workingProfile As New ListOfProfiles
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
-
     Public movieRebuildNeeded As Boolean = True
     Public tvRebuildNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
