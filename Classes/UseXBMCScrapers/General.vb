@@ -1507,34 +1507,40 @@ Module General
         If Form1.userPrefs.tvposter = True Then
             If Form1.userPrefs.postertype = "banner" Then
                 Dim ImageFilename As String = Path & "\folder.jpg"
-                myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(0), ImageFilename)
+                If ArtforDownload(0) <> Nothing Then
+                    myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(0), ImageFilename)
+                End If
             ElseIf Form1.userPrefs.postertype = "poster" Then
                 Dim ImageFilename As String = Path & "\folder.jpg"
-                myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(1), ImageFilename)
-            End If
+                If ArtforDownload(1) <> Nothing Then
+                    myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(1), ImageFilename)
+                End If
+                End If
         End If
         If Form1.userPrefs.tvfanart = True Then
             Dim ImageFilename As String = Path & "\fanart.jpg"
-            myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
-            '-----------------Start Resize Fanart
-            If Form1.userPrefs.resizefanart = 2 Then
-                Dim FanartToBeResized As New Bitmap(ImageFilename)
-                If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-                    Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 1280, 960)
-                    ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
-                Else
-                    'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+            If ArtforDownload(2) <> Nothing Then
+                myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
+                '-----------------Start Resize Fanart
+                If Form1.userPrefs.resizefanart = 2 Then
+                    Dim FanartToBeResized As New Bitmap(ImageFilename)
+                    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
+                        Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 1280, 960)
+                        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
+                    Else
+                        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+                    End If
+                ElseIf Form1.userPrefs.resizefanart = 3 Then
+                    Dim FanartToBeResized As New Bitmap(ImageFilename)
+                    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
+                        Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 960, 540)
+                        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
+                    Else
+                        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+                    End If
                 End If
-            ElseIf Form1.userPrefs.resizefanart = 3 Then
-                Dim FanartToBeResized As New Bitmap(ImageFilename)
-                If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-                    Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 960, 540)
-                    ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
-                Else
-                    'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-                End If
+                '-----------------End Resize Fanart
             End If
-            '-----------------End Resize Fanart
         End If
 
         If Form1.userPrefs.downloadtvseasonthumbs = True Then
@@ -1546,13 +1552,18 @@ Module General
                     SeasonTemp = n.ToString
                 End If
                 Dim ImageFilename As String = Path & "\season" & SeasonTemp & ".tbn"
-                myWebClient.DownloadFile(SeasonPosters(n), ImageFilename)
-                If n = 0 Then
-                    File.Copy(ImageFilename, Path & "\season-specials.tbn")
+                If SeasonPosters(n) <> Nothing Then
+                    myWebClient.DownloadFile(SeasonPosters(n), ImageFilename)
+                    If n = 0 Then
+                        File.Copy(ImageFilename, Path & "\season-specials.tbn")
+                    End If
                 End If
+
             Next
             Dim ImageFilename1 As String = Path & "\season-all.tbn"
-            myWebClient.DownloadFile(Seasonall, ImageFilename1)
+            If Seasonall <> Nothing Then
+                myWebClient.DownloadFile(Seasonall, ImageFilename1)
+            End If
         End If
         Return True
     End Function
