@@ -2477,7 +2477,7 @@ Me.Label127.Location = New System.Drawing.Point(254, 4)
 Me.Label127.Name = "Label127"
 Me.Label127.Size = New System.Drawing.Size(142, 22)
 Me.Label127.TabIndex = 162
-Me.Label127.Text = "Mulitsave Mode"
+Me.Label127.Text = "Multisave Mode"
 Me.Label127.Visible = false
 '
 'titletxt

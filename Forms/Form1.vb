@@ -7,6 +7,7 @@ Imports Media_Companion.ScraperFunctions
 Imports Media_Companion.Preferences
 Imports System.Xml
 Imports System.Reflection
+Imports System.Windows.Forms
 Imports System.ComponentModel
 
 Public Class Form1
@@ -33,15 +34,15 @@ Public Class Form1
     Public nfoFunction As New WorkingWithNfoFiles
     Public fullMovieList As New List(Of ComboList)
     Public filteredList As New List(Of ComboList)
-    Public workingmoviedetails As FullMovieDetails
-    Public workingtvshow As New TvShowNFO
-    Public workingepisode As New List(Of EpisodeInfo)
-    Public tempworkingtvshow As New TvShowNFO
-    Public tempworkingepisode As New EpisodeInfo
-    Public workingepisodeindex As Integer
-    Public workingmovie As New ComboList
-    Public batchlist As New BatchWizard
-    Public tvbatchlist As New TvShowBatchWizard
+    Public workingMovieDetails As FullMovieDetails
+    Public workingTvShow As New TvShowNFO
+    Public workingEpisode As New List(Of EpisodeInfo)
+    Public tempWorkingTvShow As New TvShowNFO
+    Public tempWorkingEpisode As New EpisodeInfo
+    Public workingEpisodeIndex As Integer
+    Public workingMovie As New ComboList
+    Public batchList As New BatchWizard
+    Public tvBatchList As New TvShowBatchWizard
     Public basictvlist As New List(Of BasicTvShowNFO)
     Public sending As String
     Public applicationpath As String = Application.StartupPath 'Get application root path
@@ -109,8 +110,10 @@ Public Class Form1
     Dim NovaThread As Thread
     Dim NewMovieFoundTitle As String = ""
     Dim NewMovieFoundFilename As String = ""
+    Dim tablesets As New List(Of TableItems)
+    Dim relativefolderlist As New List(Of RelativeFileList)
 
-    Private WithEvents webFileDownloader As WebFileDownloader
+    Private WithEvents FileToBeDownloaded As WebFileDownloader
     Private tvCurrentTabIndex As Integer = 0
     Private currentTabIndex As Integer = 0
 
@@ -119,9 +122,9 @@ Public Class Form1
         Return asm.GetManifestResourceStream(resfile)
     End Function
 
-    Private Sub batchupdate()
+    Private Sub BatchUpdate()
         messbox = New frmMessageBox("Please wait,", "", "rebuilding Movie nfo files")
-        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
@@ -571,12 +574,12 @@ Public Class Form1
                         ComboBox3.Items.Add(mset)
                     Next
                 End If
-                If workingmoviedetails.fullmoviebody.movieset <> "None" Then
+                If workingMovieDetails.fullmoviebody.movieset <> "None" Then
                     'For Each mset In userprefs.moviesets
                     '    ComboBox3.Items.Add(mset)
                     'Next
                     For te = 0 To ComboBox3.Items.Count - 1
-                        If ComboBox3.Items(te) = workingmoviedetails.fullmoviebody.movieset Then
+                        If ComboBox3.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
                             ComboBox3.SelectedIndex = te
                             Exit For
                         End If
@@ -1142,7 +1145,7 @@ Public Class Form1
         TextBox16.Text = ""
         TextBox18.Text = ""
         TextBox19.Text = ""
-        If Not workingtvshow Is Nothing Then workingtvshow.path = ""
+        If Not workingTvShow Is Nothing Then workingTvShow.path = ""
         ComboBox4.Items.Clear()
         ComboBox4.Text = ""
         TextBox20.Text = ""
@@ -1900,42 +1903,42 @@ Public Class Form1
             Application.DoEvents()
             exists = (IO.File.Exists(fs_info.FullName))
             If exists = True Then
-                workingmovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
-                If workingmovie.movieset <> Nothing Then
+                workingMovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
+                If workingMovie.movieset <> Nothing Then
                     Dim add As Boolean = True
                     For Each item In userPrefs.moviesets
-                        If item = workingmovie.movieset Then
+                        If item = workingMovie.movieset Then
                             add = False
                             Exit For
                         End If
                     Next
                     If add = True Then
-                        userPrefs.moviesets.Add(workingmovie.movieset)
-                        ComboBox3.Items.Add(workingmovie.movieset)
+                        userPrefs.moviesets.Add(workingMovie.movieset)
+                        ComboBox3.Items.Add(workingMovie.movieset)
                     End If
                 End If
-                If workingmovie.title <> Nothing Then
-                    workingmovie.foldername = fileFunction.getlastfolder(workingmovie.fullpathandfilename)
-                    If workingmovie.genre.IndexOf("skipthisfile") = -1 Then
+                If workingMovie.title <> Nothing Then
+                    workingMovie.foldername = fileFunction.getlastfolder(workingMovie.fullpathandfilename)
+                    If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
                         Dim skip As Boolean = False
                         For Each movie In fullMovieList
-                            If movie.fullpathandfilename = workingmovie.fullpathandfilename Then
+                            If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
                                 skip = True
                                 Exit For
                             End If
                         Next
                         If skip = False Then
                             Dim completebyte1 As Byte = 0
-                            Dim fanartexists As Boolean = IO.File.Exists(fileFunction.getfanartpath(workingmovie.fullpathandfilename))
-                            Dim posterexists As Boolean = IO.File.Exists(fileFunction.getposterpath(workingmovie.fullpathandfilename))
+                            Dim fanartexists As Boolean = IO.File.Exists(fileFunction.getfanartpath(workingMovie.fullpathandfilename))
+                            Dim posterexists As Boolean = IO.File.Exists(fileFunction.getposterpath(workingMovie.fullpathandfilename))
                             If fanartexists = False Then
                                 completebyte1 += 1
                             End If
                             If posterexists = False Then
                                 completebyte1 += 2
                             End If
-                            workingmovie.missingdata1 = completebyte1
-                            fullMovieList.Add(workingmovie)
+                            workingMovie.missingdata1 = completebyte1
+                            fullMovieList.Add(workingMovie)
                             'filteredlist.Add(workingmovie)
                         End If
                     End If
@@ -2050,8 +2053,8 @@ Public Class Form1
 
         Dim tempstring As String
         Try
-            If Not IsNothing(workingmoviedetails) Then
-                If workingmovie.fullpathandfilename <> workingmoviedetails.fileinfo.fullpathandfilename Then
+            If Not IsNothing(workingMovieDetails) Then
+                If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
                     Try
                         For i = Panel8.Controls.Count - 1 To 0 Step -1
                             Panel8.Controls.RemoveAt(i)
@@ -2119,73 +2122,73 @@ Public Class Form1
         Me.Refresh()
         Application.DoEvents()
         Try
-            If workingmovie.fullpathandfilename <> Nothing Then
-                workingmoviedetails = nfoFunction.loadfullmovienfo(workingmovie.fullpathandfilename)
-                If workingmoviedetails.fullmoviebody.playcount = Nothing Then workingmoviedetails.fullmoviebody.playcount = "0"
-                If workingmoviedetails.fullmoviebody.credits = Nothing Then workingmoviedetails.fullmoviebody.credits = ""
-                If workingmoviedetails.fullmoviebody.director = Nothing Then workingmoviedetails.fullmoviebody.director = ""
-                If workingmoviedetails.fullmoviebody.filename = Nothing Then workingmoviedetails.fullmoviebody.filename = ""
-                If workingmoviedetails.fullmoviebody.genre = Nothing Then workingmoviedetails.fullmoviebody.genre = ""
-                If workingmoviedetails.fullmoviebody.imdbid = Nothing Then workingmoviedetails.fullmoviebody.imdbid = ""
-                If workingmoviedetails.fullmoviebody.mpaa = Nothing Then workingmoviedetails.fullmoviebody.mpaa = ""
-                If workingmoviedetails.fullmoviebody.outline = Nothing Then workingmoviedetails.fullmoviebody.outline = ""
-                If workingmoviedetails.fullmoviebody.playcount = Nothing Then workingmoviedetails.fullmoviebody.playcount = ""
-                If workingmoviedetails.fullmoviebody.plot = Nothing Then workingmoviedetails.fullmoviebody.plot = ""
-                If workingmoviedetails.fullmoviebody.premiered = Nothing Then workingmoviedetails.fullmoviebody.premiered = ""
-                If workingmoviedetails.fullmoviebody.rating = Nothing Then workingmoviedetails.fullmoviebody.rating = ""
-                If workingmoviedetails.fullmoviebody.runtime = Nothing Then workingmoviedetails.fullmoviebody.runtime = ""
-                If workingmoviedetails.fullmoviebody.studio = Nothing Then workingmoviedetails.fullmoviebody.studio = ""
-                If workingmoviedetails.fullmoviebody.tagline = Nothing Then workingmoviedetails.fullmoviebody.tagline = ""
-                If workingmoviedetails.fullmoviebody.title = Nothing Then workingmoviedetails.fullmoviebody.title = ""
-                If workingmoviedetails.fullmoviebody.top250 = Nothing Then workingmoviedetails.fullmoviebody.top250 = ""
-                If workingmoviedetails.fullmoviebody.trailer = Nothing Then workingmoviedetails.fullmoviebody.trailer = ""
-                If workingmoviedetails.fullmoviebody.votes = Nothing Then workingmoviedetails.fullmoviebody.votes = ""
-                If workingmoviedetails.fullmoviebody.year = Nothing Then workingmoviedetails.fullmoviebody.year = ""
+            If workingMovie.fullpathandfilename <> Nothing Then
+                workingMovieDetails = nfoFunction.loadfullmovienfo(workingMovie.fullpathandfilename)
+                If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
+                If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
+                If workingMovieDetails.fullmoviebody.director = Nothing Then workingMovieDetails.fullmoviebody.director = ""
+                If workingMovieDetails.fullmoviebody.filename = Nothing Then workingMovieDetails.fullmoviebody.filename = ""
+                If workingMovieDetails.fullmoviebody.genre = Nothing Then workingMovieDetails.fullmoviebody.genre = ""
+                If workingMovieDetails.fullmoviebody.imdbid = Nothing Then workingMovieDetails.fullmoviebody.imdbid = ""
+                If workingMovieDetails.fullmoviebody.mpaa = Nothing Then workingMovieDetails.fullmoviebody.mpaa = ""
+                If workingMovieDetails.fullmoviebody.outline = Nothing Then workingMovieDetails.fullmoviebody.outline = ""
+                If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = ""
+                If workingMovieDetails.fullmoviebody.plot = Nothing Then workingMovieDetails.fullmoviebody.plot = ""
+                If workingMovieDetails.fullmoviebody.premiered = Nothing Then workingMovieDetails.fullmoviebody.premiered = ""
+                If workingMovieDetails.fullmoviebody.rating = Nothing Then workingMovieDetails.fullmoviebody.rating = ""
+                If workingMovieDetails.fullmoviebody.runtime = Nothing Then workingMovieDetails.fullmoviebody.runtime = ""
+                If workingMovieDetails.fullmoviebody.studio = Nothing Then workingMovieDetails.fullmoviebody.studio = ""
+                If workingMovieDetails.fullmoviebody.tagline = Nothing Then workingMovieDetails.fullmoviebody.tagline = ""
+                If workingMovieDetails.fullmoviebody.title = Nothing Then workingMovieDetails.fullmoviebody.title = ""
+                If workingMovieDetails.fullmoviebody.top250 = Nothing Then workingMovieDetails.fullmoviebody.top250 = ""
+                If workingMovieDetails.fullmoviebody.trailer = Nothing Then workingMovieDetails.fullmoviebody.trailer = ""
+                If workingMovieDetails.fullmoviebody.votes = Nothing Then workingMovieDetails.fullmoviebody.votes = ""
+                If workingMovieDetails.fullmoviebody.year = Nothing Then workingMovieDetails.fullmoviebody.year = ""
 
 
                 titletxt.Items.Clear()
-                titletxt.Items.Add(workingmoviedetails.fullmoviebody.title)
-                For Each title In workingmoviedetails.alternativetitles
+                titletxt.Items.Add(workingMovieDetails.fullmoviebody.title)
+                For Each title In workingMovieDetails.alternativetitles
                     titletxt.Items.Add(title)
                 Next
-                titletxt.Text = workingmoviedetails.fullmoviebody.title '& " (" & workingmoviedetails.fullmoviebody.year & ")"
-                TextBox3.Text = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
-                TextBox7.Text = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
-                If workingmoviedetails.fullmoviebody.sortorder = "" Then workingmoviedetails.fullmoviebody.sortorder = workingmoviedetails.fullmoviebody.title
-                TextBox34.Text = workingmoviedetails.fullmoviebody.sortorder
-                outlinetxt.Text = workingmoviedetails.fullmoviebody.outline
-                plottxt.Text = workingmoviedetails.fullmoviebody.plot
-                taglinetxt.Text = workingmoviedetails.fullmoviebody.tagline
-                genretxt.Text = workingmoviedetails.fullmoviebody.genre
-                creditstxt.Text = workingmoviedetails.fullmoviebody.credits
-                directortxt.Text = workingmoviedetails.fullmoviebody.director
-                studiotxt.Text = workingmoviedetails.fullmoviebody.studio
-                pathtxt.Text = workingmovie.fullpathandfilename
-                ratingtxt.Text = workingmoviedetails.fullmoviebody.rating
-                runtimetxt.Text = workingmoviedetails.fullmoviebody.runtime
-                votestxt.Text = workingmoviedetails.fullmoviebody.votes
-                certtxt.Text = workingmoviedetails.fullmoviebody.mpaa
+                titletxt.Text = workingMovieDetails.fullmoviebody.title '& " (" & workingmoviedetails.fullmoviebody.year & ")"
+                TextBox3.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                TextBox7.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
+                TextBox34.Text = workingMovieDetails.fullmoviebody.sortorder
+                outlinetxt.Text = workingMovieDetails.fullmoviebody.outline
+                plottxt.Text = workingMovieDetails.fullmoviebody.plot
+                taglinetxt.Text = workingMovieDetails.fullmoviebody.tagline
+                genretxt.Text = workingMovieDetails.fullmoviebody.genre
+                creditstxt.Text = workingMovieDetails.fullmoviebody.credits
+                directortxt.Text = workingMovieDetails.fullmoviebody.director
+                studiotxt.Text = workingMovieDetails.fullmoviebody.studio
+                pathtxt.Text = workingMovie.fullpathandfilename
+                ratingtxt.Text = workingMovieDetails.fullmoviebody.rating
+                runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
+                votestxt.Text = workingMovieDetails.fullmoviebody.votes
+                certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
 
-                workingmoviedetails.fileinfo.fullpathandfilename = workingmovie.fullpathandfilename
-                workingmoviedetails.fileinfo.filename = IO.Path.GetFileName(workingmovie.fullpathandfilename)
-                workingmoviedetails.fileinfo.path = IO.Path.GetFullPath(workingmovie.fullpathandfilename)
-                workingmoviedetails.fileinfo.foldername = workingmovie.foldername
-                workingmoviedetails.fileinfo.posterpath = fileFunction.getposterpath(workingmovie.fullpathandfilename)
-                workingmoviedetails.fileinfo.fanartpath = fileFunction.getfanartpath(workingmovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.fullpathandfilename = workingMovie.fullpathandfilename
+                workingMovieDetails.fileinfo.filename = IO.Path.GetFileName(workingMovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.path = IO.Path.GetFullPath(workingMovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.foldername = workingMovie.foldername
+                workingMovieDetails.fileinfo.posterpath = fileFunction.getposterpath(workingMovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.fanartpath = fileFunction.getfanartpath(workingMovie.fullpathandfilename)
 
 
 
-                tempstring = fileFunction.getstackname(workingmoviedetails.fileinfo.filename, workingmoviedetails.fileinfo.fullpathandfilename)
+                tempstring = fileFunction.getstackname(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
                 If tempstring = "na" Then
-                    tempstring = fileFunction.cleanfilename(workingmoviedetails.fileinfo.filename)
+                    tempstring = fileFunction.cleanfilename(workingMovieDetails.fileinfo.filename)
                 End If
-                workingmoviedetails.fileinfo.trailerpath = IO.Path.Combine(workingmoviedetails.fileinfo.path.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.path), ""), tempstring & "-trailer.flv")
+                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), tempstring & "-trailer.flv")
                 Button3.Visible = False
-                If IO.File.Exists(workingmoviedetails.fileinfo.trailerpath) Then
+                If IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
                     Button3.Visible = True
                     Button3.Text = "Play Trailer"
                 Else
-                    If workingmoviedetails.fullmoviebody.trailer <> "" Then
+                    If workingMovieDetails.fullmoviebody.trailer <> "" Then
                         Button3.Text = "Download Trailer"
                         Button3.Visible = True
                     End If
@@ -2197,21 +2200,21 @@ Public Class Form1
 
 
 
-                If workingmoviedetails.fileinfo.posterpath <> Nothing Then
+                If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Try
-                        If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
+                        If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
                         Else
-                            If IO.File.Exists(workingmoviedetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.fanartpath), "folder.jpg")) Then
-                                workingmoviedetails.fileinfo.posterpath = workingmoviedetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.posterpath), "folder.jpg")
+                            If IO.File.Exists(workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fanartpath), "folder.jpg")) Then
+                                workingMovieDetails.fileinfo.posterpath = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                             End If
                         End If
                     Catch ex As Exception
                     End Try
                 End If
-                If workingmoviedetails.fileinfo.posterpath <> Nothing Then
+                If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Try
-                        If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
-                            Dim OriginalImage As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+                        If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
+                            Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.posterpath)
                             Dim Image2 As New Bitmap(OriginalImage)
                             OriginalImage.Dispose()
                             PictureBox3.Image = Image2 '7 - 2
@@ -2225,10 +2228,10 @@ Public Class Form1
 
                     End Try
                 End If
-                If workingmoviedetails.fileinfo.fanartpath <> Nothing Then
+                If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Try
-                        If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
-                            Dim OriginalImage As New Bitmap(workingmoviedetails.fileinfo.fanartpath)
+                        If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                            Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
                             Dim Image2 As New Bitmap(OriginalImage)
                             OriginalImage.Dispose()
                             PictureBox2.Image = Image2 'moviethumb - 3
@@ -2245,7 +2248,7 @@ Public Class Form1
                     End Try
                 End If
 
-                If Convert.ToInt32(workingmoviedetails.fullmoviebody.playcount) > 0 Then
+                If Convert.ToInt32(workingMovieDetails.fullmoviebody.playcount) > 0 Then
                     Button13.Text = "&Watched"
                     Button13.BackColor = Color.LawnGreen
                     Button13.Refresh()
@@ -2255,7 +2258,7 @@ Public Class Form1
                     Button13.Refresh()
                 End If
 
-                For Each actor In workingmoviedetails.listactors
+                For Each actor In workingMovieDetails.listactors
                     If actor.actorname <> Nothing Then actorcb.Items.Add(actor.actorname)
                 Next
                 Try
@@ -2263,19 +2266,19 @@ Public Class Form1
                 Catch
                 End Try
 
-                If workingmoviedetails.fullmoviebody.movieset <> Nothing Then
+                If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
                     Dim add As Boolean = True
                     For Each mset In userPrefs.moviesets
-                        If mset = workingmoviedetails.fullmoviebody.movieset Then
+                        If mset = workingMovieDetails.fullmoviebody.movieset Then
                             add = False
                         End If
                     Next
                     If add = True Then
-                        userPrefs.moviesets.Add(workingmoviedetails.fullmoviebody.movieset)
-                        ComboBox3.Items.Add(workingmoviedetails.fullmoviebody.movieset)
+                        userPrefs.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
+                        ComboBox3.Items.Add(workingMovieDetails.fullmoviebody.movieset)
                     End If
                     For f = 0 To ComboBox3.Items.Count - 1
-                        If ComboBox3.Items(f) = workingmoviedetails.fullmoviebody.movieset Then
+                        If ComboBox3.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
                             ComboBox3.SelectedIndex = f
                             Exit For
                         End If
@@ -2297,7 +2300,7 @@ Public Class Form1
                     ComboBox3.SelectedIndex = 0
                 End If
 
-                pathtxt.Text = workingmovie.fullpathandfilename
+                pathtxt.Text = workingMovie.fullpathandfilename
 
 
             End If
@@ -2306,7 +2309,7 @@ Public Class Form1
 
             If ratingtxt.Text.IndexOf("/10") <> -1 Then
                 ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
-                workingmoviedetails.fullmoviebody.rating = ratingtxt.Text
+                workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
             End If
         Catch
         End Try
@@ -4890,13 +4893,13 @@ Public Class Form1
 
     End Sub
 
-    Private Sub _Downloader_FileDownloadSizeObtained(ByVal iFileSize As Long) Handles webFileDownloader.FileDownloadSizeObtained
+    Private Sub _Downloader_FileDownloadSizeObtained(ByVal iFileSize As Long) Handles FileToBeDownloaded.FileDownloadSizeObtained
         ProgBar.Value = 0
         ProgBar.Maximum = Convert.ToInt32(iFileSize)
     End Sub
 
     'FIRES WHEN DOWNLOAD IS COMPLETE
-    Private Sub _Downloader_FileDownloadComplete() Handles webFileDownloader.FileDownloadComplete
+    Private Sub _Downloader_FileDownloadComplete() Handles FileToBeDownloaded.FileDownloadComplete
         ProgBar.Value = ProgBar.Maximum
         ' message_box.Show("File Download Complete")
         trailerdownloadpanel.Visible = False
@@ -4905,14 +4908,14 @@ Public Class Form1
     End Sub
 
     'FIRES WHEN DOWNLOAD FAILES. PASSES IN EXCEPTION INFO
-    Private Sub _Downloader_FileDownloadFailed(ByVal ex As System.Exception) Handles webFileDownloader.FileDownloadFailed
+    Private Sub _Downloader_FileDownloadFailed(ByVal ex As System.Exception) Handles FileToBeDownloaded.FileDownloadFailed
         'message_box.Show("An error has occured during download: " & ex.Message)
     End Sub
 
     'FIRES WHEN MORE OF THE FILE HAS BEEN DOWNLOADED
-    Private Sub _Downloader_AmountDownloadedChanged(ByVal iNewProgress As Long) Handles webFileDownloader.AmountDownloadedChanged
+    Private Sub _Downloader_AmountDownloadedChanged(ByVal iNewProgress As Long) Handles FileToBeDownloaded.AmountDownloadedChanged
         ProgBar.Value = Convert.ToInt32(iNewProgress)
-        lblProgress.Text = webFileDownloader.FormatFileSize(iNewProgress) & " of " & webFileDownloader.FormatFileSize(ProgBar.Maximum) & " downloaded"
+        lblProgress.Text = FileToBeDownloaded.FormatFileSize(iNewProgress) & " of " & FileToBeDownloaded.FormatFileSize(ProgBar.Maximum) & " downloaded"
         ProgBar.Refresh()
         lblProgress.Refresh()
         Application.DoEvents()
@@ -5191,8 +5194,8 @@ Public Class Form1
         Dim t As New frmMovieFanart
         t.ShowDialog()
         Try
-            If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
-                PictureBox7.ImageLocation = workingmoviedetails.fileinfo.fanartpath
+            If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
             Else
                 PictureBox7.Image = Nothing
             End If
@@ -5393,12 +5396,12 @@ Public Class Form1
     Private Sub actorcb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles actorcb.SelectedIndexChanged
 
 
-        For Each actor In workingmoviedetails.listactors
+        For Each actor In workingMovieDetails.listactors
             If actor.actorname = actorcb.SelectedItem Then
                 If actor.actorrole <> "" Then
                     roletxt.Text = actor.actorrole
                 End If
-                Dim temppath As String = workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename), "")
+                Dim temppath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
                 Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                 temppath = temppath & ".actors\" & tempname
                 If IO.File.Exists(temppath) Then
@@ -5652,7 +5655,7 @@ Public Class Form1
         Dim tempint As Integer = ComboBox1.SelectedIndex
         Dim oldmovie As String = ""
         Try
-            oldmovie = CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value
+            oldmovie = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
         Catch
         End Try
         ComboBox1.Items.Clear()
@@ -5771,7 +5774,7 @@ Public Class Form1
         If oldmovie <> "" Then
             Dim counted As Integer = ComboBox1.Items.Count - 1
             For f = 0 To counted
-                If CType(ComboBox1.Items(f), ValueDescriptionPair).Value = oldmovie Then
+                If CType(ComboBox1.Items(f), ValueDescriptionPair).value = oldmovie Then
                     ComboBox1.SelectedIndex = f
                     Exit For
                 End If
@@ -5813,7 +5816,7 @@ Public Class Form1
             ListBox2.Sorted = True
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -5831,7 +5834,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -5873,7 +5876,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -5898,7 +5901,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -5927,7 +5930,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -5949,7 +5952,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -5975,7 +5978,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6065,11 +6068,11 @@ Public Class Form1
     'zoom images
     Private Sub moviethumb_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles moviethumb.DoubleClick
         Try
-            If workingmoviedetails.fileinfo.posterpath <> Nothing Then
-                If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
+            If workingMovieDetails.fileinfo.posterpath <> Nothing Then
+                If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
-                    Using newimage As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+                    Using newimage As New Bitmap(workingMovieDetails.fileinfo.posterpath)
                         zoomimage(newimage)
                     End Using
                 End If
@@ -6081,11 +6084,11 @@ Public Class Form1
 
     Private Sub PictureBox7_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.DoubleClick
         Try
-            If workingmoviedetails.fileinfo.fanartpath <> Nothing Then
-                If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
+            If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
+                If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
-                    Using newimage As New Bitmap(workingmoviedetails.fileinfo.fanartpath)
+                    Using newimage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
                         zoomimage(newimage)
                     End Using
                 End If
@@ -6297,9 +6300,9 @@ Public Class Form1
     Private Sub TempStartMoviesReScraping()
         Dim FullFileContent As String = ""
         Dim Scraper As String = userPrefs.XBMC_Scraper
-        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingmoviedetails.fullmoviebody.imdbid, fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value))
+        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).value))
         If FullFileContent.ToLower <> "error" Then
-            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value), FullFileContent)
+            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).value), FullFileContent)
             RefreshMovieList()
         End If
         If messbox.Visible = True Then messbox.Close()
@@ -6309,42 +6312,42 @@ Public Class Form1
         Call loadinfofile()
 
         For f = 0 To fullMovieList.Count - 1
-            If fullMovieList(f).fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
+            If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
                 Dim newfullmovie As ComboList
                 newfullmovie = fullMovieList(f)
                 '-------------- Aqui
                 If userPrefs.ignorearticle = True Then
-                    If workingmoviedetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
-                        newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title.Substring(4, workingmoviedetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                    If workingMovieDetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
+                        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title.Substring(4, workingMovieDetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingMovieDetails.fullmoviebody.year & ")"
                     Else
-                        newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                     End If
                 Else
-                    newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                    newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 End If
-                newfullmovie.genre = workingmoviedetails.fullmoviebody.genre
-                Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
+                Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
                 Try
                     newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                 Catch ex2 As Exception
                 End Try
-                If workingmoviedetails.fileinfo.createdate <> Nothing Then
-                    newfullmovie.createdate = workingmoviedetails.fileinfo.createdate
-                ElseIf workingmoviedetails.fileinfo.createdate <> "" Then
-                    newfullmovie.createdate = workingmoviedetails.fileinfo.createdate = workingmoviedetails.fileinfo.createdate
+                If workingMovieDetails.fileinfo.createdate <> Nothing Then
+                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
+                ElseIf workingMovieDetails.fileinfo.createdate <> "" Then
+                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate = workingMovieDetails.fileinfo.createdate
                 Else
                     newfullmovie.createdate = newfullmovie.filedate
                 End If
-                newfullmovie.outline = workingmoviedetails.fullmoviebody.outline
-                newfullmovie.playcount = workingmoviedetails.fullmoviebody.playcount
-                newfullmovie.rating = workingmoviedetails.fullmoviebody.rating
-                newfullmovie.top250 = workingmoviedetails.fullmoviebody.top250
-                newfullmovie.runtime = workingmoviedetails.fullmoviebody.runtime
-                If workingmoviedetails.fullmoviebody.runtime.IndexOf(":") <> -1 Then
+                newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
+                newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
+                newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
+                newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
+                newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
+                If workingMovieDetails.fullmoviebody.runtime.IndexOf(":") <> -1 Then
                     Try
-                        workingmoviedetails.fullmoviebody.runtime = workingmoviedetails.fullmoviebody.runtime.Substring(workingmoviedetails.fullmoviebody.runtime.IndexOf(":") + 1, workingmoviedetails.fullmoviebody.runtime.Length - workingmoviedetails.fullmoviebody.runtime.IndexOf(":") - 1)
+                        workingMovieDetails.fullmoviebody.runtime = workingMovieDetails.fullmoviebody.runtime.Substring(workingMovieDetails.fullmoviebody.runtime.IndexOf(":") + 1, workingMovieDetails.fullmoviebody.runtime.Length - workingMovieDetails.fullmoviebody.runtime.IndexOf(":") - 1)
                     Catch ex As Exception
 
                     End Try
@@ -6380,7 +6383,7 @@ Public Class Form1
         messbox.Refresh()
         Application.DoEvents()
         If userPrefs.movies_useXBMC_Scraper = True Then
-            If workingmoviedetails.fullmoviebody.title = Nothing And workingmoviedetails.fullmoviebody.imdbid = Nothing Then
+            If workingMovieDetails.fullmoviebody.title = Nothing And workingMovieDetails.fullmoviebody.imdbid = Nothing Then
                 messbox.Close()
                 MsgBox("Can't rescrape this movie because it doesn't have any NFO File" & vbCrLf & "rebuild movie database, and search for new movies", MsgBoxStyle.OkOnly, "Error")
                 Exit Sub
@@ -6392,8 +6395,8 @@ Public Class Form1
             End If
         Else
             Try
-                If workingmoviedetails Is Nothing Then Exit Sub
-                If workingmoviedetails.fullmoviebody.title = Nothing And workingmoviedetails.fullmoviebody.imdbid = Nothing Then Exit Sub
+                If workingMovieDetails Is Nothing Then Exit Sub
+                If workingMovieDetails.fullmoviebody.title = Nothing And workingMovieDetails.fullmoviebody.imdbid = Nothing Then Exit Sub
                 Me.Cursor = Cursors.WaitCursor
                 'Dim scraper As New imdb.Classimdbscraper
                 Dim scraper As New Classimdb
@@ -6402,36 +6405,36 @@ Public Class Form1
                 Dim trailer As String
                 Dim thumbstring As New XmlDocument
                 Dim thisresult As XmlNode = Nothing
-                workingmoviedetails.alternativetitles.Clear()
-                workingmoviedetails.fullmoviebody.credits = Nothing
-                workingmoviedetails.fullmoviebody.director = Nothing
-                workingmoviedetails.fullmoviebody.genre = Nothing
-                workingmoviedetails.fullmoviebody.mpaa = Nothing
-                workingmoviedetails.fullmoviebody.outline = Nothing
-                workingmoviedetails.fullmoviebody.plot = Nothing
-                workingmoviedetails.fullmoviebody.premiered = Nothing
-                workingmoviedetails.fullmoviebody.rating = Nothing
-                workingmoviedetails.fullmoviebody.runtime = Nothing
-                workingmoviedetails.fullmoviebody.studio = Nothing
-                workingmoviedetails.fullmoviebody.tagline = Nothing
-                workingmoviedetails.fullmoviebody.thumbnails = Nothing
-                workingmoviedetails.fullmoviebody.title = Nothing
-                workingmoviedetails.fullmoviebody.top250 = Nothing
-                workingmoviedetails.fullmoviebody.trailer = Nothing
-                workingmoviedetails.fullmoviebody.votes = Nothing
-                workingmoviedetails.fullmoviebody.year = Nothing
-                workingmoviedetails.fullmoviebody.sortorder = Nothing
-                workingmoviedetails.fullmoviebody.country = Nothing
+                workingMovieDetails.alternativetitles.Clear()
+                workingMovieDetails.fullmoviebody.credits = Nothing
+                workingMovieDetails.fullmoviebody.director = Nothing
+                workingMovieDetails.fullmoviebody.genre = Nothing
+                workingMovieDetails.fullmoviebody.mpaa = Nothing
+                workingMovieDetails.fullmoviebody.outline = Nothing
+                workingMovieDetails.fullmoviebody.plot = Nothing
+                workingMovieDetails.fullmoviebody.premiered = Nothing
+                workingMovieDetails.fullmoviebody.rating = Nothing
+                workingMovieDetails.fullmoviebody.runtime = Nothing
+                workingMovieDetails.fullmoviebody.studio = Nothing
+                workingMovieDetails.fullmoviebody.tagline = Nothing
+                workingMovieDetails.fullmoviebody.thumbnails = Nothing
+                workingMovieDetails.fullmoviebody.title = Nothing
+                workingMovieDetails.fullmoviebody.top250 = Nothing
+                workingMovieDetails.fullmoviebody.trailer = Nothing
+                workingMovieDetails.fullmoviebody.votes = Nothing
+                workingMovieDetails.fullmoviebody.year = Nothing
+                workingMovieDetails.fullmoviebody.sortorder = Nothing
+                workingMovieDetails.fullmoviebody.country = Nothing
 
                 'Dim newscraper As New Classimdb
                 'body = newscraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, userprefs.imdbmirror)
                 'trailer = newscraper.gettrailerurl(workingmoviedetails.fullmoviebody.imdbid, userprefs.imdbmirror)
-                body = scraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
-                trailer = scraper.gettrailerurl(workingmoviedetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
+                body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
+                trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
                 Dim actors As String
-                actors = scraper.getimdbactors(userPrefs.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title)
+                actors = scraper.getimdbactors(userPrefs.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
                 If body = "MIC" Then
-                    workingmoviedetails.fullmoviebody.genre = "problem"
+                    workingMovieDetails.fullmoviebody.genre = "problem"
                 Else
 
                     thumbstring.LoadXml(body)
@@ -6444,23 +6447,23 @@ Public Class Form1
                         Select Case thisresult.Name
                             Case "title"
                                 If userPrefs.keepfoldername = False Then
-                                    workingmoviedetails.fullmoviebody.title = thisresult.InnerText
+                                    workingMovieDetails.fullmoviebody.title = thisresult.InnerText
                                 Else
                                     If userPrefs.usefoldernames = False Then
-                                        tempstring = IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename)
-                                        workingmoviedetails.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
+                                        tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                        workingMovieDetails.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
                                     Else
-                                        workingmoviedetails.fullmoviebody.title = fileFunction.cleanfilename(workingmoviedetails.fileinfo.foldername, False)
+                                        workingMovieDetails.fullmoviebody.title = fileFunction.cleanfilename(workingMovieDetails.fileinfo.foldername, False)
                                     End If
                                 End If
                             Case "country"
-                                workingmoviedetails.fullmoviebody.country = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.country = thisresult.InnerText
                             Case "alternativetitle"
-                                workingmoviedetails.alternativetitles.Add(thisresult.InnerText)
+                                workingMovieDetails.alternativetitles.Add(thisresult.InnerText)
                             Case "credits"
-                                workingmoviedetails.fullmoviebody.credits = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.credits = thisresult.InnerText
                             Case "director"
-                                workingmoviedetails.fullmoviebody.director = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                             Case "genre"
                                 Dim strarr() As String
                                 strarr = thisresult.InnerText.Split("/")
@@ -6468,67 +6471,67 @@ Public Class Form1
                                     strarr(count) = strarr(count).Replace(" ", "")
                                 Next
                                 If strarr.Length <= userPrefs.maxmoviegenre Then
-                                    workingmoviedetails.fullmoviebody.genre = thisresult.InnerText
+                                    workingMovieDetails.fullmoviebody.genre = thisresult.InnerText
                                 Else
                                     For f = 0 To userPrefs.maxmoviegenre - 1
                                         If f = 0 Then
-                                            workingmoviedetails.fullmoviebody.genre = strarr(f)
+                                            workingMovieDetails.fullmoviebody.genre = strarr(f)
                                         Else
-                                            workingmoviedetails.fullmoviebody.genre += " / " & strarr(f)
+                                            workingMovieDetails.fullmoviebody.genre += " / " & strarr(f)
                                         End If
                                     Next
                                 End If
                             Case "mpaa"
-                                workingmoviedetails.fullmoviebody.mpaa = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.mpaa = thisresult.InnerText
                             Case "outline"
-                                workingmoviedetails.fullmoviebody.outline = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.outline = thisresult.InnerText
                             Case "plot"
-                                workingmoviedetails.fullmoviebody.plot = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.plot = thisresult.InnerText
                             Case "premiered"
-                                workingmoviedetails.fullmoviebody.premiered = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.premiered = thisresult.InnerText
                             Case "rating"
-                                workingmoviedetails.fullmoviebody.rating = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.rating = thisresult.InnerText
                             Case "runtime"
-                                workingmoviedetails.fullmoviebody.runtime = thisresult.InnerText
-                                If workingmoviedetails.fullmoviebody.runtime.IndexOf(":") <> -1 Then
+                                workingMovieDetails.fullmoviebody.runtime = thisresult.InnerText
+                                If workingMovieDetails.fullmoviebody.runtime.IndexOf(":") <> -1 Then
                                     Try
-                                        workingmoviedetails.fullmoviebody.runtime = workingmoviedetails.fullmoviebody.runtime.Substring(workingmoviedetails.fullmoviebody.runtime.IndexOf(":") + 1, workingmoviedetails.fullmoviebody.runtime.Length - workingmoviedetails.fullmoviebody.runtime.IndexOf(":") - 1)
+                                        workingMovieDetails.fullmoviebody.runtime = workingMovieDetails.fullmoviebody.runtime.Substring(workingMovieDetails.fullmoviebody.runtime.IndexOf(":") + 1, workingMovieDetails.fullmoviebody.runtime.Length - workingMovieDetails.fullmoviebody.runtime.IndexOf(":") - 1)
                                     Catch ex As Exception
 
                                     End Try
                                 End If
                             Case "studio"
-                                workingmoviedetails.fullmoviebody.studio = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.studio = thisresult.InnerText
                             Case "tagline"
-                                workingmoviedetails.fullmoviebody.tagline = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.tagline = thisresult.InnerText
                             Case "top250"
-                                workingmoviedetails.fullmoviebody.top250 = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.top250 = thisresult.InnerText
                             Case "votes"
-                                workingmoviedetails.fullmoviebody.votes = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.votes = thisresult.InnerText
                             Case "year"
-                                workingmoviedetails.fullmoviebody.year = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.year = thisresult.InnerText
                             Case "cert"
                                 certificates.Add(thisresult.InnerText)
                             Case "id"
-                                workingmoviedetails.fullmoviebody.imdbid = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.imdbid = thisresult.InnerText
                         End Select
                     Next
                     Try
                         If userPrefs.gettrailer = True Then
                             If trailer <> Nothing Then
-                                workingmoviedetails.fullmoviebody.trailer = trailer
+                                workingMovieDetails.fullmoviebody.trailer = trailer
                             End If
                         End If
                     Catch
                     End Try
-                    actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, userPrefs.maxactors)
+                    actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, userPrefs.maxactors)
                     'actorlist = getimdbactors(userprefs.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, userprefs.maxactors)
                     Dim done As Boolean = False
                     For f = 0 To UBound(userPrefs.certificatepriority)
                         Try
                             For Each cert In certificates
                                 If cert.IndexOf(userPrefs.certificatepriority(f)) <> -1 Then
-                                    workingmoviedetails.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
+                                    workingMovieDetails.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
                                     done = True
                                     Exit For
                                 End If
@@ -6539,31 +6542,31 @@ Public Class Form1
                     Next
                 End If
                 'userprefs.certificatepriority(1)
-                workingmoviedetails.listthumbs.Clear()
+                workingMovieDetails.listthumbs.Clear()
                 If userPrefs.nfoposterscraper <> 0 Then
                     Dim thumbs As String = ""
 
                     If userPrefs.nfoposterscraper = 1 Or userPrefs.nfoposterscraper = 3 Or userPrefs.nfoposterscraper = 5 Or userPrefs.nfoposterscraper = 7 Or userPrefs.nfoposterscraper = 9 Or userPrefs.nfoposterscraper = 11 Or userPrefs.nfoposterscraper = 13 Or userPrefs.nfoposterscraper = 15 Then
                         Dim newobject3 As New IMPA.getimpaposters
-                        tempstring = newobject3.getimpathumbs(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                        tempstring = newobject3.getimpathumbs(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                         If tempstring <> Nothing Then thumbs = thumbs & tempstring
                     End If
 
                     If userPrefs.nfoposterscraper = 2 Or userPrefs.nfoposterscraper = 3 Or userPrefs.nfoposterscraper = 6 Or userPrefs.nfoposterscraper = 7 Or userPrefs.nfoposterscraper = 10 Or userPrefs.nfoposterscraper = 11 Or userPrefs.nfoposterscraper = 14 Or userPrefs.nfoposterscraper = 15 Then
                         Dim newobject2 As New tmdb_posters.Class1
-                        tempstring = newobject2.gettmdbposters(workingmoviedetails.fullmoviebody.imdbid)
+                        tempstring = newobject2.gettmdbposters(workingMovieDetails.fullmoviebody.imdbid)
                         If tempstring <> Nothing Then thumbs = thumbs & tempstring
                     End If
 
                     If userPrefs.nfoposterscraper = 4 Or userPrefs.nfoposterscraper = 5 Or userPrefs.nfoposterscraper = 6 Or userPrefs.nfoposterscraper = 7 Or userPrefs.nfoposterscraper = 12 Or userPrefs.nfoposterscraper = 13 Or userPrefs.nfoposterscraper = 14 Or userPrefs.nfoposterscraper = 15 Then
                         Dim newobject As New class_mpdb_thumbs.Class1
-                        tempstring = newobject.get_mpdb_thumbs(workingmoviedetails.fullmoviebody.imdbid)
+                        tempstring = newobject.get_mpdb_thumbs(workingMovieDetails.fullmoviebody.imdbid)
                         If tempstring <> Nothing Then thumbs = thumbs & tempstring
                     End If
 
                     If userPrefs.nfoposterscraper = 8 Or userPrefs.nfoposterscraper = 9 Or userPrefs.nfoposterscraper = 10 Or userPrefs.nfoposterscraper = 11 Or userPrefs.nfoposterscraper = 12 Or userPrefs.nfoposterscraper = 13 Or userPrefs.nfoposterscraper = 14 Or userPrefs.nfoposterscraper = 15 Then
                         Dim thumbscraper As New imdb_thumbs.Class1
-                        tempstring = thumbscraper.getimdbthumbs(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid)
+                        tempstring = thumbscraper.getimdbthumbs(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid)
                         If tempstring <> Nothing Then thumbs = thumbs & tempstring
                     End If
 
@@ -6579,14 +6582,14 @@ Public Class Form1
                         For Each thisresult In thumbstring("thumblist")
                             Select Case thisresult.Name
                                 Case "thumb"
-                                    workingmoviedetails.listthumbs.Add(thisresult.InnerText)
+                                    workingMovieDetails.listthumbs.Add(thisresult.InnerText)
                             End Select
                         Next
                     Catch
                     End Try
                 End If
 
-                workingmoviedetails.listactors.Clear()
+                workingMovieDetails.listactors.Clear()
                 If actorlist <> Nothing Then
                     Try
                         thumbstring.LoadXml(actorlist)
@@ -6612,7 +6615,7 @@ Public Class Form1
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
                                                     If detail.InnerText <> "" And userPrefs.actorseasy = True Then
-                                                        Dim workingpath As String = workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename), "")
+                                                        Dim workingpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
                                                         workingpath = workingpath & ".actors\"
                                                         Dim hg As New IO.DirectoryInfo(workingpath)
                                                         Dim destsorted As Boolean = False
@@ -6694,10 +6697,10 @@ Public Class Form1
                                                 End If
                                         End Select
                                     Next
-                                    workingmoviedetails.listactors.Add(newactor)
+                                    workingMovieDetails.listactors.Add(newactor)
                                     Dim actornew As New ActorDatabase
                                     actornew.actorname = newactor.actorname
-                                    actornew.movieid = workingmoviedetails.fullmoviebody.imdbid
+                                    actornew.movieid = workingMovieDetails.fullmoviebody.imdbid
                                     actorDB.Add(actornew)
                             End Select
                         Next
@@ -6706,14 +6709,14 @@ Public Class Form1
                 End If
 
                 Try
-                    Dim tempname As String = fileFunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                    If tempname <> Nothing Then workingmoviedetails.filedetails = fileFunction.get_hdtags(tempname)
-                    If workingmoviedetails.filedetails.filedetails_video.duration <> Nothing Then
+                    Dim tempname As String = fileFunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                    If tempname <> Nothing Then workingMovieDetails.filedetails = fileFunction.get_hdtags(tempname)
+                    If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
                             Dim hours As Integer
                             Dim minutes As Integer
-                            tempstring = workingmoviedetails.filedetails.filedetails_video.duration
+                            tempstring = workingMovieDetails.filedetails.filedetails_video.duration
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -6747,7 +6750,7 @@ Public Class Form1
                                 End If
                             End If
                             If minutes <> 0 Then
-                                workingmoviedetails.fullmoviebody.runtime = minutes.ToString & " min"
+                                workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
                             End If
                         Catch
 
@@ -6756,46 +6759,46 @@ Public Class Form1
                 Catch
                 End Try
 
-                nfoFunction.savemovienfo(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails, True)
+                nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                 Call loadinfofile()
 
                 For f = 0 To fullMovieList.Count - 1
-                    If fullMovieList(f).fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
+                    If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
                         Dim newfullmovie As ComboList
                         newfullmovie = fullMovieList(f)
                         '-------------- Aqui
                         If userPrefs.ignorearticle = True Then
-                            If workingmoviedetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
-                                newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title.Substring(4, workingmoviedetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                            If workingMovieDetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
+                                newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title.Substring(4, workingMovieDetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingMovieDetails.fullmoviebody.year & ")"
                             Else
-                                newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                                newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                             End If
                         Else
-                            newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                            newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                         End If
-                        newfullmovie.genre = workingmoviedetails.fullmoviebody.genre
-                        Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                        newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
+                        Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                         Catch ex2 As Exception
                         End Try
-                        If workingmoviedetails.fileinfo.createdate <> Nothing Then
-                            newfullmovie.createdate = workingmoviedetails.fileinfo.createdate
-                        ElseIf workingmoviedetails.fileinfo.createdate <> "" Then
-                            newfullmovie.createdate = workingmoviedetails.fileinfo.createdate = workingmoviedetails.fileinfo.createdate
+                        If workingMovieDetails.fileinfo.createdate <> Nothing Then
+                            newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
+                        ElseIf workingMovieDetails.fileinfo.createdate <> "" Then
+                            newfullmovie.createdate = workingMovieDetails.fileinfo.createdate = workingMovieDetails.fileinfo.createdate
                         Else
                             newfullmovie.createdate = newfullmovie.filedate
                         End If
-                        newfullmovie.outline = workingmoviedetails.fullmoviebody.outline
-                        newfullmovie.playcount = workingmoviedetails.fullmoviebody.playcount
-                        newfullmovie.rating = workingmoviedetails.fullmoviebody.rating
-                        newfullmovie.top250 = workingmoviedetails.fullmoviebody.top250
-                        newfullmovie.runtime = workingmoviedetails.fullmoviebody.runtime
-                        If workingmoviedetails.fullmoviebody.runtime.IndexOf(":") <> -1 Then
+                        newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
+                        newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
+                        newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
+                        newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
+                        newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
+                        If workingMovieDetails.fullmoviebody.runtime.IndexOf(":") <> -1 Then
                             Try
-                                workingmoviedetails.fullmoviebody.runtime = workingmoviedetails.fullmoviebody.runtime.Substring(workingmoviedetails.fullmoviebody.runtime.IndexOf(":") + 1, workingmoviedetails.fullmoviebody.runtime.Length - workingmoviedetails.fullmoviebody.runtime.IndexOf(":") - 1)
+                                workingMovieDetails.fullmoviebody.runtime = workingMovieDetails.fullmoviebody.runtime.Substring(workingMovieDetails.fullmoviebody.runtime.IndexOf(":") + 1, workingMovieDetails.fullmoviebody.runtime.Length - workingMovieDetails.fullmoviebody.runtime.IndexOf(":") - 1)
                             Catch ex As Exception
 
                             End Try
@@ -6828,36 +6831,36 @@ Public Class Form1
         End If
         If ComboBox1.SelectedItems.Count = 1 Then
             Dim tempstring As String = ""
-            Dim oldmovietitle As String = workingmoviedetails.fullmoviebody.title
+            Dim oldmovietitle As String = workingMovieDetails.fullmoviebody.title
             '-------------- Aqui
             If userPrefs.ignorearticle = True Then
                 If oldmovietitle.ToLower.IndexOf("the") = 0 Then
                     oldmovietitle = oldmovietitle.Substring(4, oldmovietitle.Length - 4) & ", The"
                 End If
             Else
-                oldmovietitle = oldmovietitle & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                oldmovietitle = oldmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
             End If
-            tempstring = " (" & workingmoviedetails.fullmoviebody.year & ")"
-            workingmoviedetails.fullmoviebody.title = titletxt.Text.Replace(tempstring, "")
-            workingmoviedetails.fullmoviebody.director = directortxt.Text
-            workingmoviedetails.fullmoviebody.credits = creditstxt.Text
-            workingmoviedetails.fullmoviebody.studio = studiotxt.Text
-            workingmoviedetails.fullmoviebody.genre = genretxt.Text
-            workingmoviedetails.fullmoviebody.votes = votestxt.Text
-            workingmoviedetails.fullmoviebody.rating = ratingtxt.Text
-            workingmoviedetails.fullmoviebody.runtime = runtimetxt.Text
-            workingmoviedetails.fullmoviebody.outline = outlinetxt.Text
-            workingmoviedetails.fullmoviebody.plot = plottxt.Text
-            workingmoviedetails.fullmoviebody.tagline = taglinetxt.Text
-            workingmoviedetails.fullmoviebody.mpaa = certtxt.Text
-            workingmoviedetails.fullmoviebody.sortorder = TextBox34.Text
+            tempstring = " (" & workingMovieDetails.fullmoviebody.year & ")"
+            workingMovieDetails.fullmoviebody.title = titletxt.Text.Replace(tempstring, "")
+            workingMovieDetails.fullmoviebody.director = directortxt.Text
+            workingMovieDetails.fullmoviebody.credits = creditstxt.Text
+            workingMovieDetails.fullmoviebody.studio = studiotxt.Text
+            workingMovieDetails.fullmoviebody.genre = genretxt.Text
+            workingMovieDetails.fullmoviebody.votes = votestxt.Text
+            workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
+            workingMovieDetails.fullmoviebody.runtime = runtimetxt.Text
+            workingMovieDetails.fullmoviebody.outline = outlinetxt.Text
+            workingMovieDetails.fullmoviebody.plot = plottxt.Text
+            workingMovieDetails.fullmoviebody.tagline = taglinetxt.Text
+            workingMovieDetails.fullmoviebody.mpaa = certtxt.Text
+            workingMovieDetails.fullmoviebody.sortorder = TextBox34.Text
             If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "None"
             If ComboBox3.SelectedItem <> "None" Then
-                workingmoviedetails.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
+                workingMovieDetails.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
             Else
-                workingmoviedetails.fullmoviebody.movieset = Nothing
+                workingMovieDetails.fullmoviebody.movieset = Nothing
             End If
-            nfoFunction.savemovienfo(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails, True)
+            nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
 
             'Dim newmovietitle As String = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
             'change 
@@ -6865,23 +6868,23 @@ Public Class Form1
             'title & year
             Dim newmovietitle As String
             Dim newmovietitleandyear As String
-            newmovietitle = workingmoviedetails.fullmoviebody.title
+            newmovietitle = workingMovieDetails.fullmoviebody.title
             '-------------- Aqui
             If userPrefs.ignorearticle = True Then
                 If newmovietitle.ToLower.IndexOf("the") = 0 Then
-                    newmovietitleandyear = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The (" & workingmoviedetails.fullmoviebody.year & ")"
+                    newmovietitleandyear = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The (" & workingMovieDetails.fullmoviebody.year & ")"
                     newmovietitle = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The"
                 Else
-                    newmovietitleandyear = newmovietitle & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                    newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 End If
             Else
-                newmovietitleandyear = newmovietitle & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
             End If
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).titleandyear = oldmovietitle Then
                     Dim newfullmovie As ComboList
                     newfullmovie = fullMovieList(f)
-                    Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                    Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                     Dim myDate2 As Date = filecreation2.LastWriteTime
                     Try
                         newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
@@ -6890,17 +6893,17 @@ Public Class Form1
 
                     newfullmovie.title = newmovietitle
                     newfullmovie.titleandyear = newmovietitleandyear
-                    newfullmovie.genre = workingmoviedetails.fullmoviebody.genre
-                    newfullmovie.playcount = workingmoviedetails.fullmoviebody.playcount
-                    newfullmovie.rating = workingmoviedetails.fullmoviebody.rating
-                    newfullmovie.top250 = workingmoviedetails.fullmoviebody.top250
-                    newfullmovie.sortorder = workingmoviedetails.fullmoviebody.sortorder
-                    newfullmovie.createdate = workingmoviedetails.fileinfo.createdate
-                    newfullmovie.runtime = workingmoviedetails.fullmoviebody.runtime
-                    newfullmovie.id = workingmoviedetails.fullmoviebody.imdbid
-                    newfullmovie.outline = workingmoviedetails.fullmoviebody.outline
-                    newfullmovie.movieset = workingmoviedetails.fullmoviebody.movieset
-                    newfullmovie.year = workingmoviedetails.fullmoviebody.year
+                    newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
+                    newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
+                    newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
+                    newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
+                    newfullmovie.sortorder = workingMovieDetails.fullmoviebody.sortorder
+                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
+                    newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
+                    newfullmovie.id = workingMovieDetails.fullmoviebody.imdbid
+                    newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
+                    newfullmovie.movieset = workingMovieDetails.fullmoviebody.movieset
+                    newfullmovie.year = workingMovieDetails.fullmoviebody.year
                     If newfullmovie.movieset = Nothing Then
                         newfullmovie.movieset = "None"
                     End If
@@ -6968,7 +6971,7 @@ Public Class Form1
                     If fullMovieList(f).fullpathandfilename = movie.fileinfo.fullpathandfilename Then
                         Dim newfullmovie As ComboList
                         newfullmovie = fullMovieList(f)
-                        Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                        Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
@@ -7000,7 +7003,7 @@ Public Class Form1
                     End If
                 Next
             Next
-            workingmovie.fullpathandfilename = ComboBox1.Items(startindex).description
+            workingMovie.fullpathandfilename = ComboBox1.Items(startindex).description
             Call ApplyFilters()
             Call loadinfofile()
 
@@ -7015,12 +7018,12 @@ Public Class Form1
                 Button13.Text = "Un&watched"
                 Button13.BackColor = Color.Red
                 Button13.Refresh()
-                workingmoviedetails.fullmoviebody.playcount = "0"
+                workingMovieDetails.fullmoviebody.playcount = "0"
             Else
                 Button13.Text = "&Watched"
                 Button13.BackColor = Color.LawnGreen
                 Button13.Refresh()
-                workingmoviedetails.fullmoviebody.playcount = "1"
+                workingMovieDetails.fullmoviebody.playcount = "1"
             End If
             Call quicksavemovie()
         ElseIf ComboBox1.SelectedItems.Count > 1 Then
@@ -7067,8 +7070,8 @@ Public Class Form1
 
     Private Sub SetMovieAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SetMovieAsWatchedToolStripMenuItem.Click
         'Try
-        If Not workingmoviedetails.fileinfo.fullpathandfilename Is Nothing Then
-            Call openfolder(workingmoviedetails.fileinfo.fullpathandfilename)
+        If Not workingMovieDetails.fileinfo.fullpathandfilename Is Nothing Then
+            Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
         Else
             MsgBox("There is no Movie selected to open")
         End If
@@ -7079,7 +7082,7 @@ Public Class Form1
     Private Sub RescrapeMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeMovieToolStripMenuItem.Click
         Dim tempstring As String = ""
         Try
-            tempstring = workingmoviedetails.fileinfo.fullpathandfilename
+            tempstring = workingMovieDetails.fileinfo.fullpathandfilename
             Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
             thePSI.Arguments = """" & tempstring & """"
             System.Diagnostics.Process.Start(thePSI)
@@ -7097,8 +7100,8 @@ Public Class Form1
         Dim t As New frmMovieFanart
         t.ShowDialog()
         Try
-            If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
-                PictureBox7.ImageLocation = workingmoviedetails.fileinfo.fanartpath
+            If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
             Else
                 PictureBox7.Image = Nothing
             End If
@@ -7120,11 +7123,11 @@ Public Class Form1
             MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
             Exit Sub
         End If
-        Dim oldmovietitle As String = workingmoviedetails.fileinfo.fullpathandfilename
+        Dim oldmovietitle As String = workingMovieDetails.fileinfo.fullpathandfilename
         Dim newmovietitle As String = ""
         Dim MyFormObject As New Form2()
         MyFormObject.ShowDialog()
-        newmovietitle = workingmoviedetails.fileinfo.fullpathandfilename
+        newmovietitle = workingMovieDetails.fileinfo.fullpathandfilename
 
 
         For f = 0 To fullMovieList.Count - 1
@@ -7154,7 +7157,7 @@ Public Class Form1
                 'Else
                 '    newmovietitle2 = newmovietitle2 & " (" & newfullmovie.year & ")"
                 'End If
-                newfullmovie = nfoFunction.loadbasicmovienfo(workingmoviedetails.fileinfo.fullpathandfilename, "movielist")
+                newfullmovie = nfoFunction.loadbasicmovienfo(workingMovieDetails.fileinfo.fullpathandfilename, "movielist")
 
 
 
@@ -7194,21 +7197,21 @@ Public Class Form1
                 newfullmovie2 = filteredList(f)
                 newfullmovie2.titleandyear = newmovietitle
                 filteredList.RemoveAt(f)
-                Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
                 Try
                     newfullmovie2.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                 Catch ex2 As Exception
                 End Try
-                newfullmovie2.filename = workingmoviedetails.fileinfo.filename
-                newfullmovie2.foldername = workingmoviedetails.fileinfo.foldername
-                newfullmovie2.fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename
-                newfullmovie2.genre = workingmoviedetails.fullmoviebody.genre
-                newfullmovie2.id = workingmoviedetails.fullmoviebody.imdbid
-                newfullmovie2.playcount = workingmoviedetails.fullmoviebody.playcount
-                newfullmovie2.rating = workingmoviedetails.fullmoviebody.rating
-                newfullmovie2.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
-                newfullmovie2.year = workingmoviedetails.fullmoviebody.year
+                newfullmovie2.filename = workingMovieDetails.fileinfo.filename
+                newfullmovie2.foldername = workingMovieDetails.fileinfo.foldername
+                newfullmovie2.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename
+                newfullmovie2.genre = workingMovieDetails.fullmoviebody.genre
+                newfullmovie2.id = workingMovieDetails.fullmoviebody.imdbid
+                newfullmovie2.playcount = workingMovieDetails.fullmoviebody.playcount
+                newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating
+                newfullmovie2.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                newfullmovie2.year = workingMovieDetails.fullmoviebody.year
 
                 filteredList.Add(newfullmovie2)
                 Exit For
@@ -7234,8 +7237,8 @@ Public Class Form1
         Try
             If Not IO.File.Exists(workingmoviedetails.fileinfo.trailerpath) Then
 
-                If workingmoviedetails.fullmoviebody.trailer <> "" Then
-                    Dim trailerurl As String = workingmoviedetails.fullmoviebody.trailer
+                If workingMovieDetails.fullmoviebody.trailer <> "" Then
+                    Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
                     Dim tempstring3 As String
 
 
@@ -7243,8 +7246,8 @@ Public Class Form1
 
                     Try
                         trailerdownloadpanel.Visible = True
-                        webFileDownloader = New WebFileDownloader
-                        webFileDownloader.DownloadFileWithProgress(trailerurl, workingmoviedetails.fileinfo.trailerpath)
+                        FileToBeDownloaded = New WebFileDownloader
+                        FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
                     Catch ex As Exception
                         'message_box.Show("Error: " & ex.Message)
                     End Try
@@ -7258,7 +7261,7 @@ Public Class Form1
                     Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
 
 
-                    file.WriteLine(workingmoviedetails.fileinfo.trailerpath)
+                    file.WriteLine(workingMovieDetails.fileinfo.trailerpath)
                     file.Close()
 
 
@@ -7296,11 +7299,11 @@ Public Class Form1
 
     Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click
         filterOverride = True
-        Dim newlist As New List(Of combolist)
+        Dim newlist As New List(Of ComboList)
         newlist.Clear()
         For Each movie In fullMovieList
-            If Not IO.File.Exists(filefunction.getfanartpath(movie.fullpathandfilename)) Then
-                Dim movietoadd As New combolist
+            If Not IO.File.Exists(fileFunction.getfanartpath(movie.fullpathandfilename)) Then
+                Dim movietoadd As New ComboList
                 movietoadd.fullpathandfilename = movie.fullpathandfilename
                 movietoadd.titleandyear = movie.titleandyear
                 movietoadd.filename = movie.filename
@@ -7320,11 +7323,11 @@ Public Class Form1
 
     Private Sub ListMoviesWithoutPostersToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutPostersToolStripMenuItem.Click
         filterOverride = True
-        Dim newlist As New List(Of combolist)
+        Dim newlist As New List(Of ComboList)
         newlist.Clear()
         For Each movie In fullMovieList
-            If Not IO.File.Exists(filefunction.getposterpath(movie.fullpathandfilename)) Then
-                Dim movietoadd As New combolist
+            If Not IO.File.Exists(fileFunction.getposterpath(movie.fullpathandfilename)) Then
+                Dim movietoadd As New ComboList
                 movietoadd.fullpathandfilename = movie.fullpathandfilename
                 movietoadd.titleandyear = movie.titleandyear
                 movietoadd.filename = movie.filename
@@ -7346,36 +7349,36 @@ Public Class Form1
         If Not bckrescrapewizard.IsBusy Then
 
 
-            batchlist.credits = False
-            batchlist.director = False
-            batchlist.genre = False
-            batchlist.mediatags = False
+            batchList.credits = False
+            batchList.director = False
+            batchList.genre = False
+            batchList.mediatags = False
 
-            batchlist.mpaa = False
-            batchlist.outline = False
-            batchlist.plot = False
+            batchList.mpaa = False
+            batchList.outline = False
+            batchList.plot = False
 
-            batchlist.premiered = False
-            batchlist.rating = False
-            batchlist.runtime = False
-            batchlist.studio = False
-            batchlist.tagline = False
-            batchlist.title = False
-            batchlist.top250 = False
-            batchlist.trailer = False
-            batchlist.votes = False
-            batchlist.year = False
-            batchlist.posterurls = False
-            batchlist.missingposters = False
-            batchlist.actors = False
-            batchlist.missingfanart = False
+            batchList.premiered = False
+            batchList.rating = False
+            batchList.runtime = False
+            batchList.studio = False
+            batchList.tagline = False
+            batchList.title = False
+            batchList.top250 = False
+            batchList.trailer = False
+            batchList.votes = False
+            batchList.year = False
+            batchList.posterurls = False
+            batchList.missingposters = False
+            batchList.actors = False
+            batchList.missingfanart = False
 
-            batchlist.activate = False
+            batchList.activate = False
 
             Dim displaywizard As New frmBatchScraper
             displaywizard.ShowDialog()
 
-            If batchlist.activate = True Then
+            If batchList.activate = True Then
                 ToolStripStatusLabel7.Visible = True
                 'ToolStripProgressBar6.Visible = True
                 bckrescrapewizard.RunWorkerAsync()
@@ -7397,31 +7400,31 @@ Public Class Form1
         Dim missingfanart As Boolean = False
         Dim mediatags As Boolean = False
 
-        If batchlist.credits = True Then bodyscraper = True
-        If batchlist.director = True Then bodyscraper = True
-        If batchlist.genre = True Then bodyscraper = True
-        If batchlist.mpaa = True Then bodyscraper = True
-        If batchlist.plot = True Then bodyscraper = True
-        If batchlist.premiered = True Then bodyscraper = True
-        If batchlist.rating = True Then bodyscraper = True
-        If batchlist.runtime = True Then bodyscraper = True
-        If batchlist.studio = True Then bodyscraper = True
-        If batchlist.tagline = True Then bodyscraper = True
-        If batchlist.outline = True Then bodyscraper = True
-        If batchlist.top250 = True Then bodyscraper = True
-        If batchlist.votes = True Then bodyscraper = True
-        If batchlist.country = True Then bodyscraper = True
-        If batchlist.trailer = True Then trailerscraper = True
+        If batchList.credits = True Then bodyscraper = True
+        If batchList.director = True Then bodyscraper = True
+        If batchList.genre = True Then bodyscraper = True
+        If batchList.mpaa = True Then bodyscraper = True
+        If batchList.plot = True Then bodyscraper = True
+        If batchList.premiered = True Then bodyscraper = True
+        If batchList.rating = True Then bodyscraper = True
+        If batchList.runtime = True Then bodyscraper = True
+        If batchList.studio = True Then bodyscraper = True
+        If batchList.tagline = True Then bodyscraper = True
+        If batchList.outline = True Then bodyscraper = True
+        If batchList.top250 = True Then bodyscraper = True
+        If batchList.votes = True Then bodyscraper = True
+        If batchList.country = True Then bodyscraper = True
+        If batchList.trailer = True Then trailerscraper = True
 
-        If batchlist.posterurls = True Then thumburlscraper = True
+        If batchList.posterurls = True Then thumburlscraper = True
 
-        If batchlist.actors = True Then actorscraper = True
+        If batchList.actors = True Then actorscraper = True
 
-        If batchlist.missingposters = True Then missingposter = True
+        If batchList.missingposters = True Then missingposter = True
 
-        If batchlist.missingfanart = True Then missingfanart = True
+        If batchList.missingfanart = True Then missingfanart = True
 
-        If batchlist.mediatags = True Then mediatags = True
+        If batchList.mediatags = True Then mediatags = True
 
         Dim tempmovielist As New List(Of String)
         For Each movie In fullMovieList
@@ -7836,11 +7839,11 @@ Public Class Form1
 
 
 
-                    If mediatags = True Or batchlist.runtime = True Then
+                    If mediatags = True Or batchList.runtime = True Then
                         If userPrefs.enablehdtags = True Then
                             Try
-                                Dim mediapath As String = filefunction.getfilename(movietoalter.fileinfo.fullpathandfilename)
-                                movietemplate.filedetails = filefunction.get_hdtags(mediapath)
+                                Dim mediapath As String = fileFunction.getfilename(movietoalter.fileinfo.fullpathandfilename)
+                                movietemplate.filedetails = fileFunction.get_hdtags(mediapath)
                                 Try
                                     Dim tempstring As String
                                     Dim tempint As Integer
@@ -7881,7 +7884,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.runtime = True Then
+                    If batchList.runtime = True Then
                         If movietemplate.filedetails.filedetails_video.duration <> Nothing Then
                             Dim tempstring As String
                             tempstring = movietemplate.filedetails.filedetails_video.duration
@@ -7898,7 +7901,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.director = True Then
+                    If batchList.director = True Then
                         If movietemplate.fullmoviebody.director <> Nothing Then
                             If movietemplate.fullmoviebody.director <> "" Then
                                 movietoalter.fullmoviebody.director = movietemplate.fullmoviebody.director
@@ -7906,21 +7909,21 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.credits = True Then
+                    If batchList.credits = True Then
                         If movietemplate.fullmoviebody.credits <> Nothing Then
                             If movietemplate.fullmoviebody.credits <> "" Then
                                 movietoalter.fullmoviebody.credits = movietemplate.fullmoviebody.credits
                             End If
                         End If
                     End If
-                    If batchlist.country = True Then
+                    If batchList.country = True Then
                         If movietemplate.fullmoviebody.country <> Nothing Then
                             If movietemplate.fullmoviebody.country <> "" Then
                                 movietoalter.fullmoviebody.country = movietemplate.fullmoviebody.country
                             End If
                         End If
                     End If
-                    If batchlist.genre = True Then
+                    If batchList.genre = True Then
                         If movietemplate.fullmoviebody.genre <> Nothing Then
                             If movietemplate.fullmoviebody.genre <> "" Then
                                 movietoalter.fullmoviebody.genre = movietemplate.fullmoviebody.genre
@@ -7928,7 +7931,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.mpaa = True Then
+                    If batchList.mpaa = True Then
                         If movietemplate.fullmoviebody.mpaa <> Nothing Then
                             If movietemplate.fullmoviebody.mpaa <> "" Then
                                 movietoalter.fullmoviebody.mpaa = movietemplate.fullmoviebody.mpaa
@@ -7936,7 +7939,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.plot = True Then
+                    If batchList.plot = True Then
                         If movietemplate.fullmoviebody.plot <> Nothing Then
                             If movietemplate.fullmoviebody.plot <> "" Then
                                 movietoalter.fullmoviebody.plot = movietemplate.fullmoviebody.plot
@@ -7944,7 +7947,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.premiered = True Then
+                    If batchList.premiered = True Then
                         If movietemplate.fullmoviebody.premiered <> Nothing Then
                             If movietemplate.fullmoviebody.premiered <> "" Then
                                 movietoalter.fullmoviebody.premiered = movietemplate.fullmoviebody.premiered
@@ -7952,7 +7955,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.rating = True Then
+                    If batchList.rating = True Then
                         If movietemplate.fullmoviebody.rating <> Nothing Then
                             If movietemplate.fullmoviebody.rating <> "" Then
                                 movietoalter.fullmoviebody.rating = movietemplate.fullmoviebody.rating
@@ -7962,7 +7965,7 @@ Public Class Form1
 
 
 
-                    If batchlist.studio = True Then
+                    If batchList.studio = True Then
                         If movietemplate.fullmoviebody.studio <> Nothing Then
                             If movietemplate.fullmoviebody.studio <> "" Then
                                 movietoalter.fullmoviebody.studio = movietemplate.fullmoviebody.studio
@@ -7970,7 +7973,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.tagline = True Then
+                    If batchList.tagline = True Then
                         If movietemplate.fullmoviebody.tagline <> Nothing Then
                             If movietemplate.fullmoviebody.tagline <> "" Then
                                 movietoalter.fullmoviebody.tagline = movietemplate.fullmoviebody.tagline
@@ -7978,7 +7981,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.outline = True Then
+                    If batchList.outline = True Then
                         If movietemplate.fullmoviebody.outline <> Nothing Then
                             If movietemplate.fullmoviebody.outline <> "" Then
                                 movietoalter.fullmoviebody.outline = movietemplate.fullmoviebody.outline
@@ -7986,7 +7989,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.top250 = True Then
+                    If batchList.top250 = True Then
                         If movietemplate.fullmoviebody.top250 <> Nothing Then
                             If movietemplate.fullmoviebody.top250 <> "" Then
                                 movietoalter.fullmoviebody.top250 = movietemplate.fullmoviebody.top250
@@ -7994,7 +7997,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.votes = True Then
+                    If batchList.votes = True Then
                         If movietemplate.fullmoviebody.votes <> Nothing Then
                             If movietemplate.fullmoviebody.votes <> "" Then
                                 movietoalter.fullmoviebody.votes = movietemplate.fullmoviebody.votes
@@ -8002,7 +8005,7 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.trailer = True Then
+                    If batchList.trailer = True Then
                         If movietemplate.fullmoviebody.trailer <> Nothing Then
                             If movietemplate.fullmoviebody.trailer <> "" Then
                                 movietoalter.fullmoviebody.trailer = movietemplate.fullmoviebody.trailer
@@ -8010,18 +8013,18 @@ Public Class Form1
                         End If
                     End If
 
-                    If batchlist.actors = True Then
+                    If batchList.actors = True Then
                         If Not movietemplate.listactors Is Nothing Then
                             movietoalter.listactors = movietemplate.listactors
                         End If
                     End If
 
-                    If batchlist.posterurls = True Then
+                    If batchList.posterurls = True Then
                         If Not movietemplate.listthumbs Is Nothing Then
                             movietoalter.listthumbs = movietemplate.listthumbs
                         End If
                     End If
-                    If batchlist.mediatags = True Then
+                    If batchList.mediatags = True Then
                         If Not movietemplate.filedetails Is Nothing Then
                             movietoalter.filedetails = movietemplate.filedetails
                         End If
@@ -8270,7 +8273,7 @@ Public Class Form1
                             newfullmovie.foldername = filefunction.getlastfolder(tempmovielist(f))
                             newfullmovie.filename = IO.Path.GetFileName(tempmovielist(f))
                             newfullmovie.id = movietoalter.fullmoviebody.imdbid
-                            Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                            Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim myDate2 As Date = filecreation2.LastWriteTime
                             Try
                                 newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
@@ -8306,7 +8309,7 @@ Public Class Form1
                             fullMovieList.RemoveAt(g)
                             fullMovieList.Add(newfullmovie)
 
-                            If workingmovie.fullpathandfilename = newfullmovie.fullpathandfilename Then
+                            If workingMovie.fullpathandfilename = newfullmovie.fullpathandfilename Then
                                 Call loadinfofile()
                             End If
                             Exit For
@@ -8327,7 +8330,7 @@ Public Class Form1
         If e.ProgressPercentage = 999999 Then
             ToolStripStatusLabel7.Text = e.UserState
         ElseIf e.ProgressPercentage = 888888 Then
-            If e.UserState = workingmoviedetails.fileinfo.fullpathandfilename Then
+            If e.UserState = workingMovieDetails.fileinfo.fullpathandfilename Then
                 Call loadinfofile()
             End If
         End If
@@ -9332,7 +9335,7 @@ Public Class Form1
 
     Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox1.DoubleClick
         Dim tempstring As String
-        tempstring = CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value
+        tempstring = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
         Dim playlist As New List(Of String)
         tempstring = filefunction.getfilename(tempstring)
         playlist = filefunction.getmedialist(tempstring)
@@ -9822,7 +9825,7 @@ Public Class Form1
         indexunderthemouse = Me.ComboBox1.IndexFromPoint(MousePositionInClientCoords)
         If indexunderthemouse > -1 Then
             Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
-            Dim tempstring As String = CType(ComboBox1.Items(indexunderthemouse), ValueDescriptionPair).Value
+            Dim tempstring As String = CType(ComboBox1.Items(indexunderthemouse), ValueDescriptionPair).value
             If overitem <> tempstring Then
                 overitem = tempstring
                 For Each movie In fullMovieList
@@ -9882,21 +9885,21 @@ Public Class Form1
                 TextBox34.Visible = True
                 Dim done As Boolean = False
                 For Each movie In filteredList
-                    If movie.fullpathandfilename Is CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value Then
+                    If movie.fullpathandfilename Is CType(ComboBox1.SelectedItem, ValueDescriptionPair).value Then
                         If IO.File.Exists(movie.fullpathandfilename) Then
-                            If workingmovie.fullpathandfilename <> movie.fullpathandfilename Then
-                                workingmovie.filedate = movie.filedate
-                                workingmovie.filename = movie.foldername
-                                workingmovie.foldername = movie.foldername
-                                workingmovie.fullpathandfilename = movie.fullpathandfilename
-                                workingmovie.genre = movie.genre
-                                workingmovie.id = movie.id
-                                workingmovie.playcount = movie.playcount
-                                workingmovie.rating = movie.rating
-                                workingmovie.title = movie.title
-                                workingmovie.titleandyear = movie.titleandyear
-                                workingmovie.top250 = movie.top250
-                                workingmovie.year = movie.year
+                            If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
+                                workingMovie.filedate = movie.filedate
+                                workingMovie.filename = movie.foldername
+                                workingMovie.foldername = movie.foldername
+                                workingMovie.fullpathandfilename = movie.fullpathandfilename
+                                workingMovie.genre = movie.genre
+                                workingMovie.id = movie.id
+                                workingMovie.playcount = movie.playcount
+                                workingMovie.rating = movie.rating
+                                workingMovie.title = movie.title
+                                workingMovie.titleandyear = movie.titleandyear
+                                workingMovie.top250 = movie.top250
+                                workingMovie.year = movie.year
                                 Call loadinfofile()
                             Else
                                 If needtoload = True Then Call loadinfofile()
@@ -9904,18 +9907,18 @@ Public Class Form1
                             done = True
                             Exit For
                         Else
-                            workingmovie.filedate = Nothing
-                            workingmovie.filename = Nothing
-                            workingmovie.foldername = Nothing
-                            workingmovie.fullpathandfilename = Nothing
-                            workingmovie.genre = Nothing
-                            workingmovie.id = Nothing
-                            workingmovie.playcount = Nothing
-                            workingmovie.rating = Nothing
-                            workingmovie.title = Nothing
-                            workingmovie.titleandyear = Nothing
-                            workingmovie.top250 = Nothing
-                            workingmovie.year = Nothing
+                            workingMovie.filedate = Nothing
+                            workingMovie.filename = Nothing
+                            workingMovie.foldername = Nothing
+                            workingMovie.fullpathandfilename = Nothing
+                            workingMovie.genre = Nothing
+                            workingMovie.id = Nothing
+                            workingMovie.playcount = Nothing
+                            workingMovie.rating = Nothing
+                            workingMovie.title = Nothing
+                            workingMovie.titleandyear = Nothing
+                            workingMovie.top250 = Nothing
+                            workingMovie.year = Nothing
                             titletxt.Text = ""
                             TextBox3.Text = ""
                             outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
@@ -10188,11 +10191,11 @@ Public Class Form1
         Dim tempstring As String = ""
         Dim tab As String = TabControl2.SelectedTab.Text
         If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" Then
-            If workingmoviedetails Is Nothing And movieFolders.Count = 0 And userPrefs.offlinefolders.Count = 0 Then
+            If workingMovieDetails Is Nothing And movieFolders.Count = 0 And userPrefs.offlinefolders.Count = 0 Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 MsgBox("There are no movies in your list to work on" & vbCrLf & "Add movie folders in the Folders Tab" & vbCrLf & "Then select the ""Search For New Movies"" Tab")
                 Exit Sub
-            ElseIf workingmoviedetails Is Nothing And movieFolders.Count > 0 And tab <> "Search for new movies" Then
+            ElseIf workingMovieDetails Is Nothing And movieFolders.Count > 0 And tab <> "Search for new movies" Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 If fullMovieList.Count > 0 Then
                     MsgBox("No Movie is selected")
@@ -10207,15 +10210,15 @@ Public Class Form1
 
         End If
         If tab = "" Then
-            If workingmoviedetails.fullmoviebody.imdbid <> Nothing Then
+            If workingMovieDetails.fullmoviebody.imdbid <> Nothing Then
                 If userPrefs.externalbrowser = True Then
                     Me.TabControl2.SelectedIndex = currentTabIndex
-                    tempstring = "http://www.imdb.com/title/" & workingmoviedetails.fullmoviebody.imdbid & "/"
+                    tempstring = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
                     Process.Start(tempstring)
                 Else
 
                     Dim url As String
-                    url = "http://www.imdb.com/title/" & workingmoviedetails.fullmoviebody.imdbid & "/"
+                    url = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
                     Try
                         If WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> url Then
                             WebBrowser2.Stop()
@@ -10248,7 +10251,7 @@ Public Class Form1
             currentTabIndex = TabControl2.SelectedIndex
         ElseIf tab.ToLower = "open folder" Then
             Me.TabControl2.SelectedIndex = currentTabIndex
-            Call openfolder(workingmoviedetails.fileinfo.fullpathandfilename)
+            Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
         ElseIf tab.ToLower = "Posters" Then
             Me.TabControl2.SelectedIndex = currentTabIndex
         ElseIf tab.ToLower = "rescrape movie" Then
@@ -10293,12 +10296,12 @@ Public Class Form1
     Private Sub setup_changemovie()
         Dim tempstring As String = ""
         If userPrefs.usefoldernames = False Then
-            tempstring = filefunction.cleanfilename(IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename))
+            tempstring = filefunction.cleanfilename(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename))
         Else
-            tempstring = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename)
+            tempstring = filefunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename)
         End If
-        If workingmoviedetails.fileinfo.fullpathandfilename.ToLower.IndexOf("\video_ts\") <> -1 Then
-            tempstring = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename)
+        If workingMovieDetails.fileinfo.fullpathandfilename.ToLower.IndexOf("\video_ts\") <> -1 Then
+            tempstring = filefunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename)
         End If
         Dim url As String
         url = Form1.userPrefs.imdbmirror & "find?s=tt&q=" & tempstring
@@ -10353,7 +10356,7 @@ Public Class Form1
         Dim scraperfunction As New Classimdb
         Dim tmdbposterscraper As New tmdb_posters.Class1
         fanartarray.Clear()
-        Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingmoviedetails.fullmoviebody.imdbid)
+        Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingMovieDetails.fullmoviebody.imdbid)
         'Dim tmdbimageresults As String = gettmdbposters_newapi(workingmoviedetails.fullmoviebody.imdbid)
         Dim bannerslist As New XmlDocument
         Try
@@ -10652,7 +10655,7 @@ Public Class Form1
                     If Form1.userPrefs.resizefanart = 1 Then
                         Try
                             Dim tempbitmap As Bitmap = bmp
-                            tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Catch ex As Exception
                             tempstring = ex.Message.ToString
                         End Try
@@ -10664,10 +10667,10 @@ Public Class Form1
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                             Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
                             Threading.Thread.CurrentThread.Sleep(30)
-                            bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     ElseIf Form1.userPrefs.resizefanart = 3 Then
                         If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -10677,25 +10680,25 @@ Public Class Form1
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                             Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
                             Threading.Thread.CurrentThread.Sleep(30)
-                            bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     End If
-                    Dim exists As Boolean = System.IO.File.Exists(workingmoviedetails.fileinfo.fanartpath)
+                    Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
                     If exists = True Then
 
 
                         'mainfanart = New PictureBox
-                        PictureBox2.ImageLocation = workingmoviedetails.fileinfo.fanartpath
-                        PictureBox7.ImageLocation = workingmoviedetails.fileinfo.fanartpath
+                        PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         For Each paths In userPrefs.offlinefolders
                             Dim offlinepath As String = paths & "\"
-                            If workingmoviedetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                            If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
-                                mediapath = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                                Call offlinedvd(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails.fullmoviebody.title, mediapath)
+                                mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
                     Else
@@ -10719,7 +10722,7 @@ Public Class Form1
         For f = 0 To fullMovieList.Count - 1
             Dim newmovie As New ComboList
             newmovie = fullMovieList(f)
-            If newmovie.fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
+            If newmovie.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
                 If newmovie.missingdata1 = 3 Then
                     newmovie.missingdata1 = 2
                     replace = True
@@ -10746,7 +10749,7 @@ Public Class Form1
         For f = 0 To fullMovieList.Count - 1
             Dim newmovie As New ComboList
             newmovie = fullMovieList(f)
-            If newmovie.fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
+            If newmovie.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
                 If newmovie.missingdata1 = 3 Then
                     newmovie.missingdata1 = 1
                     replace = True
@@ -10773,7 +10776,7 @@ Public Class Form1
     End Sub
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        openFD.InitialDirectory = workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename), "")
+        openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
         openFD.Title = "Select a jpeg image file"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
@@ -10802,7 +10805,7 @@ Public Class Form1
             If Form1.userPrefs.resizefanart = 1 Then
                 Try
                     Dim tempbitmap As Bitmap = bmp
-                    tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                    tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                 Catch ex As Exception
                     tempstring = ex.Message.ToString
                 End Try
@@ -10814,10 +10817,10 @@ Public Class Form1
                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                     gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                     Dim tempbitmap As Bitmap = bm_dest
-                    tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                    tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                 Else
                     Threading.Thread.CurrentThread.Sleep(30)
-                    bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                    bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                 End If
             ElseIf Form1.userPrefs.resizefanart = 3 Then
                 If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -10827,26 +10830,26 @@ Public Class Form1
                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                     gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                     Dim tempbitmap As Bitmap = bm_dest
-                    tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                    tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                 Else
                     Threading.Thread.CurrentThread.Sleep(30)
-                    bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                    bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                 End If
             End If
 
-            Dim exists As Boolean = System.IO.File.Exists(workingmoviedetails.fileinfo.fanartpath)
+            Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
             If exists = True Then
                 For Each paths In userPrefs.offlinefolders
-                    If workingmoviedetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
+                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                         Dim mediapath As String
-                        mediapath = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                        Call offlinedvd(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails.fullmoviebody.title, mediapath)
+                        mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                        Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                     End If
                 Next
 
                 'mainfanart = New PictureBox
-                PictureBox2.ImageLocation = workingmoviedetails.fileinfo.fanartpath
-                PictureBox7.ImageLocation = workingmoviedetails.fileinfo.fanartpath
+                PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
             Else
                 PictureBox2.ImageLocation = defaultFanart
             End If
@@ -10995,15 +10998,15 @@ Public Class Form1
         thumbeditsmade = False
         Try
             Dim stream As New System.IO.MemoryStream
-            PictureBox2.Image.Save(workingmoviedetails.fileinfo.fanartpath, System.Drawing.Imaging.ImageFormat.Jpeg)
+            PictureBox2.Image.Save(workingMovieDetails.fileinfo.fanartpath, System.Drawing.Imaging.ImageFormat.Jpeg)
             PictureBox7.Image = PictureBox2.Image
             Label16.Text = PictureBox2.Image.Width
             Label17.Text = PictureBox2.Image.Height
             For Each paths In userPrefs.offlinefolders
-                If workingmoviedetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
+                If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                     Dim mediapath As String
-                    mediapath = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                    Call offlinedvd(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails.fullmoviebody.title, mediapath)
+                    mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                    Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                 End If
             Next
             btnresetimage.Visible = False
@@ -11087,7 +11090,7 @@ Public Class Form1
             Dim scraperfunction As New Classimdb
             Dim tmdbposterscraper As New tmdb_posters.Class1
 
-            Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingmoviedetails.fullmoviebody.imdbid)
+            Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingMovieDetails.fullmoviebody.imdbid)
             Dim bannerslist As New XmlDocument
             bannerslist.LoadXml(tmdbimageresults)
             Dim thisresult As XmlNode = Nothing
@@ -11347,7 +11350,7 @@ Public Class Form1
         messbox.Refresh()
         Call initialiseposters()
         Dim newobject2 As New imdb_thumbs.Class1
-        Dim posters(,) As String = newobject2.getimdbposters(workingmoviedetails.fullmoviebody.imdbid)
+        Dim posters(,) As String = newobject2.getimdbposters(workingMovieDetails.fullmoviebody.imdbid)
         For f = 0 To UBound(posters)
             If posters(f, 0) <> Nothing Then
                 If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
@@ -11592,7 +11595,7 @@ Public Class Form1
         Dim teststring As New XmlDocument
         Dim testthumbs As String
         Try
-            testthumbs = newobject.get_mpdb_thumbs(workingmoviedetails.fullmoviebody.imdbid)
+            testthumbs = newobject.get_mpdb_thumbs(workingMovieDetails.fullmoviebody.imdbid)
             testthumbs = "<totalthumbs>" & testthumbs & "</totalthumbs>"
             teststring.LoadXml(testthumbs)
 
@@ -11634,7 +11637,7 @@ Public Class Form1
         Call initialiseposters()
         Dim newobject2 As New IMPA.getimpaposters
         Try
-            Dim posters(,) As String = newobject2.getimpaafulllist(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+            Dim posters(,) As String = newobject2.getimpaafulllist(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
             For f = 0 To UBound(posters)
                 If posters(f, 0) <> Nothing Then
                     If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
@@ -11722,16 +11725,16 @@ Public Class Form1
                 End If
             End If
 
-            i1.Image.Save(workingmoviedetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
+            i1.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
       
             If userPrefs.createfolderjpg = True Then
-                tempstring = workingmoviedetails.fileinfo.posterpath
+                tempstring = workingMovieDetails.fileinfo.posterpath
                 tempstring = tempstring.Replace(IO.Path.GetFileName(tempstring), "folder.jpg")
                 i1.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
             End If
 
 
-            Dim bitmap3 As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+            Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
             Dim bitmap2 As New Bitmap(bitmap3)
             bitmap3.Dispose()
             Dim bm_source As New Bitmap(bitmap2)
@@ -11740,20 +11743,20 @@ Public Class Form1
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
             gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
             Dim tempbitmap As Bitmap = bm_dest
-            Dim filename As String = filefunction.GetCRC32(workingmoviedetails.fileinfo.fullpathandfilename)
+            Dim filename As String = filefunction.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim path As String = IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")
             tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
             tempbitmap.Dispose()
 
             For Each poster As PictureBox In TabPage22.Controls
-                If poster.Tag = workingmoviedetails.fileinfo.fullpathandfilename Then
+                If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                     poster.ImageLocation = IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")
                     Exit For
                 End If
             Next
 
-            PictureBox3.ImageLocation = workingmoviedetails.fileinfo.posterpath
-            moviethumb.ImageLocation = workingmoviedetails.fileinfo.posterpath
+            PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
+            moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
             tempstring = PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
             Label19.Text = tempstring
             Label19.Refresh()
@@ -11773,7 +11776,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
-        openFD.InitialDirectory = workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename), "")
+        openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
         openFD.Title = "Select a jpeg image File"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
@@ -11791,13 +11794,13 @@ Public Class Form1
             Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
             PictureBox3.Image = New System.Drawing.Bitmap(ImageStream)
-            PictureBox3.Image.Save(workingmoviedetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
+            PictureBox3.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
             If userPrefs.createfolderjpg = True Then
-                tempstring = workingmoviedetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.posterpath), "folder.jpg")
+                tempstring = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                 PictureBox3.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
             End If
-            moviethumb.ImageLocation = workingmoviedetails.fileinfo.posterpath
-            Dim bitmap3 As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+            moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
+            Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
             Dim bitmap2 As New Bitmap(bitmap3)
             bitmap3.Dispose()
             Dim bm_source As New Bitmap(bitmap2)
@@ -11806,13 +11809,13 @@ Public Class Form1
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
             gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
             Dim tempbitmap As Bitmap = bm_dest
-            Dim filename As String = filefunction.GetCRC32(workingmoviedetails.fileinfo.fullpathandfilename)
+            Dim filename As String = filefunction.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim path As String = IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")
             tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
             tempbitmap.Dispose()
 
             For Each poster As PictureBox In TabPage22.Controls
-                If poster.Tag = workingmoviedetails.fileinfo.fullpathandfilename Then
+                If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                     poster.ImageLocation = IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")
                     Exit For
                 End If
@@ -11864,7 +11867,7 @@ Public Class Form1
                 Exit Sub
             End If
 
-            workingmoviedetails.fullmoviebody.imdbid = tempstring
+            workingMovieDetails.fullmoviebody.imdbid = tempstring
 
             If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
                 MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
@@ -11880,25 +11883,25 @@ Public Class Form1
             messbox.Refresh()
             Application.DoEvents()
 
-            If workingmoviedetails Is Nothing Then Exit Sub
+            If workingMovieDetails Is Nothing Then Exit Sub
 
             If CheckBox2.CheckState = CheckState.Checked Then
                 stage = stage & vbCrLf
                 stage = stage & "Deleting existing poster and backdrops" & vbCrLf
                 Try
-                    If IO.File.Exists(workingmoviedetails.fileinfo.posterpath) Then
-                        IO.File.Delete(workingmoviedetails.fileinfo.posterpath)
+                    If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
+                        IO.File.Delete(workingMovieDetails.fileinfo.posterpath)
                     End If
                 Catch
                 End Try
                 Try
-                    If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
-                        IO.File.Delete(workingmoviedetails.fileinfo.fanartpath)
+                    If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                        IO.File.Delete(workingMovieDetails.fileinfo.fanartpath)
                     End If
                 Catch
                 End Try
                 Try
-                    tempstring = workingmoviedetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.posterpath), "folder.jpg")
+                    tempstring = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                     If IO.File.Exists(tempstring) Then
                         IO.File.Delete(tempstring)
                     End If
@@ -11906,7 +11909,7 @@ Public Class Form1
                 End Try
             End If
 
-            If workingmoviedetails.fullmoviebody.imdbid = Nothing Then Exit Sub
+            If workingMovieDetails.fullmoviebody.imdbid = Nothing Then Exit Sub
             Me.Cursor = Cursors.WaitCursor
             '                    Dim scraper As New imdb.Classimdbscraper
             Dim scraper As New Classimdb
@@ -11919,36 +11922,36 @@ Public Class Form1
             stage = stage & "Clearing current movie details" & vbCrLf
 
 
-            workingmoviedetails.fullmoviebody.credits = ""
-            workingmoviedetails.fullmoviebody.director = ""
-            workingmoviedetails.fullmoviebody.genre = ""
-            workingmoviedetails.fullmoviebody.mpaa = ""
-            workingmoviedetails.fullmoviebody.outline = ""
-            workingmoviedetails.fullmoviebody.plot = ""
-            workingmoviedetails.fullmoviebody.premiered = ""
-            workingmoviedetails.fullmoviebody.rating = ""
-            workingmoviedetails.fullmoviebody.runtime = ""
-            workingmoviedetails.fullmoviebody.studio = ""
-            workingmoviedetails.fullmoviebody.tagline = ""
-            workingmoviedetails.fullmoviebody.thumbnails = ""
-            workingmoviedetails.fullmoviebody.title = ""
-            workingmoviedetails.fullmoviebody.top250 = ""
-            workingmoviedetails.fullmoviebody.trailer = ""
-            workingmoviedetails.fullmoviebody.votes = ""
-            workingmoviedetails.fullmoviebody.year = ""
-            workingmoviedetails.fullmoviebody.country = ""
-            workingmoviedetails.fullmoviebody.sortorder = ""
-            workingmoviedetails.alternativetitles.Clear()
+            workingMovieDetails.fullmoviebody.credits = ""
+            workingMovieDetails.fullmoviebody.director = ""
+            workingMovieDetails.fullmoviebody.genre = ""
+            workingMovieDetails.fullmoviebody.mpaa = ""
+            workingMovieDetails.fullmoviebody.outline = ""
+            workingMovieDetails.fullmoviebody.plot = ""
+            workingMovieDetails.fullmoviebody.premiered = ""
+            workingMovieDetails.fullmoviebody.rating = ""
+            workingMovieDetails.fullmoviebody.runtime = ""
+            workingMovieDetails.fullmoviebody.studio = ""
+            workingMovieDetails.fullmoviebody.tagline = ""
+            workingMovieDetails.fullmoviebody.thumbnails = ""
+            workingMovieDetails.fullmoviebody.title = ""
+            workingMovieDetails.fullmoviebody.top250 = ""
+            workingMovieDetails.fullmoviebody.trailer = ""
+            workingMovieDetails.fullmoviebody.votes = ""
+            workingMovieDetails.fullmoviebody.year = ""
+            workingMovieDetails.fullmoviebody.country = ""
+            workingMovieDetails.fullmoviebody.sortorder = ""
+            workingMovieDetails.alternativetitles.Clear()
             stage = stage & vbCrLf
             stage = stage & "Scraping Movie Body with settings:" & vbCrLf
-            stage = stage & workingmoviedetails.fullmoviebody.imdbid & vbCrLf
+            stage = stage & workingMovieDetails.fullmoviebody.imdbid & vbCrLf
             stage = stage & userPrefs.imdbmirror & vbCrLf
-            body = scraper.getimdbbody(, , workingmoviedetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
+            body = scraper.getimdbbody(, , workingMovieDetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
 
 
 
             If body = "MIC" Then
-                workingmoviedetails.fullmoviebody.genre = "problem"
+                workingMovieDetails.fullmoviebody.genre = "problem"
                 stage = stage & "Body not Scraped" & vbCrLf
             Else
 
@@ -11964,73 +11967,73 @@ Public Class Form1
                         Case "title"
                             stage = stage & "Selecting Title according to settings" & vbCrLf
                             If userPrefs.keepfoldername = False Then
-                                workingmoviedetails.fullmoviebody.title = thisresult.InnerText
+                                workingMovieDetails.fullmoviebody.title = thisresult.InnerText
                             Else
                                 If userPrefs.usefoldernames = False Then
-                                    tempstring = IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename)
-                                    workingmoviedetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                    tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                    workingMovieDetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
                                 Else
                                     '                                    workingmoviedetails.fullmoviebody.title = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    tempstring = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    workingmoviedetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                    tempstring = filefunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
+                                    workingMovieDetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
                                     '                                    workingmoviedetails.fullmoviebody.sortorder = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    tempstring = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    workingmoviedetails.fullmoviebody.sortorder = filefunction.cleanfilename(tempstring)
+                                    tempstring = filefunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
+                                    workingMovieDetails.fullmoviebody.sortorder = filefunction.cleanfilename(tempstring)
                                 End If
                             End If
-                            stage = stage & "Adding title: " & workingmoviedetails.fullmoviebody.title & vbCrLf
+                            stage = stage & "Adding title: " & workingMovieDetails.fullmoviebody.title & vbCrLf
                         Case "credits"
                             stage = stage & "Adding credits: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.credits = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.credits = thisresult.InnerText
                         Case "country"
-                            workingmoviedetails.fullmoviebody.country = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.country = thisresult.InnerText
                         Case "director"
                             stage = stage & "Adding director: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.director = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                         Case "genre"
                             stage = stage & "Adding genre: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.genre = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.genre = thisresult.InnerText
                         Case "mpaa"
                             stage = stage & "Adding mpaa: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.mpaa = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.mpaa = thisresult.InnerText
                         Case "outline"
                             stage = stage & "Adding outline: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.outline = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.outline = thisresult.InnerText
                         Case "plot"
                             stage = stage & "Adding plot: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.plot = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.plot = thisresult.InnerText
                         Case "premiered"
                             stage = stage & "Adding premiered: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.premiered = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.premiered = thisresult.InnerText
                         Case "rating"
                             stage = stage & "Adding rating: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.rating = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.rating = thisresult.InnerText
                         Case "runtime"
                             stage = stage & "Adding runtime: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.runtime = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.runtime = thisresult.InnerText
                         Case "studio"
                             stage = stage & "Adding studio: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.studio = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.studio = thisresult.InnerText
                         Case "tagline"
                             stage = stage & "Adding tagline: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.tagline = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.tagline = thisresult.InnerText
                         Case "top250"
                             stage = stage & "Adding top250: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.top250 = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.top250 = thisresult.InnerText
                         Case "votes"
                             stage = stage & "Adding votes: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.votes = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.votes = thisresult.InnerText
                         Case "year"
                             stage = stage & "Adding year: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.year = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.year = thisresult.InnerText
                         Case "cert"
                             stage = stage & "Adding cert: " & thisresult.InnerText & vbCrLf
                             certificates.Add(thisresult.InnerText)
                         Case "id"
                             stage = stage & "Adding id: " & thisresult.InnerText & vbCrLf
-                            workingmoviedetails.fullmoviebody.imdbid = thisresult.InnerText
+                            workingMovieDetails.fullmoviebody.imdbid = thisresult.InnerText
                         Case "alternativetitle"
-                            workingmoviedetails.alternativetitles.Add(thisresult.InnerText)
+                            workingMovieDetails.alternativetitles.Add(thisresult.InnerText)
                     End Select
                 Next
 
@@ -12039,7 +12042,7 @@ Public Class Form1
                         stage = stage & vbCrLf
                         stage = stage & "Scraping trailer url" & vbCrLf
                         If trailer <> Nothing Then
-                            workingmoviedetails.fullmoviebody.trailer = trailer
+                            workingMovieDetails.fullmoviebody.trailer = trailer
                         End If
                     End If
                 Catch
@@ -12047,17 +12050,17 @@ Public Class Form1
                 stage = stage & vbCrLf
                 stage = stage & "Scraping actors with preferences:" & vbCrLf
                 stage = stage & "mirror: " & userPrefs.imdbmirror & vbCrLf
-                stage = stage & "imdbid: " & workingmoviedetails.fullmoviebody.imdbid & vbCrLf
-                stage = stage & "title: " & workingmoviedetails.fullmoviebody.title & vbCrLf
+                stage = stage & "imdbid: " & workingMovieDetails.fullmoviebody.imdbid & vbCrLf
+                stage = stage & "title: " & workingMovieDetails.fullmoviebody.title & vbCrLf
                 stage = stage & "max actors:" & userPrefs.maxactors & vbCrLf
-                actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, userPrefs.maxactors)
+                actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, userPrefs.maxactors)
                 stage = stage & vbCrLf
                 stage = stage & "Parsing xml actorlist" & vbCrLf
                 Dim done As Boolean = False
                 For f = 0 To UBound(userPrefs.certificatepriority)
                     For Each cert In certificates
                         If cert.IndexOf(userPrefs.certificatepriority(f)) <> -1 Then
-                            workingmoviedetails.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
+                            workingMovieDetails.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
                             done = True
                             Exit For
                         End If
@@ -12066,7 +12069,7 @@ Public Class Form1
                 Next
             End If
             'userprefs.certificatepriority(1)
-            workingmoviedetails.listthumbs.Clear()
+            workingMovieDetails.listthumbs.Clear()
             stage = stage & vbCrLf
             stage = stage & "working with actor thumbnails" & vbCrLf
             If userPrefs.nfoposterscraper <> 0 Then
@@ -12074,25 +12077,25 @@ Public Class Form1
 
                 If userPrefs.nfoposterscraper = 1 Or userPrefs.nfoposterscraper = 3 Or userPrefs.nfoposterscraper = 5 Or userPrefs.nfoposterscraper = 7 Or userPrefs.nfoposterscraper = 9 Or userPrefs.nfoposterscraper = 11 Or userPrefs.nfoposterscraper = 13 Or userPrefs.nfoposterscraper = 15 Then
                     Dim newobject3 As New IMPA.getimpaposters
-                    tempstring = newobject3.getimpathumbs(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                    tempstring = newobject3.getimpathumbs(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                     If tempstring <> Nothing Then thumbs = thumbs & tempstring
                 End If
 
                 If userPrefs.nfoposterscraper = 2 Or userPrefs.nfoposterscraper = 3 Or userPrefs.nfoposterscraper = 6 Or userPrefs.nfoposterscraper = 7 Or userPrefs.nfoposterscraper = 10 Or userPrefs.nfoposterscraper = 11 Or userPrefs.nfoposterscraper = 14 Or userPrefs.nfoposterscraper = 15 Then
                     Dim newobject2 As New tmdb_posters.Class1
-                    tempstring = newobject2.gettmdbposters(workingmoviedetails.fullmoviebody.imdbid)
+                    tempstring = newobject2.gettmdbposters(workingMovieDetails.fullmoviebody.imdbid)
                     If tempstring <> Nothing Then thumbs = thumbs & tempstring
                 End If
 
                 If userPrefs.nfoposterscraper = 4 Or userPrefs.nfoposterscraper = 5 Or userPrefs.nfoposterscraper = 6 Or userPrefs.nfoposterscraper = 7 Or userPrefs.nfoposterscraper = 12 Or userPrefs.nfoposterscraper = 13 Or userPrefs.nfoposterscraper = 14 Or userPrefs.nfoposterscraper = 15 Then
                     Dim newobject As New class_mpdb_thumbs.Class1
-                    tempstring = newobject.get_mpdb_thumbs(workingmoviedetails.fullmoviebody.imdbid)
+                    tempstring = newobject.get_mpdb_thumbs(workingMovieDetails.fullmoviebody.imdbid)
                     If tempstring <> Nothing Then thumbs = thumbs & tempstring
                 End If
 
                 If userPrefs.nfoposterscraper = 8 Or userPrefs.nfoposterscraper = 9 Or userPrefs.nfoposterscraper = 10 Or userPrefs.nfoposterscraper = 11 Or userPrefs.nfoposterscraper = 12 Or userPrefs.nfoposterscraper = 13 Or userPrefs.nfoposterscraper = 14 Or userPrefs.nfoposterscraper = 15 Then
                     Dim thumbscraper As New imdb_thumbs.Class1
-                    tempstring = thumbscraper.getimdbthumbs(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid)
+                    tempstring = thumbscraper.getimdbthumbs(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid)
                     If tempstring <> Nothing Then thumbs = thumbs & tempstring
                 End If
 
@@ -12108,14 +12111,14 @@ Public Class Form1
                     For Each thisresult In thumbstring("thumblist")
                         Select Case thisresult.Name
                             Case "thumb"
-                                workingmoviedetails.listthumbs.Add(thisresult.InnerText)
+                                workingMovieDetails.listthumbs.Add(thisresult.InnerText)
                         End Select
                     Next
                 Catch
                 End Try
             End If
 
-            workingmoviedetails.listactors.Clear()
+            workingMovieDetails.listactors.Clear()
             If actorlist <> Nothing Then
                 thumbstring.LoadXml(actorlist)
                 thisresult = Nothing
@@ -12172,21 +12175,21 @@ Public Class Form1
                                         End If
                                 End Select
                             Next
-                            workingmoviedetails.listactors.Add(newactor)
+                            workingMovieDetails.listactors.Add(newactor)
                             Dim actornew As New actordatabase
                             actornew.actorname = newactor.actorname
-                            actornew.movieid = workingmoviedetails.fullmoviebody.imdbid
+                            actornew.movieid = workingMovieDetails.fullmoviebody.imdbid
                             actorDB.Add(actornew)
                     End Select
                 Next
             End If
             Try
-                If workingmoviedetails.filedetails.filedetails_video.duration <> Nothing Then
+                If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
 
                     '1h 24mn 48s 546ms
                     Dim hours As Integer
                     Dim minutes As Integer
-                    tempstring = workingmoviedetails.filedetails.filedetails_video.duration
+                    tempstring = workingMovieDetails.filedetails.filedetails_video.duration
                     tempint = tempstring.IndexOf("h")
                     If tempint <> -1 Then
                         hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -12201,13 +12204,13 @@ Public Class Form1
                         hours = hours * 60
                     End If
                     minutes = minutes + hours
-                    workingmoviedetails.fullmoviebody.runtime = minutes.ToString & " min"
+                    workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
                 End If
             Catch
             End Try
             stage = stage & vbCrLf
-            stage = stage & "Saving nfo to: " & workingmoviedetails.fileinfo.fullpathandfilename & vbCrLf
-            nfoFunction.savemovienfo(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails, True)
+            stage = stage & "Saving nfo to: " & workingMovieDetails.fileinfo.fullpathandfilename & vbCrLf
+            nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
 
             If CheckBox2.CheckState = CheckState.Checked Then
                 'get poster and fanart
@@ -12218,13 +12221,13 @@ Public Class Form1
                     Try
                         Select Case userPrefs.moviethumbpriority(0)
                             Case "Internet Movie Poster Awards"
-                                moviethumburl = scraperFunction2.impathumb(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                                moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                             Case "IMDB"
-                                moviethumburl = scraperFunction2.imdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                             Case "Movie Poster DB"
-                                moviethumburl = scraperFunction2.mpdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                             Case "themoviedb.org"
-                                moviethumburl = scraperFunction2.tmdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                         End Select
                     Catch
                         moviethumburl = "na"
@@ -12233,13 +12236,13 @@ Public Class Form1
                         If moviethumburl = "na" Then
                             Select Case userPrefs.moviethumbpriority(1)
                                 Case "Internet Movie Poster Awards"
-                                    moviethumburl = scraperFunction2.impathumb(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                                    moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                                 Case "IMDB"
-                                    moviethumburl = scraperFunction2.imdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                                 Case "Movie Poster DB"
-                                    moviethumburl = scraperFunction2.mpdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                                 Case "themoviedb.org"
-                                    moviethumburl = scraperFunction2.tmdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                             End Select
                         End If
                     Catch
@@ -12249,13 +12252,13 @@ Public Class Form1
                         If moviethumburl = "na" Then
                             Select Case userPrefs.moviethumbpriority(2)
                                 Case "Internet Movie Poster Awards"
-                                    moviethumburl = scraperFunction2.impathumb(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                                    moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                                 Case "IMDB"
-                                    moviethumburl = scraperFunction2.imdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                                 Case "Movie Poster DB"
-                                    moviethumburl = scraperFunction2.mpdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                                 Case "themoviedb.org"
-                                    moviethumburl = scraperFunction2.tmdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                             End Select
                         End If
                     Catch
@@ -12265,13 +12268,13 @@ Public Class Form1
                         If moviethumburl = "na" Then
                             Select Case userPrefs.moviethumbpriority(3)
                                 Case "Internet Movie Poster Awards"
-                                    moviethumburl = scraperFunction2.impathumb(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                                    moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                                 Case "IMDB"
-                                    moviethumburl = scraperFunction2.imdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                                 Case "Movie Poster DB"
-                                    moviethumburl = scraperFunction2.mpdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                                 Case "themoviedb.org"
-                                    moviethumburl = scraperFunction2.tmdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                                    moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                             End Select
                         End If
                     Catch
@@ -12279,7 +12282,7 @@ Public Class Form1
                     End Try
                     Try
                         If moviethumburl <> "" And moviethumburl <> "na" Then
-                            Dim newmoviethumbpath As String = workingmoviedetails.fileinfo.posterpath
+                            Dim newmoviethumbpath As String = workingMovieDetails.fileinfo.posterpath
                             Try
                                 Dim buffer(4000000) As Byte
                                 Dim size As Integer = 0
@@ -12339,7 +12342,7 @@ Public Class Form1
 
 
 
-                    Dim temp As String = workingmoviedetails.fullmoviebody.imdbid
+                    Dim temp As String = workingMovieDetails.fullmoviebody.imdbid
 
                     Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
                     Dim apple2(2000) As String
@@ -12411,8 +12414,8 @@ Public Class Form1
 
 
                             If Form1.userPrefs.resizefanart = 1 Then
-                                stage = stage & "Fanart download succeeded, saving to: " & workingmoviedetails.fileinfo.fanartpath & vbCrLf
-                                bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                                stage = stage & "Fanart download succeeded, saving to: " & workingMovieDetails.fileinfo.fanartpath & vbCrLf
+                                bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                             ElseIf Form1.userPrefs.resizefanart = 2 Then
                                 If bmp.Width > 1280 Or bmp.Height > 720 Then
                                     stage = stage & "Fanart download succeeded, resizing to: 1280x720" & vbCrLf
@@ -12421,34 +12424,34 @@ Public Class Form1
                                     Dim gr As Graphics = Graphics.FromImage(bm_dest)
                                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                                     gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                    stage = stage & "Fanart resize succeeded, saving to: " & workingmoviedetails.fileinfo.fanartpath & vbCrLf
-                                    bm_dest.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                                    stage = stage & "Fanart resize succeeded, saving to: " & workingMovieDetails.fileinfo.fanartpath & vbCrLf
+                                    bm_dest.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                                 Else
-                                    stage = stage & "Fanart download succeeded, saving to: " & workingmoviedetails.fileinfo.fanartpath & vbCrLf
-                                    bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                                    stage = stage & "Fanart download succeeded, saving to: " & workingMovieDetails.fileinfo.fanartpath & vbCrLf
+                                    bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                                 End If
                             ElseIf Form1.userPrefs.resizefanart = 3 Then
                                 If bmp.Width > 960 Or bmp.Height > 540 Then
                                     stage = stage & "Fanart download succeeded, resizing to: 960x540" & vbCrLf
-                                    stage = stage & "Fanart resize succeeded, saving to: " & workingmoviedetails.fileinfo.fanartpath & vbCrLf
+                                    stage = stage & "Fanart resize succeeded, saving to: " & workingMovieDetails.fileinfo.fanartpath & vbCrLf
                                     Dim bm_source As New Bitmap(bmp)
                                     Dim bm_dest As New Bitmap(960, 540)
                                     Dim gr As Graphics = Graphics.FromImage(bm_dest)
                                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                                     gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                    bm_dest.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                                    bm_dest.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                                 Else
-                                    stage = stage & "Fanart download succeeded, saving to: " & workingmoviedetails.fileinfo.fanartpath & vbCrLf
-                                    bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                                    stage = stage & "Fanart download succeeded, saving to: " & workingMovieDetails.fileinfo.fanartpath & vbCrLf
+                                    bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                                 End If
                             End If
-                            If IO.File.Exists(workingmoviedetails.fileinfo.fanartpath) Then
+                            If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                                 For Each paths In userPrefs.offlinefolders
                                     Dim offlinepath As String = paths & "\"
-                                    If workingmoviedetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                         Dim mediapath As String
-                                        mediapath = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                                        Call offlinedvd(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails.fullmoviebody.title, mediapath)
+                                        mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                        Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                                     End If
                                 Next
                             End If
@@ -12464,10 +12467,10 @@ Public Class Form1
             stage = stage & vbCrLf
             stage = stage & "Adding movie to internal list" & vbCrLf
             For f = 0 To fullMovieList.Count - 1
-                If fullMovieList(f).fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
+                If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
                     Dim newfullmovie As combolist
                     newfullmovie = fullMovieList(f)
-                    newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title
+                    newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title
                     '-------------- Aqui
                     If userPrefs.ignorearticle = True Then
                         If newfullmovie.titleandyear.ToLower.IndexOf("the ") = 0 Then
@@ -12475,26 +12478,26 @@ Public Class Form1
                             newfullmovie.titleandyear = newfullmovie.titleandyear & ", The"
                         End If
                     End If
-                    newfullmovie.titleandyear = newfullmovie.titleandyear & " (" & workingmoviedetails.fullmoviebody.year & ")"
-                    newfullmovie.genre = workingmoviedetails.fullmoviebody.genre
+                    newfullmovie.titleandyear = newfullmovie.titleandyear & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                    newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
                     Try
-                        Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                        Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
 
                         newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                         newfullmovie.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
                     Catch ex2 As Exception
                     End Try
-                    newfullmovie.sortorder = workingmoviedetails.fullmoviebody.sortorder
-                    newfullmovie.playcount = workingmoviedetails.fullmoviebody.playcount
-                    newfullmovie.rating = workingmoviedetails.fullmoviebody.rating
-                    newfullmovie.top250 = workingmoviedetails.fullmoviebody.top250
-                    newfullmovie.id = workingmoviedetails.fullmoviebody.imdbid
-                    newfullmovie.outline = workingmoviedetails.fullmoviebody.outline
-                    newfullmovie.runtime = workingmoviedetails.fullmoviebody.runtime
-                    newfullmovie.title = workingmoviedetails.fullmoviebody.title
-                    newfullmovie.top250 = workingmoviedetails.fullmoviebody.top250
-                    newfullmovie.year = workingmoviedetails.fullmoviebody.year
+                    newfullmovie.sortorder = workingMovieDetails.fullmoviebody.sortorder
+                    newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
+                    newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
+                    newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
+                    newfullmovie.id = workingMovieDetails.fullmoviebody.imdbid
+                    newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
+                    newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
+                    newfullmovie.title = workingMovieDetails.fullmoviebody.title
+                    newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
+                    newfullmovie.year = workingMovieDetails.fullmoviebody.year
 
                     fullMovieList.RemoveAt(f)
                     fullMovieList.Add(newfullmovie)
@@ -12597,12 +12600,12 @@ Public Class Form1
         Dim tempstring As String
         Try
             Dim stream As New System.IO.MemoryStream
-            PictureBox3.Image.Save(workingmoviedetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
+            PictureBox3.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
             moviethumb.Image = PictureBox3.Image
             Button28.Visible = False
             Button27.Visible = False
 
-            Dim bitmap3 As New Bitmap(workingmoviedetails.fileinfo.posterpath)
+            Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
             Dim bitmap2 As New Bitmap(bitmap3)
             bitmap3.Dispose()
             Dim bm_source As New Bitmap(bitmap2)
@@ -12611,14 +12614,14 @@ Public Class Form1
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
             gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
             Dim tempbitmap As Bitmap = bm_dest
-            Dim filename As String = filefunction.GetCRC32(workingmoviedetails.fileinfo.fullpathandfilename)
+            Dim filename As String = filefunction.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim path As String = IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")
             tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
             tempbitmap.Dispose()
 
 
             For Each poster As PictureBox In TabPage22.Controls
-                If poster.Tag = workingmoviedetails.fileinfo.fullpathandfilename Then
+                If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                     poster.ImageLocation = IO.Path.Combine(applicationpath, "settings\postercache\" & filename & ".jpg")
                     Exit For
                 End If
@@ -12780,18 +12783,18 @@ Public Class Form1
             ListBox3.Items.Clear()
             TextBox26.Text = ""
             Dim todo As Boolean = False
-            If workingtvshow Is Nothing Then todo = True
+            If workingTvShow Is Nothing Then todo = True
 
-            If workingtvshow.path = TreeView1.SelectedNode.Name Then
-                Dim tempstring As String = "Search """ & workingtvshow.title & """ For new episodes"
+            If workingTvShow.path = TreeView1.SelectedNode.Name Then
+                Dim tempstring As String = "Search """ & workingTvShow.title & """ For new episodes"
                 SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
                 SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
                 SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
-                tempstring = "Download missing art for """ & workingtvshow.title & """"
+                tempstring = "Download missing art for """ & workingTvShow.title & """"
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Check """ & workingtvshow.title & """ for missing episodes"
+                tempstring = "Check """ & workingTvShow.title & """ for missing episodes"
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
@@ -12799,71 +12802,71 @@ Public Class Form1
                 RebuildThisShowToolStripMenuItem.Visible = True
             End If
             If todo = False Then
-                If workingtvshow.path <> TreeView1.SelectedNode.Name Then todo = True
+                If workingTvShow.path <> TreeView1.SelectedNode.Name Then todo = True
             End If
             If todo = True Then
                 Call loadtvshow(TreeView1.SelectedNode.Name)
                 For tt = 0 To basictvlist.Count
                     If basictvlist(tt).fullpath = TreeView1.SelectedNode.Name Then
-                        basictvlist(tt).imdbid = workingtvshow.imdbid
-                        basictvlist(tt).language = workingtvshow.language
-                        basictvlist(tt).locked = workingtvshow.locked
-                        basictvlist(tt).rating = workingtvshow.rating
-                        basictvlist(tt).sortorder = workingtvshow.sortorder
-                        basictvlist(tt).status = workingtvshow.status
-                        basictvlist(tt).title = workingtvshow.title
-                        basictvlist(tt).titleandyear = workingtvshow.title
-                        basictvlist(tt).tvdbid = workingtvshow.tvdbid
-                        basictvlist(tt).year = workingtvshow.year
-                        basictvlist(tt).episodeactorsource = workingtvshow.episodeactorsource
+                        basictvlist(tt).imdbid = workingTvShow.imdbid
+                        basictvlist(tt).language = workingTvShow.language
+                        basictvlist(tt).locked = workingTvShow.locked
+                        basictvlist(tt).rating = workingTvShow.rating
+                        basictvlist(tt).sortorder = workingTvShow.sortorder
+                        basictvlist(tt).status = workingTvShow.status
+                        basictvlist(tt).title = workingTvShow.title
+                        basictvlist(tt).titleandyear = workingTvShow.title
+                        basictvlist(tt).tvdbid = workingTvShow.tvdbid
+                        basictvlist(tt).year = workingTvShow.year
+                        basictvlist(tt).episodeactorsource = workingTvShow.episodeactorsource
                         Exit For
                     End If
                 Next
-                If workingtvshow.locked = 1 Or workingtvshow.locked = 2 Then
+                If workingTvShow.locked = 1 Or workingTvShow.locked = 2 Then
                     For Each indnode As TreeNode In TreeView1.Nodes
-                        If indnode.Name.ToLower = workingtvshow.path.ToLower Then
+                        If indnode.Name.ToLower = workingTvShow.path.ToLower Then
                             indnode.StateImageIndex = 0
                             Exit For
                         End If
                     Next
                 Else
                     For Each indnode As TreeNode In TreeView1.Nodes
-                        If indnode.Name.ToLower = workingtvshow.path.ToLower Then
+                        If indnode.Name.ToLower = workingTvShow.path.ToLower Then
                             indnode.StateImageIndex = -1
                             Exit For
                         End If
                     Next
                 End If
               
-                Dim tempstring As String = "Search """ & workingtvshow.title & """ For new episodes"
+                Dim tempstring As String = "Search """ & workingTvShow.title & """ For new episodes"
                 SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
                 SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
                 SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
-                tempstring = "Download missing art for """ & workingtvshow.title & """"
+                tempstring = "Download missing art for """ & workingTvShow.title & """"
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Check """ & workingtvshow.title & """ for missing episodes"
+                tempstring = "Check """ & workingTvShow.title & """ for missing episodes"
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
                 RebuildThisShowToolStripMenuItem.Enabled = True
                 RebuildThisShowToolStripMenuItem.Visible = True
-                If workingtvshow.locked = 1 Then
+                If workingTvShow.locked = 1 Then
                     Button60.Text = "Locked"
                     Button60.BackColor = Color.Red
-                ElseIf workingtvshow.locked = 0 Then
+                ElseIf workingTvShow.locked = 0 Then
                     Button60.Text = "Open"
                     Button60.BackColor = Color.LawnGreen
-                ElseIf workingtvshow.locked = 2 Then
+                ElseIf workingTvShow.locked = 2 Then
                     Button60.Text = "Un-Verified"
                     Button60.BackColor = Color.Red
                 End If
-                If workingtvshow.plot.IndexOf("Unable to find folder:") = 0 Then
+                If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
                     TreeView1.SelectedNode.ForeColor = Color.Red
                     TreeView1.SelectedNode.Collapse()
                     Exit Sub
-                ElseIf workingtvshow.plot.ToLower.IndexOf("xml error") <> -1 Then
+                ElseIf workingTvShow.plot.ToLower.IndexOf("xml error") <> -1 Then
                     TreeView1.SelectedNode.ForeColor = Color.Red
                 Else
                     If TreeView1.SelectedNode.ForeColor = Color.Red Then
@@ -12878,22 +12881,22 @@ Public Class Form1
                     TreeView1.SelectedNode.ForeColor = Color.Black
                 End If
             Else
-                If workingtvshow.plot.IndexOf("Unable to find folder:") = 0 Then
+                If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
                     TreeView1.SelectedNode.ForeColor = Color.Red
                     TreeView1.SelectedNode.Collapse()
                     Exit Sub
                 Else
                     TreeView1.SelectedNode.ForeColor = Color.Black
                 End If
-                If workingtvshow.path <> Nothing Then
-                    TextBox2.Text = workingtvshow.title
+                If workingTvShow.path <> Nothing Then
+                    TextBox2.Text = workingTvShow.title
                     Try
-                        PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
+                        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                     Catch
                         PictureBox5.Image = Nothing
                     End Try
                     Try
-                        PictureBox4.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg")
+                        PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
                     Catch
                         PictureBox4.Image = Nothing
                     End Try
@@ -12907,7 +12910,7 @@ Public Class Form1
                 TabControl3.Refresh()
             End If
             Panel9.Visible = True
-            If workingtvshow.plot.IndexOf("Unable to find folder:") = 0 Then
+            If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
                 TreeView1.SelectedNode.Parent.Parent.ForeColor = Color.Red
                 TreeView1.SelectedNode.Parent.Parent.Collapse()
                 ExpandSelectedShowToolStripMenuItem.Enabled = True
@@ -12928,7 +12931,7 @@ Public Class Form1
             If season.ToLower.IndexOf("specials") <> -1 Then season = "00"
             Call loadtvepisode(TreeView1.SelectedNode.Name, season, episode)
             Try
-                If workingepisode(workingepisodeindex).plot.IndexOf("xml error") = -1 And workingepisode(workingepisodeindex).plot.IndexOf("missing file") = -1 Then
+                If workingepisode(workingEpisodeIndex).plot.IndexOf("xml error") = -1 And workingepisode(workingEpisodeIndex).plot.IndexOf("missing file") = -1 Then
                     ToolStripMenuItem1.Enabled = True
                     ExpandSelectedShowToolStripMenuItem.Enabled = True
                     ExpandAllToolStripMenuItem.Enabled = True
@@ -12983,33 +12986,33 @@ Public Class Form1
             If TreeView1.SelectedNode.ForeColor = Color.Blue Then
                 Button43.Enabled = False
                 Dim todo As Boolean = False
-                If workingtvshow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then todo = True
+                If workingTvShow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then todo = True
                 If todo = True Then
                     Call loadtvshow(TreeView1.SelectedNode.Parent.Parent.Name)
                     For tt = 0 To basictvlist.Count
                         If basictvlist(tt).fullpath = TreeView1.SelectedNode.Parent.Parent.Name Then
-                            basictvlist(tt).imdbid = workingtvshow.imdbid
-                            basictvlist(tt).language = workingtvshow.language
-                            basictvlist(tt).locked = workingtvshow.locked
-                            basictvlist(tt).rating = workingtvshow.rating
-                            basictvlist(tt).sortorder = workingtvshow.sortorder
-                            basictvlist(tt).status = workingtvshow.status
-                            basictvlist(tt).title = workingtvshow.title
-                            basictvlist(tt).titleandyear = workingtvshow.title
-                            basictvlist(tt).tvdbid = workingtvshow.tvdbid
-                            basictvlist(tt).year = workingtvshow.year
-                            basictvlist(tt).episodeactorsource = workingtvshow.episodeactorsource
+                            basictvlist(tt).imdbid = workingTvShow.imdbid
+                            basictvlist(tt).language = workingTvShow.language
+                            basictvlist(tt).locked = workingTvShow.locked
+                            basictvlist(tt).rating = workingTvShow.rating
+                            basictvlist(tt).sortorder = workingTvShow.sortorder
+                            basictvlist(tt).status = workingTvShow.status
+                            basictvlist(tt).title = workingTvShow.title
+                            basictvlist(tt).titleandyear = workingTvShow.title
+                            basictvlist(tt).tvdbid = workingTvShow.tvdbid
+                            basictvlist(tt).year = workingTvShow.year
+                            basictvlist(tt).episodeactorsource = workingTvShow.episodeactorsource
                             Exit For
                         End If
                     Next
                 End If
                 Try
-                    PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
+                    PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                 Catch
                     PictureBox5.Image = Nothing
                 End Try
                 Try
-                    PictureBox4.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
                 Catch
                     PictureBox4.Image = Nothing
                 End Try
@@ -13066,12 +13069,12 @@ Public Class Form1
                 RenameTVShowsToolStripMenuItem.Enabled = True
                 RenameTVShowsToolStripMenuItem.Visible = True
                 Try
-                    If workingtvshow.path <> TreeView1.SelectedNode.Parent.Name Then
+                    If workingTvShow.path <> TreeView1.SelectedNode.Parent.Name Then
                         loadtvshow(TreeView1.SelectedNode.Parent.Name)
                     End If
                 Catch
                 End Try
-                If workingtvshow.plot.IndexOf("Unable to find folder:") = 0 Then
+                If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
                     TreeView1.SelectedNode.Parent.ForeColor = Color.Red
                     TreeView1.SelectedNode.Parent.Collapse()
                     Exit Sub
@@ -13090,39 +13093,39 @@ Public Class Form1
 
                 Try
                     If trueseason <> "Specials" Then
-                        If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
+                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
                             Try
-                                PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
+                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
                         Else
                             Try
-                                PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
+                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
                         End If
                     Else
                         trueseason = "00"
-                        If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
+                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
                             Try
-                                Dim fi As New FileInfo(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn"))
-                                Dim rename2 As String = workingtvshow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
+                                Dim fi As New FileInfo(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn"))
+                                Dim rename2 As String = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
                                 fi.MoveTo(rename2)
                             Catch ex As Exception
 
                             End Try
                         End If
-                        If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
+                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
                             Try
-                                PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "season-specials.tbn")
+                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
                         Else
                             Try
-                                PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
+                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
@@ -13130,9 +13133,9 @@ Public Class Form1
                     End If
                 Catch
                 End Try
-                If workingtvshow.path <> Nothing Then
+                If workingTvShow.path <> Nothing Then
                     Try
-                        PictureBox4.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg")
+                        PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
                     Catch
                         PictureBox4.Image = Nothing
                     End Try
@@ -13144,7 +13147,7 @@ Public Class Form1
 
     Private Sub loadtvshow(ByVal path As String)
         Dim tempstring As String = ""
-        workingtvshow.path = path
+        workingTvShow.path = path
         ComboBox4.Items.Clear()
         ComboBox4.Text = ""
         For i = Panel13.Controls.Count - 1 To 0 Step -1
@@ -13164,33 +13167,33 @@ Public Class Form1
         TextBox16.Text = ""
         TextBox18.Text = ""
         TextBox19.Text = ""
-        workingtvshow.path = ""
+        workingTvShow.path = ""
         ComboBox4.Items.Clear()
         ComboBox4.Text = ""
         Dim hg As New IO.DirectoryInfo(path.Replace(IO.Path.GetFileName(path), ""))
         If Not hg.Exists Then
-            workingtvshow.episodeactorsource = Nothing
-            workingtvshow.episodeguideurl = Nothing
-            workingtvshow.fanart = Nothing
-            workingtvshow.fanartpath = Nothing
-            workingtvshow.genre = Nothing
-            workingtvshow.imdbid = Nothing
-            workingtvshow.language = Nothing
-            workingtvshow.listactors.Clear()
-            workingtvshow.mpaa = Nothing
-            workingtvshow.plot = Nothing
-            workingtvshow.posterpath = Nothing
-            workingtvshow.posters.Clear()
-            workingtvshow.premiered = Nothing
-            workingtvshow.rating = Nothing
-            workingtvshow.runtime = Nothing
-            workingtvshow.sortorder = Nothing
-            workingtvshow.studio = Nothing
-            workingtvshow.tvdbid = Nothing
-            workingtvshow.year = Nothing
-            workingtvshow.locked = True
+            workingTvShow.episodeactorsource = Nothing
+            workingTvShow.episodeguideurl = Nothing
+            workingTvShow.fanart = Nothing
+            workingTvShow.fanartpath = Nothing
+            workingTvShow.genre = Nothing
+            workingTvShow.imdbid = Nothing
+            workingTvShow.language = Nothing
+            workingTvShow.listactors.Clear()
+            workingTvShow.mpaa = Nothing
+            workingTvShow.plot = Nothing
+            workingTvShow.posterpath = Nothing
+            workingTvShow.posters.Clear()
+            workingTvShow.premiered = Nothing
+            workingTvShow.rating = Nothing
+            workingTvShow.runtime = Nothing
+            workingTvShow.sortorder = Nothing
+            workingTvShow.studio = Nothing
+            workingTvShow.tvdbid = Nothing
+            workingTvShow.year = Nothing
+            workingTvShow.locked = True
             TextBox2.Text = "Unable to find folder: " & path.Replace(IO.Path.GetFileName(path), "")
-            workingtvshow.title = TextBox2.Text
+            workingTvShow.title = TextBox2.Text
             TextBox10.Text = ""
             TextBox11.Text = ""
             TextBox9.Text = ""
@@ -13201,33 +13204,33 @@ Public Class Form1
             TextBox16.Text = ""
             TextBox18.Text = ""
             TextBox19.Text = "Unable to find folder: " & path.Replace(IO.Path.GetFileName(path), "")
-            workingtvshow.plot = TextBox19.Text
-            workingtvshow.path = path
+            workingTvShow.plot = TextBox19.Text
+            workingTvShow.path = path
             ComboBox4.Items.Clear()
             ComboBox4.Text = ""
-            workingtvshow.episodeactorsource = Nothing
-            workingtvshow.episodeguideurl = Nothing
-            workingtvshow.fanart = Nothing
-            workingtvshow.fanartpath = Nothing
-            workingtvshow.genre = Nothing
-            workingtvshow.imdbid = Nothing
-            workingtvshow.language = Nothing
-            workingtvshow.listactors.Clear()
-            workingtvshow.mpaa = Nothing
-            workingtvshow.posterpath = Nothing
-            workingtvshow.posters.Clear()
-            workingtvshow.premiered = Nothing
-            workingtvshow.rating = Nothing
-            workingtvshow.runtime = Nothing
-            workingtvshow.sortorder = Nothing
-            workingtvshow.studio = Nothing
-            workingtvshow.tvdbid = Nothing
-            workingtvshow.year = Nothing
+            workingTvShow.episodeactorsource = Nothing
+            workingTvShow.episodeguideurl = Nothing
+            workingTvShow.fanart = Nothing
+            workingTvShow.fanartpath = Nothing
+            workingTvShow.genre = Nothing
+            workingTvShow.imdbid = Nothing
+            workingTvShow.language = Nothing
+            workingTvShow.listactors.Clear()
+            workingTvShow.mpaa = Nothing
+            workingTvShow.posterpath = Nothing
+            workingTvShow.posters.Clear()
+            workingTvShow.premiered = Nothing
+            workingTvShow.rating = Nothing
+            workingTvShow.runtime = Nothing
+            workingTvShow.sortorder = Nothing
+            workingTvShow.studio = Nothing
+            workingTvShow.tvdbid = Nothing
+            workingTvShow.year = Nothing
             PictureBox6.Image = Nothing
             PictureBox4.Image = Nothing
             PictureBox5.Image = Nothing
         Else
-            workingtvshow = nfoFunction.loadfulltnshownfo(path)
+            workingTvShow = nfoFunction.loadfulltnshownfo(path)
 
 
             TextBox2.Text = ""
@@ -13241,7 +13244,7 @@ Public Class Form1
             TextBox16.Text = ""
             TextBox18.Text = ""
             TextBox19.Text = ""
-            workingtvshow.path = path
+            workingTvShow.path = path
             ComboBox4.Items.Clear()
             ComboBox4.Text = ""
 
@@ -13249,90 +13252,90 @@ Public Class Form1
             PictureBox4.Image = Nothing
             PictureBox5.Image = Nothing
 
-            If workingtvshow.title <> Nothing Then TextBox2.Text = workingtvshow.title
-            If workingtvshow.premiered <> Nothing Then TextBox10.Text = workingtvshow.premiered
-            If workingtvshow.genre <> Nothing Then TextBox11.Text = workingtvshow.genre
-            If workingtvshow.tvdbid <> Nothing Then TextBox9.Text = workingtvshow.tvdbid
-            If workingtvshow.imdbid <> Nothing Then TextBox12.Text = workingtvshow.imdbid
-            If workingtvshow.rating <> Nothing Then TextBox13.Text = workingtvshow.rating
-            If workingtvshow.mpaa <> Nothing Then TextBox14.Text = workingtvshow.mpaa
-            If workingtvshow.runtime <> Nothing Then TextBox15.Text = workingtvshow.runtime
-            If workingtvshow.studio <> Nothing Then TextBox16.Text = workingtvshow.studio
-            If workingtvshow.plot <> Nothing Then TextBox19.Text = workingtvshow.plot
-            If workingtvshow.locked = 1 Then
+            If workingTvShow.title <> Nothing Then TextBox2.Text = workingTvShow.title
+            If workingTvShow.premiered <> Nothing Then TextBox10.Text = workingTvShow.premiered
+            If workingTvShow.genre <> Nothing Then TextBox11.Text = workingTvShow.genre
+            If workingTvShow.tvdbid <> Nothing Then TextBox9.Text = workingTvShow.tvdbid
+            If workingTvShow.imdbid <> Nothing Then TextBox12.Text = workingTvShow.imdbid
+            If workingTvShow.rating <> Nothing Then TextBox13.Text = workingTvShow.rating
+            If workingTvShow.mpaa <> Nothing Then TextBox14.Text = workingTvShow.mpaa
+            If workingTvShow.runtime <> Nothing Then TextBox15.Text = workingTvShow.runtime
+            If workingTvShow.studio <> Nothing Then TextBox16.Text = workingTvShow.studio
+            If workingTvShow.plot <> Nothing Then TextBox19.Text = workingTvShow.plot
+            If workingTvShow.locked = 1 Then
                 Button60.Text = "Locked"
                 Button60.BackColor = Color.Red
-            ElseIf workingtvshow.locked = 0 Then
+            ElseIf workingTvShow.locked = 0 Then
                 Button60.Text = "Open"
                 Button60.BackColor = Color.LawnGreen
-            ElseIf workingtvshow.locked = -1 Then
+            ElseIf workingTvShow.locked = -1 Then
                 Button60.Text = "Open"
                 Button60.BackColor = Color.LawnGreen
-            ElseIf workingtvshow.locked = 2 Then
+            ElseIf workingTvShow.locked = 2 Then
                 Button60.Text = "Un-Verified"
                 Button60.BackColor = Color.Red
             End If
 
-            If workingtvshow.sortorder = Nothing Then workingtvshow.sortorder = userPrefs.sortorder
-            If workingtvshow.sortorder = "" Then workingtvshow.sortorder = userPrefs.sortorder
-            If workingtvshow.sortorder = "dvd" Then
+            If workingTvShow.sortorder = Nothing Then workingTvShow.sortorder = userPrefs.sortorder
+            If workingTvShow.sortorder = "" Then workingTvShow.sortorder = userPrefs.sortorder
+            If workingTvShow.sortorder = "dvd" Then
                 Button47.Text = "DVD"
-            ElseIf workingtvshow.sortorder = "default" Then
+            ElseIf workingTvShow.sortorder = "default" Then
                 Button47.Text = "Default"
             End If
             '0	-	all from tvdb
             '1	-	all from imdb
             '2	-	tv imdb, eps tvdb
             '3	-	tv TVDB, eps IMDB
-            If workingtvshow.episodeactorsource = Nothing Then
+            If workingTvShow.episodeactorsource = Nothing Then
                 tempstring = userPrefs.tvdbactorscrape
                 If tempstring = "0" Or tempstring = "2" Then
-                    workingtvshow.episodeactorsource = "tvdb"
+                    workingTvShow.episodeactorsource = "tvdb"
                 Else
-                    workingtvshow.episodeactorsource = "imdb"
+                    workingTvShow.episodeactorsource = "imdb"
                 End If
             End If
 
-            If workingtvshow.episodeactorsource = "" Then
+            If workingTvShow.episodeactorsource = "" Then
                 tempstring = userPrefs.tvdbactorscrape
                 If tempstring = "0" Or tempstring = "2" Then
-                    workingtvshow.episodeactorsource = "tvdb"
+                    workingTvShow.episodeactorsource = "tvdb"
                 Else
-                    workingtvshow.episodeactorsource = "imdb"
+                    workingTvShow.episodeactorsource = "imdb"
                 End If
             End If
 
-            If workingtvshow.episodeactorsource = "imdb" Then
+            If workingTvShow.episodeactorsource = "imdb" Then
                 Button46.Text = "IMDB"
-            ElseIf workingtvshow.episodeactorsource = "tvdb" Then
+            ElseIf workingTvShow.episodeactorsource = "tvdb" Then
                 Button46.Text = "TVDB"
             End If
 
-            If workingtvshow.tvshowactorsource = Nothing Then
+            If workingTvShow.tvshowactorsource = Nothing Then
                 tempstring = userPrefs.tvdbactorscrape
                 If tempstring = "0" Or tempstring = "3" Then
-                    workingtvshow.tvshowactorsource = "tvdb"
+                    workingTvShow.tvshowactorsource = "tvdb"
                 Else
-                    workingtvshow.tvshowactorsource = "imdb"
+                    workingTvShow.tvshowactorsource = "imdb"
                 End If
             End If
 
-            If workingtvshow.tvshowactorsource = "" Then
+            If workingTvShow.tvshowactorsource = "" Then
                 tempstring = userPrefs.tvdbactorscrape
                 If tempstring = "0" Or tempstring = "3" Then
-                    workingtvshow.tvshowactorsource = "tvdb"
+                    workingTvShow.tvshowactorsource = "tvdb"
                 Else
-                    workingtvshow.tvshowactorsource = "imdb"
+                    workingTvShow.tvshowactorsource = "imdb"
                 End If
             End If
 
-            If workingtvshow.tvshowactorsource = "imdb" Then
+            If workingTvShow.tvshowactorsource = "imdb" Then
                 Button45.Text = "IMDB"
-            ElseIf workingtvshow.tvshowactorsource = "tvdb" Then
+            ElseIf workingTvShow.tvshowactorsource = "tvdb" Then
                 Button45.Text = "TVDB"
             End If
 
-            For Each actor In workingtvshow.listactors
+            For Each actor In workingTvShow.listactors
                 ComboBox4.Items.Add(actor.actorname)
             Next
             Try
@@ -13343,17 +13346,17 @@ Public Class Form1
 
             End Try
 
-            If workingtvshow.path <> Nothing Then
+            If workingTvShow.path <> Nothing Then
                 Try
-                    If IO.File.Exists(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")) Then
-                        Dim OriginalImage As New Bitmap(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg"))
+                    If IO.File.Exists(workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")) Then
+                        Dim OriginalImage As New Bitmap(workingTvShow.path.Replace("tvshow.nfo", "folder.jpg"))
                         Dim Image2 As New Bitmap(OriginalImage)
                         OriginalImage.Dispose()
                         PictureBox5.Image = Image2
                     End If
 
-                    If IO.File.Exists(workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg")) Then
-                        Dim OriginalImage2 As New Bitmap(workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg"))
+                    If IO.File.Exists(workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")) Then
+                        Dim OriginalImage2 As New Bitmap(workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg"))
                         Dim Image22 As New Bitmap(OriginalImage2)
                         OriginalImage2.Dispose()
                         PictureBox4.Image = Image22
@@ -13391,25 +13394,25 @@ Public Class Form1
 
             TextBox2.Text = "Unable to find episode: " & path
             TextBox21.Text = "Unable to find episode: " & path
-            workingepisode(workingepisodeindex).aired = Nothing
-            workingepisode(workingepisodeindex).credits = Nothing
-            workingepisode(workingepisodeindex).director = Nothing
-            workingepisode(workingepisodeindex).episodeno = Nothing
-            workingepisode(workingepisodeindex).episodepath = TreeView1.SelectedNode.Parent.Parent.Name
-            workingepisode(workingepisodeindex).fanartpath = Nothing
-            workingepisode(workingepisodeindex).filedetails = Nothing
-            workingepisode(workingepisodeindex).listactors.Clear()
-            workingepisode(workingepisodeindex).playcount = Nothing
-            workingepisode(workingepisodeindex).plot = TextBox21.Text
-            workingepisode(workingepisodeindex).rating = Nothing
-            workingepisode(workingepisodeindex).seasonno = Nothing
-            workingepisode(workingepisodeindex).thumb = Nothing
-            workingepisode(workingepisodeindex).title = TextBox2.Text
+            workingEpisode(workingEpisodeIndex).aired = Nothing
+            workingEpisode(workingEpisodeIndex).credits = Nothing
+            workingEpisode(workingEpisodeIndex).director = Nothing
+            workingEpisode(workingEpisodeIndex).episodeno = Nothing
+            workingEpisode(workingEpisodeIndex).episodepath = TreeView1.SelectedNode.Parent.Parent.Name
+            workingEpisode(workingEpisodeIndex).fanartpath = Nothing
+            workingEpisode(workingEpisodeIndex).filedetails = Nothing
+            workingEpisode(workingEpisodeIndex).listactors.Clear()
+            workingEpisode(workingEpisodeIndex).playcount = Nothing
+            workingEpisode(workingEpisodeIndex).plot = TextBox21.Text
+            workingEpisode(workingEpisodeIndex).rating = Nothing
+            workingEpisode(workingEpisodeIndex).seasonno = Nothing
+            workingEpisode(workingEpisodeIndex).thumb = Nothing
+            workingEpisode(workingEpisodeIndex).title = TextBox2.Text
             Panel9.Visible = True
             Exit Sub
         End If
 
-        If workingtvshow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then
+        If workingTvShow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then
             loadtvshow(TreeView1.SelectedNode.Parent.Parent.Name)
         End If
 
@@ -13424,58 +13427,58 @@ Public Class Form1
         End If
 
         'Try
-        workingepisodeindex = -5
+        workingEpisodeIndex = -5
         nfoFunction.loadfullepisodenfo(path) ', season, episode)
-        For f = 0 To workingepisode.Count - 1
-            If workingepisode(f).seasonno = season And workingepisode(f).episodeno = episode Then
-                workingepisodeindex = f
+        For f = 0 To workingEpisode.Count - 1
+            If workingEpisode(f).seasonno = season And workingEpisode(f).episodeno = episode Then
+                workingEpisodeIndex = f
                 Exit For
             End If
         Next
 
-        If workingepisodeindex = -5 And workingepisode.Count > 0 Then
-            workingepisodeindex = 0
-            If workingepisode(0).plot.IndexOf("xml error") <> -1 Then
+        If workingEpisodeIndex = -5 And workingEpisode.Count > 0 Then
+            workingEpisodeIndex = 0
+            If workingEpisode(0).plot.IndexOf("xml error") <> -1 Then
                 TextBox21.Text = "This episode could not be loaded due to an xml error"
-                TextBox2.Text = workingepisode(0).title
+                TextBox2.Text = workingEpisode(0).title
                 TreeView1.SelectedNode.ForeColor = Color.Red
                 Exit Sub
-            ElseIf workingepisode(0).plot.IndexOf("missing file") <> -1 Then
-                workingepisodeindex = 0
+            ElseIf workingEpisode(0).plot.IndexOf("missing file") <> -1 Then
+                workingEpisodeIndex = 0
                 TextBox21.Text = "Missing file: " & vbCrLf & path
-                TextBox2.Text = workingepisode(0).title
+                TextBox2.Text = workingEpisode(0).title
                 TreeView1.SelectedNode.ForeColor = Color.Red
                 Exit Sub
             End If
             'Exit Sub
         End If
 
-        If IsNumeric(workingepisode(workingepisodeindex).playcount) Then
-            If Convert.ToInt32(workingepisode(workingepisodeindex).playcount) <= 0 Then
+        If IsNumeric(workingEpisode(workingEpisodeIndex).playcount) Then
+            If Convert.ToInt32(workingEpisode(workingEpisodeIndex).playcount) <= 0 Then
                 Button48.Text = "UnWatched"
                 Button48.BackColor = Color.Red
-            ElseIf Convert.ToInt32(workingepisode(workingepisodeindex).playcount) > 0 Then
+            ElseIf Convert.ToInt32(workingEpisode(workingEpisodeIndex).playcount) > 0 Then
                 Button48.Text = "Watched"
                 Button48.BackColor = Color.Green
             End If
         Else
-            workingepisode(workingepisodeindex).playcount = "0"
+            workingEpisode(workingEpisodeIndex).playcount = "0"
             Button48.Text = "UnWatched"
             Button48.BackColor = Color.Red
         End If
-        TextBox20.Text = workingepisode(workingepisodeindex).rating
-        TextBox21.Text = workingepisode(workingepisodeindex).plot
-        TextBox22.Text = workingepisode(workingepisodeindex).director
-        TextBox23.Text = workingepisode(workingepisodeindex).credits
-        TextBox24.Text = workingepisode(workingepisodeindex).aired
+        TextBox20.Text = workingEpisode(workingEpisodeIndex).rating
+        TextBox21.Text = workingEpisode(workingEpisodeIndex).plot
+        TextBox22.Text = workingEpisode(workingEpisodeIndex).director
+        TextBox23.Text = workingEpisode(workingEpisodeIndex).credits
+        TextBox24.Text = workingEpisode(workingEpisodeIndex).aired
 
-        For Each actor In workingepisode(workingepisodeindex).listactors
+        For Each actor In workingEpisode(workingEpisodeIndex).listactors
             If actor.actorname <> Nothing Then
                 ComboBox5.Items.Add(actor.actorname)
             End If
         Next
         If ComboBox5.Items.Count = 0 Then
-            For Each actor In workingtvshow.listactors
+            For Each actor In workingTvShow.listactors
                 If actor.actorname <> Nothing Then
                     ComboBox5.Items.Add(actor.actorname)
                 End If
@@ -13487,7 +13490,7 @@ Public Class Form1
 
         End Try
         Try
-            tempstring = workingepisode(workingepisodeindex).episodepath.Substring(0, workingepisode(workingepisodeindex).episodepath.Length - 3)
+            tempstring = workingEpisode(workingEpisodeIndex).episodepath.Substring(0, workingEpisode(workingEpisodeIndex).episodepath.Length - 3)
             tempstring = tempstring & "tbn"
             If IO.File.Exists(tempstring) Then
                 Try
@@ -13501,36 +13504,36 @@ Public Class Form1
             Else
                 Try
                     PictureBox14.Image = Nothing
-                    PictureBox4.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
                 Catch
                 End Try
             End If
             Try
                 If trueseason <> 0 Then
-                    If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
-                        PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
+                    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
+                        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
                     End If
                 Else
-                    If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
+                    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
                         Try
-                            Dim fi As New FileInfo(workingtvshow.path.Replace("tvshow.nfo", "season00.tbn"))
-                            Dim rename2 As String = workingtvshow.path.Replace("tvshow.nfo", "season-specials.tbn")
+                            Dim fi As New FileInfo(workingTvShow.path.Replace("tvshow.nfo", "season00.tbn"))
+                            Dim rename2 As String = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
                             fi.MoveTo(rename2)
                         Catch ex As Exception
                         End Try
                     End If
 
-                    If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
-                        PictureBox5.ImageLocation = workingtvshow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
+                    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
+                        PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
                     End If
 
                 End If
             Catch
             End Try
             If trueseason <> "Unknown" Then
-                TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & workingepisode(workingepisodeindex).title
+                TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & workingEpisode(workingEpisodeIndex).title
             Else
-                TextBox2.Text = workingtvshow.title & ": " & IO.Path.GetFileName(workingepisode(workingepisodeindex).title)
+                TextBox2.Text = workingTvShow.title & ": " & IO.Path.GetFileName(workingEpisode(workingEpisodeIndex).title)
                 TextBox21.Text = "This media file has been found by Media Companion" & vbCrLf & "Within this TV Shows Folder" & vbCrLf & vbCrLf & "Season and/or episode numbers could" & vbCrLf & "identified from the filename"
             End If
             Panel9.Visible = True
@@ -13542,11 +13545,11 @@ Public Class Form1
 
         PictureBox8.Image = Nothing
         PictureBox8.Visible = True
-        For Each actor In workingepisode(workingepisodeindex).listactors
+        For Each actor In workingepisode(workingEpisodeIndex).listactors
             If actor.actorname = ComboBox5.Text Then
                 TextBox25.Text = actor.actorrole
                 Try
-                    Dim temppath As String = workingepisode(workingepisodeindex).episodepath.Replace(IO.Path.GetFileName(workingepisode(workingepisodeindex).episodepath), "")
+                    Dim temppath As String = workingepisode(workingEpisodeIndex).episodepath.Replace(IO.Path.GetFileName(workingepisode(workingEpisodeIndex).episodepath), "")
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
@@ -13574,11 +13577,11 @@ Public Class Form1
 
         PictureBox6.Image = Nothing
 
-        For Each actor In workingtvshow.listactors
+        For Each actor In workingTvShow.listactors
             If actor.actorname = ComboBox4.Text Then
                 TextBox18.Text = actor.actorrole
                 Try
-                    Dim temppath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "")
+                    Dim temppath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "")
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
@@ -13606,16 +13609,16 @@ Public Class Form1
         Dim tempstring As String = ""
         Try
             If TreeView1.SelectedNode.Parent.Text = "" Then
-                tempstring = workingtvshow.path
+                tempstring = workingTvShow.path
             ElseIf TreeView1.SelectedNode.Parent.Text.ToLower.IndexOf("season") <> -1 Then
-                tempstring = workingepisode(workingepisodeindex).episodepath
+                tempstring = workingEpisode(workingEpisodeIndex).episodepath
             ElseIf TreeView1.SelectedNode.Parent.Text.ToLower.IndexOf("specials") <> -1 Then
-                tempstring = workingepisode(workingepisodeindex).episodepath
+                tempstring = workingEpisode(workingEpisodeIndex).episodepath
             Else
                 Exit Sub
             End If
         Catch
-            tempstring = workingtvshow.path
+            tempstring = workingTvShow.path
         End Try
         Try
             Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
@@ -13643,7 +13646,7 @@ Public Class Form1
     Private Sub ExpandSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandSelectedShowToolStripMenuItem.Click
         Dim node As TreeNode
         For Each node In TreeView1.Nodes
-            If node.Name = workingtvshow.path Then
+            If node.Name = workingTvShow.path Then
                 node.ExpandAll()
             End If
         Next
@@ -13652,7 +13655,7 @@ Public Class Form1
     Private Sub CollapseSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CollapseSelectedShowToolStripMenuItem.Click
         Dim node As TreeNode
         For Each node In TreeView1.Nodes
-            If node.Name = workingtvshow.path Then
+            If node.Name = workingTvShow.path Then
                 node.Collapse()
             End If
         Next
@@ -13750,9 +13753,9 @@ Public Class Form1
         If TreeView1.SelectedNode Is Nothing Then Exit Sub
         If TreeView1.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Then
             'load tvshow.nfo
-            If workingtvshow.path <> TreeView1.SelectedNode.Name Or force = True Then
+            If workingTvShow.path <> TreeView1.SelectedNode.Name Or force = True Then
                 Call loadtvshow(TreeView1.SelectedNode.Name)
-                If workingtvshow.plot.IndexOf("xml error") = -1 Then
+                If workingTvShow.plot.IndexOf("xml error") = -1 Then
                     If Me.TreeView1.SelectedNode.ForeColor = Color.Red Then
                         Me.TreeView1.SelectedNode.ForeColor = Color.Black
                     End If
@@ -13764,10 +13767,10 @@ Public Class Form1
                     Call savetvdata()
                 End If
             Else
-                If workingtvshow.path <> Nothing Then
-                    TextBox2.Text = workingtvshow.title
-                    PictureBox5.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
-                    PictureBox4.ImageLocation = workingtvshow.path.Replace("tvshow.nfo", "fanart.jpg")
+                If workingTvShow.path <> Nothing Then
+                    TextBox2.Text = workingTvShow.title
+                    PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                    PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
                 End If
                 Panel9.Visible = False
             End If
@@ -13777,7 +13780,7 @@ Public Class Form1
             Dim episode As String = TreeView1.SelectedNode.Text.Substring(0, 2)
             Call loadtvepisode(TreeView1.SelectedNode.Name, season, episode)
 
-            If workingepisode(workingepisodeindex).plot.IndexOf("xml error") = -1 Then
+            If workingEpisode(workingEpisodeIndex).plot.IndexOf("xml error") = -1 Then
                 If Me.TreeView1.SelectedNode.ForeColor = Color.Red Then
                     Me.TreeView1.SelectedNode.ForeColor = Color.Black
                 End If
@@ -13799,11 +13802,11 @@ Public Class Form1
         Dim tempstring As String = ""
         If tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences" Then
 
-            If workingtvshow.path = "" And tvFolders.Count = 0 Then
+            If workingTvShow.path = "" And tvFolders.Count = 0 Then
                 Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                 MsgBox("There are no TV Shows in your list to work on" & vbCrLf & "Set the Preferences as you want them" & vbCrLf & "Using the Preferences Tab, then" & vbCrLf & "add your TV Folders using the Folders Tab" & vbCrLf & "Once the tvshow has been scraped then" & vbCrLf & "Use the tab, ""Search for new episodes""")
                 If tab <> "TV Preferences" Then Exit Sub
-            ElseIf workingtvshow.path = "" And tvFolders.Count > 0 And tab <> "Search for new Episodes" And tab <> "TV Preferences" Then
+            ElseIf workingTvShow.path = "" And tvFolders.Count > 0 And tab <> "Search for new Episodes" And tab <> "TV Preferences" Then
                 Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                 If basictvlist.Count > 0 Then
                     MsgBox("No TV Show is selected")
@@ -13841,22 +13844,22 @@ Public Class Form1
             tvCurrentTabIndex = TabControl3.SelectedIndex
             Call setup_tvposters()
         ElseIf tab = "" Then
-            If workingtvshow.imdbid <> Nothing Then
-                If workingtvshow.imdbid = "" Then
+            If workingTvShow.imdbid <> Nothing Then
+                If workingTvShow.imdbid = "" Then
                     MsgBox("No IMDB ID is available for this TV Show")
                 End If
-                If workingtvshow.imdbid.IndexOf("tt") <> 0 Then
+                If workingTvShow.imdbid.IndexOf("tt") <> 0 Then
                     MsgBox("This shows IMDB ID cannot be recognised")
                 End If
 
                 If userPrefs.externalbrowser = True Then
                     Me.TabControl3.SelectedIndex = tvCurrentTabIndex
-                    tempstring = "http://www.imdb.com/title/" & workingtvshow.imdbid & "/"
+                    tempstring = "http://www.imdb.com/title/" & workingTvShow.imdbid & "/"
                     Process.Start(tempstring)
                 Else
                     tvCurrentTabIndex = TabControl3.SelectedIndex
                     Dim url As String
-                    url = "http://www.imdb.com/title/" & workingtvshow.imdbid & "/"
+                    url = "http://www.imdb.com/title/" & workingTvShow.imdbid & "/"
                     Try
                         If WebBrowser3.Url.AbsoluteUri.ToLower.ToString <> url Then
                             WebBrowser3.Stop()
@@ -13881,17 +13884,17 @@ Public Class Form1
 
         ElseIf tab = "TVDB" Then
             Try
-                If IsNumeric(workingtvshow.tvdbid) Then
+                If IsNumeric(workingTvShow.tvdbid) Then
                     If userPrefs.externalbrowser = True Then
                         Me.TabControl3.SelectedIndex = tvCurrentTabIndex
-                        tempstring = "http://thetvdb.com/?tab=series&id=" & workingtvshow.tvdbid & "&lid=7"
+                        tempstring = "http://thetvdb.com/?tab=series&id=" & workingTvShow.tvdbid & "&lid=7"
                         Process.Start(tempstring)
                     Else
                         tvCurrentTabIndex = TabControl3.SelectedIndex
                         Dim url As String
-                        url = "http://thetvdb.com/?tab=series&id=" & workingtvshow.tvdbid & "&lid=7"
+                        url = "http://thetvdb.com/?tab=series&id=" & workingTvShow.tvdbid & "&lid=7"
                         Try
-                            If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & workingtvshow.tvdbid) = -1 Then
+                            If WebBrowser4.Url.AbsoluteUri.ToLower.ToString <> url And WebBrowser4.Url.AbsoluteUri.ToLower.ToString.IndexOf("seriesid=" & workingTvShow.tvdbid) = -1 Then
                                 WebBrowser4.Stop()
                                 WebBrowser4.ScriptErrorsSuppressed = True
 
@@ -13917,8 +13920,8 @@ Public Class Form1
             tvCurrentTabIndex = TabControl3.SelectedIndex
         ElseIf tab.ToLower = "screenshot" Then
             tvCurrentTabIndex = TabControl3.SelectedIndex
-            If IO.File.Exists(workingepisode(0).episodepath.Replace(IO.Path.GetExtension(workingepisode(0).episodepath), ".tbn")) Then
-                PictureBox14.ImageLocation = workingepisode(0).episodepath.Replace(IO.Path.GetExtension(workingepisode(0).episodepath), ".tbn")
+            If IO.File.Exists(workingEpisode(0).episodepath.Replace(IO.Path.GetExtension(workingEpisode(0).episodepath), ".tbn")) Then
+                PictureBox14.ImageLocation = workingEpisode(0).episodepath.Replace(IO.Path.GetExtension(workingEpisode(0).episodepath), ".tbn")
             Else
                 PictureBox14.Image = Nothing
             End If
@@ -13977,11 +13980,11 @@ Public Class Form1
                     ListBox1.Items.Add(lan.language)
                 Next
             End If
-            TextBox26.Text = filefunction.getlastfolder(workingtvshow.path)
+            TextBox26.Text = filefunction.getlastfolder(workingTvShow.path)
             PictureBox9.Image = Nothing
-            If workingtvshow.language <> Nothing Then
+            If workingTvShow.language <> Nothing Then
                 For Each language In languagelist
-                    If language.abbreviation = workingtvshow.language Then
+                    If language.abbreviation = workingTvShow.language Then
                         ListBox1.SelectedItem = language.language
                         Exit For
                     End If
@@ -14267,9 +14270,9 @@ Public Class Form1
 
         If userPrefs.tvshow_useXBMC_Scraper = True Then
 
-            Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listofshows(ListBox3.SelectedIndex).showid, languagelist(ListBox1.SelectedIndex).abbreviation, workingtvshow.path)
-            If TVShowNFOContent <> "error" Then CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-            Call loadtvshow(workingtvshow.path)
+            Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listofshows(ListBox3.SelectedIndex).showid, languagelist(ListBox1.SelectedIndex).abbreviation, workingTvShow.path)
+            If TVShowNFOContent <> "error" Then CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
+            Call loadtvshow(workingTvShow.path)
             TreeView1.Refresh()
             messbox.Close()
             TabControl3.SelectedIndex = 0
@@ -14286,41 +14289,41 @@ Public Class Form1
             Dim posterurl As String
             Dim bannerurl As String
             Dim fanarturl As String
-            workingtvshow.title = Nothing
-            workingtvshow.year = Nothing
-            workingtvshow.genre = Nothing
-            workingtvshow.tvdbid = Nothing
-            workingtvshow.imdbid = Nothing
-            workingtvshow.rating = Nothing
-            workingtvshow.mpaa = Nothing
-            workingtvshow.runtime = Nothing
-            workingtvshow.studio = Nothing
-            workingtvshow.language = Nothing
-            workingtvshow.plot = Nothing
-            workingtvshow.sortorder = Nothing
-            workingtvshow.premiered = Nothing
-            workingtvshow.posterpath = Nothing
-            workingtvshow.listactors.Clear()
-            workingtvshow.fanartpath = Nothing
-            workingtvshow.episodeguideurl = Nothing
-            workingtvshow.episodeactorsource = Nothing
-            workingtvshow.locked = 0
+            workingTvShow.title = Nothing
+            workingTvShow.year = Nothing
+            workingTvShow.genre = Nothing
+            workingTvShow.tvdbid = Nothing
+            workingTvShow.imdbid = Nothing
+            workingTvShow.rating = Nothing
+            workingTvShow.mpaa = Nothing
+            workingTvShow.runtime = Nothing
+            workingTvShow.studio = Nothing
+            workingTvShow.language = Nothing
+            workingTvShow.plot = Nothing
+            workingTvShow.sortorder = Nothing
+            workingTvShow.premiered = Nothing
+            workingTvShow.posterpath = Nothing
+            workingTvShow.listactors.Clear()
+            workingTvShow.fanartpath = Nothing
+            workingTvShow.episodeguideurl = Nothing
+            workingTvShow.episodeactorsource = Nothing
+            workingTvShow.locked = 0
 
-            workingtvshow.title = listofshows(ListBox3.SelectedIndex).showtitle
-            workingtvshow.tvdbid = listofshows(ListBox3.SelectedIndex).showid
-            workingtvshow.language = languagelist(ListBox1.SelectedIndex).abbreviation
+            workingTvShow.title = listofshows(ListBox3.SelectedIndex).showtitle
+            workingTvShow.tvdbid = listofshows(ListBox3.SelectedIndex).showid
+            workingTvShow.language = languagelist(ListBox1.SelectedIndex).abbreviation
 
 
             If RadioButton11.Checked = True Then
-                workingtvshow.episodeactorsource = "tvdb"
+                workingTvShow.episodeactorsource = "tvdb"
             Else
-                workingtvshow.episodeactorsource = "imdb"
+                workingTvShow.episodeactorsource = "imdb"
             End If
 
             If RadioButton15.Checked = True Then
-                workingtvshow.sortorder = "default"
+                workingTvShow.sortorder = "default"
             Else
-                workingtvshow.sortorder = "dvd"
+                workingTvShow.sortorder = "dvd"
             End If
 
             Dim showlist As New XmlDocument
@@ -14329,27 +14332,27 @@ Public Class Form1
             For Each thisresult In showlist("fulltvshow")
                 Select Case thisresult.Name
                     Case "mpaa"
-                        workingtvshow.mpaa = thisresult.InnerText
+                        workingTvShow.mpaa = thisresult.InnerText
                     Case "premiered"
-                        workingtvshow.premiered = thisresult.InnerText
-                        workingtvshow.year = thisresult.InnerText.Substring(0, 4)
+                        workingTvShow.premiered = thisresult.InnerText
+                        workingTvShow.year = thisresult.InnerText.Substring(0, 4)
                     Case "genre"
                         Dim newstring As String
                         newstring = thisresult.InnerText
                         newstring = newstring.TrimEnd("|")
                         newstring = newstring.TrimStart("|")
                         newstring = newstring.Replace("|", " / ")
-                        workingtvshow.genre = newstring
+                        workingTvShow.genre = newstring
                     Case "imdbid"
-                        workingtvshow.imdbid = thisresult.InnerText
+                        workingTvShow.imdbid = thisresult.InnerText
                     Case "studio"
-                        workingtvshow.studio = thisresult.InnerText
+                        workingTvShow.studio = thisresult.InnerText
                     Case "plot"
-                        workingtvshow.plot = thisresult.InnerText
+                        workingTvShow.plot = thisresult.InnerText
                     Case "rating"
-                        workingtvshow.rating = thisresult.InnerText
+                        workingTvShow.rating = thisresult.InnerText
                     Case "runtime"
-                        workingtvshow.runtime = thisresult.InnerText
+                        workingTvShow.runtime = thisresult.InnerText
                     Case "banner"
                         bannerurl = thisresult.InnerText
                     Case "fanart"
@@ -14357,10 +14360,10 @@ Public Class Form1
                     Case "poster"
                         posterurl = thisresult.InnerText
                     Case "episodeguideurl"
-                        workingtvshow.episodeguideurl = thisresult.InnerText
+                        workingTvShow.episodeguideurl = thisresult.InnerText
 
                     Case "actor"
-                        If RadioButton13.Checked = True Or workingtvshow.imdbid = Nothing Then
+                        If RadioButton13.Checked = True Or workingTvShow.imdbid = Nothing Then
                             Dim id As String = ""
                             Dim acts As New MovieActors
                             Dim results As XmlNode = Nothing
@@ -14422,24 +14425,24 @@ Public Class Form1
                                 End If
                             End If
                             Dim exists As Boolean = False
-                            For Each actors In workingtvshow.listactors
+                            For Each actors In workingTvShow.listactors
                                 If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                     exists = True
                                 End If
                             Next
                             If exists = False Then
-                                workingtvshow.listactors.Add(acts)
+                                workingTvShow.listactors.Add(acts)
                             End If
                         End If
                 End Select
             Next
 
-            If RadioButton12.Checked = True And workingtvshow.imdbid <> Nothing Then
+            If RadioButton12.Checked = True And workingTvShow.imdbid <> Nothing Then
                 '                    Dim imdbscraper As New imdb.Classimdbscraper
                 Dim imdbscraper As New Classimdb
                 Dim actorlist As String
                 Dim actorstring As New XmlDocument
-                actorlist = imdbscraper.getimdbactors(userPrefs.imdbmirror, workingtvshow.imdbid)
+                actorlist = imdbscraper.getimdbactors(userPrefs.imdbmirror, workingTvShow.imdbid)
                 Try
                     actorstring.LoadXml(actorlist)
                     thisresult = Nothing
@@ -14501,12 +14504,12 @@ Public Class Form1
                                             End If
                                     End Select
                                 Next
-                                workingtvshow.listactors.Add(newactor)
+                                workingTvShow.listactors.Add(newactor)
                         End Select
                     Next
                     scraperLog = scraperLog & "Actors scraped OK"
-                    While workingtvshow.listactors.Count > userPrefs.maxactors
-                        workingtvshow.listactors.RemoveAt(workingtvshow.listactors.Count - 1)
+                    While workingTvShow.listactors.Count > userPrefs.maxactors
+                        workingTvShow.listactors.RemoveAt(workingTvShow.listactors.Count - 1)
                     End While
                 Catch ex As Exception
 
@@ -14580,9 +14583,9 @@ Public Class Form1
                             tempstring = f.ToString
                         End If
 
-                        Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season" & tempstring & ".tbn")
+                        Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season" & tempstring & ".tbn")
                         If tempstring = "00" Then
-                            seasonpath = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season-specials.tbn")
+                            seasonpath = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-specials.tbn")
                         End If
                         If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                             Try
@@ -14642,7 +14645,7 @@ Public Class Form1
                 End If
                 If fanartposter <> "" Then
 
-                    Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "fanart.jpg")
+                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "fanart.jpg")
                     If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                         Try
                             Dim buffer(4000000) As Byte
@@ -14770,7 +14773,7 @@ Public Class Form1
 
                 If posterurlpath <> "" Then
 
-                    Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "folder.jpg")
+                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "folder.jpg")
                     If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                         Try
                             Dim buffer(4000000) As Byte
@@ -14862,7 +14865,7 @@ Public Class Form1
 
                 If seasonallpath <> "" Then
 
-                    Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season-all.tbn")
+                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
                     If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                         Try
                             Dim buffer(4000000) As Byte
@@ -14889,7 +14892,7 @@ Public Class Form1
                     End If
                 End If
             ElseIf RadioButton18.Checked = False And seasonallpath <> "" Then
-                Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season-all.tbn")
+                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
                 If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                     Try
                         Dim buffer(4000000) As Byte
@@ -14963,14 +14966,14 @@ Public Class Form1
             End If
             For Each url In artlist
                 If url.bannertype <> "fanart" Then
-                    workingtvshow.posters.Add(url.url)
+                    workingTvShow.posters.Add(url.url)
                 Else
-                    workingtvshow.fanart.Add(url.url)
+                    workingTvShow.fanart.Add(url.url)
                 End If
             Next
 
-            nfoFunction.savetvshownfo(workingtvshow.path, workingtvshow, True, "unlocked")
-            Call loadtvshow(workingtvshow.path)
+            nfoFunction.savetvshownfo(workingTvShow.path, workingTvShow, True, "unlocked")
+            Call loadtvshow(workingTvShow.path)
             messbox.Close()
             TabControl3.SelectedIndex = 0
         End If
@@ -15580,10 +15583,10 @@ Public Class Form1
                 PictureBox11.Image = Nothing
             End If
         Else
-            If IO.File.Exists(workingtvshow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")) Then
+            If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")) Then
                 Try
-                    PictureBox10.ImageLocation = workingtvshow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-                    PictureBox11.ImageLocation = workingtvshow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox10.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox11.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
                 Catch
                     PictureBox10.Image = Nothing
                     PictureBox11.Image = Nothing
@@ -15598,14 +15601,14 @@ Public Class Form1
             Label59.Text = PictureBox10.Image.Width.ToString
         Catch
         End Try
-        TextBox28.Text = workingtvshow.title
+        TextBox28.Text = workingTvShow.title
         messbox = New frmMessageBox("Please wait,", "", "Querying TVDB for fanart list")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
         Dim tmdbid As String
-        Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & workingtvshow.tvdbid & "/banners.xml"
+        Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & workingTvShow.tvdbid & "/banners.xml"
         Dim apple2(2000) As String
         Dim fanartlinecount As Integer = 0
         Try
@@ -15770,7 +15773,7 @@ Public Class Form1
                 Dim res As HttpWebResponse = req.GetResponse()
                 Dim contents As Stream = res.GetResponseStream()
                 Dim bmp As New Bitmap(contents)
-                Dim savepath As String = workingtvshow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+                Dim savepath As String = workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
 
                 Dim bytesToRead As Integer = CInt(buffer.Length)
 
@@ -15949,7 +15952,7 @@ Public Class Form1
     Private Sub Button39_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button39.Click
         Try
             Dim stream As New System.IO.MemoryStream
-            PictureBox10.Image.Save(workingtvshow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
+            PictureBox10.Image.Save(workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
             PictureBox11.Image = PictureBox10.Image
             If TreeView1.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TreeView1.SelectedNode.Name = "" Then
                 PictureBox4.Image = PictureBox11.Image
@@ -15972,7 +15975,7 @@ Public Class Form1
 
     Private Sub Button31_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button31.Click
         'browser
-        openFD.InitialDirectory = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "")
+        openFD.InitialDirectory = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "")
         openFD.Title = "Select a jpeg image file"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
@@ -15998,7 +16001,7 @@ Public Class Form1
             Dim tempstring As String
 
             Dim bmp As New Bitmap(ImageStream)
-            Dim savepath As String = workingtvshow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+            Dim savepath As String = workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
 
             If Form1.userPrefs.resizefanart = 1 Then
                 Try
@@ -16064,12 +16067,12 @@ Public Class Form1
 
     Private Sub TextBox2_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox2.Enter
         If Panel9.Visible = False Then
-            TextBox2.Text = workingtvshow.title
+            TextBox2.Text = workingTvShow.title
             If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 Then
                 TextBox2.Text = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
             End If
         Else
-            TextBox2.Text = workingepisode(workingepisodeindex).title
+            TextBox2.Text = workingEpisode(workingEpisodeIndex).title
         End If
     End Sub
 
@@ -16082,14 +16085,14 @@ Public Class Form1
                     TextBox2.Text = TextBox2.Text.Substring(4, TextBox2.Text.Length - 4) & ", The"
                 End If
             End If
-            workingtvshow.title = TextBox2.Text
+            workingTvShow.title = TextBox2.Text
         Else
-            workingepisode(workingepisodeindex).title = TextBox2.Text
-            Dim trueseason As String = workingepisode(workingepisodeindex).seasonno
-            Dim trueepisode As String = workingepisode(workingepisodeindex).episodeno
+            workingEpisode(workingEpisodeIndex).title = TextBox2.Text
+            Dim trueseason As String = workingEpisode(workingEpisodeIndex).seasonno
+            Dim trueepisode As String = workingEpisode(workingEpisodeIndex).episodeno
             If trueseason.Length = 1 Then trueseason = "0" & trueseason
             If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-            TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & workingepisode(workingepisodeindex).title
+            TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & workingEpisode(workingEpisodeIndex).title
         End If
     End Sub
 
@@ -16098,10 +16101,10 @@ Public Class Form1
         Dim tempstring As String = ""
         If Panel9.Visible = False Then
             Dim changed As Integer = 0
-            If workingtvshow.tvdbid <> TextBox9.Text Then
+            If workingTvShow.tvdbid <> TextBox9.Text Then
                 changed += 1
             End If
-            If workingtvshow.imdbid.ToLower <> TextBox12.Text.ToLower Then
+            If workingTvShow.imdbid.ToLower <> TextBox12.Text.ToLower Then
                 changed += 2
             End If
             If changed > 0 Then
@@ -16125,22 +16128,22 @@ Public Class Form1
             'its a tvshow
 
             If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 And TextBox2.Text.Length > 5 Then
-                tempworkingtvshow.title = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
+                tempWorkingTvShow.title = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
             Else
-                tempworkingtvshow.title = TextBox2.Text
+                tempWorkingTvShow.title = TextBox2.Text
             End If
-            workingtvshow.title = tempworkingtvshow.title
-            tempworkingtvshow.plot = TextBox19.Text : workingtvshow.plot = TextBox19.Text
-            tempworkingtvshow.runtime = TextBox15.Text : workingtvshow.runtime = TextBox15.Text
-            tempworkingtvshow.premiered = TextBox10.Text : workingtvshow.premiered = TextBox10.Text
-            tempworkingtvshow.studio = TextBox16.Text : workingtvshow.studio = TextBox16.Text
-            tempworkingtvshow.rating = TextBox13.Text : workingtvshow.rating = TextBox13.Text
-            tempworkingtvshow.imdbid = TextBox12.Text : workingtvshow.imdbid = TextBox12.Text
-            tempworkingtvshow.tvdbid = TextBox9.Text : workingtvshow.tvdbid = TextBox9.Text
-            tempworkingtvshow.mpaa = TextBox14.Text : workingtvshow.mpaa = TextBox14.Text
-            tempworkingtvshow.path = workingtvshow.path
-            Dim TVShowNFOContent As String = nfoFunction.ChangeAllFieldsTVShow(tempworkingtvshow)
-            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
+            workingTvShow.title = tempWorkingTvShow.title
+            tempWorkingTvShow.plot = TextBox19.Text : workingTvShow.plot = TextBox19.Text
+            tempWorkingTvShow.runtime = TextBox15.Text : workingTvShow.runtime = TextBox15.Text
+            tempWorkingTvShow.premiered = TextBox10.Text : workingTvShow.premiered = TextBox10.Text
+            tempWorkingTvShow.studio = TextBox16.Text : workingTvShow.studio = TextBox16.Text
+            tempWorkingTvShow.rating = TextBox13.Text : workingTvShow.rating = TextBox13.Text
+            tempWorkingTvShow.imdbid = TextBox12.Text : workingTvShow.imdbid = TextBox12.Text
+            tempWorkingTvShow.tvdbid = TextBox9.Text : workingTvShow.tvdbid = TextBox9.Text
+            tempWorkingTvShow.mpaa = TextBox14.Text : workingTvShow.mpaa = TextBox14.Text
+            tempWorkingTvShow.path = workingTvShow.path
+            Dim TVShowNFOContent As String = nfoFunction.ChangeAllFieldsTVShow(tempWorkingTvShow)
+            If TVShowNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
             'title(2)
             'plot(19)
             'Runtime(15)
@@ -16154,7 +16157,7 @@ Public Class Form1
             'Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
             Dim node As TreeNode
             For Each node In TreeView1.Nodes
-                If node.Name = workingtvshow.path Then
+                If node.Name = workingTvShow.path Then
                     node.Text = TextBox2.Text
                     Exit For
                 End If
@@ -16171,33 +16174,33 @@ Public Class Form1
             'its an episode
 
 
-            Dim trueseason As String = workingepisode(workingepisodeindex).seasonno
-            Dim trueepisode As String = workingepisode(workingepisodeindex).episodeno
+            Dim trueseason As String = workingEpisode(workingEpisodeIndex).seasonno
+            Dim trueepisode As String = workingEpisode(workingEpisodeIndex).episodeno
             If trueseason.Length = 1 Then trueseason = "0" & trueseason
             If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
             tempstring = "S" & trueseason & "E" & trueepisode & " - "
-            tempworkingepisode.title = TextBox2.Text.Replace(tempstring, "") : workingepisode(0).title = tempworkingepisode.title
-            tempworkingepisode.plot = TextBox21.Text : workingepisode(0).plot = TextBox21.Text
-            tempworkingepisode.aired = TextBox24.Text : workingepisode(0).aired = TextBox24.Text
-            tempworkingepisode.rating = TextBox20.Text : workingepisode(0).rating = TextBox20.Text
-            tempworkingepisode.episodepath = workingepisode(0).episodepath
-            Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempworkingepisode)
-            If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingepisode(0).episodepath, TVShowEpisodeNFOContent)
+            tempWorkingEpisode.title = TextBox2.Text.Replace(tempstring, "") : workingEpisode(0).title = tempWorkingEpisode.title
+            tempWorkingEpisode.plot = TextBox21.Text : workingEpisode(0).plot = TextBox21.Text
+            tempWorkingEpisode.aired = TextBox24.Text : workingEpisode(0).aired = TextBox24.Text
+            tempWorkingEpisode.rating = TextBox20.Text : workingEpisode(0).rating = TextBox20.Text
+            tempWorkingEpisode.episodepath = workingEpisode(0).episodepath
+            Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempWorkingEpisode)
+            If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).episodepath, TVShowEpisodeNFOContent)
 
             For Each node As TreeNode In TreeView1.Nodes
                 For Each childnode As TreeNode In node.Nodes
                     Dim counter As Integer = -1
                     For Each epie In childnode.Nodes
-                        If epie.Name = workingepisode(0).episodepath Then
+                        If epie.Name = workingEpisode(0).episodepath Then
                             counter += 1
-                            If counter = workingepisodeindex Then
+                            If counter = workingEpisodeIndex Then
                                 Dim eps As String
-                                If workingepisode(workingepisodeindex).episodeno < 10 Then
-                                    eps = "0" & workingepisode(workingepisodeindex).episodeno
+                                If workingEpisode(workingEpisodeIndex).episodeno < 10 Then
+                                    eps = "0" & workingEpisode(workingEpisodeIndex).episodeno
                                 Else
-                                    eps = workingepisode(workingepisodeindex).episodeno.ToString
+                                    eps = workingEpisode(workingEpisodeIndex).episodeno.ToString
                                 End If
-                                eps = eps & " - " & workingepisode(workingepisodeindex).title
+                                eps = eps & " - " & workingEpisode(workingEpisodeIndex).title
                                 epie.Text = eps
                             End If
                         End If
@@ -16209,10 +16212,10 @@ Public Class Form1
             For Each item In basictvlist
                 If item.fullpath = showpath Then
                     For f = 0 To item.allepisodes.Count - 1
-                        If item.allepisodes(f).episodepath = workingepisode(0).episodepath Then
+                        If item.allepisodes(f).episodepath = workingEpisode(0).episodepath Then
                             item.allepisodes.RemoveAt(f)
-                            For Each ep In workingepisode
-                                If ep.seasonno = workingepisode(workingepisodeindex).seasonno And ep.episodeno = workingepisode(workingepisodeindex).episodeno Then
+                            For Each ep In workingEpisode
+                                If ep.seasonno = workingEpisode(workingEpisodeIndex).seasonno And ep.episodeno = workingEpisode(workingEpisodeIndex).episodeno Then
                                     Dim newwp As New BasicEpisodeNFO
                                     newwp.episodeno = ep.episodeno
                                     newwp.episodepath = ep.episodepath
@@ -16250,17 +16253,17 @@ Public Class Form1
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            Dim langu As String = workingtvshow.language
+            Dim langu As String = workingTvShow.language
             If langu = "" Then langu = "en"
 
 
             If userPrefs.tvshow_useXBMC_Scraper = True Then
 
-                Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", workingtvshow.tvdbid, langu, workingtvshow.path)
-                If TVShowNFOContent <> "error" Then CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
-                Call loadtvshow(workingtvshow.path)
+                Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", workingTvShow.tvdbid, langu, workingTvShow.path)
+                If TVShowNFOContent <> "error" Then CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
+                Call loadtvshow(workingTvShow.path)
                 For Each item In basictvlist
-                    If item.fullpath = workingtvshow.path Then
+                    If item.fullpath = workingTvShow.path Then
                         Dim newitem As New BasicTvShowNFO
                         For Each episode In item.allepisodes
                             newitem.allepisodes.Add(episode)
@@ -16268,15 +16271,15 @@ Public Class Form1
                         newitem.fullpath = item.fullpath
                         newitem.status = "ok"
                         newitem.episodeactorsource = item.episodeactorsource
-                        newitem.genre = workingtvshow.genre
-                        newitem.imdbid = workingtvshow.imdbid
-                        newitem.language = workingtvshow.language
-                        newitem.rating = workingtvshow.rating
-                        newitem.sortorder = workingtvshow.sortorder
-                        newitem.title = workingtvshow.title
+                        newitem.genre = workingTvShow.genre
+                        newitem.imdbid = workingTvShow.imdbid
+                        newitem.language = workingTvShow.language
+                        newitem.rating = workingTvShow.rating
+                        newitem.sortorder = workingTvShow.sortorder
+                        newitem.title = workingTvShow.title
                         newitem.titleandyear = item.titleandyear
-                        newitem.tvdbid = workingtvshow.tvdbid
-                        newitem.year = workingtvshow.year
+                        newitem.tvdbid = workingTvShow.tvdbid
+                        newitem.year = workingTvShow.year
                         basictvlist.Remove(item)
                         basictvlist.Add(newitem)
                         Call populatetvtree()
@@ -16290,43 +16293,43 @@ Public Class Form1
 
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
-                Dim tvshowxmlstring As String = tvdbstuff.getshow(workingtvshow.tvdbid, langu)
+                Dim tvshowxmlstring As String = tvdbstuff.getshow(workingTvShow.tvdbid, langu)
                 If tvshowxmlstring = "!!!Error!!!" Then
                     MsgBox("Error scraping show")
                     Exit Sub
                 End If
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(tvshowxmlstring)
-                workingtvshow.listactors.Clear()
+                workingTvShow.listactors.Clear()
                 Dim thisresult As XmlNode = Nothing
                 Dim maxcount As Integer = 0
                 For Each thisresult In showlist("fulltvshow")
                     Select Case thisresult.Name
                         Case "title"
-                            workingtvshow.title = thisresult.InnerText
+                            workingTvShow.title = thisresult.InnerText
                         Case "mpaa"
-                            workingtvshow.mpaa = thisresult.InnerText
+                            workingTvShow.mpaa = thisresult.InnerText
                         Case "premiered"
-                            workingtvshow.premiered = thisresult.InnerText
+                            workingTvShow.premiered = thisresult.InnerText
                         Case "genre"
                             Dim newstring As String
                             newstring = thisresult.InnerText
                             newstring = newstring.TrimEnd("|")
                             newstring = newstring.TrimStart("|")
                             newstring = newstring.Replace("|", " / ")
-                            workingtvshow.genre = newstring
+                            workingTvShow.genre = newstring
                         Case "imdbid"
-                            workingtvshow.imdbid = thisresult.InnerText
+                            workingTvShow.imdbid = thisresult.InnerText
                         Case "studio"
-                            workingtvshow.studio = thisresult.InnerText
+                            workingTvShow.studio = thisresult.InnerText
                         Case "plot"
-                            workingtvshow.plot = thisresult.InnerText
+                            workingTvShow.plot = thisresult.InnerText
                         Case "rating"
-                            workingtvshow.rating = thisresult.InnerText
+                            workingTvShow.rating = thisresult.InnerText
                         Case "runtime"
-                            workingtvshow.runtime = thisresult.InnerText
+                            workingTvShow.runtime = thisresult.InnerText
                         Case "episodeguideurl"
-                            workingtvshow.episodeguideurl = thisresult.InnerText
+                            workingTvShow.episodeguideurl = thisresult.InnerText
                         Case "actor"
                             If maxcount >= userPrefs.maxactors Then
                                 Exit For
@@ -16352,8 +16355,8 @@ Public Class Form1
 
                             If acts.actorthumb <> Nothing Then
                                 If acts.actorthumb <> "" And userPrefs.actorseasy = True Then
-                                    If workingtvshow.tvshowactorsource <> "imdb" Or workingtvshow.imdbid = Nothing Then
-                                        Dim workingpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "")
+                                    If workingTvShow.tvshowactorsource <> "imdb" Or workingTvShow.imdbid = Nothing Then
+                                        Dim workingpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "")
                                         workingpath = workingpath & ".actors\"
                                         Dim hg As New IO.DirectoryInfo(workingpath)
                                         Dim destsorted As Boolean = False
@@ -16435,23 +16438,23 @@ Public Class Form1
                                 End If
                             End If
                             Dim exists As Boolean = False
-                            For Each actors In workingtvshow.listactors
+                            For Each actors In workingTvShow.listactors
                                 If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                     exists = True
                                 End If
                             Next
                             If exists = False Then
-                                workingtvshow.listactors.Add(acts)
+                                workingTvShow.listactors.Add(acts)
                             End If
                     End Select
                 Next
-                If workingtvshow.tvshowactorsource = "imdb" And workingtvshow.imdbid <> Nothing Then
-                    workingtvshow.listactors.Clear()
+                If workingTvShow.tvshowactorsource = "imdb" And workingTvShow.imdbid <> Nothing Then
+                    workingTvShow.listactors.Clear()
                     '                    Dim imdbscraper As New imdb.Classimdbscraper
                     Dim imdbscraper As New Classimdb
                     Dim actorlist As String
                     Dim actorstring As New XmlDocument
-                    actorlist = imdbscraper.getimdbactors(userPrefs.imdbmirror, workingtvshow.imdbid)
+                    actorlist = imdbscraper.getimdbactors(userPrefs.imdbmirror, workingTvShow.imdbid)
                     Try
                         actorstring.LoadXml(actorlist)
                         thisresult = Nothing
@@ -16476,7 +16479,7 @@ Public Class Form1
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
                                                     If detail.InnerText <> "" And userPrefs.actorseasy = True Then
-                                                        Dim workingpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "")
+                                                        Dim workingpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "")
                                                         workingpath = workingpath & ".actors\"
                                                         Dim hg As New IO.DirectoryInfo(workingpath)
                                                         Dim destsorted As Boolean = False
@@ -16558,22 +16561,22 @@ Public Class Form1
                                                 End If
                                         End Select
                                     Next
-                                    workingtvshow.listactors.Add(newactor)
+                                    workingTvShow.listactors.Add(newactor)
                             End Select
                         Next
                         scraperLog = scraperLog & "Actors scraped OK"
-                        While workingtvshow.listactors.Count > userPrefs.maxactors
-                            workingtvshow.listactors.RemoveAt(workingtvshow.listactors.Count - 1)
+                        While workingTvShow.listactors.Count > userPrefs.maxactors
+                            workingTvShow.listactors.RemoveAt(workingTvShow.listactors.Count - 1)
                         End While
                     Catch ex As Exception
 
                     End Try
 
                 End If
-                Call nfoFunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
-                Call loadtvshow(workingtvshow.path)
+                Call nfoFunction.savetvshownfo(workingTvShow.path, workingTvShow, True)
+                Call loadtvshow(workingTvShow.path)
                 For Each item In basictvlist
-                    If item.fullpath = workingtvshow.path Then
+                    If item.fullpath = workingTvShow.path Then
                         Dim newitem As New BasicTvShowNFO
                         For Each episode In item.allepisodes
                             newitem.allepisodes.Add(episode)
@@ -16581,15 +16584,15 @@ Public Class Form1
                         newitem.fullpath = item.fullpath
                         newitem.status = "ok"
                         newitem.episodeactorsource = item.episodeactorsource
-                        newitem.genre = workingtvshow.genre
-                        newitem.imdbid = workingtvshow.imdbid
-                        newitem.language = workingtvshow.language
-                        newitem.rating = workingtvshow.rating
-                        newitem.sortorder = workingtvshow.sortorder
-                        newitem.title = workingtvshow.title
+                        newitem.genre = workingTvShow.genre
+                        newitem.imdbid = workingTvShow.imdbid
+                        newitem.language = workingTvShow.language
+                        newitem.rating = workingTvShow.rating
+                        newitem.sortorder = workingTvShow.sortorder
+                        newitem.title = workingTvShow.title
                         newitem.titleandyear = item.titleandyear
-                        newitem.tvdbid = workingtvshow.tvdbid
-                        newitem.year = workingtvshow.year
+                        newitem.tvdbid = workingTvShow.tvdbid
+                        newitem.year = workingTvShow.year
                         basictvlist.Remove(item)
                         basictvlist.Add(newitem)
                         Call populatetvtree()
@@ -16610,13 +16613,13 @@ Public Class Form1
             messbox.Refresh()
             Application.DoEvents()
             Dim newepisode As New EpisodeInfo
-            Dim sortorder As String = workingtvshow.sortorder
-            Dim language As String = workingtvshow.language
-            Dim actorsource As String = workingtvshow.episodeactorsource
-            Dim tvdbid As String = workingtvshow.tvdbid
-            Dim imdbid As String = workingtvshow.imdbid
-            Dim seasonno As String = workingepisode(workingepisodeindex).seasonno
-            Dim episodeno As String = workingepisode(workingepisodeindex).episodeno
+            Dim sortorder As String = workingTvShow.sortorder
+            Dim language As String = workingTvShow.language
+            Dim actorsource As String = workingTvShow.episodeactorsource
+            Dim tvdbid As String = workingTvShow.tvdbid
+            Dim imdbid As String = workingTvShow.imdbid
+            Dim seasonno As String = workingEpisode(workingEpisodeIndex).seasonno
+            Dim episodeno As String = workingepisode(workingEpisodeIndex).episodeno
             'its an episode
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim episodescraper As New TVDBScraper
@@ -16673,9 +16676,9 @@ Public Class Form1
 
             If actorsource = "tvdb" Then
                 If newepisode.listactors.Count > 0 Then
-                    workingtvshow.listactors.Clear()
+                    workingTvShow.listactors.Clear()
                     For Each act In newepisode.listactors
-                        workingtvshow.listactors.Add(act)
+                        workingTvShow.listactors.Add(act)
                     Next
                 End If
             Else
@@ -16761,7 +16764,7 @@ Public Class Form1
                                                         Case "actorid"
                                                             If newactor.actorthumb <> Nothing Then
                                                                 If detail.InnerText <> "" And userPrefs.actorseasy = True Then
-                                                                    Dim workingpath As String = workingepisode(workingepisodeindex).episodepath.Replace(IO.Path.GetFileName(workingepisode(workingepisodeindex).episodepath), "")
+                                                                    Dim workingpath As String = workingepisode(workingEpisodeIndex).episodepath.Replace(IO.Path.GetFileName(workingepisode(workingEpisodeIndex).episodepath), "")
                                                                     workingpath = workingpath & ".actors\"
                                                                     Dim hg As New IO.DirectoryInfo(workingpath)
                                                                     Dim destsorted As Boolean = False
@@ -16778,7 +16781,7 @@ Public Class Form1
                                                                     If destsorted = True Then
                                                                         Dim filename As String = newactor.actorname.Replace(" ", "_")
                                                                         filename = filename & ".tbn"
-                                                                        Dim tvshowactorpath As String = workingtvshow.path
+                                                                        Dim tvshowactorpath As String = workingTvShow.path
                                                                         tvshowactorpath = tvshowactorpath.Replace(IO.Path.GetFileName(tvshowactorpath), "")
                                                                         tvshowactorpath = IO.Path.Combine(tvshowactorpath, ".actors\")
                                                                         tvshowactorpath = IO.Path.Combine(tvshowactorpath, filename)
@@ -16884,16 +16887,16 @@ Public Class Form1
                 End If
             End If
             If newepisode.title <> "" Then
-                workingepisode(workingepisodeindex).aired = newepisode.aired
-                workingepisode(workingepisodeindex).credits = newepisode.credits
-                workingepisode(workingepisodeindex).director = newepisode.director
-                workingepisode(workingepisodeindex).genre = newepisode.genre
-                workingepisode(workingepisodeindex).plot = newepisode.plot
-                workingepisode(workingepisodeindex).rating = newepisode.rating
-                workingepisode(workingepisodeindex).title = newepisode.title
-                workingepisode(workingepisodeindex).listactors.Clear()
+                workingepisode(workingEpisodeIndex).aired = newepisode.aired
+                workingepisode(workingEpisodeIndex).credits = newepisode.credits
+                workingepisode(workingEpisodeIndex).director = newepisode.director
+                workingepisode(workingEpisodeIndex).genre = newepisode.genre
+                workingepisode(workingEpisodeIndex).plot = newepisode.plot
+                workingepisode(workingEpisodeIndex).rating = newepisode.rating
+                workingepisode(workingEpisodeIndex).title = newepisode.title
+                workingepisode(workingEpisodeIndex).listactors.Clear()
                 For Each actor In newepisode.listactors
-                    workingepisode(workingepisodeindex).listactors.Add(actor)
+                    workingepisode(workingEpisodeIndex).listactors.Add(actor)
                 Next
 
 
@@ -16912,13 +16915,13 @@ Public Class Form1
 
 
                 If userPrefs.enablehdtags = True Then
-                    workingepisode(workingepisodeindex).filedetails = filefunction.get_hdtags(filefunction.getfilename(workingepisode(workingepisodeindex).episodepath))
-                    If workingepisode(workingepisodeindex).filedetails.filedetails_video.duration <> Nothing Then
+                    workingepisode(workingEpisodeIndex).filedetails = filefunction.get_hdtags(filefunction.getfilename(workingepisode(workingEpisodeIndex).episodepath))
+                    If workingepisode(workingEpisodeIndex).filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
                             Dim hours As Integer
                             Dim minutes As Integer
-                            tempstring = workingepisode(workingepisodeindex).filedetails.filedetails_video.duration
+                            tempstring = workingepisode(workingEpisodeIndex).filedetails.filedetails_video.duration
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -16933,7 +16936,7 @@ Public Class Form1
                                 hours = hours * 60
                             End If
                             minutes = minutes + hours
-                            workingepisode(workingepisodeindex).runtime = minutes.ToString & " min"
+                            workingepisode(workingEpisodeIndex).runtime = minutes.ToString & " min"
                         Catch
                         End Try
                     End If
@@ -16960,8 +16963,8 @@ Public Class Form1
 
 
 
-                Call nfoFunction.saveepisodenfo(workingepisode, workingepisode(0).episodepath)
-                Call loadtvepisode(workingepisode(workingepisodeindex).episodepath, workingepisode(workingepisodeindex).seasonno, workingepisode(workingepisodeindex).episodeno)
+                Call nfoFunction.saveepisodenfo(workingEpisode, workingepisode(0).episodepath)
+                Call loadtvepisode(workingepisode(workingEpisodeIndex).episodepath, workingepisode(workingEpisodeIndex).seasonno, workingepisode(workingEpisodeIndex).episodeno)
                 messbox.Close()
             End If
         End If
@@ -16970,11 +16973,11 @@ Public Class Form1
     Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
         Dim TVShowNFOContent As String = ""
         If Button45.Text = "TVDB" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "tvshowactorsource", "imdb")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "tvshowactorsource", "imdb")
         Else
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "tvshowactorsource", "tvdb")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "tvshowactorsource", "tvdb")
         End If
-        Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
+        Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
         If DiditWork = True Then
             If Button45.Text = "TVDB" Then
                 Button45.Text = "IMDB"
@@ -16987,11 +16990,11 @@ Public Class Form1
     Private Sub Button46_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button46.Click
         Dim TVShowNFOContent As String = ""
         If Button46.Text = "TVDB" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "episodeactorsource", "imdb")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "episodeactorsource", "imdb")
         Else
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "episodeactorsource", "tvdb")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "episodeactorsource", "tvdb")
         End If
-        Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
+        Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
         If DiditWork = True Then
             If Button46.Text = "TVDB" Then
                 Button46.Text = "IMDB"
@@ -17005,21 +17008,21 @@ Public Class Form1
 
         Dim TVShowNFOContent As String = ""
         If Button47.Text = "Default" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "sortorder", "dvd")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "sortorder", "dvd")
         Else
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "sortorder", "default")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "sortorder", "default")
         End If
-        Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
+        Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
         If DiditWork = True Then
             If Button47.Text = "Default" Then
                 Button47.Text = "DVD"
-                workingtvshow.sortorder = "dvd"
+                workingTvShow.sortorder = "dvd"
             Else
                 Button47.Text = "Default"
-                workingtvshow.sortorder = "default"
+                workingTvShow.sortorder = "default"
             End If
             For Each Shows In basictvlist
-                If workingtvshow.path = Shows.fullpath Then
+                If workingTvShow.path = Shows.fullpath Then
                     Dim newtv As New BasicTvShowNFO
                     newtv = Shows
                     If Button47.Text = "Default" Then
@@ -17363,29 +17366,29 @@ Public Class Form1
 
     Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
         Try
-            If IsNumeric(workingepisode(workingepisodeindex).playcount) Then
-                If Convert.ToInt32(workingepisode(workingepisodeindex).playcount) <= 0 Then
-                    workingepisode(workingepisodeindex).playcount = "1"
+            If IsNumeric(workingepisode(workingEpisodeIndex).playcount) Then
+                If Convert.ToInt32(workingepisode(workingEpisodeIndex).playcount) <= 0 Then
+                    workingepisode(workingEpisodeIndex).playcount = "1"
                     Button48.Text = "Watched"
                     Button48.BackColor = Color.Green
                 Else
-                    workingepisode(workingepisodeindex).playcount = "0"
+                    workingepisode(workingEpisodeIndex).playcount = "0"
                     Button48.Text = "UnWatched"
                     Button48.BackColor = Color.Red
                 End If
             Else
-                workingepisode(workingepisodeindex).playcount = "0"
+                workingepisode(workingEpisodeIndex).playcount = "0"
                 Button48.Text = "UnWatched"
                 Button48.BackColor = Color.Red
             End If
-            Call nfoFunction.saveepisodenfo(workingepisode, workingepisode(0).episodepath)
+            Call nfoFunction.saveepisodenfo(workingEpisode, workingepisode(0).episodepath)
         Catch ex As Exception
 
         End Try
     End Sub
 
     Private Sub setup_tvposters()
-        If workingtvshow.tvdbid = currentposterid Then
+        If workingTvShow.tvdbid = currentposterid Then
             Exit Sub
         End If
         tvposterpage = 0
@@ -17395,7 +17398,7 @@ Public Class Form1
         CheckBox8.Visible = False
         ComboBox2.Items.Clear()
         tvobjects.Clear()
-        TextBox31.Text = workingtvshow.title
+        TextBox31.Text = workingTvShow.title
         Label72.Text = ""
         'If IO.File.Exists(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")) Then
         '    Dim bmp As New Bitmap(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg"))
@@ -17407,7 +17410,7 @@ Public Class Form1
 
         tvobjects.Add("Main Poster")
         For Each tvshow In basictvlist
-            If tvshow.tvdbid = workingtvshow.tvdbid Then
+            If tvshow.tvdbid = workingTvShow.tvdbid Then
                 currentposterid = tvshow.tvdbid
                 For Each ep In tvshow.allepisodes
                     If ep.seasonno <> "-1" Then
@@ -17466,15 +17469,15 @@ Public Class Form1
         If tempstring = "Main Poster" Then
             CheckBox8.Visible = True
             Button53.Enabled = True
-            If IO.File.Exists(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")) Then
-                Dim bmp As New Bitmap(workingtvshow.path.Replace("tvshow.nfo", "folder.jpg"))
-                workingposterpath = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
+            If IO.File.Exists(workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")) Then
+                Dim bmp As New Bitmap(workingTvShow.path.Replace("tvshow.nfo", "folder.jpg"))
+                workingposterpath = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
                 Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
-                workingposterpath = workingtvshow.path.Replace("tvshow.nfo", "folder.jpg")
+                workingposterpath = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                 Dim bmp As New Bitmap(defaultPoster)
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
@@ -17484,19 +17487,19 @@ Public Class Form1
         ElseIf tempstring = "Specials" Then
             Button53.Enabled = True
             CheckBox8.Visible = False
-            Dim path As String = workingtvshow.path.Replace("tvshow.nfo", "season-specials.tbn")
+            Dim path As String = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
             If IO.File.Exists(path) Then
-                workingposterpath = workingtvshow.path.Replace("tvshow.nfo", "season-specials.tbn")
+                workingposterpath = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
                 Dim bmp As New Bitmap(path)
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
                 Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
-                If IO.File.Exists(workingtvshow.path.Replace("tvshow.nfo", "season00.tbn")) Then
+                If IO.File.Exists(workingTvShow.path.Replace("tvshow.nfo", "season00.tbn")) Then
                     Try
-                        Dim fi As New FileInfo(workingtvshow.path.Replace("tvshow.nfo", "season00.tbn"))
-                        Dim rename2 As String = workingtvshow.path.Replace("tvshow.nfo", "season-specials.tbn")
+                        Dim fi As New FileInfo(workingTvShow.path.Replace("tvshow.nfo", "season00.tbn"))
+                        Dim rename2 As String = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
                         fi.MoveTo(rename2)
                     Catch ex As Exception
                         Dim bmp As New Bitmap(defaultPoster)
@@ -17517,7 +17520,7 @@ Public Class Form1
             Button53.Enabled = True
             CheckBox8.Visible = False
             Dim path As String = tempstring.Replace("Season ", "")
-            path = workingtvshow.path.Replace("tvshow.nfo", "season" & path & ".tbn")
+            path = workingTvShow.path.Replace("tvshow.nfo", "season" & path & ".tbn")
             If IO.File.Exists(path) Then
                 workingposterpath = path
                 Dim bmp As New Bitmap(path)
@@ -17537,7 +17540,7 @@ Public Class Form1
             CheckBox8.Visible = True
             Button53.Enabled = False
             Dim path As String = ""
-            path = workingtvshow.path.Replace("tvshow.nfo", "season-all.tbn")
+            path = workingTvShow.path.Replace("tvshow.nfo", "season-all.tbn")
             If IO.File.Exists(path) Then
                 workingposterpath = path
                 Dim bmp As New Bitmap(path)
@@ -17560,7 +17563,7 @@ Public Class Form1
         Dim showlist As New XmlDocument
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim tvdbstuff As New TVDBScraper
-        Dim thumblist As String = tvdbstuff.getposterlist(workingtvshow.tvdbid)
+        Dim thumblist As String = tvdbstuff.getposterlist(workingTvShow.tvdbid)
         showlist.LoadXml(thumblist)
         'CheckBox3 = seasons
         'CheckBox4 = fanart
@@ -18051,23 +18054,23 @@ Public Class Form1
     End Sub
 
     Private Sub Button58_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button58.Click
-        If workingtvshow.imdbid = Nothing Then
+        If workingTvShow.imdbid = Nothing Then
             MsgBox("No IMDB ID is available for this movie, cant scrape posters")
             Exit Sub
         End If
-        If workingtvshow.imdbid = "" Then
+        If workingTvShow.imdbid = "" Then
             MsgBox("No IMDB ID is available for this movie, cant scrape posters")
             Exit Sub
         End If
         Dim ok As Boolean = False
-        If workingtvshow.imdbid.ToLower.IndexOf("tt") = 0 Then
-            Dim tempstring As String = workingtvshow.imdbid.ToLower.Substring(2, workingtvshow.imdbid.Length - 2)
+        If workingTvShow.imdbid.ToLower.IndexOf("tt") = 0 Then
+            Dim tempstring As String = workingTvShow.imdbid.ToLower.Substring(2, workingTvShow.imdbid.Length - 2)
             If IsNumeric(tempstring) Then
                 ok = True
             End If
         End If
-        If IsNumeric(workingtvshow.imdbid) And workingtvshow.imdbid.Length = 7 Then
-            workingtvshow.imdbid = "tt" & workingtvshow.imdbid
+        If IsNumeric(workingTvShow.imdbid) And workingTvShow.imdbid.Length = 7 Then
+            workingTvShow.imdbid = "tt" & workingTvShow.imdbid
             ok = True
         End If
 
@@ -18080,7 +18083,7 @@ Public Class Form1
         usedlist.Clear()
         If imdbposterlist.Count <= 0 Then
             Dim newobject2 As New imdb_thumbs.Class1
-            Dim posters(,) As String = newobject2.getimdbposters(workingtvshow.imdbid)
+            Dim posters(,) As String = newobject2.getimdbposters(workingTvShow.imdbid)
             For f = 0 To UBound(posters)
                 If posters(f, 0) <> Nothing Then
                     Dim individualposter As New tvbanners
@@ -18099,7 +18102,7 @@ Public Class Form1
 
     Private Sub Button49_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button49.Click
         'browse
-        openFD.InitialDirectory = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "")
+        openFD.InitialDirectory = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "")
         openFD.Title = "Select a jpeg image File"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
@@ -18155,7 +18158,7 @@ Public Class Form1
     End Sub
 
     Private Sub RebuildMovieNfoFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildMovieNfoFilesToolStripMenuItem.Click
-        Call batchupdate()
+        Call BatchUpdate()
     End Sub
 
     Private Sub Button62_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button62.Click
@@ -18266,11 +18269,11 @@ Public Class Form1
         Dim messbox As frmMessageBox = New frmMessageBox("Checking TVDB for screenshot", "", "Please Wait")
         'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim episodescraper As New TVDBScraper
-        Dim id As String = workingtvshow.tvdbid
-        Dim sortorder As String = workingtvshow.sortorder
-        Dim seasonno As String = workingepisode(0).seasonno
-        Dim episodeno As String = workingepisode(0).episodeno
-        Dim language As String = workingtvshow.language
+        Dim id As String = workingTvShow.tvdbid
+        Dim sortorder As String = workingTvShow.sortorder
+        Dim seasonno As String = workingEpisode(0).seasonno
+        Dim episodeno As String = workingEpisode(0).episodeno
+        Dim language As String = workingTvShow.language
         If language = Nothing Then language = "en"
         If language = "" Then language = "en"
         If sortorder = Nothing Then sortorder = "default"
@@ -18304,7 +18307,7 @@ Public Class Form1
         messbox.Show()
         messbox.Refresh()
         Application.DoEvents()
-        Dim tempepisode As String = episodescraper.getepisode(workingtvshow.tvdbid, sortorder, seasonno, episodeno, language)
+        Dim tempepisode As String = episodescraper.getepisode(workingTvShow.tvdbid, sortorder, seasonno, episodeno, language)
         Dim thumburl As String = ""
         messbox.Close()
         Dim scrapedepisode As New XmlDocument
@@ -18326,7 +18329,7 @@ Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim tempstring As String = workingepisode(0).episodepath.Replace(IO.Path.GetExtension(workingepisode(0).episodepath), ".tbn")
+                    Dim tempstring As String = workingEpisode(0).episodepath.Replace(IO.Path.GetExtension(workingEpisode(0).episodepath), ".tbn")
                     Dim MyWebClient As New System.Net.WebClient
                     Try
                         Dim ImageInBytes() As Byte = MyWebClient.DownloadData(thumburl)
@@ -18759,7 +18762,7 @@ Public Class Form1
         'Dim picbox As PictureBox = item.SourceControl
         Dim tempstring As String = item.Tag
         For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).Value = tempstring Then
+            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
                 ComboBox1.SelectedItems.Clear()
                 ComboBox1.SelectedIndex = f
                 Application.DoEvents()
@@ -19276,7 +19279,7 @@ Public Class Form1
         Dim tempstring As String = ClickedControl
         'Dim picbox As PictureBox = item.SourceControl
         For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).Value = tempstring Then
+            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
                 ComboBox1.SelectedItems.Clear()
                 ComboBox1.SelectedIndex = f
                 Application.DoEvents()
@@ -19333,7 +19336,7 @@ Public Class Form1
         tempbitmap.Dispose()
 
         For Each poster As PictureBox In TabPage22.Controls
-            If poster.Tag = workingmoviedetails.fileinfo.fullpathandfilename Then
+            If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                 poster.ImageLocation = IO.Path.Combine(applicationpath, "settings\postercache\" & imdbid & ".jpg")
                 Exit For
             End If
@@ -19346,12 +19349,12 @@ Public Class Form1
         Dim TVShowNFOContent As String = ""
 
         If Button60.Text = "Open" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "locked", "1")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "1")
         ElseIf Button60.Text = "Locked" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingtvshow.path, "locked", "0")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "0")
         End If
         If TVShowNFOContent <> "error" Then
-            Dim DiditWork As Boolean = CreateMovieNfo(workingtvshow.path, TVShowNFOContent)
+            Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
             If DiditWork = True Then
                 If Button60.Text = "Open" Then
                     Button60.Text = "Locked"
@@ -20655,19 +20658,19 @@ Public Class Form1
                 For Each mset In userPrefs.moviesets
                     ComboBox3.Items.Add(mset)
                 Next
-                If workingmoviedetails.fullmoviebody.movieset <> Nothing Then
+                If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
                     Dim add As Boolean = True
                     For Each mset In userPrefs.moviesets
-                        If mset = workingmoviedetails.fullmoviebody.movieset Then
+                        If mset = workingMovieDetails.fullmoviebody.movieset Then
                             add = False
                         End If
                     Next
                     If add = True Then
-                        userPrefs.moviesets.Add(workingmoviedetails.fullmoviebody.movieset)
-                        ComboBox3.Items.Add(workingmoviedetails.fullmoviebody.movieset)
+                        userPrefs.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
+                        ComboBox3.Items.Add(workingMovieDetails.fullmoviebody.movieset)
                     End If
                     For f = 0 To ComboBox3.Items.Count - 1
-                        If ComboBox3.Items(f) = workingmoviedetails.fullmoviebody.movieset Then
+                        If ComboBox3.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
                             ComboBox3.SelectedIndex = f
                             Exit For
                         End If
@@ -20700,7 +20703,7 @@ Public Class Form1
             If ListBox4.SelectedItems(i) <> Nothing And ListBox4.SelectedItems(i) <> "" Then
                 For Each mset In userPrefs.moviesets
                     If mset = ListBox4.SelectedItems(i) Then
-                        If workingmoviedetails.fullmoviebody.movieset <> mset Then
+                        If workingMovieDetails.fullmoviebody.movieset <> mset Then
                             userPrefs.moviesets.Remove(mset)
                         Else
                             MsgBox("Unable to remove """ & mset & """, it is being used by the selected Movie")
@@ -21081,14 +21084,14 @@ Public Class Form1
     Private Sub titletxt_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles titletxt.Enter
         Try
             processnow = False
-            If titletxt.Text.IndexOf(workingmoviedetails.fullmoviebody.year) <> -1 Then
-                Dim tempstring2 As String = " (" & workingmoviedetails.fullmoviebody.year & ")"
+            If titletxt.Text.IndexOf(workingMovieDetails.fullmoviebody.year) <> -1 Then
+                Dim tempstring2 As String = " (" & workingMovieDetails.fullmoviebody.year & ")"
                 Dim tempstring As String = titletxt.Text.Replace(tempstring2, "")
                 tempstring = tempstring.TrimEnd(" ")
                 currenttitle = tempstring
                 titletxt.Items.Clear()
                 'titletxt.Items.Add(tempstring)
-                For Each item In workingmoviedetails.alternativetitles
+                For Each item In workingMovieDetails.alternativetitles
                     If item <> tempstring Then
                         titletxt.Items.Add(item)
                     End If
@@ -21112,16 +21115,16 @@ Public Class Form1
             '        Exit For
             '    End If
             'Next
-            If titletxt.Text.IndexOf(workingmoviedetails.fullmoviebody.year) = -1 Then
+            If titletxt.Text.IndexOf(workingMovieDetails.fullmoviebody.year) = -1 Then
                 Dim tempstring As String = titletxt.Text
                 titletxt.Items.Clear()
                 'titletxt.Items.Add(tempstring & " (" & workingmoviedetails.fullmoviebody.year & ")")
-                For Each item In workingmoviedetails.alternativetitles
+                For Each item In workingMovieDetails.alternativetitles
                     If item <> currenttitle Then
                         titletxt.Items.Add(item)
                     End If
                 Next
-                titletxt.Text = tempstring & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                titletxt.Text = tempstring & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 'titletxt.SelectedIndex = -1
             End If
             processnow = True
@@ -21131,11 +21134,11 @@ Public Class Form1
 
     Private Sub titletxt_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles titletxt.SelectedIndexChanged
         Try
-            If titletxt.Text.IndexOf(workingmoviedetails.fullmoviebody.year) = -1 Then
+            If titletxt.Text.IndexOf(workingMovieDetails.fullmoviebody.year) = -1 Then
                 Dim tempstring As String = titletxt.Text
                 titletxt.Items.Clear()
-                titletxt.Items.Add(tempstring & " (" & workingmoviedetails.fullmoviebody.year & ")")
-                For Each item In workingmoviedetails.alternativetitles
+                titletxt.Items.Add(tempstring & " (" & workingMovieDetails.fullmoviebody.year & ")")
+                For Each item In workingMovieDetails.alternativetitles
                     If item <> tempstring Then
                         titletxt.Items.Add(item)
                     End If
@@ -23472,7 +23475,7 @@ Public Class Form1
 
                                         If acts.actorthumb <> Nothing Then
                                             If acts.actorthumb <> "" And userPrefs.actorseasy = True And speedy = False Then
-                                                If workingtvshow.tvshowactorsource <> "imdb" Or workingtvshow.imdbid = Nothing Then
+                                                If workingTvShow.tvshowactorsource <> "imdb" Or workingTvShow.imdbid = Nothing Then
                                                     Dim workingpath As String = newtvshow.path.Replace(IO.Path.GetFileName(newtvshow.path), "")
                                                     workingpath = workingpath & ".actors\"
                                                     Dim hg As New IO.DirectoryInfo(workingpath)
@@ -23559,7 +23562,7 @@ Public Class Form1
                                             End If
                                         End If
                                         Dim exists As Boolean = False
-                                        For Each actors In workingtvshow.listactors
+                                        For Each actors In workingTvShow.listactors
                                             If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                                 exists = True
                                             End If
@@ -24475,12 +24478,12 @@ Public Class Form1
                     ComboBox3.Items.Add(mset)
                 Next
             End If
-            If workingmoviedetails.fullmoviebody.movieset <> "None" Then
+            If workingMovieDetails.fullmoviebody.movieset <> "None" Then
                 'For Each mset In userprefs.moviesets
                 '    ComboBox3.Items.Add(mset)
                 'Next
                 For te = 0 To ComboBox3.Items.Count - 1
-                    If ComboBox3.Items(te) = workingmoviedetails.fullmoviebody.movieset Then
+                    If ComboBox3.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
                         ComboBox3.SelectedIndex = te
                         Exit For
                     End If
@@ -24679,13 +24682,7 @@ Public Class Form1
             Call applyfilters()
         End If
     End Sub
-    Public Structure tableitems
-        Dim title As String
-        Dim width As Integer
-        Dim index As Integer
-        Dim visible As Boolean
-    End Structure
-    Dim tablesets As New List(Of tableitems)
+
     Private Sub setuptableview()
         userPrefs.tableview.Clear()
         userPrefs.tableview.Add("title|150|0|true")
@@ -24729,7 +24726,7 @@ Public Class Form1
         For Each item In userPrefs.tableview
             Dim tempdata() As String
             tempdata = item.Split("|")
-            Dim newcolumn As New tableitems
+            Dim newcolumn As New TableItems
             newcolumn.title = tempdata(0)
             newcolumn.width = Convert.ToInt32(tempdata(1))
             newcolumn.index = Convert.ToInt32(tempdata(2))
@@ -24741,7 +24738,7 @@ Public Class Form1
             tablesets.Add(newcolumn)
         Next
 
-      
+
         DataGridView1.AutoGenerateColumns = False
 
         Dim doc As New XmlDocument
@@ -25237,11 +25234,11 @@ Public Class Form1
                 End If
             Next
         Next
-       
+
         Call setuptextboxes()
         Try
             For f = 0 To DataGridView1.Rows.Count
-                If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingmoviedetails.fileinfo.fullpathandfilename Then
+                If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
                     DataGridView1.ClearSelection()
                     'DataGridView1.CurrentCell = DataGridView1.Rows(f).Cells(0)
                     'DataGridView1.Rows(f).Selected = True
@@ -26063,7 +26060,7 @@ Public Class Form1
             tempstring = selecteditem.Cells("fullpathandfilename").Value
         Next
         For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).Value = tempstring Then
+            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
                 ComboBox1.SelectedItems.Clear()
                 ComboBox1.SelectedIndex = f
                 Application.DoEvents()
@@ -26132,7 +26129,7 @@ Public Class Form1
             tempstring = selecteditem.Cells("fullpathandfilename").Value
         Next
         For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).Value = tempstring Then
+            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
                 ComboBox1.SelectedItems.Clear()
                 ComboBox1.SelectedIndex = f
                 For Each tabs In TabControl2.TabPages
@@ -26153,7 +26150,7 @@ Public Class Form1
             tempstring = selecteditem.Cells("fullpathandfilename").Value
         Next
         For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).Value = tempstring Then
+            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
                 ComboBox1.SelectedItems.Clear()
                 ComboBox1.SelectedIndex = f
                 For Each tabs In TabControl2.TabPages
@@ -26188,7 +26185,7 @@ Public Class Form1
 
     Private Sub scrapespecific(ByVal field As String)
         Try
-            Dim originalworking As String = workingmoviedetails.fileinfo.fullpathandfilename
+            Dim originalworking As String = workingMovieDetails.fileinfo.fullpathandfilename
             Dim list As New List(Of String)
             For Each selected In ComboBox1.SelectedItems
                 list.Add(selected.value)
@@ -26206,19 +26203,19 @@ Public Class Form1
                 For Each movie In filteredList
                     If movie.fullpathandfilename = ite Then
                         If IO.File.Exists(movie.fullpathandfilename) Then
-                            If workingmovie.fullpathandfilename <> movie.fullpathandfilename Then
-                                workingmovie.filedate = movie.filedate
-                                workingmovie.filename = movie.foldername
-                                workingmovie.foldername = movie.foldername
-                                workingmovie.fullpathandfilename = movie.fullpathandfilename
-                                workingmovie.genre = movie.genre
-                                workingmovie.id = movie.id
-                                workingmovie.playcount = movie.playcount
-                                workingmovie.rating = movie.rating
-                                workingmovie.title = movie.title
-                                workingmovie.titleandyear = movie.titleandyear
-                                workingmovie.top250 = movie.top250
-                                workingmovie.year = movie.year
+                            If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
+                                workingMovie.filedate = movie.filedate
+                                workingMovie.filename = movie.foldername
+                                workingMovie.foldername = movie.foldername
+                                workingMovie.fullpathandfilename = movie.fullpathandfilename
+                                workingMovie.genre = movie.genre
+                                workingMovie.id = movie.id
+                                workingMovie.playcount = movie.playcount
+                                workingMovie.rating = movie.rating
+                                workingMovie.title = movie.title
+                                workingMovie.titleandyear = movie.titleandyear
+                                workingMovie.top250 = movie.top250
+                                workingMovie.year = movie.year
                                 Call loadinfofile()
                             End If
                             Exit For
@@ -26235,12 +26232,12 @@ Public Class Form1
 
 
                         Dim body As String
-                        body = scraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
+                        body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, userPrefs.imdbmirror)
                         'Dim newscraper As New Classimdb
                         'body = newscraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, userprefs.imdbmirror)
                         If body <> "MIC" Then
                             If field = "title" Then
-                                workingmoviedetails.alternativetitles.Clear()
+                                workingMovieDetails.alternativetitles.Clear()
                             End If
                             Dim thumbstring As New XmlDocument
                             Dim thisresult As XmlNode = Nothing
@@ -26252,28 +26249,28 @@ Public Class Form1
                                     Case "title"
                                         If field = "title" Then
                                             If userPrefs.keepfoldername = False Then
-                                                workingmoviedetails.fullmoviebody.title = thisresult.InnerText
+                                                workingMovieDetails.fullmoviebody.title = thisresult.InnerText
                                             Else
                                                 If userPrefs.usefoldernames = False Then
                                                     Dim tempstring
-                                                    tempstring = IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename)
-                                                    workingmoviedetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                                    tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                                    workingMovieDetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
                                                 Else
-                                                    workingmoviedetails.fullmoviebody.title = filefunction.cleanfilename(workingmoviedetails.fileinfo.foldername)
+                                                    workingMovieDetails.fullmoviebody.title = filefunction.cleanfilename(workingMovieDetails.fileinfo.foldername)
                                                 End If
                                             End If
                                         End If
                                     Case "alternativetitle"
                                         If field = "title" Then
-                                            workingmoviedetails.alternativetitles.Add(thisresult.InnerText)
+                                            workingMovieDetails.alternativetitles.Add(thisresult.InnerText)
                                         End If
                                     Case "credits"
                                         If field = "credits" Then
-                                            workingmoviedetails.fullmoviebody.credits = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.credits = thisresult.InnerText
                                         End If
                                     Case "director"
                                         If field = "director" Then
-                                            workingmoviedetails.fullmoviebody.director = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                                         End If
                                     Case "genre"
                                         If field = "genre" Then
@@ -26283,51 +26280,51 @@ Public Class Form1
                                                 strarr(count) = strarr(count).Replace(" ", "")
                                             Next
                                             If strarr.Length <= userPrefs.maxmoviegenre Then
-                                                workingmoviedetails.fullmoviebody.genre = thisresult.InnerText
+                                                workingMovieDetails.fullmoviebody.genre = thisresult.InnerText
                                             Else
                                                 For f = 0 To userPrefs.maxmoviegenre - 1
                                                     If f = 0 Then
-                                                        workingmoviedetails.fullmoviebody.genre = strarr(f)
+                                                        workingMovieDetails.fullmoviebody.genre = strarr(f)
                                                     Else
-                                                        workingmoviedetails.fullmoviebody.genre += " / " & strarr(f)
+                                                        workingMovieDetails.fullmoviebody.genre += " / " & strarr(f)
                                                     End If
                                                 Next
                                             End If
                                         End If
                                     Case "mpaa"
                                         If field = "cert" Then
-                                            workingmoviedetails.fullmoviebody.mpaa = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.mpaa = thisresult.InnerText
                                         End If
                                     Case "outline"
                                         If field = "outline" Then
-                                            workingmoviedetails.fullmoviebody.outline = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.outline = thisresult.InnerText
                                         End If
                                     Case "plot"
                                         If field = "plot" Then
-                                            workingmoviedetails.fullmoviebody.plot = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.plot = thisresult.InnerText
                                         End If
                                     Case "rating"
                                         If field = "rating" Then
-                                            workingmoviedetails.fullmoviebody.rating = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.rating = thisresult.InnerText
                                         End If
                                     Case "runtime"
                                         If field = "runtime_imdb" Then
-                                            workingmoviedetails.fullmoviebody.runtime = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.runtime = thisresult.InnerText
                                         End If
                                     Case "studio"
                                         If field = "studio" Then
-                                            workingmoviedetails.fullmoviebody.studio = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.studio = thisresult.InnerText
                                         End If
                                     Case "tagline"
                                         If field = "tagline" Then
-                                            workingmoviedetails.fullmoviebody.tagline = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.tagline = thisresult.InnerText
                                         End If
                                     Case "votes"
                                         If field = "votes" Then
-                                            workingmoviedetails.fullmoviebody.votes = thisresult.InnerText
+                                            workingMovieDetails.fullmoviebody.votes = thisresult.InnerText
                                         End If
                                     Case "year"
-                                        workingmoviedetails.fullmoviebody.year = thisresult.InnerText
+                                        workingMovieDetails.fullmoviebody.year = thisresult.InnerText
                                     Case "cert"
                                         If field = "cert" Then
                                             certificates.Add(thisresult.InnerText)
@@ -26341,7 +26338,7 @@ Public Class Form1
                                     Try
                                         For Each cert In certificates
                                             If cert.IndexOf(userPrefs.certificatepriority(f)) <> -1 Then
-                                                workingmoviedetails.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
+                                                workingMovieDetails.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
                                                 done = True
                                                 Exit For
                                             End If
@@ -26352,14 +26349,14 @@ Public Class Form1
                                 Next
                             End If
                         End If
-                        nfoFunction.savemovienfo(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails, True)
+                        nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                         newnfo = True
                         'Call loadinfofile()
                     ElseIf field = "hdtags" Or field = "runtime_file" Then
                         Try
                             Dim tempstring As String
                             Dim tempint As Integer
-                            Dim tempname As String = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
+                            Dim tempname As String = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim newfiledetails As New FullFileDetails
                             If tempname <> Nothing Then newfiledetails = filefunction.get_hdtags(tempname)
                             If newfiledetails.filedetails_video.duration <> Nothing Then
@@ -26401,25 +26398,25 @@ Public Class Form1
                                         End If
                                     End If
                                     If minutes <> 0 And field = "runtime_file" Then
-                                        workingmoviedetails.fullmoviebody.runtime = minutes.ToString & " min"
+                                        workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
                                     End If
                                     If field = "hdtags" Then
-                                        workingmoviedetails.filedetails = newfiledetails
+                                        workingMovieDetails.filedetails = newfiledetails
                                     End If
                                 Catch
                                 End Try
                             End If
                         Catch
                         End Try
-                        nfoFunction.savemovienfo(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails, True)
+                        nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                         newnfo = True
                         'Call loadinfofile()
                     ElseIf field = "actors" Then
                         Dim actorlist As String
                         '                    Dim scraper As New imdb.Classimdbscraper
                         Dim scraper As New Classimdb
-                        actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, userPrefs.maxactors)
-                        workingmoviedetails.listactors.Clear()
+                        actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, userPrefs.maxactors)
+                        workingMovieDetails.listactors.Clear()
                         If actorlist <> Nothing Then
                             Dim tempstring As String
                             Dim thumbstring As New XmlDocument
@@ -26443,7 +26440,7 @@ Public Class Form1
                                                     Case "actorid"
                                                         If newactor.actorthumb <> Nothing Then
                                                             If detail.InnerText <> "" And userPrefs.actorseasy = True Then
-                                                                Dim workingpath As String = workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingmoviedetails.fileinfo.fullpathandfilename), "")
+                                                                Dim workingpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
                                                                 workingpath = workingpath & ".actors\"
                                                                 Dim hg As New IO.DirectoryInfo(workingpath)
                                                                 Dim destsorted As Boolean = False
@@ -26525,16 +26522,16 @@ Public Class Form1
                                                         End If
                                                 End Select
                                             Next
-                                            workingmoviedetails.listactors.Add(newactor)
+                                            workingMovieDetails.listactors.Add(newactor)
                                             Dim actornew As New ActorDatabase
                                             actornew.actorname = newactor.actorname
-                                            actornew.movieid = workingmoviedetails.fullmoviebody.imdbid
+                                            actornew.movieid = workingMovieDetails.fullmoviebody.imdbid
                                             actorDB.Add(actornew)
                                     End Select
                                 Next
                             Catch
                             End Try
-                            nfoFunction.savemovienfo(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails, True)
+                            nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                             newnfo = True
                             'Call loadinfofile()
                         End If
@@ -26547,44 +26544,44 @@ Public Class Form1
                     End If
                     If newnfo = True Then
                         For f = 0 To fullMovieList.Count - 1
-                            If fullMovieList(f).fullpathandfilename = workingmoviedetails.fileinfo.fullpathandfilename Then
+                            If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
                                 Dim newfullmovie As ComboList
                                 newfullmovie = fullMovieList(f)
                                 '-------------- Aqui
                                 If userPrefs.ignorearticle = True Then
-                                    If workingmoviedetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
-                                        newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title.Substring(4, workingmoviedetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                                    If workingMovieDetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
+                                        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title.Substring(4, workingMovieDetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingMovieDetails.fullmoviebody.year & ")"
                                     Else
-                                        newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                                        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                                     End If
                                 Else
-                                    newfullmovie.titleandyear = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
+                                    newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                                 End If
-                                newfullmovie.genre = workingmoviedetails.fullmoviebody.genre
-                                Dim filecreation2 As New FileInfo(workingmoviedetails.fileinfo.fullpathandfilename)
+                                newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
+                                Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                                 Dim myDate2 As Date = filecreation2.LastWriteTime
                                 Try
                                     newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                                 Catch ex2 As Exception
                                 End Try
-                                If workingmoviedetails.fileinfo.createdate <> Nothing Then
-                                    newfullmovie.createdate = workingmoviedetails.fileinfo.createdate
-                                ElseIf workingmoviedetails.fileinfo.createdate <> "" Then
-                                    newfullmovie.createdate = workingmoviedetails.fileinfo.createdate = workingmoviedetails.fileinfo.createdate
+                                If workingMovieDetails.fileinfo.createdate <> Nothing Then
+                                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
+                                ElseIf workingMovieDetails.fileinfo.createdate <> "" Then
+                                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate = workingMovieDetails.fileinfo.createdate
                                 Else
                                     newfullmovie.createdate = newfullmovie.filedate
                                 End If
-                                newfullmovie.outline = workingmoviedetails.fullmoviebody.outline
-                                newfullmovie.playcount = workingmoviedetails.fullmoviebody.playcount
-                                newfullmovie.rating = workingmoviedetails.fullmoviebody.rating
-                                newfullmovie.top250 = workingmoviedetails.fullmoviebody.top250
-                                newfullmovie.runtime = workingmoviedetails.fullmoviebody.runtime
-                                If workingmoviedetails.fullmoviebody.sortorder = Nothing Then
-                                    workingmoviedetails.fullmoviebody.sortorder = newfullmovie.title
+                                newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
+                                newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
+                                newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
+                                newfullmovie.top250 = workingMovieDetails.fullmoviebody.top250
+                                newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
+                                If workingMovieDetails.fullmoviebody.sortorder = Nothing Then
+                                    workingMovieDetails.fullmoviebody.sortorder = newfullmovie.title
                                 End If
-                                If workingmoviedetails.fullmoviebody.sortorder = "" Then
-                                    workingmoviedetails.fullmoviebody.sortorder = newfullmovie.title
+                                If workingMovieDetails.fullmoviebody.sortorder = "" Then
+                                    workingMovieDetails.fullmoviebody.sortorder = newfullmovie.title
                                 End If
                                 fullMovieList.RemoveAt(f)
                                 fullMovieList.Add(newfullmovie)
@@ -26667,7 +26664,7 @@ Public Class Form1
         RescrapeFanartToolStripMenuItem.Visible = False
         DownloadFanartToolStripMenuItem.Visible = False
         Try
-            If IO.File.Exists(filefunction.getfanartpath(workingmoviedetails.fileinfo.fullpathandfilename)) Then
+            If IO.File.Exists(filefunction.getfanartpath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
                 RescrapeFanartToolStripMenuItem.Visible = True
             Else
                 DownloadFanartToolStripMenuItem.Visible = True
@@ -26693,7 +26690,7 @@ Public Class Form1
         RescrapeFanartToolStripMenuItem.Visible = False
         DownloadFanartToolStripMenuItem.Visible = False
         Try
-            If IO.File.Exists(filefunction.getposterpath(workingmoviedetails.fileinfo.fullpathandfilename)) Then
+            If IO.File.Exists(filefunction.getposterpath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
                 RescrapePToolStripMenuItem.Visible = True
                 RescrapePosterFromTMDBToolStripMenuItem.Visible = True
                 RescraToolStripMenuItem.Visible = True
@@ -26734,17 +26731,17 @@ Public Class Form1
         messbox.Refresh()
         Application.DoEvents()
         Dim backpath As String = ""
-        If Not workingmoviedetails Is Nothing Then
-            If workingmoviedetails.fileinfo.fullpathandfilename <> Nothing Then
-                If workingmoviedetails.fileinfo.fullpathandfilename <> "" Then
-                    backpath = filefunction.getfanartpath(workingmoviedetails.fileinfo.fullpathandfilename)
+        If Not workingMovieDetails Is Nothing Then
+            If workingMovieDetails.fileinfo.fullpathandfilename <> Nothing Then
+                If workingMovieDetails.fileinfo.fullpathandfilename <> "" Then
+                    backpath = filefunction.getfanartpath(workingMovieDetails.fileinfo.fullpathandfilename)
                 End If
             End If
         End If
         If backpath <> "" Then
             Dim moviethumburl As String
             Try
-                Dim temp As String = workingmoviedetails.fullmoviebody.imdbid
+                Dim temp As String = workingMovieDetails.fullmoviebody.imdbid
 
                 Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
                 Dim apple2(2000) As String
@@ -26843,10 +26840,10 @@ Public Class Form1
                         If IO.File.Exists(backpath) Then
                             For Each paths In userPrefs.offlinefolders
                                 Dim offlinepath As String = paths & "\"
-                                If workingmoviedetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                                If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                     Dim mediapath As String
-                                    mediapath = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                                    Call offlinedvd(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails.fullmoviebody.title, mediapath)
+                                    mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                    Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                                 End If
                             Next
                             Dim bitmap3 As New Bitmap(backpath)
@@ -26913,10 +26910,10 @@ Public Class Form1
             messbox.Refresh()
             Application.DoEvents()
             Dim posterpath As String = ""
-            If Not workingmoviedetails Is Nothing Then
-                If workingmoviedetails.fileinfo.fullpathandfilename <> Nothing Then
-                    If workingmoviedetails.fileinfo.fullpathandfilename <> "" Then
-                        posterpath = filefunction.getposterpath(workingmoviedetails.fileinfo.fullpathandfilename)
+            If Not workingMovieDetails Is Nothing Then
+                If workingMovieDetails.fileinfo.fullpathandfilename <> Nothing Then
+                    If workingMovieDetails.fileinfo.fullpathandfilename <> "" Then
+                        posterpath = filefunction.getposterpath(workingMovieDetails.fileinfo.fullpathandfilename)
                     End If
                 End If
             End If
@@ -26924,20 +26921,20 @@ Public Class Form1
             If posterpath <> "" Then
                 Dim moviethumburl As String = ""
                 If source = "impa" Then
-                    If workingmoviedetails.fullmoviebody.title <> "" And workingmoviedetails.fullmoviebody.year <> "" Then
-                        moviethumburl = scraperFunction2.impathumb(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year)
+                    If workingMovieDetails.fullmoviebody.title <> "" And workingMovieDetails.fullmoviebody.year <> "" Then
+                        moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
                     End If
                 ElseIf source = "tmdb" Then
-                    If workingmoviedetails.fullmoviebody.imdbid <> "" Then
-                        moviethumburl = scraperFunction2.tmdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                    If workingMovieDetails.fullmoviebody.imdbid <> "" Then
+                        moviethumburl = scraperFunction2.tmdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                     End If
                 ElseIf source = "mpdb" Then
-                    If workingmoviedetails.fullmoviebody.imdbid <> "" Then
-                        moviethumburl = scraperFunction2.mpdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                    If workingMovieDetails.fullmoviebody.imdbid <> "" Then
+                        moviethumburl = scraperFunction2.mpdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                     End If
                 ElseIf source = "imdb" Then
-                    If workingmoviedetails.fullmoviebody.imdbid <> "" Then
-                        moviethumburl = scraperFunction2.imdbthumb(workingmoviedetails.fullmoviebody.imdbid)
+                    If workingMovieDetails.fullmoviebody.imdbid <> "" Then
+                        moviethumburl = scraperFunction2.imdbthumb(workingMovieDetails.fullmoviebody.imdbid)
                     End If
                 End If
 
@@ -26990,13 +26987,13 @@ Public Class Form1
                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                     gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
                     Dim tempbitmap As Bitmap = bm_dest
-                    Dim path As String = IO.Path.Combine(applicationpath, "settings\postercache\" & workingmoviedetails.fullmoviebody.imdbid & ".jpg")
+                    Dim path As String = IO.Path.Combine(applicationpath, "settings\postercache\" & workingMovieDetails.fullmoviebody.imdbid & ".jpg")
                     tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
                     tempbitmap.Dispose()
 
                     For Each poster As PictureBox In TabPage22.Controls
-                        If poster.Tag = workingmoviedetails.fileinfo.fullpathandfilename Then
-                            poster.ImageLocation = IO.Path.Combine(applicationpath, "settings\postercache\" & workingmoviedetails.fullmoviebody.imdbid & ".jpg")
+                        If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
+                            poster.ImageLocation = IO.Path.Combine(applicationpath, "settings\postercache\" & workingMovieDetails.fullmoviebody.imdbid & ".jpg")
                             Exit For
                         End If
                     Next
@@ -27192,7 +27189,7 @@ Public Class Form1
             'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim tvdbstuff As New TVDBScraper
             Dim showlist As New XmlDocument
-            Dim thumblist As String = tvdbstuff.getposterlist(workingtvshow.tvdbid)
+            Dim thumblist As String = tvdbstuff.getposterlist(workingTvShow.tvdbid)
             showlist.LoadXml(thumblist)
             Dim thisresult As XmlNode = Nothing
             Dim artlist As New List(Of tvbanners)
@@ -27252,9 +27249,9 @@ Public Class Form1
                     Else
                         tempstring = f.ToString
                     End If
-                    Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season" & tempstring & ".tbn")
+                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season" & tempstring & ".tbn")
                     If tempstring = "00" Then
-                        seasonpath = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season-specials.tbn")
+                        seasonpath = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-specials.tbn")
                     End If
                     If Not IO.File.Exists(seasonpath) Then
                         Try
@@ -27308,7 +27305,7 @@ Public Class Form1
             End If
             If fanartposter <> "" Then
 
-                Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "fanart.jpg")
+                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "fanart.jpg")
                 If Not IO.File.Exists(seasonpath) Then
                     Try
                         Dim buffer(4000000) As Byte
@@ -27431,7 +27428,7 @@ Public Class Form1
 
             If posterurlpath <> "" Then
 
-                Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "folder.jpg")
+                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "folder.jpg")
                 If Not IO.File.Exists(seasonpath) Then
                     Try
                         Dim buffer(4000000) As Byte
@@ -27511,7 +27508,7 @@ Public Class Form1
 
                 If seasonallpath <> "" Then
 
-                    Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season-all.tbn")
+                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
                     If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                         Try
                             Dim buffer(4000000) As Byte
@@ -27538,7 +27535,7 @@ Public Class Form1
                     End If
                 End If
             ElseIf userPrefs.seasonall <> "none" And seasonallpath <> "" Then
-                Dim seasonpath As String = workingtvshow.path.Replace(IO.Path.GetFileName(workingtvshow.path), "season-all.tbn")
+                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
                 If Not IO.File.Exists(seasonpath) Then
                     Try
                         Dim buffer(4000000) As Byte
@@ -27651,7 +27648,7 @@ Public Class Form1
                     If Form1.userPrefs.resizefanart = 1 Then
                         Try
                             Dim tempbitmap As Bitmap = bmp
-                            tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Catch ex As Exception
                             tempstring = ex.Message.ToString
                         End Try
@@ -27663,10 +27660,10 @@ Public Class Form1
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                             Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
                             Threading.Thread.CurrentThread.Sleep(30)
-                            bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     ElseIf Form1.userPrefs.resizefanart = 3 Then
                         If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -27676,25 +27673,25 @@ Public Class Form1
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                             Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
                             Threading.Thread.CurrentThread.Sleep(30)
-                            bmp.Save(workingmoviedetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     End If
-                    Dim exists As Boolean = System.IO.File.Exists(workingmoviedetails.fileinfo.fanartpath)
+                    Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
                     If exists = True Then
 
 
                         'mainfanart = New PictureBox
-                        PictureBox2.ImageLocation = workingmoviedetails.fileinfo.fanartpath
-                        PictureBox7.ImageLocation = workingmoviedetails.fileinfo.fanartpath
+                        PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         For Each paths In userPrefs.offlinefolders
                             Dim offlinepath As String = paths & "\"
-                            If workingmoviedetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                            If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
-                                mediapath = filefunction.getfilename(workingmoviedetails.fileinfo.fullpathandfilename)
-                                Call offlinedvd(workingmoviedetails.fileinfo.fullpathandfilename, workingmoviedetails.fullmoviebody.title, mediapath)
+                                mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
                     Else
@@ -28099,7 +28096,7 @@ Public Class Form1
             For f = tempint To 0 Step -1
                 If basictvlist(f).fullpath = shownode.Name Then
                     If basictvlist(f).locked <> 2 And basictvlist(f).locked <> 1 Then
-                        If shownode.Name = workingtvshow.path Then
+                        If shownode.Name = workingTvShow.path Then
                             Button60.Text = "Locked"
                             Button60.BackColor = Color.Red
                         End If
@@ -28125,7 +28122,7 @@ Public Class Form1
             For f = tempint To 0 Step -1
                 If basictvlist(f).fullpath = shownode.Name Then
                     If basictvlist(f).locked <> 2 And basictvlist(f).locked <> 0 Then
-                        If shownode.Name = workingtvshow.path Then
+                        If shownode.Name = workingTvShow.path Then
                             Button60.Text = "Open"
                             Button60.BackColor = Color.LawnGreen
                         End If
@@ -28239,42 +28236,42 @@ Public Class Form1
         If Not tvbckrescrapewizard.IsBusy Then
 
 
-            tvbatchlist.epActor = False
-            tvbatchlist.epAired = False
+            tvBatchList.epActor = False
+            tvBatchList.epAired = False
 
-            tvbatchlist.epCredits = False
-            tvbatchlist.epDirector = False
-            tvbatchlist.epPlot = False
-            tvbatchlist.epRating = False
-            tvbatchlist.epRuntime = False
-            tvbatchlist.epScreenshot = False
+            tvBatchList.epCredits = False
+            tvBatchList.epDirector = False
+            tvBatchList.epPlot = False
+            tvBatchList.epRating = False
+            tvBatchList.epRuntime = False
+            tvBatchList.epScreenshot = False
 
-            tvbatchlist.epStreamDetails = False
-            tvbatchlist.epCreateScreenshot = False
+            tvBatchList.epStreamDetails = False
+            tvBatchList.epCreateScreenshot = False
 
-            tvbatchlist.shActor = False
-            tvbatchlist.shFanart = False
-            tvbatchlist.shGenre = False
-            tvbatchlist.shPosters = False
-            tvbatchlist.shMpaa = False
-            tvbatchlist.shPlot = False
-            tvbatchlist.shRating = False
-            tvbatchlist.shRuntime = False
-            tvbatchlist.shStudio = False
-            tvbatchlist.shYear = False
+            tvBatchList.shActor = False
+            tvBatchList.shFanart = False
+            tvBatchList.shGenre = False
+            tvBatchList.shPosters = False
+            tvBatchList.shMpaa = False
+            tvBatchList.shPlot = False
+            tvBatchList.shRating = False
+            tvBatchList.shRuntime = False
+            tvBatchList.shStudio = False
+            tvBatchList.shYear = False
 
-            tvbatchlist.includeLocked = False
-            tvbatchlist.activate = False
+            tvBatchList.includeLocked = False
+            tvBatchList.activate = False
 
-            tvbatchlist.doShows = False
-            tvbatchlist.doEpisodes = False
-            tvbatchlist.doShowArt = False
-            tvbatchlist.doShowActors = False
-            tvbatchlist.doShowBody = False
-            tvbatchlist.doEpisodeArt = False
-            tvbatchlist.doEpisodeActors = False
-            tvbatchlist.doEpisodeBody = False
-            tvbatchlist.doEpisodeMediaTags = False
+            tvBatchList.doShows = False
+            tvBatchList.doEpisodes = False
+            tvBatchList.doShowArt = False
+            tvBatchList.doShowActors = False
+            tvBatchList.doShowBody = False
+            tvBatchList.doEpisodeArt = False
+            tvBatchList.doEpisodeActors = False
+            tvBatchList.doEpisodeBody = False
+            tvBatchList.doEpisodeMediaTags = False
             ' doshowbody As Boolean
             'Dim doshowart As Boolean
             'Dim doshowactors As Boolean
@@ -28284,7 +28281,7 @@ Public Class Form1
             Dim displaywizard As New tv_batch_wizard
             displaywizard.ShowDialog()
 
-            If tvbatchlist.activate = True Then
+            If tvBatchList.activate = True Then
                 ToolStripStatusLabel8.Text = "Starting TV Batch Scrape"
                 ToolStripStatusLabel8.Visible = True
                 ToolStripProgressBar7.Value = 0
@@ -28304,8 +28301,8 @@ Public Class Form1
         Dim progcount As Integer = 0
         Dim done As Integer = 0
         For f = basictvlist.Count - 1 To 0 Step -1
-            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvbatchlist.includeLocked = True Then
-                If tvbatchlist.doEpisodes = True Then
+            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvBatchList.includeLocked = True Then
+                If tvBatchList.doEpisodes = True Then
                     showprocesscount += basictvlist(f).allepisodes.Count
                     showprocesscount += 1
                     progcount += 1
@@ -28319,7 +28316,7 @@ Public Class Form1
         Dim showcounter As Integer = 0
         For f = basictvlist.Count - 1 To 0 Step -1
             showcounter += 1
-            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvbatchlist.includeLocked = True Then
+            If basictvlist(f).locked = 0 Or basictvlist(f).locked = -1 Or tvBatchList.includeLocked = True Then
                 progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount
                 If done > 0 Then
                     progress = (100 / showprocesscount) * done
@@ -28331,8 +28328,8 @@ Public Class Form1
                 editshow = nfoFunction.loadfulltnshownfo(basictvlist(f).fullpath)
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
-                If tvbatchlist.doShows = True Then
-                    If tvbatchlist.doShowBody = True Or tvbatchlist.doShowActors = True Then
+                If tvBatchList.doShows = True Then
+                    If tvBatchList.doShowBody = True Or tvBatchList.doShowActors = True Then
                         Dim language As String = editshow.language
                         If language = "" Then language = "en"
 
@@ -28349,11 +28346,11 @@ Public Class Form1
                                     Case "title"
                                         'thisresult.InnerText
                                     Case "mpaa"
-                                        If tvbatchlist.shMpaa = True Then
+                                        If tvBatchList.shMpaa = True Then
                                             editshow.mpaa = thisresult.InnerText
                                         End If
                                     Case "premiered"
-                                        If tvbatchlist.shYear = True Then
+                                        If tvBatchList.shYear = True Then
                                             editshow.premiered = thisresult.InnerText
                                         End If
                                     Case "genre"
@@ -28362,31 +28359,31 @@ Public Class Form1
                                         newstring = newstring.TrimEnd("|")
                                         newstring = newstring.TrimStart("|")
                                         newstring = newstring.Replace("|", " / ")
-                                        If tvbatchlist.shGenre = True Then
+                                        If tvBatchList.shGenre = True Then
                                             editshow.genre = newstring
                                         End If
                                     Case "imdbid"
 
                                     Case "studio"
-                                        If tvbatchlist.shStudio = True Then
+                                        If tvBatchList.shStudio = True Then
                                             editshow.studio = thisresult.InnerText
                                         End If
                                     Case "plot"
-                                        If tvbatchlist.shPlot = True Then
+                                        If tvBatchList.shPlot = True Then
                                             editshow.plot = thisresult.InnerText
                                         End If
                                     Case "rating"
-                                        If tvbatchlist.shRating = True Then
+                                        If tvBatchList.shRating = True Then
                                             editshow.rating = thisresult.InnerText
                                         End If
                                     Case "runtime"
-                                        If tvbatchlist.shRuntime = True Then
+                                        If tvBatchList.shRuntime = True Then
                                             editshow.runtime = thisresult.InnerText
                                         End If
                                     Case "episodeguideurl"
 
                                     Case "actor"
-                                        If editshow.tvshowactorsource = "tvdb" And tvbatchlist.doShowActors = True Then
+                                        If editshow.tvshowactorsource = "tvdb" And tvBatchList.doShowActors = True Then
                                             If maxcount >= userPrefs.maxactors Then
                                                 Exit For
                                             End If
@@ -28459,7 +28456,7 @@ Public Class Form1
                                         End If
                                 End Select
                             Next
-                            If tvbatchlist.doShowActors = True And editshow.tvshowactorsource = "imdb" Then
+                            If tvBatchList.doShowActors = True And editshow.tvshowactorsource = "imdb" Then
                                 '                    Dim imdbscraper As New imdb.Classimdbscraper
                                 Dim imdbscraper As New Classimdb
                                 Dim actorlist2 As String
@@ -28578,7 +28575,7 @@ Public Class Form1
                                 Catch ex As Exception
                                 End Try
                             End If
-                            If tvbatchlist.doShowActors = True Then
+                            If tvBatchList.doShowActors = True Then
                                 If actorlist.Count > 0 Then
                                     editshow.listactors.Clear()
                                     For Each act In actorlist
@@ -28598,7 +28595,7 @@ Public Class Form1
                     Dim showlist2 As New XmlDocument
                     Dim thisresult2 As XmlNode
                     Dim artdone As Boolean = False
-                    If tvbatchlist.doShowArt = True Then
+                    If tvBatchList.doShowArt = True Then
 
                         Dim thumblist As String = tvdbstuff.getposterlist(basictvlist(f).tvdbid)
                         showlist2.LoadXml(thumblist)
@@ -28653,10 +28650,10 @@ Public Class Form1
                                 Else
                                     tempstring = g.ToString
                                 End If
-                                If tvbatchlist.shPosters = True Then
+                                If tvBatchList.shPosters = True Then
                                     Dim seasonpath As String = basictvlist(f).fullpath.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season" & tempstring & ".tbn")
                                     If tempstring = "00" Then
-                                        seasonpath = workingtvshow.path.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season-specials.tbn")
+                                        seasonpath = workingTvShow.path.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season-specials.tbn")
                                     End If
                                     If Not IO.File.Exists(seasonpath) Then
                                         Try
@@ -28704,7 +28701,7 @@ Public Class Form1
                                 End If
                             Next
                         End If
-                        If fanartposter <> "" And tvbatchlist.shFanart = True Then
+                        If fanartposter <> "" And tvBatchList.shFanart = True Then
 
                             Dim seasonpath As String = basictvlist(f).fullpath.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "fanart.jpg")
                             If Not IO.File.Exists(seasonpath) Then
@@ -28807,7 +28804,7 @@ Public Class Form1
                                 End If
                             End If
                             Dim seasonpath As String = basictvlist(f).fullpath.Replace(IO.Path.GetFileName(basictvlist(f).fullpath), "season-all.tbn")
-                            If Not IO.File.Exists(seasonpath) And tvbatchlist.shPosters = True Then
+                            If Not IO.File.Exists(seasonpath) And tvBatchList.shPosters = True Then
                                 Try
                                     Dim buffer(4000000) As Byte
                                     Dim size As Integer = 0
@@ -28839,7 +28836,7 @@ Public Class Form1
                         End If
                     End If
                 End If
-                If tvbatchlist.doEpisodes = True Then
+                If tvBatchList.doEpisodes = True Then
 
                     'progresstext = "Working on Episodes: " & basictvlist(f).title
                     'tvbckrescrapewizard.ReportProgress(999999, progresstext)
@@ -28852,7 +28849,7 @@ Public Class Form1
                             progress = 0
                         End If
                         tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                        If tvbatchlist.doEpisodeBody = True Or (tvbatchlist.doEpisodeActors = True And basictvlist(f).episodeactorsource <> "") Or (tvbatchlist.doEpisodeArt = True) Then
+                        If tvBatchList.doEpisodeBody = True Or (tvBatchList.doEpisodeActors = True And basictvlist(f).episodeactorsource <> "") Or (tvBatchList.doEpisodeArt = True) Then
                             Dim listofnewepisodes As New List(Of EpisodeInfo)
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(basictvlist(f).allepisodes(g).episodepath)
@@ -28884,15 +28881,15 @@ Public Class Form1
                                                 Case "title"
                                                     'listofnewepisodes(h).title = thisresult.InnerText
                                                 Case "premiered"
-                                                    If tvbatchlist.epAired = True Then
+                                                    If tvBatchList.epAired = True Then
                                                         listofnewepisodes(h).aired = thisresult.InnerText
                                                     End If
                                                 Case "plot"
-                                                    If tvbatchlist.epPlot = True Then
+                                                    If tvBatchList.epPlot = True Then
                                                         listofnewepisodes(h).plot = thisresult.InnerText
                                                     End If
                                                 Case "director"
-                                                    If tvbatchlist.epDirector = True Then
+                                                    If tvBatchList.epDirector = True Then
                                                         Dim tempstring As String = ""
                                                         tempstring = thisresult.InnerText
                                                         tempstring = tempstring.TrimStart("|")
@@ -28902,7 +28899,7 @@ Public Class Form1
                                                     End If
                                                 Case "credits"
                                                     Dim tempstring As String = ""
-                                                    If tvbatchlist.epCredits = True Then
+                                                    If tvBatchList.epCredits = True Then
                                                         tempstring = thisresult.InnerText
                                                         tempstring = tempstring.TrimStart("|")
                                                         tempstring = tempstring.TrimEnd("|")
@@ -28910,14 +28907,14 @@ Public Class Form1
                                                         listofnewepisodes(h).credits = tempstring
                                                     End If
                                                 Case "rating"
-                                                    If tvbatchlist.epRating = True Then
+                                                    If tvBatchList.epRating = True Then
                                                         listofnewepisodes(h).rating = thisresult.InnerText
                                                     End If
                                                     basictvlist(f).allepisodes(g).rating = thisresult.InnerText
                                                 Case "thumb"
                                                     episodescreenurl = thisresult.InnerText
                                                     Dim downloadok As Boolean = True
-                                                    If tvbatchlist.doEpisodeArt = True And tvbatchlist.epScreenshot = True Then
+                                                    If tvBatchList.doEpisodeArt = True And tvBatchList.epScreenshot = True Then
                                                         If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
                                                             Try
                                                                 Dim screenshotpath As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
@@ -28948,7 +28945,7 @@ Public Class Form1
                                                         Else
                                                             Dim thumbpathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
                                                             Dim pathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), "")
-                                                            If Not IO.File.Exists(thumbpathandfilename) And tvbatchlist.epCreateScreenshot = True Then
+                                                            If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
                                                                 progresstext = listofnewepisodes(h).episodepath
                                                                 tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
@@ -28956,14 +28953,14 @@ Public Class Form1
                                                         If downloadok = False Then
                                                             Dim thumbpathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
                                                             Dim pathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), "")
-                                                            If Not IO.File.Exists(thumbpathandfilename) And tvbatchlist.epCreateScreenshot = True Then
+                                                            If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
                                                                 progresstext = listofnewepisodes(h).episodepath
                                                                 tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
                                                         End If
                                                     End If
                                                 Case "actor"
-                                                    If tvbatchlist.epActor = True And userPrefs.episodeacrorsource = "tvdb" Then
+                                                    If tvBatchList.epActor = True And userPrefs.episodeacrorsource = "tvdb" Then
                                                         Dim actors As XmlNode = Nothing
                                                         For Each actorl In thisresult.ChildNodes
                                                             Select Case actorl.name
@@ -28977,13 +28974,13 @@ Public Class Form1
                                             End Select
                                         Next
                                         'newepisode.playcount = "0"
-                                        If userPrefs.episodeacrorsource = "tvdb" And tvbatchlist.epActor = True And newactors.Count > 0 Then
+                                        If userPrefs.episodeacrorsource = "tvdb" And tvBatchList.epActor = True And newactors.Count > 0 Then
                                             listofnewepisodes(h).listactors.Clear()
                                             For Each act In newactors
                                                 listofnewepisodes(h).listactors.Add(act)
                                             Next
                                         End If
-                                        If basictvlist(f).episodeactorsource = "imdb" And tvbatchlist.epActor = True Then
+                                        If basictvlist(f).episodeactorsource = "imdb" And tvBatchList.epActor = True Then
                                             Dim ac As New actors
                                             Dim actorlist As New List(Of MovieActors)
                                             actorlist = ac.EpisodeGetImdbActors(basictvlist(f).imdbid, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno)
@@ -29007,7 +29004,7 @@ Public Class Form1
                         End If
 
 
-                        If tvbatchlist.doEpisodeMediaTags = True Then
+                        If tvBatchList.doEpisodeMediaTags = True Then
                             Dim listofnewepisodes As New List(Of EpisodeInfo)
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(basictvlist(f).allepisodes(g).episodepath)
@@ -29123,7 +29120,7 @@ Public Class Form1
 
             For Each movie In ComboBox1.SelectedItems
                 Dim tempstring As String
-                tempstring = CType(ComboBox1.SelectedItem, ValueDescriptionPair).Value
+                tempstring = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
                 Dim playlist As New List(Of String)
                 tempstring = filefunction.getfilename(tempstring)
                 playlist = filefunction.getmedialist(tempstring)
@@ -29217,7 +29214,7 @@ Public Class Form1
 
                     Select Case thisresult.Name
                         Case "folder"
-                            Dim mc As New relativefilelist
+                            Dim mc As New RelativeFileList
                             Dim it2 As XmlNode
                             For Each it2 In thisresult.ChildNodes
                                 Select Case it2.Name
@@ -29261,11 +29258,7 @@ Public Class Form1
         End If
     End Sub
 
-    Dim relativefolderlist As New List(Of relativefilelist)
-    Private Structure relativefilelist
-        Dim mc As String
-        Dim xbmc As String
-    End Structure
+
     Private Sub Button109_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button109.Click
 
         relativefolderlist.Clear()
@@ -29279,7 +29272,7 @@ Public Class Form1
         doc.LoadXml(temptext)
         Dim thisresult As XmlElement
         For Each thisresult In doc("relativepaths")
-            Dim newfo As New relativefilelist
+            Dim newfo As New RelativeFileList
             For Each innerresult In thisresult
                 Select Case innerresult.Name
                     Case "mc"
@@ -29617,25 +29610,3 @@ Public Class Form1
         Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
     End Sub
 End Class
-
-
-Public Class ValueDescriptionPair
-
-    Public Value As Object
-    Public Description As String
-
-    Public Sub New(ByVal NewValue As Object, ByVal NewDescription As String)
-        Value = NewValue
-        Description = NewDescription
-    End Sub
-
-    Public Overrides Function ToString() As String
-        Return Description
-    End Function
-
-
-End Class
-
-
-
-

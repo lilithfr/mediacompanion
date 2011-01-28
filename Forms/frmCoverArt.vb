@@ -15,7 +15,7 @@ Public Class frmCoverArt
     Dim WithEvents mainposter As PictureBox
     Dim WithEvents bigpicbox As PictureBox
     Dim count As Integer = 0
-    Dim title As String = Form1.workingmoviedetails.fullmoviebody.title
+    Dim title As String = Form1.workingMovieDetails.fullmoviebody.title
     Dim itemnumber As Integer
     Dim rememberint As Integer
     Dim maxthumbs As Integer = Form1.userPrefs.maximumthumbs
@@ -23,13 +23,13 @@ Public Class frmCoverArt
     Dim currentpage As Integer = 1
     Dim movieyear As String
     Dim folderjpgpath As String
-    Dim tmdbid As String = Form1.workingmoviedetails.fullmoviebody.imdbid
+    Dim tmdbid As String = Form1.workingMovieDetails.fullmoviebody.imdbid
 
 
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
 
-        posterpath = Form1.workingmoviedetails.fileinfo.posterpath
+        posterpath = Form1.workingMovieDetails.fileinfo.posterpath
 
         folderjpgpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "folder.jpg")
 
@@ -42,8 +42,8 @@ Public Class frmCoverArt
 
 
 
-        If Form1.workingmoviedetails.fullmoviebody.year <> Nothing Then
-            movieyear = Form1.workingmoviedetails.fullmoviebody.year
+        If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then
+            movieyear = Form1.workingMovieDetails.fullmoviebody.year
 
         End If
 
@@ -1380,7 +1380,7 @@ Public Class frmCoverArt
     End Sub
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        openFD.InitialDirectory = Form1.workingmoviedetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingmoviedetails.fileinfo.fullpathandfilename), "")
+        openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
         openFD.Title = "Select a jpeg image file File"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"

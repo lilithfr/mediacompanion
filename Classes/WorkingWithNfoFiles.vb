@@ -476,7 +476,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
     Public Function loadfullepisodenfo(ByVal path As String) ', ByVal season As String, ByVal episode As String)
-        Form1.workingepisode.Clear()
+        Form1.workingEpisode.Clear()
         Dim newepisode As New EpisodeInfo
         If Not IO.File.Exists(path) Then
             newepisode.title = IO.Path.GetFileName(path)
@@ -506,7 +506,7 @@ Public Class WorkingWithNfoFiles
             If newepisode.seasonno = Nothing Then
                 newepisode.seasonno = "-1"
             End If
-            Form1.workingepisode.Add(newepisode)
+            Form1.workingEpisode.Add(newepisode)
             Return ""
             Exit Function
         Else
@@ -544,7 +544,7 @@ Public Class WorkingWithNfoFiles
                 If newepisode.seasonno = Nothing Then
                     newepisode.seasonno = "-1"
                 End If
-                Form1.workingepisode.Add(newepisode)
+                Form1.workingEpisode.Add(newepisode)
                 Return ""
                 Exit Function
             End Try
@@ -695,7 +695,7 @@ Public Class WorkingWithNfoFiles
                     newtvepisode.seasonno = "-1"
                 End If
                 If newtvepisode.rating = Nothing Then newtvepisode.rating = ""
-                Form1.workingepisode.Add(newtvepisode)
+                Form1.workingEpisode.Add(newtvepisode)
                 Return ""
                 Exit Function
             ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Then
@@ -843,7 +843,7 @@ Public Class WorkingWithNfoFiles
                                 End Try
                             Next f
                             anotherepisode.episodepath = path
-                            Form1.workingepisode.Add(anotherepisode)
+                            Form1.workingEpisode.Add(anotherepisode)
                     End Select
                 Next
             End If
@@ -1297,7 +1297,7 @@ Public Class WorkingWithNfoFiles
             If batch = False Then
                 Dim timetoexit As Boolean = False
                 For Each show In Form1.basictvlist
-                    If show.fullpath = Form1.workingtvshow.path Then
+                    If show.fullpath = Form1.workingTvShow.path Then
                         For Each episode In show.allepisodes
                             If episode.episodeno = episodeno And episode.seasonno = seasonno Then
 
@@ -1965,7 +1965,7 @@ Public Class WorkingWithNfoFiles
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
-                    newmovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingmovie.fullpathandfilename))
+                    newmovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingMovie.fullpathandfilename))
                     newmovie.fullmoviebody.year = "0000"
                     newmovie.fullmoviebody.top250 = "0"
                     newmovie.fullmoviebody.playcount = "0"
