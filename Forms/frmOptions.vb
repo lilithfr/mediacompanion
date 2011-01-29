@@ -1111,7 +1111,7 @@ Public Class frmOptions
             Form1.userPrefs.sortorder = "dvd"
         End If
     End Sub
-    Dim languagelist As New List(Of tvshowlanguages)
+    Dim languagelist As New List(Of TvShowLanguages)
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
         If ListBox8.Items.Count = 0 Then
             Try
@@ -1135,7 +1135,7 @@ Public Class frmOptions
                     Select Case thisresult.Name
                         Case "Language"
                             Dim results As XmlNode = Nothing
-                            Dim lan As New tvshowlanguages
+                            Dim lan As New TvShowLanguages
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "name"

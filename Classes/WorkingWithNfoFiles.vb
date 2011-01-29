@@ -1010,22 +1010,22 @@ Public Class WorkingWithNfoFiles
 
         Try
             Dim newshow As Boolean = True
-            For f = Form1.basictvlist.Count - 1 To 0 Step -1
-                If Form1.basictvlist(f).fullpath.ToLower = filenameandpath.ToLower Then
+            For f = Form1.basicTvList.Count - 1 To 0 Step -1
+                If Form1.basicTvList(f).fullpath.ToLower = filenameandpath.ToLower Then
                     newshow = False
-                    Form1.basictvlist(f).episodeactorsource = tvshowtosave.episodeactorsource
-                    Form1.basictvlist(f).fullpath = tvshowtosave.path
-                    Form1.basictvlist(f).genre = tvshowtosave.genre
-                    Form1.basictvlist(f).imdbid = tvshowtosave.imdbid
-                    Form1.basictvlist(f).language = tvshowtosave.language
-                    Form1.basictvlist(f).rating = tvshowtosave.rating
-                    Form1.basictvlist(f).sortorder = tvshowtosave.sortorder
-                    Form1.basictvlist(f).title = tvshowtosave.title
-                    Form1.basictvlist(f).tvdbid = tvshowtosave.tvdbid
-                    Form1.basictvlist(f).year = tvshowtosave.year
-                    Form1.basictvlist(f).locked = tvshowtosave.locked
+                    Form1.basicTvList(f).episodeactorsource = tvshowtosave.episodeactorsource
+                    Form1.basicTvList(f).fullpath = tvshowtosave.path
+                    Form1.basicTvList(f).genre = tvshowtosave.genre
+                    Form1.basicTvList(f).imdbid = tvshowtosave.imdbid
+                    Form1.basicTvList(f).language = tvshowtosave.language
+                    Form1.basicTvList(f).rating = tvshowtosave.rating
+                    Form1.basicTvList(f).sortorder = tvshowtosave.sortorder
+                    Form1.basicTvList(f).title = tvshowtosave.title
+                    Form1.basicTvList(f).tvdbid = tvshowtosave.tvdbid
+                    Form1.basicTvList(f).year = tvshowtosave.year
+                    Form1.basicTvList(f).locked = tvshowtosave.locked
                     If forceunlocked = "unlock" Then
-                        Form1.basictvlist(f).locked = 0
+                        Form1.basicTvList(f).locked = 0
                     End If
                     Exit For
                 End If
@@ -1043,7 +1043,7 @@ Public Class WorkingWithNfoFiles
                 newtvnfo.tvdbid = tvshowtosave.tvdbid
                 newtvnfo.year = tvshowtosave.year
                 newtvnfo.locked = tvshowtosave.locked
-                Form1.basictvlist.Add(newtvnfo)
+                Form1.basicTvList.Add(newtvnfo)
             End If
         Catch ex As Exception
 
@@ -1296,7 +1296,7 @@ Public Class WorkingWithNfoFiles
         If seasonno <> -2 And episodeno <> -2 Then
             If batch = False Then
                 Dim timetoexit As Boolean = False
-                For Each show In Form1.basictvlist
+                For Each show In Form1.basicTvList
                     If show.fullpath = Form1.workingTvShow.path Then
                         For Each episode In show.allepisodes
                             If episode.episodeno = episodeno And episode.seasonno = seasonno Then

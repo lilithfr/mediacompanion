@@ -58,7 +58,7 @@ Public Class CreateScreenshot
                                 Dim myProcess As Process = New Process
                                 myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                                 myProcess.StartInfo.CreateNoWindow = False
-                                myProcess.StartInfo.FileName = Form1.applicationpath & "\ffmpeg.exe"
+                                myProcess.StartInfo.FileName = Form1.applicationPath & "\ffmpeg.exe"
                                 Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                                 myProcess.StartInfo.Arguments = proc_arguments
                                 myProcess.Start()

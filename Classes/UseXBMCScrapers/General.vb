@@ -1382,26 +1382,26 @@ Module General
         Teste.aired = entrada.aired
         Teste.credits = entrada.credits
         Teste.director = entrada.director
-        Teste.episodeno = entrada.episodeno
-        Teste.episodepath = entrada.episodepath
-        Teste.fanartpath = entrada.fanartpath
-        Teste.filedetails = entrada.filedetails
+        Teste.episodeno = entrada.episodeNO
+        Teste.episodepath = entrada.episodePath
+        Teste.fanartpath = entrada.fanartPath
+        Teste.filedetails = entrada.fileDetails
         Teste.genre = entrada.genre
-        For Each merda As TempMovieActors In entrada.listactors
-            merda1.actorid = merda.actorid
-            merda1.actorname = merda.actorname
-            merda1.actorrole = merda.actorrole
-            merda1.actorthumb = merda.actorthumb
+        For Each merda As TempMovieActors In entrada.listActors
+            merda1.actorid = merda.actorID
+            merda1.actorname = merda.actorName
+            merda1.actorrole = merda.actorRole
+            merda1.actorthumb = merda.actorThumb
             Teste.listactors.Add(merda1)
         Next
         'Teste.listactors = entrada.listactors
         'Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
-        Teste.mediaextension = entrada.mediaextension
-        Teste.playcount = entrada.playcount
+        Teste.mediaextension = entrada.mediaExtension
+        Teste.playcount = entrada.playCount
         Teste.plot = entrada.plot
         Teste.rating = entrada.rating
         Teste.runtime = entrada.runtime
-        Teste.seasonno = entrada.seasonno
+        Teste.seasonno = entrada.seasonNO
         Teste.thumb = entrada.thumb
         Teste.title = entrada.title
         Return Teste
@@ -1515,7 +1515,7 @@ Module General
                 If ArtforDownload(1) <> Nothing Then
                     myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(1), ImageFilename)
                 End If
-                End If
+            End If
         End If
         If Form1.userPrefs.tvfanart = True Then
             Dim ImageFilename As String = Path & "\fanart.jpg"
@@ -1644,14 +1644,14 @@ Module General
             TempXMLEpisode.aired = Nothing
             TempXMLEpisode.credits = Nothing
             TempXMLEpisode.director = Nothing
-            TempXMLEpisode.episodeno = Nothing
+            TempXMLEpisode.episodeNO = Nothing
             TempXMLEpisode.genre = Nothing
             TempXMLEpisode.plot = Nothing
             TempXMLEpisode.rating = Nothing
-            TempXMLEpisode.seasonno = Nothing
+            TempXMLEpisode.seasonNO = Nothing
             TempXMLEpisode.thumb = Nothing
             TempXMLEpisode.title = Nothing
-            TempXMLEpisode.listactors.Clear()
+            TempXMLEpisode.listActors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
@@ -1679,22 +1679,22 @@ Module General
                     Case "title"
                         TempXMLEpisode.title = NodeChild.InnerText
                     Case "season"
-                        TempXMLEpisode.seasonno = NodeChild.InnerText
+                        TempXMLEpisode.seasonNO = NodeChild.InnerText
                     Case "episode"
-                        TempXMLEpisode.episodeno = NodeChild.InnerText
+                        TempXMLEpisode.episodeNO = NodeChild.InnerText
                     Case "actor"
                         For Each Nodechild1 In NodeChild.ChildNodes
                             Select Case Nodechild1.Name
                                 Case "name"
-                                    newActor.actorname = Nodechild1.InnerText
+                                    newActor.actorName = Nodechild1.InnerText
                                 Case "role"
-                                    newActor.actorrole = Nodechild1.InnerText
+                                    newActor.actorRole = Nodechild1.InnerText
                                 Case "thumb"
-                                    newActor.actorthumb = Nodechild1.InnerText
+                                    newActor.actorThumb = Nodechild1.InnerText
                                 Case "actorid"
                             End Select
                         Next
-                        If newActor.actorname <> Nothing Then TempXMLEpisode.listactors.Add(newActor)
+                        If newActor.actorName <> Nothing Then TempXMLEpisode.listActors.Add(newActor)
                 End Select
             Next
             episodeXMLinformation.Add(TempXMLEpisode)
@@ -1856,11 +1856,11 @@ Module General
         For n As Integer = 0 To EpisodeArray.Count - 1
             EpisodeArray(n).seasonno = CInt(EpisodeArray(n).seasonno)
             EpisodeArray(n).episodeno = CInt(EpisodeArray(n).episodeno)
-            TempXMLEpisode.episodepath = EpisodeArray(n).mediaextension.Substring(0, EpisodeArray(n).mediaextension.LastIndexOf(".")) & ".nfo"
-            TempXMLEpisode.episodeno = EpisodeArray(n).episodeno
-            TempXMLEpisode.seasonno = EpisodeArray(n).seasonno
-            TempXMLEpisode.mediaextension = EpisodeArray(n).mediaextension
-            TempXMLEpisode.playcount = "0"
+            TempXMLEpisode.episodePath = EpisodeArray(n).mediaextension.Substring(0, EpisodeArray(n).mediaextension.LastIndexOf(".")) & ".nfo"
+            TempXMLEpisode.episodeNO = EpisodeArray(n).episodeno
+            TempXMLEpisode.seasonNO = EpisodeArray(n).seasonno
+            TempXMLEpisode.mediaExtension = EpisodeArray(n).mediaextension
+            TempXMLEpisode.playCount = "0"
             ParametersForScraper(1) = TVDBId
             ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
             ParametersForScraper(4) = Nothing
@@ -1894,7 +1894,7 @@ Module General
             Dim ImageFilename As String = EpisodeArray(0).mediaextension.Substring(0, EpisodeArray(0).mediaextension.LastIndexOf(".")) & ".tbn"
             myWebClient.DownloadFile(episodeInformation(0).thumb, ImageFilename)
         End If
-        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.episodepath, FinalScrapResult)
+        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.episodePath, FinalScrapResult)
 
         Return episodeInformation
     End Function

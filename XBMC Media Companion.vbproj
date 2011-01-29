@@ -121,6 +121,8 @@
     <Compile Include="Classes\Profiles.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
+    <Compile Include="Structures\FanartList.vb" />
+    <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
     <Compile Include="Structures\TableItems.vb" />
     <Compile Include="Structures\HTMLTemplate.vb" />
@@ -271,6 +273,8 @@
     <Compile Include="Forms\frmTVShowBrowser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Structures\TempMovieActors.vb" />
+    <Compile Include="Structures\TvBanners.vb" />
     <Compile Include="Structures\TvPosterType.vb" />
     <Compile Include="Structures\TvPosterSeason.vb" />
     <Compile Include="Classes\TvArt.vb" />
@@ -285,7 +289,8 @@
     <Compile Include="Classes\UseXBMCScrapers\ScraperManager.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
-    <Compile Include="Structures\TVShows.vb" />
+    <Compile Include="Structures\TvShowLanguages.vb" />
+    <Compile Include="Structures\TempEpisodeInfo.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBatchScraper.resx">
