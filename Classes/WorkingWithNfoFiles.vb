@@ -5,10 +5,11 @@ Imports System.Text.RegularExpressions
 
 Public Class WorkingWithNfoFiles
 
-    Public Function ChangeFieldTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String) As String
+    Public Function ChangeFieldTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String, Optional ByVal CreateIfMissing As Boolean = False) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
+        Dim FindField As Boolean = False
         Dim FinalString As String = "<tvshow>"
 
         m_xmld = New XmlDocument()
@@ -19,11 +20,15 @@ Public Class WorkingWithNfoFiles
                 For Each node1 As XmlNode In m_node
                     If node1.Name.ToLower = Field.ToLower Then
                         node1.InnerText = ValueToAssign
+                        FindField = True
                     End If
                     FinalString &= node1.OuterXml.ToString
                 Next
             End If
         Next
+        If (FindField = False) And (CreateIfMissing = True) Then
+            FinalString &= "<" & Field & ">" & ValueToAssign & "</" & Field & ">"
+        End If
         FinalString &= "</tvshow>"
         Return FinalString
     End Function

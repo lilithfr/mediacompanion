@@ -19348,7 +19348,7 @@ Public Class Form1
         Dim TVShowNFOContent As String = ""
 
         If Button60.Text = "Open" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "1")
+            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "1", True)
         ElseIf Button60.Text = "Locked" Then
             TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "0")
         End If
