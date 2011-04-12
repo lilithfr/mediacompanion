@@ -697,7 +697,7 @@ Public Class frmTVShowBrowser
                                 actors(f, 2) = tempstring.Substring(tempstring.IndexOf("http"), tempstring.IndexOf("jpg") - tempstring.IndexOf("http") + 3)
                                 Exit For
                                 If Form1.userPrefs.actorsave = True Then
-                                    Dim workingpath As String = ""
+                                    Dim workingpath As String = String.Empty
                                     Dim networkpath As String = Form1.userPrefs.actorsavepath
                                     If actors(f, 2) <> Nothing Then
                                         If actors(f, 2) <> "" Then

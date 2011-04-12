@@ -532,7 +532,7 @@ Public Class Form2
                                             Dim size As Integer = 0
                                             Dim bytesRead As Integer = 0
                                             Dim thumburl As String = moviethumburl
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)
