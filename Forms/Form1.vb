@@ -271,7 +271,7 @@ Public Class Form1
             Dim process As New Process()
             processes = process.GetProcesses
             For Each instance In processes
-                If instance.ProcessName.IndexOf("Media Companion") <> -1 Then
+                If instance.ProcessName = "Media Companion" Then
                     tej = tej + 1
                     If tej >= 2 Then
                         MsgBox("XBMC Media Companion is already running")
