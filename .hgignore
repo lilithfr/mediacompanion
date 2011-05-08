@@ -29,3 +29,5 @@ _ReSharper*/
 *.[Pp]ublish.xml
 *.resharper
 *.tlog
+bin/Debug/Settings/*.*
+bin/Release/Settings/*.*
