@@ -31,4 +31,5 @@ _ReSharper*/
 *.tlog
 bin/Debug/Settings/*.*
 bin/Release/Settings/*.*
-*.exe
+bin/Debug/Media Companion.exe
+bin/Release/Media Companion.exe
