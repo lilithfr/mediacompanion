@@ -233,3 +233,106 @@ C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Compa
 C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Release\XBMC Media Companion.vbproj.GenerateResource.Cache
 C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Release\Media Companion.exe
 C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Release\Media Companion.pdb
+C:\SVN MC\bin\Release\Media Companion.exe.config
+C:\SVN MC\obj\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\SVN MC\obj\Release\Interop.WMPLib.dll
+C:\SVN MC\obj\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\SVN MC\obj\Release\AxInterop.WMPLib.dll
+C:\SVN MC\obj\Release\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\SVN MC\obj\Release\Media Companion.exe
+C:\SVN MC\obj\Release\Media Companion.pdb
+C:\SVN MC\obj\Release\ResolveAssemblyReference.cache
+C:\SVN MC\obj\Release\Media_Companion.frmBatchScraper.resources
+C:\SVN MC\obj\Release\Media_Companion.frmCopyProgress.resources
+C:\SVN MC\obj\Release\Media_Companion.frmCoverArt.resources
+C:\SVN MC\obj\Release\Media_Companion.Delete_Dialogue.resources
+C:\SVN MC\obj\Release\Media_Companion.frmDialog1.resources
+C:\SVN MC\obj\Release\Media_Companion.Form1.resources
+C:\SVN MC\obj\Release\Media_Companion.Form2.resources
+C:\SVN MC\obj\Release\Media_Companion.frmoutputlog.resources
+C:\SVN MC\obj\Release\Media_Companion.frmMessageBox.resources
+C:\SVN MC\obj\Release\Media_Companion.frmMovieFanart.resources
+C:\SVN MC\obj\Release\Media_Companion.Resources.resources
+C:\SVN MC\obj\Release\Media_Companion.frmOptions.resources
+C:\SVN MC\obj\Release\Media_Companion.frmSplashscreen.resources
+C:\SVN MC\obj\Release\Media_Companion.tv_batch_wizard.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTvEdit.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTvFanart.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTvPosters.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTVShowBrowser.resources
+C:\SVN MC\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\SVN MC\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\SVN MC\obj\Release\GenerateResource-ResGen.write.1.tlog
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.imdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.impa.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.impa.com\impa.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\imdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.mtv.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.mtv.com\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.mtv.com\mtv.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\xbmc.core\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\xbmc.metadata\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+C:\SVN MC\bin\Release\Media Companion.exe
+C:\SVN MC\bin\Release\Media Companion.pdb
+C:\SVN MC\bin\Release\crclib.dll
+C:\SVN MC\bin\Release\tmdb_posters.dll
+C:\SVN MC\bin\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\SVN MC\bin\Release\Interop.WMPLib.dll
+C:\SVN MC\bin\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\SVN MC\bin\Release\AxInterop.WMPLib.dll

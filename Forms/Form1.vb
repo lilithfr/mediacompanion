@@ -1,4 +1,5 @@
-﻿Imports System.Net
+﻿
+Imports System.Net
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Text
@@ -9,6 +10,8 @@ Imports System.Xml
 Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
+
+
 
 Public Class Form1
 
@@ -111,6 +114,11 @@ Public Class Form1
     Dim newMovieFoundFilename As String = String.Empty
     Dim tableSets As New List(Of TableItems)
     Dim relativeFolderList As New List(Of RelativeFileList)
+
+
+
+
+
 
     Private WithEvents FileToBeDownloaded As WebFileDownloader
     Private tvCurrentTabIndex As Integer = 0
