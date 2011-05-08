@@ -31,3 +31,4 @@ _ReSharper*/
 *.tlog
 bin/Debug/Settings/*.*
 bin/Release/Settings/*.*
+*.exe

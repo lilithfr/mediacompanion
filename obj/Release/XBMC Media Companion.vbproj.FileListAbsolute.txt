@@ -336,3 +336,7 @@ C:\SVN MC\bin\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
 C:\SVN MC\bin\Release\Interop.WMPLib.dll
 C:\SVN MC\bin\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
 C:\SVN MC\bin\Release\AxInterop.WMPLib.dll
+C:\SVN MC\bin\Release\Media Companion.exe.manifest
+C:\SVN MC\bin\Release\Media Companion.application
+C:\SVN MC\obj\Release\Media Companion.exe.manifest
+C:\SVN MC\obj\Release\Media Companion.application

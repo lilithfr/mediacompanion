@@ -3220,7 +3220,7 @@ Public Class Form1
         Dim mediacounter As Integer = newMovieList.Count
         For g = 0 To NewMoviesFolders.Count - 1
             Progress = ((100 / NewMoviesFolders.Count) * g) * 10
-            ProgressText = String.Concat("Scanning folder " & g & " of " & NewMoviesFolders.Count)
+            ProgressText = String.Concat("Scanning folder " & g + 1 & " of " & NewMoviesFolders.Count)
             ToolStripProgressBar1.Visible = True
             ToolStripProgressBar1.Value = Progress
             ToolStripProgressBar1.ProgressBar.Refresh()
