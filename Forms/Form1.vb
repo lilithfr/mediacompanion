@@ -21145,7 +21145,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button76_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button76.Click
+    Private Sub Button110_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button110.Click
         Dim folderstoadd As New List(Of String)
         Dim offlinefolderstoadd As New List(Of String)
         Dim folderstoremove As New List(Of String)
@@ -21250,7 +21250,7 @@ Public Class Form1
         'filteredlist = fullmovielist
         Call sortorder()
         'Call loadmovielist()
-        Call applyfilters()
+        Call ApplyFilters()
         Call loadinfofile()
 
     End Sub
