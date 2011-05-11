@@ -12718,7 +12718,7 @@ Public Class Form1
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Indicate the missing episodes for """ & workingTvShow.title & """"
+                tempstring = "Display missing episodes for """ & workingTvShow.title & """"
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
@@ -12770,7 +12770,7 @@ Public Class Form1
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Indicate the missing episodes for """ & workingTvShow.title & """"
+                tempstring = "Display missing episodes for """ & workingTvShow.title & """"
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
