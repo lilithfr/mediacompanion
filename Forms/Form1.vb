@@ -6154,7 +6154,7 @@ Public Class Form1
             Dim resolutionlbl As New Label
             With resolutionlbl
                 .Location = New Point(20, 450)
-                .Width = 180
+                .Width = 300
                 .Text = tempstring
                 .BackColor = Color.Transparent
             End With
@@ -10787,6 +10787,7 @@ Public Class Form1
     End Sub
 
     Private Sub btncancelgetthumburl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btncancelgetthumburl.Click
+        TextBox5.Text = ""
         Panel3.Visible = False
     End Sub
 
@@ -12709,7 +12710,7 @@ Public Class Form1
             If workingTvShow Is Nothing Then todo = True
 
             If workingTvShow.path = TreeView1.SelectedNode.Name Then
-                Dim tempstring As String = "Search """ & workingTvShow.title & """ For new episodes"
+                Dim tempstring As String = "Search """ & workingTvShow.title & """ for new episodes"
                 SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
                 SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
                 SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
@@ -12717,7 +12718,7 @@ Public Class Form1
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Check """ & workingTvShow.title & """ for missing episodes"
+                tempstring = "Indicate the missing episodes for """ & workingTvShow.title & """"
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
@@ -12761,7 +12762,7 @@ Public Class Form1
                     Next
                 End If
 
-                Dim tempstring As String = "Search """ & workingTvShow.title & """ For new episodes"
+                Dim tempstring As String = "Search """ & workingTvShow.title & """ for new episodes"
                 SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
                 SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
                 SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
@@ -12769,7 +12770,7 @@ Public Class Form1
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
                 DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Check """ & workingTvShow.title & """ for missing episodes"
+                tempstring = "Indicate the missing episodes for """ & workingTvShow.title & """"
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
@@ -19256,121 +19257,120 @@ Public Class Form1
 
     Private Sub Button60_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button60.Click
         'workingtvshow
+        '-----------------------------------------------
+        'Dim TVShowNFOContent As String = ""
 
-        Dim TVShowNFOContent As String = ""
-
+        'If Button60.Text = "Open" Then
+        'TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "1", True)
+        'ElseIf Button60.Text = "Locked" Then
+        'TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "0")
+        'End If
+        'If TVShowNFOContent <> "error" Then
+        'Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
+        'If DiditWork = True Then
+        'If Button60.Text = "Open" Then
+        'Button60.Text = "Locked"
+        'Button60.BackColor = Color.Red
+        'ElseIf Button60.Text = "Locked" Then
+        'Button60.Text = "Open"
+        'Button60.BackColor = Color.LawnGreen
+        'End If
+        ''Call loadtvshow(workingtvshow.path)
+        'savetvdata()
+        'reloadtvshow()
+        'messbox.Close()
+        'TabControl3.SelectedIndex = 0
+        'End If
+        'End If
+        'TreeView1.SelectedNode = TreeView1.SelectedNode.NextVisibleNode
+        'TreeView1.SelectedNode = TreeView1.SelectedNode.PrevVisibleNode
+        'TreeView1.Update()
+        'TreeView1.Refresh()
+        Dim lockedstring As String = ""
         If Button60.Text = "Open" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "1", True)
-        ElseIf Button60.Text = "Locked" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "locked", "0")
-        End If
-        If TVShowNFOContent <> "error" Then
-            Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
-            If DiditWork = True Then
-                If Button60.Text = "Open" Then
-                    Button60.Text = "Locked"
+            workingTvShow.locked = 1
+            For Each tvshow In basicTvList
+                If tvshow.fullpath = workingTvShow.path Then
+                    tvshow.locked = 1
+                    lockedstring = "1"
                     Button60.BackColor = Color.Red
-                ElseIf Button60.Text = "Locked" Then
+                    For Each indnode As TreeNode In TreeView1.Nodes
+                        If indnode.Name.ToLower = tvshow.fullpath.ToLower Then
+                            indnode.StateImageIndex = 0
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
+            Button60.Text = "Locked"
+        ElseIf Button60.Text = "Locked" Then
+
+            If Not workingTvShow.tvdbid Is Nothing Then
+                If workingTvShow.tvdbid <> "" Then
+                    workingTvShow.locked = False
                     Button60.Text = "Open"
                     Button60.BackColor = Color.LawnGreen
+                    For Each tvshow In basicTvList
+                        If tvshow.fullpath = workingTvShow.path Then
+                            tvshow.locked = 0
+                            lockedstring = "0"
+                            For Each indnode As TreeNode In TreeView1.Nodes
+                                If indnode.Name.ToLower = tvshow.fullpath.ToLower Then
+                                    indnode.StateImageIndex = -1
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                    Next
+                Else
+                    MsgBox("Can't unlock, " & vbCrLf & "No TVDB ID is available")
+                    Exit Sub
                 End If
-                'Call loadtvshow(workingtvshow.path)
-                savetvdata()
-                reloadtvshow()
-                messbox.Close()
-                TabControl3.SelectedIndex = 0
+            Else
+                MsgBox("Can't unlock, " & vbCrLf & "No TVDB ID is available")
+                Exit Sub
             End If
+        ElseIf Button60.Text = "Un-Verified" Then
+            'Dim tempint As Integer = MessageBox.Show("This TV Show has been automatically added by Media Companion" & vbCrLf & "Are you sure that the correct show has been scraped?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            'If tempint = DialogResult.Yes Then
+            Button60.Text = "Open"
+            Button60.BackColor = Color.LawnGreen
+            workingTvShow.locked = False
+            For Each tvshow In basicTvList
+                If tvshow.fullpath = workingTvShow.path Then
+                    tvshow.locked = 0
+                    lockedstring = "0"
+                    For Each indnode As TreeNode In TreeView1.Nodes
+                        If indnode.Name.ToLower = tvshow.fullpath.ToLower Then
+                            indnode.StateImageIndex = -1
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
         End If
-        TreeView1.SelectedNode = TreeView1.SelectedNode.NextVisibleNode
-        TreeView1.SelectedNode = TreeView1.SelectedNode.PrevVisibleNode
-        TreeView1.Update()
-        TreeView1.Refresh()
-        'Dim lockedstring As String = ""
-        'If Button60.Text = "Open" Then
-        '    workingtvshow.locked = 1
-        '    For Each tvshow In basictvlist
-        '        If tvshow.fullpath = workingtvshow.path Then
-        '            tvshow.locked = 1
-        '            lockedstring = "1"
-        '            Button60.BackColor = Color.Red
-        '            For Each indnode As TreeNode In TreeView1.Nodes
-        '                If indnode.Name.ToLower = tvshow.fullpath.ToLower Then
-        '                    indnode.StateImageIndex = 0
-        '                    Exit For
-        '                End If
-        '            Next
-        '        End If
-        '    Next
-        '    Button60.Text = "Locked"
-        'ElseIf Button60.Text = "Locked" Then
-
-
-        '    If Not workingtvshow.tvdbid Is Nothing Then
-        '        If workingtvshow.tvdbid <> "" Then
-        '            workingtvshow.locked = False
-        '            Button60.Text = "Open"
-        '            Button60.BackColor = Color.LawnGreen
-        '            For Each tvshow In basictvlist
-        '                If tvshow.fullpath = workingtvshow.path Then
-        '                    tvshow.locked = 0
-        '                    lockedstring = "0"
-        '                    For Each indnode As TreeNode In TreeView1.Nodes
-        '                        If indnode.Name.ToLower = tvshow.fullpath.ToLower Then
-        '                            indnode.StateImageIndex = -1
-        '                            Exit For
-        '                        End If
-        '                    Next
-        '                End If
-        '            Next
-        '        Else
-        '            MsgBox("Can't unlock, " & vbCrLf & "No TVDB ID is available")
-        '            Exit Sub
-        '        End If
-        '    Else
-        '        MsgBox("Can't unlock, " & vbCrLf & "No TVDB ID is available")
-        '        Exit Sub
-        '    End If
-        'ElseIf Button60.Text = "Un-Verified" Then
-        '    'Dim tempint As Integer = MessageBox.Show("This TV Show has been automatically added by Media Companion" & vbCrLf & "Are you sure that the correct show has been scraped?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        '    'If tempint = DialogResult.Yes Then
-        '    Button60.Text = "Open"
-        '    Button60.BackColor = Color.LawnGreen
-        '    workingtvshow.locked = False
-        '    For Each tvshow In basictvlist
-        '        If tvshow.fullpath = workingtvshow.path Then
-        '            tvshow.locked = 0
-        '            lockedstring = "0"
-        '            For Each indnode As TreeNode In TreeView1.Nodes
-        '                If indnode.Name.ToLower = tvshow.fullpath.ToLower Then
-        '                    indnode.StateImageIndex = -1
-        '                    Exit For
-        '                End If
-        '            Next
-        '        End If
-        '    Next
         'End If
-        ''End If
-        'workingtvshow.plot = TextBox19.Text
-        'workingtvshow.runtime = TextBox15.Text
-        'workingtvshow.premiered = TextBox10.Text
-        'workingtvshow.studio = TextBox16.Text
-        'workingtvshow.rating = TextBox13.Text
-        'workingtvshow.genre = TextBox11.Text
-        'workingtvshow.imdbid = TextBox12.Text
-        'workingtvshow.tvdbid = TextBox9.Text
-        'workingtvshow.mpaa = TextBox14.Text
-        'workingtvshow.locked = lockedstring
-        'If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 And TextBox2.Text.Length > 5 Then
-        '    workingtvshow.title = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
-        'End If
-        'Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
-        'For Each node As TreeNode In TreeView1.Nodes
-        '    If node.Name = workingtvshow.path Then
-        '        node.Text = TextBox2.Text
-        '        Exit For
-        '    End If
-        'Next
-        'Call savetvdata()
+        workingTvShow.plot = TextBox19.Text
+        workingTvShow.runtime = TextBox15.Text
+        workingTvShow.premiered = TextBox10.Text
+        workingTvShow.studio = TextBox16.Text
+        workingTvShow.rating = TextBox13.Text
+        workingTvShow.genre = TextBox11.Text
+        workingTvShow.imdbid = TextBox12.Text
+        workingTvShow.tvdbid = TextBox9.Text
+        workingTvShow.mpaa = TextBox14.Text
+        workingTvShow.locked = lockedstring
+        If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 And TextBox2.Text.Length > 5 Then
+            workingTvShow.title = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
+        End If
+        Call nfoFunction.savetvshownfo(workingTvShow.path, workingTvShow, True)
+        For Each node As TreeNode In TreeView1.Nodes
+            If node.Name = workingTvShow.path Then
+                node.Text = TextBox2.Text
+                Exit For
+            End If
+        Next
+        Call savetvdata()
     End Sub
 
     Private Function UrlIsValid(ByVal url As String) As Boolean
@@ -20380,15 +20380,19 @@ Public Class Form1
                     Exit Sub
                 End If
                 Dim newnamepath As String = ""
-                If userPrefs.tvshow_useXBMC_Scraper = True Then
-                    newnamepath = savepath
-                Else
-                    newnamepath = addepisode(episodearray, savepath, showtitle)
-                    '9999999
-                    For Each ep In episodearray
-                        ep.episodepath = newnamepath
-                    Next
-                End If
+
+
+
+                '' Commented out the lines below so that the episodes are renamed irrelavent of scraper (MC or XBMC scraper) - not sure of their purpose. 
+                'If userPrefs.tvshow_useXBMC_Scraper = True Then
+                '    newnamepath = savepath
+                'Else
+                newnamepath = addepisode(episodearray, savepath, showtitle)
+                ''9999999                                                               'This was already commented out, it must be a note of some sort.
+                For Each ep In episodearray
+                    ep.episodepath = newnamepath
+                Next
+                'End If
                 bckgroundscanepisodes.ReportProgress(9999999, episodearray)
                 If bckgroundscanepisodes.CancellationPending Then
                     tvScraperLog = tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
@@ -27968,7 +27972,7 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            If tempstring = "" Then tempstring = "Checkign for missing episodes"
+            If tempstring = "" Then tempstring = "Checking for missing episodes"
             Dim messbox As New frmMessageBox(tempstring, "", "Please Wait")
             Dim showlist As New List(Of String)
             showlist.Clear()
@@ -29508,5 +29512,21 @@ Public Class Form1
 
     Private Sub ComboBox_IMDB_Title_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_Title_Language.SelectedIndexChanged
         Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
+    End Sub
+
+    Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+
+    End Sub
+
+    Private Sub Label7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label7.Click
+
+    End Sub
+
+    Private Sub Label11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label11.Click
+
+    End Sub
+
+    Private Sub SplitContainer1_Panel2_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles SplitContainer1.Panel2.Paint
+
     End Sub
 End Class

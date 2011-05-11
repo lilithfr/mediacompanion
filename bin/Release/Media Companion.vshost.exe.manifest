@@ -158,14 +158,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Media Companion.exe" size="1632768">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Media Companion.exe" size="1650176">
       <assemblyIdentity name="Media Companion" version="3.4.0.1" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>b0GZQoeOz+GZlXdC98Xm/vYWVBc=</dsig:DigestValue>
+        <dsig:DigestValue>IaMnwqO4PKB7t1GJ0ogIeceDrCA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
