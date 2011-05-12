@@ -447,3 +447,10 @@ C:\MediaCompanion\SilentError\obj\Release\ResGen.write.1.tlog
 C:\MediaCompanion\SilentError\obj\Release\Media Companion.exe.manifest
 C:\MediaCompanion\SilentError\obj\Release\Media Companion.application
 C:\MediaCompanion\SilentError\obj\Release\Media Companion.exe
+C:\MC SVN\bin\Release\Media Companion.exe.config
+C:\MC SVN\obj\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\MC SVN\obj\Release\Interop.WMPLib.dll
+C:\MC SVN\obj\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\MC SVN\obj\Release\AxInterop.WMPLib.dll
+C:\MC SVN\obj\Release\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\MC SVN\obj\Release\Media Companion.pdb

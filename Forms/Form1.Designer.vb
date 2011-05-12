@@ -1337,6 +1337,7 @@ Me.Label3.Size = New System.Drawing.Size(62, 12)
 Me.Label3.TabIndex = 6
 Me.Label3.Text = "Version 3.401"
 Me.ToolTip1.SetToolTip(Me.Label3, "Program Version 3.400")
+Me.Label3.Visible = false
 '
 'Button52
 '
@@ -4101,9 +4102,6 @@ Me.TextBox8.TabIndex = 0
 'ToolTip2
 '
 Me.ToolTip2.IsBalloon = true
-'
-'SaveFileDialog1
-'
 '
 'StatusStrip1
 '
@@ -9896,7 +9894,7 @@ Me.MinimumSize = New System.Drawing.Size(758, 365)
 Me.Name = "Form1"
 Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
 Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
-Me.Text = "Media Companion"
+Me.Text = "Media Companion - V3.4.0.1b"
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).EndInit
 Me.ContextMenuStrip4.ResumeLayout(false)
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).EndInit
