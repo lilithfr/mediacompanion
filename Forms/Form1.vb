@@ -11,7 +11,8 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
 
-
+#Const SilentErrorScream = False
+#Const NoRefocus = False
 
 Public Class Form1
 
@@ -141,12 +142,16 @@ Public Class Form1
                 Dim updatedmovie As New FullMovieDetails
                 updatedmovie = nfoFunction.loadfullmovienfo(fullMovieList(i).fullpathandfilename)
                 nfoFunction.savemovienfo(fullMovieList(i).fullpathandfilename, updatedmovie, True)
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         Next
         messbox.Close()
     End Sub
 
+#If Not Refocus Then
     Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Activated
         If messbox.Visible = True Then
             messbox.Activate()
@@ -154,6 +159,7 @@ Public Class Form1
             messbox.Focus()
         End If
     End Sub
+#End If
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         Me.Dispose()
@@ -393,7 +399,10 @@ Public Class Form1
 
         Try
             If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
         tempstring = applicationDatapath & "error.log"
@@ -596,7 +605,10 @@ Public Class Form1
                         End If
                     Next
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             Call setupfont()
 
@@ -720,6 +732,9 @@ Public Class Form1
                     IO.File.Delete(fullpath)
                     don = True
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 Finally
                     count += 1
                 End Try
@@ -807,7 +822,10 @@ Public Class Form1
                         movie.titleandyear = "The " & movie.titleandyear.Substring(0, movie.titleandyear.Length - 12) & Temp
                     End If
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             childchild.InnerText = movie.titleandyear
             child.AppendChild(childchild)
@@ -831,7 +849,10 @@ Public Class Form1
                 doc.WriteTo(output)
                 output.Close()
                 Exit For
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         Next
 
@@ -973,6 +994,9 @@ Public Class Form1
                 output.Close()
             End Using
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
     End Sub
@@ -1133,6 +1157,9 @@ Public Class Form1
             End If
             'TreeView1.Nodes.Remove(node)
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
             'MsgBox(ex.ToString)
         End Try
     End Sub
@@ -1186,6 +1213,9 @@ Public Class Form1
                     Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
                 End If
             Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
 
             For Each episode In item.allepisodes
@@ -1250,6 +1280,9 @@ Public Class Form1
                     End If
 
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Next
 
@@ -1324,7 +1357,9 @@ Public Class Form1
             TabControl3.Focus()
             TreeView1.Focus()
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         TextBox32.Text = totalTvShowCount.ToString
         TextBox33.Text = totalEpisodeCount.ToString
@@ -1442,7 +1477,9 @@ Public Class Form1
                 'loadinfofile()
             End If
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -1468,11 +1505,16 @@ Public Class Form1
                     Next
                 End If
 
-            Catch
+            Catch ex As Exception
+
                 Call SaveRegex(True)
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         Else
             Call SaveRegex(True)
+
         End If
     End Sub
 
@@ -1511,6 +1553,9 @@ Public Class Form1
                 output.Close()
             End Using
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
     End Sub
@@ -1610,7 +1655,10 @@ Public Class Form1
                         End Select
                     Next
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
 
             End Try
         Else
@@ -1779,7 +1827,10 @@ Public Class Form1
                 Next
             Next
             Call saveactorcache()
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -1976,7 +2027,10 @@ Public Class Form1
 
             Try
                 newlist = fileFunction.EnumerateDirectory2(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), True)
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             newlist.Insert(0, tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 11))
             If newlist.Count > 0 Then
@@ -2082,8 +2136,10 @@ Public Class Form1
                     End Try
                 End If
             End If
-        Catch
-
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         'PictureBox1.CancelAsync()
         'PictureBox1.Image = Nothing
@@ -2218,6 +2274,9 @@ Public Class Form1
                             End If
                         End If
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
@@ -2234,7 +2293,9 @@ Public Class Form1
                             PictureBox3.ImageLocation = defaultPoster '7 - 2
                         End If
                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -2253,7 +2314,10 @@ Public Class Form1
                             PictureBox2.ImageLocation = defaultFanart 'moviethumb - 3
                             PictureBox7.ImageLocation = defaultFanart '2
                         End If
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
 
@@ -2272,7 +2336,10 @@ Public Class Form1
                 Next
                 Try
                     actorcb.SelectedIndex = 0
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
 
                 If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
@@ -2320,7 +2387,10 @@ Public Class Form1
                 ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
                 workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
     End Sub
@@ -2526,7 +2596,10 @@ Public Class Form1
                                         End If
                                     Loop Until tempstring.IndexOf("</movie>") <> -1
                                     filechck.Close()
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 Finally
                                 End Try
                                 If allok = True Then
@@ -2569,7 +2642,10 @@ Public Class Form1
                     End If
 
 
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
 
                 Finally
                 End Try
@@ -2619,7 +2695,10 @@ Public Class Form1
                             End If
                         Loop Until tempstring.IndexOf("</movie>") <> -1
                         filechck.Close()
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     If allok2 = True Then
                         remove = True
@@ -2649,7 +2728,10 @@ Public Class Form1
                                 End If
                             Loop Until tempstring.IndexOf("</movie>") <> -1
                             filechck.Close()
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         Finally
                         End Try
 
@@ -3006,7 +3088,10 @@ Public Class Form1
                                                     End If
                                                 Loop Until tempstring.IndexOf("</movie>") <> -1
                                                 filechck.Close()
-                                            Catch
+                                            Catch ex As Exception
+#If SilentErrorScream Then
+                                                Throw ex
+#End If
                                             Finally
                                             End Try
                                             If allok = True Then
@@ -3114,7 +3199,10 @@ Public Class Form1
             fs_infos = Nothing
 
 
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
             Monitor.Exit(Me)
         End Try
@@ -3211,7 +3299,10 @@ Public Class Form1
                             NewMoviesFolders.Add(subfolder)
                         End If
                     Next
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
         Next
@@ -3251,7 +3342,10 @@ Public Class Form1
                 While novaThread.IsAlive
                     Application.DoEvents()
                 End While
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             newMovieFoundTitle = newMovieList(f).title.ToString
             newMovieFoundFilename = newMovieList(f).mediapathandfilename.ToString
@@ -3272,7 +3366,10 @@ Public Class Form1
             While novaThread.IsAlive
                 Application.DoEvents()
             End While
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         ToolStripProgressBar1.Visible = False
         ToolStripStatusLabel6.Visible = False
@@ -3305,7 +3402,9 @@ Public Class Form1
         Try
             movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
         Catch ex As Exception
-            'MsgBox(ex.ToString)
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         movietoadd.createdate = TempMovieToAdd.fileinfo.createdate
         movietoadd.filename = TempMovieToAdd.fileinfo.filename
@@ -3413,7 +3512,10 @@ Public Class Form1
                             scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                             newmoviefolders.Add(subfolder)
                         Next
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
             Next
@@ -3448,7 +3550,10 @@ Public Class Form1
                             End If
                             'End If
                         Next
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
             Next
@@ -3484,7 +3589,9 @@ Public Class Form1
                     scraperLog = String.Format("{0}{1} New movies found in directory:- {2}\n\n", scraperLog, tempint.ToString, dirpath)
                     mediacounter = newMovieList.Count
                 Catch ex As Exception
-
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
 
             Next g
@@ -3547,8 +3654,10 @@ Public Class Form1
 
                     scraperLog = scraperLog & "Filename is: " & movie.mediapathandfilename & vbCrLf
                     scraperLog = scraperLog & "Title according to settings is: """ & movie.title & """" & vbCrLf
-                Catch
-
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
 
             Next
@@ -3769,7 +3878,10 @@ Public Class Form1
                         Dim myDate2 As Date = System.DateTime.Now
                         Try
                             newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        Catch ex2 As Exception
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         nfoFunction.savemovienfo(nfopath, newmovie, True)
 
@@ -3795,12 +3907,17 @@ Public Class Form1
                         Try
                             movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
                         Catch ex As Exception
-                            'MsgBox(ex.ToString)
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         myDate2 = System.DateTime.Now
                         Try
                             movietoadd.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        Catch ex2 As Exception
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         movietoadd.sortorder = newmovie.fullmoviebody.title
                         movietoadd.outline = newmovie.fullmoviebody.outline
@@ -3874,7 +3991,9 @@ Public Class Form1
                                             Try
                                                 newmovie.fullmoviebody.runtime = newmovie.fullmoviebody.runtime.Substring(newmovie.fullmoviebody.runtime.IndexOf(":") + 1, newmovie.fullmoviebody.runtime.Length - newmovie.fullmoviebody.runtime.IndexOf(":") - 1)
                                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                Throw ex
+#End If
                                             End Try
                                         End If
                                     Case "studio"
@@ -3963,7 +4082,9 @@ Public Class Form1
                                                                     IO.Directory.CreateDirectory(workingpath)
                                                                     destsorted = True
                                                                 Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             Else
                                                                 destsorted = True
@@ -3993,7 +4114,10 @@ Public Class Form1
                                                                         fstrm.Write(buffer, 0, bytesRead)
                                                                         contents.Close()
                                                                         fstrm.Close()
-                                                                    Catch
+                                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                                        Throw ex
+#End If
                                                                     End Try
                                                                 End If
                                                             End If
@@ -4035,7 +4159,10 @@ Public Class Form1
                                                                 Else
                                                                     newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                 End If
-                                                            Catch
+                                                            Catch ex As Exception
+#If SilentErrorScream Then
+                                                                Throw ex
+#End If
                                                             End Try
                                                         End If
                                                     End If
@@ -4079,7 +4206,10 @@ Public Class Form1
                                     scraperLog = scraperLog & "Trailer URL Scraped OK" & vbCrLf
                                 End If
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         stage = 4
                         'stage 4 = get movie thumblist(for nfo)
@@ -4099,6 +4229,9 @@ Public Class Form1
                                     teststring.LoadXml(testthumbs2)
                                     thumbs = thumbs & testthumbs.ToString
                                 Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     Thread.Sleep(1)
                                 End Try
                             End If
@@ -4124,6 +4257,9 @@ Public Class Form1
                                     Next
                                     thumbs = thumbs & templist.ToString
                                 Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     Thread.Sleep(1)
                                 End Try
                             End If
@@ -4138,6 +4274,9 @@ Public Class Form1
                                     teststring.LoadXml(testthumbs2)
                                     thumbs = thumbs & testthumbs.ToString
                                 Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     Thread.Sleep(1)
                                 End Try
                             End If
@@ -4152,6 +4291,9 @@ Public Class Form1
                                     teststring.LoadXml(testthumbs2)
                                     thumbs = thumbs & testthumbs.ToString
                                 Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     Thread.Sleep(1)
                                 End Try
                             End If
@@ -4265,7 +4407,10 @@ Public Class Form1
                         Dim myDate2 As Date = System.DateTime.Now
                         Try
                             newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        Catch ex2 As Exception
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         nfoFunction.savemovienfo(nfopath, newmovie, True)
 
@@ -4301,12 +4446,17 @@ Public Class Form1
                         Try
                             movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
                         Catch ex As Exception
-                            'MsgBox(ex.ToString)
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         myDate2 = System.DateTime.Now
                         Try
                             movietoadd.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        Catch ex2 As Exception
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
 
 
@@ -4452,7 +4602,10 @@ Public Class Form1
                                         scraperLog = scraperLog & "Error Returned :- " & ex.ToString & vbCrLf & vbCrLf
                                     End Try
                                 End If
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
 
@@ -4527,7 +4680,10 @@ Public Class Form1
                                                 End If
                                             Next
                                             If fanartfound = False Then moviethumburl = ""
-                                        Catch
+                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
                                         End Try
 
                                         If moviethumburl <> "" Then
@@ -4594,7 +4750,10 @@ Public Class Form1
                                                 Try
                                                     scraperLog = scraperLog & "Fanart Not Saved to :- " & fanarturlpath & vbCrLf
                                                     scraperLog = scraperLog & "Error received :- " & ex.ToString & vbCrLf & vbCrLf
-                                                Catch
+                                                Catch ex2 As Exception
+#If SilentErrorScream Then
+                                                    Throw ex2
+#End If
                                                 End Try
                                             End Try
 
@@ -4605,7 +4764,10 @@ Public Class Form1
                                         'scraperlog = scraperlog & "Fanart Not Saved to :- " & moviethumbpath & ", file already exists" & vbCrLf
                                     End If
 
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
 
@@ -4768,7 +4930,9 @@ Public Class Form1
                 'loadinfofile()
             End If
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -4794,7 +4958,10 @@ Public Class Form1
                     Exit For
                 End Try
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
         Call savedata()
@@ -4806,7 +4973,9 @@ Public Class Form1
         Try
             ComboBox1.SelectedIndex = 0
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
         Me.Enabled = True
@@ -5010,7 +5179,10 @@ Public Class Form1
             If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
                 Try
                     IO.File.Copy(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"), IO.Path.Combine(thumbpath, filename & ".jpg"))
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 Try
                     text = text.Replace("<<smallimage>>", "images/" & filename & ".jpg")
@@ -5026,7 +5198,10 @@ Public Class Form1
                         bitmap.Dispose()
                         bitmap2 = imageFunctions.ResizeImage(bitmap2, 150, 200)
                         bitmap2.Save(IO.Path.Combine(thumbpath, filename & ".jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 Else
                     Try
@@ -5035,7 +5210,10 @@ Public Class Form1
                         bitmap.Dispose()
                         bitmap2 = imageFunctions.ResizeImage(bitmap2, 150, 200)
                         bitmap2.Save(IO.Path.Combine(thumbpath, filename & ".jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
             End If
@@ -5062,12 +5240,18 @@ Public Class Form1
         End If
         Try
             text = text.Replace("<<moviecount>>", filteredList.Count.ToString)
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
             text = text.Replace("<<moviecount>>", "0000")
         End Try
         Try
             text = text.Replace("<<counter>>", counter.ToString)
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         If movie.title <> Nothing Then
             text = text.Replace("<<title>>", movie.title)
@@ -5159,7 +5343,10 @@ Public Class Form1
             Dim MyFormObject As New frmoutputlog(scraperLog, True)
             Try
                 MyFormObject.ShowDialog()
-            Catch ex As ObjectDisposedException
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
 
@@ -5203,7 +5390,10 @@ Public Class Form1
                 PictureBox7.Image = Nothing
             End If
 
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -5262,7 +5452,10 @@ Public Class Form1
                 Application.DoEvents()
             Loop
             messbox.Visible = False
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
 
         End Try
@@ -5659,7 +5852,10 @@ Public Class Form1
         Dim oldmovie As String = ""
         Try
             oldmovie = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         ComboBox1.Items.Clear()
 
@@ -5786,6 +5982,9 @@ Public Class Form1
                 Try
                     ComboBox1.SelectedIndex = tempint
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                     Try
                         ComboBox1.SelectedIndex = tempint - 1
                     Catch
@@ -6081,7 +6280,9 @@ Public Class Form1
                 End If
             End If
         Catch ex As Exception
-            ' Silence exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -6097,7 +6298,9 @@ Public Class Form1
                 End If
             End If
         Catch ex As Exception
-            ' Silence exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -6319,7 +6522,10 @@ Public Class Form1
                 Dim myDate2 As Date = filecreation2.LastWriteTime
                 Try
                     newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                Catch ex2 As Exception
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 If workingMovieDetails.fileinfo.createdate <> Nothing Then
                     newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
@@ -6337,7 +6543,9 @@ Public Class Form1
                     Try
                         workingMovieDetails.fullmoviebody.runtime = workingMovieDetails.fullmoviebody.runtime.Substring(workingMovieDetails.fullmoviebody.runtime.IndexOf(":") + 1, workingMovieDetails.fullmoviebody.runtime.Length - workingMovieDetails.fullmoviebody.runtime.IndexOf(":") - 1)
                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
                 fullMovieList.RemoveAt(f)
@@ -6485,7 +6693,9 @@ Public Class Form1
                                     Try
                                         workingMovieDetails.fullmoviebody.runtime = workingMovieDetails.fullmoviebody.runtime.Substring(workingMovieDetails.fullmoviebody.runtime.IndexOf(":") + 1, workingMovieDetails.fullmoviebody.runtime.Length - workingMovieDetails.fullmoviebody.runtime.IndexOf(":") - 1)
                                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                 End If
                             Case "studio"
@@ -6510,7 +6720,10 @@ Public Class Form1
                                 workingMovieDetails.fullmoviebody.trailer = trailer
                             End If
                         End If
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     actorlist = scraper.getimdbactors(userPrefs.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, userPrefs.maxactors)
                     'actorlist = getimdbactors(userprefs.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, userprefs.maxactors)
@@ -6524,7 +6737,10 @@ Public Class Form1
                                     Exit For
                                 End If
                             Next
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         If done = True Then Exit For
                     Next
@@ -6573,7 +6789,10 @@ Public Class Form1
                                     workingMovieDetails.listthumbs.Add(thisresult.InnerText)
                             End Select
                         Next
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
 
@@ -6612,7 +6831,9 @@ Public Class Form1
                                                                 IO.Directory.CreateDirectory(workingpath)
                                                                 destsorted = True
                                                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                Throw ex
+#End If
                                                             End Try
                                                         Else
                                                             destsorted = True
@@ -6642,7 +6863,10 @@ Public Class Form1
                                                                     fstrm.Write(buffer, 0, bytesRead)
                                                                     contents.Close()
                                                                     fstrm.Close()
-                                                                Catch
+                                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             End If
                                                         End If
@@ -6679,7 +6903,10 @@ Public Class Form1
                                                                 fstrm.Close()
                                                             End If
                                                             newactor.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, detail.InnerText & ".jpg")
-                                                        Catch
+                                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                                            Throw ex
+#End If
                                                         End Try
                                                     End If
                                                 End If
@@ -6692,7 +6919,10 @@ Public Class Form1
                                     actorDB.Add(actornew)
                             End Select
                         Next
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
 
@@ -6740,11 +6970,17 @@ Public Class Form1
                             If minutes <> 0 Then
                                 workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
 
                         End Try
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
 
                 nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
@@ -6770,7 +7006,10 @@ Public Class Form1
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        Catch ex2 As Exception
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         If workingMovieDetails.fileinfo.createdate <> Nothing Then
                             newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
@@ -6788,7 +7027,9 @@ Public Class Form1
                             Try
                                 workingMovieDetails.fullmoviebody.runtime = workingMovieDetails.fullmoviebody.runtime.Substring(workingMovieDetails.fullmoviebody.runtime.IndexOf(":") + 1, workingMovieDetails.fullmoviebody.runtime.Length - workingMovieDetails.fullmoviebody.runtime.IndexOf(":") - 1)
                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
                         fullMovieList.RemoveAt(f)
@@ -6798,7 +7039,10 @@ Public Class Form1
                 Next
 
                 Call ApplyFilters()
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             Finally
 
                 messbox.Close()
@@ -6876,7 +7120,10 @@ Public Class Form1
                     Dim myDate2 As Date = filecreation2.LastWriteTime
                     Try
                         newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                    Catch ex2 As Exception
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
 
                     newfullmovie.title = newmovietitle
@@ -6963,7 +7210,10 @@ Public Class Form1
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        Catch ex2 As Exception
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         If newfullmovie.movieset = Nothing Then
                             newfullmovie.movieset = "None"
@@ -7094,7 +7344,10 @@ Public Class Form1
                 PictureBox7.Image = Nothing
             End If
 
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -7146,7 +7399,10 @@ Public Class Form1
                 Dim myDate2 As Date = filecreation2.LastWriteTime
                 Try
                     newfullmovie2.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                Catch ex2 As Exception
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 newfullmovie2.filename = workingMovieDetails.fileinfo.filename
                 newfullmovie2.foldername = workingMovieDetails.fileinfo.foldername
@@ -7189,6 +7445,9 @@ Public Class Form1
                         FileToBeDownloaded = New WebFileDownloader
                         FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
             Else
@@ -7215,9 +7474,15 @@ Public Class Form1
                         End If
                     End If
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
     End Sub
@@ -7547,7 +7812,9 @@ Public Class Form1
                                     If done = True Then Exit For
                                 Next
                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
                     End If
@@ -7589,7 +7856,9 @@ Public Class Form1
                                                                     IO.Directory.CreateDirectory(workingpath)
                                                                     destsorted = True
                                                                 Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             Else
                                                                 destsorted = True
@@ -7620,7 +7889,10 @@ Public Class Form1
                                                                         fstrm.Write(buffer, 0, bytesRead)
                                                                         contents.Close()
                                                                         fstrm.Close()
-                                                                    Catch
+                                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                                        Throw ex
+#End If
                                                                     End Try
                                                                 End If
                                                             End If
@@ -7662,7 +7934,10 @@ Public Class Form1
                                                                 Else
                                                                     newactor.actorthumb = Form1.userPrefs.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                 End If
-                                                            Catch
+                                                            Catch ex As Exception
+#If SilentErrorScream Then
+                                                                Throw ex
+#End If
                                                             End Try
                                                         End If
                                                     End If
@@ -7686,7 +7961,10 @@ Public Class Form1
                             If trailer <> Nothing Then
                                 movietemplate.fullmoviebody.trailer = trailer
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
 
@@ -7704,6 +7982,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -7719,6 +8000,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -7733,6 +8017,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -7747,6 +8034,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -7766,9 +8056,15 @@ Public Class Form1
                                         End Select
                                     Next
                                 Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
 
@@ -8071,12 +8367,21 @@ Public Class Form1
                                                 End If
                                             End If
                                         Catch ex As Exception
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
                                         End Try
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
                         Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
 
@@ -8123,7 +8428,10 @@ Public Class Form1
                                         End If
                                     Next
                                     If fanartfound = False Then moviefanarturl = ""
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
 
                                 If moviefanarturl <> "" Then
@@ -8191,9 +8499,15 @@ Public Class Form1
                                             Next
                                         End If
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                 End If
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
                     End If
@@ -8211,7 +8525,10 @@ Public Class Form1
                             Dim myDate2 As Date = filecreation2.LastWriteTime
                             Try
                                 newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                            Catch ex2 As Exception
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             newfullmovie.titleandyear = movietoalter.fullmoviebody.title & " (" & movietoalter.fullmoviebody.year & ")"
                             newfullmovie.title = movietoalter.fullmoviebody.title
@@ -8248,13 +8565,19 @@ Public Class Form1
                             End If
                             Exit For
                         End If
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 Next
 
                 progresstext = tempmovielist(f)
                 bckrescrapewizard.ReportProgress(888888, progresstext)
             Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         Next
         Call ApplyFilters()
@@ -8512,7 +8835,10 @@ Public Class Form1
                             Dim myDate2 As Date = System.DateTime.Now
                             Try
                                 newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                            Catch ex2 As Exception
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             If bckgrounddroppedfiles.CancellationPending Then Exit Sub
                             progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
@@ -8541,7 +8867,9 @@ Public Class Form1
                             Try
                                 movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
                             Catch ex As Exception
-                                'MsgBox(ex.ToString)
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             movietoadd.outline = newmovie.fullmoviebody.outline
                             movietoadd.id = newmovie.fullmoviebody.imdbid
@@ -8581,7 +8909,10 @@ Public Class Form1
                                                 If newmovie.fullmoviebody.title.ToLower.IndexOf("the ") <> -1 Then
                                                     newmovie.fullmoviebody.title = newmovie.fullmoviebody.title.Substring(4, newmovie.fullmoviebody.title.Length - 4) & " , The"
                                                 End If
-                                            Catch
+                                            Catch ex As Exception
+#If SilentErrorScream Then
+                                                Throw ex
+#End If
                                             End Try
                                         Case "credits"
                                             newmovie.fullmoviebody.credits = thisresult.InnerText
@@ -8631,7 +8962,10 @@ Public Class Form1
                             Dim myDate2 As Date = System.DateTime.Now
                             Try
                                 newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                            Catch ex2 As Exception
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Dim done As Boolean = False
                             For g = 0 To UBound(userPrefs.certificatepriority)
@@ -8706,7 +9040,10 @@ Public Class Form1
                                                                     Else
                                                                         newactor.actorthumb = Form1.userPrefs.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                     End If
-                                                                Catch
+                                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             End If
                                                         End If
@@ -8737,7 +9074,10 @@ Public Class Form1
                                         newmovie.fullmoviebody.trailer = trailer
                                     End If
                                 End If
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             If bckgrounddroppedfiles.CancellationPending Then Exit Sub
                             progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
@@ -8754,6 +9094,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -8771,6 +9114,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -8787,6 +9133,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -8803,6 +9152,9 @@ Public Class Form1
                                         teststring.LoadXml(testthumbs2)
                                         thumbs = thumbs & testthumbs.ToString
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         Thread.Sleep(1)
                                     End Try
                                 End If
@@ -8863,11 +9215,15 @@ Public Class Form1
                                         newmovie.fullmoviebody.runtime = minutes.ToString & " min"
                                         scraperLog = scraperLog & "HD Tags Added OK" & vbCrLf
                                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                 End If
                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
 
 
@@ -8938,7 +9294,9 @@ Public Class Form1
                                 movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
                                 movietoadd.createdate = Format(myDate, "yyyyMMddHHmmss").ToString
                             Catch ex As Exception
-                                'MsgBox(ex.ToString)
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             movietoadd.outline = newmovie.fullmoviebody.outline
                             movietoadd.id = newmovie.fullmoviebody.imdbid
@@ -9090,7 +9448,10 @@ Public Class Form1
                                             scraperLog = scraperLog & "Error Returned :- " & ex.ToString & vbCrLf & vbCrLf
                                         End Try
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
 
@@ -9150,7 +9511,10 @@ Public Class Form1
                                                     End If
                                                 Next
                                                 If fanartfound = False Then moviethumburl = ""
-                                            Catch
+                                            Catch ex As Exception
+#If SilentErrorScream Then
+                                                Throw ex
+#End If
                                             End Try
                                             If moviethumburl <> "" Then
 
@@ -9221,7 +9585,10 @@ Public Class Form1
                                         Else
                                             'scraperlog = scraperlog & "Fanart Not Saved to :- " & moviethumbpath & ", file already exists" & vbCrLf
                                         End If
-                                    Catch
+                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                 End If
                             End If
@@ -9685,9 +10052,10 @@ Public Class Form1
                     If checkvalidmediafile(files(f)) = True Then
                         If skip = False Then droppeditems.Add(files(f))
                     End If
-
                 Catch ex As Exception
-
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Else
                 If IO.Directory.Exists(files(f)) Then
@@ -9716,7 +10084,9 @@ Public Class Form1
                                 If skip = False Then droppeditems.Add(dra.FullName)
                             End If
                         Catch ex As Exception
-
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     Next
                 End If
@@ -9949,7 +10319,10 @@ Public Class Form1
                     End If
                 End If
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -10110,6 +10483,9 @@ Public Class Form1
             Try
                 TabPage22.AutoScrollPosition = New Point(0, TabPage22.VerticalScroll.Value - (mouseDelta * 30))
             Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
     End Sub
@@ -10320,7 +10696,10 @@ Public Class Form1
 
                 End Select
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
 
@@ -10409,7 +10788,9 @@ Public Class Form1
                 Me.Panel2.Controls.Add(mainlabel2)
             End If
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -10473,7 +10854,10 @@ Public Class Form1
         End With
         Try
             bigPictureBox.ImageLocation = tempstring2
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
 
@@ -10501,14 +10885,20 @@ Public Class Form1
                 tempstring2 = posterArray(tempint).ldposter
                 bigPictureBox.ImageLocation = tempstring2
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Try
             If bigPictureBox.Image.Width < 20 Then
                 tempstring2 = posterArray(tempint).ldposter
                 bigPictureBox.ImageLocation = tempstring2
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Dim sizex As Integer = bigPictureBox.Image.Width
         Dim sizey As Integer = bigPictureBox.Image.Height
@@ -10637,7 +11027,10 @@ Public Class Form1
                     MsgBox(ex.Message)
                 End Try
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
             messbox.Close()
         End Try
@@ -10939,6 +11332,9 @@ Public Class Form1
             btnresetimage.Visible = False
             btnsavecropped.Visible = False
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -11047,7 +11443,10 @@ Public Class Form1
 
 
 
-        Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
             messbox.Close()
             Call displayselection()
@@ -11185,7 +11584,10 @@ Public Class Form1
                     Application.DoEvents()
                     If tempboolean = False Then location += 120
                     tempboolean = Not tempboolean
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Next
         Else
@@ -11398,7 +11800,10 @@ Public Class Form1
                 Application.DoEvents()
                 If tempboolean = False Then location += 120
                 tempboolean = Not tempboolean
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         Next
         messbox.Close()
@@ -11527,6 +11932,9 @@ Public Class Form1
             teststring.LoadXml(testthumbs)
 
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
             Thread.Sleep(1)
         End Try
 
@@ -11548,7 +11956,9 @@ Public Class Form1
                 End Select
             Next
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         messbox.Close()
         Call displayselection()
@@ -11576,7 +11986,10 @@ Public Class Form1
                     newposters.hdposter = Nothing
                 End If
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
 
         End Try
         messbox.Close()
@@ -11688,7 +12101,9 @@ Public Class Form1
             Label19.Text = tempstring
             Label19.Refresh()
         Catch ex As Exception
-            'MsgBox(ex.ToString)
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Call postersaved()
     End Sub
@@ -11819,20 +12234,29 @@ Public Class Form1
                     If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
                         IO.File.Delete(workingMovieDetails.fileinfo.posterpath)
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 Try
                     If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                         IO.File.Delete(workingMovieDetails.fileinfo.fanartpath)
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 Try
                     tempstring = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                     If IO.File.Exists(tempstring) Then
                         IO.File.Delete(tempstring)
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
 
@@ -11972,7 +12396,10 @@ Public Class Form1
                             workingMovieDetails.fullmoviebody.trailer = trailer
                         End If
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 stage = stage & vbCrLf
                 stage = stage & "Scraping actors with preferences:" & vbCrLf
@@ -12041,7 +12468,10 @@ Public Class Form1
                                 workingMovieDetails.listthumbs.Add(thisresult.InnerText)
                         End Select
                     Next
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
 
@@ -12096,7 +12526,10 @@ Public Class Form1
                                                         fstrm.Close()
                                                     End If
                                                     newactor.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, detail.InnerText & ".jpg")
-                                                Catch
+                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                    Throw ex
+#End If
                                                 End Try
                                             End If
                                         End If
@@ -12133,7 +12566,10 @@ Public Class Form1
                     minutes = minutes + hours
                     workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             stage = stage & vbCrLf
             stage = stage & "Saving nfo to: " & workingMovieDetails.fileinfo.fullpathandfilename & vbCrLf
@@ -12251,7 +12687,10 @@ Public Class Form1
                         Else
                             stage = stage & "No Poster Found" & vbCrLf
                         End If
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
 
@@ -12308,7 +12747,10 @@ Public Class Form1
                             stage = stage & "No fanart found" & vbCrLf
                         End If
 
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
 
                     If moviethumburl <> "" Then
@@ -12380,7 +12822,9 @@ Public Class Form1
                                 Next
                             End If
                         Catch ex As Exception
-
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                 End If
@@ -12410,7 +12854,10 @@ Public Class Form1
 
                         newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                         newfullmovie.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                    Catch ex2 As Exception
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     newfullmovie.sortorder = workingMovieDetails.fullmoviebody.sortorder
                     newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
@@ -12551,6 +12998,9 @@ Public Class Form1
                 End If
             Next
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
     End Sub
@@ -12610,7 +13060,10 @@ Public Class Form1
         Try
             Timer3.Enabled = False
             Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -12618,7 +13071,10 @@ Public Class Form1
         Try
             Timer3.Enabled = False
             Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -12626,7 +13082,10 @@ Public Class Form1
         Try
             Timer3.Enabled = False
             Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -12634,7 +13093,10 @@ Public Class Form1
         Try
             Timer3.Enabled = False
             Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -12903,7 +13365,10 @@ Public Class Form1
                         Me.TreeView1.SelectedNode.ForeColor = Color.Red
                     End If
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         Else
             'seasons
@@ -12996,7 +13461,10 @@ Public Class Form1
                     If workingTvShow.path <> TreeView1.SelectedNode.Parent.Name Then
                         loadtvshow(TreeView1.SelectedNode.Parent.Name)
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
                     TreeView1.SelectedNode.Parent.ForeColor = Color.Red
@@ -13038,7 +13506,9 @@ Public Class Form1
                                 Dim rename2 As String = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
                                 fi.MoveTo(rename2)
                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
                         If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
@@ -13055,7 +13525,10 @@ Public Class Form1
                             End Try
                         End If
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 If workingTvShow.path <> Nothing Then
                     Try
@@ -13267,7 +13740,9 @@ Public Class Form1
                 'TextBox18.Text = workingtvshow.listactors(0).actorrole
                 'PictureBox6.ImageLocation = workingtvshow.listactors(0).actorthumb
             Catch ex As Exception
-
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
 
             If workingTvShow.path <> Nothing Then
@@ -13285,7 +13760,10 @@ Public Class Form1
                         OriginalImage2.Dispose()
                         PictureBox4.Image = Image22
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
 
@@ -13411,7 +13889,9 @@ Public Class Form1
         Try
             ComboBox5.SelectedIndex = 0
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Try
             tempstring = workingEpisode(workingEpisodeIndex).episodepath.Substring(0, workingEpisode(workingEpisodeIndex).episodepath.Length - 3)
@@ -13423,13 +13903,19 @@ Public Class Form1
                     bitmap2.Dispose()
                     PictureBox4.Image = bitmap3
                     PictureBox14.Image = bitmap3
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Else
                 Try
                     PictureBox14.Image = Nothing
                     PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
             Try
@@ -13444,6 +13930,9 @@ Public Class Form1
                             Dim rename2 As String = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
                             fi.MoveTo(rename2)
                         Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
 
@@ -13452,7 +13941,10 @@ Public Class Form1
                     End If
 
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             If trueseason <> "Unknown" Then
                 TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & workingEpisode(workingEpisodeIndex).title
@@ -13461,7 +13953,10 @@ Public Class Form1
                 TextBox21.Text = "This media file has been found by Media Companion" & vbCrLf & "Within this TV Shows Folder" & vbCrLf & vbCrLf & "Season and/or episode numbers could" & vbCrLf & "identified from the filename"
             End If
             Panel9.Visible = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -13549,7 +14044,9 @@ Public Class Form1
             thePSI.Arguments = """" & tempstring & """"
             System.Diagnostics.Process.Start(thePSI)
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -13835,7 +14332,10 @@ Public Class Form1
                         End Try
                     End If
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         ElseIf tab.ToLower = "fanart" Then
             If Panel13.Controls.Count = 0 Then
@@ -13928,7 +14428,10 @@ Public Class Form1
                 Else
                     RadioButton15.Checked = True
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
                 RadioButton15.Checked = True
             End Try
 
@@ -14072,6 +14575,9 @@ Public Class Form1
                     End Try
                 End If
             Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
 
             End Try
             Call checklanguage()
@@ -14098,6 +14604,9 @@ Public Class Form1
                 PictureBox9.Image = Nothing
             End If
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
 
         End Try
         Call checklanguage()
@@ -14134,6 +14643,9 @@ Public Class Form1
                 urllinecount -= 1
 
             Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
                 'MsgBox(ex.ToString)
             End Try
             For f = 1 To urllinecount
@@ -14150,7 +14662,10 @@ Public Class Form1
                     End If
                 End If
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -14344,7 +14859,10 @@ Public Class Form1
                                             acts.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
                                         End If
 
-                                    Catch
+                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                 End If
                             End If
@@ -14422,7 +14940,10 @@ Public Class Form1
                                                         Else
                                                             newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                         End If
-                                                    Catch
+                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                        Throw ex
+#End If
                                                     End Try
                                                 End If
                                             End If
@@ -14436,6 +14957,9 @@ Public Class Form1
                         workingTvShow.listactors.RemoveAt(workingTvShow.listactors.Count - 1)
                     End While
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
 
                 End Try
             End If
@@ -14531,7 +15055,10 @@ Public Class Form1
                                 fstrm.Write(buffer, 0, bytesRead)
                                 contents.Close()
                                 fstrm.Close()
-                            Catch ex As WebException
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
                     End If
@@ -14626,7 +15153,10 @@ Public Class Form1
                                 End If
                             Catch
                             End Try
-                        Catch ex As WebException
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                             'MsgBox("Error Downloading season poster from TVDB")
                         End Try
                     End If
@@ -14717,7 +15247,10 @@ Public Class Form1
                             fstrm.Write(buffer, 0, bytesRead)
                             contents.Close()
                             fstrm.Close()
-                        Catch ex As WebException
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                 End If
@@ -14808,7 +15341,10 @@ Public Class Form1
                             fstrm.Write(buffer, 0, bytesRead)
                             contents.Close()
                             fstrm.Close()
-                        Catch ex As WebException
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                 End If
@@ -14834,7 +15370,10 @@ Public Class Form1
                         fstrm.Write(buffer, 0, bytesRead)
                         contents.Close()
                         fstrm.Close()
-                    Catch ex As WebException
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
             End If
@@ -15230,7 +15769,10 @@ Public Class Form1
                             tvScraperLog = tvScraperLog & "Unable to Save Thumb" & vbCrLf
                             tvScraperLog = tvScraperLog & "Error :- " & ex.Message.ToString & vbCrLf
                         End Try
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 Else
                     If Not IO.File.Exists(ext) Then
@@ -15276,7 +15818,10 @@ Public Class Form1
                     Catch ex As Exception
                         validated = False
                     End Try
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
             Return validated
@@ -15302,7 +15847,10 @@ Public Class Form1
                         Dim movefilename As String = filename2.Replace(IO.Path.GetExtension(filename2), ".info")
                         Try
                             IO.File.Move(filename2, movefilename)
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                 End If
@@ -15396,7 +15944,9 @@ Public Class Form1
                     End If
                 End If
             Catch ex As Exception
-
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
 
         Next fs_info
@@ -15434,6 +15984,9 @@ Public Class Form1
             Try
                 MyFormObject.ShowDialog()
             Catch ex As ObjectDisposedException
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
         'Call populatetvtree()
@@ -15519,7 +16072,10 @@ Public Class Form1
         Try
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         TextBox28.Text = workingTvShow.title
         messbox = New frmMessageBox("Please wait,", "", "Querying TVDB for fanart list")
@@ -15746,7 +16302,10 @@ Public Class Form1
                         If TreeView1.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TreeView1.SelectedNode.Name = "" Then
                             PictureBox4.ImageLocation = savepath
                         End If
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 Else
                     PictureBox10.Image = Nothing
@@ -15878,6 +16437,9 @@ Public Class Form1
             Button40.Visible = False
             Button39.Visible = False
         Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -16277,7 +16839,9 @@ Public Class Form1
                                                 IO.Directory.CreateDirectory(workingpath)
                                                 destsorted = True
                                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                Throw ex
+#End If
                                             End Try
                                         Else
                                             destsorted = True
@@ -16345,7 +16909,10 @@ Public Class Form1
                                             acts.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
                                         End If
 
-                                    Catch
+                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                 End If
                             End If
@@ -16400,7 +16967,9 @@ Public Class Form1
                                                                 IO.Directory.CreateDirectory(workingpath)
                                                                 destsorted = True
                                                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                Throw ex
+#End If
                                                             End Try
                                                         Else
                                                             destsorted = True
@@ -16467,7 +17036,10 @@ Public Class Form1
                                                             Else
                                                                 newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                             End If
-                                                        Catch
+                                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                                            Throw ex
+#End If
                                                         End Try
                                                     End If
                                                 End If
@@ -16481,7 +17053,9 @@ Public Class Form1
                             workingTvShow.listactors.RemoveAt(workingTvShow.listactors.Count - 1)
                         End While
                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
 
                 End If
@@ -16583,7 +17157,9 @@ Public Class Form1
                 Next
                 newepisode.playcount = "0"
             Catch ex As Exception
-
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
 
             If actorsource = "tvdb" Then
@@ -16685,7 +17261,9 @@ Public Class Form1
                                                                             IO.Directory.CreateDirectory(workingpath)
                                                                             destsorted = True
                                                                         Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                            Throw ex
+#End If
                                                                         End Try
                                                                     Else
                                                                         destsorted = True
@@ -16703,7 +17281,10 @@ Public Class Form1
                                                                             If IO.File.Exists(tvshowactorpath) Then
                                                                                 Try
                                                                                     IO.File.Copy(tvshowactorpath, filename, True)
-                                                                                Catch
+                                                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                                                    Throw ex
+#End If
                                                                                 End Try
                                                                             End If
                                                                         End If
@@ -16766,7 +17347,10 @@ Public Class Form1
                                                                         Else
                                                                             newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                         End If
-                                                                    Catch
+                                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                                        Throw ex
+#End If
                                                                     End Try
                                                                 End If
                                                             End If
@@ -16849,7 +17433,10 @@ Public Class Form1
                             End If
                             minutes = minutes + hours
                             workingepisode(workingEpisodeIndex).runtime = minutes.ToString & " min"
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                 End If
@@ -17272,6 +17859,11 @@ Public Class Form1
             Try
                 MyFormObject.ShowDialog()
             Catch ex As ObjectDisposedException
+
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
     End Sub
@@ -17295,7 +17887,9 @@ Public Class Form1
             End If
             Call nfoFunction.saveepisodenfo(workingEpisode, workingepisode(0).episodepath)
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -17353,13 +17947,19 @@ Public Class Form1
             If TreeView1.SelectedNode.Text.IndexOf("Season") <> -1 Or TreeView1.SelectedNode.Text.IndexOf("Specials") <> -1 Then
                 combostart = TreeView1.SelectedNode.Text
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Try
             If TreeView1.SelectedNode.Parent.Text.IndexOf("Season") <> -1 Or TreeView1.SelectedNode.Parent.Text.IndexOf("Specials") <> -1 Then
                 combostart = TreeView1.SelectedNode.Parent.Text
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         If combostart = "" Then
             combostart = "Main Poster"
@@ -17369,7 +17969,10 @@ Public Class Form1
             If item = combostart Then
                 Try
                     ComboBox2.SelectedIndex = ComboBox2.Items.Count - 1
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
         Next
@@ -18264,7 +18867,10 @@ Public Class Form1
             Else
                 MsgBox("No Episode Screenshot Found On TVDB")
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
             messbox.Close()
         End Try
@@ -18409,7 +19015,10 @@ Public Class Form1
                 End Try
             Next
 
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
             walllocked = False
         End Try
@@ -19218,7 +19827,10 @@ Public Class Form1
                 Else
                     MsgBox("Cant find file:-" & vbCrLf & filefunction.getposterpath(tempstring))
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
     End Sub
@@ -19228,7 +19840,10 @@ Public Class Form1
         If tempstring <> Nothing Then
             Try
                 Call openfolder(tempstring)
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
     End Sub
@@ -19475,7 +20090,10 @@ Public Class Form1
                 Application.DoEvents()
                 Try
                     temphtml = temphtml & getmovietags(tempstring, movie, counter, pathstring)
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 counter += 1
             Next
@@ -19878,7 +20496,10 @@ Public Class Form1
                         End If
                         Try
                             newepisode.fanartpath = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Exit For
                     Catch
@@ -19950,7 +20571,10 @@ Public Class Form1
                         End If
                         Try
                             S = S.Substring(M2.Groups(3).Index + M2.Groups(3).Value.Length, S.Length - (M2.Groups(3).Index + M2.Groups(3).Value.Length))
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                     If bckgroundscanepisodes.CancellationPending Then
@@ -20200,7 +20824,9 @@ Public Class Form1
                                                                                                 IO.Directory.CreateDirectory(workingpath)
                                                                                                 destsorted = True
                                                                                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                                                Throw ex
+#End If
                                                                                             End Try
                                                                                         Else
                                                                                             destsorted = True
@@ -20216,7 +20842,10 @@ Public Class Form1
                                                                                             If IO.File.Exists(tvshowactorpath) Then
                                                                                                 Try
                                                                                                     IO.File.Copy(tvshowactorpath, filename, True)
-                                                                                                Catch
+                                                                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                                                                    Throw ex
+#End If
                                                                                                 End Try
                                                                                             End If
                                                                                             If Not IO.File.Exists(filename) Then
@@ -20278,7 +20907,10 @@ Public Class Form1
                                                                                             Else
                                                                                                 newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                                             End If
-                                                                                        Catch
+                                                                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                                                                            Throw ex
+#End If
                                                                                         End Try
                                                                                     End If
                                                                                 End If
@@ -20361,7 +20993,10 @@ Public Class Form1
                                         minutes = minutes + hours
                                         singleepisode.runtime = minutes.ToString & " min"
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
                         Else
@@ -20485,11 +21120,17 @@ Public Class Form1
                                                 For j = 0 To tvtempint
                                                     Try
                                                         episodestring = episodestring & "<actor>" & "<name>" & a(j) & "</name></actor>"
-                                                    Catch
+                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                        Throw ex
+#End If
                                                     End Try
                                                 Next
                                             End If
-                                        Catch
+                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
                                         End Try
                                     Case "Director"
                                         Dim tempstring As String = mirrorselection.InnerXml
@@ -20768,6 +21409,9 @@ Public Class Form1
                             'End If
                             'End If
                         Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                             'MsgBox(ex.ToString)
                         End Try
                     Next
@@ -20877,6 +21521,9 @@ Public Class Form1
                                 End If
                             End If
                         Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                             'MsgBox(ex.ToString)
                         End Try
                     Next
@@ -21004,7 +21651,10 @@ Public Class Form1
                 titletxt.Text = tempstring
 
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -21032,7 +21682,10 @@ Public Class Form1
                 'titletxt.SelectedIndex = -1
             End If
             processnow = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -21049,7 +21702,10 @@ Public Class Form1
                 Next
                 titletxt.SelectedIndex = 0
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -21137,14 +21793,20 @@ Public Class Form1
                             tempbitmap.Save(tempfanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Next
         Catch
         Finally
             Try
                 messbox.Close()
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End Try
     End Sub
@@ -21237,7 +21899,10 @@ Public Class Form1
                 Call nfos_to_array(folderstoadd)
                 Dim save As New Preferences
                 Call save.saveconfig()
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             messbox.Close()
         End If
@@ -21248,7 +21913,9 @@ Public Class Form1
                 'loadinfofile()
             End If
         Catch ex As Exception
-
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Call savedata()
         'filteredlist = fullmovielist
@@ -21269,7 +21936,10 @@ Public Class Form1
         If seasonnumber.IndexOf("0") = 0 Then
             Try
                 seasonnumber = seasonnumber.Substring(1, 1)
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
         If season = "season00" Then
@@ -21328,7 +21998,10 @@ Public Class Form1
                     Catch
                         Try
                             .ImageLocation = backupposterurl
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End Try
                 End With
@@ -21337,7 +22010,10 @@ Public Class Form1
                     If Not i1 Is Nothing Then
                         i1.Image.Save(seasonposterpath, Imaging.ImageFormat.Jpeg)
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
         End If
@@ -21383,158 +22059,61 @@ Public Class Form1
         If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
             strfolder = (theFolderBrowser.SelectedPath)
             Form1.userPrefs.lastpath = strfolder
-            Try
-                allok = True
-                For Each item As Object In ListBox5.Items
-                    If strfolder = item.ToString Then allok = False
+            'Try
+            allok = True
+            For Each item As Object In ListBox5.Items
+                If strfolder = item.ToString Then allok = False
+            Next
+            Dim hasseason As Boolean = False
+            If allok = True Then
+                For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
+                    Dim M As Match
+                    tempstring3 = strfolder2.ToLower
+                    M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
+                    If M.Success = True Then
+                        hasseason = True
+                        Exit For
+                    End If
                 Next
-                Dim hasseason As Boolean = False
-                If allok = True Then
-                    For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder)
-                        Dim M As Match
-                        tempstring3 = strfolder2.ToLower
-                        M = Regex.Match(tempstring3, "(series ?\d+|season ?\d+|s ?\d+|^\d{1,3}$)")
-                        If M.Success = True Then
-                            hasseason = True
-                            Exit For
-                        End If
-                    Next
-                    If hasseason = True Then
-                        tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders" & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, Each in it's own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                        If tempint = DialogResult.Yes Then
-                            ListBox5.Items.Add(strfolder)
-                        ElseIf tempint = DialogResult.No Then
-                            tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                            If tempint2 = DialogResult.Yes Then
-                                Dim test As Boolean = True
-                                For Each folder In ListBox6.Items
-                                    If folder = strfolder Then
-                                        test = False
-                                        MsgBox("Folder not added, Already exists")
-                                        Exit For
-                                    End If
-                                Next
-                                If test = True Then
-                                    ListBox6.Items.Add(strfolder)
+                If hasseason = True Then
+                    tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders" & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, Each in it's own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        ListBox5.Items.Add(strfolder)
+                    ElseIf tempint = DialogResult.No Then
+                        tempint2 = MessageBox.Show("Do you wish to add this as a single TV Show Folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                        If tempint2 = DialogResult.Yes Then
+                            Dim test As Boolean = True
+                            For Each folder In ListBox6.Items
+                                If folder = strfolder Then
+                                    test = False
+                                    MsgBox("Folder not added, Already exists")
+                                    Exit For
                                 End If
+                            Next
+                            If test = True Then
+                                ListBox6.Items.Add(strfolder)
                             End If
                         End If
-                    Else
-                        ListBox5.Items.Add(strfolder)
                     End If
                 Else
-                    MsgBox("Root already exists")
-                End If
-            Catch ex As Exception
-                MsgBox("error")
-            End Try
-        End If
-    End Sub
-
-    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
-        Dim allok As Boolean = True
-        If TabPage23.Text <> "Folders" Then
-            Exit Sub
-        End If
-        If tvFolders.Count <> ListBox6.Items.Count Then allok = False
-        If tvRootFolders.Count <> ListBox5.Items.Count Then allok = False
-        If allok = True Then
-            Dim templist As New List(Of String)
-            templist.Clear()
-            For Each item In ListBox5.Items
-                templist.Add(item)
-            Next
-            For Each item In tvRootFolders
-                If Not templist.Contains(item) Then
-                    allok = False
-                    Exit For
-                End If
-            Next
-        End If
-        If allok = True Then
-            Dim templist As New List(Of String)
-            templist.Clear()
-            For Each item In ListBox6.Items
-                templist.Add(item)
-            Next
-            For Each item In tvFolders
-                If Not templist.Contains(item) Then
-                    allok = False
-                    Exit For
-                End If
-            Next
-        End If
-        If allok = False Then
-            Dim tempint As Integer = MessageBox.Show("There appears to be unsaved changes to your folderlists," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If tempint = DialogResult.Yes Then
-                tvFolders.Clear()
-                For Each item In ListBox6.Items
-                    If Not newTvFolders.Contains(item) Then
-                        tvFolders.Add(item)
-                    End If
-                Next
-                tvRootFolders.Clear()
-                For Each item In ListBox5.Items
-                    tvRootFolders.Add(item)
-                Next
-                Dim save As New Preferences
-                Call save.saveconfig()
-                Call updatetree()
-                If newTvFolders.Count = 0 Then
-                    MsgBox("Changes Saved")
-                Else
-                    MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
-                    If Not bckgrnd_tvshowscraper.IsBusy Then
-                        bckgrnd_tvshowscraper.RunWorkerAsync()
-                    End If
+                    ListBox5.Items.Add(strfolder)
                 End If
             Else
-                Dim load As New Preferences
-                Call load.loadconfig()
+                MsgBox("Root already exists")
             End If
+            'Catch ex As Exception
+            '    MsgBox("error")
+            'End Try
         End If
     End Sub
 
-    Private Sub Button83_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button83.Click
-        tvFolders.Clear()
-        For Each item In ListBox6.Items
-            If Not newTvFolders.Contains(item) Then
-                tvFolders.Add(item)
-            End If
-        Next
-        tvRootFolders.Clear()
-        For Each item In ListBox5.Items
-            tvRootFolders.Add(item)
-        Next
-        Dim save As New Preferences
-        Call save.saveconfig()
-        Call updatetree()
-        If newTvFolders.Count = 0 Then
-            MsgBox("Changes Saved")
-        Else
-            MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
-            If Not bckgrnd_tvshowscraper.IsBusy Then
-                ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
-                ToolStripStatusLabel5.Visible = True
-                bckgrnd_tvshowscraper.RunWorkerAsync()
-            End If
-        End If
-    End Sub
+    
 
-    Private Sub Button84_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button84.Click
-        For Each folder In ListBox5.Items
-            For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(folder)
-                If Not ListBox6.Items.Contains(strfolder2) Then
-                    ListBox6.Items.Add(strfolder2)
-                    newTvFolders.Add(strfolder2)
-                End If
-            Next
-        Next
-    End Sub
+
 
     Private Sub Button85_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button85.Click
-        newTvFolders.Clear()
-        Call setuptvfolders()
+        'newTvFolders.Clear()
+        'Call setuptvfolders()
     End Sub
 
     Public Sub updatetree(Optional ByVal addnew As Boolean = True)
@@ -21625,10 +22204,16 @@ Public Class Form1
                             End If
                         End If
                         realTvPaths.Add(tvfolder)
-                    Catch
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 Next
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
             messbox.Close()
         End If
@@ -21644,27 +22229,122 @@ Public Class Form1
     End Sub
 
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
+        setuptvfolders()
+        FindNewShowsFromRoot()
+        
+    End Sub
 
-        For Each folder In tvRootFolders
+    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
+        'Dim allok As Boolean = True
+        'If TabPage23.Text <> "Folders" Then
+        '    Exit Sub
+        'End If
+        'If tvFolders.Count <> ListBox6.Items.Count Then allok = False
+        'If tvRootFolders.Count <> ListBox5.Items.Count Then allok = False
+        'If allok = True Then
+        '    Dim templist As New List(Of String)
+        '    templist.Clear()
+        '    For Each item In ListBox5.Items
+        '        templist.Add(item)
+        '    Next
+        '    For Each item In tvRootFolders
+        '        If Not templist.Contains(item) Then
+        '            allok = False
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
+        'If allok = True Then
+        '    Dim templist As New List(Of String)
+        '    templist.Clear()
+        '    For Each item In ListBox6.Items
+        '        templist.Add(item)
+        '    Next
+        '    For Each item In tvFolders
+        '        If Not templist.Contains(item) Then
+        '            allok = False
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
+        'If allok = False Then
+        '    Dim tempint As Integer = MessageBox.Show("There appears to be unsaved changes to your folderlists," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        '    If tempint = DialogResult.Yes Then
+        '        tvFolders.Clear()
+        '        For Each item In ListBox6.Items
+        '            If Not newTvFolders.Contains(item) Then
+        '                tvFolders.Add(item)
+        '            End If
+        '        Next
+        '        tvRootFolders.Clear()
+        '        For Each item In ListBox5.Items
+        '            tvRootFolders.Add(item)
+        '        Next
+        '        Dim save As New Preferences
+        '        Call save.saveconfig()
+        '        Call updatetree()
+        '        If newTvFolders.Count = 0 Then
+        '            MsgBox("Changes Saved")
+        '        Else
+        '            MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
+        '            If Not bckgrnd_tvshowscraper.IsBusy Then
+        '                bckgrnd_tvshowscraper.RunWorkerAsync()
+        '            End If
+        '        End If
+        '    Else
+        '        Dim load As New Preferences
+        '        Call load.loadconfig()
+        '    End If
+        'End If
+    End Sub
+
+    Private Sub Button83_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button83.Click
+        ScrapeNewShows()
+    End Sub
+
+    Private Sub Button84_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button84.Click
+        FindNewShowsFromRoot()
+    End Sub
+
+    Public Sub FindNewShowsFromRoot()
+       For Each folder In ListBox5.Items
             For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(folder)
-                If Not tvFolders.Contains(strfolder2) Then
-                    If Not newTvFolders.Contains(strfolder2) Then
-                        newTvFolders.Add(strfolder2)
+                If Not ListBox6.Items.Contains(strfolder2) Then
+                    If strfolder2.Contains("System Volume Information") OrElse strfolder2.Contains("$RECYCLE.BIN") Then
+                        Continue For
                     End If
+
+                    ListBox6.Items.Add(strfolder2)
+                    newTvFolders.Add(strfolder2)
                 End If
             Next
         Next
+    End Sub
+
+    Public Sub ScrapeNewShows()
+        tvFolders.Clear()
+        For Each item In ListBox6.Items
+            If Not newTvFolders.Contains(item) Then
+                tvFolders.Add(item)
+            End If
+        Next
+        tvRootFolders.Clear()
+        For Each item In ListBox5.Items
+            tvRootFolders.Add(item)
+        Next
+        Dim save As New Preferences
+        Call save.saveconfig()
+        Call updatetree()
         If newTvFolders.Count = 0 Then
-            MsgBox("No New Shows Found")
+            MsgBox("Changes Saved")
         Else
             MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
             If Not bckgrnd_tvshowscraper.IsBusy Then
-                ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
+                ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvShows.Count + 1 & " remaining"
                 ToolStripStatusLabel5.Visible = True
                 bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
         End If
-        
     End Sub
 
     Private Sub Button70_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button70.Click
@@ -22242,7 +22922,10 @@ Public Class Form1
                 userPrefs.moviethumbpriority(f) = ListBox10.Items(f)
             Next
             generalprefschanged = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -22259,7 +22942,10 @@ Public Class Form1
                 Form1.userPrefs.moviethumbpriority(f) = ListBox10.Items(f)
             Next
             generalprefschanged = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -22276,7 +22962,10 @@ Public Class Form1
                 userPrefs.certificatepriority(f) = ListBox11.Items(f)
             Next
             generalprefschanged = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -22293,7 +22982,10 @@ Public Class Form1
                 userPrefs.certificatepriority(f) = ListBox11.Items(f)
             Next
             generalprefschanged = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -22663,11 +23355,17 @@ Public Class Form1
             For Each lan In languageList
                 ListBox12.Items.Add(lan.language)
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Try
             ListBox12.SelectedItem = userPrefs.tvdblanguage
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
     End Sub
@@ -22896,7 +23594,10 @@ Public Class Form1
         Dim tempstring = ListBox14.SelectedItem
         Try
             ListBox14.Items.Remove(ListBox14.SelectedItem)
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         For Each regexp In tvRegex
             If regexp = tempstring Then
@@ -23010,7 +23711,10 @@ Public Class Form1
                     If tvepisode <> "-1" Then
                         TextBox47.Text = TextBox47.Text & "Episode No = " & tvepisode
                     End If
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Else
                 TextBox47.Text = "No Matches"
@@ -23053,7 +23757,10 @@ Public Class Form1
                 End If
             End If
             realtvpaths.Add(e.UserState)
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         For Each item In basictvlist
             Dim shownfopath As String = IO.Path.Combine(e.UserState, "tvshow.nfo")
@@ -23071,6 +23778,9 @@ Public Class Form1
                         Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
                     End If
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                     'MsgBox(ex.Message)
                 End Try
                 For Each episode In item.allepisodes
@@ -23136,6 +23846,9 @@ Public Class Form1
                         End If
 
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                         'MsgBox(ex.ToString)
                     End Try
                 Next
@@ -23242,6 +23955,9 @@ Public Class Form1
                 urllinecount -= 1
 
             Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
                 'MsgBox(ex.ToString)
             End Try
             For f = 1 To urllinecount
@@ -23256,7 +23972,10 @@ Public Class Form1
                     End If
                 End If
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Function
 
@@ -23389,7 +24108,9 @@ Public Class Form1
                                                             IO.Directory.CreateDirectory(workingpath)
                                                             destsorted = True
                                                         Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                            Throw ex
+#End If
                                                         End Try
                                                     Else
                                                         destsorted = True
@@ -23418,7 +24139,10 @@ Public Class Form1
                                                             fstrm.Write(buffer, 0, bytesRead)
                                                             contents.Close()
                                                             fstrm.Close()
-                                                        Catch
+                                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                                            Throw ex
+#End If
                                                         End Try
                                                     End If
                                                 End If
@@ -23461,7 +24185,10 @@ Public Class Form1
                                                         acts.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
                                                     End If
 
-                                                Catch
+                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                    Throw ex
+#End If
                                                 End Try
                                             End If
                                         End If
@@ -23541,7 +24268,10 @@ Public Class Form1
                                                                     Else
                                                                         newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                     End If
-                                                                Catch
+                                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             End If
                                                         End If
@@ -23554,7 +24284,9 @@ Public Class Form1
                                     newtvshow.listactors.RemoveAt(newtvshow.listactors.Count - 1)
                                 End While
                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
 
@@ -23648,6 +24380,9 @@ Public Class Form1
                                             contents.Close()
                                             fstrm.Close()
                                         Catch ex As WebException
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
                                             'MsgBox("Error Downloading season poster from TVDB")
                                         End Try
                                     End If
@@ -23740,9 +24475,15 @@ Public Class Form1
                                                 End If
 
                                             End If
-                                        Catch
+                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
                                         End Try
                                     Catch ex As WebException
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         'MsgBox("Error Downloading season poster from TVDB")
                                     End Try
                                 End If
@@ -23832,6 +24573,9 @@ Public Class Form1
                                         contents.Close()
                                         fstrm.Close()
                                     Catch ex As WebException
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         'MsgBox("Error Downloading main poster from TVDB")
                                     End Try
                                 End If
@@ -23911,6 +24655,9 @@ Public Class Form1
                                         contents.Close()
                                         fstrm.Close()
                                     Catch ex As WebException
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         'MsgBox("Error Downloading main poster from TVDB")
                                     End Try
                                 End If
@@ -23938,6 +24685,9 @@ Public Class Form1
                                     contents.Close()
                                     fstrm.Close()
                                 Catch ex As WebException
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     'MsgBox("Error Downloading main poster from TVDB")
                                 End Try
                             End If
@@ -24020,12 +24770,10 @@ Public Class Form1
                         newTvFolders.RemoveAt(0)
                     End If
                 Catch ex As Exception
-                Finally
-                    Try
+#If SilentErrorScream Then
+                    Throw ex
+#End If
 
-
-                    Catch ex As Exception
-                    End Try
                 End Try
             Else
                 'not to process
@@ -24202,26 +24950,44 @@ Public Class Form1
                     Try
                         IO.File.Delete(profileStructure.profilelist(f).actorcache)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Try
                         IO.File.Delete(profileStructure.profilelist(f).config)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Try
                         IO.File.Delete(profileStructure.profilelist(f).filters)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Try
                         IO.File.Delete(profileStructure.profilelist(f).moviecache)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Try
                         IO.File.Delete(profileStructure.profilelist(f).regexlist)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Try
                         IO.File.Delete(profileStructure.profilelist(f).tvcache)
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Exit For
                 End If
@@ -24393,17 +25159,26 @@ Public Class Form1
                     End If
                 Next
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Try
             TabControl2.SelectedIndex = 0
             currentTabIndex = 0
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         Try
             TabControl3.SelectedIndex = 0
             tvCurrentTabIndex = 0
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
 
 
@@ -24444,7 +25219,10 @@ Public Class Form1
                 tvRegex.Add(item)
             Next
             generalprefschanged = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -24463,7 +25241,10 @@ Public Class Form1
                 tvRegex.Add(item)
             Next
             generalprefschanged = True
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25150,7 +25931,10 @@ Public Class Form1
                     Exit For
                 End If
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25201,7 +25985,10 @@ Public Class Form1
                     TextBox14.Font = newFont
                     Me.Refresh()
                     Application.DoEvents()
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             End If
         End If
@@ -25294,7 +26081,10 @@ Public Class Form1
                                     changed = True
                                 End If
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Dim runtime As String = gridrow.Cells("runtime").Value
                         runtime = runtime.Replace("min", "")
@@ -25333,7 +26123,10 @@ Public Class Form1
                     MsgBox("Changes Saved")
                 End If
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25346,7 +26139,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("sorttitle").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25359,7 +26155,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("fullpathandfilename").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25372,7 +26171,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("id").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25385,7 +26187,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("playcount").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25398,7 +26203,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("rating").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25411,7 +26219,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("outline").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25424,7 +26235,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("genre").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25450,7 +26264,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("set").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25463,7 +26280,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("runtime").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25487,25 +26307,37 @@ Public Class Form1
                             If fullMovieList(f).title <> gridrow.Cells("Title").Value Then
                                 changed = True
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If fullMovieList(f).outline <> gridrow.Cells("Outline").Value Then
                                 changed = True
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If fullMovieList(f).genre <> gridrow.Cells("genre").Value Then
                                 changed = True
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If fullMovieList(f).rating <> gridrow.Cells("rating").Value Then
                                 changed = True
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If gridrow.Cells("playcount").Value = True Then
@@ -25526,7 +26358,10 @@ Public Class Form1
                             If fullMovieList(f).sortorder <> gridrow.Cells("sorttitle").Value Then
                                 changed = True
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If fullMovieList(f).year <> gridrow.Cells("year").Value Then
@@ -25534,7 +26369,10 @@ Public Class Form1
                                     changed = True
                                 End If
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If Convert.ToInt32(fullMovieList(f).top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
@@ -25542,7 +26380,10 @@ Public Class Form1
                                     changed = True
                                 End If
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             Dim runtime As String = gridrow.Cells("runtime").Value
@@ -25555,13 +26396,19 @@ Public Class Form1
                                     changed = True
                                 End If
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Try
                             If fullMovieList(f).movieset <> gridrow.Cells("set").Value Then
                                 changed = True
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                     If changed = True And IO.File.Exists(fullMovieList(f).fullpathandfilename) Then
@@ -25572,31 +26419,52 @@ Public Class Form1
                             changedmovie = fullMovieList(f)
                             Try
                                 changedmovie.genre = gridrow.Cells("genre").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Try
                                 changedmovie.title = gridrow.Cells("title").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Try
                                 changedmovie.year = gridrow.Cells("year").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Try
                                 changedmovie.sortorder = gridrow.Cells("sorttitle").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Try
                                 changedmovie.rating = gridrow.Cells("rating").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Try
                                 changedmovie.outline = gridrow.Cells("outline").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             Try
                                 changedmovie.movieset = gridrow.Cells("set").Value
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
 
                             Try
@@ -25604,7 +26472,10 @@ Public Class Form1
                                     changed = True
                                 End If
                                 changedmovie.top250 = Convert.ToInt32(gridrow.Cells("top250").Value).ToString
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
 
                             Try
@@ -25617,6 +26488,9 @@ Public Class Form1
                                     changedmovie.playcount = "0"
                                 End If
                             Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
 
                             Try
@@ -25631,6 +26505,9 @@ Public Class Form1
                                     End If
                                 End If
                             Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
 
                             changedmoviedetails.fullmoviebody.runtime = changedmovie.runtime
@@ -25679,7 +26556,10 @@ Public Class Form1
                 Me.DataGridView1.Columns("missingdata1").Visible = False
                 Call setuptextboxes()
             End If
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -25806,7 +26686,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "title" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25822,7 +26705,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "year" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25838,7 +26724,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "top 250" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25854,7 +26743,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "outline" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25870,7 +26762,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "rating" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25886,7 +26781,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "sort title" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25902,7 +26800,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "genre" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25918,7 +26819,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "runtime" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25932,7 +26836,10 @@ Public Class Form1
                                     If col.displayindex < DataGridView1.Columns("playcount").DisplayIndex And col.visible = True Then
                                         locx = locx + col.width
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -25948,7 +26855,10 @@ Public Class Form1
                                         'Else
                                         '    If col.visible = True And col.headertext.tolower = "sets" Then Exit For
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
@@ -26247,7 +27157,10 @@ Public Class Form1
                                                 Exit For
                                             End If
                                         Next
-                                    Catch
+                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                     If done = True Then Exit For
                                 Next
@@ -26307,10 +27220,16 @@ Public Class Form1
                                     If field = "hdtags" Then
                                         workingMovieDetails.filedetails = newfiledetails
                                     End If
-                                Catch
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                         newnfo = True
@@ -26353,7 +27272,9 @@ Public Class Form1
                                                                         IO.Directory.CreateDirectory(workingpath)
                                                                         destsorted = True
                                                                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                        Throw ex
+#End If
                                                                     End Try
                                                                 Else
                                                                     destsorted = True
@@ -26384,7 +27305,10 @@ Public Class Form1
                                                                             contents.Close()
                                                                             fstrm.Close()
                                                                         End If
-                                                                    Catch
+                                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                                        Throw ex
+#End If
                                                                     End Try
                                                                 End If
                                                             End If
@@ -26420,7 +27344,10 @@ Public Class Form1
                                                                         fstrm.Close()
                                                                     End If
                                                                     newactor.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, detail.InnerText & ".jpg")
-                                                                Catch
+                                                                Catch ex As Exception
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             End If
                                                         End If
@@ -26433,7 +27360,10 @@ Public Class Form1
                                             actorDB.Add(actornew)
                                     End Select
                                 Next
-                            Catch
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                             nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                             newnfo = True
@@ -26467,7 +27397,10 @@ Public Class Form1
                                 Dim myDate2 As Date = filecreation2.LastWriteTime
                                 Try
                                     newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                                Catch ex2 As Exception
+                                Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                                 If workingMovieDetails.fileinfo.createdate <> Nothing Then
                                     newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
@@ -26498,7 +27431,10 @@ Public Class Form1
             ApplyFilters()
             Call loadinfofile()
             messbox.Close()
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
             messbox.Close()
         End Try
@@ -26683,7 +27619,10 @@ Public Class Form1
                         End If
                     Next
                     If fanartfound = False Then moviethumburl = ""
-                Catch
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
 
                 If moviethumburl <> "" Then
@@ -26757,11 +27696,17 @@ Public Class Form1
                             PictureBox2.Image = bmp4
                         End If
                     Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 Else
                     MsgBox("No Fanart Found on TMDB")
                 End If
-            Catch
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
             End Try
         End If
         messbox.Close()
@@ -26873,7 +27818,9 @@ Public Class Form1
                             End If
                         End If
                     Catch ex As Exception
-
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                     Dim bitmap3 As New Bitmap(posterpath)
                     Dim bmp4 As New Bitmap(bitmap3)
@@ -26906,7 +27853,10 @@ Public Class Form1
                 End If
             End If
             messbox.Close()
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         Finally
 
         End Try
@@ -27017,10 +27967,15 @@ Public Class Form1
                 Try
                     IO.File.Delete(tempstring4)
                 Catch ex As Exception
-
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
             Next
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
     End Sub
 
@@ -27178,7 +28133,9 @@ Public Class Form1
                             contents.Close()
                             fstrm.Close()
                         Catch ex As WebException
-
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                     End If
                 End If
@@ -27268,7 +28225,9 @@ Public Class Form1
                         Catch
                         End Try
                     Catch ex As WebException
-
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                     End Try
                 End If
             End If
@@ -27354,6 +28313,9 @@ Public Class Form1
                         contents.Close()
                         fstrm.Close()
                     Catch ex As WebException
+#If SilentErrorScream Then
+                        Throw ex
+#End If
                         'MsgBox("Error Downloading main poster from TVDB")
                     End Try
                 End If
@@ -27434,6 +28396,9 @@ Public Class Form1
                             contents.Close()
                             fstrm.Close()
                         Catch ex As WebException
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                             'MsgBox("Error Downloading main poster from TVDB")
                         End Try
                     End If
@@ -27949,7 +28914,10 @@ Public Class Form1
                 realtvpaths.Add(show)
             Catch
             End Try
-        Catch
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
         End Try
         messbox.Close()
         Call populatetvtree()
@@ -28123,7 +29091,9 @@ Public Class Form1
 
                                 End If
                             Catch ex As Exception
-
+#If SilentErrorScream Then
+                                Throw ex
+#End If
                             End Try
                         End If
                         line = textfile.ReadLine
@@ -28323,7 +29293,9 @@ Public Class Form1
                                                                     IO.Directory.CreateDirectory(workingpath)
                                                                     destsorted = True
                                                                 Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                    Throw ex
+#End If
                                                                 End Try
                                                             Else
                                                                 destsorted = True
@@ -28352,7 +29324,10 @@ Public Class Form1
                                                                 contents.Close()
                                                                 fstrm.Close()
                                                             End If
-                                                        Catch
+                                                        Catch ex As Exception
+#If SilentErrorScream Then
+                                                            Throw ex
+#End If
                                                         End Try
                                                     End If
                                                 End If
@@ -28399,7 +29374,9 @@ Public Class Form1
                                                                             IO.Directory.CreateDirectory(workingpath)
                                                                             destsorted = True
                                                                         Catch ex As Exception
-
+#If SilentErrorScream Then
+                                                                            Throw ex
+#End If
                                                                         End Try
                                                                     Else
                                                                         destsorted = True
@@ -28467,7 +29444,10 @@ Public Class Form1
                                                                         Else
                                                                             newactor.actorthumb = Form1.userPrefs.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                         End If
-                                                                    Catch
+                                                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                                                        Throw ex
+#End If
                                                                     End Try
                                                                 End If
                                                             End If
@@ -28477,6 +29457,9 @@ Public Class Form1
                                         End Select
                                     Next
                                 Catch ex As Exception
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                 End Try
                             End If
                             If tvBatchList.doShowActors = True Then
@@ -28487,7 +29470,10 @@ Public Class Form1
                                     Next
                                 End If
                             End If
-                        Catch
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
                         End Try
                         Call nfoFunction.savetvshownfo(basicTvList(f).fullpath, editshow, True)
                     End If
@@ -28580,6 +29566,9 @@ Public Class Form1
                                             contents.Close()
                                             fstrm.Close()
                                         Catch ex As WebException
+#If SilentErrorScream Then
+                                            Throw ex
+#End If
                                             'MsgBox("Error Downloading season poster from TVDB")
                                         End Try
                                     End If
@@ -28661,6 +29650,9 @@ Public Class Form1
                                     Catch
                                     End Try
                                 Catch ex As WebException
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     'MsgBox("Error Downloading season poster from TVDB")
                                 End Try
                             End If
@@ -28734,6 +29726,9 @@ Public Class Form1
                                     contents.Close()
                                     fstrm2.Close()
                                 Catch ex As WebException
+#If SilentErrorScream Then
+                                    Throw ex
+#End If
                                     'MsgBox("Error Downloading main poster from TVDB")
                                 End Try
                             End If
@@ -28893,6 +29888,9 @@ Public Class Form1
                                             End If
                                         End If
                                     Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                         'MsgBox("hekp")
                                     End Try
                                     Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).episodepath, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno, True)
@@ -28937,7 +29935,10 @@ Public Class Form1
                                         End If
                                         minutes = minutes + hours
                                         listofnewepisodes(h).runtime = minutes.ToString & " min"
-                                    Catch
+                                    Catch ex As Exception
+#If SilentErrorScream Then
+                                        Throw ex
+#End If
                                     End Try
                                     Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).episodepath, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno, True)
                                 End If
@@ -29110,6 +30111,9 @@ Public Class Form1
                 Try
                     prefs.Load(tempstring2)
                 Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
                 End Try
                 Dim thisresult As XmlNode = Nothing
 
@@ -29514,19 +30518,4 @@ Public Class Form1
         Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
     End Sub
 
-    Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
-
-    End Sub
-
-    Private Sub Label7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label7.Click
-
-    End Sub
-
-    Private Sub Label11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label11.Click
-
-    End Sub
-
-    Private Sub SplitContainer1_Panel2_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles SplitContainer1.Panel2.Paint
-
-    End Sub
 End Class

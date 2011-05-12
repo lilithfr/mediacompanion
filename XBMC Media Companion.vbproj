@@ -72,7 +72,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>929C237912B42F092487F6FA8A1198DD3D7D7389</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>1179C7EB15DCB2E8C80EA8E148233A34D2BC75F9</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>XBMC Media Companion_TemporaryKey.pfx</ManifestKeyFile>

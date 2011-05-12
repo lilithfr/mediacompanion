@@ -340,3 +340,110 @@ C:\SVN MC\bin\Release\Media Companion.exe.manifest
 C:\SVN MC\bin\Release\Media Companion.application
 C:\SVN MC\obj\Release\Media Companion.exe.manifest
 C:\SVN MC\obj\Release\Media Companion.application
+C:\MediaCompanion\SilentError\bin\Release\Media Companion.exe.config
+C:\MediaCompanion\SilentError\obj\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\MediaCompanion\SilentError\obj\Release\Interop.WMPLib.dll
+C:\MediaCompanion\SilentError\obj\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\MediaCompanion\SilentError\obj\Release\AxInterop.WMPLib.dll
+C:\MediaCompanion\SilentError\obj\Release\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\MediaCompanion\SilentError\obj\Release\Media Companion.pdb
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.imdb.com\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.impa.com\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.impa.com\impa.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\changelog.txt
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\icon.png
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\imdb.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.mtv.com\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.mtv.com\icon.png
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.mtv.com\mtv.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\icon.png
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\changelog.txt
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\icon.png
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\xbmc.core\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\xbmc.metadata\addon.xml
+C:\MediaCompanion\SilentError\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
+C:\MediaCompanion\SilentError\bin\Release\Media Companion.exe.manifest
+C:\MediaCompanion\SilentError\bin\Release\Media Companion.application
+C:\MediaCompanion\SilentError\bin\Release\Media Companion.exe
+C:\MediaCompanion\SilentError\bin\Release\Media Companion.pdb
+C:\MediaCompanion\SilentError\bin\Release\crclib.dll
+C:\MediaCompanion\SilentError\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\MediaCompanion\SilentError\bin\Release\tmdb_posters.dll
+C:\MediaCompanion\SilentError\bin\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\MediaCompanion\SilentError\bin\Release\Interop.WMPLib.dll
+C:\MediaCompanion\SilentError\bin\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\MediaCompanion\SilentError\bin\Release\AxInterop.WMPLib.dll
+C:\MediaCompanion\SilentError\obj\Release\ResolveAssemblyReference.cache
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmBatchScraper.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmCopyProgress.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmCoverArt.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.Delete_Dialogue.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmDialog1.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.Form1.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.Form2.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmoutputlog.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmMessageBox.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmMovieFanart.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.Resources.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmOptions.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmSplashscreen.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.tv_batch_wizard.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmTvEdit.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmTvFanart.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmTvPosters.resources
+C:\MediaCompanion\SilentError\obj\Release\Media_Companion.frmTVShowBrowser.resources
+C:\MediaCompanion\SilentError\obj\Release\ResGen.read.1.tlog
+C:\MediaCompanion\SilentError\obj\Release\ResGen.write.1.tlog
+C:\MediaCompanion\SilentError\obj\Release\Media Companion.exe.manifest
+C:\MediaCompanion\SilentError\obj\Release\Media Companion.application
+C:\MediaCompanion\SilentError\obj\Release\Media Companion.exe
