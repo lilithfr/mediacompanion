@@ -5059,7 +5059,6 @@ Me.TabControl4.TabIndex = 50
 Me.TabPage27.AutoScroll = true
 Me.TabPage27.AutoScrollMinSize = New System.Drawing.Size(928, 370)
 Me.TabPage27.BackColor = System.Drawing.SystemColors.Control
-Me.TabPage27.Controls.Add(Me.GroupBox_TMDB_Scraper_Preferences)
 Me.TabPage27.Controls.Add(Me.GroupBox_IMDB_Scraper_Preferences)
 Me.TabPage27.Controls.Add(Me.Panel22)
 Me.TabPage27.Controls.Add(Me.Label98)
@@ -5073,6 +5072,7 @@ Me.TabPage27.Controls.Add(Me.ComboBox6)
 Me.TabPage27.Controls.Add(Me.GroupBox10)
 Me.TabPage27.Controls.Add(Me.GroupBox11)
 Me.TabPage27.Controls.Add(Me.GroupBox9)
+Me.TabPage27.Controls.Add(Me.GroupBox_TMDB_Scraper_Preferences)
 Me.TabPage27.Location = New System.Drawing.Point(4, 22)
 Me.TabPage27.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage27.Name = "TabPage27"
@@ -5103,6 +5103,7 @@ Me.GroupBox_IMDB_Scraper_Preferences.Size = New System.Drawing.Size(354, 272)
 Me.GroupBox_IMDB_Scraper_Preferences.TabIndex = 67
 Me.GroupBox_IMDB_Scraper_Preferences.TabStop = false
 Me.GroupBox_IMDB_Scraper_Preferences.Text = "XBMC Scraper Preferences"
+Me.GroupBox_IMDB_Scraper_Preferences.Visible = false
 '
 'Label156
 '
