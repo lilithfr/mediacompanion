@@ -336,10 +336,6 @@ C:\SVN MC\bin\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
 C:\SVN MC\bin\Release\Interop.WMPLib.dll
 C:\SVN MC\bin\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
 C:\SVN MC\bin\Release\AxInterop.WMPLib.dll
-C:\SVN MC\bin\Release\Media Companion.exe.manifest
-C:\SVN MC\bin\Release\Media Companion.application
-C:\SVN MC\obj\Release\Media Companion.exe.manifest
-C:\SVN MC\obj\Release\Media Companion.application
 C:\MediaCompanion\SilentError\bin\Release\Media Companion.exe.config
 C:\MediaCompanion\SilentError\obj\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
 C:\MediaCompanion\SilentError\obj\Release\Interop.WMPLib.dll
@@ -550,3 +546,5 @@ C:\MC SVN\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\MC SVN\obj\Release\ResGen.read.1.tlog
 C:\MC SVN\obj\Release\ResGen.write.1.tlog
 C:\MC SVN\obj\Release\Media Companion.exe
+C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
+C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
