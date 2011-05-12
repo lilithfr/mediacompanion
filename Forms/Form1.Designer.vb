@@ -8119,7 +8119,7 @@ Me.ListBox5.Location = New System.Drawing.Point(15, 34)
 Me.ListBox5.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox5.Name = "ListBox5"
 Me.ListBox5.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ListBox5.Size = New System.Drawing.Size(381, 511)
+Me.ListBox5.Size = New System.Drawing.Size(381, 524)
 Me.ListBox5.TabIndex = 0
 '
 'Button67
@@ -8157,7 +8157,7 @@ Me.TextBox39.TabIndex = 3
 'Button72
 '
 Me.Button72.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button72.Location = New System.Drawing.Point(536, 599)
+Me.Button72.Location = New System.Drawing.Point(672, 601)
 Me.Button72.Margin = New System.Windows.Forms.Padding(4)
 Me.Button72.Name = "Button72"
 Me.Button72.Size = New System.Drawing.Size(45, 29)
@@ -8172,7 +8172,7 @@ Me.TextBox40.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System
 Me.TextBox40.Location = New System.Drawing.Point(21, 601)
 Me.TextBox40.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox40.Name = "TextBox40"
-Me.TextBox40.Size = New System.Drawing.Size(507, 20)
+Me.TextBox40.Size = New System.Drawing.Size(631, 20)
 Me.TextBox40.TabIndex = 11
 '
 'Label85
@@ -8189,7 +8189,7 @@ Me.Label85.Text = "Manually add path"
 'Button71
 '
 Me.Button71.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button71.Location = New System.Drawing.Point(401, 634)
+Me.Button71.Location = New System.Drawing.Point(537, 634)
 Me.Button71.Margin = New System.Windows.Forms.Padding(4)
 Me.Button71.Name = "Button71"
 Me.Button71.Size = New System.Drawing.Size(180, 29)
@@ -8201,7 +8201,7 @@ Me.Button71.UseVisualStyleBackColor = true
 '
 Me.Label84.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label84.AutoSize = true
-Me.Label84.Location = New System.Drawing.Point(441, 34)
+Me.Label84.Location = New System.Drawing.Point(470, 34)
 Me.Label84.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label84.Name = "Label84"
 Me.Label84.Size = New System.Drawing.Size(158, 143)
@@ -8212,10 +8212,10 @@ Me.Label84.Text = resources.GetString("Label84.Text")
 '
 Me.Button70.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button70.Location = New System.Drawing.Point(210, 634)
+Me.Button70.Location = New System.Drawing.Point(261, 634)
 Me.Button70.Margin = New System.Windows.Forms.Padding(4)
 Me.Button70.Name = "Button70"
-Me.Button70.Size = New System.Drawing.Size(184, 29)
+Me.Button70.Size = New System.Drawing.Size(214, 29)
 Me.Button70.TabIndex = 8
 Me.Button70.Text = "Browse for Folder"
 Me.Button70.UseVisualStyleBackColor = true
@@ -8240,7 +8240,7 @@ Me.ListBox6.Location = New System.Drawing.Point(21, 34)
 Me.ListBox6.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox6.Name = "ListBox6"
 Me.ListBox6.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ListBox6.Size = New System.Drawing.Size(381, 524)
+Me.ListBox6.Size = New System.Drawing.Size(420, 524)
 Me.ListBox6.TabIndex = 0
 '
 'TabPage24
@@ -8510,7 +8510,7 @@ Me.CheckBox_Use_XBMC_TVDB_Scraper.UseVisualStyleBackColor = true
 'Label139
 '
 Me.Label139.AutoSize = true
-Me.Label139.Location = New System.Drawing.Point(523, 266)
+Me.Label139.Location = New System.Drawing.Point(535, 265)
 Me.Label139.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label139.Name = "Label139"
 Me.Label139.Size = New System.Drawing.Size(253, 52)
@@ -8524,7 +8524,7 @@ Me.GroupBox20.Controls.Add(Me.CheckBox15)
 Me.GroupBox20.Controls.Add(Me.CheckBox10)
 Me.GroupBox20.Controls.Add(Me.GroupBox19)
 Me.GroupBox20.Controls.Add(Me.Panel21)
-Me.GroupBox20.Location = New System.Drawing.Point(518, 23)
+Me.GroupBox20.Location = New System.Drawing.Point(538, 21)
 Me.GroupBox20.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox20.Name = "GroupBox20"
 Me.GroupBox20.Padding = New System.Windows.Forms.Padding(4)
@@ -8681,7 +8681,7 @@ Me.GroupBox15.Location = New System.Drawing.Point(888, 127)
 Me.GroupBox15.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox15.Name = "GroupBox15"
 Me.GroupBox15.Padding = New System.Windows.Forms.Padding(4)
-Me.GroupBox15.Size = New System.Drawing.Size(334, 325)
+Me.GroupBox15.Size = New System.Drawing.Size(319, 325)
 Me.GroupBox15.TabIndex = 31
 Me.GroupBox15.TabStop = false
 Me.GroupBox15.Text = "TV Episode Renaming Settings"
@@ -8758,7 +8758,7 @@ Me.ListBox12.FormattingEnabled = true
 Me.ListBox12.Location = New System.Drawing.Point(12, 26)
 Me.ListBox12.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox12.Name = "ListBox12"
-Me.ListBox12.Size = New System.Drawing.Size(103, 394)
+Me.ListBox12.Size = New System.Drawing.Size(103, 420)
 Me.ListBox12.TabIndex = 11
 '
 'Label122
@@ -9152,10 +9152,10 @@ Me.Label125.AutoSize = true
 Me.Label125.Location = New System.Drawing.Point(11, 128)
 Me.Label125.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label125.Name = "Label125"
-Me.Label125.Size = New System.Drawing.Size(230, 26)
+Me.Label125.Size = New System.Drawing.Size(212, 39)
 Me.Label125.TabIndex = 21
-Me.Label125.Text = "When you create a new profile, the settings are"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"copied from the default profile "& _ 
-    "to the new profile"
+Me.Label125.Text = "When you create a new profile, the settings"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"are copied from the default profile "& _ 
+    "to the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"new profile"
 '
 'Button93
 '
@@ -9316,13 +9316,13 @@ Me.Label115.AutoSize = true
 Me.Label115.Location = New System.Drawing.Point(8, 20)
 Me.Label115.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label115.Name = "Label115"
-Me.Label115.Size = New System.Drawing.Size(485, 39)
+Me.Label115.Size = New System.Drawing.Size(444, 39)
 Me.Label115.TabIndex = 9
 Me.Label115.Text = resources.GetString("Label115.Text")
 '
 'btn_custommediaplayer
 '
-Me.btn_custommediaplayer.Location = New System.Drawing.Point(216, 132)
+Me.btn_custommediaplayer.Location = New System.Drawing.Point(215, 127)
 Me.btn_custommediaplayer.Margin = New System.Windows.Forms.Padding(4)
 Me.btn_custommediaplayer.Name = "btn_custommediaplayer"
 Me.btn_custommediaplayer.Size = New System.Drawing.Size(231, 26)
@@ -9344,7 +9344,7 @@ Me.RadioButton36.UseVisualStyleBackColor = true
 'Label105
 '
 Me.Label105.AutoSize = true
-Me.Label105.Location = New System.Drawing.Point(212, 109)
+Me.Label105.Location = New System.Drawing.Point(212, 106)
 Me.Label105.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label105.Name = "Label105"
 Me.Label105.Size = New System.Drawing.Size(204, 13)
@@ -9354,12 +9354,12 @@ Me.Label105.Text = "Launch WMP and play the selected file(s)"
 'Label106
 '
 Me.Label106.AutoSize = true
-Me.Label106.Location = New System.Drawing.Point(212, 80)
+Me.Label106.Location = New System.Drawing.Point(212, 77)
 Me.Label106.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label106.Name = "Label106"
-Me.Label106.Size = New System.Drawing.Size(340, 13)
+Me.Label106.Size = New System.Drawing.Size(293, 13)
 Me.Label106.TabIndex = 3
-Me.Label106.Text = "This option will open whatever the default player is for .m3u playlist files"
+Me.Label106.Text = "This option will open the default player is for .m3u playlist files"
 '
 'RadioButton37
 '
