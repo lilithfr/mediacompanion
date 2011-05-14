@@ -3160,11 +3160,11 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>347, 95</value>
   </metadata>
-  <data name="Label56.Text" xml:space="preserve">
-    <value>If one of the above TV Shows is the Correct one then
-select your preferred options from the panel opposite
-and select scrape. If none of the above are correct
-then alter the search term and search again.</value>
+  <data name="Label139.Text" xml:space="preserve">
+    <value>Enabling the 'Quick Add' option will speed up the
+scraping of TV Shows by not downloading available
+Art. All show art can be scraped at any time by using
+the TV context menu item to 'Download missing art'</value>
   </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>284, 56</value>
@@ -3448,6 +3448,12 @@ and fanart.jpg to keep compatability with other media managers.
 This is not reccomended since it breaks MCs ability to see the 
 media file, used for playback and filedetails information.</value>
   </data>
+  <data name="Label56.Text" xml:space="preserve">
+    <value>If one of the above TV Shows is the Correct one then
+select your preferred options from the panel opposite
+and select scrape. If none of the above are correct
+then alter the search term and search again.</value>
+  </data>
   <data name="Label81.Text" xml:space="preserve">
     <value>Root Folders are folders that contain
 multiple TV Shows
@@ -3494,12 +3500,6 @@ This preference gives you the option to copy an actors
 thumb, if available, to the episodes actor folder, allowing
 the higher 
 quality TVDB actor thumb to be used for the episode.</value>
-  </data>
-  <data name="Label139.Text" xml:space="preserve">
-    <value>Enabling the 'Quick Add' option will speed up the
-scraping of TV Shows by not downloading available
-Art. All show art can be scraped at any time by using
-the TV context menu item to 'Download missing art'</value>
   </data>
   <data name="Label140.Text" xml:space="preserve">
     <value>Media Companion now offers the option to
