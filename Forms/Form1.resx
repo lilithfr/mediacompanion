@@ -606,11 +606,12 @@
 </value>
   </data>
   <data name="Label95.Text" xml:space="preserve">
-    <value>This panel allows you to customise your preference with regards to
-the MPAA movie rating or Cert.
+    <value>This panel allows you to customise your preference with
+regards to the MPAA movie rating or Cert.
 
-Since not all movies are listed with all certificates, Media Companion
-will use the first available certificate in the order you select below</value>
+Since not all movies are listed with all certificates, Media
+Companion will use the first available certificate in the
+order you select below</value>
   </data>
   <data name="Label104.Text" xml:space="preserve">
     <value>The settings for local actors can be tricky and if you dont know what you are doing it is reccomended that you leave this
@@ -3159,39 +3160,11 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>347, 95</value>
   </metadata>
-  <data name="Label81.Text" xml:space="preserve">
-    <value>Root Folders are folders that contain
-multiple TV Shows
-
-For example :-
-D:/Root/TV Show 1
-D:/Root/TV Show 2 
-You would add the path:
-D:/Root
-
-Folders added to this list can be
-checked for new TV Show folders
-and can be added to the Seperate
-Folders List automatically on startup.
-
-To check for new TV Folders when the
-program is running, use the 
-"Check Roots for New TV Shows"
-menu item, located in the "TV Shows"
-Drop down menu.</value>
-  </data>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>Seperate folders are those that
-contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method
-means that all shows must be
-added manually.</value>
+  <data name="Label56.Text" xml:space="preserve">
+    <value>If one of the above TV Shows is the Correct one then
+select your preferred options from the panel opposite
+and select scrape. If none of the above are correct
+then alter the search term and search again.</value>
   </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>284, 56</value>
@@ -3469,17 +3442,45 @@ enabled, then the setting below allows you to prioritise the
 order that sources are checked for an available  poster</value>
   </data>
   <data name="Label109.Text" xml:space="preserve">
-    <value>Some people prefer to save their files as movie.nfo, movie.tbn and
-fanart.jpg to keep compatability with other media managers.
+    <value>Some people prefer to save their files as movie.nfo, movie.tbn
+and fanart.jpg to keep compatability with other media managers.
 
 This is not reccomended since it breaks MCs ability to see the 
 media file, used for playback and filedetails information.</value>
   </data>
-  <data name="Label56.Text" xml:space="preserve">
-    <value>If one of the above TV Shows is the Correct one then select
-your preferred options from the panel opposite and select
-scrape. If none of the above are correct then alter the
-search term and search again.</value>
+  <data name="Label81.Text" xml:space="preserve">
+    <value>Root Folders are folders that contain
+multiple TV Shows
+
+For example :-
+D:/Root/TV Show 1
+D:/Root/TV Show 2 
+You would add the path:
+D:/Root
+
+Folders added to this list can be
+checked for new TV Show folders
+and can be added to the Seperate
+Folders List automatically on startup.
+
+To check for new TV Folders when the
+program is running, use the 
+"Check Roots for New TV Shows"
+menu item, located in the "TV Shows"
+Drop down menu.</value>
+  </data>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>Seperate folders are those that
+contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method
+means that all shows must be
+added manually.</value>
   </data>
   <data name="Label138.Text" xml:space="preserve">
     <value>If you have enabled the option to 'Save Actor Thumbs to the
@@ -3489,8 +3490,9 @@ When Scraping episodes from TVDB, the only actor
 thumbnails avaialble are those at IMDB, but compared to
 TVDB these actor thumbs are low quality.
 
-This preference gives you the option to copy an actors thumb,
-if available, to the episodes actor folder, allowing the higher
+This preference gives you the option to copy an actors
+thumb, if available, to the episodes actor folder, allowing
+the higher 
 quality TVDB actor thumb to be used for the episode.</value>
   </data>
   <data name="Label139.Text" xml:space="preserve">
@@ -3501,11 +3503,11 @@ the TV context menu item to 'Download missing art'</value>
   </data>
   <data name="Label140.Text" xml:space="preserve">
     <value>Media Companion now offers the option to
-automatically rename episodes during scraping.
-
+automatically rename episodes during
+scraping.
 Only use this option if you are sure that the
-media file is named according to supported MC
-naming conventions.</value>
+media file is named according to supported
+MC naming conventions.</value>
   </data>
   <data name="Label115.Text" xml:space="preserve">
     <value>Media Companion can be used to playback media files, Use the options below to select what
@@ -3572,7 +3574,7 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
     <value>797, 95</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>209</value>
+    <value>121</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

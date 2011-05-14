@@ -227,6 +227,11 @@ Public Class Form1
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
 
+        'Update Main Form Window Title to show Currrent Version
+        Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
+        sAssemblyVersion = Microsoft.VisualBasic.Right(sAssemblyVersion, 7)       'Cuts Version=3.4.0.2 down to just 3.4.0.2
+        Me.Text = "Media Companion - V" & sAssemblyVersion
+
         For Each Temp In InternalResourceNames
             Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
         Next
@@ -256,8 +261,6 @@ Public Class Form1
         If scrapeAndQuit = False Then
             frmSplash.Show()
 
-
-
             loadinginfo = "Status :- Initialising Program"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
@@ -277,11 +280,12 @@ Public Class Form1
             Dim process As New Process()
             processes = process.GetProcesses
             For Each instance In processes
-                If instance.ProcessName = "Media Companion" Then
+                If instance.ProcessName = "Media Companion" Then                            'If instance.ProcessName.IndexOf("Media Companion - V") <> -1 Then          This should limit the match to only Median Companion running not Visual Studio 2010
                     tej = tej + 1
                     If tej >= 2 Then
                         MsgBox("XBMC Media Companion is already running")
-                        End
+
+                        End                         'Close MC since another version of the program is running.
                     End If
                 End If
             Next
@@ -2287,7 +2291,7 @@ Public Class Form1
                             OriginalImage.Dispose()
                             PictureBox3.Image = Image2 '7 - 2
                             moviethumb.Image = Image2 'picturebox3
-                            Label19.Text = Image2.Width.ToString & " x " & Image2.Height.ToString
+                            Label19.Text = "Current Loaded Poster - " & Image2.Width.ToString & " x " & Image2.Height.ToString
                         Else
                             moviethumb.ImageLocation = defaultPoster 'picturebox3
                             PictureBox3.ImageLocation = defaultPoster '7 - 2
@@ -12097,7 +12101,7 @@ Public Class Form1
 
             PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
             moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
-            tempstring = PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
+            tempstring = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
             Label19.Text = tempstring
             Label19.Refresh()
         Catch ex As Exception
@@ -12962,7 +12966,7 @@ Public Class Form1
         PictureBox3.Image = moviethumb.Image
         Button28.Visible = False
         Button27.Visible = False
-        Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+        Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
     End Sub
 
     Private Sub Button27_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button27.Click
@@ -13059,7 +13063,7 @@ Public Class Form1
     Private Sub Button23_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -13070,7 +13074,7 @@ Public Class Form1
     Private Sub Button24_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -13081,7 +13085,7 @@ Public Class Form1
     Private Sub Button25_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -13092,7 +13096,7 @@ Public Class Form1
     Private Sub Button26_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -14560,6 +14564,14 @@ Public Class Form1
                 lan.showtitle = "TVDB Search Returned Zero Results"
                 lan.showbanner = Nothing
                 listOfShows.Add(lan)
+
+                lan.showid = "none"
+                lan.showtitle = "Adjust the TV Shows Title & search again"
+                lan.showbanner = Nothing
+                listOfShows.Add(lan)
+
+
+
             End If
             ListBox3.Items.Clear()
             For Each item In listOfShows
@@ -17990,14 +18002,14 @@ Public Class Form1
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
                 workingposterpath = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
                 Dim bmp As New Bitmap(defaultPoster)
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             End If
         ElseIf tempstring = "Specials" Then
             Button53.Enabled = True
@@ -18009,7 +18021,7 @@ Public Class Form1
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
                 If IO.File.Exists(workingTvShow.path.Replace("tvshow.nfo", "season00.tbn")) Then
                     Try
@@ -18021,14 +18033,14 @@ Public Class Form1
                         Dim Image2 As New Bitmap(bmp)
                         bmp.Dispose()
                         PictureBox12.Image = Image2
-                        Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                     End Try
                 Else
                     Dim bmp As New Bitmap(defaultPoster)
                     Dim Image2 As New Bitmap(bmp)
                     bmp.Dispose()
                     PictureBox12.Image = Image2
-                    Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 End If
             End If
         ElseIf tempstring.IndexOf("Season") = 0 And tempstring.IndexOf("Season All") = -1 Then
@@ -18042,14 +18054,14 @@ Public Class Form1
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
                 workingposterpath = path
                 Dim bmp As New Bitmap(defaultPoster)
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             End If
         ElseIf tempstring = "Season All" Then
             CheckBox8.Visible = True
@@ -18062,14 +18074,14 @@ Public Class Form1
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             Else
                 workingposterpath = path
                 Dim bmp As New Bitmap(defaultPoster)
                 Dim Image2 As New Bitmap(bmp)
                 bmp.Dispose()
                 PictureBox12.Image = Image2
-                Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             End If
         End If
     End Sub
@@ -18228,7 +18240,7 @@ Public Class Form1
 
                     tvpostercheckboxes() = New RadioButton()
                     With tvpostercheckboxes
-                        .Location = New Point(location + 50, 179)
+                        .Location = New Point(location + 50, 166) '179
                         .Name = "postercheckbox" & itemcounter.ToString
                         .SendToBack()
                         .Text = " "
@@ -18244,7 +18256,7 @@ Public Class Form1
                 If tempboolean = False Then
                     tvposterpicboxes() = New PictureBox()
                     With tvposterpicboxes
-                        .Location = New Point(location, 210)
+                        .Location = New Point(location, 192) '210
                         .Width = 123
                         .Height = 168
                         .SizeMode = PictureBoxSizeMode.Zoom
@@ -18258,7 +18270,7 @@ Public Class Form1
 
                     tvpostercheckboxes() = New RadioButton()
                     With tvpostercheckboxes
-                        .Location = New Point(location + 50, 389)
+                        .Location = New Point(location + 50, 358) '389
                         .Name = "postercheckbox" & itemcounter.ToString
                         .SendToBack()
                         .Text = " "
@@ -18453,7 +18465,7 @@ Public Class Form1
                 PictureBox5.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
-            Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+            Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
         Else
             Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Res Image")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -18486,7 +18498,7 @@ Public Class Form1
                         PictureBox5.Image = Image2
                     End If
                     PictureBox12.Image = Image2
-                    Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 End If
 
                 If witherror = True And witherror2 = False Then
@@ -18537,7 +18549,7 @@ Public Class Form1
                             PictureBox5.Image = newpicbox.Image
                         End If
                         PictureBox12.Image = newpicbox.Image
-                        Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                     Catch ex As Exception
                         MsgBox(ex.ToString)
                     End Try
@@ -18641,7 +18653,7 @@ Public Class Form1
                 PictureBox5.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
-            Label73.Text = PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+            Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
         Catch ex As Exception
             MsgBox(ex.ToString)
         Finally
@@ -30518,4 +30530,7 @@ Public Class Form1
         Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
     End Sub
 
+    Private Sub SplitContainer7_Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles SplitContainer7.Panel1.Paint
+
+    End Sub
 End Class

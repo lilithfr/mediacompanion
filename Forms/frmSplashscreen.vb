@@ -16,8 +16,8 @@ Public Class frmSplashscreen
         'Me.TopMost = True
         CheckForIllegalCrossThreadCalls = False
 
-        Dim sAssemlyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
-        Label2.Text = sAssemlyVersion
+        Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
+        Label2.Text = sAssemblyVersion
 
         'BackgroundWorker1.RunWorkerAsync()
 
