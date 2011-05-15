@@ -22243,7 +22243,7 @@ Public Class Form1
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
         setuptvfolders()
         FindNewShowsFromRoot()
-        
+        ScrapeNewShows()
     End Sub
 
     Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
