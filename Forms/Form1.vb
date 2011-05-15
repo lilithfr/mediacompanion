@@ -23096,6 +23096,8 @@ Public Class Form1
             Button73.Enabled = False
             Button61.Enabled = False
 
+            RadioButton51.Checked = True
+
             RadioButton51.Visible = True
             RadioButton52.Visible = True
             If userPrefs.XBMC_Scraper = "imdb" Then
@@ -23106,7 +23108,7 @@ Public Class Form1
                 GroupBox_TMDB_Scraper_Preferences.Enabled = False
                 GroupBox_TMDB_Scraper_Preferences.Visible = False
                 GroupBox_TMDB_Scraper_Preferences.SendToBack()
-            ElseIf userprefs.XBMC_Scraper = "tmdb" Then
+            ElseIf userPrefs.XBMC_Scraper = "tmdb" Then
                 RadioButton52.Checked = True
                 GroupBox_IMDB_Scraper_Preferences.Enabled = False
                 GroupBox_IMDB_Scraper_Preferences.Visible = False
@@ -23119,8 +23121,13 @@ Public Class Form1
             userPrefs.movies_useXBMC_Scraper = False
             GroupBox9.Enabled = True
             GroupBox9.Visible = True
+            GroupBox9.BringToFront()
+
             GroupBox_IMDB_Scraper_Preferences.Enabled = False
             GroupBox_IMDB_Scraper_Preferences.Visible = False
+            'GroupBox_TMDB_Scraper_Preferences.Enabled = False
+            'GroupBox_TMDB_Scraper_Preferences.Visible = False
+
             GroupBox11.Visible = True
             ComboBox7.Visible = True
             ComboBox6.Visible = True
