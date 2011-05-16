@@ -10580,7 +10580,8 @@ Public Class Form1
             Else
                 MsgBox("This task is already running")
             End If
-        ElseIf tab.ToLower = "cancel movie search" Then
+        ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
+            TabPage14.Text = "...Cancelling..."
             Me.TabControl2.SelectedIndex = currentTabIndex
             BckWrkScnMovies.CancelAsync()
         ElseIf tab.ToLower = "wall" Then
