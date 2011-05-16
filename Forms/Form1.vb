@@ -22480,6 +22480,7 @@ Public Class Form1
             userPrefs.font = "Times New Roman, 9pt"
         End If
         Label130.Font = newFont
+        Label130.Text = userPrefs.font
         If userPrefs.ignorearticle = True Then
             CheckBox41.CheckState = CheckState.Checked
         Else
@@ -26034,7 +26035,7 @@ Public Class Form1
             Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(userPrefs.font), System.Drawing.Font)
 
             Label130.Font = newFont
-
+            Label130.Text = fontString
             generalprefschanged = True
         End If
     End Sub
@@ -30538,6 +30539,22 @@ Public Class Form1
     End Sub
 
     Private Sub SplitContainer7_Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles SplitContainer7.Panel1.Paint
+
+    End Sub
+
+    Private Sub Button111_Click(sender As System.Object, e As System.EventArgs) Handles Button111.Click
+        'Reset Font
+        'Dim tc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+        'Dim fontString As String = tc.ConvertToString("Times New Roman, 9pt")
+
+        userPrefs.font = "Times New Roman, 9pt"
+
+        Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
+        Dim newFont As System.Drawing.Font = CType(tcc.ConvertFromString(userPrefs.font), System.Drawing.Font)
+
+        Label130.Font = newFont
+        Label130.Text = "Times New Roman, 9pt"
+        generalprefschanged = True
 
     End Sub
 End Class
