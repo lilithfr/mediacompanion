@@ -20763,10 +20763,10 @@ Public Class Form1
                                         Dim tvdbsLine As String = ""
                                         tvfblinecount = 0
 
-                                        Do While Not tvdbsLine Is Nothing
+                                        Do While Not tvdbsLine = ""   'is Nothing Changed by SK 18/5/2011     to avoid System.NullReferenceException was with new install & 1 new tvshow scraped & tried to serach for new episodes with 1 in the folder
                                             tvfblinecount += 1
                                             tvdbsLine = objReader.ReadLine
-                                            If Not tvdbsLine Is Nothing Then
+                                            If Not tvdbsLine = "" Then   '   Is Nothing Then Changed by SK 18/5/2011
                                                 tvdbwebsource(tvfblinecount) = tvdbsLine
                                             End If
                                             If bckgroundscanepisodes.CancellationPending Then
