@@ -91,6 +91,7 @@ Public Class Structures
     Public maximised As Boolean
     Public copytvactorthumbs As Boolean = False
     Public actorseasy As Boolean
+    Public scrapefullcert As Boolean
 
     Public moviesortorder As Byte
     Public moviedefaultlist As Byte

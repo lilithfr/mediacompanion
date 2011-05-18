@@ -30594,4 +30594,13 @@ Public Class Form1
     Private Sub SplitContainer2_SplitterMoved(sender As System.Object, e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer2.SplitterMoved
         DebugSplitter2PosLabel.Text = SplitContainer2.SplitterDistance
     End Sub
+
+    Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
+        If ScrapeFullCertCheckBox.Checked Then
+            userPrefs.scrapefullcert = True
+        Else
+            userPrefs.scrapefullcert = False
+        End If
+        'generalprefschanged = True
+    End Sub
 End Class

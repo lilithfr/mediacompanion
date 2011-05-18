@@ -474,6 +474,10 @@ Public Class Preferences
             child.InnerText = Form1.userPrefs.autorenameepisodes.ToString.ToLower
             root.AppendChild(child)
 
+            child = doc.CreateElement("scrapefullcert")
+            child.InnerText = Form1.userPrefs.scrapefullcert.ToString.ToLower
+            root.AppendChild(child)
+
             child = doc.CreateElement("moviesets")
             Dim childchild As XmlElement
             For Each movieset In Form1.userPrefs.moviesets
@@ -1085,6 +1089,13 @@ Public Class Preferences
                     Form1.userPrefs.moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                 Case "startuptab"
                     Form1.userPrefs.startuptab = Convert.ToByte(thisresult.InnerText)
+                Case "scrapefullcert"
+                    If thisresult.InnerXml = "true" Then
+                        Form1.userPrefs.scrapefullcert = True
+                        Form1.ScrapeFullCertCheckBox.Checked = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Form1.userPrefs.scrapefullcert = False
+                    End If
             End Select
             'Catch
             '    'MsgBox("Error : pr278")

@@ -1069,7 +1069,11 @@ Public Class Classimdb
                                     tempstring = tempstring.Substring(tempstring.IndexOf(">") + 1, tempstring.IndexOf("</a>") - tempstring.IndexOf(">") - 1)
                                     mpaaresults(g, 1) = tempstring
                                     Try
-                                        mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
+                                        'line below determines if cert is full or short as e.g. UK:15 becomes 15
+                                        If Not Form1.userPrefs.scrapefullcert Then
+                                            mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
+                                        End If
+
                                         mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
                                     Catch
                                         mpaaresults(g, 1) = "error"
