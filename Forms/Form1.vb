@@ -247,7 +247,7 @@ Public Class Form1
         'Catch
 
         'End Try
-        Panel4.Location = New Point(149, 23)
+        'Panel4.Location = New Point(149, 23)              'Disabled this direct positioning on Panel 4 so that we can position in GUI....SK
         TreeView1.Sort()
 
         For Each arg As String In Environment.GetCommandLineArgs()
