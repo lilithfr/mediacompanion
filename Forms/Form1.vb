@@ -210,7 +210,7 @@ Public Class Form1
         End If
         Call savedata()
         Call savetvdata()
-        userPrefs.startuptab = TabControl1.SelectedIndex
+        userPrefs.startuptab = TabDebug.SelectedIndex
         Dim save As New Preferences
         Call save.saveconfig()
         Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
@@ -529,7 +529,10 @@ Public Class Form1
                 Me.WindowState = FormWindowState.Maximized
             End If
 
-
+            Dim dpi As Graphics = Me.CreateGraphics
+            'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
+            '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            DebugSytemDPITextBox.Text = dpi.DpiX
             'If Form1.userprefs.maximised = True Then
             '    Me.WindowState = FormWindowState.Maximized
             'Else
@@ -569,15 +572,15 @@ Public Class Form1
                 SplitContainer1.SplitterDistance = userPrefs.splt1
                 SplitContainer2.SplitterDistance = userPrefs.splt2
                 SplitContainer5.SplitterDistance = userPrefs.splt5
-                TabControl1.SelectedIndex = 1
+                TabDebug.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = userPrefs.splt3
                 SplitContainer4.SplitterDistance = userPrefs.splt4
-                TabControl1.SelectedIndex = 0
+                TabDebug.SelectedIndex = 0
             Else
                 SplitContainer1.SplitterDistance = userPrefs.splt1
                 SplitContainer2.SplitterDistance = userPrefs.splt2
                 SplitContainer5.SplitterDistance = userPrefs.splt5
-                TabControl1.SelectedIndex = 1
+                TabDebug.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = userPrefs.splt3
                 SplitContainer4.SplitterDistance = userPrefs.splt4
             End If
@@ -1357,7 +1360,7 @@ Public Class Form1
             MyNode = TreeView1.Nodes(0) 'First Level
             'MyNode = MyNode.Nodes(6)  ' Second Level
             TreeView1.SelectedNode = MyNode
-            TabControl1.Focus()
+            TabDebug.Focus()
             TabControl3.Focus()
             TreeView1.Focus()
         Catch ex As Exception
@@ -13119,8 +13122,8 @@ Public Class Form1
         e.Cancel = True
     End Sub
 
-    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
-        Dim tab As String = TabControl1.SelectedTab.Text.ToLower
+    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabDebug.SelectedIndexChanged
+        Dim tab As String = TabDebug.SelectedTab.Text.ToLower
         If tab = "movies" Then
             tab1 = 0
             userPrefs.startuptab = 0
@@ -13128,11 +13131,11 @@ Public Class Form1
             tab1 = 1
             userPrefs.startuptab = 1
         ElseIf tab = "" Then
-            TabControl1.SelectedIndex = tab1
+            TabDebug.SelectedIndex = tab1
             Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
             Process.Start(webAddress)
         ElseIf tab = "general preferences" Then
-            tab1 = TabControl1.SelectedIndex
+            tab1 = TabDebug.SelectedIndex
             Call setupgeneralpreferences()
         ElseIf tab = "export" Then
             Call setupexporttab()
@@ -25143,15 +25146,15 @@ Public Class Form1
             SplitContainer1.SplitterDistance = userPrefs.splt1
             SplitContainer2.SplitterDistance = userPrefs.splt2
             SplitContainer5.SplitterDistance = userPrefs.splt5
-            TabControl1.SelectedIndex = 1
+            TabDebug.SelectedIndex = 1
             SplitContainer3.SplitterDistance = userPrefs.splt3
             SplitContainer4.SplitterDistance = userPrefs.splt4
-            TabControl1.SelectedIndex = 0
+            TabDebug.SelectedIndex = 0
         Else
             SplitContainer1.SplitterDistance = userPrefs.splt1
             SplitContainer2.SplitterDistance = userPrefs.splt2
             SplitContainer5.SplitterDistance = userPrefs.splt5
-            TabControl1.SelectedIndex = 1
+            TabDebug.SelectedIndex = 1
             SplitContainer3.SplitterDistance = userPrefs.splt3
             SplitContainer4.SplitterDistance = userPrefs.splt4
         End If
