@@ -961,9 +961,6 @@ eg "C:\MovieStuff\ActorThumbs"</value>
         o8U4elShScORt736HoNFFFesfnoUUUUAFFFFABRRRQAUUUUAf//Z
 </value>
   </data>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>444, 17</value>
-  </metadata>
   <data name="Button66.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -2040,6 +2037,9 @@ eg "C:\MovieStuff\ActorThumbs"</value>
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>444, 17</value>
+  </metadata>
   <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1187, 17</value>
   </metadata>
@@ -3131,9 +3131,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>444, 17</value>
-  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>632, 17</value>
   </metadata>
@@ -3373,6 +3370,46 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         Af8EAAF/AfwFAAFwDwAB/wMAAQEB/wH+BQAB8A8AAf8BwAIAAQEH/wHwDwAL
 </value>
   </data>
+  <data name="Label56.Text" xml:space="preserve">
+    <value>If one of the above TV Shows is the Correct one then
+select your preferred options from the panel opposite
+and select scrape. If none of the above are correct
+then alter the search term and search again.</value>
+  </data>
+  <data name="Label81.Text" xml:space="preserve">
+    <value>Root Folders are folders that contain
+multiple TV Shows
+
+For example :-
+D:/Root/TV Show 1
+D:/Root/TV Show 2 
+You would add the path:
+D:/Root
+
+Folders added to this list can be
+checked for new TV Show folders
+and can be added to the Seperate
+Folders List automatically on startup.
+
+To check for new TV Folders when the
+program is running, use the 
+"Check Roots for New TV Shows"
+menu item, located in the "TV Shows"
+Drop down menu.</value>
+  </data>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>Seperate folders are those that
+contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method
+means that all shows must be
+added manually.</value>
+  </data>
   <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>135, 134</value>
   </metadata>
@@ -3445,46 +3482,6 @@ and fanart.jpg to keep compatability with other media managers.
 
 This is not reccomended since it breaks MCs ability to see the 
 media file, used for playback and filedetails information.</value>
-  </data>
-  <data name="Label56.Text" xml:space="preserve">
-    <value>If one of the above TV Shows is the Correct one then
-select your preferred options from the panel opposite
-and select scrape. If none of the above are correct
-then alter the search term and search again.</value>
-  </data>
-  <data name="Label81.Text" xml:space="preserve">
-    <value>Root Folders are folders that contain
-multiple TV Shows
-
-For example :-
-D:/Root/TV Show 1
-D:/Root/TV Show 2 
-You would add the path:
-D:/Root
-
-Folders added to this list can be
-checked for new TV Show folders
-and can be added to the Seperate
-Folders List automatically on startup.
-
-To check for new TV Folders when the
-program is running, use the 
-"Check Roots for New TV Shows"
-menu item, located in the "TV Shows"
-Drop down menu.</value>
-  </data>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>Seperate folders are those that
-contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method
-means that all shows must be
-added manually.</value>
   </data>
   <data name="Label138.Text" xml:space="preserve">
     <value>If you have enabled the option to 'Save Actor Thumbs to the
@@ -3562,9 +3559,6 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>475, 134</value>
   </metadata>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>682, 134</value>
-  </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>811, 134</value>
   </metadata>
@@ -3578,7 +3572,7 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
     <value>797, 95</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>121</value>
+    <value>64</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
