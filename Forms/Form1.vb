@@ -533,6 +533,9 @@ Public Class Form1
             'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
             '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
             DebugSytemDPITextBox.Text = dpi.DpiX
+
+
+
             'If Form1.userprefs.maximised = True Then
             '    Me.WindowState = FormWindowState.Maximized
             'Else
@@ -23101,7 +23104,7 @@ Public Class Form1
             Button73.Enabled = False
             Button61.Enabled = False
 
-            RadioButton51.Checked = True
+
 
             RadioButton51.Visible = True
             RadioButton52.Visible = True
