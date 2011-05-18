@@ -629,6 +629,7 @@ Public Class Form1
             GroupBox_IMDB_Scraper_Preferences.Location = GroupBox9.Location
             GroupBox_TMDB_Scraper_Preferences.Location = GroupBox9.Location
             'ToolStrip1.Enabled = True
+            DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
         End If
     End Sub
 
@@ -646,6 +647,8 @@ Public Class Form1
         If userPrefs.formwidth <> Me.Width Or userPrefs.formheight <> Me.Height Then
             userPrefs.formwidth = Me.Width
             userPrefs.formheight = Me.Height
+            DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
+
             Dim save As New Preferences
             Call save.saveconfig()
             Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
@@ -30566,21 +30569,29 @@ Public Class Form1
     End Sub
 
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
-        DebugSpiltter1Pos.Text = SplitContainer1.SplitterDistance
+        DebugSplitter1PosLabel.Text = SplitContainer1.SplitterDistance
 
     End Sub
 
     Private Sub SplitContainer5_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer5.SplitterMoved
-        DebugSplitContainer5Label.Text = SplitContainer5.SplitterDistance
+        DebugSplitter5PosLabel.Text = SplitContainer5.SplitterDistance
     End Sub
 
     Private Sub ExtraDebugEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExtraDebugEnable.CheckedChanged
         If ExtraDebugEnable.Checked = True Then
-            DebugSpiltter1Pos.Visible = True
-            DebugSplitContainer5Label.Visible = True
+            DebugSplitter1PosLabel.Visible = True
+            DebugSplitter2PosLabel.Visible = True
+            DebugSplitter5PosLabel.Visible = True
+            DebugScreenSizeLabel.Visible = True
         Else
-            DebugSpiltter1Pos.Visible = False
-            DebugSplitContainer5Label.Visible = False
+            DebugSplitter1PosLabel.Visible = False
+            DebugSplitter2PosLabel.Visible = False
+            DebugSplitter5PosLabel.Visible = False
+            DebugScreenSizeLabel.Visible = False
         End If
+    End Sub
+
+    Private Sub SplitContainer2_SplitterMoved(sender As System.Object, e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer2.SplitterMoved
+        DebugSplitter2PosLabel.Text = SplitContainer2.SplitterDistance
     End Sub
 End Class
