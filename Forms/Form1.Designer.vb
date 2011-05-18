@@ -2498,7 +2498,7 @@ Me.RadioButton21.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton21.Name = "RadioButton21"
 Me.RadioButton21.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton21.TabIndex = 70
-Me.RadioButton21.Text = "   Runtime    "
+Me.RadioButton21.Text = "Runtime"
 Me.RadioButton21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton21.UseVisualStyleBackColor = true
 '
@@ -2511,7 +2511,7 @@ Me.RadioButton20.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton20.Name = "RadioButton20"
 Me.RadioButton20.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton20.TabIndex = 69
-Me.RadioButton20.Text = " Date Added"
+Me.RadioButton20.Text = "Date Added"
 Me.RadioButton20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton20.UseVisualStyleBackColor = true
 '
@@ -2524,7 +2524,7 @@ Me.RadioButton19.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton19.Name = "RadioButton19"
 Me.RadioButton19.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton19.TabIndex = 68
-Me.RadioButton19.Text = "  Sort Order  "
+Me.RadioButton19.Text = "Sort Order"
 Me.RadioButton19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton19.UseVisualStyleBackColor = true
 '
@@ -2550,7 +2550,7 @@ Me.RadioButton7.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton7.Name = "RadioButton7"
 Me.RadioButton7.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton7.TabIndex = 3
-Me.RadioButton7.Text = "     Rating     "
+Me.RadioButton7.Text = "Rating"
 Me.RadioButton7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton7.UseVisualStyleBackColor = true
 '
@@ -2563,7 +2563,7 @@ Me.RadioButton5.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton5.Name = "RadioButton5"
 Me.RadioButton5.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton5.TabIndex = 2
-Me.RadioButton5.Text = "   Modified    "
+Me.RadioButton5.Text = "Modified"
 Me.RadioButton5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton5.UseVisualStyleBackColor = true
 '
@@ -2576,7 +2576,7 @@ Me.RadioButton4.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton4.Name = "RadioButton4"
 Me.RadioButton4.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton4.TabIndex = 1
-Me.RadioButton4.Text = " Movie Year "
+Me.RadioButton4.Text = "Movie Year"
 Me.RadioButton4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton4.UseVisualStyleBackColor = true
 '
@@ -2589,7 +2589,7 @@ Me.RadioButton3.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton3.Name = "RadioButton3"
 Me.RadioButton3.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton3.TabIndex = 0
-Me.RadioButton3.Text = "       A - Z       "
+Me.RadioButton3.Text = "A - Z"
 Me.RadioButton3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton3.UseVisualStyleBackColor = true
 '
@@ -2626,7 +2626,7 @@ Me.RadioButton2.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton2.Name = "RadioButton2"
 Me.RadioButton2.Size = New System.Drawing.Size(80, 25)
 Me.RadioButton2.TabIndex = 1
-Me.RadioButton2.Text = "  File Name  "
+Me.RadioButton2.Text = "File Name"
 Me.RadioButton2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.RadioButton2.UseVisualStyleBackColor = true
 '
@@ -9996,7 +9996,6 @@ Me.DebugSytemDPITextBox.Location = New System.Drawing.Point(119, 35)
 Me.DebugSytemDPITextBox.Name = "DebugSytemDPITextBox"
 Me.DebugSytemDPITextBox.Size = New System.Drawing.Size(100, 21)
 Me.DebugSytemDPITextBox.TabIndex = 0
-Me.DebugSytemDPITextBox.Visible = false
 '
 'Label23
 '
