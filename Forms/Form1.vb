@@ -1479,8 +1479,8 @@ Public Class Form1
         Call loadmovielist()
         Try
             'ignore = False
-            ComboBox1.SelectedIndex = 0
-            If ComboBox1.SelectedItem.value <> "" Then
+            MovieListComboBox.SelectedIndex = 0
+            If MovieListComboBox.SelectedItem.value <> "" Then
                 'loadinfofile()
             End If
         Catch ex As Exception
@@ -4932,8 +4932,8 @@ Public Class Form1
         Call loadmovielist()
         Try
             'ignore = False
-            ComboBox1.SelectedIndex = 0
-            If ComboBox1.SelectedItem.value <> "" Then
+            MovieListComboBox.SelectedIndex = 0
+            If MovieListComboBox.SelectedItem.value <> "" Then
                 'loadinfofile()
             End If
         Catch ex As Exception
@@ -4978,7 +4978,7 @@ Public Class Form1
         Call ApplyFilters()
         Call loadinfofile()
         Try
-            ComboBox1.SelectedIndex = 0
+            MovieListComboBox.SelectedIndex = 0
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -5855,25 +5855,25 @@ Public Class Form1
 
     'create list to browse
     Private Sub loadmovielist()
-        Dim tempint As Integer = ComboBox1.SelectedIndex
+        Dim tempint As Integer = MovieListComboBox.SelectedIndex
         Dim oldmovie As String = ""
         Try
-            oldmovie = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
+            oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
         End Try
-        ComboBox1.Items.Clear()
+        MovieListComboBox.Items.Clear()
 
         For Each movie In filteredList
             If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False Then
                 If RadioButton1.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filename))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filename))
                 ElseIf RadioButton6.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.foldername))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.foldername))
                 End If
             ElseIf RadioButton21.Checked = True Then
 
@@ -5903,11 +5903,11 @@ Public Class Form1
                     tempstring = "000 min - "
                 End Try
                 If RadioButton1.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.titleandyear))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
                 ElseIf RadioButton6.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
             ElseIf RadioButton7.Checked = True Then
                 Dim tempstring As String = movie.rating
@@ -5933,11 +5933,11 @@ Public Class Form1
                 End If
                 tempstring = tempstring & " - "
                 If RadioButton1.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.titleandyear))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
                 ElseIf RadioButton6.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
             ElseIf RadioButton4.Checked = True Then
                 Dim tempstring As String = movie.year
@@ -5968,35 +5968,35 @@ Public Class Form1
                 End If
                 tempstring = tempstring & " - "
                 If RadioButton1.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.title))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.title))
                 ElseIf RadioButton2.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
                 ElseIf RadioButton6.Checked = True Then
-                    ComboBox1.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
             End If
 
         Next
         If oldmovie <> "" Then
-            Dim counted As Integer = ComboBox1.Items.Count - 1
+            Dim counted As Integer = MovieListComboBox.Items.Count - 1
             For f = 0 To counted
-                If CType(ComboBox1.Items(f), ValueDescriptionPair).value = oldmovie Then
-                    ComboBox1.SelectedIndex = f
+                If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = oldmovie Then
+                    MovieListComboBox.SelectedIndex = f
                     Exit For
                 End If
             Next
-            If ComboBox1.SelectedIndex = -1 Then
+            If MovieListComboBox.SelectedIndex = -1 Then
                 Try
-                    ComboBox1.SelectedIndex = tempint
+                    MovieListComboBox.SelectedIndex = tempint
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
 #End If
                     Try
-                        ComboBox1.SelectedIndex = tempint - 1
+                        MovieListComboBox.SelectedIndex = tempint - 1
                     Catch
                         Try
-                            ComboBox1.SelectedIndex = 0
+                            MovieListComboBox.SelectedIndex = 0
                         Catch
                         End Try
                     End Try
@@ -6034,7 +6034,7 @@ Public Class Form1
         End If
 
         If RadioButton4.Checked = True Then
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
                 ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.year))
@@ -6052,7 +6052,7 @@ Public Class Form1
         End If
 
         If RadioButton21.Checked = True Then
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
                 Dim tempstring As String = movie.runtime
@@ -6097,7 +6097,7 @@ Public Class Form1
 
 
         If RadioButton20.Checked = True Then
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
                 If IsNumeric(movie.createdate) Then
@@ -6122,7 +6122,7 @@ Public Class Form1
 
 
         If RadioButton19.Checked = True Then
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
                 If movie.sortorder <> Nothing Then
@@ -6151,7 +6151,7 @@ Public Class Form1
 
 
         If RadioButton5.Checked = True Then
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
                 ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filedate.ToString))
@@ -6170,7 +6170,7 @@ Public Class Form1
 
         End If
         If RadioButton7.Checked = True Then
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             ListBox2.Sorted = False
             For Each movie In filteredList
@@ -6183,7 +6183,7 @@ Public Class Form1
                 End If
             Next
             ListBox2.Sorted = True
-            ComboBox1.Sorted = False
+            MovieListComboBox.Sorted = False
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
@@ -6498,9 +6498,9 @@ Public Class Form1
     Private Sub TempStartMoviesReScraping()
         Dim FullFileContent As String = ""
         Dim Scraper As String = userPrefs.XBMC_Scraper
-        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).value))
+        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, fileFunction.getfilename(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value))
         If FullFileContent.ToLower <> "error" Then
-            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(CType(ComboBox1.SelectedItem, ValueDescriptionPair).value), FullFileContent)
+            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value), FullFileContent)
             RefreshMovieList()
         End If
         If messbox.Visible = True Then messbox.Close()
@@ -7065,10 +7065,10 @@ Public Class Form1
 
     'quicksavenfo
     Private Sub quicksavemovie()
-        If ComboBox1.SelectedItems.Count = 0 Then
+        If MovieListComboBox.SelectedItems.Count = 0 Then
             Exit Sub
         End If
-        If ComboBox1.SelectedItems.Count = 1 Then
+        If MovieListComboBox.SelectedItems.Count = 1 Then
             Dim tempstring As String = ""
             Dim oldmovietitle As String = workingMovieDetails.fullmoviebody.title
             '-------------- Aqui
@@ -7167,8 +7167,8 @@ Public Class Form1
             mess.Show()
             mess.Refresh()
             Application.DoEvents()
-            Dim startindex As Integer = ComboBox1.SelectedIndex
-            For Each item In ComboBox1.SelectedItems
+            Dim startindex As Integer = MovieListComboBox.SelectedIndex
+            For Each item In MovieListComboBox.SelectedItems
                 Dim filepath As String = item.value
                 Dim movie As FullMovieDetails
                 movie = nfoFunction.loadfullmovienfo(filepath)
@@ -7248,7 +7248,7 @@ Public Class Form1
                     End If
                 Next
             Next
-            workingMovie.fullpathandfilename = ComboBox1.Items(startindex).description
+            workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
             Call ApplyFilters()
             Call loadinfofile()
 
@@ -7258,7 +7258,7 @@ Public Class Form1
 
     'change watched status
     Private Sub Button13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button13.Click
-        If ComboBox1.SelectedItems.Count = 1 Then
+        If MovieListComboBox.SelectedItems.Count = 1 Then
             If Button13.Text = "&Watched" Then
                 Button13.Text = "Un&watched"
                 Button13.BackColor = Color.Red
@@ -7271,7 +7271,7 @@ Public Class Form1
                 workingMovieDetails.fullmoviebody.playcount = "1"
             End If
             Call quicksavemovie()
-        ElseIf ComboBox1.SelectedItems.Count > 1 Then
+        ElseIf MovieListComboBox.SelectedItems.Count > 1 Then
             Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")
             mess.Show()
             mess.Refresh()
@@ -7292,7 +7292,7 @@ Public Class Form1
                 Button13.Refresh()
                 watched = "1"
             End If
-            For Each item In ComboBox1.SelectedItems
+            For Each item In MovieListComboBox.SelectedItems
                 Dim filepath As String = item.value
                 Dim movie As FullMovieDetails
                 movie = nfoFunction.loadfullmovienfo(filepath)
@@ -9634,9 +9634,9 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox1.DoubleClick
+    Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
         Dim tempstring As String
-        tempstring = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
+        tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
         Dim playlist As New List(Of String)
         tempstring = filefunction.getfilename(tempstring)
         playlist = filefunction.getmedialist(tempstring)
@@ -10036,7 +10036,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ComboBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles ComboBox1.DragDrop
+    Private Sub ComboBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragDrop
         Dim files() As String
         files = e.Data.GetData(DataFormats.FileDrop)
         For f = 0 To UBound(files)
@@ -10110,15 +10110,15 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ComboBox1_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles ComboBox1.DragEnter
+    Private Sub ComboBox1_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragEnter
         e.Effect = DragDropEffects.Copy
     End Sub
 
-    Private Sub ComboBox1_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox1.MouseEnter
-        ComboBox1.Focus()
+    Private Sub ComboBox1_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.MouseEnter
+        MovieListComboBox.Focus()
     End Sub
 
-    Private Sub ComboBox1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ComboBox1.MouseMove
+    Private Sub ComboBox1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseMove
         ToolTip1.IsBalloon = False
         'Dim tootip5 As New ToolTip
         'tootip4.Active = False
@@ -10126,10 +10126,10 @@ Public Class Form1
         'tootip5.SetToolTip(Me.ComboBox1, "")
         Dim MousePositionInClientCoords As Point = New Point(e.X, e.Y)
         Dim indexunderthemouse As Integer
-        indexunderthemouse = Me.ComboBox1.IndexFromPoint(MousePositionInClientCoords)
+        indexunderthemouse = Me.MovieListComboBox.IndexFromPoint(MousePositionInClientCoords)
         If indexunderthemouse > -1 Then
             Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
-            Dim tempstring As String = CType(ComboBox1.Items(indexunderthemouse), ValueDescriptionPair).value
+            Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).value
             If overItem <> tempstring Then
                 overItem = tempstring
                 For Each movie In fullMovieList
@@ -10154,18 +10154,18 @@ Public Class Form1
                     .AutomaticDelay = 1000
                     .AutoPopDelay = 3000
                 End With
-                tootip5.SetToolTip(Me.ComboBox1, s)
+                tootip5.SetToolTip(Me.MovieListComboBox, s)
             End If
         End If
 
     End Sub
 
-    Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ComboBox1.MouseUp
+    Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
         If e.Button = MouseButtons.Right Then
             Dim pt As Point
             pt.X = e.X
             pt.Y = e.Y
-            ComboBox1.SelectedIndex = ComboBox1.IndexFromPoint(pt)
+            MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
         End If
     End Sub
 
@@ -10173,11 +10173,11 @@ Public Class Form1
         ApplyFilters()
     End Sub
 
-    Private Sub ComboBox1_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedValueChanged
+    Private Sub ComboBox1_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
 
         Try
             Dim needtoload As Boolean = False
-            If ComboBox1.SelectedItems.Count = 1 Then
+            If MovieListComboBox.SelectedItems.Count = 1 Then
                 If titletxt.Visible = False Then
                     needtoload = True
                 End If
@@ -10189,7 +10189,7 @@ Public Class Form1
                 TextBox34.Visible = True
                 Dim done As Boolean = False
                 For Each movie In filteredList
-                    If movie.fullpathandfilename Is CType(ComboBox1.SelectedItem, ValueDescriptionPair).value Then
+                    If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value Then
                         If IO.File.Exists(movie.fullpathandfilename) Then
                             If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
                                 workingMovie.filedate = movie.filedate
@@ -10245,7 +10245,7 @@ Public Class Form1
                         End If
                     End If
                 Next
-            ElseIf ComboBox1.SelectedItems.Count = 0 Then
+            ElseIf MovieListComboBox.SelectedItems.Count = 0 Then
                 titletxt.Text = ""
                 TextBox3.Text = ""
                 outlinetxt.Text = ""
@@ -10294,7 +10294,7 @@ Public Class Form1
                 'ComboBox3.SelectedIndex = -1
                 Dim add As Boolean = True
                 Dim watched As String = ""
-                For Each mov In ComboBox1.SelectedItems
+                For Each mov In MovieListComboBox.SelectedItems
                     Dim old As String = watched
                     For Each item In fullMovieList
                         If item.fullpathandfilename = mov.value Then
@@ -19044,8 +19044,8 @@ Public Class Form1
 
         Dim check As Boolean
         check = True
-        If moviecount_bak <> ComboBox1.Items.Count Then
-            moviecount_bak = ComboBox1.Items.Count
+        If moviecount_bak <> MovieListComboBox.Items.Count Then
+            moviecount_bak = MovieListComboBox.Items.Count
             check = False
         End If
         For i = 0 To CheckedListBox1.Items.Count - 1
@@ -19298,10 +19298,10 @@ Public Class Form1
         Dim item As Windows.Forms.PictureBox = sender
         'Dim picbox As PictureBox = item.SourceControl
         Dim tempstring As String = item.Tag
-        For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
-                ComboBox1.SelectedItems.Clear()
-                ComboBox1.SelectedIndex = f
+        For f = 0 To MovieListComboBox.Items.Count - 1
+            If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = tempstring Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = f
                 Application.DoEvents()
                 currentTabIndex = 0
                 Me.TabControl2.SelectedIndex = 0
@@ -19815,10 +19815,10 @@ Public Class Form1
     Private Sub EditMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMovieToolStripMenuItem1.Click
         Dim tempstring As String = ClickedControl
         'Dim picbox As PictureBox = item.SourceControl
-        For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
-                ComboBox1.SelectedItems.Clear()
-                ComboBox1.SelectedIndex = f
+        For f = 0 To MovieListComboBox.Items.Count - 1
+            If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = tempstring Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = f
                 Application.DoEvents()
                 currentTabIndex = 4
                 Me.TabControl2.SelectedIndex = 4
@@ -21285,7 +21285,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button66_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button66.Click
-        ComboBox1.Items.Clear()
+        MovieListComboBox.Items.Clear()
         filteredList.Clear()
         If ComboBox3.SelectedItem <> "None" Then
             For Each movie In fullMovieList
@@ -21924,8 +21924,8 @@ Public Class Form1
         End If
         Try
             'ignore = False
-            ComboBox1.SelectedIndex = 0
-            If ComboBox1.SelectedItem.value <> "" Then
+            MovieListComboBox.SelectedIndex = 0
+            If MovieListComboBox.SelectedItem.value <> "" Then
                 'loadinfofile()
             End If
         Catch ex As Exception
@@ -25982,7 +25982,7 @@ Public Class Form1
                     'CheckedListBox1.Font = newFont
                     TextBox34.Font = newFont
                     ComboBox3.Font = newFont
-                    ComboBox1.Font = newFont
+                    MovieListComboBox.Font = newFont
                     plottxt.Font = newFont
                     'titletxt.Font = newFont
                     ComboBox3.Font = newFont
@@ -26897,10 +26897,10 @@ Public Class Form1
         For Each selecteditem In DataGridView1.SelectedRows
             tempstring = selecteditem.Cells("fullpathandfilename").Value
         Next
-        For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
-                ComboBox1.SelectedItems.Clear()
-                ComboBox1.SelectedIndex = f
+        For f = 0 To MovieListComboBox.Items.Count - 1
+            If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = tempstring Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = f
                 Application.DoEvents()
                 currentTabIndex = 0
                 Me.TabControl2.SelectedIndex = 0
@@ -26966,10 +26966,10 @@ Public Class Form1
         For Each selecteditem In DataGridView1.SelectedRows
             tempstring = selecteditem.Cells("fullpathandfilename").Value
         Next
-        For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
-                ComboBox1.SelectedItems.Clear()
-                ComboBox1.SelectedIndex = f
+        For f = 0 To MovieListComboBox.Items.Count - 1
+            If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = tempstring Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = f
                 For Each tabs In TabControl2.TabPages
                     If tabs.text = "Posters" Then
                         currentTabIndex = tabs.tabindex + 1
@@ -26987,10 +26987,10 @@ Public Class Form1
         For Each selecteditem In DataGridView1.SelectedRows
             tempstring = selecteditem.Cells("fullpathandfilename").Value
         Next
-        For f = 0 To ComboBox1.Items.Count - 1
-            If CType(ComboBox1.Items(f), ValueDescriptionPair).value = tempstring Then
-                ComboBox1.SelectedItems.Clear()
-                ComboBox1.SelectedIndex = f
+        For f = 0 To MovieListComboBox.Items.Count - 1
+            If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = tempstring Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = f
                 For Each tabs In TabControl2.TabPages
                     If tabs.text = "Fanart" Then
                         currentTabIndex = tabs.tabindex + 1
@@ -27025,7 +27025,7 @@ Public Class Form1
         Try
             Dim originalworking As String = workingMovieDetails.fileinfo.fullpathandfilename
             Dim list As New List(Of String)
-            For Each selected In ComboBox1.SelectedItems
+            For Each selected In MovieListComboBox.SelectedItems
                 list.Add(selected.value)
             Next
 
@@ -30045,11 +30045,11 @@ Public Class Form1
 
         listoffilestomove.Clear()
 
-        If ComboBox1.SelectedItems.Count > 0 Then
+        If MovieListComboBox.SelectedItems.Count > 0 Then
 
-            For Each movie In ComboBox1.SelectedItems
+            For Each movie In MovieListComboBox.SelectedItems
                 Dim tempstring As String
-                tempstring = CType(ComboBox1.SelectedItem, ValueDescriptionPair).value
+                tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
                 Dim playlist As New List(Of String)
                 tempstring = filefunction.getfilename(tempstring)
                 playlist = filefunction.getmedialist(tempstring)
@@ -30560,5 +30560,24 @@ Public Class Form1
         Label130.Text = "Times New Roman, 9pt"
         generalprefschanged = True
 
+    End Sub
+
+    Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
+        DebugSpiltter1Pos.Text = SplitContainer1.SplitterDistance
+
+    End Sub
+
+    Private Sub SplitContainer5_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer5.SplitterMoved
+        DebugSplitContainer5Label.Text = SplitContainer5.SplitterDistance
+    End Sub
+
+    Private Sub ExtraDebugEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExtraDebugEnable.CheckedChanged
+        If ExtraDebugEnable.Checked = True Then
+            DebugSpiltter1Pos.Visible = True
+            DebugSplitContainer5Label.Visible = True
+        Else
+            DebugSpiltter1Pos.Visible = False
+            DebugSplitContainer5Label.Visible = False
+        End If
     End Sub
 End Class
