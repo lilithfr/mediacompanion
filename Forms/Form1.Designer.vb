@@ -662,6 +662,7 @@ Me.RadioButton42 = New System.Windows.Forms.RadioButton()
 Me.Label124 = New System.Windows.Forms.Label()
 Me.Label123 = New System.Windows.Forms.Label()
 Me.Label138 = New System.Windows.Forms.Label()
+Me.CheckBox34 = New System.Windows.Forms.CheckBox()
 Me.CheckBox36 = New System.Windows.Forms.CheckBox()
 Me.CheckBox_Use_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
 Me.Label139 = New System.Windows.Forms.Label()
@@ -677,7 +678,6 @@ Me.Panel21 = New System.Windows.Forms.Panel()
 Me.Label111 = New System.Windows.Forms.Label()
 Me.bannerbtn = New System.Windows.Forms.RadioButton()
 Me.posterbtn = New System.Windows.Forms.RadioButton()
-Me.CheckBox34 = New System.Windows.Forms.CheckBox()
 Me.CheckBox35 = New System.Windows.Forms.CheckBox()
 Me.GroupBox15 = New System.Windows.Forms.GroupBox()
 Me.CheckBox40 = New System.Windows.Forms.CheckBox()
@@ -814,6 +814,7 @@ Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+Me.MediaCompanionCodeplexSiteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1090,10 +1091,10 @@ Me.Button6.Visible = false
 '
 Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.CheckBox1.AutoSize = true
-Me.CheckBox1.Location = New System.Drawing.Point(1061, 490)
+Me.CheckBox1.Location = New System.Drawing.Point(1075, 492)
 Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox1.Name = "CheckBox1"
-Me.CheckBox1.Size = New System.Drawing.Size(134, 19)
+Me.CheckBox1.Size = New System.Drawing.Size(120, 17)
 Me.CheckBox1.TabIndex = 114
 Me.CheckBox1.Text = "Save Lo-Res Image"
 Me.ToolTip1.SetToolTip(Me.CheckBox1, "The default image saved is from the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"highest resolution available."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check this bo"& _ 
@@ -1405,7 +1406,7 @@ Me.ToolTip1.SetToolTip(Me.GroupBox11, "You can select a specific locations certi
 Me.ScrapeFullCertCheckBox.AutoSize = true
 Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(24, 271)
 Me.ScrapeFullCertCheckBox.Name = "ScrapeFullCertCheckBox"
-Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(264, 19)
+Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(234, 17)
 Me.ScrapeFullCertCheckBox.TabIndex = 8
 Me.ScrapeFullCertCheckBox.Text = "Scrape Full Cert i.e. UK:15 instead of just 15"
 Me.ScrapeFullCertCheckBox.UseVisualStyleBackColor = true
@@ -1636,7 +1637,7 @@ Me.ToolTip1.SetToolTip(Me.ComboBox7, "Media Companion will not scrape more than 
 'Button95
 '
 Me.Button95.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button95.Location = New System.Drawing.Point(417, 63)
+Me.Button95.Location = New System.Drawing.Point(417, 65)
 Me.Button95.Margin = New System.Windows.Forms.Padding(4)
 Me.Button95.Name = "Button95"
 Me.Button95.Size = New System.Drawing.Size(36, 29)
@@ -1862,7 +1863,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Location = New System.Drawing.Point(11, 50)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Name = "CheckBox_XBMC_Scraper_TMDB_IMDBRatings"
-Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(140, 19)
+Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(124, 17)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.TabIndex = 71
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Text = "Get rating from IMDb"
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.UseVisualStyleBackColor = true
@@ -1884,7 +1885,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Location = New System.Drawing.Point(11, 25)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Name = "CheckBox_XBMC_Scraper_TMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(99, 19)
+Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(89, 17)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Text = "Enable fanart"
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.UseVisualStyleBackColor = true
@@ -2009,7 +2010,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Trailer.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Location = New System.Drawing.Point(11, 164)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Name = "CheckBox_XBMC_Scraper_IMDB_Trailer"
-Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(166, 19)
+Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(147, 17)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Text = "Fall back on IMDB trailers"
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.UseVisualStyleBackColor = true
@@ -2041,7 +2042,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Location = New System.Drawing.Point(11, 118)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(224, 19)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(196, 17)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.TabIndex = 4
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Text = "Enable posters from MoviePosterDB"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.UseVisualStyleBackColor = true
@@ -2052,7 +2053,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Location = New System.Drawing.Point(11, 94)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(201, 19)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(176, 17)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.TabIndex = 3
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Text = "Enable posters from IMPAwards"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.UseVisualStyleBackColor = true
@@ -2063,7 +2064,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Location = New System.Drawing.Point(11, 70)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(224, 19)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(195, 17)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.TabIndex = 2
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Text = "Enable posters from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.UseVisualStyleBackColor = true
@@ -2085,7 +2086,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Location = New System.Drawing.Point(11, 48)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Name = "CheckBox_XBMC_Scraper_IMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(215, 19)
+Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(188, 17)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.TabIndex = 1
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Text = "Enable fanart from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.UseVisualStyleBackColor = true
@@ -2096,7 +2097,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Location = New System.Drawing.Point(11, 24)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Name = "CheckBox_XBMC_Scraper_IMDB_FullCredits"
-Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(148, 19)
+Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(132, 17)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.TabIndex = 0
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Text = "Enable full cast credits"
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.UseVisualStyleBackColor = true
@@ -2749,7 +2750,7 @@ Me.RadioButton50.AutoSize = true
 Me.RadioButton50.Location = New System.Drawing.Point(8, 118)
 Me.RadioButton50.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton50.Name = "RadioButton50"
-Me.RadioButton50.Size = New System.Drawing.Size(106, 19)
+Me.RadioButton50.Size = New System.Drawing.Size(93, 17)
 Me.RadioButton50.TabIndex = 5
 Me.RadioButton50.Text = "Missing Fanart"
 Me.RadioButton50.UseVisualStyleBackColor = true
@@ -2760,7 +2761,7 @@ Me.RadioButton45.AutoSize = true
 Me.RadioButton45.Location = New System.Drawing.Point(8, 19)
 Me.RadioButton45.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton45.Name = "RadioButton45"
-Me.RadioButton45.Size = New System.Drawing.Size(38, 19)
+Me.RadioButton45.Size = New System.Drawing.Size(36, 17)
 Me.RadioButton45.TabIndex = 0
 Me.RadioButton45.Text = "All"
 Me.RadioButton45.UseVisualStyleBackColor = true
@@ -2771,7 +2772,7 @@ Me.RadioButton49.AutoSize = true
 Me.RadioButton49.Location = New System.Drawing.Point(8, 98)
 Me.RadioButton49.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton49.Name = "RadioButton49"
-Me.RadioButton49.Size = New System.Drawing.Size(112, 19)
+Me.RadioButton49.Size = New System.Drawing.Size(98, 17)
 Me.RadioButton49.TabIndex = 4
 Me.RadioButton49.Text = "Missing Posters"
 Me.RadioButton49.UseVisualStyleBackColor = true
@@ -2782,7 +2783,7 @@ Me.RadioButton46.AutoSize = true
 Me.RadioButton46.Location = New System.Drawing.Point(8, 39)
 Me.RadioButton46.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton46.Name = "RadioButton46"
-Me.RadioButton46.Size = New System.Drawing.Size(73, 19)
+Me.RadioButton46.Size = New System.Drawing.Size(69, 17)
 Me.RadioButton46.TabIndex = 1
 Me.RadioButton46.Text = "Watched"
 Me.RadioButton46.UseVisualStyleBackColor = true
@@ -2793,7 +2794,7 @@ Me.RadioButton48.AutoSize = true
 Me.RadioButton48.Location = New System.Drawing.Point(8, 78)
 Me.RadioButton48.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton48.Name = "RadioButton48"
-Me.RadioButton48.Size = New System.Drawing.Size(83, 19)
+Me.RadioButton48.Size = New System.Drawing.Size(75, 17)
 Me.RadioButton48.TabIndex = 3
 Me.RadioButton48.Text = "Duplicates"
 Me.RadioButton48.UseVisualStyleBackColor = true
@@ -2804,7 +2805,7 @@ Me.RadioButton47.AutoSize = true
 Me.RadioButton47.Location = New System.Drawing.Point(8, 59)
 Me.RadioButton47.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton47.Name = "RadioButton47"
-Me.RadioButton47.Size = New System.Drawing.Size(89, 19)
+Me.RadioButton47.Size = New System.Drawing.Size(83, 17)
 Me.RadioButton47.TabIndex = 2
 Me.RadioButton47.Text = "UnWatched"
 Me.RadioButton47.UseVisualStyleBackColor = true
@@ -5274,10 +5275,10 @@ Me.TabPage26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage26.Controls.Add(Me.Button82)
 Me.TabPage26.Controls.Add(Me.TabControl4)
 Me.TabPage26.Controls.Add(Me.CheckBox22)
-Me.TabPage26.Location = New System.Drawing.Point(4, 27)
+Me.TabPage26.Location = New System.Drawing.Point(4, 25)
 Me.TabPage26.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage26.Name = "TabPage26"
-Me.TabPage26.Size = New System.Drawing.Size(1207, 607)
+Me.TabPage26.Size = New System.Drawing.Size(1207, 609)
 Me.TabPage26.TabIndex = 12
 Me.TabPage26.Text = "Movie Preferences"
 Me.TabPage26.UseVisualStyleBackColor = true
@@ -5287,7 +5288,7 @@ Me.TabPage26.UseVisualStyleBackColor = true
 Me.Button82.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button82.Location = New System.Drawing.Point(512, 557)
+Me.Button82.Location = New System.Drawing.Point(512, 559)
 Me.Button82.Margin = New System.Windows.Forms.Padding(4)
 Me.Button82.Name = "Button82"
 Me.Button82.Size = New System.Drawing.Size(152, 29)
@@ -5306,7 +5307,7 @@ Me.TabControl4.Location = New System.Drawing.Point(0, 0)
 Me.TabControl4.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl4.Name = "TabControl4"
 Me.TabControl4.SelectedIndex = 0
-Me.TabControl4.Size = New System.Drawing.Size(1198, 594)
+Me.TabControl4.Size = New System.Drawing.Size(1198, 596)
 Me.TabControl4.TabIndex = 50
 '
 'TabPage27
@@ -5332,7 +5333,7 @@ Me.TabPage27.Location = New System.Drawing.Point(4, 24)
 Me.TabPage27.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage27.Name = "TabPage27"
 Me.TabPage27.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage27.Size = New System.Drawing.Size(1190, 566)
+Me.TabPage27.Size = New System.Drawing.Size(1190, 568)
 Me.TabPage27.TabIndex = 0
 Me.TabPage27.Text = "General"
 '
@@ -5690,7 +5691,7 @@ Me.TabPage28.Location = New System.Drawing.Point(4, 22)
 Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage28.Name = "TabPage28"
 Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage28.Size = New System.Drawing.Size(1190, 566)
+Me.TabPage28.Size = New System.Drawing.Size(1190, 568)
 Me.TabPage28.TabIndex = 1
 Me.TabPage28.Text = "Advanced"
 '
@@ -5789,9 +5790,9 @@ Me.Label88.AutoSize = true
 Me.Label88.Location = New System.Drawing.Point(9, 120)
 Me.Label88.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label88.Name = "Label88"
-Me.Label88.Size = New System.Drawing.Size(331, 45)
+Me.Label88.Size = New System.Drawing.Size(333, 45)
 Me.Label88.TabIndex = 5
-Me.Label88.Text = "Urls added to the nfo file can be browsed frow within XBMC."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Each option added wi"& _ 
+Me.Label88.Text = "Urls added to the nfo file can be browsed from within XBMC."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Each option added wi"& _ 
     "ll slow down the scrape and rescrape"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"functions."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
 '
 'imdb_chk
@@ -8362,10 +8363,10 @@ Me.TabPage24.AutoScroll = true
 Me.TabPage24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage24.Controls.Add(Me.TabControl6)
 Me.TabPage24.Controls.Add(Me.Button92)
-Me.TabPage24.Location = New System.Drawing.Point(4, 27)
+Me.TabPage24.Location = New System.Drawing.Point(4, 25)
 Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage24.Name = "TabPage24"
-Me.TabPage24.Size = New System.Drawing.Size(1207, 607)
+Me.TabPage24.Size = New System.Drawing.Size(1207, 609)
 Me.TabPage24.TabIndex = 9
 Me.TabPage24.Text = "TV Preferences"
 Me.TabPage24.UseVisualStyleBackColor = true
@@ -8381,7 +8382,7 @@ Me.TabControl6.Location = New System.Drawing.Point(1, 0)
 Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl6.Name = "TabControl6"
 Me.TabControl6.SelectedIndex = 0
-Me.TabControl6.Size = New System.Drawing.Size(1203, 554)
+Me.TabControl6.Size = New System.Drawing.Size(1203, 556)
 Me.TabControl6.TabIndex = 15
 '
 'TabPage30
@@ -8391,7 +8392,7 @@ Me.TabPage30.Location = New System.Drawing.Point(4, 24)
 Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage30.Name = "TabPage30"
 Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage30.Size = New System.Drawing.Size(1195, 526)
+Me.TabPage30.Size = New System.Drawing.Size(1195, 528)
 Me.TabPage30.TabIndex = 0
 Me.TabPage30.Text = "General / Scraper"
 Me.TabPage30.UseVisualStyleBackColor = true
@@ -8416,7 +8417,7 @@ Me.GroupBox17.Location = New System.Drawing.Point(4, 4)
 Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox17.Name = "GroupBox17"
 Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-Me.GroupBox17.Size = New System.Drawing.Size(1187, 518)
+Me.GroupBox17.Size = New System.Drawing.Size(1187, 520)
 Me.GroupBox17.TabIndex = 22
 Me.GroupBox17.TabStop = false
 Me.GroupBox17.Text = "Default TV Scraper Settings"
@@ -8592,6 +8593,17 @@ Me.Label138.Name = "Label138"
 Me.Label138.Size = New System.Drawing.Size(328, 165)
 Me.Label138.TabIndex = 32
 Me.Label138.Text = resources.GetString("Label138.Text")
+'
+'CheckBox34
+'
+Me.CheckBox34.AutoSize = true
+Me.CheckBox34.Location = New System.Drawing.Point(4, 333)
+Me.CheckBox34.Margin = New System.Windows.Forms.Padding(4)
+Me.CheckBox34.Name = "CheckBox34"
+Me.CheckBox34.Size = New System.Drawing.Size(224, 34)
+Me.CheckBox34.TabIndex = 33
+Me.CheckBox34.Text = "Enable TV Show Actor Thumbs to be"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"copied for Episode Actor Thumbs "
+Me.CheckBox34.UseVisualStyleBackColor = true
 '
 'CheckBox36
 '
@@ -8780,17 +8792,6 @@ Me.posterbtn.TabStop = true
 Me.posterbtn.Text = "Poster"
 Me.posterbtn.UseVisualStyleBackColor = true
 '
-'CheckBox34
-'
-Me.CheckBox34.AutoSize = true
-Me.CheckBox34.Location = New System.Drawing.Point(4, 333)
-Me.CheckBox34.Margin = New System.Windows.Forms.Padding(4)
-Me.CheckBox34.Name = "CheckBox34"
-Me.CheckBox34.Size = New System.Drawing.Size(224, 34)
-Me.CheckBox34.TabIndex = 33
-Me.CheckBox34.Text = "Enable TV Show Actor Thumbs to be"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"copied for Episode Actor Thumbs "
-Me.CheckBox34.UseVisualStyleBackColor = true
-'
 'CheckBox35
 '
 Me.CheckBox35.AutoSize = true
@@ -8936,11 +8937,11 @@ Me.TabPage31.Controls.Add(Me.TextBox46)
 Me.TabPage31.Controls.Add(Me.TextBox49)
 Me.TabPage31.Controls.Add(Me.Label117)
 Me.TabPage31.Controls.Add(Me.Label119)
-Me.TabPage31.Location = New System.Drawing.Point(4, 24)
+Me.TabPage31.Location = New System.Drawing.Point(4, 22)
 Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage31.Name = "TabPage31"
 Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage31.Size = New System.Drawing.Size(1195, 526)
+Me.TabPage31.Size = New System.Drawing.Size(1195, 528)
 Me.TabPage31.TabIndex = 1
 Me.TabPage31.Text = "Regex"
 Me.TabPage31.UseVisualStyleBackColor = true
@@ -8949,7 +8950,7 @@ Me.TabPage31.UseVisualStyleBackColor = true
 '
 Me.Button89.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button89.Location = New System.Drawing.Point(235, 100)
+Me.Button89.Location = New System.Drawing.Point(235, 102)
 Me.Button89.Margin = New System.Windows.Forms.Padding(4)
 Me.Button89.Name = "Button89"
 Me.Button89.Size = New System.Drawing.Size(218, 29)
@@ -8975,7 +8976,7 @@ Me.ListBox14.TabIndex = 23
 'Button90
 '
 Me.Button90.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button90.Location = New System.Drawing.Point(387, 145)
+Me.Button90.Location = New System.Drawing.Point(387, 147)
 Me.Button90.Margin = New System.Windows.Forms.Padding(4)
 Me.Button90.Name = "Button90"
 Me.Button90.Size = New System.Drawing.Size(66, 29)
@@ -8987,7 +8988,7 @@ Me.Button90.UseVisualStyleBackColor = true
 '
 Me.Button86.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button86.Location = New System.Drawing.Point(235, 420)
+Me.Button86.Location = New System.Drawing.Point(235, 422)
 Me.Button86.Margin = New System.Windows.Forms.Padding(4)
 Me.Button86.Name = "Button86"
 Me.Button86.Size = New System.Drawing.Size(218, 29)
@@ -9003,7 +9004,7 @@ Me.GroupBox18.Controls.Add(Me.TextBox47)
 Me.GroupBox18.Controls.Add(Me.Button88)
 Me.GroupBox18.Controls.Add(Me.TextBox48)
 Me.GroupBox18.Controls.Add(Me.Label118)
-Me.GroupBox18.Location = New System.Drawing.Point(8, 223)
+Me.GroupBox18.Location = New System.Drawing.Point(8, 225)
 Me.GroupBox18.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox18.Name = "GroupBox18"
 Me.GroupBox18.Padding = New System.Windows.Forms.Padding(4)
@@ -9058,7 +9059,7 @@ Me.Label118.Text = "Test String"
 'Button87
 '
 Me.Button87.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button87.Location = New System.Drawing.Point(387, 187)
+Me.Button87.Location = New System.Drawing.Point(387, 189)
 Me.Button87.Margin = New System.Windows.Forms.Padding(4)
 Me.Button87.Name = "Button87"
 Me.Button87.Size = New System.Drawing.Size(66, 29)
@@ -9070,7 +9071,7 @@ Me.Button87.UseVisualStyleBackColor = true
 '
 Me.TextBox46.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox46.Location = New System.Drawing.Point(90, 187)
+Me.TextBox46.Location = New System.Drawing.Point(90, 189)
 Me.TextBox46.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox46.Name = "TextBox46"
 Me.TextBox46.Size = New System.Drawing.Size(288, 21)
@@ -9080,7 +9081,7 @@ Me.TextBox46.TabIndex = 29
 '
 Me.TextBox49.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox49.Location = New System.Drawing.Point(90, 147)
+Me.TextBox49.Location = New System.Drawing.Point(90, 149)
 Me.TextBox49.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox49.Name = "TextBox49"
 Me.TextBox49.Size = New System.Drawing.Size(288, 21)
@@ -9090,7 +9091,7 @@ Me.TextBox49.TabIndex = 24
 '
 Me.Label117.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label117.AutoSize = true
-Me.Label117.Location = New System.Drawing.Point(8, 176)
+Me.Label117.Location = New System.Drawing.Point(8, 178)
 Me.Label117.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label117.Name = "Label117"
 Me.Label117.Size = New System.Drawing.Size(67, 15)
@@ -9101,7 +9102,7 @@ Me.Label117.Text = "Edit Regex"
 '
 Me.Label119.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label119.AutoSize = true
-Me.Label119.Location = New System.Drawing.Point(8, 151)
+Me.Label119.Location = New System.Drawing.Point(8, 153)
 Me.Label119.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label119.Name = "Label119"
 Me.Label119.Size = New System.Drawing.Size(71, 15)
@@ -9112,7 +9113,7 @@ Me.Label119.Text = "New Regex"
 '
 Me.Button92.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button92.Location = New System.Drawing.Point(545, 561)
+Me.Button92.Location = New System.Drawing.Point(545, 563)
 Me.Button92.Margin = New System.Windows.Forms.Padding(4)
 Me.Button92.Name = "Button92"
 Me.Button92.Size = New System.Drawing.Size(94, 30)
@@ -9590,12 +9591,12 @@ Me.TabPage33.Controls.Add(Me.Button105)
 Me.TabPage33.Controls.Add(Me.TextBox43)
 Me.TabPage33.Controls.Add(Me.TextBox41)
 Me.TabPage33.Controls.Add(Me.Label141)
-Me.TabPage33.Location = New System.Drawing.Point(4, 22)
+Me.TabPage33.Location = New System.Drawing.Point(4, 24)
 Me.TabPage33.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage33.Name = "TabPage33"
-Me.TabPage33.Size = New System.Drawing.Size(1215, 620)
+Me.TabPage33.Size = New System.Drawing.Size(1215, 618)
 Me.TabPage33.TabIndex = 1
-Me.TabPage33.Text = "Custom Commands"
+Me.TabPage33.Text = "Custom Commands - Tools Menu"
 Me.TabPage33.UseVisualStyleBackColor = true
 '
 'ListBox17
@@ -9609,14 +9610,14 @@ Me.ListBox17.ItemHeight = 15
 Me.ListBox17.Location = New System.Drawing.Point(244, 184)
 Me.ListBox17.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox17.Name = "ListBox17"
-Me.ListBox17.Size = New System.Drawing.Size(946, 229)
+Me.ListBox17.Size = New System.Drawing.Size(946, 214)
 Me.ListBox17.TabIndex = 8
 '
 'Button106
 '
 Me.Button106.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button106.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button106.Location = New System.Drawing.Point(1056, 458)
+Me.Button106.Location = New System.Drawing.Point(1056, 456)
 Me.Button106.Margin = New System.Windows.Forms.Padding(4)
 Me.Button106.Name = "Button106"
 Me.Button106.Size = New System.Drawing.Size(131, 29)
@@ -9635,7 +9636,7 @@ Me.ListBox16.Location = New System.Drawing.Point(21, 184)
 Me.ListBox16.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox16.MultiColumn = true
 Me.ListBox16.Name = "ListBox16"
-Me.ListBox16.Size = New System.Drawing.Size(214, 229)
+Me.ListBox16.Size = New System.Drawing.Size(214, 214)
 Me.ListBox16.TabIndex = 6
 '
 'Label143
@@ -9949,7 +9950,7 @@ Me.BatchRescrapeWizardToolStripMenuItem.Text = "Batch Rescraper Wizard"
 '
 'HelpToolStripMenuItem
 '
-Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MediaCompanionForumToolStripMenuItem, Me.XBMCMCThreadToolStripMenuItem})
+Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MediaCompanionCodeplexSiteToolStripMenuItem, Me.XBMCMCThreadToolStripMenuItem, Me.MediaCompanionForumToolStripMenuItem})
 Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
 Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(43, 20)
 Me.HelpToolStripMenuItem.Text = "Help"
@@ -9957,13 +9958,14 @@ Me.HelpToolStripMenuItem.Text = "Help"
 'MediaCompanionForumToolStripMenuItem
 '
 Me.MediaCompanionForumToolStripMenuItem.Name = "MediaCompanionForumToolStripMenuItem"
-Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(207, 22)
+Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
 Me.MediaCompanionForumToolStripMenuItem.Text = "Media Companion Forum"
+Me.MediaCompanionForumToolStripMenuItem.Visible = false
 '
 'XBMCMCThreadToolStripMenuItem
 '
 Me.XBMCMCThreadToolStripMenuItem.Name = "XBMCMCThreadToolStripMenuItem"
-Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(207, 22)
+Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
 Me.XBMCMCThreadToolStripMenuItem.Text = "XBMC MC Thread"
 '
 'ProfilesToolStripMenuItem
@@ -9995,6 +9997,8 @@ Me.ToolsToolStripMenuItem.Font = New System.Drawing.Font("Tahoma", 9!, System.Dr
 Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
 Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
 Me.ToolsToolStripMenuItem.Text = "Tools"
+Me.ToolsToolStripMenuItem.ToolTipText = "You can add commands here"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"to run external programs. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Goto General Preferences -"& _ 
+    " Custom Commands"
 '
 'ExportToXBMCToolStripMenuItem
 '
@@ -10083,6 +10087,12 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 '
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
+'
+'MediaCompanionCodeplexSiteToolStripMenuItem
+'
+Me.MediaCompanionCodeplexSiteToolStripMenuItem.Name = "MediaCompanionCodeplexSiteToolStripMenuItem"
+Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+Me.MediaCompanionCodeplexSiteToolStripMenuItem.Text = "Media Companion Codeplex Site"
 '
 'Form1
 '
@@ -11098,6 +11108,7 @@ End Sub
     Friend WithEvents Panel12 As System.Windows.Forms.Panel
     Friend WithEvents Label64 As System.Windows.Forms.Label
     Friend WithEvents PictureBox10 As System.Windows.Forms.PictureBox
+    Friend WithEvents MediaCompanionCodeplexSiteToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 
 

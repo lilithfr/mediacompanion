@@ -7441,7 +7441,7 @@ Public Class Form1
     End Sub
 
     Private Sub XBMCMCThreadToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles XBMCMCThreadToolStripMenuItem.Click
-        Dim webAddress As String = "http://xbmc.org/forum/showthread.php?t=53640"
+        Dim webAddress As String = "http://forum.xbmc.org/showthread.php?t=53640"
         Process.Start(webAddress)
     End Sub
 
@@ -30602,5 +30602,10 @@ Public Class Form1
             userPrefs.scrapefullcert = False
         End If
         'generalprefschanged = True
+    End Sub
+
+    Private Sub MediaCompanionCodeplexSiteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionCodeplexSiteToolStripMenuItem.Click
+        Dim webAddress As String = "http://mediacompanion.codeplex.com/"
+        Process.Start(webAddress)
     End Sub
 End Class
