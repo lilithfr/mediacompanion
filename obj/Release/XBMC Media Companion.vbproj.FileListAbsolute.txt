@@ -546,5 +546,6 @@ C:\MC SVN\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\MC SVN\obj\Release\Media Companion.exe
 C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
 C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
-C:\MC SVN\obj\Release\ResGen.read.1.tlog
-C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog

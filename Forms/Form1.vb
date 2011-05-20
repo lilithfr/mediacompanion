@@ -626,8 +626,8 @@ Public Class Form1
             Call loadcommandlist()
             startup = False
             frmSplash.Close()
-            GroupBox_IMDB_Scraper_Preferences.Location = GroupBox9.Location
-            GroupBox_TMDB_Scraper_Preferences.Location = GroupBox9.Location
+            GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+            GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
             'ToolStrip1.Enabled = True
             DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
         End If
@@ -22920,6 +22920,9 @@ Public Class Form1
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
         Else
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
+            GroupBox_MovieIMDBMirror.Enabled = True
+            GroupBox_MovieIMDBMirror.Visible = True
+            GroupBox_MovieIMDBMirror.BringToFront()
         End If
 
         generalprefschanged = False
@@ -23092,8 +23095,8 @@ Public Class Form1
     Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
         If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
             userPrefs.movies_useXBMC_Scraper = True
-            GroupBox9.Enabled = False
-            GroupBox9.Visible = False
+            GroupBox_MovieIMDBMirror.Enabled = False
+            GroupBox_MovieIMDBMirror.Visible = False
             GroupBox_IMDB_Scraper_Preferences.Enabled = True
             GroupBox_IMDB_Scraper_Preferences.Visible = True
             GroupBox_IMDB_Scraper_Preferences.BringToFront()
@@ -23132,14 +23135,11 @@ Public Class Form1
             End If
         Else
             userPrefs.movies_useXBMC_Scraper = False
-            GroupBox9.Enabled = True
-            GroupBox9.Visible = True
-            GroupBox9.BringToFront()
+            GroupBox_MovieIMDBMirror.Enabled = True
+            GroupBox_MovieIMDBMirror.Visible = True
+            GroupBox_MovieIMDBMirror.BringToFront()
 
-            GroupBox_IMDB_Scraper_Preferences.Enabled = False
-            GroupBox_IMDB_Scraper_Preferences.Visible = False
-            'GroupBox_TMDB_Scraper_Preferences.Enabled = False
-            'GroupBox_TMDB_Scraper_Preferences.Visible = False
+            
 
             GroupBox11.Visible = True
             ComboBox7.Visible = True
