@@ -15750,8 +15750,9 @@ Public Class Form1
 
         Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
 
-        If IO.File.Exists(ext) Or alleps(0).thumb = Nothing Then
+        If (IO.File.Exists(ext) Or alleps(0).thumb = Nothing) And userPrefs.autoepisodescreenshot = True Then
             If Not IO.File.Exists(ext) Then
+                tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
                 Call doscreenshot(ext)
             End If
         Else
@@ -15797,7 +15798,8 @@ Public Class Form1
 #End If
                     End Try
                 Else
-                    If Not IO.File.Exists(ext) Then
+                    If Not IO.File.Exists(ext) And userPrefs.autoepisodescreenshot = True Then
+                        tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
                         Call doscreenshot(ext)
                     End If
                 End If

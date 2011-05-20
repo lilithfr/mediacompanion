@@ -5275,10 +5275,10 @@ Me.TabPage26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage26.Controls.Add(Me.Button82)
 Me.TabPage26.Controls.Add(Me.TabControl4)
 Me.TabPage26.Controls.Add(Me.CheckBox22)
-Me.TabPage26.Location = New System.Drawing.Point(4, 27)
+Me.TabPage26.Location = New System.Drawing.Point(4, 25)
 Me.TabPage26.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage26.Name = "TabPage26"
-Me.TabPage26.Size = New System.Drawing.Size(1207, 607)
+Me.TabPage26.Size = New System.Drawing.Size(1207, 609)
 Me.TabPage26.TabIndex = 12
 Me.TabPage26.Text = "Movie Preferences"
 Me.TabPage26.UseVisualStyleBackColor = true
@@ -5288,7 +5288,7 @@ Me.TabPage26.UseVisualStyleBackColor = true
 Me.Button82.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button82.Location = New System.Drawing.Point(512, 557)
+Me.Button82.Location = New System.Drawing.Point(512, 559)
 Me.Button82.Margin = New System.Windows.Forms.Padding(4)
 Me.Button82.Name = "Button82"
 Me.Button82.Size = New System.Drawing.Size(152, 29)
@@ -5307,7 +5307,7 @@ Me.TabControl4.Location = New System.Drawing.Point(0, 0)
 Me.TabControl4.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl4.Name = "TabControl4"
 Me.TabControl4.SelectedIndex = 0
-Me.TabControl4.Size = New System.Drawing.Size(1198, 594)
+Me.TabControl4.Size = New System.Drawing.Size(1198, 596)
 Me.TabControl4.TabIndex = 50
 '
 'TabPage27
@@ -5333,7 +5333,7 @@ Me.TabPage27.Location = New System.Drawing.Point(4, 24)
 Me.TabPage27.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage27.Name = "TabPage27"
 Me.TabPage27.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage27.Size = New System.Drawing.Size(1190, 566)
+Me.TabPage27.Size = New System.Drawing.Size(1190, 568)
 Me.TabPage27.TabIndex = 0
 Me.TabPage27.Text = "General"
 '
@@ -5691,7 +5691,7 @@ Me.TabPage28.Location = New System.Drawing.Point(4, 22)
 Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage28.Name = "TabPage28"
 Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage28.Size = New System.Drawing.Size(1190, 570)
+Me.TabPage28.Size = New System.Drawing.Size(1190, 568)
 Me.TabPage28.TabIndex = 1
 Me.TabPage28.Text = "Advanced"
 '
@@ -6808,10 +6808,10 @@ Me.TabPage21.Controls.Add(Me.TextBox35)
 Me.TabPage21.Controls.Add(Me.PictureBox14)
 Me.TabPage21.Controls.Add(Me.Button64)
 Me.TabPage21.Controls.Add(Me.Button63)
-Me.TabPage21.Location = New System.Drawing.Point(4, 25)
+Me.TabPage21.Location = New System.Drawing.Point(4, 27)
 Me.TabPage21.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage21.Name = "TabPage21"
-Me.TabPage21.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage21.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage21.TabIndex = 7
 Me.TabPage21.Text = "Screenshot"
 Me.TabPage21.UseVisualStyleBackColor = true
@@ -6832,7 +6832,7 @@ Me.PictureBox15.WaitOnLoad = true
 Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label6.AutoSize = true
 Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label6.Location = New System.Drawing.Point(842, 526)
+Me.Label6.Location = New System.Drawing.Point(842, 524)
 Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label6.Name = "Label6"
 Me.Label6.Size = New System.Drawing.Size(140, 30)
@@ -6842,7 +6842,7 @@ Me.Label6.Text = "Location within media in"&Global.Microsoft.VisualBasic.ChrW(13
 'TextBox35
 '
 Me.TextBox35.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox35.Location = New System.Drawing.Point(1014, 530)
+Me.TextBox35.Location = New System.Drawing.Point(1014, 528)
 Me.TextBox35.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox35.Name = "TextBox35"
 Me.TextBox35.Size = New System.Drawing.Size(58, 21)
@@ -6857,7 +6857,7 @@ Me.PictureBox14.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or Syste
 Me.PictureBox14.Location = New System.Drawing.Point(94, 24)
 Me.PictureBox14.Margin = New System.Windows.Forms.Padding(4)
 Me.PictureBox14.Name = "PictureBox14"
-Me.PictureBox14.Size = New System.Drawing.Size(979, 460)
+Me.PictureBox14.Size = New System.Drawing.Size(979, 458)
 Me.PictureBox14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
 Me.PictureBox14.TabIndex = 2
 Me.PictureBox14.TabStop = false
@@ -6866,7 +6866,7 @@ Me.PictureBox14.TabStop = false
 '
 Me.Button64.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button64.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button64.Location = New System.Drawing.Point(844, 564)
+Me.Button64.Location = New System.Drawing.Point(844, 562)
 Me.Button64.Margin = New System.Windows.Forms.Padding(4)
 Me.Button64.Name = "Button64"
 Me.Button64.Size = New System.Drawing.Size(229, 29)
@@ -6878,7 +6878,7 @@ Me.Button64.UseVisualStyleBackColor = true
 '
 Me.Button63.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Button63.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button63.Location = New System.Drawing.Point(94, 564)
+Me.Button63.Location = New System.Drawing.Point(94, 562)
 Me.Button63.Margin = New System.Windows.Forms.Padding(4)
 Me.Button63.Name = "Button63"
 Me.Button63.Size = New System.Drawing.Size(160, 29)
@@ -8363,10 +8363,10 @@ Me.TabPage24.AutoScroll = true
 Me.TabPage24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage24.Controls.Add(Me.TabControl6)
 Me.TabPage24.Controls.Add(Me.Button92)
-Me.TabPage24.Location = New System.Drawing.Point(4, 25)
+Me.TabPage24.Location = New System.Drawing.Point(4, 27)
 Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage24.Name = "TabPage24"
-Me.TabPage24.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage24.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage24.TabIndex = 9
 Me.TabPage24.Text = "TV Preferences"
 Me.TabPage24.UseVisualStyleBackColor = true
@@ -8382,7 +8382,7 @@ Me.TabControl6.Location = New System.Drawing.Point(1, 0)
 Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl6.Name = "TabControl6"
 Me.TabControl6.SelectedIndex = 0
-Me.TabControl6.Size = New System.Drawing.Size(1203, 556)
+Me.TabControl6.Size = New System.Drawing.Size(1203, 554)
 Me.TabControl6.TabIndex = 15
 '
 'TabPage30
@@ -8392,7 +8392,7 @@ Me.TabPage30.Location = New System.Drawing.Point(4, 24)
 Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage30.Name = "TabPage30"
 Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage30.Size = New System.Drawing.Size(1195, 528)
+Me.TabPage30.Size = New System.Drawing.Size(1195, 526)
 Me.TabPage30.TabIndex = 0
 Me.TabPage30.Text = "General / Scraper"
 Me.TabPage30.UseVisualStyleBackColor = true
@@ -8417,7 +8417,7 @@ Me.GroupBox17.Location = New System.Drawing.Point(4, 4)
 Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox17.Name = "GroupBox17"
 Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-Me.GroupBox17.Size = New System.Drawing.Size(1187, 520)
+Me.GroupBox17.Size = New System.Drawing.Size(1187, 518)
 Me.GroupBox17.TabIndex = 22
 Me.GroupBox17.TabStop = false
 Me.GroupBox17.Text = "Default TV Scraper Settings"
@@ -9113,7 +9113,7 @@ Me.Label119.Text = "New Regex"
 '
 Me.Button92.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button92.Location = New System.Drawing.Point(545, 563)
+Me.Button92.Location = New System.Drawing.Point(545, 561)
 Me.Button92.Margin = New System.Windows.Forms.Padding(4)
 Me.Button92.Name = "Button92"
 Me.Button92.Size = New System.Drawing.Size(94, 30)
