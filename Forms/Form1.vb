@@ -22996,7 +22996,7 @@ Public Class Form1
         Try
             Dim mSelectedIndex, mOtherIndex As Integer
             If Me.ListBox11.SelectedIndex <> Me.ListBox11.Items.Count - 1 Then
-                mSelectedIndex = Me.ListBox10.SelectedIndex
+                mSelectedIndex = Me.ListBox11.SelectedIndex
                 mOtherIndex = mSelectedIndex + 1
                 ListBox11.Items.Insert(mSelectedIndex, ListBox11.Items(mOtherIndex))
                 ListBox11.Items.RemoveAt(mOtherIndex + 1)

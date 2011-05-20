@@ -787,8 +787,9 @@ Me.ReloadShowCacheToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
 Me.SearchForMissingEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.BatchRescrapeWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.MediaCompanionForumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.MediaCompanionCodeplexSiteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.XBMCMCThreadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.MediaCompanionForumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.ProfilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -814,7 +815,6 @@ Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-Me.MediaCompanionCodeplexSiteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1637,7 +1637,7 @@ Me.ToolTip1.SetToolTip(Me.ComboBox7, "Media Companion will not scrape more than 
 'Button95
 '
 Me.Button95.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button95.Location = New System.Drawing.Point(417, 65)
+Me.Button95.Location = New System.Drawing.Point(417, 67)
 Me.Button95.Margin = New System.Windows.Forms.Padding(4)
 Me.Button95.Name = "Button95"
 Me.Button95.Size = New System.Drawing.Size(36, 29)
@@ -5275,10 +5275,10 @@ Me.TabPage26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage26.Controls.Add(Me.Button82)
 Me.TabPage26.Controls.Add(Me.TabControl4)
 Me.TabPage26.Controls.Add(Me.CheckBox22)
-Me.TabPage26.Location = New System.Drawing.Point(4, 25)
+Me.TabPage26.Location = New System.Drawing.Point(4, 27)
 Me.TabPage26.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage26.Name = "TabPage26"
-Me.TabPage26.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage26.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage26.TabIndex = 12
 Me.TabPage26.Text = "Movie Preferences"
 Me.TabPage26.UseVisualStyleBackColor = true
@@ -5288,7 +5288,7 @@ Me.TabPage26.UseVisualStyleBackColor = true
 Me.Button82.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button82.Location = New System.Drawing.Point(512, 559)
+Me.Button82.Location = New System.Drawing.Point(512, 557)
 Me.Button82.Margin = New System.Windows.Forms.Padding(4)
 Me.Button82.Name = "Button82"
 Me.Button82.Size = New System.Drawing.Size(152, 29)
@@ -5307,7 +5307,7 @@ Me.TabControl4.Location = New System.Drawing.Point(0, 0)
 Me.TabControl4.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl4.Name = "TabControl4"
 Me.TabControl4.SelectedIndex = 0
-Me.TabControl4.Size = New System.Drawing.Size(1198, 596)
+Me.TabControl4.Size = New System.Drawing.Size(1198, 594)
 Me.TabControl4.TabIndex = 50
 '
 'TabPage27
@@ -5333,7 +5333,7 @@ Me.TabPage27.Location = New System.Drawing.Point(4, 24)
 Me.TabPage27.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage27.Name = "TabPage27"
 Me.TabPage27.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage27.Size = New System.Drawing.Size(1190, 568)
+Me.TabPage27.Size = New System.Drawing.Size(1190, 566)
 Me.TabPage27.TabIndex = 0
 Me.TabPage27.Text = "General"
 '
@@ -5691,7 +5691,7 @@ Me.TabPage28.Location = New System.Drawing.Point(4, 22)
 Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage28.Name = "TabPage28"
 Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage28.Size = New System.Drawing.Size(1190, 568)
+Me.TabPage28.Size = New System.Drawing.Size(1190, 570)
 Me.TabPage28.TabIndex = 1
 Me.TabPage28.Text = "Advanced"
 '
@@ -8941,7 +8941,7 @@ Me.TabPage31.Location = New System.Drawing.Point(4, 22)
 Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage31.Name = "TabPage31"
 Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage31.Size = New System.Drawing.Size(1195, 528)
+Me.TabPage31.Size = New System.Drawing.Size(1195, 530)
 Me.TabPage31.TabIndex = 1
 Me.TabPage31.Text = "Regex"
 Me.TabPage31.UseVisualStyleBackColor = true
@@ -8950,7 +8950,7 @@ Me.TabPage31.UseVisualStyleBackColor = true
 '
 Me.Button89.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button89.Location = New System.Drawing.Point(235, 102)
+Me.Button89.Location = New System.Drawing.Point(235, 104)
 Me.Button89.Margin = New System.Windows.Forms.Padding(4)
 Me.Button89.Name = "Button89"
 Me.Button89.Size = New System.Drawing.Size(218, 29)
@@ -8976,7 +8976,7 @@ Me.ListBox14.TabIndex = 23
 'Button90
 '
 Me.Button90.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button90.Location = New System.Drawing.Point(387, 147)
+Me.Button90.Location = New System.Drawing.Point(387, 149)
 Me.Button90.Margin = New System.Windows.Forms.Padding(4)
 Me.Button90.Name = "Button90"
 Me.Button90.Size = New System.Drawing.Size(66, 29)
@@ -8988,7 +8988,7 @@ Me.Button90.UseVisualStyleBackColor = true
 '
 Me.Button86.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button86.Location = New System.Drawing.Point(235, 422)
+Me.Button86.Location = New System.Drawing.Point(235, 424)
 Me.Button86.Margin = New System.Windows.Forms.Padding(4)
 Me.Button86.Name = "Button86"
 Me.Button86.Size = New System.Drawing.Size(218, 29)
@@ -9004,7 +9004,7 @@ Me.GroupBox18.Controls.Add(Me.TextBox47)
 Me.GroupBox18.Controls.Add(Me.Button88)
 Me.GroupBox18.Controls.Add(Me.TextBox48)
 Me.GroupBox18.Controls.Add(Me.Label118)
-Me.GroupBox18.Location = New System.Drawing.Point(8, 225)
+Me.GroupBox18.Location = New System.Drawing.Point(8, 227)
 Me.GroupBox18.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox18.Name = "GroupBox18"
 Me.GroupBox18.Padding = New System.Windows.Forms.Padding(4)
@@ -9059,7 +9059,7 @@ Me.Label118.Text = "Test String"
 'Button87
 '
 Me.Button87.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button87.Location = New System.Drawing.Point(387, 189)
+Me.Button87.Location = New System.Drawing.Point(387, 191)
 Me.Button87.Margin = New System.Windows.Forms.Padding(4)
 Me.Button87.Name = "Button87"
 Me.Button87.Size = New System.Drawing.Size(66, 29)
@@ -9071,7 +9071,7 @@ Me.Button87.UseVisualStyleBackColor = true
 '
 Me.TextBox46.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox46.Location = New System.Drawing.Point(90, 189)
+Me.TextBox46.Location = New System.Drawing.Point(90, 191)
 Me.TextBox46.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox46.Name = "TextBox46"
 Me.TextBox46.Size = New System.Drawing.Size(288, 21)
@@ -9081,7 +9081,7 @@ Me.TextBox46.TabIndex = 29
 '
 Me.TextBox49.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TextBox49.Location = New System.Drawing.Point(90, 149)
+Me.TextBox49.Location = New System.Drawing.Point(90, 151)
 Me.TextBox49.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox49.Name = "TextBox49"
 Me.TextBox49.Size = New System.Drawing.Size(288, 21)
@@ -9091,7 +9091,7 @@ Me.TextBox49.TabIndex = 24
 '
 Me.Label117.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label117.AutoSize = true
-Me.Label117.Location = New System.Drawing.Point(8, 178)
+Me.Label117.Location = New System.Drawing.Point(8, 180)
 Me.Label117.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label117.Name = "Label117"
 Me.Label117.Size = New System.Drawing.Size(67, 15)
@@ -9102,7 +9102,7 @@ Me.Label117.Text = "Edit Regex"
 '
 Me.Label119.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label119.AutoSize = true
-Me.Label119.Location = New System.Drawing.Point(8, 153)
+Me.Label119.Location = New System.Drawing.Point(8, 155)
 Me.Label119.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label119.Name = "Label119"
 Me.Label119.Size = New System.Drawing.Size(71, 15)
@@ -9591,10 +9591,10 @@ Me.TabPage33.Controls.Add(Me.Button105)
 Me.TabPage33.Controls.Add(Me.TextBox43)
 Me.TabPage33.Controls.Add(Me.TextBox41)
 Me.TabPage33.Controls.Add(Me.Label141)
-Me.TabPage33.Location = New System.Drawing.Point(4, 24)
+Me.TabPage33.Location = New System.Drawing.Point(4, 22)
 Me.TabPage33.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage33.Name = "TabPage33"
-Me.TabPage33.Size = New System.Drawing.Size(1215, 618)
+Me.TabPage33.Size = New System.Drawing.Size(1215, 620)
 Me.TabPage33.TabIndex = 1
 Me.TabPage33.Text = "Custom Commands - Tools Menu"
 Me.TabPage33.UseVisualStyleBackColor = true
@@ -9617,7 +9617,7 @@ Me.ListBox17.TabIndex = 8
 '
 Me.Button106.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button106.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button106.Location = New System.Drawing.Point(1056, 456)
+Me.Button106.Location = New System.Drawing.Point(1056, 458)
 Me.Button106.Margin = New System.Windows.Forms.Padding(4)
 Me.Button106.Name = "Button106"
 Me.Button106.Size = New System.Drawing.Size(131, 29)
@@ -9955,18 +9955,24 @@ Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
 Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(43, 20)
 Me.HelpToolStripMenuItem.Text = "Help"
 '
-'MediaCompanionForumToolStripMenuItem
+'MediaCompanionCodeplexSiteToolStripMenuItem
 '
-Me.MediaCompanionForumToolStripMenuItem.Name = "MediaCompanionForumToolStripMenuItem"
-Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
-Me.MediaCompanionForumToolStripMenuItem.Text = "Media Companion Forum"
-Me.MediaCompanionForumToolStripMenuItem.Visible = false
+Me.MediaCompanionCodeplexSiteToolStripMenuItem.Name = "MediaCompanionCodeplexSiteToolStripMenuItem"
+Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+Me.MediaCompanionCodeplexSiteToolStripMenuItem.Text = "Media Companion Codeplex Site"
 '
 'XBMCMCThreadToolStripMenuItem
 '
 Me.XBMCMCThreadToolStripMenuItem.Name = "XBMCMCThreadToolStripMenuItem"
 Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
 Me.XBMCMCThreadToolStripMenuItem.Text = "XBMC MC Thread"
+'
+'MediaCompanionForumToolStripMenuItem
+'
+Me.MediaCompanionForumToolStripMenuItem.Name = "MediaCompanionForumToolStripMenuItem"
+Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+Me.MediaCompanionForumToolStripMenuItem.Text = "Media Companion Forum"
+Me.MediaCompanionForumToolStripMenuItem.Visible = false
 '
 'ProfilesToolStripMenuItem
 '
@@ -10087,12 +10093,6 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 '
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
-'
-'MediaCompanionCodeplexSiteToolStripMenuItem
-'
-Me.MediaCompanionCodeplexSiteToolStripMenuItem.Name = "MediaCompanionCodeplexSiteToolStripMenuItem"
-Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
-Me.MediaCompanionCodeplexSiteToolStripMenuItem.Text = "Media Companion Codeplex Site"
 '
 'Form1
 '
