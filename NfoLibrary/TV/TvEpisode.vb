@@ -28,6 +28,7 @@ Public Class TvEpisode
     Public Property Aired As New ProtoProperty(Me, "aired")
     Public Property Studio As New ProtoProperty(Me, "studio")
     Public Property Trailer As New ProtoProperty(Me, "trailer")
+    Public Property Genre As New ProtoProperty(Me, "genre")
 
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")

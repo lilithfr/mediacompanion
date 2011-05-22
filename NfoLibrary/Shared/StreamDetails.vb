@@ -4,8 +4,8 @@ Public Class StreamDetails
     Inherits ProtoPropertyGroup
 
     Public Property Video As New VideoDetails(Me, "video")
-    Public Property Music As New AudioDetails(Me, "audio")
-    Public Property Subtitles As New ProtoProperty(Me, "subtitles")
+    Public Property Audio As New AudioList(Me, "audio")
+    Public Property Subtitles As New SubtitleList(Me, "subtitle")
 
     Private Sub New()
         MyBase.New(Nothing, Nothing)
