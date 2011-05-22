@@ -550,11 +550,6 @@ C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
 C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
 C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog
 C:\Projects\MC\Trunk\bin\Release\Media Companion.exe.config
-C:\Projects\MC\Trunk\obj\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
-C:\Projects\MC\Trunk\obj\Release\Interop.WMPLib.dll
-C:\Projects\MC\Trunk\obj\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
-C:\Projects\MC\Trunk\obj\Release\AxInterop.WMPLib.dll
-C:\Projects\MC\Trunk\obj\Release\XBMC Media Companion.vbproj.ResolveComReference.cache
 C:\Projects\MC\Trunk\obj\Release\Media Companion.pdb
 C:\Projects\MC\Trunk\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
 C:\Projects\MC\Trunk\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
@@ -626,10 +621,6 @@ C:\Projects\MC\Trunk\bin\Release\Media Companion.pdb
 C:\Projects\MC\Trunk\bin\Release\crclib.dll
 C:\Projects\MC\Trunk\bin\Release\ICSharpCode.SharpZipLib.dll
 C:\Projects\MC\Trunk\bin\Release\tmdb_posters.dll
-C:\Projects\MC\Trunk\bin\Release\Interop.Microsoft.Vbe.Interop.Forms.dll
-C:\Projects\MC\Trunk\bin\Release\Interop.WMPLib.dll
-C:\Projects\MC\Trunk\bin\Release\AxInterop.Microsoft.Vbe.Interop.Forms.dll
-C:\Projects\MC\Trunk\bin\Release\AxInterop.WMPLib.dll
 C:\Projects\MC\Trunk\obj\Release\ResolveAssemblyReference.cache
 C:\Projects\MC\Trunk\obj\Release\Media_Companion.frmBatchScraper.resources
 C:\Projects\MC\Trunk\obj\Release\Media_Companion.frmCopyProgress.resources
@@ -652,3 +643,9 @@ C:\Projects\MC\Trunk\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\Projects\MC\Trunk\obj\Release\ResGen.read.1.tlog
 C:\Projects\MC\Trunk\obj\Release\ResGen.write.1.tlog
 C:\Projects\MC\Trunk\obj\Release\Media Companion.exe
+C:\Projects\MC\Trunk\bin\Release\NfoLibrary.dll
+C:\Projects\MC\Trunk\bin\Release\ProtoXML.dll
+C:\Projects\MC\Trunk\bin\Release\NfoLibrary.pdb
+C:\Projects\MC\Trunk\bin\Release\NfoLibrary.xml
+C:\Projects\MC\Trunk\bin\Release\ProtoXML.pdb
+C:\Projects\MC\Trunk\bin\Release\ProtoXML.xml

@@ -754,7 +754,7 @@ Public Class WorkingWithNfoFiles
                                         Case "thumb"
                                             anotherepisode.thumb = thisresult.ChildNodes(f).InnerText
                                         Case "runtime"
-                                            anotherepisode.runtime = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"
                                             Dim detail As XmlNode = Nothing
                                             Dim newactor As New MovieActors
@@ -3053,7 +3053,7 @@ Public Class WorkingWithNfoFiles
                                         Case "thumb"
                                             anotherepisode.thumb = thisresult.ChildNodes(f).InnerText
                                         Case "runtime"
-                                            anotherepisode.runtime = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"
                                             Dim detail As XmlNode = Nothing
                                             Dim newactor As New MovieActors

@@ -11,8 +11,8 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
 
-#Const SilentErrorScream = False
-#Const NoRefocus = False
+#Const SilentErrorScream = True
+#Const NoRefocus = True
 
 Public Class Form1
 
@@ -17456,7 +17456,7 @@ Public Class Form1
                                 hours = hours * 60
                             End If
                             minutes = minutes + hours
-                            workingepisode(workingEpisodeIndex).runtime = minutes.ToString & " min"
+                            workingEpisode(workingEpisodeIndex).Runtime.Value = minutes.ToString & " min"
                         Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -21015,7 +21015,7 @@ Public Class Form1
                                             hours = hours * 60
                                         End If
                                         minutes = minutes + hours
-                                        singleepisode.runtime = minutes.ToString & " min"
+                                        singleepisode.Runtime.Value = minutes.ToString & " min"
                                     End If
                                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -29966,7 +29966,7 @@ Public Class Form1
                                             hours = hours * 60
                                         End If
                                         minutes = minutes + hours
-                                        listofnewepisodes(h).runtime = minutes.ToString & " min"
+                                        listofnewepisodes(h).Runtime.Value = minutes.ToString & " min"
                                     Catch ex As Exception
 #If SilentErrorScream Then
                                         Throw ex

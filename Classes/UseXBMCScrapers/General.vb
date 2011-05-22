@@ -1377,34 +1377,31 @@ Module General
 #Region "Misc.TVShows Routines"
 
     Public Function NeededConversion(ByVal entrada As TempEpisodeInfo) As EpisodeInfo
-        Dim Teste As New EpisodeInfo
-        Dim merda1 As MovieActors
-        Teste.aired = entrada.aired
-        Teste.credits = entrada.credits
-        Teste.director = entrada.director
-        Teste.episodeno = entrada.episodeNO
-        Teste.episodepath = entrada.episodePath
-        Teste.fanartpath = entrada.fanartPath
-        Teste.filedetails = entrada.fileDetails
-        Teste.genre = entrada.genre
-        For Each merda As TempMovieActors In entrada.listActors
-            merda1.actorid = merda.actorID
-            merda1.actorname = merda.actorName
-            merda1.actorrole = merda.actorRole
-            merda1.actorthumb = merda.actorThumb
-            Teste.listactors.Add(merda1)
-        Next
-        'Teste.listactors = entrada.listactors
-        'Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
-        Teste.mediaextension = entrada.mediaExtension
-        Teste.playcount = entrada.playCount
-        Teste.plot = entrada.plot
-        Teste.rating = entrada.rating
-        Teste.runtime = entrada.runtime
-        Teste.seasonno = entrada.seasonNO
-        Teste.thumb = entrada.thumb
-        Teste.title = entrada.title
-        Return Teste
+        'Dim Teste As New EpisodeInfo
+
+        'Teste.aired = entrada.aired
+        'Teste.credits = entrada.credits
+        'Teste.director = entrada.director
+        'Teste.episodeno = entrada.episodeNO
+        'Teste.episodepath = entrada.episodePath
+        'Teste.fanartpath = entrada.fanartPath
+        'Teste.filedetails = entrada.fileDetails
+        'Teste.genre = entrada.genre
+        'For Each merda As Nfo.Actor In entrada.Actors
+
+        '    Teste.Actors.Add(merda1)
+        'Next
+        ''Teste.listactors = entrada.listactors
+        ''Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
+        'Teste.mediaextension = entrada.mediaExtension
+        'Teste.playcount = entrada.playCount
+        'Teste.plot = entrada.plot
+        'Teste.rating = entrada.rating
+        'Teste.runtime = entrada.runtime
+        'Teste.seasonno = entrada.seasonNO
+        'Teste.thumb = entrada.thumb
+        'Teste.title = entrada.title
+        Return entrada
     End Function
 
     Public Function Clean_AddTVShowExtraFields(ByVal Entrada As String, ByVal Language As String, ByVal IMDB_ID As String) As String
@@ -1582,7 +1579,7 @@ Module General
             If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
             If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
             If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
-            If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.runtime = FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
+            If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.Runtime.Value = FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
             If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
             If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
             If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
@@ -1625,7 +1622,7 @@ Module General
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
-        Dim newActor As New TempMovieActors
+        Dim newActor As New Nfo.Actor
 
         episodeXMLinformation.Clear()
         m_xmld = New XmlDocument()
@@ -1651,7 +1648,7 @@ Module General
             TempXMLEpisode.seasonNO = Nothing
             TempXMLEpisode.thumb = Nothing
             TempXMLEpisode.title = Nothing
-            TempXMLEpisode.listActors.Clear()
+            TempXMLEpisode.Actors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
@@ -1686,15 +1683,15 @@ Module General
                         For Each Nodechild1 In NodeChild.ChildNodes
                             Select Case Nodechild1.Name
                                 Case "name"
-                                    newActor.actorName = Nodechild1.InnerText
+                                    newActor.Name.Value = Nodechild1.InnerText
                                 Case "role"
-                                    newActor.actorRole = Nodechild1.InnerText
+                                    newActor.Role.Value = Nodechild1.InnerText
                                 Case "thumb"
-                                    newActor.actorThumb = Nodechild1.InnerText
+                                    newActor.Thumb.Value = Nodechild1.InnerText
                                 Case "actorid"
                             End Select
                         Next
-                        If newActor.actorName <> Nothing Then TempXMLEpisode.listActors.Add(newActor)
+                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.Actors.Add(newActor)
                 End Select
             Next
             episodeXMLinformation.Add(TempXMLEpisode)

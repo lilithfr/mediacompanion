@@ -13,4 +13,45 @@ Public Structure MediaNFOVideo
     Dim codecid As String
     Dim codecinfo As String
     Dim scantype As String
+
+    Shared Widening Operator CType(ByVal Input As Nfo.VideoDetails) As MediaNFOVideo
+        Dim Temp As New MediaNFOVideo
+
+        Temp.width = Input.Width
+        Temp.height = Input.Height
+        Temp.aspect = Input.Aspect
+        Temp.codec = Input.Codec
+        Temp.formatinfo = Input.FormatInfo
+        Temp.duration = Input.DurationInSeconds
+        Temp.bitrate = Input.Bitrate
+        Temp.bitratemode = Input.Bitrate
+        Temp.bitratemax = Input.BitrateMax
+        Temp.container = Input.Container
+        Temp.codecid = Input.CodecId
+        Temp.codecinfo = Input.CodecInfo
+        Temp.scantype = Input.ScanType
+
+        Return Temp
+    End Operator
+
+    Shared Widening Operator CType(ByVal Input As MediaNFOVideo) As Nfo.VideoDetails
+        Dim Temp As New Nfo.VideoDetails
+
+        Temp.Width.Value = Input.width
+        Temp.Height.Value = Input.height
+        Temp.Aspect.Value = Input.aspect
+        Temp.Codec.Value = Input.codec
+        Temp.FormatInfo.Value = Input.formatinfo
+        Temp.DurationInSeconds.Value = Input.duration
+        Temp.Bitrate.Value = Input.bitrate
+        Temp.BitrateMode.Value = Input.bitratemode
+        Temp.BitrateMax.Value = Input.bitratemax
+        Temp.Container.Value = Input.container
+        Temp.CodecId.Value = Input.codecid
+        Temp.CodecInfo.Value = Input.codecinfo
+        Temp.ScanType.Value = Input.scantype
+
+        Return Temp
+    End Operator
+
 End Structure

@@ -135,6 +135,7 @@
     <Compile Include="Classes\BasicTvShowNFO.vb" />
     <Compile Include="Classes\Profiles.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
+    <Compile Include="Classes\Tv\TvEpisode.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Structures\FanartList.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />

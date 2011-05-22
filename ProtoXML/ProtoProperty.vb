@@ -68,4 +68,10 @@ Public Class ProtoProperty
             ParentNode.Add(Node)
         End If
     End Sub
+
+    Public Shared Narrowing Operator CType(ByVal Left As ProtoProperty) As String
+        Return Left.Value
+    End Operator
+
+
 End Class
