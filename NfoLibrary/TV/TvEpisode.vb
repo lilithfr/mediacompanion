@@ -34,7 +34,7 @@ Public Class TvEpisode
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
 
 
-    Public Details As New FileInfo(Me, "fileinfo")
+    Public Property Details As New FileInfo(Me, "fileinfo")
 
-    Public Actors As New ActorList(Me, "actor")
+    Public Property ListActors As New ActorList(Me, "actor")
 End Class

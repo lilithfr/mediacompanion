@@ -25,7 +25,7 @@
     Sub Add(ByVal item As T) Implements System.Collections.Generic.ICollection(Of T).Add
         item.ParentClass = Me
         item.ParentNode = Me.Node
-        item.ResolveAttachment()
+        item.ResolveAttachment(Me)
 
         ParentNode.Add(item.Node)
 

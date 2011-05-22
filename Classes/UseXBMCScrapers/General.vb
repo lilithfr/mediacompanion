@@ -1648,7 +1648,7 @@ Module General
             TempXMLEpisode.seasonNO = Nothing
             TempXMLEpisode.thumb = Nothing
             TempXMLEpisode.title = Nothing
-            TempXMLEpisode.Actors.Clear()
+            TempXMLEpisode.listactors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
@@ -1691,7 +1691,7 @@ Module General
                                 Case "actorid"
                             End Select
                         Next
-                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.Actors.Add(newActor)
+                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.listactors.Add(newActor)
                 End Select
             Next
             episodeXMLinformation.Add(TempXMLEpisode)

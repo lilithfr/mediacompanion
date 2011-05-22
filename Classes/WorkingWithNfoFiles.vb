@@ -257,13 +257,10 @@ Public Class WorkingWithNfoFiles
                 Dim filecreation As New FileInfo(path)
                 Dim myDate As Date = filecreation.LastWriteTime
 
-                If newtvshow.title <> Nothing And newtvshow.year <> Nothing Then
-                    newtvshow.titleandyear = newtvshow.title & " (" & newtvshow.year & ")"
-                Else
-                    newtvshow.titleandyear = newtvshow.title & "(0000)"
+                If Not (newtvshow.title <> Nothing And newtvshow.year <> Nothing) Then
+             
+                    newtvshow.year = "(0000)"
                 End If
-
-
 
                 If newtvshow.tvdbid = Nothing Then newtvshow.tvdbid = ""
                 If newtvshow.genre = Nothing Then newtvshow.genre = ""

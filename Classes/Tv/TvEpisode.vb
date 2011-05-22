@@ -136,35 +136,6 @@
         End Set
     End Property
 
-    Public Property listactors As List(Of MovieActors)
-        Get
-            Dim TempList As New List(Of MovieActors)
-            Dim OldActor As New MovieActors
-            For Each NewActor As Nfo.Actor In MyBase.Actors
-                OldActor.actorid = NewActor.ActorId
-                OldActor.actorname = NewActor.Name
-                OldActor.actorrole = NewActor.Role
-                OldActor.actorthumb = NewActor.Thumb
-
-                TempList.Add(OldActor)
-            Next
-
-            Return TempList
-        End Get
-        Set(ByVal value As List(Of MovieActors))
-            Dim NewActor As New Nfo.Actor
-            MyBase.Actors.Clear()
-            For Each OldActor As MovieActors In value
-                NewActor.ActorId.Value = OldActor.actorid
-                NewActor.Name.Value = OldActor.actorname
-                NewActor.Role.Value = OldActor.actorrole
-                NewActor.Thumb.Value = OldActor.actorthumb
-
-                MyBase.Actors.Add(NewActor)
-            Next
-        End Set
-    End Property
-
     Public Property filedetails As FullFileDetails
         Get
             Dim TempDetails As New FullFileDetails

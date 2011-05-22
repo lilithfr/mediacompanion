@@ -28,8 +28,10 @@ Public Class ProtoProperty
             End If
 
             If value Is Nothing Then
-                Me.Node.Remove()
-                Me.Node = Nothing
+                If Me.Node IsNot Nothing And Me.Node.Parent IsNot Nothing Then
+                    Me.Node.Remove()
+                    Me.Node = Nothing
+                End If
             End If
 
             _value = value
@@ -55,14 +57,18 @@ Public Class ProtoProperty
         Me.Value = Element.Value
     End Sub
 
-    Public Overrides Sub ResolveAttachment()
+    Public Overrides Sub ResolveAttachment(ByRef ParentClass As IProtoXBase)
         If ParentClass Is Nothing Then
             Throw New Exception("Parent Class not set")
         End If
 
         If ParentNode Is Nothing Then
+            If ParentClass.Node Is Nothing Then
+                Exit Sub
+            End If
             ParentNode = ParentClass.Node
         End If
+
 
         If Not ParentNode.Nodes.Contains(Node) Then
             ParentNode.Add(Node)

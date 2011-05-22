@@ -12,6 +12,6 @@
 
     Sub AttachToParentNode(ByRef ParentNode As XElement)
 
-    Sub ResolveAttachment()
+    Sub ResolveAttachment(ByRef ParentClass As IProtoXBase)
 
 End Interface

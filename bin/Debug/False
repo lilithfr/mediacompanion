@@ -19,7 +19,7 @@
   <copytvactorthumbs>true</copytvactorthumbs>
   <fanartnotstacked>false</fanartnotstacked>
   <posternotstacked>false</posternotstacked>
-  <lastpath>D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug</lastpath>
+  <lastpath>C:\Projects\MC\Trunk\bin\Debug</lastpath>
   <downloadfanart>true</downloadfanart>
   <scrapemovieposters>true</scrapemovieposters>
   <usefanart>true</usefanart>
@@ -85,10 +85,16 @@
   <moviesortorder>0</moviesortorder>
   <moviedefaultlist>0</moviedefaultlist>
   <autoepisodescreenshot>false</autoepisodescreenshot>
+  <ignorearticle>false</ignorearticle>
+  <TVShowUseXBMCScraper>false</TVShowUseXBMCScraper>
+  <moviesUseXBMCScraper>false</moviesUseXBMCScraper>
+  <whatXBMCScraper>
+  </whatXBMCScraper>
   <startuptab>0</startuptab>
   <intruntime>false</intruntime>
   <font>Times New Roman, 9pt</font>
   <autorenameepisodes>false</autorenameepisodes>
+  <scrapefullcert>false</scrapefullcert>
   <moviesets />
   <table>
     <sort>

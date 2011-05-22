@@ -8,6 +8,37 @@ Public Class Actor
     Public Property Role As New ProtoProperty(Me, "role")
     Public Property Thumb As New ProtoProperty(Me, "thumb")
     Public Property ActorId As New ProtoProperty(Me, "actorid")
+
+    Public Property actorname As String
+        Get
+            Return Me.Name.Value
+        End Get
+        Set(ByVal value As String)
+            Me.Name.Value = value
+        End Set
+    End Property
+
+    Public Property actorrole As String
+        Get
+            Return Me.Role.Value
+        End Get
+        Set(ByVal value As String)
+            Me.Role.Value = value
+        End Set
+    End Property
+
+
+    Public Property actorthumb As String
+        Get
+            Return Me.Thumb.Value
+        End Get
+        Set(ByVal value As String)
+            Me.Thumb.Value = value
+        End Set
+    End Property
+
+
+
     Public Sub New()
         MyBase.New(Nothing, Nothing)
 
@@ -20,13 +51,4 @@ Public Class Actor
     End Sub
 
 
-    Public Shared Function Builder(ByVal Name As String, ByVal Role As String, ByVal Thumb As String) As Actor
-        Dim TempActor As New Actor()
-
-        TempActor.Name.Value = Name
-        TempActor.Role.Value = Role
-        TempActor.Thumb.Value = Thumb
-
-        Return TempActor
-    End Function
 End Class

@@ -77,9 +77,9 @@
     End Sub
 
 
-    Public Overridable Sub ResolveAttachment() Implements IProtoXChild.ResolveAttachment
+    Public Overridable Sub ResolveAttachment(ByRef ParentClass As IProtoXBase) Implements IProtoXChild.ResolveAttachment
         For Each item As IProtoXChild In ChildrenLookup.Values
-            item.ResolveAttachment()
+            item.ResolveAttachment(ParentClass)
         Next
     End Sub
 End Class
