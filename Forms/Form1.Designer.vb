@@ -1000,66 +1000,66 @@ Partial Class Form1
         '
         Me.ContextMenuStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RescrapeFanartToolStripMenuItem, Me.DownloadFanartToolStripMenuItem, Me.RescrapePToolStripMenuItem, Me.RescrapePosterFromTMDBToolStripMenuItem, Me.RescraToolStripMenuItem, Me.PeToolStripMenuItem, Me.DownloadPosterToolStripMenuItem, Me.DownloadPosterFromTMDBToolStripMenuItem, Me.DownloadPosterFromMPDBToolStripMenuItem, Me.DownloadPosterFromIMDBToolStripMenuItem})
         Me.ContextMenuStrip4.Name = "ContextMenuStrip4"
-        Me.ContextMenuStrip4.Size = New System.Drawing.Size(232, 224)
+        Me.ContextMenuStrip4.Size = New System.Drawing.Size(213, 224)
         '
         'RescrapeFanartToolStripMenuItem
         '
         Me.RescrapeFanartToolStripMenuItem.Name = "RescrapeFanartToolStripMenuItem"
-        Me.RescrapeFanartToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.RescrapeFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.RescrapeFanartToolStripMenuItem.Text = "Rescrape Fanart"
         '
         'DownloadFanartToolStripMenuItem
         '
         Me.DownloadFanartToolStripMenuItem.Name = "DownloadFanartToolStripMenuItem"
-        Me.DownloadFanartToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.DownloadFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.DownloadFanartToolStripMenuItem.Text = "Download Fanart"
         '
         'RescrapePToolStripMenuItem
         '
         Me.RescrapePToolStripMenuItem.Name = "RescrapePToolStripMenuItem"
-        Me.RescrapePToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.RescrapePToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.RescrapePToolStripMenuItem.Text = "Rescrape Poster From IMPA"
         '
         'RescrapePosterFromTMDBToolStripMenuItem
         '
         Me.RescrapePosterFromTMDBToolStripMenuItem.Name = "RescrapePosterFromTMDBToolStripMenuItem"
-        Me.RescrapePosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.RescrapePosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.RescrapePosterFromTMDBToolStripMenuItem.Text = "Rescrape Poster From TMDB"
         '
         'RescraToolStripMenuItem
         '
         Me.RescraToolStripMenuItem.Name = "RescraToolStripMenuItem"
-        Me.RescraToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.RescraToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.RescraToolStripMenuItem.Text = "Rescrape Poster From MPDB"
         '
         'PeToolStripMenuItem
         '
         Me.PeToolStripMenuItem.Name = "PeToolStripMenuItem"
-        Me.PeToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.PeToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.PeToolStripMenuItem.Text = "Rescrape Poster From IMDB"
         '
         'DownloadPosterToolStripMenuItem
         '
         Me.DownloadPosterToolStripMenuItem.Name = "DownloadPosterToolStripMenuItem"
-        Me.DownloadPosterToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.DownloadPosterToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.DownloadPosterToolStripMenuItem.Text = "Download Poster from IMPA"
         '
         'DownloadPosterFromTMDBToolStripMenuItem
         '
         Me.DownloadPosterFromTMDBToolStripMenuItem.Name = "DownloadPosterFromTMDBToolStripMenuItem"
-        Me.DownloadPosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.DownloadPosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.DownloadPosterFromTMDBToolStripMenuItem.Text = "Download Poster From TMDB"
         '
         'DownloadPosterFromMPDBToolStripMenuItem
         '
         Me.DownloadPosterFromMPDBToolStripMenuItem.Name = "DownloadPosterFromMPDBToolStripMenuItem"
-        Me.DownloadPosterFromMPDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.DownloadPosterFromMPDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.DownloadPosterFromMPDBToolStripMenuItem.Text = "Download Poster From MPDB"
         '
         'DownloadPosterFromIMDBToolStripMenuItem
         '
         Me.DownloadPosterFromIMDBToolStripMenuItem.Name = "DownloadPosterFromIMDBToolStripMenuItem"
-        Me.DownloadPosterFromIMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.DownloadPosterFromIMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.DownloadPosterFromIMDBToolStripMenuItem.Text = "Download Poster From IMDB"
         '
         'moviethumb
@@ -1188,101 +1188,101 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem, Me.ToolStripSeparator2, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.MissingepisodesToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 324)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(242, 324)
         Me.ContextMenuStrip2.Text = "Open Folder at file"
         '
         'OpenFolderToolStripMenuItem
         '
         Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
-        Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(255, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(241, 22)
         Me.ToolStripMenuItem1.Text = "Open File"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(252, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(238, 6)
         '
         'ExpandSelectedShowToolStripMenuItem
         '
         Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
-        Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
         '
         'CollapseSelectedShowToolStripMenuItem
         '
         Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
-        Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
         '
         'CollapseAllToolStripMenuItem
         '
         Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
-        Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
         '
         'ExpandAllToolStripMenuItem
         '
         Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
-        Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.ExpandAllToolStripMenuItem.Text = "Expand All"
         '
         'LockAllToolStripMenuItem
         '
         Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
-        Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
         '
         'UnlockAllToolStripMenuItem
         '
         Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
-        Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(252, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(238, 6)
         '
         'SearchThisShowForNewEpisodesToolStripMenuItem
         '
         Me.SearchThisShowForNewEpisodesToolStripMenuItem.Name = "SearchThisShowForNewEpisodesToolStripMenuItem"
-        Me.SearchThisShowForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.SearchThisShowForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search this Show for new episodes"
         '
         'DownloadAvaileableMissingArtForShowToolStripMenuItem
         '
         Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Name = "DownloadAvaileableMissingArtForShowToolStripMenuItem"
-        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "missing art for show"
         '
         'ReloadItemToolStripMenuItem
         '
         Me.ReloadItemToolStripMenuItem.Name = "ReloadItemToolStripMenuItem"
-        Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.ReloadItemToolStripMenuItem.Text = "Reload Item"
         '
         'RenameTVShowsToolStripMenuItem
         '
         Me.RenameTVShowsToolStripMenuItem.Name = "RenameTVShowsToolStripMenuItem"
-        Me.RenameTVShowsToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.RenameTVShowsToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.RenameTVShowsToolStripMenuItem.Text = "Rename Episode(s)"
         '
         'RebuildThisShowToolStripMenuItem
         '
         Me.RebuildThisShowToolStripMenuItem.Name = "RebuildThisShowToolStripMenuItem"
-        Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.RebuildThisShowToolStripMenuItem.Text = "Rebuild this Show"
         '
         'MissingepisodesToolStripMenuItem
         '
         Me.MissingepisodesToolStripMenuItem.Name = "MissingepisodesToolStripMenuItem"
-        Me.MissingepisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+        Me.MissingepisodesToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
         Me.MissingepisodesToolStripMenuItem.Text = "missingepisodes"
         '
         'ImageList2
@@ -2151,42 +2151,42 @@ Partial Class Form1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 192)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(213, 192)
         Me.ContextMenuStrip1.Text = "whatever"
         '
         'SetMovieAsWatchedToolStripMenuItem
         '
         Me.SetMovieAsWatchedToolStripMenuItem.Name = "SetMovieAsWatchedToolStripMenuItem"
-        Me.SetMovieAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.SetMovieAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.SetMovieAsWatchedToolStripMenuItem.Text = "Open Folder"
         '
         'RescrapeMovieToolStripMenuItem
         '
         Me.RescrapeMovieToolStripMenuItem.Name = "RescrapeMovieToolStripMenuItem"
-        Me.RescrapeMovieToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.RescrapeMovieToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.RescrapeMovieToolStripMenuItem.Text = "Open File"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(217, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(209, 6)
         '
         'ReloadItemToolStripMenuItem1
         '
         Me.ReloadItemToolStripMenuItem1.Name = "ReloadItemToolStripMenuItem1"
-        Me.ReloadItemToolStripMenuItem1.Size = New System.Drawing.Size(220, 22)
+        Me.ReloadItemToolStripMenuItem1.Size = New System.Drawing.Size(212, 22)
         Me.ReloadItemToolStripMenuItem1.Text = "Reload Item"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(217, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(209, 6)
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem3, Me.ToolStripMenuItem4, Me.ToolStripMenuItem5, Me.ToolStripMenuItem6, Me.ToolStripMenuItem7, Me.ToolStripMenuItem8, Me.ToolStripMenuItem9, Me.ToolStripMenuItem10, Me.ToolStripMenuItem11, Me.ToolStripMenuItem14, Me.ToolStripMenuItem19, Me.ToolStripMenuItem20, Me.ToolStripMenuItem15, Me.ToolStripSeparator6, Me.ToolStripMenuItem16, Me.ToolStripMenuItem17, Me.ToolStripMenuItem18})
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(220, 22)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(212, 22)
         Me.ToolStripMenuItem2.Text = "Recrape Specific"
         '
         'ToolStripMenuItem3
@@ -2308,25 +2308,25 @@ Partial Class Form1
         'BrowseFanartToolStripMenuItem
         '
         Me.BrowseFanartToolStripMenuItem.Name = "BrowseFanartToolStripMenuItem"
-        Me.BrowseFanartToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.BrowseFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.BrowseFanartToolStripMenuItem.Text = "Fanart Browser (Alternative)"
         '
         'PosterBrowserToolStripMenuItem
         '
         Me.PosterBrowserToolStripMenuItem.Name = "PosterBrowserToolStripMenuItem"
-        Me.PosterBrowserToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.PosterBrowserToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.PosterBrowserToolStripMenuItem.Text = "Poster Browser (Alternative)"
         '
         'EditMovieToolStripMenuItem
         '
         Me.EditMovieToolStripMenuItem.Name = "EditMovieToolStripMenuItem"
-        Me.EditMovieToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.EditMovieToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.EditMovieToolStripMenuItem.Text = "Edit Movie (Alternative)"
         '
         'ExportmoviesMenuItem
         '
         Me.ExportmoviesMenuItem.Name = "ExportmoviesMenuItem"
-        Me.ExportmoviesMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.ExportmoviesMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.ExportmoviesMenuItem.Text = "Export Selected Movies"
         '
         'TabPage3
@@ -4836,36 +4836,36 @@ Partial Class Form1
         '
         Me.ContextMenuStrip_table.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MarkAllSelectedAsWatchedToolStripMenuItem, Me.MarkAllSelectedAsUnWatchedToolStripMenuItem, Me.GoToToolStripMenuItem, Me.GoToSelectedMoviePosterSelectorToolStripMenuItem, Me.GoToSelectedMovieFanartSelectorToolStripMenuItem})
         Me.ContextMenuStrip_table.Name = "ContextMenuStrip_table"
-        Me.ContextMenuStrip_table.Size = New System.Drawing.Size(281, 114)
+        Me.ContextMenuStrip_table.Size = New System.Drawing.Size(259, 114)
         '
         'MarkAllSelectedAsWatchedToolStripMenuItem
         '
         Me.MarkAllSelectedAsWatchedToolStripMenuItem.Name = "MarkAllSelectedAsWatchedToolStripMenuItem"
-        Me.MarkAllSelectedAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.MarkAllSelectedAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
         Me.MarkAllSelectedAsWatchedToolStripMenuItem.Text = "Mark All Selected as Watched"
         '
         'MarkAllSelectedAsUnWatchedToolStripMenuItem
         '
         Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Name = "MarkAllSelectedAsUnWatchedToolStripMenuItem"
-        Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
         Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Text = "Mark All Selected as Un-Watched"
         '
         'GoToToolStripMenuItem
         '
         Me.GoToToolStripMenuItem.Name = "GoToToolStripMenuItem"
-        Me.GoToToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.GoToToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
         Me.GoToToolStripMenuItem.Text = " Go To Selected Movie in Main Browser"
         '
         'GoToSelectedMoviePosterSelectorToolStripMenuItem
         '
         Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Name = "GoToSelectedMoviePosterSelectorToolStripMenuItem"
-        Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
         Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Text = "Go To Selected Movie Poster Selector"
         '
         'GoToSelectedMovieFanartSelectorToolStripMenuItem
         '
         Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Name = "GoToSelectedMovieFanartSelectorToolStripMenuItem"
-        Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
         Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Text = "Go To Selected Movie Fanart Selector"
         '
         'Label132
@@ -5693,16 +5693,16 @@ Partial Class Form1
         Me.GroupBox9.Size = New System.Drawing.Size(392, 100)
         Me.GroupBox9.TabIndex = 70
         Me.GroupBox9.TabStop = False
-        Me.GroupBox9.Text = "Offline DVD Title Text - *Not saved after reboot yet"
+        Me.GroupBox9.Text = "Offline DVD Title Text"
         '
         'Label77
         '
-        Me.Label77.AutoSize = True
+        Me.Label77.AutoSize = true
         Me.Label77.Location = New System.Drawing.Point(29, 56)
         Me.Label77.Name = "Label77"
         Me.Label77.Size = New System.Drawing.Size(96, 30)
         Me.Label77.TabIndex = 70
-        Me.Label77.Text = "Use Parameters" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "%T - Movie Title"
+        Me.Label77.Text = "Use Parameters"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"%T - Movie Title"
         '
         'TextBox_OfflineDVDTitle
         '
@@ -5714,7 +5714,7 @@ Partial Class Form1
         '
         'TabPage28
         '
-        Me.TabPage28.AutoScroll = True
+        Me.TabPage28.AutoScroll = true
         Me.TabPage28.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.TabPage28.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage28.Controls.Add(Me.GroupBox14)
@@ -5724,7 +5724,7 @@ Partial Class Form1
         Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage28.Name = "TabPage28"
         Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage28.Size = New System.Drawing.Size(1190, 570)
+        Me.TabPage28.Size = New System.Drawing.Size(1190, 568)
         Me.TabPage28.TabIndex = 1
         Me.TabPage28.Text = "Advanced"
         '
@@ -10070,35 +10070,35 @@ Partial Class Form1
         '
         Me.ContextMenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem, Me.ToolStripSeparator3, Me.EditMovieToolStripMenuItem1, Me.DToolStripMenuItem, Me.OpenFolderToolStripMenuItem1})
         Me.ContextMenuStrip3.Name = "ContextMenuStrip3"
-        Me.ContextMenuStrip3.Size = New System.Drawing.Size(188, 98)
+        Me.ContextMenuStrip3.Size = New System.Drawing.Size(177, 98)
         '
         'PlayMovieToolStripMenuItem
         '
         Me.PlayMovieToolStripMenuItem.Name = "PlayMovieToolStripMenuItem"
-        Me.PlayMovieToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.PlayMovieToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.PlayMovieToolStripMenuItem.Text = "Play Movie"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(173, 6)
         '
         'EditMovieToolStripMenuItem1
         '
         Me.EditMovieToolStripMenuItem1.Name = "EditMovieToolStripMenuItem1"
-        Me.EditMovieToolStripMenuItem1.Size = New System.Drawing.Size(187, 22)
+        Me.EditMovieToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
         Me.EditMovieToolStripMenuItem1.Text = "Change Movie Poster"
         '
         'DToolStripMenuItem
         '
         Me.DToolStripMenuItem.Name = "DToolStripMenuItem"
-        Me.DToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.DToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.DToolStripMenuItem.Text = "Large Image View"
         '
         'OpenFolderToolStripMenuItem1
         '
         Me.OpenFolderToolStripMenuItem1.Name = "OpenFolderToolStripMenuItem1"
-        Me.OpenFolderToolStripMenuItem1.Size = New System.Drawing.Size(187, 22)
+        Me.OpenFolderToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
         Me.OpenFolderToolStripMenuItem1.Text = "Open Folder"
         '
         'ListBox8
