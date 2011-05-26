@@ -501,6 +501,9 @@ Public Class Preferences
             Next
             root.AppendChild(child)
 
+            child = doc.CreateElement("offlinemovielabeltext")
+            child.InnerText = Form1.TextBox_OfflineDVDTitle.Text
+            root.AppendChild(child)
 
 
             For Each com In Form1.userPrefs.commandlist
@@ -1089,6 +1092,11 @@ Public Class Preferences
                     Form1.userPrefs.moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                 Case "startuptab"
                     Form1.userPrefs.startuptab = Convert.ToByte(thisresult.InnerText)
+
+                Case "offlinemovielabeltext"
+                    Form1.TextBox_OfflineDVDTitle.Text = thisresult.InnerText
+
+
                 Case "scrapefullcert"
                     If thisresult.InnerXml = "true" Then
                         Form1.userPrefs.scrapefullcert = True
