@@ -11,7 +11,7 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
 
-#Const SilentErrorScream = True
+#Const SilentErrorScream = False
 #Const NoRefocus = True
 
 Public Class Form1
@@ -11073,8 +11073,8 @@ Public Class Form1
         If replace = True Then
             Call ApplyFilters()
             Call loadinfofile()
-            TabControl2.SelectedIndex = 0
-            currentTabIndex = TabControl2.SelectedIndex
+            'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
+            'currentTabIndex = TabControl2.SelectedIndex
         End If
     End Sub
 
@@ -11100,8 +11100,8 @@ Public Class Form1
         If replace = True Then
             Call ApplyFilters()
             Call loadinfofile()
-            TabControl2.SelectedIndex = 0
-            currentTabIndex = TabControl2.SelectedIndex
+            'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
+            'currentTabIndex = TabControl2.SelectedIndex
         End If
     End Sub
 
