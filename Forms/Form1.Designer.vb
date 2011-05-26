@@ -815,6 +815,9 @@ Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+Me.TextBox_OfflineDVDTitle = New System.Windows.Forms.TextBox()
+Me.GroupBox9 = New System.Windows.Forms.GroupBox()
+Me.Label77 = New System.Windows.Forms.Label()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -945,6 +948,7 @@ Me.ContextMenuStrip3.SuspendLayout
 CType(Me.BindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
 CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
 CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).BeginInit
+Me.GroupBox9.SuspendLayout
 Me.SuspendLayout
 '
 'ToolTip1
@@ -996,66 +1000,66 @@ Me.ToolTip1.SetToolTip(Me.PictureBox7, "Double Click for larger view")
 '
 Me.ContextMenuStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RescrapeFanartToolStripMenuItem, Me.DownloadFanartToolStripMenuItem, Me.RescrapePToolStripMenuItem, Me.RescrapePosterFromTMDBToolStripMenuItem, Me.RescraToolStripMenuItem, Me.PeToolStripMenuItem, Me.DownloadPosterToolStripMenuItem, Me.DownloadPosterFromTMDBToolStripMenuItem, Me.DownloadPosterFromMPDBToolStripMenuItem, Me.DownloadPosterFromIMDBToolStripMenuItem})
 Me.ContextMenuStrip4.Name = "ContextMenuStrip4"
-Me.ContextMenuStrip4.Size = New System.Drawing.Size(213, 224)
+Me.ContextMenuStrip4.Size = New System.Drawing.Size(232, 224)
 '
 'RescrapeFanartToolStripMenuItem
 '
 Me.RescrapeFanartToolStripMenuItem.Name = "RescrapeFanartToolStripMenuItem"
-Me.RescrapeFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.RescrapeFanartToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.RescrapeFanartToolStripMenuItem.Text = "Rescrape Fanart"
 '
 'DownloadFanartToolStripMenuItem
 '
 Me.DownloadFanartToolStripMenuItem.Name = "DownloadFanartToolStripMenuItem"
-Me.DownloadFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.DownloadFanartToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.DownloadFanartToolStripMenuItem.Text = "Download Fanart"
 '
 'RescrapePToolStripMenuItem
 '
 Me.RescrapePToolStripMenuItem.Name = "RescrapePToolStripMenuItem"
-Me.RescrapePToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.RescrapePToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.RescrapePToolStripMenuItem.Text = "Rescrape Poster From IMPA"
 '
 'RescrapePosterFromTMDBToolStripMenuItem
 '
 Me.RescrapePosterFromTMDBToolStripMenuItem.Name = "RescrapePosterFromTMDBToolStripMenuItem"
-Me.RescrapePosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.RescrapePosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.RescrapePosterFromTMDBToolStripMenuItem.Text = "Rescrape Poster From TMDB"
 '
 'RescraToolStripMenuItem
 '
 Me.RescraToolStripMenuItem.Name = "RescraToolStripMenuItem"
-Me.RescraToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.RescraToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.RescraToolStripMenuItem.Text = "Rescrape Poster From MPDB"
 '
 'PeToolStripMenuItem
 '
 Me.PeToolStripMenuItem.Name = "PeToolStripMenuItem"
-Me.PeToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.PeToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.PeToolStripMenuItem.Text = "Rescrape Poster From IMDB"
 '
 'DownloadPosterToolStripMenuItem
 '
 Me.DownloadPosterToolStripMenuItem.Name = "DownloadPosterToolStripMenuItem"
-Me.DownloadPosterToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.DownloadPosterToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.DownloadPosterToolStripMenuItem.Text = "Download Poster from IMPA"
 '
 'DownloadPosterFromTMDBToolStripMenuItem
 '
 Me.DownloadPosterFromTMDBToolStripMenuItem.Name = "DownloadPosterFromTMDBToolStripMenuItem"
-Me.DownloadPosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.DownloadPosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.DownloadPosterFromTMDBToolStripMenuItem.Text = "Download Poster From TMDB"
 '
 'DownloadPosterFromMPDBToolStripMenuItem
 '
 Me.DownloadPosterFromMPDBToolStripMenuItem.Name = "DownloadPosterFromMPDBToolStripMenuItem"
-Me.DownloadPosterFromMPDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.DownloadPosterFromMPDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.DownloadPosterFromMPDBToolStripMenuItem.Text = "Download Poster From MPDB"
 '
 'DownloadPosterFromIMDBToolStripMenuItem
 '
 Me.DownloadPosterFromIMDBToolStripMenuItem.Name = "DownloadPosterFromIMDBToolStripMenuItem"
-Me.DownloadPosterFromIMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.DownloadPosterFromIMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
 Me.DownloadPosterFromIMDBToolStripMenuItem.Text = "Download Poster From IMDB"
 '
 'moviethumb
@@ -1091,10 +1095,10 @@ Me.Button6.Visible = false
 '
 Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.CheckBox1.AutoSize = true
-Me.CheckBox1.Location = New System.Drawing.Point(1075, 490)
+Me.CheckBox1.Location = New System.Drawing.Point(1061, 488)
 Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox1.Name = "CheckBox1"
-Me.CheckBox1.Size = New System.Drawing.Size(120, 17)
+Me.CheckBox1.Size = New System.Drawing.Size(134, 19)
 Me.CheckBox1.TabIndex = 114
 Me.CheckBox1.Text = "Save Lo-Res Image"
 Me.ToolTip1.SetToolTip(Me.CheckBox1, "The default image saved is from the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"highest resolution available."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check this bo"& _ 
@@ -1184,101 +1188,101 @@ Me.ToolTip1.SetToolTip(Me.TreeView1, "Double click an episode to playback,"&Glob
 '
 Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem, Me.ToolStripSeparator2, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.MissingepisodesToolStripMenuItem})
 Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-Me.ContextMenuStrip2.Size = New System.Drawing.Size(242, 324)
+Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 324)
 Me.ContextMenuStrip2.Text = "Open Folder at file"
 '
 'OpenFolderToolStripMenuItem
 '
 Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
-Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
 '
 'ToolStripMenuItem1
 '
 Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-Me.ToolStripMenuItem1.Size = New System.Drawing.Size(241, 22)
+Me.ToolStripMenuItem1.Size = New System.Drawing.Size(255, 22)
 Me.ToolStripMenuItem1.Text = "Open File"
 '
 'ToolStripSeparator1
 '
 Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-Me.ToolStripSeparator1.Size = New System.Drawing.Size(238, 6)
+Me.ToolStripSeparator1.Size = New System.Drawing.Size(252, 6)
 '
 'ExpandSelectedShowToolStripMenuItem
 '
 Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
-Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
 '
 'CollapseSelectedShowToolStripMenuItem
 '
 Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
-Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
 '
 'CollapseAllToolStripMenuItem
 '
 Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
-Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
 '
 'ExpandAllToolStripMenuItem
 '
 Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
-Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.ExpandAllToolStripMenuItem.Text = "Expand All"
 '
 'LockAllToolStripMenuItem
 '
 Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
-Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
 '
 'UnlockAllToolStripMenuItem
 '
 Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
-Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
 '
 'ToolStripSeparator2
 '
 Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-Me.ToolStripSeparator2.Size = New System.Drawing.Size(238, 6)
+Me.ToolStripSeparator2.Size = New System.Drawing.Size(252, 6)
 '
 'SearchThisShowForNewEpisodesToolStripMenuItem
 '
 Me.SearchThisShowForNewEpisodesToolStripMenuItem.Name = "SearchThisShowForNewEpisodesToolStripMenuItem"
-Me.SearchThisShowForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.SearchThisShowForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search this Show for new episodes"
 '
 'DownloadAvaileableMissingArtForShowToolStripMenuItem
 '
 Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Name = "DownloadAvaileableMissingArtForShowToolStripMenuItem"
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "missing art for show"
 '
 'ReloadItemToolStripMenuItem
 '
 Me.ReloadItemToolStripMenuItem.Name = "ReloadItemToolStripMenuItem"
-Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.ReloadItemToolStripMenuItem.Text = "Reload Item"
 '
 'RenameTVShowsToolStripMenuItem
 '
 Me.RenameTVShowsToolStripMenuItem.Name = "RenameTVShowsToolStripMenuItem"
-Me.RenameTVShowsToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.RenameTVShowsToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.RenameTVShowsToolStripMenuItem.Text = "Rename Episode(s)"
 '
 'RebuildThisShowToolStripMenuItem
 '
 Me.RebuildThisShowToolStripMenuItem.Name = "RebuildThisShowToolStripMenuItem"
-Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.RebuildThisShowToolStripMenuItem.Text = "Rebuild this Show"
 '
 'MissingepisodesToolStripMenuItem
 '
 Me.MissingepisodesToolStripMenuItem.Name = "MissingepisodesToolStripMenuItem"
-Me.MissingepisodesToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+Me.MissingepisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
 Me.MissingepisodesToolStripMenuItem.Text = "missingepisodes"
 '
 'ImageList2
@@ -1406,7 +1410,7 @@ Me.ToolTip1.SetToolTip(Me.GroupBox11, "You can select a specific locations certi
 Me.ScrapeFullCertCheckBox.AutoSize = true
 Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(24, 271)
 Me.ScrapeFullCertCheckBox.Name = "ScrapeFullCertCheckBox"
-Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(234, 17)
+Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(264, 19)
 Me.ScrapeFullCertCheckBox.TabIndex = 8
 Me.ScrapeFullCertCheckBox.Text = "Scrape Full Cert i.e. UK:15 instead of just 15"
 Me.ScrapeFullCertCheckBox.UseVisualStyleBackColor = true
@@ -1863,7 +1867,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Location = New System.Drawing.Point(11, 50)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Name = "CheckBox_XBMC_Scraper_TMDB_IMDBRatings"
-Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(124, 17)
+Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(140, 19)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.TabIndex = 71
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Text = "Get rating from IMDb"
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.UseVisualStyleBackColor = true
@@ -1885,7 +1889,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Location = New System.Drawing.Point(11, 25)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Name = "CheckBox_XBMC_Scraper_TMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(89, 17)
+Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(99, 19)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Text = "Enable fanart"
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.UseVisualStyleBackColor = true
@@ -2010,7 +2014,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Trailer.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Location = New System.Drawing.Point(11, 164)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Name = "CheckBox_XBMC_Scraper_IMDB_Trailer"
-Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(147, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(166, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Text = "Fall back on IMDB trailers"
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.UseVisualStyleBackColor = true
@@ -2042,7 +2046,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Location = New System.Drawing.Point(11, 118)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(196, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(224, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.TabIndex = 4
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Text = "Enable posters from MoviePosterDB"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.UseVisualStyleBackColor = true
@@ -2053,7 +2057,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Location = New System.Drawing.Point(11, 94)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(176, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(201, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.TabIndex = 3
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Text = "Enable posters from IMPAwards"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.UseVisualStyleBackColor = true
@@ -2064,7 +2068,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Location = New System.Drawing.Point(11, 70)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(195, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(224, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.TabIndex = 2
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Text = "Enable posters from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.UseVisualStyleBackColor = true
@@ -2086,7 +2090,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Location = New System.Drawing.Point(11, 48)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Name = "CheckBox_XBMC_Scraper_IMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(188, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(215, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.TabIndex = 1
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Text = "Enable fanart from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.UseVisualStyleBackColor = true
@@ -2097,7 +2101,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Location = New System.Drawing.Point(11, 24)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Name = "CheckBox_XBMC_Scraper_IMDB_FullCredits"
-Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(132, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(148, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.TabIndex = 0
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Text = "Enable full cast credits"
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.UseVisualStyleBackColor = true
@@ -2147,42 +2151,42 @@ Me.MovieListComboBox.TabIndex = 53
 '
 Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
 Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-Me.ContextMenuStrip1.Size = New System.Drawing.Size(213, 192)
+Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 192)
 Me.ContextMenuStrip1.Text = "whatever"
 '
 'SetMovieAsWatchedToolStripMenuItem
 '
 Me.SetMovieAsWatchedToolStripMenuItem.Name = "SetMovieAsWatchedToolStripMenuItem"
-Me.SetMovieAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.SetMovieAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
 Me.SetMovieAsWatchedToolStripMenuItem.Text = "Open Folder"
 '
 'RescrapeMovieToolStripMenuItem
 '
 Me.RescrapeMovieToolStripMenuItem.Name = "RescrapeMovieToolStripMenuItem"
-Me.RescrapeMovieToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.RescrapeMovieToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
 Me.RescrapeMovieToolStripMenuItem.Text = "Open File"
 '
 'ToolStripSeparator4
 '
 Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-Me.ToolStripSeparator4.Size = New System.Drawing.Size(209, 6)
+Me.ToolStripSeparator4.Size = New System.Drawing.Size(217, 6)
 '
 'ReloadItemToolStripMenuItem1
 '
 Me.ReloadItemToolStripMenuItem1.Name = "ReloadItemToolStripMenuItem1"
-Me.ReloadItemToolStripMenuItem1.Size = New System.Drawing.Size(212, 22)
+Me.ReloadItemToolStripMenuItem1.Size = New System.Drawing.Size(220, 22)
 Me.ReloadItemToolStripMenuItem1.Text = "Reload Item"
 '
 'ToolStripSeparator5
 '
 Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-Me.ToolStripSeparator5.Size = New System.Drawing.Size(209, 6)
+Me.ToolStripSeparator5.Size = New System.Drawing.Size(217, 6)
 '
 'ToolStripMenuItem2
 '
 Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem3, Me.ToolStripMenuItem4, Me.ToolStripMenuItem5, Me.ToolStripMenuItem6, Me.ToolStripMenuItem7, Me.ToolStripMenuItem8, Me.ToolStripMenuItem9, Me.ToolStripMenuItem10, Me.ToolStripMenuItem11, Me.ToolStripMenuItem14, Me.ToolStripMenuItem19, Me.ToolStripMenuItem20, Me.ToolStripMenuItem15, Me.ToolStripSeparator6, Me.ToolStripMenuItem16, Me.ToolStripMenuItem17, Me.ToolStripMenuItem18})
 Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-Me.ToolStripMenuItem2.Size = New System.Drawing.Size(212, 22)
+Me.ToolStripMenuItem2.Size = New System.Drawing.Size(220, 22)
 Me.ToolStripMenuItem2.Text = "Recrape Specific"
 '
 'ToolStripMenuItem3
@@ -2304,25 +2308,25 @@ Me.ToolStripMenuItem18.Text = "Media Tags"
 'BrowseFanartToolStripMenuItem
 '
 Me.BrowseFanartToolStripMenuItem.Name = "BrowseFanartToolStripMenuItem"
-Me.BrowseFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.BrowseFanartToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
 Me.BrowseFanartToolStripMenuItem.Text = "Fanart Browser (Alternative)"
 '
 'PosterBrowserToolStripMenuItem
 '
 Me.PosterBrowserToolStripMenuItem.Name = "PosterBrowserToolStripMenuItem"
-Me.PosterBrowserToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.PosterBrowserToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
 Me.PosterBrowserToolStripMenuItem.Text = "Poster Browser (Alternative)"
 '
 'EditMovieToolStripMenuItem
 '
 Me.EditMovieToolStripMenuItem.Name = "EditMovieToolStripMenuItem"
-Me.EditMovieToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.EditMovieToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
 Me.EditMovieToolStripMenuItem.Text = "Edit Movie (Alternative)"
 '
 'ExportmoviesMenuItem
 '
 Me.ExportmoviesMenuItem.Name = "ExportmoviesMenuItem"
-Me.ExportmoviesMenuItem.Size = New System.Drawing.Size(212, 22)
+Me.ExportmoviesMenuItem.Size = New System.Drawing.Size(220, 22)
 Me.ExportmoviesMenuItem.Text = "Export Selected Movies"
 '
 'TabPage3
@@ -2750,7 +2754,7 @@ Me.RadioButton50.AutoSize = true
 Me.RadioButton50.Location = New System.Drawing.Point(8, 118)
 Me.RadioButton50.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton50.Name = "RadioButton50"
-Me.RadioButton50.Size = New System.Drawing.Size(93, 17)
+Me.RadioButton50.Size = New System.Drawing.Size(106, 19)
 Me.RadioButton50.TabIndex = 5
 Me.RadioButton50.Text = "Missing Fanart"
 Me.RadioButton50.UseVisualStyleBackColor = true
@@ -2761,7 +2765,7 @@ Me.RadioButton45.AutoSize = true
 Me.RadioButton45.Location = New System.Drawing.Point(8, 19)
 Me.RadioButton45.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton45.Name = "RadioButton45"
-Me.RadioButton45.Size = New System.Drawing.Size(36, 17)
+Me.RadioButton45.Size = New System.Drawing.Size(38, 19)
 Me.RadioButton45.TabIndex = 0
 Me.RadioButton45.Text = "All"
 Me.RadioButton45.UseVisualStyleBackColor = true
@@ -2772,7 +2776,7 @@ Me.RadioButton49.AutoSize = true
 Me.RadioButton49.Location = New System.Drawing.Point(8, 98)
 Me.RadioButton49.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton49.Name = "RadioButton49"
-Me.RadioButton49.Size = New System.Drawing.Size(98, 17)
+Me.RadioButton49.Size = New System.Drawing.Size(112, 19)
 Me.RadioButton49.TabIndex = 4
 Me.RadioButton49.Text = "Missing Posters"
 Me.RadioButton49.UseVisualStyleBackColor = true
@@ -2783,7 +2787,7 @@ Me.RadioButton46.AutoSize = true
 Me.RadioButton46.Location = New System.Drawing.Point(8, 39)
 Me.RadioButton46.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton46.Name = "RadioButton46"
-Me.RadioButton46.Size = New System.Drawing.Size(69, 17)
+Me.RadioButton46.Size = New System.Drawing.Size(73, 19)
 Me.RadioButton46.TabIndex = 1
 Me.RadioButton46.Text = "Watched"
 Me.RadioButton46.UseVisualStyleBackColor = true
@@ -2794,7 +2798,7 @@ Me.RadioButton48.AutoSize = true
 Me.RadioButton48.Location = New System.Drawing.Point(8, 78)
 Me.RadioButton48.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton48.Name = "RadioButton48"
-Me.RadioButton48.Size = New System.Drawing.Size(75, 17)
+Me.RadioButton48.Size = New System.Drawing.Size(83, 19)
 Me.RadioButton48.TabIndex = 3
 Me.RadioButton48.Text = "Duplicates"
 Me.RadioButton48.UseVisualStyleBackColor = true
@@ -2805,7 +2809,7 @@ Me.RadioButton47.AutoSize = true
 Me.RadioButton47.Location = New System.Drawing.Point(8, 59)
 Me.RadioButton47.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton47.Name = "RadioButton47"
-Me.RadioButton47.Size = New System.Drawing.Size(83, 17)
+Me.RadioButton47.Size = New System.Drawing.Size(89, 19)
 Me.RadioButton47.TabIndex = 2
 Me.RadioButton47.Text = "UnWatched"
 Me.RadioButton47.UseVisualStyleBackColor = true
@@ -4832,36 +4836,36 @@ Me.DataGridView1.TabIndex = 0
 '
 Me.ContextMenuStrip_table.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MarkAllSelectedAsWatchedToolStripMenuItem, Me.MarkAllSelectedAsUnWatchedToolStripMenuItem, Me.GoToToolStripMenuItem, Me.GoToSelectedMoviePosterSelectorToolStripMenuItem, Me.GoToSelectedMovieFanartSelectorToolStripMenuItem})
 Me.ContextMenuStrip_table.Name = "ContextMenuStrip_table"
-Me.ContextMenuStrip_table.Size = New System.Drawing.Size(259, 114)
+Me.ContextMenuStrip_table.Size = New System.Drawing.Size(281, 114)
 '
 'MarkAllSelectedAsWatchedToolStripMenuItem
 '
 Me.MarkAllSelectedAsWatchedToolStripMenuItem.Name = "MarkAllSelectedAsWatchedToolStripMenuItem"
-Me.MarkAllSelectedAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+Me.MarkAllSelectedAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
 Me.MarkAllSelectedAsWatchedToolStripMenuItem.Text = "Mark All Selected as Watched"
 '
 'MarkAllSelectedAsUnWatchedToolStripMenuItem
 '
 Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Name = "MarkAllSelectedAsUnWatchedToolStripMenuItem"
-Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
 Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Text = "Mark All Selected as Un-Watched"
 '
 'GoToToolStripMenuItem
 '
 Me.GoToToolStripMenuItem.Name = "GoToToolStripMenuItem"
-Me.GoToToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+Me.GoToToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
 Me.GoToToolStripMenuItem.Text = " Go To Selected Movie in Main Browser"
 '
 'GoToSelectedMoviePosterSelectorToolStripMenuItem
 '
 Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Name = "GoToSelectedMoviePosterSelectorToolStripMenuItem"
-Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
 Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Text = "Go To Selected Movie Poster Selector"
 '
 'GoToSelectedMovieFanartSelectorToolStripMenuItem
 '
 Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Name = "GoToSelectedMovieFanartSelectorToolStripMenuItem"
-Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
 Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Text = "Go To Selected Movie Fanart Selector"
 '
 'Label132
@@ -5275,10 +5279,10 @@ Me.TabPage26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage26.Controls.Add(Me.Button82)
 Me.TabPage26.Controls.Add(Me.TabControl4)
 Me.TabPage26.Controls.Add(Me.CheckBox22)
-Me.TabPage26.Location = New System.Drawing.Point(4, 25)
+Me.TabPage26.Location = New System.Drawing.Point(4, 27)
 Me.TabPage26.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage26.Name = "TabPage26"
-Me.TabPage26.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage26.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage26.TabIndex = 12
 Me.TabPage26.Text = "Movie Preferences"
 Me.TabPage26.UseVisualStyleBackColor = true
@@ -5288,7 +5292,7 @@ Me.TabPage26.UseVisualStyleBackColor = true
 Me.Button82.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button82.Location = New System.Drawing.Point(512, 559)
+Me.Button82.Location = New System.Drawing.Point(512, 557)
 Me.Button82.Margin = New System.Windows.Forms.Padding(4)
 Me.Button82.Name = "Button82"
 Me.Button82.Size = New System.Drawing.Size(152, 29)
@@ -5307,7 +5311,7 @@ Me.TabControl4.Location = New System.Drawing.Point(0, 0)
 Me.TabControl4.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl4.Name = "TabControl4"
 Me.TabControl4.SelectedIndex = 0
-Me.TabControl4.Size = New System.Drawing.Size(1198, 596)
+Me.TabControl4.Size = New System.Drawing.Size(1198, 594)
 Me.TabControl4.TabIndex = 50
 '
 'TabPage27
@@ -5329,11 +5333,12 @@ Me.TabPage27.Controls.Add(Me.Label92)
 Me.TabPage27.Controls.Add(Me.ComboBox6)
 Me.TabPage27.Controls.Add(Me.GroupBox10)
 Me.TabPage27.Controls.Add(Me.GroupBox11)
+Me.TabPage27.Controls.Add(Me.GroupBox9)
 Me.TabPage27.Location = New System.Drawing.Point(4, 24)
 Me.TabPage27.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage27.Name = "TabPage27"
 Me.TabPage27.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage27.Size = New System.Drawing.Size(1190, 568)
+Me.TabPage27.Size = New System.Drawing.Size(1190, 566)
 Me.TabPage27.TabIndex = 0
 Me.TabPage27.Text = "General"
 '
@@ -5687,11 +5692,11 @@ Me.TabPage28.BackColor = System.Drawing.SystemColors.Control
 Me.TabPage28.Controls.Add(Me.GroupBox14)
 Me.TabPage28.Controls.Add(Me.GroupBox16)
 Me.TabPage28.Controls.Add(Me.GroupBox12)
-Me.TabPage28.Location = New System.Drawing.Point(4, 22)
+Me.TabPage28.Location = New System.Drawing.Point(4, 24)
 Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage28.Name = "TabPage28"
 Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage28.Size = New System.Drawing.Size(1190, 570)
+Me.TabPage28.Size = New System.Drawing.Size(1190, 566)
 Me.TabPage28.TabIndex = 1
 Me.TabPage28.Text = "Advanced"
 '
@@ -10037,35 +10042,35 @@ Me.Timer4.Interval = 75
 '
 Me.ContextMenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem, Me.ToolStripSeparator3, Me.EditMovieToolStripMenuItem1, Me.DToolStripMenuItem, Me.OpenFolderToolStripMenuItem1})
 Me.ContextMenuStrip3.Name = "ContextMenuStrip3"
-Me.ContextMenuStrip3.Size = New System.Drawing.Size(177, 98)
+Me.ContextMenuStrip3.Size = New System.Drawing.Size(188, 98)
 '
 'PlayMovieToolStripMenuItem
 '
 Me.PlayMovieToolStripMenuItem.Name = "PlayMovieToolStripMenuItem"
-Me.PlayMovieToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+Me.PlayMovieToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
 Me.PlayMovieToolStripMenuItem.Text = "Play Movie"
 '
 'ToolStripSeparator3
 '
 Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-Me.ToolStripSeparator3.Size = New System.Drawing.Size(173, 6)
+Me.ToolStripSeparator3.Size = New System.Drawing.Size(184, 6)
 '
 'EditMovieToolStripMenuItem1
 '
 Me.EditMovieToolStripMenuItem1.Name = "EditMovieToolStripMenuItem1"
-Me.EditMovieToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
+Me.EditMovieToolStripMenuItem1.Size = New System.Drawing.Size(187, 22)
 Me.EditMovieToolStripMenuItem1.Text = "Change Movie Poster"
 '
 'DToolStripMenuItem
 '
 Me.DToolStripMenuItem.Name = "DToolStripMenuItem"
-Me.DToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+Me.DToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
 Me.DToolStripMenuItem.Text = "Large Image View"
 '
 'OpenFolderToolStripMenuItem1
 '
 Me.OpenFolderToolStripMenuItem1.Name = "OpenFolderToolStripMenuItem1"
-Me.OpenFolderToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
+Me.OpenFolderToolStripMenuItem1.Size = New System.Drawing.Size(187, 22)
 Me.OpenFolderToolStripMenuItem1.Text = "Open Folder"
 '
 'ListBox8
@@ -10093,6 +10098,34 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 '
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
+'
+'TextBox_OfflineDVDTitle
+'
+Me.TextBox_OfflineDVDTitle.Location = New System.Drawing.Point(13, 28)
+Me.TextBox_OfflineDVDTitle.Name = "TextBox_OfflineDVDTitle"
+Me.TextBox_OfflineDVDTitle.Size = New System.Drawing.Size(368, 21)
+Me.TextBox_OfflineDVDTitle.TabIndex = 69
+Me.TextBox_OfflineDVDTitle.Text = "Please Insert %T Media"
+'
+'GroupBox9
+'
+Me.GroupBox9.Controls.Add(Me.Label77)
+Me.GroupBox9.Controls.Add(Me.TextBox_OfflineDVDTitle)
+Me.GroupBox9.Location = New System.Drawing.Point(787, 443)
+Me.GroupBox9.Name = "GroupBox9"
+Me.GroupBox9.Size = New System.Drawing.Size(392, 100)
+Me.GroupBox9.TabIndex = 70
+Me.GroupBox9.TabStop = false
+Me.GroupBox9.Text = "Offline DVD Title Text - *Not saved after reboot yet"
+'
+'Label77
+'
+Me.Label77.AutoSize = true
+Me.Label77.Location = New System.Drawing.Point(29, 56)
+Me.Label77.Name = "Label77"
+Me.Label77.Size = New System.Drawing.Size(96, 30)
+Me.Label77.TabIndex = 70
+Me.Label77.Text = "Use Parameters"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"%T - Movie Title"
 '
 'Form1
 '
@@ -10314,6 +10347,8 @@ Me.ContextMenuStrip3.ResumeLayout(false)
 CType(Me.BindingSource1,System.ComponentModel.ISupportInitialize).EndInit
 CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).EndInit
 CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).EndInit
+Me.GroupBox9.ResumeLayout(false)
+Me.GroupBox9.PerformLayout
 Me.ResumeLayout(false)
 Me.PerformLayout
 
@@ -11109,6 +11144,9 @@ End Sub
     Friend WithEvents Label64 As System.Windows.Forms.Label
     Friend WithEvents PictureBox10 As System.Windows.Forms.PictureBox
     Friend WithEvents MediaCompanionCodeplexSiteToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TextBox_OfflineDVDTitle As System.Windows.Forms.TextBox
+    Friend WithEvents GroupBox9 As System.Windows.Forms.GroupBox
+    Friend WithEvents Label77 As System.Windows.Forms.Label
 
 
 

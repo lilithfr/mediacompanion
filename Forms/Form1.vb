@@ -27910,7 +27910,9 @@ Public Class Form1
                 fanartpath = defaultOfflineArt
             End If
             Dim curImage As Image = Image.FromFile(fanartpath)
-            Dim tempstring As String = "Please Insert '" & title & "' DVD"
+            'Dim tempstring As String = "Please Insert '" & title & "' DVD"
+
+            Dim tempstring As String = TextBox_OfflineDVDTitle.Text.Replace("%T", title)
 
             Dim g As System.Drawing.Graphics
 
