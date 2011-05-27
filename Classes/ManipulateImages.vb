@@ -7,7 +7,7 @@ Public Class ManipulateImages
         Dim bm_dest As New Bitmap(width, height)
         Dim gr As Graphics = Graphics.FromImage(bm_dest)
         gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-        gr.DrawImage(bm_source, 0, 0, width - 1, height - 1)
+        gr.DrawImage(bm_source, 0, 0, width, height)
         Dim tempbitmap As Bitmap = bm_dest
         Return tempbitmap
     End Function

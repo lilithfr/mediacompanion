@@ -39,9 +39,9 @@ Public Class frmMessageBox
 
     Private Sub MessageBoxVisibilityChanged(ByVal sender As Object, ByVal e As EventArgs) Handles Me.VisibleChanged
         If Me.Visible = False Then
-            Me.Cursor.Current = Cursors.Default
+            Windows.Forms.Cursor.Current = Cursors.Default
         Else
-            Me.Cursor.Current = Cursors.WaitCursor
+            Windows.Forms.Cursor.Current = Cursors.WaitCursor
         End If
         TextBox1.SelectionStart = TextBox1.Text.Length
         TextBox2.SelectionStart = TextBox2.Text.Length

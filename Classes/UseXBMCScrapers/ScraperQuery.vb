@@ -493,7 +493,7 @@ Public Class ScraperQuery
 
          Dim functionName As String = chainElement.@function
 
-            Dim chainResultElement As XElement
+            Dim chainResultElement As XElement = Nothing
             ' I've inserted the Try routine below, for handling null result
             Try 'isto é meu
                 Dim chainResult As String = ScraperQuery.ExecuteQuery(mScraper, functionName, functionParams)

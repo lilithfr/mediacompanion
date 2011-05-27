@@ -136,13 +136,14 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
 
     Public Function tmdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
         Try
             Dim newobject2 As New tmdb_posters.Class1
-            Dim thumburl As String
+            Dim thumburl As String = String.Empty
             Dim xmllist As String
             Dim ok As Boolean = False
             Try
@@ -172,6 +173,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function mpdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
@@ -257,6 +259,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function impathumb(ByVal title As String, ByVal year As String)
         Monitor.Enter(Me)
@@ -471,6 +474,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function imdbthumb(ByVal posterimdbid As String)
 
@@ -521,6 +525,6 @@ Public Class ScraperFunctions
 
             Monitor.Exit(Me)
         End Try
-
+        Return "Error"
     End Function
 End Class

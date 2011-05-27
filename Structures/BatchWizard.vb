@@ -6,6 +6,7 @@ Public Structure BatchWizard
     Dim top250 As Boolean
     Dim runtime As Boolean
     Dim director As Boolean
+    Dim stars As Boolean
     Dim year As Boolean
     Dim outline As Boolean
     Dim plot As Boolean

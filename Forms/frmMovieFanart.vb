@@ -177,7 +177,7 @@ Public Class frmMovieFanart
 
 
 
-        Dim tmdbid As String
+        Dim tmdbid As String = String.Empty
         Dim temp As String = Form1.workingMovieDetails.fullmoviebody.imdbid
         Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
         Dim apple2(2000) As String
@@ -404,9 +404,9 @@ Public Class frmMovieFanart
         Me.Refresh()
         Application.DoEvents()
 
-        Dim tempstring As String
+        Dim tempstring As String = String.Empty
         Dim tempint As Integer
-        Dim tempstring2 As String
+        Dim tempstring2 As String = String.Empty
         Dim allok As Boolean = False
         For Each button As Control In Me.Panel2.Controls
             If button.Name.IndexOf("checkbox") <> -1 Then
@@ -431,7 +431,7 @@ Public Class frmMovieFanart
                 Dim bytesRead As Integer = 0
 
                 Dim fanartthumburl As String = tempstring2
-                Dim req As HttpWebRequest = req.Create(fanartthumburl)
+                Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
                 Dim res As HttpWebResponse = req.GetResponse()
                 Dim contents As Stream = res.GetResponseStream()
                 Dim bmp As New Bitmap(contents)
@@ -462,7 +462,7 @@ Public Class frmMovieFanart
                         Dim tempbitmap As Bitmap = bm_dest
                         tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                     Else
-                        Threading.Thread.CurrentThread.Sleep(30)
+                        Threading.Thread.Sleep(30)
                         bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                     End If
                 ElseIf Form1.userPrefs.resizefanart = 3 Then
@@ -475,7 +475,7 @@ Public Class frmMovieFanart
                         Dim tempbitmap As Bitmap = bm_dest
                         tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                     Else
-                        Threading.Thread.CurrentThread.Sleep(30)
+                        Threading.Thread.Sleep(30)
                         bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                     End If
                 End If
@@ -574,7 +574,7 @@ Public Class frmMovieFanart
                     Dim tempbitmap As Bitmap = bm_dest
                     tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                 Else
-                    Threading.Thread.CurrentThread.Sleep(30)
+                    Threading.Thread.Sleep(30)
                     bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                 End If
             ElseIf Form1.userPrefs.resizefanart = 3 Then
@@ -587,28 +587,16 @@ Public Class frmMovieFanart
                     Dim tempbitmap As Bitmap = bm_dest
                     tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                 Else
-                    Threading.Thread.CurrentThread.Sleep(30)
+                    Threading.Thread.Sleep(30)
                     bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                 End If
             End If
-
-
-
-
-
-
-
-
-
-
 
             Me.Close()
         Catch ex As Exception
             MsgBox("Unable To Download Image")
         End Try
         Panel3.Visible = False
-
-
 
     End Sub
 

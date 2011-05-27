@@ -5,9 +5,9 @@ Imports System.Xml
 Public Class actors
     Public Function EpisodeGetImdbActors(ByVal imbdID As String, ByVal seasonNO As String, _
                                          ByVal episodeNO As String) As List(Of movieactors)
+        Dim tempactorlist As New List(Of MovieActors)
         Monitor.Enter(Me)
         Try
-            Dim tempactorlist As New List(Of movieactors)
             tempactorlist.Clear()
             Try
                 Dim url As String
@@ -107,6 +107,7 @@ Public Class actors
         Finally
             Monitor.Exit(Me)
         End Try
+        Return tempactorlist
     End Function
 
     Public Sub savelocalactors(ByVal path As String, ByVal listofactors As List(Of MovieActors), Optional ByVal tvshowpath As String = "", Optional ByVal copyactorthumbs As Boolean = False)
@@ -165,7 +166,7 @@ Public Class actors
                                     Dim size As Integer = 0
                                     Dim bytesRead As Integer = 0
                                     Dim thumburl As String = actor.actorthumb
-                                    Dim req As HttpWebRequest = req.Create(thumburl)
+                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                     Dim res As HttpWebResponse = req.GetResponse()
                                     Dim contents As Stream = res.GetResponseStream()
                                     Dim bytesToRead As Integer = CInt(buffer.Length)

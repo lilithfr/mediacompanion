@@ -855,7 +855,7 @@ Public Class frmTvPosters
     End Sub
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
-        Dim savepath As String
+        Dim savepath As String = String.Empty
 
         If ComboBox2.Text.IndexOf("Main") <> -1 Then
             savepath = savethumbpath & "folder.jpg"
@@ -887,7 +887,7 @@ Public Class frmTvPosters
     End Sub
 
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
-        Dim savepath As String
+        Dim savepath As String = String.Empty
 
         If ComboBox2.Text.IndexOf("Main") <> -1 Then
             savepath = savethumbpath & "folder.jpg"
@@ -970,7 +970,7 @@ Public Class frmTvPosters
 
         'Call initialise()
 
-        Dim savepath As String
+        Dim savepath As String = String.Empty
 
         If ComboBox2.Text.IndexOf("Main") <> -1 Then
             savepath = savethumbpath & "folder.jpg"

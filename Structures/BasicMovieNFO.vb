@@ -14,6 +14,7 @@ Public Structure BasicMovieNFO
     Dim genre As String
     Dim credits As String
     Dim director As String
+    Dim stars As String
     Dim premiered As String
     Dim studio As String
     Dim trailer As String

@@ -235,7 +235,7 @@ Public Class frmCoverArt
 
         Call initialise()
 
-        Dim tempsimdbid As String
+        Dim tempsimdbid As String = String.Empty
         '------------------------------------
         ''                                    Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
         'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
@@ -932,7 +932,7 @@ Public Class frmCoverArt
     End Sub
 
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox1.KeyPress
-        If e.KeyChar.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
             If TextBox1.Text <> "" Then
                 If Convert.ToDecimal(TextBox1.Text) >= 1 Then
                     e.Handled = True

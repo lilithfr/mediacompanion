@@ -23,6 +23,7 @@ Partial Class frmBatchScraper
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox
         Me.CheckBox22 = New System.Windows.Forms.CheckBox
         Me.CheckBox21 = New System.Windows.Forms.CheckBox
         Me.CheckBox14 = New System.Windows.Forms.CheckBox
@@ -47,7 +48,7 @@ Partial Class frmBatchScraper
         Me.CheckBox15 = New System.Windows.Forms.CheckBox
         Me.CheckBox19 = New System.Windows.Forms.CheckBox
         Me.Label1 = New System.Windows.Forms.Label
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -55,6 +56,7 @@ Partial Class frmBatchScraper
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Controls.Add(Me.CheckBox22)
         Me.GroupBox1.Controls.Add(Me.CheckBox21)
@@ -76,6 +78,16 @@ Partial Class frmBatchScraper
         Me.GroupBox1.TabIndex = 28
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Select Main Tags to Rescrape"
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(336, 65)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(62, 17)
+        Me.CheckBox1.TabIndex = 16
+        Me.CheckBox1.Text = "Country"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox22
         '
@@ -318,15 +330,15 @@ Partial Class frmBatchScraper
         Me.Label1.Text = "This form can be used to rescrape all movies, you can select which tags are updat" & _
             "ed below," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "all other tags will remain unchanged."
         '
-        'CheckBox1
+        'CheckBox2
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(336, 65)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(62, 17)
-        Me.CheckBox1.TabIndex = 16
-        Me.CheckBox1.Text = "Country"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(336, 88)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(50, 17)
+        Me.CheckBox2.TabIndex = 17
+        Me.CheckBox2.Text = "Stars"
+        Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'batch_scraper
         '
@@ -380,4 +392,5 @@ Partial Class frmBatchScraper
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents CheckBox16 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
 End Class

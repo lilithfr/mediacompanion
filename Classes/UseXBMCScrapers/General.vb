@@ -83,7 +83,7 @@ Module General
         End Try
     End Function
     Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
-        Dim TempScraper As Scraper
+        Dim TempScraper As Scraper = Nothing
         For Each c In mScraperManager.Scrapers
             If c.ID = ScraperIdentification Then
                 TempScraper = c
@@ -161,6 +161,7 @@ Module General
             Return movieyear
         Catch
         End Try
+        Return "Error"
     End Function
     Public Function cleanfilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Dim cleanname As String = filename
@@ -696,9 +697,11 @@ Module General
         Catch
         Finally
         End Try
+        Return "Error"
     End Function
     Public Function get_hdtags(ByVal filename As String) As FullFileDetails
 
+        Dim workingfiledetails As New FullFileDetails
         Try
             If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
                 Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
@@ -713,9 +716,8 @@ Module General
             playlist = FileFolderFunctions.getmedialist(tempstring)
 
             If Not IO.File.Exists(filename) Then
-                Exit Function
+                Return workingfiledetails
             End If
-            Dim workingfiledetails As New FullFileDetails
             Dim MI As New mediainfo
             'MI = New mediainfo
             MI.Open(filename)
@@ -903,6 +905,7 @@ Module General
 
         Finally
         End Try
+        Return workingfiledetails
     End Function
     Public Function InsertFileInformationTags(ByVal Entrada As String, ByVal Filename As String) As String
         Dim WorkingFileDetails As FullFileDetails = get_hdtags(Filename)
@@ -1091,11 +1094,8 @@ Module General
         m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
@@ -1200,11 +1200,8 @@ Module General
         m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
@@ -1256,11 +1253,8 @@ Module General
         m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
@@ -1334,11 +1328,8 @@ Module General
         m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
@@ -1437,7 +1428,7 @@ Module General
                                     FinalString &= "<year>" & node1.InnerText.Substring(0, 4) & "</year>"
                                 Case "genre"
                                     If ExtraFields = False Then
-                                        Dim sortorder As String
+                                        Dim sortorder As String = String.Empty
                                         If Form1.RadioButton14.Checked Then sortorder = "dvd"
                                         If Form1.RadioButton15.Checked Then sortorder = "default"
                                         FinalString &= "<top250>0</top250><season>-1</season><episode>-1</episode><displayseason>-1</displayseason><displayepisode>-1</displayepisode>" _
@@ -1467,11 +1458,8 @@ Module General
         m_xmld.LoadXml(FullString)
         m_nodelist = m_xmld.SelectNodes("/tvshow")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
@@ -1634,7 +1622,6 @@ Module General
         End If
         Dim NodeChild As XmlNode
         Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim Counter As Integer = 0
 
         For Each m_node In m_nodelist
@@ -1710,11 +1697,8 @@ Module General
         m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 
@@ -1776,11 +1760,8 @@ Module General
         m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
-        Dim Nodechild1 As XmlNode
-        Dim Nodechild2 As XmlNode
         Dim MoviePosterURL As String = ""
         Dim MovieFanartURL As String = ""
-        Dim PosterFanartAttributes As XmlAttributeCollection
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
 

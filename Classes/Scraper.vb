@@ -508,13 +508,11 @@ Public Class Classimdb
           
             Dim first As Integer
             Dim tempstring As String
-            Dim tempstring2 As String
             Dim actors(10000, 3)
             Dim actorcount As Integer = 0
             Dim filterstring As String
             Dim last As Integer
             Dim length As Integer
-            Dim thumburl As String
             Dim tempint As Integer
             Dim mpaacount As Integer = -1
             Dim webpage As New List(Of String)
@@ -556,7 +554,7 @@ Public Class Classimdb
             mpaaresults(32, 0) = "Greece"
             mpaaresults(33, 0) = "Austria"
 
-            Dim movienfoarray As String
+            Dim movienfoarray As String = String.Empty
 
             Dim genre(20)
             Dim thumbs(500)
@@ -792,6 +790,43 @@ Public Class Classimdb
                         End Try
                     End If
 
+                    'Stars
+                    If webpage(f).IndexOf("<h4 class=""inline"">Stars") <> -1 Then
+                        Try
+                            movienfoarray = ""
+                            Dim listofstars As New List(Of String)
+                            listofstars.Clear()
+                            For g = 1 To 10
+                                If webpage(f + g).IndexOf("<tr") <> -1 Then Exit For
+                                'If webpage(f + g).IndexOf("Writer") <> -1 Then Exit For
+                                If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
+                                    If webpage(f + g).IndexOf("/name/nm") <> webpage(f + g).LastIndexOf("/name/nm") Then
+                                        webpage(f + g + 1) = webpage(f + g).Replace(webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>") + 4), "")
+                                        webpage(f + g) = webpage(f + g).Replace(webpage(f + g + 1), "")
+                                    End If
+                                    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
+                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
+                                    webpage(f + g) = webpage(f + g).TrimEnd(" ")
+                                    webpage(f + g) = webpage(f + g).TrimEnd(",")
+                                    If webpage(f + g) <> "" Then
+                                        listofstars.Add(webpage(f + g))
+                                    End If
+                                End If
+                            Next
+                            For g = 0 To listofstars.Count - 1
+                                If g = 0 Then
+                                    movienfoarray = listofstars(g)
+                                Else
+                                    movienfoarray = movienfoarray & ", " & listofstars(g)
+                                End If
+                            Next
+                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = encodespecialchrs(movienfoarray)
+                            totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
+                        Catch
+                            totalinfo = totalinfo & "<stars>scraper error</stars>" & vbCrLf
+                        End Try
+                    End If
 
 
                     'genre
@@ -1151,8 +1186,6 @@ Public Class Classimdb
         Dim actors(5000, 3)
         Dim tempstring As String
         Dim filterstring As String
-        Dim first As Integer
-        Dim last As Integer
         Dim actorcount As Integer
         Dim totalinfo As String = "<actorlist>"
 
@@ -1267,6 +1300,7 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String)
         Monitor.Enter(Me)
@@ -1348,6 +1382,7 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
 
 
@@ -1790,6 +1825,7 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function ' Replace special IMDB chrs with ascii
 
 

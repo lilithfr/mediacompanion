@@ -136,6 +136,7 @@
     <Compile Include="Classes\Profiles.vb" />
     <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
+    <Compile Include="Classes\TVhtml.vb" />
     <Compile Include="Classes\Tv\TvEpisode.vb" />
     <Compile Include="Classes\Tv\TvShow.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />

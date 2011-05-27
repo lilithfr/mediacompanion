@@ -590,6 +590,7 @@ Public Class FileAndFolderFunctions
         Finally
             Monitor.Exit(monitorobject)
         End Try
+        Return "Error"
     End Function
     Public Function EnumerateDirectory(ByVal RootDirectory As String)
 
@@ -873,6 +874,7 @@ Public Class FileAndFolderFunctions
             Return movieyear
         Catch
         End Try
+        Return "Error"
     End Function
     Public Function cleanfilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Monitor.Enter(Me)
@@ -1031,7 +1033,7 @@ Public Class FileAndFolderFunctions
             playlist = getmedialist(tempstring)
 
             If Not IO.File.Exists(filename) Then
-                Exit Function
+                Return "Error"
             End If
             Dim workingfiledetails As New FullFileDetails
             Dim MI As New mediainfo
@@ -1222,6 +1224,7 @@ Public Class FileAndFolderFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function getlangcode(ByVal strLang As String) As String
         Dim monitorobject As New Object
@@ -2212,6 +2215,7 @@ Public Class FileAndFolderFunctions
         Finally
             Monitor.Exit(monitorobject)
         End Try
+        Return "Error"
     End Function
     Public Function getactorthumbpath(Optional ByVal location As String = "")
         Monitor.Enter(Me)
@@ -2635,7 +2639,7 @@ Public Class FileAndFolderFunctions
         Finally
             Monitor.Exit(Me)
         End Try
-
+        Return "Error"
     End Function
     Public Function cleanruntime(ByVal runtime As String)
         Monitor.Enter(Me)
@@ -2697,6 +2701,7 @@ Public Class FileAndFolderFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
         Dim intCounter As Integer = 0

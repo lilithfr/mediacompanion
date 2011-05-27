@@ -91,7 +91,7 @@ Public Class InputOutput
 
     Public Function loadtextfull(ByVal path As String) As String
         Monitor.Enter(Me)
-        Dim text As String
+        Dim text As String = String.Empty
         Try
             If Not IO.File.Exists(path) Then
                 text = "nofile"
@@ -153,6 +153,7 @@ Public Class InputOutput
         Finally
             Monitor.Exit(Me)
         End Try
+        Return Nothing
     End Function
 
     Public Function saveimage(ByVal image As Bitmap, ByVal path As String) As Boolean

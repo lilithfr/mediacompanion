@@ -35,7 +35,7 @@ Public Class WebFileDownloader
         End Try
     End Function
     Public Function DownloadFileWithProgress(ByVal URL As String, ByVal Location As String) As Boolean
-        Dim FS As FileStream
+        Dim FS As FileStream = Nothing
         Try
             mCurrentFile = GetFileName(URL)
             Dim wRemote As WebRequest
@@ -93,5 +93,6 @@ Public Class WebFileDownloader
         Catch ex As Exception
             Return Size.ToString
         End Try
+        Return "Error"
     End Function
 End Class

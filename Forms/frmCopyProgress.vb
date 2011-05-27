@@ -124,11 +124,7 @@ Public Class frmCopyProgress
         End If
     End Sub
 
-
-
-
-
-    Dim closing As Boolean = False
+    Shadows closing As Boolean = False
     Private Sub copyprogress_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.Visible = False
         Me.Refresh()

@@ -128,7 +128,6 @@ Public Class WorkingWithNfoFiles
     End Function
 
     Public Function validate_nfo(ByVal nfopath As String)
-        Dim filepath As String
         Dim tempstring As String
         Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
@@ -271,6 +270,7 @@ Public Class WorkingWithNfoFiles
 
         Catch
         End Try
+        Return "Error"
     End Function
 
     Public Function loadbasicepisodenfo(ByVal path As String)
@@ -279,7 +279,7 @@ Public Class WorkingWithNfoFiles
 
         Dim newtvshow As New BasicEpisodeNFO
         If Not IO.File.Exists(path) Then
-            Exit Function
+            Return "Error"
         Else
             Dim tvshow As New XmlDocument
             Try
@@ -852,6 +852,7 @@ Public Class WorkingWithNfoFiles
 
 
         End If
+        Return "Error"
     End Function
 
     Public Function loadfulltnshownfo(ByVal path As String)
@@ -1005,6 +1006,7 @@ Public Class WorkingWithNfoFiles
 
         Catch
         End Try
+        Return "Error"
     End Function
 
     Public Sub savetvshownfo(ByVal filenameandpath As String, ByVal tvshowtosave As TvShowNFO, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
@@ -1062,8 +1064,6 @@ Public Class WorkingWithNfoFiles
                 Dim root As XmlElement
                 Dim child As XmlElement
                 Dim actorchild As XmlElement
-                Dim filedetailschild As XmlElement
-                Dim filedetailschildchild As XmlElement
                 root = doc.CreateElement("tvshow")
                 Dim thumbnailstring As String = ""
                 stage = 2
@@ -1568,7 +1568,6 @@ Public Class WorkingWithNfoFiles
             Dim childchild As XmlElement
             Dim childchildchild As XmlElement
             Dim childchildchildchild As XmlElement
-            Dim childchildchildchildchild As XmlElement
             Dim middlechild As XmlElement
 
             Dim xmlproc As XmlDeclaration
@@ -1818,6 +1817,7 @@ Public Class WorkingWithNfoFiles
         Try
             Dim newmovie As New ComboList
             If Not IO.File.Exists(path) Then
+                Return "Error"
                 Exit Function
             Else
                 If mode = "movielist" Then
@@ -1826,6 +1826,7 @@ Public Class WorkingWithNfoFiles
                         movie.Load(path)
                     Catch ex As Exception
                         If Not validate_nfo(path) Then
+                            Return "Error"
                             Exit Function
                         End If
                         newmovie.title = IO.Path.GetFileName(path)
@@ -1932,9 +1933,6 @@ Public Class WorkingWithNfoFiles
                         newmovie.titleandyear = newmovie.title & "(0000)"
                     End If
                     newmovie.filename = IO.Path.GetFileName(path)
-                    Dim basicfilename As String
-                    'basicfilename = System.IO.Path.GetFileName(newmovie.fullpathandfilename)
-                    'Dim filepath2 As String = newmovie.fullpathandfilename.Replace(basicfilename, "")
 
                     newmovie.foldername = Form1.fileFunction.getlastfolder(path)
 
@@ -1949,6 +1947,7 @@ Public Class WorkingWithNfoFiles
 
         Catch
         End Try
+        Return "Error"
     End Function
 
 
@@ -1957,7 +1956,7 @@ Public Class WorkingWithNfoFiles
         Try
             Dim newmovie As New FullMovieDetails
             newmovie.fullmoviebody.genre = ""
-            Dim thumbstring As String
+            Dim thumbstring As String = String.Empty
             If Not IO.File.Exists(path) Then
             Else
                 Dim movie As New XmlDocument
@@ -1973,6 +1972,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.playcount = "0"
                     newmovie.fullmoviebody.credits = ""
                     newmovie.fullmoviebody.director = ""
+                    newmovie.fullmoviebody.stars = ""
                     newmovie.fullmoviebody.filename = ""
                     newmovie.fullmoviebody.genre = ""
                     newmovie.fullmoviebody.imdbid = ""
@@ -2026,6 +2026,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.credits = thisresult.InnerText
                         Case "director"
                             newmovie.fullmoviebody.director = thisresult.InnerText
+                        Case "stars"
+                            newmovie.fullmoviebody.stars = thisresult.InnerText
                         Case "thumb"
                             If thisresult.InnerText.IndexOf("&lt;thumbs&gt;") <> -1 Then
                                 thumbstring = thisresult.InnerText
@@ -2177,6 +2179,7 @@ Public Class WorkingWithNfoFiles
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
 
 
@@ -2195,12 +2198,12 @@ Public Class WorkingWithNfoFiles
 
                 xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
                 doc.AppendChild(xmlproc)
-                Dim root As XmlElement
-                Dim child As XmlElement
-                Dim actorchild As XmlElement
-                Dim filedetailschild As XmlElement
-                Dim filedetailschildchild As XmlElement
-                Dim anotherchild As XmlElement
+                Dim root As XmlElement = Nothing
+                Dim child As XmlElement = Nothing
+                Dim actorchild As XmlElement = Nothing
+                Dim filedetailschild As XmlElement = Nothing
+                Dim filedetailschildchild As XmlElement = Nothing
+                Dim anotherchild As XmlElement = Nothing
 
                 root = doc.CreateElement("movie")
                 stage = 3
@@ -2521,6 +2524,12 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 20
                 Try
+                    child = doc.CreateElement("premiered")
+                    child.InnerText = movietosave.fullmoviebody.premiered
+                    root.AppendChild(child)
+                Catch
+                End Try
+                Try
                     child = doc.CreateElement("rating")
                     child.InnerText = movietosave.fullmoviebody.rating
                     root.AppendChild(child)
@@ -2714,6 +2723,12 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 33
                 Try
+                    child = doc.CreateElement("stars")
+                    child.InnerText = movietosave.fullmoviebody.stars
+                    root.AppendChild(child)
+                Catch
+                End Try
+                Try
                     Dim actorstosave As Integer = movietosave.listactors.Count
                     If actorstosave > Form1.userprefs.maxactors Then actorstosave = Form1.userprefs.maxactors
                     For f = 0 To actorstosave - 1
@@ -2772,13 +2787,14 @@ Public Class WorkingWithNfoFiles
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
 
 
     Public Function loadfullepisodenfogeneric(ByVal path As String) ', ByVal season As String, ByVal episode As String)
 
         Dim newepisodelist As New List(Of EpisodeInfo)
-        Dim newepisode As EpisodeInfo
+        Dim newepisode As New EpisodeInfo
         If Not IO.File.Exists(path) Then
             newepisode.title = IO.Path.GetFileName(path)
             newepisode.plot = "missing file"
@@ -3152,6 +3168,7 @@ Public Class WorkingWithNfoFiles
 
 
         End If
+        Return "Error"
     End Function
 
 

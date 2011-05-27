@@ -109,6 +109,15 @@
         End Set
     End Property
 
+    Public Shadows Property missing As Boolean
+        Get
+            Return MyBase.Missing.Value
+        End Get
+        Set(ByVal value As Boolean)
+            MyBase.Missing.Value = value
+        End Set
+    End Property
+
     Public Shadows Property credits As String
         Get
             Return MyBase.Credits.Value

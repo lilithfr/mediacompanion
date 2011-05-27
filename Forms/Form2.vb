@@ -28,6 +28,7 @@ Public Class Form2
         actorcb.Items.Clear()
         If workingmovieedit.fullmoviebody.title <> Nothing Then titletxt.Text = workingmovieedit.fullmoviebody.title
         If workingmovieedit.fullmoviebody.director <> Nothing Then directortxt.Text = workingmovieedit.fullmoviebody.director
+        If workingmovieedit.fullmoviebody.stars <> Nothing Then starstxt.Text = workingmovieedit.fullmoviebody.stars
         If workingmovieedit.fullmoviebody.runtime <> Nothing Then runtimetxt.Text = workingmovieedit.fullmoviebody.runtime
         If workingmovieedit.fullmoviebody.credits <> Nothing Then creditstxt.Text = workingmovieedit.fullmoviebody.credits
         If workingmovieedit.fullmoviebody.mpaa <> Nothing Then mpaatxt.Text = workingmovieedit.fullmoviebody.mpaa
@@ -155,9 +156,7 @@ Public Class Form2
 
     Private Sub btnchangemovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnchangemovie.Click
         Dim tempstring As String
-        Dim tempstring2 As String
         Dim url As String
-        Dim tempstring3 As String
         If Form1.userPrefs.usefoldernames = True Then
             tempstring = Form1.workingMovie.foldername
         Else
@@ -241,6 +240,8 @@ Public Class Form2
                             alternatemovie.fullmoviebody.credits = thisresult.InnerText
                         Case "director"
                             alternatemovie.fullmoviebody.director = thisresult.InnerText
+                        Case "stars"
+                            alternatemovie.fullmoviebody.stars = thisresult.InnerText
                         Case "genre"
                             alternatemovie.fullmoviebody.genre = thisresult.InnerText
                         Case "mpaa"
@@ -322,7 +323,7 @@ Public Class Form2
                                                             Dim size As Integer = 0
                                                             Dim bytesRead As Integer = 0
                                                             Dim thumburl As String = newactor.actorthumb
-                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                             Dim contents As Stream = res.GetResponseStream()
                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -630,7 +631,7 @@ Public Class Form2
                                             Dim bytesRead As Integer = 0
 
                                             Dim thumburl As String = moviethumburl
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -942,6 +943,7 @@ Public Class Form2
         workingmovieedit.fullmoviebody.plot = plottxt.Text
         workingmovieedit.fullmoviebody.title = titletxt.Text
         workingmovieedit.fullmoviebody.director = directortxt.Text
+        workingmovieedit.fullmoviebody.stars = starstxt.Text
         workingmovieedit.fullmoviebody.runtime = runtimetxt.Text
         workingmovieedit.fullmoviebody.credits = creditstxt.Text
         workingmovieedit.fullmoviebody.mpaa = mpaatxt.Text
@@ -993,13 +995,12 @@ Public Class Form2
             Dim lngSizeOfFile As Decimal
             lngSizeOfFile = FileLen(Form1.workingMovieDetails.fileinfo.posterpath)
             lngSizeOfFile = lngSizeOfFile / 1024
-            lngSizeOfFile = lngSizeOfFile.Round(lngSizeOfFile, 2)
+            lngSizeOfFile = Decimal.Round(lngSizeOfFile, 2)
             Label18.Text = lngSizeOfFile & "kB"
         End If
     End Sub
 
     Private Sub zoom_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles zoom.Click
-        Dim posx As Integer
         If moviethumb.Height = 213 Then
             moviethumb.Location = New Point(371, 12)
             moviethumb.Height = 518
@@ -1077,6 +1078,7 @@ Public Class Form2
         workingmovieedit.filedetails.filedetails_video.width = Nothing
         workingmovieedit.fullmoviebody.title = Nothing
         workingmovieedit.fullmoviebody.director = Nothing
+        workingmovieedit.fullmoviebody.stars = Nothing
         workingmovieedit.fullmoviebody.credits = Nothing
         workingmovieedit.fullmoviebody.studio = Nothing
         workingmovieedit.fullmoviebody.outline = Nothing

@@ -599,7 +599,7 @@ Public Class frmOptions
     End Sub
 
     Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtbx_minrarsize.KeyPress
-        If e.KeyChar.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
             If txtbx_minrarsize.Text <> "" Then
                 e.Handled = True
             Else
@@ -628,7 +628,7 @@ Public Class frmOptions
 
 
     Private Sub txtbox_maxposters_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtbox_maxposters.KeyPress
-        If e.KeyChar.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
             If txtbox_maxposters.Text <> "" Then
                 If Convert.ToDecimal(txtbox_maxposters.Text) >= 1 Then
                     e.Handled = True

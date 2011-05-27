@@ -951,6 +951,7 @@ Partial Class Form2
     Friend WithEvents studiotxt As System.Windows.Forms.TextBox
     Friend WithEvents creditstxt As System.Windows.Forms.TextBox
     Friend WithEvents directortxt As System.Windows.Forms.TextBox
+    Friend WithEvents starstxt As System.Windows.Forms.TextBox
     Friend WithEvents titletxt As System.Windows.Forms.TextBox
     Friend WithEvents taglinetxt As System.Windows.Forms.TextBox
     Friend WithEvents plottxt As System.Windows.Forms.TextBox

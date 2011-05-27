@@ -72,6 +72,7 @@ Public Class Form1
     Dim defaultActor As String
     Dim defaultFanart As String
     Dim defaultPoster As String
+    Dim defaultBanner As String
     Dim defaultOfflineArt As String
     Dim actorDB As New List(Of ActorDatabase)
     Dim scraperLog As String = ""
@@ -395,6 +396,7 @@ Public Class Form1
         defaultOfflineArt = IO.Path.Combine(applicationPath, "Resources\default_offline.jpg")
         defaultFanart = IO.Path.Combine(applicationPath, "Resources\default_fanart.jpg")
         defaultPoster = IO.Path.Combine(applicationPath, "Resources\default_poster.jpg")
+        defaultBanner = IO.Path.Combine(applicationPath, "Resources\default_banner.jpg")
         defaultActor = IO.Path.Combine(applicationPath, "Resources\default_actor.jpg")
         CheckForIllegalCrossThreadCalls = False
 
@@ -1797,9 +1799,16 @@ Public Class Form1
         For Each info In fs_infos
             Try
                 Dim fullstring As String
+                Dim htmlType As String = ""
                 Dim cfg2 As IO.StreamReader = IO.File.OpenText(info.FullName)
                 fullstring = cfg2.ReadToEnd
                 If fullstring.ToLower.IndexOf("<<mc html page>>") <> -1 And fullstring.ToLower.IndexOf("<</mc html page>>") <> -1 Then
+                    htmlType = "movie"
+                ElseIf fullstring.ToLower.IndexOf("<<mc tv html page>>") <> -1 And fullstring.ToLower.IndexOf("<</mc tv html page>>") <> -1 Then
+                    htmlType = "tv"
+                Else
+                    Continue For
+                End If
                     Dim tempstring As String = fullstring.Substring(fullstring.IndexOf("<title>") + 7, fullstring.IndexOf("</title>") - 7)
                     Dim template As HTMLTemplate
                     Dim add As Boolean = True
@@ -1813,9 +1822,12 @@ Public Class Form1
                         template.title = tempstring
                         template.path = info.FullName
                         template.body = fullstring
+                    If htmlType = "movie" Then
                         OutputMovieListAsHTMLToolStripMenuItem.DropDownItems.Add(template.title)
-                        templateList.Add(template)
+                    Else
+                        OutputTVShowsAsHTMLToolStripMenuItem.DropDownItems.Add(template.title)
                     End If
+                    templateList.Add(template)
                 End If
             Catch ex As Exception
                 Dim t As Integer = 0
@@ -2202,6 +2214,7 @@ Public Class Form1
                 If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
                 If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
                 If workingMovieDetails.fullmoviebody.director = Nothing Then workingMovieDetails.fullmoviebody.director = ""
+                If workingMovieDetails.fullmoviebody.stars = Nothing Then workingMovieDetails.fullmoviebody.stars = ""
                 If workingMovieDetails.fullmoviebody.filename = Nothing Then workingMovieDetails.fullmoviebody.filename = ""
                 If workingMovieDetails.fullmoviebody.genre = Nothing Then workingMovieDetails.fullmoviebody.genre = ""
                 If workingMovieDetails.fullmoviebody.imdbid = Nothing Then workingMovieDetails.fullmoviebody.imdbid = ""
@@ -3968,6 +3981,8 @@ Public Class Form1
                                         newmovie.fullmoviebody.credits = thisresult.InnerText
                                     Case "director"
                                         newmovie.fullmoviebody.director = thisresult.InnerText
+                                    Case "stars"
+                                        newmovie.fullmoviebody.stars = thisresult.InnerText
                                     Case "genre"
                                         Dim strarr() As String
                                         strarr = thisresult.InnerText.Split("/")
@@ -5184,131 +5199,635 @@ Public Class Form1
     End Sub
 
     Private Function getmovietags(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, Optional ByVal thumbpath As String = "")
-        If text.IndexOf("<<smallimage>>") And thumbpath <> "" Then
-            Dim filename As String = fileFunction.GetCRC32(movie.fullpathandfilename)
-            If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
-                Try
-                    IO.File.Copy(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"), IO.Path.Combine(thumbpath, filename & ".jpg"))
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-                Try
-                    text = text.Replace("<<smallimage>>", "images/" & filename & ".jpg")
-                Catch ex As Exception
-                    MsgBox(ex.ToString)
-                End Try
-                Dim tempstring As String = text
-            Else
-                If IO.File.Exists(fileFunction.getposterpath(movie.fullpathandfilename)) Then
-                    Try
-                        Dim bitmap As New Bitmap(fileFunction.getposterpath(movie.fullpathandfilename))
-                        Dim bitmap2 As New Bitmap(bitmap)
-                        bitmap.Dispose()
-                        bitmap2 = imageFunctions.ResizeImage(bitmap2, 150, 200)
-                        bitmap2.Save(IO.Path.Combine(thumbpath, filename & ".jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
-                Else
-                    Try
-                        Dim bitmap As New Bitmap(defaultPoster)
-                        Dim bitmap2 As New Bitmap(bitmap)
-                        bitmap.Dispose()
-                        bitmap2 = imageFunctions.ResizeImage(bitmap2, 150, 200)
-                        bitmap2.Save(IO.Path.Combine(thumbpath, filename & ".jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
-                End If
-            End If
-            '<img border="0" src="images/tt1175491.jpg" width="150" height="200">
-            text = text.Replace("<<smallimage>>", "images/" & filename & ".jpg")
-        End If
+        Dim tokenCol As MatchCollection
+        Dim tokenRegExp As New Regex("<<[\w_:]+>>")
+        tokenCol = tokenRegExp.Matches(text)
+        Dim token As Match
+        
+        For Each token In tokenCol
+            Dim strNFOprop As String = ""
+            Dim valToken As String = token.Value.Substring( 2, token.Value.Length - 4 )
+            Dim tokenInstr() As String = valToken.Split(":")
+            Select Case tokenInstr(0)
+                Case "smallimage", "createimage"
+                    If thumbpath <> "" then
+                        Dim origImage = fileFunction.getposterpath(movie.fullpathandfilename)
+                        Try
+                            strNFOprop = "images/" & createImage(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
+                        Catch ex As Exception
+                            MsgBox(ex.ToString)
+                        End Try
+                    End If
 
+                Case "moviecount"
+                    strNFOprop = If( filteredList.Count, filteredList.Count.ToString, "0000" )
+                                        
+                Case "counter"
+                    strNFOprop = counter.ToString
+                                        
+                Case "imdb_id"
+                    strNFOprop = If( movie.id <> Nothing, movie.id, "" )
 
-        If text.IndexOf("<<fullplot>>") <> -1 Or text.IndexOf("<<director>>") <> -1 Or text.IndexOf("<<writer>>") <> -1 Or text.IndexOf("<<moviegenre>>") <> -1 Then
-            Dim newplotdeetails As FullMovieDetails
-            newplotdeetails = nfoFunction.loadfullmovienfo(movie.fullpathandfilename)
-            If text.IndexOf("<<fullplot>>") <> -1 Then
-                text = text.Replace("<<fullplot>>", newplotdeetails.fullmoviebody.plot)
-            End If
-            If text.IndexOf("<<director>>") <> -1 Then
-                text = text.Replace("<<director>>", newplotdeetails.fullmoviebody.director)
-            End If
-            If text.IndexOf("<<writer>>") <> -1 Then
-                text = text.Replace("<<writer>>", newplotdeetails.fullmoviebody.credits)
-            End If
-            If text.IndexOf("<<moviegenre>>") <> -1 Then
-                text = text.Replace("<<moviegenre>>", newplotdeetails.fullmoviebody.genre)
-            End If
-        End If
-        Try
-            text = text.Replace("<<moviecount>>", filteredList.Count.ToString)
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            text = text.Replace("<<moviecount>>", "0000")
-        End Try
-        Try
-            text = text.Replace("<<counter>>", counter.ToString)
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-        If movie.title <> Nothing Then
-            text = text.Replace("<<title>>", movie.title)
-        Else
-            text = text.Replace("<<title>>", "")
-        End If
-        If movie.title <> Nothing And movie.year <> Nothing Then
-            text = text.Replace("<<movietitleandyear>>", movie.title & " (" & movie.year.ToString & ")")
-        ElseIf movie.title <> Nothing And movie.year = Nothing Then
-            text = text.Replace("<<movietitleandyear>>", movie.title & " (0000)")
-        ElseIf movie.title = Nothing And movie.year <> Nothing Then
-            text = text.Replace("<<movietitleandyear>>", "" & " (" & movie.year.ToString & ")")
-        End If
-        If movie.runtime <> Nothing Then
-            text = text.Replace("<<runtime>>", movie.runtime)
-        Else
-            text = text.Replace("<<runtime>>", "")
-        End If
-        If movie.rating <> Nothing Then
-            text = text.Replace("<<rating>>", movie.rating)
-        Else
-            text = text.Replace("<<rating>>", "")
-        End If
-        If movie.outline <> Nothing Then
-            text = text.Replace("<<outline>>", movie.outline)
-        Else
-            text = text.Replace("<<outline>>", "")
-        End If
-        If movie.id <> Nothing Then
-            text = text.Replace("<<imdb_url>>", userPrefs.imdbmirror & "title/" & movie.id & "/")
-        Else
-            text = text.Replace("<<imdb_url>>", userPrefs.imdbmirror)
-        End If
-        If movie.fullpathandfilename <> Nothing Then
-            text = text.Replace("<<fullpathandfilename>>", movie.fullpathandfilename)
-        Else
-            text = text.Replace("<<fullpathandfilename>>", "")
-        End If
-        If movie.year <> Nothing Then
-            text = text.Replace("<<movieyear>>", movie.year)
-        Else
-            text = text.Replace("<<movieyear>>", "")
-        End If
+                Case "imdb_url"
+                    strNFOprop = If( movie.id <> Nothing, userPrefs.imdbmirror & "title/" & movie.id & "/", userPrefs.imdbmirror )
+
+                Case "title"
+                    strNFOprop = If( movie.title <> Nothing, movie.title, "" )
+
+                Case "movieyear"
+                    strNFOprop = If( movie.year <> Nothing, movie.year, "0000" )
+
+                Case "movietitleandyear"
+                    strNFOprop = If( movie.title <> Nothing, movie.title, "" ) & " (" & If( movie.year <> Nothing, movie.year, "0000" ) & ")"
+
+                Case "rating"
+                    strNFOprop = If( movie.rating <> Nothing, movie.rating, "" )
+
+                Case "runtime"
+                    strNFOprop = If( movie.runtime <> Nothing, movie.runtime, "" )
+
+                Case "outline"
+                    strNFOprop = If( movie.outline <> Nothing, movie.outline, "" )
+
+                Case "fullpathandfilename"
+                    strNFOprop = If( movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "" )
+
+                ' These tokens (except 'nfo') are included for backwards compatibility
+                Case "fullplot", "director", "stars", "writer", "moviegenre", "format", "releasedate", "nfo"
+                    Dim newplotdetails As FullMovieDetails
+                    newplotdetails = nfoFunction.loadfullmovienfo(movie.fullpathandfilename)
+                    If tokenInstr(0) = "fullplot" Then
+                        strNFOprop = newplotdetails.fullmoviebody.plot
+                    End If
+                    If tokenInstr(0) = "director" Then
+                        strNFOprop = newplotdetails.fullmoviebody.director
+                    End If
+                    If tokenInstr(0) = "stars" Then
+                        strNFOprop = newplotdetails.fullmoviebody.stars
+                    End If
+                    If tokenInstr(0) = "writer" Then
+                        strNFOprop = newplotdetails.fullmoviebody.credits
+                    End If
+                    If tokenInstr(0) = "moviegenre" Then
+                        strNFOprop = newplotdetails.fullmoviebody.genre
+                    End If
+                    If tokenInstr(0) = "format" Then
+                        strNFOprop = newplotdetails.filedetails.filedetails_video.container.Remove(0,1)
+                    End If
+                    If tokenInstr(0) = "releasedate" Then
+                        strNFOprop = newplotdetails.fullmoviebody.premiered
+                    End If
+                    If tokenInstr(0) = "nfo" Then
+                        Try
+                            Select Case tokenInstr(1)
+
+                                Case "file"
+                                    Select Case tokenInstr(2)
+                                        Case "video"
+                                            strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet )
+                                        Case "audio"
+                                            Dim i As Integer = 1
+                                            For Each audioStream In newplotdetails.filedetails.filedetails_audio
+                                                strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet )
+                                                If( newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count )
+                                                    strNFOprop = strNFOprop & " / "
+                                                End If
+                                                i += 1
+                                            Next
+                                        Case "subtitles"
+                                            Dim i As Integer = 1
+                                            For Each subLang In newplotdetails.filedetails.filedetails_subtitles
+                                                strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet )
+                                                If( newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count )
+                                                    strNFOprop = strNFOprop & " / "
+                                                End If
+                                                i += 1
+                                            Next
+                                    End Select
+                                Case "sorttitle"
+                                    strNFOprop = newplotdetails.fullmoviebody.sortorder
+                                Case "set"
+                                    strNFOprop = newplotdetails.fullmoviebody.movieset
+                                Case "actor"                                        ' No support for actor list
+                                    strNFOprop = "No support"
+                                Case "alternativetitle"                             ' No support for alternative titles
+                                    strNFOprop = "No support"
+                                Case Else
+                                    strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet )
+                            End Select
+                            If tokenInstr(1) <> "file" And tokenInstr.Length > 2 then
+                                Dim intCharLimit = CInt( tokenInstr(2) )
+                                If strNFOprop.Length > intCharLimit then
+                                    strNFOprop = strNFOprop.Substring( 0, strNFOprop.LastIndexOf( " ", intCharLimit - 3 ) ) & "<font class=dim>...</font>"
+                                End If
+                            End If
+
+                        Catch
+                            strNFOprop = "Error in token"
+                        End Try
+                    End If
+
+            End Select
+            Try
+                strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                text = text.Replace(token.Value, strNFOprop)
+            Catch
+                text = text.Replace( token.Value, "" )
+            End Try
+        Next
 
         Return text
     End Function
 
+    Private Function getTValltags(ByVal text As String, ByVal tvShow As Media_Companion.BasicTvShowNFO, ByVal showCounter As Integer, Optional ByVal imagepath As String = "")
+        Dim inclShow As Boolean = False
+        If imagepath.Equals("!HEADER!") Then    'A hack to process the header
+            inclShow = True
+            imagepath = ""                      'No images allowed in header!
+        End If
+
+        Dim blockShow As String = text
+        Dim blockSeason As String = ""
+        Dim blockEpisode As String = ""
+        Dim strHTML As String = ""
+        Dim counterSeason = 0
+        If text.IndexOf("<<season") <> -1 And text.IndexOf("<</season>>") <> -1 Or text.IndexOf("<<episode") <> -1 And text.IndexOf("<</episode>>") <> -1 Then
+            Dim setTVshows = New SortedList(Of String, BasicEpisodeNFO)(New SeasonEpisodeComparer)
+            Dim keySE As String
+            Dim arrSeasonPresent(0 To 0) As Boolean
+            Dim firstSeason As Integer = 99999
+            Dim inclSeason As Boolean = False
+            Dim inclEpisode As Boolean = False
+            Dim inclMissingSeason As Boolean = False
+            Dim inclMissingEpisode As Boolean = False
+            If text.IndexOf("<<season>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
+                If text.IndexOf("<<season") <> -1 Then inclSeason = True
+                If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
+                For Each episode In tvShow.allepisodes
+                    keySE = episode.seasonno & "-" & episode.episodeno
+                    episode.missing = False
+                    setTVshows.Add(keySE, episode)
+                    If episode.seasonno > UBound(arrSeasonPresent) Then
+                        ReDim Preserve arrSeasonPresent(episode.seasonno)
+                        arrSeasonPresent(episode.seasonno) = True
+                    End If
+                    If episode.seasonno < firstSeason Then firstSeason = episode.seasonno
+                Next
+            End If
+            If text.IndexOf("<<season:missing>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode:missing>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
+                If tvShow.missingepisodes.Count > 0 Then
+                    If text.IndexOf("<<season") <> -1 Then inclMissingSeason = True
+                    If text.IndexOf("<<episode") <> -1 Then inclMissingEpisode = True
+                    For Each episode In tvShow.missingepisodes
+                        keySE = episode.seasonno & "-" & episode.episodeno
+                        episode.missing = True
+                        setTVshows.Add(keySE, episode)
+                        If episode.seasonno > UBound(arrSeasonPresent) Then
+                            ReDim Preserve arrSeasonPresent(episode.seasonno)
+                            arrSeasonPresent(episode.seasonno) = True
+                        End If
+                        If episode.seasonno < firstSeason Then firstSeason = episode.seasonno
+                    Next
+                End If
+            End If
+            If setTVshows.Count Then
+                Dim separator As String = "<<|separator|>>"
+                If inclSeason Or inclMissingSeason Then
+                    blockSeason = text.Substring(text.IndexOf("<<season"), text.IndexOf("<</season>>") - text.IndexOf("<<season") + 11)
+                    blockShow = blockShow.Replace(blockSeason, separator)
+                End If
+                If inclEpisode Or inclMissingEpisode Then
+                    blockEpisode = text.Substring(text.IndexOf("<<episode"), text.IndexOf("<</episode>>") - text.IndexOf("<<episode") + 12)
+                    If blockSeason <> "" Then
+                        blockSeason = blockSeason.Replace(blockEpisode, separator)
+                    Else
+                        blockShow = blockShow.Replace(blockEpisode, separator)
+                    End If
+                    blockEpisode = blockEpisode.Substring(blockEpisode.IndexOf(">>") + 2, blockEpisode.IndexOf("<</episode>>") - blockEpisode.IndexOf(">>") - 2)
+                End If
+                If blockSeason <> "" Then
+                    blockSeason = blockSeason.Substring(blockSeason.IndexOf(">>") + 2, blockSeason.IndexOf("<</season>>") - blockSeason.IndexOf(">>") - 2)
+                End If
+                Dim strHTMLseason As String = ""
+                Dim strHTMLepisode As String = ""
+                Dim strTempEpisode As String = ""
+                Dim currSeason As Integer = firstSeason
+                Dim numSeasonEpisodes = 0
+                Dim numSeasonMissingEpisodes = 0
+                Dim numSeasonTotalEpisodes = 0
+                Dim lastShow As Boolean = False
+                'Build string
+                For Each episode In setTVshows
+                    If Not (episode.Value.missing And Not inclMissingEpisode) Then
+                        strTempEpisode = If(inclEpisode Or inclMissingEpisode, getTVepisodetags(blockEpisode, episode.Value, showCounter, numSeasonTotalEpisodes), "")
+                        inclShow = True
+                    End If
+                    If setTVshows.IndexOfKey(episode.Key) = setTVshows.Count - 1 Then
+                        If strTempEpisode <> "" Then
+                            strHTMLepisode = strHTMLepisode & strTempEpisode
+                            numSeasonTotalEpisodes += 1
+                            If episode.Value.missing Then
+                                numSeasonMissingEpisodes += 1
+                            Else
+                                numSeasonEpisodes += 1
+                            End If
+                        End If
+                        lastShow = True
+                    End If
+                    ' If season changes or reach end of sorted list, aggregate season and episode HTML
+                    If lastShow Or episode.Value.seasonno > currSeason Then
+                        'If Not lastShow Then strHTMLepisode = strHTMLepisode & strTemp
+                        If inclSeason Or inclMissingSeason Then
+                            strHTMLseason = getTVseasontags(blockSeason, tvShow, showCounter, currSeason, numSeasonEpisodes, numSeasonMissingEpisodes, numSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
+                            strHTMLseason = strHTMLseason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode, "", strHTMLepisode))
+                            inclShow = True
+                        Else
+                            strHTMLseason = strHTMLepisode
+                        End If
+                        strHTML = strHTML & strHTMLseason
+                        strHTMLseason = ""
+                        strHTMLepisode = ""
+                        currSeason = episode.Value.seasonno
+                        counterSeason += 1
+                        numSeasonEpisodes = 0
+                        numSeasonMissingEpisodes = 0
+                        numSeasonTotalEpisodes = 0
+                    End If
+                    strHTMLepisode = strHTMLepisode & strTempEpisode
+                    If episode.Value.missing Then
+                        numSeasonMissingEpisodes += 1
+                    Else
+                        numSeasonEpisodes += 1
+                    End If
+                    numSeasonTotalEpisodes += 1
+                Next
+                blockShow = blockShow.Replace(separator, strHTML)
+            End If
+
+        End If
+
+        blockShow = getTVshowtags(blockShow, tvShow, showCounter, counterSeason, imagepath)
+        If Not inclShow Then blockShow = ""
+        Return blockShow
+    End Function
+    Private Function getTVshowtags(ByRef text As String, ByVal tvShow As Media_Companion.BasicTvShowNFO, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
+        Dim tokenCol As MatchCollection
+        Dim tokenRegExp As New Regex("<<[\w_:]+>>")
+        tokenCol = tokenRegExp.Matches(text)
+        Dim token As Match
+
+        For Each token In tokenCol
+            Dim strNFOprop As String = ""
+            Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
+            Dim tokenInstr() As String = valToken.Split(":")
+            Dim addText As Boolean = False
+            Dim padNumber As Boolean = False
+            If tokenInstr.Length > 1 Then
+                If tokenInstr(1).IndexOf("text") <> -1 Then addText = True
+                If tokenInstr(1).IndexOf("pad") <> -1 Then padNumber = True
+            End If
+            Select Case tokenInstr(0)
+                Case "createimage"
+                    If imagepath <> "" And tokenInstr.Length > 1 Then
+                        Dim origImage = fileFunction.getposterpath(tvShow.fullpath)
+                        origImage = origImage.Replace(IO.Path.GetFileName(origImage), "folder.jpg")
+                        Dim imageType As String = "poster"
+                        Dim imgTest As Image = Image.FromFile(origImage)
+                        If tokenInstr.Length > 2 And tokenInstr(2) = "banner" Then
+                            imageType = "banner"
+                            If imgTest.Height / imgTest.Width > 1 Then
+                                origImage = origImage.Replace(IO.Path.GetFileName(origImage), "season-all.tbn")
+                            End If
+                        Else
+                            If imgTest.Height / imgTest.Width < 1 Then
+                                origImage = origImage.Replace(IO.Path.GetFileName(origImage), "season-all.tbn")
+                            End If
+                        End If
+
+                        strNFOprop = "tvimages/" & createImage(origImage, tokenInstr(1), imagepath, imageType)
+                    End If
+
+                Case "show_title"
+                    strNFOprop = tvShow.title
+
+                Case "show_year"
+                    strNFOprop = tvShow.year
+
+                Case "show_titleandyear"
+                    strNFOprop = tvShow.titleandyear
+
+                Case "show_imdbid"
+                    strNFOprop = tvShow.imdbid
+
+                Case "show_imdburl"
+                    strNFOprop = If(tvShow.imdbid <> Nothing, userPrefs.imdbmirror & "title/" & tvShow.imdbid & "/", userPrefs.imdbmirror)
+
+                Case "show_tvdbid"
+                    strNFOprop = tvShow.tvdbid
+
+                Case "show_tvdburl"
+                    strNFOprop = If(tvShow.tvdbid <> Nothing, "http://thetvdb.com/?tab=series&id=" & tvShow.tvdbid, "http://thetvdb.com/")
+
+                Case "show_genre"
+                    strNFOprop = tvShow.genre
+
+                Case "show_episodeactorsource"
+                    strNFOprop = tvShow.episodeactorsource
+
+                Case "show_language"
+                    strNFOprop = tvShow.language
+
+                Case "show_locked"
+                    strNFOprop = tvShow.locked
+
+                Case "show_rating"
+                    strNFOprop = If(tvShow.rating <> Nothing, tvShow.rating & If(tvShow.rating.IndexOf(".") <> -1, "", ".0"), "")
+
+                Case "show_sortorder"
+                    strNFOprop = tvShow.sortorder
+
+                Case "show_status"
+                    strNFOprop = tvShow.status
+
+                Case "show_count"
+                    strNFOprop = If(basicTvList.Count, basicTvList.Count.ToString, "00")
+
+                Case "show_counter"
+                    strNFOprop = counter.ToString
+
+                Case "show_seasons"
+                    strNFOprop = numSeasons.ToString
+                    If addText Then strNFOprop = strNFOprop & " Season" & If(numSeasons <> 1, "s", "")
+
+                Case "class"
+                    If tokenInstr.Length > 1 Then
+                        If tokenInstr(1).IndexOf("row") <> -1 Then
+                            strNFOprop = " class=show_row_" & If(counter Mod 2, "odd", "even")
+                        Else
+                            strNFOprop = " class=" & tokenInstr(1)
+                        End If
+                    End If
+
+                Case "show_nfo"
+                    Dim fullTVShowDetails As TvShowNFO = nfoFunction.loadfulltnshownfo(tvShow.fullpath)
+                    Try
+                        Select Case tokenInstr(1)
+                            Case "id"
+                                strNFOprop = fullTVShowDetails.imdbid
+                            Case "episodeguide"
+                                strNFOprop = fullTVShowDetails.episodeguideurl
+                            Case "actor"                                        ' No support for actor list
+                                strNFOprop = "No support"
+                            Case "thumb"                                        ' No support for thumbnail list
+                                strNFOprop = "No support"
+                            Case "fanart"                                       ' No support for fanart list
+                                strNFOprop = "No support"
+                            Case Else
+                                strNFOprop = CallByName(fullTVShowDetails, tokenInstr(1), vbGet)
+                        End Select
+                        If tokenInstr(1) <> "episodeguide" And tokenInstr.Length > 2 Then
+                            Dim intCharLimit = CInt(tokenInstr(2))
+                            If strNFOprop.Length > intCharLimit Then
+                                strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
+                            End If
+                        End If
+
+                    Catch
+                        strNFOprop = "Error in token"
+                    End Try
+
+            End Select
+
+            Try
+                strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                text = text.Replace(token.Value, strNFOprop)
+            Catch
+                text = text.Replace(token.Value, "")
+            End Try
+        Next
+        Return text
+    End Function
+    Private Function getTVseasontags(ByVal text As String, ByVal tvShow As Media_Companion.BasicTvShowNFO, ByVal showCounter As Integer, _
+                                     ByVal currSeason As Integer, ByVal numEpisodes As Integer, ByVal numMissingEpisodes As Integer, _
+                                     ByVal numTotalEpisodes As Integer, ByVal seasonPresent As Boolean, Optional ByVal imagepath As String = "")
+        Dim tokenCol As MatchCollection
+        Dim tokenRegExp As New Regex("<<[\w_:]+>>")
+        tokenCol = tokenRegExp.Matches(text)
+        Dim token As Match
+
+        For Each token In tokenCol
+            Dim strNFOprop As String = ""
+            Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
+            Dim tokenInstr() As String = valToken.Split(":")
+            Dim addText As Boolean = False
+            Dim padNumber As Boolean = False
+            If tokenInstr.Length > 1 Then
+                If tokenInstr(1).IndexOf("text") <> -1 Then addText = True
+                If tokenInstr(1).IndexOf("pad") <> -1 Then padNumber = True
+            End If
+            Select Case tokenInstr(0)
+                Case "createimage"
+                    If imagepath <> "" And tokenInstr.Length > 1 Then
+                        Dim origImage = fileFunction.getposterpath(tvShow.fullpath)
+                        Dim imageName As String = "season" & If(currSeason >= 10, "", "0") & currSeason.ToString & ".tbn"
+                        origImage = origImage.Replace(IO.Path.GetFileName(origImage), imageName)
+
+                        strNFOprop = "tvimages/" & createImage(origImage, tokenInstr(1), imagepath)
+                    End If
+
+                Case "show_counter"
+                    strNFOprop = showCounter.ToString
+                Case "seas_number"
+                    strNFOprop = If(currSeason.ToString.Length = 1 And padNumber, "0", "") & currSeason.ToString
+                    If addText Then strNFOprop = strNFOprop & " Episode" & If(numTotalEpisodes <> 1, "s", "")
+                Case "seas_episodes"
+                    strNFOprop = If(numTotalEpisodes.ToString.Length = 1 And padNumber, "0", "") & numTotalEpisodes.ToString
+                    If addText Then strNFOprop = strNFOprop & " Episode" & If(numTotalEpisodes <> 1, "s", "")
+                Case "seas_episodesof"
+                    strNFOprop = numEpisodes.ToString
+                    If numEpisodes = numTotalEpisodes Then
+                        ' Do nothing
+                    ElseIf numMissingEpisodes Then
+                        strNFOprop = strNFOprop & " of " & numTotalEpisodes.ToString
+                    End If
+                    If addText Then strNFOprop = strNFOprop & " Episode" & If(numTotalEpisodes <> 1, "s", "")
+                Case "class"
+                    If tokenInstr.Length > 1 Then
+                        If tokenInstr(1).IndexOf("missing") <> -1 Then
+                            ' Special case where we want to know if the season contains missing episodes
+                            If tokenInstr(1).IndexOf("episode") <> -1 And numMissingEpisodes Then
+                                strNFOprop = " class=missingseason"
+                            ElseIf Not seasonPresent Then
+                                strNFOprop = " class=" & tokenInstr(1)
+                            End If
+                        ElseIf tokenInstr(1).IndexOf("row") <> -1 Then
+                            strNFOprop = " class=seas_row_" & If(currSeason Mod 2, "odd", "even")
+                        Else
+                            strNFOprop = " class=" & tokenInstr(1)
+                        End If
+                    End If
+            End Select
+
+            Try
+                strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                text = text.Replace(token.Value, strNFOprop)
+            Catch
+                text = text.Replace(token.Value, "")
+            End Try
+        Next
+        Return text
+    End Function
+    Private Function getTVepisodetags(ByVal text As String, ByVal tvEpisode As Media_Companion.BasicEpisodeNFO, ByVal showCounter As Integer, ByVal episodeCounter As Integer, Optional ByVal imagepath As String = "")
+        Dim tokenCol As MatchCollection
+        Dim tokenRegExp As New Regex("<<[\w_:]+>>")
+        tokenCol = tokenRegExp.Matches(text)
+        Dim token As Match
+
+        For Each token In tokenCol
+            Dim strNFOprop As String = ""
+            Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
+            Dim tokenInstr() As String = valToken.Split(":")
+            Dim addText As Boolean = False
+            Dim padNumber As Boolean = False
+            If tokenInstr.Length > 1 Then
+                If tokenInstr(1).IndexOf("text") <> -1 Then addText = True
+                If tokenInstr(1).IndexOf("pad") <> -1 Then padNumber = True
+            End If
+            Select Case tokenInstr(0)
+                Case "show_counter"
+                    strNFOprop = showCounter.ToString
+                Case "ep_title"
+                    strNFOprop = tvEpisode.title
+
+                Case "ep_season"
+                    strNFOprop = If(tvEpisode.seasonno.Length = 1 And padNumber, "0", "") & tvEpisode.seasonno
+
+                Case "ep_number"
+                    strNFOprop = If(tvEpisode.episodeno.Length = 1 And padNumber, "0", "") & tvEpisode.episodeno
+
+                Case "ep_rating"
+                    strNFOprop = If(tvEpisode.rating <> Nothing, tvEpisode.rating & If(tvEpisode.rating.IndexOf(".") <> -1, "", ".0"), "")
+
+                Case "ep_playcount"
+                    strNFOprop = tvEpisode.playcount
+
+                Case "ep_imdbid"
+                    strNFOprop = tvEpisode.imdbid
+
+                Case "ep_imdburl"
+                    strNFOprop = If(tvEpisode.imdbid <> Nothing, userPrefs.imdbmirror & "title/" & tvEpisode.imdbid & "/", userPrefs.imdbmirror)
+
+                Case "ep_tvdbid"
+                    strNFOprop = tvEpisode.tvdbid
+
+                Case "class"
+                    If tokenInstr.Length > 1 Then
+                        If tokenInstr(1).IndexOf("missing") <> -1 And Not tvEpisode.missing Then
+                            ' Do nothing
+                        ElseIf tokenInstr(1).IndexOf("row") <> -1 Then
+                            strNFOprop = " class=ep_row_" & If(episodeCounter Mod 2, "odd", "even")
+                        Else
+                            strNFOprop = " class=" & tokenInstr(1)
+                        End If
+                    End If
+
+                Case "ep_nfo"
+                    Dim TVEpisodeNFO As List(Of EpisodeInfo) = nfoFunction.loadfullepisodenfogeneric(tvEpisode.episodepath)
+                    Dim fullTVEpisodeDetails As EpisodeInfo = TVEpisodeNFO(0)
+                    Try
+                        Select Case tokenInstr(1)
+                            Case "file"
+                                Select Case tokenInstr(2)
+                                    Case "video"
+                                        strNFOprop = CallByName(fullTVEpisodeDetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
+                                    Case "audio"
+                                        Dim i As Integer = 1
+                                        For Each audioStream In fullTVEpisodeDetails.filedetails.filedetails_audio
+                                            strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
+                                            If (fullTVEpisodeDetails.filedetails.filedetails_audio.Count > 1 And i <> fullTVEpisodeDetails.filedetails.filedetails_audio.Count) Then
+                                                strNFOprop = strNFOprop & " / "
+                                            End If
+                                            i += 1
+                                        Next
+                                    Case "subtitles"
+                                        Dim i As Integer = 1
+                                        For Each subLang In fullTVEpisodeDetails.filedetails.filedetails_subtitles
+                                            strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
+                                            If (fullTVEpisodeDetails.filedetails.filedetails_subtitles.Count > 1 And i <> fullTVEpisodeDetails.filedetails.filedetails_subtitles.Count) Then
+                                                strNFOprop = strNFOprop & " / "
+                                            End If
+                                            i += 1
+                                        Next
+                                End Select
+                            Case "actor"                                        ' No support for actor list
+                                strNFOprop = "No support"
+                            Case "thumb"                                        ' No support for thumbnail list
+                                strNFOprop = "No support"
+                            Case "fanart"                                       ' No support for fanart list
+                                strNFOprop = "No support"
+                            Case Else
+                                strNFOprop = CallByName(fullTVEpisodeDetails, tokenInstr(1), vbGet)
+                        End Select
+                        If tokenInstr.Length > 2 Then
+                            Dim intCharLimit = CInt(tokenInstr(2))
+                            If strNFOprop.Length > intCharLimit Then
+                                strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
+                            End If
+                        End If
+
+                    Catch
+                        strNFOprop = "Error in token"
+                    End Try
+            End Select
+
+            Try
+                strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
+                text = text.Replace(token.Value, strNFOprop)
+            Catch
+                text = text.Replace(token.Value, "")
+            End Try
+        Next
+        Return text
+    End Function
+    Private Function createImage(ByVal origImage As String, ByVal sizeLimit As Integer, ByVal target As String, Optional ByVal picType As String = "poster")
+
+        Dim isPoster As Boolean = Equals(picType, "poster")
+        Dim filename As String = If(isPoster, "DefaultPoster.jpg", "DefaultBanner.jpg") & If(sizeLimit <> 0, "_" & sizeLimit.ToString, "")
+        Dim imgPoster As String = If(isPoster, defaultPoster, defaultBanner)
+        If IO.File.Exists(origImage) Then
+            Dim origBitmap As Image = Image.FromFile(origImage)
+            Dim origRatio As Single = 0
+            origRatio = origBitmap.Height / origBitmap.Width
+            If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
+                If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width)
+                filename = IO.File.GetCreationTime(origImage).ToFileTimeUtc & "_" & fileFunction.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
+                imgPoster = origImage
+            End If
+            origBitmap.Dispose()
+        End If
+        If Not IO.File.Exists(IO.Path.Combine(target, filename)) Then
+            Try
+                Dim srcBitmap As New Bitmap(imgPoster)
+                Dim height As Integer = srcBitmap.Height
+                Dim width As Integer = srcBitmap.Width
+                Dim dstBitmap As New Bitmap(srcBitmap)
+                If sizeLimit <> 0 Then
+                    If isPoster Then
+                        height = sizeLimit
+                        width = Math.Truncate(height * (srcBitmap.Width / srcBitmap.Height))
+                    Else
+                        width = sizeLimit
+                        height = Math.Truncate(width * (srcBitmap.Height / srcBitmap.Width))
+                    End If
+                End If
+                srcBitmap.Dispose()
+                dstBitmap = imageFunctions.ResizeImage(dstBitmap, width, height)
+                dstBitmap.Save(IO.Path.Combine(target, filename), System.Drawing.Imaging.ImageFormat.Jpeg)
+            Catch
+            End Try
+        End If
+        Return filename
+    End Function
     Private Sub BckWrkScnMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkScnMovies.DoWork
         'ToolStripButton10.Visible = True
         globalThreadCounter += 1
@@ -5718,7 +6237,7 @@ Public Class Form1
             Dim add As Boolean = False
             Dim newlist As New List(Of ComboList)
             For Each movie In filteredList
-                Dim tempstring As String
+                Dim tempstring As String = String.Empty
                 If RadioButton1.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.titleandyear.ToLower
                 If RadioButton2.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.filename.ToLower
                 If RadioButton6.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.foldername.ToLower
@@ -6618,6 +7137,7 @@ Public Class Form1
                 workingMovieDetails.alternativetitles.Clear()
                 workingMovieDetails.fullmoviebody.credits = Nothing
                 workingMovieDetails.fullmoviebody.director = Nothing
+                workingMovieDetails.fullmoviebody.stars = Nothing
                 workingMovieDetails.fullmoviebody.genre = Nothing
                 workingMovieDetails.fullmoviebody.mpaa = Nothing
                 workingMovieDetails.fullmoviebody.outline = Nothing
@@ -6674,6 +7194,8 @@ Public Class Form1
                                 workingMovieDetails.fullmoviebody.credits = thisresult.InnerText
                             Case "director"
                                 workingMovieDetails.fullmoviebody.director = thisresult.InnerText
+                            Case "stars"
+                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText
                             Case "genre"
                                 Dim strarr() As String
                                 strarr = thisresult.InnerText.Split("/")
@@ -7089,6 +7611,7 @@ Public Class Form1
             tempstring = " (" & workingMovieDetails.fullmoviebody.year & ")"
             workingMovieDetails.fullmoviebody.title = titletxt.Text.Replace(tempstring, "")
             workingMovieDetails.fullmoviebody.director = directortxt.Text
+            'workingMovieDetails.fullmoviebody.stars = starstxt.Text
             workingMovieDetails.fullmoviebody.credits = creditstxt.Text
             workingMovieDetails.fullmoviebody.studio = studiotxt.Text
             workingMovieDetails.fullmoviebody.genre = genretxt.Text
@@ -7565,6 +8088,7 @@ Public Class Form1
 
             batchList.credits = False
             batchList.director = False
+            batchList.stars = False
             batchList.genre = False
             batchList.mediatags = False
 
@@ -7616,6 +8140,7 @@ Public Class Form1
 
         If batchList.credits = True Then bodyscraper = True
         If batchList.director = True Then bodyscraper = True
+        If batchList.stars = True Then bodyscraper = True
         If batchList.genre = True Then bodyscraper = True
         If batchList.mpaa = True Then bodyscraper = True
         If batchList.plot = True Then bodyscraper = True
@@ -7657,6 +8182,7 @@ Public Class Form1
                 bckrescrapewizard.ReportProgress(999999, progresstext)
                 movietemplate.fullmoviebody.credits = Nothing
                 movietemplate.fullmoviebody.director = Nothing
+                movietemplate.fullmoviebody.stars = Nothing
                 movietemplate.fullmoviebody.fanart = Nothing
                 movietemplate.fullmoviebody.filename = Nothing
                 movietemplate.fullmoviebody.genre = Nothing
@@ -7703,6 +8229,7 @@ Public Class Form1
 
                 movietoalter.fullmoviebody.credits = Nothing
                 movietoalter.fullmoviebody.director = Nothing
+                movietoalter.fullmoviebody.stars = Nothing
                 movietoalter.fullmoviebody.fanart = Nothing
                 movietoalter.fullmoviebody.filename = Nothing
                 movietoalter.fullmoviebody.genre = Nothing
@@ -7767,6 +8294,8 @@ Public Class Form1
                                             movietemplate.fullmoviebody.credits = thisresult.InnerText
                                         Case "director"
                                             movietemplate.fullmoviebody.director = thisresult.InnerText
+                                        Case "stars"
+                                            movietemplate.fullmoviebody.stars = thisresult.InnerText
                                         Case "country"
                                             movietemplate.fullmoviebody.country = thisresult.InnerText
                                         Case "genre"
@@ -8154,6 +8683,14 @@ Public Class Form1
                         End If
                     End If
 
+                    If batchList.stars = True Then
+                        If movietemplate.fullmoviebody.stars <> Nothing Then
+                            If movietemplate.fullmoviebody.stars <> "" Then
+                                movietoalter.fullmoviebody.stars = movietemplate.fullmoviebody.stars
+                            End If
+                        End If
+                    End If
+
                     If batchList.credits = True Then
                         If movietemplate.fullmoviebody.credits <> Nothing Then
                             If movietemplate.fullmoviebody.credits <> "" Then
@@ -8401,7 +8938,7 @@ Public Class Form1
 
 
                     If missingfanart = True Then
-                        Dim moviefanarturl As String
+                        Dim moviefanarturl As String = String.Empty
                         If IO.File.Exists(movietoalter.fileinfo.fanartpath) = False Then
                             Try
                                 If BckWrkScnMovies.CancellationPending Then Exit Sub
@@ -8530,7 +9067,7 @@ Public Class Form1
                 For g = 0 To fullMovieList.Count - 1
                     Try
                         If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
-                            Dim newfullmovie As ComboList
+                            Dim newfullmovie As ComboList = Nothing
                             newfullmovie.fullpathandfilename = tempmovielist(f)
                             newfullmovie.foldername = filefunction.getlastfolder(tempmovielist(f))
                             newfullmovie.filename = IO.Path.GetFileName(tempmovielist(f))
@@ -8546,6 +9083,7 @@ Public Class Form1
                             End Try
                             newfullmovie.titleandyear = movietoalter.fullmoviebody.title & " (" & movietoalter.fullmoviebody.year & ")"
                             newfullmovie.title = movietoalter.fullmoviebody.title
+                            newfullmovie.year = movietoalter.fullmoviebody.year
                             newfullmovie.genre = movietoalter.fullmoviebody.genre
                             newfullmovie.playcount = movietoalter.fullmoviebody.playcount
                             newfullmovie.rating = movietoalter.fullmoviebody.rating
@@ -8718,7 +9256,7 @@ Public Class Form1
 
                 If extension.ToLower = ".ifo" Then
                     If IO.File.Exists(newdetails.nfopathandfilename) = False Then
-                        Dim paths() As String
+                        Dim paths() As String = Nothing
                         If newdetails.nfopathandfilename.IndexOf("\") <> -1 Then
                             paths = newdetails.nfopathandfilename.Split("\")
                         ElseIf newdetails.nfopathandfilename.IndexOf("/") <> -1 Then
@@ -8745,7 +9283,7 @@ Public Class Form1
 
                 If newdetails.title <> Nothing Then
                     If newdetails.title <> "" Then
-                        Dim year As String
+                        Dim year As String = String.Empty
                         Dim extrapossibleID As String
                         extrapossibleID = Nothing
                         If IO.File.Exists(newdetails.nfopathandfilename) Then
@@ -8932,6 +9470,8 @@ Public Class Form1
                                             newmovie.fullmoviebody.credits = thisresult.InnerText
                                         Case "director"
                                             newmovie.fullmoviebody.director = thisresult.InnerText
+                                        Case "stars"
+                                            newmovie.fullmoviebody.stars = thisresult.InnerText
                                         Case "genre"
                                             newmovie.fullmoviebody.genre = thisresult.InnerText
                                         Case "mpaa"
@@ -10632,8 +11172,8 @@ Public Class Form1
 
     Private Sub openfolder(ByVal path As String)
         Dim tempstring As String = ""
-        Dim action As String
-        Dim errors As String
+        Dim action As String = String.Empty
+        Dim errors As String = String.Empty
         Try
             If path <> "" Then
                 tempstring = path
@@ -10812,7 +11352,7 @@ Public Class Form1
     Private Sub zoomimage2(ByVal sender As Object, ByVal e As EventArgs)
 
         Dim tempstring As String = sender.name
-        Dim tempstring2 As String
+        Dim tempstring2 As String = String.Empty
         Dim tempint As Integer
         If tempstring.IndexOf("poster") <> -1 Then
             tempstring = tempstring.Replace("poster", "")
@@ -10945,7 +11485,7 @@ Public Class Form1
 
             Dim tempstring As String
             Dim tempint As Integer
-            Dim tempstring2 As String
+            Dim tempstring2 As String = String.Empty
             Dim allok As Boolean = False
             For Each button As Control In Me.Panel2.Controls
                 If button.Name.IndexOf("checkbox") <> -1 Then
@@ -11940,7 +12480,7 @@ Public Class Form1
         Call initialiseposters()
         Dim newobject As New class_mpdb_thumbs.Class1
         Dim teststring As New XmlDocument
-        Dim testthumbs As String
+        Dim testthumbs As String = String.Empty
         Try
             testthumbs = newobject.get_mpdb_thumbs(workingMovieDetails.fullmoviebody.imdbid)
             testthumbs = "<totalthumbs>" & testthumbs & "</totalthumbs>"
@@ -12290,6 +12830,7 @@ Public Class Form1
 
             workingMovieDetails.fullmoviebody.credits = ""
             workingMovieDetails.fullmoviebody.director = ""
+            workingMovieDetails.fullmoviebody.stars = ""
             workingMovieDetails.fullmoviebody.genre = ""
             workingMovieDetails.fullmoviebody.mpaa = ""
             workingMovieDetails.fullmoviebody.outline = ""
@@ -12356,6 +12897,9 @@ Public Class Form1
                         Case "director"
                             stage = stage & "Adding director: " & thisresult.InnerText & vbCrLf
                             workingMovieDetails.fullmoviebody.director = thisresult.InnerText
+                        Case "stars"
+                            stage = stage & "Adding stars: " & thisresult.InnerText & vbCrLf
+                            workingMovieDetails.fullmoviebody.stars = thisresult.InnerText
                         Case "genre"
                             stage = stage & "Adding genre: " & thisresult.InnerText & vbCrLf
                             workingMovieDetails.fullmoviebody.genre = thisresult.InnerText
@@ -12715,10 +13259,6 @@ Public Class Form1
                 If Form1.userPrefs.savefanart = True Then
 
                     If BckWrkScnMovies.CancellationPending Then Exit Sub
-                    Dim moviefanartexists As Boolean
-
-
-
 
                     Dim temp As String = workingMovieDetails.fullmoviebody.imdbid
 
@@ -12983,7 +13523,6 @@ Public Class Form1
     Private Sub Button27_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button27.Click
         'save cropped
         posterThumbedItsMade = False
-        Dim tempstring As String
         Try
             Dim stream As New System.IO.MemoryStream
             PictureBox3.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
@@ -15091,7 +15630,7 @@ Public Class Form1
 
 
             If CheckBox4.CheckState = CheckState.Checked Then
-                Dim fanartposter As String
+                Dim fanartposter As String = String.Empty
                 If CheckBox7.CheckState = CheckState.Checked Then
                     For Each Image In artlist
                         If Image.language = languageList(ListBox1.SelectedIndex).abbreviation And Image.bannerType = "fanart" Then
@@ -15767,7 +16306,7 @@ Public Class Form1
             Else
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
                     Try
-                        Dim req As HttpWebRequest = req.Create(url)
+                        Dim req As HttpWebRequest = WebRequest.Create(url)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -15809,7 +16348,7 @@ Public Class Form1
         Return path
     End Function
 
-    Private Function valdateepisodenfo(ByVal nfopath As String)
+    Private Function validateepisodenfo(ByVal nfopath As String)
         Dim validated As Boolean = True
         If IO.File.Exists(nfopath) Then
             Dim tvshow As New XmlDocument
@@ -15851,10 +16390,10 @@ Public Class Form1
             End If
             Return validated
         End If
+        Return False
     End Function
 
     Private Sub findnewepisodes(ByVal path As String, ByVal pattern As String)
-        Dim exists As Boolean
         Dim episode As New List(Of BasicEpisodeNFO)
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
@@ -15868,7 +16407,7 @@ Public Class Form1
                 Dim filename As String = IO.Path.Combine(path, fs_info.Name)
                 Dim filename2 As String = filename.Replace(IO.Path.GetExtension(filename), ".nfo")
                 If IO.File.Exists(filename2) Then
-                    If valdateepisodenfo(filename2) = False Then
+                    If validateepisodenfo(filename2) = False Then
                         Dim movefilename As String = filename2.Replace(IO.Path.GetExtension(filename2), ".info")
                         Try
                             IO.File.Move(filename2, movefilename)
@@ -15889,8 +16428,7 @@ Public Class Form1
                         End If
                     End If
                     If pattern = "*.rar" Then
-                        Dim tempmovie As String
-                        Dim tempint As Integer
+                        Dim tempmovie As String = String.Empty
                         Dim tempint2 As Integer
                         Dim tempmovie2 As String = fs_info.FullName
                         If IO.Path.GetExtension(tempmovie2).ToLower = ".rar" Then
@@ -16108,7 +16646,6 @@ Public Class Form1
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
-        Dim tmdbid As String
         Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & workingTvShow.tvdbid & "/banners.xml"
         Dim apple2(2000) As String
         Dim fanartlinecount As Integer = 0
@@ -16243,9 +16780,9 @@ Public Class Form1
         Me.Refresh()
         Application.DoEvents()
 
-        Dim miscvar As String
+        Dim miscvar As String = String.Empty
         Dim miscint As Integer
-        Dim miscvar2 As String
+        Dim miscvar2 As String = String.Empty
         Dim allok As Boolean = False
         For Each button As Control In Me.Panel13.Controls
             If button.Name.IndexOf("checkbox") <> -1 Then
@@ -16270,7 +16807,7 @@ Public Class Form1
                 Dim bytesRead As Integer = 0
 
                 Dim fanartthumburl As String = miscvar2
-                Dim req As HttpWebRequest = req.Create(fanartthumburl)
+                Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
                 Dim res As HttpWebResponse = req.GetResponse()
                 Dim contents As Stream = res.GetResponseStream()
                 Dim bmp As New Bitmap(contents)
@@ -16654,7 +17191,7 @@ Public Class Form1
             'TVDBID(9)
             'Cert(14)
             'Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
-            Dim node As TreeNode
+            Dim node As TreeNode = Nothing
             For Each node In TreeView1.Nodes
                 If node.Name = workingTvShow.path Then
                     node.Text = TextBox2.Text
@@ -16879,7 +17416,7 @@ Public Class Form1
                                             Dim size As Integer = 0
                                             Dim bytesRead As Integer = 0
                                             Dim thumburl As String = acts.actorthumb
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -16912,7 +17449,7 @@ Public Class Form1
                                             Dim size As Integer = 0
                                             Dim bytesRead As Integer = 0
                                             Dim thumburl As String = acts.actorthumb
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -17007,7 +17544,7 @@ Public Class Form1
                                                             Dim size As Integer = 0
                                                             Dim bytesRead As Integer = 0
                                                             Dim thumburl As String = newactor.actorthumb
-                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                             Dim contents As Stream = res.GetResponseStream()
                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -17039,7 +17576,7 @@ Public Class Form1
                                                                 Dim size As Integer = 0
                                                                 Dim bytesRead As Integer = 0
                                                                 Dim thumburl As String = newactor.actorthumb
-                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -17318,7 +17855,7 @@ Public Class Form1
                                                                             Dim size As Integer = 0
                                                                             Dim bytesRead As Integer = 0
                                                                             Dim thumburl As String = newactor.actorthumb
-                                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                                             Dim contents As Stream = res.GetResponseStream()
                                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -17351,7 +17888,7 @@ Public Class Form1
                                                                             Dim size As Integer = 0
                                                                             Dim bytesRead As Integer = 0
                                                                             Dim thumburl As String = newactor.actorthumb
-                                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                                             Dim contents As Stream = res.GetResponseStream()
                                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -17583,7 +18120,6 @@ Public Class Form1
 
         Dim oldname As String = ""
 
-        Dim noder As TreeNode
         Dim extensioncount As Integer
         Dim extensions(100)
         extensions(1) = ".avi"
@@ -18706,7 +19242,7 @@ Public Class Form1
     End Sub
 
     Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
-        If e.KeyChar.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
             e.Handled = True
         End If
     End Sub
@@ -18750,7 +19286,6 @@ Public Class Form1
                 Dim tempstring2 As String
                 tempstring2 = pathandfilename & extensions(f)
                 If IO.File.Exists(tempstring2) Then
-                    Dim tempstring3 As String
                     Dim seconds As Integer = 10
                     If Convert.ToInt32(TextBox35.Text) > 0 Then
                         seconds = Convert.ToInt32(TextBox35.Text)
@@ -19409,7 +19944,7 @@ Public Class Form1
     Dim moviecount_bak As Integer = 0
     Private ClickedControl As String
 
-    Private Sub mouseenter(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Shadows Sub mouseenter(ByVal sender As System.Object, ByVal e As System.EventArgs)
         ClickedControl = sender.tag
     End Sub
 
@@ -20036,11 +20571,18 @@ Public Class Form1
     Private Sub OutputMovieListAsHTMLToolStripMenuItem_DropDownClosed(ByVal sender As Object, ByVal e As System.EventArgs) Handles OutputMovieListAsHTMLToolStripMenuItem.DropDownClosed
         If dohtml = True Then
             dohtml = False
-            Call htmloutput()
+            Call htmloutput("Movies")
         End If
     End Sub
 
-    Private Sub htmloutput()
+    Private Sub OutputTVShowsAsHTMLToolStripMenuItem_DropDownClosed(sender As Object, e As System.EventArgs) Handles OutputTVShowsAsHTMLToolStripMenuItem.DropDownClosed
+        If doTVhtml = True Then
+            doTVhtml = False
+            Call htmloutput("TV Shows")
+        End If
+    End Sub
+
+    Private Sub htmloutput(ByVal htmlType As String)
         If fullhtmlstring = Nothing Then Exit Sub
         If fullhtmlstring = "" Then Exit Sub
         Dim frmhtmloutput As New frmDialog1
@@ -20055,6 +20597,7 @@ Public Class Form1
         Dim cssbody As String
         Dim csspath As String
         Dim counter As Integer = 0
+        Dim mediaCollection As Object
         With SaveFileDialog1
             .DefaultExt = "html"
             .Filter = "Html Documents (*.htm)|*.html"
@@ -20084,37 +20627,61 @@ Public Class Form1
                 End If
 
             End If
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.IndexOf("<<header>>") + 12, (fullhtmlstring.IndexOf("<</header>>") - fullhtmlstring.IndexOf("<<header>>")) - 12)
-            tempstring = getmovietags(tempstring, filteredList(0), counter)
-
             Dim temphtml As String
-            temphtml = "<html><head>" & tempstring & "</head>"
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.ToLower.IndexOf("<<body>>") + 8, fullhtmlstring.ToLower.IndexOf("<</body>>") - (fullhtmlstring.ToLower.IndexOf("<<body>>") + 8))
-            temphtml = temphtml & "<body>"
+            Dim tempBody As String = ""
+            Dim overallcancel As Boolean = False
             Dim pathstring As String = ""
-            If tempstring.IndexOf("<<smallimage>>") <> -1 Then
+            Dim imageFolder As String = ""
+
+            tempstring = fullhtmlstring.Substring(fullhtmlstring.IndexOf("<<header>>") + 12, (fullhtmlstring.IndexOf("<</header>>") - fullhtmlstring.IndexOf("<<header>>")) - 12)
+
+            If htmlType = "Movies" Then
+                tempstring = getmovietags(tempstring, filteredList(0), counter)
+                mediaCollection = filteredList
+                imageFolder = "images\"
+            Else
+                tempstring = getTValltags(tempstring, basicTvList(0), counter, "!HEADER!")
+                mediaCollection = basicTvList
+                imageFolder = "tvimages\"
+            End If
+
+            If fullhtmlstring.IndexOf("<<smallimage>>") <> -1 Or fullhtmlstring.IndexOf("<<createimage") <> -1 Then
                 pathstring = savepath.Replace(IO.Path.GetFileName(savepath), "")
-                pathstring = pathstring & "images\"
+                pathstring = pathstring & imageFolder
                 Dim fso As New DirectoryInfo(pathstring)
                 If fso.Exists = False Then
                     IO.Directory.CreateDirectory(pathstring)
                 End If
             End If
-            Dim overallcancel As Boolean = False
-            For Each movie In filteredList
+
+            temphtml = "<html><head>" & tempstring & "</head>"
+            temphtml = temphtml & "<body>"
+            tempstring = fullhtmlstring.Substring(fullhtmlstring.ToLower.IndexOf("<<body>>") + 8, fullhtmlstring.ToLower.IndexOf("<</body>>") - (fullhtmlstring.ToLower.IndexOf("<<body>>") + 8))
+
+            If tempstring.ToLower.IndexOf("<<media_item>>") <> -1 And tempstring.ToLower.IndexOf("<</media_item>>") <> -1 Then
+                temphtml = temphtml & tempstring.Substring(0, tempstring.ToLower.IndexOf("<<media_item>>"))
+                tempBody = tempstring.Substring(tempstring.ToLower.IndexOf("<</media_item>>") + 15, tempstring.Length - (tempstring.ToLower.IndexOf("<</media_item>>") + 15))
+                tempstring = fullhtmlstring.Substring(fullhtmlstring.ToLower.IndexOf("<<media_item>>") + 14, fullhtmlstring.ToLower.IndexOf("<</media_item>>") - (fullhtmlstring.ToLower.IndexOf("<<media_item>>") + 14))
+            End If
+
+            For Each mediaItem In mediaCollection
                 If frmhtmloutput.IsDisposed Then
                     MsgBox("Operation Canceled")
                     overallcancel = True
                     Exit For
                 End If
-                frmhtmloutput.Label3.Text = "Processing: " & movie.title
-                Dim tempint As Integer = filteredList.Count - (counter + 1)
-                frmhtmloutput.Label4.Text = tempint.ToString & " Movies Remaining"
+                frmhtmloutput.Label3.Text = "Processing: " & mediaItem.title
+                Dim tempint As Integer = mediaCollection.Count - (counter + 1)
+                frmhtmloutput.Label4.Text = tempint.ToString & " " & htmlType & " Remaining"
                 frmhtmloutput.Label3.Refresh()
                 frmhtmloutput.Label4.Refresh()
                 Application.DoEvents()
                 Try
-                    temphtml = temphtml & getmovietags(tempstring, movie, counter, pathstring)
+                    If htmlType = "Movies" Then
+                        temphtml = temphtml & getmovietags(tempstring, mediaItem, counter, pathstring)
+                    Else
+                        temphtml = temphtml & getTValltags(tempstring, mediaItem, counter, pathstring)
+                    End If
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -20123,6 +20690,9 @@ Public Class Form1
                 counter += 1
             Next
             If overallcancel = False Then
+                If tempBody <> "" Then
+                    temphtml = temphtml & tempBody
+                End If
                 temphtml = temphtml & "</body>"
                 temphtml = temphtml & "</html>"
 
@@ -20145,6 +20715,7 @@ Public Class Form1
         End If
     End Sub
     Dim dohtml As Boolean
+    Dim doTVhtml As Boolean
     Dim fullhtmlstring As String
     Private Sub OutputMovieListAsHTMLToolStripMenuItem_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles OutputMovieListAsHTMLToolStripMenuItem.DropDownItemClicked
         dohtml = True
@@ -20168,6 +20739,27 @@ Public Class Form1
        
     End Sub
 
+    Private Sub OutputTVShowsAsHTMLToolStripMenuItem_DropDownItemClicked(sender As Object, e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles OutputTVShowsAsHTMLToolStripMenuItem.DropDownItemClicked
+        doTVhtml = True
+        For Each temp In templateList
+            If temp.title = e.ClickedItem.Text Then
+                Try
+                    Dim fullstring As String
+                    Dim cfg2 As IO.StreamReader = IO.File.OpenText(temp.path)
+                    fullstring = cfg2.ReadToEnd
+                    If fullstring.ToLower.IndexOf("<<mc tv html page>>") <> -1 And fullstring.ToLower.IndexOf("<</mc tv html page>>") <> -1 Then
+                        fullhtmlstring = fullstring
+                    Else
+                        fullhtmlstring = Nothing
+                    End If
+                Catch ex As Exception
+                    Dim t As Integer = 0
+                End Try
+                Exit For
+            End If
+        Next
+    End Sub
+
     Dim showstoscrapelist As New List(Of String)
     Private Sub bckgroundscanepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bckgroundscanepisodes.ProgressChanged
         Dim tempint As Integer
@@ -20181,8 +20773,6 @@ Public Class Form1
             For Each ep In e.UserState
                 totalEpisodeCount += 1
                 TextBox33.Text = totalEpisodeCount.ToString
-                Dim rootnode As String
-                Dim childnode As String
                 Dim fullpath As String
                 Dim title As String
                 Dim xmlerroer As Boolean = False
@@ -20316,19 +20906,15 @@ Public Class Form1
     Private Sub episodescraper(ByVal listofshowfolders As List(Of String), ByVal manual As Boolean)
         Dim tempstring As String = ""
         Dim tempint As Integer
-        Dim errorstring As String
         Dim errorcounter As Integer = 0
-        Dim trailer As String
-        Dim newepisodecount As Integer
-        Dim dirinfo As String
         newEpisodeList.Clear()
         Dim newtvfolders As New List(Of String)
         Dim progress As Integer
         progress = 0
-        Dim progresstext As String
+        Dim progresstext As String = String.Empty
         tvScraperLog = ""
         Dim dirpath As String = String.Empty
-        Dim moviepattern As String
+        Dim moviepattern As String = String.Empty
         Dim showtitle As String = ""
         If bckgroundscanepisodes.CancellationPending Then
             tvScraperLog = tvScraperLog & vbCrLf & "Operation cancelled by user"
@@ -20342,10 +20928,6 @@ Public Class Form1
 
         tvScraperLog = "Starting Folder Scan" & vbCrLf & vbCrLf
 
-        'totalscan = True
-        Dim extension As String
-        Dim filename2 As String
-        'inprog = True
         Dim extensions(100) As String
         Dim extensioncount As Integer
         extensions(1) = "*.avi"
@@ -20403,7 +20985,6 @@ Public Class Form1
                     scraperLog = scraperLog & "found" & hg.FullName.ToString & vbCrLf
                     newtvfolders.Add(tvfolder)
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
-                    Dim newlist As List(Of String)
 
                     Try
                         For Each strfolder As String In My.Computer.FileSystem.GetDirectories(tvfolder)
@@ -20493,7 +21074,6 @@ Public Class Form1
                 Exit Sub
             End If
             Dim episode As New EpisodeInfo
-            Dim removal As String
 
             For Each Regexs In tvRegex
 
@@ -20878,7 +21458,7 @@ Public Class Form1
                                                                                                 Dim size As Integer = 0
                                                                                                 Dim bytesRead As Integer = 0
                                                                                                 Dim thumburl As String = newactor.actorthumb
-                                                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -20911,7 +21491,7 @@ Public Class Form1
                                                                                                 Dim size As Integer = 0
                                                                                                 Dim bytesRead As Integer = 0
                                                                                                 Dim thumburl As String = newactor.actorthumb
-                                                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -21193,7 +21773,7 @@ Public Class Form1
             End Try
 
         End While
-
+        Return "Error"
     End Function
 
     Private Sub ReloadItemToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadItemToolStripMenuItem1.Click
@@ -21349,9 +21929,8 @@ Public Class Form1
                     Next
                 Next
                 Dim shownode As Integer
-                Dim cnode As TreeNode
-                Dim tempstring As String
-                Dim showtitlenode As TreeNode
+                Dim cnode As TreeNode = Nothing
+                Dim tempstring As String = String.Empty
                 Dim tempint As Integer
 
                 For Each item In basicTvList
@@ -21467,14 +22046,9 @@ Public Class Form1
                 Next
 
                 Dim shownode As Integer
-                Dim cnode As TreeNode
-                Dim tempstring As String
-                Dim showtitlenode As TreeNode
+                Dim cnode As TreeNode = Nothing
+                Dim tempstring As String = String.Empty
                 Dim tempint As Integer
-
-
-
-
 
                 For Each item In basicTvList
                     For Each episode In item.allepisodes
@@ -22606,7 +23180,7 @@ Public Class Form1
     End Sub
 
     Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtbx_minrarsize.KeyPress
-        If e.KeyChar.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
             If txtbx_minrarsize.Text <> "" Then
                 e.Handled = True
             Else
@@ -23798,8 +24372,8 @@ Public Class Form1
         For Each item In basictvlist
             Dim shownfopath As String = IO.Path.Combine(e.UserState, "tvshow.nfo")
             If item.fullpath = shownfopath Then
-                Dim cnode As TreeNode
-                Dim tempstring As String
+                Dim cnode As TreeNode = Nothing
+                Dim tempstring As String = String.Empty
                 Dim tempint As Integer
 
                 totaltvshowcount += 1
@@ -24010,6 +24584,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
+        Return "Error"
     End Function
 
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork
@@ -24157,7 +24732,7 @@ Public Class Form1
                                                             Dim size As Integer = 0
                                                             Dim bytesRead As Integer = 0
                                                             Dim thumburl As String = acts.actorthumb
-                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                             Dim contents As Stream = res.GetResponseStream()
                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24195,7 +24770,7 @@ Public Class Form1
                                                         Dim size As Integer = 0
                                                         Dim bytesRead As Integer = 0
                                                         Dim thumburl As String = acts.actorthumb
-                                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                         Dim res As HttpWebResponse = req.GetResponse()
                                                         Dim contents As Stream = res.GetResponseStream()
                                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24279,7 +24854,7 @@ Public Class Form1
                                                                         Dim size As Integer = 0
                                                                         Dim bytesRead As Integer = 0
                                                                         Dim thumburl As String = newactor.actorthumb
-                                                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                         Dim res As HttpWebResponse = req.GetResponse()
                                                                         Dim contents As Stream = res.GetResponseStream()
                                                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24398,7 +24973,7 @@ Public Class Form1
                                             Dim size As Integer = 0
                                             Dim bytesRead As Integer = 0
                                             Dim thumburl As String = seasonposter
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24460,7 +25035,7 @@ Public Class Form1
                                         Dim bytesRead As Integer = 0
 
                                         Dim thumburl As String = fanartposter
-                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                         Dim res As HttpWebResponse = req.GetResponse()
                                         Dim contents As Stream = res.GetResponseStream()
                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24591,7 +25166,7 @@ Public Class Form1
                                         Dim size As Integer = 0
                                         Dim bytesRead As Integer = 0
                                         Dim thumburl As String = posterurlpath
-                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                         Dim res As HttpWebResponse = req.GetResponse()
                                         Dim contents As Stream = res.GetResponseStream()
                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24673,7 +25248,7 @@ Public Class Form1
                                         Dim size As Integer = 0
                                         Dim bytesRead As Integer = 0
                                         Dim thumburl As String = seasonallpath
-                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                         Dim res As HttpWebResponse = req.GetResponse()
                                         Dim contents As Stream = res.GetResponseStream()
                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24703,7 +25278,7 @@ Public Class Form1
                                     Dim size As Integer = 0
                                     Dim bytesRead As Integer = 0
                                     Dim thumburl As String = seasonallpath
-                                    Dim req As HttpWebRequest = req.Create(thumburl)
+                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                     Dim res As HttpWebResponse = req.GetResponse()
                                     Dim contents As Stream = res.GetResponseStream()
                                     Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -24884,12 +25459,12 @@ Public Class Form1
         Next
         'new profilename
         Dim tempstring As String = applicationPath & "\Settings\"
-        Dim moviecachetocopy As String
-        Dim actorcachetocopy As String
-        Dim tvcachetocopy As String
-        Dim configtocopy As String
-        Dim filterstocopy As String
-        Dim regextocopy As String
+        Dim moviecachetocopy As String = String.Empty
+        Dim actorcachetocopy As String = String.Empty
+        Dim tvcachetocopy As String = String.Empty
+        Dim configtocopy As String = String.Empty
+        Dim filterstocopy As String = String.Empty
+        Dim regextocopy As String = String.Empty
         For Each profs In profileStructure.profilelist
             If profs.profilename = profileStructure.defaultprofile Then
                 moviecachetocopy = profs.moviecache
@@ -25547,11 +26122,6 @@ Public Class Form1
 
         doc.AppendChild(root)
 
-
-
-
-
-        Dim runt As XmlElement
         For Each thisresult In doc("movie_cache")
             'Try
             Select Case thisresult.Name
@@ -25611,7 +26181,7 @@ Public Class Form1
                                 chi.InnerText = "0"
                             End If
                             Dim play As Integer = Convert.ToInt32(chi.InnerText)
-                            Dim bbol As String
+                            Dim bbol As String = String.Empty
                             If play = 0 Then
                                 bbol = "None"
                             ElseIf play = 1 Then
@@ -27119,6 +27689,10 @@ Public Class Form1
                                         If field = "director" Then
                                             workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                                         End If
+                                    Case "stars"
+                                        If field = "stars" Then
+                                            workingMovieDetails.fullmoviebody.stars = thisresult.InnerText
+                                        End If
                                     Case "genre"
                                         If field = "genre" Then
                                             Dim strarr() As String
@@ -27322,7 +27896,7 @@ Public Class Form1
                                                                             Dim size As Integer = 0
                                                                             Dim bytesRead As Integer = 0
                                                                             Dim thumburl As String = newactor.actorthumb
-                                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                                             Dim contents As Stream = res.GetResponseStream()
                                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -27360,7 +27934,7 @@ Public Class Form1
                                                                         Dim size As Integer = 0
                                                                         Dim bytesRead As Integer = 0
                                                                         Dim thumburl As String = newactor.actorthumb
-                                                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                         Dim res As HttpWebResponse = req.GetResponse()
                                                                         Dim contents As Stream = res.GetResponseStream()
                                                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -27524,6 +28098,9 @@ Public Class Form1
     Private Sub ToolStripMenuItem20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem20.Click
         Call scrapespecific("votes")
     End Sub
+    Private Sub ToolStripMenuItem21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem21.Click
+        Call scrapespecific("stars")
+    End Sub
 
     Private Sub PictureBox7_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.MouseEnter
         RescrapePToolStripMenuItem.Visible = False
@@ -27612,7 +28189,7 @@ Public Class Form1
             End If
         End If
         If backpath <> "" Then
-            Dim moviethumburl As String
+            Dim moviethumburl As String = String.Empty
             Try
                 Dim temp As String = workingMovieDetails.fullmoviebody.imdbid
 
@@ -27665,7 +28242,7 @@ Public Class Form1
                         Dim bytesRead As Integer = 0
 
                         Dim thumburl As String = moviethumburl
-                        Dim req As HttpWebRequest = req.Create(thumburl)
+                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -27826,7 +28403,7 @@ Public Class Form1
                         Dim size As Integer = 0
                         Dim bytesRead As Integer = 0
                         Dim thumburl As String = moviethumburl
-                        Dim req As HttpWebRequest = req.Create(thumburl)
+                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -27981,7 +28558,6 @@ Public Class Form1
                 End If
                 curImage.Save(path, Drawing.Imaging.ImageFormat.Jpeg)
             Next
-            Dim tempstring3 As String
 
             Dim myProcess As Process = New Process
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
@@ -28153,7 +28729,7 @@ Public Class Form1
                             Dim size As Integer = 0
                             Dim bytesRead As Integer = 0
                             Dim thumburl As String = seasonposter
-                            Dim req As HttpWebRequest = req.Create(thumburl)
+                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                             Dim res As HttpWebResponse = req.GetResponse()
                             Dim contents As Stream = res.GetResponseStream()
                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -28209,7 +28785,7 @@ Public Class Form1
                         Dim bytesRead As Integer = 0
 
                         Dim thumburl As String = fanartposter
-                        Dim req As HttpWebRequest = req.Create(thumburl)
+                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -28333,7 +28909,7 @@ Public Class Form1
                         Dim size As Integer = 0
                         Dim bytesRead As Integer = 0
                         Dim thumburl As String = posterurlpath
-                        Dim req As HttpWebRequest = req.Create(thumburl)
+                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -28416,7 +28992,7 @@ Public Class Form1
                             Dim size As Integer = 0
                             Dim bytesRead As Integer = 0
                             Dim thumburl As String = seasonallpath
-                            Dim req As HttpWebRequest = req.Create(thumburl)
+                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                             Dim res As HttpWebResponse = req.GetResponse()
                             Dim contents As Stream = res.GetResponseStream()
                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -28446,7 +29022,7 @@ Public Class Form1
                         Dim size As Integer = 0
                         Dim bytesRead As Integer = 0
                         Dim thumburl As String = seasonallpath
-                        Dim req As HttpWebRequest = req.Create(thumburl)
+                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -28508,9 +29084,9 @@ Public Class Form1
             Me.Refresh()
             Application.DoEvents()
 
-            Dim tempstring As String
+            Dim tempstring As String = String.Empty
             Dim tempint As Integer
-            Dim tempstring2 As String
+            Dim tempstring2 As String = String.Empty
             Dim allok As Boolean = False
             For Each button As Control In Me.Panel2.Controls
                 If button.Name.IndexOf("checkbox") <> -1 Then
@@ -28535,7 +29111,7 @@ Public Class Form1
                     Dim bytesRead As Integer = 0
 
                     Dim fanartthumburl As String = tempstring2
-                    Dim req As HttpWebRequest = req.Create(fanartthumburl)
+                    Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
                     Dim res As HttpWebResponse = req.GetResponse()
                     Dim contents As Stream = res.GetResponseStream()
                     Dim bmp As New Bitmap(contents)
@@ -28566,7 +29142,7 @@ Public Class Form1
                             Dim tempbitmap As Bitmap = bm_dest
                             tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
-                            Threading.Thread.CurrentThread.Sleep(30)
+                            Thread.Sleep(30)
                             bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     ElseIf Form1.userPrefs.resizefanart = 3 Then
@@ -28579,7 +29155,7 @@ Public Class Form1
                             Dim tempbitmap As Bitmap = bm_dest
                             tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
-                            Threading.Thread.CurrentThread.Sleep(30)
+                            Thread.Sleep(30)
                             bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         End If
                     End If
@@ -28706,7 +29282,7 @@ Public Class Form1
                             Select Case thisresult.Name
                                 Case "Episode"
                                     Dim newshow As New basicepisodenfo
-                                    Dim premdate As String
+                                    Dim premdate As String = String.Empty
                                     Dim aired As Boolean = True
                                     Dim mirrorselection As XmlNode = Nothing
                                     For Each mirrorselection In thisresult.ChildNodes
@@ -28823,7 +29399,7 @@ Public Class Form1
                             End If
                         Next
                         If exists = False Then
-                            Dim cnode As TreeNode
+                            Dim cnode As TreeNode = Nothing
                             Dim shownode As Integer = -1
                             For g = 0 To TreeView1.Nodes.Count - 1
                                 If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
@@ -28835,7 +29411,7 @@ Public Class Form1
 
                             Dim seasonstring As String = Nothing
                             Dim seasonno As Integer = Convert.ToInt32(newshow.seasonno)
-                            Dim tempstring As String
+                            Dim tempstring As String = String.Empty
                             If seasonno <> 0 And seasonno <> -1 Then
                                 If seasonno < 10 Then
                                     tempstring = "Season 0" & seasonno.ToString
@@ -29343,7 +29919,7 @@ Public Class Form1
                                                                 Dim size As Integer = 0
                                                                 Dim bytesRead As Integer = 0
                                                                 Dim thumburl As String = acts.actorthumb
-                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -29424,7 +30000,7 @@ Public Class Form1
                                                                         Dim size As Integer = 0
                                                                         Dim bytesRead As Integer = 0
                                                                         Dim thumburl As String = newactor.actorthumb
-                                                                        Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                         Dim res As HttpWebResponse = req.GetResponse()
                                                                         Dim contents As Stream = res.GetResponseStream()
                                                                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -29457,7 +30033,7 @@ Public Class Form1
                                                                             Dim size As Integer = 0
                                                                             Dim bytesRead As Integer = 0
                                                                             Dim thumburl As String = newactor.actorthumb
-                                                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                             Dim res As HttpWebResponse = req.GetResponse()
                                                                             Dim contents As Stream = res.GetResponseStream()
                                                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -29586,7 +30162,7 @@ Public Class Form1
                                             Dim size As Integer = 0
                                             Dim bytesRead As Integer = 0
                                             Dim thumburl As String = seasonposter
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -29612,7 +30188,7 @@ Public Class Form1
                         Next
 
 
-                        Dim fanartposter As String
+                        Dim fanartposter As String = ""
                         If fanartposter = "" Then
                             For Each Image In artlist
                                 If Image.language = "en" And Image.bannerType = "fanart" Then
@@ -29639,7 +30215,7 @@ Public Class Form1
                                     Dim bytesRead As Integer = 0
 
                                     Dim thumburl As String = fanartposter
-                                    Dim req As HttpWebRequest = req.Create(thumburl)
+                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                     Dim res As HttpWebResponse = req.GetResponse()
                                     Dim contents As Stream = res.GetResponseStream()
                                     Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -29741,7 +30317,7 @@ Public Class Form1
                                     Dim size As Integer = 0
                                     Dim bytesRead As Integer = 0
                                     Dim thumburl As String = posterurlpath
-                                    Dim req As HttpWebRequest = req.Create(thumburl)
+                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                     Dim res As HttpWebResponse = req.GetResponse()
                                     Dim contents As Stream = res.GetResponseStream()
                                     Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -29857,7 +30433,7 @@ Public Class Form1
                                                                     Dim size As Integer = 0
                                                                     Dim bytesRead As Integer = 0
                                                                     Dim fanartthumburl As String = episodescreenurl
-                                                                    Dim req As HttpWebRequest = req.Create(fanartthumburl)
+                                                                    Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
                                                                     Dim res As HttpWebResponse = req.GetResponse()
                                                                     Dim contents As Stream = res.GetResponseStream()
                                                                     Dim bmp As New Bitmap(contents)
@@ -30051,8 +30627,6 @@ Public Class Form1
     Public totalfilesize As Long = 0
     Public listoffilestomove As New List(Of String)
     Private Sub ExportmoviesMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExportmoviesMenuItem.Click
-        Dim selecteddestination As String
-
 
         listoffilestomove.Clear()
 
@@ -30614,5 +31188,4 @@ Public Class Form1
         Process.Start(webAddress)
     End Sub
    
-    
 End Class

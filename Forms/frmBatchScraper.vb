@@ -172,4 +172,22 @@
             Form1.batchList.country = False
         End If
     End Sub
+
+    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
+        If CheckBox2.CheckState = CheckState.Checked Then
+            Form1.batchList.stars = True
+        Else
+            Form1.batchList.stars = False
+        End If
+
+    End Sub
+
+    Public Sub New()
+        
+        ' This call is required by the designer.
+        InitializeComponent()
+        
+        ' Add any initialization after the InitializeComponent() call.
+        
+    End Sub
 End Class

@@ -412,14 +412,6 @@ Public Class frmTvFanart
             Loop
             objReader.Close()
             urllinecount -= 1
-            Dim tempboolean As Boolean
-            'tempboolean = Form1.forceexit
-            'If Form1.forceexit = True Then
-            '    objStream.Dispose()
-            '    Form1.completeclose = True
-            '    Application.Exit()
-            'End If
-
 
         Catch ex As WebException
             'MsgBox("Unable to load webpage " & url & vbCrLf & vbCrLf & ex.ToString)
@@ -899,7 +891,7 @@ Public Class frmTvFanart
     End Sub
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
-        Dim savepath As String
+        Dim savepath As String = String.Empty
 
 
 
