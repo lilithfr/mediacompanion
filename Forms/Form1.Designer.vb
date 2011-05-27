@@ -5719,7 +5719,7 @@ Me.TextBox_OfflineDVDTitle.Location = New System.Drawing.Point(13, 28)
 Me.TextBox_OfflineDVDTitle.Name = "TextBox_OfflineDVDTitle"
 Me.TextBox_OfflineDVDTitle.Size = New System.Drawing.Size(368, 21)
 Me.TextBox_OfflineDVDTitle.TabIndex = 69
-Me.TextBox_OfflineDVDTitle.Text = "Please Insert %T Media"
+Me.TextBox_OfflineDVDTitle.Text = "Please Insert '%T' Media"
 '
 'TabPage28
 '
