@@ -537,9 +537,6 @@ C:\MC SVN\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\MC SVN\obj\Release\Media Companion.exe
 C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
 C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
-C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
-C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
-C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog
 C:\Projects\MC\Trunk\bin\Release\Media Companion.exe.config
 C:\Projects\MC\Trunk\obj\Release\Media Companion.pdb
 C:\Projects\MC\Trunk\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
@@ -646,3 +643,5 @@ C:\MC SVN\bin\Release\NfoLibrary.pdb
 C:\MC SVN\bin\Release\NfoLibrary.xml
 C:\MC SVN\bin\Release\ProtoXML.pdb
 C:\MC SVN\bin\Release\ProtoXML.xml
+C:\MC SVN\obj\Release\ResGen.read.1.tlog
+C:\MC SVN\obj\Release\ResGen.write.1.tlog
