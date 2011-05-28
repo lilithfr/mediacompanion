@@ -643,5 +643,6 @@ C:\MC SVN\bin\Release\NfoLibrary.pdb
 C:\MC SVN\bin\Release\NfoLibrary.xml
 C:\MC SVN\bin\Release\ProtoXML.pdb
 C:\MC SVN\bin\Release\ProtoXML.xml
-C:\MC SVN\obj\Release\ResGen.read.1.tlog
-C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog

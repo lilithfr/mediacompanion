@@ -501,7 +501,10 @@ Public Class ScraperQuery
 
             Catch
             End Try
-            ReplaceOrAddElements(rootElement, chainResultElement, chainElement)
+            If chainResultElement IsNot Nothing Then
+                ReplaceOrAddElements(rootElement, chainResultElement, chainElement)
+            End If
+            chainElement.Remove()
       End While
 
       Return rootElement
@@ -547,7 +550,7 @@ Public Class ScraperQuery
       Next
 
       ' Remove the chain element from our output so we don't reprocess it again
-      chainElement.Remove()
+        'chainElement.Remove()
    End Sub
 #End Region
 

@@ -79,7 +79,8 @@ Module General
             Return Saida
         Catch ex As WebException
             MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + URLAddress, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Throw ex
+            Return "ERROR" 'SK: added 
+            'Throw ex   'SK : this was originally uncommented 
         End Try
     End Function
     Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
@@ -99,8 +100,12 @@ Module General
         Dim ScraperFunctiontoExecute As XElement
         If GetURL = True Then
             Dim PrimaryString As String = RetrieveUrls(InputParameters(InputBuffer))
-            InputParameters(InputBuffer) = PrimaryString
-            If PrimaryString.Length = 0 Then
+            If PrimaryString = "ERROR" Then 'SK: added this test but calling functions don't test for "error"
+                Return "Error"
+                Exit Function
+            End If
+            InputParameters(InputBuffer) = PrimaryString 'SK: Primary string was returning as Nothing when the Throw Ex was commented out with a failed causing an exception
+            If PrimaryString.Length = 0 Then 'SK: this test already existed
                 Return "Error"
                 Exit Function
             End If
