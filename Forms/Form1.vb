@@ -774,6 +774,9 @@ Public Class Form1
             childchild = doc.CreateElement("filedate")
             childchild.InnerText = movie.filedate
             child.AppendChild(childchild)
+            childchild = doc.CreateElement("createdate")
+            childchild.InnerText = movie.createdate
+            child.AppendChild(childchild)
             childchild = doc.CreateElement("missingdata1")
             childchild.InnerText = movie.missingdata1.ToString
             child.AppendChild(childchild)
@@ -1406,6 +1409,8 @@ Public Class Form1
                                 newmovie.sortorder = detail.InnerText
                             Case "filedate"
                                 newmovie.filedate = detail.InnerText
+                            Case "createdate"
+                                newmovie.createdate = detail.InnerText
                             Case "filename"
                                 newmovie.filename = detail.InnerText
                             Case "foldername"
@@ -6393,7 +6398,7 @@ Public Class Form1
         MovieListComboBox.Items.Clear()
 
         For Each movie In filteredList
-            If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False Then
+            If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False And RadioButton20.Checked = False And RadioButton5.Checked = False Then
                 If RadioButton1.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
@@ -6435,7 +6440,7 @@ Public Class Form1
                 ElseIf RadioButton6.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
-            ElseIf RadioButton7.Checked = True Then
+            ElseIf RadioButton7.Checked = True Then         'rating sort button selected
                 Dim tempstring As String = movie.rating
                 If tempstring = "" Then tempstring = "0.0"
                 Try
@@ -6500,7 +6505,31 @@ Public Class Form1
                 ElseIf RadioButton6.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
+
+            ElseIf RadioButton20.Checked = True Or RadioButton5.Checked = True Then    'Sort by CreateDate (date in nfo) OR FileDate (date of nfo from Operating System)
+                Dim tempstring As String = ""
+                If CheckBox_ShowDateOnMovieList.Checked = True Then             'If this is false tempstring will stay as "" in the list below
+                    Dim tempdate As Date
+                    If RadioButton20.Checked = True Then
+                        tempdate = DateSerial(movie.createdate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
+                    Else
+                        tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
+                    End If
+
+                    tempstring = tempdate.ToShortDateString   'This is the format set in your regional settings in control panel for shortdate
+
+                    tempstring = tempstring & " - "
+                End If
+
+                If RadioButton1.Checked = True Then
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.titleandyear))
+                ElseIf RadioButton2.Checked = True Then
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.filename))
+                ElseIf RadioButton6.Checked = True Then
+                    MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
+                End If
             End If
+
 
         Next
         If oldmovie <> "" Then
@@ -6622,7 +6651,7 @@ Public Class Form1
 
 
 
-        If RadioButton20.Checked = True Then
+        If RadioButton20.Checked = True Then        'Date Added button
             MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
@@ -6636,7 +6665,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -7597,7 +7626,7 @@ Public Class Form1
         If MovieListComboBox.SelectedItems.Count = 0 Then
             Exit Sub
         End If
-        If MovieListComboBox.SelectedItems.Count = 1 Then
+        If MovieListComboBox.SelectedItems.Count = 1 Then   'Only one movie selected from movie list 
             Dim tempstring As String = ""
             Dim oldmovietitle As String = workingMovieDetails.fullmoviebody.title
             '-------------- Aqui
@@ -7693,7 +7722,7 @@ Public Class Form1
                 Call loadinfofile()
             End If
         Else
-            Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")
+            Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
             mess.Show()
             mess.Refresh()
             Application.DoEvents()
@@ -7758,19 +7787,20 @@ Public Class Form1
                         If newfullmovie.movieset = "" Then
                             newfullmovie.movieset = "None"
                         End If
-                        'newfullmovie.title = movie.fullmoviebody.title
-                        'newfullmovie.titleandyear = newfullmovie.title & " (" & movie.fullmoviebody.year & ")"
+                        'Commented out items are not saved when multiple movies are selected
+                        '              newfullmovie.title = movie.fullmoviebody.title
+                        '              newfullmovie.titleandyear = newfullmovie.title & " (" & movie.fullmoviebody.year & ")"
                         newfullmovie.genre = movie.fullmoviebody.genre
                         newfullmovie.playcount = movie.fullmoviebody.playcount
                         newfullmovie.rating = movie.fullmoviebody.rating
                         newfullmovie.top250 = movie.fullmoviebody.top250
                         newfullmovie.sortorder = movie.fullmoviebody.sortorder
-                        'newfullmovie.createdate = movie.fileinfo.createdate
+                        '              newfullmovie.createdate = movie.fileinfo.createdate
                         newfullmovie.runtime = movie.fullmoviebody.runtime
-                        'newfullmovie.id = movie.fullmoviebody.imdbid
+                        '              newfullmovie.id = movie.fullmoviebody.imdbid
                         newfullmovie.outline = movie.fullmoviebody.outline
                         newfullmovie.movieset = movie.fullmoviebody.movieset
-                        'newfullmovie.year = movie.fullmoviebody.year
+                        '              newfullmovie.year = movie.fullmoviebody.year
                         fullMovieList.RemoveAt(f)
                         fullMovieList.Add(newfullmovie)
                         Call savedata()
@@ -13408,7 +13438,10 @@ Public Class Form1
                         Dim myDate2 As Date = filecreation2.LastWriteTime
 
                         newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                        'Createdate becomes new because we have changed the movie (i.e. not a recrape of the same movie)
                         newfullmovie.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                        
+
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -31188,4 +31221,7 @@ Public Class Form1
         Process.Start(webAddress)
     End Sub
    
+    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
+        Call sortorder()
+    End Sub
 End Class
