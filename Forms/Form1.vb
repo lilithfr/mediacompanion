@@ -1408,9 +1408,18 @@ Public Class Form1
                             Case "sortorder"
                                 newmovie.sortorder = detail.InnerText
                             Case "filedate"
-                                newmovie.filedate = detail.InnerText
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.filedate = "19000101000000" '01/01/1900 00:00:00
+                                Else
+                                    newmovie.filedate = detail.InnerText
+                                End If
                             Case "createdate"
-                                newmovie.createdate = detail.InnerText
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.createdate = "19000101000000" '01/01/1900 00:00:00
+                                Else
+                                    newmovie.createdate = detail.InnerText
+                                End If
+
                             Case "filename"
                                 newmovie.filename = detail.InnerText
                             Case "foldername"
@@ -1476,6 +1485,9 @@ Public Class Form1
                     fullMovieList.Add(newmovie)
             End Select
         Next
+
+
+
         If fullMovieList.Count = 0 Then
             Call rebuildmovies(movieFolders)
             Exit Sub
@@ -6515,9 +6527,7 @@ Public Class Form1
                     Else
                         tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
                     End If
-
                     tempstring = tempdate.ToShortDateString   'This is the format set in your regional settings in control panel for shortdate
-
                     tempstring = tempstring & " - "
                 End If
 
@@ -6528,7 +6538,7 @@ Public Class Form1
                 ElseIf RadioButton6.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
-            End If
+                End If
 
 
         Next
