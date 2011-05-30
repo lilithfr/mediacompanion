@@ -2,38 +2,57 @@
     Inherits ProtoXChildBase
     Implements IList(Of T)
 
-
-    'Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
-    '    For Each Child As XElement In Element.Nodes
-
-    '    Next
-    'End Sub
-
-
     Public Sub New(ByRef ParentClass As IProtoXBase, ByRef ListItemNodeName As String)
         MyBase.New(ParentClass, ListItemNodeName)
 
         Me.NodeName = ListItemNodeName
-        Me.ParentNode = ParentClass.Node
         Me.Node = ParentClass.Node
         Me.ParentClass = ParentClass
     End Sub
 
+    Public Overrides Property Node As XElement
+        Get
+            Return ParentClass.Node
+        End Get
+        Set(ByVal value As XElement)
+
+        End Set
+    End Property
+
+    Protected Sub ProcessAdd(ByVal Item As T)
+        Item.ParentClass = Me
+        If Not Me.ParentClass.Node.Nodes.Contains(Item.Node) Then
+            If Item.Node IsNot Nothing Then
+                If Item.Node.Parent IsNot Nothing Then
+                    Item.Node.Remove()
+                End If
+            End If
+            Me.ParentClass.Node.Add(Item.Node)
+        End If
+        Item.ResolveAttachment(Item)
+
+        List.Add(Item)
+    End Sub
 
     Public List As New List(Of T)
 
     Sub Add(ByVal item As T) Implements System.Collections.Generic.ICollection(Of T).Add
         item.ParentClass = Me
-        item.ParentNode = Me.Node
-        item.ResolveAttachment(Me)
-
-        ParentNode.Add(item.Node)
+        If Not Me.ParentClass.Node.Nodes.Contains(item.Node) Then
+            If item.Node IsNot Nothing Then
+                If item.Node.Parent IsNot Nothing Then
+                    item.Node.Remove()
+                End If
+            End If
+            Me.ParentClass.Node.Add(item.Node)
+        End If
+        item.ResolveAttachment(item)
 
         List.Add(item)
     End Sub
 
     Public Sub Clear() Implements System.Collections.Generic.ICollection(Of T).Clear
-        For Each Node As XElement In (From X As XElement In ParentNode.Nodes Where X.Name = Me.NodeName)
+        For Each Node As XElement In (From X As XElement In ParentClass.Node.Nodes Where X.Name = Me.NodeName)
             Node.Remove()
         Next
 

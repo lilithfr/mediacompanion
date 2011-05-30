@@ -46,8 +46,18 @@
     Public Sub Load(ByVal Path As String) Implements IProtoXFile.Load
         Me.Doc = XDocument.Load(Path)
 
-        If Me.Doc.Root Is Nothing Then Throw New Exception("Invalid NFO file")
+        LoadDoc()
+    End Sub
 
+    Public Sub LoadXml(ByVal Input As String)
+        Me.Doc = XDocument.Parse(Input)
+
+        LoadDoc()
+    End Sub
+
+    Private Sub LoadDoc()
+        If Me.Doc.Root Is Nothing Then Throw New Exception("Invalid NFO file")
+        Me._node = Me.Doc.Root
         Dim Root As XElement = Me.Doc.Root
 
         Dim ChildProperty As IProtoXChild
@@ -58,6 +68,8 @@
                 ChildProperty.ProcessNode(Child)
             End If
         Next
+
+        Me.CleanDoc()
     End Sub
 
     Public Sub Save() Implements IProtoXFile.Save
@@ -65,7 +77,42 @@
     End Sub
 
     Public Sub Save(ByVal Path As String) Implements IProtoXFile.Save
+        Me.CleanDoc()
+
         Doc.Save(Path)
+    End Sub
+
+    Private Sub CleanDoc()
+        CleanNode(Doc.Root)
+    End Sub
+
+    Private Sub CleanNode(ByVal Element As XElement)
+        Dim Cursor As XElement
+        Dim NextOne As XNode
+        If Element.FirstNode Is Nothing Then
+            Element.Remove()
+            Exit Sub
+        End If
+
+        If Element.FirstNode.NodeType = Xml.XmlNodeType.Text Then
+            Exit Sub
+        End If
+
+        Cursor = Element.FirstNode
+
+        Do
+            NextOne = Cursor.NextNode
+            If Cursor.Nodes.Count = 0 AndAlso Cursor.Attributes.Count = 0 Then
+                Cursor.Remove()
+            Else
+                CleanNode(Cursor)
+            End If
+            Cursor = NextOne
+        Loop Until Cursor Is Nothing
+
+        If Element.Nodes.Count = 0 AndAlso Element.Attributes.Count = 0 Then
+            Element.Remove()
+        End If
     End Sub
 
 #End Region

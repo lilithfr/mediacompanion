@@ -16,12 +16,21 @@
         If Parent Is Nothing Then Exit Sub
 
         Me.Node = New XElement(NodeName)
-        ParentNode.Add(Me.Node)
+        ParentClass.Node.Add(Me.Node)
     End Sub
 
     Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
         If Not Element.Name = Node.Name Then
             Throw New Exception("Wrong element sent")
+        End If
+
+        If ParentClass IsNot Nothing AndAlso Not XDocument.ReferenceEquals(Me.Node.Document, Element.Document) Then
+            If Element.Parent IsNot Nothing Then
+                Element.Remove()
+            End If
+            ParentClass.Node.Add(Element)
+            Me.Node.Remove()
+            Me.Node = Element
         End If
 
         Dim ChildProperty As IProtoXChild
@@ -32,9 +41,7 @@
                 ChildProperty.ProcessNode(Child)
             End If
         Next
-        If Element.Name Is Nothing Then
 
-        End If
     End Sub
 
     

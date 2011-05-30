@@ -14,24 +14,28 @@ Public Class ProtoProperty
             Return _value
         End Get
         Set(ByVal value As String)
+            If value Is Nothing Then
+                If Me.Node IsNot Nothing AndAlso Me.Node.Parent IsNot Nothing Then
+                    Me.Node.Remove()
+                    Me.Node = Nothing
+                End If
+                Exit Property
+            End If
+
             If Me.Node Is Nothing Then
                 Me.Node = <hold><%= value %></hold>
                 Me.Node.Name = Me.NodeName
 
-                If ParentNode IsNot Nothing Then
-                    ParentNode.Add(Me.Node)
+                If ParentClass IsNot Nothing AndAlso ParentClass.Node IsNot Nothing Then
+                    If Node.Parent IsNot Nothing Then
+                        Node.Remove()
+                    End If
+                    ParentClass.Node.Add(Me.Node)
                 Else
                     NotAttached = True
                 End If
             Else
                 Me.Node.Value = CType(value, String)
-            End If
-
-            If value Is Nothing Then
-                If Me.Node IsNot Nothing And Me.Node.Parent IsNot Nothing Then
-                    Me.Node.Remove()
-                    Me.Node = Nothing
-                End If
             End If
 
             _value = value
@@ -62,16 +66,21 @@ Public Class ProtoProperty
             Throw New Exception("Parent Class not set")
         End If
 
-        If ParentNode Is Nothing Then
-            If ParentClass.Node Is Nothing Then
-                Exit Sub
+        If ParentClass.Node Is Nothing Then
+            'Throw New Exception("Parent Class no node")
+        Else
+            If Not ParentClass.Node.Nodes.Contains(Node) Then
+                If Me.Node Is Nothing Then
+                    Me.Node = New XElement(Me.NodeName)
+                    If _value IsNot Nothing Then
+                        Me.Node.Value = _value
+                    End If
+                End If
+                If Node.Parent IsNot Nothing Then
+                    Node.Remove()
+                End If
+                ParentClass.Node.Add(Node)
             End If
-            ParentNode = ParentClass.Node
-        End If
-
-
-        If Not ParentNode.Nodes.Contains(Node) Then
-            ParentNode.Add(Node)
         End If
     End Sub
 

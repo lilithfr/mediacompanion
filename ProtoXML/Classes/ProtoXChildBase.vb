@@ -1,17 +1,16 @@
 ﻿Public MustInherit Class ProtoXChildBase
     Implements IProtoXChild
 
-    Public Property ParentNode As XElement Implements IProtoXChild.ParentNode
     Public Property ParentClass As IProtoXBase Implements IProtoXChild.ParentClass
 
     Public Property ChildrenLookup As New System.Collections.Generic.Dictionary(Of String, IProtoXChild) Implements IProtoXBase.ChildrenLookup
-    Public Property Node As XElement Implements IProtoXBase.Node
+    Public Overridable Property Node As XElement Implements IProtoXBase.Node
     Private _NodeName As String
 
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)
         If Parent Is Nothing Then Exit Sub
         Me.ParentClass = Parent
-        Me.ParentNode = Parent.Node
+
 
         Me.NodeName = NodeName
 

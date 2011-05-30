@@ -2,11 +2,8 @@
     Inherits IProtoXBase
 
     Property ParentClass As IProtoXBase
-    Property ParentNode As XElement
 
     Sub ProcessNode(ByRef Element As XElement)
-
-    'Property Value As String
 
     Sub AttachToParentClass(ByRef ParentClass As IProtoXBase)
 
