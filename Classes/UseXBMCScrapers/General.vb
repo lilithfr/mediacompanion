@@ -7,10 +7,10 @@ Imports System.Xml
 
 Module General
 
-    Dim TempEpisode As New EpisodeInfo
-    Dim episodeInformation As New List(Of EpisodeInfo)
-    Dim TempXMLEpisode As TempEpisodeInfo
-    Dim episodeXMLinformation As New List(Of TempEpisodeInfo)
+    Dim TempEpisode As New TvEpisode
+    Dim episodeInformation As New List(Of TvEpisode)
+    Dim TempXMLEpisode As TvEpisode
+    Dim episodeXMLinformation As New List(Of TvEpisode)
 
 
 
@@ -1372,7 +1372,7 @@ Module General
 
 #Region "Misc.TVShows Routines"
 
-    Public Function NeededConversion(ByVal entrada As TempEpisodeInfo) As EpisodeInfo
+    Public Function NeededConversion(ByVal entrada As TvEpisode) As TvEpisode
         'Dim Teste As New EpisodeInfo
 
         'Teste.aired = entrada.aired
@@ -1611,7 +1611,7 @@ Module General
         Return TempString
     End Function
 
-    Public Function ProcessEpisodeFile(ByVal Entrada As String, ByVal HowManyEpisodes As Integer) As List(Of EpisodeInfo)
+    Public Function ProcessEpisodeFile(ByVal Entrada As String, ByVal HowManyEpisodes As Integer) As List(Of TvEpisode)
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
@@ -1688,8 +1688,8 @@ Module General
             Next
             episodeXMLinformation.Add(TempXMLEpisode)
         Next
-        Dim Teste As New List(Of EpisodeInfo)
-        Teste = episodeXMLinformation.ConvertAll(New Converter(Of TempEpisodeInfo, EpisodeInfo)(AddressOf NeededConversion))
+        Dim Teste As New List(Of TvEpisode)
+        Teste = episodeXMLinformation.ConvertAll(New Converter(Of TvEpisode, TvEpisode)(AddressOf NeededConversion))
         Return Teste
     End Function
 
@@ -1832,7 +1832,7 @@ Module General
 #End Region
 
 
-    Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of EpisodeInfo), ByVal Language As String) As List(Of EpisodeInfo)
+    Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of TvEpisode), ByVal Language As String) As List(Of TvEpisode)
         episodeInformation.Clear()
         Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
 

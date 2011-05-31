@@ -32,7 +32,7 @@ Public Class WorkingWithNfoFiles
         FinalString &= "</tvshow>"
         Return FinalString
     End Function
-    Public Function ChangeAllFieldsTVShow(ByVal TempTVShow As TvShowNFO) As String
+    Public Function ChangeAllFieldsTVShow(ByVal TempTVShow As TvShow) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
@@ -93,7 +93,7 @@ Public Class WorkingWithNfoFiles
         FinalString &= "</episodedetails>"
         Return FinalString
     End Function
-    Public Function ChangeAllFieldsEpisodeTVShow(ByVal TempEpisode As EpisodeInfo) As String
+    Public Function ChangeAllFieldsEpisodeTVShow(ByVal TempEpisode As TvEpisode) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
@@ -144,7 +144,7 @@ Public Class WorkingWithNfoFiles
 
     Public Function loadbasictvshownfo(ByVal path As String)
         Try
-            Dim newtvshow As New BasicTvShowNFO
+            Dim newtvshow As New TvShow
             If Not IO.File.Exists(path) Then
                 'Form1.tvrebuildlog(path & ", does not appear to exist")
                 newtvshow.title = Utilities.GetLastFolder(path)
@@ -275,9 +275,9 @@ Public Class WorkingWithNfoFiles
 
     Public Function loadbasicepisodenfo(ByVal path As String)
         'Try
-        Dim episodelist As New List(Of BasicEpisodeNFO)
+        Dim episodelist As New List(Of TvEpisode)
 
-        Dim newtvshow As New BasicEpisodeNFO
+        Dim newtvshow As New TvEpisode
         If Not IO.File.Exists(path) Then
             Return "Error"
         Else
@@ -341,7 +341,7 @@ Public Class WorkingWithNfoFiles
             Dim thisresult As XmlNode = Nothing
             Dim tempid As String = ""
             If tvshow.DocumentElement.Name = "episodedetails" Then
-                Dim newtvepisode As New BasicEpisodeNFO
+                Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
                         newtvepisode.episodepath = path
@@ -400,7 +400,7 @@ Public Class WorkingWithNfoFiles
                     Select Case thisresult.Name
                         Case "episodedetails"
                             Dim newepisodenfo As XmlNode = Nothing
-                            Dim anotherepisode As New BasicEpisodeNFO
+                            Dim anotherepisode As New TvEpisode
 
                             anotherepisode.episodepath = Nothing
                             'anotherepisode.status = Nothing
@@ -479,7 +479,7 @@ Public Class WorkingWithNfoFiles
 
     Public Function loadfullepisodenfo(ByVal path As String) ', ByVal season As String, ByVal episode As String)
         Form1.workingEpisode.Clear()
-        Dim newepisode As New EpisodeInfo
+        Dim newepisode As New TvEpisode
         If Not IO.File.Exists(path) Then
             newepisode.title = IO.Path.GetFileName(path)
             newepisode.plot = "missing file"
@@ -554,7 +554,7 @@ Public Class WorkingWithNfoFiles
             Dim thisresult As XmlNode = Nothing
             Dim tempid As String = ""
             If tvshow.DocumentElement.Name = "episodedetails" Then
-                Dim newtvepisode As New EpisodeInfo
+                Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
                         newtvepisode.episodepath = path
@@ -705,7 +705,7 @@ Public Class WorkingWithNfoFiles
                     Select Case thisresult.Name
                         Case "episodedetails"
                             Dim newepisodenfo As XmlNode = Nothing
-                            Dim anotherepisode As New EpisodeInfo
+                            Dim anotherepisode As New TvEpisode
 
                             anotherepisode.episodepath = Nothing
                             anotherepisode.playcount = Nothing
@@ -858,7 +858,7 @@ Public Class WorkingWithNfoFiles
     Public Function loadfulltnshownfo(ByVal path As String)
         Try
 
-            Dim newtvshow As New TvShowNFO
+            Dim newtvshow As New TvShow
             If Not IO.File.Exists(path) Then
                 newtvshow.title = Utilities.GetLastFolder(path)
                 newtvshow.year = newtvshow.title & " (0000)"
@@ -1009,7 +1009,7 @@ Public Class WorkingWithNfoFiles
         Return "Error"
     End Function
 
-    Public Sub savetvshownfo(ByVal filenameandpath As String, ByVal tvshowtosave As TvShowNFO, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+    Public Sub savetvshownfo(ByVal filenameandpath As String, ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
 
 
         Try
@@ -1035,7 +1035,7 @@ Public Class WorkingWithNfoFiles
                 End If
             Next
             If newshow = True Then
-                Dim newtvnfo As New BasicTvShowNFO
+                Dim newtvnfo As New TvShow
                 newtvnfo.episodeactorsource = tvshowtosave.episodeactorsource
                 newtvnfo.fullpath = tvshowtosave.path
                 newtvnfo.genre = tvshowtosave.genre
@@ -1182,9 +1182,9 @@ Public Class WorkingWithNfoFiles
                         Do While minutes.IndexOf("0") = 0
                             minutes = minutes.Substring(1, minutes.Length - 1)
                         Loop
-                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Form1.userprefs.roundminutes = True Then
+                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Form1.userPrefs.roundminutes = True Then
                             minutes = "0" & minutes & " min"
-                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Form1.userprefs.roundminutes = True Then
+                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Form1.userPrefs.roundminutes = True Then
                             minutes = "00" & minutes & " min"
                         Else
                             minutes = tvshowtosave.runtime
@@ -1250,7 +1250,7 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
 
                 Dim actorstosave As Integer = tvshowtosave.listactors.Count
-                If actorstosave > Form1.userprefs.maxactors Then actorstosave = Form1.userprefs.maxactors
+                If actorstosave > Form1.userPrefs.maxactors Then actorstosave = Form1.userPrefs.maxactors
                 For f = 0 To actorstosave - 1
                     child = doc.CreateElement("actor")
                     actorchild = doc.CreateElement("name")
@@ -1292,7 +1292,7 @@ Public Class WorkingWithNfoFiles
         End Try
     End Sub
 
-    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of EpisodeInfo), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
+    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
         'Monitor.Enter(Me)
         'Try
         If seasonno <> -2 And episodeno <> -2 Then
@@ -1305,7 +1305,7 @@ Public Class WorkingWithNfoFiles
 
                                 For Each epis In listofepisodes
                                     If epis.seasonno = seasonno And epis.episodeno = episodeno Then
-                                        Dim newep As New BasicEpisodeNFO
+                                        Dim newep As New TvEpisode
                                         newep.episodepath = epis.episodepath
                                         newep.title = epis.title
                                         newep.seasonno = epis.seasonno
@@ -1341,7 +1341,7 @@ Public Class WorkingWithNfoFiles
             xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
             doc.AppendChild(xmlproc)
             Dim anotherchild As XmlNode = Nothing
-            If Form1.userprefs.enabletvhdtags = True Then
+            If Form1.userPrefs.enabletvhdtags = True Then
                 Try
                     child = doc.CreateElement("fileinfo")
 
@@ -1537,7 +1537,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             Dim actorstosave As Integer = listofepisodes(0).listactors.Count
-            If actorstosave > Form1.userprefs.maxactors Then actorstosave = Form1.userprefs.maxactors
+            If actorstosave > Form1.userPrefs.maxactors Then actorstosave = Form1.userPrefs.maxactors
             For f = 0 To actorstosave - 1
                 child = doc.CreateElement("actor")
                 actorchild = doc.CreateElement("name")
@@ -1580,7 +1580,7 @@ Public Class WorkingWithNfoFiles
                 child = document.CreateElement("episodedetails")
                 If done = False Then
                     'done = True
-                    If Form1.userprefs.enabletvhdtags = True Then
+                    If Form1.userPrefs.enabletvhdtags = True Then
                         Try
                             middlechild = document.CreateElement("streamdetails")
                             childchild = document.CreateElement("fileinfo")
@@ -2792,8 +2792,8 @@ Public Class WorkingWithNfoFiles
 
     Public Function loadfullepisodenfogeneric(ByVal path As String) ', ByVal season As String, ByVal episode As String)
 
-        Dim newepisodelist As New List(Of EpisodeInfo)
-        Dim newepisode As New EpisodeInfo
+        Dim newepisodelist As New List(Of TvEpisode)
+        Dim newepisode As New TvEpisode
         If Not IO.File.Exists(path) Then
             newepisode.title = IO.Path.GetFileName(path)
             newepisode.plot = "missing file"
@@ -2868,7 +2868,7 @@ Public Class WorkingWithNfoFiles
             Dim thisresult As XmlNode = Nothing
             Dim tempid As String = ""
             If tvshow.DocumentElement.Name = "episodedetails" Then
-                Dim newtvepisode As New EpisodeInfo
+                Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
                         newtvepisode.episodepath = path
@@ -3019,7 +3019,7 @@ Public Class WorkingWithNfoFiles
                     Select Case thisresult.Name
                         Case "episodedetails"
                             Dim newepisodenfo As XmlNode = Nothing
-                            Dim anotherepisode As New EpisodeInfo
+                            Dim anotherepisode As New TvEpisode
 
                             anotherepisode.episodepath = Nothing
                             anotherepisode.playcount = Nothing

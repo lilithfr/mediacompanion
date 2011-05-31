@@ -36,15 +36,15 @@ Public Class Form1
     Public fullMovieList As New List(Of ComboList)
     Public filteredList As New List(Of ComboList)
     Public workingMovieDetails As FullMovieDetails
-    Public workingTvShow As New TvShowNFO
-    Public workingEpisode As New List(Of EpisodeInfo)
-    Public tempWorkingTvShow As New TvShowNFO
-    Public tempWorkingEpisode As New EpisodeInfo
+    Public workingTvShow As New TvShow
+    Public workingEpisode As New List(Of TvEpisode)
+    Public tempWorkingTvShow As New TvShow
+    Public tempWorkingEpisode As New TvEpisode
     Public workingEpisodeIndex As Integer
     Public workingMovie As New ComboList
     Public batchList As New BatchWizard
     Public tvBatchList As New TvShowBatchWizard
-    Public basicTvList As New List(Of BasicTvShowNFO)
+    Public basicTvList As New List(Of TvShow)
     Public sending As String
     Public applicationPath As String = Application.StartupPath 'Get application root path
 
@@ -78,8 +78,8 @@ Public Class Form1
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
     Dim newMovieList As New List(Of NewMovie)
-    Dim newEpisodeList As New List(Of EpisodeInfo)
-    Dim tvShowList As New List(Of TvShowNFO)
+    Dim newEpisodeList As New List(Of TvEpisode)
+    Dim tvShowList As New List(Of TvShow)
     Dim bigPanel As Panel
     Dim realMoviePaths As New List(Of String)
     Dim realTvPaths As New List(Of String)
@@ -105,7 +105,7 @@ Public Class Form1
     Dim tab1 As Integer
     Dim languageList As New List(Of TvShowLanguages)
     Dim listOfShows As New List(Of PossibleShowList)
-    Dim newEpisodeToAdd As New BasicEpisodeNFO
+    Dim newEpisodeToAdd As New TvEpisode
     Dim listOfTvFanarts As New List(Of FanartList)
     Dim lockedList As Boolean = False
     Dim tempTVDBiD As String = String.Empty
@@ -1031,7 +1031,7 @@ Public Class Form1
         For Each thisresult In tvlist("tv_cache")
             Select Case thisresult.Name
                 Case "tvshow"
-                    Dim newtvshow As New BasicTvShowNFO
+                    Dim newtvshow As New TvShow
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
@@ -1069,7 +1069,7 @@ Public Class Form1
                             Case "status"
                                 newtvshow.status = detail.InnerText
                             Case "episode"
-                                Dim newepisode As New BasicEpisodeNFO
+                                Dim newepisode As New TvEpisode
                                 Dim episodenew As XmlNode = Nothing
                                 For Each episodenew In detail.ChildNodes
                                     Select Case episodenew.Name
@@ -1093,7 +1093,7 @@ Public Class Form1
                                 Next
                                 newtvshow.allepisodes.Add(newepisode)
                             Case "missingepisode"
-                                Dim newepisode As New BasicEpisodeNFO
+                                Dim newepisode As New TvEpisode
                                 Dim episodenew As XmlNode = Nothing
                                 For Each episodenew In detail.ChildNodes
                                     Select Case episodenew.Name
@@ -1951,7 +1951,7 @@ Public Class Form1
             End If
             Dim shownfopath As String = IO.Path.Combine(tvfolder, "tvshow.nfo")
             'tvrebuildlog("tvshow.nfo path is: " & shownfopath)
-            Dim newtvshownfo As BasicTvShowNFO
+            Dim newtvshownfo As TvShow
 
             newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
             If newtvshownfo.title <> Nothing Then
@@ -2052,9 +2052,9 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ListtvFiles(ByVal tvshow As BasicTvShowNFO, ByVal pattern As String)
+    Private Sub ListtvFiles(ByVal tvshow As TvShow, ByVal pattern As String)
         Try
-            Dim episode As New List(Of BasicEpisodeNFO)
+            Dim episode As New List(Of TvEpisode)
             Dim propfile As Boolean = False
             Dim allok As Boolean = False
 
@@ -5354,7 +5354,7 @@ Public Class Form1
         Return text
     End Function
 
-    Private Function getTValltags(ByVal text As String, ByVal tvShow As Media_Companion.BasicTvShowNFO, ByVal showCounter As Integer, Optional ByVal imagepath As String = "")
+    Private Function getTValltags(ByVal text As String, ByVal tvShow As TvShow, ByVal showCounter As Integer, Optional ByVal imagepath As String = "")
         Dim inclShow As Boolean = False
         If imagepath.Equals("!HEADER!") Then    'A hack to process the header
             inclShow = True
@@ -5367,7 +5367,7 @@ Public Class Form1
         Dim strHTML As String = ""
         Dim counterSeason = 0
         If text.IndexOf("<<season") <> -1 And text.IndexOf("<</season>>") <> -1 Or text.IndexOf("<<episode") <> -1 And text.IndexOf("<</episode>>") <> -1 Then
-            Dim setTVshows = New SortedList(Of String, BasicEpisodeNFO)(New SeasonEpisodeComparer)
+            Dim setTVshows = New SortedList(Of String, TvEpisode)(New SeasonEpisodeComparer)
             Dim keySE As String
             Dim arrSeasonPresent(0 To 0) As Boolean
             Dim firstSeason As Integer = 99999
@@ -5485,7 +5485,7 @@ Public Class Form1
         If Not inclShow Then blockShow = ""
         Return blockShow
     End Function
-    Private Function getTVshowtags(ByRef text As String, ByVal tvShow As Media_Companion.BasicTvShowNFO, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
+    Private Function getTVshowtags(ByRef text As String, ByVal tvShow As TvShow, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
         Dim tokenCol As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCol = tokenRegExp.Matches(text)
@@ -5584,7 +5584,7 @@ Public Class Form1
                     End If
 
                 Case "show_nfo"
-                    Dim fullTVShowDetails As TvShowNFO = nfoFunction.loadfulltnshownfo(tvShow.fullpath)
+                    Dim fullTVShowDetails As TvShow = nfoFunction.loadfulltnshownfo(tvShow.fullpath)
                     Try
                         Select Case tokenInstr(1)
                             Case "id"
@@ -5622,7 +5622,7 @@ Public Class Form1
         Next
         Return text
     End Function
-    Private Function getTVseasontags(ByVal text As String, ByVal tvShow As Media_Companion.BasicTvShowNFO, ByVal showCounter As Integer, _
+    Private Function getTVseasontags(ByVal text As String, ByVal tvShow As TvShow, ByVal showCounter As Integer, _
                                      ByVal currSeason As Integer, ByVal numEpisodes As Integer, ByVal numMissingEpisodes As Integer, _
                                      ByVal numTotalEpisodes As Integer, ByVal seasonPresent As Boolean, Optional ByVal imagepath As String = "")
         Dim tokenCol As MatchCollection
@@ -5692,7 +5692,7 @@ Public Class Form1
         Next
         Return text
     End Function
-    Private Function getTVepisodetags(ByVal text As String, ByVal tvEpisode As Media_Companion.BasicEpisodeNFO, ByVal showCounter As Integer, ByVal episodeCounter As Integer, Optional ByVal imagepath As String = "")
+    Private Function getTVepisodetags(ByVal text As String, ByVal tvEpisode As TvEpisode, ByVal showCounter As Integer, ByVal episodeCounter As Integer, Optional ByVal imagepath As String = "")
         Dim tokenCol As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCol = tokenRegExp.Matches(text)
@@ -5747,8 +5747,8 @@ Public Class Form1
                     End If
 
                 Case "ep_nfo"
-                    Dim TVEpisodeNFO As List(Of EpisodeInfo) = nfoFunction.loadfullepisodenfogeneric(tvEpisode.episodepath)
-                    Dim fullTVEpisodeDetails As EpisodeInfo = TVEpisodeNFO(0)
+                    Dim TVEpisodeNFO As List(Of TvEpisode) = nfoFunction.loadfullepisodenfogeneric(tvEpisode.episodepath)
+                    Dim fullTVEpisodeDetails As TvEpisode = TVEpisodeNFO(0)
                     Try
                         Select Case tokenInstr(1)
                             Case "file"
@@ -16309,7 +16309,7 @@ Public Class Form1
         Return returnpath
     End Function
 
-    Private Function addepisode(ByVal alleps As List(Of EpisodeInfo), ByVal path As String, ByVal show As String)
+    Private Function addepisode(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
 
 
         If userPrefs.autorenameepisodes = True Then
@@ -16435,7 +16435,7 @@ Public Class Form1
     End Function
 
     Private Sub findnewepisodes(ByVal path As String, ByVal pattern As String)
-        Dim episode As New List(Of BasicEpisodeNFO)
+        Dim episode As New List(Of TvEpisode)
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
         Dim dir_info As New System.IO.DirectoryInfo(path)
@@ -16541,7 +16541,7 @@ Public Class Form1
                         End If
                     End If
                     If add = True Then
-                        Dim newep As New EpisodeInfo
+                        Dim newep As New TvEpisode
                         newep.episodepath = filename2
                         newep.mediaextension = filename
                         newEpisodeList.Add(newep)
@@ -17293,7 +17293,7 @@ Public Class Form1
                             item.allepisodes.RemoveAt(f)
                             For Each ep In workingEpisode
                                 If ep.seasonno = workingEpisode(workingEpisodeIndex).seasonno And ep.episodeno = workingEpisode(workingEpisodeIndex).episodeno Then
-                                    Dim newwp As New BasicEpisodeNFO
+                                    Dim newwp As New TvEpisode
                                     newwp.episodeno = ep.episodeno
                                     newwp.episodepath = ep.episodepath
                                     newwp.playcount = "0"
@@ -17341,7 +17341,7 @@ Public Class Form1
                 Call loadtvshow(workingTvShow.path)
                 For Each item In basicTvList
                     If item.fullpath = workingTvShow.path Then
-                        Dim newitem As New BasicTvShowNFO
+                        Dim newitem As New TvShow
                         For Each episode In item.allepisodes
                             newitem.allepisodes.Add(episode)
                         Next
@@ -17666,7 +17666,7 @@ Public Class Form1
                 Call loadtvshow(workingTvShow.path)
                 For Each item In basicTvList
                     If item.fullpath = workingTvShow.path Then
-                        Dim newitem As New BasicTvShowNFO
+                        Dim newitem As New TvShow
                         For Each episode In item.allepisodes
                             newitem.allepisodes.Add(episode)
                         Next
@@ -17701,7 +17701,7 @@ Public Class Form1
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            Dim newepisode As New EpisodeInfo
+            Dim newepisode As New TvEpisode
             Dim sortorder As String = workingTvShow.sortorder
             Dim language As String = workingTvShow.language
             Dim actorsource As String = workingTvShow.episodeactorsource
@@ -18125,7 +18125,7 @@ Public Class Form1
             End If
             For Each Shows In basicTvList
                 If workingTvShow.path = Shows.fullpath Then
-                    Dim newtv As New BasicTvShowNFO
+                    Dim newtv As New TvShow
                     newtv = Shows
                     If Button47.Text = "Default" Then
                         newtv.sortorder = "default"
@@ -20817,12 +20817,12 @@ Public Class Form1
                 Dim fullpath As String
                 Dim title As String
                 Dim xmlerroer As Boolean = False
-                Dim newepisodetoadd2 As New episodeinfo
+                Dim newepisodetoadd2 As New TvEpisode
                 newepisodetoadd2 = ep
                 fullpath = newepisodetoadd2.episodepath
                 title = newepisodetoadd2.title
                 Dim seasonno As Integer = Convert.ToInt32(newepisodetoadd2.seasonno)
-                Dim teste As New tvshownfo
+                Dim teste As New TvShow
 
 
                 Dim cnode As TreeNode = Nothing
@@ -20917,7 +20917,7 @@ Public Class Form1
             TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
             showstoscrapelist.Clear()
             If TreeView1.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Then
-                Dim show As New BasicTvShowNFO
+                Dim show As New TvShow
                 show = nfoFunction.loadbasictvshownfo(TreeView1.SelectedNode.Name)
                 If show.locked = 1 Then
                     Dim tempint As Integer = MessageBox.Show("This TV Show is locked" & vbCrLf & "Are you sure you want to search for new episodes?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -21114,7 +21114,7 @@ Public Class Form1
                 tvScraperLog = tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
                 Exit Sub
             End If
-            Dim episode As New EpisodeInfo
+            Dim episode As New TvEpisode
 
             For Each Regexs In tvRegex
 
@@ -21162,9 +21162,9 @@ Public Class Form1
         Dim scrapedok As Boolean
         For Each eps In newEpisodeList
             tempTVDBiD = ""
-            Dim episodearray As New List(Of EpisodeInfo)
+            Dim episodearray As New List(Of TvEpisode)
             episodearray.Clear()
-            Dim multieps2 As New EpisodeInfo
+            Dim multieps2 As New TvEpisode
             multieps2.seasonno = eps.seasonno
             multieps2.episodeno = eps.episodeno
             multieps2.episodepath = eps.episodepath
@@ -21207,7 +21207,7 @@ Public Class Form1
                             If epso.episodeno = M2.Groups(3).Value Then skip = True
                         Next
                         If skip = False Then
-                            Dim multieps As New EpisodeInfo
+                            Dim multieps As New TvEpisode
                             multieps.seasonno = eps.seasonno
                             multieps.episodeno = M2.Groups(3).Value
                             multieps.episodepath = eps.episodepath
@@ -21691,7 +21691,7 @@ Public Class Form1
                             Next
                         Next
                         For Each ep In episodearray
-                            Dim newwp As New BasicEpisodeNFO
+                            Dim newwp As New TvEpisode
                             newwp.episodeno = ep.episodeno
                             newwp.episodepath = newnamepath
                             newwp.playcount = "0"
@@ -22818,7 +22818,7 @@ Public Class Form1
                 For Each tvfolder In folderstoadd
                     Try
                         Dim shownfopath As String = IO.Path.Combine(tvfolder, "tvshow.nfo")
-                        Dim newtvshownfo As basictvshownfo
+                        Dim newtvshownfo As TvShow
                         newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
                         'Try
                         '    If addnew = True Then
@@ -24387,7 +24387,7 @@ Public Class Form1
 
         Try
             Dim shownfopath As String = IO.Path.Combine(e.UserState, "tvshow.nfo")
-            Dim newtvshownfo As BasicTvShowNFO
+            Dim newtvshownfo As TvShow
             newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
             If newtvshownfo.title <> Nothing Then
                 If newtvshownfo.status.IndexOf("skipthisfile") = -1 Then
@@ -24671,7 +24671,7 @@ Public Class Form1
                     Dim tvshowid As String = gettoptvshow(tempname)
                     If IsNumeric(tvshowid) Then
                         'tvshow found
-                        Dim newtvshow As New tvshownfo
+                        Dim newtvshow As New TvShow
                         newtvshow.tvdbid = tvshowid
                         newtvshow.path = IO.Path.Combine(newTvFolders(0), "tvshow.nfo")
                         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -29322,7 +29322,7 @@ Public Class Form1
                         For Each thisresult In showlist("Data")
                             Select Case thisresult.Name
                                 Case "Episode"
-                                    Dim newshow As New basicepisodenfo
+                                    Dim newshow As New TvEpisode
                                     Dim premdate As String = String.Empty
                                     Dim aired As Boolean = True
                                     Dim mirrorselection As XmlNode = Nothing
@@ -29427,7 +29427,7 @@ Public Class Form1
 
     Private Sub Bckgrndfindmissingepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles Bckgrndfindmissingepisodes.ProgressChanged
         If e.ProgressPercentage = 1 Then
-            Dim newshow As New basicepisodenfo
+            Dim newshow As New TvEpisode
             newshow = e.UserState
             For Each item In basicTvList
                 If item.fullpath = newshow.episodepath Then
@@ -29546,7 +29546,7 @@ Public Class Form1
         Try
             Try
                 Dim shownfopath As String = show
-                Dim newtvshownfo As basictvshownfo
+                Dim newtvshownfo As TvShow
                 newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
                 If newtvshownfo.title <> Nothing Then
                     If newtvshownfo.status.IndexOf("skipthisfile") = -1 Then
@@ -29625,7 +29625,7 @@ Public Class Form1
                             Button60.BackColor = Color.Red
                         End If
                         basicTvList(f).locked = 1
-                        Dim showtochange As New tvshownfo
+                        Dim showtochange As New TvShow
                         showtochange = nfoFunction.loadfulltnshownfo(basicTvList(f).fullpath)
                         showtochange.locked = 1
                         Call nfoFunction.savetvshownfo(basicTvList(f).fullpath, showtochange, True)
@@ -29651,7 +29651,7 @@ Public Class Form1
                             Button60.BackColor = Color.LawnGreen
                         End If
                         basicTvList(f).locked = 0
-                        Dim showtochange As New tvshownfo
+                        Dim showtochange As New TvShow
                         showtochange = nfoFunction.loadfulltnshownfo(basicTvList(f).fullpath)
                         showtochange.locked = 0
                         Call nfoFunction.savetvshownfo(basicTvList(f).fullpath, showtochange, True)
@@ -29850,7 +29850,7 @@ Public Class Form1
                     progress = 0
                 End If
                 tvbckrescrapewizard.ReportProgress(progress, progresstext)
-                Dim editshow As New TvShowNFO
+                Dim editshow As New TvShow
                 editshow = nfoFunction.loadfulltnshownfo(basicTvList(f).fullpath)
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
@@ -30401,7 +30401,7 @@ Public Class Form1
                         End If
                         tvbckrescrapewizard.ReportProgress(progress, progresstext)
                         If tvBatchList.doEpisodeBody = True Or (tvBatchList.doEpisodeActors = True And basicTvList(f).episodeactorsource <> "") Or (tvBatchList.doEpisodeArt = True) Then
-                            Dim listofnewepisodes As New List(Of EpisodeInfo)
+                            Dim listofnewepisodes As New List(Of TvEpisode)
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(basicTvList(f).allepisodes(g).episodepath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1
@@ -30559,7 +30559,7 @@ Public Class Form1
 
 
                         If tvBatchList.doEpisodeMediaTags = True Then
-                            Dim listofnewepisodes As New List(Of EpisodeInfo)
+                            Dim listofnewepisodes As New List(Of TvEpisode)
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(basicTvList(f).allepisodes(g).episodepath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1

@@ -57,7 +57,8 @@ Public Class TVDBScraper
             Next
             bannerlist = bannerlist & "</banners>"
             Return bannerlist
-
+        Catch ex As WebException
+            Return ex.ToString
         Catch EX As Exception
             Return EX.ToString
         Finally

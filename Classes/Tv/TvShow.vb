@@ -170,8 +170,8 @@
     Public Property posterpath As String
     Public Property fanartpath As String
 
-    Public Property allepisodes As New List(Of BasicEpisodeNFO)
-    Public Property missingepisodes As New List(Of BasicEpisodeNFO)
+    Public Property allepisodes As New List(Of TvEpisode)
+    Public Property missingepisodes As New List(Of TvEpisode)
 
     Public Property posters As New List(Of String)
     Public Property fanart As New List(Of String)

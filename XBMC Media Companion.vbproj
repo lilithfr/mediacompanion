@@ -131,8 +131,6 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\BasicEpisodeNFO.vb" />
-    <Compile Include="Classes\BasicTvShowNFO.vb" />
     <Compile Include="Classes\Profiles.vb" />
     <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
@@ -154,7 +152,6 @@
     <Compile Include="Structures\MediaNFOAudio.vb" />
     <Compile Include="Structures\RunningThreads.vb" />
     <Compile Include="Structures\ComboList.vb" />
-    <Compile Include="Classes\EpisodeInfo.vb" />
     <Compile Include="Structures\NewMovie.vb" />
     <Compile Include="Structures\FileDetails.vb" />
     <Compile Include="Classes\FullFileDetails.vb" />
@@ -294,7 +291,6 @@
     <Compile Include="Structures\TvPosterSeason.vb" />
     <Compile Include="Classes\TvArt.vb" />
     <Compile Include="Structures\TvShowBatchWizard.vb" />
-    <Compile Include="Classes\TvShowNFO.vb" />
     <Compile Include="Classes\WebFileDownloader.vb" />
     <Compile Include="Classes\WorkingWithNfoFiles.vb" />
     <Compile Include="Classes\UseXBMCScrapers\CacheManager.vb" />
@@ -305,7 +301,6 @@
     <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
     <Compile Include="Structures\TvShowLanguages.vb" />
-    <Compile Include="Structures\TempEpisodeInfo.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBatchScraper.resx">
