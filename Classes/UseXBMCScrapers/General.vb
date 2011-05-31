@@ -9,7 +9,7 @@ Module General
 
     Dim TempEpisode As New TvEpisode
     Dim episodeInformation As New List(Of TvEpisode)
-    Dim TempXMLEpisode As TvEpisode
+    Dim TempXMLEpisode As New TvEpisode
     Dim episodeXMLinformation As New List(Of TvEpisode)
 
 

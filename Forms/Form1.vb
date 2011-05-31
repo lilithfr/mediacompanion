@@ -22598,7 +22598,11 @@ Public Class Form1
             'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim tvdbstuff As New TVDBScraper
             Dim thumblist As String = tvdbstuff.getposterlist(tvdbid)
-            showlist.LoadXml(thumblist)
+            Try
+                showlist.LoadXml(thumblist)
+            Catch
+                Exit Sub
+            End Try
             Dim tvseasonposterlist As New List(Of TvBanners)
             tvseasonposterlist.Clear()
             Dim backupposterurl As String = ""
