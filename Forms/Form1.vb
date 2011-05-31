@@ -209,7 +209,7 @@ Public Class Form1
         End If
         Call savedata()
         Call savetvdata()
-        userPrefs.startuptab = TabDebug.SelectedIndex
+        userPrefs.startuptab = TabLevel1.SelectedIndex
         Dim save As New Preferences
         Call save.saveconfig()
         Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
@@ -575,15 +575,15 @@ Public Class Form1
                 SplitContainer1.SplitterDistance = userPrefs.splt1
                 SplitContainer2.SplitterDistance = userPrefs.splt2
                 SplitContainer5.SplitterDistance = userPrefs.splt5
-                TabDebug.SelectedIndex = 1
+                TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = userPrefs.splt3
                 SplitContainer4.SplitterDistance = userPrefs.splt4
-                TabDebug.SelectedIndex = 0
+                TabLevel1.SelectedIndex = 0
             Else
                 SplitContainer1.SplitterDistance = userPrefs.splt1
                 SplitContainer2.SplitterDistance = userPrefs.splt2
                 SplitContainer5.SplitterDistance = userPrefs.splt5
-                TabDebug.SelectedIndex = 1
+                TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = userPrefs.splt3
                 SplitContainer4.SplitterDistance = userPrefs.splt4
             End If
@@ -1370,7 +1370,7 @@ Public Class Form1
             MyNode = TreeView1.Nodes(0) 'First Level
             'MyNode = MyNode.Nodes(6)  ' Second Level
             TreeView1.SelectedNode = MyNode
-            TabDebug.Focus()
+            TabLevel1.Focus()
             TabControl3.Focus()
             TreeView1.Focus()
         End If
@@ -13709,8 +13709,8 @@ Public Class Form1
         e.Cancel = True
     End Sub
 
-    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabDebug.SelectedIndexChanged
-        Dim tab As String = TabDebug.SelectedTab.Text.ToLower
+    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
+        Dim tab As String = TabLevel1.SelectedTab.Text.ToLower
         If tab = "movies" Then
             tab1 = 0
             userPrefs.startuptab = 0
@@ -13718,14 +13718,16 @@ Public Class Form1
             tab1 = 1
             userPrefs.startuptab = 1
         ElseIf tab = "" Then
-            TabDebug.SelectedIndex = tab1
+            TabLevel1.SelectedIndex = tab1
             Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
             Process.Start(webAddress)
         ElseIf tab = "general preferences" Then
-            tab1 = TabDebug.SelectedIndex
+            tab1 = TabLevel1.SelectedIndex
             Call setupgeneralpreferences()
         ElseIf tab = "export" Then
             Call setupexporttab()
+        ElseIf tab = "config.xml" Then
+            RichTextBoxConfigXML.Text = Utilities.LoadFullText(applicationPath & "\settings\config.xml")
         End If
     End Sub
 
@@ -25775,15 +25777,15 @@ Public Class Form1
             SplitContainer1.SplitterDistance = userPrefs.splt1
             SplitContainer2.SplitterDistance = userPrefs.splt2
             SplitContainer5.SplitterDistance = userPrefs.splt5
-            TabDebug.SelectedIndex = 1
+            TabLevel1.SelectedIndex = 1
             SplitContainer3.SplitterDistance = userPrefs.splt3
             SplitContainer4.SplitterDistance = userPrefs.splt4
-            TabDebug.SelectedIndex = 0
+            TabLevel1.SelectedIndex = 0
         Else
             SplitContainer1.SplitterDistance = userPrefs.splt1
             SplitContainer2.SplitterDistance = userPrefs.splt2
             SplitContainer5.SplitterDistance = userPrefs.splt5
-            TabDebug.SelectedIndex = 1
+            TabLevel1.SelectedIndex = 1
             SplitContainer3.SplitterDistance = userPrefs.splt3
             SplitContainer4.SplitterDistance = userPrefs.splt4
         End If
