@@ -26,14 +26,12 @@ Public Class Form1
     Public movieRebuildNeeded As Boolean = True
     Public tvRebuildNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
-    Public imageFunctions As New ManipulateImages
     Public startup As Boolean = True
     Public tvRegex As New List(Of String)
     Public dList As New List(Of String)
     Public scraperFunction2 As New ScraperFunctions
     Public globalThreadStop As Boolean = False
     Public globalThreadCounter As Integer = 0
-    Public fileFunction As New FileAndFolderFunctions
     Public nfoFunction As New WorkingWithNfoFiles
     Public fullMovieList As New List(Of ComboList)
     Public filteredList As New List(Of ComboList)
@@ -64,7 +62,7 @@ Public Class Form1
     Dim maximised As Boolean = False
     Dim imdbCounter As Integer = 0
     Dim tootip5 As New ToolTip
-    Dim loadSave As New InputOutput
+
     Dim pictureList As New List(Of PictureBox)
     Dim screenshotTab As TabPage
     Dim totalEpisodeCount As Integer = 0
@@ -2022,7 +2020,7 @@ Public Class Form1
                     End If
                 End If
                 If workingMovie.title <> Nothing Then
-                    workingMovie.foldername = fileFunction.getlastfolder(workingMovie.fullpathandfilename)
+                    workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
                     If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
                         Dim skip As Boolean = False
                         For Each movie In fullMovieList
@@ -2033,8 +2031,8 @@ Public Class Form1
                         Next
                         If skip = False Then
                             Dim completebyte1 As Byte = 0
-                            Dim fanartexists As Boolean = IO.File.Exists(fileFunction.getfanartpath(workingMovie.fullpathandfilename))
-                            Dim posterexists As Boolean = IO.File.Exists(fileFunction.getposterpath(workingMovie.fullpathandfilename))
+                            Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(workingMovie.fullpathandfilename))
+                            Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(workingMovie.fullpathandfilename))
                             If fanartexists = False Then
                                 completebyte1 += 1
                             End If
@@ -2065,7 +2063,7 @@ Public Class Form1
             newlist.Clear()
 
             Try
-                newlist = fileFunction.EnumerateDirectory2(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), True)
+                newlist = Utilities.EnumerateDirectory2(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), True)
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -2135,7 +2133,7 @@ Public Class Form1
         If tempint > 0 Then
             Dim newlist As List(Of String) = Nothing
             For f = 0 To tempint - 1
-                newlist = fileFunction.EnumerateDirectory(realMoviePaths(f))
+                newlist = Utilities.EnumerateDirectory(realMoviePaths(f))
             Next
             For Each subfolder In newlist
                 realMoviePaths.Add(subfolder)
@@ -2278,14 +2276,14 @@ Public Class Form1
                 workingMovieDetails.fileinfo.filename = IO.Path.GetFileName(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.path = IO.Path.GetFullPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.foldername = workingMovie.foldername
-                workingMovieDetails.fileinfo.posterpath = fileFunction.getposterpath(workingMovie.fullpathandfilename)
-                workingMovieDetails.fileinfo.fanartpath = fileFunction.getfanartpath(workingMovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.posterpath = Utilities.GetPosterPath(workingMovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.fanartpath = Utilities.GetFanartPath(workingMovie.fullpathandfilename)
 
 
 
-                tempstring = fileFunction.getstackname(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
+                tempstring = Utilities.GetStackName(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
                 If tempstring = "na" Then
-                    tempstring = fileFunction.cleanfilename(workingMovieDetails.fileinfo.filename)
+                    tempstring = Utilities.CleanFileName(workingMovieDetails.fileinfo.filename)
                 End If
                 workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), tempstring & "-trailer.flv")
                 Button3.Visible = False
@@ -2718,7 +2716,7 @@ Public Class Form1
                 'If IO.File.Exists(basicmoviename) Then
                 '    remove = True
                 'End If
-                basicmoviename = fileFunction.getstackname(IO.Path.GetFileName(fs_info.FullName), fs_info.FullName)
+                basicmoviename = Utilities.GetStackName(IO.Path.GetFileName(fs_info.FullName), fs_info.FullName)
                 Dim otherformat As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), basicmoviename & ".nfo")
                 If IO.File.Exists(otherformat) Then
                     Dim allok2 As Boolean = False
@@ -3217,7 +3215,7 @@ Public Class Form1
                             If tempstring4.IndexOf("video_ts") = -1 Then
                                 newmoviedetails.title = newmoviedetails.nfopath.Substring(0, newmoviedetails.nfopath.Length - 1)
                                 newmoviedetails.title = newmoviedetails.title.Substring(newmoviedetails.title.LastIndexOf("\") + 1, newmoviedetails.title.Length - newmoviedetails.title.LastIndexOf("\") - 1)
-                                newmoviedetails.title = fileFunction.getlastfolder(newmoviedetails.nfopathandfilename)
+                                newmoviedetails.title = Utilities.GetLastFolder(newmoviedetails.nfopathandfilename)
                             End If
                         End If
                         Dim alreadyadded As Boolean = False
@@ -3309,7 +3307,7 @@ Public Class Form1
         Extensions(25) = "VIDEO_TS.IFO"
         ExtensionCount = 25
 
-        NewMoviesFolders = fileFunction.FindAllFolders(movieFolders)
+        NewMoviesFolders = Utilities.FindAllFolders(movieFolders)
         '--------------------------Begin Search for New Media in Offline Folders
         For Each moviefolder In userPrefs.offlinefolders
             Dim hg As New IO.DirectoryInfo(moviefolder)
@@ -3318,10 +3316,10 @@ Public Class Form1
                 scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                 Dim newlist As List(Of String)
                 Try
-                    newlist = fileFunction.EnumerateDirectory3(moviefolder)
+                    newlist = Utilities.EnumerateDirectory3(moviefolder)
                     For Each subfolder In newlist
                         scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
-                        Dim temge22 As String = fileFunction.getlastfolder(subfolder & "\whatever") & ".avi"
+                        Dim temge22 As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
                         Dim sTempFileName22 As String = IO.Path.Combine(subfolder, temge22)
                         Dim newtemp1 As String = sTempFileName22.Replace(IO.Path.GetExtension(sTempFileName22), ".nfo")
                         If Not IO.File.Exists(newtemp1) Then
@@ -3331,7 +3329,7 @@ Public Class Form1
                                 fsTemp.Close()
                             End If
                             If Not IO.File.Exists(sTempFileName22) Then
-                                Dim temge As String = fileFunction.getlastfolder(subfolder & "\whatever") & ".avi"
+                                Dim temge As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
                                 Dim sTempFileName2 As String = IO.Path.Combine(subfolder, temge)
                                 Dim fsTemp2 As New System.IO.FileStream(sTempFileName2, IO.FileMode.Create)
                                 fsTemp2.Close()
@@ -3422,7 +3420,7 @@ Public Class Form1
         Dim Scraper As String = userPrefs.XBMC_Scraper
         FullFileContent = Start_XBMC_MoviesScraping(Scraper, newMovieFoundTitle, newMovieFoundFilename)
         If FullFileContent.ToLower <> "error" Then
-            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(newMovieFoundFilename), FullFileContent)
+            Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then AddScrapedMovietoDB(newMovieFoundFilename)
             ApplyFilters()
             If messbox.Visible = True Then messbox.Close()
@@ -3547,7 +3545,7 @@ Public Class Form1
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim newlist As List(Of String)
                     Try
-                        newlist = fileFunction.EnumerateDirectory2(moviefolder)
+                        newlist = Utilities.EnumerateDirectory2(moviefolder)
                         For Each subfolder In newlist
                             scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                             newmoviefolders.Add(subfolder)
@@ -3567,11 +3565,11 @@ Public Class Form1
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim newlist As List(Of String)
                     Try
-                        newlist = fileFunction.EnumerateDirectory3(moviefolder)
+                        newlist = Utilities.EnumerateDirectory3(moviefolder)
                         For Each subfolder In newlist
                             'If subfolder.IndexOf(".actors") = -1 Then
                             scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
-                            Dim temge22 As String = fileFunction.getlastfolder(subfolder & "\whatever") & ".avi"
+                            Dim temge22 As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
                             Dim sTempFileName22 As String = IO.Path.Combine(subfolder, temge22)
                             Dim newtemp1 As String = sTempFileName22.Replace(IO.Path.GetExtension(sTempFileName22), ".nfo")
                             If Not IO.File.Exists(newtemp1) Then
@@ -3581,7 +3579,7 @@ Public Class Form1
                                     fsTemp.Close()
                                 End If
                                 If Not IO.File.Exists(sTempFileName22) Then
-                                    Dim temge As String = fileFunction.getlastfolder(subfolder & "\whatever") & ".avi"
+                                    Dim temge As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
                                     Dim sTempFileName2 As String = IO.Path.Combine(subfolder, temge)
                                     Dim fsTemp2 As New System.IO.FileStream(sTempFileName2, IO.FileMode.Create)
                                     fsTemp2.Close()
@@ -3664,7 +3662,7 @@ Public Class Form1
                     If extension.ToLower = ".ifo" Or userPrefs.usefoldernames = True Then
                         Try
                             movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
-                            movie.title = fileFunction.getlastfolder(movie.nfopathandfilename)
+                            movie.title = Utilities.GetLastFolder(movie.nfopathandfilename)
                         Catch
                             scraperLog = scraperLog & "Unable to get movie title, stage2" & vbCrLf
                             scraperLog = scraperLog & "Path is: " & movie.nfopathandfilename & vbCrLf
@@ -3674,7 +3672,7 @@ Public Class Form1
 
                     If movie.title <> Nothing Then
                         If movie.title <> "" Then
-                            tempstring = fileFunction.cleanfilename(movie.title, False)
+                            tempstring = Utilities.CleanFileName(movie.title, False)
                             If tempstring <> Nothing Then
                                 If tempstring <> "" Then
                                     If tempstring <> "error" Then
@@ -3738,8 +3736,8 @@ Public Class Form1
                         nfopath = newMovieList(f).nfopathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).nfopathandfilename), "movie.nfo")
                     End If
                     scraperLog = scraperLog & "Output filename:- " & nfopath & vbCrLf
-                    posterpath = fileFunction.getposterpath(nfopath)
-                    fanartpath = fileFunction.getfanartpath(nfopath)
+                    posterpath = Utilities.GetPosterPath(nfopath)
+                    fanartpath = Utilities.GetFanartPath(nfopath)
                     scraperLog = scraperLog & "Poster Path:- " & posterpath & vbCrLf
                     scraperLog = scraperLog & "Fanart Path:- " & fanartpath & vbCrLf
 
@@ -3779,7 +3777,7 @@ Public Class Form1
                         '    scraperlog = scraperlog & "Current nfo file will be overwritten" & vbCrLf
                         'End If
                     Else
-                        Dim stackname As String = fileFunction.getstackname(nfopath, nfopath.Replace(IO.Path.GetFileName(nfopath), ""))
+                        Dim stackname As String = Utilities.GetStackName(nfopath, nfopath.Replace(IO.Path.GetFileName(nfopath), ""))
                         Dim path As String = stackname & ".nfo"
                         If IO.File.Exists(path) Then
                             scraperLog = scraperLog & "nfo file exists, checking for IMDB ID" & vbCrLf
@@ -3849,7 +3847,7 @@ Public Class Form1
                             scraperLog = scraperLog & "Year found for movie:- " & movieyear.ToString & vbCrLf
                         End If
                     End If
-                    title = fileFunction.cleanfilename(title, False)
+                    title = Utilities.CleanFileName(title, False)
                     scraperLog = scraperLog & "Cleaned Title for search :- " & title & vbCrLf
                     Dim newmovie As New FullMovieDetails
                     Dim scraperfunction As New Classimdb
@@ -3928,7 +3926,7 @@ Public Class Form1
                         Dim movietoadd As New ComboList
                         movietoadd.fullpathandfilename = nfopath
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
-                        movietoadd.foldername = fileFunction.getlastfolder(newMovieList(f).nfopathandfilename)
+                        movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)
                         movietoadd.title = newmovie.fullmoviebody.title
                         If newmovie.fullmoviebody.title <> Nothing Then
                             If newmovie.fullmoviebody.year <> Nothing Then
@@ -3985,9 +3983,9 @@ Public Class Form1
                                         Else
                                             If userPrefs.usefoldernames = False Then
                                                 tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
-                                                newmovie.fullmoviebody.title = fileFunction.cleanfilename(tempstring, False)
+                                                newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring, False)
                                             Else
-                                                newmovie.fullmoviebody.title = fileFunction.cleanfilename(fileFunction.getlastfolder(newMovieList(f).nfopathandfilename), False)
+                                                newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newMovieList(f).nfopathandfilename), False)
                                             End If
                                         End If
                                     Case "alternativetitle"
@@ -4061,9 +4059,9 @@ Public Class Form1
                             errorcounter += 1
                             If userPrefs.usefoldernames = False Then
                                 tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
-                                newmovie.fullmoviebody.title = fileFunction.cleanfilename(tempstring, False)
+                                newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring, False)
                             Else
-                                newmovie.fullmoviebody.title = fileFunction.cleanfilename(fileFunction.getlastfolder(newMovieList(f).nfopathandfilename), False)
+                                newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newMovieList(f).nfopathandfilename), False)
                             End If
                         End Try
                         If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
@@ -4083,9 +4081,9 @@ Public Class Form1
                         If userPrefs.keepfoldername = True Then
                             If userPrefs.usefoldernames = False Then
                                 tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
-                                newmovie.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
+                                newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                             Else
-                                newmovie.fullmoviebody.title = fileFunction.cleanfilename(fileFunction.getlastfolder(newMovieList(f).nfopathandfilename))
+                                newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newMovieList(f).nfopathandfilename))
                             End If
                         End If
                         stage = 2
@@ -4373,7 +4371,7 @@ Public Class Form1
                             tempsb = IO.Path.Combine(tempsb, "tempoffline.ttt")
                             If Not IO.File.Exists(tempsb) Then
 
-                                newmovie.filedetails = fileFunction.get_hdtags(newMovieList(f).mediapathandfilename)
+                                newmovie.filedetails = Utilities.Get_HdTags(newMovieList(f).mediapathandfilename)
                                 If newmovie.filedetails.filedetails_video.duration <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
@@ -4461,7 +4459,7 @@ Public Class Form1
                         Dim movietoadd As New ComboList
                         movietoadd.fullpathandfilename = nfopath
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
-                        movietoadd.foldername = fileFunction.getlastfolder(newMovieList(f).nfopathandfilename)
+                        movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)
                         movietoadd.title = newmovie.fullmoviebody.title
                         movietoadd.sortorder = newmovie.fullmoviebody.sortorder
                         movietoadd.runtime = newmovie.fullmoviebody.runtime
@@ -4516,7 +4514,7 @@ Public Class Form1
                         stage = 6
                         'stage 6 = download movieposter
                         Dim moviethumburl As String = ""
-                        If userPrefs.scrapemovieposters = True And userPrefs.overwritethumbs = True Or IO.File.Exists(fileFunction.getposterpath(newMovieList(f).nfopathandfilename)) = False Then
+                        If userPrefs.scrapemovieposters = True And userPrefs.overwritethumbs = True Or IO.File.Exists(Utilities.GetPosterPath(newMovieList(f).nfopathandfilename)) = False Then
                             Try
                                 If BckWrkScnMovies.CancellationPending Then
                                     scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
@@ -4601,7 +4599,7 @@ Public Class Form1
                                     Exit Sub
                                 End If
                                 If moviethumburl <> "" And moviethumburl <> "na" Then
-                                    Dim newmoviethumbpath As String = fileFunction.getposterpath(newMovieList(f).nfopathandfilename)
+                                    Dim newmoviethumbpath As String = Utilities.GetPosterPath(newMovieList(f).nfopathandfilename)
                                     Try
                                         Dim buffer(4000000) As Byte
                                         Dim size As Integer = 0
@@ -4656,7 +4654,7 @@ Public Class Form1
 
                         stage = 7
                         'stage 7 = download fanart
-                        If Form1.userPrefs.overwritethumbs = True Or Form1.userPrefs.overwritethumbs = False And IO.File.Exists(fileFunction.getfanartpath(newMovieList(f).nfopathandfilename)) = False Then
+                        If Form1.userPrefs.overwritethumbs = True Or Form1.userPrefs.overwritethumbs = False And IO.File.Exists(Utilities.GetFanartPath(newMovieList(f).nfopathandfilename)) = False Then
                             If Form1.userPrefs.savefanart = False Then
                                 'scraperlog = scraperlog & "Fanart Not Downloaded - Disabled in preferences, use browser to find and add Fanart" & vbCrLf
                             Else
@@ -4666,7 +4664,7 @@ Public Class Form1
                                         Exit Sub
                                     End If
                                     Dim moviefanartexists As Boolean
-                                    Dim fanarturlpath As String = fileFunction.getfanartpath(newMovieList(f).nfopathandfilename)
+                                    Dim fanarturlpath As String = Utilities.GetFanartPath(newMovieList(f).nfopathandfilename)
 
                                     moviethumburl = ""
                                     moviefanartexists = System.IO.File.Exists(fanarturlpath)
@@ -4818,11 +4816,11 @@ Public Class Form1
                         tempst = tempst.Replace(IO.Path.GetFileName(tempst), "tempoffline.ttt")
                         If IO.File.Exists(tempst) Then
                             IO.File.Delete(tempst)
-                            Call offlinedvd(movietoadd.fullpathandfilename, movietoadd.title, fileFunction.getfilename(movietoadd.fullpathandfilename))
+                            Call offlinedvd(movietoadd.fullpathandfilename, movietoadd.title, Utilities.GetFileName(movietoadd.fullpathandfilename))
                         End If
                         Dim completebyte1 As Byte = 0
-                        Dim fanartexists As Boolean = IO.File.Exists(fileFunction.getfanartpath(movietoadd.fullpathandfilename))
-                        Dim posterexists As Boolean = IO.File.Exists(fileFunction.getposterpath(movietoadd.fullpathandfilename))
+                        Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(movietoadd.fullpathandfilename))
+                        Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(movietoadd.fullpathandfilename))
                         If fanartexists = False Then
                             completebyte1 += 1
                         End If
@@ -5228,7 +5226,7 @@ Public Class Form1
             Select Case tokenInstr(0)
                 Case "smallimage", "createimage"
                     If thumbpath <> "" then
-                        Dim origImage = fileFunction.getposterpath(movie.fullpathandfilename)
+                        Dim origImage = Utilities.GetPosterPath(movie.fullpathandfilename)
                         Try
                             strNFOprop = "images/" & createImage(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
                         Catch ex As Exception
@@ -5506,7 +5504,7 @@ Public Class Form1
             Select Case tokenInstr(0)
                 Case "createimage"
                     If imagepath <> "" And tokenInstr.Length > 1 Then
-                        Dim origImage = fileFunction.getposterpath(tvShow.fullpath)
+                        Dim origImage = Utilities.GetPosterPath(tvShow.fullpath)
                         origImage = origImage.Replace(IO.Path.GetFileName(origImage), "folder.jpg")
                         Dim imageType As String = "poster"
                         Dim imgTest As Image = Image.FromFile(origImage)
@@ -5645,7 +5643,7 @@ Public Class Form1
             Select Case tokenInstr(0)
                 Case "createimage"
                     If imagepath <> "" And tokenInstr.Length > 1 Then
-                        Dim origImage = fileFunction.getposterpath(tvShow.fullpath)
+                        Dim origImage = Utilities.GetPosterPath(tvShow.fullpath)
                         Dim imageName As String = "season" & If(currSeason >= 10, "", "0") & currSeason.ToString & ".tbn"
                         origImage = origImage.Replace(IO.Path.GetFileName(origImage), imageName)
 
@@ -5817,7 +5815,7 @@ Public Class Form1
             origRatio = origBitmap.Height / origBitmap.Width
             If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
                 If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width)
-                filename = IO.File.GetCreationTime(origImage).ToFileTimeUtc & "_" & fileFunction.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
+                filename = IO.File.GetCreationTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
                 imgPoster = origImage
             End If
             origBitmap.Dispose()
@@ -5838,7 +5836,7 @@ Public Class Form1
                     End If
                 End If
                 srcBitmap.Dispose()
-                dstBitmap = imageFunctions.ResizeImage(dstBitmap, width, height)
+                dstBitmap = Utilities.ResizeImage(dstBitmap, width, height)
                 dstBitmap.Save(IO.Path.Combine(target, filename), System.Drawing.Imaging.ImageFormat.Jpeg)
             Catch
             End Try
@@ -6151,7 +6149,7 @@ Public Class Form1
                     Exit Sub
                 End If
                 If actor.actorthumb <> Nothing Then
-                    Dim actorthumbpath As String = fileFunction.getactorthumbpath(actor.actorthumb)
+                    Dim actorthumbpath As String = Utilities.GetActorThumbPath(actor.actorthumb)
                     If actorthumbpath <> "none" Then
                         If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
                             PictureBox1.ImageLocation = actorthumbpath
@@ -7041,7 +7039,7 @@ Public Class Form1
             TextBox1.Text = "MediaInfo.Dll: this version of the DLL is not compatible"
             Exit Sub
         End If
-        tempstring = fileFunction.getfilename(pathtxt.Text)
+        tempstring = Utilities.GetFileName(pathtxt.Text)
         If IO.Path.GetFileName(tempstring).ToLower = "video_ts.ifo" Then
             Dim temppath As String = tempstring.Replace(IO.Path.GetFileName(tempstring), "VTS_01_0.IFO")
             If IO.File.Exists(temppath) Then
@@ -7063,9 +7061,9 @@ Public Class Form1
     Private Sub TempStartMoviesReScraping()
         Dim FullFileContent As String = ""
         Dim Scraper As String = userPrefs.XBMC_Scraper
-        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, fileFunction.getfilename(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value))
+        FullFileContent = Start_XBMC_MoviesReScraping(Scraper, workingMovieDetails.fullmoviebody.imdbid, Utilities.GetFileName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value))
         If FullFileContent.ToLower <> "error" Then
-            Dim Teste As Boolean = CreateMovieNfo(fileFunction.getfilename(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value), FullFileContent)
+            Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value), FullFileContent)
             RefreshMovieList()
         End If
         If messbox.Visible = True Then messbox.Close()
@@ -7220,9 +7218,9 @@ Public Class Form1
                                 Else
                                     If userPrefs.usefoldernames = False Then
                                         tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                                        workingMovieDetails.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
+                                        workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                     Else
-                                        workingMovieDetails.fullmoviebody.title = fileFunction.cleanfilename(workingMovieDetails.fileinfo.foldername, False)
+                                        workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(workingMovieDetails.fileinfo.foldername, False)
                                     End If
                                 End If
                             Case "country"
@@ -7502,8 +7500,8 @@ Public Class Form1
                 End If
 
                 Try
-                    Dim tempname As String = fileFunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
-                    If tempname <> Nothing Then workingMovieDetails.filedetails = fileFunction.get_hdtags(tempname)
+                    Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                    If tempname <> Nothing Then workingMovieDetails.filedetails = Utilities.Get_HdTags(tempname)
                     If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -8079,7 +8077,7 @@ Public Class Form1
         Dim newlist As New List(Of ComboList)
         newlist.Clear()
         For Each movie In fullMovieList
-            If Not IO.File.Exists(fileFunction.getfanartpath(movie.fullpathandfilename)) Then
+            If Not IO.File.Exists(Utilities.GetFanartPath(movie.fullpathandfilename)) Then
                 Dim movietoadd As New ComboList
                 movietoadd.fullpathandfilename = movie.fullpathandfilename
                 movietoadd.titleandyear = movie.titleandyear
@@ -8103,7 +8101,7 @@ Public Class Form1
         Dim newlist As New List(Of ComboList)
         newlist.Clear()
         For Each movie In fullMovieList
-            If Not IO.File.Exists(fileFunction.getposterpath(movie.fullpathandfilename)) Then
+            If Not IO.File.Exists(Utilities.GetPosterPath(movie.fullpathandfilename)) Then
                 Dim movietoadd As New ComboList
                 movietoadd.fullpathandfilename = movie.fullpathandfilename
                 movietoadd.titleandyear = movie.titleandyear
@@ -8656,8 +8654,8 @@ Public Class Form1
                     If mediatags = True Or batchList.runtime = True Then
                         If userPrefs.enablehdtags = True Then
                             Try
-                                Dim mediapath As String = fileFunction.getfilename(movietoalter.fileinfo.fullpathandfilename)
-                                movietemplate.filedetails = fileFunction.get_hdtags(mediapath)
+                                Dim mediapath As String = Utilities.GetFileName(movietoalter.fileinfo.fullpathandfilename)
+                                movietemplate.filedetails = Utilities.Get_HdTags(mediapath)
                                 Try
                                     Dim tempstring As String
                                     Dim tempint As Integer
@@ -9084,7 +9082,7 @@ Public Class Form1
                                                 Dim offlinepath As String = paths & "\"
                                                 If movietoalter.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                                     Dim mediapath As String
-                                                    mediapath = filefunction.getfilename(movietoalter.fileinfo.fullpathandfilename)
+                                                    mediapath = Utilities.GetFileName(movietoalter.fileinfo.fullpathandfilename)
                                                     Call offlinedvd(movietoalter.fileinfo.fullpathandfilename, movietoalter.fullmoviebody.title, mediapath)
                                                 End If
                                             Next
@@ -9109,7 +9107,7 @@ Public Class Form1
                         If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
                             Dim newfullmovie As ComboList = Nothing
                             newfullmovie.fullpathandfilename = tempmovielist(f)
-                            newfullmovie.foldername = filefunction.getlastfolder(tempmovielist(f))
+                            newfullmovie.foldername = Utilities.GetLastFolder(tempmovielist(f))
                             newfullmovie.filename = IO.Path.GetFileName(tempmovielist(f))
                             newfullmovie.id = movietoalter.fullmoviebody.imdbid
                             Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -9140,8 +9138,8 @@ Public Class Form1
                                 newfullmovie.sortorder = movietoalter.fullmoviebody.title
                             End If
                             Dim completebyte1 As Byte = 0
-                            Dim fanartexists As Boolean = IO.File.Exists(filefunction.getfanartpath(newfullmovie.fullpathandfilename))
-                            Dim posterexists As Boolean = IO.File.Exists(filefunction.getposterpath(newfullmovie.fullpathandfilename))
+                            Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(newfullmovie.fullpathandfilename))
+                            Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(newfullmovie.fullpathandfilename))
                             If fanartexists = False Then
                                 completebyte1 += 1
                             End If
@@ -9374,7 +9372,7 @@ Public Class Form1
                                 End If
                             End If
                         End If
-                        newdetails.title = filefunction.cleanfilename(newdetails.title)
+                        newdetails.title = Utilities.CleanFileName(newdetails.title)
                         If bckgrounddroppedfiles.CancellationPending Then Exit Sub
                         Dim scraperfunction As New Classimdb
                         Dim body As String
@@ -9440,7 +9438,7 @@ Public Class Form1
                             Dim movietoadd As New ComboList
                             movietoadd.fullpathandfilename = newdetails.nfopathandfilename
                             movietoadd.filename = IO.Path.GetFileName(newdetails.nfopathandfilename)
-                            movietoadd.foldername = filefunction.getlastfolder(newdetails.nfopathandfilename)
+                            movietoadd.foldername = Utilities.GetLastFolder(newdetails.nfopathandfilename)
                             movietoadd.title = newmovie.fullmoviebody.title
                             If newmovie.fullmoviebody.title <> Nothing Then
                                 If newmovie.fullmoviebody.year <> Nothing Then
@@ -9492,9 +9490,9 @@ Public Class Form1
                                             Else
                                                 If userPrefs.usefoldernames = False Then
                                                     tempstring = IO.Path.GetFileName(newdetails.nfopathandfilename)
-                                                    newmovie.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                                    newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                                 Else
-                                                    newmovie.fullmoviebody.title = filefunction.cleanfilename(filefunction.getlastfolder(newdetails.nfopathandfilename))
+                                                    newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newdetails.nfopathandfilename))
                                                 End If
                                             End If
                                             Try
@@ -9546,9 +9544,9 @@ Public Class Form1
 
                                 If userPrefs.usefoldernames = False Then
                                     tempstring = IO.Path.GetFileName(newdetails.nfopathandfilename)
-                                    newmovie.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                    newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                 Else
-                                    newmovie.fullmoviebody.title = filefunction.cleanfilename(filefunction.getlastfolder(newdetails.nfopathandfilename))
+                                    newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newdetails.nfopathandfilename))
                                 End If
                             End Try
                             If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
@@ -9776,7 +9774,7 @@ Public Class Form1
                             bckgrounddroppedfiles.ReportProgress(999999, progresstext)
 
                             Try
-                                newmovie.filedetails = filefunction.get_hdtags(newdetails.mediapathandfilename)
+                                newmovie.filedetails = Utilities.Get_HdTags(newdetails.mediapathandfilename)
                                 If newmovie.filedetails.filedetails_video.duration <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
@@ -9869,7 +9867,7 @@ Public Class Form1
                             movietoadd.runtime = newmovie.fullmoviebody.runtime
                             movietoadd.fullpathandfilename = newdetails.nfopathandfilename
                             movietoadd.filename = IO.Path.GetFileName(newdetails.nfopathandfilename)
-                            movietoadd.foldername = filefunction.getlastfolder(newdetails.nfopathandfilename)
+                            movietoadd.foldername = Utilities.GetLastFolder(newdetails.nfopathandfilename)
                             movietoadd.title = newmovie.fullmoviebody.title
                             If newmovie.fullmoviebody.title <> Nothing Then
                                 If newmovie.fullmoviebody.year <> Nothing Then
@@ -9901,8 +9899,8 @@ Public Class Form1
                             movietoadd.sortorder = newmovie.fullmoviebody.title
                             movietoadd.playcount = "0"
                             Dim completebyte1 As Byte = 0
-                            Dim fanartexists As Boolean = IO.File.Exists(filefunction.getfanartpath(movietoadd.fullpathandfilename))
-                            Dim posterexists As Boolean = IO.File.Exists(filefunction.getposterpath(movietoadd.fullpathandfilename))
+                            Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(movietoadd.fullpathandfilename))
+                            Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(movietoadd.fullpathandfilename))
                             If fanartexists = False Then
                                 completebyte1 += 1
                             End If
@@ -9923,7 +9921,7 @@ Public Class Form1
                             bckgrounddroppedfiles.ReportProgress(999999, progresstext)
 
                             Dim moviethumburl As String = ""
-                            If userPrefs.scrapemovieposters = True And userPrefs.overwritethumbs = True Or IO.File.Exists(filefunction.getposterpath(newdetails.nfopathandfilename)) = False Then
+                            If userPrefs.scrapemovieposters = True And userPrefs.overwritethumbs = True Or IO.File.Exists(Utilities.GetPosterPath(newdetails.nfopathandfilename)) = False Then
                                 Try
                                     If bckgrounddroppedfiles.CancellationPending Then Exit Sub
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
@@ -10003,7 +10001,7 @@ Public Class Form1
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                     bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                     If moviethumburl <> "" And moviethumburl <> "na" Then
-                                        Dim newmoviethumbpath As String = filefunction.getposterpath(newdetails.nfopathandfilename)
+                                        Dim newmoviethumbpath As String = Utilities.GetPosterPath(newdetails.nfopathandfilename)
                                         Try
                                             Dim buffer(4000000) As Byte
                                             Dim size As Integer = 0
@@ -10052,7 +10050,7 @@ Public Class Form1
 
 
 
-                            If Form1.userPrefs.overwritethumbs = True Or Form1.userPrefs.overwritethumbs = False And IO.File.Exists(filefunction.getfanartpath(newdetails.nfopathandfilename)) = False Then
+                            If Form1.userPrefs.overwritethumbs = True Or Form1.userPrefs.overwritethumbs = False And IO.File.Exists(Utilities.GetFanartPath(newdetails.nfopathandfilename)) = False Then
                                 If Form1.userPrefs.savefanart = False Then
                                     'scraperlog = scraperlog & "Fanart Not Downloaded - Disabled in preferences, use browser to find and add Fanart" & vbCrLf
                                 Else
@@ -10061,7 +10059,7 @@ Public Class Form1
                                         progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                         bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                         Dim moviefanartexists As Boolean
-                                        Dim fanarturlpath As String = filefunction.getfanartpath(newdetails.nfopathandfilename)
+                                        Dim fanarturlpath As String = Utilities.GetFanartPath(newdetails.nfopathandfilename)
 
                                         moviethumburl = ""
                                         moviefanartexists = System.IO.File.Exists(fanarturlpath)
@@ -10225,8 +10223,8 @@ Public Class Form1
         Dim tempstring As String
         tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
         Dim playlist As New List(Of String)
-        tempstring = filefunction.getfilename(tempstring)
-        playlist = filefunction.getmedialist(tempstring)
+        tempstring = Utilities.GetFileName(tempstring)
+        playlist = Utilities.GetMediaList(tempstring)
         'If IO.File.Exists(tempstring) Then
         '    playlist.Add(tempstring)
         'End If
@@ -11194,12 +11192,12 @@ Public Class Form1
     Private Sub setup_changemovie()
         Dim tempstring As String = ""
         If userPrefs.usefoldernames = False Then
-            tempstring = filefunction.cleanfilename(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename))
+            tempstring = Utilities.CleanFileName(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename))
         Else
-            tempstring = filefunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename)
+            tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename)
         End If
         If workingMovieDetails.fileinfo.fullpathandfilename.ToLower.IndexOf("\video_ts\") <> -1 Then
-            tempstring = filefunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename)
+            tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename)
         End If
         Dim url As String
         url = Form1.userPrefs.imdbmirror & "find?s=tt&q=" & tempstring
@@ -11608,7 +11606,7 @@ Public Class Form1
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
-                                mediapath = fileFunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                                 Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
@@ -11756,7 +11754,7 @@ Public Class Form1
                 For Each paths In userPrefs.offlinefolders
                     If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                         Dim mediapath As String
-                        mediapath = fileFunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                         Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                     End If
                 Next
@@ -11920,7 +11918,7 @@ Public Class Form1
             For Each paths In userPrefs.offlinefolders
                 If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                     Dim mediapath As String
-                    mediapath = fileFunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                    mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                     Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                 End If
             Next
@@ -12678,7 +12676,7 @@ Public Class Form1
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
             gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
             Dim tempbitmap As Bitmap = bm_dest
-            Dim filename As String = fileFunction.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
+            Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
             tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
             tempbitmap.Dispose()
@@ -12746,7 +12744,7 @@ Public Class Form1
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
             gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
             Dim tempbitmap As Bitmap = bm_dest
-            Dim filename As String = fileFunction.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
+            Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
             tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
             tempbitmap.Dispose()
@@ -12918,14 +12916,14 @@ Public Class Form1
                             Else
                                 If userPrefs.usefoldernames = False Then
                                     tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                                    workingMovieDetails.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
+                                    workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                 Else
                                     '                                    workingmoviedetails.fullmoviebody.title = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    tempstring = fileFunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
-                                    workingMovieDetails.fullmoviebody.title = fileFunction.cleanfilename(tempstring)
+                                    tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
+                                    workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                     '                                    workingmoviedetails.fullmoviebody.sortorder = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    tempstring = fileFunction.getlastfolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
-                                    workingMovieDetails.fullmoviebody.sortorder = fileFunction.cleanfilename(tempstring)
+                                    tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
+                                    workingMovieDetails.fullmoviebody.sortorder = Utilities.CleanFileName(tempstring)
                                 End If
                             End If
                             stage = stage & "Adding title: " & workingMovieDetails.fullmoviebody.title & vbCrLf
@@ -13411,7 +13409,7 @@ Public Class Form1
                                     Dim offlinepath As String = paths & "\"
                                     If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                         Dim mediapath As String
-                                        mediapath = fileFunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                                         Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                                     End If
                                 Next
@@ -13582,7 +13580,7 @@ Public Class Form1
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
             gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
             Dim tempbitmap As Bitmap = bm_dest
-            Dim filename As String = fileFunction.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
+            Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
             Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
             tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
             tempbitmap.Dispose()
@@ -15001,7 +14999,7 @@ Public Class Form1
                     ListBox1.Items.Add(lan.language)
                 Next
             End If
-            TextBox26.Text = fileFunction.getlastfolder(workingTvShow.path)
+            TextBox26.Text = Utilities.GetLastFolder(workingTvShow.path)
             PictureBox9.Image = Nothing
             If workingTvShow.language <> Nothing Then
                 For Each language In languageList
@@ -18016,7 +18014,7 @@ Public Class Form1
 
 
                 If userPrefs.enablehdtags = True Then
-                    workingepisode(workingEpisodeIndex).filedetails = filefunction.get_hdtags(filefunction.getfilename(workingepisode(workingEpisodeIndex).episodepath))
+                    workingEpisode(workingEpisodeIndex).filedetails = Utilities.Get_HdTags(Utilities.GetFileName(workingEpisode(workingEpisodeIndex).episodepath))
                     If workingepisode(workingEpisodeIndex).filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -19798,31 +19796,31 @@ Public Class Form1
                 .Height = 200
                 .SizeMode = PictureBoxSizeMode.StretchImage
                 '.Image = sender.image
-                Dim filename As String = filefunction.GetCRC32(movie.fullpathandfilename)
+                Dim filename As String = Utilities.GetCRC32(movie.fullpathandfilename)
                 If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
                     Try
                         'Dim bitmap2 As New Bitmap(IO.Path.Combine(applicationpath, "settings\postercache\" & movie.id & ".jpg"))
                         'Dim bitmap3 As New Bitmap(bitmap2)
                         'bitmap2.Dispose()
-                        .Image = imageFunctions.loadbitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
+                        .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
                     Catch ex As Exception
                         'Dim bitmap2 As New Bitmap(defaultposter)
                         'Dim bitmap3 As New Bitmap(bitmap2)
                         'bitmap2.Dispose()
                         '.Image = bitmap3
-                        .Image = imageFunctions.loadbitmap(defaultPoster)
+                        .Image = Utilities.LoadBitmap(defaultPoster)
                     End Try
-                ElseIf IO.File.Exists(filefunction.getposterpath(movie.fullpathandfilename)) Then
+                ElseIf IO.File.Exists(Utilities.GetPosterPath(movie.fullpathandfilename)) Then
                     Try
-                        Dim bitmap2 As New Bitmap(filefunction.getposterpath(movie.fullpathandfilename))
-                        bitmap2 = imageFunctions.ResizeImage(bitmap2, 150, 200)
-                        If loadSave.saveimage(bitmap2, IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
-                            .Image = imageFunctions.loadbitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
+                        Dim bitmap2 As New Bitmap(Utilities.GetPosterPath(movie.fullpathandfilename))
+                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                        If Utilities.SaveImage(bitmap2, IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
+                            .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
                         Else
-                            .Image = imageFunctions.loadbitmap(defaultPoster)
+                            .Image = Utilities.LoadBitmap(defaultPoster)
                         End If
                     Catch ex As Exception
-                        .Image = imageFunctions.loadbitmap(defaultPoster)
+                        .Image = Utilities.LoadBitmap(defaultPoster)
                     End Try
                 Else
                     Dim bitmap2 As New Bitmap(defaultPoster)
@@ -20002,7 +20000,7 @@ Public Class Form1
             Exit Sub
         End If
         Dim playlist As New List(Of String)
-        tempstring = filefunction.getfilename(tempstring)
+        tempstring = Utilities.GetFileName(tempstring)
         If IO.File.Exists(tempstring) Then
             playlist.Add(tempstring)
         End If
@@ -20419,16 +20417,16 @@ Public Class Form1
         Dim tempstring As String = ClickedControl
         If tempstring <> Nothing Then
             Try
-                If IO.File.Exists(filefunction.getposterpath(tempstring)) Then
+                If IO.File.Exists(Utilities.GetPosterPath(tempstring)) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
                     'ToolStrip1.Enabled = False
-                    Dim newimage As New Bitmap(filefunction.getposterpath(tempstring))
+                    Dim newimage As New Bitmap(Utilities.GetPosterPath(tempstring))
                     Dim newimage2 As New Bitmap(newimage)
                     newimage.Dispose()
                     Call zoomimage(newimage2)
                 Else
-                    MsgBox("Cant find file:-" & vbCrLf & filefunction.getposterpath(tempstring))
+                    MsgBox("Cant find file:-" & vbCrLf & Utilities.GetPosterPath(tempstring))
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -21182,11 +21180,11 @@ Public Class Form1
 
             Dim removal As String = ""
             If eps.seasonno = "-1" Or eps.episodeno = "-1" Then
-                eps.title = filefunction.getfilename(eps.episodepath)
+                eps.title = Utilities.GetFileName(eps.episodepath)
                 eps.rating = "0"
                 eps.playcount = "0"
                 eps.genre = "Unknown Episode Season and/or Episode Number"
-                eps.filedetails = filefunction.get_hdtags(eps.mediaextension)
+                eps.filedetails = Utilities.Get_HdTags(eps.mediaextension)
                 episodearray.Add(eps)
                 savepath = episodearray(0).episodepath
             Else
@@ -21617,7 +21615,7 @@ Public Class Form1
 
                             If userPrefs.enablehdtags = True Then
                                 'Try
-                                singleepisode.filedetails = fileFunction.get_hdtags(fileFunction.getfilename(singleepisode.episodepath))
+                                singleepisode.filedetails = Utilities.Get_HdTags(Utilities.GetFileName(singleepisode.episodepath))
 
                                 If Not singleepisode.filedetails.filedetails_video.duration Is Nothing Then
 
@@ -21729,7 +21727,7 @@ Public Class Form1
                 Dim myProxy As New WebProxy("myproxy", 80)
                 myProxy.BypassProxyOnLocal = True
 
-                xmlfile = fileFunction.DownloadTextFiles(episodeurl2)
+                xmlfile = Utilities.DownloadTextFiles(episodeurl2)
                 Dim episode As New XmlDocument
 
                 episode.LoadXml(xmlfile)
@@ -22410,7 +22408,7 @@ Public Class Form1
                 'Application.DoEvents()
                 Try
                     Dim tempfanartpath As String = ""
-                    tempfanartpath = filefunction.getfanartpath(movie.fullpathandfilename)
+                    tempfanartpath = Utilities.GetFanartPath(movie.fullpathandfilename)
                     Dim btmp As New Bitmap(tempfanartpath)
                     Dim bmp As New Bitmap(btmp)
                     btmp.Dispose()
@@ -24650,7 +24648,7 @@ Public Class Form1
             End If
             If toprocess = True Then
                 Try
-                    Dim tempname As String = filefunction.getlastfolder(newTvFolders(0) & "\hifh")
+                    Dim tempname As String = Utilities.GetLastFolder(newTvFolders(0) & "\hifh")
                     Dim showyear As String = ""
                     If tempname.IndexOf("(") <> -1 Then
                         Dim M As Match
@@ -27714,9 +27712,9 @@ Public Class Form1
                                                 If userPrefs.usefoldernames = False Then
                                                     Dim tempstring
                                                     tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                                                    workingMovieDetails.fullmoviebody.title = filefunction.cleanfilename(tempstring)
+                                                    workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                                 Else
-                                                    workingMovieDetails.fullmoviebody.title = filefunction.cleanfilename(workingMovieDetails.fileinfo.foldername)
+                                                    workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(workingMovieDetails.fileinfo.foldername)
                                                 End If
                                             End If
                                         End If
@@ -27823,9 +27821,9 @@ Public Class Form1
                         Try
                             Dim tempstring As String
                             Dim tempint As Integer
-                            Dim tempname As String = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                            Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim newfiledetails As New FullFileDetails
-                            If tempname <> Nothing Then newfiledetails = filefunction.get_hdtags(tempname)
+                            If tempname <> Nothing Then newfiledetails = Utilities.Get_HdTags(tempname)
                             If newfiledetails.filedetails_video.duration <> Nothing Then
                                 Try
                                     '1h 24mn 48s 546ms
@@ -28157,7 +28155,7 @@ Public Class Form1
         RescrapeFanartToolStripMenuItem.Visible = False
         DownloadFanartToolStripMenuItem.Visible = False
         Try
-            If IO.File.Exists(filefunction.getfanartpath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
+            If IO.File.Exists(Utilities.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
                 RescrapeFanartToolStripMenuItem.Visible = True
             Else
                 DownloadFanartToolStripMenuItem.Visible = True
@@ -28183,7 +28181,7 @@ Public Class Form1
         RescrapeFanartToolStripMenuItem.Visible = False
         DownloadFanartToolStripMenuItem.Visible = False
         Try
-            If IO.File.Exists(filefunction.getposterpath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
+            If IO.File.Exists(Utilities.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
                 RescrapePToolStripMenuItem.Visible = True
                 RescrapePosterFromTMDBToolStripMenuItem.Visible = True
                 RescraToolStripMenuItem.Visible = True
@@ -28227,7 +28225,7 @@ Public Class Form1
         If Not workingMovieDetails Is Nothing Then
             If workingMovieDetails.fileinfo.fullpathandfilename <> Nothing Then
                 If workingMovieDetails.fileinfo.fullpathandfilename <> "" Then
-                    backpath = filefunction.getfanartpath(workingMovieDetails.fileinfo.fullpathandfilename)
+                    backpath = Utilities.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)
                 End If
             End If
         End If
@@ -28338,7 +28336,7 @@ Public Class Form1
                                 Dim offlinepath As String = paths & "\"
                                 If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                     Dim mediapath As String
-                                    mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                    mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                                     Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                                 End If
                             Next
@@ -28415,7 +28413,7 @@ Public Class Form1
             If Not workingMovieDetails Is Nothing Then
                 If workingMovieDetails.fileinfo.fullpathandfilename <> Nothing Then
                     If workingMovieDetails.fileinfo.fullpathandfilename <> "" Then
-                        posterpath = filefunction.getposterpath(workingMovieDetails.fileinfo.fullpathandfilename)
+                        posterpath = Utilities.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)
                     End If
                 End If
             End If
@@ -28524,8 +28522,8 @@ Public Class Form1
         End If
         Try
             Dim fanartpath As String = ""
-            If IO.File.Exists(filefunction.getfanartpath(nfopath)) Then
-                fanartpath = filefunction.getfanartpath(nfopath)
+            If IO.File.Exists(Utilities.GetFanartPath(nfopath)) Then
+                fanartpath = Utilities.GetFanartPath(nfopath)
             Else
                 fanartpath = defaultOfflineArt
             End If
@@ -29213,7 +29211,7 @@ Public Class Form1
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
-                                mediapath = filefunction.getfilename(workingMovieDetails.fileinfo.fullpathandfilename)
+                                mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                                 Call offlinedvd(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
@@ -30565,7 +30563,7 @@ Public Class Form1
                             listofnewepisodes.Clear()
                             listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(basicTvList(f).allepisodes(g).episodepath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1
-                                listofnewepisodes(h).filedetails = filefunction.get_hdtags(filefunction.getfilename(listofnewepisodes(h).episodepath))
+                                listofnewepisodes(h).filedetails = Utilities.Get_HdTags(Utilities.GetFileName(listofnewepisodes(h).episodepath))
                                 If listofnewepisodes(h).filedetails.filedetails_video.duration <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
@@ -30610,8 +30608,8 @@ Public Class Form1
         If e.ProgressPercentage = 999999 Then
             ToolStripStatusLabel8.Text = e.UserState
         ElseIf e.ProgressPercentage = 888888 Then
-            Dim getthumb As New createscreenshot
-            Dim result As String = getthumb.screenshot(e.UserState)
+            'Dim getthumb As New createscreenshot
+            Dim result As String = Utilities.CreateScreenShot(e.UserState)
         Else
             ToolStripStatusLabel8.Text = e.UserState
             ToolStripProgressBar7.Value = e.ProgressPercentage
@@ -30679,8 +30677,8 @@ Public Class Form1
                 Dim tempstring As String
                 tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
                 Dim playlist As New List(Of String)
-                tempstring = filefunction.getfilename(tempstring)
-                playlist = filefunction.getmedialist(tempstring)
+                tempstring = Utilities.GetFileName(tempstring)
+                playlist = Utilities.GetMediaList(tempstring)
                 If playlist.Count > 0 Then
                     For Each File In playlist
                         If Not listoffilestomove.Contains(File) Then
@@ -30688,11 +30686,11 @@ Public Class Form1
                         End If
                     Next
                     listoffilestomove.Add(movie.value)
-                    If IO.File.Exists(filefunction.getfanartpath(movie.value)) Then
-                        listoffilestomove.Add(filefunction.getfanartpath(movie.value))
+                    If IO.File.Exists(Utilities.GetFanartPath(movie.value)) Then
+                        listoffilestomove.Add(Utilities.GetFanartPath(movie.value))
                     End If
-                    If IO.File.Exists(filefunction.getposterpath(movie.value)) Then
-                        listoffilestomove.Add(filefunction.getposterpath(movie.value))
+                    If IO.File.Exists(Utilities.GetPosterPath(movie.value)) Then
+                        listoffilestomove.Add(Utilities.GetPosterPath(movie.value))
                     End If
                     Dim di As DirectoryInfo = New DirectoryInfo(movie.value.Replace(IO.Path.GetFileName(movie.value), ""))
                     Dim filenama As String = IO.Path.GetFileNameWithoutExtension(movie.value)

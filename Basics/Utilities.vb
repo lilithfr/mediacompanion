@@ -1,13 +1,65 @@
 ﻿Imports System.Threading
-Imports System.Text.RegularExpressions
-Imports System.IO
-Imports ICSharpCode.SharpZipLib.Zip
 Imports System.Net
+Imports System.IO
+Imports System.Text.RegularExpressions
+Imports System.Xml
+Imports System.Text
+
+Public Class Utilities
+    Public Shared VideoExtensions As String() = {".avi", ".xvid", ".divx", ".img", ".mpg", ".mpeg", ".mov",
+                                                 ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".mkv", ".nrg", ".iso",
+                                                 ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
+                                                 ".dvr-ms", "VIDEO_TS.IFO"}
 
 
+    Public Shared Function CreateScreenShot(ByVal FilePath As String, Optional ByVal Overwrite As Boolean = False) As String
+        Dim thumbpathandfilename As String = FilePath.Replace(IO.Path.GetExtension(FilePath), ".tbn")
 
-Public Class FileAndFolderFunctions
-    Public Function DownloadTextFiles(ByVal StartURL As String) As String
+        Dim ThumbExists As Boolean = Not IO.File.Exists(thumbpathandfilename)
+
+        If ThumbExists AndAlso Overwrite Then
+            Try
+                IO.File.Delete(thumbpathandfilename)
+                ThumbExists = False
+            Catch
+                Return "nodelete"
+            End Try
+        Else
+            Return "nooverwrite"
+        End If
+
+        Dim nfofilename As String = IO.Path.GetFileName(FilePath)
+        Dim FullPath As String = IO.Path.GetFileName(FilePath)
+        Dim Extention As String = IO.Path.GetExtension(FilePath)
+        Dim tempfilename As String = nfofilename
+        For j = 0 To VideoExtensions.Length
+            tempfilename = nfofilename.Replace(Extention, VideoExtensions(j))
+
+            Dim tempstring2 As String = FilePath.Replace(FullPath, tempfilename)
+            If IO.File.Exists(tempstring2) Then
+                Try
+                    Dim seconds As Integer = 100
+                    Dim myProcess As Process = New Process
+                    myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                    myProcess.StartInfo.CreateNoWindow = False
+                    myProcess.StartInfo.FileName = Form1.applicationPath & "\ffmpeg.exe"
+                    Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                    myProcess.StartInfo.Arguments = proc_arguments
+                    myProcess.Start()
+                    myProcess.WaitForExit()
+
+                    Return "done"
+                Catch ex As Exception
+                    Throw ex
+                End Try
+            End If
+        Next
+
+
+        Return "failure"
+    End Function
+
+    Public Shared Function DownloadTextFiles(ByVal StartURL As String) As String
         Dim wr As HttpWebRequest = CType(WebRequest.Create(StartURL), HttpWebRequest)
         Dim ws As HttpWebResponse = CType(wr.GetResponse(), HttpWebResponse)
         Dim str As New StreamReader(ws.GetResponseStream())
@@ -15,586 +67,455 @@ Public Class FileAndFolderFunctions
         Return result
     End Function
 
-    Private Sub unzip(ByVal filename As String, ByVal targetdir As String, ByVal overwrite As Boolean, Optional ByVal password As String = "")
-        Dim inputStrm As New ZipInputStream(File.OpenRead(filename))
-        inputStrm.Password = password
-        Dim nextEntry As ZipEntry = inputStrm.GetNextEntry()
-        'loop through every file in zip
-        While Not nextEntry Is Nothing
-            'if no slash at end of nextentry.name, file isn't a directory
-            If Not nextEntry.Name.LastIndexOf("/") = nextEntry.Name.Length - 1 Then
-                'checks to make SURE the directory exists, sometimes they arent specified prior to their contents
-                If nextEntry.Name.IndexOf("/") > 0 Then
-                    If Not Directory.Exists(targetdir & "\" & nextEntry.Name.Replace("/", "\").Substring(0, nextEntry.Name.Replace("/", "\").LastIndexOf("\"))) Then
-                        Directory.CreateDirectory(targetdir & "\" & nextEntry.Name.Replace("/", "\").Substring(0, nextEntry.Name.Replace("/", "\").LastIndexOf("\")))
-                    End If
-                End If
-                Dim tmpStrm As FileStream
-                Dim tmpBuffer(2048) As Byte
-                Dim tmpLength As Integer = -1
-
-                If overwrite = True Then
-                    tmpStrm = New FileStream(Path.Combine(targetdir, nextEntry.Name), FileMode.Create)
-                Else
-                    tmpStrm = New FileStream(Path.Combine(targetdir, nextEntry.Name), FileMode.CreateNew)
-                End If
-
-                While True
-                    tmpLength = inputStrm.Read(tmpBuffer, 0, tmpBuffer.Length)
-                    If tmpLength > 0 Then
-                        tmpStrm.Write(tmpBuffer, 0, tmpLength)
-                    Else
-                        Exit While
-                    End If
-                End While
-
-                tmpStrm.Flush()
-                tmpStrm.Close()
-
-                nextEntry = inputStrm.GetNextEntry()
-            Else
-                'else, is a directory... createdirectory ensures directory exists
-                Directory.CreateDirectory(targetdir & "\" & nextEntry.Name.Replace("/", "\"))
-                nextEntry = inputStrm.GetNextEntry()
-            End If
-        End While
-
-    End Sub
-    Public Function GetCRC32(ByVal sFileName As String) As String
+    Public Shared Function GetCRC32(ByVal sFileName As String) As String
         Dim oCRC As Vbaccelerator.Components.Algorithms.CRC32 = New Vbaccelerator.Components.Algorithms.CRC32()
         Dim oEnc As System.Text.UTF7Encoding = New System.Text.UTF7Encoding()
         Return (oCRC.GetCrc32(New System.IO.MemoryStream(oEnc.GetBytes(sFileName))))
     End Function
 
-    Public Function getlastfolder(ByVal fullpath As String) As String
-        Monitor.Enter(Me)
-        Try
-            If fullpath.IndexOf("/") <> -1 And fullpath.IndexOf("\") = -1 Then
-                fullpath = fullpath.Replace("/", "\")
+    Public Shared Function GetLastFolder(ByVal FullPath As String) As String
+        If FullPath.Contains("/") AndAlso Not FullPath.Contains("\") Then
+            FullPath = FullPath.Replace("/", "\")
+        End If
+
+        FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
+
+        Dim foldername As String = ""
+        Dim paths() As String
+        paths = FullPath.Split("\")
+        For g = UBound(paths) To 0 Step -1
+            If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g) <> "" Then
+                foldername = paths(g)
+                Return foldername
             End If
-            fullpath = fullpath.Replace(IO.Path.GetFileName(fullpath), "")
-            Dim foldername As String = ""
-            Dim paths() As String
-            paths = fullpath.Split("\")
-            For g = UBound(paths) To 0 Step -1
-                If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g) <> "" Then
-                    foldername = paths(g)
-                    Exit For
-                End If
-            Next
-            Return foldername
-        Catch
-            Return ""
-        Finally
-            Monitor.Exit(Me)
-        End Try
+        Next
+
+        Return ""
     End Function
-    Public Function getposterpath(ByVal fullpath As String) As String
-        Monitor.Enter(Me)
-        Try
-            Dim posterpath As String = ""
-            posterpath = fullpath.Substring(0, fullpath.Length - 4)
-            posterpath = posterpath & ".tbn"
-            'If Not IO.File.Exists(posterpath) Then
-            Dim stackname As String = getstackname(IO.Path.GetFileName(fullpath), fullpath.Replace(IO.Path.GetFileName(fullpath), ""))
-            stackname = fullpath.Replace(IO.Path.GetFileName(fullpath), stackname)
-            stackname = stackname & ".tbn"
+
+
+    Public Shared Function GetPosterPath(ByVal FullPath As String) As String
+        Dim posterpath As String = ""
+        posterpath = FullPath.Substring(0, FullPath.Length - 4)
+        posterpath = posterpath & ".tbn"
+        'If Not IO.File.Exists(posterpath) Then
+        Dim stackname As String = GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
+        stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
+        stackname = stackname & ".tbn"
+        If stackname <> "na" And IO.File.Exists(stackname) Then
+            posterpath = stackname
+        Else
+            posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
+            posterpath = posterpath & "movie.tbn"
+            If Not IO.File.Exists(posterpath) Then
+                posterpath = ""
+            End If
+        End If
+        '    Else
+        'posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
+        'End If
+        If posterpath = "" Then
+            If FullPath.IndexOf("movie.nfo") <> -1 Then
+                posterpath = FullPath.Replace("movie.nfo", "movie.tbn")
+            End If
+        End If
+        If posterpath = "" Then
+            If Form1.userPrefs.posternotstacked = True Then
+                posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
+            Else
+                posterpath = GetStackName(IO.Path.GetFileName(FullPath), posterpath.Replace(IO.Path.GetFileName(FullPath), "")) & ".tbn"
+                If posterpath = "na.tbn" Then
+                    posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
+                Else
+                    posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
+                End If
+            End If
+            If Form1.userPrefs.basicsavemode = True Then
+                posterpath = posterpath.Replace(IO.Path.GetFileName(FullPath), "movie.tbn")
+            End If
+        End If
+        If posterpath = "na" Then
+            If IO.File.Exists(FullPath.Replace(IO.Path.GetFileName(FullPath), "folder.jpg")) Then
+                posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), "folder.jpg")
+            End If
+        End If
+        Return posterpath
+
+    End Function
+
+    Public Shared Function GetFanartPath(ByVal FullPath As String) As String
+        Dim posterpath As String = ""
+        posterpath = FullPath.Substring(0, FullPath.Length - 4)
+        posterpath = posterpath & "-fanart.jpg"
+        If Not IO.File.Exists(posterpath) Then
+            Dim stackname As String = GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
+
+            stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
+            stackname = stackname & "-fanart.jpg"
             If stackname <> "na" And IO.File.Exists(stackname) Then
                 posterpath = stackname
             Else
                 posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-                posterpath = posterpath & "movie.tbn"
+                posterpath = posterpath & "fanart.jpg"
                 If Not IO.File.Exists(posterpath) Then
                     posterpath = ""
                 End If
             End If
-            '    Else
-            'posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-            'End If
-            If posterpath = "" Then
-                If fullpath.IndexOf("movie.nfo") <> -1 Then
-                    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-                End If
+            'Else
+            '    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
+        End If
+        If posterpath = "" Then
+            If FullPath.IndexOf("movie.nfo") <> -1 Then
+                posterpath = FullPath.Replace("movie.nfo", "fanart.jpg")
             End If
-            If posterpath = "" Then
-                If Form1.userPrefs.posternotstacked = True Then
-                    posterpath = fullpath.Substring(0, fullpath.Length - 4) & ".tbn"
+        End If
+        If posterpath = "" Then
+            If Form1.userPrefs.fanartnotstacked = True Then
+                posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
+            Else
+                posterpath = GetStackName(IO.Path.GetFileName(FullPath), FullPath) & "-fanart.jpg"
+                If posterpath = "na-fanart.jpg" Then
+                    posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
                 Else
-                    posterpath = getstackname(IO.Path.GetFileName(fullpath), posterpath.Replace(IO.Path.GetFileName(fullpath), "")) & ".tbn"
-                    If posterpath = "na.tbn" Then
-                        posterpath = fullpath.Substring(0, fullpath.Length - 4) & ".tbn"
-                    Else
-                        posterpath = fullpath.Replace(IO.Path.GetFileName(fullpath), posterpath)
-                    End If
-                End If
-                If Form1.userPrefs.basicsavemode = True Then
-                    posterpath = posterpath.Replace(IO.Path.GetFileName(fullpath), "movie.tbn")
+                    posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
                 End If
             End If
-            If posterpath = "na" Then
-                If IO.File.Exists(fullpath.Replace(IO.Path.GetFileName(fullpath), "folder.jpg")) Then
-                    posterpath = fullpath.Replace(IO.Path.GetFileName(fullpath), "folder.jpg")
-                End If
+            If Form1.userPrefs.basicsavemode = True Then
+                posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
             End If
-            Return posterpath
-        Catch
-            Return ""
-        Finally
-            Monitor.Exit(Me)
-        End Try
+        End If
+
+        Return posterpath
     End Function
-    Public Function getfanartpath(ByVal fullpath As String) As String
-        Monitor.Enter(Me)
-        Try
-            Dim posterpath As String = ""
-            posterpath = fullpath.Substring(0, fullpath.Length - 4)
-            posterpath = posterpath & "-fanart.jpg"
-            If Not IO.File.Exists(posterpath) Then
-                Dim stackname As String = getstackname(IO.Path.GetFileName(fullpath), fullpath.Replace(IO.Path.GetFileName(fullpath), ""))
 
-                stackname = fullpath.Replace(IO.Path.GetFileName(fullpath), stackname)
-                stackname = stackname & "-fanart.jpg"
-                If stackname <> "na" And IO.File.Exists(stackname) Then
-                    posterpath = stackname
-                Else
-                    posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-                    posterpath = posterpath & "fanart.jpg"
-                    If Not IO.File.Exists(posterpath) Then
-                        posterpath = ""
-                    End If
+    Public Shared Function GetStackName(ByVal filenames As String, ByVal filepath As String) As String
+        Dim tempboolean As Boolean = False
+        Dim truerar As Boolean = False
+        Dim filename As String = filenames
+        If IO.Path.GetExtension(filename).ToLower = ".rar" Then
+            truerar = True
+        End If
+        filenames = filenames.Replace(System.IO.Path.GetExtension(filenames), "")
+        filename = filename.ToLower
+        Dim stackname As String = ""
+        Dim workingstring As String = "na"
+
+
+        If filename.IndexOf("cd1") <> -1 Then
+            tempboolean = True
+            workingstring = "cd1"
+        End If
+
+        If filename.IndexOf("cd.1") <> -1 Then
+            tempboolean = True
+            workingstring = "cd.1"
+        End If
+
+
+        If filename.IndexOf("cd_1") <> -1 Then
+            tempboolean = True
+            workingstring = "cd_1"
+        End If
+
+
+        If filename.IndexOf("cd 1") <> -1 Then
+            tempboolean = True
+            workingstring = "cd 1"
+        End If
+
+
+        If filename.IndexOf("cd-1") <> -1 Then
+            tempboolean = True
+            workingstring = "cd-1"
+        End If
+
+
+        If filename.IndexOf("dvd1") <> -1 Then
+            tempboolean = True
+            workingstring = "dvd1"
+        End If
+
+
+        If filename.IndexOf("dvd.1") <> -1 Then
+            tempboolean = True
+            workingstring = "dvd.1"
+        End If
+
+
+        If filename.IndexOf("dvd_1") <> -1 Then
+            tempboolean = True
+            workingstring = "dvd_1"
+        End If
+
+
+        If filename.IndexOf("dvd 1") <> -1 Then
+            tempboolean = True
+            workingstring = "dvd 1"
+        End If
+
+
+        If filename.IndexOf("dvd-1") <> -1 Then
+            tempboolean = True
+            workingstring = "dvd-1"
+        End If
+
+
+        If filename.IndexOf("part1") <> -1 Then
+            tempboolean = True
+            workingstring = "part1"
+        End If
+
+
+        If filename.IndexOf("part.1") <> -1 Then
+            tempboolean = True
+            workingstring = "part.1"
+        End If
+
+        If filename.IndexOf("part_1") <> -1 Then
+            tempboolean = True
+            workingstring = "part_1"
+        End If
+
+        If filename.IndexOf("part-1") <> -1 Then
+            tempboolean = True
+            workingstring = "part-1"
+        End If
+
+        If filename.IndexOf("part 1") <> -1 Then
+            tempboolean = True
+            workingstring = "part 1"
+        End If
+
+        If filename.IndexOf("disk1") <> -1 Then
+            tempboolean = True
+            workingstring = "disk1"
+        End If
+
+        If filename.IndexOf("disk.1") <> -1 Then
+            tempboolean = True
+            workingstring = "disk.1"
+        End If
+
+        If filename.IndexOf("disk_1") <> -1 Then
+            tempboolean = True
+            workingstring = "disk_1"
+        End If
+
+        If filename.IndexOf("disk 1") <> -1 Then
+            tempboolean = True
+            workingstring = "disk 1"
+        End If
+
+        If filename.IndexOf("disk-1") <> -1 Then
+            tempboolean = True
+            workingstring = "disk-1"
+        End If
+
+        If filename.IndexOf("pt 1") <> -1 Then
+            tempboolean = True
+            workingstring = "pt 1"
+        End If
+
+        If filename.IndexOf("pt-1") <> -1 Then
+            tempboolean = True
+            workingstring = "pt-1"
+        End If
+
+        If filename.IndexOf("pt1") <> -1 Then
+            tempboolean = True
+            workingstring = "pt1"
+        End If
+
+        If filename.IndexOf("pt_1") <> -1 Then
+            tempboolean = True
+            workingstring = "pt_1"
+        End If
+
+        If filename.IndexOf("pt.1") <> -1 Then
+            tempboolean = True
+            workingstring = "pt.1"
+        End If
+
+
+        Dim extension As String = System.IO.Path.GetExtension(filename)
+        Dim filenameex As String
+
+        filenameex = filename.Replace(System.IO.Path.GetExtension(filename), "")
+
+        If filenameex.Substring(filenameex.Length - 1).ToLower = "a" Then
+            Dim exists As Boolean = False
+            Dim tempname As String
+            For f = 0 To VideoExtensions.Length
+                tempname = filepath & filename.Substring(0, filename.Length - (1 + extension.Length)) & "b" & VideoExtensions(f)
+                exists = System.IO.File.Exists(tempname)
+                If exists = True Then
+                    workingstring = "a"
+                    tempboolean = True
+                    Exit For
                 End If
-                'Else
-                '    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-            End If
-            If posterpath = "" Then
-                If fullpath.IndexOf("movie.nfo") <> -1 Then
-                    posterpath = fullpath.Replace("movie.nfo", "fanart.jpg")
-                End If
-            End If
-            If posterpath = "" Then
-                If Form1.userPrefs.fanartnotstacked = True Then
-                    posterpath = fullpath.Substring(0, fullpath.Length - 4) & "-fanart.jpg"
-                Else
-                    posterpath = getstackname(IO.Path.GetFileName(fullpath), fullpath) & "-fanart.jpg"
-                    If posterpath = "na-fanart.jpg" Then
-                        posterpath = fullpath.Substring(0, fullpath.Length - 4) & "-fanart.jpg"
-                    Else
-                        posterpath = fullpath.Replace(IO.Path.GetFileName(fullpath), posterpath)
-                    End If
-                End If
-                If Form1.userPrefs.basicsavemode = True Then
-                    posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
-                End If
-            End If
+            Next
+        End If
 
-            Return posterpath
-        Catch
-            Return ""
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function
-    Public Function getstackname(ByVal filenames As String, ByVal filepath As String) As String
-        Monitor.Enter(Me)
-        Try
-            Dim tempboolean As Boolean = False
-            Dim truerar As Boolean = False
-            Dim filename As String = filenames
-            If IO.Path.GetExtension(filename).ToLower = ".rar" Then
-                truerar = True
-            End If
-            filenames = filenames.Replace(System.IO.Path.GetExtension(filenames), "")
-            filename = filename.ToLower
-            Dim stackname As String = ""
-            Dim workingstring As String = "na"
+        If tempboolean = True Then
+            Dim tbool As Boolean = False
+            If workingstring <> "na" Then
 
+                filename = filename.Replace(System.IO.Path.GetExtension(filename), "")
 
-            If filename.IndexOf("cd1") <> -1 Then
-                tempboolean = True
-                workingstring = "cd1"
-            End If
-
-            If filename.IndexOf("cd.1") <> -1 Then
-                tempboolean = True
-                workingstring = "cd.1"
-            End If
-
-
-            If filename.IndexOf("cd_1") <> -1 Then
-                tempboolean = True
-                workingstring = "cd_1"
-            End If
-
-
-            If filename.IndexOf("cd 1") <> -1 Then
-                tempboolean = True
-                workingstring = "cd 1"
-            End If
-
-
-            If filename.IndexOf("cd-1") <> -1 Then
-                tempboolean = True
-                workingstring = "cd-1"
-            End If
-
-
-            If filename.IndexOf("dvd1") <> -1 Then
-                tempboolean = True
-                workingstring = "dvd1"
-            End If
-
-
-            If filename.IndexOf("dvd.1") <> -1 Then
-                tempboolean = True
-                workingstring = "dvd.1"
-            End If
-
-
-            If filename.IndexOf("dvd_1") <> -1 Then
-                tempboolean = True
-                workingstring = "dvd_1"
-            End If
-
-
-            If filename.IndexOf("dvd 1") <> -1 Then
-                tempboolean = True
-                workingstring = "dvd 1"
-            End If
-
-
-            If filename.IndexOf("dvd-1") <> -1 Then
-                tempboolean = True
-                workingstring = "dvd-1"
-            End If
-
-
-            If filename.IndexOf("part1") <> -1 Then
-                tempboolean = True
-                workingstring = "part1"
-            End If
-
-
-            If filename.IndexOf("part.1") <> -1 Then
-                tempboolean = True
-                workingstring = "part.1"
-            End If
-
-            If filename.IndexOf("part_1") <> -1 Then
-                tempboolean = True
-                workingstring = "part_1"
-            End If
-
-            If filename.IndexOf("part-1") <> -1 Then
-                tempboolean = True
-                workingstring = "part-1"
-            End If
-
-            If filename.IndexOf("part 1") <> -1 Then
-                tempboolean = True
-                workingstring = "part 1"
-            End If
-
-            If filename.IndexOf("disk1") <> -1 Then
-                tempboolean = True
-                workingstring = "disk1"
-            End If
-
-            If filename.IndexOf("disk.1") <> -1 Then
-                tempboolean = True
-                workingstring = "disk.1"
-            End If
-
-            If filename.IndexOf("disk_1") <> -1 Then
-                tempboolean = True
-                workingstring = "disk_1"
-            End If
-
-            If filename.IndexOf("disk 1") <> -1 Then
-                tempboolean = True
-                workingstring = "disk 1"
-            End If
-
-            If filename.IndexOf("disk-1") <> -1 Then
-                tempboolean = True
-                workingstring = "disk-1"
-            End If
-
-            If filename.IndexOf("pt 1") <> -1 Then
-                tempboolean = True
-                workingstring = "pt 1"
-            End If
-
-            If filename.IndexOf("pt-1") <> -1 Then
-                tempboolean = True
-                workingstring = "pt-1"
-            End If
-
-            If filename.IndexOf("pt1") <> -1 Then
-                tempboolean = True
-                workingstring = "pt1"
-            End If
-
-            If filename.IndexOf("pt_1") <> -1 Then
-                tempboolean = True
-                workingstring = "pt_1"
-            End If
-
-            If filename.IndexOf("pt.1") <> -1 Then
-                tempboolean = True
-                workingstring = "pt.1"
-            End If
-            Dim extensions(23) As String
-            Dim extensioncount As Integer
-            extensions(1) = ".avi"
-            extensions(2) = ".xvid"
-            extensions(3) = ".divx"
-            extensions(4) = ".img"
-            extensions(5) = ".mpg"
-            extensions(6) = ".mpeg"
-            extensions(7) = ".mov"
-            extensions(8) = ".rm"
-            extensions(9) = ".3gp"
-            extensions(10) = ".m4v"
-            extensions(11) = ".wmv"
-            extensions(12) = ".asf"
-            extensions(13) = ".mp4"
-            extensions(14) = ".mkv"
-            extensions(15) = ".nrg"
-            extensions(16) = ".iso"
-            extensions(17) = ".rmvb"
-            extensions(18) = ".ogm"
-            extensions(19) = ".bin"
-            extensions(20) = ".ts"
-            extensions(21) = ".vob"
-            extensions(22) = ".m2ts"
-            extensions(23) = ".rar"
-
-            extensioncount = 23
-
-            'Dim stackpaths(22) As String
-
-
-            Dim extension As String = System.IO.Path.GetExtension(filename)
-            Dim filenameex As String
-
-            filenameex = filename.Replace(System.IO.Path.GetExtension(filename), "")
-
-            If filenameex.Substring(filenameex.Length - 1).ToLower = "a" Then
-                Dim exists As Boolean = False
-                Dim tempname As String
-                For f = 1 To extensioncount
-                    tempname = filepath & filename.Substring(0, filename.Length - (1 + extension.Length)) & "b" & extensions(f)
-                    exists = System.IO.File.Exists(tempname)
-                    If exists = True Then
-                        workingstring = "a"
-                        tempboolean = True
+                Dim a() As String = {".", " ", "-", "_"}
+                Dim multipartidentify As String
+                For f = 0 To 3
+                    multipartidentify = a(f) & workingstring
+                    'filename = filename.Replace(System.IO.Path.GetExtension(filename), "")
+                    If filename.IndexOf(multipartidentify) <> -1 Then
+                        If multipartidentify.IndexOf(".") <> -1 Then
+                            multipartidentify = multipartidentify.Replace(".", "\.")
+                        End If
+                        'filename = filename.Replace(multipartidentify, "")
+                        filename = Regex.Replace(filenames, multipartidentify, "", RegexOptions.IgnoreCase)
+                        tbool = True
                         Exit For
                     End If
                 Next
             End If
 
-
-
-
-
-            If tempboolean = True Then
-                Dim tbool As Boolean = False
-                If workingstring <> "na" Then
-
-                    filename = filename.Replace(System.IO.Path.GetExtension(filename), "")
-
-                    Dim a() As String = {".", " ", "-", "_"}
-                    Dim multipartidentify As String
-                    For f = 0 To 3
-                        multipartidentify = a(f) & workingstring
-                        'filename = filename.Replace(System.IO.Path.GetExtension(filename), "")
-                        If filename.IndexOf(multipartidentify) <> -1 Then
-                            If multipartidentify.IndexOf(".") <> -1 Then
-                                multipartidentify = multipartidentify.Replace(".", "\.")
-                            End If
-                            'filename = filename.Replace(multipartidentify, "")
-                            filename = Regex.Replace(filenames, multipartidentify, "", RegexOptions.IgnoreCase)
-                            tbool = True
+            If workingstring = "a" And tbool = False Then
+                Dim temp As String = filename
+                Dim temp2 As String
+                If temp.Substring(temp.Length - 1, 1) = "a" Then
+                    temp = temp.Substring(0, temp.Length - 1)
+                    For f = 0 To VideoExtensions.Length
+                        temp2 = filepath & temp & "b" & VideoExtensions(f)
+                        If System.IO.File.Exists(temp2) = True Then
+                            filename = filenames.Substring(0, filename.Length - 1)
                             Exit For
                         End If
                     Next
                 End If
-
-                If workingstring = "a" And tbool = False Then
-                    Dim temp As String = filename
-                    Dim temp2 As String
-                    If temp.Substring(temp.Length - 1, 1) = "a" Then
-                        temp = temp.Substring(0, temp.Length - 1)
-                        For f = 1 To extensioncount
-                            temp2 = filepath & temp & "b" & extensions(f)
-                            If System.IO.File.Exists(temp2) = True Then
-                                filename = filenames.Substring(0, filename.Length - 1)
-                                Exit For
-                            End If
-                        Next
-                    End If
-                End If
             End If
+        End If
 
-            If truerar = True Then
-                If IO.Path.GetExtension(filename).ToLower = ".rar" Then
-                    filename = filename.Replace(IO.Path.GetExtension(filename), "")
-                End If
-                If filename.ToLower.IndexOf(".part1") <> -1 Then
-                    filename = filename.Replace(".part1", "")
-                    tempboolean = True
-                End If
-                If filename.ToLower.IndexOf(".part01") <> -1 Then
-                    filename = filename.Replace(".part01", "")
-                    tempboolean = True
-                End If
-                If filename.ToLower.IndexOf(".part001") <> -1 Then
-                    filename = filename.Replace(".part001", "")
-                    tempboolean = True
-                End If
-                If filename.ToLower.IndexOf(".part0001") <> -1 Then
-                    filename = filename.Replace(".part0001", "")
-                    tempboolean = True
-                End If
+        If truerar = True Then
+            If IO.Path.GetExtension(filename).ToLower = ".rar" Then
+                filename = filename.Replace(IO.Path.GetExtension(filename), "")
             End If
+            If filename.ToLower.IndexOf(".part1") <> -1 Then
+                filename = filename.Replace(".part1", "")
+                tempboolean = True
+            End If
+            If filename.ToLower.IndexOf(".part01") <> -1 Then
+                filename = filename.Replace(".part01", "")
+                tempboolean = True
+            End If
+            If filename.ToLower.IndexOf(".part001") <> -1 Then
+                filename = filename.Replace(".part001", "")
+                tempboolean = True
+            End If
+            If filename.ToLower.IndexOf(".part0001") <> -1 Then
+                filename = filename.Replace(".part0001", "")
+                tempboolean = True
+            End If
+        End If
 
-            If tempboolean = False Then filename = "na"
-            Dim prefix(3)
-            prefix(0) = " "
-            prefix(1) = "_"
-            prefix(2) = "-"
-            prefix(3) = "."
-            filename = RTrim(filename)
-            If filename.IndexOf("_") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
-            If filename.IndexOf("-") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
-            If filename.IndexOf(".") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
-            filename = RTrim(filename)
+        If tempboolean = False Then filename = "na"
+        Dim prefix(3)
+        prefix(0) = " "
+        prefix(1) = "_"
+        prefix(2) = "-"
+        prefix(3) = "."
+        filename = RTrim(filename)
+        If filename.IndexOf("_") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
+        If filename.IndexOf("-") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
+        If filename.IndexOf(".") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
+        filename = RTrim(filename)
 
-            Return filename
-        Catch
-            Return "na"
-        Finally
-            Monitor.Exit(Me)
-        End Try
+        Return filename
 
     End Function
-    Public Function getfilename(ByVal path As String)
-        'todo getfilename
-        Dim monitorobject As New Object
-        Monitor.Enter(monitorobject)
-        Try
-            Dim tempstring As String
-            Dim tempfilename As String = path
-            Dim actualpathandfilename As String = ""
-            Dim extensions(23) As String
-            Dim extensioncount As Integer
-            extensions(1) = ".avi"
-            extensions(2) = ".xvid"
-            extensions(3) = ".divx"
-            extensions(4) = ".img"
-            extensions(5) = ".mpg"
-            extensions(6) = ".mpeg"
-            extensions(7) = ".mov"
-            extensions(8) = ".rm"
-            extensions(9) = ".3gp"
-            extensions(10) = ".m4v"
-            extensions(11) = ".wmv"
-            extensions(12) = ".asf"
-            extensions(13) = ".mp4"
-            extensions(14) = ".mkv"
-            extensions(15) = ".nrg"
-            extensions(16) = ".iso"
-            extensions(17) = ".rmvb"
-            extensions(18) = ".ogm"
-            extensions(19) = ".bin"
-            extensions(20) = ".ts"
-            extensions(21) = ".vob"
-            extensions(22) = ".m2ts"
-            extensions(23) = ".tp"
-            'extensions(23) = ".rar"
-            extensioncount = 23
 
-            If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
-                actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
-            End If
+    Public Shared Function GetFileName(ByVal path As String)
+        Dim tempstring As String
+        Dim tempfilename As String = path
+        Dim actualpathandfilename As String = ""
 
-            If actualpathandfilename = "" Then
-                For f = 1 To extensioncount
-                    tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), extensions(f))
-                    If IO.File.Exists(tempfilename) Then
-                        actualpathandfilename = tempfilename
-                        Exit For
-                    End If
-                Next
-            End If
 
-            If actualpathandfilename = "" Then
-                If tempfilename.IndexOf("movie.nfo") <> -1 Then
-                    Dim possiblemovies(1000) As String
-                    Dim possiblemoviescount As Integer = 0
-                    For f = 1 To 23
-                        Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
-                        Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                        Dim pattern As String = "*" & extensions(f)
-                        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
-                        For Each fs_info As System.IO.FileInfo In fs_infos
-                            Application.DoEvents()
-                            If IO.File.Exists(fs_info.FullName) Then
-                                tempstring = fs_info.FullName.ToLower
-                                If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
-                                    possiblemoviescount += 1
-                                    possiblemovies(possiblemoviescount) = fs_info.FullName
-                                End If
+        If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
+            actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
+        End If
+
+        If actualpathandfilename = "" Then
+            For f = 0 To VideoExtensions.Length
+                tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), VideoExtensions(f))
+                If IO.File.Exists(tempfilename) Then
+                    actualpathandfilename = tempfilename
+                    Exit For
+                End If
+            Next
+        End If
+
+        If actualpathandfilename = "" Then
+            If tempfilename.IndexOf("movie.nfo") <> -1 Then
+                Dim possiblemovies(1000) As String
+                Dim possiblemoviescount As Integer = 0
+                For f = 1 To 23
+                    Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
+                    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                    Dim pattern As String = "*" & VideoExtensions(f)
+                    Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+                    For Each fs_info As System.IO.FileInfo In fs_infos
+                        Application.DoEvents()
+                        If IO.File.Exists(fs_info.FullName) Then
+                            tempstring = fs_info.FullName.ToLower
+                            If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
+                                possiblemoviescount += 1
+                                possiblemovies(possiblemoviescount) = fs_info.FullName
                             End If
-                        Next
+                        End If
                     Next
-                    If possiblemoviescount = 1 Then
-                        actualpathandfilename = possiblemovies(possiblemoviescount)
-                    ElseIf possiblemoviescount > 1 Then
-                        Dim multistrings(6) As String
-                        multistrings(1) = "cd"
-                        multistrings(2) = "dvd"
-                        multistrings(3) = "part"
-                        multistrings(4) = "pt"
-                        multistrings(5) = "disk"
-                        multistrings(6) = "disc"
-                        Dim types(5) As String
-                        types(1) = ""
-                        types(2) = "-"
-                        types(3) = "_"
-                        types(4) = " "
-                        types(5) = "."
-                        Dim workingstring As String
-                        For f = 1 To 6
-                            For g = 1 To 5
-                                For h = 1 To possiblemoviescount
-                                    workingstring = multistrings(f) & types(h) & "1"
-                                    Dim workingtitle As String = possiblemovies(h).ToLower
-                                    If workingtitle.IndexOf(workingstring) <> -1 Then
-                                        actualpathandfilename = possiblemovies(h)
-                                    End If
-                                Next
+                Next
+                If possiblemoviescount = 1 Then
+                    actualpathandfilename = possiblemovies(possiblemoviescount)
+                ElseIf possiblemoviescount > 1 Then
+                    Dim multistrings(6) As String
+                    multistrings(1) = "cd"
+                    multistrings(2) = "dvd"
+                    multistrings(3) = "part"
+                    multistrings(4) = "pt"
+                    multistrings(5) = "disk"
+                    multistrings(6) = "disc"
+                    Dim types(5) As String
+                    types(1) = ""
+                    types(2) = "-"
+                    types(3) = "_"
+                    types(4) = " "
+                    types(5) = "."
+                    Dim workingstring As String
+                    For f = 1 To 6
+                        For g = 1 To 5
+                            For h = 1 To possiblemoviescount
+                                workingstring = multistrings(f) & types(h) & "1"
+                                Dim workingtitle As String = possiblemovies(h).ToLower
+                                If workingtitle.IndexOf(workingstring) <> -1 Then
+                                    actualpathandfilename = possiblemovies(h)
+                                End If
                             Next
                         Next
-                    End If
+                    Next
                 End If
             End If
+        End If
 
-            If actualpathandfilename = "" Then
-                actualpathandfilename = "none"
-            End If
+        If actualpathandfilename = "" Then
+            actualpathandfilename = "none"
+        End If
 
 
-            Return actualpathandfilename
-        Catch
-        Finally
-            Monitor.Exit(monitorobject)
-        End Try
+        Return actualpathandfilename
+
         Return "Error"
     End Function
-    Public Function EnumerateDirectory(ByVal RootDirectory As String)
 
-        Monitor.Enter(Me)
+    Public Shared Function EnumerateDirectory(ByVal RootDirectory As String)
         Try
             For Each s As String In Directory.GetDirectories(RootDirectory)
                 If Not (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
@@ -616,12 +537,11 @@ Public Class FileAndFolderFunctions
 
             Return Form1.dList
         Finally
-            Monitor.Exit(Me)
+
         End Try
     End Function
-    Public Function EnumerateDirectory2(ByVal RootDirectory As String, Optional ByVal log As Boolean = False)
 
-        Monitor.Enter(Me)
+    Public Shared Function EnumerateDirectory2(ByVal RootDirectory As String, Optional ByVal log As Boolean = False)
         Dim dli As New List(Of String)
         Try
             'dli.Add(RootDirectory)
@@ -775,13 +695,11 @@ Public Class FileAndFolderFunctions
 
         Finally
 
-
-            Monitor.Exit(Me)
         End Try
     End Function
-    Public Function EnumerateDirectory3(ByVal RootDirectory As String)
 
-        Monitor.Enter(Me)
+    Public Shared Function EnumerateDirectory3(ByVal RootDirectory As String)
+
         Dim dli As New List(Of String)
         Try
             'dli.Add(RootDirectory)
@@ -805,10 +723,10 @@ Public Class FileAndFolderFunctions
 
             Return dli
         Finally
-            Monitor.Exit(Me)
+
         End Try
     End Function
-    Public Function validmoviedir(ByVal s As String) As Boolean
+    Public Shared Function validmoviedir(ByVal s As String) As Boolean
         Dim passed As Boolean = True
         Try
             For Each t As String In Directory.GetDirectories(s)
@@ -836,8 +754,8 @@ Public Class FileAndFolderFunctions
         End Try
         Return passed
     End Function
-    Public Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
-        Monitor.Enter(Me)
+
+    Public Shared Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Dim cleanname As String = filename
         Try
             If withextension = True Then
@@ -876,8 +794,8 @@ Public Class FileAndFolderFunctions
         End Try
         Return "Error"
     End Function
-    Public Function cleanfilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
-        Monitor.Enter(Me)
+
+    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Dim cleanname As String = filename
         Try
             If withextension = True Then
@@ -1013,12 +931,11 @@ Public Class FileAndFolderFunctions
             cleanname = "error"
             Return cleanname
         Finally
-            Monitor.Exit(Me)
+
         End Try
     End Function
-    Public Function get_hdtags(ByVal filename As String)
 
-        Monitor.Enter(Me)
+    Public Shared Function Get_HdTags(ByVal filename As String)
         Try
             If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
                 Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
@@ -1029,8 +946,8 @@ Public Class FileAndFolderFunctions
 
             Dim playlist As New List(Of String)
             Dim tempstring As String
-            tempstring = getfilename(filename)
-            playlist = getmedialist(tempstring)
+            tempstring = GetFileName(filename)
+            playlist = GetMediaList(tempstring)
 
             If Not IO.File.Exists(filename) Then
                 Return "Error"
@@ -1187,7 +1104,7 @@ Public Class FileAndFolderFunctions
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
                     Dim audio As New MediaNFOAudio
-                    audio.language = getlangcode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
+                    audio.language = GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.codec = "MP3"
                     Else
@@ -1212,7 +1129,7 @@ Public Class FileAndFolderFunctions
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
                     Dim sublanguage As New MediaNFOSubtitles
-                    sublanguage.language = getlangcode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
+                    sublanguage.language = GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
                 End While
@@ -1222,13 +1139,10 @@ Public Class FileAndFolderFunctions
         Catch ex As Exception
 
         Finally
-            Monitor.Exit(Me)
         End Try
         Return "Error"
     End Function
-    Public Function getlangcode(ByVal strLang As String) As String
-        Dim monitorobject As New Object
-        Monitor.Enter(monitorobject)
+    Public Shared Function GetLangCode(ByVal strLang As String) As String
         Try
             Select Case strLang.ToLower
                 Case "english"
@@ -2213,12 +2127,10 @@ Public Class FileAndFolderFunctions
 
         Catch
         Finally
-            Monitor.Exit(monitorobject)
         End Try
         Return "Error"
     End Function
-    Public Function getactorthumbpath(Optional ByVal location As String = "")
-        Monitor.Enter(Me)
+    Public Shared Function GetActorThumbPath(Optional ByVal location As String = "")
         Dim actualpath As String = ""
         Try
             If location = Nothing Then
@@ -2261,11 +2173,11 @@ Public Class FileAndFolderFunctions
         Catch
             Return "none"
         Finally
-            Monitor.Exit(Me)
+
         End Try
     End Function
-    Public Function getmedialist(ByVal pathandfilename As String)
-        Monitor.Enter(Me)
+    Public Shared Function GetMediaList(ByVal pathandfilename As String)
+
         Try
             Dim tempstring As String = pathandfilename
             Dim playlist As New List(Of String)
@@ -2637,12 +2549,11 @@ Public Class FileAndFolderFunctions
         Catch
 
         Finally
-            Monitor.Exit(Me)
+
         End Try
         Return "Error"
     End Function
-    Public Function cleanruntime(ByVal runtime As String)
-        Monitor.Enter(Me)
+    Public Shared Function cleanruntime(ByVal runtime As String)
         Try
             Dim temptime As String = runtime
             Dim totalmins As Integer = -1
@@ -2699,11 +2610,11 @@ Public Class FileAndFolderFunctions
             Return runtime
         Catch
         Finally
-            Monitor.Exit(Me)
+
         End Try
         Return "Error"
     End Function
-    Public Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
+    Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
         Dim intCounter As Integer = 0
         Dim lstStringFolders As New List(Of String)
         Dim strSubFolders As String()
@@ -2733,4 +2644,156 @@ Public Class FileAndFolderFunctions
         Return lstStringFolders
     End Function
 
+
+    Public Shared Function SaveText(ByVal text As String, ByVal path As String) As Boolean
+
+        Try
+            Dim file As IO.StreamWriter = IO.File.CreateText(path)
+            Try
+                file.Write(text, False, Encoding.UTF8)
+                file.Close()
+                Return True
+            Catch ex As Exception
+                file.Close()
+                Try
+                    IO.File.Delete(path)
+                Catch
+                End Try
+                Return False
+            End Try
+        Catch ex As Exception
+        Finally
+        End Try
+    End Function
+
+    Public Shared Function DeleteFile(ByVal path As String) As Boolean
+
+        Try
+            If IO.File.Exists(path) Then
+                IO.File.Delete(path)
+            End If
+            Return True
+        Catch
+            Return False
+        Finally
+
+        End Try
+    End Function
+
+    Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
+
+        Dim listoflines As New List(Of String)
+        Try
+            If Not IO.File.Exists(path) Then
+                listoflines.Add("nofile")
+                Return listoflines
+            Else
+                Dim lines As IO.StreamReader = IO.File.OpenText(path)
+                Dim line As String
+                Do
+                    line = lines.ReadLine
+                    If Not line Is Nothing Then
+                        listoflines.Add(line)
+                    Else
+                        Exit Do
+                    End If
+                Loop Until line = Nothing
+                Return listoflines
+            End If
+        Catch
+            If listoflines.Count > 0 Then
+                Return listoflines
+            Else
+                listoflines.Add("Error")
+                Return listoflines
+            End If
+        Finally
+
+        End Try
+    End Function
+
+    Public Shared Function LoadFullText(ByVal path As String) As String
+
+        Dim text As String = String.Empty
+        Try
+            If Not IO.File.Exists(path) Then
+                text = "nofile"
+                Return text
+            Else
+                Dim lines As IO.StreamReader = IO.File.OpenText(path)
+                text = lines.ReadToEnd
+                Return text
+            End If
+        Catch
+            If text Is Nothing Then
+                text = "error"
+            End If
+            If text.Length = 0 Then
+                text = "error"
+            End If
+            Return text
+        Finally
+        End Try
+    End Function
+
+    Public Shared Function SaveXml(ByVal path As String, ByVal xmldoc As XmlDocument) As Boolean
+
+        Try
+            Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
+            Try
+                output.Formatting = Formatting.Indented
+                xmldoc.WriteTo(output)
+                output.Close()
+                Return True
+            Catch ex As Exception
+                Try
+                    output.Close()
+                    Try
+                        IO.File.Delete(path)
+                    Catch
+                    End Try
+                Catch
+                End Try
+                Return False
+            End Try
+        Catch ex As Exception
+            Return False
+        Finally
+
+        End Try
+    End Function
+
+    Public Shared Function SaveImage(ByVal image As Bitmap, ByVal path As String) As Boolean
+
+        Try
+            image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg)
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+
+        End Try
+    End Function
+
+    Public Shared Function ResizeImage(ByVal bmp As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
+        Dim bm_source As New Bitmap(bmp)
+        Dim bm_dest As New Bitmap(width, height)
+        Dim gr As Graphics = Graphics.FromImage(bm_dest)
+        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+        gr.DrawImage(bm_source, 0, 0, width, height)
+        Dim tempbitmap As Bitmap = bm_dest
+        Return tempbitmap
+    End Function
+
+    Public Shared Function LoadBitmap(ByVal path As String) As Bitmap
+
+        Try
+            Dim bmp As New Bitmap(path)
+            Return bmp
+        Catch
+            Return Nothing
+        Finally
+
+        End Try
+    End Function
 End Class

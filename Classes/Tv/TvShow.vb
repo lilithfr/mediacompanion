@@ -173,37 +173,6 @@
     Public Property allepisodes As New List(Of BasicEpisodeNFO)
     Public Property missingepisodes As New List(Of BasicEpisodeNFO)
 
-    ''Private LegacyActorList As New List(Of Actor)
-
-    'Public Property listactors As List(Of MovieActors)
-    '    Get
-    '        Dim Found As Boolean
-    '        For Each NewActor As Nfo.Actor In MyBase.Actors
-    '            Found = False
-
-    '            For Each OldActor As MovieActors In LegacyActorList
-    '                If NewActor.ActorId = OldActor.actorid Then
-    '                    Found = True
-    '                    Exit For
-    '                End If
-    '            Next
-
-    '            If Not Found Then
-    '                LegacyActorList.Add(NewActor)
-    '            End If
-    '        Next
-
-    '        Return LegacyActorList
-    '    End Get
-    '    Set(ByVal value As List(Of MovieActors))
-    '        Dim NewActor As New Nfo.Actor
-    '        MyBase.Actors.Clear()
-    '        For Each OldActor As MovieActors In value
-    '            MyBase.Actors.Add(OldActor)
-    '        Next
-    '    End Set
-    'End Property
-
     Public Property posters As New List(Of String)
     Public Property fanart As New List(Of String)
 End Class

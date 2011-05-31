@@ -139,6 +139,7 @@
     <Compile Include="Classes\TVhtml.vb" />
     <Compile Include="Classes\Tv\TvEpisode.vb" />
     <Compile Include="Classes\Tv\TvShow.vb" />
+    <Compile Include="Basics\Utilities.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Structures\FanartList.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
@@ -162,7 +163,6 @@
     <Compile Include="Structures\BasicMovieNFO.vb" />
     <Compile Include="Structures\ActorDatabase.vb" />
     <Compile Include="Classes\Actors.vb" />
-    <Compile Include="Classes\ApplicationEvents.vb" />
     <Compile Include="Forms\frmBatchScraper.Designer.vb">
       <DependentUpon>frmBatchScraper.vb</DependentUpon>
     </Compile>
@@ -181,7 +181,6 @@
     <Compile Include="Forms\frmCoverArt.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Classes\CreateScreenshot.vb" />
     <Compile Include="Forms\frmDeleteDialogue.Designer.vb">
       <DependentUpon>frmDeleteDialogue.vb</DependentUpon>
     </Compile>
@@ -194,11 +193,8 @@
     <Compile Include="Forms\frmDialog1.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Classes\FileAndFolderFunctions.vb" />
     <Compile Include="Structures\ListOfPosters.vb" />
     <Compile Include="Structures\ListOfCommands.vb" />
-    <Compile Include="Classes\ManipulateImages.vb" />
-    <Compile Include="Classes\InputOutput.vb" />
     <Compile Include="Forms\frmMessageBox.Designer.vb">
       <DependentUpon>frmMessageBox.vb</DependentUpon>
     </Compile>

@@ -6,7 +6,7 @@ Imports System.Xml
 
 
 Module General
-    Dim FileFolderFunctions As New FileAndFolderFunctions
+
     Dim TempEpisode As New EpisodeInfo
     Dim episodeInformation As New List(Of EpisodeInfo)
     Dim TempXMLEpisode As TempEpisodeInfo
@@ -717,8 +717,8 @@ Module General
 
             Dim playlist As New List(Of String)
             Dim tempstring As String
-            tempstring = FileFolderFunctions.getfilename(filename)
-            playlist = FileFolderFunctions.getmedialist(tempstring)
+            tempstring = Utilities.GetFileName(filename)
+            playlist = Utilities.GetMediaList(tempstring)
 
             If Not IO.File.Exists(filename) Then
                 Return workingfiledetails
@@ -874,7 +874,7 @@ Module General
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
                     Dim audio As New MediaNFOAudio
-                    audio.language = FileFolderFunctions.getlangcode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
+                    audio.language = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.codec = "MP3"
                     Else
@@ -899,7 +899,7 @@ Module General
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
                     Dim sublanguage As New MediaNFOSubtitles
-                    sublanguage.language = FileFolderFunctions.getlangcode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
+                    sublanguage.language = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
                 End While
@@ -921,7 +921,7 @@ Module General
         If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
         If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
         If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
-        If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
+        If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
         If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
         If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
         If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
@@ -1006,7 +1006,7 @@ Module General
         If Form1.userPrefs.resizefanart = 2 Then
             Dim FanartToBeResized As New Bitmap(ImageFilename3)
             If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-                Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 1280, 960)
+                Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
                 ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
             Else
                 'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
@@ -1014,7 +1014,7 @@ Module General
         ElseIf Form1.userPrefs.resizefanart = 3 Then
             Dim FanartToBeResized As New Bitmap(ImageFilename3)
             If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-                Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 960, 540)
+                Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
                 ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
             Else
                 'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
@@ -1062,7 +1062,7 @@ Module General
                 extrapossibleID = Nothing
             End If
         Else
-            Dim stackname As String = FileFolderFunctions.getstackname(Filename, Filename.Replace(IO.Path.GetFileName(Filename), ""))
+            Dim stackname As String = Utilities.GetStackName(Filename, Filename.Replace(IO.Path.GetFileName(Filename), ""))
             Dim path As String = stackname & ".nfo"
             If IO.File.Exists(path) Then
                 '                scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
@@ -1515,7 +1515,7 @@ Module General
                 If Form1.userPrefs.resizefanart = 2 Then
                     Dim FanartToBeResized As New Bitmap(ImageFilename)
                     If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-                        Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 1280, 960)
+                        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
                         ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
                     Else
                         'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
@@ -1523,7 +1523,7 @@ Module General
                 ElseIf Form1.userPrefs.resizefanart = 3 Then
                     Dim FanartToBeResized As New Bitmap(ImageFilename)
                     If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-                        Dim ResizedFanart As Bitmap = Form1.imageFunctions.ResizeImage(FanartToBeResized, 960, 540)
+                        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
                         ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
                     Else
                         'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
@@ -1571,8 +1571,8 @@ Module General
             If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
             If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
             If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
-            If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
-            If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.Runtime.Value = FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
+            If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
+            If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
             If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
             If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
             If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
@@ -1849,7 +1849,7 @@ Module General
             ParametersForScraper(4) = Nothing
             Try
                 For x As Integer = 0 To 20
-                    ParametersForScraper(7) = FileFolderFunctions.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).seasonno & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
+                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).seasonno & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
                     'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).seasonno & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
                     If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
                         Exit For
@@ -1887,7 +1887,7 @@ Module General
         Try
             Dim Parameters(2) As String
             Dim ParametersForScraper(9) As String
-            ParametersForScraper(0) = FileFolderFunctions.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
+            ParametersForScraper(0) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
             'ParametersForScraper(0) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
             Dim m_xmld As XmlDocument
             Dim m_nodelist As XmlNodeList

@@ -105,7 +105,7 @@ Public Class Form2
             roletxt.Text = workingmovieedit.listactors(actorcb.SelectedIndex).actorrole
             If workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb <> Nothing Then
                 Try
-                    PictureBox1.ImageLocation = Form1.fileFunction.getactorthumbpath(workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb)
+                    PictureBox1.ImageLocation = Utilities.GetActorThumbPath(workingmovieedit.listactors(actorcb.SelectedIndex).actorthumb)
                 Catch ex As Exception
                     PictureBox1.Image = Nothing
                 End Try
@@ -160,7 +160,7 @@ Public Class Form2
         If Form1.userPrefs.usefoldernames = True Then
             tempstring = Form1.workingMovie.foldername
         Else
-            tempstring = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename))
+            tempstring = Utilities.CleanFileName(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename))
         End If
 
         tempstring = tempstring.Replace(" ", "+")
@@ -226,9 +226,9 @@ Public Class Form2
                             Else
                                 If Form1.userPrefs.usefoldernames = False Then
                                     Dim tempstring2 As String = IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)
-                                    alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(tempstring2)
+                                    alternatemovie.fullmoviebody.title = Utilities.CleanFileName(tempstring2)
                                 Else
-                                    alternatemovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(Form1.workingMovieDetails.fileinfo.foldername)
+                                    alternatemovie.fullmoviebody.title = Utilities.CleanFileName(Form1.workingMovieDetails.fileinfo.foldername)
                                 End If
                             End If
                             If Form1.userPrefs.keepfoldername = False Then
@@ -449,7 +449,7 @@ Public Class Form2
 
                 If Form1.userPrefs.enablehdtags = True Then
                     If Form1.workingMovieDetails.filedetails.filedetails_video.container = Nothing Then
-                        alternatemovie.filedetails = Form1.fileFunction.get_hdtags(tempstring)
+                        alternatemovie.filedetails = Utilities.Get_HdTags(tempstring)
                     End If
                 End If
 

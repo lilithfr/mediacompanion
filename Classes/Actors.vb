@@ -153,14 +153,6 @@ Public Class actors
                         End If
                         If actor.actorthumb <> Nothing Then
                             If actor.actorthumb <> "" And actor.actorthumb.IndexOf("http") <> -1 And actor.actorthumb.IndexOf(".jpg") <> -1 Then
-
-
-
-
-
-
-
-
                                 If Not IO.File.Exists(filename) Then
                                     Dim buffer(4000000) As Byte
                                     Dim size As Integer = 0

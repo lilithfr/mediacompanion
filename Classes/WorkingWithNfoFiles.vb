@@ -147,7 +147,7 @@ Public Class WorkingWithNfoFiles
             Dim newtvshow As New BasicTvShowNFO
             If Not IO.File.Exists(path) Then
                 'Form1.tvrebuildlog(path & ", does not appear to exist")
-                newtvshow.title = Form1.fileFunction.getlastfolder(path)
+                newtvshow.title = Utilities.GetLastFolder(path)
                 newtvshow.year = newtvshow.title & " (0000)"
                 newtvshow.fullpath = path
                 newtvshow.year = "0000"
@@ -165,7 +165,7 @@ Public Class WorkingWithNfoFiles
                     'If Not validate_nfo(path) Then
                     '    Exit Function
                     'End If
-                    newtvshow.title = Form1.fileFunction.getlastfolder(path)
+                    newtvshow.title = Utilities.GetLastFolder(path)
                     newtvshow.year = newtvshow.title & " (0000)"
                     newtvshow.status = "xml error"
                     newtvshow.fullpath = path
@@ -860,7 +860,7 @@ Public Class WorkingWithNfoFiles
 
             Dim newtvshow As New TvShowNFO
             If Not IO.File.Exists(path) Then
-                newtvshow.title = Form1.fileFunction.getlastfolder(path)
+                newtvshow.title = Utilities.GetLastFolder(path)
                 newtvshow.year = newtvshow.title & " (0000)"
                 newtvshow.plot = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
                 newtvshow.status = "file does not exist"
@@ -879,7 +879,7 @@ Public Class WorkingWithNfoFiles
                     'If Not validate_nfo(path) Then
                     '    Exit Function
                     'End If
-                    newtvshow.title = Form1.fileFunction.getlastfolder(path)
+                    newtvshow.title = Utilities.GetLastFolder(path)
                     newtvshow.year = newtvshow.title & " (0000)"
                     newtvshow.plot = "problem loading tvshow.nfo / xml error"
                     newtvshow.status = "xml error"
@@ -1844,7 +1844,7 @@ Public Class WorkingWithNfoFiles
                         newmovie.playcount = "0"
                         newmovie.filename = IO.Path.GetFileName(path)
                         newmovie.top250 = "0"
-                        newmovie.foldername = Form1.fileFunction.getlastfolder(path)
+                        newmovie.foldername = Utilities.GetLastFolder(path)
                         newmovie.runtime = "0"
                         newmovie.createdate = "999999999999"
                         Return newmovie
@@ -1934,7 +1934,7 @@ Public Class WorkingWithNfoFiles
                     End If
                     newmovie.filename = IO.Path.GetFileName(path)
 
-                    newmovie.foldername = Form1.fileFunction.getlastfolder(path)
+                    newmovie.foldername = Utilities.GetLastFolder(path)
 
                     If newmovie.top250 = Nothing Then newmovie.top250 = "0"
                     If newmovie.id = Nothing Then newmovie.id = ""
@@ -1966,7 +1966,7 @@ Public Class WorkingWithNfoFiles
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
-                    newmovie.fullmoviebody.title = Form1.fileFunction.cleanfilename(IO.Path.GetFileName(Form1.workingMovie.fullpathandfilename))
+                    newmovie.fullmoviebody.title = Utilities.CleanFileName(IO.Path.GetFileName(Form1.workingMovie.fullpathandfilename))
                     newmovie.fullmoviebody.year = "0000"
                     newmovie.fullmoviebody.top250 = "0"
                     newmovie.fullmoviebody.playcount = "0"
@@ -2164,13 +2164,12 @@ Public Class WorkingWithNfoFiles
                         End Try
                     Loop
                 End If
-                Dim filefunction2 As New FileAndFolderFunctions
                 newmovie.fileinfo.fullpathandfilename = path
                 newmovie.fileinfo.filename = IO.Path.GetFileName(path)
-                newmovie.fileinfo.foldername = filefunction2.getlastfolder(path)
-                newmovie.fileinfo.posterpath = filefunction2.getposterpath(path)
+                newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)
+                newmovie.fileinfo.posterpath = Utilities.GetPosterPath(path)
                 newmovie.fileinfo.trailerpath = ""
-                newmovie.fileinfo.fanartpath = filefunction2.getfanartpath(path)
+                newmovie.fileinfo.fanartpath = Utilities.GetFanartPath(path)
 
                 Return newmovie
             End If
@@ -2281,7 +2280,7 @@ Public Class WorkingWithNfoFiles
                                 filedetailschildchild = doc.CreateElement("duration")
                                 Dim temptemp As String = movietosave.filedetails.filedetails_video.duration
                                 If Form1.userprefs.intruntime = True Then
-                                    temptemp = Form1.fileFunction.cleanruntime(movietosave.filedetails.filedetails_video.duration)
+                                    temptemp = Utilities.cleanruntime(movietosave.filedetails.filedetails_video.duration)
                                     If IsNumeric(temptemp) Then
                                         filedetailschildchild.InnerText = temptemp
                                         filedetailschild.AppendChild(filedetailschildchild)
