@@ -7021,6 +7021,9 @@ Public Class Form1
         txt_titlesearch.Text = ""
         txt_titlesearch.BackColor = Color.White
         TextBox1.BackColor = Color.White
+
+        Button112.Visible = False   'hide next movie button on fanart tab used for missing fanart
+        Button112.Text = "Click here to move to next Movie without Fanart"
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, False)
         Next
@@ -11524,7 +11527,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
         Try
             messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -11628,7 +11631,19 @@ Public Class Form1
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
-                    Call fanartsaved()
+                    Dim result As Boolean = fanartsaved()
+                    If result = True Then
+                        Dim mytempstring As String = ""
+                        If RadioButtonMissingFanart.Checked = True Then
+                            Button112.Visible = True 'show next movie button
+                        Else
+                            Call ApplyFilters() 'Apply Filters to movielist combobox
+                        End If
+
+                        'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
+                        'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
+                        'currentTabIndex = TabControl2.SelectedIndex
+                    End If
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
@@ -11642,7 +11657,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub fanartsaved()
+    Private Function fanartsaved()
         Dim replace As Boolean = False
         For f = 0 To fullMovieList.Count - 1
             Dim newmovie As New ComboList
@@ -11661,13 +11676,14 @@ Public Class Form1
             End If
         Next
 
-        If replace = True Then
-            Call ApplyFilters()
-            Call loadinfofile()
-            'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
-            'currentTabIndex = TabControl2.SelectedIndex
-        End If
-    End Sub
+        'If replace = true
+        '    Call ApplyFilters()
+        '    'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
+        '    'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
+        '   currentTabIndex = TabControl2.SelectedIndex
+        'end if
+        Return replace
+    End Function
 
     Private Sub postersaved()
         Dim replace As Boolean = False
@@ -29144,7 +29160,7 @@ Public Class Form1
         If prefsload = False Then generalprefschanged = True
     End Sub
 
-    Private Sub Button104_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button104.Click
+    Private Sub Button104_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanartSaveLoRes.Click
         Try
             messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -30984,8 +31000,8 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub RadioButton50_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton50.CheckedChanged
-        If RadioButton50.Checked = True Then
+    Private Sub RadioButton50_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingFanart.CheckedChanged
+        If RadioButtonMissingFanart.Checked = True Then
             '            CheckedListBox1.ClearSelected()
             '            TextBox_GenreFilter.Enabled = False
             '            ComboBox11.SelectedIndex = 0
@@ -31277,6 +31293,16 @@ Public Class Form1
             TabLevel1.TabPages.Add(Me.TabProfile)
             TabLevel1.TabPages.Add(Me.TabActorCache)
             TabLevel1.TabPages.Add(Me.TabRegex)
+        End If
+    End Sub
+
+    Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles Button112.Click
+
+        Call ApplyFilters("missing fanart") 'Apply Filters to movielist combobox
+        Call loadfanart()   'refresh fanart for the current movie
+        If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
+            Button112.Enabled = False
+            Button112.Text = "All Fanart Done!"
         End If
     End Sub
 End Class
