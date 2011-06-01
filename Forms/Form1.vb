@@ -626,9 +626,22 @@ Public Class Form1
             Call loadcommandlist()
             startup = False
             frmSplash.Close()
+
+            'hide debug xml view tabs - unhiden (i.e. added) via debug tab
+            TabLevel1.TabPages.Remove(Me.TabConfigXML)
+            TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
+            TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
+            TabLevel1.TabPages.Remove(Me.TabProfile)
+            TabLevel1.TabPages.Remove(Me.TabActorCache)
+            TabLevel1.TabPages.Remove(Me.TabRegex)
+
+            'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
             GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
             GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+
             'ToolStrip1.Enabled = True
+
+            'Below shows the current screensize on initial start
             DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
         End If
     End Sub
@@ -13727,7 +13740,17 @@ Public Class Form1
         ElseIf tab = "export" Then
             Call setupexporttab()
         ElseIf tab = "config.xml" Then
-            RichTextBoxConfigXML.Text = Utilities.LoadFullText(applicationPath & "\settings\config.xml")
+            RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(applicationPath & "\settings\config.xml")
+        ElseIf tab = "moviecache" Then
+            RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(applicationPath & "\settings\moviecache.xml")
+        ElseIf tab = "tvcache" Then
+            RichTextBoxTabTVCache.Text = Utilities.LoadFullText(applicationPath & "\settings\tvcache.xml")
+        ElseIf tab = "actorcache" Then
+            RichTextBoxTabActorCache.Text = Utilities.LoadFullText(applicationPath & "\settings\actorcache.xml")
+        ElseIf tab = "profile" Then
+            RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml")
+        ElseIf tab = "regex" Then
+            RichTextBoxTabRegex.Text = Utilities.LoadFullText(applicationPath & "\settings\regex.xml")
         End If
     End Sub
 
@@ -31237,5 +31260,23 @@ Public Class Form1
    
     Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
         Call sortorder()
+    End Sub
+
+    Private Sub CheckBoxDebugShowXML_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxDebugShowXML.CheckedChanged
+        If CheckBoxDebugShowXML.Checked = False Then
+            TabLevel1.TabPages.Remove(Me.TabConfigXML)
+            TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
+            TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
+            TabLevel1.TabPages.Remove(Me.TabProfile)
+            TabLevel1.TabPages.Remove(Me.TabActorCache)
+            TabLevel1.TabPages.Remove(Me.TabRegex)
+        Else
+            TabLevel1.TabPages.Add(Me.TabConfigXML)
+            TabLevel1.TabPages.Add(Me.TabMovieCacheXML)
+            TabLevel1.TabPages.Add(Me.TabTVCacheXML)
+            TabLevel1.TabPages.Add(Me.TabProfile)
+            TabLevel1.TabPages.Add(Me.TabActorCache)
+            TabLevel1.TabPages.Add(Me.TabRegex)
+        End If
     End Sub
 End Class
