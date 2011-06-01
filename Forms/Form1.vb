@@ -2063,7 +2063,7 @@ Public Class Form1
             newlist.Clear()
 
             Try
-                newlist = Utilities.EnumerateDirectory2(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), True)
+                newlist = Utilities.EnumerateFolders(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), 6) 'TODO: Restore loging functions
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -2133,7 +2133,7 @@ Public Class Form1
         If tempint > 0 Then
             Dim newlist As List(Of String) = Nothing
             For f = 0 To tempint - 1
-                newlist = Utilities.EnumerateDirectory(realMoviePaths(f))
+                newlist = Utilities.EnumerateFolders(realMoviePaths(f), Long.MaxValue)
             Next
             For Each subfolder In newlist
                 realMoviePaths.Add(subfolder)
@@ -3316,7 +3316,7 @@ Public Class Form1
                 scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                 Dim newlist As List(Of String)
                 Try
-                    newlist = Utilities.EnumerateDirectory3(moviefolder)
+                    newlist = Utilities.EnumerateFolders(moviefolder, 0)
                     For Each subfolder In newlist
                         scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                         Dim temge22 As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
@@ -3545,7 +3545,7 @@ Public Class Form1
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim newlist As List(Of String)
                     Try
-                        newlist = Utilities.EnumerateDirectory2(moviefolder)
+                        newlist = Utilities.EnumerateFolders(moviefolder, 6)
                         For Each subfolder In newlist
                             scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                             newmoviefolders.Add(subfolder)
@@ -3565,7 +3565,7 @@ Public Class Form1
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim newlist As List(Of String)
                     Try
-                        newlist = Utilities.EnumerateDirectory3(moviefolder)
+                        newlist = Utilities.EnumerateFolders(moviefolder, 0)
                         For Each subfolder In newlist
                             'If subfolder.IndexOf(".actors") = -1 Then
                             scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
@@ -21001,6 +21001,7 @@ Public Class Form1
         extensions(26) = "VIDEO_TS.IFO"
 
         extensioncount = 26
+
 
         For Each tvfolder In listofshowfolders
             Dim add As Boolean = True

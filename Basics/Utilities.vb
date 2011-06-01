@@ -515,244 +515,58 @@ Public Class Utilities
         Return "Error"
     End Function
 
-    Public Shared Function EnumerateDirectory(ByVal RootDirectory As String)
-        Try
-            For Each s As String In Directory.GetDirectories(RootDirectory)
-                If Not (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                    If validmoviedir(s) Then
-                        Dim exists As Boolean = False
-                        For Each item In Form1.dList
-                            If item = s Then exists = True
-                        Next
-                        If exists = False Then
-                            Form1.dList.Add(s)
-                        End If
-                        EnumerateDirectory(s)
-                    End If
-                End If
-            Next s
-            Return Form1.dList
-        Catch ex As Exception
-            Dim t As String = ex.ToString
-
-            Return Form1.dList
-        Finally
-
-        End Try
-    End Function
-
-    Public Shared Function EnumerateDirectory2(ByVal RootDirectory As String, Optional ByVal log As Boolean = False)
-        Dim dli As New List(Of String)
-        Try
-            'dli.Add(RootDirectory)
-            If log = True Then Form1.tvrebuildlog("Searching for subfolders")
-            For Each s As String In Directory.GetDirectories(RootDirectory)
-                If log = True Then Form1.tvrebuildlog("Found: " & s.ToString)
-                If (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                Else
-                    If Not validmoviedir(s) Then
-                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                    Else
-                        Dim exists As Boolean = False
-                        For Each item In dli
-                            If item = s Then exists = True
-                        Next
-                        If exists = True Then
-                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                        Else
-                            If log = True Then Form1.tvrebuildlog("Added: " & s)
-                            dli.Add(s)
-                            For Each t As String In Directory.GetDirectories(s)
-                                If (File.GetAttributes(t) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                                Else
-                                    If Not validmoviedir(t) Then
-                                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                                    Else
-                                        Dim existst As Boolean = False
-                                        For Each item In dli
-                                            If item = t Then existst = True
-                                        Next
-                                        If exists = True Then
-                                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                                        Else
-                                            If log = True Then Form1.tvrebuildlog("Added: " & t)
-                                            dli.Add(t)
-                                            For Each u As String In Directory.GetDirectories(t)
-                                                If (File.GetAttributes(u) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                                                Else
-                                                    If Not validmoviedir(u) Then
-                                                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                                                    Else
-                                                        Dim existsu As Boolean = False
-                                                        For Each item In dli
-                                                            If item = s Then existsu = True
-                                                        Next
-                                                        If exists = True Then
-                                                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                                                        Else
-                                                            If log = True Then Form1.tvrebuildlog("Added: " & u)
-                                                            dli.Add(u)
-                                                            For Each v As String In Directory.GetDirectories(u)
-                                                                If (File.GetAttributes(v) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                                                                Else
-                                                                    If Not validmoviedir(v) Then
-                                                                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                                                                    Else
-                                                                        Dim existsv As Boolean = False
-                                                                        For Each item In dli
-                                                                            If item = v Then existsv = True
-                                                                        Next
-                                                                        If existsv = True Then
-                                                                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                                                                        Else
-                                                                            If log = True Then Form1.tvrebuildlog("Added: " & v)
-                                                                            dli.Add(v)
-                                                                            For Each w As String In Directory.GetDirectories(v)
-                                                                                If (File.GetAttributes(w) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                                                                                Else
-                                                                                    If Not validmoviedir(w) Then
-                                                                                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                                                                                    Else
-                                                                                        Dim existsw As Boolean = False
-                                                                                        For Each item In dli
-                                                                                            If item = w Then existsw = True
-                                                                                        Next
-                                                                                        If existsw = True Then
-                                                                                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                                                                                        Else
-                                                                                            If log = True Then Form1.tvrebuildlog("Added: " & w)
-                                                                                            dli.Add(w)
-                                                                                            For Each x As String In Directory.GetDirectories(w)
-                                                                                                If (File.GetAttributes(x) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                                                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                                                                                                Else
-                                                                                                    If Not validmoviedir(x) Then
-                                                                                                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                                                                                                    Else
-                                                                                                        Dim existsx As Boolean = False
-                                                                                                        For Each item In dli
-                                                                                                            If item = x Then existsx = True
-                                                                                                        Next
-                                                                                                        If existsx = True Then
-                                                                                                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                                                                                                        Else
-                                                                                                            If log = True Then Form1.tvrebuildlog("Added: " & x)
-                                                                                                            dli.Add(x)
-                                                                                                            For Each y As String In Directory.GetDirectories(x)
-                                                                                                                If (File.GetAttributes(y) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                                                                    If log = True Then Form1.tvrebuildlog("Failed at FileAttributes.ReparsePoint, folder not added")
-                                                                                                                Else
-                                                                                                                    If Not validmoviedir(y) Then
-                                                                                                                        If log = True Then Form1.tvrebuildlog("Failed at validfolderdir, folder not added")
-                                                                                                                    Else
-                                                                                                                        Dim existsy As Boolean = False
-                                                                                                                        For Each item In dli
-                                                                                                                            If item = y Then existsy = True
-                                                                                                                        Next
-                                                                                                                        If existsy = True Then
-                                                                                                                            If log = True Then Form1.tvrebuildlog("path already exists in list, not added")
-                                                                                                                        Else
-                                                                                                                            If log = True Then Form1.tvrebuildlog("Added: " & y)
-                                                                                                                            dli.Add(y)
-                                                                                                                        End If
-                                                                                                                    End If
-                                                                                                                End If
-                                                                                                            Next
-                                                                                                        End If
-                                                                                                    End If
-                                                                                                End If
-                                                                                            Next
-                                                                                        End If
-                                                                                    End If
-                                                                                End If
-                                                                            Next
-                                                                        End If
-                                                                    End If
-                                                                End If
-                                                            Next
-                                                        End If
-                                                    End If
-                                                End If
-                                            Next
-                                        End If
-                                    End If
-                                End If
-                            Next
-                        End If
-                    End If
-                End If
-            Next
-            Return (dli)
-        Catch ex As Exception
-            Dim t As String = ex.ToString
-            If log = True Then Form1.tvrebuildlog(ex.ToString)
-            Return (dli)
-
-        Finally
-
-        End Try
-    End Function
-
-    Public Shared Function EnumerateDirectory3(ByVal RootDirectory As String)
-
-        Dim dli As New List(Of String)
-        Try
-            'dli.Add(RootDirectory)
-            For Each s As String In Directory.GetDirectories(RootDirectory)
-                If Not (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                    If validmoviedir(s) Then
-                        Dim exists As Boolean = False
-                        For Each item In dli
-                            If item = s Then exists = True
-                        Next
-                        If exists = False Then
-                            dli.Add(s)
-                            EnumerateDirectory3(s)
-                        End If
-                    End If
-                End If
-            Next s
-            Return dli
-        Catch ex As Exception
-            Dim t As String = ex.ToString
-
-            Return dli
-        Finally
-
-        End Try
-    End Function
-    Public Shared Function validmoviedir(ByVal s As String) As Boolean
+    Public Shared Function ValidMovieDir(ByVal PathToCheck As String) As Boolean
         Dim passed As Boolean = True
+        Dim s As String = PathToCheck.ToLower
         Try
-            For Each t As String In Directory.GetDirectories(s)
-            Next
-            Select Case True
-                Case Strings.Right(s, 7).ToLower = "trailer"
-                    passed = False
-                Case Strings.Right(s, 8).ToLower = "(noscan)"
-                    passed = False
-                Case Strings.Right(s, 6).ToLower = "sample"
-                    passed = False
-                Case Strings.Right(s, 8).ToLower = "recycler"
-                    passed = False
-                Case s.ToLower.Contains("$recycle.bin")
-                    passed = False
-                Case Strings.Right(s, 10).ToLower = "lost+found"
-                    passed = False
-                Case s.ToLower.Contains("system volume information")
-                    passed = False
-                Case s.Contains("MSOCache")
-                    passed = False
-            End Select
+            If Strings.Right(s, 7) = "trailer" Then
+                passed = False
+            ElseIf Strings.Right(s, 8) = "(noscan)" Then
+                passed = False
+            ElseIf Strings.Right(s, 6) = "sample" Then
+                passed = False
+            ElseIf Strings.Right(s, 8) = "recycler" Then
+                passed = False
+            ElseIf s.Contains("$recycle.bin") Then
+                passed = False
+            ElseIf Strings.Right(s, 10) = "lost+found" Then
+                passed = False
+            ElseIf s.Contains("system volume information") Then
+                passed = False
+            ElseIf s.Contains("msocache") Then
+                passed = False
+            End If
         Catch ex As Exception
             passed = False
         End Try
         Return passed
+    End Function
+
+    Public Shared Function EnumerateFolders(ByVal RootPath As String, ByVal MaxLevels As Long) As List(Of String)
+        Return EnumerateFolders(RootPath, MaxLevels, 0)
+    End Function
+
+    Private Shared Function EnumerateFolders(ByVal RootPath As String, ByVal MaxLevels As Long, ByVal Level As Long) As List(Of String)
+        Dim TempReturn As New List(Of String)
+        Dim ChildList
+        Try
+            ChildList = Directory.GetDirectories(RootPath)
+        Catch ex As UnauthorizedAccessException
+            Return TempReturn
+        End Try
+        If Level > 0 Then
+            TempReturn.Add(RootPath)
+        End If
+
+        For Each Item In ChildList
+            If Level <= MaxLevels Then
+                If ValidMovieDir(Item) Then
+                    TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))
+                End If
+            End If
+        Next
+
+        Return TempReturn
     End Function
 
     Public Shared Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
