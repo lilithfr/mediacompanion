@@ -6204,6 +6204,14 @@ Public Class Form1
                 Monitor.Exit(Me)
             End If
 
+            ' Added this section because ApplyFilter is often called as ApplyFilter() & doesn't take into account that a filter choice may have been set.... 
+            If RadioButton46.Checked = True Then Filter = "watched"
+            If RadioButton47.Checked = True Then Filter = "unwatched"
+            If RadioButton48.Checked = True Then Filter = "duplicates"
+            If RadioButton49.Checked = True Then Filter = "missing posters"
+            If RadioButtonMissingFanart.Checked = True Then Filter = "missing fanart"
+
+
             If Filter = "blabla" Then           'i.e. applyFilters() {NONE}
                 RadioButton45.Checked = True    'reset filter radio buttons indcation to ALL
                 ComboBox11.SelectedIndex = 0    'reset filename video type filter to ALL       
@@ -6587,7 +6595,7 @@ Public Class Form1
                 End Try
             End If
         End If
-        Label39.Text = "Displaying " & filteredList.Count & " of " & fullMovieList.Count & " movies"
+        Label39.Text = "Displaying " & filteredList.Count & " of  " & fullMovieList.Count & " movies"
     End Sub
 
     'View Title, Filename, or Foldername
