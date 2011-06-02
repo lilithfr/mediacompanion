@@ -47,6 +47,7 @@ Public Class Form1
     Public basicTvList As New List(Of TvShow)
     Public sending As String
     Public applicationPath As String = Application.StartupPath 'Get application root path
+    Public noFanart As Boolean
 
     Dim WithEvents bigPictureBox As PictureBox
     Dim WithEvents fanartBoxes As PictureBox
@@ -11209,49 +11210,49 @@ Public Class Form1
                 Call loadfanart()
             End If
             currentTabIndex = TabControl2.SelectedIndex
-        ElseIf tab.ToLower = "open folder" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
-        ElseIf tab.ToLower = "Posters" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-        ElseIf tab.ToLower = "rescrape movie" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            Call rescrapemovie()
-        ElseIf tab.ToLower = "change movie" Then
-            Call setup_changemovie()
-            currentTabIndex = TabControl2.SelectedIndex
-        ElseIf tab.ToLower = "search for new movies" Then
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            If Not BckWrkScnMovies.IsBusy Then
-                'ToolStripButton10.Visible = True
-                'ToolStripProgressBar4.Visible = True
-                ToolStripStatusLabel1.Visible = True
-                ToolStripProgressBar1.Visible = True
-                TabPage14.Text = "Cancel Movie Search"
-                TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
-                BckWrkScnMovies.RunWorkerAsync()
+            ElseIf tab.ToLower = "open folder" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
+            ElseIf tab.ToLower = "Posters" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+            ElseIf tab.ToLower = "rescrape movie" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                Call rescrapemovie()
+            ElseIf tab.ToLower = "change movie" Then
+                Call setup_changemovie()
+                currentTabIndex = TabControl2.SelectedIndex
+            ElseIf tab.ToLower = "search for new movies" Then
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                If Not BckWrkScnMovies.IsBusy Then
+                    'ToolStripButton10.Visible = True
+                    'ToolStripProgressBar4.Visible = True
+                    ToolStripStatusLabel1.Visible = True
+                    ToolStripProgressBar1.Visible = True
+                    TabPage14.Text = "Cancel Movie Search"
+                    TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
+                    BckWrkScnMovies.RunWorkerAsync()
+                Else
+                    MsgBox("This task is already running")
+                End If
+            ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
+                TabPage14.Text = "...Cancelling..."
+                Me.TabControl2.SelectedIndex = currentTabIndex
+                BckWrkScnMovies.CancelAsync()
+            ElseIf tab.ToLower = "wall" Then
+                Call setupwall()
+            ElseIf tab.ToLower = "movie sets" Then
+                ListBox4.Items.Clear()
+                For Each mset In userPrefs.moviesets
+                    If mset <> "None" Then ListBox4.Items.Add(mset)
+                Next
+            ElseIf tab.ToLower = "movie preferences" Then
+                Call setupmoviepreferences()
+            ElseIf tab.ToLower = "table" Then
+                currentTabIndex = TabControl2.SelectedIndex
+                Call setuptable()
             Else
-                MsgBox("This task is already running")
+                currentTabIndex = TabControl2.SelectedIndex
             End If
-        ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
-            TabPage14.Text = "...Cancelling..."
-            Me.TabControl2.SelectedIndex = currentTabIndex
-            BckWrkScnMovies.CancelAsync()
-        ElseIf tab.ToLower = "wall" Then
-            Call setupwall()
-        ElseIf tab.ToLower = "movie sets" Then
-            ListBox4.Items.Clear()
-            For Each mset In userPrefs.moviesets
-                If mset <> "None" Then ListBox4.Items.Add(mset)
-            Next
-        ElseIf tab.ToLower = "movie preferences" Then
-            Call setupmoviepreferences()
-        ElseIf tab.ToLower = "table" Then
-            currentTabIndex = TabControl2.SelectedIndex
-            Call setuptable()
-        Else
-            currentTabIndex = TabControl2.SelectedIndex
-        End If
     End Sub
   
     Private Sub setup_changemovie()
@@ -11317,6 +11318,8 @@ Public Class Form1
         Dim scraperfunction As New Classimdb
         Dim tmdbposterscraper As New tmdb_posters.Class1
         fanartArray.Clear()
+        noFanart = False
+        ButtonNextFanart.Visible = False
         Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingMovieDetails.fullmoviebody.imdbid)
         'Dim tmdbimageresults As String = gettmdbposters_newapi(workingmoviedetails.fullmoviebody.imdbid)
         Dim bannerslist As New XmlDocument
@@ -11443,7 +11446,14 @@ Public Class Form1
                     .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
                     .Text = "No Fanart Was Found At www.themoviedb.org For This Movie"
                 End With
+
                 Me.Panel2.Controls.Add(mainlabel2)
+
+                If RadioButtonMissingFanart.Checked = True Then     'If no fanart found & If the Missing Fanart RadioButton is checked
+                    ButtonNextFanart.Enabled = True
+                    ButtonNextFanart.Visible = True            'then show the next movie button so we can go to the next movie without saving
+                    noFanart = True                             'only required if this button is visible
+                End If
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -11682,8 +11692,9 @@ Public Class Form1
                     Label17.Text = PictureBox2.Image.Height
                     Dim result As Boolean = fanartsaved()
                     If result = True Then
-                        Dim mytempstring As String = ""
                         If RadioButtonMissingFanart.Checked = True Then
+                            ButtonNextFanart.Text = "Click here to move to next Movie"
+                            ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
                             Call ApplyFilters() 'Apply Filters to movielist combobox
@@ -29316,8 +29327,10 @@ Public Class Form1
                     Label17.Text = PictureBox2.Image.Height
                     Dim result As Boolean = fanartsaved()
                     If result = True Then
-                        Dim mytempstring As String = ""
+
                         If RadioButtonMissingFanart.Checked = True Then
+                            ButtonNextFanart.Text = "Click here to move to next Movie"
+                            ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
                             Call ApplyFilters() 'Apply Filters to movielist combobox
@@ -31358,14 +31371,29 @@ Public Class Form1
     End Sub
 
     Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles ButtonNextFanart.Click
-
-        Call ApplyFilters("missing fanart") 'Apply Filters to movielist combobox
-        Call loadfanart()   'refresh fanart for the current movie
-        If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
-            ButtonNextFanart.Enabled = False
-            ButtonNextFanart.Text = "All Fanart Done!"
+        If noFanart = False Then
+            Call ApplyFilters("missing fanart") 'Apply Filters to movielist combobox
+            Call loadfanart()   'refresh fanart for the current movie
+            If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
+                ButtonNextFanart.Enabled = False
+                ButtonNextFanart.Text = "All Fanart Done!"
+            Else
+                If noFanart = False Then ButtonNextFanart.Visible = False 'Hide button whilst getting new fanart NOTE: noFanart can be changed by loadfanart inside the original If noFanart false
+            End If
         Else
-            ButtonNextFanart.Visible = False  'Hide button whilst getting new fanart
+            Dim maxIndex As Integer = MovieListComboBox.Items.Count - 1
+            Dim currentIndex As Integer = MovieListComboBox.SelectedIndex
+            currentIndex += 1
+            If currentIndex > maxIndex Then
+                ButtonNextFanart.Enabled = False
+                ButtonNextFanart.Text = "All Fanart Done!"
+            Else
+                MovieListComboBox.ClearSelected()
+                MovieListComboBox.SetSelected(currentIndex, True)
+                loadfanart()
+            End If
         End If
     End Sub
+
+   
 End Class

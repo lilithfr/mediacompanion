@@ -345,7 +345,7 @@ Public Class Utilities
         If filenameex.Substring(filenameex.Length - 1).ToLower = "a" Then
             Dim exists As Boolean = False
             Dim tempname As String
-            For f = 0 To VideoExtensions.Length
+            For f = 0 To VideoExtensions.Length - 1
                 tempname = filepath & filename.Substring(0, filename.Length - (1 + extension.Length)) & "b" & VideoExtensions(f)
                 exists = System.IO.File.Exists(tempname)
                 If exists = True Then
