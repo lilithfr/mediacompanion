@@ -5392,14 +5392,19 @@ Public Class Form1
                 If text.IndexOf("<<season") <> -1 Then inclSeason = True
                 If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
                 For Each episode In tvShow.allepisodes
+                    If episode.seasonno <> "-1" And episode.episodeno <> "-1" Then
                     keySE = episode.seasonno & "-" & episode.episodeno
                     episode.missing = False
-                    setTVshows.Add(keySE, episode)
+                        If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                     If episode.seasonno > UBound(arrSeasonPresent) Then
                         ReDim Preserve arrSeasonPresent(episode.seasonno)
                         arrSeasonPresent(episode.seasonno) = True
                     End If
-                    If episode.seasonno < firstSeason Then firstSeason = episode.seasonno
+                        If episode.seasonno < firstSeason Then
+                            firstSeason = episode.seasonno
+                            If episode.seasonno = 0 Then arrSeasonPresent(0) = True
+                        End If
+                    End If
                 Next
             End If
             If text.IndexOf("<<season:missing>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode:missing>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
@@ -5407,14 +5412,19 @@ Public Class Form1
                     If text.IndexOf("<<season") <> -1 Then inclMissingSeason = True
                     If text.IndexOf("<<episode") <> -1 Then inclMissingEpisode = True
                     For Each episode In tvShow.missingepisodes
+                        If episode.seasonno <> "-1" And episode.episodeno <> "-1" Then
                         keySE = episode.seasonno & "-" & episode.episodeno
                         episode.missing = True
-                        setTVshows.Add(keySE, episode)
+                            If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                         If episode.seasonno > UBound(arrSeasonPresent) Then
                             ReDim Preserve arrSeasonPresent(episode.seasonno)
                             arrSeasonPresent(episode.seasonno) = True
                         End If
-                        If episode.seasonno < firstSeason Then firstSeason = episode.seasonno
+                            If episode.seasonno < firstSeason Then
+                                firstSeason = episode.seasonno
+                                If episode.seasonno = 0 Then arrSeasonPresent(0) = True
+                            End If
+                        End If
                     Next
                 End If
             End If
@@ -5439,56 +5449,63 @@ Public Class Form1
                 Dim strHTMLseason As String = ""
                 Dim strHTMLepisode As String = ""
                 Dim strTempEpisode As String = ""
+                Dim strHTMLseasonSpecials As String = ""
                 Dim currSeason As Integer = firstSeason
-                Dim numSeasonEpisodes = 0
-                Dim numSeasonMissingEpisodes = 0
-                Dim numSeasonTotalEpisodes = 0
-                Dim lastShow As Boolean = False
+                Dim counterSeasonEpisodes = 0
+                Dim counterSeasonMissingEpisodes = 0
+                Dim counterSeasonTotalEpisodes = 0
+                Dim lastEpisode As Boolean = False
                 'Build string
                 For Each episode In setTVshows
                     If Not (episode.Value.missing And Not inclMissingEpisode) Then
-                        strTempEpisode = If(inclEpisode Or inclMissingEpisode, getTVepisodetags(blockEpisode, episode.Value, showCounter, numSeasonTotalEpisodes), "")
+                        strTempEpisode = If(inclEpisode Or inclMissingEpisode, getTVepisodetags(blockEpisode, episode.Value, showCounter, counterSeasonTotalEpisodes), "")
                         inclShow = True
                     End If
-                    If setTVshows.IndexOfKey(episode.Key) = setTVshows.Count - 1 Then
+                    If setTVshows.IndexOfKey(episode.Key) = setTVshows.Count - 1 Then   'This is the last episode
                         If strTempEpisode <> "" Then
                             strHTMLepisode = strHTMLepisode & strTempEpisode
-                            numSeasonTotalEpisodes += 1
+                            counterSeasonTotalEpisodes += 1
                             If episode.Value.missing Then
-                                numSeasonMissingEpisodes += 1
+                                counterSeasonMissingEpisodes += 1
                             Else
-                                numSeasonEpisodes += 1
+                                counterSeasonEpisodes += 1
                             End If
                         End If
-                        lastShow = True
+                        lastEpisode = True
                     End If
                     ' If season changes or reach end of sorted list, aggregate season and episode HTML
-                    If lastShow Or episode.Value.seasonno > currSeason Then
-                        'If Not lastShow Then strHTMLepisode = strHTMLepisode & strTemp
+                    If lastEpisode Or episode.Value.seasonno > currSeason Then
                         If inclSeason Or inclMissingSeason Then
-                            strHTMLseason = getTVseasontags(blockSeason, tvShow, showCounter, currSeason, numSeasonEpisodes, numSeasonMissingEpisodes, numSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
-                            strHTMLseason = strHTMLseason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode, "", strHTMLepisode))
+                            strHTMLseason = getTVseasontags(blockSeason, tvShow, showCounter, currSeason, counterSeasonEpisodes, counterSeasonMissingEpisodes, _
+                                                            counterSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
+                            strHTMLseason = strHTMLseason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode, _
+                                                                                "", strHTMLepisode))
                             inclShow = True
                         Else
                             strHTMLseason = strHTMLepisode
                         End If
+                        If currSeason = 0 Then
+                            strHTMLseasonSpecials = strHTMLseason
+                        Else
                         strHTML = strHTML & strHTMLseason
+                        End If
                         strHTMLseason = ""
                         strHTMLepisode = ""
                         currSeason = episode.Value.seasonno
                         counterSeason += 1
-                        numSeasonEpisodes = 0
-                        numSeasonMissingEpisodes = 0
-                        numSeasonTotalEpisodes = 0
+                        counterSeasonEpisodes = 0
+                        counterSeasonMissingEpisodes = 0
+                        counterSeasonTotalEpisodes = 0
                     End If
-                    strHTMLepisode = strHTMLepisode & strTempEpisode
                     If episode.Value.missing Then
-                        numSeasonMissingEpisodes += 1
+                        counterSeasonMissingEpisodes += 1
                     Else
-                        numSeasonEpisodes += 1
+                        counterSeasonEpisodes += 1
                     End If
-                    numSeasonTotalEpisodes += 1
+                    counterSeasonTotalEpisodes += 1
+                    strHTMLepisode = strHTMLepisode & strTempEpisode
                 Next
+                strHTML = strHTML & strHTMLseasonSpecials
                 blockShow = blockShow.Replace(separator, strHTML)
             End If
 
@@ -5649,15 +5666,18 @@ Public Class Form1
             Dim tokenInstr() As String = valToken.Split(":")
             Dim addText As Boolean = False
             Dim padNumber As Boolean = False
+            Dim specials As Boolean = False
             If tokenInstr.Length > 1 Then
                 If tokenInstr(1).IndexOf("text") <> -1 Then addText = True
                 If tokenInstr(1).IndexOf("pad") <> -1 Then padNumber = True
+                If tokenInstr(1).IndexOf("special") <> -1 Then specials = True
             End If
             Select Case tokenInstr(0)
                 Case "createimage"
                     If imagepath <> "" And tokenInstr.Length > 1 Then
                         Dim origImage = Utilities.GetPosterPath(tvShow.fullpath)
                         Dim imageName As String = "season" & If(currSeason >= 10, "", "0") & currSeason.ToString & ".tbn"
+                        If currSeason = 0 Then imageName = "season-specials.tbn"
                         origImage = origImage.Replace(IO.Path.GetFileName(origImage), imageName)
 
                         strNFOprop = "tvimages/" & createImage(origImage, tokenInstr(1), imagepath)
@@ -5666,8 +5686,14 @@ Public Class Form1
                 Case "show_counter"
                     strNFOprop = showCounter.ToString
                 Case "seas_number"
-                    strNFOprop = If(currSeason.ToString.Length = 1 And padNumber, "0", "") & currSeason.ToString
-                    If addText Then strNFOprop = strNFOprop & " Episode" & If(numTotalEpisodes <> 1, "s", "")
+                    If currSeason = 0 And specials Then
+                        Dim endOfPrevTag = text.LastIndexOf(">", text.IndexOf(token.Value)) + 1
+                        text = text.Remove(endOfPrevTag, text.IndexOf(token.Value) - endOfPrevTag)
+                        strNFOprop = "Specials"
+                    Else
+                        strNFOprop = If(currSeason.ToString.Length = 1 And padNumber, "0", "") & currSeason.ToString
+                        If addText Then strNFOprop = strNFOprop & " Season" & If(numTotalEpisodes <> 1, "s", "")
+                    End If
                 Case "seas_episodes"
                     strNFOprop = If(numTotalEpisodes.ToString.Length = 1 And padNumber, "0", "") & numTotalEpisodes.ToString
                     If addText Then strNFOprop = strNFOprop & " Episode" & If(numTotalEpisodes <> 1, "s", "")
@@ -5820,7 +5846,7 @@ Public Class Form1
     Private Function createImage(ByVal origImage As String, ByVal sizeLimit As Integer, ByVal target As String, Optional ByVal picType As String = "poster")
 
         Dim isPoster As Boolean = Equals(picType, "poster")
-        Dim filename As String = If(isPoster, "DefaultPoster.jpg", "DefaultBanner.jpg") & If(sizeLimit <> 0, "_" & sizeLimit.ToString, "")
+        Dim filename As String = If(isPoster, "DefaultPoster", "DefaultBanner") & If(sizeLimit <> 0, "_" & sizeLimit.ToString, "") & ".jpg"
         Dim imgPoster As String = If(isPoster, defaultPoster, defaultBanner)
         If IO.File.Exists(origImage) Then
             Dim origBitmap As Image = Image.FromFile(origImage)
@@ -5828,7 +5854,7 @@ Public Class Form1
             origRatio = origBitmap.Height / origBitmap.Width
             If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
                 If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width)
-                filename = IO.File.GetCreationTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
+                filename = IO.File.GetLastWriteTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
                 imgPoster = origImage
             End If
             origBitmap.Dispose()

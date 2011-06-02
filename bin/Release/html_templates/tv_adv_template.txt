@@ -21,6 +21,7 @@ function showDetails( disp, div_id ) {
 			var getTVShow = document.getElementById("tvshow_" + i );
 			if( getTVShow !== null ) getTVShow.style.display = "block";
 		}
+		document.getElementById("tvshow_" + div_id ).scrollIntoView();
 	}
 }
 
@@ -54,7 +55,7 @@ NOTE: This template relies on the banner image for each show, otherwise the defa
 					<table align="center" valign="center" border="0" width="758" cellspacing="1" cellpadding="1">
 						<tr>
 							<td rowspan="2" width="75"><img src="<<createimage:100>>" height="100" border="0" onclick="showSeason(<<show_counter>>,<<seas_number>>);"></td>
-							<td valign="bottom"><span<<class:missingepisode>> onclick="showSeason(<<show_counter>>,<<seas_number>>);"><font class=headingfont>Season <<seas_number>></font></span></td>
+							<td valign="bottom"><span<<class:missingepisode>> onclick="showSeason(<<show_counter>>,<<seas_number>>);"><font class=headingfont>Season <<seas_number:specials>></font></span></td>
 							<td align="right" valign="bottom"><span class=smallfont><<seas_episodesof:text>></span></td>
 						</tr>
 						<tr>
