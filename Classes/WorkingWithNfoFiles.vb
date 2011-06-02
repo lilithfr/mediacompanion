@@ -1878,12 +1878,11 @@ Public Class WorkingWithNfoFiles
                                 Case "outline"
                                     newmovie.outline = thisresult.InnerText
                                 Case "genre"
-                                    If newmovie.genre = "" Then
+                                    If newmovie.genre = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
                                         newmovie.genre = thisresult.InnerText
                                     Else
                                         newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
                                     End If
-                                    newmovie.genre = thisresult.InnerText
                                 Case "id"
                                     newmovie.id = thisresult.InnerText
                                 Case "playcount"
