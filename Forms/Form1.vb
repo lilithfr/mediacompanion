@@ -6203,6 +6203,14 @@ Public Class Form1
                 Exit Sub
                 Monitor.Exit(Me)
             End If
+
+            If Filter = "blabla" Then           'i.e. applyFilters() {NONE}
+                RadioButton45.Checked = True    'reset filter radio buttons indcation to ALL
+                ComboBox11.SelectedIndex = 0    'reset filename video type filter to ALL       
+            End If
+
+
+
             For f = 0 To tempint
                 dupes2 = False
                 offline = False
@@ -7015,18 +7023,20 @@ Public Class Form1
     End Sub
 
     'reset all filters
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonResetFilters.Click
         filterOverride = False
         TextBox1.Text = ""
         txt_titlesearch.Text = ""
         txt_titlesearch.BackColor = Color.White
         TextBox1.BackColor = Color.White
 
-        Button112.Visible = False   'hide next movie button on fanart tab used for missing fanart
-        Button112.Text = "Click here to move to next Movie without Fanart"
+        ButtonNextFanart.Visible = False   'hide next movie button on fanart tab used for missing fanart
+        ButtonNextFanart.Text = "Click here to move to next Movie without Fanart"  'resetthe button text back to default for when its next show
         For i = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, False)
         Next
+        RadioButton45.Checked = True     'set movie filters indication back to all
+        ComboBox11.SelectedIndex = 0   'set filename filetype filter back to all
         Call ApplyFilters()
     End Sub
 
@@ -11635,12 +11645,12 @@ Public Class Form1
                     If result = True Then
                         Dim mytempstring As String = ""
                         If RadioButtonMissingFanart.Checked = True Then
-                            Button112.Visible = True 'show next movie button
+                            ButtonNextFanart.Visible = True 'show next movie button
                         Else
                             Call ApplyFilters() 'Apply Filters to movielist combobox
                         End If
 
-                        'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
+                        'Call loadinfofile() 'reloads main page information     'not required as we no longer move back to main page
                         'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
                         'currentTabIndex = TabControl2.SelectedIndex
                     End If
@@ -29265,7 +29275,19 @@ Public Class Form1
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
-                    Call fanartsaved()
+                    Dim result As Boolean = fanartsaved()
+                    If result = True Then
+                        Dim mytempstring As String = ""
+                        If RadioButtonMissingFanart.Checked = True Then
+                            ButtonNextFanart.Visible = True 'show next movie button
+                        Else
+                            Call ApplyFilters() 'Apply Filters to movielist combobox
+                        End If
+
+                        'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
+                        'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
+                        'currentTabIndex = TabControl2.SelectedIndex
+                    End If
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
@@ -31296,13 +31318,15 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles Button112.Click
+    Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles ButtonNextFanart.Click
 
         Call ApplyFilters("missing fanart") 'Apply Filters to movielist combobox
         Call loadfanart()   'refresh fanart for the current movie
         If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
-            Button112.Enabled = False
-            Button112.Text = "All Fanart Done!"
+            ButtonNextFanart.Enabled = False
+            ButtonNextFanart.Text = "All Fanart Done!"
+        Else
+            ButtonNextFanart.Visible = False  'Hide button whilst getting new fanart
         End If
     End Sub
 End Class
