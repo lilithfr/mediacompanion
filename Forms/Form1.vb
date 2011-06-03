@@ -6239,10 +6239,10 @@ Public Class Form1
             If RadioButtonMissingFanart.Checked = True Then Filter = "missing fanart"
 
 
-            If Filter = "blabla" Then           'i.e. applyFilters() {NONE}
-                RadioButton45.Checked = True    'reset filter radio buttons indcation to ALL
-                ComboBox11.SelectedIndex = 0    'reset filename video type filter to ALL       
-            End If
+            'If Filter = "blabla" Then           'i.e. applyFilters() {NONE}
+            'RadioButton45.Checked = True    'reset filter radio buttons indcation to ALL
+            'ComboBox11.SelectedIndex = 0    'reset filename video type filter to ALL       
+            'End If
 
 
 
@@ -11441,10 +11441,12 @@ Public Class Form1
                 mainlabel2 = New Label
                 With mainlabel2
                     .Location = New Point(0, 100)
-                    .Width = 700
-                    .Height = 100
+                    .AutoSize = False
+                    .TextAlign = ContentAlignment.MiddleCenter
+                    .Width = 500
+                    .Height = 400
                     .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-                    .Text = "No Fanart Was Found At www.themoviedb.org For This Movie"
+                    .Text = "No Fanart Was Found At" & Environment.NewLine & "www.themoviedb.org For This Movie"
                 End With
 
                 Me.Panel2.Controls.Add(mainlabel2)
@@ -31375,6 +31377,7 @@ Public Class Form1
             Call ApplyFilters("missing fanart") 'Apply Filters to movielist combobox
             Call loadfanart()   'refresh fanart for the current movie
             If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
+                ButtonNextFanart.Visible = True
                 ButtonNextFanart.Enabled = False
                 ButtonNextFanart.Text = "All Fanart Done!"
             Else
