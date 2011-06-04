@@ -88,6 +88,8 @@ Public Class Form1
     Dim newTvShows As New List(Of String)
     Dim profileStructure As New Profiles
     Dim frmSplash As New frmSplashscreen
+    Dim frmSplash2 As New frmProgressScreen
+    Dim mode As Boolean
     Dim templateList As New List(Of HTMLTemplate)
     Dim overItem As String
     Dim oldIndexUnderTheMouse As Integer
@@ -2015,8 +2017,13 @@ Public Class Form1
 
         Dim counter As Integer = 1
         Dim counter2 As Integer = 1
+        Dim progcounter As Integer = 1
+        If mode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
+
         For Each fs_info As System.IO.FileInfo In fs_infos
             Application.DoEvents()
+            If mode = True Then frmSplash2.ProgressBar1.Value = progcounter
+            progcounter += 1
             exists = (IO.File.Exists(fs_info.FullName))
             If exists = True Then
                 workingMovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
@@ -2128,12 +2135,12 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub nfos_to_array(ByVal folderlist As List(Of String))
+    Private Sub nfos_to_array(ByVal folderlist As List(Of String), Optional mode As Boolean = False)
         Dim tempint As Integer
         Dim dirinfo As String = String.Empty
         Dim pattern As String = "*.nfo"
 
-        dList.Clear()
+        'dList.Clear()
         realMoviePaths.Clear()
         For Each moviefolder In folderlist
             Dim hg As New IO.DirectoryInfo(moviefolder)
@@ -2153,13 +2160,21 @@ Public Class Form1
                 realMoviePaths.Add(subfolder)
             Next
 
+
+
+            If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
             For f = 0 To realMoviePaths.Count - 1
-                frmSplash.Label3.Text = "Scanning Folder: " & """" & realMoviePaths(f).ToString & """"
-                frmSplash.Label3.Refresh()
+
+                frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
+                frmSplash2.Label1.Refresh()
+                If mode = False Then frmSplash2.ProgressBar1.Value = f
                 Application.DoEvents()
                 Dim subdirs As New System.IO.DirectoryInfo(realMoviePaths(f))
                 ListFiles(dirinfo, pattern, subdirs)
             Next
+
+
+
         End If
     End Sub
 
@@ -3618,7 +3633,7 @@ Public Class Form1
                 End If
                 Try
                     progress = ((100 / newmoviefolders.Count) * g) * 10
-                    progresstext = String.Concat("Scanning folder " & g & " of " & newmoviefolders.Count)
+                    progresstext = String.Concat("Scanning folder " & g + 1 & " of " & newmoviefolders.Count)
                     BckWrkScnMovies.ReportProgress(progress, progresstext)
                     If BckWrkScnMovies.CancellationPending Then
                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
@@ -4992,20 +5007,39 @@ Public Class Form1
 
     Private Sub rebuildmovies(ByVal folderlist As List(Of String))
         Me.Enabled = False
+
+        frmSplash2.Text = "Rebuild Movies..."
+        frmSplash2.Label1.Text = "Searching for Movie Folders....."
+        frmSplash2.Show()
+        Application.DoEvents()
+
         dList.Clear()
         fullMovieList.Clear()
         filteredList.Clear()
+        '----------------------------------------------Progess Bar Addition
+        If userPrefs.usefoldernames = True Then         'use TRUE if folder contains nfo's, False if folder contains folders which contain nfo's
+            mode = False
+        Else
+            mode = True
+        End If
 
-        Call nfos_to_array(movieFolders)
-        Call nfos_to_array(userPrefs.offlinefolders)
+        Call nfos_to_array(movieFolders, mode)
+
+
+        frmSplash2.Label1.Text = "Searching for Offline Movie Folders....."
+        Application.DoEvents()                                  ' If not called previous progress bar is not hidden as requested 
+        mode = False                                            'offlines folders always are folders of folders that contain nfo's
+        Call nfos_to_array(userPrefs.offlinefolders, mode)
+        Application.DoEvents()
+        '----------------------------------------------
         Try
             For Each movie In fullMovieList
                 Try
                     If userPrefs.usefoldernames = False Then
                         If movie.filename <> Nothing Then
                             movie.filename = movie.filename.Replace(".nfo", "")
-                            Dim tempstring4 As String = ""
-                            tempstring4 = movie.fullpathandfilename.ToLower
+                            'Dim tempstring4 As String = ""                         'not sure of the purpose of this, tempstring4 is never used.....
+                            'tempstring4 = movie.fullpathandfilename.ToLower
                         End If
                     End If
                 Catch
@@ -5032,7 +5066,10 @@ Public Class Form1
 #End If
         End Try
 
+        frmSplash2.Hide()
+        Me.Activate()
         Me.Enabled = True
+
     End Sub
 
     Private Sub videomode1(ByVal tempstring As String)
@@ -8129,13 +8166,13 @@ Public Class Form1
     End Sub
 
     Private Sub RebuildMoviesToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildMoviesToolStripMenuItem1.Click
-        messbox = New frmMessageBox("Please wait,", "", "Rebuilding Movie DB")
-        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        messbox.Show()
-        Me.Refresh()
-        messbox.Refresh()
+        'messbox = New frmMessageBox("Please wait,", "", "Rebuilding Movie DB")
+        'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        'messbox.Show()
+        'Me.Refresh()
+        'messbox.Refresh()
         Call rebuildmovies(movieFolders)
-        messbox.Close()
+        'messbox.Close()
     End Sub
 
     Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click

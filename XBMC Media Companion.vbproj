@@ -139,6 +139,12 @@
     <Compile Include="Classes\Tv\TvShow.vb" />
     <Compile Include="Basics\Utilities.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
+    <Compile Include="Forms\frmProgressScreen.Designer.vb">
+      <DependentUpon>frmProgressScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmProgressScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Structures\FanartList.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
@@ -342,6 +348,9 @@
     <EmbeddedResource Include="Forms\frmMovieFanart.resx">
       <DependentUpon>frmMovieFanart.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmProgressScreen.resx">
+      <DependentUpon>frmProgressScreen.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
