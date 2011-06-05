@@ -48,6 +48,7 @@ Public Class Form1
     Public sending As String
     Public applicationPath As String = Application.StartupPath 'Get application root path
     Public noFanart As Boolean
+    Public Shared tvScraperLog As String = ""
 
     Dim WithEvents bigPictureBox As PictureBox
     Dim WithEvents fanartBoxes As PictureBox
@@ -75,7 +76,7 @@ Public Class Form1
     Dim defaultOfflineArt As String
     Dim actorDB As New List(Of ActorDatabase)
     Dim scraperLog As String = ""
-    Dim tvScraperLog As String = ""
+
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
     Dim newMovieList As New List(Of NewMovie)

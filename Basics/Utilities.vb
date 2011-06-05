@@ -65,31 +65,33 @@ Public Class Utilities
         'Dim wr As HttpWebRequest = CType(WebRequest.Create(StartURL), HttpWebRequest)
         'Dim ws As HttpWebResponse = CType(wr.GetResponse(), HttpWebResponse)
         'Dim str As New StreamReader(ws.GetResponseStream())
-        'Dim co As Integer = ws.Headers.Count
+        'Dim co As Integer = ws.Headers.Count                           'this parts was to read & display all the headers to see which one showed gzip - header 2 was the answer
         'Dim txt As String = ""
         'For myco = 0 To co - 1
         '    txt = txt & ws.Headers.Get(myco) & Environment.NewLine()
         'Next
-        'Dim gzipresult As Boolean = (ws.Headers.Get(2) = "gzip")
+        'Dim gzipresult As Boolean = (ws.Headers.Get(2) = "gzip")       'this tests if the header(2) contains gzip, if so the xml is gzipped!
         'MsgBox(txt, MsgBoxStyle.OkOnly, gzipresult)
 
         'Dim result As String
-        'If gzipresult = True Then
-        '    'un zip data
-        '    result = New GZipStream(str, CompressionMode.Decompress)
-        'Else
-        '    result = str.ReadToEnd
-        'End If
+        
+        'result = str.ReadToEnd
+
 
         'Return result
-
+        '                                                               'Converting the above was too hard so I started fresh.....
         Dim Http As HttpWebRequest = WebRequest.Create(StartURL)
         Using WebResponse As HttpWebResponse = Http.GetResponse()
+
             Dim responseStream As Stream = WebResponse.GetResponseStream()
             If (WebResponse.ContentEncoding.ToLower().Contains("gzip")) Then
                 responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
+                Form1.tvScraperLog = Form1.tvScraperLog & "**** GZIP DECODED *****" & vbCrLf
             ElseIf (WebResponse.ContentEncoding.ToLower().Contains("deflate")) Then
                 responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
+                Form1.tvScraperLog = Form1.tvScraperLog & "**** DEFLATE DECODED *****" & vbCrLf
+            Else
+                Form1.tvScraperLog = Form1.tvScraperLog & "**** UNDECODED *****" & vbCrLf
             End If
             Dim reader As StreamReader = New StreamReader(responseStream, Encoding.Default)
 
