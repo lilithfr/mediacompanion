@@ -3,7 +3,9 @@ Imports System.Net
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports System.IO.Compression
 Imports System.Text
+
 
 Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".xvid", ".divx", ".img", ".mpg", ".mpeg", ".mov",
@@ -60,11 +62,43 @@ Public Class Utilities
     End Function
 
     Public Shared Function DownloadTextFiles(ByVal StartURL As String) As String
-        Dim wr As HttpWebRequest = CType(WebRequest.Create(StartURL), HttpWebRequest)
-        Dim ws As HttpWebResponse = CType(wr.GetResponse(), HttpWebResponse)
-        Dim str As New StreamReader(ws.GetResponseStream())
-        Dim result As String = str.ReadToEnd
-        Return result
+        'Dim wr As HttpWebRequest = CType(WebRequest.Create(StartURL), HttpWebRequest)
+        'Dim ws As HttpWebResponse = CType(wr.GetResponse(), HttpWebResponse)
+        'Dim str As New StreamReader(ws.GetResponseStream())
+        'Dim co As Integer = ws.Headers.Count
+        'Dim txt As String = ""
+        'For myco = 0 To co - 1
+        '    txt = txt & ws.Headers.Get(myco) & Environment.NewLine()
+        'Next
+        'Dim gzipresult As Boolean = (ws.Headers.Get(2) = "gzip")
+        'MsgBox(txt, MsgBoxStyle.OkOnly, gzipresult)
+
+        'Dim result As String
+        'If gzipresult = True Then
+        '    'un zip data
+        '    result = New GZipStream(str, CompressionMode.Decompress)
+        'Else
+        '    result = str.ReadToEnd
+        'End If
+
+        'Return result
+
+        Dim Http As HttpWebRequest = WebRequest.Create(StartURL)
+        Using WebResponse As HttpWebResponse = Http.GetResponse()
+            Dim responseStream As Stream = WebResponse.GetResponseStream()
+            If (WebResponse.ContentEncoding.ToLower().Contains("gzip")) Then
+                responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
+            ElseIf (WebResponse.ContentEncoding.ToLower().Contains("deflate")) Then
+                responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
+            End If
+            Dim reader As StreamReader = New StreamReader(responseStream, Encoding.Default)
+
+            Dim html As String = reader.ReadToEnd()
+
+            responseStream.Close()
+
+            Return html
+        End Using
     End Function
 
     Public Shared Function GetCRC32(ByVal sFileName As String) As String
