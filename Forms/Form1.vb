@@ -14004,7 +14004,7 @@ Public Class Form1
                         For Each Sh In basicTvList
                             If Sh.fullpath = TreeView1.SelectedNode.Name Then
                                 Sh.status = "ok"
-                                Call savetvdata()
+                                'Call savetvdata()
                                 Exit For
                             End If
                         Next
@@ -14079,7 +14079,7 @@ Public Class Form1
 
                                 Next
 
-                                Call savetvdata()
+                                'Call savetvdata()
                                 Exit For
                             End If
                         Next
@@ -14103,7 +14103,7 @@ Public Class Form1
                                         Exit For
                                     End If
                                 Next
-                                Call savetvdata()
+                                'Call savetvdata()
                                 Exit For
                             End If
                         Next
@@ -14316,28 +14316,29 @@ Public Class Form1
         ComboBox4.Text = ""
         Dim hg As New IO.DirectoryInfo(path.Replace(IO.Path.GetFileName(path), ""))
         If Not hg.Exists Then
-            workingTvShow.episodeactorsource = Nothing
-            workingTvShow.episodeguideurl = Nothing
-            workingTvShow.fanart = Nothing
-            workingTvShow.fanartpath = Nothing
-            workingTvShow.genre = Nothing
-            workingTvShow.imdbid = Nothing
-            workingTvShow.language = Nothing
-            workingTvShow.listactors.Clear()
-            workingTvShow.mpaa = Nothing
-            workingTvShow.plot = Nothing
-            workingTvShow.posterpath = Nothing
-            workingTvShow.posters.Clear()
-            workingTvShow.premiered = Nothing
-            workingTvShow.rating = Nothing
-            workingTvShow.runtime = Nothing
-            workingTvShow.sortorder = Nothing
-            workingTvShow.studio = Nothing
-            workingTvShow.tvdbid = Nothing
-            workingTvShow.year = Nothing
-            workingTvShow.locked = True
+            'workingTvShow.episodeactorsource = Nothing
+            'workingTvShow.episodeguideurl = Nothing
+            'workingTvShow.fanart = Nothing
+            'workingTvShow.fanartpath = Nothing
+            'workingTvShow.genre = Nothing
+            'workingTvShow.imdbid = Nothing
+            'workingTvShow.language = Nothing
+            'workingTvShow.listactors.Clear()
+            'workingTvShow.mpaa = Nothing
+            'workingTvShow.plot = Nothing
+            'workingTvShow.posterpath = Nothing
+            'workingTvShow.posters.Clear()
+            'workingTvShow.premiered = Nothing
+            'workingTvShow.rating = Nothing
+            'workingTvShow.runtime = Nothing
+            'workingTvShow.sortorder = Nothing
+            'workingTvShow.studio = Nothing
+            'workingTvShow.tvdbid = Nothing
+            'workingTvShow.year = Nothing
+            'workingTvShow.locked = True
             TextBox2.Text = "Unable to find folder: " & path.Replace(IO.Path.GetFileName(path), "")
-            workingTvShow.title = TextBox2.Text
+            'workingTvShow.title = TextBox2.Text                'we don't want to do this, if the drive that the TVShow is on has been turned off, then we dont want to
+            '                                                   'overwrite the cache details. We can restart MC with the drive on & it will be back to normal. 
             TextBox10.Text = ""
             TextBox11.Text = ""
             TextBox9.Text = ""
@@ -14348,31 +14349,31 @@ Public Class Form1
             TextBox16.Text = ""
             TextBox18.Text = ""
             TextBox19.Text = "Unable to find folder: " & path.Replace(IO.Path.GetFileName(path), "")
-            workingTvShow.plot = TextBox19.Text
-            workingTvShow.path = path
+            'workingTvShow.plot = TextBox19.Text
+            'workingTvShow.path = path
             ComboBox4.Items.Clear()
             ComboBox4.Text = ""
-            workingTvShow.episodeactorsource = Nothing
-            workingTvShow.episodeguideurl = Nothing
-            workingTvShow.fanart = Nothing
-            workingTvShow.fanartpath = Nothing
-            workingTvShow.genre = Nothing
-            workingTvShow.imdbid = Nothing
-            workingTvShow.language = Nothing
-            workingTvShow.listactors.Clear()
-            workingTvShow.mpaa = Nothing
-            workingTvShow.posterpath = Nothing
-            workingTvShow.posters.Clear()
-            workingTvShow.premiered = Nothing
-            workingTvShow.rating = Nothing
-            workingTvShow.runtime = Nothing
-            workingTvShow.sortorder = Nothing
-            workingTvShow.studio = Nothing
-            workingTvShow.tvdbid = Nothing
-            workingTvShow.year = Nothing
-            PictureBox6.Image = Nothing
-            PictureBox4.Image = Nothing
-            PictureBox5.Image = Nothing
+            'workingTvShow.episodeactorsource = Nothing
+            'workingTvShow.episodeguideurl = Nothing
+            'workingTvShow.fanart = Nothing
+            'workingTvShow.fanartpath = Nothing
+            'workingTvShow.genre = Nothing
+            'workingTvShow.imdbid = Nothing
+            'workingTvShow.language = Nothing
+            'workingTvShow.listactors.Clear()
+            'workingTvShow.mpaa = Nothing
+            'workingTvShow.posterpath = Nothing
+            'workingTvShow.posters.Clear()
+            'workingTvShow.premiered = Nothing
+            'workingTvShow.rating = Nothing
+            'workingTvShow.runtime = Nothing
+            'workingTvShow.sortorder = Nothing
+            'workingTvShow.studio = Nothing
+            'workingTvShow.tvdbid = Nothing
+            'workingTvShow.year = Nothing
+            'PictureBox6.Image = Nothing
+            'PictureBox4.Image = Nothing
+            'PictureBox5.Image = Nothing
         Else
             workingTvShow = nfoFunction.loadfulltnshownfo(path)
 
@@ -14928,12 +14929,12 @@ Public Class Form1
                     If TreeView1.SelectedNode.ForeColor = Color.Red Then
                         TreeView1.SelectedNode.ForeColor = Color.Black
                     End If
-                    Call savetvdata()
+                    'Call savetvdata()
                 Else
                     If TreeView1.SelectedNode.ForeColor = Color.Black Then
                         TreeView1.SelectedNode.ForeColor = Color.Red
                     End If
-                    Call savetvdata()
+                    'Call savetvdata()
                 End If
             Else
                 If workingTvShow.path <> Nothing Then
@@ -14953,7 +14954,7 @@ Public Class Form1
                 If TreeView1.SelectedNode.ForeColor = Color.Red Then
                     TreeView1.SelectedNode.ForeColor = Color.Black
                 End If
-                Call savetvdata()
+                'Call savetvdata()
             Else
                 If TreeView1.SelectedNode.ForeColor = Color.Black Then
                     TreeView1.SelectedNode.ForeColor = Color.Red
