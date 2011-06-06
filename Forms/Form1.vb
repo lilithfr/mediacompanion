@@ -119,7 +119,7 @@ Public Class Form1
     Dim tableSets As New List(Of TableItems)
     Dim relativeFolderList As New List(Of RelativeFileList)
 
-
+    Dim templanguage As String
 
 
 
@@ -24670,8 +24670,9 @@ Public Class Form1
 
     End Sub
    
-    Dim templanguage As String
+
     Private Function gettoptvshow(ByVal tvshowname As String)
+
         templanguage = userPrefs.tvdblanguagecode
         Try
             'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
