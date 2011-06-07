@@ -2024,75 +2024,77 @@ Public Class Form1
     End Sub
 
     Private Sub ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
-        Try
-            Dim exists As Boolean
-            Dim propfile As Boolean = False
-            Dim allok As Boolean = False
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
 
-            Dim counter As Integer = 1
-            Dim counter2 As Integer = 1
-            Dim progcounter As Integer = 1
-            If progressmode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
-            frmSplash2.Label2.Visible = True
-            For Each fs_info As System.IO.FileInfo In fs_infos
-                Application.DoEvents()
-                If progressmode = True Then frmSplash2.ProgressBar1.Value = progcounter
-                progcounter += 1
-                frmSplash2.Label2.Text = fs_info.FullName
-                exists = (IO.File.Exists(fs_info.FullName))
-                If exists = True Then
+        Dim exists As Boolean
+        Dim propfile As Boolean = False
+        Dim allok As Boolean = False
+        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+
+        Dim counter As Integer = 1
+        Dim counter2 As Integer = 1
+        Dim progcounter As Integer = 1
+        If progressmode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
+        frmSplash2.Label2.Visible = True
+        For Each fs_info As System.IO.FileInfo In fs_infos
+            Application.DoEvents()
+            If progressmode = True Then frmSplash2.ProgressBar1.Value = progcounter
+            progcounter += 1
+            frmSplash2.Label2.Text = fs_info.FullName
+            exists = (IO.File.Exists(fs_info.FullName))
+            If exists = True Then
+                Try
                     workingMovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
-                    If workingMovie.title <> "ERROR" Then
+                Catch ex As Exception
+                    Continue For    ' if we call an exception due to an nfo issue, try the next one
+                End Try
+                If workingMovie.title <> "ERROR" Then
 
-                        If workingMovie.movieset <> Nothing Then
-                            Dim add As Boolean = True
-                            For Each item In userPrefs.moviesets
-                                If item = workingMovie.movieset Then
-                                    add = False
+                    If workingMovie.movieset <> Nothing Then
+                        Dim add As Boolean = True
+                        For Each item In userPrefs.moviesets
+                            If item = workingMovie.movieset Then
+                                add = False
+                                Exit For
+                            End If
+                        Next
+                        If add = True Then
+                            userPrefs.moviesets.Add(workingMovie.movieset)
+                            ComboBox3.Items.Add(workingMovie.movieset)
+                        End If
+                    End If
+                    If workingMovie.title <> Nothing Then
+                        workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+                        If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
+                            Dim skip As Boolean = False
+                            For Each movie In fullMovieList
+                                If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
+                                    skip = True
                                     Exit For
                                 End If
                             Next
-                            If add = True Then
-                                userPrefs.moviesets.Add(workingMovie.movieset)
-                                ComboBox3.Items.Add(workingMovie.movieset)
-                            End If
-                        End If
-                        If workingMovie.title <> Nothing Then
-                            workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
-                            If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
-                                Dim skip As Boolean = False
-                                For Each movie In fullMovieList
-                                    If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
-                                        skip = True
-                                        Exit For
-                                    End If
-                                Next
-                                If skip = False Then
-                                    Dim completebyte1 As Byte = 0
-                                    Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(workingMovie.fullpathandfilename))
-                                    Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(workingMovie.fullpathandfilename))
-                                    If fanartexists = False Then
-                                        completebyte1 += 1
-                                    End If
-                                    If posterexists = False Then
-                                        completebyte1 += 2
-                                    End If
-                                    workingMovie.missingdata1 = completebyte1
-                                    fullMovieList.Add(workingMovie)
-                                    'filteredlist.Add(workingmovie)
+                            If skip = False Then
+                                Dim completebyte1 As Byte = 0
+                                Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(workingMovie.fullpathandfilename))
+                                Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(workingMovie.fullpathandfilename))
+                                If fanartexists = False Then
+                                    completebyte1 += 1
                                 End If
+                                If posterexists = False Then
+                                    completebyte1 += 2
+                                End If
+                                workingMovie.missingdata1 = completebyte1
+                                fullMovieList.Add(workingMovie)
+                                'filteredlist.Add(workingmovie)
                             End If
                         End If
                     End If
                 End If
-            Next fs_info
-            frmSplash2.Label2.Visible = False
-            fs_infos = Nothing
+            End If
+        Next fs_info
+        frmSplash2.Label2.Visible = False
+        fs_infos = Nothing
 
-        Catch ex As Exception
-            MsgBox("Repair the NFO below & Rebuild again" & Environment.NewLine & "Current NFO: " & frmSplash2.Label2.Text, MsgBoxStyle.OkOnly, "MC has detected an issue with a NFO file during rebuild...")
-        End Try
+        
     End Sub
 
     Private Sub ListtvFiles(ByVal tvshow As TvShow, ByVal pattern As String)
@@ -3813,20 +3815,20 @@ Public Class Form1
                             scraperLog = scraperLog & "No IMDB ID found" & vbCrLf
                             extrapossibleID = Nothing
                         End If
-                        'If userprefs.renamenfofiles = True Then
-                        Try
-                            If Not IO.File.Exists(nfopath.Replace(".nfo", ".info")) Then
-                                IO.File.Move(nfopath, nfopath.Replace(".nfo", ".info"))
-                                scraperLog = scraperLog & "renaming nfo file to:- " & nfopath.Replace(".nfo", ".info") & vbCrLf
-                            Else
+                        If userPrefs.renamenfofiles = True Then   'reenabled choice as per user preference
+                            Try
+                                If Not IO.File.Exists(nfopath.Replace(".nfo", ".info")) Then
+                                    IO.File.Move(nfopath, nfopath.Replace(".nfo", ".info"))
+                                    scraperLog = scraperLog & "renaming nfo file to:- " & nfopath.Replace(".nfo", ".info") & vbCrLf
+                                Else
+                                    scraperLog = scraperLog & "Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
+                                End If
+                            Catch
                                 scraperLog = scraperLog & "Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
-                            End If
-                        Catch
-                            scraperLog = scraperLog & "Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
-                        End Try
-                        'Else
-                        '    scraperlog = scraperlog & "Current nfo file will be overwritten" & vbCrLf
-                        'End If
+                            End Try
+                        Else
+                            scraperLog = scraperLog & "Current nfo file will be overwritten" & vbCrLf
+                        End If
                     Else
                         Dim stackname As String = Utilities.GetStackName(nfopath, nfopath.Replace(IO.Path.GetFileName(nfopath), ""))
                         Dim path As String = stackname & ".nfo"
@@ -16617,7 +16619,7 @@ Public Class Form1
                 Dim filename As String = IO.Path.Combine(path, fs_info.Name)
                 Dim filename2 As String = filename.Replace(IO.Path.GetExtension(filename), ".nfo")
                 If IO.File.Exists(filename2) Then
-                    If validateepisodenfo(filename2) = False Then
+                    If validateepisodenfo(filename2) = False And userPrefs.renamenfofiles = True Then
                         Dim movefilename As String = filename2.Replace(IO.Path.GetExtension(filename2), ".info")
                         Try
                             IO.File.Move(filename2, movefilename)
