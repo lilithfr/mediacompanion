@@ -8079,7 +8079,9 @@ Public Class Form1
                 fullMovieList.RemoveAt(f)
 
                 newfullmovie = nfoFunction.loadbasicmovienfo(workingMovieDetails.fileinfo.fullpathandfilename, "movielist")
-                fullMovieList.Add(newfullmovie)
+                If workingMovie.title <> "ERROR" Then   'if there is a problem with the nfo being invalid we need to skip
+                    fullMovieList.Add(newfullmovie)
+                End If
                 Exit For
             End If
         Next
