@@ -300,10 +300,10 @@ Public Class Form1
 
 
         Form1.userPrefs.maximised = False
-        Call setuppreferences()
+        Call setuppreferences()                     'Set defaults to all userpreferences
 
 
-        tempstring = applicationPath & "\Settings\"
+        tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
         Dim hg As New IO.DirectoryInfo(tempstring)
         If hg.Exists Then
             ' applicationdatapath = tempstring
@@ -315,9 +315,12 @@ Public Class Form1
         Else
             IO.Directory.CreateDirectory(tempstring)
             workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
-            Dim save As New Preferences
+            Dim save As New Preferences             'save preferences using defaults becuase the config.xml doesn't exist
             Call save.saveconfig()
         End If
+
+
+
         If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
             Call loadprofiles()
             For Each prof In profileStructure.profilelist
@@ -507,6 +510,7 @@ Public Class Form1
         End If
 
         Call displaypreferences()
+
         If scrapeAndQuit = False Then
             Me.Visible = True
 
@@ -534,11 +538,11 @@ Public Class Form1
             End If
 
             Dim dpi As Graphics = Me.CreateGraphics
+
             'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
             '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
             DebugSytemDPITextBox.Text = dpi.DpiX
-
-
 
             'If Form1.userprefs.maximised = True Then
             '    Me.WindowState = FormWindowState.Maximized
@@ -562,7 +566,9 @@ Public Class Form1
             Application.DoEvents()
 
             Application.DoEvents()
+
             screenshotTab = TabControl3.TabPages(1)
+
             TabControl3.TabPages.RemoveAt(1)
 
             If userPrefs.splt5 = 0 Then
@@ -575,6 +581,7 @@ Public Class Form1
                     userPrefs.splt5 = 275
                 End If
             End If
+
             If userPrefs.startuptab = 0 Then
                 SplitContainer1.SplitterDistance = userPrefs.splt1
                 SplitContainer2.SplitterDistance = userPrefs.splt2
@@ -597,7 +604,9 @@ Public Class Form1
             SplitContainer4.IsSplitterFixed = False
             SplitContainer5.IsSplitterFixed = False
         End If
+
         'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
+
         If scrapeAndQuit = True Then
             Call autorun()
         Else
@@ -6139,7 +6148,7 @@ Public Class Form1
         userPrefs.ignoretrailers = False
         userPrefs.keepfoldername = False
         userPrefs.enablehdtags = True
-        userPrefs.renamenfofiles = False
+        userPrefs.renamenfofiles = True
         userPrefs.checkinfofiles = True
         userPrefs.savefanart = True
         userPrefs.scrapemovieposters = True

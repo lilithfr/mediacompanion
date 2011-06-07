@@ -10418,7 +10418,7 @@ Me.Label157.Location = New System.Drawing.Point(7, 478)
 Me.Label157.Name = "Label157"
 Me.Label157.Size = New System.Drawing.Size(534, 15)
 Me.Label157.TabIndex = 42
-Me.Label157.Text = "The default behaviour is for MC to overwrite none complient nfo files, you can ch"& _ 
+Me.Label157.Text = "The default behaviour is for MC to overwrite none compliant nfo files, you can ch"& _ 
     "ange this below :-"
 '
 'CheckBoxRenameNFOtoINFO
