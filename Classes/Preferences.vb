@@ -704,8 +704,10 @@ Public Class Preferences
                 Case "renamenfofiles"
                     If thisresult.InnerXml = "true" Then
                         Form1.userPrefs.renamenfofiles = True
+                        Form1.CheckBoxRenameNFOtoINFO.Checked = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Form1.userPrefs.renamenfofiles = False
+                        Form1.CheckBoxRenameNFOtoINFO.Checked = False
                     End If
 
                 Case "checkinfofiles"

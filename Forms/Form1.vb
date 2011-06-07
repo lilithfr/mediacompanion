@@ -31456,4 +31456,11 @@ Public Class Form1
     End Sub
 
    
+    Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
+        If CheckBoxRenameNFOtoINFO.Checked = False Then
+            userPrefs.renamenfofiles = False
+        Else
+            userPrefs.renamenfofiles = True
+        End If
+    End Sub
 End Class
