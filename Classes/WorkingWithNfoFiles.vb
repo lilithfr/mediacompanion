@@ -707,11 +707,11 @@ Public Class WorkingWithNfoFiles
                             Dim newepisodenfo As XmlNode = Nothing
                             Dim anotherepisode As New TvEpisode
 
-                            anotherepisode.episodepath = Nothing
-                            anotherepisode.playcount = Nothing
-                            anotherepisode.rating = Nothing
-                            anotherepisode.seasonno = Nothing
-                            anotherepisode.title = Nothing
+                            anotherepisode.episodepath = ""
+                            anotherepisode.playcount = ""
+                            anotherepisode.rating = ""
+                            anotherepisode.seasonno = ""
+                            anotherepisode.title = ""
                             ' For Each newepisodenfo In thisresult.ChildNodes
                             Dim tempint As Integer = thisresult.ChildNodes.Count - 1
                             For f = 0 To tempint
