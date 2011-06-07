@@ -1826,7 +1826,8 @@ Public Class WorkingWithNfoFiles
                         movie.Load(path)
                     Catch ex As Exception
                         If Not validate_nfo(path) Then
-                            Return "Error"
+                            newmovie.title = "ERROR"
+                            Return "ERROR"
                             Exit Function
                         End If
                         newmovie.title = IO.Path.GetFileName(path)

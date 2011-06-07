@@ -90,7 +90,7 @@ Public Class Form1
     Dim profileStructure As New Profiles
     Dim frmSplash As New frmSplashscreen
     Dim frmSplash2 As New frmProgressScreen
-    Dim mode As Boolean
+    Dim progressmode As Boolean
     Dim templateList As New List(Of HTMLTemplate)
     Dim overItem As String
     Dim oldIndexUnderTheMouse As Integer
@@ -2033,52 +2033,55 @@ Public Class Form1
             Dim counter As Integer = 1
             Dim counter2 As Integer = 1
             Dim progcounter As Integer = 1
-            If mode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
+            If progressmode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
             frmSplash2.Label2.Visible = True
             For Each fs_info As System.IO.FileInfo In fs_infos
                 Application.DoEvents()
-                If mode = True Then frmSplash2.ProgressBar1.Value = progcounter
+                If progressmode = True Then frmSplash2.ProgressBar1.Value = progcounter
                 progcounter += 1
                 frmSplash2.Label2.Text = fs_info.FullName
                 exists = (IO.File.Exists(fs_info.FullName))
                 If exists = True Then
                     workingMovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
-                    If workingMovie.movieset <> Nothing Then
-                        Dim add As Boolean = True
-                        For Each item In userPrefs.moviesets
-                            If item = workingMovie.movieset Then
-                                add = False
-                                Exit For
-                            End If
-                        Next
-                        If add = True Then
-                            userPrefs.moviesets.Add(workingMovie.movieset)
-                            ComboBox3.Items.Add(workingMovie.movieset)
-                        End If
-                    End If
-                    If workingMovie.title <> Nothing Then
-                        workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
-                        If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
-                            Dim skip As Boolean = False
-                            For Each movie In fullMovieList
-                                If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
-                                    skip = True
+                    If workingMovie.title <> "ERROR" Then
+
+                        If workingMovie.movieset <> Nothing Then
+                            Dim add As Boolean = True
+                            For Each item In userPrefs.moviesets
+                                If item = workingMovie.movieset Then
+                                    add = False
                                     Exit For
                                 End If
                             Next
-                            If skip = False Then
-                                Dim completebyte1 As Byte = 0
-                                Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(workingMovie.fullpathandfilename))
-                                Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(workingMovie.fullpathandfilename))
-                                If fanartexists = False Then
-                                    completebyte1 += 1
+                            If add = True Then
+                                userPrefs.moviesets.Add(workingMovie.movieset)
+                                ComboBox3.Items.Add(workingMovie.movieset)
+                            End If
+                        End If
+                        If workingMovie.title <> Nothing Then
+                            workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+                            If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
+                                Dim skip As Boolean = False
+                                For Each movie In fullMovieList
+                                    If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
+                                        skip = True
+                                        Exit For
+                                    End If
+                                Next
+                                If skip = False Then
+                                    Dim completebyte1 As Byte = 0
+                                    Dim fanartexists As Boolean = IO.File.Exists(Utilities.GetFanartPath(workingMovie.fullpathandfilename))
+                                    Dim posterexists As Boolean = IO.File.Exists(Utilities.GetPosterPath(workingMovie.fullpathandfilename))
+                                    If fanartexists = False Then
+                                        completebyte1 += 1
+                                    End If
+                                    If posterexists = False Then
+                                        completebyte1 += 2
+                                    End If
+                                    workingMovie.missingdata1 = completebyte1
+                                    fullMovieList.Add(workingMovie)
+                                    'filteredlist.Add(workingmovie)
                                 End If
-                                If posterexists = False Then
-                                    completebyte1 += 2
-                                End If
-                                workingMovie.missingdata1 = completebyte1
-                                fullMovieList.Add(workingMovie)
-                                'filteredlist.Add(workingmovie)
                             End If
                         End If
                     End If
@@ -5038,18 +5041,18 @@ Public Class Form1
         filteredList.Clear()
         '----------------------------------------------Progess Bar Addition
         If userPrefs.usefoldernames = True Then         'use TRUE if folder contains nfo's, False if folder contains folders which contain nfo's
-            mode = False
+            progressmode = False
         Else
-            mode = True
+            progressmode = True
         End If
 
-        Call nfos_to_array(movieFolders, mode)
+        Call nfos_to_array(movieFolders, progressmode)
 
 
         frmSplash2.Label1.Text = "Searching for Offline Movie Folders....."
         Application.DoEvents()                                  ' If not called previous progress bar is not hidden as requested 
-        mode = False                                            'offlines folders always are folders of folders that contain nfo's
-        Call nfos_to_array(userPrefs.offlinefolders, mode)
+        progressmode = False                                            'offlines folders always are folders of folders that contain nfo's
+        Call nfos_to_array(userPrefs.offlinefolders, progressmode)
         Application.DoEvents()
         '----------------------------------------------
         Try
