@@ -4105,6 +4105,9 @@ Public Class Form1
                                         certificates.Add(thisresult.InnerText)
                                 End Select
                             Next
+                            ' If plot is empty, use outline
+                            If newmovie.fullmoviebody.plot = "" Then newmovie.fullmoviebody.plot = newmovie.fullmoviebody.outline
+
                         Catch ex As Exception
                             scraperLog = scraperLog & "Error with " & newMovieList(f).nfopathandfilename & vbCrLf
                             scraperLog = scraperLog & "An error was encountered at stage 1, Downloading Movie Body" & vbCrLf
