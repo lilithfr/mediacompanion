@@ -2610,4 +2610,29 @@ Public Class Utilities
 
         End Try
     End Function
+
+    Public Shared Sub DownloadFile(ByVal URL As String, ByVal Path As String)
+        Try
+            Dim buffer(4000000) As Byte
+            Dim size As Integer = 0
+            Dim bytesRead As Integer = 0
+            Dim req As HttpWebRequest = WebRequest.Create(URL)
+            Dim res As HttpWebResponse = req.GetResponse()
+            Dim contents As Stream = res.GetResponseStream()
+            Dim bytesToRead As Integer = CInt(buffer.Length)
+            While bytesToRead > 0
+                size = contents.Read(buffer, bytesRead, bytesToRead)
+                If size = 0 Then Exit While
+                bytesToRead -= size
+                bytesRead += size
+            End While
+
+            Dim fstrm As New FileStream(Path, FileMode.OpenOrCreate, FileAccess.Write)
+            fstrm.Write(buffer, 0, bytesRead)
+            contents.Close()
+            fstrm.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class

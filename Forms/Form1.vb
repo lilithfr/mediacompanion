@@ -24775,31 +24775,8 @@ Public Class Form1
                                                         Dim filename As String = acts.actorname.Replace(" ", "_")
                                                         filename = filename & ".tbn"
                                                         filename = IO.Path.Combine(workingpath, filename)
-                                                        Try
-                                                            Dim buffer(4000000) As Byte
-                                                            Dim size As Integer = 0
-                                                            Dim bytesRead As Integer = 0
-                                                            Dim thumburl As String = acts.actorthumb
-                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                            Dim res As HttpWebResponse = req.GetResponse()
-                                                            Dim contents As Stream = res.GetResponseStream()
-                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                            While bytesToRead > 0
-                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                If size = 0 Then Exit While
-                                                                bytesToRead -= size
-                                                                bytesRead += size
-                                                            End While
 
-                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-                                                            fstrm.Write(buffer, 0, bytesRead)
-                                                            contents.Close()
-                                                            fstrm.Close()
-                                                        Catch ex As Exception
-#If SilentErrorScream Then
-                                                            Throw ex
-#End If
-                                                        End Try
+                                                        Utilities.DownloadFile(acts.actorthumb, filename)
                                                     End If
                                                 End If
                                             End If
@@ -24814,25 +24791,7 @@ Public Class Form1
                                                     End If
                                                     workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
                                                     If Not IO.File.Exists(workingpath) Then
-                                                        Dim buffer(4000000) As Byte
-                                                        Dim size As Integer = 0
-                                                        Dim bytesRead As Integer = 0
-                                                        Dim thumburl As String = acts.actorthumb
-                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                        Dim res As HttpWebResponse = req.GetResponse()
-                                                        Dim contents As Stream = res.GetResponseStream()
-                                                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                        While bytesToRead > 0
-                                                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                            If size = 0 Then Exit While
-                                                            bytesToRead -= size
-                                                            bytesRead += size
-                                                        End While
-
-                                                        Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                        fstrm.Write(buffer, 0, bytesRead)
-                                                        contents.Close()
-                                                        fstrm.Close()
+                                                        Utilities.DownloadFile(acts.actorthumb, workingpath)
                                                     End If
                                                     acts.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, id.Substring(id.Length - 2, 2))
                                                     If Form1.userPrefs.actornetworkpath.IndexOf("/") <> -1 Then
@@ -24864,7 +24823,6 @@ Public Class Form1
 
 
                         If userPrefs.tvdbactorscrape = 1 Or userPrefs.tvdbactorscrape = 2 And newtvshow.imdbid <> Nothing Then
-                            '                    Dim imdbscraper As New imdb.Classimdbscraper
                             Dim imdbscraper As New Classimdb
                             Dim actorlist As String
                             Dim actorstring As New XmlDocument
@@ -24898,25 +24856,7 @@ Public Class Form1
                                                                     End If
                                                                     workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                     If Not IO.File.Exists(workingpath) Then
-                                                                        Dim buffer(4000000) As Byte
-                                                                        Dim size As Integer = 0
-                                                                        Dim bytesRead As Integer = 0
-                                                                        Dim thumburl As String = newactor.actorthumb
-                                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                        Dim res As HttpWebResponse = req.GetResponse()
-                                                                        Dim contents As Stream = res.GetResponseStream()
-                                                                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                        While bytesToRead > 0
-                                                                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                            If size = 0 Then Exit While
-                                                                            bytesToRead -= size
-                                                                            bytesRead += size
-                                                                        End While
-
-                                                                        Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                        fstrm.Write(buffer, 0, bytesRead)
-                                                                        contents.Close()
-                                                                        fstrm.Close()
+                                                                        Utilities.DownloadFile(newactor.actorthumb, workingpath)
                                                                     End If
                                                                     newactor.actorthumb = IO.Path.Combine(Form1.userPrefs.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                                     If Form1.userPrefs.actornetworkpath.IndexOf("/") <> -1 Then
@@ -25016,31 +24956,9 @@ Public Class Form1
                                         seasonpath = newtvshow.path.Replace(IO.Path.GetFileName(newtvshow.path), "season-specials.tbn")
                                     End If
                                     If Not IO.File.Exists(seasonpath) Then
-                                        Try
-                                            Dim buffer(4000000) As Byte
-                                            Dim size As Integer = 0
-                                            Dim bytesRead As Integer = 0
-                                            Dim thumburl As String = seasonposter
-                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                            Dim res As HttpWebResponse = req.GetResponse()
-                                            Dim contents As Stream = res.GetResponseStream()
-                                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                                            While bytesToRead > 0
-                                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                If size = 0 Then Exit While
-                                                bytesToRead -= size
-                                                bytesRead += size
-                                            End While
-                                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                            fstrm.Write(buffer, 0, bytesRead)
-                                            contents.Close()
-                                            fstrm.Close()
-                                        Catch ex As WebException
-#If SilentErrorScream Then
-                                            Throw ex
-#End If
-                                            'MsgBox("Error Downloading season poster from TVDB")
-                                        End Try
+
+                                        Utilities.DownloadFile(seasonposter, seasonpath)
+
                                     End If
                                 End If
                             Next
@@ -25209,31 +25127,9 @@ Public Class Form1
 
                                 Dim seasonpath As String = newtvshow.path.Replace(IO.Path.GetFileName(newtvshow.path), "folder.jpg")
                                 If Not IO.File.Exists(seasonpath) Then
-                                    Try
-                                        Dim buffer(4000000) As Byte
-                                        Dim size As Integer = 0
-                                        Dim bytesRead As Integer = 0
-                                        Dim thumburl As String = posterurlpath
-                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                        Dim res As HttpWebResponse = req.GetResponse()
-                                        Dim contents As Stream = res.GetResponseStream()
-                                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                                        While bytesToRead > 0
-                                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                                            If size = 0 Then Exit While
-                                            bytesToRead -= size
-                                            bytesRead += size
-                                        End While
-                                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                        fstrm.Write(buffer, 0, bytesRead)
-                                        contents.Close()
-                                        fstrm.Close()
-                                    Catch ex As WebException
-#If SilentErrorScream Then
-                                        Throw ex
-#End If
-                                        'MsgBox("Error Downloading main poster from TVDB")
-                                    End Try
+  
+                                        Utilities.DownloadFile(posterurlpath, seasonpath)
+
                                 End If
                             End If
                         End If
@@ -25291,61 +25187,15 @@ Public Class Form1
 
                                 Dim seasonpath As String = newtvshow.path.Replace(IO.Path.GetFileName(newtvshow.path), "season-all.tbn")
                                 If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
-                                    Try
-                                        Dim buffer(4000000) As Byte
-                                        Dim size As Integer = 0
-                                        Dim bytesRead As Integer = 0
-                                        Dim thumburl As String = seasonallpath
-                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                        Dim res As HttpWebResponse = req.GetResponse()
-                                        Dim contents As Stream = res.GetResponseStream()
-                                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                                        While bytesToRead > 0
-                                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                                            If size = 0 Then Exit While
-                                            bytesToRead -= size
-                                            bytesRead += size
-                                        End While
-                                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                        fstrm.Write(buffer, 0, bytesRead)
-                                        contents.Close()
-                                        fstrm.Close()
-                                    Catch ex As WebException
-#If SilentErrorScream Then
-                                        Throw ex
-#End If
-                                        'MsgBox("Error Downloading main poster from TVDB")
-                                    End Try
+
+                                    Utilities.DownloadFile(seasonallpath, seasonallpath)
+
                                 End If
                             End If
                         ElseIf userPrefs.seasonall <> "none" And seasonallpath <> "" And speedy = False Then
                             Dim seasonpath As String = newtvshow.path.Replace(IO.Path.GetFileName(newtvshow.path), "season-all.tbn")
                             If Not IO.File.Exists(seasonpath) Then
-                                Try
-                                    Dim buffer(4000000) As Byte
-                                    Dim size As Integer = 0
-                                    Dim bytesRead As Integer = 0
-                                    Dim thumburl As String = seasonallpath
-                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                    Dim res As HttpWebResponse = req.GetResponse()
-                                    Dim contents As Stream = res.GetResponseStream()
-                                    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                    While bytesToRead > 0
-                                        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                        If size = 0 Then Exit While
-                                        bytesToRead -= size
-                                        bytesRead += size
-                                    End While
-                                    Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                    fstrm.Write(buffer, 0, bytesRead)
-                                    contents.Close()
-                                    fstrm.Close()
-                                Catch ex As WebException
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                    'MsgBox("Error Downloading main poster from TVDB")
-                                End Try
+                                Utilities.DownloadFile(seasonallpath, seasonpath)
                             End If
                         End If
 
@@ -25409,21 +25259,6 @@ Public Class Form1
                         newtvshow.sortorder = userPrefs.sortorder
 
                         nfoFunction.savetvshownfo(newtvshow.path, newtvshow, True)
-
-                        If Not tvFolders.Contains(newTvFolders(0)) Then
-                            tvFolders.Add(newTvFolders(0))
-                        End If
-
-
-                        bckgrnd_tvshowscraper.ReportProgress(0, newTvFolders(0))
-                        newTvFolders.RemoveAt(0)
-                    Else
-                        If Not tvFolders.Contains(newTvFolders(0)) Then
-                            tvFolders.Add(newTvFolders(0))
-                        End If
-                        tvFolders.Add(newTvFolders(0))
-                        bckgrnd_tvshowscraper.ReportProgress(0, newTvFolders(0))
-                        newTvFolders.RemoveAt(0)
                     End If
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -25431,34 +25266,13 @@ Public Class Form1
 #End If
 
                 End Try
-            Else
-                'not to process
-                'Dim shownfopath As String = IO.Path.Combine(newtvfolders(0), "tvshow.nfo")
-                'Dim newtvshownfo As basictvshownfo
-                'newtvshownfo = nfofunction.loadbasictvshownfo(shownfopath)
-
-                'If newtvshownfo.title <> Nothing Then
-                '    If newtvshownfo.status.IndexOf("skipthisfile") = -1 Then
-                '        Dim skip As Boolean = False
-                '        For Each tvshow In basictvlist
-                '            If newtvshownfo.fullpath = tvshow.fullpath Then
-                '                skip = True
-                '                Exit For
-                '            End If
-                '        Next
-                '        If skip = False Then
-                '            ListtvFiles(newtvshownfo, "*.NFO")
-                '            basictvlist.Add(newtvshownfo)
-                '        End If
-                '    End If
-                'End If
-                If Not tvFolders.Contains(newTvFolders(0)) Then
-                    tvFolders.Add(newTvFolders(0))
-                End If
-                bckgrnd_tvshowscraper.ReportProgress(0, newTvFolders(0))
-                newTvFolders.RemoveAt(0)
-
             End If
+
+            If Not tvFolders.Contains(newTvFolders(0)) Then
+                tvFolders.Add(newTvFolders(0))
+            End If
+            bckgrnd_tvshowscraper.ReportProgress(0, newTvFolders(0))
+            newTvFolders.RemoveAt(0)
         Loop
 
 
