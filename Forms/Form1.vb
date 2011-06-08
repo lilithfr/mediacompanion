@@ -5297,14 +5297,14 @@ Public Class Form1
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCol = tokenRegExp.Matches(text)
         Dim token As Match
-        
+
         For Each token In tokenCol
             Dim strNFOprop As String = ""
-            Dim valToken As String = token.Value.Substring( 2, token.Value.Length - 4 )
+            Dim valToken As String = token.Value.Substring(2, token.Value.Length - 4)
             Dim tokenInstr() As String = valToken.Split(":")
             Select Case tokenInstr(0)
                 Case "smallimage", "createimage"
-                    If thumbpath <> "" then
+                    If thumbpath <> "" Then
                         Dim origImage = Utilities.GetPosterPath(movie.fullpathandfilename)
                         Try
                             strNFOprop = "images/" & createImage(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
@@ -5314,39 +5314,39 @@ Public Class Form1
                     End If
 
                 Case "moviecount"
-                    strNFOprop = If( filteredList.Count, filteredList.Count.ToString, "0000" )
-                                        
+                    strNFOprop = If(filteredList.Count, filteredList.Count.ToString, "0000")
+
                 Case "counter"
                     strNFOprop = counter.ToString
-                                        
+
                 Case "imdb_id"
-                    strNFOprop = If( movie.id <> Nothing, movie.id, "" )
+                    strNFOprop = If(movie.id <> Nothing, movie.id, "")
 
                 Case "imdb_url"
-                    strNFOprop = If( movie.id <> Nothing, userPrefs.imdbmirror & "title/" & movie.id & "/", userPrefs.imdbmirror )
+                    strNFOprop = If(movie.id <> Nothing, userPrefs.imdbmirror & "title/" & movie.id & "/", userPrefs.imdbmirror)
 
                 Case "title"
-                    strNFOprop = If( movie.title <> Nothing, movie.title, "" )
+                    strNFOprop = If(movie.title <> Nothing, movie.title, "")
 
                 Case "movieyear"
-                    strNFOprop = If( movie.year <> Nothing, movie.year, "0000" )
+                    strNFOprop = If(movie.year <> Nothing, movie.year, "0000")
 
                 Case "movietitleandyear"
-                    strNFOprop = If( movie.title <> Nothing, movie.title, "" ) & " (" & If( movie.year <> Nothing, movie.year, "0000" ) & ")"
+                    strNFOprop = If(movie.title <> Nothing, movie.title, "") & " (" & If(movie.year <> Nothing, movie.year, "0000") & ")"
 
                 Case "rating"
-                    strNFOprop = If( movie.rating <> Nothing, movie.rating, "" )
+                    strNFOprop = If(movie.rating <> Nothing, movie.rating, "")
 
                 Case "runtime"
-                    strNFOprop = If( movie.runtime <> Nothing, movie.runtime, "" )
+                    strNFOprop = If(movie.runtime <> Nothing, movie.runtime, "")
 
                 Case "outline"
-                    strNFOprop = If( movie.outline <> Nothing, movie.outline, "" )
+                    strNFOprop = If(movie.outline <> Nothing, movie.outline, "")
 
                 Case "fullpathandfilename"
-                    strNFOprop = If( movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "" )
+                    strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
 
-                ' These tokens (except 'nfo') are included for backwards compatibility
+                    ' These tokens (except 'nfo') are included for backwards compatibility
                 Case "fullplot", "director", "stars", "writer", "moviegenre", "format", "releasedate", "nfo"
                     Dim newplotdetails As FullMovieDetails
                     newplotdetails = nfoFunction.loadfullmovienfo(movie.fullpathandfilename)
@@ -5366,7 +5366,7 @@ Public Class Form1
                         strNFOprop = newplotdetails.fullmoviebody.genre
                     End If
                     If tokenInstr(0) = "format" Then
-                        strNFOprop = newplotdetails.filedetails.filedetails_video.container.Remove(0,1)
+                        strNFOprop = newplotdetails.filedetails.filedetails_video.container.Remove(0, 1)
                     End If
                     If tokenInstr(0) = "releasedate" Then
                         strNFOprop = newplotdetails.fullmoviebody.premiered
@@ -5378,12 +5378,12 @@ Public Class Form1
                                 Case "file"
                                     Select Case tokenInstr(2)
                                         Case "video"
-                                            strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet )
+                                            strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
                                         Case "audio"
                                             Dim i As Integer = 1
                                             For Each audioStream In newplotdetails.filedetails.filedetails_audio
-                                                strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet )
-                                                If( newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count )
+                                                strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
+                                                If (newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count) Then
                                                     strNFOprop = strNFOprop & " / "
                                                 End If
                                                 i += 1
@@ -5391,8 +5391,8 @@ Public Class Form1
                                         Case "subtitles"
                                             Dim i As Integer = 1
                                             For Each subLang In newplotdetails.filedetails.filedetails_subtitles
-                                                strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet )
-                                                If( newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count )
+                                                strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
+                                                If (newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count) Then
                                                     strNFOprop = strNFOprop & " / "
                                                 End If
                                                 i += 1
@@ -5407,12 +5407,12 @@ Public Class Form1
                                 Case "alternativetitle"                             ' No support for alternative titles
                                     strNFOprop = "No support"
                                 Case Else
-                                    strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet )
+                                    strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet)
                             End Select
-                            If tokenInstr(1) <> "file" And tokenInstr.Length > 2 then
-                                Dim intCharLimit = CInt( tokenInstr(2) )
-                                If strNFOprop.Length > intCharLimit then
-                                    strNFOprop = strNFOprop.Substring( 0, strNFOprop.LastIndexOf( " ", intCharLimit - 3 ) ) & "<font class=dim>...</font>"
+                            If tokenInstr(1) <> "file" And tokenInstr.Length > 2 Then
+                                Dim intCharLimit = CInt(tokenInstr(2))
+                                If strNFOprop.Length > intCharLimit Then
+                                    strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
                                 End If
                             End If
 
@@ -5426,7 +5426,7 @@ Public Class Form1
                 strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
                 text = text.Replace(token.Value, strNFOprop)
             Catch
-                text = text.Replace( token.Value, "" )
+                text = text.Replace(token.Value, "")
             End Try
         Next
 
@@ -5459,13 +5459,13 @@ Public Class Form1
                 If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
                 For Each episode In tvShow.allepisodes
                     If episode.seasonno <> "-1" And episode.episodeno <> "-1" Then
-                    keySE = episode.seasonno & "-" & episode.episodeno
-                    episode.missing = False
+                        keySE = episode.seasonno & "-" & episode.episodeno
+                        episode.missing = False
                         If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
-                    If episode.seasonno > UBound(arrSeasonPresent) Then
-                        ReDim Preserve arrSeasonPresent(episode.seasonno)
-                        arrSeasonPresent(episode.seasonno) = True
-                    End If
+                        If episode.seasonno > UBound(arrSeasonPresent) Then
+                            ReDim Preserve arrSeasonPresent(episode.seasonno)
+                            arrSeasonPresent(episode.seasonno) = True
+                        End If
                         If episode.seasonno < firstSeason Then
                             firstSeason = episode.seasonno
                             If episode.seasonno = 0 Then arrSeasonPresent(0) = True
@@ -5479,13 +5479,13 @@ Public Class Form1
                     If text.IndexOf("<<episode") <> -1 Then inclMissingEpisode = True
                     For Each episode In tvShow.missingepisodes
                         If episode.seasonno <> "-1" And episode.episodeno <> "-1" Then
-                        keySE = episode.seasonno & "-" & episode.episodeno
-                        episode.missing = True
+                            keySE = episode.seasonno & "-" & episode.episodeno
+                            episode.missing = True
                             If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
-                        If episode.seasonno > UBound(arrSeasonPresent) Then
-                            ReDim Preserve arrSeasonPresent(episode.seasonno)
-                            arrSeasonPresent(episode.seasonno) = True
-                        End If
+                            If episode.seasonno > UBound(arrSeasonPresent) Then
+                                ReDim Preserve arrSeasonPresent(episode.seasonno)
+                                arrSeasonPresent(episode.seasonno) = True
+                            End If
                             If episode.seasonno < firstSeason Then
                                 firstSeason = episode.seasonno
                                 If episode.seasonno = 0 Then arrSeasonPresent(0) = True
@@ -5553,7 +5553,7 @@ Public Class Form1
                         If currSeason = 0 Then
                             strHTMLseasonSpecials = strHTMLseason
                         Else
-                        strHTML = strHTML & strHTMLseason
+                            strHTML = strHTML & strHTMLseason
                         End If
                         strHTMLseason = ""
                         strHTMLepisode = ""
@@ -6662,7 +6662,7 @@ Public Class Form1
                 ElseIf RadioButton6.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
-                End If
+            End If
 
 
         Next
@@ -7418,6 +7418,10 @@ Public Class Form1
                                 workingMovieDetails.fullmoviebody.imdbid = thisresult.InnerText
                         End Select
                     Next
+
+                    ' If plot is empty, use outline
+                    If workingMovieDetails.fullmoviebody.plot = "" Then workingMovieDetails.fullmoviebody.plot = workingMovieDetails.fullmoviebody.outline
+
                     Try
                         If userPrefs.gettrailer = True Then
                             If trailer <> Nothing Then
@@ -27974,6 +27978,9 @@ Public Class Form1
                                         End If
                                 End Select
                             Next
+
+                            ' If plot is empty, use outline
+                            If workingMovieDetails.fullmoviebody.plot = "" Then workingMovieDetails.fullmoviebody.plot = workingMovieDetails.fullmoviebody.outline
 
                             If field = "cert" Then
                                 Dim done As Boolean = False
