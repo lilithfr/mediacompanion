@@ -13,7 +13,7 @@ Public Class frmTVShowBrowser
     Dim urllinecount As Integer = 0
     Dim returnedresults(100, 2) As String
     Dim resultcount As Integer = 0
-    Dim languagecode As String = Form1.userPrefs.tvdblanguagecode
+    Dim languagecode As String = Preferences.tvdblanguagecode
     Dim actors(1000, 3) As String
 
 
@@ -237,37 +237,37 @@ Public Class frmTVShowBrowser
                                 actors(f, 2) = tempstring.Substring(tempstring.IndexOf("http"), tempstring.IndexOf("jpg") - tempstring.IndexOf("http") + 3)
                                 Exit For
                             End If
-                                If Form1.userPrefs.actorsave = True Then
-                                    If actors(f, 2) <> Nothing Then
-                                        If actors(f, 2) <> "" Then
-                                            Try
+                            If Preferences.actorsave = True Then
+                                If actors(f, 2) <> Nothing Then
+                                    If actors(f, 2) <> "" Then
+                                        Try
                                             Dim workingpath As String = ""
-                                            Dim networkpath As String = Form1.userPrefs.actorsavepath
-                                                workingpath = networkpath & "\" & actors(f, 3) & ".jpg"
-                                                If Not IO.File.Exists(workingpath) Then
-                                                    Dim buffer(4000000) As Byte
-                                                    Dim size As Integer = 0
-                                                    Dim bytesRead As Integer = 0
-                                                    Dim thumburl As String = actors(f, 2)
+                                            Dim networkpath As String = Preferences.actorsavepath
+                                            workingpath = networkpath & "\" & actors(f, 3) & ".jpg"
+                                            If Not IO.File.Exists(workingpath) Then
+                                                Dim buffer(4000000) As Byte
+                                                Dim size As Integer = 0
+                                                Dim bytesRead As Integer = 0
+                                                Dim thumburl As String = actors(f, 2)
                                                 Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                    Dim res As HttpWebResponse = req.GetResponse()
-                                                    Dim contents As Stream = res.GetResponseStream()
-                                                    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                    While bytesToRead > 0
-                                                        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                        If size = 0 Then Exit While
-                                                        bytesToRead -= size
-                                                        bytesRead += size
-                                                    End While
+                                                Dim res As HttpWebResponse = req.GetResponse()
+                                                Dim contents As Stream = res.GetResponseStream()
+                                                Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                While bytesToRead > 0
+                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                    If size = 0 Then Exit While
+                                                    bytesToRead -= size
+                                                    bytesRead += size
+                                                End While
 
-                                                    Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                    fstrm.Write(buffer, 0, bytesRead)
-                                                    contents.Close()
-                                                    fstrm.Close()
-                                                End If
-                                                actors(f, 2) = IO.Path.Combine(Form1.userPrefs.actornetworkpath, actors(f, 3) & ".jpg")
-                                            Catch
-                                            End Try
+                                                Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                                fstrm.Write(buffer, 0, bytesRead)
+                                                contents.Close()
+                                                fstrm.Close()
+                                            End If
+                                            actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
+                                        Catch
+                                        End Try
                                     End If
                                 End If
                             End If
@@ -332,9 +332,9 @@ Public Class frmTVShowBrowser
                 actors(f, 1) = specchars(actors(f, 1))
                 actors(f, 0) = encodespecialchrs(actors(f, 0))
                 actors(f, 1) = encodespecialchrs(actors(f, 1))
-                If Form1.userPrefs.actorsave = True Then
+                If Preferences.actorsave = True Then
                     Dim workingpath As String = ""
-                    Dim networkpath As String = Form1.userPrefs.actorsavepath
+                    Dim networkpath As String = Preferences.actorsavepath
                     If actors(f, 2) <> Nothing Then
                         If actors(f, 2) <> "" Then
                             'Try
@@ -361,7 +361,7 @@ Public Class frmTVShowBrowser
                                 contents.Close()
                                 fstrm.Close()
                             End If
-                            actors(f, 2) = IO.Path.Combine(Form1.userPrefs.actornetworkpath, actors(f, 3) & ".jpg")
+                            actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
                             'Catch
                             'End Try
                         End If

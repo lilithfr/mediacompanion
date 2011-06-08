@@ -191,7 +191,7 @@ Public Class WorkingWithNfoFiles
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
                                 '-------------- Aqui
-                                If Form1.userprefs.ignorearticle = True Then
+                                If Preferences.ignorearticle = True Then
                                     If tempstring.ToLower.IndexOf("the ") = 0 Then
                                         tempstring = tempstring.Substring(4, tempstring.Length - 4)
                                         tempstring = tempstring & ", The"
@@ -257,7 +257,7 @@ Public Class WorkingWithNfoFiles
                 Dim myDate As Date = filecreation.LastWriteTime
 
                 If Not (newtvshow.title <> Nothing And newtvshow.year <> Nothing) Then
-             
+
                     newtvshow.year = "(0000)"
                 End If
 
@@ -907,7 +907,7 @@ Public Class WorkingWithNfoFiles
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
                                 '-------------- Aqui
-                                If Form1.userprefs.ignorearticle = True Then
+                                If Preferences.ignorearticle = True Then
                                     If tempstring.ToLower.IndexOf("the ") = 0 Then
                                         tempstring = tempstring.Substring(4, tempstring.Length - 4)
                                         tempstring = tempstring & ", The"
@@ -1182,9 +1182,9 @@ Public Class WorkingWithNfoFiles
                         Do While minutes.IndexOf("0") = 0
                             minutes = minutes.Substring(1, minutes.Length - 1)
                         Loop
-                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Form1.userPrefs.roundminutes = True Then
+                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
                             minutes = "0" & minutes & " min"
-                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Form1.userPrefs.roundminutes = True Then
+                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
                             minutes = "00" & minutes & " min"
                         Else
                             minutes = tvshowtosave.runtime
@@ -1250,7 +1250,7 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
 
                 Dim actorstosave As Integer = tvshowtosave.listactors.Count
-                If actorstosave > Form1.userPrefs.maxactors Then actorstosave = Form1.userPrefs.maxactors
+                If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
                 For f = 0 To actorstosave - 1
                     child = doc.CreateElement("actor")
                     actorchild = doc.CreateElement("name")
@@ -1341,7 +1341,7 @@ Public Class WorkingWithNfoFiles
             xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
             doc.AppendChild(xmlproc)
             Dim anotherchild As XmlNode = Nothing
-            If Form1.userPrefs.enabletvhdtags = True Then
+            If Preferences.enabletvhdtags = True Then
                 Try
                     child = doc.CreateElement("fileinfo")
 
@@ -1537,7 +1537,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             Dim actorstosave As Integer = listofepisodes(0).listactors.Count
-            If actorstosave > Form1.userPrefs.maxactors Then actorstosave = Form1.userPrefs.maxactors
+            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
             For f = 0 To actorstosave - 1
                 child = doc.CreateElement("actor")
                 actorchild = doc.CreateElement("name")
@@ -1580,7 +1580,7 @@ Public Class WorkingWithNfoFiles
                 child = document.CreateElement("episodedetails")
                 If done = False Then
                     'done = True
-                    If Form1.userPrefs.enabletvhdtags = True Then
+                    If Preferences.enabletvhdtags = True Then
                         Try
                             middlechild = document.CreateElement("streamdetails")
                             childchild = document.CreateElement("fileinfo")
@@ -1865,7 +1865,7 @@ Public Class WorkingWithNfoFiles
                                     Dim tempstring As String = ""
                                     tempstring = thisresult.InnerText
                                     '-------------- Aqui
-                                    If Form1.userprefs.ignorearticle = True Then
+                                    If Preferences.ignorearticle = True Then
                                         If tempstring.ToLower.IndexOf("the ") = 0 Then
                                             tempstring = tempstring.Substring(4, tempstring.Length - 4)
                                             tempstring = tempstring & ", The"
@@ -2206,7 +2206,7 @@ Public Class WorkingWithNfoFiles
 
                 root = doc.CreateElement("movie")
                 stage = 3
-                If Form1.userprefs.enablehdtags = True Then
+                If Preferences.enablehdtags = True Then
                     Try
                         child = doc.CreateElement("fileinfo")
                     Catch
@@ -2279,7 +2279,7 @@ Public Class WorkingWithNfoFiles
                             If movietosave.filedetails.filedetails_video.duration <> "" Then
                                 filedetailschildchild = doc.CreateElement("duration")
                                 Dim temptemp As String = movietosave.filedetails.filedetails_video.duration
-                                If Form1.userprefs.intruntime = True Then
+                                If Preferences.intruntime = True Then
                                     temptemp = Utilities.cleanruntime(movietosave.filedetails.filedetails_video.duration)
                                     If IsNumeric(temptemp) Then
                                         filedetailschildchild.InnerText = temptemp
@@ -2601,7 +2601,7 @@ Public Class WorkingWithNfoFiles
                         minutes = minutes.Replace("mins", "")
                         minutes = minutes.Replace("min", "")
                         minutes = minutes.Replace(" ", "")
-                        'If Form1.userprefs.intruntime = True And Not IsNumeric(minutes) Then
+                        'If Preferences.intruntime = True And Not IsNumeric(minutes) Then
                         '    Dim tempstring As String = Form1.filefunction.cleanruntime(minutes)
                         '    If IsNumeric(tempstring) Then
                         '        minutes = tempstring
@@ -2611,12 +2611,12 @@ Public Class WorkingWithNfoFiles
                             Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                                 minutes = minutes.Substring(1, minutes.Length - 1)
                             Loop
-                            If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Form1.userprefs.roundminutes = True Then
+                            If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
                                 minutes = "0" & minutes
-                            ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Form1.userprefs.roundminutes = True Then
+                            ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
                                 minutes = "00" & minutes
                             End If
-                            If Form1.userprefs.intruntime = False And IsNumeric(minutes) Then
+                            If Preferences.intruntime = False And IsNumeric(minutes) Then
                                 minutes = minutes & " min"
                             End If
                         Catch ex As Exception
@@ -2729,7 +2729,7 @@ Public Class WorkingWithNfoFiles
                 End Try
                 Try
                     Dim actorstosave As Integer = movietosave.listactors.Count
-                    If actorstosave > Form1.userprefs.maxactors Then actorstosave = Form1.userprefs.maxactors
+                    If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
                     For f = 0 To actorstosave - 1
                         child = doc.CreateElement("actor")
                         actorchild = doc.CreateElement("name")

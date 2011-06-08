@@ -73,11 +73,11 @@ Public Class WebFileDownloader
             Return False
         End Try
     End Function
-
+    Const KB As Integer = 1024
+    Const MB As Integer = KB * KB
     Public Shared Function FormatFileSize(ByVal Size As Long) As String
         Try
-            Dim KB As Integer = 1024
-            Dim MB As Integer = KB * KB
+
             ' Return size of file in kilobytes.
             If Size < KB Then
                 Return (Size.ToString("D") & " bytes")

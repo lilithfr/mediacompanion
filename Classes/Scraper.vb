@@ -1105,7 +1105,7 @@ Public Class Classimdb
                                     mpaaresults(g, 1) = tempstring
                                     Try
                                         'line below determines if cert is full or short as e.g. UK:15 becomes 15
-                                        If Not Form1.userPrefs.scrapefullcert Then
+                                        If Not Preferences.scrapefullcert Then
                                             mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
                                         End If
 

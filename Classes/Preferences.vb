@@ -4,547 +4,637 @@ Imports System.Threading
 
 
 Public Class Preferences
+    Public Shared customcounter As Integer
+    Public Shared tvrename As Integer
+    Public Shared locx As Integer
+    Public Shared locy As Integer
+    Public Shared maxactors As Integer
+    Public Shared maxmoviegenre As Integer
+    Public Shared rarsize As Integer
+    Public Shared splt1 As Integer
+    Public Shared splt2 As Integer
+    Public Shared splt3 As Integer
+    Public Shared splt4 As Integer
+    Public Shared splt5 As Integer
+    Public Shared resizefanart As Integer
+    Public Shared formheight As Integer
+    Public Shared formwidth As Integer
+    Public Shared videoplaybackmode As Integer
+    Public Shared startupdisplaynamemode As Integer
+    Public Shared tvdbactorscrape As Integer
+    Public Shared transparencyvalue As Integer
+    Public Shared maximumthumbs As Integer
+    Public Shared startupmode As Integer
+    Public Shared videomode As Integer ' = 3
+    Public Shared maximagecount As Integer
+    Public Shared moviescraper As Integer
+    Public Shared nfoposterscraper As Integer
+
+    'Dim tvdbmode As String
+    Public Shared XBMC_Scraper As String = ""
+    Public Shared font As String
+    Public Shared moviethumbpriority() As String
+    Public Shared certificatepriority() As String
+    Public Shared actorsavepath As String
+    Public Shared actornetworkpath As String
+    Public Shared defaulttvthumb As String
+    Public Shared imdbmirror As String
+    Public Shared backgroundcolour As String
+    Public Shared forgroundcolour As String
+    Public Shared namemode As String
+    Public Shared tvdblanguage As String
+    Public Shared tvdblanguagecode As String
+    Public Shared configpath As String
+    Public Shared postertype As String
+    Public Shared sortorder As String
+    Public Shared selectedvideoplayer As String
+    Public Shared lastpath As String
+    Public Shared episodeacrorsource As String
+    Public Shared seasonall As String
+    Public Shared tablesortorder As String
+
+    Public Shared intruntime As Boolean
+    Public Shared autorenameepisodes As Boolean
+    Public Shared autoepisodescreenshot As Boolean
+    Public Shared ignorearticle As Boolean
+    Public Shared tvshow_useXBMC_Scraper As Boolean
+    Public Shared movies_useXBMC_Scraper As Boolean
+    Public Shared eprenamelowercase As Boolean
+    Public Shared tvshowautoquick As Boolean
+    Public Shared tvshowrebuildlog As Boolean
+    Public Shared roundminutes As Boolean
+    Public Shared keepfoldername As Boolean
+    Public Shared startupCache As Boolean
+    Public Shared ignoretrailers As Boolean
+    Public Shared ignoreactorthumbs As Boolean
+    Public Shared enabletvhdtags As Boolean
+    Public Shared enablehdtags As Boolean
+    Public Shared renamenfofiles As Boolean
+    Public Shared checkinfofiles As Boolean
+    Public Shared disablelogfiles As Boolean
+    Public Shared fanartnotstacked As Boolean
+    Public Shared posternotstacked As Boolean
+    Public Shared scrapemovieposters As Boolean
+    Public Shared usefanart As Boolean
+    Public Shared dontdisplayposter As Boolean
+    Public Shared actorsave As Boolean
+    Public Shared overwritethumbs As Boolean
+    Public Shared remembersize As Boolean
+    Public Shared usefoldernames As Boolean
+    Public Shared createfolderjpg As Boolean
+    Public Shared basicsavemode As Boolean
+    Public Shared usetransparency As Boolean
+    Public Shared downloadtvseasonthumbs As Boolean
+    Public Shared disabletvlogs As Boolean
+    Public Shared savefanart As Boolean
+    Public Shared tvposter As Boolean
+    Public Shared tvfanart As Boolean
+    Public Shared alwaysuseimdbid As Boolean
+    Public Shared gettrailer As Boolean
+    Public Shared externalbrowser As Boolean
+    Public Shared maximised As Boolean
+    Public Shared copytvactorthumbs As Boolean = False
+    Public Shared actorseasy As Boolean
+    Public Shared scrapefullcert As Boolean
+
+    Public Shared moviesortorder As Byte
+    Public Shared moviedefaultlist As Byte
+    Public Shared startuptab As Byte
+
+    Public Shared moviesets As New List(Of String)
+    Public Shared tableview As New List(Of String)
+    Public Shared offlinefolders As New List(Of String)
+
+    Public Shared commandlist As New List(Of ListOfCommands)
+
+    Public Shared Sub SaveConfig()
+
+        Dim doc As New XmlDocument
+
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc As XmlDeclaration
+
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        Dim root As XmlElement
+        Dim child As XmlElement
+        root = doc.CreateElement("xbmc_media_companion_config_v1.0")
 
 
-    Public Sub saveconfig()
-        Monitor.Enter(Me)
-        Try
-            Dim doc As New XmlDocument
+        For Each path In Form1.tvFolders
+            child = doc.CreateElement("tvfolder")
+            child.InnerText = path
+            root.AppendChild(child)
+        Next
 
-            Dim thispref As XmlNode = Nothing
-            Dim xmlproc As XmlDeclaration
+        For Each path In Form1.tvRootFolders
+            child = doc.CreateElement("tvrootfolder")
+            child.InnerText = path
+            root.AppendChild(child)
+        Next
 
-            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-            doc.AppendChild(xmlproc)
-            Dim root As XmlElement
-            Dim child As XmlElement
-            root = doc.CreateElement("xbmc_media_companion_config_v1.0")
-
-
-            For Each path In Form1.tvFolders
-                child = doc.CreateElement("tvfolder")
+        For Each path In Form1.movieFolders
+            child = doc.CreateElement("nfofolder")
+            child.InnerText = path
+            root.AppendChild(child)
+        Next
+        Dim list As New List(Of String)
+        For Each path In Preferences.offlinefolders
+            If Not list.Contains(path) Then
+                child = doc.CreateElement("offlinefolder")
                 child.InnerText = path
                 root.AppendChild(child)
-            Next
-
-            For Each path In Form1.tvRootFolders
-                child = doc.CreateElement("tvrootfolder")
-                child.InnerText = path
-                root.AppendChild(child)
-            Next
-
-            For Each path In Form1.movieFolders
-                child = doc.CreateElement("nfofolder")
-                child.InnerText = path
-                root.AppendChild(child)
-            Next
-            Dim list As New List(Of String)
-            For Each path In Form1.userPrefs.offlinefolders
-                If Not list.Contains(path) Then
-                    child = doc.CreateElement("offlinefolder")
-                    child.InnerText = path
-                    root.AppendChild(child)
-                    list.Add(path)
-                End If
-            Next
-
-
-            child = doc.CreateElement("gettrailer")
-            child.InnerText = Form1.userPrefs.gettrailer.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("keepfoldername")
-            child.InnerText = Form1.userPrefs.keepfoldername.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("startupcache")
-            child.InnerText = Form1.userPrefs.startupCache.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("ignoretrailers")
-            child.InnerText = Form1.userPrefs.ignoretrailers.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("moviescraper")
-            child.InnerText = Form1.userPrefs.moviescraper.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("nfoposterscraper")
-            child.InnerText = Form1.userPrefs.nfoposterscraper.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("alwaysuseimdbid")
-            child.InnerText = Form1.userPrefs.alwaysuseimdbid.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("ignoreactorthumbs")
-            child.InnerText = Form1.userPrefs.ignoreactorthumbs.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("maxactors")
-            child.InnerText = Form1.userPrefs.maxactors.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("maxmoviegenre")
-            child.InnerText = Form1.userPrefs.maxmoviegenre.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("enablehdtags")
-            child.InnerText = Form1.userPrefs.enablehdtags.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("renamenfofiles")
-            child.InnerText = Form1.userPrefs.renamenfofiles.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("checkinfofiles")
-            child.InnerText = Form1.userPrefs.checkinfofiles.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("tvshowautoquick")
-            child.InnerText = Form1.userPrefs.tvshowautoquick.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("disablelogfiles")
-            child.InnerText = Form1.userPrefs.disablelogfiles.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("actorseasy")
-            child.InnerText = Form1.userPrefs.actorseasy.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("copytvactorthumbs")
-            child.InnerText = Form1.userPrefs.copytvactorthumbs.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("fanartnotstacked")
-            child.InnerText = Form1.userPrefs.fanartnotstacked.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("posternotstacked")
-            child.InnerText = Form1.userPrefs.posternotstacked.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("lastpath")
-            child.InnerText = Form1.userPrefs.lastpath
-            root.AppendChild(child)
-
-            child = doc.CreateElement("downloadfanart")
-            child.InnerText = Form1.userPrefs.savefanart.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("scrapemovieposters")
-            child.InnerText = Form1.userPrefs.scrapemovieposters.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("usefanart")
-            child.InnerText = Form1.userPrefs.usefanart.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("dontdisplayposter")
-            child.InnerText = Form1.userPrefs.dontdisplayposter.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("usefoldernames")
-            child.InnerText = Form1.userPrefs.usefoldernames.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("rarsize")
-            child.InnerText = Form1.userPrefs.rarsize.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("actorsave")
-            child.InnerText = Form1.userPrefs.actorsave.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("actorsavepath")
-            child.InnerText = Form1.userPrefs.actorsavepath
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("actornetworkpath")
-            child.InnerText = Form1.userPrefs.actornetworkpath
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("resizefanart")
-            child.InnerText = Form1.userPrefs.resizefanart.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("overwritethumbs")
-            child.InnerText = Form1.userPrefs.overwritethumbs.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("defaulttvthumb")
-            child.InnerText = Form1.userPrefs.defaulttvthumb
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("imdbmirror")
-            child.InnerText = Form1.userPrefs.imdbmirror
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("backgroundcolour")
-            child.InnerText = Form1.userPrefs.backgroundcolour
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("forgroundcolour")
-            child.InnerText = Form1.userPrefs.forgroundcolour
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("remembersize")
-            child.InnerText = Form1.userPrefs.remembersize.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("locx")
-            child.InnerText = Form1.userPrefs.locx.ToString
-            root.AppendChild(child)
-
-            child = doc.CreateElement("locy")
-            child.InnerText = Form1.userPrefs.locy.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("formheight")
-            child.InnerText = Form1.userPrefs.formheight.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("formwidth")
-            child.InnerText = Form1.userPrefs.formwidth.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("videoplaybackmode")
-            child.InnerText = Form1.userPrefs.videoplaybackmode.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("createfolderjpg")
-            child.InnerText = Form1.userPrefs.createfolderjpg.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("basicsavemode")
-            child.InnerText = Form1.userPrefs.basicsavemode.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("startupdisplaynamemode")
-            child.InnerText = Form1.userPrefs.startupdisplaynamemode.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("namemode")
-            child.InnerText = Form1.userPrefs.namemode
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("tvdbmode")
-            child.InnerText = Form1.userPrefs.sortorder
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("tvdbactorscrape")
-            child.InnerText = Form1.userPrefs.tvdbactorscrape.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("usetransparency")
-            child.InnerText = Form1.userPrefs.usetransparency.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("transparencyvalue")
-            child.InnerText = Form1.userPrefs.transparencyvalue.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("downloadtvfanart")
-            child.InnerText = Form1.userPrefs.tvfanart.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("downloadtvposter")
-            child.InnerText = Form1.userPrefs.tvposter.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("keepfoldername")
-            child.InnerText = Form1.userPrefs.keepfoldername.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("downloadtvseasonthumbs")
-            child.InnerText = Form1.userPrefs.downloadtvseasonthumbs.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("maximumthumbs")
-            child.InnerText = Form1.userPrefs.maximumthumbs.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("startupmode")
-            child.InnerText = Form1.userPrefs.startupmode.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("hdtvtags")
-            child.InnerText = Form1.userPrefs.enabletvhdtags.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("disablelogs")
-            child.InnerText = Form1.userPrefs.disablelogfiles.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("disabletvlogs")
-            child.InnerText = Form1.userPrefs.disabletvlogs.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("overwritethumb")
-            child.InnerText = Form1.userPrefs.overwritethumbs.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("savefanart")
-            child.InnerText = Form1.userPrefs.savefanart.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("postertype")
-            child.InnerText = Form1.userPrefs.postertype
-            root.AppendChild(child)
-
-            child = doc.CreateElement("roundminutes")
-            child.InnerText = Form1.userPrefs.roundminutes.ToString.ToLower
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("tvactorscrape")
-            child.InnerText = Form1.userPrefs.tvdbactorscrape.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("videomode")
-            child.InnerText = Form1.userPrefs.videomode.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("selectedvideoplayer")
-            child.InnerText = Form1.userPrefs.selectedvideoplayer
-            root.AppendChild(child)
-
-            child = doc.CreateElement("externalbrowser")
-            child.InnerText = Form1.userPrefs.externalbrowser.ToString.ToLower
-            root.AppendChild(child)
-
-            child = doc.CreateElement("moviethumbpriority")
-            Dim tempstring As String
-            tempstring = Form1.userPrefs.moviethumbpriority(0) & "|" & Form1.userPrefs.moviethumbpriority(1) & "|" & Form1.userPrefs.moviethumbpriority(2) & "|" & Form1.userPrefs.moviethumbpriority(3)
-            child.InnerText = tempstring
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("tvdblanguage")
-            tempstring = ""
-            tempstring = Form1.userPrefs.tvdblanguagecode & "|" & Form1.userPrefs.tvdblanguage
-            child.InnerText = tempstring
-            root.AppendChild(child)
-
-
-
-            child = doc.CreateElement("certificatepriority")
-            tempstring = ""
-            For f = 0 To 32
-                tempstring = tempstring & Form1.userPrefs.certificatepriority(f) & "|"
-            Next
-            tempstring = tempstring & Form1.userPrefs.certificatepriority(33)
-            child.InnerText = tempstring
-            root.AppendChild(child)
-
-            child = doc.CreateElement("splitcontainer1")
-            child.InnerText = Form1.userPrefs.splt1.ToString
-            root.AppendChild(child)
-
-            child = doc.CreateElement("splitcontainer2")
-            child.InnerText = Form1.userPrefs.splt2.ToString
-            root.AppendChild(child)
-
-            child = doc.CreateElement("splitcontainer3")
-            child.InnerText = Form1.userPrefs.splt3.ToString
-            root.AppendChild(child)
-
-            child = doc.CreateElement("splitcontainer4")
-            child.InnerText = Form1.userPrefs.splt4.ToString
-            root.AppendChild(child)
-
-            child = doc.CreateElement("splitcontainer5")
-            child.InnerText = Form1.userPrefs.splt5.ToString
-            root.AppendChild(child)
-
-
-            child = doc.CreateElement("seasonall")
-            child.InnerText = Form1.userPrefs.seasonall
-            root.AppendChild(child)
-
-            child = doc.CreateElement("maximised")
-            If Form1.userPrefs.maximised = True Then
-                child.InnerText = "true"
-            Else
-                child.InnerText = "false"
+                list.Add(path)
             End If
-            root.AppendChild(child)
+        Next
 
-            child = doc.CreateElement("tvrename")
-            child.InnerText = Form1.userPrefs.tvrename.ToString
-            root.AppendChild(child)
 
-            child = doc.CreateElement("eprenamelowercase")
-            child.InnerText = Form1.userPrefs.eprenamelowercase.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("gettrailer")
+        child.InnerText = Preferences.gettrailer.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("tvshowrebuildlog")
-            child.InnerText = Form1.userPrefs.tvshowrebuildlog.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("keepfoldername")
+        child.InnerText = Preferences.keepfoldername.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("moviesortorder")
-            child.InnerText = Form1.userPrefs.moviesortorder.ToString
-            root.AppendChild(child)
+        child = doc.CreateElement("startupcache")
+        child.InnerText = Preferences.startupCache.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("moviedefaultlist")
-            child.InnerText = Form1.userPrefs.moviedefaultlist.ToString
-            root.AppendChild(child)
 
-            child = doc.CreateElement("autoepisodescreenshot")
-            child.InnerText = Form1.userPrefs.autoepisodescreenshot.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("ignoretrailers")
+        child.InnerText = Preferences.ignoretrailers.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("ignorearticle")
-            child.InnerText = Form1.userPrefs.ignorearticle.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("moviescraper")
+        child.InnerText = Preferences.moviescraper.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("TVShowUseXBMCScraper")
-            child.InnerText = Form1.userPrefs.tvshow_useXBMC_Scraper.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("nfoposterscraper")
+        child.InnerText = Preferences.nfoposterscraper.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("moviesUseXBMCScraper")
-            child.InnerText = Form1.userPrefs.movies_useXBMC_Scraper.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("alwaysuseimdbid")
+        child.InnerText = Preferences.alwaysuseimdbid.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("whatXBMCScraper")
-            child.InnerText = Form1.userPrefs.XBMC_Scraper.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("ignoreactorthumbs")
+        child.InnerText = Preferences.ignoreactorthumbs.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("startuptab")
-            child.InnerText = Form1.userPrefs.startuptab.ToString
-            root.AppendChild(child)
 
-            child = doc.CreateElement("intruntime")
-            child.InnerText = Form1.userPrefs.intruntime.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("maxactors")
+        child.InnerText = Preferences.maxactors.ToString.ToLower
+        root.AppendChild(child)
 
-            If Form1.userPrefs.font <> Nothing Then
-                If Form1.userPrefs.font <> "" Then
-                    child = doc.CreateElement("font")
-                    child.InnerText = Form1.userPrefs.font
-                    root.AppendChild(child)
-                End If
+        child = doc.CreateElement("maxmoviegenre")
+        child.InnerText = Preferences.maxmoviegenre.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("enablehdtags")
+        child.InnerText = Preferences.enablehdtags.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("renamenfofiles")
+        child.InnerText = Preferences.renamenfofiles.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("checkinfofiles")
+        child.InnerText = Preferences.checkinfofiles.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("tvshowautoquick")
+        child.InnerText = Preferences.tvshowautoquick.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("disablelogfiles")
+        child.InnerText = Preferences.disablelogfiles.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("actorseasy")
+        child.InnerText = Preferences.actorseasy.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("copytvactorthumbs")
+        child.InnerText = Preferences.copytvactorthumbs.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("fanartnotstacked")
+        child.InnerText = Preferences.fanartnotstacked.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("posternotstacked")
+        child.InnerText = Preferences.posternotstacked.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("lastpath")
+        child.InnerText = Preferences.lastpath
+        root.AppendChild(child)
+
+        child = doc.CreateElement("downloadfanart")
+        child.InnerText = Preferences.savefanart.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("scrapemovieposters")
+        child.InnerText = Preferences.scrapemovieposters.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("usefanart")
+        child.InnerText = Preferences.usefanart.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("dontdisplayposter")
+        child.InnerText = Preferences.dontdisplayposter.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("usefoldernames")
+        child.InnerText = Preferences.usefoldernames.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("rarsize")
+        child.InnerText = Preferences.rarsize.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("actorsave")
+        child.InnerText = Preferences.actorsave.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("actorsavepath")
+        child.InnerText = Preferences.actorsavepath
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("actornetworkpath")
+        child.InnerText = Preferences.actornetworkpath
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("resizefanart")
+        child.InnerText = Preferences.resizefanart.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("overwritethumbs")
+        child.InnerText = Preferences.overwritethumbs.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("defaulttvthumb")
+        child.InnerText = Preferences.defaulttvthumb
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("imdbmirror")
+        child.InnerText = Preferences.imdbmirror
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("backgroundcolour")
+        child.InnerText = Preferences.backgroundcolour
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("forgroundcolour")
+        child.InnerText = Preferences.forgroundcolour
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("remembersize")
+        child.InnerText = Preferences.remembersize.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("locx")
+        child.InnerText = Preferences.locx.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("locy")
+        child.InnerText = Preferences.locy.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("formheight")
+        child.InnerText = Preferences.formheight.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("formwidth")
+        child.InnerText = Preferences.formwidth.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("videoplaybackmode")
+        child.InnerText = Preferences.videoplaybackmode.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("createfolderjpg")
+        child.InnerText = Preferences.createfolderjpg.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("basicsavemode")
+        child.InnerText = Preferences.basicsavemode.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("startupdisplaynamemode")
+        child.InnerText = Preferences.startupdisplaynamemode.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("namemode")
+        child.InnerText = Preferences.namemode
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("tvdbmode")
+        child.InnerText = Preferences.sortorder
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("tvdbactorscrape")
+        child.InnerText = Preferences.tvdbactorscrape.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("usetransparency")
+        child.InnerText = Preferences.usetransparency.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("transparencyvalue")
+        child.InnerText = Preferences.transparencyvalue.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("downloadtvfanart")
+        child.InnerText = Preferences.tvfanart.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("downloadtvposter")
+        child.InnerText = Preferences.tvposter.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("keepfoldername")
+        child.InnerText = Preferences.keepfoldername.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("downloadtvseasonthumbs")
+        child.InnerText = Preferences.downloadtvseasonthumbs.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("maximumthumbs")
+        child.InnerText = Preferences.maximumthumbs.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("startupmode")
+        child.InnerText = Preferences.startupmode.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("hdtvtags")
+        child.InnerText = Preferences.enabletvhdtags.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("disablelogs")
+        child.InnerText = Preferences.disablelogfiles.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("disabletvlogs")
+        child.InnerText = Preferences.disabletvlogs.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("overwritethumb")
+        child.InnerText = Preferences.overwritethumbs.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("savefanart")
+        child.InnerText = Preferences.savefanart.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("postertype")
+        child.InnerText = Preferences.postertype
+        root.AppendChild(child)
+
+        child = doc.CreateElement("roundminutes")
+        child.InnerText = Preferences.roundminutes.ToString.ToLower
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("tvactorscrape")
+        child.InnerText = Preferences.tvdbactorscrape.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("videomode")
+        child.InnerText = Preferences.videomode.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("selectedvideoplayer")
+        child.InnerText = Preferences.selectedvideoplayer
+        root.AppendChild(child)
+
+        child = doc.CreateElement("externalbrowser")
+        child.InnerText = Preferences.externalbrowser.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("moviethumbpriority")
+        Dim tempstring As String
+        tempstring = Preferences.moviethumbpriority(0) & "|" & Preferences.moviethumbpriority(1) & "|" & Preferences.moviethumbpriority(2) & "|" & Preferences.moviethumbpriority(3)
+        child.InnerText = tempstring
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("tvdblanguage")
+        tempstring = ""
+        tempstring = Preferences.tvdblanguagecode & "|" & Preferences.tvdblanguage
+        child.InnerText = tempstring
+        root.AppendChild(child)
+
+
+
+        child = doc.CreateElement("certificatepriority")
+        tempstring = ""
+        For f = 0 To 32
+            tempstring = tempstring & Preferences.certificatepriority(f) & "|"
+        Next
+        tempstring = tempstring & Preferences.certificatepriority(33)
+        child.InnerText = tempstring
+        root.AppendChild(child)
+
+        child = doc.CreateElement("splitcontainer1")
+        child.InnerText = Preferences.splt1.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("splitcontainer2")
+        child.InnerText = Preferences.splt2.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("splitcontainer3")
+        child.InnerText = Preferences.splt3.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("splitcontainer4")
+        child.InnerText = Preferences.splt4.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("splitcontainer5")
+        child.InnerText = Preferences.splt5.ToString
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("seasonall")
+        child.InnerText = Preferences.seasonall
+        root.AppendChild(child)
+
+        child = doc.CreateElement("maximised")
+        If Preferences.maximised = True Then
+            child.InnerText = "true"
+        Else
+            child.InnerText = "false"
+        End If
+        root.AppendChild(child)
+
+        child = doc.CreateElement("tvrename")
+        child.InnerText = Preferences.tvrename.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("eprenamelowercase")
+        child.InnerText = Preferences.eprenamelowercase.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("tvshowrebuildlog")
+        child.InnerText = Preferences.tvshowrebuildlog.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("moviesortorder")
+        child.InnerText = Preferences.moviesortorder.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("moviedefaultlist")
+        child.InnerText = Preferences.moviedefaultlist.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("autoepisodescreenshot")
+        child.InnerText = Preferences.autoepisodescreenshot.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("ignorearticle")
+        child.InnerText = Preferences.ignorearticle.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("TVShowUseXBMCScraper")
+        child.InnerText = Preferences.tvshow_useXBMC_Scraper.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("moviesUseXBMCScraper")
+        child.InnerText = Preferences.movies_useXBMC_Scraper.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("whatXBMCScraper")
+        child.InnerText = Preferences.XBMC_Scraper.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("startuptab")
+        child.InnerText = Preferences.startuptab.ToString
+        root.AppendChild(child)
+
+        child = doc.CreateElement("intruntime")
+        child.InnerText = Preferences.intruntime.ToString.ToLower
+        root.AppendChild(child)
+
+        If Preferences.font <> Nothing Then
+            If Preferences.font <> "" Then
+                child = doc.CreateElement("font")
+                child.InnerText = Preferences.font
+                root.AppendChild(child)
             End If
+        End If
 
-            child = doc.CreateElement("autorenameepisodes")
-            child.InnerText = Form1.userPrefs.autorenameepisodes.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("autorenameepisodes")
+        child.InnerText = Preferences.autorenameepisodes.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("scrapefullcert")
-            child.InnerText = Form1.userPrefs.scrapefullcert.ToString.ToLower
-            root.AppendChild(child)
+        child = doc.CreateElement("scrapefullcert")
+        child.InnerText = Preferences.scrapefullcert.ToString.ToLower
+        root.AppendChild(child)
 
-            child = doc.CreateElement("moviesets")
-            Dim childchild As XmlElement
-            For Each movieset In Form1.userPrefs.moviesets
-                If movieset <> "None" Then
-                    childchild = doc.CreateElement("set")
-                    childchild.InnerText = movieset
-                    child.AppendChild(childchild)
-                End If
-            Next
-            root.AppendChild(child)
+        child = doc.CreateElement("moviesets")
+        Dim childchild As XmlElement
+        For Each movieset In Preferences.moviesets
+            If movieset <> "None" Then
+                childchild = doc.CreateElement("set")
+                childchild.InnerText = movieset
+                child.AppendChild(childchild)
+            End If
+        Next
+        root.AppendChild(child)
 
-            child = doc.CreateElement("table")
-            Dim childchild2 As XmlElement
-            childchild2 = doc.CreateElement("sort")
-            childchild2.InnerText = Form1.userPrefs.tablesortorder
+        child = doc.CreateElement("table")
+        Dim childchild2 As XmlElement
+        childchild2 = doc.CreateElement("sort")
+        childchild2.InnerText = Preferences.tablesortorder
+        child.AppendChild(childchild2)
+        For Each tabs In Preferences.tableview
+            childchild2 = doc.CreateElement("tab")
+            childchild2.InnerText = tabs
             child.AppendChild(childchild2)
-            For Each tabs In Form1.userPrefs.tableview
-                childchild2 = doc.CreateElement("tab")
-                childchild2.InnerText = tabs
-                child.AppendChild(childchild2)
-            Next
-            root.AppendChild(child)
+        Next
+        root.AppendChild(child)
 
-            child = doc.CreateElement("offlinemovielabeltext")
-            child.InnerText = Form1.TextBox_OfflineDVDTitle.Text
-            root.AppendChild(child)
+        child = doc.CreateElement("offlinemovielabeltext")
+        child.InnerText = Form1.TextBox_OfflineDVDTitle.Text
+        root.AppendChild(child)
 
 
-            For Each com In Form1.userPrefs.commandlist
-                If com.command <> "" And com.title <> "" Then
-                    child = doc.CreateElement("comms")
-                    childchild = doc.CreateElement("title")
-                    childchild.InnerText = com.title
-                    child.AppendChild(childchild)
-                    childchild = doc.CreateElement("command")
-                    childchild.InnerText = com.command
-                    child.AppendChild(childchild)
-                    root.AppendChild(child)
-                End If
-            Next
+        For Each com In Preferences.commandlist
+            If com.command <> "" And com.title <> "" Then
+                child = doc.CreateElement("comms")
+                childchild = doc.CreateElement("title")
+                childchild.InnerText = com.title
+                child.AppendChild(childchild)
+                childchild = doc.CreateElement("command")
+                childchild.InnerText = com.command
+                child.AppendChild(childchild)
+                root.AppendChild(child)
+            End If
+        Next
 
-
-
-
-            doc.AppendChild(root)
-            Dim tempstring2 As String = Form1.workingProfile.config
-            Dim output As New XmlTextWriter(Form1.workingProfile.config, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-            doc.WriteTo(output)
-            output.Close()
-        Catch
-
-        Finally
-            Monitor.Exit(Me)
-        End Try
-
-
+        doc.AppendChild(root)
+        Dim tempstring2 As String = Form1.workingProfile.config
+        Dim output As New XmlTextWriter(Form1.workingProfile.config, System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
     End Sub
 
-    Public Sub loadconfig()
-        Form1.userPrefs.commandlist.Clear()
-        Form1.userPrefs.moviesets.Clear()
-        Form1.userPrefs.moviesets.Add("None")
+    Public Shared Sub LoadConfig()
+        Preferences.commandlist.Clear()
+        Preferences.moviesets.Clear()
+        Preferences.moviesets.Add("None")
         Form1.movieFolders.Clear()
         Form1.tvFolders.Clear()
         Form1.tvRootFolders.Clear()
-        Form1.userPrefs.tableview.Clear()
+        Preferences.tableview.Clear()
         Dim tempstring As String = Form1.workingProfile.config
         If Not IO.File.Exists(Form1.workingProfile.config) Then
             Exit Sub
@@ -567,7 +657,7 @@ Public Class Preferences
                     For Each thisset In thisresult.ChildNodes
                         Select Case thisset.Name
                             Case "set"
-                                Form1.userPrefs.moviesets.Add(thisset.InnerText)
+                                Preferences.moviesets.Add(thisset.InnerText)
                         End Select
                     Next
                 Case "table"
@@ -575,9 +665,9 @@ Public Class Preferences
                     For Each thistable In thisresult.ChildNodes
                         Select Case thistable.Name
                             Case "tab"
-                                Form1.userPrefs.tableview.Add(thistable.InnerText)
+                                Preferences.tableview.Add(thistable.InnerText)
                             Case "sort"
-                                Form1.userPrefs.tablesortorder = thistable.InnerText
+                                Preferences.tablesortorder = thistable.InnerText
                         End Select
                     Next
                 Case "comms"
@@ -592,36 +682,36 @@ Public Class Preferences
                         End Select
                     Next
                     If newcom.command <> "" And newcom.title <> "" Then
-                        Form1.userPrefs.commandlist.Add(newcom)
+                        Preferences.commandlist.Add(newcom)
                     End If
                 Case "seasonall"
-                    Form1.userPrefs.seasonall = thisresult.InnerText
+                    Preferences.seasonall = thisresult.InnerText
                 Case "splitcontainer1"
-                    Form1.userPrefs.splt1 = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.splt1 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer2"
-                    Form1.userPrefs.splt2 = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.splt2 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer3"
-                    Form1.userPrefs.splt3 = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.splt3 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer4"
-                    Form1.userPrefs.splt4 = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.splt4 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer5"
-                    Form1.userPrefs.splt5 = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.splt5 = Convert.ToInt32(thisresult.InnerText)
                 Case "maximised"
                     If thisresult.InnerText = "true" Then
-                        Form1.userPrefs.maximised = True
+                        Preferences.maximised = True
                     Else
-                        Form1.userPrefs.maximised = False
+                        Preferences.maximised = False
                     End If
                 Case "locx"
-                    Form1.userPrefs.locx = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.locx = Convert.ToInt32(thisresult.InnerText)
                 Case "locy"
-                    Form1.userPrefs.locy = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.locy = Convert.ToInt32(thisresult.InnerText)
                 Case "nfofolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
                     Form1.movieFolders.Add(decodestring)
                 Case "offlinefolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.userPrefs.offlinefolders.Add(decodestring)
+                    Preferences.offlinefolders.Add(decodestring)
                 Case "tvfolder"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
                     Form1.tvFolders.Add(decodestring)
@@ -630,312 +720,312 @@ Public Class Preferences
                     Form1.tvRootFolders.Add(decodestring)
                 Case "gettrailer"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.gettrailer = True
+                        Preferences.gettrailer = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.gettrailer = False
+                        Preferences.gettrailer = False
                     End If
                 Case "tvshowautoquick"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.tvshowautoquick = True
+                        Preferences.tvshowautoquick = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.tvshowautoquick = False
+                        Preferences.tvshowautoquick = False
                     End If
                 Case "intruntime"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.intruntime = True
+                        Preferences.intruntime = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.intruntime = False
+                        Preferences.intruntime = False
                     End If
                 Case "keepfoldername"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.keepfoldername = True
+                        Preferences.keepfoldername = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.keepfoldername = False
+                        Preferences.keepfoldername = False
                     End If
 
                 Case "startupcache"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.startupCache = True
+                        Preferences.startupCache = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.startupCache = False
+                        Preferences.startupCache = False
                     End If
 
                 Case "ignoretrailers"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.ignoretrailers = True
+                        Preferences.ignoretrailers = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.ignoretrailers = False
+                        Preferences.ignoretrailers = False
                     End If
 
                 Case "ignoreactorthumbs"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.ignoreactorthumbs = True
+                        Preferences.ignoreactorthumbs = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.ignoreactorthumbs = False
+                        Preferences.ignoreactorthumbs = False
                     End If
 
                 Case "font"
                     If thisresult.InnerXml <> Nothing Then
                         If thisresult.InnerXml <> "" Then
-                            Form1.userPrefs.font = thisresult.InnerXml
+                            Preferences.font = thisresult.InnerXml
                         End If
                     End If
 
                 Case "maxactors"
-                    Form1.userPrefs.maxactors = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.maxactors = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "maxmoviegenre"
-                    Form1.userPrefs.maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "enablehdtags"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.enablehdtags = True
+                        Preferences.enablehdtags = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.enablehdtags = False
+                        Preferences.enablehdtags = False
                     End If
 
                 Case "hdtvtags"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.enabletvhdtags = True
+                        Preferences.enabletvhdtags = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.enabletvhdtags = False
+                        Preferences.enabletvhdtags = False
                     End If
 
                 Case "renamenfofiles"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.renamenfofiles = True
+                        Preferences.renamenfofiles = True
                         Form1.CheckBoxRenameNFOtoINFO.Checked = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.renamenfofiles = False
+                        Preferences.renamenfofiles = False
                         Form1.CheckBoxRenameNFOtoINFO.Checked = False
                     End If
 
                 Case "checkinfofiles"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.checkinfofiles = True
+                        Preferences.checkinfofiles = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.checkinfofiles = False
+                        Preferences.checkinfofiles = False
                     End If
 
                 Case "disablelogfiles"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.disablelogfiles = True
+                        Preferences.disablelogfiles = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.disablelogfiles = False
+                        Preferences.disablelogfiles = False
                     End If
 
                 Case "fanartnotstacked"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.fanartnotstacked = True
+                        Preferences.fanartnotstacked = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.fanartnotstacked = False
+                        Preferences.fanartnotstacked = False
                     End If
 
                 Case "posternotstacked"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.posternotstacked = True
+                        Preferences.posternotstacked = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.posternotstacked = False
+                        Preferences.posternotstacked = False
                     End If
 
                 Case "downloadfanart"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.savefanart = True
+                        Preferences.savefanart = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.savefanart = False
+                        Preferences.savefanart = False
                     End If
 
                 Case "scrapemovieposters"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.scrapemovieposters = True
+                        Preferences.scrapemovieposters = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.scrapemovieposters = False
+                        Preferences.scrapemovieposters = False
                     End If
 
                 Case "usefanart"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.usefanart = True
+                        Preferences.usefanart = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.usefanart = False
+                        Preferences.usefanart = False
                     End If
 
                 Case "dontdisplayposter"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.dontdisplayposter = True
+                        Preferences.dontdisplayposter = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.dontdisplayposter = False
+                        Preferences.dontdisplayposter = False
                     End If
 
                 Case "rarsize"
-                    Form1.userPrefs.rarsize = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.rarsize = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "actorsave"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.actorsave = True
+                        Preferences.actorsave = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.actorsave = False
+                        Preferences.actorsave = False
                     End If
 
                 Case "actorseasy"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.actorseasy = True
+                        Preferences.actorseasy = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.actorseasy = False
+                        Preferences.actorseasy = False
                     End If
 
                 Case "copytvactorthumbs"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.copytvactorthumbs = True
+                        Preferences.copytvactorthumbs = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.copytvactorthumbs = False
+                        Preferences.copytvactorthumbs = False
                     End If
 
                 Case "actorsavepath"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.userPrefs.actorsavepath = decodestring
+                    Preferences.actorsavepath = decodestring
 
                 Case "actornetworkpath"
                     Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.userPrefs.actornetworkpath = decodestring
+                    Preferences.actornetworkpath = decodestring
 
                 Case "resizefanart"
-                    Form1.userPrefs.resizefanart = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.resizefanart = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "overwritethumbs"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.overwritethumbs = True
+                        Preferences.overwritethumbs = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.overwritethumbs = False
+                        Preferences.overwritethumbs = False
                     End If
 
                 Case "defaulttvthumb"
-                    Form1.userPrefs.defaulttvthumb = thisresult.InnerXml
+                    Preferences.defaulttvthumb = thisresult.InnerXml
 
                 Case "imdbmirror"
-                    Form1.userPrefs.imdbmirror = thisresult.InnerXml
+                    Preferences.imdbmirror = thisresult.InnerXml
 
                 Case "moviethumbpriority"
-                    ReDim Form1.userPrefs.moviethumbpriority(3)
-                    Form1.userPrefs.moviethumbpriority = thisresult.InnerXml.Split("|")
+                    ReDim Preferences.moviethumbpriority(3)
+                    Preferences.moviethumbpriority = thisresult.InnerXml.Split("|")
 
                 Case "certificatepriority"
-                    ReDim Form1.userPrefs.certificatepriority(33)
-                    Form1.userPrefs.certificatepriority = thisresult.InnerXml.Split("|")
+                    ReDim Preferences.certificatepriority(33)
+                    Preferences.certificatepriority = thisresult.InnerXml.Split("|")
 
                 Case "backgroundcolour"
-                    Form1.userPrefs.backgroundcolour = thisresult.InnerXml
+                    Preferences.backgroundcolour = thisresult.InnerXml
 
                 Case "forgroundcolour"
-                    Form1.userPrefs.forgroundcolour = thisresult.InnerXml
+                    Preferences.forgroundcolour = thisresult.InnerXml
 
                 Case "remembersize"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.remembersize = True
+                        Preferences.remembersize = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.remembersize = False
+                        Preferences.remembersize = False
                     End If
 
                 Case "formheight"
-                    Form1.userPrefs.formheight = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.formheight = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "formwidth"
-                    Form1.userPrefs.formwidth = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.formwidth = Convert.ToInt32(thisresult.InnerXml)
                 Case "videoplaybackmode"
-                    Form1.userPrefs.videoplaybackmode = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.videoplaybackmode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "usefoldernames"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.usefoldernames = True
+                        Preferences.usefoldernames = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.usefoldernames = False
+                        Preferences.usefoldernames = False
                     End If
 
                 Case "createfolderjpg"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.createfolderjpg = True
+                        Preferences.createfolderjpg = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.createfolderjpg = False
+                        Preferences.createfolderjpg = False
                     End If
 
                 Case "basicsavemode"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.basicsavemode = True
+                        Preferences.basicsavemode = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.basicsavemode = False
+                        Preferences.basicsavemode = False
                     End If
 
                 Case "startupdisplaynamemode"
-                    Form1.userPrefs.startupdisplaynamemode = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.startupdisplaynamemode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "namemode"
-                    Form1.userPrefs.namemode = thisresult.InnerXml
+                    Preferences.namemode = thisresult.InnerXml
 
                 Case "tvdblanguage"
                     Dim partone() As String
                     partone = thisresult.InnerXml.Split("|")
                     For f = 0 To 1
                         If partone(0).Length = 2 Then
-                            Form1.userPrefs.tvdblanguagecode = partone(0)
-                            Form1.userPrefs.tvdblanguage = partone(1)
+                            Preferences.tvdblanguagecode = partone(0)
+                            Preferences.tvdblanguage = partone(1)
                             Exit For
                         Else
-                            Form1.userPrefs.tvdblanguagecode = partone(1)
-                            Form1.userPrefs.tvdblanguage = partone(0)
+                            Preferences.tvdblanguagecode = partone(1)
+                            Preferences.tvdblanguage = partone(0)
                         End If
                     Next
 
                 Case "tvdbmode"
-                    Form1.userPrefs.sortorder = thisresult.InnerXml
+                    Preferences.sortorder = thisresult.InnerXml
                 Case "tvdbactorscrape"
-                    Form1.userPrefs.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "usetransparency"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.usetransparency = True
+                        Preferences.usetransparency = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.usetransparency = False
+                        Preferences.usetransparency = False
                     End If
 
                 Case "transparencyvalue"
-                    Form1.userPrefs.transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "downloadtvfanart"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.tvfanart = True
+                        Preferences.tvfanart = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.tvfanart = False
+                        Preferences.tvfanart = False
                     End If
 
                 Case "roundminutes"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.roundminutes = True
+                        Preferences.roundminutes = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.roundminutes = False
+                        Preferences.roundminutes = False
                     End If
 
                 Case "autoepisodescreenshot"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.autoepisodescreenshot = True
+                        Preferences.autoepisodescreenshot = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.autoepisodescreenshot = False
+                        Preferences.autoepisodescreenshot = False
                     End If
 
                 Case "ignorearticle"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.ignorearticle = True
+                        Preferences.ignorearticle = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.ignorearticle = False
+                        Preferences.ignorearticle = False
                     End If
 
                 Case "TVShowUseXBMCScraper"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.tvshow_useXBMC_Scraper = True
+                        Preferences.tvshow_useXBMC_Scraper = True
                         Form1.GroupBox22.Visible = False
                         Form1.GroupBox22.SendToBack()
                         Form1.GroupBox_TVDB_Scraper_Preferences.Visible = True
                         Form1.GroupBox_TVDB_Scraper_Preferences.BringToFront()
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.tvshow_useXBMC_Scraper = False
+                        Preferences.tvshow_useXBMC_Scraper = False
                         Form1.GroupBox22.Visible = True
                         Form1.GroupBox22.BringToFront()
                         Form1.GroupBox_TVDB_Scraper_Preferences.Visible = False
@@ -945,18 +1035,18 @@ Public Class Preferences
 
                 Case "moviesUseXBMCScraper"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.movies_useXBMC_Scraper = True
+                        Preferences.movies_useXBMC_Scraper = True
                         Form1.RadioButton51.Visible = True
                         Form1.RadioButton52.Visible = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.movies_useXBMC_Scraper = False
+                        Preferences.movies_useXBMC_Scraper = False
                         Form1.RadioButton51.Visible = False
                         Form1.RadioButton52.Visible = False
                     End If
 
 
                 Case "whatXBMCScraper"
-                    Form1.userPrefs.XBMC_Scraper = thisresult.InnerXml
+                    Preferences.XBMC_Scraper = thisresult.InnerXml
                     If thisresult.InnerXml = "imdb" Then
                         Form1.RadioButton51.Checked = True
                         Read_XBMC_IMDB_Scraper_Config()
@@ -968,132 +1058,132 @@ Public Class Preferences
 
                 Case "downloadtvposter"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.tvposter = True
+                        Preferences.tvposter = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.tvposter = False
+                        Preferences.tvposter = False
                     End If
 
                 Case "downloadtvseasonthumbs"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.downloadtvseasonthumbs = True
+                        Preferences.downloadtvseasonthumbs = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.downloadtvseasonthumbs = False
+                        Preferences.downloadtvseasonthumbs = False
                     End If
 
                 Case "maximumthumbs"
-                    Form1.userPrefs.maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "startupmode"
-                    Form1.userPrefs.startupmode = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.startupmode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "hdtags"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.enablehdtags = True
+                        Preferences.enablehdtags = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.enablehdtags = False
+                        Preferences.enablehdtags = False
                     End If
 
                 Case "disablelogs"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.disablelogfiles = True
+                        Preferences.disablelogfiles = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.disablelogfiles = False
+                        Preferences.disablelogfiles = False
                     End If
 
                 Case "disabletvlogs"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.disabletvlogs = True
+                        Preferences.disabletvlogs = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.disabletvlogs = False
+                        Preferences.disabletvlogs = False
                     End If
 
                 Case "overwritethumb"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.overwritethumbs = True
+                        Preferences.overwritethumbs = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.overwritethumbs = False
+                        Preferences.overwritethumbs = False
                     End If
 
                 Case "folderjpg"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.createfolderjpg = True
+                        Preferences.createfolderjpg = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.createfolderjpg = False
+                        Preferences.createfolderjpg = False
                     End If
 
                 Case "savefanart"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.savefanart = True
+                        Preferences.savefanart = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.savefanart = False
+                        Preferences.savefanart = False
                     End If
 
                 Case "postertype"
-                    Form1.userPrefs.postertype = thisresult.InnerXml
+                    Preferences.postertype = thisresult.InnerXml
 
                 Case "tvactorscrape"
-                    Form1.userPrefs.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "videomode"
-                    Form1.userPrefs.videomode = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.videomode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "selectedvideoplayer"
-                    Form1.userPrefs.selectedvideoplayer = thisresult.InnerXml
+                    Preferences.selectedvideoplayer = thisresult.InnerXml
 
                 Case "maximagecount"
-                    Form1.userPrefs.maximagecount = Convert.ToInt32(thisresult.InnerXml)
+                    Preferences.maximagecount = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "lastpath"
-                    Form1.userPrefs.lastpath = thisresult.InnerXml
+                    Preferences.lastpath = thisresult.InnerXml
 
                 Case "moviescraper"
-                    Form1.userPrefs.moviescraper = thisresult.InnerXml
+                    Preferences.moviescraper = thisresult.InnerXml
 
                 Case "nfoposterscraper"
-                    Form1.userPrefs.nfoposterscraper = thisresult.InnerXml
+                    Preferences.nfoposterscraper = thisresult.InnerXml
 
                 Case "alwaysuseimdbid"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.alwaysuseimdbid = True
+                        Preferences.alwaysuseimdbid = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.alwaysuseimdbid = False
+                        Preferences.alwaysuseimdbid = False
                     End If
 
                 Case "externalbrowser"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.externalbrowser = True
+                        Preferences.externalbrowser = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.externalbrowser = False
+                        Preferences.externalbrowser = False
                     End If
                 Case "tvrename"
-                    Form1.userPrefs.tvrename = Convert.ToInt32(thisresult.InnerText)
+                    Preferences.tvrename = Convert.ToInt32(thisresult.InnerText)
                 Case "tvshowrebuildlog"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.tvshowrebuildlog = True
+                        Preferences.tvshowrebuildlog = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.tvshowrebuildlog = False
+                        Preferences.tvshowrebuildlog = False
                     End If
-                    'Public moviesortorder As Byte
-                    'Public moviedefaultlist As Byte
-                    'Public lasttab As Byte
+                    'public shared moviesortorder As Byte
+                    'public shared moviedefaultlist As Byte
+                    'public shared lasttab As Byte
                 Case "autorenameepisodes"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.autorenameepisodes = True
+                        Preferences.autorenameepisodes = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.autorenameepisodes = False
+                        Preferences.autorenameepisodes = False
                     End If
                 Case "eprenamelowercase"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.eprenamelowercase = True
+                        Preferences.eprenamelowercase = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.eprenamelowercase = False
+                        Preferences.eprenamelowercase = False
                     End If
                 Case "moviesortorder"
-                    Form1.userPrefs.moviesortorder = Convert.ToByte(thisresult.InnerText)
+                    Preferences.moviesortorder = Convert.ToByte(thisresult.InnerText)
                 Case "moviedefaultlist"
-                    Form1.userPrefs.moviedefaultlist = Convert.ToByte(thisresult.InnerText)
+                    Preferences.moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                 Case "startuptab"
-                    Form1.userPrefs.startuptab = Convert.ToByte(thisresult.InnerText)
+                    Preferences.startuptab = Convert.ToByte(thisresult.InnerText)
 
                 Case "offlinemovielabeltext"
                     Form1.TextBox_OfflineDVDTitle.Text = thisresult.InnerText
@@ -1101,10 +1191,10 @@ Public Class Preferences
 
                 Case "scrapefullcert"
                     If thisresult.InnerXml = "true" Then
-                        Form1.userPrefs.scrapefullcert = True
+                        Preferences.scrapefullcert = True
                         Form1.ScrapeFullCertCheckBox.Checked = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Form1.userPrefs.scrapefullcert = False
+                        Preferences.scrapefullcert = False
                     End If
             End Select
             'Catch

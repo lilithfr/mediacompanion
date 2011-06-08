@@ -54,7 +54,7 @@ Public Class actors
                                 '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                                 Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
-                                actorlist = scraperfunction.getimdbactors(Form1.userPrefs.imdbmirror, tvtempstring, , Form1.userPrefs.maxactors)
+                                actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Preferences.maxactors)
                                 Dim thumbstring As New XmlDocument
                                 Dim thisresult As XmlNode = Nothing
                                 Try
@@ -64,7 +64,7 @@ Public Class actors
                                     For Each thisresult In thumbstring("actorlist")
                                         Select Case thisresult.Name
                                             Case "actor"
-                                                If countactors >= Form1.userPrefs.maxactors Then
+                                                If countactors >= Preferences.maxactors Then
                                                     Exit For
                                                 End If
                                                 countactors += 1
@@ -89,7 +89,7 @@ Public Class actors
 
                                 End Try
 
-                                While tempactorlist.Count > Form1.userPrefs.maxactors
+                                While tempactorlist.Count > Preferences.maxactors
                                     tempactorlist.RemoveAt(tempactorlist.Count - 1)
                                 End While
 
@@ -113,7 +113,7 @@ Public Class actors
     Public Sub savelocalactors(ByVal path As String, ByVal listofactors As List(Of MovieActors), Optional ByVal tvshowpath As String = "", Optional ByVal copyactorthumbs As Boolean = False)
         Monitor.Enter(Me)
         Try
-            If Form1.userPrefs.actorseasy = True Then
+            If Preferences.actorseasy = True Then
                 Dim workingpath As String = path.Replace(IO.Path.GetFileName(path), "")
                 workingpath = workingpath & ".actors\"
                 Dim hg As New IO.DirectoryInfo(workingpath)

@@ -18,7 +18,7 @@ Public Class frmCoverArt
     Dim title As String = Form1.workingMovieDetails.fullmoviebody.title
     Dim itemnumber As Integer
     Dim rememberint As Integer
-    Dim maxthumbs As Integer = Form1.userPrefs.maximumthumbs
+    Dim maxthumbs As Integer = Preferences.maximumthumbs
     Dim pagecount As Integer = 0
     Dim currentpage As Integer = 1
     Dim movieyear As String
@@ -47,7 +47,7 @@ Public Class frmCoverArt
 
         End If
 
-        TextBox1.Text = Form1.userPrefs.maximumthumbs.ToString
+        TextBox1.Text = Preferences.maximumthumbs.ToString
 
         Dim exists As Boolean = System.IO.File.Exists(posterpath)
         If exists = True Then
@@ -937,7 +937,7 @@ Public Class frmCoverArt
                 If Convert.ToDecimal(TextBox1.Text) >= 1 Then
                     e.Handled = True
                     maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                    Form1.userPrefs.maximumthumbs = maxthumbs
+                    Preferences.maximumthumbs = maxthumbs
                 Else
                     MsgBox("Please Enter A Number More Than 0")
                 End If
@@ -1206,18 +1206,18 @@ Public Class frmCoverArt
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
                 maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                Form1.userPrefs.maximumthumbs = maxthumbs
+                Preferences.maximumthumbs = maxthumbs
             Else
                 MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
                 maxthumbs = 10
                 TextBox1.Text = "10"
-                Form1.userPrefs.maximumthumbs = 10
+                Preferences.maximumthumbs = 10
             End If
         Else
             MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
             maxthumbs = 10
             TextBox1.Text = "10"
-            Form1.userPrefs.maximumthumbs = 10
+            Preferences.maximumthumbs = 10
         End If
 
         Button5.Visible = False
@@ -1276,7 +1276,7 @@ Public Class frmCoverArt
                     If Not b1.Image Is Nothing Then
                         If b1.Image.Width > 20 Then
                             b1.Image.Save(posterpath)
-                            If Form1.userPrefs.createfolderjpg = True Then
+                            If Preferences.createfolderjpg = True Then
                                 b1.Image.Save(folderjpgpath)
                             End If
                             Form2.moviethumb.Image = b1.Image
@@ -1337,7 +1337,7 @@ Public Class frmCoverArt
                                 End Try
                             End With
                             b1.Image.Save(posterpath)
-                            If Form1.userPrefs.createfolderjpg = True Then
+                            If Preferences.createfolderjpg = True Then
                                 b1.Image.Save(folderjpgpath)
                             End If
                             Form2.moviethumb.Image = b1.Image

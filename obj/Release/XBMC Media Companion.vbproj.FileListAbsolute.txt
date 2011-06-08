@@ -302,3 +302,4 @@ C:\SVN MC\obj\Release\Media_Companion.frmProgressScreen.resources
 C:\MC SVN\obj\Release\Media_Companion.frmProgressScreen.resources
 C:\MC SVN\obj\Release\ResGen.read.1.tlog
 C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmProgressScreen.resources

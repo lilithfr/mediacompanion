@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports System.IO.Compression
 Imports System.Text
+Imports System.Reflection
 
 
 Public Class Utilities
@@ -13,6 +14,33 @@ Public Class Utilities
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
                                                  ".dvr-ms", "VIDEO_TS.IFO"}
 
+    Private Declare Function GetDiskFreeSpaceEx _
+Lib "kernel32" _
+Alias "GetDiskFreeSpaceExA" _
+(ByVal lpDirectoryName As String, _
+ByRef lpFreeBytesAvailableToCaller As Long, _
+ByRef lpTotalNumberOfBytes As Long, _
+ByRef lpTotalNumberOfFreeBytes As Long) As Long
+
+    Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
+        'returns free space in MB, formatted to two decimal places
+        'e.g., msgbox("Free Space on C: "& GetFreeSpace("C:\") & "MB")
+
+        Dim lBytesTotal, lFreeBytes, lFreeBytesAvailable As Long
+
+        Dim iAns As Long
+
+        iAns = GetDiskFreeSpaceEx(Drive, lFreeBytesAvailable, _
+             lBytesTotal, lFreeBytes)
+        If iAns > 0 Then
+
+            Return lFreeBytes
+        Else
+            Throw New Exception("Invalid or unreadable drive")
+        End If
+
+
+    End Function
 
     Public Shared Function CreateScreenShot(ByVal FilePath As String, Optional ByVal Overwrite As Boolean = False) As String
         Dim thumbpathandfilename As String = FilePath.Replace(IO.Path.GetExtension(FilePath), ".tbn")
@@ -74,7 +102,7 @@ Public Class Utilities
         'MsgBox(txt, MsgBoxStyle.OkOnly, gzipresult)
 
         'Dim result As String
-        
+
         'result = str.ReadToEnd
 
 
@@ -156,7 +184,7 @@ Public Class Utilities
             End If
         End If
         If posterpath = "" Then
-            If Form1.userPrefs.posternotstacked = True Then
+            If Preferences.posternotstacked = True Then
                 posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
             Else
                 posterpath = GetStackName(IO.Path.GetFileName(FullPath), posterpath.Replace(IO.Path.GetFileName(FullPath), "")) & ".tbn"
@@ -166,7 +194,7 @@ Public Class Utilities
                     posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
                 End If
             End If
-            If Form1.userPrefs.basicsavemode = True Then
+            If Preferences.basicsavemode = True Then
                 posterpath = posterpath.Replace(IO.Path.GetFileName(FullPath), "movie.tbn")
             End If
         End If
@@ -206,7 +234,7 @@ Public Class Utilities
             End If
         End If
         If posterpath = "" Then
-            If Form1.userPrefs.fanartnotstacked = True Then
+            If Preferences.fanartnotstacked = True Then
                 posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
             Else
                 posterpath = GetStackName(IO.Path.GetFileName(FullPath), FullPath) & "-fanart.jpg"
@@ -216,7 +244,7 @@ Public Class Utilities
                     posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
                 End If
             End If
-            If Form1.userPrefs.basicsavemode = True Then
+            If Preferences.basicsavemode = True Then
                 posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
             End If
         End If
@@ -1996,16 +2024,16 @@ Public Class Utilities
                 Return location
                 Exit Function
             Else
-                If location.IndexOf(Form1.userPrefs.actornetworkpath) <> -1 Then
-                    If Form1.userPrefs.actornetworkpath <> Nothing And Form1.userPrefs.actorsavepath <> Nothing Then
-                        If Form1.userPrefs.actornetworkpath <> "" And Form1.userPrefs.actorsavepath <> "" Then
+                If location.IndexOf(Preferences.actornetworkpath) <> -1 Then
+                    If Preferences.actornetworkpath <> Nothing And Preferences.actorsavepath <> Nothing Then
+                        If Preferences.actornetworkpath <> "" And Preferences.actorsavepath <> "" Then
                             Dim filename As String = IO.Path.GetFileName(location)
-                            actualpath = IO.Path.Combine(Form1.userPrefs.actorsavepath, filename)
+                            actualpath = IO.Path.Combine(Preferences.actorsavepath, filename)
                             If Not IO.File.Exists(actualpath) Then
                                 Dim extension As String = IO.Path.GetExtension(location)
                                 Dim purename As String = IO.Path.GetFileName(location)
                                 purename = purename.Replace(extension, "")
-                                actualpath = Form1.userPrefs.actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
+                                actualpath = Preferences.actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
                             End If
                             If Not IO.File.Exists(actualpath) Then
                                 actualpath = "none"
@@ -2671,4 +2699,9 @@ Public Class Utilities
 
         End Try
     End Sub
+
+    Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
+        Dim asm As Assembly = Assembly.GetExecutingAssembly
+        Return asm.GetManifestResourceStream(resfile)
+    End Function
 End Class

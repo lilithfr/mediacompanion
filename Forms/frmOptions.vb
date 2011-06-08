@@ -7,7 +7,7 @@ Imports System.Xml
 
 Public Class frmOptions
 
-    'Dim form1.userprefs As New _form1.userprefs.form1.userprefs
+    'Dim Preferences As New _Preferences.Preferences
     Dim moviefolders As New List(Of String)
     Dim tvfolders As New List(Of String)
 
@@ -16,22 +16,21 @@ Public Class frmOptions
     Private Sub options_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
         For f = 0 To 33
-            Form1.userPrefs.certificatepriority(f) = ListBox5.Items(f)
+            Preferences.certificatepriority(f) = ListBox5.Items(f)
         Next
         For f = 0 To 3
-            Form1.userPrefs.moviethumbpriority(f) = ListBox3.Items(f)
+            Preferences.moviethumbpriority(f) = ListBox3.Items(f)
         Next
 
-        If Form1.userPrefs.videomode = 4 Then
-            If Not IO.File.Exists(Form1.userPrefs.selectedvideoplayer) Then
+        If Preferences.videomode = 4 Then
+            If Not IO.File.Exists(Preferences.selectedvideoplayer) Then
                 MsgBox("You Have Not Selected Your Preferred Media Player")
                 e.Cancel = True
                 Exit Sub
             End If
         End If
 
-        Dim save As New Preferences
-        Call save.saveconfig()
+        Preferences.SaveConfig()
     End Sub
 
 
@@ -39,7 +38,7 @@ Public Class frmOptions
 
 
     Private Sub options_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Select Case Form1.userPrefs.seasonall
+        Select Case Preferences.seasonall
             Case "none"
                 RadioButton6.Checked = True
             Case "poster"
@@ -48,7 +47,7 @@ Public Class frmOptions
                 RadioButton10.Checked = True
         End Select
 
-        If Form1.userPrefs.tvshowrebuildlog = True Then
+        If Preferences.tvshowrebuildlog = True Then
             CheckBox11.CheckState = CheckState.Checked
         Else
             CheckBox11.CheckState = CheckState.Unchecked
@@ -57,62 +56,62 @@ Public Class frmOptions
         For Each Regex In Form1.tvRegex
             ListBox7.Items.Add(Regex)
         Next
-        ComboBox3.SelectedIndex = Form1.userPrefs.tvrename
+        ComboBox3.SelectedIndex = Preferences.tvrename
 
-        If Form1.userPrefs.roundminutes = True Then
+        If Preferences.roundminutes = True Then
             CheckBox6.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.roundminutes = False Then
+        ElseIf Preferences.roundminutes = False Then
             CheckBox6.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.externalbrowser = True Then
+        If Preferences.externalbrowser = True Then
             CheckBox5.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.externalbrowser = False Then
+        ElseIf Preferences.externalbrowser = False Then
             CheckBox5.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.videomode = 1 Then
+        If Preferences.videomode = 1 Then
             RadioButton1.Checked = True
-        ElseIf Form1.userPrefs.videomode = 2 Then
+        ElseIf Preferences.videomode = 2 Then
             RadioButton2.Checked = True
-        ElseIf Form1.userPrefs.videomode = 4 Then
+        ElseIf Preferences.videomode = 4 Then
             RadioButton4.Checked = True
         End If
-        Label4.Text = Form1.userPrefs.selectedvideoplayer
-        If Form1.userPrefs.overwritethumbs = True Then
+        Label4.Text = Preferences.selectedvideoplayer
+        If Preferences.overwritethumbs = True Then
             CheckBox1.Checked = CheckState.Unchecked
         Else
             CheckBox1.Checked = CheckState.Checked
         End If
 
-        If Form1.userPrefs.keepfoldername = True Then
+        If Preferences.keepfoldername = True Then
             CheckBox10.CheckState = CheckState.Checked
         Else
             CheckBox10.CheckState = CheckState.Unchecked
         End If
 
 
-        If Form1.userPrefs.disabletvlogs = True Then
+        If Preferences.disabletvlogs = True Then
             CheckBox18.CheckState = CheckState.Checked
         Else
             CheckBox18.CheckState = CheckState.Unchecked
         End If
 
-        If IsNumeric(Form1.userPrefs.rarsize) Then
-            Dim tempint As Integer = Form1.userPrefs.rarsize
+        If IsNumeric(Preferences.rarsize) Then
+            Dim tempint As Integer = Preferences.rarsize
             If tempint <= 0 Then
                 tempint = 8
-                Form1.userPrefs.rarsize = 8
+                Preferences.rarsize = 8
             End If
             txtbx_minrarsize.Text = tempint.ToString
         End If
 
 
-        If Form1.userPrefs.resizefanart = 1 Then
+        If Preferences.resizefanart = 1 Then
             RadioButton17.Checked = True
-        ElseIf Form1.userPrefs.resizefanart = 2 Then
+        ElseIf Preferences.resizefanart = 2 Then
             RadioButton18.Checked = True
-        ElseIf Form1.userPrefs.resizefanart = 3 Then
+        ElseIf Preferences.resizefanart = 3 Then
             RadioButton19.Checked = True
         End If
 
@@ -130,35 +129,35 @@ Public Class frmOptions
             ListBox1.Items.Add(item)
         Next
 
-        If Form1.userPrefs.gettrailer = True Then
+        If Preferences.gettrailer = True Then
             CheckBox4.CheckState = CheckState.Checked
         Else
             CheckBox4.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.startupCache = True Then
+        If Preferences.startupCache = True Then
             chkbx_disablecache.CheckState = CheckState.Unchecked
         Else
             chkbx_disablecache.CheckState = CheckState.Checked
         End If
 
-        If Form1.userPrefs.enablehdtags = True Then
+        If Preferences.enablehdtags = True Then
             CheckBox22.CheckState = CheckState.Checked
         Else
             CheckBox22.CheckState = CheckState.Unchecked
         End If
 
-        If IsNumeric(Form1.userPrefs.rarsize) Then
-            txtbx_minrarsize.Text = Form1.userPrefs.rarsize.ToString
+        If IsNumeric(Preferences.rarsize) Then
+            txtbx_minrarsize.Text = Preferences.rarsize.ToString
         Else
             txtbx_minrarsize.Text = "8"
         End If
 
-        If Form1.userPrefs.actorsave = True Then
+        If Preferences.actorsave = True Then
             localactorpath.Enabled = True
             xbmcactorpath.Enabled = True
-            xbmcactorpath.Text = Form1.userPrefs.actornetworkpath
-            localactorpath.Text = Form1.userPrefs.actorsavepath
+            xbmcactorpath.Text = Preferences.actornetworkpath
+            localactorpath.Text = Preferences.actorsavepath
             Button1.Enabled = True
             saveactorchkbx.CheckState = CheckState.Checked
         Else
@@ -168,32 +167,32 @@ Public Class frmOptions
             saveactorchkbx.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.keepfoldername = False Then
+        If Preferences.keepfoldername = False Then
             CheckBox10.CheckState = CheckState.Unchecked
         Else
             CheckBox10.CheckState = CheckState.Checked
         End If
 
-        If Form1.userPrefs.ignoretrailers = False Then
+        If Preferences.ignoretrailers = False Then
             chkbx_ignoretrailers.CheckState = CheckState.Unchecked
         Else
             chkbx_ignoretrailers.CheckState = CheckState.Checked
         End If
 
         For f = 0 To 3
-            ListBox3.Items.Add(Form1.userPrefs.moviethumbpriority(f))
+            ListBox3.Items.Add(Preferences.moviethumbpriority(f))
         Next
         For f = 0 To 33
-            ListBox5.Items.Add(Form1.userPrefs.certificatepriority(f))
+            ListBox5.Items.Add(Preferences.certificatepriority(f))
         Next
 
-        If Form1.userPrefs.tvfanart = True Then
+        If Preferences.tvfanart = True Then
             CheckBox9.CheckState = CheckState.Checked
         Else
             CheckBox9.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.tvposter = True Then
+        If Preferences.tvposter = True Then
             CheckBox8.CheckState = CheckState.Checked
         Else
             CheckBox8.CheckState = CheckState.Unchecked
@@ -203,7 +202,7 @@ Public Class frmOptions
 
 
 
-        If Form1.userPrefs.downloadtvseasonthumbs = True Then
+        If Preferences.downloadtvseasonthumbs = True Then
             CheckBox7.CheckState = CheckState.Checked
         Else
             CheckBox7.CheckState = CheckState.Unchecked
@@ -214,25 +213,25 @@ Public Class frmOptions
 
 
 
-        If Form1.userPrefs.posternotstacked = True Then
+        If Preferences.posternotstacked = True Then
             chkbx_unstackposternames.CheckState = CheckState.Checked
         Else
             chkbx_unstackposternames.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.fanartnotstacked = True Then
+        If Preferences.fanartnotstacked = True Then
             chkbx_unstackfanartnames.CheckState = CheckState.Checked
         Else
             chkbx_unstackfanartnames.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.scrapemovieposters = False Then
+        If Preferences.scrapemovieposters = False Then
             CheckBox18.CheckState = CheckState.Unchecked
         Else
             CheckBox18.CheckState = CheckState.Checked
         End If
 
-        If Form1.userPrefs.dontdisplayposter = False Then
+        If Preferences.dontdisplayposter = False Then
             Chkbx_fanartnoposter.CheckState = CheckState.Unchecked
         Else
             Chkbx_fanartnoposter.CheckState = CheckState.Checked
@@ -245,13 +244,13 @@ Public Class frmOptions
             Me.AutoScroll = True
         End If
 
-        If Form1.userPrefs.renamenfofiles = False Then
+        If Preferences.renamenfofiles = False Then
             chkbx_renamnfofiles.Checked = False
         Else
             chkbx_renamnfofiles.Checked = True
         End If
 
-        If Form1.userPrefs.disabletvlogs = True Then
+        If Preferences.disabletvlogs = True Then
             CheckBox15.CheckState = CheckState.Checked
         Else
             CheckBox15.CheckState = CheckState.Unchecked
@@ -260,10 +259,10 @@ Public Class frmOptions
         TabPage1.BackColor = Form1.BackColor
         TabPage2.BackColor = Form1.BackColor
         TabPage3.BackColor = Form1.BackColor
-        ListBox4.SelectedItem = Form1.userPrefs.imdbmirror
+        ListBox4.SelectedItem = Preferences.imdbmirror
 
 
-        Select Case Form1.userPrefs.maxactors
+        Select Case Preferences.maxactors
             Case 9999
                 ComboBox1.SelectedItem = "All Available"
             Case 0
@@ -302,7 +301,7 @@ Public Class frmOptions
                 ComboBox1.SelectedItem = "250"
         End Select
 
-        Select Case Form1.userPrefs.maxmoviegenre
+        Select Case Preferences.maxmoviegenre
             Case 9999
                 ComboBox2.SelectedItem = "All Available"
             Case 0
@@ -335,38 +334,38 @@ Public Class frmOptions
 
 
 
-        If Form1.userPrefs.resizefanart = 1 Then
+        If Preferences.resizefanart = 1 Then
             RadioButton17.Checked = True
-        ElseIf Form1.userPrefs.resizefanart = 2 Then
+        ElseIf Preferences.resizefanart = 2 Then
             RadioButton18.Checked = True
-        ElseIf Form1.userPrefs.resizefanart = 3 Then
+        ElseIf Preferences.resizefanart = 3 Then
             RadioButton19.Checked = True
         Else
-            Form1.userPrefs.resizefanart = 1
+            Preferences.resizefanart = 1
             RadioButton17.Checked = True
         End If
 
 
 
-        If Form1.userPrefs.usefanart = True Then chkbxfanart.CheckState = CheckState.Checked
-        If Form1.userPrefs.usefanart = False Then chkbxfanart.CheckState = CheckState.Unchecked
-        If Form1.userPrefs.remembersize = True Then chk_rememberformsize.CheckState = CheckState.Checked
-        If Form1.userPrefs.remembersize = False Then chk_rememberformsize.CheckState = CheckState.Unchecked
+        If Preferences.usefanart = True Then chkbxfanart.CheckState = CheckState.Checked
+        If Preferences.usefanart = False Then chkbxfanart.CheckState = CheckState.Unchecked
+        If Preferences.remembersize = True Then chk_rememberformsize.CheckState = CheckState.Checked
+        If Preferences.remembersize = False Then chk_rememberformsize.CheckState = CheckState.Unchecked
 
 
         Me.BackColor = Form1.BackColor
 
 
-        If Form1.userPrefs.usefoldernames = True Then
+        If Preferences.usefoldernames = True Then
             chkbx_usefoldernames.CheckState = CheckState.Checked
             chkbx_createfolderjpg.Enabled = True
             chkbx_basicsave.Enabled = True
-            If Form1.userPrefs.createfolderjpg = True Then
+            If Preferences.createfolderjpg = True Then
                 chkbx_createfolderjpg.CheckState = CheckState.Checked
             Else
                 chkbx_createfolderjpg.CheckState = CheckState.Unchecked
             End If
-            If Form1.userPrefs.basicsavemode = True Then
+            If Preferences.basicsavemode = True Then
                 chkbx_basicsave.CheckState = CheckState.Checked
             Else
                 chkbx_basicsave.CheckState = CheckState.Unchecked
@@ -375,124 +374,124 @@ Public Class frmOptions
             chkbx_usefoldernames.CheckState = CheckState.Unchecked
             chkbx_createfolderjpg.Enabled = False
             chkbx_basicsave.Enabled = False
-            Form1.userPrefs.createfolderjpg = False
-            Form1.userPrefs.basicsavemode = False
+            Preferences.createfolderjpg = False
+            Preferences.basicsavemode = False
         End If
 
 
-        ComboBox5.SelectedIndex = Form1.userPrefs.tvdbactorscrape
+        ComboBox5.SelectedIndex = Preferences.tvdbactorscrape
 
-        If Form1.userPrefs.postertype = "poster" Then
+        If Preferences.postertype = "poster" Then
             poster.Checked = True
         Else
             banner.Checked = True
         End If
 
-        If Form1.userPrefs.usefanart = True Then
+        If Preferences.usefanart = True Then
             chkbxfanart.Checked = True
         Else
             chkbxfanart.Checked = False
         End If
 
-        If Form1.userPrefs.usetransparency = True Then
+        If Preferences.usetransparency = True Then
             chkbxusealpha.Checked = True
         Else
             chkbxusealpha.Checked = False
         End If
 
-        TrackBar1.Value = Form1.userPrefs.transparencyvalue
+        TrackBar1.Value = Preferences.transparencyvalue
         Label13.Text = TrackBar1.Value.ToString
 
 
-        If Form1.userPrefs.ignoreactorthumbs = True Then
+        If Preferences.ignoreactorthumbs = True Then
             chkbx_notactorthumbs.CheckState = CheckState.Checked
         Else
             chkbx_notactorthumbs.CheckState = CheckState.Unchecked
         End If
 
-        If Form1.userPrefs.nfoposterscraper = 0 Then
+        If Preferences.nfoposterscraper = 0 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 1 Then
+        ElseIf Preferences.nfoposterscraper = 1 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 2 Then
+        ElseIf Preferences.nfoposterscraper = 2 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 3 Then
+        ElseIf Preferences.nfoposterscraper = 3 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 4 Then
+        ElseIf Preferences.nfoposterscraper = 4 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 5 Then
+        ElseIf Preferences.nfoposterscraper = 5 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 6 Then
+        ElseIf Preferences.nfoposterscraper = 6 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 7 Then
+        ElseIf Preferences.nfoposterscraper = 7 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Unchecked
-        ElseIf Form1.userPrefs.nfoposterscraper = 8 Then
+        ElseIf Preferences.nfoposterscraper = 8 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 9 Then
+        ElseIf Preferences.nfoposterscraper = 9 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 10 Then
+        ElseIf Preferences.nfoposterscraper = 10 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 11 Then
+        ElseIf Preferences.nfoposterscraper = 11 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Unchecked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 12 Then
+        ElseIf Preferences.nfoposterscraper = 12 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 13 Then
+        ElseIf Preferences.nfoposterscraper = 13 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Unchecked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 14 Then
+        ElseIf Preferences.nfoposterscraper = 14 Then
             IMPA_chk.CheckState = CheckState.Unchecked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Checked
-        ElseIf Form1.userPrefs.nfoposterscraper = 15 Then
+        ElseIf Preferences.nfoposterscraper = 15 Then
             IMPA_chk.CheckState = CheckState.Checked
             tmdb_chk.CheckState = CheckState.Checked
             mpdb_chk.CheckState = CheckState.Checked
             imdb_chk.CheckState = CheckState.Checked
         End If
 
-        If Form1.userPrefs.savefanart = True Then
+        If Preferences.savefanart = True Then
             CheckBox3.CheckState = CheckState.Checked
         Else
             CheckBox3.CheckState = CheckState.Unchecked
@@ -504,29 +503,29 @@ Public Class frmOptions
     End Sub
 
     Private Sub btn_setbackcolour_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_setbackcolour.Click
-        ColorDialog.Color = ColorTranslator.FromHtml(Form1.userPrefs.backgroundcolour)
+        ColorDialog.Color = ColorTranslator.FromHtml(Preferences.backgroundcolour)
         If ColorDialog.ShowDialog() = DialogResult.OK Then
-            Form1.userPrefs.backgroundcolour = ColorTranslator.ToHtml(ColorDialog.Color)
+            Preferences.backgroundcolour = ColorTranslator.ToHtml(ColorDialog.Color)
             Me.BackColor = ColorDialog.Color
         End If
     End Sub
 
     Private Sub btn_setforcolour_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_setforcolour.Click
-        ColorDialog.Color = ColorTranslator.FromHtml(Form1.userPrefs.forgroundcolour)
+        ColorDialog.Color = ColorTranslator.FromHtml(Preferences.forgroundcolour)
         If ColorDialog.ShowDialog() = DialogResult.OK Then
-            Form1.userPrefs.forgroundcolour = ColorTranslator.ToHtml(ColorDialog.Color)
-            ListBox2.BackColor = ColorTranslator.FromHtml(Form1.userPrefs.forgroundcolour)
-            ListBox1.BackColor = ColorTranslator.FromHtml(Form1.userPrefs.forgroundcolour)
-            ListBox8.BackColor = ColorTranslator.FromHtml(Form1.userPrefs.forgroundcolour)
-            ComboBox5.BackColor = ColorTranslator.FromHtml(Form1.userPrefs.forgroundcolour)
+            Preferences.forgroundcolour = ColorTranslator.ToHtml(ColorDialog.Color)
+            ListBox2.BackColor = ColorTranslator.FromHtml(Preferences.forgroundcolour)
+            ListBox1.BackColor = ColorTranslator.FromHtml(Preferences.forgroundcolour)
+            ListBox8.BackColor = ColorTranslator.FromHtml(Preferences.forgroundcolour)
+            ComboBox5.BackColor = ColorTranslator.FromHtml(Preferences.forgroundcolour)
         End If
     End Sub
 
     Private Sub chk_rememberformsize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chk_rememberformsize.CheckedChanged
         If chk_rememberformsize.CheckState = CheckState.Checked Then
-            Form1.userPrefs.remembersize = True
+            Preferences.remembersize = True
         Else
-            Form1.userPrefs.remembersize = False
+            Preferences.remembersize = False
         End If
     End Sub
 
@@ -534,27 +533,27 @@ Public Class frmOptions
 
     Private Sub chkbxfanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbxfanart.CheckedChanged
         If chkbxfanart.CheckState = CheckState.Checked Then
-            Form1.userPrefs.usefanart = True
+            Preferences.usefanart = True
         Else
-            Form1.userPrefs.usefanart = False
+            Preferences.usefanart = False
         End If
     End Sub
 
 
     Private Sub Chkbx_fanartnoposter_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Chkbx_fanartnoposter.CheckedChanged
         If Chkbx_fanartnoposter.CheckState = CheckState.Checked Then
-            Form1.userPrefs.dontdisplayposter = True
+            Preferences.dontdisplayposter = True
         Else
-            Form1.userPrefs.dontdisplayposter = False
+            Preferences.dontdisplayposter = False
         End If
     End Sub
 
 
     Private Sub chkbxusealpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbxusealpha.CheckedChanged
         If chkbxusealpha.CheckState = CheckState.Checked Then
-            Form1.userPrefs.usetransparency = True
+            Preferences.usetransparency = True
         Else
-            Form1.userPrefs.usetransparency = False
+            Preferences.usetransparency = False
         End If
     End Sub
 
@@ -562,16 +561,16 @@ Public Class frmOptions
     Private Sub TrackBar1_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TrackBar1.ValueChanged
         Label13.Text = TrackBar1.Value.ToString
         Label13.Refresh()
-        Form1.userPrefs.transparencyvalue = TrackBar1.Value.ToString
+        Preferences.transparencyvalue = TrackBar1.Value.ToString
     End Sub
 
     Private Sub chkbx_usefoldernames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_usefoldernames.CheckedChanged
         If chkbx_usefoldernames.CheckState = CheckState.Checked Then
-            Form1.userPrefs.usefoldernames = True
+            Preferences.usefoldernames = True
             chkbx_createfolderjpg.Enabled = True
             chkbx_basicsave.Enabled = True
         Else
-            Form1.userPrefs.usefoldernames = False
+            Preferences.usefoldernames = False
             chkbx_createfolderjpg.CheckState = CheckState.Unchecked
             chkbx_basicsave.CheckState = CheckState.Unchecked
             chkbx_createfolderjpg.Enabled = False
@@ -583,18 +582,18 @@ Public Class frmOptions
 
     Private Sub chkbx_createfolderjpg_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkbx_createfolderjpg.CheckedChanged
         If chkbx_createfolderjpg.CheckState = CheckState.Checked Then
-            Form1.userPrefs.createfolderjpg = True
+            Preferences.createfolderjpg = True
         Else
-            Form1.userPrefs.createfolderjpg = False
+            Preferences.createfolderjpg = False
         End If
     End Sub
 
 
     Private Sub chkbx_basicsave_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkbx_basicsave.CheckedChanged
         If chkbx_basicsave.CheckState = CheckState.Checked Then
-            Form1.userPrefs.basicsavemode = True
+            Preferences.basicsavemode = True
         Else
-            Form1.userPrefs.basicsavemode = False
+            Preferences.basicsavemode = False
         End If
     End Sub
 
@@ -605,23 +604,23 @@ Public Class frmOptions
             Else
                 MsgBox("Please Enter at least 0")
                 txtbx_minrarsize.Text = "8"
-                Form1.userPrefs.rarsize = 8
+                Preferences.rarsize = 8
             End If
         End If
         If txtbx_minrarsize.Text = "" Then
             MsgBox("Please enter a numerical Value that is 1 or more")
             txtbx_minrarsize.Text = "8"
-            Form1.userPrefs.rarsize = 8
+            Preferences.rarsize = 8
             Exit Sub
         End If
         If Not IsNumeric(txtbx_minrarsize.Text) Then
             MsgBox("Please enter a numerical Value that is 1 or more")
             txtbx_minrarsize.Text = "8"
-            Form1.userPrefs.rarsize = 8
+            Preferences.rarsize = 8
             Exit Sub
         End If
 
-        Form1.userPrefs.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+        Preferences.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
 
     End Sub
 
@@ -632,58 +631,58 @@ Public Class frmOptions
             If txtbox_maxposters.Text <> "" Then
                 If Convert.ToDecimal(txtbox_maxposters.Text) >= 1 Then
                     e.Handled = True
-                    Form1.userPrefs.maximagecount = Convert.ToInt32(txtbox_maxposters.Text)
+                    Preferences.maximagecount = Convert.ToInt32(txtbox_maxposters.Text)
                 Else
                     MsgBox("Please Enter at least 1")
-                    Form1.userPrefs.maximagecount = 5
+                    Preferences.maximagecount = 5
                 End If
             Else
                 MsgBox("Please Enter at least 1")
                 txtbox_maxposters.Text = "5"
-                Form1.userPrefs.maximagecount = 5
+                Preferences.maximagecount = 5
             End If
         End If
     End Sub
 
     Private Sub chkbx_notactorthumbs_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_notactorthumbs.CheckedChanged
         If chkbx_notactorthumbs.CheckState = CheckState.Checked Then
-            Form1.userPrefs.ignoreactorthumbs = True
+            Preferences.ignoreactorthumbs = True
         Else
-            Form1.userPrefs.ignoreactorthumbs = False
+            Preferences.ignoreactorthumbs = False
         End If
     End Sub
 
     Private Sub chkbx_ignoretrailers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_ignoretrailers.CheckedChanged
         If chkbx_ignoretrailers.CheckState = CheckState.Checked Then
-            Form1.userPrefs.ignoretrailers = True
+            Preferences.ignoretrailers = True
         Else
-            Form1.userPrefs.ignoretrailers = False
+            Preferences.ignoretrailers = False
         End If
     End Sub
 
     Private Sub chkbx_renamnfofiles_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_renamnfofiles.CheckedChanged
         If chkbx_renamnfofiles.CheckState = CheckState.Checked Then
-            Form1.userPrefs.renamenfofiles = True
+            Preferences.renamenfofiles = True
         Else
-            Form1.userPrefs.renamenfofiles = False
+            Preferences.renamenfofiles = False
         End If
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
         If RadioButton1.Checked = True Then
-            Form1.userPrefs.videomode = 1
+            Preferences.videomode = 1
         End If
     End Sub
 
     Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
         If RadioButton2.Checked = True Then
-            Form1.userPrefs.videomode = 2
+            Preferences.videomode = 2
         End If
     End Sub
 
     Private Sub RadioButton4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.CheckedChanged
         If RadioButton4.Checked = True Then
-            Form1.userPrefs.videomode = 4
+            Preferences.videomode = 4
         End If
     End Sub
 
@@ -694,33 +693,33 @@ Public Class frmOptions
         filebrowser.Filter = "Executable Files|*.exe"
         filebrowser.Title = "Find Executable Of Preferred Media Player"
         If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Form1.userPrefs.selectedvideoplayer = filebrowser.FileName
+            Preferences.selectedvideoplayer = filebrowser.FileName
             Label4.Visible = True
-            Label4.Text = Form1.userPrefs.selectedvideoplayer
+            Label4.Text = Preferences.selectedvideoplayer
         End If
     End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         If chkbx_disablecache.CheckState = CheckState.Checked Then
-            Form1.userPrefs.startupCache = False
+            Preferences.startupCache = False
         Else
-            Form1.userPrefs.startupCache = True
+            Preferences.startupCache = True
         End If
     End Sub
 
     Private Sub chkbx_unstackposternames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_unstackposternames.CheckedChanged
         If chkbx_unstackposternames.CheckState = CheckState.Checked Then
-            Form1.userPrefs.posternotstacked = True
+            Preferences.posternotstacked = True
         Else
-            Form1.userPrefs.posternotstacked = False
+            Preferences.posternotstacked = False
         End If
     End Sub
 
     Private Sub chkbx_unstackfanartnames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_unstackfanartnames.CheckedChanged
         If chkbx_unstackfanartnames.CheckState = CheckState.Checked Then
-            Form1.userPrefs.fanartnotstacked = True
+            Preferences.fanartnotstacked = True
         Else
-            Form1.userPrefs.fanartnotstacked = False
+            Preferences.fanartnotstacked = False
         End If
     End Sub
 
@@ -731,10 +730,10 @@ Public Class frmOptions
         theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
         theFolderBrowser.ShowNewFolderButton = True
         theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-        theFolderBrowser.SelectedPath = Form1.userPrefs.lastpath
+        theFolderBrowser.SelectedPath = Preferences.lastpath
         If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
             thefoldernames = (theFolderBrowser.SelectedPath)
-            Form1.userPrefs.lastpath = thefoldernames
+            Preferences.lastpath = thefoldernames
             For Each item As Object In ListBox2.Items
                 If thefoldernames.ToString = item.ToString Then allok = False
             Next
@@ -765,9 +764,9 @@ Public Class frmOptions
 
     Private Sub CheckBox10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox10.CheckedChanged
         If CheckBox10.CheckState = CheckState.Checked Then
-            Form1.userPrefs.keepfoldername = True
+            Preferences.keepfoldername = True
         Else
-            Form1.userPrefs.keepfoldername = False
+            Preferences.keepfoldername = False
         End If
     End Sub
 
@@ -778,9 +777,9 @@ Public Class frmOptions
 
     Private Sub RadioButton3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton3.CheckedChanged
         If RadioButton3.Checked = True Then
-            Form1.userPrefs.moviescraper = 1
+            Preferences.moviescraper = 1
         Else
-            Form1.userPrefs.moviescraper = 2
+            Preferences.moviescraper = 2
         End If
     End Sub
 
@@ -789,37 +788,37 @@ Public Class frmOptions
 
     Private Sub setnfothumbnailurls()
         If IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 0
+            Preferences.nfoposterscraper = 0
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 1
+            Preferences.nfoposterscraper = 1
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 2
+            Preferences.nfoposterscraper = 2
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 3
+            Preferences.nfoposterscraper = 3
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 4
+            Preferences.nfoposterscraper = 4
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 5
+            Preferences.nfoposterscraper = 5
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 6
+            Preferences.nfoposterscraper = 6
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-            Form1.userPrefs.nfoposterscraper = 7
+            Preferences.nfoposterscraper = 7
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 8
+            Preferences.nfoposterscraper = 8
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 9
+            Preferences.nfoposterscraper = 9
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 10
+            Preferences.nfoposterscraper = 10
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 11
+            Preferences.nfoposterscraper = 11
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 12
+            Preferences.nfoposterscraper = 12
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 13
+            Preferences.nfoposterscraper = 13
         ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 14
+            Preferences.nfoposterscraper = 14
         ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-            Form1.userPrefs.nfoposterscraper = 15
+            Preferences.nfoposterscraper = 15
         End If
     End Sub
     Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IMPA_chk.CheckedChanged
@@ -838,9 +837,9 @@ Public Class frmOptions
     Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
         'use imdbid for tmdb
         If CheckBox2.CheckState = CheckState.Checked Then
-            Form1.userPrefs.alwaysuseimdbid = True
+            Preferences.alwaysuseimdbid = True
         Else
-            Form1.userPrefs.alwaysuseimdbid = False
+            Preferences.alwaysuseimdbid = False
         End If
 
     End Sub
@@ -896,49 +895,49 @@ Public Class frmOptions
 
 
     Private Sub ListBox4_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox4.SelectedIndexChanged
-        Form1.userPrefs.imdbmirror = ListBox4.SelectedItem
+        Preferences.imdbmirror = ListBox4.SelectedItem
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         If ComboBox1.SelectedItem = "None" Then
-            Form1.userPrefs.maxactors = 0
+            Preferences.maxactors = 0
         ElseIf ComboBox1.SelectedItem = "All Available" Then
-            Form1.userPrefs.maxactors = 9999
+            Preferences.maxactors = 9999
         Else
-            Form1.userPrefs.maxactors = Convert.ToInt32(ComboBox1.SelectedItem)
+            Preferences.maxactors = Convert.ToInt32(ComboBox1.SelectedItem)
         End If
     End Sub
 
     Private Sub CheckBox22_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox22.CheckedChanged
         If CheckBox22.CheckState = CheckState.Checked Then
-            Form1.userPrefs.enablehdtags = True
+            Preferences.enablehdtags = True
         Else
-            Form1.userPrefs.enablehdtags = False
+            Preferences.enablehdtags = False
         End If
     End Sub
 
     Private Sub CheckBox4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox4.CheckedChanged
         If CheckBox4.CheckState = CheckState.Checked Then
-            Form1.userPrefs.gettrailer = True
+            Preferences.gettrailer = True
         Else
-            Form1.userPrefs.gettrailer = False
+            Preferences.gettrailer = False
         End If
     End Sub
 
     Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
         If saveactorchkbx.CheckState = CheckState.Checked Then
-            Form1.userPrefs.actorsave = True
+            Preferences.actorsave = True
         Else
-            Form1.userPrefs.actorsave = False
+            Preferences.actorsave = False
         End If
     End Sub
 
     Private Sub localactorpath_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles localactorpath.Leave
-        Form1.userPrefs.actorsavepath = localactorpath.Text
+        Preferences.actorsavepath = localactorpath.Text
     End Sub
 
     Private Sub xbmcactorpath_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles xbmcactorpath.Leave
-        Form1.userPrefs.actornetworkpath = xbmcactorpath.Text
+        Preferences.actornetworkpath = xbmcactorpath.Text
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
@@ -947,82 +946,82 @@ Public Class frmOptions
         theFolderBrowser.Description = "Please Select Folder to Save Actor Thumbnails)"
         theFolderBrowser.ShowNewFolderButton = True
         theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-        theFolderBrowser.SelectedPath = Form1.userPrefs.lastpath
+        theFolderBrowser.SelectedPath = Preferences.lastpath
         If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
             thefoldernames = (theFolderBrowser.SelectedPath)
             localactorpath.Text = thefoldernames
-            Form1.userPrefs.lastpath = thefoldernames
-            Form1.userPrefs.actorsavepath = thefoldernames
+            Preferences.lastpath = thefoldernames
+            Preferences.actorsavepath = thefoldernames
         End If
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
         If CheckBox3.CheckState = CheckState.Checked Then
-            Form1.userPrefs.savefanart = True
+            Preferences.savefanart = True
         Else
-            Form1.userPrefs.savefanart = False
+            Preferences.savefanart = False
         End If
     End Sub
 
     Private Sub RadioButton17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton17.CheckedChanged
         'unchanged
         If RadioButton17.Checked = True Then
-            Form1.userPrefs.resizefanart = 1
+            Preferences.resizefanart = 1
         End If
     End Sub
 
     Private Sub RadioButton18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton18.CheckedChanged
         '1280x720
         If RadioButton18.Checked = True Then
-            Form1.userPrefs.resizefanart = 2
+            Preferences.resizefanart = 2
         End If
     End Sub
 
     Private Sub RadioButton19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton19.CheckedChanged
         '960x540
         If RadioButton19.Checked = True Then
-            Form1.userPrefs.resizefanart = 3
+            Preferences.resizefanart = 3
         End If
     End Sub
 
     Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
         If CheckBox18.CheckState = CheckState.Checked Then
-            Form1.userPrefs.scrapemovieposters = True
+            Preferences.scrapemovieposters = True
         Else
-            Form1.userPrefs.scrapemovieposters = False
+            Preferences.scrapemovieposters = False
         End If
     End Sub
 
     Private Sub CheckBox15_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox15.CheckedChanged
         If CheckBox18.CheckState = CheckState.Checked Then
-            Form1.userPrefs.disabletvlogs = True
+            Preferences.disabletvlogs = True
         Else
-            Form1.userPrefs.disabletvlogs = False
+            Preferences.disabletvlogs = False
         End If
     End Sub
 
     Private Sub txtbx_minrarsize_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtbx_minrarsize.TextChanged
         If IsNumeric(txtbx_minrarsize.Text) Then
-            Form1.userPrefs.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
+            Preferences.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
         Else
-            Form1.userPrefs.rarsize = 8
+            Preferences.rarsize = 8
             txtbx_minrarsize.Text = "8"
         End If
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
         If CheckBox1.CheckState = CheckState.Checked Then
-            Form1.userPrefs.overwritethumbs = False
+            Preferences.overwritethumbs = False
         Else
-            Form1.userPrefs.overwritethumbs = True
+            Preferences.overwritethumbs = True
         End If
     End Sub
 
     Private Sub CheckBox5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox5.CheckedChanged
         If CheckBox5.CheckState = CheckState.Checked Then
-            Form1.userPrefs.externalbrowser = True
+            Preferences.externalbrowser = True
         Else
-            Form1.userPrefs.externalbrowser = False
+            Preferences.externalbrowser = False
         End If
 
 
@@ -1030,9 +1029,9 @@ Public Class frmOptions
 
     Private Sub CheckBox6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox6.CheckedChanged
         If CheckBox6.CheckState = CheckState.Checked Then
-            Form1.userPrefs.roundminutes = True
+            Preferences.roundminutes = True
         Else
-            Form1.userPrefs.roundminutes = False
+            Preferences.roundminutes = False
         End If
     End Sub
 
@@ -1048,10 +1047,10 @@ Public Class frmOptions
         theFolderBrowser.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
         theFolderBrowser.ShowNewFolderButton = True
         theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-        theFolderBrowser.SelectedPath = Form1.userPrefs.lastpath
+        theFolderBrowser.SelectedPath = Preferences.lastpath
         If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
             thefoldernames = (theFolderBrowser.SelectedPath)
-            Form1.userPrefs.lastpath = thefoldernames
+            Preferences.lastpath = thefoldernames
             For Each strfolder As String In My.Computer.FileSystem.GetDirectories(thefoldernames)
                 Try
                     If strfolder.IndexOf("System Volume Information") = -1 Then
@@ -1102,13 +1101,13 @@ Public Class frmOptions
 
     Private Sub RadioButton7_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton7.CheckedChanged
         If RadioButton7.Checked = True Then
-            Form1.userPrefs.sortorder = "default"
+            Preferences.sortorder = "default"
         End If
     End Sub
 
     Private Sub RadioButton8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
         If RadioButton8.Checked = True Then
-            Form1.userPrefs.sortorder = "dvd"
+            Preferences.sortorder = "dvd"
         End If
     End Sub
     Dim languagelist As New List(Of TvShowLanguages)
@@ -1153,7 +1152,7 @@ Public Class frmOptions
             Catch
             End Try
             Try
-                ListBox8.SelectedItem = Form1.userPrefs.tvdblanguage
+                ListBox8.SelectedItem = Preferences.tvdblanguage
             Catch
             End Try
         End If
@@ -1193,13 +1192,13 @@ Public Class frmOptions
         theFolderBrowser.Description = "Please Select TV Folder to Add to DB"
         theFolderBrowser.ShowNewFolderButton = True
         theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
-        theFolderBrowser.SelectedPath = Form1.userPrefs.lastpath
+        theFolderBrowser.SelectedPath = Preferences.lastpath
         If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
             thefoldernames = (theFolderBrowser.SelectedPath)
             For Each item As Object In ListBox1.Items
                 If thefoldernames.ToString = item.ToString Then allok = False
             Next
-            Form1.userPrefs.lastpath = thefoldernames
+            Preferences.lastpath = thefoldernames
             If allok = True Then
                 ListBox1.Items.Add(thefoldernames)
                 Form1.tvFolders.Add(thefoldernames)
@@ -1210,7 +1209,7 @@ Public Class frmOptions
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
-        Form1.userPrefs.tvdbactorscrape = ComboBox5.SelectedIndex.ToString
+        Preferences.tvdbactorscrape = ComboBox5.SelectedIndex.ToString
     End Sub
 
     Private Sub ListBox7_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox7.SelectedIndexChanged
@@ -1332,26 +1331,26 @@ Public Class frmOptions
     End Function
 
     Private Sub ComboBox3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox3.SelectedIndexChanged
-        Form1.userPrefs.tvrename = ComboBox3.SelectedIndex
+        Preferences.tvrename = ComboBox3.SelectedIndex
     End Sub
 
     Private Sub poster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles poster.CheckedChanged
         If poster.Checked = True Then
-            Form1.userPrefs.postertype = "poster"
+            Preferences.postertype = "poster"
         End If
     End Sub
 
     Private Sub banner_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles banner.CheckedChanged
         If banner.Checked = True Then
-            Form1.userPrefs.postertype = "banner"
+            Preferences.postertype = "banner"
         End If
     End Sub
 
     Private Sub ListBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox8.SelectedIndexChanged
         For Each lan In languagelist
             If lan.language = ListBox8.Text Then
-                Form1.userPrefs.tvdblanguage = lan.language
-                Form1.userPrefs.tvdblanguagecode = lan.abbreviation
+                Preferences.tvdblanguage = lan.language
+                Preferences.tvdblanguagecode = lan.abbreviation
                 Exit For
             End If
         Next
@@ -1359,27 +1358,27 @@ Public Class frmOptions
 
     Private Sub RadioButton6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.CheckedChanged
         If RadioButton6.Checked = True Then
-            Form1.userPrefs.seasonall = "none"
+            Preferences.seasonall = "none"
         End If
     End Sub
 
     Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
         If RadioButton9.Checked = True Then
-            Form1.userPrefs.seasonall = "poster"
+            Preferences.seasonall = "poster"
         End If
     End Sub
 
     Private Sub RadioButton10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton10.CheckedChanged
         If RadioButton10.Checked = True Then
-            Form1.userPrefs.seasonall = "wide"
+            Preferences.seasonall = "wide"
         End If
     End Sub
 
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
         If CheckBox11.CheckState = CheckState.Checked Then
-            Form1.userPrefs.tvshowrebuildlog = True
+            Preferences.tvshowrebuildlog = True
         Else
-            Form1.userPrefs.tvshowrebuildlog = False
+            Preferences.tvshowrebuildlog = False
         End If
     End Sub
 End Class
