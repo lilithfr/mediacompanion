@@ -17,11 +17,7 @@ Imports System.ComponentModel
 Public Class Form1
 
     'Public Shared Preferences As New Structures
-    Public Shared movieFolders As New List(Of String)
-    Public Shared tvFolders As New List(Of String)
-    Public Shared tvRootFolders As New List(Of String)
-    Public Shared profiles As New List(Of ListOfProfiles)
-    Public Shared workingProfile As New ListOfProfiles
+
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
     Public movieRebuildNeeded As Boolean = True
     Public tvRebuildNeeded As Boolean = True
@@ -31260,5 +31256,24 @@ Public Class Form1
         Else
             Preferences.renamenfofiles = True
         End If
+    End Sub
+
+    Public Sub LoadConfig()
+        Preferences.LoadConfig()
+        Me.GroupBox22.Visible = Not Preferences.tvshow_useXBMC_Scraper
+        Me.GroupBox22.SendToBack()
+        Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
+        Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
+
+        Me.RadioButton51.Visible = Preferences.movies_useXBMC_Scraper
+        Me.RadioButton52.Visible = Preferences.movies_useXBMC_Scraper
+        Me.RadioButton51.Checked = Preferences.whatXBMCScraperIMBD
+
+        Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
+        Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
+
+        Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
+
+        Read_XBMC_IMDB_Scraper_Config()
     End Sub
 End Class
