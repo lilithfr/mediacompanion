@@ -300,7 +300,6 @@ C:\MC SVN\obj\Release\Media_Companion.frmTvPosters.resources
 C:\MC SVN\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\SVN MC\obj\Release\Media_Companion.frmProgressScreen.resources
 C:\MC SVN\obj\Release\Media_Companion.frmProgressScreen.resources
+C:\MC SVN\obj\Release\ResGen.read.1.tlog
+C:\MC SVN\obj\Release\ResGen.write.1.tlog
 C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmProgressScreen.resources
-C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
-C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
-C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog

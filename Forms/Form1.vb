@@ -26004,26 +26004,38 @@ Public Class Form1
     Private Sub setuptableview()
         Preferences.tableview.Clear()
         Preferences.tableview.Add("title|150|0|true")
+
         Preferences.tableview.Add("year|35|1|true")
+
         Preferences.tableview.Add("playcount|55|2|true")
+
         Preferences.tableview.Add("fullpathandfilename|150|3|false")
+
         Preferences.tableview.Add("genre|150|4|true")
+
         Preferences.tableview.Add("runtime|45|5|true")
+
         Preferences.tableview.Add("outline|200|6|false")
-        Preferences.tableview.Add("plot|200|7|false")
-        Preferences.tableview.Add("id|75|8|false")
-        Preferences.tableview.Add("rating|40|9|true")
-        Preferences.tableview.Add("set|150|10|true")
-        Preferences.tableview.Add("sorttitle|150|11|false")
-        Preferences.tableview.Add("top250|150|12|false")
-        Preferences.tableview.Add("missingdata1|150|13|false")
+
+        Preferences.tableview.Add("id|75|7|false")
+
+        Preferences.tableview.Add("rating|40|8|true")
+
+        Preferences.tableview.Add("set|150|9|true")
+
+        Preferences.tableview.Add("sorttitle|150|10|false")
+
+        Preferences.tableview.Add("top250|150|11|false")
+
+        Preferences.tableview.Add("missingdata1|150|12|false")
+
     End Sub
 
     Private Sub setuptable()
         DataGridView1.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tableview.Count <> 14 Then
+        If Preferences.tableview.Count <> 13 Then
             Call setuptableview()
         End If
         cmbobx_tablesets.Items.Clear()
@@ -26114,9 +26126,6 @@ Public Class Form1
             End If
             childchild = doc.CreateElement("outline")
             childchild.InnerText = movie.outline
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("plot")
-            childchild.InnerText = movie.plot
             child.AppendChild(childchild)
             childchild = doc.CreateElement("sortorder")
             childchild.InnerText = movie.sortorder
@@ -26303,17 +26312,6 @@ Public Class Form1
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
-        Dim plotcolumn As New DataGridViewColumn()
-        With plotcolumn
-            Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
-            .CellTemplate = oCell
-            '.DefaultCellStyle.WrapMode = DataGridViewTriState.True
-            .HeaderText = "Plot"
-            .DataPropertyName = "plot"
-            .Name = "plot"
-            .SortMode = DataGridViewColumnSortMode.Automatic
-        End With
-
         Dim sorttitlecolumn As New DataGridViewColumn()
         With sorttitlecolumn
             Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
@@ -26381,7 +26379,7 @@ Public Class Form1
             .ReadOnly = True
         End With
 
-        For f = 0 To 13
+        For f = 0 To 12
             For Each col In tableSets
                 If col.index = f Then
                     Select Case col.title
@@ -26442,16 +26440,6 @@ Public Class Form1
                                 outlinecolumn.Visible = False
                             End If
                             DataGridView1.Columns.Insert(f, outlinecolumn)
-                            Exit For
-                        Case "plot"
-                            plotcolumn.Width = col.width
-                            If col.visible = True Then
-                                plotcolumn.Visible = True
-                                CheckBox42.CheckState = CheckState.Checked
-                            Else
-                                plotcolumn.Visible = False
-                            End If
-                            DataGridView1.Columns.Insert(f, plotcolumn)
                             Exit For
                         Case "id"
                             idcolumn.Width = col.width
@@ -26683,9 +26671,6 @@ Public Class Form1
                             changed = True
                         End If
                         If mov.outline <> gridrow.Cells("Outline").Value Then
-                            changed = True
-                        End If
-                        If mov.plot <> gridrow.Cells("Plot").Value Then
                             changed = True
                         End If
                         If mov.genre <> gridrow.Cells("genre").Value Then
@@ -27102,13 +27087,6 @@ Public Class Form1
 #End If
                             End Try
                             Try
-                                changedmovie.plot = gridrow.Cells("plot").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            Try
                                 changedmovie.movieset = gridrow.Cells("set").Value
                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -27167,7 +27145,6 @@ Public Class Form1
                             changedmoviedetails.fullmoviebody.playcount = changedmovie.playcount
                             changedmoviedetails.fullmoviebody.genre = changedmovie.genre
                             changedmoviedetails.fullmoviebody.outline = changedmovie.outline
-                            changedmoviedetails.fullmoviebody.plot = changedmovie.plot
                             changedmoviedetails.fullmoviebody.rating = changedmovie.rating
                             changedmoviedetails.fullmoviebody.movieset = changedmovie.movieset
                             changedmoviedetails.fullmoviebody.sortorder = changedmovie.sortorder
@@ -27258,7 +27235,6 @@ Public Class Form1
             txt_tableruntime.Visible = True
             txt_tablerating.Visible = True
             txt_tableoutline.Visible = True
-            txt_tableplot.Visible = True
             txt_tablegenre.Visible = True
             cmbobx_tablesets.Visible = True
             Cmbobx_tablewatched.Visible = True
@@ -27276,7 +27252,6 @@ Public Class Form1
             txt_tableruntime.Visible = False
             txt_tablerating.Visible = False
             txt_tableoutline.Visible = False
-            txt_tableplot.Visible = False
             txt_tablegenre.Visible = False
             cmbobx_tablesets.Visible = False
             Button98.Visible = False
@@ -27319,7 +27294,6 @@ Public Class Form1
         txt_tableruntime.Visible = False
         txt_tablerating.Visible = False
         txt_tableoutline.Visible = False
-        txt_tableplot.Visible = False
         txt_tablegenre.Visible = False
         Cmbobx_tablewatched.Visible = False
         cmbobx_tablesets.Visible = False
@@ -27404,25 +27378,6 @@ Public Class Form1
                             Next
                             locx = locx + DataGridView1.RowHeadersWidth
                             txt_tableoutline.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "plot"
-                            txt_tableplot.Width = column.width - 4
-                            txt_tableplot.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Plot").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "plot" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tableplot.Location = New Point(locx + 2, DataGridView1.Height + 31)
                         Case "rating"
                             txt_tablerating.Width = column.width - 4
                             txt_tablerating.Visible = True
@@ -27587,9 +27542,6 @@ Public Class Form1
             End If
             If txt_tableoutline.Text <> "" And txt_tableoutline.Visible = True Then
                 row.cells("outline").value = txt_tableoutline.Text
-            End If
-            If txt_tableplot.Text <> "" And txt_tableplot.Visible = True Then
-                row.cells("plot").value = txt_tableplot.Text
             End If
             If txt_tablegenre.Text <> "" And txt_tablegenre.Visible = True Then
                 row.cells("genre").value = txt_tablegenre.Text
@@ -31308,21 +31260,5 @@ Public Class Form1
         Else
             Preferences.renamenfofiles = True
         End If
-    End Sub
-
-    Private Sub CheckBox42_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox42.CheckedChanged
-        Try
-            If CheckBox42.CheckState = CheckState.Checked Then
-                Me.DataGridView1.Columns("plot").Visible = True
-                Call setuptextboxes()
-            Else
-                Me.DataGridView1.Columns("plot").Visible = False
-                Call setuptextboxes()
-            End If
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
     End Sub
 End Class

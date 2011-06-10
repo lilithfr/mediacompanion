@@ -15,7 +15,6 @@ Public Structure ComboList
     Dim playcount As String
     Dim sortorder As String
     Dim outline As String
-    Dim plot As String
     Dim runtime As String
     Dim createdate As String
     Dim missingdata1 As Byte
