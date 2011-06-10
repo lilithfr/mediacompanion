@@ -137,7 +137,6 @@
     <Compile Include="Classes\TVhtml.vb" />
     <Compile Include="Classes\Tv\TvEpisode.vb" />
     <Compile Include="Classes\Tv\TvShow.vb" />
-    <Compile Include="Basics\Utilities.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Forms\frmProgressScreen.Designer.vb">
       <DependentUpon>frmProgressScreen.vb</DependentUpon>
@@ -152,14 +151,10 @@
     <Compile Include="Structures\HTMLTemplate.vb" />
     <Compile Include="Structures\BatchWizard.vb" />
     <Compile Include="Classes\MediaInfoDLLComplete.vb" />
-    <Compile Include="Structures\MediaNFOVideo.vb" />
-    <Compile Include="Structures\MediaNFOSubtitles.vb" />
-    <Compile Include="Structures\MediaNFOAudio.vb" />
     <Compile Include="Structures\RunningThreads.vb" />
     <Compile Include="Structures\ComboList.vb" />
     <Compile Include="Structures\NewMovie.vb" />
     <Compile Include="Structures\FileDetails.vb" />
-    <Compile Include="Classes\FullFileDetails.vb" />
     <Compile Include="Classes\FullMovieDetails.vb" />
     <Compile Include="Structures\MovieActors.vb" />
     <Compile Include="Structures\BasicMovieNFO.vb" />
@@ -229,7 +224,6 @@
     <Compile Include="Forms\frmOutputLog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Classes\MediaNFO.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -654,6 +648,9 @@
       <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
       <Name>ProtoXML</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Basics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

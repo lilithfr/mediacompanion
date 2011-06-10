@@ -4,6 +4,11 @@ Imports System.Threading
 
 
 Public Class Preferences
+    'Not saved items
+    Public Shared applicationPath As String
+    Public Shared tvScraperLog As String = ""
+
+    'Saved items
     Public Shared customcounter As Integer
     Public Shared tvrename As Integer
     Public Shared locx As Integer
@@ -1035,7 +1040,7 @@ Public Class Preferences
                 Case "moviesUseXBMCScraper"
                     If thisresult.InnerXml = "true" Then
                         Preferences.movies_useXBMC_Scraper = True
-  
+
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.movies_useXBMC_Scraper = False
                     End If

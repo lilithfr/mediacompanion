@@ -5780,7 +5780,7 @@ Me.TabPage28.Location = New System.Drawing.Point(4, 22)
 Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage28.Name = "TabPage28"
 Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage28.Size = New System.Drawing.Size(1190, 568)
+Me.TabPage28.Size = New System.Drawing.Size(1190, 570)
 Me.TabPage28.TabIndex = 1
 Me.TabPage28.Text = "Advanced"
 '

@@ -42,9 +42,9 @@ Public Class Form1
     Public tvBatchList As New TvShowBatchWizard
     Public basicTvList As New List(Of TvShow)
     Public sending As String
-    Public applicationPath As String = Application.StartupPath 'Get application root path
+
     Public noFanart As Boolean
-    Public Shared tvScraperLog As String = ""
+
 
     Dim WithEvents bigPictureBox As PictureBox
     Dim WithEvents fanartBoxes As PictureBox
@@ -237,6 +237,7 @@ Public Class Form1
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Preferences.applicationPath = Application.StartupPath
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
 
@@ -17101,9 +17102,10 @@ Public Class Form1
                     PictureBox10.Image = Nothing
                     PictureBox11.Image = Nothing
                 End If
-                Label59.Text = PictureBox2.Image.Width
-                Label58.Text = PictureBox2.Image.Height
-
+                If PictureBox2.Image IsNot Nothing Then
+                    Label59.Text = PictureBox2.Image.Width
+                    Label58.Text = PictureBox2.Image.Height
+                End If
             Catch ex As WebException
                 MsgBox(ex.Message)
             End Try
