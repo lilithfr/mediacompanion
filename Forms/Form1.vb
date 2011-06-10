@@ -17,11 +17,7 @@ Imports System.ComponentModel
 Public Class Form1
 
     'Public Shared Preferences As New Structures
-    Public Shared movieFolders As New List(Of String)
-    Public Shared tvFolders As New List(Of String)
-    Public Shared tvRootFolders As New List(Of String)
-    Public Shared profiles As New List(Of ListOfProfiles)
-    Public Shared workingProfile As New ListOfProfiles
+
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
     Public movieRebuildNeeded As Boolean = True
     Public tvRebuildNeeded As Boolean = True
@@ -46,9 +42,9 @@ Public Class Form1
     Public tvBatchList As New TvShowBatchWizard
     Public basicTvList As New List(Of TvShow)
     Public sending As String
-    Public applicationPath As String = Application.StartupPath 'Get application root path
+
     Public noFanart As Boolean
-    Public Shared tvScraperLog As String = ""
+    'Public Shared tvScraperLog As String = ""
 
     Dim WithEvents bigPictureBox As PictureBox
     Dim WithEvents fanartBoxes As PictureBox
@@ -187,7 +183,7 @@ Public Class Form1
 
         'Todo: Code a better way to serialize the data
 
-        preferences.loadconfig()
+        'Me.LoadConfig()
 
         Preferences.splt1 = SplitContainer1.SplitterDistance
         Preferences.splt2 = SplitContainer2.SplitterDistance
@@ -241,6 +237,8 @@ Public Class Form1
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Preferences.applicationPath = Application.StartupPath
+
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
 
@@ -324,13 +322,13 @@ Public Class Form1
             Preferences.configpath = tempstring & "config.xml"
             If Not IO.File.Exists(Preferences.configpath) Then
 
-                Preferences.saveconfig()
+                Preferences.SaveConfig()
             End If
         Else
             IO.Directory.CreateDirectory(tempstring)
             workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
 
-            Call Preferences.saveconfig()
+            Call Preferences.SaveConfig()
         End If
 
 
@@ -1687,7 +1685,7 @@ Public Class Form1
                 If IO.File.Exists(tempstring) Then Preferences.configpath = tempstring
                 Preferences.configpath = tempstring
 
-                Preferences.loadconfig()
+                Me.LoadConfig()
             End If
         Next
         For Each item In Preferences.moviesets
@@ -5264,7 +5262,7 @@ Public Class Form1
         Preferences.moviesets.Clear()
         movieFolders.Clear()
         tvFolders.Clear()
-        Preferences.LoadConfig()
+        Me.LoadConfig()
         Dim result As Boolean = True
 
         If movielistcheck.Count <> movieFolders.Count Then
@@ -23479,7 +23477,7 @@ Public Class Form1
 
                 MsgBox("Changes Saved")
             Else
-                Preferences.loadconfig()
+                Me.LoadConfig()
             End If
             generalprefschanged = False
         End If
@@ -24140,7 +24138,7 @@ Public Class Form1
                 Preferences.saveconfig()
                 MsgBox("Changes Saved")
             Else
-                Preferences.loadconfig()
+                Me.LoadConfig()
             End If
             generalprefschanged = False
         End If
@@ -24499,7 +24497,7 @@ Public Class Form1
                 MsgBox("Changes Saved")
             Else
 
-                Preferences.LoadConfig()
+                Me.LoadConfig()
                 Call loadregex()
             End If
             generalprefschanged = False
@@ -25695,7 +25693,7 @@ Public Class Form1
         Me.Enabled = False
         If IO.File.Exists(workingProfile.config) Then
             Preferences.moviesets.Clear()
-            Preferences.loadconfig()
+            Me.LoadConfig()
             For Each item In Preferences.moviesets
                 ComboBox3.Items.Clear()
                 ComboBox3.Items.Add(item)
@@ -31337,8 +31335,24 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ContextMenuStrip_table_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip_table.Opening
+   
+    Public Sub LoadConfig()
+        Preferences.LoadConfig()
+        Me.GroupBox22.Visible = Not Preferences.tvshow_useXBMC_Scraper
+        Me.GroupBox22.SendToBack()
+        Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
+        Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
 
+        Me.RadioButton51.Visible = Preferences.movies_useXBMC_Scraper
+        Me.RadioButton52.Visible = Preferences.movies_useXBMC_Scraper
+        Me.RadioButton51.Checked = CBool(Preferences.whatXBMCScraperIMBD)
+
+        Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
+        Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
+
+        Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
+
+        Read_XBMC_IMDB_Scraper_Config()
     End Sub
 
     

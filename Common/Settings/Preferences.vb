@@ -631,15 +631,17 @@ Public Class Preferences
         Next
 
         doc.AppendChild(root)
-        Dim tempstring2 As String = Preferences.workingProfile.config
+
+
+
         Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
         doc.WriteTo(output)
         output.Close()
     End Sub
 
-    Public Shared whatXBMCScraperIMBD As String
-    Public Shared whatXBMCScraperTVDB As String
+    Public Shared whatXBMCScraperIMBD As Boolean
+    Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared OfflineDVDTitle As String
 
     Public Shared Sub LoadConfig()
