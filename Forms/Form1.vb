@@ -5016,6 +5016,8 @@ Public Class Form1
                                 newmovie.runtime = detail.InnerText
                             Case "outline"
                                 newmovie.outline = detail.InnerText
+                            Case "plot"
+                                newmovie.plot = detail.InnerText
                             Case "year"
                                 newmovie.year = detail.InnerText
                                 'Dim allok As Boolean = False
@@ -6914,6 +6916,7 @@ Public Class Form1
                 filteredList.Clear()
                 For f = comboarray2.Count - 1 To 0 Step -1
                     Dim movietoadd As New ComboList
+                    movietoadd.plot = comboarray2(f).plot
                     movietoadd.fullpathandfilename = comboarray2(f).fullpathandfilename
                     movietoadd.titleandyear = comboarray2(f).titleandyear
                     movietoadd.filename = comboarray2(f).filename
@@ -6948,6 +6951,7 @@ Public Class Form1
                 filteredList.Clear()
                 For f = comboarray2.Count - 1 To 0 Step -1
                     Dim movietoadd As New ComboList
+                    movietoadd.plot = comboarray2(f).plot
                     movietoadd.fullpathandfilename = comboarray2(f).fullpathandfilename
                     movietoadd.titleandyear = comboarray2(f).titleandyear
                     movietoadd.filename = comboarray2(f).filename
@@ -31356,4 +31360,7 @@ Public Class Form1
     End Sub
 
     
+    Private Sub MediaCompanionHelpFileToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles MediaCompanionHelpFileToolStripMenuItem.Click
+        Process.Start(applicationPath & "\Media_Companion.chm")
+    End Sub
 End Class
