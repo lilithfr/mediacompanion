@@ -866,7 +866,12 @@ Public Class Form1
             childchild.InnerText = movie.outline
             child.AppendChild(childchild)
             childchild = doc.CreateElement("plot")
-            childchild.InnerText = movie.plot
+            If movie.plot.Length() > 100 Then
+                childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
+            Else
+                childchild.InnerText = movie.plot
+            End If
+
             child.AppendChild(childchild)
             childchild = doc.CreateElement("sortorder")
             childchild.InnerText = movie.sortorder
@@ -27106,13 +27111,14 @@ Public Class Form1
                                 Throw ex
 #End If
                             End Try
-                            Try
-                                changedmovie.plot = gridrow.Cells("plot").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
+                            ' Because plot is truncated to 100 chars to save moviecache.xml length, we don't want the user to overwrite the real plot
+                            '                            Try
+                            '                                changedmovie.plot = gridrow.Cells("plot").Value
+                            '                            Catch ex As Exception
+                            '#If SilentErrorScream Then
+                            '                                Throw ex
+                            '#End If
+                            '                            End Try
                             Try
                                 changedmovie.movieset = gridrow.Cells("set").Value
                             Catch ex As Exception
@@ -27172,7 +27178,7 @@ Public Class Form1
                             changedmoviedetails.fullmoviebody.playcount = changedmovie.playcount
                             changedmoviedetails.fullmoviebody.genre = changedmovie.genre
                             changedmoviedetails.fullmoviebody.outline = changedmovie.outline
-                            changedmoviedetails.fullmoviebody.plot = changedmovie.plot
+                            'changedmoviedetails.fullmoviebody.plot = changedmovie.plot
                             changedmoviedetails.fullmoviebody.rating = changedmovie.rating
                             changedmoviedetails.fullmoviebody.movieset = changedmovie.movieset
                             changedmoviedetails.fullmoviebody.sortorder = changedmovie.sortorder
