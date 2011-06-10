@@ -6,6 +6,7 @@ Imports System.Xml
 Imports System.IO.Compression
 Imports System.Text
 Imports System.Reflection
+Imports System.Drawing
 
 
 Public Class Utilities
@@ -72,7 +73,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     Dim myProcess As Process = New Process
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
-                    myProcess.StartInfo.FileName = Form1.applicationPath & "\ffmpeg.exe"
+                    myProcess.StartInfo.FileName = Preferences.applicationPath & "\ffmpeg.exe"
                     Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
@@ -114,12 +115,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim responseStream As Stream = WebResponse.GetResponseStream()
             If (WebResponse.ContentEncoding.ToLower().Contains("gzip")) Then
                 responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
-                Form1.tvScraperLog = Form1.tvScraperLog & "**** GZIP DECODED *****" & vbCrLf
+                Preferences.tvScraperLog &= "**** GZIP DECODED *****" & vbCrLf
             ElseIf (WebResponse.ContentEncoding.ToLower().Contains("deflate")) Then
                 responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
-                Form1.tvScraperLog = Form1.tvScraperLog & "**** DEFLATE DECODED *****" & vbCrLf
+                Preferences.tvScraperLog &= "**** DEFLATE DECODED *****" & vbCrLf
             Else
-                Form1.tvScraperLog = Form1.tvScraperLog & "**** UNDECODED *****" & vbCrLf
+                Preferences.tvScraperLog &= "**** UNDECODED *****" & vbCrLf
             End If
             Dim reader As StreamReader = New StreamReader(responseStream, Encoding.Default)
 
@@ -527,7 +528,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     Dim pattern As String = "*" & VideoExtensions(f)
                     Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
                     For Each fs_info As System.IO.FileInfo In fs_infos
-                        Application.DoEvents()
+                        'Application.DoEvents()
                         If IO.File.Exists(fs_info.FullName) Then
                             tempstring = fs_info.FullName.ToLower
                             If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
@@ -2541,7 +2542,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End Try
         Catch ex As Exception
         Finally
+
         End Try
+        Return False
     End Function
 
     Public Shared Function DeleteFile(ByVal path As String) As Boolean

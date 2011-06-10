@@ -881,7 +881,7 @@ Public Class frmTvFanart
     End Sub
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        openFD.InitialDirectory = Form1.applicationPath
+        openFD.InitialDirectory = Preferences.applicationPath
         openFD.Title = "Select a jpeg image file File"
         openFD.FileName = ""
         openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"

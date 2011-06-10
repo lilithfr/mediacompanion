@@ -4,6 +4,11 @@ Imports System.Threading
 
 
 Public Class Preferences
+    'Not saved items
+    Public Shared applicationPath As String
+    Public Shared tvScraperLog As String = ""
+
+    'Saved items
     Public Shared customcounter As Integer
     Public Shared tvrename As Integer
     Public Shared locx As Integer
@@ -107,6 +112,12 @@ Public Class Preferences
 
     Public Shared commandlist As New List(Of ListOfCommands)
 
+    Public Shared movieFolders As New List(Of String)
+    Public Shared tvFolders As New List(Of String)
+    Public Shared tvRootFolders As New List(Of String)
+    Public Shared profiles As New List(Of ListOfProfiles)
+    Public Shared workingProfile As New ListOfProfiles
+
     Public Shared Sub SaveConfig()
 
         Dim doc As New XmlDocument
@@ -121,19 +132,19 @@ Public Class Preferences
         root = doc.CreateElement("xbmc_media_companion_config_v1.0")
 
 
-        For Each path In Form1.tvFolders
+        For Each path In Preferences.tvFolders
             child = doc.CreateElement("tvfolder")
             child.InnerText = path
             root.AppendChild(child)
         Next
 
-        For Each path In Form1.tvRootFolders
+        For Each path In Preferences.tvRootFolders
             child = doc.CreateElement("tvrootfolder")
             child.InnerText = path
             root.AppendChild(child)
         Next
 
-        For Each path In Form1.movieFolders
+        For Each path In Preferences.movieFolders
             child = doc.CreateElement("nfofolder")
             child.InnerText = path
             root.AppendChild(child)
@@ -602,7 +613,7 @@ Public Class Preferences
         root.AppendChild(child)
 
         child = doc.CreateElement("offlinemovielabeltext")
-        child.InnerText = Form1.TextBox_OfflineDVDTitle.Text
+        child.InnerText = Preferences.OfflineDVDTitle
         root.AppendChild(child)
 
 
@@ -620,29 +631,33 @@ Public Class Preferences
         Next
 
         doc.AppendChild(root)
-        Dim tempstring2 As String = Form1.workingProfile.config
-        Dim output As New XmlTextWriter(Form1.workingProfile.config, System.Text.Encoding.UTF8)
+        Dim tempstring2 As String = Preferences.workingProfile.config
+        Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
         doc.WriteTo(output)
         output.Close()
     End Sub
 
+    Public Shared whatXBMCScraperIMBD As String
+    Public Shared whatXBMCScraperTVDB As String
+    Public Shared OfflineDVDTitle As String
+
     Public Shared Sub LoadConfig()
         Preferences.commandlist.Clear()
         Preferences.moviesets.Clear()
         Preferences.moviesets.Add("None")
-        Form1.movieFolders.Clear()
-        Form1.tvFolders.Clear()
-        Form1.tvRootFolders.Clear()
+        Preferences.movieFolders.Clear()
+        Preferences.tvFolders.Clear()
+        Preferences.tvRootFolders.Clear()
         Preferences.tableview.Clear()
-        Dim tempstring As String = Form1.workingProfile.config
-        If Not IO.File.Exists(Form1.workingProfile.config) Then
+        Dim tempstring As String = Preferences.workingProfile.config
+        If Not IO.File.Exists(Preferences.workingProfile.config) Then
             Exit Sub
         End If
 
         Dim prefs As New XmlDocument
         Try
-            prefs.Load(Form1.workingProfile.config)
+            prefs.Load(Preferences.workingProfile.config)
         Catch ex As Exception
             MsgBox("Error : pr24")
         End Try
@@ -707,17 +722,17 @@ Public Class Preferences
                 Case "locy"
                     Preferences.locy = Convert.ToInt32(thisresult.InnerText)
                 Case "nfofolder"
-                    Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.movieFolders.Add(decodestring)
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                    Preferences.movieFolders.Add(decodestring)
                 Case "offlinefolder"
-                    Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
                     Preferences.offlinefolders.Add(decodestring)
                 Case "tvfolder"
-                    Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.tvFolders.Add(decodestring)
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                    Preferences.tvFolders.Add(decodestring)
                 Case "tvrootfolder"
-                    Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
-                    Form1.tvRootFolders.Add(decodestring)
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                    Preferences.tvRootFolders.Add(decodestring)
                 Case "gettrailer"
                     If thisresult.InnerXml = "true" Then
                         Preferences.gettrailer = True
@@ -794,10 +809,8 @@ Public Class Preferences
                 Case "renamenfofiles"
                     If thisresult.InnerXml = "true" Then
                         Preferences.renamenfofiles = True
-                        Form1.CheckBoxRenameNFOtoINFO.Checked = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.renamenfofiles = False
-                        Form1.CheckBoxRenameNFOtoINFO.Checked = False
                     End If
 
                 Case "checkinfofiles"
@@ -881,11 +894,11 @@ Public Class Preferences
                     End If
 
                 Case "actorsavepath"
-                    Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
                     Preferences.actorsavepath = decodestring
 
                 Case "actornetworkpath"
-                    Dim decodestring As String = Form1.nfoFunction.decxmlchars(thisresult.InnerText)
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
                     Preferences.actornetworkpath = decodestring
 
                 Case "resizefanart"
@@ -1020,42 +1033,25 @@ Public Class Preferences
                 Case "TVShowUseXBMCScraper"
                     If thisresult.InnerXml = "true" Then
                         Preferences.tvshow_useXBMC_Scraper = True
-                        Form1.GroupBox22.Visible = False
-                        Form1.GroupBox22.SendToBack()
-                        Form1.GroupBox_TVDB_Scraper_Preferences.Visible = True
-                        Form1.GroupBox_TVDB_Scraper_Preferences.BringToFront()
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.tvshow_useXBMC_Scraper = False
-                        Form1.GroupBox22.Visible = True
-                        Form1.GroupBox22.BringToFront()
-                        Form1.GroupBox_TVDB_Scraper_Preferences.Visible = False
-                        Form1.GroupBox_TVDB_Scraper_Preferences.SendToBack()
                     End If
-                    Read_XBMC_TVDB_Scraper_Config()
 
                 Case "moviesUseXBMCScraper"
                     If thisresult.InnerXml = "true" Then
                         Preferences.movies_useXBMC_Scraper = True
-                        Form1.RadioButton51.Visible = True
-                        Form1.RadioButton52.Visible = True
+
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.movies_useXBMC_Scraper = False
-                        Form1.RadioButton51.Visible = False
-                        Form1.RadioButton52.Visible = False
                     End If
-
-
                 Case "whatXBMCScraper"
                     Preferences.XBMC_Scraper = thisresult.InnerXml
                     If thisresult.InnerXml = "imdb" Then
-                        Form1.RadioButton51.Checked = True
-                        Read_XBMC_IMDB_Scraper_Config()
+                        Preferences.whatXBMCScraperIMBD = True
+
                     ElseIf thisresult.InnerXml = "tmdb" Then
-                        Form1.RadioButton52.Checked = True
-                        Read_XBMC_TMDB_Scraper_Config()
+                        Preferences.whatXBMCScraperTVDB = True
                     End If
-
-
                 Case "downloadtvposter"
                     If thisresult.InnerXml = "true" Then
                         Preferences.tvposter = True
@@ -1186,13 +1182,10 @@ Public Class Preferences
                     Preferences.startuptab = Convert.ToByte(thisresult.InnerText)
 
                 Case "offlinemovielabeltext"
-                    Form1.TextBox_OfflineDVDTitle.Text = thisresult.InnerText
-
-
+                    OfflineDVDTitle = thisresult.InnerText
                 Case "scrapefullcert"
                     If thisresult.InnerXml = "true" Then
                         Preferences.scrapefullcert = True
-                        Form1.ScrapeFullCertCheckBox.Checked = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.scrapefullcert = False
                     End If
@@ -1204,7 +1197,21 @@ Public Class Preferences
 
     End Sub
 
+    Public Shared Function decxmlchars(ByVal line As String)
 
+        Try
+            line = line.Replace("&amp;", "&")
+            line = line.Replace("&lt;", "<")
+            line = line.Replace("&gt;", ">")
+            line = line.Replace("&quot;", "Chr(34)")
+            line = line.Replace("&apos;", "'")
+            line = line.Replace("&#xA;", vbCrLf)
+            Return line
+        Catch
+        Finally
+        End Try
+        Return "Error"
+    End Function
 
 
 End Class
