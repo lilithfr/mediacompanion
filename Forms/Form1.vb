@@ -3531,6 +3531,7 @@ Public Class Form1
             movietoadd.movieset = TempMovieToAdd.fullmoviebody.movieset
         End If
         movietoadd.outline = TempMovieToAdd.fullmoviebody.outline
+        movietoadd.plot = TempMovieToAdd.fullmoviebody.plot
         movietoadd.playcount = TempMovieToAdd.fullmoviebody.playcount
         movietoadd.rating = TempMovieToAdd.fullmoviebody.rating
         movietoadd.runtime = TempMovieToAdd.fullmoviebody.runtime
@@ -4033,6 +4034,7 @@ Public Class Form1
                         End Try
                         movietoadd.sortorder = newmovie.fullmoviebody.title
                         movietoadd.outline = newmovie.fullmoviebody.outline
+                        movietoadd.plot = newmovie.fullmoviebody.plot
                         movietoadd.id = newmovie.fullmoviebody.imdbid
                         movietoadd.rating = newmovie.fullmoviebody.rating
                         movietoadd.top250 = newmovie.fullmoviebody.top250
@@ -4554,6 +4556,7 @@ Public Class Form1
                             movietoadd.titleandyear = "Unknown (0000)"
                         End If
                         movietoadd.outline = newmovie.fullmoviebody.outline
+                        movietoadd.plot = newmovie.fullmoviebody.plot
                         movietoadd.year = newmovie.fullmoviebody.year
 
 
