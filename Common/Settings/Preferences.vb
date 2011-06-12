@@ -101,6 +101,7 @@ Public Class Preferences
     Public Shared copytvactorthumbs As Boolean = False
     Public Shared actorseasy As Boolean
     Public Shared scrapefullcert As Boolean
+    Public Shared showsortdate As Boolean
 
     Public Shared moviesortorder As Byte
     Public Shared moviedefaultlist As Byte
@@ -616,6 +617,9 @@ Public Class Preferences
         child.InnerText = Preferences.OfflineDVDTitle
         root.AppendChild(child)
 
+        child = doc.CreateElement("showsortdate")
+        child.InnerText = Preferences.showsortdate
+        root.AppendChild(child)
 
         For Each com In Preferences.commandlist
             If com.command <> "" And com.title <> "" Then
@@ -1185,6 +1189,8 @@ Public Class Preferences
 
                 Case "offlinemovielabeltext"
                     OfflineDVDTitle = thisresult.InnerText
+                Case "showsortdate"
+                    showsortdate = thisresult.InnerText
                 Case "scrapefullcert"
                     If thisresult.InnerXml = "true" Then
                         Preferences.scrapefullcert = True

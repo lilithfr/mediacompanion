@@ -460,7 +460,7 @@ Public Class Form1
             Case 1
                 RadioButton4.Checked = True
             Case 2
-                RadioButton5.Checked = True
+                RadioButtonSortModified.Checked = True
             Case 3
                 RadioButton21.Checked = True
             Case 4
@@ -468,7 +468,7 @@ Public Class Form1
             Case 5
                 RadioButton19.Checked = True
             Case 6
-                RadioButton20.Checked = True
+                RadioButtonSortCreate.Checked = True
         End Select
         '----------------------------------------------------------
 
@@ -6256,6 +6256,7 @@ Public Class Form1
         movieFolders.Clear()
         tvFolders.Clear()
         Preferences.splt5 = 0
+        Preferences.showsortdate = False
         generalprefschanged = False
     End Sub
 
@@ -6560,7 +6561,7 @@ Public Class Form1
         MovieListComboBox.Items.Clear()
 
         For Each movie In filteredList
-            If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False And RadioButton20.Checked = False And RadioButton5.Checked = False Then
+            If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False And RadioButtonSortCreate.Checked = False And RadioButtonSortModified.Checked = False Then
                 If RadioButton1.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
@@ -6668,11 +6669,11 @@ Public Class Form1
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
 
-            ElseIf RadioButton20.Checked = True Or RadioButton5.Checked = True Then    'Sort by CreateDate (date in nfo) OR FileDate (date of nfo from Operating System)
+            ElseIf RadioButtonSortCreate.Checked = True Or RadioButtonSortModified.Checked = True Then    'Sort by CreateDate (date in nfo) OR FileDate (date of nfo from Operating System)
                 Dim tempstring As String = ""
                 If CheckBox_ShowDateOnMovieList.Checked = True Then             'If this is false tempstring will stay as "" in the list below
-                    Dim tempdate As Date
-                    If RadioButton20.Checked = True Then
+                    Dim tempdate As Date = Nothing
+                    If RadioButtonSortCreate.Checked = True Then 'movie.createdate.Substring(0, 4)
                         tempdate = DateSerial(movie.createdate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
                     Else
                         tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
@@ -6740,7 +6741,7 @@ Public Class Form1
             ListBox2.Sorted = True
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6811,7 +6812,7 @@ Public Class Form1
 
 
 
-        If RadioButton20.Checked = True Then        'Date Added button
+        If RadioButtonSortCreate.Checked = True Then        'Date Added button
             MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
@@ -6865,18 +6866,18 @@ Public Class Form1
 
 
 
-        If RadioButton5.Checked = True Then
+        If RadioButtonSortModified.Checked = True Then   'in nfo as createdate'
             MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
-                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filedate.ToString))
+                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.createdate)) '.ToString))
             Next
             ListBox2.Sorted = True
 
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6912,7 +6913,7 @@ Public Class Form1
         End If
         'filteredlist.Clear()
 
-        If RadioButton5.Checked = False And RadioButton4.Checked = False And RadioButton7.Checked = False And RadioButton20.Checked = False Then
+        If RadioButtonSortModified.Checked = False And RadioButton4.Checked = False And RadioButton7.Checked = False And RadioButtonSortCreate.Checked = False Then
             If btnreverse.CheckState = CheckState.Unchecked Then
                 filteredList = comboarray2
             Else
@@ -11208,8 +11209,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub RadioButton5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton5.CheckedChanged
-        If RadioButton5.Checked = True Then
+    Private Sub RadioButton5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonSortModified.CheckedChanged
+        If RadioButtonSortModified.Checked = True Then
             Preferences.moviesortorder = 2
 
             Preferences.SaveConfig()
@@ -19861,8 +19862,8 @@ Public Class Form1
             check = False
         End If
 
-        If RadioButton5.Checked <> RadioButton26.Checked Then
-            RadioButton26.Checked = RadioButton5.Checked
+        If RadioButtonSortModified.Checked <> RadioButton26.Checked Then
+            RadioButton26.Checked = RadioButtonSortModified.Checked
             check = False
         End If
 
@@ -19881,8 +19882,8 @@ Public Class Form1
             check = False
         End If
 
-        If RadioButton20.Checked <> RadioButton23.Checked Then
-            RadioButton23.Checked = RadioButton20.Checked
+        If RadioButtonSortCreate.Checked <> RadioButton23.Checked Then
+            RadioButton23.Checked = RadioButtonSortCreate.Checked
             check = False
         End If
 
@@ -20165,8 +20166,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub RadioButton20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton20.CheckedChanged
-        If RadioButton20.Checked = True Then
+    Private Sub RadioButton20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonSortCreate.CheckedChanged
+        If RadioButtonSortCreate.Checked = True Then
             Preferences.moviesortorder = 6
 
             Preferences.SaveConfig()
@@ -31269,9 +31270,6 @@ Public Class Form1
         Process.Start(webAddress)
     End Sub
    
-    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
-        Call sortorder()
-    End Sub
 
     Private Sub CheckBoxDebugShowXML_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxDebugShowXML.CheckedChanged
         If CheckBoxDebugShowXML.Checked = False Then
@@ -31358,12 +31356,22 @@ Public Class Form1
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
-
+        Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Read_XBMC_IMDB_Scraper_Config()
     End Sub
 
     
     Private Sub MediaCompanionHelpFileToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles MediaCompanionHelpFileToolStripMenuItem.Click
         Process.Start(applicationPath & "\Media_Companion.chm")
+    End Sub
+
+  
+    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
+        If CheckBox_ShowDateOnMovieList.Checked = True Then
+            Preferences.showsortdate = True
+        Else
+            Preferences.showsortdate = False
+        End If
+        Call sortorder()
     End Sub
 End Class
