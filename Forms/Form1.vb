@@ -16310,6 +16310,16 @@ Public Class Form1
     End Sub
 
     Private Function renameepisode(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
+
+        If Preferences.ignorearticle = True Then
+            If showtitle.ToLower.IndexOf("the ") = 0 Then
+                showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
+            End If
+        End If
+
+
+
+
         Dim s As String = ""
         Dim e As String = ""
         Dim x As String = ""
