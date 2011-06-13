@@ -8370,7 +8370,7 @@ Public Class Form1
         If batchList.mediatags = True Then mediatags = True
 
         Dim tempmovielist As New List(Of String)
-        For Each movie In fullMovieList
+        For Each movie In filteredList    'fullMovieList
             tempmovielist.Add(movie.fullpathandfilename)
         Next
 
@@ -9268,9 +9268,11 @@ Public Class Form1
                     End If
 
                 End If
-                For g = 0 To fullMovieList.Count - 1
+                For g = 0 To filteredList.Count - 1 'fullMovieList.Count - 1
                     Try
-                        If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
+                        'If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
+                        If filteredList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
+
                             Dim newfullmovie As ComboList = Nothing
                             newfullmovie.fullpathandfilename = tempmovielist(f)
                             newfullmovie.foldername = Utilities.GetLastFolder(tempmovielist(f))
@@ -9294,9 +9296,12 @@ Public Class Form1
                             newfullmovie.top250 = movietoalter.fullmoviebody.top250
                             newfullmovie.runtime = movietoalter.fullmoviebody.runtime
                             newfullmovie.outline = movietoalter.fullmoviebody.outline
-                            If fullMovieList(g).sortorder <> Nothing Then
-                                If fullMovieList(g).sortorder <> "" Then
-                                    newfullmovie.sortorder = fullMovieList(g).sortorder
+                            'If fullMovieList(g).sortorder <> Nothing Then
+                            If filteredList(g).sortorder <> Nothing Then
+                                'If fullMovieList(g).sortorder <> "" Then
+                                If filteredList(g).sortorder <> "" Then
+                                    'newfullmovie.sortorder = fullMovieList(g).sortorder
+                                    newfullmovie.sortorder = filteredList(g).sortorder
                                 Else
                                     newfullmovie.sortorder = movietoalter.fullmoviebody.title
                                 End If
@@ -9313,8 +9318,11 @@ Public Class Form1
                                 completebyte1 += 2
                             End If
                             newfullmovie.missingdata1 = completebyte1
-                            fullMovieList.RemoveAt(g)
-                            fullMovieList.Add(newfullmovie)
+                            'fullMovieList.RemoveAt(g)
+                            'fullMovieList.Add(newfullmovie)
+
+                            filteredList.RemoveAt(g)
+                            filteredList.Add(newfullmovie)
 
                             If workingMovie.fullpathandfilename = newfullmovie.fullpathandfilename Then
                                 Call loadinfofile()
