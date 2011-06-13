@@ -8330,7 +8330,12 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub bckrescrapewizard_Disposed(sender As Object, e As System.EventArgs) Handles bckrescrapewizard.Disposed
+
+    End Sub
+
     Private Sub bckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckrescrapewizard.DoWork
+        'Now works on the filtered list rather than the full list V3.407
         globalThreadCounter += 1
 
         Dim bodyscraper As Boolean = False
@@ -8677,9 +8682,9 @@ Public Class Form1
                                                                 End If
                                                                 newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                                 If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                    newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                                                                 Else
-                                                                    newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                 End If
                                                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -9802,9 +9807,9 @@ Public Class Form1
                                                                     End If
                                                                     newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                                     If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                        newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                        newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                                                                     Else
-                                                                        newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                        newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                     End If
                                                                 Catch ex As Exception
 #If SilentErrorScream Then
