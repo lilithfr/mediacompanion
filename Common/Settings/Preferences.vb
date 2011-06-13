@@ -593,7 +593,7 @@ Public Class Preferences
         child = doc.CreateElement("moviesets")
         Dim childchild As XmlElement
         For Each movieset In Preferences.moviesets
-            If movieset <> "None" Then
+            If movieset <> "-None-" Then
                 childchild = doc.CreateElement("set")
                 childchild.InnerText = movieset
                 child.AppendChild(childchild)
@@ -651,7 +651,7 @@ Public Class Preferences
     Public Shared Sub LoadConfig()
         Preferences.commandlist.Clear()
         Preferences.moviesets.Clear()
-        Preferences.moviesets.Add("None")
+        Preferences.moviesets.Add("-None-")
         Preferences.movieFolders.Clear()
         Preferences.tvFolders.Clear()
         Preferences.tvRootFolders.Clear()

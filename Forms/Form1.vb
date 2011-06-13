@@ -629,7 +629,7 @@ Public Class Form1
                         ComboBox3.Items.Add(mset)
                     Next
                 End If
-                If workingMovieDetails.fullmoviebody.movieset <> "None" Then
+                If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
                     'For Each mset In Preferences.moviesets
                     '    ComboBox3.Items.Add(mset)
                     'Next
@@ -831,12 +831,12 @@ Public Class Form1
                     child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set")
-                    childchild.InnerText = "None"
+                    childchild.InnerText = "-None-"
                     child.AppendChild(childchild)
                 End If
             Else
                 childchild = doc.CreateElement("set")
-                childchild.InnerText = "None"
+                childchild.InnerText = "-None-"
                 child.AppendChild(childchild)
             End If
             childchild = doc.CreateElement("genre")
@@ -1527,10 +1527,10 @@ Public Class Form1
                         End Select
                     Next
                     If newmovie.movieset = Nothing Then
-                        newmovie.movieset = "None"
+                        newmovie.movieset = "-None-"
                     End If
                     If newmovie.movieset = "" Then
-                        newmovie.movieset = "None"
+                        newmovie.movieset = "-None-"
                     End If
                     fullMovieList.Add(newmovie)
             End Select
@@ -2480,10 +2480,10 @@ Public Class Form1
                         End If
                     End If
                     If ComboBox3.Items.Count = 0 Then
-                        ComboBox3.Items.Add("None")
+                        ComboBox3.Items.Add("-None-")
                     End If
-                    If ComboBox3.Items(0) <> "None" Then
-                        ComboBox3.Items.Insert(0, "None")
+                    If ComboBox3.Items(0) <> "-None-" Then
+                        ComboBox3.Items.Insert(0, "-None-")
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
@@ -7824,8 +7824,8 @@ Public Class Form1
             workingMovieDetails.fullmoviebody.tagline = taglinetxt.Text
             workingMovieDetails.fullmoviebody.mpaa = certtxt.Text
             workingMovieDetails.fullmoviebody.sortorder = TextBox34.Text
-            If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "None"
-            If ComboBox3.SelectedItem <> "None" Then
+            If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "-None-"
+            If ComboBox3.SelectedItem <> "-None-" Then
                 workingMovieDetails.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
             Else
                 workingMovieDetails.fullmoviebody.movieset = Nothing
@@ -7878,10 +7878,10 @@ Public Class Form1
                     newfullmovie.movieset = workingMovieDetails.fullmoviebody.movieset
                     newfullmovie.year = workingMovieDetails.fullmoviebody.year
                     If newfullmovie.movieset = Nothing Then
-                        newfullmovie.movieset = "None"
+                        newfullmovie.movieset = "-None-"
                     End If
                     If newfullmovie.movieset = "" Then
-                        newfullmovie.movieset = "None"
+                        newfullmovie.movieset = "-None-"
                     End If
                     fullMovieList.RemoveAt(f)
                     fullMovieList.Add(newfullmovie)
@@ -7954,10 +7954,10 @@ Public Class Form1
 #End If
                         End Try
                         If newfullmovie.movieset = Nothing Then
-                            newfullmovie.movieset = "None"
+                            newfullmovie.movieset = "-None-"
                         End If
                         If newfullmovie.movieset = "" Then
-                            newfullmovie.movieset = "None"
+                            newfullmovie.movieset = "-None-"
                         End If
                         'Commented out items are not saved when multiple movies are selected
                         '              newfullmovie.title = movie.fullmoviebody.title
@@ -11356,7 +11356,7 @@ Public Class Form1
             ElseIf tab.ToLower = "movie sets" Then
                 ListBox4.Items.Clear()
                 For Each mset In Preferences.moviesets
-                    If mset <> "None" Then ListBox4.Items.Add(mset)
+                If mset <> "-None-" Then ListBox4.Items.Add(mset)
                 Next
             ElseIf tab.ToLower = "movie preferences" Then
                 Call setupmoviepreferences()
@@ -22092,10 +22092,10 @@ Public Class Form1
                         End If
                     End If
                     If ComboBox3.Items.Count = 0 Then
-                        ComboBox3.Items.Add("None")
+                        ComboBox3.Items.Add("-None-")
                     End If
-                    If ComboBox3.Items(0) <> "None" Then
-                        ComboBox3.Items.Insert(0, "None")
+                    If ComboBox3.Items(0) <> "-None-" Then
+                        ComboBox3.Items.Insert(0, "-None-")
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
@@ -22125,7 +22125,7 @@ Public Class Form1
         ComboBox3.Items.Clear()
       
         For Each mset In Preferences.moviesets
-            If mset <> "None" Then ListBox4.Items.Add(mset)
+            If mset <> "-None-" Then ListBox4.Items.Add(mset)
             ComboBox3.Items.Add(mset)
         Next
 
@@ -22134,7 +22134,7 @@ Public Class Form1
     Private Sub Button66_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button66.Click
         MovieListComboBox.Items.Clear()
         filteredList.Clear()
-        If ComboBox3.SelectedItem <> "None" Then
+        If ComboBox3.SelectedItem <> "-None-" Then
             For Each movie In fullMovieList
                 If movie.movieset = ComboBox3.SelectedItem Then
                     filteredList.Add(movie)
@@ -25821,7 +25821,7 @@ Public Class Form1
                     ComboBox3.Items.Add(mset)
                 Next
             End If
-            If workingMovieDetails.fullmoviebody.movieset <> "None" Then
+            If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
                 'For Each mset In Preferences.moviesets
                 '    ComboBox3.Items.Add(mset)
                 'Next
@@ -26123,12 +26123,12 @@ Public Class Form1
                     child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set")
-                    childchild.InnerText = "None"
+                    childchild.InnerText = "-None-"
                     child.AppendChild(childchild)
                 End If
             Else
                 childchild = doc.CreateElement("set")
-                childchild.InnerText = "None"
+                childchild.InnerText = "-None-"
                 child.AppendChild(childchild)
             End If
             childchild = doc.CreateElement("genre")
@@ -26407,7 +26407,7 @@ Public Class Form1
             .Name = "set"
             .DataPropertyName = "set"
             .SortMode = DataGridViewColumnSortMode.Automatic
-            .DefaultCellStyle.NullValue = "None"
+            .DefaultCellStyle.NullValue = "-None-"
         End With
 
         Dim artcolumn As New DataGridViewColumn()
@@ -26779,10 +26779,10 @@ Public Class Form1
                             End If
                         End If
                         If mov.movieset <> gridrow.Cells("set").Value Then
-                            If mov.movieset = "None" And gridrow.Cells("set").Value = Nothing Then
+                            If mov.movieset = "-None-" And gridrow.Cells("set").Value = Nothing Then
                             Else
                                 If mov.movieset = Nothing Then
-                                    If gridrow.Cells("set").Value <> "None" Then
+                                    If gridrow.Cells("set").Value <> "-None-" Then
                                         changed = True
                                     End If
                                 Else
