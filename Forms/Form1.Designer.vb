@@ -5046,6 +5046,7 @@ Partial Class Form1
         Me.ListBox4.Name = "ListBox4"
         Me.ListBox4.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBox4.Size = New System.Drawing.Size(623, 559)
+        Me.ListBox4.Sorted = True
         Me.ListBox4.TabIndex = 0
         '
         'TabPage14
