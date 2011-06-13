@@ -6673,10 +6673,10 @@ Public Class Form1
                 Dim tempstring As String = ""
                 If CheckBox_ShowDateOnMovieList.Checked = True Then             'If this is false tempstring will stay as "" in the list below
                     Dim tempdate As Date = Nothing
-                    If RadioButtonSortCreate.Checked = True Then 'movie.createdate.Substring(0, 4)
+                    If RadioButtonSortCreate.Checked = True Then 'create=create modified=filedate
                         tempdate = DateSerial(movie.createdate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
                     Else
-                        tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
+                        tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.filedate.Substring(4, 2), movie.filedate.Substring(6, 2))
                     End If
                     tempstring = tempdate.ToShortDateString   'This is the format set in your regional settings in control panel for shortdate
                     tempstring = tempstring & " - "
@@ -24690,7 +24690,8 @@ Public Class Form1
                 Next
             End If
         Next
-
+        TextBox32.Text = totalTvShowCount.ToString
+        TextBox33.Text = totalEpisodeCount.ToString
         Me.BringToFront()
         Me.Activate()
         ';
