@@ -22142,7 +22142,7 @@ Public Class Form1
             Next
         Else
             For Each movie In fullMovieList
-                If movie.movieset = Nothing Then
+                If movie.movieset = "-None-" Then
                     filteredList.Add(movie)
                 End If
             Next
