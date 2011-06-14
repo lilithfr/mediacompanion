@@ -2212,11 +2212,11 @@ Public Class Form1
             Dim newlist As List(Of String) = Nothing
             For f = 0 To tempint - 1
                 newlist = Utilities.EnumerateFolders(realMoviePaths(f), Long.MaxValue)
-            Next
-            For Each subfolder In newlist
-                realMoviePaths.Add(subfolder)
-            Next
 
+                For Each subfolder In newlist
+                    realMoviePaths.Add(subfolder)
+                Next
+            Next
 
 
             If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
