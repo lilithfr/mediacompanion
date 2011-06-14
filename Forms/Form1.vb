@@ -460,7 +460,7 @@ Public Class Form1
             Case 1
                 RadioButton4.Checked = True
             Case 2
-                RadioButton5.Checked = True
+                RadioButtonSortModified.Checked = True
             Case 3
                 RadioButton21.Checked = True
             Case 4
@@ -468,7 +468,7 @@ Public Class Form1
             Case 5
                 RadioButton19.Checked = True
             Case 6
-                RadioButton20.Checked = True
+                RadioButtonSortCreate.Checked = True
         End Select
         '----------------------------------------------------------
 
@@ -629,7 +629,7 @@ Public Class Form1
                         ComboBox3.Items.Add(mset)
                     Next
                 End If
-                If workingMovieDetails.fullmoviebody.movieset <> "None" Then
+                If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
                     'For Each mset In Preferences.moviesets
                     '    ComboBox3.Items.Add(mset)
                     'Next
@@ -835,12 +835,12 @@ Public Class Form1
                     child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set")
-                    childchild.InnerText = "None"
+                    childchild.InnerText = "-None-"
                     child.AppendChild(childchild)
                 End If
             Else
                 childchild = doc.CreateElement("set")
-                childchild.InnerText = "None"
+                childchild.InnerText = "-None-"
                 child.AppendChild(childchild)
             End If
             childchild = doc.CreateElement("genre")
@@ -1531,10 +1531,10 @@ Public Class Form1
                         End Select
                     Next
                     If newmovie.movieset = Nothing Then
-                        newmovie.movieset = "None"
+                        newmovie.movieset = "-None-"
                     End If
                     If newmovie.movieset = "" Then
-                        newmovie.movieset = "None"
+                        newmovie.movieset = "-None-"
                     End If
                     fullMovieList.Add(newmovie)
             End Select
@@ -2484,10 +2484,10 @@ Public Class Form1
                         End If
                     End If
                     If ComboBox3.Items.Count = 0 Then
-                        ComboBox3.Items.Add("None")
+                        ComboBox3.Items.Add("-None-")
                     End If
-                    If ComboBox3.Items(0) <> "None" Then
-                        ComboBox3.Items.Insert(0, "None")
+                    If ComboBox3.Items(0) <> "-None-" Then
+                        ComboBox3.Items.Insert(0, "-None-")
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
@@ -6260,6 +6260,7 @@ Public Class Form1
         movieFolders.Clear()
         tvFolders.Clear()
         Preferences.splt5 = 0
+        Preferences.showsortdate = False
         generalprefschanged = False
     End Sub
 
@@ -6564,7 +6565,7 @@ Public Class Form1
         MovieListComboBox.Items.Clear()
 
         For Each movie In filteredList
-            If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False And RadioButton20.Checked = False And RadioButton5.Checked = False Then
+            If RadioButton21.Checked = False And RadioButton7.Checked = False And RadioButton4.Checked = False And RadioButtonSortCreate.Checked = False And RadioButtonSortModified.Checked = False Then
                 If RadioButton1.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
@@ -6672,14 +6673,14 @@ Public Class Form1
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.foldername))
                 End If
 
-            ElseIf RadioButton20.Checked = True Or RadioButton5.Checked = True Then    'Sort by CreateDate (date in nfo) OR FileDate (date of nfo from Operating System)
+            ElseIf RadioButtonSortCreate.Checked = True Or RadioButtonSortModified.Checked = True Then    'Sort by CreateDate (date in nfo) OR FileDate (date of nfo from Operating System)
                 Dim tempstring As String = ""
                 If CheckBox_ShowDateOnMovieList.Checked = True Then             'If this is false tempstring will stay as "" in the list below
-                    Dim tempdate As Date
-                    If RadioButton20.Checked = True Then
+                    Dim tempdate As Date = Nothing
+                    If RadioButtonSortCreate.Checked = True Then 'create=create modified=filedate
                         tempdate = DateSerial(movie.createdate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
                     Else
-                        tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
+                        tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.filedate.Substring(4, 2), movie.filedate.Substring(6, 2))
                     End If
                     tempstring = tempdate.ToShortDateString   'This is the format set in your regional settings in control panel for shortdate
                     tempstring = tempstring & " - "
@@ -6744,7 +6745,7 @@ Public Class Form1
             ListBox2.Sorted = True
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6815,7 +6816,7 @@ Public Class Form1
 
 
 
-        If RadioButton20.Checked = True Then        'Date Added button
+        If RadioButtonSortCreate.Checked = True Then        'Date Added button
             MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
@@ -6869,18 +6870,18 @@ Public Class Form1
 
 
 
-        If RadioButton5.Checked = True Then
+        If RadioButtonSortModified.Checked = True Then   'in nfo as createdate'
             MovieListComboBox.Sorted = False
             ListBox2.Items.Clear()
             For Each movie In filteredList
-                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.filedate.ToString))
+                ListBox2.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.createdate)) '.ToString))
             Next
             ListBox2.Sorted = True
 
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6916,7 +6917,7 @@ Public Class Form1
         End If
         'filteredlist.Clear()
 
-        If RadioButton5.Checked = False And RadioButton4.Checked = False And RadioButton7.Checked = False And RadioButton20.Checked = False Then
+        If RadioButtonSortModified.Checked = False And RadioButton4.Checked = False And RadioButton7.Checked = False And RadioButtonSortCreate.Checked = False Then
             If btnreverse.CheckState = CheckState.Unchecked Then
                 filteredList = comboarray2
             Else
@@ -7827,8 +7828,8 @@ Public Class Form1
             workingMovieDetails.fullmoviebody.tagline = taglinetxt.Text
             workingMovieDetails.fullmoviebody.mpaa = certtxt.Text
             workingMovieDetails.fullmoviebody.sortorder = TextBox34.Text
-            If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "None"
-            If ComboBox3.SelectedItem <> "None" Then
+            If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "-None-"
+            If ComboBox3.SelectedItem <> "-None-" Then
                 workingMovieDetails.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
             Else
                 workingMovieDetails.fullmoviebody.movieset = Nothing
@@ -7881,10 +7882,10 @@ Public Class Form1
                     newfullmovie.movieset = workingMovieDetails.fullmoviebody.movieset
                     newfullmovie.year = workingMovieDetails.fullmoviebody.year
                     If newfullmovie.movieset = Nothing Then
-                        newfullmovie.movieset = "None"
+                        newfullmovie.movieset = "-None-"
                     End If
                     If newfullmovie.movieset = "" Then
-                        newfullmovie.movieset = "None"
+                        newfullmovie.movieset = "-None-"
                     End If
                     fullMovieList.RemoveAt(f)
                     fullMovieList.Add(newfullmovie)
@@ -7957,10 +7958,10 @@ Public Class Form1
 #End If
                         End Try
                         If newfullmovie.movieset = Nothing Then
-                            newfullmovie.movieset = "None"
+                            newfullmovie.movieset = "-None-"
                         End If
                         If newfullmovie.movieset = "" Then
-                            newfullmovie.movieset = "None"
+                            newfullmovie.movieset = "-None-"
                         End If
                         'Commented out items are not saved when multiple movies are selected
                         '              newfullmovie.title = movie.fullmoviebody.title
@@ -8333,7 +8334,12 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub bckrescrapewizard_Disposed(sender As Object, e As System.EventArgs) Handles bckrescrapewizard.Disposed
+
+    End Sub
+
     Private Sub bckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckrescrapewizard.DoWork
+        'Now works on the filtered list rather than the full list V3.407
         globalThreadCounter += 1
 
         Dim bodyscraper As Boolean = False
@@ -8373,7 +8379,7 @@ Public Class Form1
         If batchList.mediatags = True Then mediatags = True
 
         Dim tempmovielist As New List(Of String)
-        For Each movie In fullMovieList
+        For Each movie In filteredList    'fullMovieList
             tempmovielist.Add(movie.fullpathandfilename)
         Next
 
@@ -8680,9 +8686,9 @@ Public Class Form1
                                                                 End If
                                                                 newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                                 If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                    newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                                                                 Else
-                                                                    newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                 End If
                                                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -9271,9 +9277,11 @@ Public Class Form1
                     End If
 
                 End If
-                For g = 0 To fullMovieList.Count - 1
+                For g = 0 To filteredList.Count - 1 'fullMovieList.Count - 1
                     Try
-                        If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
+                        'If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
+                        If filteredList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
+
                             Dim newfullmovie As ComboList = Nothing
                             newfullmovie.fullpathandfilename = tempmovielist(f)
                             newfullmovie.foldername = Utilities.GetLastFolder(tempmovielist(f))
@@ -9297,9 +9305,12 @@ Public Class Form1
                             newfullmovie.top250 = movietoalter.fullmoviebody.top250
                             newfullmovie.runtime = movietoalter.fullmoviebody.runtime
                             newfullmovie.outline = movietoalter.fullmoviebody.outline
-                            If fullMovieList(g).sortorder <> Nothing Then
-                                If fullMovieList(g).sortorder <> "" Then
-                                    newfullmovie.sortorder = fullMovieList(g).sortorder
+                            'If fullMovieList(g).sortorder <> Nothing Then
+                            If filteredList(g).sortorder <> Nothing Then
+                                'If fullMovieList(g).sortorder <> "" Then
+                                If filteredList(g).sortorder <> "" Then
+                                    'newfullmovie.sortorder = fullMovieList(g).sortorder
+                                    newfullmovie.sortorder = filteredList(g).sortorder
                                 Else
                                     newfullmovie.sortorder = movietoalter.fullmoviebody.title
                                 End If
@@ -9316,8 +9327,11 @@ Public Class Form1
                                 completebyte1 += 2
                             End If
                             newfullmovie.missingdata1 = completebyte1
-                            fullMovieList.RemoveAt(g)
-                            fullMovieList.Add(newfullmovie)
+                            'fullMovieList.RemoveAt(g)
+                            'fullMovieList.Add(newfullmovie)
+
+                            filteredList.RemoveAt(g)
+                            filteredList.Add(newfullmovie)
 
                             If workingMovie.fullpathandfilename = newfullmovie.fullpathandfilename Then
                                 Call loadinfofile()
@@ -9797,9 +9811,9 @@ Public Class Form1
                                                                     End If
                                                                     newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                                     If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                        newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                        newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                                                                     Else
-                                                                        newactor.actorthumb = Preferences.actornetworkpath & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                        newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                     End If
                                                                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -11212,8 +11226,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub RadioButton5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton5.CheckedChanged
-        If RadioButton5.Checked = True Then
+    Private Sub RadioButton5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonSortModified.CheckedChanged
+        If RadioButtonSortModified.Checked = True Then
             Preferences.moviesortorder = 2
 
             Preferences.SaveConfig()
@@ -11346,7 +11360,7 @@ Public Class Form1
             ElseIf tab.ToLower = "movie sets" Then
                 ListBox4.Items.Clear()
                 For Each mset In Preferences.moviesets
-                    If mset <> "None" Then ListBox4.Items.Add(mset)
+                If mset <> "-None-" Then ListBox4.Items.Add(mset)
                 Next
             ElseIf tab.ToLower = "movie preferences" Then
                 Call setupmoviepreferences()
@@ -16313,6 +16327,16 @@ Public Class Form1
     End Sub
 
     Private Function renameepisode(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
+
+        If Preferences.ignorearticle = True Then
+            If showtitle.ToLower.IndexOf("the ") = 0 Then
+                showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
+            End If
+        End If
+
+
+
+
         Dim s As String = ""
         Dim e As String = ""
         Dim x As String = ""
@@ -19863,8 +19887,8 @@ Public Class Form1
             check = False
         End If
 
-        If RadioButton5.Checked <> RadioButton26.Checked Then
-            RadioButton26.Checked = RadioButton5.Checked
+        If RadioButtonSortModified.Checked <> RadioButton26.Checked Then
+            RadioButton26.Checked = RadioButtonSortModified.Checked
             check = False
         End If
 
@@ -19883,8 +19907,8 @@ Public Class Form1
             check = False
         End If
 
-        If RadioButton20.Checked <> RadioButton23.Checked Then
-            RadioButton23.Checked = RadioButton20.Checked
+        If RadioButtonSortCreate.Checked <> RadioButton23.Checked Then
+            RadioButton23.Checked = RadioButtonSortCreate.Checked
             check = False
         End If
 
@@ -20167,8 +20191,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub RadioButton20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton20.CheckedChanged
-        If RadioButton20.Checked = True Then
+    Private Sub RadioButton20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonSortCreate.CheckedChanged
+        If RadioButtonSortCreate.Checked = True Then
             Preferences.moviesortorder = 6
 
             Preferences.SaveConfig()
@@ -22070,10 +22094,10 @@ Public Class Form1
                         End If
                     End If
                     If ComboBox3.Items.Count = 0 Then
-                        ComboBox3.Items.Add("None")
+                        ComboBox3.Items.Add("-None-")
                     End If
-                    If ComboBox3.Items(0) <> "None" Then
-                        ComboBox3.Items.Insert(0, "None")
+                    If ComboBox3.Items(0) <> "-None-" Then
+                        ComboBox3.Items.Insert(0, "-None-")
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
@@ -22103,7 +22127,7 @@ Public Class Form1
         ComboBox3.Items.Clear()
       
         For Each mset In Preferences.moviesets
-            If mset <> "None" Then ListBox4.Items.Add(mset)
+            If mset <> "-None-" Then ListBox4.Items.Add(mset)
             ComboBox3.Items.Add(mset)
         Next
 
@@ -22112,7 +22136,7 @@ Public Class Form1
     Private Sub Button66_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button66.Click
         MovieListComboBox.Items.Clear()
         filteredList.Clear()
-        If ComboBox3.SelectedItem <> "None" Then
+        If ComboBox3.SelectedItem <> "-None-" Then
             For Each movie In fullMovieList
                 If movie.movieset = ComboBox3.SelectedItem Then
                     filteredList.Add(movie)
@@ -22120,7 +22144,7 @@ Public Class Form1
             Next
         Else
             For Each movie In fullMovieList
-                If movie.movieset = Nothing Then
+                If movie.movieset = "-None-" Then
                     filteredList.Add(movie)
                 End If
             Next
@@ -24691,7 +24715,8 @@ Public Class Form1
                 Next
             End If
         Next
-
+        TextBox32.Text = totalTvShowCount.ToString
+        TextBox33.Text = totalEpisodeCount.ToString
         Me.BringToFront()
         Me.Activate()
         ';
@@ -25798,7 +25823,7 @@ Public Class Form1
                     ComboBox3.Items.Add(mset)
                 Next
             End If
-            If workingMovieDetails.fullmoviebody.movieset <> "None" Then
+            If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
                 'For Each mset In Preferences.moviesets
                 '    ComboBox3.Items.Add(mset)
                 'Next
@@ -26100,12 +26125,12 @@ Public Class Form1
                     child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set")
-                    childchild.InnerText = "None"
+                    childchild.InnerText = "-None-"
                     child.AppendChild(childchild)
                 End If
             Else
                 childchild = doc.CreateElement("set")
-                childchild.InnerText = "None"
+                childchild.InnerText = "-None-"
                 child.AppendChild(childchild)
             End If
             childchild = doc.CreateElement("genre")
@@ -26384,7 +26409,7 @@ Public Class Form1
             .Name = "set"
             .DataPropertyName = "set"
             .SortMode = DataGridViewColumnSortMode.Automatic
-            .DefaultCellStyle.NullValue = "None"
+            .DefaultCellStyle.NullValue = "-None-"
         End With
 
         Dim artcolumn As New DataGridViewColumn()
@@ -26756,10 +26781,10 @@ Public Class Form1
                             End If
                         End If
                         If mov.movieset <> gridrow.Cells("set").Value Then
-                            If mov.movieset = "None" And gridrow.Cells("set").Value = Nothing Then
+                            If mov.movieset = "-None-" And gridrow.Cells("set").Value = Nothing Then
                             Else
                                 If mov.movieset = Nothing Then
-                                    If gridrow.Cells("set").Value <> "None" Then
+                                    If gridrow.Cells("set").Value <> "-None-" Then
                                         changed = True
                                     End If
                                 Else
@@ -31271,9 +31296,6 @@ Public Class Form1
         Process.Start(webAddress)
     End Sub
    
-    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
-        Call sortorder()
-    End Sub
 
     Private Sub CheckBoxDebugShowXML_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxDebugShowXML.CheckedChanged
         If CheckBoxDebugShowXML.Checked = False Then
@@ -31360,12 +31382,22 @@ Public Class Form1
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
-
+        Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Read_XBMC_IMDB_Scraper_Config()
     End Sub
 
     
     Private Sub MediaCompanionHelpFileToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles MediaCompanionHelpFileToolStripMenuItem.Click
         Process.Start(applicationPath & "\Media_Companion.chm")
+    End Sub
+
+  
+    Private Sub CheckBox_ShowDateOnMovieList_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox_ShowDateOnMovieList.CheckedChanged
+        If CheckBox_ShowDateOnMovieList.Checked = True Then
+            Preferences.showsortdate = True
+        Else
+            Preferences.showsortdate = False
+        End If
+        Call sortorder()
     End Sub
 End Class
