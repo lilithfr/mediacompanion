@@ -1004,6 +1004,10 @@ Public Class Form1
                 'episodechild.InnerText = episode.status
                 'childchild.AppendChild(episodechild)
 
+                episodechild = doc.CreateElement("aired")
+                episodechild.InnerText = episode.aired
+                childchild.AppendChild(episodechild)
+
                 episodechild = doc.CreateElement("playcount")
                 episodechild.InnerText = episode.playcount
                 childchild.AppendChild(episodechild)
@@ -1023,6 +1027,10 @@ Public Class Form1
                 childchild = doc.CreateElement("missingepisode")
                 episodechild = doc.CreateElement("title")
                 episodechild.InnerText = episode.title
+                childchild.AppendChild(episodechild)
+
+                episodechild = doc.CreateElement("aired")
+                episodechild.InnerText = episode.aired
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("playcount")
@@ -1128,6 +1136,8 @@ Public Class Form1
                                             newepisode.episodeno = episodenew.InnerText
                                             'Case "status"
                                             '    newepisode.status = episodenew.InnerText
+                                        Case "aired"
+                                            newepisode.aired = episodenew.InnerText
                                         Case "playcount"
                                             newepisode.playcount = episodenew.InnerText
                                         Case "rating"
@@ -1152,6 +1162,8 @@ Public Class Form1
                                             newepisode.episodeno = episodenew.InnerText
                                             'Case "status"
                                             '    newepisode.status = episodenew.InnerText
+                                        Case "aired"
+                                            newepisode.aired = episodenew.InnerText
                                         Case "playcount"
                                             newepisode.playcount = episodenew.InnerText
                                         Case "rating"
@@ -31400,6 +31412,327 @@ Public Class Form1
     End Sub
 
     Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click
+        'Dim s As String = ""
+        'Dim ee As String = ""
+        'Dim x As String = ""
+        'If Preferences.eprenamelowercase = False Then
+        '    s = "S"
+        '    ee = "E"
+        '    x = "X"
+        'Else
+        '    s = "s"
+        '    ee = "e"
+        '    x = "x"
+        'End If
+        'Dim listtorename As New List(Of String)
 
+        ''Need to find the TVShow that we have right clicked on & choose to show episodes by aired date
+        'Dim thisTVShow As String = TreeView1.SelectedNode.Text
+        'Dim showlist As String = TreeView1.SelectedNode.Name
+        ''Create sorted list, its going to do the sorting for us....
+
+        'Dim nfofilestorename As New List(Of String)
+        'nfofilestorename.Clear()
+        'Dim childnode As TreeNode
+        'Dim childchildnode As TreeNode
+        'For Each childnode In TreeView1.SelectedNode.Nodes
+        '    For Each childchildnode In childnode.Nodes
+        '        If Not nfofilestorename.Contains(childchildnode.Name) And childchildnode.Name.IndexOf("Missing: ") <> 0 Then
+        '            nfofilestorename.Add(childchildnode.Name)
+        '        End If
+        '    Next
+        'Next
+
+        'For Each renamefile In nfofilestorename
+        '    Dim seasonno As String = ""
+        '    Dim episodetitle As String = ""
+        '    Dim showtitle As String = ""
+        '    Dim episodeno As New List(Of String)
+        '    episodeno.Clear()
+        '    Dim aired As String = ""
+        '    For Each tvshow In basicTvList
+        '        Dim showpath As String = tvshow.fullpath.Replace(IO.Path.GetFileName(tvshow.fullpath), "")
+        '        If renamefile.IndexOf(showpath) <> -1 Then
+        '            showtitle = tvshow.title
+        '            For Each episode In tvshow.allepisodes
+        '                If episode.episodepath = renamefile Then
+        '                    If seasonno = "" Then
+        '                        seasonno = episode.seasonno
+        '                    End If
+        '                    If episodetitle = "" Then
+        '                        episodetitle = episode.title
+        '                    End If
+        '                    If aired = "" Then
+        '                        aired = episode.aired
+        '                    End If
+        '                    episodeno.Add(episode.episodeno)
+        '                End If
+        '            Next
+        '            Dim newfilename As String
+        '            newfilename = ""
+        '            If seasonno.Length = 1 Then
+        '                seasonno = "0" & seasonno
+        '            End If
+        '            For f = 0 To episodeno.Count - 1
+        '                If episodeno(f).Length = 1 Then
+        '                    episodeno(f) = "0" & episodeno(f)
+        '                End If
+        '            Next
+        '            Select Case Preferences.tvrename
+        '                Case 0
+        '                    'Show Title - S01E01 - Episode Title.ext
+        '                    newfilename = showtitle & " - " & s & seasonno
+        '                    For Each ep In episodeno
+        '                        newfilename = newfilename & ee & ep
+        '                    Next
+        '                    newfilename = newfilename & " - " & episodetitle
+        '                Case 1
+        '                    'S01E01 - Episode Title.ext
+        '                    newfilename = s & seasonno
+        '                    For Each ep In episodeno
+        '                        newfilename = newfilename & ee & ep
+        '                    Next
+        '                    newfilename = newfilename & " - " & episodetitle
+        '                Case 2
+        '                    'Show Title - 1x01 - Episode Title.ext
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    newfilename = showtitle & " - " & seasonno
+        '                    For Each ep In episodeno
+        '                        newfilename = newfilename & x & ep
+        '                    Next
+        '                    newfilename = newfilename & " - " & episodetitle
+        '                Case 3
+        '                    '1x01 - Episode Title.ext
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    newfilename = seasonno
+        '                    For Each ep In episodeno
+        '                        newfilename = newfilename & x & ep
+        '                    Next
+        '                    newfilename = newfilename & " - " & episodetitle
+        '                Case 4
+        '                    'Show Title - 101 - Episode Title.ext
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    newfilename = showtitle & " - " & seasonno
+        '                    For f = 0 To episodeno.Count - 1
+        '                        If f = 0 Then
+        '                            newfilename = newfilename & episodeno(f)
+        '                        Else
+        '                            newfilename = newfilename & x & episodeno(f)
+        '                        End If
+        '                    Next
+        '                    newfilename = newfilename & " - " & episodetitle
+        '                Case 5
+        '                    '101 - Episode Title.ext
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+        '                        seasonno = seasonno.Substring(1, seasonno.Length - 1)
+        '                    End If
+        '                    newfilename = seasonno
+        '                    For f = 0 To episodeno.Count - 1
+        '                        If f = 0 Then
+        '                            newfilename = newfilename & episodeno(f)
+        '                        Else
+        '                            newfilename = newfilename & x & episodeno(f)
+        '                        End If
+        '                    Next
+        '                    newfilename = newfilename & " - " & episodetitle
+        '            End Select
+        '            newfilename = newfilename.Replace("?", "")
+        '            newfilename = newfilename.Replace("/", "")
+        '            newfilename = newfilename.Replace("\", "")
+        '            newfilename = newfilename.Replace("<", "")
+        '            newfilename = newfilename.Replace(">", "")
+        '            newfilename = newfilename.Replace(":", "")
+        '            newfilename = newfilename.Replace("""", "")
+        '            newfilename = newfilename.Replace("*", "")
+
+        '            'listtorename.Clear()
+        '            listtorename.Add(aired & " " & newfilename)
+        '            'For f = 1 To extensioncount
+        '            '    Dim temppath2 As String = renamefile.Replace(IO.Path.GetExtension(renamefile), Extensions(f))
+        '            '    If IO.File.Exists(temppath2) Then
+        '            '        listtorename.Add(temppath2)
+        '            '    End If
+        '            'Next
+        '            'Dim temppath As String = renamefile
+        '            'temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
+        '            'If IO.File.Exists(temppath) Then
+        '            '    listtorename.Add(temppath)
+        '            'End If
+        '            'temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
+        '            'If IO.File.Exists(temppath) Then
+        '            '    listtorename.Add(temppath)
+        '            'End If
+
+        '            '    Dim di As DirectoryInfo = New DirectoryInfo(renamefile.Replace(IO.Path.GetFileName(renamefile), ""))
+        '            '    Dim filenama As String = IO.Path.GetFileNameWithoutExtension(renamefile)
+        '            '    Dim fils As FileInfo() = di.GetFiles(filenama & ".*")
+        '            '    For Each fiNext In fils
+        '            '        If Not listtorename.Contains(fiNext.FullName) Then
+        '            '            listtorename.Add(fiNext.FullName)
+        '            '        End If
+        '            '    Next
+        '            '    Dim oldnfofile As String = ""
+        '            '    Dim newnfofile As String = ""
+        '            '    For Each items In listtorename
+        '            '        If IO.Path.GetExtension(items).ToLower = ".nfo" And oldnfofile = "" Then
+        '            '            oldnfofile = items
+        '            '            newnfofile = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
+        '            '            newnfofile = newnfofile.Replace("..", ".")
+        '            '        End If
+        '            '        Dim newname As String = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
+        '            '        newname = newname.Replace("..", ".")
+        '            '        Try
+        '            '            renamelog = renamelog & "Renaming" & vbCrLf
+        '            '            renamelog = renamelog & items & vbCrLf & " to " & vbCrLf & newname & vbCrLf
+        '            '            Dim fi As New FileInfo(items)
+        '            '            If Not IO.File.Exists(newname) Then
+        '            '                fi.MoveTo(newname)
+        '            '                If items.ToLower = IO.Path.Combine(TextBox17.Text, TextBox29.Text).ToLower Then
+        '            '                    TextBox29.Text = IO.Path.GetFileName(fi.FullName)
+        '            '                End If
+        '            '                renamelog = renamelog & "Succeeded" & vbCrLf & vbCrLf
+        '            '            Else
+        '            '                renamelog = renamelog & "Not Renamed - Same" & vbCrLf & vbCrLf
+        '            '            End If
+
+        '            '        Catch ex As Exception
+        '            '            renamelog = renamelog & "Not Succeeded" & vbCrLf & ex.Message.ToString
+        '            '        End Try
+        '            '    Next
+        '            '    renamelog = renamelog & "Updating Tables" & vbCrLf
+        '            '    Try
+        '            '        For Each noder2 In TreeView1.Nodes
+        '            '            If noder2.name = oldnfofile Then
+        '            '                noder2.name = newnfofile
+        '            '            End If
+        '            '            For Each noder3 In noder2.nodes
+        '            '                If noder3.name = oldnfofile Then
+        '            '                    noder3.name = newnfofile
+        '            '                End If
+        '            '                For Each noder4 In noder3.nodes
+        '            '                    If noder4.name = oldnfofile Then
+        '            '                        noder4.name = newnfofile
+        '            '                    End If
+        '            '                Next
+        '            '            Next
+        '            '        Next
+        '            '        For Each item In basicTvList
+        '            '            For Each ep In item.allepisodes
+        '            '                If ep.episodepath = oldnfofile Then
+        '            '                    ep.episodepath = newnfofile
+        '            '                End If
+        '            '            Next
+        '            '        Next
+        '            '        renamelog = renamelog & "Tables Updated" & vbCrLf & vbCrLf
+        '            '    Catch
+        '            '        renamelog = renamelog & "Failed to update tables, use 'Rebuild TV Shows' menu item to fix" & vbCrLf & vbCrLf
+        '            '    End Try
+        '        End If
+        '    Next
+        'Next
+
+
+        '' Dim mySL1 As New SortedList()
+
+        ''Add premiered date, seasons & episode information into sorted list
+        ''showlist =  
+        ''For Each episode In workingTvShow.allepisodes()
+        ''showlist = showlist & "S" & workingTvShow.allepisodes(0).seasonno(0) & "E" & workingTvShow.allepisodes(0).Episode & " " & workingTvShow.allepisodes(0).title & " " & workingTvShow.allepisodes(0).aired
+        ''showlist = showlist & "S" & workingTvShow.allepisodes(0).seasonno & vbCrLf
+
+        ''Next
+        ''mySL1.Add("FIRST", "Hello")
+        ''mySL1.Add("SECOND", "World")
+        ''mySL1.Add("THIRD", "!")
+        Dim textstring As String = ""
+
+        'Dim node As TreeNode = Nothing
+
+        Dim nodes As New List(Of String)
+        nodes.Clear()
+
+        '  For Each childNodeLevel1 As TreeNode In TreeView1.SelectedNode.Nodes
+        Dim childNodeLevel1 As TreeNode = TreeView1.SelectedNode
+        For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
+            For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+                nodes.Add(childNodeLevel3.Text)
+                Dim path As String = childNodeLevel3.Name
+                Dim season As String = childNodeLevel3.Parent.Text.Replace("Season ", "")
+                Dim episode As String = childNodeLevel3.Text.Substring(0, 3)
+                episode = episode.TrimEnd(" ")
+                If Not IsNumeric(episode) Then
+                    episode = TreeView1.SelectedNode.Text.Substring(0, 2)
+                End If
+                If season.ToLower.IndexOf("specials") <> -1 Then season = "00"
+
+                'If workingTvShow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then
+                'loadtvshow(path)
+                'End If
+
+                Dim trueseason As String = season
+                Dim trueepisode As String = episode
+                If season.IndexOf("0") = 0 Then
+                    season = season.Substring(1, 1)
+                End If
+                If episode.IndexOf("0") = 0 Then
+                    episode = episode.Substring(1, 1)
+                End If
+
+                'workingEpisodeIndex = -5
+                nfoFunction.loadfullepisodenfo(path) ', season, episode)
+                For f = 0 To workingEpisode.Count - 1
+                    'If workingEpisode(f).seasonno = season And workingEpisode(f).episodeno = episode Then
+                    'workingEpisodeIndex = f
+                    'Exit For
+                    'End If
+                    textstring = textstring & workingEpisode(f).aired
+                    textstring = textstring & " "
+                    textstring = textstring & workingEpisode(f).seasonno
+                    textstring = textstring & "x"
+                    textstring = textstring & workingEpisode(f).episodeno
+                    textstring = textstring & " "
+                    textstring = textstring & workingEpisode(f).title & " " & vbCrLf
+                Next
+            Next
+        Next
+        'Next
+
+
+
+        ''Show Final Listing
+        Dim MyFormObject As New frmoutputlog(textstring, True)
+        MyFormObject.Button1.Text = "Save Details..."
+        MyFormObject.Text = "Episodes in Aired Order for " & workingTvShow.title
+        MyFormObject.ShowDialog()
     End Sub
 End Class

@@ -360,6 +360,8 @@ Public Class WorkingWithNfoFiles
                                 If newtvepisode.rating.IndexOf(" ") <> -1 Then newtvepisode.rating.Replace(" ", "")
                             Case "playcount"
                                 newtvepisode.playcount = thisresult.InnerText
+                            Case "aired"
+                                newtvepisode.aired = thisresult.InnerText
                         End Select
 
                     Catch ex As Exception
