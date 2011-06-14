@@ -1,0 +1,312 @@
+C:\SVN MC\bin\Release\Media Companion.exe.config
+C:\SVN MC\obj\Release\Media Companion.exe
+C:\SVN MC\obj\Release\Media Companion.pdb
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.imdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.impa.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.impa.com\impa.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\imdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.mtv.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.mtv.com\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.mtv.com\mtv.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\changelog.txt
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\icon.png
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\SVN MC\bin\Release\Assets\scrapers\xbmc.core\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\xbmc.metadata\addon.xml
+C:\SVN MC\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
+C:\SVN MC\bin\Release\Media Companion.exe
+C:\SVN MC\bin\Release\Media Companion.pdb
+C:\SVN MC\bin\Release\crclib.dll
+C:\SVN MC\bin\Release\NfoLibrary.dll
+C:\SVN MC\bin\Release\ProtoXML.dll
+C:\SVN MC\bin\Release\tmdb_posters.dll
+C:\SVN MC\bin\Release\NfoLibrary.pdb
+C:\SVN MC\bin\Release\NfoLibrary.xml
+C:\SVN MC\bin\Release\ProtoXML.pdb
+C:\SVN MC\bin\Release\ProtoXML.xml
+C:\SVN MC\obj\Release\ResolveAssemblyReference.cache
+C:\SVN MC\obj\Release\Media_Companion.frmBatchScraper.resources
+C:\SVN MC\obj\Release\Media_Companion.frmCopyProgress.resources
+C:\SVN MC\obj\Release\Media_Companion.frmCoverArt.resources
+C:\SVN MC\obj\Release\Media_Companion.Delete_Dialogue.resources
+C:\SVN MC\obj\Release\Media_Companion.frmDialog1.resources
+C:\SVN MC\obj\Release\Media_Companion.Form1.resources
+C:\SVN MC\obj\Release\Media_Companion.Form2.resources
+C:\SVN MC\obj\Release\Media_Companion.frmoutputlog.resources
+C:\SVN MC\obj\Release\Media_Companion.frmMessageBox.resources
+C:\SVN MC\obj\Release\Media_Companion.frmMovieFanart.resources
+C:\SVN MC\obj\Release\Media_Companion.Resources.resources
+C:\SVN MC\obj\Release\Media_Companion.frmOptions.resources
+C:\SVN MC\obj\Release\Media_Companion.frmSplashscreen.resources
+C:\SVN MC\obj\Release\Media_Companion.tv_batch_wizard.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTvEdit.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTvFanart.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTvPosters.resources
+C:\SVN MC\obj\Release\Media_Companion.frmTVShowBrowser.resources
+C:\SVN MC\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\SVN MC\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
+C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
+C:\SVN MC\obj\Release\GenerateResource-ResGen.write.1.tlog
+C:\MC SVN\bin\Release\Media Companion.exe.config
+C:\MC SVN\obj\Release\Media Companion.exe
+C:\MC SVN\obj\Release\Media Companion.pdb
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.imdb.com\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.impa.com\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.impa.com\impa.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\changelog.txt
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\icon.png
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\imdb.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.mtv.com\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.mtv.com\icon.png
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.mtv.com\mtv.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\icon.png
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\changelog.txt
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\icon.png
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\MC SVN\bin\Release\Assets\scrapers\xbmc.core\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\xbmc.metadata\addon.xml
+C:\MC SVN\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
+C:\MC SVN\bin\Release\Media Companion.exe
+C:\MC SVN\bin\Release\Media Companion.pdb
+C:\MC SVN\bin\Release\crclib.dll
+C:\MC SVN\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\MC SVN\bin\Release\NfoLibrary.dll
+C:\MC SVN\bin\Release\ProtoXML.dll
+C:\MC SVN\bin\Release\tmdb_posters.dll
+C:\MC SVN\bin\Release\NfoLibrary.pdb
+C:\MC SVN\bin\Release\NfoLibrary.xml
+C:\MC SVN\bin\Release\ProtoXML.pdb
+C:\MC SVN\bin\Release\ProtoXML.xml
+C:\MC SVN\obj\Release\ResolveAssemblyReference.cache
+C:\MC SVN\obj\Release\Media_Companion.frmBatchScraper.resources
+C:\MC SVN\obj\Release\Media_Companion.frmCopyProgress.resources
+C:\MC SVN\obj\Release\Media_Companion.frmCoverArt.resources
+C:\MC SVN\obj\Release\Media_Companion.Delete_Dialogue.resources
+C:\MC SVN\obj\Release\Media_Companion.frmDialog1.resources
+C:\MC SVN\obj\Release\Media_Companion.Form1.resources
+C:\MC SVN\obj\Release\Media_Companion.Form2.resources
+C:\MC SVN\obj\Release\Media_Companion.frmoutputlog.resources
+C:\MC SVN\obj\Release\Media_Companion.frmMessageBox.resources
+C:\MC SVN\obj\Release\Media_Companion.frmMovieFanart.resources
+C:\MC SVN\obj\Release\Media_Companion.Resources.resources
+C:\MC SVN\obj\Release\Media_Companion.frmOptions.resources
+C:\MC SVN\obj\Release\Media_Companion.frmSplashscreen.resources
+C:\MC SVN\obj\Release\Media_Companion.tv_batch_wizard.resources
+C:\MC SVN\obj\Release\Media_Companion.frmTvEdit.resources
+C:\MC SVN\obj\Release\Media_Companion.frmTvFanart.resources
+C:\MC SVN\obj\Release\Media_Companion.frmTvPosters.resources
+C:\MC SVN\obj\Release\Media_Companion.frmTVShowBrowser.resources
+C:\SVN MC\obj\Release\Media_Companion.frmProgressScreen.resources
+C:\MC SVN\obj\Release\Media_Companion.frmProgressScreen.resources
+C:\MC SVN\bin\Release\Common.dll
+C:\MC SVN\bin\Release\Common.pdb
+C:\MC SVN\bin\Release\Common.xml
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog
+C:\Projects\MC\Recheck\bin\Release\Media Companion.exe.config
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.imdb.com\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.impa.com\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.impa.com\impa.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\changelog.txt
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\icon.png
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\imdb.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.mtv.com\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.mtv.com\icon.png
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.mtv.com\mtv.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\icon.png
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\changelog.txt
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\icon.png
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\xbmc.core\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\xbmc.metadata\addon.xml
+C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
+C:\Projects\MC\Recheck\bin\Release\Media Companion.exe
+C:\Projects\MC\Recheck\bin\Release\Media Companion.pdb
+C:\Projects\MC\Recheck\bin\Release\Common.dll
+C:\Projects\MC\Recheck\bin\Release\crclib.dll
+C:\Projects\MC\Recheck\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\Projects\MC\Recheck\bin\Release\NfoLibrary.dll
+C:\Projects\MC\Recheck\bin\Release\ProtoXML.dll
+C:\Projects\MC\Recheck\bin\Release\tmdb_posters.dll
+C:\Projects\MC\Recheck\bin\Release\Common.pdb
+C:\Projects\MC\Recheck\bin\Release\Common.xml
+C:\Projects\MC\Recheck\bin\Release\NfoLibrary.pdb
+C:\Projects\MC\Recheck\bin\Release\NfoLibrary.xml
+C:\Projects\MC\Recheck\bin\Release\ProtoXML.pdb
+C:\Projects\MC\Recheck\bin\Release\ProtoXML.xml
+C:\Projects\MC\Recheck\obj\Release\ResolveAssemblyReference.cache
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmBatchScraper.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmCopyProgress.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmCoverArt.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.Delete_Dialogue.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmDialog1.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.Form1.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.Form2.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmoutputlog.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmMessageBox.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmMovieFanart.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmProgressScreen.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.Resources.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmOptions.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmSplashscreen.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.tv_batch_wizard.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmTvEdit.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmTvFanart.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmTvPosters.resources
+C:\Projects\MC\Recheck\obj\Release\Media_Companion.frmTVShowBrowser.resources
+C:\Projects\MC\Recheck\obj\Release\ResGen.read.1.tlog
+C:\Projects\MC\Recheck\obj\Release\ResGen.write.1.tlog
+C:\Projects\MC\Recheck\obj\Release\Media Companion.exe
+C:\Projects\MC\Recheck\obj\Release\Media Companion.pdb
