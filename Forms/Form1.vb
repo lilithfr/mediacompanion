@@ -825,18 +825,18 @@ Public Class Form1
             childchild.InnerText = movie.fullpathandfilename
             child.AppendChild(childchild)
             If movie.movieset <> Nothing Then
-                If movie.movieset <> "" Then
+                If movie.movieset <> "" Or movie.movieset <> "-None-" Then
                     childchild = doc.CreateElement("set")
                     childchild.InnerText = movie.movieset
                     child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set")
-                    childchild.InnerText = "-None-"
+                    childchild.InnerText = ""
                     child.AppendChild(childchild)
                 End If
             Else
                 childchild = doc.CreateElement("set")
-                childchild.InnerText = "-None-"
+                childchild.InnerText = ""
                 child.AppendChild(childchild)
             End If
             childchild = doc.CreateElement("genre")

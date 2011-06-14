@@ -1832,6 +1832,7 @@ Public Class WorkingWithNfoFiles
                         End If
                         newmovie.title = IO.Path.GetFileName(path)
                         newmovie.titleandyear = newmovie.title & " (0000)"
+                        newmovie.movieset = ""
                         Dim filecreation2 As New FileInfo(path)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
@@ -1912,6 +1913,8 @@ Public Class WorkingWithNfoFiles
                             MsgBox(ex.ToString)
                         End Try
                     Next
+                    If newmovie.movieset = "" Then newmovie.movieset = "-None-"
+
                     newmovie.fullpathandfilename = path
                     If newmovie.sortorder = Nothing Then
                         newmovie.sortorder = newmovie.title
