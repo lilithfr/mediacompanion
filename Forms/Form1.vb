@@ -31398,4 +31398,8 @@ Public Class Form1
         End If
         Call sortorder()
     End Sub
+
+    Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click
+
+    End Sub
 End Class
