@@ -31695,30 +31695,8 @@ Public Class Form1
         For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
             For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
                 Abort = False
-                'nodes.Add(childNodeLevel3.Text)
                 Dim path As String = childNodeLevel3.Name
-                Dim season As String = childNodeLevel3.Parent.Text.Replace("Season ", "")
-                Dim episode As String = childNodeLevel3.Text.Substring(0, 3)
-                episode = episode.TrimEnd(" ")
-                If Not IsNumeric(episode) Then
-                    episode = TreeView1.SelectedNode.Text.Substring(0, 2)
-                End If
-                If season.ToLower.IndexOf("specials") <> -1 Then season = "00"
-
-                Dim trueseason As String = season
-                Dim trueepisode As String = episode
-                If season.IndexOf("0") = 0 Then
-                    season = season.Substring(1, 1)
-                End If
-                If episode.IndexOf("0") = 0 Then
-                    episode = episode.Substring(1, 1)
-                End If
-
                 nfoFunction.loadfullepisodenfo(path)
-                'If workingEpisode.Count < 1 Then
-                '    Abort = True
-                '    Exit For
-                'End If
                 Dim EpAired As String = ""
                 For f = 0 To workingEpisode.Count - 1
                     If workingEpisode(f).aired <> Nothing Then
@@ -31729,8 +31707,19 @@ Public Class Form1
 
                     End If
                     If EpAired <> Nothing Then
-                        'Abort = True
-                        mySortedList.Add(workingEpisode(f).aired, workingEpisode(f).seasonno & "x" & workingEpisode(f).episodeno & " " & workingEpisode(f).title)
+
+                        'Convert episode to 2 digits for formatting
+                        Dim episode2digit As String = workingEpisode(f).episodeno
+                        If episode2digit.Length = 1 Then episode2digit = "0" & episode2digit
+
+                        'Convert season to 2 digits for formatting
+                        Dim season2digit As String = workingEpisode(f).seasonno
+                        If season2digit.Length = 1 Then season2digit = "0" & season2digit
+
+                        'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
+                        'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
+                        'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
+                        mySortedList.Add(workingEpisode(f).aired, FormatTVFilename(workingTvShow.title, workingEpisode(f).title, episode2digit, season2digit))
 
                     End If
                 Next
@@ -31744,6 +31733,7 @@ Public Class Form1
             Next
             ''Show Final Listing
             Dim MyFormObject As New frmoutputlog(textstring, True)
+            MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             MyFormObject.Button1.Text = "Save Details..."
             MyFormObject.Text = "Episodes in Aired Order for " & workingTvShow.title
             MyFormObject.ShowDialog()
@@ -31751,4 +31741,104 @@ Public Class Form1
             MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
         End If
     End Sub
+    Private Function FormatTVFilename(ByVal showtitle As String, ByVal episodetitle As String, ByVal episodeno As String, ByVal seasonno As String) As String
+        Dim newfilename As String = ""
+
+        Dim s As String = ""
+        Dim ee As String = ""
+        Dim x As String = ""
+        If Preferences.eprenamelowercase = False Then
+            s = "S"
+            ee = "E"
+            x = "X"
+        Else
+            s = "s"
+            ee = "e"
+            x = "x"
+        End If
+
+        Select Case Preferences.tvrename
+            Case 0
+                'Show Title - S01E01 - Episode Title.ext
+                newfilename = showtitle & " - " & s & seasonno
+
+                newfilename = newfilename & ee & episodeno
+
+                newfilename = newfilename & " - " & episodetitle
+            Case 1
+                'S01E01 - Episode Title.ext
+                newfilename = s & seasonno
+
+                newfilename = newfilename & ee & episodeno
+
+                newfilename = newfilename & " - " & episodetitle
+            Case 2
+                'Show Title - 1x01 - Episode Title.ext
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                newfilename = showtitle & " - " & seasonno
+
+                newfilename = newfilename & x & episodeno
+
+                newfilename = newfilename & " - " & episodetitle
+            Case 3
+                '1x01 - Episode Title.ext
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                newfilename = seasonno
+
+                newfilename = newfilename & x & episodeno
+
+                newfilename = newfilename & " - " & episodetitle
+            Case 4
+                'Show Title - 101 - Episode Title.ext
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                newfilename = showtitle & " - " & seasonno
+
+                newfilename = newfilename & x & episodeno     '(f)
+
+                newfilename = newfilename & " - " & episodetitle
+            Case 5
+                '101 - Episode Title.ext
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
+                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
+                End If
+                newfilename = seasonno
+
+                newfilename = newfilename & x & episodeno       '(f)
+
+                newfilename = newfilename & " - " & episodetitle
+        End Select
+        Return newfilename
+    End Function
+
+
 End Class
