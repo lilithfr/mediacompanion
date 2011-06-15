@@ -13958,6 +13958,7 @@ Public Class Form1
     End Sub
 
     Private Sub TreeView1_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
+
         'RenameTVShowsToolStripMenuItem.Enabled = False
         Button43.Enabled = True
         'RenameTVShowsToolStripMenuItem.Visible = False
@@ -13965,10 +13966,13 @@ Public Class Form1
         RebuildThisShowToolStripMenuItem.Visible = False
         MissingepisodesToolStripMenuItem.Enabled = False
         MissingepisodesToolStripMenuItem.Visible = False
+        DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = False
+        DisplayEpisodesByAiredDateToolStripMenuItem.Visible = False
         SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = False
         SearchThisShowForNewEpisodesToolStripMenuItem.Visible = False
         DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = False
         DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = False
+        
         ToolStripMenuItem1.Enabled = False
         ExpandSelectedShowToolStripMenuItem.Enabled = False
         CollapseSelectedShowToolStripMenuItem.Enabled = False
@@ -14007,6 +14011,8 @@ Public Class Form1
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
+                DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
+                DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
                 RebuildThisShowToolStripMenuItem.Enabled = True
                 RebuildThisShowToolStripMenuItem.Visible = True
             End If
@@ -14059,6 +14065,8 @@ Public Class Form1
                 MissingepisodesToolStripMenuItem.Text = tempstring
                 MissingepisodesToolStripMenuItem.Enabled = True
                 MissingepisodesToolStripMenuItem.Visible = True
+                DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
+                DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
                 RebuildThisShowToolStripMenuItem.Enabled = True
                 RebuildThisShowToolStripMenuItem.Visible = True
                 If workingTvShow.locked = 1 Then
@@ -31674,17 +31682,19 @@ Public Class Form1
         ''mySL1.Add("FIRST", "Hello")
         ''mySL1.Add("SECOND", "World")
         ''mySL1.Add("THIRD", "!")
+
         Dim textstring As String = ""
+        Dim Abort As Boolean = True
 
-        'Dim node As TreeNode = Nothing
-
+        Dim mySortedList As New SortedList()
         Dim nodes As New List(Of String)
         nodes.Clear()
 
-        '  For Each childNodeLevel1 As TreeNode In TreeView1.SelectedNode.Nodes
+
         Dim childNodeLevel1 As TreeNode = TreeView1.SelectedNode
         For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
             For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+                Abort = False
                 nodes.Add(childNodeLevel3.Text)
                 Dim path As String = childNodeLevel3.Name
                 Dim season As String = childNodeLevel3.Parent.Text.Replace("Season ", "")
@@ -31695,10 +31705,6 @@ Public Class Form1
                 End If
                 If season.ToLower.IndexOf("specials") <> -1 Then season = "00"
 
-                'If workingTvShow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then
-                'loadtvshow(path)
-                'End If
-
                 Dim trueseason As String = season
                 Dim trueepisode As String = episode
                 If season.IndexOf("0") = 0 Then
@@ -31708,31 +31714,34 @@ Public Class Form1
                     episode = episode.Substring(1, 1)
                 End If
 
-                'workingEpisodeIndex = -5
-                nfoFunction.loadfullepisodenfo(path) ', season, episode)
+                nfoFunction.loadfullepisodenfo(path)
+                'If workingEpisode.Count < 1 Then
+                '    Abort = True
+                '    Exit For
+                'End If
                 For f = 0 To workingEpisode.Count - 1
-                    'If workingEpisode(f).seasonno = season And workingEpisode(f).episodeno = episode Then
-                    'workingEpisodeIndex = f
-                    'Exit For
-                    'End If
-                    textstring = textstring & workingEpisode(f).aired
-                    textstring = textstring & " "
-                    textstring = textstring & workingEpisode(f).seasonno
-                    textstring = textstring & "x"
-                    textstring = textstring & workingEpisode(f).episodeno
-                    textstring = textstring & " "
-                    textstring = textstring & workingEpisode(f).title & " " & vbCrLf
+                    If workingEpisode(f).aired <> Nothing Then
+                        mySortedList.Add(workingEpisode(f).aired, workingEpisode(f).seasonno & "x" & workingEpisode(f).episodeno & " " & workingEpisode(f).title)
+                    Else
+                        Abort = True
+                        Exit For
+                    End If
                 Next
+
             Next
         Next
-        'Next
 
-
-
-        ''Show Final Listing
-        Dim MyFormObject As New frmoutputlog(textstring, True)
-        MyFormObject.Button1.Text = "Save Details..."
-        MyFormObject.Text = "Episodes in Aired Order for " & workingTvShow.title
-        MyFormObject.ShowDialog()
+        If Not Abort Then   'i.e. no episodes in this show.... 
+            For Line = 0 To mySortedList.Count - 1
+                textstring = textstring & mySortedList.GetKey(Line) & " " & mySortedList.GetByIndex(Line) & vbCrLf
+            Next
+            ''Show Final Listing
+            Dim MyFormObject As New frmoutputlog(textstring, True)
+            MyFormObject.Button1.Text = "Save Details..."
+            MyFormObject.Text = "Episodes in Aired Order for " & workingTvShow.title
+            MyFormObject.ShowDialog()
+        Else
+            MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
+        End If
     End Sub
 End Class
