@@ -31687,15 +31687,15 @@ Public Class Form1
         Dim Abort As Boolean = True
 
         Dim mySortedList As New SortedList()
-        Dim nodes As New List(Of String)
-        nodes.Clear()
+        'Dim nodes As New List(Of String)
+        'nodes.Clear()
 
 
         Dim childNodeLevel1 As TreeNode = TreeView1.SelectedNode
         For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
             For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
                 Abort = False
-                nodes.Add(childNodeLevel3.Text)
+                'nodes.Add(childNodeLevel3.Text)
                 Dim path As String = childNodeLevel3.Name
                 Dim season As String = childNodeLevel3.Parent.Text.Replace("Season ", "")
                 Dim episode As String = childNodeLevel3.Text.Substring(0, 3)
@@ -31726,11 +31726,12 @@ Public Class Form1
                     End If
                     If EpAired = workingEpisode(f).playcount <> Nothing Then
                         EpAired = workingEpisode(f).playcount
+
                     End If
                     If EpAired <> Nothing Then
                         'Abort = True
                         mySortedList.Add(workingEpisode(f).aired, workingEpisode(f).seasonno & "x" & workingEpisode(f).episodeno & " " & workingEpisode(f).title)
-                        
+
                     End If
                 Next
 
