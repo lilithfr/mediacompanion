@@ -1190,7 +1190,12 @@ Public Class Preferences
                 Case "offlinemovielabeltext"
                     OfflineDVDTitle = thisresult.InnerText
                 Case "showsortdate"
-                    showsortdate = thisresult.InnerText
+                    If thisresult.InnerText = Nothing Or thisresult.InnerText = "" Then
+                        showsortdate = False
+                    Else
+                        showsortdate = thisresult.InnerText
+                    End If
+                    
                 Case "scrapefullcert"
                     If thisresult.InnerXml = "true" Then
                         Preferences.scrapefullcert = True

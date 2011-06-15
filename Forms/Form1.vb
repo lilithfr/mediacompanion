@@ -31719,12 +31719,18 @@ Public Class Form1
                 '    Abort = True
                 '    Exit For
                 'End If
+                Dim EpAired As String = ""
                 For f = 0 To workingEpisode.Count - 1
                     If workingEpisode(f).aired <> Nothing Then
+                        EpAired = workingEpisode(f).aired
+                    End If
+                    If EpAired = workingEpisode(f).playcount <> Nothing Then
+                        EpAired = workingEpisode(f).playcount
+                    End If
+                    If EpAired <> Nothing Then
+                        'Abort = True
                         mySortedList.Add(workingEpisode(f).aired, workingEpisode(f).seasonno & "x" & workingEpisode(f).episodeno & " " & workingEpisode(f).title)
-                    Else
-                        Abort = True
-                        Exit For
+                        
                     End If
                 Next
 
