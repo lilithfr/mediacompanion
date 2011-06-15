@@ -31728,15 +31728,21 @@ Public Class Form1
         Next
 
         If Not Abort Then   'i.e. no episodes in this show.... 
+            textstring = workingTvShow.title & vbCrLf
+            textstring = textstring & StrDup(workingTvShow.title.Length, "-") & vbCrLf
+
             For Line = 0 To mySortedList.Count - 1
                 textstring = textstring & mySortedList.GetKey(Line) & " " & mySortedList.GetByIndex(Line) & vbCrLf
             Next
+
+            textstring = textstring & vbCrLf & "* missing episodes are not listed" & vbCrLf
             ''Show Final Listing
             Dim MyFormObject As New frmoutputlog(textstring, True)
             MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             MyFormObject.Button1.Text = "Save Details..."
             MyFormObject.Text = "Episodes in Aired Order for " & workingTvShow.title
             MyFormObject.ShowDialog()
+
         Else
             MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
         End If

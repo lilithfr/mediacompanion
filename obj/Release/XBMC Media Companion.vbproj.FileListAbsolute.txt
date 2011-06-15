@@ -206,5 +206,6 @@ C:\MC SVN\bin\Release\Common.xml
 C:\SVN MC\bin\Release\Common.dll
 C:\SVN MC\bin\Release\Common.pdb
 C:\SVN MC\bin\Release\Common.xml
-C:\MC SVN\obj\Release\ResGen.read.1.tlog
-C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog

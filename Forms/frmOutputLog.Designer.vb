@@ -22,22 +22,10 @@ Partial Class frmoutputlog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TextBox1 = New System.Windows.Forms.TextBox
-        Me.Button1 = New System.Windows.Forms.Button
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(0, 0)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(855, 509)
-        Me.TextBox1.TabIndex = 0
         '
         'Button1
         '
@@ -48,6 +36,20 @@ Partial Class frmoutputlog
         Me.Button1.TabIndex = 1
         Me.Button1.Text = "Save Log"
         Me.Button1.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox1.BackColor = System.Drawing.Color.White
+        Me.TextBox1.Location = New System.Drawing.Point(0, -1)
+        Me.TextBox1.Multiline = True
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.ReadOnly = True
+        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox1.Size = New System.Drawing.Size(855, 510)
+        Me.TextBox1.TabIndex = 0
         '
         'frmoutputlog
         '
@@ -63,7 +65,7 @@ Partial Class frmoutputlog
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
 End Class
