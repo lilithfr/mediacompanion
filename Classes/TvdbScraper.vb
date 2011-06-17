@@ -357,7 +357,7 @@ Public Class TVDBScraper
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
-            MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "Returned data from thetvdb")
+            If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
 
             Dim episode As New XmlDocument
 

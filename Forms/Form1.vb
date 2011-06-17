@@ -21963,7 +21963,7 @@ Public Class Form1
                 myProxy.BypassProxyOnLocal = True
 
                 xmlfile = Utilities.DownloadTextFiles(episodeurl2)
-                If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "TVDB returned.....")
+                If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
 
                 Dim episode As New XmlDocument
 
