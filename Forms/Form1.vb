@@ -2349,6 +2349,7 @@ Public Class Form1
                 titletxt.Text = workingMovieDetails.fullmoviebody.title '& " (" & workingmoviedetails.fullmoviebody.year & ")"
                 TextBox3.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 TextBox7.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                Me.ToolTip1.SetToolTip(Me.titletxt, "Original Title: '" & workingMovieDetails.fullmoviebody.originaltitle & "'")
                 If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
                 TextBox34.Text = workingMovieDetails.fullmoviebody.sortorder
                 outlinetxt.Text = workingMovieDetails.fullmoviebody.outline
@@ -7336,7 +7337,7 @@ Public Class Form1
         If tempint = DialogResult.No Then
             Exit Sub
         End If
-        messbox = New frmMessageBox("The Selected Movie is being Rescraped", "", "Please Wait" & vbCrLf)
+        messbox = New frmMessageBox("", "", "The Selected Movie is being Rescraped....")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
         messbox.Refresh()
@@ -7354,7 +7355,7 @@ Public Class Form1
             End If
         Else
             Try
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Clearing Variables" & vbCrLf
+                messbox.TextBox1.Text = "Clearing Variables"
                 If workingMovieDetails Is Nothing Then Exit Sub
                 If workingMovieDetails.fullmoviebody.title = Nothing And workingMovieDetails.fullmoviebody.imdbid = Nothing Then Exit Sub
                 Me.Cursor = Cursors.WaitCursor
@@ -7391,14 +7392,14 @@ Public Class Form1
                 'Dim newscraper As New Classimdb
                 'body = newscraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 'trailer = newscraper.gettrailerurl(workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get IMDB Body" & vbCrLf
+                messbox.TextBox1.Text = "Get IMDB Body"
                 body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get Trailer" & vbCrLf
+                messbox.TextBox1.Text = "Get Trailer"
                 trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 Dim actors As String
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get Actors" & vbCrLf
+                messbox.TextBox1.Text = "Get Actors"
                 actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Processing..." & vbCrLf
+                messbox.TextBox1.Text = "Processing..."
                 If body = "MIC" Then
                     workingMovieDetails.fullmoviebody.genre = "problem"
                 Else
@@ -7507,7 +7508,7 @@ Public Class Form1
                         Throw ex
 #End If
                     End Try
-                    messbox.TextBox1.Text = messbox.TextBox1.Text & "Get actorlist" & vbCrLf
+                    messbox.TextBox1.Text = "Get actorlist"
                     actorlist = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, Preferences.maxactors)
                     'actorlist = getimdbactors(Preferences.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, Preferences.maxactors)
                     Dim done As Boolean = False
@@ -7528,7 +7529,7 @@ Public Class Form1
                         If done = True Then Exit For
                     Next
                 End If
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get Thumbs" & vbCrLf
+                messbox.TextBox1.Text = "Get Thumbs"
                 'Preferences.certificatepriority(1)
                 workingMovieDetails.listthumbs.Clear()
                 If Preferences.nfoposterscraper <> 0 Then
@@ -7579,7 +7580,7 @@ Public Class Form1
 #End If
                     End Try
                 End If
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "List Actors" & vbCrLf
+                messbox.TextBox1.Text = "List Actors"
                 workingMovieDetails.listactors.Clear()
                 If actorlist <> Nothing Then
                     Try
@@ -7713,7 +7714,7 @@ Public Class Form1
                 Try
                     Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                     If tempname <> Nothing Then workingMovieDetails.filedetails = Utilities.Get_HdTags(tempname)
-                    messbox.TextBox1.Text = messbox.TextBox1.Text & "Video Duration" & vbCrLf
+                    messbox.TextBox1.Text = "Video Duration"
                     If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -7767,11 +7768,11 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Save Nfo" & vbCrLf
+                messbox.TextBox1.Text = "Save Nfo"
                 nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Load Nfo" & vbCrLf
+                messbox.TextBox1.Text = "Load Nfo"
                 Call loadinfofile()
-                messbox.TextBox1.Text = messbox.TextBox1.Text & "Refesh Movie List" & vbCrLf
+                messbox.TextBox1.Text = "Refesh Movie List"
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
