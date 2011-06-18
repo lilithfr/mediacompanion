@@ -15672,8 +15672,13 @@ Public Class Form1
                     Case "mpaa"
                         workingTvShow.mpaa = thisresult.InnerText
                     Case "premiered"
-                        workingTvShow.premiered = thisresult.InnerText
-                        workingTvShow.year = thisresult.InnerText.Substring(0, 4)
+                        If thisresult.InnerText <> "" Then
+                            workingTvShow.premiered = thisresult.InnerText
+                            workingTvShow.year = thisresult.InnerText.Substring(0, 4)
+                        Else
+                            workingTvShow.premiered = "N/A"
+                            workingTvShow.year = "N/A"
+                        End If
                     Case "genre"
                         Dim newstring As String
                         newstring = thisresult.InnerText
@@ -15766,13 +15771,13 @@ Public Class Form1
                                 End If
                             End If
                             Dim exists As Boolean = False
-                            For Each actors In workingTvShow.listactors
+                            For Each actors In workingTvShow.ListActors
                                 If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                     exists = True
                                 End If
                             Next
                             If exists = False Then
-                                workingTvShow.listactors.Add(acts)
+                                workingTvShow.ListActors.Add(acts)
                             End If
                         End If
                 End Select
