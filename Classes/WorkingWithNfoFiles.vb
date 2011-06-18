@@ -2801,6 +2801,7 @@ Public Class WorkingWithNfoFiles
             line = line.Replace("&quot;", "Chr(34)")
             line = line.Replace("&apos;", "'")
             line = line.Replace("&#xA;", vbCrLf)
+            line = line.Replace("â€˜", "'")
             Return line
         Catch
         Finally

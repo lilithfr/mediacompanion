@@ -16337,14 +16337,14 @@ Public Class Form1
         End If
     End Sub
 
-    Private Function tvencodespecialchrs(ByVal text As String)
-        If text.IndexOf("&") <> -1 Then text = text.Replace("&", "&amp;")
-        If text.IndexOf("<") <> -1 Then text = text.Replace("", "&lt;")
-        If text.IndexOf(">") <> -1 Then text = text.Replace("", "&gt;")
-        If text.IndexOf(Chr(34)) <> -1 Then text = text.Replace(Chr(34), "&quot;")
-        If text.IndexOf("'") <> -1 Then text = text.Replace("'", "&apos;")
-        If text.IndexOf(vbCrLf) <> -1 Then text = text.Replace(vbCrLf, "&#xA;")
-        Return text
+    Private Function tvencodespecialchrs(ByVal Text As String)                  'Convert textcodes to real characters
+        If Text.IndexOf("â€˜") <> -1 Then Text = Text.Replace("â€˜", "'")
+        If Text.IndexOf("â€™") <> -1 Then Text = Text.Replace("â€™", "'")
+        If Text.IndexOf("â€™") <> -1 Then Text = Text.Replace("â€™", "'")
+        If Text.IndexOf("â€" & Chr(147)) <> -1 Then Text = Text.Replace("â€" & Chr(147), "-")
+
+        Return Text
+
     End Function
 
     Private Sub doscreenshot(ByVal filenameandpath As String)
@@ -21660,6 +21660,7 @@ Public Class Form1
                                                 Next
                                         End Select
                                     Next
+                                    singleepisode.plot = tvencodespecialchrs(singleepisode.plot)
                                     singleepisode.playcount = "0"
                                 Catch ex As Exception
                                     tvScraperLog = tvScraperLog & "Error scraping episode body, " & vbCrLf & ex.Message.ToString & vbCrLf & vbCrLf
