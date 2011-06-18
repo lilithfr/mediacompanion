@@ -2072,14 +2072,15 @@ Public Class Form1
         Dim counter2 As Integer = 1
         Dim progcounter As Integer = 1
         If progressmode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
-        frmSplash2.Label2.Visible = True
+
         For Each fs_info As System.IO.FileInfo In fs_infos
             Application.DoEvents()
             If progressmode = True Then frmSplash2.ProgressBar1.Value = progcounter
             progcounter += 1
-            frmSplash2.Label2.Text = fs_info.FullName
+
             exists = (IO.File.Exists(fs_info.FullName))
             If exists = True Then
+                frmSplash2.Label2.Text = fs_info.FullName
                 Try
                     workingMovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
                 Catch ex As Exception
@@ -2101,6 +2102,7 @@ Public Class Form1
                         End If
                     End If
                     If workingMovie.title <> Nothing Then
+
                         workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
                         If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
                             Dim skip As Boolean = False
@@ -2129,7 +2131,7 @@ Public Class Form1
                 End If
             End If
         Next fs_info
-        frmSplash2.Label2.Visible = False
+
         fs_infos = Nothing
 
         
@@ -2225,17 +2227,18 @@ Public Class Form1
 
 
             If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
+            frmSplash2.Label2.Visible = True
             For f = 0 To realMoviePaths.Count - 1
 
                 frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
-                frmSplash2.Label1.Refresh()
+
                 If mode = False Then frmSplash2.ProgressBar1.Value = f
-                Application.DoEvents()
+
                 Dim subdirs As New System.IO.DirectoryInfo(realMoviePaths(f))
+
                 ListFiles(dirinfo, pattern, subdirs)
             Next
-
-
+            frmSplash2.Label2.Visible = False
 
         End If
     End Sub
@@ -5120,6 +5123,8 @@ Public Class Form1
         Call nfos_to_array(Preferences.offlinefolders, progressmode)
         Application.DoEvents()
         '----------------------------------------------
+
+        frmSplash2.Label1.Text = "Processing...."
         Try
             For Each movie In fullMovieList
                 Try
@@ -5139,25 +5144,30 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-
+        frmSplash2.Label2.Visible = True
+        frmSplash2.Label2.Text = "Save Data..."
         Call savedata()
 
-        Call sortorder()
-
+        'Call sortorder()    ApplyFilters calls sortorder()
+        frmSplash2.Label2.Text = "Apply Filters..."
         Call ApplyFilters()
+        frmSplash2.Label2.Text = "Reload Main Page..."
         Call loadinfofile()
         Try
+            MovieListComboBox.SelectionMode = SelectionMode.One         'if we just select index 0 (the top one) & we already had selected another other than 0 before callingthis function then both will be selected
             MovieListComboBox.SelectedIndex = 0
+            MovieListComboBox.SelectionMode = SelectionMode.MultiExtended
+
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
         End Try
 
-        frmSplash2.Hide()
+
         Me.Activate()
         Me.Enabled = True
-
+        frmSplash2.Hide()
     End Sub
 
     Private Sub videomode1(ByVal tempstring As String)
@@ -6976,6 +6986,7 @@ Public Class Form1
                     movietoadd.genre = comboarray2(f).genre
                     movietoadd.sortorder = comboarray2(f).sortorder
                     movietoadd.title = comboarray2(f).title
+                    movietoadd.originaltitle = comboarray2(f).originaltitle
                     movietoadd.movieset = comboarray2(f).movieset
                     movietoadd.filedate = comboarray2(f).filedate
 
@@ -7005,6 +7016,7 @@ Public Class Form1
                     movietoadd.genre = comboarray2(f).genre
                     movietoadd.runtime = comboarray2(f).runtime
                     movietoadd.title = comboarray2(f).title
+                    movietoadd.originaltitle = comboarray2(f).originaltitle
                     If comboarray2(f).sortorder = Nothing Then
                         movietoadd.sortorder = comboarray2(f).sortorder
                     ElseIf comboarray2(f).sortorder = "" Then
@@ -7298,6 +7310,7 @@ Public Class Form1
                 Else
                     newfullmovie.createdate = newfullmovie.filedate
                 End If
+                newfullmovie.originaltitle = workingMovieDetails.fullmoviebody.originaltitle
                 newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
                 newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
                 newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
@@ -7862,6 +7875,7 @@ Public Class Form1
             End If
             tempstring = " (" & workingMovieDetails.fullmoviebody.year & ")"
             workingMovieDetails.fullmoviebody.title = titletxt.Text.Replace(tempstring, "")
+            If workingMovieDetails.fullmoviebody.originaltitle = Nothing Or workingMovieDetails.fullmoviebody.originaltitle = "" Then workingMovieDetails.fullmoviebody.originaltitle = workingMovieDetails.fullmoviebody.title
             workingMovieDetails.fullmoviebody.director = directortxt.Text
             'workingMovieDetails.fullmoviebody.stars = starstxt.Text            'starstxt.Text textbox not implemented yet
             workingMovieDetails.fullmoviebody.credits = creditstxt.Text
@@ -8456,6 +8470,7 @@ Public Class Form1
                 movietemplate.fullmoviebody.runtime = Nothing
                 movietemplate.fullmoviebody.studio = Nothing
                 movietemplate.fullmoviebody.title = Nothing
+                movietemplate.fullmoviebody.originaltitle = Nothing
                 movietemplate.fullmoviebody.tagline = Nothing
                 movietemplate.fullmoviebody.thumbnails = Nothing
                 movietemplate.fullmoviebody.trailer = Nothing
@@ -8503,6 +8518,7 @@ Public Class Form1
                 movietoalter.fullmoviebody.runtime = Nothing
                 movietoalter.fullmoviebody.studio = Nothing
                 movietoalter.fullmoviebody.title = Nothing
+                movietoalter.fullmoviebody.originaltitle = Nothing
                 movietoalter.fullmoviebody.tagline = Nothing
                 movietoalter.fullmoviebody.thumbnails = Nothing
                 movietoalter.fullmoviebody.trailer = Nothing
@@ -9345,6 +9361,7 @@ Public Class Form1
                             End Try
                             newfullmovie.titleandyear = movietoalter.fullmoviebody.title & " (" & movietoalter.fullmoviebody.year & ")"
                             newfullmovie.title = movietoalter.fullmoviebody.title
+                            newfullmovie.originaltitle = movietoalter.fullmoviebody.title
                             newfullmovie.year = movietoalter.fullmoviebody.year
                             newfullmovie.genre = movietoalter.fullmoviebody.genre
                             newfullmovie.playcount = movietoalter.fullmoviebody.playcount

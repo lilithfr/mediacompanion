@@ -1875,6 +1875,8 @@ Public Class WorkingWithNfoFiles
                                         End If
                                     End If
                                     newmovie.title = tempstring
+                                Case "originaltitle"
+                                    newmovie.originaltitle = thisresult.InnerText
                                 Case "set"
                                     newmovie.movieset = thisresult.InnerText
                                 Case "year"
@@ -1915,15 +1917,15 @@ Public Class WorkingWithNfoFiles
                             MsgBox(ex.ToString)
                         End Try
                     Next
-                    If newmovie.movieset = "" Then newmovie.movieset = "-None-"
+
+                    'if there is no entry for originaltitle, then use the current title. this should only come into use
+                    'for old movies since new ones will have the originaltitle created when scraped
+                    If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
+                    If newmovie.movieset = "" Or newmovie.movieset = Nothing Then newmovie.movieset = "-None-"
+                    If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
 
                     newmovie.fullpathandfilename = path
-                    If newmovie.sortorder = Nothing Then
-                        newmovie.sortorder = newmovie.title
-                    End If
-                    If newmovie.sortorder = "" Then
-                        newmovie.sortorder = newmovie.title
-                    End If
+
                     Dim filecreation As New FileInfo(path)
                     Dim myDate As Date = filecreation.LastWriteTime
 
@@ -2484,7 +2486,12 @@ Public Class WorkingWithNfoFiles
                 Catch
                 End Try
                 child = doc.CreateElement("originaltitle")
-                child.InnerText = movietosave.fullmoviebody.originaltitle
+                If movietosave.fullmoviebody.originaltitle = Nothing Or movietosave.fullmoviebody.originaltitle = "" Then
+                    child.InnerText = movietosave.fullmoviebody.title
+                Else
+                    child.InnerText = movietosave.fullmoviebody.originaltitle
+                End If
+
                 root.AppendChild(child)
 
                 If movietosave.alternativetitles.Count > 0 Then
