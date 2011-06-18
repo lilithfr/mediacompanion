@@ -2050,6 +2050,8 @@ Public Class WorkingWithNfoFiles
                         Case "title"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                             newmovie.fullmoviebody.title = thisresult.InnerText
+                        Case "originaltitle"
+                            newmovie.fullmoviebody.originaltitle = thisresult.InnerText
                         Case "year"
                             newmovie.fullmoviebody.year = thisresult.InnerText
                         Case "genre"
@@ -2481,6 +2483,10 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 Catch
                 End Try
+                child = doc.CreateElement("originaltitle")
+                child.InnerText = movietosave.fullmoviebody.originaltitle
+                root.AppendChild(child)
+
                 If movietosave.alternativetitles.Count > 0 Then
                     Try
                         For Each title In movietosave.alternativetitles

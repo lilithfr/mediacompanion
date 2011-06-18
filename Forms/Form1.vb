@@ -854,6 +854,9 @@ Public Class Form1
             childchild = doc.CreateElement("title")
             childchild.InnerText = movie.title
             child.AppendChild(childchild)
+            childchild = doc.CreateElement("originaltitle")
+            childchild.InnerText = movie.originaltitle
+            child.AppendChild(childchild)
             If movie.sortorder = Nothing Then
                 movie.sortorder = movie.title
             End If
@@ -1514,6 +1517,8 @@ Public Class Form1
                                 newmovie.rating = detail.InnerText
                             Case "title"
                                 newmovie.title = detail.InnerText
+                            Case "originaltitle"
+                                newmovie.originaltitle = detail.InnerText
                             Case "titleandyear"
                                 '--------- aqui
                                 Dim TempString2 As String = detail.InnerText
@@ -2329,6 +2334,7 @@ Public Class Form1
                 If workingMovieDetails.fullmoviebody.studio = Nothing Then workingMovieDetails.fullmoviebody.studio = ""
                 If workingMovieDetails.fullmoviebody.tagline = Nothing Then workingMovieDetails.fullmoviebody.tagline = ""
                 If workingMovieDetails.fullmoviebody.title = Nothing Then workingMovieDetails.fullmoviebody.title = ""
+                If workingMovieDetails.fullmoviebody.originaltitle = Nothing Then workingMovieDetails.fullmoviebody.originaltitle = ""
                 If workingMovieDetails.fullmoviebody.top250 = Nothing Then workingMovieDetails.fullmoviebody.top250 = ""
                 If workingMovieDetails.fullmoviebody.trailer = Nothing Then workingMovieDetails.fullmoviebody.trailer = ""
                 If workingMovieDetails.fullmoviebody.votes = Nothing Then workingMovieDetails.fullmoviebody.votes = ""
@@ -2500,7 +2506,7 @@ Public Class Form1
                     ComboBox3.SelectedIndex = 0
                 End If
 
-                pathtxt.Text = workingMovie.fullpathandfilename
+
 
 
             End If
@@ -3245,6 +3251,7 @@ Public Class Form1
                     newmoviedetails.nfopath = Nothing
                     newmoviedetails.nfopathandfilename = Nothing
                     newmoviedetails.title = Nothing
+
                 Else
                     If title <> Nothing Then
 
@@ -3549,6 +3556,7 @@ Public Class Form1
         movietoadd.runtime = TempMovieToAdd.fullmoviebody.runtime
         movietoadd.sortorder = TempMovieToAdd.fullmoviebody.sortorder
         movietoadd.title = TempMovieToAdd.fullmoviebody.title
+        movietoadd.originaltitle = TempMovieToAdd.fullmoviebody.title
         movietoadd.titleandyear = TempMovieToAdd.fullmoviebody.title & " (" & TempMovieToAdd.fullmoviebody.year & ")"
         movietoadd.top250 = TempMovieToAdd.fullmoviebody.top250
         movietoadd.year = TempMovieToAdd.fullmoviebody.year
@@ -3992,6 +4000,7 @@ Public Class Form1
                                 title = "Unknown Title"
                             End If
                             newmovie.fullmoviebody.title = title
+
                         End If
                         If newmovie.fullmoviebody.title = "Unknown Title" Then
                             newmovie.fullmoviebody.genre = "Problem"
@@ -4045,6 +4054,7 @@ Public Class Form1
 #End If
                         End Try
                         movietoadd.sortorder = newmovie.fullmoviebody.title
+                        movietoadd.originaltitle = newmovie.fullmoviebody.title
                         movietoadd.outline = newmovie.fullmoviebody.outline
                         movietoadd.plot = newmovie.fullmoviebody.plot
                         movietoadd.id = newmovie.fullmoviebody.imdbid
@@ -4076,6 +4086,8 @@ Public Class Form1
                                                 newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newMovieList(f).nfopathandfilename), False)
                                             End If
                                         End If
+                                    Case "originaltitle"
+                                        newmovie.fullmoviebody.originaltitle = thisresult.InnerText
                                     Case "alternativetitle"
                                         newmovie.alternativetitles.Add(thisresult.InnerText)
                                     Case "country"
@@ -4151,8 +4163,10 @@ Public Class Form1
                             If Preferences.usefoldernames = False Then
                                 tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                                 newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring, False)
+
                             Else
                                 newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newMovieList(f).nfopathandfilename), False)
+
                             End If
                         End Try
                         If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
@@ -4173,8 +4187,10 @@ Public Class Form1
                             If Preferences.usefoldernames = False Then
                                 tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                                 newmovie.fullmoviebody.title = Utilities.CleanFileName(tempstring)
+
                             Else
                                 newmovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(newMovieList(f).nfopathandfilename))
+
                             End If
                         End If
                         stage = 2
@@ -4509,6 +4525,7 @@ Public Class Form1
                         If newmovie.fullmoviebody.title = "" Then
                             newmovie.fullmoviebody.title = "Unknown Title"
                         End If
+
                         If newmovie.fullmoviebody.year = Nothing Then
                             newmovie.fullmoviebody.year = "0000"
                         End If
@@ -4531,6 +4548,7 @@ Public Class Form1
                                 title = "Unknown Title"
                             End If
                             newmovie.fullmoviebody.title = title
+
                         End If
                         If newmovie.fullmoviebody.title = "Unknown Title" Then
                             newmovie.fullmoviebody.genre = "Problem"
@@ -4552,6 +4570,7 @@ Public Class Form1
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                         movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)
                         movietoadd.title = newmovie.fullmoviebody.title
+                        movietoadd.originaltitle = newmovie.fullmoviebody.originaltitle
                         movietoadd.sortorder = newmovie.fullmoviebody.sortorder
                         movietoadd.runtime = newmovie.fullmoviebody.runtime
                         If newmovie.fullmoviebody.title <> Nothing Then
@@ -5023,6 +5042,8 @@ Public Class Form1
                                 newmovie.rating = detail.InnerText
                             Case "title"
                                 newmovie.title = detail.InnerText
+                            Case "originaltitle"
+                                newmovie.originaltitle = detail.InnerText
                             Case "titleandyear"
                                 newmovie.titleandyear = detail.InnerText
                             Case "top250"
@@ -7315,7 +7336,7 @@ Public Class Form1
         If tempint = DialogResult.No Then
             Exit Sub
         End If
-        messbox = New frmMessageBox("The Selected Movie is being Rescraped", "", "Please Wait")
+        messbox = New frmMessageBox("The Selected Movie is being Rescraped", "", "Please Wait" & vbCrLf)
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
         messbox.Refresh()
@@ -7333,6 +7354,7 @@ Public Class Form1
             End If
         Else
             Try
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Clearing Variables" & vbCrLf
                 If workingMovieDetails Is Nothing Then Exit Sub
                 If workingMovieDetails.fullmoviebody.title = Nothing And workingMovieDetails.fullmoviebody.imdbid = Nothing Then Exit Sub
                 Me.Cursor = Cursors.WaitCursor
@@ -7358,6 +7380,7 @@ Public Class Form1
                 workingMovieDetails.fullmoviebody.tagline = Nothing
                 workingMovieDetails.fullmoviebody.thumbnails = Nothing
                 workingMovieDetails.fullmoviebody.title = Nothing
+                workingMovieDetails.fullmoviebody.originaltitle = Nothing
                 workingMovieDetails.fullmoviebody.top250 = Nothing
                 workingMovieDetails.fullmoviebody.trailer = Nothing
                 workingMovieDetails.fullmoviebody.votes = Nothing
@@ -7368,10 +7391,14 @@ Public Class Form1
                 'Dim newscraper As New Classimdb
                 'body = newscraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 'trailer = newscraper.gettrailerurl(workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get IMDB Body" & vbCrLf
                 body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get Trailer" & vbCrLf
                 trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 Dim actors As String
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get Actors" & vbCrLf
                 actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Processing..." & vbCrLf
                 If body = "MIC" Then
                     workingMovieDetails.fullmoviebody.genre = "problem"
                 Else
@@ -7391,10 +7418,13 @@ Public Class Form1
                                     If Preferences.usefoldernames = False Then
                                         tempstring = IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                                         workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(tempstring)
+                                        workingMovieDetails.fullmoviebody.originaltitle = workingMovieDetails.fullmoviebody.title
                                     Else
                                         workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(workingMovieDetails.fileinfo.foldername, False)
+                                        workingMovieDetails.fullmoviebody.originaltitle = workingMovieDetails.fullmoviebody.title
                                     End If
                                 End If
+
                             Case "country"
                                 workingMovieDetails.fullmoviebody.country = thisresult.InnerText
                             Case "alternativetitle"
@@ -7460,6 +7490,9 @@ Public Class Form1
                         End Select
                     Next
 
+                    ' Save the original title
+                    workingMovieDetails.fullmoviebody.originaltitle = workingMovieDetails.fullmoviebody.title
+
                     ' If plot is empty, use outline
                     If workingMovieDetails.fullmoviebody.plot = "" Then workingMovieDetails.fullmoviebody.plot = workingMovieDetails.fullmoviebody.outline
 
@@ -7474,6 +7507,7 @@ Public Class Form1
                         Throw ex
 #End If
                     End Try
+                    messbox.TextBox1.Text = messbox.TextBox1.Text & "Get actorlist" & vbCrLf
                     actorlist = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, Preferences.maxactors)
                     'actorlist = getimdbactors(Preferences.imdbmirror, workingmoviedetails.fullmoviebody.imdbid, workingmoviedetails.fullmoviebody.title, Preferences.maxactors)
                     Dim done As Boolean = False
@@ -7494,6 +7528,7 @@ Public Class Form1
                         If done = True Then Exit For
                     Next
                 End If
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Get Thumbs" & vbCrLf
                 'Preferences.certificatepriority(1)
                 workingMovieDetails.listthumbs.Clear()
                 If Preferences.nfoposterscraper <> 0 Then
@@ -7544,7 +7579,7 @@ Public Class Form1
 #End If
                     End Try
                 End If
-
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "List Actors" & vbCrLf
                 workingMovieDetails.listactors.Clear()
                 If actorlist <> Nothing Then
                     Try
@@ -7678,6 +7713,7 @@ Public Class Form1
                 Try
                     Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                     If tempname <> Nothing Then workingMovieDetails.filedetails = Utilities.Get_HdTags(tempname)
+                    messbox.TextBox1.Text = messbox.TextBox1.Text & "Video Duration" & vbCrLf
                     If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -7731,10 +7767,11 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
-
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Save Nfo" & vbCrLf
                 nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Load Nfo" & vbCrLf
                 Call loadinfofile()
-
+                messbox.TextBox1.Text = messbox.TextBox1.Text & "Refesh Movie List" & vbCrLf
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
@@ -7767,6 +7804,7 @@ Public Class Form1
                         Else
                             newfullmovie.createdate = newfullmovie.filedate
                         End If
+                        newfullmovie.originaltitle = workingMovieDetails.fullmoviebody.originaltitle
                         newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
                         newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
                         newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
@@ -7824,7 +7862,7 @@ Public Class Form1
             tempstring = " (" & workingMovieDetails.fullmoviebody.year & ")"
             workingMovieDetails.fullmoviebody.title = titletxt.Text.Replace(tempstring, "")
             workingMovieDetails.fullmoviebody.director = directortxt.Text
-            'workingMovieDetails.fullmoviebody.stars = starstxt.Text
+            'workingMovieDetails.fullmoviebody.stars = starstxt.Text            'starstxt.Text textbox not implemented yet
             workingMovieDetails.fullmoviebody.credits = creditstxt.Text
             workingMovieDetails.fullmoviebody.studio = studiotxt.Text
             workingMovieDetails.fullmoviebody.genre = genretxt.Text

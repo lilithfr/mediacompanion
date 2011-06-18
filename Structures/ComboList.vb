@@ -5,6 +5,7 @@ Public Structure ComboList
     Dim filename As String
     Dim foldername As String
     Dim title As String
+    Dim originaltitle As String
     Dim titleandyear As String
     Dim year As String
     Dim filedate As String
