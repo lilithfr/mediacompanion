@@ -40,9 +40,10 @@
 
     Public Shadows Property tvdbid As String
         Get
-            Return MyBase.TvdbId.Value
+            Return MyBase.Id.Value
         End Get
         Set(ByVal value As String)
+            MyBase.Id.Value = value
             MyBase.TvdbId.Value = value
         End Set
     End Property
@@ -166,6 +167,13 @@
 
     Public Property path As String
     Public Property fullpath As String
+        Get
+            Return Me.NfoFilePath
+        End Get
+        Set(ByVal value As String)
+            Me.NfoFilePath = value
+        End Set
+    End Property
     Public Property locked As Integer
     Public Property posterpath As String
     Public Property fanartpath As String

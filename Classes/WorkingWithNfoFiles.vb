@@ -32,45 +32,45 @@ Public Class WorkingWithNfoFiles
         FinalString &= "</tvshow>"
         Return FinalString
     End Function
-    Public Function ChangeAllFieldsTVShow(ByVal TempTVShow As TvShow) As String
-        Dim m_xmld As XmlDocument
-        Dim m_nodelist As XmlNodeList
-        Dim m_node As XmlNode
-        Dim FinalString As String = "<tvshow>"
+    'Public Function ChangeAllFieldsTVShow(ByVal TempTVShow As TvShow) As String
+    '    Dim m_xmld As XmlDocument
+    '    Dim m_nodelist As XmlNodeList
+    '    Dim m_node As XmlNode
+    '    Dim FinalString As String = "<tvshow>"
 
-        m_xmld = New XmlDocument()
-        m_xmld.Load(TempTVShow.path)
-        m_nodelist = m_xmld.SelectNodes("/tvshow")
-        For Each m_node In m_nodelist
-            If m_node.HasChildNodes Then
-                For Each node1 As XmlNode In m_node
-                    Select Case node1.Name.ToLower
-                        Case "title"
-                            node1.InnerText = TempTVShow.title
-                        Case "plot"
-                            node1.InnerText = TempTVShow.plot
-                        Case "runtime"
-                            node1.InnerText = TempTVShow.runtime
-                        Case "premiered"
-                            node1.InnerText = TempTVShow.premiered
-                        Case "studio"
-                            node1.InnerText = TempTVShow.studio
-                        Case "rating"
-                            node1.InnerText = TempTVShow.rating
-                        Case "id"
-                            node1.InnerText = TempTVShow.imdbid
-                        Case "tvdbid"
-                            node1.InnerText = TempTVShow.tvdbid
-                        Case "mpaa"
-                            node1.InnerText = TempTVShow.mpaa
-                    End Select
-                    FinalString &= node1.OuterXml.ToString
-                Next
-            End If
-        Next
-        FinalString &= "</tvshow>"
-        Return FinalString
-    End Function
+    '    m_xmld = New XmlDocument()
+    '    m_xmld.Load(TempTVShow.path)
+    '    m_nodelist = m_xmld.SelectNodes("/tvshow")
+    '    For Each m_node In m_nodelist
+    '        If m_node.HasChildNodes Then
+    '            For Each node1 As XmlNode In m_node
+    '                Select Case node1.Name.ToLower
+    '                    Case "title"
+    '                        node1.InnerText = TempTVShow.title
+    '                    Case "plot"
+    '                        node1.InnerText = TempTVShow.plot
+    '                    Case "runtime"
+    '                        node1.InnerText = TempTVShow.runtime
+    '                    Case "premiered"
+    '                        node1.InnerText = TempTVShow.premiered
+    '                    Case "studio"
+    '                        node1.InnerText = TempTVShow.studio
+    '                    Case "rating"
+    '                        node1.InnerText = TempTVShow.rating
+    '                    Case "id"
+    '                        node1.InnerText = TempTVShow.imdbid
+    '                    Case "tvdbid"
+    '                        node1.InnerText = TempTVShow.tvdbid
+    '                    Case "mpaa"
+    '                        node1.InnerText = TempTVShow.mpaa
+    '                End Select
+    '                FinalString &= node1.OuterXml.ToString
+    '            Next
+    '        End If
+    '    Next
+    '    FinalString &= "</tvshow>"
+    '    Return FinalString
+    'End Function
     Public Function ChangeFieldEpisodeTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
@@ -93,39 +93,39 @@ Public Class WorkingWithNfoFiles
         FinalString &= "</episodedetails>"
         Return FinalString
     End Function
-    Public Function ChangeAllFieldsEpisodeTVShow(ByVal TempEpisode As TvEpisode) As String
-        Dim m_xmld As XmlDocument
-        Dim m_nodelist As XmlNodeList
-        Dim m_node As XmlNode
-        Dim FinalString As String = "<episodedetails>"
+    'Public Function ChangeAllFieldsEpisodeTVShow(ByVal TempEpisode As TvEpisode) As String
+    '    Dim m_xmld As XmlDocument
+    '    Dim m_nodelist As XmlNodeList
+    '    Dim m_node As XmlNode
+    '    Dim FinalString As String = "<episodedetails>"
 
-        m_xmld = New XmlDocument()
-        m_xmld.Load(TempEpisode.episodepath)
-        m_nodelist = m_xmld.SelectNodes("/episodedetails")
-        For Each m_node In m_nodelist
-            If m_node.HasChildNodes Then
-                For Each node1 As XmlNode In m_node
-                    'If node1.Name.ToLower = Field.ToLower Then
-                    '    node1.InnerText = ValueToAssign
-                    'End If
-                    'FinalString &= node1.OuterXml.ToString
-                    Select Case node1.Name.ToLower
-                        Case "title"
-                            node1.InnerText = TempEpisode.title
-                        Case "plot"
-                            node1.InnerText = TempEpisode.plot
-                        Case "aired"
-                            node1.InnerText = TempEpisode.aired
-                        Case "rating"
-                            node1.InnerText = TempEpisode.rating
-                    End Select
-                    FinalString &= node1.OuterXml.ToString
-                Next
-            End If
-        Next
-        FinalString &= "</episodedetails>"
-        Return FinalString
-    End Function
+    '    m_xmld = New XmlDocument()
+    '    m_xmld.Load(TempEpisode.episodepath)
+    '    m_nodelist = m_xmld.SelectNodes("/episodedetails")
+    '    For Each m_node In m_nodelist
+    '        If m_node.HasChildNodes Then
+    '            For Each node1 As XmlNode In m_node
+    '                'If node1.Name.ToLower = Field.ToLower Then
+    '                '    node1.InnerText = ValueToAssign
+    '                'End If
+    '                'FinalString &= node1.OuterXml.ToString
+    '                Select Case node1.Name.ToLower
+    '                    Case "title"
+    '                        node1.InnerText = TempEpisode.title
+    '                    Case "plot"
+    '                        node1.InnerText = TempEpisode.plot
+    '                    Case "aired"
+    '                        node1.InnerText = TempEpisode.aired
+    '                    Case "rating"
+    '                        node1.InnerText = TempEpisode.rating
+    '                End Select
+    '                FinalString &= node1.OuterXml.ToString
+    '            Next
+    '        End If
+    '    Next
+    '    FinalString &= "</episodedetails>"
+    '    Return FinalString
+    'End Function
 
     Public Function validate_nfo(ByVal nfopath As String)
         Dim tempstring As String
@@ -142,135 +142,134 @@ Public Class WorkingWithNfoFiles
         Return False
     End Function
 
-    Public Function loadbasictvshownfo(ByVal path As String)
-        Try
-            Dim newtvshow As New TvShow
-            If Not IO.File.Exists(path) Then
-                'Form1.tvrebuildlog(path & ", does not appear to exist")
-                newtvshow.title = Utilities.GetLastFolder(path)
-                newtvshow.year = newtvshow.title & " (0000)"
-                newtvshow.fullpath = path
-                newtvshow.year = "0000"
-                newtvshow.tvdbid = ""
-                newtvshow.status = "missing"
-                newtvshow.locked = 1
-                Return newtvshow
-                Exit Function
-            Else
-                Dim tvshow As New XmlDocument
-                Try
-                    tvshow.Load(path)
-                Catch ex As Exception
-                    'Form1.tvrebuildlog(path & ", seems to be an invalid xml file")
-                    'If Not validate_nfo(path) Then
-                    '    Exit Function
-                    'End If
-                    newtvshow.title = Utilities.GetLastFolder(path)
-                    newtvshow.year = newtvshow.title & " (0000)"
-                    newtvshow.status = "xml error"
-                    newtvshow.fullpath = path
-                    newtvshow.year = "0000"
-                    newtvshow.tvdbid = ""
-                    newtvshow.status = "xml error"
-                    newtvshow.locked = True
-                    Return newtvshow
+    Public Function loadbasictvshownfo(ByVal path As String) As TvShow
 
-
-
-
-                    Exit Function
-                End Try
-                newtvshow.status = "ok"
-                newtvshow.locked = False
-                Dim thisresult As XmlNode = Nothing
-                Dim tempid As String = ""
-                For Each thisresult In tvshow("tvshow")
-                    Try
-                        Select Case thisresult.Name
-                            Case "title"
-                                Dim tempstring As String = ""
-                                tempstring = thisresult.InnerText
-                                '-------------- Aqui
-                                If Preferences.ignorearticle = True Then
-                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                        tempstring = tempstring & ", The"
-                                    End If
-                                End If
-                                newtvshow.title = tempstring
-                            Case "episodeguideurl"
-                                tempid = thisresult.InnerText
-                            Case "year"
-                                newtvshow.year = thisresult.InnerText
-                            Case "episodeactorsource"
-                                newtvshow.episodeactorsource = thisresult.InnerText
-                            Case "genre"
-                                newtvshow.genre = thisresult.InnerText
-                            Case "tvdbid"
-                                newtvshow.tvdbid = thisresult.InnerText
-                            Case "id"
-                                newtvshow.imdbid = thisresult.InnerText
-                            Case "rating"
-                                newtvshow.rating = thisresult.InnerText
-                                If newtvshow.rating.IndexOf("/10") <> -1 Then newtvshow.rating.Replace("/10", "")
-                                If newtvshow.rating.IndexOf(" ") <> -1 Then newtvshow.rating.Replace(" ", "")
-                            Case "sortorder"
-                                newtvshow.sortorder = thisresult.InnerText
-                            Case "language"
-                                newtvshow.language = thisresult.InnerText
-                            Case "locked"
-                                If thisresult.InnerText = "true" Then
-                                    newtvshow.locked = 1
-                                ElseIf thisresult.InnerText = "false" Then
-                                    newtvshow.locked = 0
-                                ElseIf thisresult.InnerText = "2" Then
-                                    newtvshow.locked = 2
-                                Else
-                                    If IsNumeric(thisresult.InnerText) Then
-                                        newtvshow.locked = Convert.ToInt32(thisresult.InnerText)
-                                    Else
-                                        newtvshow.locked = 1
-                                    End If
-                                End If
-                        End Select
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
-                    End Try
-                Next
-                'Form1.tvrebuildlog(path & ", loaded ok")
-                'Form1.tvrebuildlog("title= " & newtvshow.title)
-                'Form1.tvrebuildlog("tvdbid= " & newtvshow.tvdbid)
-                If newtvshow.tvdbid = Nothing Then
-                    If tempid <> Nothing Then
-                        Dim tempstring As String = tempid.Substring(tempid.LastIndexOf("series/") + 7, tempid.Length - (tempid.LastIndexOf("series/") + 7))
-                        tempstring = tempstring.Substring(0, tempstring.IndexOf("/"))
-                        If tempstring.Length = 5 Then
-                            If IsNumeric(tempstring) Then
-                                newtvshow.tvdbid = tempstring
-                            End If
-                        End If
-                    End If
-                End If
-                newtvshow.fullpath = path
-
-                Dim filecreation As New FileInfo(path)
-                Dim myDate As Date = filecreation.LastWriteTime
-
-                If Not (newtvshow.title <> Nothing And newtvshow.year <> Nothing) Then
-
-                    newtvshow.year = "(0000)"
-                End If
-
-                If newtvshow.tvdbid = Nothing Then newtvshow.tvdbid = ""
-                If newtvshow.genre = Nothing Then newtvshow.genre = ""
-                If newtvshow.rating = Nothing Then newtvshow.rating = ""
-            End If
+        Dim newtvshow As New TvShow
+        If Not IO.File.Exists(path) Then
+            'Form1.tvrebuildlog(path & ", does not appear to exist")
+            newtvshow.title = Utilities.GetLastFolder(path)
+            newtvshow.year = newtvshow.title & " (0000)"
+            newtvshow.fullpath = path
+            newtvshow.year = "0000"
+            newtvshow.tvdbid = ""
+            newtvshow.status = "missing"
+            newtvshow.locked = 1
             Return newtvshow
+            Exit Function
+        Else
+            newtvshow.NfoFilePath = path
+            newtvshow.Load()
+            '    Dim tvshow As New XmlDocument
+            '    Try
+            '        tvshow.Load(path)
+            '    Catch ex As Exception
+            '        'Form1.tvrebuildlog(path & ", seems to be an invalid xml file")
+            '        'If Not validate_nfo(path) Then
+            '        '    Exit Function
+            '        'End If
+            '        newtvshow.title = Utilities.GetLastFolder(path)
+            '        newtvshow.year = newtvshow.title & " (0000)"
+            '        newtvshow.status = "xml error"
+            '        newtvshow.fullpath = path
+            '        newtvshow.year = "0000"
+            '        newtvshow.tvdbid = ""
+            '        newtvshow.status = "xml error"
+            '        newtvshow.locked = True
+            '        Return newtvshow
 
 
-        Catch
-        End Try
-        Return "Error"
+
+
+            '        Exit Function
+            '    End Try
+            '    newtvshow.status = "ok"
+            '    newtvshow.locked = False
+            '    Dim thisresult As XmlNode = Nothing
+            '    Dim tempid As String = ""
+            '    For Each thisresult In tvshow("tvshow")
+            '        Try
+            '            Select Case thisresult.Name
+            '                Case "title"
+            '                    Dim tempstring As String = ""
+            '                    tempstring = thisresult.InnerText
+            '                    '-------------- Aqui
+            '                    If Preferences.ignorearticle = True Then
+            '                        If tempstring.ToLower.IndexOf("the ") = 0 Then
+            '                            tempstring = tempstring.Substring(4, tempstring.Length - 4)
+            '                            tempstring = tempstring & ", The"
+            '                        End If
+            '                    End If
+            '                    newtvshow.title = tempstring
+            '                Case "episodeguideurl"
+            '                    tempid = thisresult.InnerText
+            '                Case "year"
+            '                    newtvshow.year = thisresult.InnerText
+            '                Case "episodeactorsource"
+            '                    newtvshow.episodeactorsource = thisresult.InnerText
+            '                Case "genre"
+            '                    newtvshow.genre = thisresult.InnerText
+            '                Case "tvdbid"
+            '                    newtvshow.tvdbid = thisresult.InnerText
+            '                Case "id"
+            '                    newtvshow.imdbid = thisresult.InnerText
+            '                Case "rating"
+            '                    newtvshow.rating = thisresult.InnerText
+            '                    If newtvshow.rating.IndexOf("/10") <> -1 Then newtvshow.rating.Replace("/10", "")
+            '                    If newtvshow.rating.IndexOf(" ") <> -1 Then newtvshow.rating.Replace(" ", "")
+            '                Case "sortorder"
+            '                    newtvshow.sortorder = thisresult.InnerText
+            '                Case "language"
+            '                    newtvshow.language = thisresult.InnerText
+            '                Case "locked"
+            '                    If thisresult.InnerText = "true" Then
+            '                        newtvshow.locked = 1
+            '                    ElseIf thisresult.InnerText = "false" Then
+            '                        newtvshow.locked = 0
+            '                    ElseIf thisresult.InnerText = "2" Then
+            '                        newtvshow.locked = 2
+            '                    Else
+            '                        If IsNumeric(thisresult.InnerText) Then
+            '                            newtvshow.locked = Convert.ToInt32(thisresult.InnerText)
+            '                        Else
+            '                            newtvshow.locked = 1
+            '                        End If
+            '                    End If
+            '            End Select
+            '        Catch ex As Exception
+            '            MsgBox(ex.ToString)
+            '        End Try
+            '    Next
+            '    'Form1.tvrebuildlog(path & ", loaded ok")
+            '    'Form1.tvrebuildlog("title= " & newtvshow.title)
+            '    'Form1.tvrebuildlog("tvdbid= " & newtvshow.tvdbid)
+            '    If newtvshow.tvdbid = Nothing Then
+            '        If tempid <> Nothing Then
+            '            Dim tempstring As String = tempid.Substring(tempid.LastIndexOf("series/") + 7, tempid.Length - (tempid.LastIndexOf("series/") + 7))
+            '            tempstring = tempstring.Substring(0, tempstring.IndexOf("/"))
+            '            If tempstring.Length = 5 Then
+            '                If IsNumeric(tempstring) Then
+            '                    newtvshow.tvdbid = tempstring
+            '                End If
+            '            End If
+            '        End If
+            '    End If
+            '    newtvshow.fullpath = path
+
+            '    Dim filecreation As New FileInfo(path)
+            '    Dim myDate As Date = filecreation.LastWriteTime
+
+            '    If Not (newtvshow.title <> Nothing And newtvshow.year <> Nothing) Then
+
+            '        newtvshow.year = "(0000)"
+            '    End If
+
+            '    If newtvshow.tvdbid = Nothing Then newtvshow.tvdbid = ""
+            '    If newtvshow.genre = Nothing Then newtvshow.genre = ""
+            '    If newtvshow.rating = Nothing Then newtvshow.rating = ""
+        End If
+        Return newtvshow
+
+
     End Function
 
     Public Function loadbasicepisodenfo(ByVal path As String)
@@ -855,442 +854,449 @@ Public Class WorkingWithNfoFiles
         Return "Error"
     End Function
 
-    Public Function loadfulltnshownfo(ByVal path As String)
-        Try
-
-            Dim newtvshow As New TvShow
-            If Not IO.File.Exists(path) Then
-                newtvshow.title = Utilities.GetLastFolder(path)
-                newtvshow.year = newtvshow.title & " (0000)"
-                newtvshow.plot = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
-                newtvshow.status = "file does not exist"
-                newtvshow.path = path
-                newtvshow.year = "0000"
-                newtvshow.tvdbid = ""
-                newtvshow.path = path
-                newtvshow.locked = 1
-                Return newtvshow
-                Exit Function
-            Else
-                Dim tvshow As New XmlDocument
-                Try
-                    tvshow.Load(path)
-                Catch ex As Exception
-                    'If Not validate_nfo(path) Then
-                    '    Exit Function
-                    'End If
-                    newtvshow.title = Utilities.GetLastFolder(path)
-                    newtvshow.year = newtvshow.title & " (0000)"
-                    newtvshow.plot = "problem loading tvshow.nfo / xml error"
-                    newtvshow.status = "xml error"
-                    newtvshow.path = path
-                    newtvshow.year = "0000"
-                    newtvshow.tvdbid = ""
-                    newtvshow.path = path
-                    newtvshow.locked = 1
-                    Return newtvshow
+    Public Function loadfulltnshownfo(ByVal path As String) As TvShow
 
 
-
-
-                    Exit Function
-                End Try
-                newtvshow.genre = ""
-                newtvshow.status = "ok"
-                newtvshow.locked = False
-                Dim thisresult As XmlNode = Nothing
-                Dim tempid As String = ""
-                For Each thisresult In tvshow("tvshow")
-                    Try
-                        Select Case thisresult.Name
-                            Case "title"
-                                Dim tempstring As String = ""
-                                tempstring = thisresult.InnerText
-                                '-------------- Aqui
-                                If Preferences.ignorearticle = True Then
-                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                        tempstring = tempstring & ", The"
-                                    End If
-                                End If
-                                newtvshow.title = tempstring
-                            Case "episodeguide"
-                                newtvshow.episodeguideurl = thisresult.InnerText
-                            Case "plot"
-                                newtvshow.plot = thisresult.InnerText
-                            Case "year"
-                                newtvshow.year = thisresult.InnerText
-                            Case "genre"
-                                If newtvshow.genre = "" Then
-                                    newtvshow.genre = thisresult.InnerText
-                                Else
-                                    newtvshow.genre &= " / " & thisresult.InnerText
-                                End If
-                            Case "tvdbid"
-                                newtvshow.tvdbid = thisresult.InnerText
-                            Case "id"
-                                newtvshow.imdbid = thisresult.InnerText
-                            Case "rating"
-                                newtvshow.rating = thisresult.InnerText
-                                If newtvshow.rating.IndexOf("/10") <> -1 Then newtvshow.rating.Replace("/10", "")
-                                If newtvshow.rating.IndexOf(" ") <> -1 Then newtvshow.rating.Replace(" ", "")
-                            Case "mpaa"
-                                newtvshow.mpaa = thisresult.InnerText
-                            Case "runtime"
-                                newtvshow.runtime = thisresult.InnerText
-                            Case "genre"
-                                newtvshow.genre = thisresult.InnerText
-                            Case "premiered"
-                                newtvshow.premiered = thisresult.InnerText
-                            Case "studio"
-                                newtvshow.studio = thisresult.InnerText
-                            Case "language"
-                                newtvshow.language = thisresult.InnerText
-                            Case "sortorder"
-                                newtvshow.sortorder = thisresult.InnerText
-                            Case "episodeactorsource"
-                                newtvshow.episodeactorsource = thisresult.InnerText
-                            Case "tvshowactorsource"
-                                newtvshow.tvshowactorsource = thisresult.InnerText
-                            Case "actor"
-                                Dim detail As XmlNode = Nothing
-                                Dim newactor As New MovieActors
-                                For Each detail In thisresult.ChildNodes
-                                    Select Case detail.Name
-                                        Case "name"
-                                            newactor.actorname = detail.InnerText
-                                        Case "role"
-                                            newactor.actorrole = detail.InnerText
-                                        Case "thumb"
-                                            newactor.actorthumb = detail.InnerText
-                                    End Select
-                                Next
-                                newtvshow.listactors.Add(newactor)
-                            Case "locked"
-                                If thisresult.InnerText = "false" Then
-                                    newtvshow.locked = 0
-                                ElseIf thisresult.InnerText = "true" Then
-                                    newtvshow.locked = 1
-                                ElseIf thisresult.InnerText = "2" Then
-                                    newtvshow.locked = 2
-                                Else
-                                    If IsNumeric(thisresult.InnerText) Then
-                                        newtvshow.locked = Convert.ToInt32(thisresult.InnerText)
-                                    Else
-                                        newtvshow.locked = 1
-                                    End If
-                                End If
-                        End Select
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
-                    End Try
-                Next
-
-                If newtvshow.tvdbid = Nothing Then
-                    If tempid <> Nothing Then
-                        Dim tempstring As String = tempid.Substring(tempid.LastIndexOf("series/") + 7, tempid.Length - (tempid.LastIndexOf("series/") + 7))
-                        tempstring = tempstring.Substring(0, tempstring.IndexOf("/"))
-                        If tempstring.Length = 5 Then
-                            If IsNumeric(tempstring) Then
-                                newtvshow.tvdbid = tempstring
-                            End If
-                        End If
-                    End If
-                End If
-                If newtvshow.tvdbid = Nothing Then newtvshow.tvdbid = ""
-                If newtvshow.genre = Nothing Then newtvshow.genre = ""
-                If newtvshow.rating = Nothing Then newtvshow.rating = ""
-            End If
+        Dim newtvshow As New TvShow
+        If Not IO.File.Exists(path) Then
+            newtvshow.title = Utilities.GetLastFolder(path)
+            newtvshow.year = newtvshow.title & " (0000)"
+            newtvshow.plot = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
+            newtvshow.status = "file does not exist"
+            newtvshow.path = path
+            newtvshow.year = "0000"
+            newtvshow.tvdbid = ""
+            newtvshow.path = path
+            newtvshow.locked = 1
             Return newtvshow
+            Exit Function
+        Else
+            newtvshow.NfoFilePath = path
+            newtvshow.Load()
+            'Dim tvshow As New XmlDocument
+
+            'Try
+            '    tvshow.Load(path)
+            'Catch ex As Exception
+            '    'If Not validate_nfo(path) Then
+            '    '    Exit Function
+            '    'End If
+            '    newtvshow.title = Utilities.GetLastFolder(path)
+            '    newtvshow.year = newtvshow.title & " (0000)"
+            '    newtvshow.plot = "problem loading tvshow.nfo / xml error"
+            '    newtvshow.status = "xml error"
+            '    newtvshow.path = path
+            '    newtvshow.year = "0000"
+            '    newtvshow.tvdbid = ""
+            '    newtvshow.path = path
+            '    newtvshow.locked = 1
+            '    Return newtvshow
 
 
-        Catch
-        End Try
-        Return "Error"
+
+
+            '    Exit Function
+            'End Try
+            'newtvshow.genre = ""
+            'newtvshow.status = "ok"
+            'newtvshow.locked = False
+            'Dim thisresult As XmlNode = Nothing
+            'Dim tempid As String = ""
+            'For Each thisresult In tvshow("tvshow")
+            '    Try
+            '        Select Case thisresult.Name
+            '            Case "title"
+            '                Dim tempstring As String = ""
+            '                tempstring = thisresult.InnerText
+            '                '-------------- Aqui
+            '                If Preferences.ignorearticle = True Then
+            '                    If tempstring.ToLower.IndexOf("the ") = 0 Then
+            '                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+            '                        tempstring = tempstring & ", The"
+            '                    End If
+            '                End If
+            '                newtvshow.title = tempstring
+            '            Case "episodeguide"
+            '                newtvshow.episodeguideurl = thisresult.InnerText
+            '            Case "plot"
+            '                newtvshow.plot = thisresult.InnerText
+            '            Case "year"
+            '                newtvshow.year = thisresult.InnerText
+            '            Case "genre"
+            '                If newtvshow.genre = "" Then
+            '                    newtvshow.genre = thisresult.InnerText
+            '                Else
+            '                    newtvshow.genre &= " / " & thisresult.InnerText
+            '                End If
+            '            Case "tvdbid"
+            '                newtvshow.tvdbid = thisresult.InnerText
+            '            Case "id"
+            '                newtvshow.imdbid = thisresult.InnerText
+            '            Case "rating"
+            '                newtvshow.rating = thisresult.InnerText
+            '                If newtvshow.rating.IndexOf("/10") <> -1 Then newtvshow.rating.Replace("/10", "")
+            '                If newtvshow.rating.IndexOf(" ") <> -1 Then newtvshow.rating.Replace(" ", "")
+            '            Case "mpaa"
+            '                newtvshow.mpaa = thisresult.InnerText
+            '            Case "runtime"
+            '                newtvshow.runtime = thisresult.InnerText
+            '            Case "genre"
+            '                newtvshow.genre = thisresult.InnerText
+            '            Case "premiered"
+            '                newtvshow.premiered = thisresult.InnerText
+            '            Case "studio"
+            '                newtvshow.studio = thisresult.InnerText
+            '            Case "language"
+            '                newtvshow.language = thisresult.InnerText
+            '            Case "sortorder"
+            '                newtvshow.sortorder = thisresult.InnerText
+            '            Case "episodeactorsource"
+            '                newtvshow.episodeactorsource = thisresult.InnerText
+            '            Case "tvshowactorsource"
+            '                newtvshow.tvshowactorsource = thisresult.InnerText
+            '            Case "actor"
+            '                Dim detail As XmlNode = Nothing
+            '                Dim newactor As New MovieActors
+            '                For Each detail In thisresult.ChildNodes
+            '                    Select Case detail.Name
+            '                        Case "name"
+            '                            newactor.actorname = detail.InnerText
+            '                        Case "role"
+            '                            newactor.actorrole = detail.InnerText
+            '                        Case "thumb"
+            '                            newactor.actorthumb = detail.InnerText
+            '                    End Select
+            '                Next
+            '                newtvshow.listactors.Add(newactor)
+            '            Case "locked"
+            '                If thisresult.InnerText = "false" Then
+            '                    newtvshow.locked = 0
+            '                ElseIf thisresult.InnerText = "true" Then
+            '                    newtvshow.locked = 1
+            '                ElseIf thisresult.InnerText = "2" Then
+            '                    newtvshow.locked = 2
+            '                Else
+            '                    If IsNumeric(thisresult.InnerText) Then
+            '                        newtvshow.locked = Convert.ToInt32(thisresult.InnerText)
+            '                    Else
+            '                        newtvshow.locked = 1
+            '                    End If
+            '                End If
+            '        End Select
+            '    Catch ex As Exception
+            '        MsgBox(ex.ToString)
+            '    End Try
+            'Next
+
+            'If newtvshow.tvdbid = Nothing Then
+            '    If tempid <> Nothing Then
+            '        Dim tempstring As String = tempid.Substring(tempid.LastIndexOf("series/") + 7, tempid.Length - (tempid.LastIndexOf("series/") + 7))
+            '        tempstring = tempstring.Substring(0, tempstring.IndexOf("/"))
+            '        If tempstring.Length = 5 Then
+            '            If IsNumeric(tempstring) Then
+            '                newtvshow.tvdbid = tempstring
+            '            End If
+            '        End If
+            '    End If
+            'End If
+            'If newtvshow.tvdbid = Nothing Then newtvshow.tvdbid = ""
+            'If newtvshow.genre = Nothing Then newtvshow.genre = ""
+            'If newtvshow.rating = Nothing Then newtvshow.rating = ""
+        End If
+        Return newtvshow
+
+
+    
     End Function
-
-    Public Sub savetvshownfo(ByVal filenameandpath As String, ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
-
-
-        Try
-            Dim newshow As Boolean = True
-            For f = Form1.basicTvList.Count - 1 To 0 Step -1
-                If Form1.basicTvList(f).fullpath.ToLower = filenameandpath.ToLower Then
-                    newshow = False
-                    Form1.basicTvList(f).episodeactorsource = tvshowtosave.episodeactorsource
-                    Form1.basicTvList(f).fullpath = tvshowtosave.path
-                    Form1.basicTvList(f).genre = tvshowtosave.genre
-                    Form1.basicTvList(f).imdbid = tvshowtosave.imdbid
-                    Form1.basicTvList(f).language = tvshowtosave.language
-                    Form1.basicTvList(f).rating = tvshowtosave.rating
-                    Form1.basicTvList(f).sortorder = tvshowtosave.sortorder
-                    Form1.basicTvList(f).title = tvshowtosave.title
-                    Form1.basicTvList(f).tvdbid = tvshowtosave.tvdbid
-                    Form1.basicTvList(f).year = tvshowtosave.year
-                    Form1.basicTvList(f).locked = tvshowtosave.locked
-                    If forceunlocked = "unlock" Then
-                        Form1.basicTvList(f).locked = 0
-                    End If
-                    Exit For
-                End If
-            Next
-            If newshow = True Then
-                Dim newtvnfo As New TvShow
-                newtvnfo.episodeactorsource = tvshowtosave.episodeactorsource
-                newtvnfo.fullpath = tvshowtosave.path
-                newtvnfo.genre = tvshowtosave.genre
-                newtvnfo.imdbid = tvshowtosave.imdbid
-                newtvnfo.language = tvshowtosave.language
-                newtvnfo.rating = tvshowtosave.rating
-                newtvnfo.sortorder = tvshowtosave.sortorder
-                newtvnfo.title = tvshowtosave.title
-                newtvnfo.tvdbid = tvshowtosave.tvdbid
-                newtvnfo.year = tvshowtosave.year
-                newtvnfo.locked = tvshowtosave.locked
-                Form1.basicTvList.Add(newtvnfo)
-            End If
-        Catch ex As Exception
-
-        End Try
-
-        Monitor.Enter(Me)
-        Try
-            Dim stage As Integer = 1
-
-            If tvshowtosave Is Nothing Then Exit Sub
-            If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
-                'Try
-                Dim doc As New XmlDocument
-                Dim root As XmlElement
-                Dim child As XmlElement
-                Dim actorchild As XmlElement
-                root = doc.CreateElement("tvshow")
-                Dim thumbnailstring As String = ""
-                stage = 2
-                Dim thispref As XmlNode = Nothing
-                Dim xmlproc As XmlDeclaration
-
-                xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-                doc.AppendChild(xmlproc)
-
-                child = doc.CreateElement("episodeguide")
-                Dim childchild As XmlElement
-                childchild = doc.CreateElement("url")
-                Dim tempppp As String = tvshowtosave.tvdbid & ".xml"
-                Dim Attr As XmlAttribute
-                Attr = doc.CreateAttribute("cache")
-                Attr.Value = tempppp
-                childchild.Attributes.Append(Attr)
-                If tvshowtosave.episodeguideurl <> Nothing Then
-                    If tvshowtosave.episodeguideurl <> "" Then
-                        childchild.InnerText = tvshowtosave.episodeguideurl
-                        child.AppendChild(childchild)
-                    Else
-                        '"http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
-                        If tvshowtosave.tvdbid <> Nothing Then
-                            If IsNumeric(tvshowtosave.tvdbid) Then
-                                If tvshowtosave.language <> Nothing Then
-                                    If tvshowtosave.language <> "" Then
-                                        childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/" & tvshowtosave.language & ".zip"
-                                        child.AppendChild(childchild)
-                                    Else
-                                        childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
-                                        child.AppendChild(childchild)
-                                    End If
-                                Else
-                                    childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
-                                    child.AppendChild(childchild)
-                                End If
-                            End If
-                        End If
-                    End If
-                    root.AppendChild(child)
-                Else
-                    '"http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
-                    If tvshowtosave.tvdbid <> Nothing Then
-                        If IsNumeric(tvshowtosave.tvdbid) Then
-                            If tvshowtosave.language <> Nothing Then
-                                If tvshowtosave.language <> "" Then
-                                    child.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/" & tvshowtosave.language & ".zip"
-                                    root.AppendChild(child)
-                                Else
-                                    child.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
-                                    root.AppendChild(child)
-                                End If
-                            Else
-                                child.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
-                                root.AppendChild(child)
-                            End If
-                        End If
-                    End If
-                End If
+    Public Sub SaveTvShowNfo(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+        If IO.File.Exists(Path) And Not overwrite Then Exit Sub
 
 
-                child = doc.CreateElement("title")
-                child.InnerText = tvshowtosave.title
-                root.AppendChild(child)
-
-                stage = 19
-
-                child = doc.CreateElement("year")
-                child.InnerText = tvshowtosave.year
-                root.AppendChild(child)
-
-                stage = 20
-
-                child = doc.CreateElement("rating")
-                child.InnerText = tvshowtosave.rating
-                root.AppendChild(child)
-
-                stage = 21
-
-
-                child = doc.CreateElement("plot")
-                child.InnerText = tvshowtosave.plot
-                root.AppendChild(child)
-
-                stage = 22
-
-                For Each thumbnail In tvshowtosave.posters
-
-                    child = doc.CreateElement("thumb")
-                    child.InnerText = thumbnail
-                    root.AppendChild(child)
-                Next
-
-
-                For Each thumbnail In tvshowtosave.fanart
-
-                    child = doc.CreateElement("fanart")
-                    child.InnerText = thumbnail
-                    root.AppendChild(child)
-                Next
-
-                stage = 23
-
-
-
-                child = doc.CreateElement("runtime")
-                If tvshowtosave.runtime <> Nothing Then
-                    Dim minutes As String = tvshowtosave.runtime
-                    minutes = minutes.Replace("minutes", "")
-                    minutes = minutes.Replace("mins", "")
-                    minutes = minutes.Replace("min", "")
-                    minutes = minutes.Replace(" ", "")
-
-                    Try
-                        Do While minutes.IndexOf("0") = 0
-                            minutes = minutes.Substring(1, minutes.Length - 1)
-                        Loop
-                        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
-                            minutes = "0" & minutes & " min"
-                        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
-                            minutes = "00" & minutes & " min"
-                        Else
-                            minutes = tvshowtosave.runtime
-                        End If
-                    Catch
-                        minutes = "00"
-                    End Try
-                    child.InnerText = minutes
-                Else
-                    child.InnerText = tvshowtosave.runtime
-                End If
-                root.AppendChild(child)
-
-                stage = 25
-
-                child = doc.CreateElement("mpaa")
-                child.InnerText = tvshowtosave.mpaa
-                root.AppendChild(child)
-
-                stage = 26
-
-                child = doc.CreateElement("genre")
-                child.InnerText = tvshowtosave.genre
-                root.AppendChild(child)
-
-                child = doc.CreateElement("premiered")
-                child.InnerText = tvshowtosave.premiered
-                root.AppendChild(child)
-
-                stage = 27
-
-                child = doc.CreateElement("studio")
-                child.InnerText = tvshowtosave.studio
-                root.AppendChild(child)
-
-                stage = 30
-
-                child = doc.CreateElement("id")
-                child.InnerText = tvshowtosave.imdbid
-                root.AppendChild(child)
-
-                child = doc.CreateElement("tvdbid")
-                child.InnerText = tvshowtosave.tvdbid
-                root.AppendChild(child)
-
-                child = doc.CreateElement("sortorder")
-                child.InnerText = tvshowtosave.sortorder
-                root.AppendChild(child)
-
-                child = doc.CreateElement("language")
-                child.InnerText = tvshowtosave.language
-                root.AppendChild(child)
-
-                child = doc.CreateElement("episodeactorsource")
-                child.InnerText = tvshowtosave.episodeactorsource
-                root.AppendChild(child)
-                child = doc.CreateElement("tvshowactorsource")
-                child.InnerText = tvshowtosave.tvshowactorsource
-                root.AppendChild(child)
-
-                child = doc.CreateElement("locked")
-                child.InnerText = tvshowtosave.locked.ToString
-                root.AppendChild(child)
-
-                Dim actorstosave As Integer = tvshowtosave.listactors.Count
-                If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
-                For f = 0 To actorstosave - 1
-                    child = doc.CreateElement("actor")
-                    actorchild = doc.CreateElement("name")
-                    actorchild.InnerText = tvshowtosave.listactors(f).actorname
-                    child.AppendChild(actorchild)
-                    actorchild = doc.CreateElement("role")
-                    actorchild.InnerText = tvshowtosave.listactors(f).actorrole
-                    child.AppendChild(actorchild)
-                    If tvshowtosave.listactors(f).actorthumb <> Nothing Then
-                        If tvshowtosave.listactors(f).actorthumb <> "" Then
-                            actorchild = doc.CreateElement("thumb")
-                            actorchild.InnerText = tvshowtosave.listactors(f).actorthumb
-                            child.AppendChild(actorchild)
-                        End If
-                    End If
-                    root.AppendChild(child)
-                Next
-                doc.AppendChild(root)
-
-                stage = 34
-
-                Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
-                output.Formatting = Formatting.Indented
-                stage = 35
-                doc.WriteTo(output)
-                output.Close()
-
-                'Catch ex As Exception
-                '    MsgBox(ex.Message.ToString)
-                'End Try
-            Else
-                MsgBox("File already exists")
-            End If
-
-        Catch ex As Exception
-            'MsgBox("Error Encountered at stage " & stage.ToString & vbCrLf & vbCrLf & ex.ToString)
-        Finally
-            Monitor.Exit(Me)
-        End Try
+        Show.Save(Path)
     End Sub
+
+    'Public Sub savetvshownfo(ByVal filenameandpath As String, ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+
+
+    '    Try
+    '        Dim newshow As Boolean = True
+    '        For f = Form1.TvShows.Count - 1 To 0 Step -1
+    '            If Form1.TvShows(f).fullpath.ToLower = filenameandpath.ToLower Then
+    '                newshow = False
+    '                Form1.TvShows(f).episodeactorsource = tvshowtosave.episodeactorsource
+    '                Form1.TvShows(f).fullpath = tvshowtosave.path
+    '                Form1.TvShows(f).genre = tvshowtosave.genre
+    '                Form1.TvShows(f).imdbid = tvshowtosave.imdbid
+    '                Form1.TvShows(f).language = tvshowtosave.language
+    '                Form1.TvShows(f).rating = tvshowtosave.rating
+    '                Form1.TvShows(f).sortorder = tvshowtosave.sortorder
+    '                Form1.TvShows(f).title = tvshowtosave.title
+    '                Form1.TvShows(f).tvdbid = tvshowtosave.tvdbid
+    '                Form1.TvShows(f).year = tvshowtosave.year
+    '                Form1.TvShows(f).locked = tvshowtosave.locked
+    '                If forceunlocked = "unlock" Then
+    '                    Form1.TvShows(f).locked = 0
+    '                End If
+    '                Exit For
+    '            End If
+    '        Next
+    '        If newshow = True Then
+    '            Dim newtvnfo As New TvShow
+    '            newtvnfo.episodeactorsource = tvshowtosave.episodeactorsource
+    '            newtvnfo.fullpath = tvshowtosave.path
+    '            newtvnfo.genre = tvshowtosave.genre
+    '            newtvnfo.imdbid = tvshowtosave.imdbid
+    '            newtvnfo.language = tvshowtosave.language
+    '            newtvnfo.rating = tvshowtosave.rating
+    '            newtvnfo.sortorder = tvshowtosave.sortorder
+    '            newtvnfo.title = tvshowtosave.title
+    '            newtvnfo.tvdbid = tvshowtosave.tvdbid
+    '            newtvnfo.year = tvshowtosave.year
+    '            newtvnfo.locked = tvshowtosave.locked
+    '            Form1.TvShows.Add(newtvnfo)
+    '        End If
+    '    Catch ex As Exception
+
+    '    End Try
+
+    '    Monitor.Enter(Me)
+    '    Try
+    '        Dim stage As Integer = 1
+
+    '        If tvshowtosave Is Nothing Then Exit Sub
+    '        If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
+    '            'Try
+    '            Dim doc As New XmlDocument
+    '            Dim root As XmlElement
+    '            Dim child As XmlElement
+    '            Dim actorchild As XmlElement
+    '            root = doc.CreateElement("tvshow")
+    '            Dim thumbnailstring As String = ""
+    '            stage = 2
+    '            Dim thispref As XmlNode = Nothing
+    '            Dim xmlproc As XmlDeclaration
+
+    '            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+    '            doc.AppendChild(xmlproc)
+
+    '            child = doc.CreateElement("episodeguide")
+    '            Dim childchild As XmlElement
+    '            childchild = doc.CreateElement("url")
+    '            Dim tempppp As String = tvshowtosave.tvdbid & ".xml"
+    '            Dim Attr As XmlAttribute
+    '            Attr = doc.CreateAttribute("cache")
+    '            Attr.Value = tempppp
+    '            childchild.Attributes.Append(Attr)
+    '            If tvshowtosave.episodeguideurl <> Nothing Then
+    '                If tvshowtosave.episodeguideurl <> "" Then
+    '                    childchild.InnerText = tvshowtosave.episodeguideurl
+    '                    child.AppendChild(childchild)
+    '                Else
+    '                    '"http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
+    '                    If tvshowtosave.tvdbid <> Nothing Then
+    '                        If IsNumeric(tvshowtosave.tvdbid) Then
+    '                            If tvshowtosave.language <> Nothing Then
+    '                                If tvshowtosave.language <> "" Then
+    '                                    childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/" & tvshowtosave.language & ".zip"
+    '                                    child.AppendChild(childchild)
+    '                                Else
+    '                                    childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
+    '                                    child.AppendChild(childchild)
+    '                                End If
+    '                            Else
+    '                                childchild.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
+    '                                child.AppendChild(childchild)
+    '                            End If
+    '                        End If
+    '                    End If
+    '                End If
+    '                root.AppendChild(child)
+    '            Else
+    '                '"http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
+    '                If tvshowtosave.tvdbid <> Nothing Then
+    '                    If IsNumeric(tvshowtosave.tvdbid) Then
+    '                        If tvshowtosave.language <> Nothing Then
+    '                            If tvshowtosave.language <> "" Then
+    '                                child.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/" & tvshowtosave.language & ".zip"
+    '                                root.AppendChild(child)
+    '                            Else
+    '                                child.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
+    '                                root.AppendChild(child)
+    '                            End If
+    '                        Else
+    '                            child.InnerText = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvshowtosave.tvdbid & "/all/en.zip"
+    '                            root.AppendChild(child)
+    '                        End If
+    '                    End If
+    '                End If
+    '            End If
+
+
+    '            child = doc.CreateElement("title")
+    '            child.InnerText = tvshowtosave.title
+    '            root.AppendChild(child)
+
+    '            stage = 19
+
+    '            child = doc.CreateElement("year")
+    '            child.InnerText = tvshowtosave.year
+    '            root.AppendChild(child)
+
+    '            stage = 20
+
+    '            child = doc.CreateElement("rating")
+    '            child.InnerText = tvshowtosave.rating
+    '            root.AppendChild(child)
+
+    '            stage = 21
+
+
+    '            child = doc.CreateElement("plot")
+    '            child.InnerText = tvshowtosave.plot
+    '            root.AppendChild(child)
+
+    '            stage = 22
+
+    '            For Each thumbnail In tvshowtosave.posters
+
+    '                child = doc.CreateElement("thumb")
+    '                child.InnerText = thumbnail
+    '                root.AppendChild(child)
+    '            Next
+
+
+    '            For Each thumbnail In tvshowtosave.fanart
+
+    '                child = doc.CreateElement("fanart")
+    '                child.InnerText = thumbnail
+    '                root.AppendChild(child)
+    '            Next
+
+    '            stage = 23
+
+
+
+    '            child = doc.CreateElement("runtime")
+    '            If tvshowtosave.runtime <> Nothing Then
+    '                Dim minutes As String = tvshowtosave.runtime
+    '                minutes = minutes.Replace("minutes", "")
+    '                minutes = minutes.Replace("mins", "")
+    '                minutes = minutes.Replace("min", "")
+    '                minutes = minutes.Replace(" ", "")
+
+    '                Try
+    '                    Do While minutes.IndexOf("0") = 0
+    '                        minutes = minutes.Substring(1, minutes.Length - 1)
+    '                    Loop
+    '                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+    '                        minutes = "0" & minutes & " min"
+    '                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+    '                        minutes = "00" & minutes & " min"
+    '                    Else
+    '                        minutes = tvshowtosave.runtime
+    '                    End If
+    '                Catch
+    '                    minutes = "00"
+    '                End Try
+    '                child.InnerText = minutes
+    '            Else
+    '                child.InnerText = tvshowtosave.runtime
+    '            End If
+    '            root.AppendChild(child)
+
+    '            stage = 25
+
+    '            child = doc.CreateElement("mpaa")
+    '            child.InnerText = tvshowtosave.mpaa
+    '            root.AppendChild(child)
+
+    '            stage = 26
+
+    '            child = doc.CreateElement("genre")
+    '            child.InnerText = tvshowtosave.genre
+    '            root.AppendChild(child)
+
+    '            child = doc.CreateElement("premiered")
+    '            child.InnerText = tvshowtosave.premiered
+    '            root.AppendChild(child)
+
+    '            stage = 27
+
+    '            child = doc.CreateElement("studio")
+    '            child.InnerText = tvshowtosave.studio
+    '            root.AppendChild(child)
+
+    '            stage = 30
+
+    '            child = doc.CreateElement("id")
+    '            child.InnerText = tvshowtosave.imdbid
+    '            root.AppendChild(child)
+
+    '            child = doc.CreateElement("tvdbid")
+    '            child.InnerText = tvshowtosave.tvdbid
+    '            root.AppendChild(child)
+
+    '            child = doc.CreateElement("sortorder")
+    '            child.InnerText = tvshowtosave.sortorder
+    '            root.AppendChild(child)
+
+    '            child = doc.CreateElement("language")
+    '            child.InnerText = tvshowtosave.language
+    '            root.AppendChild(child)
+
+    '            child = doc.CreateElement("episodeactorsource")
+    '            child.InnerText = tvshowtosave.episodeactorsource
+    '            root.AppendChild(child)
+    '            child = doc.CreateElement("tvshowactorsource")
+    '            child.InnerText = tvshowtosave.tvshowactorsource
+    '            root.AppendChild(child)
+
+    '            child = doc.CreateElement("locked")
+    '            child.InnerText = tvshowtosave.locked.ToString
+    '            root.AppendChild(child)
+
+    '            Dim actorstosave As Integer = tvshowtosave.ListActors.Count
+    '            If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+    '            For f = 0 To actorstosave - 1
+    '                child = doc.CreateElement("actor")
+    '                actorchild = doc.CreateElement("name")
+    '                actorchild.InnerText = tvshowtosave.ListActors(f).actorname
+    '                child.AppendChild(actorchild)
+    '                actorchild = doc.CreateElement("role")
+    '                actorchild.InnerText = tvshowtosave.ListActors(f).actorrole
+    '                child.AppendChild(actorchild)
+    '                If tvshowtosave.ListActors(f).actorthumb <> Nothing Then
+    '                    If tvshowtosave.ListActors(f).actorthumb <> "" Then
+    '                        actorchild = doc.CreateElement("thumb")
+    '                        actorchild.InnerText = tvshowtosave.ListActors(f).actorthumb
+    '                        child.AppendChild(actorchild)
+    '                    End If
+    '                End If
+    '                root.AppendChild(child)
+    '            Next
+    '            doc.AppendChild(root)
+
+    '            stage = 34
+
+    '            Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
+    '            output.Formatting = Formatting.Indented
+    '            stage = 35
+    '            doc.WriteTo(output)
+    '            output.Close()
+
+    '            'Catch ex As Exception
+    '            '    MsgBox(ex.Message.ToString)
+    '            'End Try
+    '        Else
+    '            MsgBox("File already exists")
+    '        End If
+
+    '    Catch ex As Exception
+    '        'MsgBox("Error Encountered at stage " & stage.ToString & vbCrLf & vbCrLf & ex.ToString)
+    '    Finally
+    '        Monitor.Exit(Me)
+    '    End Try
+    'End Sub
 
     Public Sub saveepisodenfo(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
         'Monitor.Enter(Me)
@@ -1298,7 +1304,7 @@ Public Class WorkingWithNfoFiles
         If seasonno <> -2 And episodeno <> -2 Then
             If batch = False Then
                 Dim timetoexit As Boolean = False
-                For Each show In Form1.basicTvList
+                For Each show In Form1.TvShows
                     If show.fullpath = Form1.workingTvShow.path Then
                         For Each episode In show.allepisodes
                             If episode.episodeno = episodeno And episode.seasonno = seasonno Then
@@ -1533,23 +1539,23 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             child = doc.CreateElement("runtime")
-            child.InnerText = listofepisodes(0).runtime
+            child.InnerText = listofepisodes(0).Runtime
             root.AppendChild(child)
 
-            Dim actorstosave As Integer = listofepisodes(0).listactors.Count
+            Dim actorstosave As Integer = listofepisodes(0).ListActors.Count
             If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
             For f = 0 To actorstosave - 1
                 child = doc.CreateElement("actor")
                 actorchild = doc.CreateElement("name")
-                actorchild.InnerText = listofepisodes(0).listactors(f).actorname
+                actorchild.InnerText = listofepisodes(0).ListActors(f).actorname
                 child.AppendChild(actorchild)
                 actorchild = doc.CreateElement("role")
-                actorchild.InnerText = listofepisodes(0).listactors(f).actorrole
+                actorchild.InnerText = listofepisodes(0).ListActors(f).actorrole
                 child.AppendChild(actorchild)
-                If listofepisodes(0).listactors(f).actorthumb <> Nothing Then
-                    If listofepisodes(0).listactors(f).actorthumb <> "" Then
+                If listofepisodes(0).ListActors(f).actorthumb <> Nothing Then
+                    If listofepisodes(0).ListActors(f).actorthumb <> "" Then
                         actorchild = doc.CreateElement("thumb")
-                        actorchild.InnerText = listofepisodes(0).listactors(f).actorthumb
+                        actorchild.InnerText = listofepisodes(0).ListActors(f).actorthumb
                         child.AppendChild(actorchild)
                     End If
                 End If
@@ -1766,10 +1772,10 @@ Public Class WorkingWithNfoFiles
                 child.AppendChild(childchild)
 
                 childchild = document.CreateElement("runtime")
-                childchild.InnerText = ep.runtime
+                childchild.InnerText = ep.Runtime
                 child.AppendChild(childchild)
 
-                For Each actor In ep.listactors
+                For Each actor In ep.ListActors
                     Try
                         childchild = document.CreateElement("actor")
                         childchildchild = document.CreateElement("name")
@@ -2910,7 +2916,7 @@ Public Class WorkingWithNfoFiles
                                             newactor.actorthumb = actordetail.InnerText
                                     End Select
                                 Next
-                                newtvepisode.listactors.Add(newactor)
+                                newtvepisode.ListActors.Add(newactor)
                             Case "fileinfo"
                                 Dim detail2 As XmlNode = Nothing
                                 For Each detail2 In thisresult.ChildNodes
@@ -3081,7 +3087,7 @@ Public Class WorkingWithNfoFiles
                                                         newactor.actorthumb = detail.InnerText
                                                 End Select
                                             Next
-                                            anotherepisode.listactors.Add(newactor)
+                                            anotherepisode.ListActors.Add(newactor)
                                         Case "streamdetails"
                                             Dim detail2 As XmlNode = Nothing
                                             For Each detail2 In thisresult.ChildNodes(f).ChildNodes

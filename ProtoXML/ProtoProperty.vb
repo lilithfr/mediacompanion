@@ -7,6 +7,8 @@ Public Class ProtoProperty
 
     Private _value As String
 
+    Event ValueChanged(ByVal NewValue As String)
+
     Public Property Value As String
         Get
             If _value Is Nothing Then Return Nothing
@@ -38,6 +40,7 @@ Public Class ProtoProperty
                 Me.Node.Value = CType(value, String)
             End If
 
+            RaiseEvent ValueChanged(value)
             _value = value
         End Set
     End Property
@@ -88,5 +91,11 @@ Public Class ProtoProperty
         Return Left.Value
     End Operator
 
+    Public Function IndexOf(ByVal Input As String) As Integer
+        If Me.Value Is Nothing Then
+            Return -1
+        End If
 
+        Return Me.Value.IndexOf(Input)
+    End Function
 End Class

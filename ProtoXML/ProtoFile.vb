@@ -3,6 +3,7 @@
 
 
 
+
     Friend Property Doc As System.Xml.Linq.XDocument = <?xml version="1.0" encoding="UTF-8" standalone="yes"?><tvshow></tvshow> Implements IProtoXFile.Doc
 
     Private _node As XElement = Doc.Root
@@ -37,7 +38,29 @@
 
 
 #Region "File Access"
+    Private _NfoFilePath As String
     Public Property NfoFilePath As String Implements IProtoXFile.NfoFilePath
+        Get
+            Return _NfoFilePath
+        End Get
+        Set(ByVal value As String)
+            Dim Parts() As String
+            Parts = value.Split("\")
+            _FolderPath = Parts(0)
+            For I = 1 To Parts.GetUpperBound(0) - 1
+                _FolderPath &= "\" & Parts(I)
+            Next
+            _FolderPath &= "\"
+            _NfoFilePath = value
+        End Set
+    End Property
+
+    Private _FolderPath As String
+    Public ReadOnly Property FolderPath As String
+        Get
+            Return _FolderPath
+        End Get
+    End Property
 
     Public Sub Load() Implements IProtoXFile.Load
         Me.Load(Me.NfoFilePath)
@@ -62,8 +85,8 @@
 
         Dim ChildProperty As IProtoXChild
         For Each Child As XElement In Root.Nodes
-            If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
-                ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+            If Me.ChildrenLookup.ContainsKey(Child.Name.ToString) Then
+                ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString)
 
                 ChildProperty.ProcessNode(Child)
             End If
@@ -116,4 +139,25 @@
     End Sub
 
 #End Region
+
+    Public ReadOnly Property FileContainsReadableXml As Boolean Implements IProtoXFile.FileContainsReadableXml
+        Get
+            Try
+                If Me.FileExists Then
+                    Dim Test As XDocument = XDocument.Load(Me.NfoFilePath)
+                Else
+                    Return False
+                End If
+            Catch ex As Exception
+                Return False
+            End Try
+            Return True
+        End Get
+    End Property
+
+    Public ReadOnly Property FileExists As Boolean Implements IProtoXFile.FileExists
+        Get
+            Return IO.File.Exists(Me.NfoFilePath)
+        End Get
+    End Property
 End Class

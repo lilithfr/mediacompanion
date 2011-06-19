@@ -6,6 +6,8 @@
 
     Property NfoFilePath As String
 
+    ReadOnly Property FileExists As Boolean
+    ReadOnly Property FileContainsReadableXml As Boolean
 
     Sub Save()
     Sub Save(ByVal Path As String)

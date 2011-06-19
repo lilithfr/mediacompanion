@@ -111,13 +111,19 @@ Public Class Preferences
     Public Shared tableview As New List(Of String)
     Public Shared offlinefolders As New List(Of String)
 
-    Public Shared commandlist As New List(Of ListOfCommands)
+
+
+    Public Shared tvRootFolders As New List(Of String)
 
     Public Shared movieFolders As New List(Of String)
     Public Shared tvFolders As New List(Of String)
-    Public Shared tvRootFolders As New List(Of String)
+
+
     Public Shared profiles As New List(Of ListOfProfiles)
     Public Shared workingProfile As New ListOfProfiles
+    Public Shared commandlist As New List(Of ListOfCommands)
+
+    Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
     Public Shared Sub SaveConfig()
 

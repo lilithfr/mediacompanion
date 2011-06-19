@@ -2707,4 +2707,36 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Return asm.GetManifestResourceStream(resfile)
     End Function
+
+    Public Shared Function EnsureFolderExists(ByVal Path As String) As Boolean
+        Dim Parts As String()
+
+        Parts = Split(Path, "\")
+
+        If Left(Path, 2) = "\\" Then 'Network path
+            Dim Drive As String = Parts(0) & "\" & Parts(1) & "\" & Parts(2) & "\" & Parts(3)
+
+            Dim CurrentPath As String = Drive
+            For I = 4 To Parts.GetUpperBound(0)
+                CurrentPath = IO.Path.Combine(CurrentPath, Parts(I))
+
+                If Not IO.Directory.Exists(CurrentPath) Then
+                    IO.Directory.CreateDirectory(CurrentPath)
+                End If
+            Next
+        Else 'Local
+            Dim Drive As String = Parts(0)
+
+            Dim CurrentPath As String = Drive
+            For I = 1 To Parts.GetUpperBound(0)
+                CurrentPath = IO.Path.Combine(CurrentPath, Parts(I))
+
+                If Not IO.Directory.Exists(CurrentPath) Then
+                    IO.Directory.CreateDirectory(CurrentPath)
+                End If
+            Next
+        End If
+
+        Return True
+    End Function
 End Class

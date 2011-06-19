@@ -7,7 +7,15 @@ Public Class TvShow
     Public Property Year As New ProtoProperty(Me, "year")
     Public Property Rating As New ProtoProperty(Me, "rating")
     Public Property Genre As New ProtoProperty(Me, "genre")
+    Public Property Id As New ProtoProperty(Me, "id")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
+    '    Get
+    '        Return Id
+    '    End Get
+    '    Set(ByVal value As ProtoProperty)
+    '        Id = value
+    '    End Set
+    'End Property
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property SortOrder As New ProtoProperty(Me, "sortorder")
     Public Property Language As New ProtoProperty(Me, "language")
@@ -32,4 +40,6 @@ Public Class TvShow
             Return Title.Value & " " & Year.Value
         End Get
     End Property
+
+
 End Class

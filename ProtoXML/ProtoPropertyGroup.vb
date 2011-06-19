@@ -20,9 +20,9 @@
     End Sub
 
     Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
-        If Not Element.Name = Node.Name Then
-            Throw New Exception("Wrong element sent")
-        End If
+        'If Not Element.Name = Node.Name Then
+        '    Throw New Exception("Wrong element sent")
+        'End If
 
         If ParentClass IsNot Nothing AndAlso Not XDocument.ReferenceEquals(Me.Node.Document, Element.Document) Then
             If Element.Parent IsNot Nothing Then
@@ -35,8 +35,8 @@
 
         Dim ChildProperty As IProtoXChild
         For Each Child As XElement In Element.Nodes
-            If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
-                ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+            If Me.ChildrenLookup.ContainsKey(Child.Name.ToString) Then
+                ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString)
 
                 ChildProperty.ProcessNode(Child)
             End If
