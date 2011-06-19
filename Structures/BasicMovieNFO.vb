@@ -1,6 +1,7 @@
 
 Public Structure BasicMovieNFO
     Dim title As String
+    Dim originaltitle As String
     Dim sortorder As String
     Dim movieset As String
     Dim year As String

@@ -359,6 +359,8 @@ Public Class WorkingWithNfoFiles
                                 If newtvepisode.rating.IndexOf(" ") <> -1 Then newtvepisode.rating.Replace(" ", "")
                             Case "playcount"
                                 newtvepisode.playcount = thisresult.InnerText
+                            Case "aired"
+                                newtvepisode.aired = thisresult.InnerText
                         End Select
 
                     Catch ex As Exception
@@ -1838,6 +1840,7 @@ Public Class WorkingWithNfoFiles
                         End If
                         newmovie.title = IO.Path.GetFileName(path)
                         newmovie.titleandyear = newmovie.title & " (0000)"
+                        newmovie.movieset = ""
                         Dim filecreation2 As New FileInfo(path)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
@@ -1878,6 +1881,8 @@ Public Class WorkingWithNfoFiles
                                         End If
                                     End If
                                     newmovie.title = tempstring
+                                Case "originaltitle"
+                                    newmovie.originaltitle = thisresult.InnerText
                                 Case "set"
                                     newmovie.movieset = thisresult.InnerText
                                 Case "year"
@@ -1918,13 +1923,15 @@ Public Class WorkingWithNfoFiles
                             MsgBox(ex.ToString)
                         End Try
                     Next
+
+                    'if there is no entry for originaltitle, then use the current title. this should only come into use
+                    'for old movies since new ones will have the originaltitle created when scraped
+                    If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
+                    If newmovie.movieset = "" Or newmovie.movieset = Nothing Then newmovie.movieset = "-None-"
+                    If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
+
                     newmovie.fullpathandfilename = path
-                    If newmovie.sortorder = Nothing Then
-                        newmovie.sortorder = newmovie.title
-                    End If
-                    If newmovie.sortorder = "" Then
-                        newmovie.sortorder = newmovie.title
-                    End If
+
                     Dim filecreation As New FileInfo(path)
                     Dim myDate As Date = filecreation.LastWriteTime
 
@@ -2051,6 +2058,8 @@ Public Class WorkingWithNfoFiles
                         Case "title"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                             newmovie.fullmoviebody.title = thisresult.InnerText
+                        Case "originaltitle"
+                            newmovie.fullmoviebody.originaltitle = thisresult.InnerText
                         Case "year"
                             newmovie.fullmoviebody.year = thisresult.InnerText
                         Case "genre"
@@ -2482,6 +2491,15 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 Catch
                 End Try
+                child = doc.CreateElement("originaltitle")
+                If movietosave.fullmoviebody.originaltitle = Nothing Or movietosave.fullmoviebody.originaltitle = "" Then
+                    child.InnerText = movietosave.fullmoviebody.title
+                Else
+                    child.InnerText = movietosave.fullmoviebody.originaltitle
+                End If
+
+                root.AppendChild(child)
+
                 If movietosave.alternativetitles.Count > 0 Then
                     Try
                         For Each title In movietosave.alternativetitles
@@ -2789,6 +2807,7 @@ Public Class WorkingWithNfoFiles
             line = line.Replace("&quot;", "Chr(34)")
             line = line.Replace("&apos;", "'")
             line = line.Replace("&#xA;", vbCrLf)
+            line = line.Replace("â€˜", "'")
             Return line
         Catch
         Finally
