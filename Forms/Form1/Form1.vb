@@ -21145,8 +21145,6 @@ Public Class Form1
         End If
     End Sub
 
-                                    singleepisode.plot = tvencodespecialchrs(singleepisode.plot)
-    
     Public Function getepisode(ByVal tvdbid As String, ByVal sortorder As String, ByVal seriesno As String, ByVal episodeno As String, ByVal language As String)
         Dim ErrorCounter As Integer = 0
         Dim episodestring As String = ""
