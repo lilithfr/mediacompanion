@@ -22203,7 +22203,7 @@ Public Class Form1
         totalEpisodeCount = 0
         TextBox32.Text = ""
         TextBox33.Text = ""
-        Me.Enabled = False
+        'Me.Enabled = False
         'basictvlist.Clear()
         TreeView1.Nodes.Clear()
       
@@ -22254,7 +22254,7 @@ Public Class Form1
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            'messbox.Show()
+            messbox.Show()
             Try
                 For Each tvfolder In folderstoadd
                     Try
@@ -22297,6 +22297,7 @@ Public Class Form1
 #End If
             End Try
             messbox.Close()
+            Me.Activate()               'bring main form back to front
         End If
         'For Each tv In basictvlist
         '    ListtvFiles(tv, "*.NFO")
@@ -22425,7 +22426,7 @@ Public Class Form1
                 bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
         End If
-        Me.Focus()
+        'Me.Focus()
     End Sub
 
     Private Sub Button70_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button70.Click
@@ -22445,7 +22446,7 @@ Public Class Form1
             If allok = True Then
                 ListBox6.Items.Add(thefoldernames)
             Else
-                MsgBox("        Folder Already Exists")
+                MsgBox("        Folder Already Exists", MsgBoxStyle.OkOnly)
             End If
         End If
     End Sub
