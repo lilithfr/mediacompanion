@@ -22425,6 +22425,7 @@ Public Class Form1
                 bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
         End If
+        Me.Focus()
     End Sub
 
     Private Sub Button70_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button70.Click
