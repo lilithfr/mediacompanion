@@ -1172,6 +1172,7 @@ Public Class Form1
                                     End Select
                                 Next
                                 newtvshow.missingepisodes.Add(newepisode)
+                                newtvshow.Load()
                         End Select
                     Next
                     TvShows.Add(newtvshow)
@@ -1180,264 +1181,255 @@ Public Class Form1
         Call populatetvtree()
     End Sub
 
-    Private Sub add_tvshow_to_treeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
-        If xmlerror = True Then
-            TreeView1.Nodes.Add(fullpath, title)
-            For Each tn As TreeNode In TreeView1.Nodes
-                If tn.Name = fullpath Then
-                    If locked = True Or locked = 2 Then tn.StateImageIndex = 0
-                    tn.ForeColor = Color.Red
-                End If
-            Next
-        Else
-            TreeView1.Nodes.Add(fullpath, title)
-            For Each tn As TreeNode In TreeView1.Nodes
-                If tn.Name = fullpath Then
-                    tn.ForeColor = Color.Black
-                    If locked = True Or locked = 2 Then tn.StateImageIndex = 0
-                End If
-            Next
-        End If
-    End Sub
+    '    Private Sub add_tvshow_to_treeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
+    '        If xmlerror = True Then
+    '            TreeView1.Nodes.Add(fullpath, title)
+    '            For Each tn As TreeNode In TreeView1.Nodes
+    '                If tn.Name = fullpath Then
+    '                    If locked = True Or locked = 2 Then tn.StateImageIndex = 0
+    '                    tn.ForeColor = Color.Red
+    '                End If
+    '            Next
+    '        Else
+    '            TreeView1.Nodes.Add(fullpath, title)
+    '            For Each tn As TreeNode In TreeView1.Nodes
+    '                If tn.Name = fullpath Then
+    '                    tn.ForeColor = Color.Black
+    '                    If locked = True Or locked = 2 Then tn.StateImageIndex = 0
+    '                End If
+    '            Next
+    '        End If
+    '    End Sub
 
-    Private Sub add_episode_to_treeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
-        Try
-            Dim ccnode As TreeNode
-            ccnode = TreeView1.Nodes(rootnode).Nodes(childnode)
-            For Each nod In ccnode.Nodes
-                If nod.text = title Then
-                    ccnode.Nodes.Remove(nod)
-                    Exit For
-                End If
-            Next
-            ccnode.Nodes.Add(fullpath, title)
+    '    Private Sub add_episode_to_treeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
+    '        Try
+    '            Dim ccnode As TreeNode
+    '            ccnode = TreeView1.Nodes(rootnode).Nodes(childnode)
+    '            For Each nod In ccnode.Nodes
+    '                If nod.text = title Then
+    '                    ccnode.Nodes.Remove(nod)
+    '                    Exit For
+    '                End If
+    '            Next
+    '            ccnode.Nodes.Add(fullpath, title)
 
-            If xmlerror = True Then
-                For Each no As TreeNode In ccnode.Nodes
-                    If no.Name = fullpath Then
-                        no.ForeColor = Color.Red
-                        Exit For
-                    End If
-                Next
-            Else
-                For Each no As TreeNode In ccnode.Nodes
-                    If no.Name = fullpath Then
-                        no.ForeColor = Color.Black
-                        Exit For
-                    End If
-                Next
-            End If
-            'TreeView1.Nodes.Remove(node)
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            'MsgBox(ex.ToString)
-        End Try
-    End Sub
+    '            If xmlerror = True Then
+    '                For Each no As TreeNode In ccnode.Nodes
+    '                    If no.Name = fullpath Then
+    '                        no.ForeColor = Color.Red
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            Else
+    '                For Each no As TreeNode In ccnode.Nodes
+    '                    If no.Name = fullpath Then
+    '                        no.ForeColor = Color.Black
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '            'TreeView1.Nodes.Remove(node)
+    '        Catch ex As Exception
+    '#If SilentErrorScream Then
+    '            Throw ex
+    '#End If
+    '            'MsgBox(ex.ToString)
+    '        End Try
+    '    End Sub
 
-    Private Sub populatetvtree()
-        Dim tempint As Integer
-        Dim tempstring As String = String.Empty
-        Dim cnode As TreeNode = Nothing
+    'Private Sub populatetvtree()
+    '    Dim tempint As Integer
+    '    Dim tempstring As String = String.Empty
+    '    Dim cnode As TreeNode = Nothing
 
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = String.Empty
+    '    ComboBox4.Items.Clear()
+    '    ComboBox4.Text = String.Empty
 
 
-        PictureBox6.Image = Nothing
-        PictureBox4.Image = Nothing
-        PictureBox5.Image = Nothing
-        TextBox10.Text = String.Empty
-        TextBox11.Text = String.Empty
-        TextBox9.Text = String.Empty
-        TextBox12.Text = String.Empty
-        TextBox13.Text = String.Empty
-        TextBox14.Text = String.Empty
-        TextBox15.Text = String.Empty
-        TextBox16.Text = String.Empty
-        TextBox18.Text = String.Empty
-        TextBox19.Text = String.Empty
-        If Not workingTvShow Is Nothing Then workingTvShow.path = String.Empty
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = String.Empty
-        TextBox20.Text = String.Empty
-        TextBox21.Text = String.Empty
-        TextBox22.Text = String.Empty
-        TextBox23.Text = String.Empty
-        TextBox24.Text = String.Empty
-        TextBox25.Text = String.Empty
-        ComboBox5.Items.Clear()
-        ComboBox5.Text = String.Empty
-        Panel9.Visible = False
-        TextBox2.Text = String.Empty
-        totalTvShowCount = 0
-        totalEpisodeCount = 0
-        TreeView1.Nodes.Clear()
+    '    PictureBox6.Image = Nothing
+    '    PictureBox4.Image = Nothing
+    '    PictureBox5.Image = Nothing
+    '    TextBox10.Text = String.Empty
+    '    TextBox11.Text = String.Empty
+    '    TextBox9.Text = String.Empty
+    '    TextBox12.Text = String.Empty
+    '    TextBox13.Text = String.Empty
+    '    TextBox14.Text = String.Empty
+    '    TextBox15.Text = String.Empty
+    '    TextBox16.Text = String.Empty
+    '    TextBox18.Text = String.Empty
+    '    TextBox19.Text = String.Empty
+    '    If Not workingTvShow Is Nothing Then workingTvShow.path = String.Empty
+    '    ComboBox4.Items.Clear()
+    '    ComboBox4.Text = String.Empty
+    '    TextBox20.Text = String.Empty
+    '    TextBox21.Text = String.Empty
+    '    TextBox22.Text = String.Empty
+    '    TextBox23.Text = String.Empty
+    '    TextBox24.Text = String.Empty
+    '    TextBox25.Text = String.Empty
+    '    ComboBox5.Items.Clear()
+    '    ComboBox5.Text = String.Empty
+    '    Panel9.Visible = False
+    '    TextBox2.Text = String.Empty
+    '    totalTvShowCount = 0
+    '    totalEpisodeCount = 0
+    '    TreeView1.Nodes.Clear()
 
-        For Each item In TvShows
-            totalTvShowCount += 1
-            Dim shownode As Integer = -1
-            Try
-                If item.status.ToLower.IndexOf("xml error") <> -1 Then
-                    Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
-                Else
-                    Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
+    '    For Each item In TvShows
+    '        totalTvShowCount += 1
+    '        Dim shownode As Integer = -1
 
-            For Each episode In item.allepisodes
-                totalEpisodeCount += 1
-                Try
-                    Dim seasonno As Integer = -10
-                    seasonno = Convert.ToInt32(episode.seasonno)
+    '        If item.status IsNot Nothing AndAlso Not item.status.ToLower.Contains("xml error") Then
+    '            Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
+    '        Else
+    '            Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
+    '        End If
 
-                    For g = 0 To TreeView1.Nodes.Count - 1
-                        If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
-                            cnode = TreeView1.Nodes(g)
-                            shownode = g
-                            Exit For
-                        End If
-                    Next
 
-                    Dim seasonstring As String = Nothing
+    '        For Each episode In item.allepisodes
+    '            totalEpisodeCount += 1
 
-                    If seasonno <> 0 And seasonno <> -1 Then
-                        If seasonno < 10 Then
-                            tempstring = "Season 0" & seasonno.ToString
-                        Else
-                            tempstring = "Season " & seasonno.ToString
-                        End If
-                    ElseIf seasonno = 0 Then
-                        tempstring = "Specials"
-                    End If
+    '            Dim seasonno As Integer = -10
+    '            seasonno = Convert.ToInt32(episode.seasonno)
 
-                    Dim node As TreeNode
-                    Dim alreadyexists As Boolean = False
-                    For Each node In cnode.Nodes
-                        If node.Text = tempstring Then
-                            alreadyexists = True
-                            Exit For
-                        End If
-                    Next
-                    If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+    '            For g = 0 To TreeView1.Nodes.Count - 1
+    '                If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
+    '                    cnode = TreeView1.Nodes(g)
+    '                    shownode = g
+    '                    Exit For
+    '                End If
+    '            Next
 
-                    For Each node In cnode.Nodes
-                        If node.Text = tempstring Then
-                            tempint = node.Index
-                            Exit For
-                        End If
-                    Next
+    '            Dim seasonstring As String = Nothing
 
-                    Dim eps As String
-                    If episode.episodeno < 10 Then
-                        eps = "0" & episode.episodeno.ToString
-                    Else
-                        eps = episode.episodeno.ToString
-                    End If
+    '            If seasonno <> 0 And seasonno <> -1 Then
+    '                If seasonno < 10 Then
+    '                    tempstring = "Season 0" & seasonno.ToString
+    '                Else
+    '                    tempstring = "Season " & seasonno.ToString
+    '                End If
+    '            ElseIf seasonno = 0 Then
+    '                tempstring = "Specials"
+    '            End If
 
-                    eps = eps & " - " & episode.title
-                    If episode.imdbid = Nothing Then
-                        episode.imdbid = ""
-                    End If
+    '            Dim node As TreeNode
+    '            Dim alreadyexists As Boolean = False
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    alreadyexists = True
+    '                    Exit For
+    '                End If
+    '            Next
+    '            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
 
-                    If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
-                    Else
-                        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
-                    End If
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    tempint = node.Index
+    '                    Exit For
+    '                End If
+    '            Next
 
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-            Next
+    '            Dim eps As String
+    '            If episode.episodeno < 10 Then
+    '                eps = "0" & episode.episodeno.ToString
+    '            Else
+    '                eps = episode.episodeno.ToString
+    '            End If
 
-            For Each missingep In item.missingepisodes
-                For g = 0 To TreeView1.Nodes.Count - 1
-                    If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
-                        cnode = TreeView1.Nodes(g)
-                        shownode = g
-                        Exit For
-                    End If
-                Next
+    '            eps = eps & " - " & episode.title
+    '            If episode.imdbid = Nothing Then
+    '                episode.imdbid = ""
+    '            End If
 
-                Dim seasonstring As String = Nothing
-                Dim seasonno As Integer = Convert.ToInt32(missingep.seasonno)
-                If seasonno <> 0 And seasonno <> -1 Then
-                    If seasonno < 10 Then
-                        tempstring = "Season 0" & seasonno.ToString
-                    Else
-                        tempstring = "Season " & seasonno.ToString
-                    End If
-                ElseIf seasonno = 0 Then
-                    tempstring = "Specials"
-                End If
+    '            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
+    '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+    '            Else
+    '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+    '            End If
 
-                Dim node As TreeNode
-                Dim alreadyexists As Boolean = False
-                For Each node In cnode.Nodes
-                    If node.Text = tempstring Then
-                        alreadyexists = True
-                        Exit For
-                    End If
-                Next
+    '        Next
 
-                If alreadyexists = False Then cnode.Nodes.Add(tempstring)
-                For Each node In cnode.Nodes
-                    If node.Text = tempstring Then
-                        tempint = node.Index
-                        Exit For
-                    End If
-                Next
+    '        For Each missingep In item.missingepisodes
+    '            For g = 0 To TreeView1.Nodes.Count - 1
+    '                If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
+    '                    cnode = TreeView1.Nodes(g)
+    '                    shownode = g
+    '                    Exit For
+    '                End If
+    '            Next
 
-                Dim eps As String
-                Dim episodeno As Integer = Convert.ToInt32(missingep.episodeno)
-                If episodeno < 10 Then
-                    eps = "0" & episodeno.ToString
-                Else
-                    eps = episodeno.ToString
-                End If
+    '            Dim seasonstring As String = Nothing
+    '            Dim seasonno As Integer = Convert.ToInt32(missingep.seasonno)
+    '            If seasonno <> 0 And seasonno <> -1 Then
+    '                If seasonno < 10 Then
+    '                    tempstring = "Season 0" & seasonno.ToString
+    '                Else
+    '                    tempstring = "Season " & seasonno.ToString
+    '                End If
+    '            ElseIf seasonno = 0 Then
+    '                tempstring = "Specials"
+    '            End If
 
-                eps = eps & " - " & missingep.title
-                Dim ccnode As TreeNode
-                ccnode = TreeView1.Nodes(shownode).Nodes(tempint)
-                Dim tempstring2 As String = "Missing: " & eps
-                ccnode.Nodes.Add(tempstring2, eps)
+    '            Dim node As TreeNode
+    '            Dim alreadyexists As Boolean = False
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    alreadyexists = True
+    '                    Exit For
+    '                End If
+    '            Next
 
-                For Each no As TreeNode In ccnode.Nodes
-                    If no.Name = tempstring2 Then
-                        no.ForeColor = Color.Blue
-                        no.Parent.ForeColor = Color.Blue
-                        no.Parent.Parent.ForeColor = Color.Blue
-                        Exit For
-                    End If
-                Next
-            Next
-        Next
+    '            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    tempint = node.Index
+    '                    Exit For
+    '                End If
+    '            Next
+
+    '            Dim eps As String
+    '            Dim episodeno As Integer = Convert.ToInt32(missingep.episodeno)
+    '            If episodeno < 10 Then
+    '                eps = "0" & episodeno.ToString
+    '            Else
+    '                eps = episodeno.ToString
+    '            End If
+
+    '            eps = eps & " - " & missingep.title
+    '            Dim ccnode As TreeNode
+    '            ccnode = TreeView1.Nodes(shownode).Nodes(tempint)
+    '            Dim tempstring2 As String = "Missing: " & eps
+    '            ccnode.Nodes.Add(tempstring2, eps)
+
+    '            For Each no As TreeNode In ccnode.Nodes
+    '                If no.Name = tempstring2 Then
+    '                    no.ForeColor = Color.Blue
+    '                    no.Parent.ForeColor = Color.Blue
+    '                    no.Parent.Parent.ForeColor = Color.Blue
+    '                    Exit For
+    '                End If
+    '            Next
+    '        Next
+    '    Next
 
 
 
-        Dim MyNode As TreeNode
-        If Not TreeView1.Nodes.Count = 0 Then
-            MyNode = TreeView1.Nodes(0) 'First Level
-            'MyNode = MyNode.Nodes(6)  ' Second Level
-            TreeView1.SelectedNode = MyNode
-            TabLevel1.Focus()
-            TabControl3.Focus()
-            TreeView1.Focus()
-        End If
-        TreeView1.Refresh()
-        TreeView1.CollapseAll()
+    '    Dim MyNode As TreeNode
+    '    If Not TreeView1.Nodes.Count = 0 Then
+    '        MyNode = TreeView1.Nodes(0) 'First Level
+    '        'MyNode = MyNode.Nodes(6)  ' Second Level
+    '        TreeView1.SelectedNode = MyNode
+    '        TabLevel1.Focus()
+    '        TabControl3.Focus()
+    '        TreeView1.Focus()
+    '    End If
+    '    TreeView1.Refresh()
+    '    TreeView1.CollapseAll()
 
-        TextBox32.Text = totalTvShowCount.ToString
-        TextBox33.Text = totalEpisodeCount.ToString
-    End Sub
+    '    TextBox32.Text = totalTvShowCount.ToString
+    '    TextBox33.Text = totalEpisodeCount.ToString
+    'End Sub
 
     Private Sub loadmoviecache()
         fullMovieList.Clear()
@@ -2014,11 +2006,10 @@ Public Class Form1
                 'newtvshownfo.status = "Folder not found"
                 'basictvlist.Add(newtvshownfo)
             End If
-            Dim shownfopath As String = IO.Path.Combine(tvfolder, "tvshow.nfo")
             'tvrebuildlog("tvshow.nfo path is: " & shownfopath)
             Dim newtvshownfo As New TvShow
-
-            newtvshownfo.Load(shownfopath)
+            newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
+            newtvshownfo.Load()
             If newtvshownfo.title IsNot Nothing Then
                 If newtvshownfo.status Is Nothing OrElse (newtvshownfo.status IsNot Nothing AndAlso Not newtvshownfo.status.Contains("skipthisfile")) Then
                     'Dim skip As Boolean = False
@@ -2042,11 +2033,13 @@ Public Class Form1
         Next
 
 
+        CleanFolderList()
         Call populatetvtree()
 
         Me.Enabled = True
 
         Call savetvdata()
+
     End Sub
 
     Private Sub autorun()
@@ -2133,67 +2126,67 @@ Public Class Form1
         
     End Sub
 
-    Private Sub ListtvFiles(ByVal tvshow As TvShow, ByVal pattern As String)
-        Try
-            Dim episode As New List(Of TvEpisode)
-            Dim propfile As Boolean = False
-            Dim allok As Boolean = False
+'    Private Sub ListtvFiles(ByVal tvshow As TvShow, ByVal pattern As String)
+'        Try
+'            Dim episode As New List(Of TvEpisode)
+'            Dim propfile As Boolean = False
+'            Dim allok As Boolean = False
 
 
-            Dim newlist As New List(Of String)
-            newlist.Clear()
+'            Dim newlist As New List(Of String)
+'            newlist.Clear()
 
-            Try
-                newlist = Utilities.EnumerateFolders(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), 6) 'TODO: Restore loging functions
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-            newlist.Insert(0, tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 11))
-            If newlist.Count > 0 Then
-                tvrebuildlog(newlist.Count - 1.ToString & " subfolders found in: " & newlist(0) & vbCrLf)
-            End If
-            For Each folder In newlist
-                tvrebuildlog("Searching: " & vbCrLf & folder & vbCrLf & "for episodes")
-                Dim dir_info As New System.IO.DirectoryInfo(folder)
-                tvrebuildlog("Looking in " & folder)
-                Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern, SearchOption.TopDirectoryOnly)
-                For Each fs_info As System.IO.FileInfo In fs_infos
+'            Try
+'                newlist = Utilities.EnumerateFolders(tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 10), 6) 'TODO: Restore loging functions
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'                Throw ex
+'#End If
+'            End Try
+'            newlist.Insert(0, tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 11))
+'            If newlist.Count > 0 Then
+'                tvrebuildlog(newlist.Count - 1.ToString & " subfolders found in: " & newlist(0) & vbCrLf)
+'            End If
+'            For Each folder In newlist
+'                tvrebuildlog("Searching: " & vbCrLf & folder & vbCrLf & "for episodes")
+'                Dim dir_info As New System.IO.DirectoryInfo(folder)
+'                tvrebuildlog("Looking in " & folder)
+'                Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern, SearchOption.TopDirectoryOnly)
+'                For Each fs_info As System.IO.FileInfo In fs_infos
 
-                    Try
-                        Application.DoEvents()
-                        If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
-                            tvrebuildlog("possible episode nfo found: " & fs_info.FullName)
-                            episode = nfoFunction.loadbasicepisodenfo(fs_info.FullName)
-                            If Not episode Is Nothing Then
-                                For Each ep In episode
-                                    If ep.title <> Nothing Then
-                                        Dim skip As Boolean = False
-                                        For Each eps In tvshow.allepisodes
-                                            If eps.seasonno = ep.seasonno And eps.episodeno = ep.episodeno And eps.episodepath = ep.episodepath Then
-                                                skip = True
-                                                Exit For
-                                            End If
-                                        Next
-                                        If skip = False Then
-                                            tvshow.allepisodes.Add(ep)
-                                            tvrebuildlog("Episode appears to have loaded ok")
-                                        End If
-                                    End If
-                                Next
-                            End If
-                        End If
-                    Catch ex As Exception
-                        tvrebuildlog(ex.ToString)
-                    End Try
-                Next fs_info
-            Next
-            tvrebuildlog(vbCrLf & vbCrLf & vbCrLf)
-        Catch ex As Exception
-            tvrebuildlog(ex.ToString)
-        End Try
-    End Sub
+'                    Try
+'                        Application.DoEvents()
+'                        If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
+'                            tvrebuildlog("possible episode nfo found: " & fs_info.FullName)
+'                            episode = nfoFunction.loadbasicepisodenfo(fs_info.FullName)
+'                            If Not episode Is Nothing Then
+'                                For Each ep In episode
+'                                    If ep.title <> Nothing Then
+'                                        Dim skip As Boolean = False
+'                                        For Each eps In tvshow.allepisodes
+'                                            If eps.seasonno = ep.seasonno And eps.episodeno = ep.episodeno And eps.episodepath = ep.episodepath Then
+'                                                skip = True
+'                                                Exit For
+'                                            End If
+'                                        Next
+'                                        If skip = False Then
+'                                            tvshow.allepisodes.Add(ep)
+'                                            tvrebuildlog("Episode appears to have loaded ok")
+'                                        End If
+'                                    End If
+'                                Next
+'                            End If
+'                        End If
+'                    Catch ex As Exception
+'                        tvrebuildlog(ex.ToString)
+'                    End Try
+'                Next fs_info
+'            Next
+'            tvrebuildlog(vbCrLf & vbCrLf & vbCrLf)
+'        Catch ex As Exception
+'            tvrebuildlog(ex.ToString)
+'        End Try
+'    End Sub
 
     Private Sub nfos_to_array(ByVal folderlist As List(Of String), Optional mode As Boolean = False)
         Dim tempint As Integer
@@ -27798,403 +27791,403 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
-        Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
-        messbox.Show()
-        messbox.Refresh()
-        Application.DoEvents()
-        Try
-            templanguage = Preferences.tvdblanguagecode
-            'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-            Dim tvdbstuff As New TVDBScraper
-            Dim showlist As New XmlDocument
-            Dim thumblist As String = tvdbstuff.getposterlist(workingTvShow.tvdbid)
-            showlist.LoadXml(thumblist)
-            Dim thisresult As XmlNode = Nothing
-            Dim artlist As New List(Of TvBanners)
-            artlist.Clear()
-            For Each thisresult In showlist("banners")
-                Select Case thisresult.Name
-                    Case "banner"
-                        Dim individualposter As New TvBanners
-                        For Each results In thisresult.ChildNodes
-                            Select Case results.Name
-                                Case "url"
-                                    individualposter.url = results.InnerText
-                                Case "bannertype"
-                                    individualposter.bannerType = results.InnerText
-                                Case "resolution"
-                                    individualposter.resolution = results.InnerText
-                                Case "language"
-                                    individualposter.language = results.InnerText
-                                Case "season"
-                                    individualposter.season = results.InnerText
-                            End Select
-                        Next
-                        artlist.Add(individualposter)
-                End Select
-            Next
-            If artlist.Count = 0 Then
-                Exit Sub
-            End If
-            For f = 0 To 1000
-                Dim seasonposter As String = ""
-                For Each Image In artlist
-                    If Image.season = f.ToString And Image.language = templanguage Then
-                        seasonposter = Image.url
-                        Exit For
-                    End If
-                Next
-                If seasonposter = "" Then
-                    For Each Image In artlist
-                        If Image.season = f.ToString And Image.language = "en" Then
-                            seasonposter = Image.url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If seasonposter = "" Then
-                    For Each Image In artlist
-                        If Image.season = f.ToString Then
-                            seasonposter = Image.url
-                            Exit For
-                        End If
-                    Next
-                End If
-                Dim tempstring As String = ""
-                If seasonposter <> "" Then
-                    If f < 10 Then
-                        tempstring = "0" & f.ToString
-                    Else
-                        tempstring = f.ToString
-                    End If
-                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season" & tempstring & ".tbn")
-                    If tempstring = "00" Then
-                        seasonpath = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-specials.tbn")
-                    End If
-                    If Not IO.File.Exists(seasonpath) Then
-                        Try
-                            Dim buffer(4000000) As Byte
-                            Dim size As Integer = 0
-                            Dim bytesRead As Integer = 0
-                            Dim thumburl As String = seasonposter
-                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                            Dim res As HttpWebResponse = req.GetResponse()
-                            Dim contents As Stream = res.GetResponseStream()
-                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                            While bytesToRead > 0
-                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                If size = 0 Then Exit While
-                                bytesToRead -= size
-                                bytesRead += size
-                            End While
-                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                            fstrm.Write(buffer, 0, bytesRead)
-                            contents.Close()
-                            fstrm.Close()
-                        Catch ex As WebException
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                    End If
-                End If
-            Next
-            Dim fanartposter As String
-            fanartposter = ""
-            For Each Image In artlist
-                If Image.language = templanguage And Image.bannerType = "fanart" Then
-                    fanartposter = Image.url
-                    Exit For
-                End If
-            Next
-            If fanartposter = "" Then
-                For Each Image In artlist
-                    If Image.language = "en" And Image.bannerType = "fanart" Then
-                        fanartposter = Image.url
-                        Exit For
-                    End If
-                Next
-            End If
-            If fanartposter = "" Then
-                For Each Image In artlist
-                    If Image.bannerType = "fanart" Then
-                        fanartposter = Image.url
-                        Exit For
-                    End If
-                Next
-            End If
-            If fanartposter <> "" Then
+    '    Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
+    '        Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
+    '        messbox.Show()
+    '        messbox.Refresh()
+    '        Application.DoEvents()
+    '        Try
+    '            templanguage = Preferences.tvdblanguagecode
+    '            'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
+    '            Dim tvdbstuff As New TVDBScraper
+    '            Dim showlist As New XmlDocument
+    '            Dim thumblist As String = tvdbstuff.getposterlist(workingTvShow.tvdbid)
+    '            showlist.LoadXml(thumblist)
+    '            Dim thisresult As XmlNode = Nothing
+    '            Dim artlist As New List(Of TvBanners)
+    '            artlist.Clear()
+    '            For Each thisresult In showlist("banners")
+    '                Select Case thisresult.Name
+    '                    Case "banner"
+    '                        Dim individualposter As New TvBanners
+    '                        For Each results In thisresult.ChildNodes
+    '                            Select Case results.Name
+    '                                Case "url"
+    '                                    individualposter.url = results.InnerText
+    '                                Case "bannertype"
+    '                                    individualposter.bannerType = results.InnerText
+    '                                Case "resolution"
+    '                                    individualposter.resolution = results.InnerText
+    '                                Case "language"
+    '                                    individualposter.language = results.InnerText
+    '                                Case "season"
+    '                                    individualposter.season = results.InnerText
+    '                            End Select
+    '                        Next
+    '                        artlist.Add(individualposter)
+    '                End Select
+    '            Next
+    '            If artlist.Count = 0 Then
+    '                Exit Sub
+    '            End If
+    '            For f = 0 To 1000
+    '                Dim seasonposter As String = ""
+    '                For Each Image In artlist
+    '                    If Image.season = f.ToString And Image.language = templanguage Then
+    '                        seasonposter = Image.url
+    '                        Exit For
+    '                    End If
+    '                Next
+    '                If seasonposter = "" Then
+    '                    For Each Image In artlist
+    '                        If Image.season = f.ToString And Image.language = "en" Then
+    '                            seasonposter = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                If seasonposter = "" Then
+    '                    For Each Image In artlist
+    '                        If Image.season = f.ToString Then
+    '                            seasonposter = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                Dim tempstring As String = ""
+    '                If seasonposter <> "" Then
+    '                    If f < 10 Then
+    '                        tempstring = "0" & f.ToString
+    '                    Else
+    '                        tempstring = f.ToString
+    '                    End If
+    '                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season" & tempstring & ".tbn")
+    '                    If tempstring = "00" Then
+    '                        seasonpath = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-specials.tbn")
+    '                    End If
+    '                    If Not IO.File.Exists(seasonpath) Then
+    '                        Try
+    '                            Dim buffer(4000000) As Byte
+    '                            Dim size As Integer = 0
+    '                            Dim bytesRead As Integer = 0
+    '                            Dim thumburl As String = seasonposter
+    '                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+    '                            Dim res As HttpWebResponse = req.GetResponse()
+    '                            Dim contents As Stream = res.GetResponseStream()
+    '                            Dim bytesToRead As Integer = CInt(buffer.Length)
+    '                            While bytesToRead > 0
+    '                                size = contents.Read(buffer, bytesRead, bytesToRead)
+    '                                If size = 0 Then Exit While
+    '                                bytesToRead -= size
+    '                                bytesRead += size
+    '                            End While
+    '                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+    '                            fstrm.Write(buffer, 0, bytesRead)
+    '                            contents.Close()
+    '                            fstrm.Close()
+    '                        Catch ex As WebException
+    '#If SilentErrorScream Then
+    '                            Throw ex
+    '#End If
+    '                        End Try
+    '                    End If
+    '                End If
+    '            Next
+    '            Dim fanartposter As String
+    '            fanartposter = ""
+    '            For Each Image In artlist
+    '                If Image.language = templanguage And Image.bannerType = "fanart" Then
+    '                    fanartposter = Image.url
+    '                    Exit For
+    '                End If
+    '            Next
+    '            If fanartposter = "" Then
+    '                For Each Image In artlist
+    '                    If Image.language = "en" And Image.bannerType = "fanart" Then
+    '                        fanartposter = Image.url
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '            If fanartposter = "" Then
+    '                For Each Image In artlist
+    '                    If Image.bannerType = "fanart" Then
+    '                        fanartposter = Image.url
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '            If fanartposter <> "" Then
 
-                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "fanart.jpg")
-                If Not IO.File.Exists(seasonpath) Then
-                    Try
-                        Dim buffer(4000000) As Byte
-                        Dim size As Integer = 0
-                        Dim bytesRead As Integer = 0
+    '                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "fanart.jpg")
+    '                If Not IO.File.Exists(seasonpath) Then
+    '                    Try
+    '                        Dim buffer(4000000) As Byte
+    '                        Dim size As Integer = 0
+    '                        Dim bytesRead As Integer = 0
 
-                        Dim thumburl As String = fanartposter
-                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                        Dim res As HttpWebResponse = req.GetResponse()
-                        Dim contents As Stream = res.GetResponseStream()
-                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                        Dim bmp As New Bitmap(contents)
-
-
-
-                        While bytesToRead > 0
-                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                            If size = 0 Then Exit While
-                            bytesToRead -= size
-                            bytesRead += size
-                        End While
-
-
-                        Try
-                            If Preferences.resizefanart = 1 Then
-                                bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                scraperLog = scraperLog & "Fanart not resized" & vbCrLf
-                            ElseIf Preferences.resizefanart = 2 Then
-                                If bmp.Width > 1280 Or bmp.Height > 720 Then
-                                    Dim bm_source As New Bitmap(bmp)
-                                    Dim bm_dest As New Bitmap(1280, 720)
-                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
-                                Else
-                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                End If
-                            ElseIf Preferences.resizefanart = 3 Then
-                                If bmp.Width > 960 Or bmp.Height > 540 Then
-                                    Dim bm_source As New Bitmap(bmp)
-                                    Dim bm_dest As New Bitmap(960, 540)
-                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
-                                Else
-                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                End If
-
-                            End If
-                        Catch
-                        End Try
-                    Catch ex As WebException
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
-                End If
-            End If
-
-            Dim seasonallpath As String = ""
-            Dim posterurlpath As String = ""
-            Dim posterurl As String = ""
-            If Preferences.postertype = "poster" Then 'poster
-                For Each Image In artlist
-                    If Image.language = templanguage And Image.bannerType = "poster" Then
-                        posterurl = Image.url
-                        Exit For
-                    End If
-                Next
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.language = "en" And Image.bannerType = "poster" Then
-                            posterurlpath = Image.url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.bannerType = "poster" Then
-                            posterurlpath = Image.url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath <> "" And Preferences.seasonall <> "none" Then
-                    seasonallpath = posterurlpath
-                End If
-            ElseIf Preferences.postertype = "banner" Then 'banner
-                For Each Image In artlist
-                    If Image.language = templanguage And Image.bannerType = "series" And Image.season = Nothing Then
-                        posterurl = Image.url
-                        Exit For
-                    End If
-                Next
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.language = "en" And Image.bannerType = "series" And Image.season = Nothing Then
-                            posterurlpath = Image.url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.bannerType = "series" And Image.season = Nothing Then
-                            posterurlpath = Image.url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath <> "" And RadioButton16.Checked = True Then
-                    seasonallpath = posterurlpath
-                End If
-            End If
-
-            If posterurlpath <> "" Then
-
-                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "folder.jpg")
-                If Not IO.File.Exists(seasonpath) Then
-                    Try
-                        Dim buffer(4000000) As Byte
-                        Dim size As Integer = 0
-                        Dim bytesRead As Integer = 0
-                        Dim thumburl As String = posterurlpath
-                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                        Dim res As HttpWebResponse = req.GetResponse()
-                        Dim contents As Stream = res.GetResponseStream()
-                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                        While bytesToRead > 0
-                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                            If size = 0 Then Exit While
-                            bytesToRead -= size
-                            bytesRead += size
-                        End While
-                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                        fstrm.Write(buffer, 0, bytesRead)
-                        contents.Close()
-                        fstrm.Close()
-                    Catch ex As WebException
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                        'MsgBox("Error Downloading main poster from TVDB")
-                    End Try
-                End If
-            End If
+    '                        Dim thumburl As String = fanartposter
+    '                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+    '                        Dim res As HttpWebResponse = req.GetResponse()
+    '                        Dim contents As Stream = res.GetResponseStream()
+    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
+    '                        Dim bmp As New Bitmap(contents)
 
 
 
-            If Preferences.seasonall <> "none" And seasonallpath = "" Then
-                If Preferences.seasonall = "poster" Then 'poster
-                    For Each Image In artlist
-                        If Image.language = templanguage And Image.bannerType = "poster" Then
-                            seasonallpath = Image.url
-                            Exit For
-                        End If
-                    Next
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.language = "en" And Image.bannerType = "poster" Then
-                                seasonallpath = Image.url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.bannerType = "poster" Then
-                                seasonallpath = Image.url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                ElseIf Preferences.seasonall = "wide" = True Then 'banner
-                    For Each Image In artlist
-                        If Image.language = templanguage And Image.bannerType = "series" And Image.season = Nothing Then
-                            seasonallpath = Image.url
-                            Exit For
-                        End If
-                    Next
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.language = "en" And Image.bannerType = "series" And Image.season = Nothing Then
-                                seasonallpath = Image.url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.bannerType = "series" And Image.season = Nothing Then
-                                seasonallpath = Image.url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                End If
+    '                        While bytesToRead > 0
+    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
+    '                            If size = 0 Then Exit While
+    '                            bytesToRead -= size
+    '                            bytesRead += size
+    '                        End While
 
-                If seasonallpath <> "" Then
 
-                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
-                    If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
-                        Try
-                            Dim buffer(4000000) As Byte
-                            Dim size As Integer = 0
-                            Dim bytesRead As Integer = 0
-                            Dim thumburl As String = seasonallpath
-                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                            Dim res As HttpWebResponse = req.GetResponse()
-                            Dim contents As Stream = res.GetResponseStream()
-                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                            While bytesToRead > 0
-                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                If size = 0 Then Exit While
-                                bytesToRead -= size
-                                bytesRead += size
-                            End While
-                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                            fstrm.Write(buffer, 0, bytesRead)
-                            contents.Close()
-                            fstrm.Close()
-                        Catch ex As WebException
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                            'MsgBox("Error Downloading main poster from TVDB")
-                        End Try
-                    End If
-                End If
-            ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
-                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
-                If Not IO.File.Exists(seasonpath) Then
-                    Try
-                        Dim buffer(4000000) As Byte
-                        Dim size As Integer = 0
-                        Dim bytesRead As Integer = 0
-                        Dim thumburl As String = seasonallpath
-                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                        Dim res As HttpWebResponse = req.GetResponse()
-                        Dim contents As Stream = res.GetResponseStream()
-                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                        While bytesToRead > 0
-                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                            If size = 0 Then Exit While
-                            bytesToRead -= size
-                            bytesRead += size
-                        End While
-                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                        fstrm.Write(buffer, 0, bytesRead)
-                        contents.Close()
-                        fstrm.Close()
-                    Catch ex As WebException
-                        'MsgBox("Error Downloading main poster from TVDB")
-                    End Try
-                End If
-            End If
-        Catch
-        End Try
-        Call loadtvshow(TreeView1.SelectedNode.Name)
-        messbox.Close()
-    End Sub
+    '                        Try
+    '                            If Preferences.resizefanart = 1 Then
+    '                                bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+    '                                scraperLog = scraperLog & "Fanart not resized" & vbCrLf
+    '                            ElseIf Preferences.resizefanart = 2 Then
+    '                                If bmp.Width > 1280 Or bmp.Height > 720 Then
+    '                                    Dim bm_source As New Bitmap(bmp)
+    '                                    Dim bm_dest As New Bitmap(1280, 720)
+    '                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
+    '                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+    '                                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
+    '                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+    '                                    scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
+    '                                Else
+    '                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
+    '                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+    '                                End If
+    '                            ElseIf Preferences.resizefanart = 3 Then
+    '                                If bmp.Width > 960 Or bmp.Height > 540 Then
+    '                                    Dim bm_source As New Bitmap(bmp)
+    '                                    Dim bm_dest As New Bitmap(960, 540)
+    '                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
+    '                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+    '                                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
+    '                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+    '                                    scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
+    '                                Else
+    '                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
+    '                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+    '                                End If
+
+    '                            End If
+    '                        Catch
+    '                        End Try
+    '                    Catch ex As WebException
+    '#If SilentErrorScream Then
+    '                        Throw ex
+    '#End If
+    '                    End Try
+    '                End If
+    '            End If
+
+    '            Dim seasonallpath As String = ""
+    '            Dim posterurlpath As String = ""
+    '            Dim posterurl As String = ""
+    '            If Preferences.postertype = "poster" Then 'poster
+    '                For Each Image In artlist
+    '                    If Image.language = templanguage And Image.bannerType = "poster" Then
+    '                        posterurl = Image.url
+    '                        Exit For
+    '                    End If
+    '                Next
+    '                If posterurlpath = "" Then
+    '                    For Each Image In artlist
+    '                        If Image.language = "en" And Image.bannerType = "poster" Then
+    '                            posterurlpath = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                If posterurlpath = "" Then
+    '                    For Each Image In artlist
+    '                        If Image.bannerType = "poster" Then
+    '                            posterurlpath = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                If posterurlpath <> "" And Preferences.seasonall <> "none" Then
+    '                    seasonallpath = posterurlpath
+    '                End If
+    '            ElseIf Preferences.postertype = "banner" Then 'banner
+    '                For Each Image In artlist
+    '                    If Image.language = templanguage And Image.bannerType = "series" And Image.season = Nothing Then
+    '                        posterurl = Image.url
+    '                        Exit For
+    '                    End If
+    '                Next
+    '                If posterurlpath = "" Then
+    '                    For Each Image In artlist
+    '                        If Image.language = "en" And Image.bannerType = "series" And Image.season = Nothing Then
+    '                            posterurlpath = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                If posterurlpath = "" Then
+    '                    For Each Image In artlist
+    '                        If Image.bannerType = "series" And Image.season = Nothing Then
+    '                            posterurlpath = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                If posterurlpath <> "" And RadioButton16.Checked = True Then
+    '                    seasonallpath = posterurlpath
+    '                End If
+    '            End If
+
+    '            If posterurlpath <> "" Then
+
+    '                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "folder.jpg")
+    '                If Not IO.File.Exists(seasonpath) Then
+    '                    Try
+    '                        Dim buffer(4000000) As Byte
+    '                        Dim size As Integer = 0
+    '                        Dim bytesRead As Integer = 0
+    '                        Dim thumburl As String = posterurlpath
+    '                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+    '                        Dim res As HttpWebResponse = req.GetResponse()
+    '                        Dim contents As Stream = res.GetResponseStream()
+    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
+    '                        While bytesToRead > 0
+    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
+    '                            If size = 0 Then Exit While
+    '                            bytesToRead -= size
+    '                            bytesRead += size
+    '                        End While
+    '                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+    '                        fstrm.Write(buffer, 0, bytesRead)
+    '                        contents.Close()
+    '                        fstrm.Close()
+    '                    Catch ex As WebException
+    '#If SilentErrorScream Then
+    '                        Throw ex
+    '#End If
+    '                        'MsgBox("Error Downloading main poster from TVDB")
+    '                    End Try
+    '                End If
+    '            End If
+
+
+
+    '            If Preferences.seasonall <> "none" And seasonallpath = "" Then
+    '                If Preferences.seasonall = "poster" Then 'poster
+    '                    For Each Image In artlist
+    '                        If Image.language = templanguage And Image.bannerType = "poster" Then
+    '                            seasonallpath = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                    If seasonallpath = "" Then
+    '                        For Each Image In artlist
+    '                            If Image.language = "en" And Image.bannerType = "poster" Then
+    '                                seasonallpath = Image.url
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                    End If
+    '                    If seasonallpath = "" Then
+    '                        For Each Image In artlist
+    '                            If Image.bannerType = "poster" Then
+    '                                seasonallpath = Image.url
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                    End If
+    '                ElseIf Preferences.seasonall = "wide" = True Then 'banner
+    '                    For Each Image In artlist
+    '                        If Image.language = templanguage And Image.bannerType = "series" And Image.season = Nothing Then
+    '                            seasonallpath = Image.url
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                    If seasonallpath = "" Then
+    '                        For Each Image In artlist
+    '                            If Image.language = "en" And Image.bannerType = "series" And Image.season = Nothing Then
+    '                                seasonallpath = Image.url
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                    End If
+    '                    If seasonallpath = "" Then
+    '                        For Each Image In artlist
+    '                            If Image.bannerType = "series" And Image.season = Nothing Then
+    '                                seasonallpath = Image.url
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                    End If
+    '                End If
+
+    '                If seasonallpath <> "" Then
+
+    '                    Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
+    '                    If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
+    '                        Try
+    '                            Dim buffer(4000000) As Byte
+    '                            Dim size As Integer = 0
+    '                            Dim bytesRead As Integer = 0
+    '                            Dim thumburl As String = seasonallpath
+    '                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+    '                            Dim res As HttpWebResponse = req.GetResponse()
+    '                            Dim contents As Stream = res.GetResponseStream()
+    '                            Dim bytesToRead As Integer = CInt(buffer.Length)
+    '                            While bytesToRead > 0
+    '                                size = contents.Read(buffer, bytesRead, bytesToRead)
+    '                                If size = 0 Then Exit While
+    '                                bytesToRead -= size
+    '                                bytesRead += size
+    '                            End While
+    '                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+    '                            fstrm.Write(buffer, 0, bytesRead)
+    '                            contents.Close()
+    '                            fstrm.Close()
+    '                        Catch ex As WebException
+    '#If SilentErrorScream Then
+    '                            Throw ex
+    '#End If
+    '                            'MsgBox("Error Downloading main poster from TVDB")
+    '                        End Try
+    '                    End If
+    '                End If
+    '            ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
+    '                Dim seasonpath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "season-all.tbn")
+    '                If Not IO.File.Exists(seasonpath) Then
+    '                    Try
+    '                        Dim buffer(4000000) As Byte
+    '                        Dim size As Integer = 0
+    '                        Dim bytesRead As Integer = 0
+    '                        Dim thumburl As String = seasonallpath
+    '                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+    '                        Dim res As HttpWebResponse = req.GetResponse()
+    '                        Dim contents As Stream = res.GetResponseStream()
+    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
+    '                        While bytesToRead > 0
+    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
+    '                            If size = 0 Then Exit While
+    '                            bytesToRead -= size
+    '                            bytesRead += size
+    '                        End While
+    '                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+    '                        fstrm.Write(buffer, 0, bytesRead)
+    '                        contents.Close()
+    '                        fstrm.Close()
+    '                    Catch ex As WebException
+    '                        'MsgBox("Error Downloading main poster from TVDB")
+    '                    End Try
+    '                End If
+    '            End If
+    '        Catch
+    '        End Try
+    '        Call loadtvshow(TreeView1.SelectedNode.Name)
+    '        messbox.Close()
+    '    End Sub
 
     Private Sub CheckBox35_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox35.CheckedChanged
         If CheckBox35.CheckState = CheckState.Checked Then

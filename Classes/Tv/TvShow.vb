@@ -1,4 +1,8 @@
-﻿Public Class TvShow
+﻿Imports System.Xml
+Imports System.Net
+Imports System.IO
+
+Public Class TvShow
     Inherits Nfo.TvShow
 
 
@@ -158,10 +162,10 @@
 
     Public Shadows Property episodeactorsource As String
         Get
-            Return MyBase.episodeactorsource.Value
+            Return MyBase.EpisodeActorSource.Value
         End Get
         Set(ByVal value As String)
-            MyBase.episodeactorsource.Value = value
+            MyBase.EpisodeActorSource.Value = value
         End Set
     End Property
 
@@ -183,4 +187,10 @@
 
     Public Property posters As New List(Of String)
     Public Property fanart As New List(Of String)
+
+    Public ShowNode As New TreeNode
+    Public SeasonNode As New TreeNode()
+
+
+
 End Class

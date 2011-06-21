@@ -613,6 +613,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Private Shared Function EnumerateFolders(ByVal RootPath As String, ByVal MaxLevels As Long, ByVal Level As Long) As List(Of String)
         Dim TempReturn As New List(Of String)
+        If String.IsNullOrEmpty(RootPath) Then Return Nothing
         Dim ChildList
         Try
             ChildList = Directory.GetDirectories(RootPath)

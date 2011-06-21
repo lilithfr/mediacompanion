@@ -208,6 +208,7 @@ C:\SVN MC\bin\Release\Common.pdb
 C:\SVN MC\bin\Release\Common.xml
 C:\MC SVN\obj\Release\ResGen.read.1.tlog
 C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\Projects\MC\Recheck\bin\Release\Media Companion.exe.config
 C:\Projects\MC\Recheck\bin\Release\Assets\class_mpdb_thumbs.dll
 C:\Projects\MC\Recheck\bin\Release\Assets\crclib.dll
 C:\Projects\MC\Recheck\bin\Release\Assets\ffmpeg.exe
@@ -302,7 +303,6 @@ C:\Projects\MC\Recheck\bin\Release\Resources\default_fanart.jpg
 C:\Projects\MC\Recheck\bin\Release\Resources\default_offline.jpg
 C:\Projects\MC\Recheck\bin\Release\Resources\default_poster.jpg
 C:\Projects\MC\Recheck\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
-C:\Projects\MC\Recheck\bin\Release\Media Companion.exe.config
 C:\Projects\MC\Recheck\bin\Release\Media Companion.exe
 C:\Projects\MC\Recheck\bin\Release\Media Companion.pdb
 C:\Projects\MC\Recheck\bin\Release\class_mpdb_thumbs.dll
