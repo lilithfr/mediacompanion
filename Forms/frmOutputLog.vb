@@ -46,4 +46,8 @@ Public Class frmoutputlog
 
 
     End Sub
+
+    Private Sub TextBox1_GotFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.GotFocus
+        TextBox1.Select(TextBox1.Text.Length, 0)
+    End Sub
 End Class
