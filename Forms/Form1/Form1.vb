@@ -10454,13 +10454,9 @@ Public Class Form1
         globalThreadCounter -= 1
 
     End Sub
-
-    Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
-
-        
-
+    Private Sub Movie_PlayMovie()
         Dim tempstring As String
-        tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
+        tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
         Dim playlist As New List(Of String)
         tempstring = Utilities.GetFileName(tempstring)
         playlist = Utilities.GetMediaList(tempstring)
@@ -10472,6 +10468,58 @@ Public Class Form1
         frmSplash2.ProgressBar1.Visible = False
         frmSplash2.Show()
         Application.DoEvents()
+
+        If playlist.Count <= 0 Then
+            MsgBox("No Media File Found For This nfo")
+            Exit Sub
+        End If
+
+
+        tempstring = applicationPath & "\settings\temp.m3u"
+
+
+        Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
+
+        For Each part In playlist
+            If part <> Nothing Then file.WriteLine(part)
+        Next
+        file.Close()
+
+        frmSplash2.Label1.Text = "Launching Player....."
+
+        If Preferences.videomode = 1 Then Call videomode1(tempstring)
+        If Preferences.videomode = 2 Then Call videomode2(tempstring)
+        If Preferences.videomode = 3 Then
+            Preferences.videomode = 2
+            Call videomode2(tempstring)
+        End If
+        If Preferences.videomode >= 4 Then
+            If Preferences.selectedvideoplayer <> Nothing Then
+                Call videomode4(tempstring)
+            Else
+                Call videomode1(tempstring)
+            End If
+        End If
+
+        frmSplash2.Hide()
+    End Sub
+    Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
+
+        Movie_PlayMovie()
+
+        'Dim tempstring As String
+        'tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
+        'Dim playlist As New List(Of String)
+        'tempstring = Utilities.GetFileName(tempstring)
+        'playlist = Utilities.GetMediaList(tempstring)
+
+        'frmSplash2.Text = "Playing Movie..."
+        'frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
+        'frmSplash2.Label1.Visible = True
+        'frmSplash2.Label2.Visible = False
+        'frmSplash2.ProgressBar1.Visible = False
+        'frmSplash2.Show()
+        'Application.DoEvents()
 
 
         'If IO.File.Exists(tempstring) Then
@@ -10838,39 +10886,39 @@ Public Class Form1
         '    End If
         'End If
 
-        If playlist.Count <= 0 Then
-            MsgBox("No Media File Found For This nfo")
-            Exit Sub
-        End If
+        'If playlist.Count <= 0 Then
+        '    MsgBox("No Media File Found For This nfo")
+        '    Exit Sub
+        'End If
 
 
-        tempstring = applicationPath & "\settings\temp.m3u"
+        'tempstring = applicationPath & "\settings\temp.m3u"
 
 
-        Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
+        'Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
 
-        For Each part In playlist
-            If part <> Nothing Then file.WriteLine(part)
-        Next
-        file.Close()
+        'For Each part In playlist
+        '    If part <> Nothing Then file.WriteLine(part)
+        'Next
+        'file.Close()
 
-        frmSplash2.Label1.Text = "Launching Player....."
+        'frmSplash2.Label1.Text = "Launching Player....."
 
-        If Preferences.videomode = 1 Then Call videomode1(tempstring)
-        If Preferences.videomode = 2 Then Call videomode2(tempstring)
-        If Preferences.videomode = 3 Then
-            Preferences.videomode = 2
-            Call videomode2(tempstring)
-        End If
-        If Preferences.videomode >= 4 Then
-            If Preferences.selectedvideoplayer <> Nothing Then
-                Call videomode4(tempstring)
-            Else
-                Call videomode1(tempstring)
-            End If
-        End If
+        'If Preferences.videomode = 1 Then Call videomode1(tempstring)
+        'If Preferences.videomode = 2 Then Call videomode2(tempstring)
+        'If Preferences.videomode = 3 Then
+        '    Preferences.videomode = 2
+        '    Call videomode2(tempstring)
+        'End If
+        'If Preferences.videomode >= 4 Then
+        '    If Preferences.selectedvideoplayer <> Nothing Then
+        '        Call videomode4(tempstring)
+        '    Else
+        '        Call videomode1(tempstring)
+        '    End If
+        'End If
 
-        frmSplash2.Hide()
+        'frmSplash2.Hide()
 
     End Sub
 
