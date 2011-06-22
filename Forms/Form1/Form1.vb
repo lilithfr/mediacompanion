@@ -10456,11 +10456,24 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
+
+        
+
         Dim tempstring As String
         tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
         Dim playlist As New List(Of String)
         tempstring = Utilities.GetFileName(tempstring)
         playlist = Utilities.GetMediaList(tempstring)
+
+        frmSplash2.Text = "Playing Movie..."
+        frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
+        frmSplash2.Label1.Visible = True
+        frmSplash2.Label2.Visible = False
+        frmSplash2.ProgressBar1.Visible = False
+        frmSplash2.Show()
+        Application.DoEvents()
+
+
         'If IO.File.Exists(tempstring) Then
         '    playlist.Add(tempstring)
         'End If
@@ -10841,6 +10854,7 @@ Public Class Form1
         Next
         file.Close()
 
+        frmSplash2.Label1.Text = "Launching Player....."
 
         If Preferences.videomode = 1 Then Call videomode1(tempstring)
         If Preferences.videomode = 2 Then Call videomode2(tempstring)
@@ -10855,6 +10869,9 @@ Public Class Form1
                 Call videomode1(tempstring)
             End If
         End If
+
+        frmSplash2.Hide()
+
     End Sub
 
     Private Sub ComboBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragDrop
@@ -14964,7 +14981,6 @@ Public Class Form1
 
     Private Sub TreeView1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TreeView1.DoubleClick
         If TreeView1.SelectedNode Is Nothing Then Exit Sub
-
         Dim tempstring2 As String
         Dim tempstring As String = ""
         Dim pathandfilename As String = TreeView1.SelectedNode.Name
@@ -15011,6 +15027,8 @@ Public Class Form1
                         Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
                         file.WriteLine(tempstring2)
                         file.Close()
+
+
 
                         If Preferences.videomode = 1 Then Call videomode1(tempstring)
                         If Preferences.videomode = 2 Then Call videomode2(tempstring)
@@ -18893,7 +18911,15 @@ Public Class Form1
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim tvdbstuff As New TVDBScraper
         Dim thumblist As String = tvdbstuff.getposterlist(workingTvShow.tvdbid)
-        showlist.LoadXml(thumblist)
+        Try
+            showlist.LoadXml(thumblist)
+        Catch ex As Exception
+            MsgBox(thumblist, MsgBoxStyle.OkOnly, "TVdb site returned.....")
+            'thumblist = "<error>ERROR</error>"
+            'showlist.LoadXml(thumblist)
+            Exit Sub
+        End Try
+
         'CheckBox3 = seasons
         'CheckBox4 = fanart
         'CheckBox5 = poster
@@ -18912,7 +18938,8 @@ Public Class Form1
                             Case "language"
                                 individualposter.language = results.InnerText
                             Case "season"
-                                individualposter.season = results.InnerText
+                                individualposter.Season = results.InnerText
+
                         End Select
                     Next
                     individualposter.smallUrl = individualposter.url.Replace("http://thetvdb.com/banners/", "http://thetvdb.com/banners/_cache/")
@@ -18930,6 +18957,7 @@ Public Class Form1
         If tvdbposterlist.Count = 0 Then
             Call gettvdbthumbs()
         End If
+
         Dim tempseason As String = ""
         If ComboBox2.SelectedItem.indexof("Season ") <> -1 Then
             tempseason = ComboBox2.SelectedItem.replace("Season ", "")
@@ -20188,6 +20216,9 @@ Public Class Form1
     Private Sub PlayMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem.Click
         'Dim item As Windows.Forms.ToolStripMenuItem = sender
         ''Dim picbox As PictureBox = item.SourceControl
+
+        
+
         Dim tempstring As String = ClickedControl
         If tempstring = Nothing Then
             Exit Sub
@@ -20578,6 +20609,7 @@ Public Class Form1
         file.Close()
 
 
+
         If Preferences.videomode = 1 Then Call videomode1(tempstring)
         If Preferences.videomode = 2 Then Call videomode2(tempstring)
         If Preferences.videomode = 3 Then
@@ -20591,6 +20623,7 @@ Public Class Form1
                 Call videomode1(tempstring)
             End If
         End If
+
     End Sub
 
     Private Sub EditMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMovieToolStripMenuItem1.Click
