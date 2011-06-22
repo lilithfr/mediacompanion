@@ -852,6 +852,8 @@ Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+Me.ToolStripSeparator17 = New System.Windows.Forms.ToolStripSeparator()
+Me.PlayMovieToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1135,10 +1137,10 @@ Me.Button6.Visible = false
 '
 Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.CheckBox1.AutoSize = true
-Me.CheckBox1.Location = New System.Drawing.Point(1075, 490)
+Me.CheckBox1.Location = New System.Drawing.Point(1061, 488)
 Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox1.Name = "CheckBox1"
-Me.CheckBox1.Size = New System.Drawing.Size(120, 17)
+Me.CheckBox1.Size = New System.Drawing.Size(134, 19)
 Me.CheckBox1.TabIndex = 114
 Me.CheckBox1.Text = "Save Lo-Res Image"
 Me.ToolTip1.SetToolTip(Me.CheckBox1, "The default image saved is from the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"highest resolution available."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check this bo"& _ 
@@ -1442,7 +1444,7 @@ Me.ToolTip1.SetToolTip(Me.GroupBox11, "You can select a specific locations certi
 Me.ScrapeFullCertCheckBox.AutoSize = true
 Me.ScrapeFullCertCheckBox.Location = New System.Drawing.Point(24, 271)
 Me.ScrapeFullCertCheckBox.Name = "ScrapeFullCertCheckBox"
-Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(234, 17)
+Me.ScrapeFullCertCheckBox.Size = New System.Drawing.Size(264, 19)
 Me.ScrapeFullCertCheckBox.TabIndex = 8
 Me.ScrapeFullCertCheckBox.Text = "Scrape Full Cert i.e. UK:15 instead of just 15"
 Me.ScrapeFullCertCheckBox.UseVisualStyleBackColor = true
@@ -1910,7 +1912,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Location = New System.Drawing.Point(11, 50)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Name = "CheckBox_XBMC_Scraper_TMDB_IMDBRatings"
-Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(124, 17)
+Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(140, 19)
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.TabIndex = 71
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Text = "Get rating from IMDb"
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.UseVisualStyleBackColor = true
@@ -1932,7 +1934,7 @@ Me.CheckBox_XBMC_Scraper_TMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Location = New System.Drawing.Point(11, 25)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Name = "CheckBox_XBMC_Scraper_TMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(89, 17)
+Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(99, 19)
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Text = "Enable fanart"
 Me.CheckBox_XBMC_Scraper_TMDB_Fanart.UseVisualStyleBackColor = true
@@ -2057,7 +2059,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Trailer.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Location = New System.Drawing.Point(11, 164)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Name = "CheckBox_XBMC_Scraper_IMDB_Trailer"
-Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(147, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(166, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.TabIndex = 67
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Text = "Fall back on IMDB trailers"
 Me.CheckBox_XBMC_Scraper_IMDB_Trailer.UseVisualStyleBackColor = true
@@ -2089,7 +2091,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Location = New System.Drawing.Point(11, 118)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(196, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(224, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.TabIndex = 4
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Text = "Enable posters from MoviePosterDB"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.UseVisualStyleBackColor = true
@@ -2100,7 +2102,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Location = New System.Drawing.Point(11, 94)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(176, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(201, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.TabIndex = 3
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Text = "Enable posters from IMPAwards"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.UseVisualStyleBackColor = true
@@ -2111,7 +2113,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Location = New System.Drawing.Point(11, 70)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB"
-Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(195, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(224, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.TabIndex = 2
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Text = "Enable posters from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.UseVisualStyleBackColor = true
@@ -2133,7 +2135,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_Fanart.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Location = New System.Drawing.Point(11, 48)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Name = "CheckBox_XBMC_Scraper_IMDB_Fanart"
-Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(188, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(215, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.TabIndex = 1
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Text = "Enable fanart from themoviedb.org"
 Me.CheckBox_XBMC_Scraper_IMDB_Fanart.UseVisualStyleBackColor = true
@@ -2144,7 +2146,7 @@ Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.AutoSize = true
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Location = New System.Drawing.Point(11, 24)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Name = "CheckBox_XBMC_Scraper_IMDB_FullCredits"
-Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(132, 17)
+Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(148, 19)
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.TabIndex = 0
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Text = "Enable full cast credits"
 Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.UseVisualStyleBackColor = true
@@ -2192,9 +2194,9 @@ Me.MovieListComboBox.TabIndex = 53
 '
 'ContextMenuStrip1
 '
-Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
+Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem1, Me.ToolStripSeparator17, Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
 Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 192)
+Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 242)
 Me.ContextMenuStrip1.Text = "whatever"
 '
 'SetMovieAsWatchedToolStripMenuItem
@@ -2808,7 +2810,7 @@ Me.RadioButtonMissingFanart.AutoSize = true
 Me.RadioButtonMissingFanart.Location = New System.Drawing.Point(8, 118)
 Me.RadioButtonMissingFanart.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButtonMissingFanart.Name = "RadioButtonMissingFanart"
-Me.RadioButtonMissingFanart.Size = New System.Drawing.Size(93, 17)
+Me.RadioButtonMissingFanart.Size = New System.Drawing.Size(106, 19)
 Me.RadioButtonMissingFanart.TabIndex = 5
 Me.RadioButtonMissingFanart.Text = "Missing Fanart"
 Me.RadioButtonMissingFanart.UseVisualStyleBackColor = true
@@ -2819,7 +2821,7 @@ Me.RadioButton45.AutoSize = true
 Me.RadioButton45.Location = New System.Drawing.Point(8, 19)
 Me.RadioButton45.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton45.Name = "RadioButton45"
-Me.RadioButton45.Size = New System.Drawing.Size(36, 17)
+Me.RadioButton45.Size = New System.Drawing.Size(38, 19)
 Me.RadioButton45.TabIndex = 0
 Me.RadioButton45.Text = "All"
 Me.RadioButton45.UseVisualStyleBackColor = true
@@ -2830,7 +2832,7 @@ Me.RadioButton49.AutoSize = true
 Me.RadioButton49.Location = New System.Drawing.Point(8, 98)
 Me.RadioButton49.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton49.Name = "RadioButton49"
-Me.RadioButton49.Size = New System.Drawing.Size(98, 17)
+Me.RadioButton49.Size = New System.Drawing.Size(112, 19)
 Me.RadioButton49.TabIndex = 4
 Me.RadioButton49.Text = "Missing Posters"
 Me.RadioButton49.UseVisualStyleBackColor = true
@@ -2841,7 +2843,7 @@ Me.RadioButton46.AutoSize = true
 Me.RadioButton46.Location = New System.Drawing.Point(8, 39)
 Me.RadioButton46.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton46.Name = "RadioButton46"
-Me.RadioButton46.Size = New System.Drawing.Size(69, 17)
+Me.RadioButton46.Size = New System.Drawing.Size(73, 19)
 Me.RadioButton46.TabIndex = 1
 Me.RadioButton46.Text = "Watched"
 Me.RadioButton46.UseVisualStyleBackColor = true
@@ -2852,7 +2854,7 @@ Me.RadioButton48.AutoSize = true
 Me.RadioButton48.Location = New System.Drawing.Point(8, 78)
 Me.RadioButton48.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton48.Name = "RadioButton48"
-Me.RadioButton48.Size = New System.Drawing.Size(75, 17)
+Me.RadioButton48.Size = New System.Drawing.Size(83, 19)
 Me.RadioButton48.TabIndex = 3
 Me.RadioButton48.Text = "Duplicates"
 Me.RadioButton48.UseVisualStyleBackColor = true
@@ -2863,7 +2865,7 @@ Me.RadioButton47.AutoSize = true
 Me.RadioButton47.Location = New System.Drawing.Point(8, 59)
 Me.RadioButton47.Margin = New System.Windows.Forms.Padding(4)
 Me.RadioButton47.Name = "RadioButton47"
-Me.RadioButton47.Size = New System.Drawing.Size(83, 17)
+Me.RadioButton47.Size = New System.Drawing.Size(89, 19)
 Me.RadioButton47.TabIndex = 2
 Me.RadioButton47.Text = "UnWatched"
 Me.RadioButton47.UseVisualStyleBackColor = true
@@ -10472,6 +10474,17 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
 '
+'ToolStripSeparator17
+'
+Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
+Me.ToolStripSeparator17.Size = New System.Drawing.Size(217, 6)
+'
+'PlayMovieToolStripMenuItem1
+'
+Me.PlayMovieToolStripMenuItem1.Name = "PlayMovieToolStripMenuItem1"
+Me.PlayMovieToolStripMenuItem1.Size = New System.Drawing.Size(220, 22)
+Me.PlayMovieToolStripMenuItem1.Text = "Play Movie"
+'
 'Form1
 '
 Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -11533,6 +11546,8 @@ End Sub
     Friend WithEvents MediaCompanionHelpFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CheckBox_ShowDateOnMovieList As System.Windows.Forms.CheckBox
     Friend WithEvents DisplayEpisodesByAiredDateToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator17 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents PlayMovieToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
 
 
 

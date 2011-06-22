@@ -376,3 +376,35 @@ C:\SVN MC\bin\Release\Resources\default_poster.jpg
 C:\SVN MC\bin\Release\class_mpdb_thumbs.dll
 C:\SVN MC\bin\Release\imdb_thumbs.dll
 C:\SVN MC\bin\Release\IMPA.dll
+C:\MC SVN\bin\Release\Assets\class_mpdb_thumbs.dll
+C:\MC SVN\bin\Release\Assets\crclib.dll
+C:\MC SVN\bin\Release\Assets\ffmpeg.exe
+C:\MC SVN\bin\Release\Assets\ICSharpCode.SharpZipLib.dll
+C:\MC SVN\bin\Release\Assets\imdb.dll
+C:\MC SVN\bin\Release\Assets\imdb_thumbs.dll
+C:\MC SVN\bin\Release\Assets\IMPA.dll
+C:\MC SVN\bin\Release\Assets\Media Companion icon5.ico
+C:\MC SVN\bin\Release\MediaInfo.dll
+C:\MC SVN\bin\Release\Assets\pthreadGC2.dll
+C:\MC SVN\bin\Release\Assets\tmdb_posters.dll
+C:\MC SVN\bin\Release\Assets\TVDB.dll
+C:\MC SVN\bin\Release\Assets\_imdb.dll
+C:\MC SVN\bin\Release\html_templates\another template.txt
+C:\MC SVN\bin\Release\html_templates\html_template.txt
+C:\MC SVN\bin\Release\html_templates\INFO_HTMLoutputTags.txt
+C:\MC SVN\bin\Release\html_templates\Movie Card 2up Filter.txt
+C:\MC SVN\bin\Release\html_templates\Movie Card 2up.txt
+C:\MC SVN\bin\Release\html_templates\Movie Card.txt
+C:\MC SVN\bin\Release\html_templates\new template.txt
+C:\MC SVN\bin\Release\html_templates\Table List.txt
+C:\MC SVN\bin\Release\html_templates\tv_adv_template.txt
+C:\MC SVN\bin\Release\html_templates\tv_basic_template.txt
+C:\MC SVN\bin\Release\html_templates\tv_missing_episode_list.txt
+C:\MC SVN\bin\Release\Resources\default_actor.jpg
+C:\MC SVN\bin\Release\Resources\default_banner.jpg
+C:\MC SVN\bin\Release\Resources\default_fanart.jpg
+C:\MC SVN\bin\Release\Resources\default_offline.jpg
+C:\MC SVN\bin\Release\Resources\default_poster.jpg
+C:\MC SVN\bin\Release\class_mpdb_thumbs.dll
+C:\MC SVN\bin\Release\imdb_thumbs.dll
+C:\MC SVN\bin\Release\IMPA.dll

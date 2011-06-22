@@ -11051,7 +11051,9 @@ Public Class Form1
             Dim pt As Point
             pt.X = e.X
             pt.Y = e.Y
+            MovieListComboBox.SelectionMode = SelectionMode.One
             MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
+            MovieListComboBox.SelectionMode = SelectionMode.MultiExtended
         End If
     End Sub
 
@@ -15103,6 +15105,8 @@ Public Class Form1
         End If
 
     End Sub
+
+    
 
     Private Sub TreeView1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TreeView1.MouseUp
         If e.Button = MouseButtons.Right Then
@@ -30672,4 +30676,8 @@ Public Class Form1
     End Function
 
    
+
+    Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
+        Movie_PlayMovie()
+    End Sub
 End Class
