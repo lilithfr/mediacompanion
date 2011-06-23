@@ -306,7 +306,7 @@ Public Class Form1
 
 
         Preferences.maximised = False
-        Preferences.SetUpPreferences()                     'Set defaults to all userpreferences
+        Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
         generalprefschanged = False
 
         tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
