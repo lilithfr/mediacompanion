@@ -6174,69 +6174,90 @@ Public Class Form1
     End Sub
 
     Public Sub setuppreferences()
+        'General
         Preferences.ignorearticle = False
-        Preferences.movies_useXBMC_Scraper = False
-        Preferences.tvshow_useXBMC_Scraper = False
-        Preferences.eprenamelowercase = False
-        Preferences.intruntime = False
-        Preferences.autorenameepisodes = False
-        Preferences.autoepisodescreenshot = False
-        Preferences.tvshowautoquick = False
-        Preferences.actorseasy = True
-        Preferences.copytvactorthumbs = True
-        Preferences.startuptab = 0
-        Preferences.font = "Times New Roman, 9pt"
-        Preferences.moviedefaultlist = 0
-        Preferences.moviesortorder = 0
-        Preferences.enabletvhdtags = True
-        Preferences.tvshowrebuildlog = False
-        Preferences.seasonall = "none"
-        Preferences.tvrename = 0
         Preferences.externalbrowser = False
         Preferences.videoplaybackmode = "1"
         Preferences.backgroundcolour = "Silver"
         Preferences.forgroundcolour = "#D3D9DC"
         Preferences.formheight = "600"
         Preferences.formwidth = "800"
-        Preferences.fanartnotstacked = False
-        Preferences.posternotstacked = False
         Preferences.disablelogfiles = False
         Preferences.startupCache = True
         Preferences.rarsize = True = "8"
-        Preferences.ignoreactorthumbs = False
-        Preferences.actorsave = False
-        Preferences.actorsavepath = ""
-        Preferences.actornetworkpath = ""
+        Preferences.renamenfofiles = True
+        Preferences.checkinfofiles = True
+        Preferences.scrapemovieposters = True
+        Preferences.dontdisplayposter = False
+        Preferences.usetransparency = False 'not used in gen2
+        Preferences.transparencyvalue = 255 'not used in gen2
+        Preferences.lastpath = Application.StartupPath
+        Preferences.videomode = 1
+        Preferences.locx = 0
+        Preferences.locy = 0
+        Preferences.formheight = 725
+        Preferences.formwidth = 1060
+        Preferences.splt5 = 0
+        Preferences.showsortdate = False
+
+        'Movies
+        Preferences.movies_useXBMC_Scraper = False
+        Preferences.moviedefaultlist = 0
+        Preferences.moviesortorder = 0
+        Preferences.imdbmirror = "http://www.imdb.com/"
+        Preferences.usefoldernames = False
+        ReDim Preferences.moviethumbpriority(3)
+        Preferences.maxmoviegenre = 99
+        Preferences.moviethumbpriority(0) = "Internet Movie Poster Awards"
+        Preferences.moviethumbpriority(1) = "themoviedb.org"
+        Preferences.moviethumbpriority(2) = "Movie Poster DB"
+        Preferences.moviethumbpriority(3) = "IMDB"
+
+        'TV
+        Preferences.tvshow_useXBMC_Scraper = False
+        Preferences.autorenameepisodes = False
+        Preferences.autoepisodescreenshot = False
+        Preferences.tvshowautoquick = False
+        Preferences.copytvactorthumbs = True
+        Preferences.enabletvhdtags = True
+        Preferences.tvshowrebuildlog = False
+        Preferences.seasonall = "none"
+        Preferences.tvrename = 0
         Preferences.tvfanart = True
         Preferences.tvposter = True
         Preferences.postertype = "poster"
         Preferences.downloadtvseasonthumbs = True
-        Preferences.usefanart = True
-        Preferences.ignoretrailers = False
-        Preferences.keepfoldername = False
-        Preferences.enablehdtags = True
-        Preferences.renamenfofiles = True
-        Preferences.checkinfofiles = True
-        Preferences.savefanart = True
-        Preferences.scrapemovieposters = True
-        Preferences.dontdisplayposter = False
-        Preferences.resizefanart = 1
-        Preferences.overwritethumbs = False
-        Preferences.startupmode = 1
-        Preferences.maxactors = 9999
-        Preferences.maxmoviegenre = 99
-        Preferences.usetransparency = False
-        Preferences.transparencyvalue = 255
-        Preferences.defaulttvthumb = "poster"
-        Preferences.imdbmirror = "http://www.imdb.com/"
-        Preferences.usefoldernames = False
-        Preferences.createfolderjpg = False
-        Preferences.basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
-        Preferences.namemode = "1"
         Preferences.tvdblanguage = "English"
         Preferences.tvdblanguagecode = "en"
         Preferences.sortorder = "default"
         Preferences.tvdbactorscrape = 0
+        Preferences.defaulttvthumb = "poster"
+        Preferences.OfflineDVDTitle = "Please Load '%T' Media To Play..."
+
+        'Unknown - need to be sorted/named better
+        Preferences.eprenamelowercase = False
+        Preferences.intruntime = False
+        Preferences.actorseasy = True
+        Preferences.startuptab = 0
+        Preferences.font = "Times New Roman, 9pt"
+        Preferences.fanartnotstacked = False
+        Preferences.posternotstacked = False
+        Preferences.ignoreactorthumbs = False
+        Preferences.actorsave = False
+        Preferences.actorsavepath = ""
+        Preferences.actornetworkpath = ""
+        Preferences.usefanart = True
+        Preferences.ignoretrailers = False
+        Preferences.keepfoldername = False
+        Preferences.enablehdtags = True
+        Preferences.savefanart = True
+        Preferences.resizefanart = 1
+        Preferences.overwritethumbs = False
+        Preferences.startupmode = 1
+        Preferences.maxactors = 9999
+        Preferences.createfolderjpg = False
+        Preferences.basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
+        Preferences.namemode = "1"
         Preferences.maximumthumbs = 10
         Preferences.gettrailer = False
         ReDim Preferences.certificatepriority(33)
@@ -6274,22 +6295,10 @@ Public Class Form1
         Preferences.certificatepriority(31) = "Germany"
         Preferences.certificatepriority(32) = "Greece"
         Preferences.certificatepriority(33) = "Austria"
-        ReDim Preferences.moviethumbpriority(3)
-        Preferences.moviethumbpriority(0) = "Internet Movie Poster Awards"
-        Preferences.moviethumbpriority(1) = "themoviedb.org"
-        Preferences.moviethumbpriority(2) = "Movie Poster DB"
-        Preferences.moviethumbpriority(3) = "IMDB"
         Preferences.maximagecount = 10
-        Preferences.lastpath = Application.StartupPath
-        Preferences.videomode = 1
-        Preferences.locx = 0
-        Preferences.locy = 0
-        Preferences.formheight = 725
-        Preferences.formwidth = 1060
+        
         movieFolders.Clear()
         tvFolders.Clear()
-        Preferences.splt5 = 0
-        Preferences.showsortdate = False
         generalprefschanged = False
     End Sub
 
