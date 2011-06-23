@@ -806,6 +806,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 cleanname = filename
             End If
             cleanname = Trim(cleanname)
+            cleanname = cleanname.Replace(".", " ")         'replace '.' with ' ' in name for OS's that can't have spaces in filenames.....
             Return cleanname
         Catch ex As Exception
             cleanname = "error"

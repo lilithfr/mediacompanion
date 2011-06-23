@@ -13134,8 +13134,9 @@ Public Class Form1
                                     tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
                                     workingMovieDetails.fullmoviebody.title = Utilities.CleanFileName(tempstring)
                                     '                                    workingmoviedetails.fullmoviebody.sortorder = filefunction.getlastfolder(workingmoviedetails.fileinfo.fullpathandfilename) 'foldername)
-                                    tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)
-                                    workingMovieDetails.fullmoviebody.sortorder = Utilities.CleanFileName(tempstring)
+                                    'tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename) 'foldername)  'unnecessary duplication & sub calls...
+                                    'workingMovieDetails.fullmoviebody.sortorder = Utilities.CleanFileName(tempstring)
+                                    workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title   'at this initial scape stage the sort title = the cleaned movie title
                                 End If
                             End If
                             stage = stage & "Adding title: " & workingMovieDetails.fullmoviebody.title & vbCrLf
