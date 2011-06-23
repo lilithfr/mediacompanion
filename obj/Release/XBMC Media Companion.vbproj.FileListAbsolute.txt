@@ -411,3 +411,6 @@ C:\MC SVN\bin\Release\IMPA.dll
 C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
 C:\MC SVN\bin\Release\mc_com.exe
 C:\MC SVN\bin\Release\media_companion.chm
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+C:\SVN MC\bin\Release\mc_com.exe
+C:\SVN MC\bin\Release\media_companion.chm
