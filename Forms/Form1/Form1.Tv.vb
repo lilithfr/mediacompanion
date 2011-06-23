@@ -993,45 +993,45 @@ Partial Public Class Form1
 
                 End If
 
-                Dim showlist As New XmlDocument
-                Dim ArtList As New List(Of TvBanners)
-                Dim artdone As Boolean = False
-                If Preferences.tvfanart = True Or Preferences.tvposter = True Or Preferences.seasonall <> "none" Then
-                    Dim thumblist As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.tvdbid, True)
-                    'showlist.LoadXml(thumblist)
-                    artdone = True
+                'Dim showlist As New XmlDocument
+                'Dim ArtList As New List(Of TvBanners)
+                'Dim artdone As Boolean = False
+                'If Preferences.tvfanart = True Or Preferences.tvposter = True Or Preferences.seasonall <> "none" Then
+                '    Dim thumblist As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.tvdbid, True)
+                '    'showlist.LoadXml(thumblist)
+                '    artdone = True
 
-                    For Each Item As Tvdb.Banner In thumblist.Items
-                        Dim NewItem As New TvBanners
-                        NewItem = Item
-                        ArtList.Add(NewItem)
-                    Next
-                End If
-
-                If Not speedy Then
+                '    For Each Item As Tvdb.Banner In thumblist.Items
+                '        Dim NewItem As New TvBanners
+                '        NewItem = Item
+                '        ArtList.Add(NewItem)
+                '    Next
+                'End If
+                Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.tvdbid, True)
+                If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
 
 
                     If Preferences.downloadtvseasonthumbs = True Then
-                        For f = 0 To 1000
+                        For f = 0 To ArtList.Items.SeasonMax
                             Dim seasonposter As String = ""
-                            For Each Image In artlist
-                                If Image.season = f.ToString And Image.language = templanguage Then
-                                    seasonposter = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Season = f.ToString And Image.Language = templanguage Then
+                                    seasonposter = Image.Url
                                     Exit For
                                 End If
                             Next
                             If seasonposter = "" Then
-                                For Each Image In artlist
-                                    If Image.season = f.ToString And Image.language = "en" Then
-                                        seasonposter = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Season = f.ToString And Image.Language = "en" Then
+                                        seasonposter = Image.Url
                                         Exit For
                                     End If
                                 Next
                             End If
                             If seasonposter = "" Then
-                                For Each Image In artlist
-                                    If Image.season = f.ToString Then
-                                        seasonposter = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Season = f.ToString Then
+                                        seasonposter = Image.Url
                                         Exit For
                                     End If
                                 Next
@@ -1059,25 +1059,25 @@ Partial Public Class Form1
                         Dim fanartposter As String
                         fanartposter = ""
                         If CheckBox7.CheckState = CheckState.Checked Then
-                            For Each Image In artlist
-                                If Image.language = templanguage And Image.bannerType = "fanart" Then
-                                    fanartposter = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Fanart Then
+                                    fanartposter = Image.Url
                                     Exit For
                                 End If
                             Next
                         End If
                         If fanartposter = "" Then
-                            For Each Image In artlist
-                                If Image.language = "en" And Image.bannerType = "fanart" Then
-                                    fanartposter = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Language = "en" And Image.Type = Tvdb.ArtType.Fanart Then
+                                    fanartposter = Image.Url
                                     Exit For
                                 End If
                             Next
                         End If
                         If fanartposter = "" Then
-                            For Each Image In artlist
-                                If Image.bannerType = "fanart" Then
-                                    fanartposter = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Type = Tvdb.ArtType.Fanart Then
+                                    fanartposter = Image.Url
                                     Exit For
                                 End If
                             Next
@@ -1150,24 +1150,24 @@ Partial Public Class Form1
                         Dim posterurlpath As String = ""
 
                         If Preferences.postertype = "poster" Then 'poster
-                            For Each Image In artlist
-                                If Image.language = templanguage And Image.bannerType = "poster" Then
-                                    posterurl = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Poster Then
+                                    posterurl = Image.Url
                                     Exit For
                                 End If
                             Next
                             If posterurlpath = "" Then
-                                For Each Image In artlist
-                                    If Image.language = "en" And Image.bannerType = "poster" Then
-                                        posterurlpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Poster Then
+                                        posterurlpath = Image.Url
                                         Exit For
                                     End If
                                 Next
                             End If
                             If posterurlpath = "" Then
-                                For Each Image In artlist
-                                    If Image.bannerType = "poster" Then
-                                        posterurlpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Type = Tvdb.ArtType.Poster Then
+                                        posterurlpath = Image.Url
                                         Exit For
                                     End If
                                 Next
@@ -1176,24 +1176,24 @@ Partial Public Class Form1
                                 seasonallpath = posterurlpath
                             End If
                         ElseIf Preferences.postertype = "banner" Then 'banner
-                            For Each Image In artlist
-                                If Image.language = templanguage And Image.bannerType = "series" And Image.season = Nothing Then
-                                    posterurl = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Banner Then
+                                    posterurl = Image.Url
                                     Exit For
                                 End If
                             Next
                             If posterurlpath = "" Then
-                                For Each Image In artlist
-                                    If Image.language = "en" And Image.bannerType = "series" And Image.season = Nothing Then
-                                        posterurlpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Banner Then
+                                        posterurlpath = Image.Url
                                         Exit For
                                     End If
                                 Next
                             End If
                             If posterurlpath = "" Then
-                                For Each Image In artlist
-                                    If Image.bannerType = "series" And Image.season = Nothing Then
-                                        posterurlpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Type = Tvdb.ArtType.Banner Then
+                                        posterurlpath = Image.Url
                                         Exit For
                                     End If
                                 Next
@@ -1216,47 +1216,47 @@ Partial Public Class Form1
 
                     If Preferences.seasonall <> "none" And seasonallpath = "" Then
                         If Preferences.seasonall = "poster" Then 'poster
-                            For Each Image In artlist
-                                If Image.language = templanguage And Image.bannerType = "poster" Then
-                                    seasonallpath = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Poster Then
+                                    seasonallpath = Image.Url
                                     Exit For
                                 End If
                             Next
                             If seasonallpath = "" Then
-                                For Each Image In artlist
-                                    If Image.language = "en" And Image.bannerType = "poster" Then
-                                        seasonallpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Poster Then
+                                        seasonallpath = Image.Url
                                         Exit For
                                     End If
                                 Next
                             End If
                             If seasonallpath = "" Then
-                                For Each Image In artlist
-                                    If Image.bannerType = "poster" Then
-                                        seasonallpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Type = Tvdb.ArtType.Poster Then
+                                        seasonallpath = Image.Url
                                         Exit For
                                     End If
                                 Next
                             End If
                         ElseIf Preferences.seasonall = "wide" = True Then 'banner
-                            For Each Image In artlist
-                                If Image.language = templanguage And Image.bannerType = "series" And Image.season = Nothing Then
-                                    seasonallpath = Image.url
+                            For Each Image In ArtList.Items
+                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Banner Then
+                                    seasonallpath = Image.Url
                                     Exit For
                                 End If
                             Next
                             If seasonallpath = "" Then
-                                For Each Image In artlist
-                                    If Image.language = "en" And Image.bannerType = "series" And Image.season = Nothing Then
-                                        seasonallpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Banner Then
+                                        seasonallpath = Image.Url
                                         Exit For
                                     End If
                                 Next
                             End If
                             If seasonallpath = "" Then
-                                For Each Image In artlist
-                                    If Image.bannerType = "series" And Image.season = Nothing Then
-                                        seasonallpath = Image.url
+                                For Each Image In ArtList.Items
+                                    If Image.Type = Tvdb.ArtType.Banner Then
+                                        seasonallpath = Image.Url
                                         Exit For
                                     End If
                                 Next
@@ -1279,45 +1279,45 @@ Partial Public Class Form1
                         End If
                     End If
                 End If
-                If artdone = False Then
-                    Dim thumblist As String = tvdbstuff.GetPosterList(newtvshow.tvdbid)
-                    showlist.LoadXml(thumblist)
-                    artdone = True
-                    'CheckBox3 = seasons
-                    'CheckBox4 = fanart
-                    'CheckBox5 = poster
-                    For Each thisresult As XmlNode In showlist("banners")
-                        Select Case thisresult.Name
-                            Case "banner"
-                                Dim individualposter As New TvBanners
-                                For Each results In thisresult.ChildNodes
-                                    Select Case results.Name
-                                        Case "url"
-                                            individualposter.url = results.InnerText
-                                        Case "bannertype"
-                                            individualposter.bannerType = results.InnerText
-                                        Case "resolution"
-                                            individualposter.resolution = results.InnerText
-                                        Case "language"
-                                            individualposter.language = results.InnerText
-                                        Case "season"
-                                            individualposter.season = results.InnerText
-                                    End Select
-                                Next
-                                artlist.Add(individualposter)
-                        End Select
-                    Next
-                End If
+                'If artdone = False Then
+                '    Dim thumblist As String = tvdbstuff.GetPosterList(newtvshow.tvdbid)
+                '    showlist.LoadXml(thumblist)
+                '    artdone = True
+                '    'CheckBox3 = seasons
+                '    'CheckBox4 = fanart
+                '    'CheckBox5 = poster
+                '    For Each thisresult As XmlNode In showlist("banners")
+                '        Select Case thisresult.Name
+                '            Case "banner"
+                '                Dim individualposter As New TvBanners
+                '                For Each results In thisresult.ChildNodes
+                '                    Select Case results.Name
+                '                        Case "url"
+                '                            individualposter.url = results.InnerText
+                '                        Case "bannertype"
+                '                            individualposter.bannerType = results.InnerText
+                '                        Case "resolution"
+                '                            individualposter.resolution = results.InnerText
+                '                        Case "language"
+                '                            individualposter.language = results.InnerText
+                '                        Case "season"
+                '                            individualposter.season = results.InnerText
+                '                    End Select
+                '                Next
+                '                artlist.Add(individualposter)
+                '        End Select
+                '    Next
+                'End If
 
-                For Each url In artlist
-                    If url.bannerType <> "fanart" Then
-                        newtvshow.posters.Add(url.url)
+                For Each url In artlist.Items
+                    If url.Type = Tvdb.ArtType.Fanart Then
+                        newtvshow.posters.Add(url.Url)
                     Else
-                        newtvshow.fanart.Add(url.url)
+                        newtvshow.fanart.Add(url.Url)
                     End If
                 Next
-                newtvshow.locked = 2
-                newtvshow.language = Preferences.tvdblanguagecode
+
+                'newtvshow.language = Preferences.tvdblanguagecode
                 If Preferences.tvdbactorscrape = 0 Or Preferences.tvdbactorscrape = 2 Then
                     newtvshow.episodeactorsource = "tvdb"
                 Else

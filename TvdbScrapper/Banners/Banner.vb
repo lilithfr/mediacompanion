@@ -16,6 +16,11 @@ Namespace Tvdb
         Public Property VignettePath As New ProtoProperty(Me, "VignettePath")
         Public Property Season As New ProtoProperty(Me, "Season")
 
+        Public ReadOnly Property Url As String
+            Get
+                Return "http://thetvdb.com/banners/" & BannerPath.Value
+            End Get
+        End Property
 
         Private _Type
         Public Property Type As ArtType
