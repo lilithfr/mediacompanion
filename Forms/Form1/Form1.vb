@@ -11051,9 +11051,9 @@ Public Class Form1
             Dim pt As Point
             pt.X = e.X
             pt.Y = e.Y
-            MovieListComboBox.SelectionMode = SelectionMode.One
+            MovieListComboBox.SelectionMode = SelectionMode.One     'this stops right click adding the selectio & makes it the only selection 
             MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
-            MovieListComboBox.SelectionMode = SelectionMode.MultiExtended
+            MovieListComboBox.SelectionMode = SelectionMode.MultiExtended   'this returns the selection mode to 'our normal'
         End If
     End Sub
 
@@ -14241,6 +14241,7 @@ Public Class Form1
                 End If
             End If
             Panel9.Visible = True
+            RescrapeThisShowToolStripMenuItem.Text = "Rescrape This Epsiode"
             If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
                 TreeView1.SelectedNode.Parent.Parent.ForeColor = Color.Red
                 TreeView1.SelectedNode.Parent.Parent.Collapse()
@@ -17597,11 +17598,10 @@ Public Class Form1
             '            rebuildselectedshow(MainNode.Name.ToString)
         End If
     End Sub
-
-    Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
+    Sub TV_RescrapeShowOREpisode() 'Panel9 visibility indicates which is selected - a tvshow or an episode
         Dim tempint As Integer
         Dim tempstring As String = ""
-        If Panel9.Visible = False Then
+        If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
             tempint = MessageBox.Show("Rescraping the TV Show will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If tempint = DialogResult.No Then
@@ -17652,14 +17652,14 @@ Public Class Form1
 
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
-                Dim tvshowxmlstring As String = tvdbstuff.getshow(workingTvShow.tvdbid, langu)
+                Dim tvshowxmlstring As String = tvdbstuff.GetShow(workingTvShow.tvdbid, langu)
                 If tvshowxmlstring = "!!!Error!!!" Then
                     MsgBox("Error scraping show")
                     Exit Sub
                 End If
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(tvshowxmlstring)
-                workingTvShow.listactors.Clear()
+                workingTvShow.ListActors.Clear()
                 Dim thisresult As XmlNode = Nothing
                 Dim maxcount As Integer = 0
                 For Each thisresult In showlist("fulltvshow")
@@ -17802,18 +17802,18 @@ Public Class Form1
                                 End If
                             End If
                             Dim exists As Boolean = False
-                            For Each actors In workingTvShow.listactors
+                            For Each actors In workingTvShow.ListActors
                                 If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                     exists = True
                                 End If
                             Next
                             If exists = False Then
-                                workingTvShow.listactors.Add(acts)
+                                workingTvShow.ListActors.Add(acts)
                             End If
                     End Select
                 Next
                 If workingTvShow.tvshowactorsource = "imdb" And workingTvShow.imdbid <> Nothing Then
-                    workingTvShow.listactors.Clear()
+                    workingTvShow.ListActors.Clear()
                     '                    Dim imdbscraper As New imdb.Classimdbscraper
                     Dim imdbscraper As New Classimdb
                     Dim actorlist As String
@@ -17930,12 +17930,12 @@ Public Class Form1
                                                 End If
                                         End Select
                                     Next
-                                    workingTvShow.listactors.Add(newactor)
+                                    workingTvShow.ListActors.Add(newactor)
                             End Select
                         Next
                         scraperLog = scraperLog & "Actors scraped OK"
-                        While workingTvShow.listactors.Count > Preferences.maxactors
-                            workingTvShow.listactors.RemoveAt(workingTvShow.listactors.Count - 1)
+                        While workingTvShow.ListActors.Count > Preferences.maxactors
+                            workingTvShow.ListActors.RemoveAt(workingTvShow.ListActors.Count - 1)
                         End While
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17944,7 +17944,7 @@ Public Class Form1
                     End Try
 
                 End If
-                Call nfoFunction.savetvshownfo(workingTvShow.path, workingTvShow, True)
+                Call nfoFunction.SaveTvShowNfo(workingTvShow.path, workingTvShow, True)
                 Call loadtvshow(workingTvShow.path)
                 For Each item In TvShows
                     If item.fullpath = workingTvShow.path Then
@@ -17990,7 +17990,7 @@ Public Class Form1
             Dim tvdbid As String = workingTvShow.tvdbid
             Dim imdbid As String = workingTvShow.imdbid
             Dim seasonno As String = workingEpisode(workingEpisodeIndex).seasonno
-            Dim episodeno As String = workingepisode(workingEpisodeIndex).episodeno
+            Dim episodeno As String = workingEpisode(workingEpisodeIndex).episodeno
             'its an episode
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim episodescraper As New TVDBScraper
@@ -18035,7 +18035,7 @@ Public Class Form1
                                     Case "name"
                                         Dim newactor As New MovieActors
                                         newactor.actorname = actorl.innertext
-                                        newepisode.listactors.Add(newactor)
+                                        newepisode.ListActors.Add(newactor)
                                 End Select
                             Next
                     End Select
@@ -18048,10 +18048,10 @@ Public Class Form1
             End Try
 
             If actorsource = "tvdb" Then
-                If newepisode.listactors.Count > 0 Then
-                    workingTvShow.listactors.Clear()
-                    For Each act In newepisode.listactors
-                        workingTvShow.listactors.Add(act)
+                If newepisode.ListActors.Count > 0 Then
+                    workingTvShow.ListActors.Clear()
+                    For Each act In newepisode.ListActors
+                        workingTvShow.ListActors.Add(act)
                     Next
                 End If
             Else
@@ -18137,7 +18137,7 @@ Public Class Form1
                                                         Case "actorid"
                                                             If newactor.actorthumb <> Nothing Then
                                                                 If detail.InnerText <> "" And Preferences.actorseasy = True Then
-                                                                    Dim workingpath As String = workingepisode(workingEpisodeIndex).episodepath.Replace(IO.Path.GetFileName(workingepisode(workingEpisodeIndex).episodepath), "")
+                                                                    Dim workingpath As String = workingEpisode(workingEpisodeIndex).episodepath.Replace(IO.Path.GetFileName(workingEpisode(workingEpisodeIndex).episodepath), "")
                                                                     workingpath = workingpath & ".actors\"
                                                                     Dim hg As New IO.DirectoryInfo(workingpath)
                                                                     Dim destsorted As Boolean = False
@@ -18255,9 +18255,9 @@ Public Class Form1
                                     While tempactorlist.Count > Preferences.maxactors
                                         tempactorlist.RemoveAt(tempactorlist.Count - 1)
                                     End While
-                                    newepisode.listactors.Clear()
+                                    newepisode.ListActors.Clear()
                                     For Each actor In tempactorlist
-                                        newepisode.listactors.Add(actor)
+                                        newepisode.ListActors.Add(actor)
                                     Next
                                     tempactorlist.Clear()
                                 End If
@@ -18268,41 +18268,26 @@ Public Class Form1
                 End If
             End If
             If newepisode.title <> "" Then
-                workingepisode(workingEpisodeIndex).aired = newepisode.aired
-                workingepisode(workingEpisodeIndex).credits = newepisode.credits
-                workingepisode(workingEpisodeIndex).director = newepisode.director
-                workingepisode(workingEpisodeIndex).genre = newepisode.genre
-                workingepisode(workingEpisodeIndex).plot = newepisode.plot
-                workingepisode(workingEpisodeIndex).rating = newepisode.rating
-                workingepisode(workingEpisodeIndex).title = newepisode.title
-                workingepisode(workingEpisodeIndex).listactors.Clear()
-                For Each actor In newepisode.listactors
-                    workingepisode(workingEpisodeIndex).listactors.Add(actor)
+                workingEpisode(workingEpisodeIndex).aired = newepisode.aired
+                workingEpisode(workingEpisodeIndex).credits = newepisode.credits
+                workingEpisode(workingEpisodeIndex).director = newepisode.director
+                workingEpisode(workingEpisodeIndex).genre = newepisode.genre
+                workingEpisode(workingEpisodeIndex).plot = newepisode.plot
+                workingEpisode(workingEpisodeIndex).rating = newepisode.rating
+                workingEpisode(workingEpisodeIndex).title = newepisode.title
+                workingEpisode(workingEpisodeIndex).ListActors.Clear()
+                For Each actor In newepisode.ListActors
+                    workingEpisode(workingEpisodeIndex).ListActors.Add(actor)
                 Next
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 If Preferences.enablehdtags = True Then
                     workingEpisode(workingEpisodeIndex).filedetails = Utilities.Get_HdTags(Utilities.GetFileName(workingEpisode(workingEpisodeIndex).episodepath))
-                    If workingepisode(workingEpisodeIndex).filedetails.filedetails_video.duration <> Nothing Then
+                    If workingEpisode(workingEpisodeIndex).filedetails.filedetails_video.duration <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
                             Dim hours As Integer
                             Dim minutes As Integer
-                            tempstring = workingepisode(workingEpisodeIndex).filedetails.filedetails_video.duration
+                            tempstring = workingEpisode(workingEpisodeIndex).filedetails.filedetails_video.duration
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -18325,33 +18310,15 @@ Public Class Form1
                         End Try
                     End If
                 End If
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                Call nfoFunction.saveepisodenfo(workingEpisode, workingepisode(0).episodepath)
-                Call loadtvepisode(workingepisode(workingEpisodeIndex).episodepath, workingepisode(workingEpisodeIndex).seasonno, workingepisode(workingEpisodeIndex).episodeno)
+                Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).episodepath)
+                Call loadtvepisode(workingEpisode(workingEpisodeIndex).episodepath, workingEpisode(workingEpisodeIndex).seasonno, workingEpisode(workingEpisodeIndex).episodeno)
                 messbox.Close()
             End If
         End If
+    End Sub
+
+    Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
+        TV_RescrapeShowOREpisode()
     End Sub
 
     Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
@@ -30675,9 +30642,11 @@ Public Class Form1
         Return newfilename
     End Function
 
-   
-
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
         Movie_PlayMovie()
+    End Sub
+
+    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeThisShowToolStripMenuItem.Click
+        TV_RescrapeShowOREpisode()
     End Sub
 End Class

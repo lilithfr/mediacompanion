@@ -854,6 +854,7 @@ Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.compo
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
 Me.ToolStripSeparator17 = New System.Windows.Forms.ToolStripSeparator()
 Me.PlayMovieToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.RescrapeThisShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1229,9 +1230,9 @@ Me.ToolTip1.SetToolTip(Me.TreeView1, "Double click an episode to playback,"&Glob
 '
 'ContextMenuStrip2
 '
-Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem, Me.ToolStripSeparator2, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.MissingepisodesToolStripMenuItem, Me.DisplayEpisodesByAiredDateToolStripMenuItem})
+Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.RescrapeThisShowToolStripMenuItem, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.MissingepisodesToolStripMenuItem, Me.DisplayEpisodesByAiredDateToolStripMenuItem, Me.ToolStripSeparator2, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem})
 Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 346)
+Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 390)
 Me.ContextMenuStrip2.Text = "Open Folder at file"
 '
 'OpenFolderToolStripMenuItem
@@ -1244,7 +1245,7 @@ Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
 '
 Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
 Me.ToolStripMenuItem1.Size = New System.Drawing.Size(255, 22)
-Me.ToolStripMenuItem1.Text = "Open File"
+Me.ToolStripMenuItem1.Text = "View .nfo File"
 '
 'ToolStripSeparator1
 '
@@ -1302,13 +1303,13 @@ Me.SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search this Show for ne
 '
 Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Name = "DownloadAvaileableMissingArtForShowToolStripMenuItem"
 Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "missing art for show"
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "Find Missing Art For This Show"
 '
 'ReloadItemToolStripMenuItem
 '
 Me.ReloadItemToolStripMenuItem.Name = "ReloadItemToolStripMenuItem"
 Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.ReloadItemToolStripMenuItem.Text = "Reload Item"
+Me.ReloadItemToolStripMenuItem.Text = "Reload Item From Cache"
 '
 'RenameTVShowsToolStripMenuItem
 '
@@ -1320,7 +1321,7 @@ Me.RenameTVShowsToolStripMenuItem.Text = "Rename Episode(s)"
 '
 Me.RebuildThisShowToolStripMenuItem.Name = "RebuildThisShowToolStripMenuItem"
 Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.RebuildThisShowToolStripMenuItem.Text = "Rebuild this Show"
+Me.RebuildThisShowToolStripMenuItem.Text = "Rebuild this Show From .nfo"
 '
 'MissingepisodesToolStripMenuItem
 '
@@ -1345,7 +1346,7 @@ Me.ImageList2.Images.SetKeyName(1, "imdb-logo.png")
 '
 Me.Button34.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button34.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button34.Location = New System.Drawing.Point(1075, 448)
+Me.Button34.Location = New System.Drawing.Point(1075, 446)
 Me.Button34.Margin = New System.Windows.Forms.Padding(4)
 Me.Button34.Name = "Button34"
 Me.Button34.Size = New System.Drawing.Size(118, 29)
@@ -1385,7 +1386,7 @@ Me.Button44.UseVisualStyleBackColor = true
 'Button52
 '
 Me.Button52.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button52.Location = New System.Drawing.Point(866, 200)
+Me.Button52.Location = New System.Drawing.Point(745, 202)
 Me.Button52.Margin = New System.Windows.Forms.Padding(4)
 Me.Button52.Name = "Button52"
 Me.Button52.Size = New System.Drawing.Size(112, 29)
@@ -1397,7 +1398,7 @@ Me.Button52.UseVisualStyleBackColor = true
 'Button53
 '
 Me.Button53.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button53.Location = New System.Drawing.Point(866, 164)
+Me.Button53.Location = New System.Drawing.Point(745, 166)
 Me.Button53.Margin = New System.Windows.Forms.Padding(4)
 Me.Button53.Name = "Button53"
 Me.Button53.Size = New System.Drawing.Size(112, 29)
@@ -2196,7 +2197,7 @@ Me.MovieListComboBox.TabIndex = 53
 '
 Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem1, Me.ToolStripSeparator17, Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
 Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 242)
+Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 220)
 Me.ContextMenuStrip1.Text = "whatever"
 '
 'SetMovieAsWatchedToolStripMenuItem
@@ -7048,10 +7049,10 @@ Me.TabPage12.Controls.Add(Me.TextBox28)
 Me.TabPage12.Controls.Add(Me.Button41)
 Me.TabPage12.Controls.Add(Me.Button42)
 Me.TabPage12.Controls.Add(Me.Panel13)
-Me.TabPage12.Location = New System.Drawing.Point(4, 25)
+Me.TabPage12.Location = New System.Drawing.Point(4, 27)
 Me.TabPage12.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage12.Name = "TabPage12"
-Me.TabPage12.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage12.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage12.TabIndex = 1
 Me.TabPage12.Text = "Fanart"
 Me.TabPage12.ToolTipText = "Use this option to select from available fanart"
@@ -7059,6 +7060,9 @@ Me.TabPage12.UseVisualStyleBackColor = true
 '
 'GroupBox6
 '
+Me.GroupBox6.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.GroupBox6.Controls.Add(Me.Panel12)
 Me.GroupBox6.Location = New System.Drawing.Point(546, 47)
 Me.GroupBox6.Margin = New System.Windows.Forms.Padding(4)
@@ -7117,7 +7121,7 @@ Me.Panel11.Controls.Add(Me.Button31)
 Me.Panel11.Controls.Add(Me.Button32)
 Me.Panel11.Controls.Add(Me.TextBox27)
 Me.Panel11.Controls.Add(Me.Label54)
-Me.Panel11.Location = New System.Drawing.Point(546, 481)
+Me.Panel11.Location = New System.Drawing.Point(546, 479)
 Me.Panel11.Margin = New System.Windows.Forms.Padding(4)
 Me.Panel11.Name = "Panel11"
 Me.Panel11.Size = New System.Drawing.Size(647, 122)
@@ -7181,7 +7185,7 @@ Me.Label54.Text = "Enter URL or Browse PC For Thumbnail"
 Me.Label65.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label65.AutoSize = true
 Me.Label65.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label65.Location = New System.Drawing.Point(561, 516)
+Me.Label65.Location = New System.Drawing.Point(561, 514)
 Me.Label65.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label65.Name = "Label65"
 Me.Label65.Size = New System.Drawing.Size(342, 60)
@@ -7195,7 +7199,7 @@ Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 Me.Label58.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label58.AutoSize = true
 Me.Label58.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label58.Location = New System.Drawing.Point(838, 474)
+Me.Label58.Location = New System.Drawing.Point(838, 472)
 Me.Label58.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label58.Name = "Label58"
 Me.Label58.Size = New System.Drawing.Size(52, 15)
@@ -7207,7 +7211,7 @@ Me.Label58.Text = "Label58"
 Me.Label59.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label59.AutoSize = true
 Me.Label59.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label59.Location = New System.Drawing.Point(838, 447)
+Me.Label59.Location = New System.Drawing.Point(838, 445)
 Me.Label59.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label59.Name = "Label59"
 Me.Label59.Size = New System.Drawing.Size(52, 15)
@@ -7219,7 +7223,7 @@ Me.Label59.Text = "Label59"
 Me.Label60.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label60.AutoSize = true
 Me.Label60.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label60.Location = New System.Drawing.Point(788, 474)
+Me.Label60.Location = New System.Drawing.Point(788, 472)
 Me.Label60.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label60.Name = "Label60"
 Me.Label60.Size = New System.Drawing.Size(52, 15)
@@ -7231,7 +7235,7 @@ Me.Label60.Text = "Height : "
 Me.Label61.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label61.AutoSize = true
 Me.Label61.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label61.Location = New System.Drawing.Point(794, 447)
+Me.Label61.Location = New System.Drawing.Point(794, 445)
 Me.Label61.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label61.Name = "Label61"
 Me.Label61.Size = New System.Drawing.Size(47, 15)
@@ -7243,7 +7247,7 @@ Me.Label61.Text = "Width : "
 Me.Label62.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label62.AutoSize = true
 Me.Label62.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label62.Location = New System.Drawing.Point(788, 424)
+Me.Label62.Location = New System.Drawing.Point(788, 422)
 Me.Label62.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label62.Name = "Label62"
 Me.Label62.Size = New System.Drawing.Size(96, 15)
@@ -7255,7 +7259,7 @@ Me.Label62.Text = "Image Details"
 Me.Label63.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Label63.AutoSize = true
 Me.Label63.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label63.Location = New System.Drawing.Point(985, 461)
+Me.Label63.Location = New System.Drawing.Point(985, 459)
 Me.Label63.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label63.Name = "Label63"
 Me.Label63.Size = New System.Drawing.Size(33, 15)
@@ -7266,7 +7270,7 @@ Me.Label63.Text = "Crop"
 '
 Me.Button35.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button35.Font = New System.Drawing.Font("Microsoft Sans Serif", 6!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button35.Location = New System.Drawing.Point(988, 424)
+Me.Button35.Location = New System.Drawing.Point(988, 422)
 Me.Button35.Margin = New System.Windows.Forms.Padding(4)
 Me.Button35.Name = "Button35"
 Me.Button35.Size = New System.Drawing.Size(30, 29)
@@ -7278,7 +7282,7 @@ Me.Button35.UseVisualStyleBackColor = true
 '
 Me.Button36.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button36.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button36.Location = New System.Drawing.Point(988, 487)
+Me.Button36.Location = New System.Drawing.Point(988, 485)
 Me.Button36.Margin = New System.Windows.Forms.Padding(4)
 Me.Button36.Name = "Button36"
 Me.Button36.Size = New System.Drawing.Size(30, 29)
@@ -7290,7 +7294,7 @@ Me.Button36.UseVisualStyleBackColor = true
 '
 Me.Button37.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button37.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button37.Location = New System.Drawing.Point(1029, 454)
+Me.Button37.Location = New System.Drawing.Point(1029, 452)
 Me.Button37.Margin = New System.Windows.Forms.Padding(4)
 Me.Button37.Name = "Button37"
 Me.Button37.Size = New System.Drawing.Size(30, 29)
@@ -7302,7 +7306,7 @@ Me.Button37.UseVisualStyleBackColor = true
 '
 Me.Button38.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button38.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button38.Location = New System.Drawing.Point(943, 454)
+Me.Button38.Location = New System.Drawing.Point(943, 452)
 Me.Button38.Margin = New System.Windows.Forms.Padding(4)
 Me.Button38.Name = "Button38"
 Me.Button38.Size = New System.Drawing.Size(30, 29)
@@ -7314,7 +7318,7 @@ Me.Button38.UseVisualStyleBackColor = true
 '
 Me.Button39.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button39.Location = New System.Drawing.Point(1075, 490)
+Me.Button39.Location = New System.Drawing.Point(1075, 488)
 Me.Button39.Margin = New System.Windows.Forms.Padding(4)
 Me.Button39.Name = "Button39"
 Me.Button39.Size = New System.Drawing.Size(118, 29)
@@ -7327,7 +7331,7 @@ Me.Button39.Visible = false
 '
 Me.Button40.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button40.Location = New System.Drawing.Point(1075, 411)
+Me.Button40.Location = New System.Drawing.Point(1075, 409)
 Me.Button40.Margin = New System.Windows.Forms.Padding(4)
 Me.Button40.Name = "Button40"
 Me.Button40.Size = New System.Drawing.Size(118, 29)
@@ -7353,7 +7357,7 @@ Me.TextBox28.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
 '
 Me.Button41.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button41.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button41.Location = New System.Drawing.Point(1075, 526)
+Me.Button41.Location = New System.Drawing.Point(1075, 524)
 Me.Button41.Margin = New System.Windows.Forms.Padding(4)
 Me.Button41.Name = "Button41"
 Me.Button41.Size = New System.Drawing.Size(118, 29)
@@ -7365,7 +7369,7 @@ Me.Button41.UseVisualStyleBackColor = true
 '
 Me.Button42.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button42.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button42.Location = New System.Drawing.Point(1075, 564)
+Me.Button42.Location = New System.Drawing.Point(1075, 562)
 Me.Button42.Margin = New System.Windows.Forms.Padding(4)
 Me.Button42.Name = "Button42"
 Me.Button42.Size = New System.Drawing.Size(118, 29)
@@ -7384,7 +7388,7 @@ Me.Panel13.Controls.Add(Me.PictureBox11)
 Me.Panel13.Location = New System.Drawing.Point(2, 6)
 Me.Panel13.Margin = New System.Windows.Forms.Padding(4)
 Me.Panel13.Name = "Panel13"
-Me.Panel13.Size = New System.Drawing.Size(495, 584)
+Me.Panel13.Size = New System.Drawing.Size(495, 582)
 Me.Panel13.TabIndex = 128
 '
 'PictureBox11
@@ -7420,10 +7424,10 @@ Me.TabPage20.Controls.Add(Me.Button57)
 Me.TabPage20.Controls.Add(Me.Button58)
 Me.TabPage20.Controls.Add(Me.Button59)
 Me.TabPage20.Controls.Add(Me.Panel16)
-Me.TabPage20.Location = New System.Drawing.Point(4, 25)
+Me.TabPage20.Location = New System.Drawing.Point(4, 27)
 Me.TabPage20.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage20.Name = "TabPage20"
-Me.TabPage20.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage20.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage20.TabIndex = 6
 Me.TabPage20.Text = "Posters"
 Me.TabPage20.UseVisualStyleBackColor = true
@@ -7437,7 +7441,7 @@ Me.Panel14.Controls.Add(Me.Button50)
 Me.Panel14.Controls.Add(Me.Button51)
 Me.Panel14.Controls.Add(Me.TextBox30)
 Me.Panel14.Controls.Add(Me.Label69)
-Me.Panel14.Location = New System.Drawing.Point(68, 521)
+Me.Panel14.Location = New System.Drawing.Point(4, 524)
 Me.Panel14.Margin = New System.Windows.Forms.Padding(4)
 Me.Panel14.Name = "Panel14"
 Me.Panel14.Size = New System.Drawing.Size(696, 72)
@@ -7500,7 +7504,7 @@ Me.Label69.Text = "Enter URL or Browse PC For Thumbnail"
 '
 Me.Label76.AutoSize = true
 Me.Label76.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label76.Location = New System.Drawing.Point(865, 352)
+Me.Label76.Location = New System.Drawing.Point(744, 354)
 Me.Label76.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label76.Name = "Label76"
 Me.Label76.Size = New System.Drawing.Size(102, 75)
@@ -7511,7 +7515,7 @@ Me.Label76.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
 'Label72
 '
 Me.Label72.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label72.Location = New System.Drawing.Point(200, 548)
+Me.Label72.Location = New System.Drawing.Point(142, 533)
 Me.Label72.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label72.Name = "Label72"
 Me.Label72.Size = New System.Drawing.Size(420, 25)
@@ -7523,7 +7527,7 @@ Me.Label72.Visible = false
 'Button55
 '
 Me.Button55.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button55.Location = New System.Drawing.Point(68, 548)
+Me.Button55.Location = New System.Drawing.Point(9, 529)
 Me.Button55.Margin = New System.Windows.Forms.Padding(4)
 Me.Button55.Name = "Button55"
 Me.Button55.Size = New System.Drawing.Size(125, 29)
@@ -7536,7 +7540,7 @@ Me.Button55.Visible = false
 '
 Me.CheckBox8.AutoSize = true
 Me.CheckBox8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.CheckBox8.Location = New System.Drawing.Point(850, 68)
+Me.CheckBox8.Location = New System.Drawing.Point(729, 70)
 Me.CheckBox8.Margin = New System.Windows.Forms.Padding(4)
 Me.CheckBox8.Name = "CheckBox8"
 Me.CheckBox8.Size = New System.Drawing.Size(142, 34)
@@ -7547,7 +7551,7 @@ Me.CheckBox8.UseVisualStyleBackColor = true
 'Button54
 '
 Me.Button54.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button54.Location = New System.Drawing.Point(628, 548)
+Me.Button54.Location = New System.Drawing.Point(569, 529)
 Me.Button54.Margin = New System.Windows.Forms.Padding(4)
 Me.Button54.Name = "Button54"
 Me.Button54.Size = New System.Drawing.Size(125, 29)
@@ -7561,11 +7565,11 @@ Me.Button54.Visible = false
 Me.TextBox31.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.TextBox31.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.TextBox31.Location = New System.Drawing.Point(1021, 2)
+Me.TextBox31.Location = New System.Drawing.Point(902, 2)
 Me.TextBox31.Margin = New System.Windows.Forms.Padding(4)
 Me.TextBox31.Name = "TextBox31"
 Me.TextBox31.ReadOnly = true
-Me.TextBox31.Size = New System.Drawing.Size(176, 31)
+Me.TextBox31.Size = New System.Drawing.Size(295, 31)
 Me.TextBox31.TabIndex = 166
 Me.TextBox31.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
 '
@@ -7573,7 +7577,7 @@ Me.TextBox31.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
 '
 Me.Label70.AutoSize = true
 Me.Label70.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label70.Location = New System.Drawing.Point(846, 48)
+Me.Label70.Location = New System.Drawing.Point(725, 50)
 Me.Label70.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label70.Name = "Label70"
 Me.Label70.Size = New System.Drawing.Size(151, 15)
@@ -7584,7 +7588,7 @@ Me.Label70.Text = "Select Working Thumbnail"
 '
 Me.ComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
 Me.ComboBox2.FormattingEnabled = true
-Me.ComboBox2.Location = New System.Drawing.Point(846, 14)
+Me.ComboBox2.Location = New System.Drawing.Point(725, 16)
 Me.ComboBox2.Margin = New System.Windows.Forms.Padding(4)
 Me.ComboBox2.Name = "ComboBox2"
 Me.ComboBox2.Size = New System.Drawing.Size(164, 23)
@@ -7594,7 +7598,7 @@ Me.ComboBox2.TabIndex = 163
 '
 Me.Button56.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button56.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button56.Location = New System.Drawing.Point(958, 564)
+Me.Button56.Location = New System.Drawing.Point(958, 562)
 Me.Button56.Margin = New System.Windows.Forms.Padding(4)
 Me.Button56.Name = "Button56"
 Me.Button56.Size = New System.Drawing.Size(239, 29)
@@ -7608,7 +7612,7 @@ Me.Button56.Visible = false
 Me.Label73.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
 Me.Label73.AutoSize = true
 Me.Label73.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label73.Location = New System.Drawing.Point(1022, 496)
+Me.Label73.Location = New System.Drawing.Point(1022, 494)
 Me.Label73.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label73.Name = "Label73"
 Me.Label73.Size = New System.Drawing.Size(52, 15)
@@ -7621,10 +7625,10 @@ Me.Panel15.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Win
             Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Panel15.Controls.Add(Me.PictureBox12)
-Me.Panel15.Location = New System.Drawing.Point(1021, 48)
+Me.Panel15.Location = New System.Drawing.Point(902, 48)
 Me.Panel15.Margin = New System.Windows.Forms.Padding(4)
 Me.Panel15.Name = "Panel15"
-Me.Panel15.Size = New System.Drawing.Size(175, 445)
+Me.Panel15.Size = New System.Drawing.Size(294, 443)
 Me.Panel15.TabIndex = 146
 '
 'PictureBox12
@@ -7633,7 +7637,7 @@ Me.PictureBox12.Dock = System.Windows.Forms.DockStyle.Fill
 Me.PictureBox12.Location = New System.Drawing.Point(0, 0)
 Me.PictureBox12.Margin = New System.Windows.Forms.Padding(4)
 Me.PictureBox12.Name = "PictureBox12"
-Me.PictureBox12.Size = New System.Drawing.Size(175, 445)
+Me.PictureBox12.Size = New System.Drawing.Size(294, 443)
 Me.PictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
 Me.PictureBox12.TabIndex = 0
 Me.PictureBox12.TabStop = false
@@ -7642,7 +7646,7 @@ Me.PictureBox12.TabStop = false
 '
 Me.Label78.AutoSize = true
 Me.Label78.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Label78.Location = New System.Drawing.Point(856, 115)
+Me.Label78.Location = New System.Drawing.Point(735, 117)
 Me.Label78.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
 Me.Label78.Name = "Label78"
 Me.Label78.Size = New System.Drawing.Size(123, 30)
@@ -7653,7 +7657,7 @@ Me.Label78.Text = "Select Source to view"&Global.Microsoft.VisualBasic.ChrW(13)&
 '
 Me.Button57.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button57.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button57.Location = New System.Drawing.Point(958, 526)
+Me.Button57.Location = New System.Drawing.Point(958, 524)
 Me.Button57.Margin = New System.Windows.Forms.Padding(4)
 Me.Button57.Name = "Button57"
 Me.Button57.Size = New System.Drawing.Size(239, 29)
@@ -7665,7 +7669,7 @@ Me.Button57.Visible = false
 'Button58
 '
 Me.Button58.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button58.Location = New System.Drawing.Point(866, 238)
+Me.Button58.Location = New System.Drawing.Point(745, 240)
 Me.Button58.Margin = New System.Windows.Forms.Padding(4)
 Me.Button58.Name = "Button58"
 Me.Button58.Size = New System.Drawing.Size(112, 29)
@@ -7676,7 +7680,7 @@ Me.Button58.UseVisualStyleBackColor = true
 'Button59
 '
 Me.Button59.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button59.Location = New System.Drawing.Point(866, 272)
+Me.Button59.Location = New System.Drawing.Point(745, 274)
 Me.Button59.Margin = New System.Windows.Forms.Padding(4)
 Me.Button59.Name = "Button59"
 Me.Button59.Size = New System.Drawing.Size(112, 29)
@@ -7691,12 +7695,12 @@ Me.Panel16.Controls.Add(Me.PictureBox13)
 Me.Panel16.Location = New System.Drawing.Point(4, 4)
 Me.Panel16.Margin = New System.Windows.Forms.Padding(4)
 Me.Panel16.Name = "Panel16"
-Me.Panel16.Size = New System.Drawing.Size(796, 499)
+Me.Panel16.Size = New System.Drawing.Size(696, 499)
 Me.Panel16.TabIndex = 167
 '
 'PictureBox13
 '
-Me.PictureBox13.Location = New System.Drawing.Point(635, 349)
+Me.PictureBox13.Location = New System.Drawing.Point(307, 334)
 Me.PictureBox13.Margin = New System.Windows.Forms.Padding(4)
 Me.PictureBox13.Name = "PictureBox13"
 Me.PictureBox13.Size = New System.Drawing.Size(125, 62)
@@ -10485,6 +10489,12 @@ Me.PlayMovieToolStripMenuItem1.Name = "PlayMovieToolStripMenuItem1"
 Me.PlayMovieToolStripMenuItem1.Size = New System.Drawing.Size(220, 22)
 Me.PlayMovieToolStripMenuItem1.Text = "Play Movie"
 '
+'RescrapeThisShowToolStripMenuItem
+'
+Me.RescrapeThisShowToolStripMenuItem.Name = "RescrapeThisShowToolStripMenuItem"
+Me.RescrapeThisShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.RescrapeThisShowToolStripMenuItem.Text = "Rescrape This Show"
+'
 'Form1
 '
 Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -11548,6 +11558,7 @@ End Sub
     Friend WithEvents DisplayEpisodesByAiredDateToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator17 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents PlayMovieToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RescrapeThisShowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 
 
