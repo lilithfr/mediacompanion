@@ -30532,4 +30532,8 @@ Public Class Form1
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeThisShowToolStripMenuItem.Click
         TV_RescrapeShowOREpisode()
     End Sub
+
+    Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
+        Preferences.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
+    End Sub
 End Class

@@ -1232,7 +1232,7 @@ Me.ToolTip1.SetToolTip(Me.TreeView1, "Double click an episode to playback,"&Glob
 '
 Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.RescrapeThisShowToolStripMenuItem, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.MissingepisodesToolStripMenuItem, Me.DisplayEpisodesByAiredDateToolStripMenuItem, Me.ToolStripSeparator2, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem})
 Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 390)
+Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 368)
 Me.ContextMenuStrip2.Text = "Open Folder at file"
 '
 'OpenFolderToolStripMenuItem
@@ -5389,10 +5389,10 @@ Me.TabPage26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage26.Controls.Add(Me.Button82)
 Me.TabPage26.Controls.Add(Me.TabControl4)
 Me.TabPage26.Controls.Add(Me.CheckBox22)
-Me.TabPage26.Location = New System.Drawing.Point(4, 25)
+Me.TabPage26.Location = New System.Drawing.Point(4, 27)
 Me.TabPage26.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage26.Name = "TabPage26"
-Me.TabPage26.Size = New System.Drawing.Size(1207, 609)
+Me.TabPage26.Size = New System.Drawing.Size(1207, 607)
 Me.TabPage26.TabIndex = 12
 Me.TabPage26.Text = "Movie Preferences"
 Me.TabPage26.UseVisualStyleBackColor = true
@@ -5402,7 +5402,7 @@ Me.TabPage26.UseVisualStyleBackColor = true
 Me.Button82.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
 Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.Button82.Location = New System.Drawing.Point(512, 559)
+Me.Button82.Location = New System.Drawing.Point(512, 557)
 Me.Button82.Margin = New System.Windows.Forms.Padding(4)
 Me.Button82.Name = "Button82"
 Me.Button82.Size = New System.Drawing.Size(152, 29)
@@ -5421,7 +5421,7 @@ Me.TabControl4.Location = New System.Drawing.Point(0, 0)
 Me.TabControl4.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl4.Name = "TabControl4"
 Me.TabControl4.SelectedIndex = 0
-Me.TabControl4.Size = New System.Drawing.Size(1198, 596)
+Me.TabControl4.Size = New System.Drawing.Size(1198, 594)
 Me.TabControl4.TabIndex = 50
 '
 'TabPage27
@@ -5448,7 +5448,7 @@ Me.TabPage27.Location = New System.Drawing.Point(4, 24)
 Me.TabPage27.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage27.Name = "TabPage27"
 Me.TabPage27.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage27.Size = New System.Drawing.Size(1190, 568)
+Me.TabPage27.Size = New System.Drawing.Size(1190, 566)
 Me.TabPage27.TabIndex = 0
 Me.TabPage27.Text = "General"
 '
