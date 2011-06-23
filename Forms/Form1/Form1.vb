@@ -37,7 +37,7 @@ Public Class Form1
     Public workingMovie As New ComboList
     Public batchList As New BatchWizard
     Public tvBatchList As New TvShowBatchWizard
-
+    Public generalprefschanged As Boolean = False
 
 
     Public noFanart As Boolean
@@ -57,6 +57,8 @@ Public Class Form1
     Dim maximised As Boolean = False
     Dim imdbCounter As Integer = 0
     Dim tootip5 As New ToolTip
+
+    Dim prefsload As Boolean = False
 
     Dim pictureList As New List(Of PictureBox)
     Dim screenshotTab As TabPage
@@ -304,8 +306,8 @@ Public Class Form1
 
 
         Preferences.maximised = False
-        Call setuppreferences()                     'Set defaults to all userpreferences
-
+        Preferences.SetUpPreferences()                     'Set defaults to all userpreferences
+        generalprefschanged = False
 
         tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
         Dim hg As New IO.DirectoryInfo(tempstring)
@@ -6173,134 +6175,7 @@ Public Class Form1
         Call exitallthreads()
     End Sub
 
-    Public Sub setuppreferences()
-        'General
-        Preferences.ignorearticle = False
-        Preferences.externalbrowser = False
-        Preferences.videoplaybackmode = "1"
-        Preferences.backgroundcolour = "Silver"
-        Preferences.forgroundcolour = "#D3D9DC"
-        Preferences.formheight = "600"
-        Preferences.formwidth = "800"
-        Preferences.disablelogfiles = False
-        Preferences.startupCache = True
-        Preferences.rarsize = True = "8"
-        Preferences.renamenfofiles = True
-        Preferences.checkinfofiles = True
-        Preferences.scrapemovieposters = True
-        Preferences.dontdisplayposter = False
-        Preferences.usetransparency = False 'not used in gen2
-        Preferences.transparencyvalue = 255 'not used in gen2
-        Preferences.lastpath = Application.StartupPath
-        Preferences.videomode = 1
-        Preferences.locx = 0
-        Preferences.locy = 0
-        Preferences.formheight = 725
-        Preferences.formwidth = 1060
-        Preferences.splt5 = 0
-        Preferences.showsortdate = False
-
-        'Movies
-        Preferences.movies_useXBMC_Scraper = False
-        Preferences.moviedefaultlist = 0
-        Preferences.moviesortorder = 0
-        Preferences.imdbmirror = "http://www.imdb.com/"
-        Preferences.usefoldernames = False
-        ReDim Preferences.moviethumbpriority(3)
-        Preferences.maxmoviegenre = 99
-        Preferences.moviethumbpriority(0) = "Internet Movie Poster Awards"
-        Preferences.moviethumbpriority(1) = "themoviedb.org"
-        Preferences.moviethumbpriority(2) = "Movie Poster DB"
-        Preferences.moviethumbpriority(3) = "IMDB"
-
-        'TV
-        Preferences.tvshow_useXBMC_Scraper = False
-        Preferences.autorenameepisodes = False
-        Preferences.autoepisodescreenshot = False
-        Preferences.tvshowautoquick = False
-        Preferences.copytvactorthumbs = True
-        Preferences.enabletvhdtags = True
-        Preferences.tvshowrebuildlog = False
-        Preferences.seasonall = "none"
-        Preferences.tvrename = 0
-        Preferences.tvfanart = True
-        Preferences.tvposter = True
-        Preferences.postertype = "poster"
-        Preferences.downloadtvseasonthumbs = True
-        Preferences.tvdblanguage = "English"
-        Preferences.tvdblanguagecode = "en"
-        Preferences.sortorder = "default"
-        Preferences.tvdbactorscrape = 0
-        Preferences.defaulttvthumb = "poster"
-        Preferences.OfflineDVDTitle = "Please Load '%T' Media To Play..."
-
-        'Unknown - need to be sorted/named better
-        Preferences.eprenamelowercase = False
-        Preferences.intruntime = False
-        Preferences.actorseasy = True
-        Preferences.startuptab = 0
-        Preferences.font = "Times New Roman, 9pt"
-        Preferences.fanartnotstacked = False
-        Preferences.posternotstacked = False
-        Preferences.ignoreactorthumbs = False
-        Preferences.actorsave = False
-        Preferences.actorsavepath = ""
-        Preferences.actornetworkpath = ""
-        Preferences.usefanart = True
-        Preferences.ignoretrailers = False
-        Preferences.keepfoldername = False
-        Preferences.enablehdtags = True
-        Preferences.savefanart = True
-        Preferences.resizefanart = 1
-        Preferences.overwritethumbs = False
-        Preferences.startupmode = 1
-        Preferences.maxactors = 9999
-        Preferences.createfolderjpg = False
-        Preferences.basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
-        Preferences.namemode = "1"
-        Preferences.maximumthumbs = 10
-        Preferences.gettrailer = False
-        ReDim Preferences.certificatepriority(33)
-        Preferences.certificatepriority(0) = "MPAA"
-        Preferences.certificatepriority(1) = "UK"
-        Preferences.certificatepriority(2) = "USA"
-        Preferences.certificatepriority(3) = "Ireland"
-        Preferences.certificatepriority(4) = "Australia"
-        Preferences.certificatepriority(5) = "New Zealand"
-        Preferences.certificatepriority(6) = "Norway"
-        Preferences.certificatepriority(7) = "Singapore"
-        Preferences.certificatepriority(8) = "South Korea"
-        Preferences.certificatepriority(9) = "Philippines"
-        Preferences.certificatepriority(10) = "Brazil"
-        Preferences.certificatepriority(11) = "Netherlands"
-        Preferences.certificatepriority(12) = "Malaysia"
-        Preferences.certificatepriority(13) = "Argentina"
-        Preferences.certificatepriority(14) = "Iceland"
-        Preferences.certificatepriority(15) = "Canada (Quebec)"
-        Preferences.certificatepriority(16) = "Canada (British Columbia/Ontario)"
-        Preferences.certificatepriority(17) = "Canada (Alberta/Manitoba/Nova Scotia)"
-        Preferences.certificatepriority(18) = "Peru"
-        Preferences.certificatepriority(19) = "Sweden"
-        Preferences.certificatepriority(20) = "Portugal"
-        Preferences.certificatepriority(21) = "South Africa"
-        Preferences.certificatepriority(22) = "Denmark"
-        Preferences.certificatepriority(23) = "Hong Kong"
-        Preferences.certificatepriority(24) = "Finland"
-        Preferences.certificatepriority(25) = "India"
-        Preferences.certificatepriority(26) = "Mexico"
-        Preferences.certificatepriority(27) = "France"
-        Preferences.certificatepriority(28) = "Italy"
-        Preferences.certificatepriority(29) = "Switzerland (canton of Vaud)"
-        Preferences.certificatepriority(30) = "Switzerland (canton of Geneva)"
-        Preferences.certificatepriority(31) = "Germany"
-        Preferences.certificatepriority(32) = "Greece"
-        Preferences.certificatepriority(33) = "Austria"
-        Preferences.maximagecount = 10
-        
-        movieFolders.Clear()
-        tvFolders.Clear()
-        generalprefschanged = False
-    End Sub
+    
 
     Private Sub actorcb_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles actorcb.MouseEnter
         actorcb.Focus()
@@ -22582,8 +22457,7 @@ Public Class Form1
             End If
         End If
     End Sub
-    Dim generalprefschanged As Boolean = False
-    Dim prefsload As Boolean = False
+    
     Private Sub setupgeneralpreferences()
         prefsload = True
         generalprefschanged = False
