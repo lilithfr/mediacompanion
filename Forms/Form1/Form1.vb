@@ -216,8 +216,8 @@ Public Class Form1
                 Preferences.tableview.Add(tempstring)
             Next
         End If
-        Call savedata()
-        Call savetvdata()
+        Call Movie_SaveMovieData()
+        Call TV_SaveTvData()
         Preferences.startuptab = TabLevel1.SelectedIndex
 
         Preferences.saveconfig()
@@ -481,7 +481,7 @@ Public Class Form1
             loadinginfo = "Status :- Loading Movie Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call loadmoviecache()
+            Call Movie_LoadMovieCache()
 
         End If
 
@@ -507,7 +507,7 @@ Public Class Form1
             loadinginfo = "Status :- Building Actor Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call rebuildactordb()
+            Call Movie_RebuildActorDb()
         Else
             loadinginfo = "Status :- Loading Actor Database"
             frmSplash.Label3.Text = loadinginfo
@@ -518,7 +518,7 @@ Public Class Form1
             'Call loadactorcache()
         End If
 
-        Call displaypreferences()
+        Call Movie_DisplayPreferences()
 
         If scrapeAndQuit = False Then
             Me.Visible = True
@@ -769,7 +769,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub savedata()
+    Private Sub Movie_SaveMovieData()
         Dim fullpath As String = workingProfile.moviecache
         If IO.File.Exists(fullpath) Then
             Dim don As Boolean = False
@@ -924,7 +924,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub savetvdata()
+    Private Sub TV_SaveTvData()
         Dim fullpath As String = workingProfile.tvcache
         If IO.File.Exists(fullpath) Then
             IO.File.Delete(fullpath)
@@ -1183,7 +1183,7 @@ Public Class Form1
                     TvShows.Add(newtvshow)
             End Select
         Next
-        Call populatetvtree()
+        Call TV_PopulateTvTree()
     End Sub
 
     '    Private Sub add_tvshow_to_treeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
@@ -1436,7 +1436,7 @@ Public Class Form1
     '    TextBox33.Text = totalEpisodeCount.ToString
     'End Sub
 
-    Private Sub loadmoviecache()
+    Private Sub Movie_LoadMovieCache()
         fullMovieList.Clear()
         filteredList.Clear()
         dList.Clear()
@@ -1912,7 +1912,7 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub rebuildactordb()
+    Private Sub Movie_RebuildActorDb()
         actorDB.Clear()
         Try
             For Each movie In fullMovieList
@@ -2038,12 +2038,12 @@ Public Class Form1
         Next
 
 
-        CleanFolderList()
-        Call populatetvtree()
+        TV_CleanFolderList()
+        Call TV_PopulateTvTree()
 
         Me.Enabled = True
 
-        Call savetvdata()
+        Call TV_SaveTvData()
 
     End Sub
 
@@ -5140,7 +5140,7 @@ Public Class Form1
         End Try
         frmSplash2.Label2.Visible = True
         frmSplash2.Label2.Text = "Save Data..."
-        Call savedata()
+        Call Movie_SaveMovieData()
 
         'Call sortorder()    ApplyFilters calls sortorder()
         frmSplash2.Label2.Text = "Apply Filters..."
@@ -7826,7 +7826,7 @@ Public Class Form1
                     End If
                     fullMovieList.RemoveAt(f)
                     fullMovieList.Add(newfullmovie)
-                    Call savedata()
+                    Call Movie_SaveMovieData()
                     Exit For
                 End If
             Next
@@ -7916,7 +7916,7 @@ Public Class Form1
                         '              newfullmovie.year = movie.fullmoviebody.year
                         fullMovieList.RemoveAt(f)
                         fullMovieList.Add(newfullmovie)
-                        Call savedata()
+                        Call Movie_SaveMovieData()
                         Exit For
                     End If
                 Next
@@ -17417,7 +17417,7 @@ Public Class Form1
                 End If
             Next
             reloadtvshow()
-            Call savetvdata()
+            Call TV_SaveTvData()
             On Error Resume Next
             TreeView1.SelectedNode = TreeView1.SelectedNode.PrevNode
             TreeView1.SelectedNode = TreeView1.SelectedNode.NextNode
@@ -17490,7 +17490,7 @@ Public Class Form1
                 End If
                 If cancelloop = True Then Exit For
             Next
-            Call savetvdata()
+            Call TV_SaveTvData()
             '            rebuildselectedshow(MainNode.Name.ToString)
         End If
     End Sub
@@ -17537,7 +17537,7 @@ Public Class Form1
                         newitem.year = workingTvShow.year
                         TvShows.Remove(item)
                         TvShows.Add(newitem)
-                        Call populatetvtree()
+                        Call TV_PopulateTvTree()
                         Exit For
                     End If
                 Next
@@ -17862,7 +17862,7 @@ Public Class Form1
                         newitem.year = workingTvShow.year
                         TvShows.Remove(item)
                         TvShows.Add(newitem)
-                        Call populatetvtree()
+                        Call TV_PopulateTvTree()
                         Exit For
                     End If
                 Next
@@ -18599,7 +18599,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call savetvdata()
+        Call TV_SaveTvData()
         messbox.Close()
         If Preferences.disabletvlogs = False Then
             Dim MyFormObject As New frmoutputlog(renamelog, True)
@@ -20730,7 +20730,7 @@ Public Class Form1
                 Exit For
             End If
         Next
-        Call savetvdata()
+        Call TV_SaveTvData()
     End Sub
 
     Private Function UrlIsValid(ByVal url As String) As Boolean
@@ -21024,7 +21024,7 @@ Public Class Form1
                 eps = eps & " - " & title
 
 
-                Call add_episode_to_treeview(shownode, tempint, fullpath, eps, False)
+                Call TV_AddEpisodeToTreeview(shownode, tempint, fullpath, eps, False)
             Next
             'Call add_episode_to_treeview(e.Empty
         End If
@@ -21032,7 +21032,7 @@ Public Class Form1
     End Sub
 
     Private Sub bckgroundscanepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs, Optional ByVal manual As Boolean = False) Handles bckgroundscanepisodes.DoWork
-        Call episodescraper(showstoscrapelist, e.Argument)
+        Call TV_EpisodeScraper(showstoscrapelist, e.Argument)
     End Sub
 
     Private Sub startsearchforepisodes()
@@ -21210,7 +21210,7 @@ Public Class Form1
     End Sub
 
     Private Sub RebuildActorDBToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildActorDBToolStripMenuItem.Click
-        Call rebuildactordb()
+        Call Movie_RebuildActorDb()
     End Sub
 
     Private Sub Button14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button14.Click
@@ -21286,7 +21286,7 @@ Public Class Form1
         Next
         ListBox4.Items.Clear()
         ComboBox3.Items.Clear()
-      
+
         For Each mset In Preferences.moviesets
             If mset <> "-None-" Then ListBox4.Items.Add(mset)
             ComboBox3.Items.Add(mset)
@@ -21315,29 +21315,29 @@ Public Class Form1
 
     Private Sub RadioButton32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton32.CheckedChanged
         If RadioButton32.Checked = True Then
-            Call tvfilter("screenshot")
+            Call TV_TvFilter("screenshot")
         End If
     End Sub
 
     Private Sub RadioButton30_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton30.CheckedChanged
         If RadioButton30.Checked = True Then
-            Call tvfilter("fanart")
+            Call TV_TvFilter("fanart")
         End If
     End Sub
 
     Private Sub RadioButton29_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton29.CheckedChanged
         If RadioButton29.Checked = True Then
-            Call tvfilter("all")
+            Call TV_TvFilter("all")
         End If
     End Sub
 
     Private Sub RadioButton31_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton31.CheckedChanged
         If RadioButton31.Checked = True Then
-            Call tvfilter("posters")
+            Call TV_TvFilter("posters")
         End If
     End Sub
 
-    Private Sub tvfilter(ByVal butt As String)
+    Private Sub TV_TvFilter(ByVal butt As String)
         If Not startup = True Then
             totalEpisodeCount = 0
             totalTvShowCount = 0
@@ -21420,7 +21420,7 @@ Public Class Form1
                             'Else
                             '    Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
                             '    If Not IO.File.Exists(path) Then
-                            Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+                            Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
                             Dim child As TreeNode
                             Dim childchild As TreeNode
                             Dim childchildchild As TreeNode
@@ -21532,12 +21532,12 @@ Public Class Form1
                             If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
                                 Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
                                 If Not IO.File.Exists(path) Then
-                                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+                                    Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
                                 End If
                             Else
                                 Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
                                 If Not IO.File.Exists(path) Then
-                                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+                                    Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
                                 End If
                             End If
                         Catch ex As Exception
@@ -21565,7 +21565,7 @@ Public Class Form1
                     Next
                 Next
             ElseIf butt = "all" Then
-                Call populatetvtree()
+                Call TV_PopulateTvTree()
             ElseIf butt = "fanart" Then
                 For Each t As TreeNode In TreeView1.Nodes
                     For i = 1 To t.Nodes.Count
@@ -21729,7 +21729,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub displaypreferences()
+    Private Sub Movie_DisplayPreferences()
         ListBox7.Items.Clear()
         For Each item In movieFolders
             ListBox7.Items.Add(item)
@@ -21898,7 +21898,7 @@ Public Class Form1
                 If remove = True Then Preferences.offlinefolders.RemoveAt(f)
             Next
             Preferences.saveconfig()
-            Call savedata()
+            Call Movie_SaveMovieData()
         End If
 
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
@@ -21935,7 +21935,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-        Call savedata()
+        Call Movie_SaveMovieData()
         'filteredlist = fullmovielist
         Call sortorder()
         'Call loadmovielist()
@@ -22129,7 +22129,7 @@ Public Class Form1
         End If
     End Sub
 
-    
+
 
 
 
@@ -22245,11 +22245,11 @@ Public Class Form1
         'For Each tv In basictvlist
         '    ListtvFiles(tv, "*.NFO")
         'Next
-        Call populatetvtree()
+        Call TV_PopulateTvTree()
         'messbox.Close()
         Me.Enabled = True
 
-        Call savetvdata()
+        Call TV_SaveTvData()
 
     End Sub
 
@@ -22469,7 +22469,7 @@ Public Class Form1
             End If
         End If
     End Sub
-    
+
     Private Sub setupgeneralpreferences()
         prefsload = True
         generalprefschanged = False
@@ -22644,7 +22644,7 @@ Public Class Form1
         Next
         MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
         generalprefschanged = False
-       
+
     End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
@@ -23135,7 +23135,7 @@ Public Class Form1
             GroupBox_MovieIMDBMirror.Visible = True
             GroupBox_MovieIMDBMirror.BringToFront()
 
-            
+
 
             GroupBox11.Visible = True
             ComboBox7.Visible = True
@@ -23755,9 +23755,9 @@ Public Class Form1
 
     End Sub
 
-   
 
-    
+
+
 
     Public Function checktvlanguage(ByVal id As String, ByVal language As String)
         Try
@@ -24661,7 +24661,7 @@ Public Class Form1
     Private Sub ProfilesToolStripMenuItem_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles ProfilesToolStripMenuItem.DropDownItemClicked
         generalprefschanged = False
 
-     Preferences.saveconfig()
+        Preferences.saveconfig()
 
         For Each prof In profileStructure.profilelist
             If prof.profilename = e.ClickedItem.Text Then
@@ -24724,7 +24724,7 @@ Public Class Form1
         End If
 
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
-            Call rebuildactordb()
+            Call Movie_RebuildActorDb()
         Else
             Call loadactorcache()
         End If
@@ -25648,7 +25648,7 @@ Public Class Form1
 
 
     End Sub
-    
+
     Private Sub ListBox14_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox14.SelectedIndexChanged
         If ListBox14.SelectedItem <> Nothing Then
             TextBox46.Text = ListBox14.SelectedItem
@@ -26198,7 +26198,7 @@ Public Class Form1
             Next
         Next gridrow
 
-        Call savedata()
+        Call Movie_SaveMovieData()
         Call loadinfofile()
         Call applyfilters()
         mess.Close()
@@ -28438,10 +28438,10 @@ Public Class Form1
                                         End If
                                     End If
 
-                                        If aired = True Then newshow.tvdbid = "true"
-                                        If aired = False Then newshow.tvdbid = "false"
-                                        newshow.episodepath = item.fullpath
-                                        Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
+                                    If aired = True Then newshow.tvdbid = "true"
+                                    If aired = False Then newshow.tvdbid = "false"
+                                    newshow.episodepath = item.fullpath
+                                    Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
                             End Select
                         Next
                     End If
@@ -28636,11 +28636,11 @@ Public Class Form1
 #End If
         End Try
         messbox.Close()
-        Call populatetvtree()
+        Call TV_PopulateTvTree()
 
 
 
-        Call savetvdata()
+        Call TV_SaveTvData()
     End Sub
 
     Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildThisShowToolStripMenuItem.Click
@@ -28673,7 +28673,7 @@ Public Class Form1
 
     Private Sub RadioButton44_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton44.CheckedChanged
         If RadioButton44.Checked = True Then
-            Call tvfilter("missingeps")
+            Call TV_TvFilter("missingeps")
         End If
     End Sub
 
@@ -28700,7 +28700,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call savetvdata()
+        Call TV_SaveTvData()
     End Sub
 
     Private Sub UnlockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnlockAllToolStripMenuItem.Click
@@ -28726,7 +28726,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call savetvdata()
+        Call TV_SaveTvData()
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged

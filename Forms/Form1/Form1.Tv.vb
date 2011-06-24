@@ -200,9 +200,9 @@ Partial Public Class Form1
                 Dim shownode As Integer = -1
 
                 If item.status IsNot Nothing AndAlso item.status.ToLower.IndexOf("xml error") <> -1 Then
-                    Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
+                    Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
                 Else
-                    Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
+                    Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
                 End If
 
                 For Each episode In item.allepisodes
@@ -262,9 +262,9 @@ Partial Public Class Form1
                     End If
 
                     If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+                        Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
                     Else
-                        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+                        Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
                     End If
 
 
@@ -853,10 +853,10 @@ Partial Public Class Form1
             newTvFolders.RemoveAt(0)
         Loop
 
-        CleanFolderList()
+        TV_CleanFolderList()
     End Sub
 
-    Public Sub CleanFolderList()
+    Public Sub TV_CleanFolderList()
         Dim TempList As List(Of String)
         TempList = Preferences.tvFolders
         Dim ReturnList As New List(Of String)
@@ -870,7 +870,7 @@ Partial Public Class Form1
         Preferences.tvFolders = TempList
     End Sub
 
-    Private Sub episodescraper(ByVal listofshowfolders As List(Of String), ByVal manual As Boolean)
+    Private Sub TV_EpisodeScraper(ByVal listofshowfolders As List(Of String), ByVal manual As Boolean)
         Dim tempstring As String = ""
         Dim tempint As Integer
         Dim errorcounter As Integer = 0
@@ -1612,7 +1612,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub add_tvshow_to_treeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
+    Private Sub TV_AddTvshowToTreeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
         If xmlerror = True Then
             TreeView1.Nodes.Add(fullpath, title)
             For Each tn As TreeNode In TreeView1.Nodes
@@ -1632,7 +1632,7 @@ Partial Public Class Form1
         End If
     End Sub
 
-    Private Sub add_episode_to_treeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
+    Private Sub TV_AddEpisodeToTreeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
         Try
             Dim ccnode As TreeNode
             ccnode = TreeView1.Nodes(rootnode).Nodes(childnode)
@@ -1668,7 +1668,7 @@ Partial Public Class Form1
         End Try
     End Sub
 
-    Private Sub populatetvtree()
+    Private Sub TV_PopulateTvTree()
         Dim tempint As Integer
         Dim tempstring As String = String.Empty
         Dim cnode As TreeNode = Nothing
@@ -1712,9 +1712,9 @@ Partial Public Class Form1
             Dim shownode As Integer = -1
 
             If item.status IsNot Nothing AndAlso Not item.status.ToLower.Contains("xml error") Then
-                Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
+                Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
             Else
-                Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
+                Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
             End If
 
 
@@ -1774,9 +1774,9 @@ Partial Public Class Form1
                 End If
 
                 If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+                    Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
                 Else
-                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+                    Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
                 End If
 
             Next
@@ -1914,7 +1914,7 @@ Partial Public Class Form1
             Next fs_info
         Next
         tvrebuildlog(vbCrLf & vbCrLf & vbCrLf)
-  
+
     End Sub
 
     Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
@@ -2294,7 +2294,7 @@ Partial Public Class Form1
         Call loadtvshow(BrokenShow.NfoFilePath)
         messbox.Close()
 
-        CleanFolderList()
+        TV_CleanFolderList()
     End Sub
 
 End Class
