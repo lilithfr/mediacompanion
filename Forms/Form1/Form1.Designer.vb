@@ -2421,6 +2421,7 @@ Me.TabPage3.UseVisualStyleBackColor = true
 'SplitContainer1
 '
 Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+Me.SplitContainer1.Cursor = System.Windows.Forms.Cursors.Default
 Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
 Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
 Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(4)
@@ -2431,6 +2432,7 @@ Me.SplitContainer1.Name = "SplitContainer1"
 Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
 Me.SplitContainer1.Panel1.Controls.Add(Me.SplitContainer5)
 Me.SplitContainer1.Panel1.Controls.Add(Me.ListBox2)
+Me.SplitContainer1.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
 Me.SplitContainer1.Panel1MinSize = 300
 '
 'SplitContainer1.Panel2
@@ -2481,6 +2483,7 @@ Me.SplitContainer1.Panel2.Controls.Add(Me.Label38)
 Me.SplitContainer1.Panel2.Controls.Add(Me.Label27)
 Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
 Me.SplitContainer1.Panel2.Font = New System.Drawing.Font("Times New Roman", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+Me.SplitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
 Me.SplitContainer1.Size = New System.Drawing.Size(1203, 603)
 Me.SplitContainer1.SplitterDistance = 378
 Me.SplitContainer1.SplitterWidth = 5
@@ -2508,6 +2511,7 @@ Me.SplitContainer5.Panel1.Controls.Add(Me.Panel1)
 Me.SplitContainer5.Panel1.Controls.Add(Me.TextBox1)
 Me.SplitContainer5.Panel1.Controls.Add(Me.Label1)
 Me.SplitContainer5.Panel1.Controls.Add(Me.MovieListComboBox)
+Me.SplitContainer5.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
 '
 'SplitContainer5.Panel2
 '
@@ -2516,6 +2520,7 @@ Me.SplitContainer5.Panel2.Controls.Add(Me.GroupBox21)
 Me.SplitContainer5.Panel2.Controls.Add(Me.ComboBox11)
 Me.SplitContainer5.Panel2.Controls.Add(Me.TextBox_GenreFilter)
 Me.SplitContainer5.Panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl
+Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
 Me.SplitContainer5.Panel2MinSize = 120
 Me.SplitContainer5.Size = New System.Drawing.Size(378, 603)
 Me.SplitContainer5.SplitterDistance = 357
@@ -3092,12 +3097,14 @@ Me.SplitContainer2.Name = "SplitContainer2"
 'SplitContainer2.Panel1
 '
 Me.SplitContainer2.Panel1.Controls.Add(Me.PictureBox7)
+Me.SplitContainer2.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
 '
 'SplitContainer2.Panel2
 '
 Me.SplitContainer2.Panel2.Controls.Add(Me.DebugSplitter2PosLabel)
 Me.SplitContainer2.Panel2.Controls.Add(Me.moviethumb)
 Me.SplitContainer2.Panel2.Controls.Add(Me.Label128)
+Me.SplitContainer2.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
 Me.SplitContainer2.Size = New System.Drawing.Size(745, 190)
 Me.SplitContainer2.SplitterDistance = 366
 Me.SplitContainer2.SplitterWidth = 5
@@ -5837,7 +5844,7 @@ Me.TabPage28.Location = New System.Drawing.Point(4, 22)
 Me.TabPage28.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage28.Name = "TabPage28"
 Me.TabPage28.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage28.Size = New System.Drawing.Size(1190, 568)
+Me.TabPage28.Size = New System.Drawing.Size(1190, 570)
 Me.TabPage28.TabIndex = 1
 Me.TabPage28.Text = "Advanced"
 '

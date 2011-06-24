@@ -414,8 +414,10 @@ Public Class Form1
 
         CheckForIllegalCrossThreadCalls = False
 
-
-
+        'These lines fixed the associated panel so that they don't automove when the Form1 is resized
+        SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
+        SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
+        SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
         Try
             If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
@@ -30206,9 +30208,7 @@ Public Class Form1
         Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
     End Sub
 
-    Private Sub SplitContainer7_Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles SplitContainer7.Panel1.Paint
-
-    End Sub
+    
 
     Private Sub Button111_Click(sender As System.Object, e As System.EventArgs) Handles Button111.Click
         'Reset Font
