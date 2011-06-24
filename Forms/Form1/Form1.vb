@@ -69,6 +69,7 @@ Public Class Form1
     Dim defaultPoster As String
     Dim defaultBanner As String
     Dim defaultOfflineArt As String
+    Dim defaultScreenShot As String
     Dim actorDB As New List(Of ActorDatabase)
     Dim scraperLog As String = ""
 
@@ -409,6 +410,8 @@ Public Class Form1
         defaultPoster = IO.Path.Combine(applicationPath, "Resources\default_poster.jpg")
         defaultBanner = IO.Path.Combine(applicationPath, "Resources\default_banner.jpg")
         defaultActor = IO.Path.Combine(applicationPath, "Resources\default_actor.jpg")
+        defaultScreenShot = IO.Path.Combine(applicationPath, "Resources\default_offline.jpg")
+
         CheckForIllegalCrossThreadCalls = False
 
 
@@ -14744,7 +14747,15 @@ Public Class Form1
             Else
                 Try
                     PictureBox14.Image = Nothing
-                    PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+                    tempstring = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+                    If IO.File.Exists(tempstring) Then
+                        PictureBox4.ImageLocation = tempstring
+                    Else
+                        PictureBox4.Image = Nothing                     'if there is no screenshot & no fanart then clear the picturebox & show nothing
+                        PictureBox4.Invalidate()
+                        'PictureBox4.ImageLocation = defaultScreenShot      ' other option is to show a picture of some sort indicating that there is no picture available
+                    End If
+
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
