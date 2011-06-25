@@ -19,6 +19,7 @@ Public Structure ComboList
     Dim runtime As String
     Dim createdate As String
     Dim missingdata1 As Byte
-
     Dim plot As String
+
+   
 End Structure

@@ -1903,7 +1903,7 @@ Public Class Form1
                     Continue For
                 End If
                     Dim tempstring As String = fullstring.Substring(fullstring.IndexOf("<title>") + 7, fullstring.IndexOf("</title>") - 7)
-                    Dim template As HTMLTemplate
+                Dim template As New HTMLTemplate
                     Dim add As Boolean = True
                     For Each temp In templateList
                         If temp.title = tempstring Then
@@ -1935,7 +1935,7 @@ Public Class Form1
                 Dim movieadd As New FullMovieDetails
                 movieadd = nfoFunction.loadfullmovienfo(movie.fullpathandfilename)
                 For Each actor In movieadd.listactors
-                    Dim newactor As ActorDatabase
+                    Dim newactor As New ActorDatabase
                     newactor.actorname = actor.actorname
                     newactor.movieid = movie.id
                     actorDB.Add(newactor)
@@ -2810,7 +2810,7 @@ Public Class Form1
             Dim dvdfiles As Boolean
             For Each fs_info As System.IO.FileInfo In fs_infos
 
-                Dim newmoviedetails As NewMovie
+                Dim newmoviedetails As New NewMovie
                 Dim title As String = String.Empty
                 Dim remove As Boolean = False
                 dvdfiles = False
@@ -5428,7 +5428,7 @@ Public Class Form1
 
                     ' These tokens (except 'nfo') are included for backwards compatibility
                 Case "fullplot", "director", "stars", "writer", "moviegenre", "format", "releasedate", "nfo"
-                    Dim newplotdetails As FullMovieDetails
+                    Dim newplotdetails As New FullMovieDetails
                     newplotdetails = nfoFunction.loadfullmovienfo(movie.fullpathandfilename)
                     If tokenInstr(0) = "fullplot" Then
                         strNFOprop = newplotdetails.fullmoviebody.plot
@@ -7173,7 +7173,7 @@ Public Class Form1
         For f = 0 To fullMovieList.Count - 1
             If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                Dim newfullmovie As ComboList
+                Dim newfullmovie As New ComboList 'this should be new to initialise values
                 newfullmovie = fullMovieList(f)
                 '-------------- Aqui
                 If Preferences.ignorearticle = True Then
@@ -7681,7 +7681,7 @@ Public Class Form1
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                        Dim newfullmovie As ComboList
+                        Dim newfullmovie As New ComboList 'added new to initialise varibles in structure to avoid NOTHING & unhandled exceptions
                         newfullmovie = fullMovieList(f)
                         '-------------- Aqui
                         If Preferences.ignorearticle = True Then
@@ -7809,7 +7809,7 @@ Public Class Form1
             End If
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).titleandyear = oldmovietitle Then
-                    Dim newfullmovie As ComboList
+                    Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
                     newfullmovie = fullMovieList(f)
                     Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                     Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -7858,7 +7858,7 @@ Public Class Form1
             Dim startindex As Integer = MovieListComboBox.SelectedIndex
             For Each item In MovieListComboBox.SelectedItems
                 Dim filepath As String = item.value
-                Dim movie As FullMovieDetails
+                Dim movie As New FullMovieDetails
                 movie = nfoFunction.loadfullmovienfo(filepath)
                 If directortxt.Text <> "" Then
                     movie.fullmoviebody.director = directortxt.Text
@@ -7899,7 +7899,7 @@ Public Class Form1
                 nfoFunction.savemovienfo(filepath, movie, True)
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = movie.fileinfo.fullpathandfilename Then
-                        Dim newfullmovie As ComboList
+                        Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
                         newfullmovie = fullMovieList(f)
                         Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -7983,13 +7983,13 @@ Public Class Form1
             End If
             For Each item In MovieListComboBox.SelectedItems
                 Dim filepath As String = item.value
-                Dim movie As FullMovieDetails
+                Dim movie As New FullMovieDetails
                 movie = nfoFunction.loadfullmovienfo(filepath)
                 movie.fullmoviebody.playcount = watched
                 nfoFunction.savemovienfo(filepath, movie, True)
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = filepath Then
-                        Dim newfullmovie As ComboList
+                        Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
                         newfullmovie = fullMovieList(f)
                         newfullmovie.playcount = watched
                         fullMovieList.RemoveAt(f)
@@ -8069,7 +8069,7 @@ Public Class Form1
 
         For f = 0 To fullMovieList.Count - 1
             If fullMovieList(f).fullpathandfilename = newmovietitle Then
-                Dim newfullmovie As ComboList
+                Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
 
                 fullMovieList.RemoveAt(f)
 
@@ -8086,10 +8086,10 @@ Public Class Form1
 
 
         For f = 0 To filteredList.Count - 1
-            Dim newfullmovie As ComboList
+            Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
             newfullmovie = filteredList(f)
             If filteredList(f).fullpathandfilename = oldmovietitle Then
-                Dim newfullmovie2 As ComboList
+                Dim newfullmovie2 As New ComboList 'added new to initialise varibles in structure
                 newfullmovie2 = filteredList(f)
                 newfullmovie2.titleandyear = newmovietitle
                 filteredList.RemoveAt(f)
@@ -9237,7 +9237,7 @@ Public Class Form1
                         'If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
                         If filteredList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
 
-                            Dim newfullmovie As ComboList = Nothing
+                            Dim newfullmovie As New ComboList ' = Nothing   'added new to initialise varibles in structure
                             newfullmovie.fullpathandfilename = tempmovielist(f)
                             newfullmovie.foldername = Utilities.GetLastFolder(tempmovielist(f))
                             newfullmovie.filename = IO.Path.GetFileName(tempmovielist(f))
@@ -13661,7 +13661,7 @@ Public Class Form1
             stage = stage & "Adding movie to internal list" & vbCrLf
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
-                    Dim newfullmovie As ComboList
+                    Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
                     newfullmovie = fullMovieList(f)
                     newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title
                     '-------------- Aqui
@@ -26083,7 +26083,7 @@ Public Class Form1
                         End Try
                     End If
                     If changed = True And IO.File.Exists(fullMovieList(f).fullpathandfilename) Then
-                        Dim changedmoviedetails As fullmoviedetails
+                        Dim changedmoviedetails As New FullMovieDetails
                         Dim changedmovie As New combolist
                         changedmoviedetails = nfoFunction.loadfullmovienfo(fullMovieList(f).fullpathandfilename)
                         If Not changedmoviedetails Is Nothing Then
@@ -27092,7 +27092,7 @@ Public Class Form1
                         For f = 0 To fullMovieList.Count - 1
                             If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                                Dim newfullmovie As ComboList
+                                Dim newfullmovie As New ComboList 'added new to initialise varibles in structure
                                 newfullmovie = fullMovieList(f)
                                 '-------------- Aqui
                                 If Preferences.ignorearticle = True Then
