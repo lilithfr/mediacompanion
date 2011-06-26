@@ -668,6 +668,8 @@ Public Class Form1
 
             'Below shows the current screensize on initial start
             DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
+            mov_SplitContainerAutoPosition("LOAD MOVIE")
+            tv_SplitContainerAutoPosition("LOAD TV")
         End If
     End Sub
 
@@ -679,26 +681,28 @@ Public Class Form1
         End If
         
     End Sub
-    Sub mov_SplitContainerAutoPosition()
+    Sub mov_SplitContainerAutoPosition(ByVal from As String)
         'Set Movie Splitter Auto Position
         Dim pic1ratio As Decimal
         Dim pic2ratio As Decimal
         Try
-            Dim pic1ImSzW = PictureBox7.Image.Size.Width
+            Dim pic1ImSzW = PictureBox7.Image.Size.Width        'original picture sizes
             Dim pic1ImszH = PictureBox7.Image.Size.Height
             Dim pic2ImSzW = moviethumb.Image.Size.Width
             Dim pic2ImszH = moviethumb.Image.Size.Height
             pic1ratio = pic1ImSzW / pic1ImszH
             pic2ratio = pic2ImSzW / pic2ImszH
+            Dim width As Integer = SplitContainer2.Size.Width
+            ' MsgBox(from & " = " & width & ":" & Int(SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio))) - 5 & " - " & pic1ImSzW & "x" & pic1ImszH & " " & pic2ImszH & "x" & pic2ImSzW)
         Catch ex As Exception
-            pic1ratio = 1
+            pic1ratio = 2
             pic2ratio = 1
+            'MsgBox("Movie Splitter Exception")
         End Try
-        SplitContainer2.SplitterDistance = SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio)) - 5 'offset due to slider width
+        SplitContainer2.SplitterDistance = (SplitContainer2.Size.Width - 8) * (pic1ratio / (pic1ratio + pic2ratio))
     End Sub
-    Sub tv_SplitContainerAutoPosition(from As String)
+    Sub tv_SplitContainerAutoPosition(ByVal from As String)
         'Set TVShow Splitter Auto Position
-
         Dim pic3ratio As Decimal
         Dim pic4ratio As Decimal
         Try
@@ -710,15 +714,14 @@ Public Class Form1
             pic4ratio = pic4ImSzW / pic4ImszH
             'MsgBox(from & " = " & SplitContainer4.SplitterDistance & " - " & pic3ImSzW & "x" & pic3ImszH & " " & pic4ImszH & "x" & pic4ImSzW)
         Catch ex As Exception
-            pic3ratio = 1
+            pic3ratio = 2
             pic4ratio = 1
-            'MsgBox("Exception")
+            'MsgBox("TV Splitter Exception")
         End Try
-        SplitContainer4.SplitterDistance = SplitContainer4.Size.Width * (pic3ratio / (pic3ratio + pic4ratio)) - 5 'offset due to slider width
+        SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
     End Sub
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeEnd
-        mov_SplitContainerAutoPosition()
-        tv_SplitContainerAutoPosition("resize")
+        
         If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
             Preferences.formwidth = Me.Width
             Preferences.formheight = Me.Height
@@ -726,87 +729,14 @@ Public Class Form1
 
             Preferences.saveconfig()
             Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
-            'If filteredlist.Count / maxcount2 > 159 Then
-            '    maxcount2 += 1
-            'End If
             If maxcount2 <> maxcount Then
                 maxcount = maxcount2
                 Call resetwall()
             End If
 
         End If
+        mov_SplitContainerAutoPosition("resize mov")
+        tv_SplitContainerAutoPosition("resize tv")
     End Sub
 
     Private Sub Movie_SaveMovieData()
@@ -2549,7 +2479,7 @@ Public Class Form1
 #End If
         End Try
 
-        mov_SplitContainerAutoPosition()
+        mov_SplitContainerAutoPosition("loadinfofile - movie")
     End Sub
 
     Private Function checkvalidmediafile(ByVal fullpathandfilename As String) As Boolean
@@ -11145,7 +11075,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-        
+        'mov_SplitContainerAutoPosition("Selected Movie Changed")
     End Sub
 
     Private Sub TextBox1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
@@ -14669,7 +14599,7 @@ Public Class Form1
 
         End If
         Panel9.Visible = False
-        tv_SplitContainerAutoPosition("loadtvshow") 'loadtvshow()
+        'tv_SplitContainerAutoPosition("loadtvshow") 'loadtvshow()
     End Sub
 
     Private Sub loadtvepisode(ByVal path As String, ByVal season As String, ByVal episode As String)
@@ -14871,7 +14801,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-        tv_SplitContainerAutoPosition("loadtvepisode") 'loadtvepisode()
+        'tv_SplitContainerAutoPosition("loadtvepisode") 'loadtvepisode()
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
