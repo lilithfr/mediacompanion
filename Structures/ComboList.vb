@@ -21,5 +21,27 @@ Public Structure ComboList
     Dim missingdata1 As Byte
     Dim plot As String
 
+    Sub New(init As Boolean)
+        fullpathandfilename = ""
+        movieset = ""
+        filename = ""
+        foldername = ""
+        title = ""
+        originaltitle = ""
+        titleandyear = ""
+        year = ""
+        filedate = ""
+        id = ""
+        rating = ""
+        top250 = ""
+        genre = ""
+        playcount = ""
+        sortorder = ""
+        outline = ""
+        runtime = ""
+        createdate = ""
+        missingdata1 = 0
+        plot = ""
+    End Sub
    
 End Structure

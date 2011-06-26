@@ -4,7 +4,7 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 
 Public Class WorkingWithNfoFiles
-
+    Const SetDefaults = True
     Public Function ChangeFieldTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String, Optional ByVal CreateIfMissing As Boolean = False) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
@@ -1823,7 +1823,7 @@ Public Class WorkingWithNfoFiles
     Public Function loadbasicmovienfo(ByVal path As String, ByVal mode As String)
 
         Try
-            Dim newmovie As New ComboList
+            Dim newmovie As New ComboList(SetDefaults)
             If Not IO.File.Exists(path) Then
                 Return "Error"
                 Exit Function
@@ -1965,7 +1965,7 @@ Public Class WorkingWithNfoFiles
 
                     'MsgBox(Format(myDate, "MMddyy"))
                     'MsgBox(myDate.ToString("MMddyy"))
-                    
+
                 End If
                 Return newmovie
             End If
