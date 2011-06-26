@@ -675,27 +675,50 @@ Public Class Form1
         If startup = False Then
             Preferences.locx = Me.Location.X
             Preferences.locy = Me.Location.Y
-
             Preferences.SaveConfig()
         End If
-
-        Dim splitContWidth As Integer = SplitContainer2.Size.Width
-        Dim splitContHeight As Integer = SplitContainer2.Size.Height
-
-        Dim pic1Width As Integer = SplitContainer2.Panel1.Width
-        Dim pic1Height As Integer = SplitContainer2.Panel1.Height
-
-        Dim pic2Width As Integer = SplitContainer2.Panel2.Width
-        Dim pic2Height As Integer = SplitContainer2.Panel2.Height
-
-
-
-        DebugSplitter2PosLabel.Text = "C:" & splitContWidth & "x" & splitContHeight & vbCrLf & "1:" & pic1Width & "x" & pic1Height & vbCrLf & "2:" & pic2Width & "x" & pic2Height
-        'SplitContainer1.SplitterDistance
+        
     End Sub
+    Sub mov_SplitContainerAutoPosition()
+        'Set Movie Splitter Auto Position
+        Dim pic1ratio As Decimal
+        Dim pic2ratio As Decimal
+        Try
+            Dim pic1ImSzW = PictureBox7.Image.Size.Width
+            Dim pic1ImszH = PictureBox7.Image.Size.Height
+            Dim pic2ImSzW = moviethumb.Image.Size.Width
+            Dim pic2ImszH = moviethumb.Image.Size.Height
+            pic1ratio = pic1ImSzW / pic1ImszH
+            pic2ratio = pic2ImSzW / pic2ImszH
+        Catch ex As Exception
+            pic1ratio = 1
+            pic2ratio = 1
+        End Try
+        SplitContainer2.SplitterDistance = SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio)) - 5 'offset due to slider width
+    End Sub
+    Sub tv_SplitContainerAutoPosition(from As String)
+        'Set TVShow Splitter Auto Position
 
+        Dim pic3ratio As Decimal
+        Dim pic4ratio As Decimal
+        Try
+            Dim pic3ImSzW = PictureBox4.Image.Size.Width
+            Dim pic3ImszH = PictureBox4.Image.Size.Height
+            Dim pic4ImSzW = PictureBox5.Image.Size.Width
+            Dim pic4ImszH = PictureBox5.Image.Size.Height
+            pic3ratio = pic3ImSzW / pic3ImszH
+            pic4ratio = pic4ImSzW / pic4ImszH
+            'MsgBox(from & " = " & SplitContainer4.SplitterDistance & " - " & pic3ImSzW & "x" & pic3ImszH & " " & pic4ImszH & "x" & pic4ImSzW)
+        Catch ex As Exception
+            pic3ratio = 1
+            pic4ratio = 1
+            'MsgBox("Exception")
+        End Try
+        SplitContainer4.SplitterDistance = SplitContainer4.Size.Width * (pic3ratio / (pic3ratio + pic4ratio)) - 5 'offset due to slider width
+    End Sub
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeEnd
-
+        mov_SplitContainerAutoPosition()
+        tv_SplitContainerAutoPosition("resize")
         If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
             Preferences.formwidth = Me.Width
             Preferences.formheight = Me.Height
@@ -2354,7 +2377,6 @@ Public Class Form1
                 If workingMovieDetails.fullmoviebody.votes = Nothing Then workingMovieDetails.fullmoviebody.votes = ""
                 If workingMovieDetails.fullmoviebody.year = Nothing Then workingMovieDetails.fullmoviebody.year = ""
 
-
                 titletxt.Items.Clear()
                 titletxt.Items.Add(workingMovieDetails.fullmoviebody.title)
                 For Each title In workingMovieDetails.alternativetitles
@@ -2386,8 +2408,6 @@ Public Class Form1
                 workingMovieDetails.fileinfo.posterpath = Utilities.GetPosterPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.fanartpath = Utilities.GetFanartPath(workingMovie.fullpathandfilename)
 
-
-
                 tempstring = Utilities.GetStackName(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
                 If tempstring = "na" Then
                     tempstring = Utilities.CleanFileName(workingMovieDetails.fileinfo.filename)
@@ -2403,12 +2423,6 @@ Public Class Form1
                         Button3.Visible = True
                     End If
                 End If
-
-
-
-
-
-
 
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Try
@@ -2435,7 +2449,9 @@ Public Class Form1
                             Label19.Text = "Current Loaded Poster - " & Image2.Width.ToString & " x " & Image2.Height.ToString
                         Else
                             moviethumb.ImageLocation = defaultPoster 'picturebox3
+                            moviethumb.Load()
                             PictureBox3.ImageLocation = defaultPoster '7 - 2
+                            PictureBox3.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -2457,7 +2473,9 @@ Public Class Form1
                             Label16.Text = ""
                             Label17.Text = ""
                             PictureBox2.ImageLocation = defaultFanart 'moviethumb - 3
+                            PictureBox2.Load()
                             PictureBox7.ImageLocation = defaultFanart '2
+                            PictureBox7.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -2520,14 +2538,7 @@ Public Class Form1
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
-
-
-
-
             End If
-
-
-
             If ratingtxt.Text.IndexOf("/10") <> -1 Then
                 ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
                 workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
@@ -2538,6 +2549,7 @@ Public Class Form1
 #End If
         End Try
 
+        mov_SplitContainerAutoPosition()
     End Sub
 
     Private Function checkvalidmediafile(ByVal fullpathandfilename As String) As Boolean
@@ -6116,6 +6128,7 @@ Public Class Form1
         Try
             If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                 PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                PictureBox7.Load()
             Else
                 PictureBox7.Image = Nothing
             End If
@@ -6215,6 +6228,7 @@ Public Class Form1
                 temppath = temppath & ".actors\" & tempname
                 If IO.File.Exists(temppath) Then
                     PictureBox1.ImageLocation = temppath
+                    PictureBox1.Load()
                     Exit Sub
                 End If
                 If actor.actorthumb <> Nothing Then
@@ -6222,18 +6236,23 @@ Public Class Form1
                     If actorthumbpath <> "none" Then
                         If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
                             PictureBox1.ImageLocation = actorthumbpath
+                            PictureBox1.Load()
                         Else
                             PictureBox1.ImageLocation = defaultActor
+                            PictureBox1.Load()
                         End If
                     Else
                         PictureBox1.ImageLocation = defaultActor
+                        PictureBox1.Load()
                     End If
                 Else
                     PictureBox1.ImageLocation = defaultActor
+                    PictureBox1.Load()
                 End If
                 Exit For
             Else
                 PictureBox1.ImageLocation = defaultActor
+                PictureBox1.Load()
             End If
         Next
     End Sub
@@ -6657,6 +6676,7 @@ Public Class Form1
             End If
         End If
         Label39.Text = "Displaying " & filteredList.Count & " of  " & fullMovieList.Count & " movies"
+
     End Sub
 
     'View Title, Filename, or Foldername
@@ -8037,6 +8057,8 @@ Public Class Form1
         Try
             If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                 PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                PictureBox7.Load()
+
             Else
                 PictureBox7.Image = Nothing
             End If
@@ -11123,6 +11145,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
+        
     End Sub
 
     Private Sub TextBox1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
@@ -11665,6 +11688,7 @@ Public Class Form1
         End With
         Try
             bigPictureBox.ImageLocation = tempstring2
+            bigPictureBox.Load()
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -11695,6 +11719,7 @@ Public Class Form1
             If bigPictureBox.Image Is Nothing Then
                 tempstring2 = posterArray(tempint).ldposter
                 bigPictureBox.ImageLocation = tempstring2
+                bigPictureBox.Load()
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -11705,6 +11730,7 @@ Public Class Form1
             If bigPictureBox.Image.Width < 20 Then
                 tempstring2 = posterArray(tempint).ldposter
                 bigPictureBox.ImageLocation = tempstring2
+                bigPictureBox.Load()
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -11819,7 +11845,9 @@ Public Class Form1
 
 
                         PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox2.Load()
                         PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox7.Load()
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
@@ -11830,6 +11858,7 @@ Public Class Form1
                         Next
                     Else
                         PictureBox2.ImageLocation = defaultFanart
+                        PictureBox2.Load()
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
@@ -11993,9 +12022,12 @@ Public Class Form1
 
                 'mainfanart = New PictureBox
                 PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                PictureBox2.Load()
                 PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                PictureBox7.Load()
             Else
                 PictureBox2.ImageLocation = defaultFanart
+                PictureBox2.Load()
             End If
             Call fanartsaved()
         Catch ex As Exception
@@ -12916,12 +12948,15 @@ Public Class Form1
             For Each poster As PictureBox In TabPage22.Controls
                 If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                     poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                    poster.Load()
                     Exit For
                 End If
             Next
 
             PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
+            PictureBox3.Load()
             moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
+            moviethumb.Load()
             tempstring = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
             Label19.Text = tempstring
             Label19.Refresh()
@@ -12967,6 +13002,7 @@ Public Class Form1
                 PictureBox3.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
             End If
             moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
+            moviethumb.Load()
             Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
             Dim bitmap2 As New Bitmap(bitmap3)
             bitmap3.Dispose()
@@ -12984,6 +13020,7 @@ Public Class Form1
             For Each poster As PictureBox In TabPage22.Controls
                 If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                     poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                    poster.Load()
                     Exit For
                 End If
             Next
@@ -13822,6 +13859,7 @@ Public Class Form1
             For Each poster As PictureBox In TabPage22.Controls
                 If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                     poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                    poster.Load()
                     Exit For
                 End If
             Next
@@ -14126,11 +14164,13 @@ Public Class Form1
                     TextBox2.Text = workingTvShow.title
                     Try
                         PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                        PictureBox5.Load()
                     Catch
                         PictureBox5.Image = Nothing
                     End Try
                     Try
                         PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+                        PictureBox4.Load()
                     Catch
                         PictureBox4.Image = Nothing
                     End Try
@@ -14248,11 +14288,13 @@ Public Class Form1
                 End If
                 Try
                     PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                    PictureBox5.Load()
                 Catch
                     PictureBox5.Image = Nothing
                 End Try
                 Try
                     PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox4.Load()
                 Catch
                     PictureBox4.Image = Nothing
                 End Try
@@ -14338,13 +14380,16 @@ Public Class Form1
                     If trueseason <> "Specials" Then
                         If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
                             Try
-                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
+                                PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
+                                PictureBox5.Load()
                             Catch
                                 PictureBox5.Image = Nothing
+                                MsgBox("Caught Exception")
                             End Try
                         Else
                             Try
                                 PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                                PictureBox5.Load()
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
@@ -14365,12 +14410,14 @@ Public Class Form1
                         If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
                             Try
                                 PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
+                                PictureBox5.Load()
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
                         Else
                             Try
                                 PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                                PictureBox5.Load()
                             Catch
                                 PictureBox5.Image = Nothing
                             End Try
@@ -14384,13 +14431,14 @@ Public Class Form1
                 If workingTvShow.path <> Nothing Then
                     Try
                         PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+                        PictureBox4.Load()
                     Catch
                         PictureBox4.Image = Nothing
                     End Try
                 End If
             End If
             End If
-
+        tv_SplitContainerAutoPosition("TreeView Select") 'TreeView1_AfterSelect
     End Sub
 
     Private Sub loadtvshow(ByVal path As String)
@@ -14621,6 +14669,7 @@ Public Class Form1
 
         End If
         Panel9.Visible = False
+        tv_SplitContainerAutoPosition("loadtvshow") 'loadtvshow()
     End Sub
 
     Private Sub loadtvepisode(ByVal path As String, ByVal season As String, ByVal episode As String)
@@ -14767,6 +14816,7 @@ Public Class Form1
                     tempstring = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
                     If IO.File.Exists(tempstring) Then
                         PictureBox4.ImageLocation = tempstring
+                        PictureBox4.Load()
                     Else
                         PictureBox4.Image = Nothing                     'if there is no screenshot & no fanart then clear the picturebox & show nothing
                         PictureBox4.Invalidate()
@@ -14783,6 +14833,7 @@ Public Class Form1
                 If trueseason <> 0 Then
                     If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
                         PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
+                        PictureBox5.Load()
                     End If
                 Else
                     If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
@@ -14799,6 +14850,7 @@ Public Class Form1
 
                     If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
                         PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
+                        PictureBox5.Load()
                     End If
 
                 End If
@@ -14819,6 +14871,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
+        tv_SplitContainerAutoPosition("loadtvepisode") 'loadtvepisode()
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -14834,20 +14887,25 @@ Public Class Form1
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
                         PictureBox8.ImageLocation = temppath
+                        PictureBox8.Load()
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         If actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb) Then
                             PictureBox8.ImageLocation = actor.actorthumb
+                            PictureBox8.Load()
                         Else
                             PictureBox8.ImageLocation = defaultActor
+                            PictureBox8.Load()
                         End If
                     Else
                         PictureBox8.ImageLocation = defaultActor
+                        PictureBox8.Load()
                     End If
                     PictureBox8.SizeMode = PictureBoxSizeMode.Zoom
                 Catch ex As Exception
                     PictureBox8.ImageLocation = defaultActor
+                    PictureBox8.Load()
                 End Try
             End If
         Next
@@ -14866,16 +14924,20 @@ Public Class Form1
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
                         PictureBox6.ImageLocation = temppath
+                        PictureBox6.Load()
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         If actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb) Then
                             PictureBox6.ImageLocation = actor.actorthumb
+                            PictureBox6.Load()
                         Else
                             PictureBox6.ImageLocation = defaultActor
+                            PictureBox6.Load()
                         End If
                     Else
                         PictureBox6.ImageLocation = defaultActor
+                        PictureBox6.Load()
                     End If
                     PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
                 Catch ex As Exception
@@ -15057,7 +15119,9 @@ Public Class Form1
                 If workingTvShow.path <> Nothing Then
                     TextBox2.Text = workingTvShow.title
                     PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                    PictureBox5.Load()
                     PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox4.Load()
                 End If
                 Panel9.Visible = False
             End If
@@ -15082,6 +15146,7 @@ Public Class Form1
         Else
             'MsgBox("Season")
         End If
+
     End Sub
 
     Private Sub TabControl3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl3.SelectedIndexChanged
@@ -15212,6 +15277,7 @@ Public Class Form1
             tvCurrentTabIndex = TabControl3.SelectedIndex
             If IO.File.Exists(workingEpisode(0).episodepath.Replace(IO.Path.GetExtension(workingEpisode(0).episodepath), ".tbn")) Then
                 PictureBox14.ImageLocation = workingEpisode(0).episodepath.Replace(IO.Path.GetExtension(workingEpisode(0).episodepath), ".tbn")
+                PictureBox14.Load()
             Else
                 PictureBox14.Image = Nothing
             End If
@@ -15381,6 +15447,7 @@ Public Class Form1
             If listOfShows(ListBox3.SelectedIndex).showbanner <> Nothing Then
                 Try
                     PictureBox9.ImageLocation = listOfShows(ListBox3.SelectedIndex).showbanner
+                    PictureBox9.Load()
                 Catch ex As Exception
                     PictureBox9.Image = Nothing
                 End Try
@@ -16859,7 +16926,9 @@ Public Class Form1
             If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")) Then
                 Try
                     PictureBox10.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox10.Load()
                     PictureBox11.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+                    PictureBox11.Load()
                 Catch
                     PictureBox10.Image = Nothing
                     PictureBox11.Image = Nothing
@@ -17097,9 +17166,12 @@ Public Class Form1
 
                     Try
                         PictureBox10.ImageLocation = savepath
+                        PictureBox10.Load()
                         PictureBox11.Image = PictureBox10.Image
+
                         If TreeView1.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TreeView1.SelectedNode.Name = "" Then
                             PictureBox4.ImageLocation = savepath
+                            PictureBox4.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17318,9 +17390,12 @@ Public Class Form1
 
 
                 PictureBox10.ImageLocation = savepath
+                PictureBox10.Load()
                 PictureBox11.Image = PictureBox10.Image
+
                 If TreeView1.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TreeView1.SelectedNode.Name = "" Then
                     PictureBox4.ImageLocation = savepath
+                    PictureBox4.Load()
                 End If
             Else
                 PictureBox10.Image = Nothing
@@ -19173,6 +19248,7 @@ Public Class Form1
         Me.Refresh()
         messbox.Refresh()
         PictureBox13.ImageLocation = sender.tag
+        PictureBox13.Load()
         messbox.Close()
         Call zoomimage(PictureBox13.Image)
     End Sub
@@ -20627,6 +20703,7 @@ Public Class Form1
         For Each poster As PictureBox In TabPage22.Controls
             If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                 poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & imdbid & ".jpg")
+                poster.Load()
                 Exit For
             End If
         Next
@@ -27561,6 +27638,7 @@ Public Class Form1
                     For Each poster As PictureBox In TabPage22.Controls
                         If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
                             poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & workingMovieDetails.fullmoviebody.imdbid & ".jpg")
+                            poster.Load()
                             Exit For
                         End If
                     Next
@@ -28271,7 +28349,9 @@ Public Class Form1
 
                         'mainfanart = New PictureBox
                         PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox2.Load()
                         PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox7.Load()
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
@@ -28282,6 +28362,7 @@ Public Class Form1
                         Next
                     Else
                         PictureBox2.ImageLocation = defaultFanart
+                        PictureBox2.Load()
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
