@@ -10,6 +10,7 @@ Imports System.Drawing
 
 
 Public Class Utilities
+    Const SetDefaults = True
     Public Shared VideoExtensions As String() = {".avi", ".xvid", ".divx", ".img", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".mkv", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
@@ -984,7 +985,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             'get audio data
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
-                    Dim audio As New MediaNFOAudio
+                    Dim audio As New str_MediaNFOAudio(SetDefaults)
                     audio.language = GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.codec = "MP3"
@@ -1009,7 +1010,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim curSS As Integer = 0
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
-                    Dim sublanguage As New MediaNFOSubtitles
+                    Dim sublanguage As New str_MediaNFOSubtitles(setdefaults)
                     sublanguage.language = GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1

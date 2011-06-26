@@ -1,5 +1,5 @@
 
-Public Structure TvShowBatchWizard
+Public Structure str_TvShowBatchWizard
     Dim shYear As Boolean
     Dim shRating As Boolean
     Dim shPlot As Boolean
@@ -31,4 +31,37 @@ Public Structure TvShowBatchWizard
     Dim doEpisodeArt As Boolean
     Dim doEpisodeActors As Boolean
     Dim doEpisodeMediaTags As Boolean
+    Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+        shYear = False
+        shRating = False
+        shPlot = False
+        shRuntime = False
+        shMpaa = False
+        shGenre = False
+        shStudio = False
+        shActor = False
+        shPosters = False
+        shFanart = False
+        epStreamDetails = False
+        epAired = False
+        epPlot = False
+        epDirector = False
+        epCredits = False
+        epRating = False
+        epRuntime = False
+        epActor = False
+        epScreenshot = False
+        epCreateScreenshot = False
+        includeLocked = False
+        activate = False
+        doEpisodes = False
+        doShows = False
+        doShowBody = False
+        doShowArt = False
+        doShowActors = False
+        doEpisodeBody = False
+        doEpisodeArt = False
+        doEpisodeActors = False
+        doEpisodeMediaTags = False
+    End Sub
 End Structure

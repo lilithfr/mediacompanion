@@ -30,14 +30,14 @@ Public Class Form1
     Public globalThreadStop As Boolean = False
     Public globalThreadCounter As Integer = 0
     Public nfoFunction As New WorkingWithNfoFiles
-    Public fullMovieList As New List(Of ComboList)
-    Public filteredList As New List(Of ComboList)
+    Public fullMovieList As New List(Of str_ComboList)
+    Public filteredList As New List(Of str_ComboList)
     Public workingMovieDetails As FullMovieDetails
 
     Public workingEpisodeIndex As Integer
-    Public workingMovie As New ComboList(SetDefaults)
-    Public batchList As New BatchWizard
-    Public tvBatchList As New TvShowBatchWizard
+    Public workingMovie As New str_ComboList(SetDefaults)
+    Public batchList As New str_BatchWizard(SetDefaults)
+    Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
 
 
@@ -71,12 +71,12 @@ Public Class Form1
     Dim defaultBanner As String
     Dim defaultOfflineArt As String
     Dim defaultScreenShot As String
-    Dim actorDB As New List(Of ActorDatabase)
+    Dim actorDB As New List(Of str_ActorDatabase)
     Dim scraperLog As String = ""
 
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
-    Dim newMovieList As New List(Of NewMovie)
+    Dim newMovieList As New List(Of str_NewMovie)
 
 
     Dim bigPanel As Panel
@@ -84,35 +84,35 @@ Public Class Form1
     Dim realTvPaths As New List(Of String)
     Dim droppedItems As New List(Of String)
     Dim newTvShows As New List(Of String)
-    Dim profileStructure As New Profiles
+    Dim profileStruct As New Profiles
     Dim frmSplash As New frmSplashscreen
     Dim frmSplash2 As New frmProgressScreen
     Dim progressmode As Boolean
-    Dim templateList As New List(Of HTMLTemplate)
+    Dim templateList As New List(Of str_HTMLTemplate)
     Dim overItem As String
     Dim oldIndexUnderTheMouse As Integer
     Dim scrapeAndQuit As Boolean = False
     Dim mouseDelta As Integer = 0
     Dim resLabels As Label
     Dim fanartUrls(1000, 1) As String
-    Dim fanartArray As New List(Of ListOfPosters)
+    Dim fanartArray As New List(Of str_ListOfPosters)
     Dim cropString As String
     Dim thumbedItsMade As Boolean = False
-    Dim posterArray As New List(Of ListOfPosters)
+    Dim posterArray As New List(Of str_ListOfPosters)
     Dim pageCount As Integer = 0
     Dim currentPage As Integer = 0
     Dim posterThumbedItsMade As Boolean = False
     Dim posterCropString As String
     Dim tab1 As Integer
 
-    Dim listOfTvFanarts As New List(Of FanartList)
+    Dim listOfTvFanarts As New List(Of str_FanartList)
     Dim lockedList As Boolean = False
     Dim tempTVDBiD As String = String.Empty
     Dim novaThread As Thread
     Dim newMovieFoundTitle As String = String.Empty
     Dim newMovieFoundFilename As String = String.Empty
-    Dim tableSets As New List(Of TableItems)
-    Dim relativeFolderList As New List(Of RelativeFileList)
+    Dim tableSets As New List(Of str_TableItems)
+    Dim relativeFolderList As New List(Of str_RelativeFileList)
 
     Dim templanguage As String
 
@@ -136,7 +136,7 @@ Public Class Form1
     Private tvCurrentTabIndex As Integer = 0
     Private currentTabIndex As Integer = 0
 
-    
+
 
     Private Sub BatchUpdate()
         messbox = New frmMessageBox("Please wait,", "", "rebuilding Movie nfo files")
@@ -234,7 +234,7 @@ Public Class Form1
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Preferences.applicationPath = Application.StartupPath
-        
+
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
 
@@ -331,8 +331,8 @@ Public Class Form1
 
         If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
             Call loadprofiles()
-            For Each prof In profileStructure.profilelist
-                If prof.profilename = profileStructure.startupprofile Then
+            For Each prof In profileStruct.profilelist
+                If prof.profilename = profileStruct.startupprofile Then
                     workingProfile.actorcache = prof.actorcache
                     workingProfile.config = prof.config
                     workingProfile.moviecache = prof.moviecache
@@ -353,10 +353,10 @@ Public Class Form1
                 End If
             Next
         Else
-            profileStructure.workingprofilename = "Default"
-            profileStructure.defaultprofile = "Default"
-            profileStructure.startupprofile = "Default"
-            Dim currentprofile As New ListOfProfiles
+            profileStruct.workingprofilename = "Default"
+            profileStruct.defaultprofile = "Default"
+            profileStruct.startupprofile = "Default"
+            Dim currentprofile As New str_ListOfProfiles(SetDefaults)
             tempstring = applicationPath & "\Settings\"
             currentprofile.actorcache = tempstring & "actorcache.xml"
             currentprofile.config = tempstring & "config.xml"
@@ -365,12 +365,12 @@ Public Class Form1
             currentprofile.filters = tempstring & "filters.txt"
             currentprofile.moviecache = tempstring & "moviecache.xml"
             currentprofile.profilename = "Default"
-            profileStructure.profilelist.Add(currentprofile)
-            profileStructure.workingprofilename = "Default"
+            profileStruct.profilelist.Add(currentprofile)
+            profileStruct.workingprofilename = "Default"
             Call saveprofiles()
             Call loadprofiles()
-            For Each prof In profileStructure.profilelist
-                If prof.profilename = profileStructure.startupprofile Then
+            For Each prof In profileStruct.profilelist
+                If prof.profilename = profileStruct.startupprofile Then
                     workingProfile.actorcache = prof.actorcache
                     workingProfile.config = prof.config
                     workingProfile.moviecache = prof.moviecache
@@ -1469,7 +1469,7 @@ Public Class Form1
         For Each thisresult In movielist("movie_cache")
             Select Case thisresult.Name
                 Case "movie"
-                    Dim newmovie As New ComboList(SetDefaults)
+                    Dim newmovie As New str_ComboList(SetDefaults)
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
@@ -1706,7 +1706,7 @@ Public Class Form1
 
     Private Sub loadprefs()
         Dim tempstring As String
-        For Each prof In profileStructure.profilelist
+        For Each prof In profileStruct.profilelist
             If prof.profilename = workingProfile.profilename Then
                 tempstring = prof.config
                 If IO.File.Exists(tempstring) Then Preferences.configpath = tempstring
@@ -1721,7 +1721,7 @@ Public Class Form1
     End Sub
 
     Private Sub loadprofiles()
-        profileStructure.profilelist.Clear()
+        profileStruct.profilelist.Clear()
         Dim profilepath As String = IO.Path.Combine(applicationPath, "settings")
         profilepath = IO.Path.Combine(profilepath, "profile.xml")
 
@@ -1734,11 +1734,11 @@ Public Class Form1
                     For Each thisresult In profilelist("profile")
                         Select Case thisresult.Name
                             Case "default"
-                                profileStructure.defaultprofile = thisresult.innertext
+                                profileStruct.defaultprofile = thisresult.innertext
                             Case "startup"
-                                profileStructure.startupprofile = thisresult.innertext
+                                profileStruct.startupprofile = thisresult.innertext
                             Case "profiledetails"
-                                Dim currentprofile As New ListOfProfiles
+                                Dim currentprofile As New str_ListOfProfiles(SetDefaults)
                                 For Each result In thisresult.childnodes
                                     Select Case result.name
                                         Case "actorcache"
@@ -1757,7 +1757,7 @@ Public Class Form1
                                             currentprofile.tvcache = result.innertext
                                     End Select
                                 Next
-                                profileStructure.profilelist.Add(currentprofile)
+                                profileStruct.profilelist.Add(currentprofile)
                         End Select
                     Next
                 End If
@@ -1770,12 +1770,12 @@ Public Class Form1
         Else
 
         End If
-        If profileStructure.profilelist.Count > 1 Then
+        If profileStruct.profilelist.Count > 1 Then
             ProfilesToolStripMenuItem.Visible = True
             ProfilesToolStripMenuItem.Enabled = True
             ProfilesToolStripMenuItem.DropDownItems.Clear()
 
-            For Each prof In profileStructure.profilelist
+            For Each prof In profileStruct.profilelist
                 If prof.profilename <> Nothing Then
                     ProfilesToolStripMenuItem.DropDownItems.Add(prof.profilename)
                 End If
@@ -1808,15 +1808,15 @@ Public Class Form1
         Dim childchild As XmlElement
         root = doc.CreateElement("profile")
         child = doc.CreateElement("default")
-        child.InnerText = profileStructure.defaultprofile
+        child.InnerText = profileStruct.defaultprofile
         root.AppendChild(child)
         child = doc.CreateElement("startup")
-        child.InnerText = profileStructure.startupprofile
+        child.InnerText = profileStruct.startupprofile
         root.AppendChild(child)
         doc.AppendChild(root)
 
 
-        For Each prof In profileStructure.profilelist
+        For Each prof In profileStruct.profilelist
             child = doc.CreateElement("profiledetails")
             childchild = doc.CreateElement("actorcache")
             childchild.InnerText = prof.actorcache
@@ -1856,11 +1856,11 @@ Public Class Form1
         doc.WriteTo(saveing)
         saveing.Close()
 
-        If profileStructure.profilelist.Count > 1 Then
+        If profileStruct.profilelist.Count > 1 Then
             ProfilesToolStripMenuItem.Visible = True
             ProfilesToolStripMenuItem.Enabled = True
             ProfilesToolStripMenuItem.DropDownItems.Clear()
-            For Each prof In profileStructure.profilelist
+            For Each prof In profileStruct.profilelist
                 If prof.profilename <> Nothing Then
                     ProfilesToolStripMenuItem.DropDownItems.Add(prof.profilename)
                 End If
@@ -1904,7 +1904,7 @@ Public Class Form1
                     Continue For
                 End If
                 Dim tempstring As String = fullstring.Substring(fullstring.IndexOf("<title>") + 7, fullstring.IndexOf("</title>") - 7)
-                Dim template As New HTMLTemplate
+                Dim template As New str_HTMLTemplate(SetDefaults)
                 Dim add As Boolean = True
                 For Each temp In templateList
                     If temp.title = tempstring Then
@@ -1936,7 +1936,7 @@ Public Class Form1
                 Dim movieadd As New FullMovieDetails
                 movieadd = nfoFunction.loadfullmovienfo(movie.fullpathandfilename)
                 For Each actor In movieadd.listactors
-                    Dim newactor As New ActorDatabase
+                    Dim newactor As New str_ActorDatabase(SetDefaults)
                     newactor.actorname = actor.actorname
                     newactor.movieid = movie.id
                     actorDB.Add(newactor)
@@ -1990,7 +1990,7 @@ Public Class Form1
         For Each thisresult In actorlist("actor_cache")
             Select Case thisresult.Name
                 Case "actor"
-                    Dim newactor As New ActorDatabase
+                    Dim newactor As New str_ActorDatabase(SetDefaults)
                     newactor.actorname = ""
                     newactor.movieid = ""
                     Dim detail As XmlNode = Nothing
@@ -2811,7 +2811,7 @@ Public Class Form1
             Dim dvdfiles As Boolean
             For Each fs_info As System.IO.FileInfo In fs_infos
 
-                Dim newmoviedetails As New NewMovie
+                Dim newmoviedetails As New str_NewMovie(SetDefaults)
                 Dim title As String = String.Empty
                 Dim remove As Boolean = False
                 dvdfiles = False
@@ -3541,7 +3541,7 @@ Public Class Form1
         nfoFilename &= ".nfo"
         Dim TempMovieToAdd As New FullMovieDetails
         TempMovieToAdd = nfoFunction.loadfullmovienfo(nfoFilename)
-        Dim movietoadd As New ComboList(SetDefaults)
+        Dim movietoadd As New str_ComboList(SetDefaults)
 
         Dim filecreation As New FileInfo(nfoFilename)
         Dim myDate As Date = filecreation.LastWriteTime
@@ -4034,7 +4034,7 @@ Public Class Form1
                         End Try
                         nfoFunction.savemovienfo(nfopath, newmovie, True)
 
-                        Dim movietoadd As New ComboList(SetDefaults)
+                        Dim movietoadd As New str_ComboList(SetDefaults)
                         movietoadd.fullpathandfilename = nfopath
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                         movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)
@@ -4222,7 +4222,7 @@ Public Class Form1
                                             Exit For
                                         End If
                                         actorcount += 1
-                                        Dim newactor As New MovieActors
+                                        Dim newactor As New str_MovieActors(SetDefaults)
                                         Dim detail As XmlNode = Nothing
                                         For Each detail In thisresult.ChildNodes
                                             Select Case detail.Name
@@ -4340,7 +4340,7 @@ Public Class Form1
                                 newmovie.listactors.RemoveAt(newmovie.listactors.Count - 1)
                             End While
                             For Each actor In newmovie.listactors
-                                Dim actornew As New ActorDatabase
+                                Dim actornew As New str_ActorDatabase(SetDefaults)
                                 actornew.actorname = actor.actorname
                                 actornew.movieid = newmovie.fullmoviebody.imdbid
                                 actorDB.Add(actornew)
@@ -4580,7 +4580,7 @@ Public Class Form1
 
 
 
-                        Dim movietoadd As New ComboList(SetDefaults)
+                        Dim movietoadd As New str_ComboList(SetDefaults)
                         movietoadd.fullpathandfilename = nfopath
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                         movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)
@@ -5035,7 +5035,7 @@ Public Class Form1
         For Each thisresult In movielist("movie_cache")
             Select Case thisresult.Name
                 Case "movie"
-                    Dim newmovie As New ComboList(SetDefaults)
+                    Dim newmovie As New str_ComboList(SetDefaults)
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
@@ -5373,7 +5373,7 @@ Public Class Form1
 
     End Sub
 
-    Private Function getmovietags(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, Optional ByVal thumbpath As String = "")
+    Private Function getmovietags(ByVal text As String, ByVal movie As str_ComboList, ByVal counter As Integer, Optional ByVal thumbpath As String = "")
         Dim tokenCol As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCol = tokenRegExp.Matches(text)
@@ -6335,7 +6335,7 @@ Public Class Form1
                 End If
             Next
             Dim add As Boolean = False
-            Dim newlist As New List(Of ComboList)
+            Dim newlist As New List(Of str_ComboList)
             For Each movie In filteredList
                 Dim tempstring As String = String.Empty
                 If RadioButton1.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.titleandyear.ToLower
@@ -6373,7 +6373,7 @@ Public Class Form1
             filteredList = newlist
             '----------------------------------------------------------------------------------------------------
             Dim ValuetoSearch As String = ComboBox11.SelectedItem.ToString.ToLower
-            Dim newlist1 As New List(Of ComboList)
+            Dim newlist1 As New List(Of str_ComboList)
             For Each movie In filteredList
                 Select Case ValuetoSearch.ToLower
                     Case "all"
@@ -6417,7 +6417,7 @@ Public Class Form1
 
 
             Dim genres As New List(Of String)
-            Dim newlist2 As New List(Of ComboList)
+            Dim newlist2 As New List(Of str_ComboList)
             TextBox_GenreFilter.Text = ""
             For Each CheckBox In CheckedListBox1.CheckedItems
                 genres.Add(CheckBox.ToString.ToLower)
@@ -6450,7 +6450,7 @@ Public Class Form1
             filteredList = newlist2
             '----------------------------------------------------------------------------------------------------
             If dupes2 = True Then
-                Dim dupelist As New List(Of ComboList)
+                Dim dupelist As New List(Of str_ComboList)
                 For f = 0 To filteredList.Count - 1
                     For g = 0 To filteredList.Count - 1
                         If g <> f Then
@@ -6663,7 +6663,7 @@ Public Class Form1
     Private Sub sortorder()
         Monitor.Enter(Me)
         'Try
-        Dim comboarray2 As New List(Of ComboList)
+        Dim comboarray2 As New List(Of str_ComboList)
         If RadioButton3.Checked = True Then
             ListBox2.Items.Clear()
             For Each movie In filteredList
@@ -6856,7 +6856,7 @@ Public Class Form1
             Else
                 filteredList.Clear()
                 For f = comboarray2.Count - 1 To 0 Step -1
-                    Dim movietoadd As New ComboList(SetDefaults)
+                    Dim movietoadd As New str_ComboList(SetDefaults)
                     movietoadd.plot = comboarray2(f).plot
                     movietoadd.fullpathandfilename = comboarray2(f).fullpathandfilename
                     movietoadd.titleandyear = comboarray2(f).titleandyear
@@ -6892,7 +6892,7 @@ Public Class Form1
             Else
                 filteredList.Clear()
                 For f = comboarray2.Count - 1 To 0 Step -1
-                    Dim movietoadd As New ComboList(SetDefaults)
+                    Dim movietoadd As New str_ComboList(SetDefaults)
                     movietoadd.plot = comboarray2(f).plot
                     movietoadd.fullpathandfilename = comboarray2(f).fullpathandfilename
                     movietoadd.titleandyear = comboarray2(f).titleandyear
@@ -7174,7 +7174,7 @@ Public Class Form1
         For f = 0 To fullMovieList.Count - 1
             If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                Dim newfullmovie As New ComboList(SetDefaults) 'this should be new to initialise values
+                Dim newfullmovie As New str_ComboList(SetDefaults) 'this should be new to initialise values
                 newfullmovie = fullMovieList(f)
                 '-------------- Aqui
                 If Preferences.ignorearticle = True Then
@@ -7500,7 +7500,7 @@ Public Class Form1
                                         Exit For
                                     End If
                                     actorcount += 1
-                                    Dim newactor As New MovieActors
+                                    Dim newactor As New str_MovieActors(SetDefaults)
                                     Dim detail As XmlNode = Nothing
                                     For Each detail In thisresult.ChildNodes
                                         Select Case detail.Name
@@ -7604,7 +7604,7 @@ Public Class Form1
                                         End Select
                                     Next
                                     workingMovieDetails.listactors.Add(newactor)
-                                    Dim actornew As New ActorDatabase
+                                    Dim actornew As New str_ActorDatabase(SetDefaults)
                                     actornew.actorname = newactor.actorname
                                     actornew.movieid = workingMovieDetails.fullmoviebody.imdbid
                                     actorDB.Add(actornew)
@@ -7682,7 +7682,7 @@ Public Class Form1
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                        Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure to avoid NOTHING & unhandled exceptions
+                        Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure to avoid NOTHING & unhandled exceptions
                         newfullmovie = fullMovieList(f)
                         '-------------- Aqui
                         If Preferences.ignorearticle = True Then
@@ -7810,7 +7810,7 @@ Public Class Form1
             End If
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).titleandyear = oldmovietitle Then
-                    Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                    Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                     newfullmovie = fullMovieList(f)
                     Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                     Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -7900,7 +7900,7 @@ Public Class Form1
                 nfoFunction.savemovienfo(filepath, movie, True)
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = movie.fileinfo.fullpathandfilename Then
-                        Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                        Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                         newfullmovie = fullMovieList(f)
                         Dim filecreation2 As New FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -7990,7 +7990,7 @@ Public Class Form1
                 nfoFunction.savemovienfo(filepath, movie, True)
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = filepath Then
-                        Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                        Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                         newfullmovie = fullMovieList(f)
                         newfullmovie.playcount = watched
                         fullMovieList.RemoveAt(f)
@@ -8070,7 +8070,7 @@ Public Class Form1
 
         For f = 0 To fullMovieList.Count - 1
             If fullMovieList(f).fullpathandfilename = newmovietitle Then
-                Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
 
                 fullMovieList.RemoveAt(f)
 
@@ -8087,10 +8087,10 @@ Public Class Form1
 
 
         For f = 0 To filteredList.Count - 1
-            Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+            Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
             newfullmovie = filteredList(f)
             If filteredList(f).fullpathandfilename = oldmovietitle Then
-                Dim newfullmovie2 As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                Dim newfullmovie2 As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                 newfullmovie2 = filteredList(f)
                 newfullmovie2.titleandyear = newmovietitle
                 filteredList.RemoveAt(f)
@@ -8198,11 +8198,11 @@ Public Class Form1
 
     Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click
         filterOverride = True
-        Dim newlist As New List(Of ComboList)
+        Dim newlist As New List(Of str_ComboList)
         newlist.Clear()
         For Each movie In fullMovieList
             If Not IO.File.Exists(Utilities.GetFanartPath(movie.fullpathandfilename)) Then
-                Dim movietoadd As New ComboList(SetDefaults)
+                Dim movietoadd As New str_ComboList(SetDefaults)
                 movietoadd.fullpathandfilename = movie.fullpathandfilename
                 movietoadd.titleandyear = movie.titleandyear
                 movietoadd.filename = movie.filename
@@ -8222,11 +8222,11 @@ Public Class Form1
 
     Private Sub ListMoviesWithoutPostersToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutPostersToolStripMenuItem.Click
         filterOverride = True
-        Dim newlist As New List(Of ComboList)
+        Dim newlist As New List(Of str_ComboList)
         newlist.Clear()
         For Each movie In fullMovieList
             If Not IO.File.Exists(Utilities.GetPosterPath(movie.fullpathandfilename)) Then
-                Dim movietoadd As New ComboList(SetDefaults)
+                Dim movietoadd As New str_ComboList(SetDefaults)
                 movietoadd.fullpathandfilename = movie.fullpathandfilename
                 movietoadd.titleandyear = movie.titleandyear
                 movietoadd.filename = movie.filename
@@ -8545,7 +8545,7 @@ Public Class Form1
                                             Exit For
                                         End If
                                         actorcount += 1
-                                        Dim newactor As New MovieActors
+                                        Dim newactor As New str_MovieActors(SetDefaults)
                                         Dim detail As XmlNode = Nothing
                                         For Each detail In thisresult.ChildNodes
                                             Select Case detail.Name
@@ -9238,7 +9238,7 @@ Public Class Form1
                         'If fullMovieList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
                         If filteredList(g).fullpathandfilename = movietoalter.fileinfo.fullpathandfilename Then
 
-                            Dim newfullmovie As New ComboList(SetDefaults) ' = Nothing   'added new to initialise varibles in structure
+                            Dim newfullmovie As New str_ComboList(SetDefaults) ' = Nothing   'added new to initialise varibles in structure
                             newfullmovie.fullpathandfilename = tempmovielist(f)
                             newfullmovie.foldername = Utilities.GetLastFolder(tempmovielist(f))
                             newfullmovie.filename = IO.Path.GetFileName(tempmovielist(f))
@@ -9410,7 +9410,7 @@ Public Class Form1
                 Dim thumbstring As New XmlDocument
 
                 Dim newmovie As New FullMovieDetails
-                Dim newdetails As New NewMovie
+                Dim newdetails As New str_NewMovie(SetDefaults)
                 Dim mediapath As String = path
                 Dim firsttitle As String = ""
                 If Preferences.basicsavemode = False Then
@@ -9575,7 +9575,7 @@ Public Class Form1
                             bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                             nfoFunction.savemovienfo(newdetails.nfopathandfilename, newmovie, True)
                             If bckgrounddroppedfiles.CancellationPending Then Exit Sub
-                            Dim movietoadd As New ComboList(SetDefaults)
+                            Dim movietoadd As New str_ComboList(SetDefaults)
                             movietoadd.fullpathandfilename = newdetails.nfopathandfilename
                             movietoadd.filename = IO.Path.GetFileName(newdetails.nfopathandfilename)
                             movietoadd.foldername = Utilities.GetLastFolder(newdetails.nfopathandfilename)
@@ -9723,7 +9723,7 @@ Public Class Form1
                                 For Each thisresult In thumbstring("actorlist")
                                     Select Case thisresult.Name
                                         Case "actor"
-                                            Dim newactor As New MovieActors
+                                            Dim newactor As New str_MovieActors(SetDefaults)
                                             Dim detail As XmlNode = Nothing
                                             For Each detail In thisresult.ChildNodes
                                                 Select Case detail.Name
@@ -9782,7 +9782,7 @@ Public Class Form1
                                                 End Select
                                             Next
                                             newmovie.listactors.Add(newactor)
-                                            Dim actornew As New ActorDatabase
+                                            Dim actornew As New str_ActorDatabase(SetDefaults)
                                             actornew.actorname = newactor.actorname
                                             actornew.movieid = newmovie.fullmoviebody.imdbid
                                             actorDB.Add(actornew)
@@ -10003,7 +10003,7 @@ Public Class Form1
                             progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                             bckgrounddroppedfiles.ReportProgress(999999, progresstext)
 
-                            Dim movietoadd As New ComboList(SetDefaults)
+                            Dim movietoadd As New str_ComboList(SetDefaults)
                             movietoadd.runtime = newmovie.fullmoviebody.runtime
                             movietoadd.fullpathandfilename = newdetails.nfopathandfilename
                             movietoadd.filename = IO.Path.GetFileName(newdetails.nfopathandfilename)
@@ -11470,7 +11470,7 @@ Public Class Form1
             For Each item In bannerslist("tmdb_posterlist")
                 Select Case item.name
                     Case "fanart"
-                        Dim newfanart As New ListOfPosters
+                        Dim newfanart As New str_ListOfPosters(SetDefaults)
                         For Each backdrop In item
                             If backdrop.childnodes(0).innertext = "original" Then
                                 newfanart.hdposter = backdrop.childnodes(1).innertext
@@ -11863,7 +11863,7 @@ Public Class Form1
     Private Function fanartsaved()
         Dim replace As Boolean = False
         For f = 0 To fullMovieList.Count - 1
-            Dim newmovie As New ComboList(SetDefaults)
+            Dim newmovie As New str_ComboList(SetDefaults)
             newmovie = fullMovieList(f)
             If newmovie.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
                 If newmovie.missingdata1 = 3 Then
@@ -11891,7 +11891,7 @@ Public Class Form1
     Private Sub postersaved()
         Dim replace As Boolean = False
         For f = 0 To fullMovieList.Count - 1
-            Dim newmovie As New ComboList(SetDefaults)
+            Dim newmovie As New str_ComboList(SetDefaults)
             newmovie = fullMovieList(f)
             If newmovie.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
                 If newmovie.missingdata1 = 3 Then
@@ -12245,7 +12245,7 @@ Public Class Form1
             For Each item In bannerslist("tmdb_posterlist")
                 Select Case item.name
                     Case "poster"
-                        Dim newfanart As New ListOfPosters
+                        Dim newfanart As New str_ListOfPosters(SetDefaults)
                         For Each backdrop In item
                             If backdrop.childnodes(0).innertext = "original" Then
                                 newfanart.hdposter = backdrop.childnodes(1).innertext
@@ -12508,7 +12508,7 @@ Public Class Form1
         For f = 0 To UBound(posters)
             If posters(f, 0) <> Nothing Then
                 If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
-                Dim newposters As New ListOfPosters
+                Dim newposters As New str_ListOfPosters(SetDefaults)
                 newposters.hdposter = posters(f, 1)
                 newposters.ldposter = posters(f, 0)
                 posterArray.Add(newposters)
@@ -12772,7 +12772,7 @@ Public Class Form1
             For Each thisresult In thumbstring("totalthumbs")
                 Select Case thisresult.Name
                     Case "thumb"
-                        Dim newposters As New ListOfPosters
+                        Dim newposters As New str_ListOfPosters(SetDefaults)
                         newposters.hdposter = thisresult.InnerText
                         newposters.ldposter = thisresult.InnerText
                         posterArray.Add(newposters)
@@ -12803,7 +12803,7 @@ Public Class Form1
             For f = 0 To UBound(posters)
                 If posters(f, 0) <> Nothing Then
                     If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
-                    Dim newposters As New ListOfPosters
+                    Dim newposters As New str_ListOfPosters(SetDefaults)
                     newposters.hdposter = posters(f, 0)
                     newposters.ldposter = posters(f, 1)
                     posterArray.Add(newposters)
@@ -13312,7 +13312,7 @@ Public Class Form1
                 For Each thisresult In thumbstring("actorlist")
                     Select Case thisresult.Name
                         Case "actor"
-                            Dim newactor As New MovieActors
+                            Dim newactor As New str_MovieActors(SetDefaults)
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
@@ -13366,7 +13366,7 @@ Public Class Form1
                                 End Select
                             Next
                             workingMovieDetails.listactors.Add(newactor)
-                            Dim actornew As New ActorDatabase
+                            Dim actornew As New str_ActorDatabase(SetDefaults)
                             actornew.actorname = newactor.actorname
                             actornew.movieid = workingMovieDetails.fullmoviebody.imdbid
                             actorDB.Add(actornew)
@@ -13662,7 +13662,7 @@ Public Class Form1
             stage = stage & "Adding movie to internal list" & vbCrLf
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
-                    Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                    Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                     newfullmovie = fullMovieList(f)
                     newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title
                     '-------------- Aqui
@@ -15254,7 +15254,7 @@ Public Class Form1
                     Select Case thisresult.Name
                         Case "Language"
                             Dim results As XmlNode = Nothing
-                            Dim lan As New TvShowLanguages
+                            Dim lan As New str_TvShowLanguages(SetDefaults)
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "name"
@@ -15593,9 +15593,9 @@ Public Class Form1
                     Case "actor"
                         If RadioButton13.Checked = True Or workingTvShow.imdbid = Nothing Then
                             Dim id As String = ""
-                            Dim acts As New MovieActors
+                            Dim acts As New str_MovieActors(SetDefaults)
                             Dim results As XmlNode = Nothing
-                            Dim lan As New PossibleShowList
+                            Dim lan As New str_PossibleShowList(SetDefaults)
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "name"
@@ -15680,7 +15680,7 @@ Public Class Form1
                     For Each thisresult In actorstring("actorlist")
                         Select Case thisresult.Name
                             Case "actor"
-                                Dim newactor As New MovieActors
+                                Dim newactor As New str_MovieActors(SetDefaults)
                                 Dim detail As XmlNode = Nothing
                                 For Each detail In thisresult.ChildNodes
                                     Select Case detail.Name
@@ -16911,7 +16911,7 @@ Public Class Form1
 
                 Select Case thisresult.Name
                     Case "Banner"
-                        Dim fanart As New FanartList
+                        Dim fanart As New str_FanartList(SetDefaults)
                         Dim bannerselection As XmlNode = Nothing
                         For Each bannerselection In thisresult.ChildNodes
                             Select Case bannerselection.Name
@@ -17110,7 +17110,7 @@ Public Class Form1
                     PictureBox10.Image = Nothing
                     PictureBox11.Image = Nothing
                 End If
-             
+
             Catch ex As WebException
                 MsgBox(ex.Message)
             End Try
@@ -17608,9 +17608,9 @@ Public Class Form1
                             End If
                             maxcount += 1
                             Dim id As String = ""
-                            Dim acts As New MovieActors
+                            Dim acts As New str_MovieActors(SetDefaults)
                             Dim results As XmlNode = Nothing
-                            Dim lan As New PossibleShowList
+                            Dim lan As New str_PossibleShowList(SetDefaults)
 
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
@@ -17743,7 +17743,7 @@ Public Class Form1
                                         Exit For
                                     End If
                                     actorcount += 1
-                                    Dim newactor As New MovieActors
+                                    Dim newactor As New str_MovieActors(SetDefaults)
                                     Dim detail As XmlNode = Nothing
                                     For Each detail In thisresult.ChildNodes
                                         Select Case detail.Name
@@ -17946,7 +17946,7 @@ Public Class Form1
                             For Each actorl In thisresult.ChildNodes
                                 Select Case actorl.name
                                     Case "name"
-                                        Dim newactor As New MovieActors
+                                        Dim newactor As New str_MovieActors(SetDefaults)
                                         newactor.actorname = actorl.innertext
                                         newepisode.ListActors.Add(newactor)
                                 End Select
@@ -18018,7 +18018,7 @@ Public Class Form1
                                 Dim scraperfunction As New Classimdb
                                 Dim actorlist As String = ""
                                 actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Preferences.maxactors)
-                                Dim tempactorlist As New List(Of MovieActors)
+                                Dim tempactorlist As New List(Of str_MovieActors)
                                 Dim thumbstring As New XmlDocument
                                 Dim thisresult As XmlNode = Nothing
                                 Try
@@ -18037,7 +18037,7 @@ Public Class Form1
                                                 End If
                                                 actorcount += 1
 
-                                                Dim newactor As New MovieActors
+                                                Dim newactor As New str_MovieActors(SetDefaults)
                                                 Dim detail As XmlNode = Nothing
                                                 For Each detail In thisresult.ChildNodes
                                                     Select Case detail.Name
@@ -18393,7 +18393,7 @@ Public Class Form1
                 Next
             End If
         End If
-     
+
         Dim messbox As New frmMessageBox("Renaming episodes,", "", "   Please Wait")
         messbox.Show()
         messbox.Refresh()
@@ -19513,7 +19513,7 @@ Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                 
+
 
                     Dim myProcess As Process = New Process
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
@@ -20149,7 +20149,7 @@ Public Class Form1
         'Dim item As Windows.Forms.ToolStripMenuItem = sender
         ''Dim picbox As PictureBox = item.SourceControl
 
-        
+
 
         Dim tempstring As String = ClickedControl
         If tempstring = Nothing Then
@@ -20938,7 +20938,7 @@ Public Class Form1
                 Exit For
             End If
         Next
-       
+
     End Sub
 
     Private Sub OutputTVShowsAsHTMLToolStripMenuItem_DropDownItemClicked(sender As Object, e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles OutputTVShowsAsHTMLToolStripMenuItem.DropDownItemClicked
@@ -22555,11 +22555,11 @@ Public Class Form1
             chkbx_disablecache.Checked = True
         End If
         ListBox13.Items.Clear()
-        For Each prof In profileStructure.profilelist
+        For Each prof In profileStruct.profilelist
             ListBox13.Items.Add(prof.profilename)
         Next
-        Label112.Text = "Current Default Profile Is :- " & profileStructure.defaultprofile
-        Label108.Text = "Current Startup Profile Is :- " & profileStructure.startupprofile
+        Label112.Text = "Current Default Profile Is :- " & profileStruct.defaultprofile
+        Label108.Text = "Current Startup Profile Is :- " & profileStruct.startupprofile
         prefsload = False
 
         ListBox16.Items.Clear()
@@ -23383,7 +23383,7 @@ Public Class Form1
                 Select Case thisresult.Name
                     Case "Language"
                         Dim results As XmlNode = Nothing
-                        Dim lan As New TvShowLanguages
+                        Dim lan As New str_TvShowLanguages(SetDefaults)
                         For Each results In thisresult.ChildNodes
                             Select Case results.Name
                                 Case "name"
@@ -24474,7 +24474,7 @@ Public Class Form1
     '    End Sub
 
     Private Sub Button79_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button79.Click
-        For Each pro In profileStructure.profilelist
+        For Each pro In profileStruct.profilelist
             If pro.profilename.ToLower = TextBox42.Text.ToLower Then
                 MsgBox("This Profile Already Exists" & vbCrLf & "Please Select Another Name")
                 Exit Sub
@@ -24522,8 +24522,8 @@ Public Class Form1
         Dim configtocopy As String = String.Empty
         Dim filterstocopy As String = String.Empty
         Dim regextocopy As String = String.Empty
-        For Each profs In profileStructure.profilelist
-            If profs.profilename = profileStructure.defaultprofile Then
+        For Each profs In profileStruct.profilelist
+            If profs.profilename = profileStruct.defaultprofile Then
                 moviecachetocopy = profs.moviecache
                 actorcachetocopy = profs.actorcache
                 tvcachetocopy = profs.tvcache
@@ -24533,7 +24533,7 @@ Public Class Form1
             End If
         Next
 
-        Dim profiletoadd As New ListOfProfiles
+        Dim profiletoadd As New str_ListOfProfiles(SetDefaults)
         profiletoadd.actorcache = tempstring & "actorcache" & tempint.ToString & ".xml"
         profiletoadd.config = tempstring & "config" & tempint.ToString & ".xml"
         profiletoadd.filters = tempstring & "filters" & tempint.ToString & ".xml"
@@ -24541,7 +24541,7 @@ Public Class Form1
         profiletoadd.regexlist = tempstring & "regex" & tempint.ToString & ".xml"
         profiletoadd.tvcache = tempstring & "tvcache" & tempint.ToString & ".xml"
         profiletoadd.profilename = TextBox42.Text
-        profileStructure.profilelist.Add(profiletoadd)
+        profileStruct.profilelist.Add(profiletoadd)
 
         If System.IO.File.Exists(moviecachetocopy) = True Then
             System.IO.File.Copy(moviecachetocopy, profiletoadd.moviecache)
@@ -24569,9 +24569,9 @@ Public Class Form1
 
     Private Sub Button78_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button78.Click
         'setselected profile to default
-        For Each prof In profileStructure.profilelist
+        For Each prof In profileStruct.profilelist
             If prof.profilename = ListBox13.SelectedItem Then
-                profileStructure.defaultprofile = prof.profilename
+                profileStruct.defaultprofile = prof.profilename
                 Label112.Text = "Current Default Profile Is :- " & prof.profilename
                 Call saveprofiles()
                 Exit For
@@ -24581,9 +24581,9 @@ Public Class Form1
 
     Private Sub Button93_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button93.Click
         'setselected profile to startup
-        For Each prof In profileStructure.profilelist
+        For Each prof In profileStruct.profilelist
             If prof.profilename = ListBox13.SelectedItem Then
-                profileStructure.startupprofile = prof.profilename
+                profileStruct.startupprofile = prof.profilename
                 Label108.Text = "Current Startup Profile Is :- " & prof.profilename
                 Call saveprofiles()
                 Exit For
@@ -24593,11 +24593,11 @@ Public Class Form1
 
     Private Sub Button80_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button80.Click
         'remove selected profile
-        If ListBox13.SelectedItem = profileStructure.defaultprofile Then
+        If ListBox13.SelectedItem = profileStruct.defaultprofile Then
             MsgBox("You can't delete your default profile" & vbCrLf & "Set another Profile to default then delete it")
             Exit Sub
         End If
-        If ListBox13.SelectedItem = profileStructure.startupprofile Then
+        If ListBox13.SelectedItem = profileStruct.startupprofile Then
             MsgBox("You can't delete your startup profile" & vbCrLf & "Set another Profile to startup then delete it")
             Exit Sub
         End If
@@ -24608,47 +24608,47 @@ Public Class Form1
         Dim tempint As Integer = MessageBox.Show("Removing a profile will delete all associated cache files and settings," & vbCrLf & "Are you sure you want to remove the selected profile", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If tempint = DialogResult.Yes Then
             Dim tempint2 As Integer
-            For f = 0 To profileStructure.profilelist.Count - 1
+            For f = 0 To profileStruct.profilelist.Count - 1
 
-                If profileStructure.profilelist(f).profilename = ListBox13.SelectedItem Then
+                If profileStruct.profilelist(f).profilename = ListBox13.SelectedItem Then
                     tempint2 = f
                     Try
-                        IO.File.Delete(profileStructure.profilelist(f).actorcache)
+                        IO.File.Delete(profileStruct.profilelist(f).actorcache)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                     End Try
                     Try
-                        IO.File.Delete(profileStructure.profilelist(f).config)
+                        IO.File.Delete(profileStruct.profilelist(f).config)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                     End Try
                     Try
-                        IO.File.Delete(profileStructure.profilelist(f).filters)
+                        IO.File.Delete(profileStruct.profilelist(f).filters)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                     End Try
                     Try
-                        IO.File.Delete(profileStructure.profilelist(f).moviecache)
+                        IO.File.Delete(profileStruct.profilelist(f).moviecache)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                     End Try
                     Try
-                        IO.File.Delete(profileStructure.profilelist(f).regexlist)
+                        IO.File.Delete(profileStruct.profilelist(f).regexlist)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
                     End Try
                     Try
-                        IO.File.Delete(profileStructure.profilelist(f).tvcache)
+                        IO.File.Delete(profileStruct.profilelist(f).tvcache)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -24657,16 +24657,16 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            profileStructure.profilelist.RemoveAt(tempint2)
+            profileStruct.profilelist.RemoveAt(tempint2)
             ListBox13.Items.Clear()
             ProfilesToolStripMenuItem.DropDownItems.Clear()
-            If profileStructure.profilelist.Count > 1 Then
+            If profileStruct.profilelist.Count > 1 Then
                 ProfilesToolStripMenuItem.Visible = True
             Else
                 ProfilesToolStripMenuItem.Visible = False
             End If
             ProfilesToolStripMenuItem.DropDownItems.Clear()
-            For Each prof In profileStructure.profilelist
+            For Each prof In profileStruct.profilelist
                 ListBox13.Items.Add(prof.profilename)
                 ProfilesToolStripMenuItem.DropDownItems.Add(prof.profilename)
             Next
@@ -24680,7 +24680,7 @@ Public Class Form1
 
         Preferences.saveconfig()
 
-        For Each prof In profileStructure.profilelist
+        For Each prof In profileStruct.profilelist
             If prof.profilename = e.ClickedItem.Text Then
                 workingProfile.actorcache = prof.actorcache
                 workingProfile.config = prof.config
@@ -24929,7 +24929,7 @@ Public Class Form1
     End Sub
 
     Private Sub applyotherfilters()
-        Dim newlist As New List(Of combolist)
+        Dim newlist As New List(Of str_ComboList)
         newlist.Clear()
         If ComboBox10.SelectedItem = "Title" Then
             For Each item In filteredList
@@ -25062,7 +25062,7 @@ Public Class Form1
         For Each item In Preferences.tableview
             Dim tempdata() As String
             tempdata = item.Split("|")
-            Dim newcolumn As New TableItems
+            Dim newcolumn As New str_TableItems(SetDefaults)
             newcolumn.title = tempdata(0)
             newcolumn.width = Convert.ToInt32(tempdata(1))
             newcolumn.index = Convert.ToInt32(tempdata(2))
@@ -26085,7 +26085,7 @@ Public Class Form1
                     End If
                     If changed = True And IO.File.Exists(fullMovieList(f).fullpathandfilename) Then
                         Dim changedmoviedetails As New FullMovieDetails
-                        Dim changedmovie As New ComboList(SetDefaults)
+                        Dim changedmovie As New str_ComboList(SetDefaults)
                         changedmoviedetails = nfoFunction.loadfullmovienfo(fullMovieList(f).fullpathandfilename)
                         If Not changedmoviedetails Is Nothing Then
                             changedmovie = fullMovieList(f)
@@ -26963,7 +26963,7 @@ Public Class Form1
                                 For Each thisresult In thumbstring("actorlist")
                                     Select Case thisresult.Name
                                         Case "actor"
-                                            Dim newactor As New MovieActors
+                                            Dim newactor As New str_MovieActors(SetDefaults)
                                             Dim detail As XmlNode = Nothing
                                             For Each detail In thisresult.ChildNodes
                                                 Select Case detail.Name
@@ -27067,7 +27067,7 @@ Public Class Form1
                                                 End Select
                                             Next
                                             workingMovieDetails.listactors.Add(newactor)
-                                            Dim actornew As New ActorDatabase
+                                            Dim actornew As New str_ActorDatabase(SetDefaults)
                                             actornew.actorname = newactor.actorname
                                             actornew.movieid = workingMovieDetails.fullmoviebody.imdbid
                                             actorDB.Add(actornew)
@@ -27093,7 +27093,7 @@ Public Class Form1
                         For f = 0 To fullMovieList.Count - 1
                             If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
 
-                                Dim newfullmovie As New ComboList(SetDefaults) 'added new to initialise varibles in structure
+                                Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                                 newfullmovie = fullMovieList(f)
                                 '-------------- Aqui
                                 If Preferences.ignorearticle = True Then
@@ -28312,7 +28312,7 @@ Public Class Form1
 
     Private Sub Button105_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button105.Click
         If TextBox41.Text <> "" And TextBox43.Text <> "" Then
-            Dim newcom As New listofcommands
+            Dim newcom As New str_ListOfCommands(SetDefaults)
             newcom.command = TextBox43.Text
             newcom.title = TextBox41.Text
             Preferences.commandlist.Add(newcom)
@@ -28942,7 +28942,7 @@ Public Class Form1
 
                         Dim tvshowxmlstring As String = tvdbstuff.getshow(editshow.tvdbid, language)
                         Try
-                            Dim actorlist As New List(Of MovieActors)
+                            Dim actorlist As New List(Of str_MovieActors)
                             actorlist.Clear()
                             Dim showlist As New XmlDocument
                             showlist.LoadXml(tvshowxmlstring)
@@ -28996,9 +28996,9 @@ Public Class Form1
                                             End If
                                             maxcount += 1
                                             Dim id As String = ""
-                                            Dim acts As New MovieActors
+                                            Dim acts As New str_MovieActors(SetDefaults)
                                             Dim results As XmlNode = Nothing
-                                            Dim lan As New PossibleShowList
+                                            Dim lan As New str_PossibleShowList(SetDefaults)
 
                                             For Each results In thisresult.ChildNodes
                                                 Select Case results.Name
@@ -29085,7 +29085,7 @@ Public Class Form1
                                                     Exit For
                                                 End If
                                                 actorcount += 1
-                                                Dim newactor As New MovieActors
+                                                Dim newactor As New str_MovieActors(SetDefaults)
                                                 Dim detail As XmlNode = Nothing
                                                 For Each detail In thisresult.ChildNodes
                                                     Select Case detail.Name
@@ -29487,7 +29487,7 @@ Public Class Form1
                             listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(TvShows(f).allepisodes(g).episodepath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1
                                 If listofnewepisodes(h).seasonno = TvShows(f).allepisodes(g).seasonno And listofnewepisodes(h).episodeno = TvShows(f).allepisodes(g).episodeno Then
-                                    Dim newactors As New List(Of MovieActors)
+                                    Dim newactors As New List(Of str_MovieActors)
                                     newactors.Clear()
                                     Dim sortorder As String = TvShows(f).sortorder
                                     Dim language As String = TvShows(f).language
@@ -29597,7 +29597,7 @@ Public Class Form1
                                                         For Each actorl In thisresult.ChildNodes
                                                             Select Case actorl.name
                                                                 Case "name"
-                                                                    Dim newactor As New MovieActors
+                                                                    Dim newactor As New str_MovieActors(SetDefaults)
                                                                     newactor.actorname = actorl.innertext
                                                                     newactors.Add(newactor)
                                                             End Select
@@ -29614,7 +29614,7 @@ Public Class Form1
                                         End If
                                         If TvShows(f).episodeactorsource = "imdb" And tvBatchList.epActor = True Then
                                             Dim ac As New actors
-                                            Dim actorlist As New List(Of MovieActors)
+                                            Dim actorlist As New List(Of str_MovieActors)
                                             actorlist = ac.EpisodeGetImdbActors(TvShows(f).imdbid, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno)
                                             If Preferences.actorseasy = True Then
                                                 ac.savelocalactors(listofnewepisodes(h).episodepath, actorlist, TvShows(f).fullpath, True)
@@ -29827,7 +29827,7 @@ Public Class Form1
 
                     Select Case thisresult.Name
                         Case "folder"
-                            Dim mc As New RelativeFileList
+                            Dim mc As New str_RelativeFileList(SetDefaults)
                             Dim it2 As XmlNode
                             For Each it2 In thisresult.ChildNodes
                                 Select Case it2.Name
@@ -29885,7 +29885,7 @@ Public Class Form1
         doc.LoadXml(temptext)
         Dim thisresult As XmlElement
         For Each thisresult In doc("relativepaths")
-            Dim newfo As New RelativeFileList
+            Dim newfo As New str_RelativeFileList(SetDefaults)
             For Each innerresult In thisresult
                 Select Case innerresult.Name
                     Case "mc"

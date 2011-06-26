@@ -3,9 +3,10 @@ Imports System.Net
 Imports System.IO
 Imports System.Xml
 Public Class actors
+    Const SetDefaults = True
     Public Function EpisodeGetImdbActors(ByVal imbdID As String, ByVal seasonNO As String, _
-                                         ByVal episodeNO As String) As List(Of movieactors)
-        Dim tempactorlist As New List(Of MovieActors)
+                                         ByVal episodeNO As String) As List(Of str_MovieActors)
+        Dim tempactorlist As New List(Of str_MovieActors)
         Monitor.Enter(Me)
         Try
             tempactorlist.Clear()
@@ -68,7 +69,7 @@ Public Class actors
                                                     Exit For
                                                 End If
                                                 countactors += 1
-                                                Dim newactor As New MovieActors
+                                                Dim newactor As New str_MovieActors(SetDefaults)
                                                 Dim detail As XmlNode = Nothing
                                                 For Each detail In thisresult.ChildNodes
                                                     Select Case detail.Name
@@ -110,7 +111,7 @@ Public Class actors
         Return tempactorlist
     End Function
 
-    Public Sub savelocalactors(ByVal path As String, ByVal listofactors As List(Of MovieActors), Optional ByVal tvshowpath As String = "", Optional ByVal copyactorthumbs As Boolean = False)
+    Public Sub savelocalactors(ByVal path As String, ByVal listofactors As List(Of str_MovieActors), Optional ByVal tvshowpath As String = "", Optional ByVal copyactorthumbs As Boolean = False)
         Monitor.Enter(Me)
         Try
             If Preferences.actorseasy = True Then

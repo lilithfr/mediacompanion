@@ -1,5 +1,5 @@
 
-Public Structure BasicMovieNFO
+Public Structure str_BasicMovieNFO
     Dim title As String
     Dim originaltitle As String
     Dim sortorder As String
@@ -26,4 +26,32 @@ Public Structure BasicMovieNFO
     Dim thumbnails As String
     Dim fanart As String
     Dim country As String
+    Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+        title = ""
+        originaltitle = ""
+        sortorder = ""
+        movieset = ""
+        year = ""
+        rating = ""
+        votes = ""
+        outline = ""
+        plot = ""
+        tagline = ""
+        runtime = ""
+        mpaa = ""
+        genre = ""
+        credits = ""
+        director = ""
+        stars = ""
+        premiered = ""
+        studio = ""
+        trailer = ""
+        playcount = ""
+        imdbid = ""
+        top250 = ""
+        filename = ""
+        thumbnails = ""
+        fanart = ""
+        country = ""
+    End Sub
 End Structure

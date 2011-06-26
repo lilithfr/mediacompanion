@@ -7,10 +7,16 @@ Imports System.Xml
 
 
 Public Class TVDBScraper
-    Private Structure possibleshowlist
+    Const SetDefaults = True
+    Private Structure str_possibleshowlist
         Dim showtitle As String
         Dim showid As String
         Dim showbanner As String
+        Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+            showtitle = ""
+            showid = ""
+            showbanner = ""
+        End Sub
     End Structure
 
     Public Function GetPosterList(ByVal TvdbId As String, ByVal ReturnPoster As Boolean) As Tvdb.Banners
@@ -126,7 +132,7 @@ Public Class TVDBScraper
     Public Function findshows(ByVal title As String, Optional ByVal mirror As String = "http://thetvdb.com")
         Monitor.Enter(Me)
         'Try
-        Dim possibleshows As New List(Of possibleshowlist)
+        Dim possibleshows As New List(Of str_possibleshowlist)
         Dim xmlfile As String
         Dim wrGETURL As WebRequest
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
@@ -145,7 +151,7 @@ Public Class TVDBScraper
 
                 Select Case thisresult.Name
                     Case "Series"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -244,7 +250,7 @@ Public Class TVDBScraper
 
                 Select Case thisresult.Name
                     Case "Series"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -296,7 +302,7 @@ Public Class TVDBScraper
                 Select Case thisresult.Name
                     Case "Actor"
                         tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -337,7 +343,7 @@ Public Class TVDBScraper
                 Select Case thisresult.Name
                     Case "Actor"
                         tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name

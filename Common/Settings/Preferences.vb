@@ -4,6 +4,7 @@ Imports System.Threading
 
 
 Public Class Preferences
+    Const SetDefaults = True
     'Not saved items
     Public Shared applicationPath As String
     Public Shared tvScraperLog As String = ""
@@ -119,9 +120,9 @@ Public Class Preferences
     Public Shared tvFolders As New List(Of String)
 
 
-    Public Shared profiles As New List(Of ListOfProfiles)
-    Public Shared workingProfile As New ListOfProfiles
-    Public Shared commandlist As New List(Of ListOfCommands)
+    Public Shared profiles As New List(Of str_ListOfProfiles)
+    Public Shared workingProfile As New str_ListOfProfiles(SetDefaults)
+    Public Shared commandlist As New List(Of str_ListOfCommands)
 
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean
@@ -830,7 +831,7 @@ Public Class Preferences
                     Next
                 Case "comms"
                     Dim thistable As XmlNode = Nothing
-                    Dim newcom As New ListOfCommands
+                    Dim newcom As New str_ListOfCommands(SetDefaults)
                     For Each thistable In thisresult.ChildNodes
                         Select Case thistable.Name
                             Case "title"

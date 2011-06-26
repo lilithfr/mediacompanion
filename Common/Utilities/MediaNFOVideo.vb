@@ -1,5 +1,5 @@
 
-Public Structure MediaNFOVideo
+Public Structure str_MediaNFOVideo
     Dim width As String
     Dim height As String
     Dim aspect As String
@@ -13,9 +13,24 @@ Public Structure MediaNFOVideo
     Dim codecid As String
     Dim codecinfo As String
     Dim scantype As String
+    Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+        width = ""
+        height = ""
+        aspect = ""
+        codec = ""
+        formatinfo = ""
+        duration = ""
+        bitrate = ""
+        bitratemode = ""
+        bitratemax = ""
+        container = ""
+        codecid = ""
+        codecinfo = ""
+        scantype = ""
+    End Sub
 
-    Shared Widening Operator CType(ByVal Input As Nfo.VideoDetails) As MediaNFOVideo
-        Dim Temp As New MediaNFOVideo
+    Shared Widening Operator CType(ByVal Input As Nfo.VideoDetails) As str_MediaNFOVideo
+        Dim Temp As New str_MediaNFOVideo(True)
 
         Temp.width = Input.Width
         Temp.height = Input.Height
@@ -34,7 +49,7 @@ Public Structure MediaNFOVideo
         Return Temp
     End Operator
 
-    Shared Widening Operator CType(ByVal Input As MediaNFOVideo) As Nfo.VideoDetails
+    Shared Widening Operator CType(ByVal Input As str_MediaNFOVideo) As Nfo.VideoDetails
         Dim Temp As New Nfo.VideoDetails
 
         Temp.Width.Value = Input.width

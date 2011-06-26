@@ -17,8 +17,8 @@ Partial Public Class Form1
     Public tempWorkingTvShow As New TvShow
     Public tempWorkingEpisode As New TvEpisode
     Dim newEpisodeList As New List(Of TvEpisode)
-    Dim languageList As New List(Of TvShowLanguages)
-    Dim listOfShows As New List(Of PossibleShowList)
+    Dim languageList As New List(Of str_TvShowLanguages)
+    Dim listOfShows As New List(Of str_PossibleShowList)
 
     Dim tvdbposterlist As New List(Of TvBanners)
     Dim imdbposterlist As New List(Of TvBanners)
@@ -53,7 +53,7 @@ Partial Public Class Form1
                     Select Case thisresult.Name
                         Case "show"
                             Dim results As XmlNode = Nothing
-                            Dim lan As New PossibleShowList
+                            Dim lan As New str_PossibleShowList(SetDefaults)
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "showid"
@@ -77,7 +77,7 @@ Partial Public Class Form1
                     End Select
                 Next
             Else
-                Dim lan As New PossibleShowList
+                Dim lan As New str_PossibleShowList(SetDefaults)
                 lan.showid = "none"
                 lan.showtitle = "TVDB Search Returned Zero Results"
                 lan.showbanner = Nothing
@@ -104,7 +104,7 @@ Partial Public Class Form1
                     PictureBox9.Image = Nothing
                 End Try
             End If
-      
+
             Call checklanguage()
             messbox.Close()
         Else
@@ -125,7 +125,7 @@ Partial Public Class Form1
                 Return "error"
                 Exit Function
             End If
-            Dim newshows As New List(Of PossibleShowList)
+            Dim newshows As New List(Of str_PossibleShowList)
             newshows.Clear()
             If showslist <> "none" Then
                 Dim showlist As New XmlDocument
@@ -135,7 +135,7 @@ Partial Public Class Form1
                     Select Case thisresult.Name
                         Case "show"
                             Dim results As XmlNode = Nothing
-                            Dim lan As New PossibleShowList
+                            Dim lan As New str_PossibleShowList(SetDefaults)
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "showid"
@@ -186,7 +186,7 @@ Partial Public Class Form1
 
         Dim NewShow As TvShow = e.UserState
 
-  
+
         ListtvFiles(NewShow, "*.NFO")
         realTvPaths.Add(NewShow.FolderPath)
 
@@ -367,7 +367,7 @@ Partial Public Class Form1
                         Dim id As String = ""
                         'Dim acts As New MovieActors
                         Dim results As XmlNode = Nothing
-                        Dim lan As New PossibleShowList
+                        Dim lan As New str_PossibleShowList(SetDefaults)
 
 
                         If Not String.IsNullOrEmpty(NewAct.actorthumb) Then
@@ -449,7 +449,7 @@ Partial Public Class Form1
                     For Each thisresult As XmlNode In actorstring("actorlist")
                         Select Case thisresult.Name
                             Case "actor"
-                                Dim newactor As New MovieActors
+                                Dim newactor As New str_MovieActors(SetDefaults)
                                 Dim detail As XmlNode = Nothing
                                 For Each detail In thisresult.ChildNodes
                                     Select Case detail.Name
@@ -1289,7 +1289,7 @@ Partial Public Class Form1
                                             For Each actorl As XmlNode In thisresult.ChildNodes
                                                 Select Case actorl.Name
                                                     Case "name"
-                                                        Dim newactor As New MovieActors
+                                                        Dim newactor As New str_MovieActors(SetDefaults)
                                                         newactor.actorname = actorl.InnerText
                                                         singleepisode.ListActors.Add(newactor)
                                                 End Select
@@ -1353,7 +1353,7 @@ Partial Public Class Form1
                                                     Dim scraperfunction As New Classimdb
                                                     Dim actorlist As String = ""
                                                     actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring, , Preferences.maxactors)
-                                                    Dim tempactorlist As New List(Of MovieActors)
+                                                    Dim tempactorlist As New List(Of str_MovieActors)
                                                     Dim thumbstring As New XmlDocument
 
 
@@ -1371,7 +1371,7 @@ Partial Public Class Form1
                                                                     Exit For
                                                                 End If
                                                                 countactors += 1
-                                                                Dim newactor As New MovieActors
+                                                                Dim newactor As New str_MovieActors(SetDefaults)
 
                                                                 For Each detail As XmlNode In thisresult.ChildNodes
                                                                     Select Case detail.Name

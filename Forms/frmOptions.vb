@@ -6,7 +6,7 @@ Imports System.Xml
 
 
 Public Class frmOptions
-
+    Public Const SetDefaults = True
     'Dim Preferences As New _Preferences.Preferences
     Dim moviefolders As New List(Of String)
     Dim tvfolders As New List(Of String)
@@ -1110,7 +1110,7 @@ Public Class frmOptions
             Preferences.sortorder = "dvd"
         End If
     End Sub
-    Dim languagelist As New List(Of TvShowLanguages)
+    Dim languagelist As New List(Of str_TvShowLanguages)
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
         If ListBox8.Items.Count = 0 Then
             Try
@@ -1134,7 +1134,7 @@ Public Class frmOptions
                     Select Case thisresult.Name
                         Case "Language"
                             Dim results As XmlNode = Nothing
-                            Dim lan As New TvShowLanguages
+                            Dim lan As New str_TvShowLanguages(SetDefaults)
                             For Each results In thisresult.ChildNodes
                                 Select Case results.Name
                                     Case "name"

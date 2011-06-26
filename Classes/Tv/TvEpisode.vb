@@ -163,10 +163,10 @@
             MyBase.Details.StreamDetails.Subtitles.Clear()
 
             MyBase.Details.StreamDetails.Video = value.filedetails_video
-            For Each Audio As MediaNFOAudio In value.filedetails_audio
+            For Each Audio As str_MediaNFOAudio In value.filedetails_audio
                 MyBase.Details.StreamDetails.Audio.Add(Audio)
             Next
-            For Each Subtitle As MediaNFOSubtitles In value.filedetails_subtitles
+            For Each Subtitle As str_MediaNFOSubtitles In value.filedetails_subtitles
                 MyBase.Details.StreamDetails.Subtitles.Add(Subtitle)
             Next
         End Set
