@@ -116,12 +116,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim responseStream As Stream = WebResponse.GetResponseStream()
             If (WebResponse.ContentEncoding.ToLower().Contains("gzip")) Then
                 responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
-                Preferences.tvScraperLog &= "**** TVDB Returned GZIP Encoded *****" & vbCrLf
+                Preferences.tvScraperLog &= "TVDB Returned GZIP File" & vbCrLf
             ElseIf (WebResponse.ContentEncoding.ToLower().Contains("deflate")) Then
                 responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
-                Preferences.tvScraperLog &= "**** TVDB Returned DEFLATE Encoded *****" & vbCrLf
+                Preferences.tvScraperLog &= "TVDB Returned DEFLATE Encoded File" & vbCrLf
             Else
-                Preferences.tvScraperLog &= "**** TVDB Returned TEXT Stream *****" & vbCrLf
+                Preferences.tvScraperLog &= "TVDB Returned TEXT File" & vbCrLf
             End If
             Dim reader As StreamReader = New StreamReader(responseStream, Encoding.Default)
 
