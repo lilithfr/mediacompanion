@@ -1597,8 +1597,8 @@ Module General
                     Next
                     FileInfoString &= "</subtitle>" & vbLf
                 End If
-                FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
             End If
+            FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
             FileInfoString &= "<createdate>" & Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString & "</createdate>" & vbLf
             TempString = ""
             TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))
