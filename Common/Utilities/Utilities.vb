@@ -2505,9 +2505,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             lstStringFolders.Add(SourceFolder)
         Next
         Do Until intCounter = lstStringFolders.Count
-            strSubFolders = System.IO.Directory.GetDirectories(lstStringFolders.Item(intCounter))
-            lstStringFolders.AddRange(strSubFolders)
-            intCounter += 1
+            Try
+                strSubFolders = System.IO.Directory.GetDirectories(lstStringFolders.Item(intCounter))
+                lstStringFolders.AddRange(strSubFolders)
+                intCounter += 1
+            Catch ex As Exception
+                intCounter += 1
+            End Try
         Loop
         'sorts the folders so that related folders (parent/child) are together
         lstStringFolders.Sort()
