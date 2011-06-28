@@ -11174,7 +11174,7 @@ Public Class Form1
         If RadioButton1.Checked = True Then
             Preferences.moviedefaultlist = 0
 
-            'Preferences.SaveConfig()
+            'Preferences.SaveConfig()   'we don't need to save this till MC Closes
             'Call applyfilters()
             Call sortorder()
         End If
@@ -11184,7 +11184,7 @@ Public Class Form1
         If RadioButton2.Checked = True Then
             Preferences.moviedefaultlist = 1
 
-            'Preferences.SaveConfig()
+            'Preferences.SaveConfig()'we don't need to save this till MC Closes
             Call sortorder()
         End If
     End Sub
@@ -11193,7 +11193,7 @@ Public Class Form1
         If RadioButton6.Checked = True Then
             Preferences.moviedefaultlist = 2
 
-            'Preferences.SaveConfig()
+            'Preferences.SaveConfig()'we don't need to save this till MC Closes
             Call sortorder()
         End If
     End Sub
@@ -11203,7 +11203,7 @@ Public Class Form1
         If RadioButton3.Checked = True Then
             Preferences.moviesortorder = 0
 
-            'Preferences.SaveConfig()
+            'Preferences.SaveConfig()'we don't need to save this till MC Closes
             sortorder()
         End If
     End Sub
@@ -11212,7 +11212,7 @@ Public Class Form1
         If RadioButton4.Checked = True Then
             Preferences.moviesortorder = 1
 
-            'Preferences.SaveConfig()
+            'Preferences.SaveConfig()'we don't need to save this till MC Closes
             Call sortorder()
         End If
 
@@ -11222,7 +11222,7 @@ Public Class Form1
         If RadioButtonSortModified.Checked = True Then
             Preferences.moviesortorder = 2
 
-            ' Preferences.SaveConfig()
+            ' Preferences.SaveConfig()'we don't need to save this till MC Closes
             Call sortorder()
         End If
     End Sub
@@ -11231,7 +11231,7 @@ Public Class Form1
         If RadioButton7.Checked = True Then
             Preferences.moviesortorder = 4
 
-            'Preferences.SaveConfig()
+            'Preferences.SaveConfig()'we don't need to save this till MC Closes
             Call sortorder()
         End If
     End Sub
