@@ -2742,6 +2742,7 @@ Public Class Form1
     End Function
 
     Private Sub Listmoviefiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
+        'scraperLog &= lst & " " & pattern & " " & dir_info.ToString & vbCrLf
         Dim moviepattern As String = pattern
         Monitor.Enter(Me)
         Dim tempint2 As Integer
@@ -2752,7 +2753,7 @@ Public Class Form1
             Dim dofilter As Boolean = False
             Dim dvdfiles As Boolean
             For Each fs_info As System.IO.FileInfo In fs_infos
-
+                scraperLog &= fs_info.ToString & vbCrLf
                 Dim newmoviedetails As New str_NewMovie(SetDefaults)
                 Dim title As String = String.Empty
                 Dim remove As Boolean = False
@@ -2762,8 +2763,9 @@ Public Class Form1
                 newmoviedetails.mediapathandfilename = fs_info.FullName
                 newmoviedetails.nfopathandfilename = tempmovie
                 Dim basicmoviename As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), "movie.nfo")
-                'If IO.File.Exists(basicmoviename) Then
-                '    remove = True
+                'If IO.File.Exists(basicmoviename) Then   'left these lines commented out they don't seem to be needed to stop rescrape if movie.nfo already exists
+                'remove = True
+                'scraperLog &= "Remove Found!" & vbCrLf
                 'End If
                 basicmoviename = Utilities.GetStackName(IO.Path.GetFileName(fs_info.FullName), fs_info.FullName)
                 Dim otherformat As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), basicmoviename & ".nfo")
@@ -2793,11 +2795,14 @@ Public Class Form1
                 End If
 
                 If moviepattern = "*.vob" Then
+                    scraperLog &= "VOB Pattern Found!" & vbCrLf
                     Dim lonevobfile As String = tempmovie.Replace(System.IO.Path.GetFileName(tempmovie), "VIDEO_TS.IFO")
+                    scraperLog &= lonevobfile & vbCrLf
                     dvdfiles = System.IO.File.Exists(lonevobfile)
                 End If
 
                 If dvdfiles = False Then
+                    scraperLog &= "Not DVD File Structure!" & vbCrLf
                     If IO.File.Exists(tempmovie) = True Then
 
 
@@ -3101,6 +3106,8 @@ Public Class Form1
                             End If
                         End If
                     End If
+                Else
+                    scraperLog &= "DVD File Structure Found!" & vbCrLf
                 End If
 
 
@@ -3211,7 +3218,7 @@ Public Class Form1
 
                 Else
                     If title <> Nothing Then
-
+                        scraperLog &= "TITLE: " & title & vbCrLf
                         Dim extension As String
                         Dim filename2 As String
                         newmoviedetails.nfopathandfilename = title
@@ -3272,10 +3279,12 @@ Public Class Form1
                         For Each newmovie In newMovieList
                             If newmovie.nfopathandfilename = newmoviedetails.nfopathandfilename Then
                                 alreadyadded = True
+                                scraperLog &= "Already Added!" & vbCrLf
                                 Exit For
                             End If
                         Next
                         If alreadyadded = False Then
+                            scraperLog &= "Not Already Added!" & vbCrLf
                             newMovieList.Add(newmoviedetails)
                         Else
                             alreadyadded = False
@@ -3356,8 +3365,9 @@ Public Class Form1
         Extensions(24) = "*.dvr-ms"
         Extensions(25) = "VIDEO_TS.IFO"
         ExtensionCount = 25
-
+        '--------------------------Begin Search for New Media in Normal Folders
         NewMoviesFolders = Utilities.FindAllFolders(movieFolders)
+
         '--------------------------Begin Search for New Media in Offline Folders
         For Each moviefolder In Preferences.offlinefolders
             Dim hg As New IO.DirectoryInfo(moviefolder)
@@ -3395,11 +3405,13 @@ Public Class Form1
             End If
         Next
         '--------------------------End Search for New Media in Offline Folders
+
         newMovieList.Clear()
         Dim mediacounter As Integer = newMovieList.Count
+
         For g = 0 To NewMoviesFolders.Count - 1
             Progress = ((100 / NewMoviesFolders.Count) * g) * 10
-            ProgressText = String.Concat("Scanning folder " & g + 1 & " of " & NewMoviesFolders.Count)
+            ProgressText = "Scanning folder " & g + 1 & " of " & NewMoviesFolders.Count & " " & NewMoviesFolders(g)
             ToolStripProgressBar1.Visible = True
             ToolStripProgressBar1.Value = Progress
             ToolStripProgressBar1.ProgressBar.Refresh()
@@ -3423,8 +3435,9 @@ Public Class Form1
         Dim movieyear As String = ""
         Dim newmoviecount As Integer = 0
         newmoviecount = newMovieList.Count.ToString
-        scraperLog = scraperLog & vbCrLf & vbCrLf & "Starting Main Scraper Process" & vbCrLf & vbCrLf
+        scraperLog &= vbCrLf & vbCrLf & "Starting Main Scraper Process" & vbCrLf & vbCrLf
         ToolStripProgressBar1.Maximum = newMovieList.Count + 1
+        If newMovieList.Count = 0 Then scraperLog &= "No New Movies Found..." & vbCrLf
         For f = 0 To newMovieList.Count - 1
             Try
                 While novaThread.IsAlive
@@ -3437,6 +3450,7 @@ Public Class Form1
             End Try
             newMovieFoundTitle = newMovieList(f).title.ToString
             newMovieFoundFilename = newMovieList(f).mediapathandfilename.ToString
+            scraperLog &= newMovieFoundTitle & vbCrLf
             novaThread = New Thread(New ThreadStart(AddressOf TempStartMoviesScraping))
             novaThread.SetApartmentState(ApartmentState.STA)
             novaThread.Start()
@@ -3464,6 +3478,7 @@ Public Class Form1
         ToolStripStatusLabel1.Visible = False
         ToolStripProgressBar1.Maximum = TempProgressBarValue
         ToolStripStatusLabel6.Text = TempLabel
+        scraperLog &= vbCrLf & "Completed!" & vbCrLf
     End Sub
     Private Sub TempStartMoviesScraping()
         Dim FullFileContent As String = ""
@@ -3543,9 +3558,10 @@ Public Class Form1
 
 
         If Preferences.movies_useXBMC_Scraper = True Then
+            scraperLog &= "Using XBMC Scraper...." & vbCrLf
             XBMC_Movie_Scraping_Initialization()
         Else
-
+            scraperLog &= "Using MC IMDB Scraper" & vbCrLf
             If BckWrkScnMovies.CancellationPending Then
                 scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                 Exit Sub
@@ -3556,7 +3572,7 @@ Public Class Form1
             BckWrkScnMovies.ReportProgress(progress, progresstext)
 
 
-            scraperLog = "Starting Folder Scan" & vbCrLf & vbCrLf
+            scraperLog &= "Starting Folder Scan" & vbCrLf & vbCrLf
 
             Dim extension As String
             Dim filename2 As String
@@ -3592,9 +3608,9 @@ Public Class Form1
             For Each moviefolder In movieFolders
                 Dim hg As New IO.DirectoryInfo(moviefolder)
                 If hg.Exists Then
-                    scraperLog = scraperLog & "found" & hg.FullName.ToString & vbCrLf
+                    scraperLog &= "found" & hg.FullName.ToString & vbCrLf
                     newmoviefolders.Add(moviefolder)
-                    scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
+                    scraperLog &= "Checking for subfolders" & vbCrLf
                     Dim newlist As List(Of String)
                     Try
                         newlist = Utilities.EnumerateFolders(moviefolder, 6)
