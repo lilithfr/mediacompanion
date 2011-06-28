@@ -777,11 +777,14 @@ Public Class Preferences
         doc.AppendChild(root)
 
 
-
-        Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+        Try
+            Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            doc.WriteTo(output)
+            output.Close()
+        Catch ex As Exception
+            MsgBox("Can't find the following path..." & vbCrLf & Preferences.workingProfile.config & vbCrLf & "Please Check/Delete Settings Folder & Restart MC")
+        End Try
     End Sub
 
 

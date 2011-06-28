@@ -320,11 +320,10 @@ Public Class Form1
 
                 Preferences.SaveConfig()
             End If
-        Else
-            IO.Directory.CreateDirectory(tempstring)
-            workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
-
-            Call Preferences.SaveConfig()
+            'Else                                                 ' I don't think we need to save the config if it already exists.....
+            '   IO.Directory.CreateDirectory(tempstring)
+            '  workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
+            'Preferences.SaveConfig()
         End If
 
 
@@ -677,7 +676,7 @@ Public Class Form1
         If startup = False Then
             Preferences.locx = Me.Location.X
             Preferences.locy = Me.Location.Y
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()              'this is run when we close MC, no need to run it each time we resize MC
         End If
         
     End Sub
@@ -727,7 +726,7 @@ Public Class Form1
             Preferences.formheight = Me.Height
             DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
 
-            Preferences.saveconfig()
+            'Preferences.saveconfig()           'no need to save position, we do that when MC closes
             Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
             If maxcount2 <> maxcount Then
                 maxcount = maxcount2
@@ -11175,7 +11174,7 @@ Public Class Form1
         If RadioButton1.Checked = True Then
             Preferences.moviedefaultlist = 0
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
             'Call applyfilters()
             Call sortorder()
         End If
@@ -11185,7 +11184,7 @@ Public Class Form1
         If RadioButton2.Checked = True Then
             Preferences.moviedefaultlist = 1
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
             Call sortorder()
         End If
     End Sub
@@ -11194,7 +11193,7 @@ Public Class Form1
         If RadioButton6.Checked = True Then
             Preferences.moviedefaultlist = 2
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
             Call sortorder()
         End If
     End Sub
@@ -11204,7 +11203,7 @@ Public Class Form1
         If RadioButton3.Checked = True Then
             Preferences.moviesortorder = 0
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
             sortorder()
         End If
     End Sub
@@ -11213,7 +11212,7 @@ Public Class Form1
         If RadioButton4.Checked = True Then
             Preferences.moviesortorder = 1
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
             Call sortorder()
         End If
 
@@ -11223,7 +11222,7 @@ Public Class Form1
         If RadioButtonSortModified.Checked = True Then
             Preferences.moviesortorder = 2
 
-            Preferences.SaveConfig()
+            ' Preferences.SaveConfig()
             Call sortorder()
         End If
     End Sub
@@ -11232,7 +11231,7 @@ Public Class Form1
         If RadioButton7.Checked = True Then
             Preferences.moviesortorder = 4
 
-            Preferences.SaveConfig()
+            'Preferences.SaveConfig()
             Call sortorder()
         End If
     End Sub
