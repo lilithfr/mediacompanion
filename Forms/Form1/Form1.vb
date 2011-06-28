@@ -3556,7 +3556,7 @@ Public Class Form1
         scraperLog = ""
         Dim dirpath As String = String.Empty
 
-
+        scraperLog &= "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
         If Preferences.movies_useXBMC_Scraper = True Then
             scraperLog &= "Using XBMC Scraper...." & vbCrLf
             XBMC_Movie_Scraping_Initialization()
@@ -3628,7 +3628,7 @@ Public Class Form1
             For Each moviefolder In Preferences.offlinefolders
                 Dim hg As New IO.DirectoryInfo(moviefolder)
                 If hg.Exists Then
-                    scraperLog = scraperLog & "found" & hg.FullName.ToString & vbCrLf
+                    scraperLog = scraperLog & "Found " & hg.FullName.ToString & vbCrLf
                     'newmoviefolders.Add(moviefolder)
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim newlist As List(Of String)
