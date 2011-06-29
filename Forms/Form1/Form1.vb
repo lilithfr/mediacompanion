@@ -762,6 +762,11 @@ Public Class Form1
 
 
         End If
+
+        frmSplash2.Label1.Text = "Creating Movie Cache xml....."
+        frmSplash2.Label2.Visible = False
+        frmSplash2.ProgressBar1.Visible = False
+
         Dim doc As New XmlDocument
 
         Dim thispref As XmlNode = Nothing
@@ -772,9 +777,12 @@ Public Class Form1
         Dim root As XmlElement
         Dim child As XmlElement
         root = doc.CreateElement("movie_cache")
-
         Dim childchild As XmlElement
+
+        Dim count2 As Integer = 0
+
         For Each movie In fullMovieList
+            
             child = doc.CreateElement("movie")
             childchild = doc.CreateElement("filedate")
             childchild.InnerText = movie.filedate
@@ -878,6 +886,7 @@ Public Class Form1
         doc.AppendChild(root)
         For f = 1 To 100
             Try
+                frmSplash2.Label2.Text = "Saving cache xml...." & f
                 Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
                 output.Formatting = Formatting.Indented
                 doc.WriteTo(output)
@@ -2044,6 +2053,7 @@ Public Class Form1
             exists = (IO.File.Exists(fs_info.FullName))
             If exists = True Then
                 frmSplash2.Label2.Text = fs_info.FullName
+                frmSplash2.Label2.Refresh()
                 Try
                     workingMovie = nfoFunction.loadbasicmovienfo(fs_info.FullName, "movielist")
                 Catch ex As Exception
@@ -2191,8 +2201,11 @@ Public Class Form1
 
             If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
             frmSplash2.Label2.Visible = True
-            For f = 0 To realMoviePaths.Count - 1
+            frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
+            frmSplash2.ProgressBar1.Visible = True
 
+            For f = 0 To realMoviePaths.Count - 1
+        
                 frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
 
                 If mode = False Then frmSplash2.ProgressBar1.Value = f
@@ -21871,6 +21884,13 @@ Public Class Form1
     End Sub
 
     Private Sub Button110_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button110.Click
+        frmSplash2.Text = "Save & Quick Rebuild Movies..."
+        frmSplash2.Label1.Text = "Searching for Movie Folders....."
+        frmSplash2.Label2.Visible = False
+        frmSplash2.ProgressBar1.Visible = False
+        frmSplash2.Show()
+        Application.DoEvents()
+
         Dim folderstoadd As New List(Of String)
         Dim offlinefolderstoadd As New List(Of String)
         Dim folderstoremove As New List(Of String)
@@ -21939,12 +21959,12 @@ Public Class Form1
             Preferences.saveconfig()
             Call Movie_SaveMovieData()
         End If
-
+        frmSplash2.ProgressBar1.Visible = True
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
-            messbox = New frmMessageBox("New Movie Folders Found", "Adding to DB", "Please Wait")
+            'messbox = New frmMessageBox("New Movie Folders Found", "Adding to DB", "Please Wait")
             'remove old
-            messbox.Show()
-            messbox.Refresh()
+            'messbox.Show()
+            ' messbox.Refresh()
             Application.DoEvents()
             Try
                 For Each folder In folderstoadd
@@ -21954,7 +21974,12 @@ Public Class Form1
                     Preferences.offlinefolders.Add(folder)
                     folderstoadd.Add(folder)
                 Next
-                Call nfos_to_array(folderstoadd)
+                If Preferences.usefoldernames = True Then         'use TRUE if folder contains nfo's, False if folder contains folders which contain nfo's
+                    progressmode = False
+                Else
+                    progressmode = True
+                End If
+                Call nfos_to_array(folderstoadd, progressmode)
                 Preferences.saveconfig()
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -21980,7 +22005,7 @@ Public Class Form1
         'Call loadmovielist()
         Call ApplyFilters()
         Call loadinfofile()
-
+        frmSplash2.Hide()
     End Sub
 
     Private Sub newseason_checkforposter(ByVal season As String, ByVal path As String, ByVal tvdbid As String)
