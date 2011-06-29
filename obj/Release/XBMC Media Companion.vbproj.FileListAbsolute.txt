@@ -96,9 +96,6 @@ C:\SVN MC\obj\Release\Media_Companion.frmTvFanart.resources
 C:\SVN MC\obj\Release\Media_Companion.frmTvPosters.resources
 C:\SVN MC\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\SVN MC\obj\Release\GenerateResource-ResGen.read.1.tlog
-C:\SVN MC\obj\Release\GenerateResource-ResGen.read.4.tlog
-C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
-C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
 C:\SVN MC\obj\Release\GenerateResource-ResGen.write.1.tlog
 C:\MC SVN\bin\Release\Media Companion.exe.config
 C:\MC SVN\obj\Release\Media Companion.exe
@@ -414,3 +411,4 @@ C:\SVN MC\bin\Release\mc_com.exe
 C:\SVN MC\bin\Release\media_companion.chm
 C:\MC SVN\obj\Release\ResGen.read.1.tlog
 C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\SVN MC\bin\Release\ICSharpCode.SharpZipLib.dll

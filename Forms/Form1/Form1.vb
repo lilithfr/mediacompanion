@@ -320,10 +320,10 @@ Public Class Form1
 
                 Preferences.SaveConfig()
             End If
-            'Else                                                 ' I don't think we need to save the config if it already exists.....
-            '   IO.Directory.CreateDirectory(tempstring)
-            '  workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
-            'Preferences.SaveConfig()
+        Else
+            IO.Directory.CreateDirectory(tempstring)
+            workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
+            Preferences.SaveConfig()
         End If
 
 
