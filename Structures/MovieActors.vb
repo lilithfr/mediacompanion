@@ -1,12 +1,18 @@
 
-Public Structure MovieActors
+Public Structure str_MovieActors
     Public actorname As String
     Public actorrole As String
     Public actorthumb As String
     Public actorid As String
+    Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+        actorname = ""
+        actorrole = ""
+        actorthumb = ""
+        actorid = ""
+    End Sub
 
-    Shared Widening Operator CType(ByVal Input As Nfo.Actor) As MovieActors
-        Dim Temp As New MovieActors
+    Shared Widening Operator CType(ByVal Input As Nfo.Actor) As str_MovieActors
+        Dim Temp As New str_MovieActors(True)
 
         Temp.actorid = Input.ActorId.Value
         Temp.actorname = Input.Name.Value
@@ -16,7 +22,7 @@ Public Structure MovieActors
         Return Temp
     End Operator
 
-    Shared Widening Operator CType(ByVal Input As MovieActors) As Nfo.Actor
+    Shared Widening Operator CType(ByVal Input As str_MovieActors) As Nfo.Actor
         Dim Temp As New Nfo.Actor
 
         Temp.ActorId.Value = Input.actorid
@@ -26,4 +32,5 @@ Public Structure MovieActors
 
         Return Temp
     End Operator
+    
 End Structure

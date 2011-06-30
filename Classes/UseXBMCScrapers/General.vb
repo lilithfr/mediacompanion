@@ -6,7 +6,7 @@ Imports System.Xml
 
 
 Module General
-
+    Const SetDefaults = True
     Dim TempEpisode As New TvEpisode
     Dim episodeInformation As New List(Of TvEpisode)
     Dim TempXMLEpisode As New TvEpisode
@@ -873,7 +873,7 @@ Module General
             'get audio data
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
-                    Dim audio As New MediaNFOAudio
+                    Dim audio As New str_MediaNFOAudio(SetDefaults)
                     audio.language = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.codec = "MP3"
@@ -898,7 +898,7 @@ Module General
             Dim curSS As Integer = 0
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
-                    Dim sublanguage As New MediaNFOSubtitles
+                    Dim sublanguage As New str_MediaNFOSubtitles(SetDefaults)
                     sublanguage.language = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
@@ -1597,8 +1597,8 @@ Module General
                     Next
                     FileInfoString &= "</subtitle>" & vbLf
                 End If
-                FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
             End If
+            FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
             FileInfoString &= "<createdate>" & Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString & "</createdate>" & vbLf
             TempString = ""
             TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))

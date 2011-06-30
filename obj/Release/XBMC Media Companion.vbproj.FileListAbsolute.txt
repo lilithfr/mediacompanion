@@ -96,9 +96,6 @@ C:\SVN MC\obj\Release\Media_Companion.frmTvFanart.resources
 C:\SVN MC\obj\Release\Media_Companion.frmTvPosters.resources
 C:\SVN MC\obj\Release\Media_Companion.frmTVShowBrowser.resources
 C:\SVN MC\obj\Release\GenerateResource-ResGen.read.1.tlog
-C:\SVN MC\obj\Release\GenerateResource-ResGen.read.4.tlog
-C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
-C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
 C:\SVN MC\obj\Release\GenerateResource-ResGen.write.1.tlog
 C:\MC SVN\bin\Release\Media Companion.exe.config
 C:\MC SVN\obj\Release\Media Companion.exe
@@ -206,8 +203,6 @@ C:\MC SVN\bin\Release\Common.xml
 C:\SVN MC\bin\Release\Common.dll
 C:\SVN MC\bin\Release\Common.pdb
 C:\SVN MC\bin\Release\Common.xml
-C:\MC SVN\obj\Release\ResGen.read.1.tlog
-C:\MC SVN\obj\Release\ResGen.write.1.tlog
 C:\Projects\MC\Recheck\bin\Release\Media Companion.exe.config
 C:\Projects\MC\Recheck\bin\Release\Assets\class_mpdb_thumbs.dll
 C:\Projects\MC\Recheck\bin\Release\Assets\crclib.dll
@@ -344,3 +339,76 @@ C:\Projects\MC\Recheck\obj\Release\ResGen.read.1.tlog
 C:\Projects\MC\Recheck\obj\Release\ResGen.write.1.tlog
 C:\Projects\MC\Recheck\obj\Release\Media Companion.exe
 C:\Projects\MC\Recheck\obj\Release\Media Companion.pdb
+C:\SVN MC\bin\Release\Assets\ICSharpCode.SharpZipLib.dll
+C:\SVN MC\bin\Release\Assets\Media Companion icon5.ico
+C:\SVN MC\bin\Release\Assets\class_mpdb_thumbs.dll
+C:\SVN MC\bin\Release\Assets\crclib.dll
+C:\SVN MC\bin\Release\Assets\ffmpeg.exe
+C:\SVN MC\bin\Release\Assets\imdb.dll
+C:\SVN MC\bin\Release\Assets\imdb_thumbs.dll
+C:\SVN MC\bin\Release\Assets\IMPA.dll
+C:\SVN MC\bin\Release\MediaInfo.dll
+C:\SVN MC\bin\Release\Assets\pthreadGC2.dll
+C:\SVN MC\bin\Release\Assets\tmdb_posters.dll
+C:\SVN MC\bin\Release\Assets\TVDB.dll
+C:\SVN MC\bin\Release\Assets\_imdb.dll
+C:\SVN MC\bin\Release\html_templates\another template.txt
+C:\SVN MC\bin\Release\html_templates\html_template.txt
+C:\SVN MC\bin\Release\html_templates\INFO_HTMLoutputTags.txt
+C:\SVN MC\bin\Release\html_templates\Movie Card 2up Filter.txt
+C:\SVN MC\bin\Release\html_templates\Movie Card 2up.txt
+C:\SVN MC\bin\Release\html_templates\Movie Card.txt
+C:\SVN MC\bin\Release\html_templates\new template.txt
+C:\SVN MC\bin\Release\html_templates\Table List.txt
+C:\SVN MC\bin\Release\html_templates\tv_adv_template.txt
+C:\SVN MC\bin\Release\html_templates\tv_basic_template.txt
+C:\SVN MC\bin\Release\html_templates\tv_missing_episode_list.txt
+C:\SVN MC\bin\Release\Resources\default_actor.jpg
+C:\SVN MC\bin\Release\Resources\default_banner.jpg
+C:\SVN MC\bin\Release\Resources\default_fanart.jpg
+C:\SVN MC\bin\Release\Resources\default_offline.jpg
+C:\SVN MC\bin\Release\Resources\default_poster.jpg
+C:\SVN MC\bin\Release\class_mpdb_thumbs.dll
+C:\SVN MC\bin\Release\imdb_thumbs.dll
+C:\SVN MC\bin\Release\IMPA.dll
+C:\MC SVN\bin\Release\Assets\class_mpdb_thumbs.dll
+C:\MC SVN\bin\Release\Assets\crclib.dll
+C:\MC SVN\bin\Release\Assets\ffmpeg.exe
+C:\MC SVN\bin\Release\Assets\ICSharpCode.SharpZipLib.dll
+C:\MC SVN\bin\Release\Assets\imdb.dll
+C:\MC SVN\bin\Release\Assets\imdb_thumbs.dll
+C:\MC SVN\bin\Release\Assets\IMPA.dll
+C:\MC SVN\bin\Release\Assets\Media Companion icon5.ico
+C:\MC SVN\bin\Release\MediaInfo.dll
+C:\MC SVN\bin\Release\Assets\pthreadGC2.dll
+C:\MC SVN\bin\Release\Assets\tmdb_posters.dll
+C:\MC SVN\bin\Release\Assets\TVDB.dll
+C:\MC SVN\bin\Release\Assets\_imdb.dll
+C:\MC SVN\bin\Release\html_templates\another template.txt
+C:\MC SVN\bin\Release\html_templates\html_template.txt
+C:\MC SVN\bin\Release\html_templates\INFO_HTMLoutputTags.txt
+C:\MC SVN\bin\Release\html_templates\Movie Card 2up Filter.txt
+C:\MC SVN\bin\Release\html_templates\Movie Card 2up.txt
+C:\MC SVN\bin\Release\html_templates\Movie Card.txt
+C:\MC SVN\bin\Release\html_templates\new template.txt
+C:\MC SVN\bin\Release\html_templates\Table List.txt
+C:\MC SVN\bin\Release\html_templates\tv_adv_template.txt
+C:\MC SVN\bin\Release\html_templates\tv_basic_template.txt
+C:\MC SVN\bin\Release\html_templates\tv_missing_episode_list.txt
+C:\MC SVN\bin\Release\Resources\default_actor.jpg
+C:\MC SVN\bin\Release\Resources\default_banner.jpg
+C:\MC SVN\bin\Release\Resources\default_fanart.jpg
+C:\MC SVN\bin\Release\Resources\default_offline.jpg
+C:\MC SVN\bin\Release\Resources\default_poster.jpg
+C:\MC SVN\bin\Release\class_mpdb_thumbs.dll
+C:\MC SVN\bin\Release\imdb_thumbs.dll
+C:\MC SVN\bin\Release\IMPA.dll
+C:\MC SVN\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+C:\MC SVN\bin\Release\mc_com.exe
+C:\MC SVN\bin\Release\media_companion.chm
+C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+C:\SVN MC\bin\Release\mc_com.exe
+C:\SVN MC\bin\Release\media_companion.chm
+C:\MC SVN\obj\Release\ResGen.read.1.tlog
+C:\MC SVN\obj\Release\ResGen.write.1.tlog
+C:\SVN MC\bin\Release\ICSharpCode.SharpZipLib.dll

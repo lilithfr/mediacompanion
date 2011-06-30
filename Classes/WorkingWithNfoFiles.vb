@@ -4,7 +4,7 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 
 Public Class WorkingWithNfoFiles
-
+    Const SetDefaults = True
     Public Function ChangeFieldTVShow(ByVal Filename As String, ByVal Field As String, ByVal ValueToAssign As String, Optional ByVal CreateIfMissing As Boolean = False) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
@@ -585,7 +585,7 @@ Public Class WorkingWithNfoFiles
     '                            newtvepisode.thumb = thisresult.InnerText
     '                        Case "actor"
     '                            Dim actordetail As XmlNode = Nothing
-    '                            Dim newactor As New MovieActors
+                                Dim newactor As New str_MovieActors(SetDefaults)
     '                            For Each actordetail In thisresult.ChildNodes
     '                                Select Case actordetail.Name
     '                                    Case "name"
@@ -640,7 +640,7 @@ Public Class WorkingWithNfoFiles
     '                                                    Next
     '                                                Case "audio"
     '                                                    Dim audiodetails As XmlNode = Nothing
-    '                                                    Dim audio As New MediaNFOAudio
+                                                        Dim audio As New str_MediaNFOAudio(SetDefaults)
     '                                                    For Each audiodetails In detail.ChildNodes
     '                                                        Select Case audiodetails.Name
     '                                                            Case "language"
@@ -659,7 +659,7 @@ Public Class WorkingWithNfoFiles
     '                                                    For Each subsdetails In detail.ChildNodes
     '                                                        Select Case subsdetails.Name
     '                                                            Case "language"
-    '                                                                Dim sublang As New MediaNFOSubtitles
+                                                                    Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
     '                                                                sublang.language = subsdetails.InnerText
     '                                                                newfilenfo.filedetails_subtitles.Add(sublang)
     '                                                        End Select
@@ -756,7 +756,7 @@ Public Class WorkingWithNfoFiles
     '                                        anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
     '                                    Case "actor"
     '                                        Dim detail As XmlNode = Nothing
-    '                                        Dim newactor As New MovieActors
+                                            Dim newactor As New str_MovieActors(SetDefaults)
     '                                        For Each detail In thisresult.ChildNodes(f).ChildNodes
     '                                            Select Case detail.Name
     '                                                Case "name"
@@ -809,7 +809,7 @@ Public Class WorkingWithNfoFiles
     '                                                                Next
     '                                                            Case "audio"
     '                                                                Dim audiodetails As XmlNode = Nothing
-    '                                                                Dim audio As New MediaNFOAudio
+                                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
     '                                                                For Each audiodetails In detail.ChildNodes
 
     '                                                                    Select Case audiodetails.Name
@@ -829,7 +829,7 @@ Public Class WorkingWithNfoFiles
     '                                                                For Each subsdetails In detail.ChildNodes
     '                                                                    Select Case subsdetails.Name
     '                                                                        Case "language"
-    '                                                                            Dim sublang As New MediaNFOSubtitles
+                                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
     '                                                                            sublang.language = subsdetails.InnerText
     '                                                                            newfilenfo.filedetails_subtitles.Add(sublang)
     '                                                                    End Select
@@ -1009,7 +1009,7 @@ Public Class WorkingWithNfoFiles
         Return newtvshow
 
 
-    
+
     End Function
     Public Sub SaveTvShowNfo(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
         If IO.File.Exists(Path) And Not overwrite Then Exit Sub
@@ -1825,7 +1825,7 @@ Public Class WorkingWithNfoFiles
     Public Function loadbasicmovienfo(ByVal path As String, ByVal mode As String)
 
         Try
-            Dim newmovie As New ComboList
+            Dim newmovie As New str_ComboList(SetDefaults)
             If Not IO.File.Exists(path) Then
                 Return "Error"
                 Exit Function
@@ -1840,30 +1840,34 @@ Public Class WorkingWithNfoFiles
                             Return "ERROR"
                             Exit Function
                         End If
-                        newmovie.title = IO.Path.GetFileName(path)
-                        newmovie.titleandyear = newmovie.title & " (0000)"
-                        newmovie.movieset = ""
+
+                        newmovie.createdate = "999999999999"
                         Dim filecreation2 As New FileInfo(path)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                         Catch ex2 As Exception
                         End Try
-                        newmovie.genre = "problem / xml error"
-                        newmovie.fullpathandfilename = path
-                        newmovie.year = "0000"
-                        newmovie.id = ""
-                        newmovie.playcount = "0"
                         newmovie.filename = IO.Path.GetFileName(path)
-                        newmovie.top250 = "0"
                         newmovie.foldername = Utilities.GetLastFolder(path)
+                        newmovie.fullpathandfilename = path
+                        newmovie.genre = "problem / xml error"
+                        newmovie.id = ""
+                        newmovie.missingdata1 = 0
+                        newmovie.movieset = ""
+                        newmovie.originaltitle = newmovie.title
+                        newmovie.outline = ""
+                        newmovie.playcount = "0"
+                        newmovie.plot = ""
+                        newmovie.rating = ""
                         newmovie.runtime = "0"
-                        newmovie.createdate = "999999999999"
-                        Return newmovie
+                        newmovie.sortorder = ""
+                        newmovie.title = IO.Path.GetFileName(path)
+                        newmovie.titleandyear = newmovie.title & " (0000)"
+                        newmovie.top250 = "0"
+                        newmovie.year = "0000"
 
-
-
-
+                        Return (newmovie)
                         Exit Function
                     End Try
 
@@ -1926,38 +1930,44 @@ Public Class WorkingWithNfoFiles
                         End Try
                     Next
 
-                    'if there is no entry for originaltitle, then use the current title. this should only come into use
-                    'for old movies since new ones will have the originaltitle created when scraped
-                    If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
-                    If newmovie.movieset = "" Or newmovie.movieset = Nothing Then newmovie.movieset = "-None-"
-                    If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
-
-                    newmovie.fullpathandfilename = path
-
+                    'Now we need to make sure no varibles are still set to NOTHING before returning....
                     Dim filecreation As New FileInfo(path)
                     Dim myDate As Date = filecreation.LastWriteTime
 
-                    'MsgBox(Format(myDate, "MMddyy"))
-                    'MsgBox(myDate.ToString("MMddyy"))
+
+                    If newmovie.title = Nothing Then newmovie.title = "ERR - This Movie Has No TITLE!"
+                    If newmovie.createdate = "" Or newmovie.createdate = Nothing Then newmovie.createdate = "18000101000000"
                     Try
                         newmovie.filedate = Format(myDate, "yyyyMMddHHmmss")
                     Catch ex As Exception
                         MsgBox(ex.ToString)
                     End Try
+                    newmovie.filename = IO.Path.GetFileName(path)
+                    newmovie.foldername = Utilities.GetLastFolder(path)
+                    newmovie.fullpathandfilename = path
+                    If newmovie.genre = Nothing Then newmovie.genre = ""
+                    If newmovie.id = Nothing Then newmovie.id = ""
+                    If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
+                    If newmovie.movieset = "" Or newmovie.movieset = Nothing Then newmovie.movieset = "-None-"
+                    'if there is no entry for originaltitle, then use the current title. this should only come into use
+                    'for old movies since new ones will have the originaltitle created when scraped
+                    If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
+                    If newmovie.playcount = Nothing Then newmovie.playcount = "0"
+                    If newmovie.plot = Nothing Then newmovie.plot = ""
+                    If newmovie.rating = Nothing Then newmovie.rating = ""
+                    If newmovie.runtime = Nothing Then newmovie.runtime = ""
+                    If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
                     If newmovie.title <> Nothing And newmovie.year <> Nothing Then
                         newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
                     Else
                         newmovie.titleandyear = newmovie.title & "(0000)"
                     End If
-                    newmovie.filename = IO.Path.GetFileName(path)
-
-                    newmovie.foldername = Utilities.GetLastFolder(path)
-
                     If newmovie.top250 = Nothing Then newmovie.top250 = "0"
-                    If newmovie.id = Nothing Then newmovie.id = ""
-                    If newmovie.genre = Nothing Then newmovie.genre = ""
-                    If newmovie.rating = Nothing Then newmovie.rating = ""
-                    If newmovie.playcount = Nothing Then newmovie.playcount = "0"
+                    If newmovie.year = Nothing Then newmovie.year = "0001"
+
+                    'MsgBox(Format(myDate, "MMddyy"))
+                    'MsgBox(myDate.ToString("MMddyy"))
+
                 End If
                 Return newmovie
             End If
@@ -2083,7 +2093,7 @@ Public Class WorkingWithNfoFiles
                         Case "createdate"
                             newmovie.fileinfo.createdate = thisresult.InnerText
                         Case "actor"
-                            Dim newactor As New MovieActors
+                            Dim newactor As New str_MovieActors(SetDefaults)
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
@@ -2139,7 +2149,7 @@ Public Class WorkingWithNfoFiles
                                                     Next
                                                 Case "audio"
                                                     Dim audiodetails As XmlNode = Nothing
-                                                    Dim audio As New MediaNFOAudio
+                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
                                                     For Each audiodetails In detail.ChildNodes
 
                                                         Select Case audiodetails.Name
@@ -2159,7 +2169,7 @@ Public Class WorkingWithNfoFiles
                                                     For Each subsdetails In detail.ChildNodes
                                                         Select Case subsdetails.Name
                                                             Case "language"
-                                                                Dim sublang As New MediaNFOSubtitles
+                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
                                                                 sublang.language = subsdetails.InnerText
                                                                 newfilenfo.filedetails_subtitles.Add(sublang)
                                                         End Select
@@ -2926,7 +2936,7 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.thumb = thisresult.InnerText
                             Case "actor"
                                 Dim actordetail As XmlNode = Nothing
-                                Dim newactor As New MovieActors
+                                Dim newactor As New str_MovieActors(SetDefaults)
                                 For Each actordetail In thisresult.ChildNodes
                                     Select Case actordetail.Name
                                         Case "name"
@@ -2981,7 +2991,7 @@ Public Class WorkingWithNfoFiles
                                                         Next
                                                     Case "audio"
                                                         Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New MediaNFOAudio
+                                                        Dim audio As New str_MediaNFOAudio(SetDefaults)
                                                         For Each audiodetails In detail.ChildNodes
                                                             Select Case audiodetails.Name
                                                                 Case "language"
@@ -3000,7 +3010,7 @@ Public Class WorkingWithNfoFiles
                                                         For Each subsdetails In detail.ChildNodes
                                                             Select Case subsdetails.Name
                                                                 Case "language"
-                                                                    Dim sublang As New MediaNFOSubtitles
+                                                                    Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
                                                                     sublang.language = subsdetails.InnerText
                                                                     newfilenfo.filedetails_subtitles.Add(sublang)
                                                             End Select
@@ -3097,7 +3107,7 @@ Public Class WorkingWithNfoFiles
                                             anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"
                                             Dim detail As XmlNode = Nothing
-                                            Dim newactor As New MovieActors
+                                            Dim newactor As New str_MovieActors(SetDefaults)
                                             For Each detail In thisresult.ChildNodes(f).ChildNodes
                                                 Select Case detail.Name
                                                     Case "name"
@@ -3150,7 +3160,7 @@ Public Class WorkingWithNfoFiles
                                                                     Next
                                                                 Case "audio"
                                                                     Dim audiodetails As XmlNode = Nothing
-                                                                    Dim audio As New MediaNFOAudio
+                                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
                                                                     For Each audiodetails In detail.ChildNodes
 
                                                                         Select Case audiodetails.Name
@@ -3170,7 +3180,7 @@ Public Class WorkingWithNfoFiles
                                                                     For Each subsdetails In detail.ChildNodes
                                                                         Select Case subsdetails.Name
                                                                             Case "language"
-                                                                                Dim sublang As New MediaNFOSubtitles
+                                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
                                                                                 sublang.language = subsdetails.InnerText
                                                                                 newfilenfo.filedetails_subtitles.Add(sublang)
                                                                         End Select

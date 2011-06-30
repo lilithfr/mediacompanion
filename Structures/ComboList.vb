@@ -1,5 +1,5 @@
 
-Public Structure ComboList
+Public Structure str_ComboList
     Dim fullpathandfilename As String
     Dim movieset As String
     Dim filename As String
@@ -19,6 +19,29 @@ Public Structure ComboList
     Dim runtime As String
     Dim createdate As String
     Dim missingdata1 As Byte
-
     Dim plot As String
+
+    Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+        fullpathandfilename = ""
+        movieset = ""
+        filename = ""
+        foldername = ""
+        title = ""
+        originaltitle = ""
+        titleandyear = ""
+        year = ""
+        filedate = ""
+        id = ""
+        rating = ""
+        top250 = ""
+        genre = ""
+        playcount = ""
+        sortorder = ""
+        outline = ""
+        runtime = ""
+        createdate = ""
+        missingdata1 = 0
+        plot = ""
+    End Sub
+
 End Structure

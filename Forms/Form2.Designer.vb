@@ -105,6 +105,7 @@ Partial Class Form2
         Me.Button2 = New System.Windows.Forms.Button()
         Me.starstxt = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
         CType(Me.moviethumb, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -311,10 +312,10 @@ Partial Class Form2
         'moviethumb
         '
         Me.moviethumb.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.moviethumb.Location = New System.Drawing.Point(1656, 15)
+        Me.moviethumb.Location = New System.Drawing.Point(760, 15)
         Me.moviethumb.Margin = New System.Windows.Forms.Padding(4)
         Me.moviethumb.Name = "moviethumb"
-        Me.moviethumb.Size = New System.Drawing.Size(217, 262)
+        Me.moviethumb.Size = New System.Drawing.Size(216, 262)
         Me.moviethumb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.moviethumb.TabIndex = 39
         Me.moviethumb.TabStop = False
@@ -494,7 +495,8 @@ Partial Class Form2
         '
         'btnaddactor
         '
-        Me.btnaddactor.Location = New System.Drawing.Point(19, 555)
+        Me.btnaddactor.Enabled = False
+        Me.btnaddactor.Location = New System.Drawing.Point(19, 587)
         Me.btnaddactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btnaddactor.Name = "btnaddactor"
         Me.btnaddactor.Size = New System.Drawing.Size(100, 28)
@@ -505,7 +507,7 @@ Partial Class Form2
         '
         'btndeleteactor
         '
-        Me.btndeleteactor.Location = New System.Drawing.Point(19, 482)
+        Me.btndeleteactor.Location = New System.Drawing.Point(19, 513)
         Me.btndeleteactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btndeleteactor.Name = "btndeleteactor"
         Me.btndeleteactor.Size = New System.Drawing.Size(100, 28)
@@ -516,7 +518,7 @@ Partial Class Form2
         '
         'btnsavechanges
         '
-        Me.btnsavechanges.Location = New System.Drawing.Point(988, 629)
+        Me.btnsavechanges.Location = New System.Drawing.Point(988, 631)
         Me.btnsavechanges.Margin = New System.Windows.Forms.Padding(4)
         Me.btnsavechanges.Name = "btnsavechanges"
         Me.btnsavechanges.Size = New System.Drawing.Size(140, 28)
@@ -536,7 +538,8 @@ Partial Class Form2
         '
         'btneditactor
         '
-        Me.btneditactor.Location = New System.Drawing.Point(19, 517)
+        Me.btneditactor.Enabled = False
+        Me.btneditactor.Location = New System.Drawing.Point(19, 549)
         Me.btneditactor.Margin = New System.Windows.Forms.Padding(4)
         Me.btneditactor.Name = "btneditactor"
         Me.btneditactor.Size = New System.Drawing.Size(100, 28)
@@ -879,38 +882,44 @@ Partial Class Form2
         '
         'Label18
         '
-        Me.Label18.Location = New System.Drawing.Point(0, 0)
+        Me.Label18.Location = New System.Drawing.Point(1051, 298)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(100, 23)
         Me.Label18.TabIndex = 0
         '
         'btnfanart
         '
-        Me.btnfanart.Location = New System.Drawing.Point(0, 0)
+        Me.btnfanart.Location = New System.Drawing.Point(19, 382)
         Me.btnfanart.Name = "btnfanart"
         Me.btnfanart.Size = New System.Drawing.Size(75, 23)
         Me.btnfanart.TabIndex = 0
+        Me.btnfanart.Visible = False
         '
         'btnresetimage
         '
-        Me.btnresetimage.Location = New System.Drawing.Point(0, 0)
+        Me.btnresetimage.Location = New System.Drawing.Point(995, 142)
         Me.btnresetimage.Name = "btnresetimage"
         Me.btnresetimage.Size = New System.Drawing.Size(75, 23)
         Me.btnresetimage.TabIndex = 0
+        Me.btnresetimage.Text = "Reset Crop"
+        Me.btnresetimage.Visible = False
         '
         'btnsavecropped
         '
-        Me.btnsavecropped.Location = New System.Drawing.Point(0, 0)
+        Me.btnsavecropped.Location = New System.Drawing.Point(995, 172)
         Me.btnsavecropped.Name = "btnsavecropped"
         Me.btnsavecropped.Size = New System.Drawing.Size(75, 23)
         Me.btnsavecropped.TabIndex = 0
+        Me.btnsavecropped.Text = "Saved Cropped"
+        Me.btnsavecropped.Visible = False
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(0, 0)
+        Me.Button2.Location = New System.Drawing.Point(19, 353)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 0
+        Me.Button2.Visible = False
         '
         'starstxt
         '
@@ -929,9 +938,21 @@ Partial Class Form2
         Me.Label6.TabIndex = 116
         Me.Label6.Text = "Stars :"
         '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(21, 638)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(44, 16)
+        Me.Label7.TabIndex = 117
+        Me.Label7.Text = "Path : "
+        '
         'Form2
         '
         Me.ClientSize = New System.Drawing.Size(1152, 692)
+        Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.starstxt)
         Me.Controls.Add(Me.Label4)
@@ -969,6 +990,9 @@ Partial Class Form2
         Me.Controls.Add(Me.btnrescrape)
         Me.Controls.Add(Me.btnchangemovie)
         Me.Controls.Add(Me.btnsavechanges)
+        Me.Controls.Add(Me.btnaddactor)
+        Me.Controls.Add(Me.btndeleteactor)
+        Me.Controls.Add(Me.btneditactor)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.runtimetxt)
         Me.Controls.Add(Me.votestxt)
@@ -1095,4 +1119,5 @@ Partial Class Form2
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents starstxt As System.Windows.Forms.TextBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents Label7 As System.Windows.Forms.Label
 End Class

@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 
 Public Class Form2
-  
+    Const SetDefaults = True
     Dim editsmade As Boolean = False
     Dim thumbeditsmade As Boolean = False
     'Dim actorlist As Integer = Nothing
@@ -296,7 +296,7 @@ Public Class Form2
                     For Each thisresult In thumbstring("actorlist")
                         Select Case thisresult.Name
                             Case "actor"
-                                Dim newactor As New MovieActors
+                                Dim newactor As New str_MovieActors(SetDefaults)
                                 Dim detail As XmlNode = Nothing
                                 For Each detail In thisresult.ChildNodes
                                     Select Case detail.Name
@@ -1129,7 +1129,7 @@ Public Class Form2
         Dim newworkingmovieedit As FullMovieDetails = Form1.workingMovieDetails
         newworkingmovieedit.listactors.Clear()
         For f = 1 To actorcount
-            Dim actor As New MovieActors
+            Dim actor As New str_MovieActors(SetDefaults)
             If oldactors(f, 0) <> Nothing Then
                 actor.actorname = oldactors(f, 0)
                 If oldactors(f, 1) <> Nothing Then
@@ -1148,4 +1148,5 @@ Public Class Form2
 
 
 
+    
 End Class
