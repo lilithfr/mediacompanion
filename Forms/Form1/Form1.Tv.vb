@@ -12,10 +12,10 @@ Imports System.ComponentModel
 
 Partial Public Class Form1
     Public TvShows As New List(Of TvShow)
-    Public workingTvShow As New TvShow
-    Public workingEpisode As New List(Of TvEpisode)
-    Public tempWorkingTvShow As New TvShow
-    Public tempWorkingEpisode As New TvEpisode
+    'Public workingTvShow As New TvShow
+    'Public workingEpisode As New List(Of TvEpisode)
+    'Public tempWorkingTvShow As New TvShow
+    'Public tempWorkingEpisode As New TvEpisode
     Dim newEpisodeList As New List(Of TvEpisode)
     Dim languageList As New List(Of TvShowLanguages)
     Dim listOfShows As New List(Of PossibleShowList)
@@ -24,6 +24,8 @@ Partial Public Class Form1
     Dim imdbposterlist As New List(Of TvBanners)
     Dim tvdbmode As Boolean = False
     Dim usedlist As New List(Of TvBanners)
+
+    Dim tvobjects As New List(Of String)
 
     Public Sub ResetTvView()
         'RenameTVShowsToolStripMenuItem.Enabled = False
@@ -47,18 +49,240 @@ Partial Public Class Form1
         CollapseAllToolStripMenuItem.Enabled = False
         ReloadItemToolStripMenuItem.Enabled = False
         OpenFolderToolStripMenuItem.Enabled = False
+        
+        TextBox10.Text = ""
+        TextBox11.Text = ""
+        TextBox9.Text = ""
+        TextBox12.Text = ""
+        TextBox13.Text = ""
+        TextBox14.Text = ""
+        TextBox15.Text = ""
+        TextBox16.Text = ""
+        TextBox18.Text = ""
+
+        ComboBox4.Items.Clear()
+        ComboBox4.Text = ""
+        PictureBox6.Image = Nothing
+        PictureBox4.Image = Nothing
+        PictureBox5.Image = Nothing
+
+        tvdbposterlist.Clear()
+        PictureBox6.Image = Nothing
+        PictureBox4.Image = Nothing
+        PictureBox5.Image = Nothing
+        TextBox10.Text = ""
+        TextBox11.Text = ""
+        TextBox9.Text = ""
+        TextBox12.Text = ""
+        TextBox13.Text = ""
+        TextBox14.Text = ""
+        TextBox15.Text = ""
+        TextBox16.Text = ""
+        TextBox18.Text = ""
+        TextBox19.Text = ""
+        ComboBox4.Items.Clear()
+        ComboBox4.Text = ""
+
+
+
+        TextBox2.Text = ""
+        TextBox10.Text = ""
+        TextBox11.Text = ""
+        TextBox9.Text = ""
+        TextBox12.Text = ""
+        TextBox13.Text = ""
+        TextBox14.Text = ""
+        TextBox15.Text = ""
+        TextBox16.Text = ""
+        TextBox18.Text = ""
+        TextBox19.Text = ""
+        ComboBox4.Items.Clear()
+        ComboBox4.Text = ""
+
+        PictureBox6.Image = Nothing
+        PictureBox4.Image = Nothing
+        PictureBox5.Image = Nothing
+        ComboBox4.Items.Clear()
+        ComboBox4.Text = ""
+        For i = Panel13.Controls.Count - 1 To 0 Step -1
+            Panel13.Controls.RemoveAt(i)
+        Next
     End Sub
 
-    Private Sub TreeView1_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
+    'Private Sub TvTreeview_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
+    '    ResetTvView()
+    '    NodeSelected()
+    'End Sub
 
-        NodeSelected()
+
+    'Public Sub NodeSelected()
+
+
+    '    ResetTvView()
+    '    Dim SelectedName As String = TvTreeview.SelectedNode.Name.ToLower
+    '    If SelectedName.Contains("tvshow.nfo") Then
+    '        If TabControl3.TabPages(1).Text = "Screenshot" Then
+    '            TabControl3.TabPages.RemoveAt(1)
+    '        End If
+
+    '        ToolStripMenuItem1.Enabled = True
+    '        ExpandSelectedShowToolStripMenuItem.Enabled = True
+    '        ExpandAllToolStripMenuItem.Enabled = True
+    '        CollapseAllToolStripMenuItem.Enabled = True
+    '        CollapseSelectedShowToolStripMenuItem.Enabled = True
+    '        ReloadItemToolStripMenuItem.Enabled = True
+    '        OpenFolderToolStripMenuItem.Enabled = True
+    '        'load tvshow.nfo
+    '        ListBox3.Items.Clear()
+    '        TextBox26.Text = ""
+    '        Dim todo As Boolean = False
+    '        If workingTvShow Is Nothing Then todo = True
+
+    '        If workingTvShow.path = TvTreeview.SelectedNode.Name Then
+    '            Dim tempstring As String = "Search """ & workingTvShow.title & """ for new episodes"
+    '            SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
+    '            SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
+    '            SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
+    '            tempstring = "Download missing art for """ & workingTvShow.title & """"
+    '            DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
+    '            DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
+    '            DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
+    '            tempstring = "Display missing episodes for """ & workingTvShow.title & """"
+    '            MissingepisodesToolStripMenuItem.Text = tempstring
+    '            MissingepisodesToolStripMenuItem.Enabled = True
+    '            MissingepisodesToolStripMenuItem.Visible = True
+    '            DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
+    '            DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
+    '            RebuildThisShowToolStripMenuItem.Enabled = True
+    '            RebuildThisShowToolStripMenuItem.Visible = True
+    '        End If
+    '        If todo = False Then
+    '            If workingTvShow.path <> TvTreeview.SelectedNode.Name Then todo = True
+    '        End If
+    '        If todo = True Then
+    '            Call LoadTvShow(TvTreeview.SelectedNode.Name)
+    '            For tt = 0 To TvShows.Count
+    '                If TvShows(tt).fullpath = TvTreeview.SelectedNode.Name Then
+    '                    TvShows(tt).imdbid = workingTvShow.imdbid
+    '                    TvShows(tt).language = workingTvShow.language
+    '                    TvShows(tt).locked = workingTvShow.locked
+    '                    TvShows(tt).rating = workingTvShow.rating
+    '                    TvShows(tt).sortorder = workingTvShow.sortorder
+    '                    TvShows(tt).status = workingTvShow.status
+    '                    TvShows(tt).title = workingTvShow.title
+    '                    'basicTvList(tt).titleandyear = workingTvShow.title
+    '                    TvShows(tt).tvdbid = workingTvShow.tvdbid
+    '                    TvShows(tt).year = workingTvShow.year
+    '                    TvShows(tt).episodeactorsource = workingTvShow.episodeactorsource
+    '                    Exit For
+    '                End If
+    '            Next
+    '            If workingTvShow.locked = 1 Or workingTvShow.locked = 2 Then
+    '                For Each indnode As TreeNode In TvTreeview.Nodes
+    '                    If indnode.Name.ToLower = workingTvShow.path.ToLower Then
+    '                        indnode.StateImageIndex = 0
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            Else
+    '                For Each indnode As TreeNode In TvTreeview.Nodes
+    '                    If indnode.Name.ToLower = workingTvShow.path.ToLower Then
+    '                        indnode.StateImageIndex = -1
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+
+    '            Dim tempstring As String = "Search """ & workingTvShow.title & """ for new episodes"
+    '            SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
+    '            SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
+    '            SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
+    '            tempstring = "Download missing art for """ & workingTvShow.title & """"
+    '            DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
+    '            DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
+    '            DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
+    '            tempstring = "Display missing episodes for """ & workingTvShow.title & """"
+    '            MissingepisodesToolStripMenuItem.Text = tempstring
+    '            MissingepisodesToolStripMenuItem.Enabled = True
+    '            MissingepisodesToolStripMenuItem.Visible = True
+    '            DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
+    '            DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
+    '            RebuildThisShowToolStripMenuItem.Enabled = True
+    '            RebuildThisShowToolStripMenuItem.Visible = True
+    '            If workingTvShow.locked = 1 Then
+    '                Button60.Text = "Locked"
+    '                Button60.BackColor = Color.Red
+    '            ElseIf workingTvShow.locked = 0 Then
+    '                Button60.Text = "Open"
+    '                Button60.BackColor = Color.LawnGreen
+    '            ElseIf workingTvShow.locked = 2 Then
+    '                Button60.Text = "Un-Verified"
+    '                Button60.BackColor = Color.Red
+    '            End If
+    '            If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
+    '                TvTreeview.SelectedNode.ForeColor = Color.Red
+    '                TvTreeview.SelectedNode.Collapse()
+    '                Exit Sub
+    '            ElseIf workingTvShow.plot.ToLower.IndexOf("xml error") <> -1 Then
+    '                TvTreeview.SelectedNode.ForeColor = Color.Red
+    '            Else
+    '                If TvTreeview.SelectedNode.ForeColor = Color.Red Then
+    '                    For Each Sh In TvShows
+    '                        If Sh.fullpath = TvTreeview.SelectedNode.Name Then
+    '                            Sh.status = "ok"
+    '                            'Call savetvdata()
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                End If
+    '                'TvTreeview.SelectedNode.ForeColor = Color.Black
+    '            End If
+    '        Else
+    '            If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
+    '                TvTreeview.SelectedNode.ForeColor = Color.Red
+    '                TvTreeview.SelectedNode.Collapse()
+    '                Exit Sub
+    '            Else
+    '                'TvTreeview.SelectedNode.ForeColor = Color.Black
+    '            End If
+    '            If workingTvShow.path <> Nothing Then
+    '                TextBox2.Text = workingTvShow.title
+    '                Try
+    '                    PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+    '                Catch
+    '                    PictureBox5.Image = Nothing
+    '                End Try
+    '                Try
+    '                    PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+    '                Catch
+    '                    PictureBox4.Image = Nothing
+    '                End Try
+    '            End If
+    '            Panel9.Visible = False
+    '        End If
+    '    ElseIf TvTreeview.SelectedNode.Name.ToLower.Contains(".nfo") Then
+    '        'Episode
+    '    Else
+    '        'seasons
+
+    '    End If
+
+    'End Sub
+
+    Public Sub TvShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
+        loadtvshow(SelectedTvShow)
+
     End Sub
 
+    Private Sub LoadTvShow(ByVal Show As Nfo.TvShow)
+        Dim hg As New IO.DirectoryInfo(Show.FolderPath)
+        If Not hg.Exists Then
+            TextBox19.Text = "Unable to find folder: " & Show.FolderPath
+            TextBox2.Text = "Unable to find folder: " & Show.FolderPath
+        Else
 
-    Public Sub NodeSelected()
-        ResetTvView()
-        Dim SelectedName As String = TreeView1.SelectedNode.Name.ToLower
-        If SelectedName.Contains("tvshow.nfo") Then
+
+
             If TabControl3.TabPages(1).Text = "Screenshot" Then
                 TabControl3.TabPages.RemoveAt(1)
             End If
@@ -74,390 +298,391 @@ Partial Public Class Form1
             ListBox3.Items.Clear()
             TextBox26.Text = ""
             Dim todo As Boolean = False
-            If workingTvShow Is Nothing Then todo = True
 
-            If workingTvShow.path = TreeView1.SelectedNode.Name Then
-                Dim tempstring As String = "Search """ & workingTvShow.title & """ for new episodes"
-                SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
-                SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
-                SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
-                tempstring = "Download missing art for """ & workingTvShow.title & """"
-                DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
-                DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
-                DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Display missing episodes for """ & workingTvShow.title & """"
-                MissingepisodesToolStripMenuItem.Text = tempstring
-                MissingepisodesToolStripMenuItem.Enabled = True
-                MissingepisodesToolStripMenuItem.Visible = True
-                DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
-                DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
-                RebuildThisShowToolStripMenuItem.Enabled = True
-                RebuildThisShowToolStripMenuItem.Visible = True
-            End If
-            If todo = False Then
-                If workingTvShow.path <> TreeView1.SelectedNode.Name Then todo = True
-            End If
-            If todo = True Then
-                Call loadtvshow(TreeView1.SelectedNode.Name)
-                For tt = 0 To TvShows.Count
-                    If TvShows(tt).fullpath = TreeView1.SelectedNode.Name Then
-                        TvShows(tt).imdbid = workingTvShow.imdbid
-                        TvShows(tt).language = workingTvShow.language
-                        TvShows(tt).locked = workingTvShow.locked
-                        TvShows(tt).rating = workingTvShow.rating
-                        TvShows(tt).sortorder = workingTvShow.sortorder
-                        TvShows(tt).status = workingTvShow.status
-                        TvShows(tt).title = workingTvShow.title
-                        'basicTvList(tt).titleandyear = workingTvShow.title
-                        TvShows(tt).tvdbid = workingTvShow.tvdbid
-                        TvShows(tt).year = workingTvShow.year
-                        TvShows(tt).episodeactorsource = workingTvShow.episodeactorsource
-                        Exit For
-                    End If
-                Next
-                If workingTvShow.locked = 1 Or workingTvShow.locked = 2 Then
-                    For Each indnode As TreeNode In TreeView1.Nodes
-                        If indnode.Name.ToLower = workingTvShow.path.ToLower Then
-                            indnode.StateImageIndex = 0
-                            Exit For
-                        End If
-                    Next
-                Else
-                    For Each indnode As TreeNode In TreeView1.Nodes
-                        If indnode.Name.ToLower = workingTvShow.path.ToLower Then
-                            indnode.StateImageIndex = -1
-                            Exit For
-                        End If
-                    Next
-                End If
+            SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search """ & Show.Title.Value & """ for new episodes"
+            SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
+            SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
+            DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "Download missing art for """ & Show.Title.Value & """"
+            DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
+            DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
+            MissingepisodesToolStripMenuItem.Text = "Display missing episodes for """ & Show.Title.Value & """"
+            MissingepisodesToolStripMenuItem.Enabled = True
+            MissingepisodesToolStripMenuItem.Visible = True
+            DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
+            DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
+            RebuildThisShowToolStripMenuItem.Enabled = True
+            RebuildThisShowToolStripMenuItem.Visible = True
 
-                Dim tempstring As String = "Search """ & workingTvShow.title & """ for new episodes"
-                SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
-                SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
-                SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
-                tempstring = "Download missing art for """ & workingTvShow.title & """"
-                DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
-                DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
-                DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-                tempstring = "Display missing episodes for """ & workingTvShow.title & """"
-                MissingepisodesToolStripMenuItem.Text = tempstring
-                MissingepisodesToolStripMenuItem.Enabled = True
-                MissingepisodesToolStripMenuItem.Visible = True
-                DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
-                DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
-                RebuildThisShowToolStripMenuItem.Enabled = True
-                RebuildThisShowToolStripMenuItem.Visible = True
-                If workingTvShow.locked = 1 Then
-                    Button60.Text = "Locked"
-                    Button60.BackColor = Color.Red
-                ElseIf workingTvShow.locked = 0 Then
-                    Button60.Text = "Open"
-                    Button60.BackColor = Color.LawnGreen
-                ElseIf workingTvShow.locked = 2 Then
-                    Button60.Text = "Un-Verified"
-                    Button60.BackColor = Color.Red
-                End If
-                If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
-                    TreeView1.SelectedNode.ForeColor = Color.Red
-                    TreeView1.SelectedNode.Collapse()
-                    Exit Sub
-                ElseIf workingTvShow.plot.ToLower.IndexOf("xml error") <> -1 Then
-                    TreeView1.SelectedNode.ForeColor = Color.Red
-                Else
-                    If TreeView1.SelectedNode.ForeColor = Color.Red Then
-                        For Each Sh In TvShows
-                            If Sh.fullpath = TreeView1.SelectedNode.Name Then
-                                Sh.status = "ok"
-                                'Call savetvdata()
-                                Exit For
-                            End If
-                        Next
-                    End If
-                    'TreeView1.SelectedNode.ForeColor = Color.Black
-                End If
+            Dim tempstring As String = "Search """ & Show.Title.Value & """ for new episodes"
+            SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
+            SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
+            SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
+            tempstring = "Download missing art for """ & Show.Title.Value & """"
+            DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
+            DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
+            DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
+            tempstring = "Display missing episodes for """ & Show.Title.Value & """"
+            MissingepisodesToolStripMenuItem.Text = tempstring
+            MissingepisodesToolStripMenuItem.Enabled = True
+            MissingepisodesToolStripMenuItem.Visible = True
+            DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
+            DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
+            RebuildThisShowToolStripMenuItem.Enabled = True
+            RebuildThisShowToolStripMenuItem.Visible = True
+            If Show.State.Value = Nfo.ShowState.Locked Then
+                Button60.Text = "Locked"
+                Button60.BackColor = Color.Red
+            ElseIf Show.State.Value = Nfo.ShowState.Open Then
+                Button60.Text = "Open"
+                Button60.BackColor = Color.LawnGreen
+            ElseIf Show.State.Value = Nfo.ShowState.Unverified Then
+                Button60.Text = "Un-Verified"
+                Button60.BackColor = Color.Yellow
             Else
-                If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
-                    TreeView1.SelectedNode.ForeColor = Color.Red
-                    TreeView1.SelectedNode.Collapse()
-                    Exit Sub
-                Else
-                    'TreeView1.SelectedNode.ForeColor = Color.Black
-                End If
-                If workingTvShow.path <> Nothing Then
-                    TextBox2.Text = workingTvShow.title
-                    Try
-                        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
-                    Catch
-                        PictureBox5.Image = Nothing
-                    End Try
-                    Try
-                        PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
-                    Catch
-                        PictureBox4.Image = Nothing
-                    End Try
-                End If
-                Panel9.Visible = False
+                Button60.Text = "Error"
+                Button60.BackColor = Color.Gray
             End If
-        ElseIf TreeView1.SelectedNode.Name.ToLower.Contains(".nfo") Then
-            'loadepisode
-            If TabControl3.TabPages(1).Text <> "Screenshot" Then
-                If screenshotTab IsNot Nothing Then
-                    TabControl3.TabPages.Insert(1, screenshotTab)
-                    TabControl3.Refresh()
-                End If
-            End If
-            Panel9.Visible = True
-            If workingTvShow.plot IsNot Nothing AndAlso workingTvShow.plot.Contains("Unable to find folder:") Then
-                TreeView1.SelectedNode.Parent.Parent.ForeColor = Color.Red
-                TreeView1.SelectedNode.Parent.Parent.Collapse()
-                ExpandSelectedShowToolStripMenuItem.Enabled = True
-                ExpandAllToolStripMenuItem.Enabled = True
-                CollapseAllToolStripMenuItem.Enabled = True
-                CollapseSelectedShowToolStripMenuItem.Enabled = True
-                ReloadItemToolStripMenuItem.Enabled = True
-                Exit Sub
+            Button60.Tag = Show
+
+
+            If Preferences.postertype = "banner" Then
+                PictureBox5.Image = Show.ImageBanner.Image
             Else
-                'TreeView1.SelectedNode.ForeColor = Color.Black
+                PictureBox5.Image = Show.ImagePoster.Image
             End If
-            Dim season As String = TreeView1.SelectedNode.Parent.Text.Replace("Season ", "")
-            Dim episode As String = TreeView1.SelectedNode.Text.Substring(0, 3)
-            episode = episode.TrimEnd(" ")
-            If Not IsNumeric(episode) Then
-                episode = TreeView1.SelectedNode.Text.Substring(0, 2)
+
+            PictureBox4.Image = Show.ImageFanart.Image
+
+            Panel9.Visible = False
+
+            If Show.Title <> Nothing Then TextBox2.Text = Show.Title
+            If Show.Premiered <> Nothing Then TextBox10.Text = Show.Premiered
+            If Show.Genre <> Nothing Then TextBox11.Text = Show.Genre
+            If Show.TvdbId <> Nothing Then TextBox9.Text = Show.TvdbId
+            If Show.ImdbId <> Nothing Then TextBox12.Text = Show.ImdbId
+            If Show.Rating <> Nothing Then TextBox13.Text = Show.Rating
+            If Show.Mpaa <> Nothing Then TextBox14.Text = Show.Mpaa
+            If Show.Runtime <> Nothing Then TextBox15.Text = Show.Runtime
+            If Show.Studio <> Nothing Then TextBox16.Text = Show.Studio
+            If Show.Plot <> Nothing Then TextBox19.Text = Show.Plot
+
+            If String.IsNullOrEmpty(Show.SortOrder) Then Show.SortOrder.Value = Preferences.sortorder
+            If Show.SortOrder.Value = "dvd" Then
+                Button47.Text = "DVD"
+            ElseIf Show.SortOrder.Value = "default" Then
+                Button47.Text = "Default"
             End If
-            If season.ToLower.IndexOf("specials") <> -1 Then season = "00"
-            Call loadtvepisode(TreeView1.SelectedNode.Name, season, episode)
-            Try
-                ToolStripMenuItem1.Enabled = True
-                ExpandSelectedShowToolStripMenuItem.Enabled = True
-                ExpandAllToolStripMenuItem.Enabled = True
-                CollapseAllToolStripMenuItem.Enabled = True
-                CollapseSelectedShowToolStripMenuItem.Enabled = True
-                ReloadItemToolStripMenuItem.Enabled = True
-                OpenFolderToolStripMenuItem.Enabled = True
-                If workingEpisode(workingEpisodeIndex).plot.IndexOf("xml error") = -1 And workingEpisode(workingEpisodeIndex).plot.IndexOf("missing file") = -1 Then
-
-                    If TreeView1.SelectedNode.ForeColor = Color.Red Then
-                        For Each Sh In TvShows
-                            If TreeView1.SelectedNode.Name.IndexOf(Sh.fullpath.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
-                                For Each ep In Sh.allepisodes
-
-                                Next
-
-                                'Call savetvdata()
-                                Exit For
-                            End If
-                        Next
-                        'TreeView1.SelectedNode.ForeColor = Color.Black
-                        Call reloadtvshow()
-                    End If
+            '0	-	all from tvdb
+            '1	-	all from imdb
+            '2	-	tv imdb, eps tvdb
+            '3	-	tv TVDB, eps IMDB
+            If Show.EpisodeActorSource.Value Is Nothing Then
+                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "2" Then
+                    Show.EpisodeActorSource.Value = "tvdb"
                 Else
-                    If TreeView1.SelectedNode.ForeColor = Color.Black Then
-                        For Each Sh In TvShows
-                            If TreeView1.SelectedNode.Name.ToLower.IndexOf(Sh.fullpath.ToLower.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
-                                For Each ep In Sh.allepisodes
-                                    If ep.episodepath = TreeView1.SelectedNode.Name Then
-                                        'ep.status = "xml error"
-                                        Exit For
-                                    End If
-                                Next
-                                'Call savetvdata()
-                                Exit For
-                            End If
-                        Next
-                        'TreeView1.SelectedNode.ForeColor = Color.Black
-                        'Call reloadtvshow()
-                        TreeView1.SelectedNode.ForeColor = Color.Red
-                    End If
+                    Show.EpisodeActorSource.Value = "imdb"
                 End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
+            End If
+
+            If String.IsNullOrEmpty(Show.EpisodeActorSource.Value) Then
+                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "2" Then
+                    Show.EpisodeActorSource.Value = "tvdb"
+                Else
+                    Show.EpisodeActorSource.Value = "imdb"
+                End If
+            End If
+
+            If Show.EpisodeActorSource.Value = "imdb" Then
+                Button46.Text = "IMDB"
+            ElseIf Show.EpisodeActorSource.Value = "tvdb" Then
+                Button46.Text = "TVDB"
+            End If
+
+            If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
+                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "3" Then
+                    Show.TvShowActorSource.Value = "tvdb"
+                Else
+                    Show.TvShowActorSource.Value = "imdb"
+                End If
+            End If
+
+            If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
+                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "3" Then
+                    Show.TvShowActorSource.Value = "tvdb"
+                Else
+                    Show.TvShowActorSource.Value = "imdb"
+                End If
+            End If
+
+            If Show.TvShowActorSource.Value = "imdb" Then
+                Button45.Text = "IMDB"
+            ElseIf Show.TvShowActorSource.Value = "tvdb" Then
+                Button45.Text = "TVDB"
+            End If
+
+            For Each actor In Show.ListActors
+                ComboBox4.Items.Add(actor.actorname)
+            Next
+
+            If Not ComboBox4.Items.Count = 0 Then
+                ComboBox4.SelectedIndex = 0
+            End If
+        End If
+        Panel9.Visible = False
+    End Sub
+
+
+    Public Sub SeasonSelected(ByRef SelectedSeason As Nfo.TvSeason)
+        Dim Show As Nfo.TvShow
+        If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
+            Show = SelectedSeason.SeasonNode.Parent.Tag
         Else
-            'seasons
-            If TreeView1.SelectedNode.ForeColor = Color.Blue And TreeView1.SelectedNode.Level = 2 Then
-                Button43.Enabled = False
-                Dim todo As Boolean = False
-                If workingTvShow.path <> TreeView1.SelectedNode.Parent.Parent.Name Then todo = True
-                If todo = True Then
-                    Call loadtvshow(TreeView1.SelectedNode.Parent.Parent.Name)
-                    For tt = 0 To TvShows.Count
-                        If TvShows(tt).fullpath = TreeView1.SelectedNode.Parent.Parent.Name Then
-                            TvShows(tt).imdbid = workingTvShow.imdbid
-                            TvShows(tt).language = workingTvShow.language
-                            TvShows(tt).locked = workingTvShow.locked
-                            TvShows(tt).rating = workingTvShow.rating
-                            TvShows(tt).sortorder = workingTvShow.sortorder
-                            TvShows(tt).status = workingTvShow.status
-                            TvShows(tt).title = workingTvShow.title
-                            'basicTvList(tt).titleandyear = workingTvShow.title
-                            TvShows(tt).tvdbid = workingTvShow.tvdbid
-                            TvShows(tt).year = workingTvShow.year
-                            TvShows(tt).episodeactorsource = workingTvShow.episodeactorsource
-                            Exit For
-                        End If
-                    Next
+            MsgBox("Show tag not set")
+            Exit Sub
+        End If
+
+
+        If TabControl3.TabPages(1).Text = "Screenshot" Then
+            TabControl3.TabPages.RemoveAt(1)
+        End If
+        Panel9.Visible = False
+        ExpandSelectedShowToolStripMenuItem.Enabled = True
+        ExpandAllToolStripMenuItem.Enabled = True
+        CollapseAllToolStripMenuItem.Enabled = True
+        CollapseSelectedShowToolStripMenuItem.Enabled = True
+        RenameTVShowsToolStripMenuItem.Enabled = True
+        RenameTVShowsToolStripMenuItem.Visible = True
+
+        PictureBox5.Image = Nothing
+        PictureBox4.Image = Nothing
+        'MsgBox("Season")
+        Dim season As String = SelectedSeason.SeasonLabel
+        Dim trueseason As Integer = SelectedSeason.SeasonNumber
+        Dim PaddedSeason As String = Utilities.PadNumber(SelectedSeason.SeasonNumber, 2)
+
+
+        If trueseason = -1 Then
+            If SelectedSeason.Poster.Image IsNot Nothing Then
+                PictureBox5.Image = SelectedSeason.Poster.Image
+            Else
+                If Preferences.postertype = "banner" Then
+                    PictureBox5.Image = Show.ImagePoster.Image
+                Else
+                    PictureBox5.Image = Show.ImageBanner.Image
                 End If
+            End If
+        Else
+            PictureBox5.Image = SelectedSeason.Poster.Image
+            If PictureBox5.Image Is Nothing Then
+                PictureBox5.Image = Show.ImageAllSeasons.Image
+            End If
+
+            If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
                 Try
-                    PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+                    PictureBox5.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
                 Catch
                     PictureBox5.Image = Nothing
                 End Try
-                Try
-                    PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
-                Catch
-                    PictureBox4.Image = Nothing
-                End Try
-                Panel9.Visible = True
-                TextBox2.Text = """"
-                TextBox20.Text = ""
-                TextBox21.Text = ""
-                TextBox22.Text = ""
-                TextBox23.Text = ""
-                TextBox24.Text = ""
-                TextBox25.Text = ""
-                ComboBox5.Items.Clear()
-                ComboBox5.Text = ""
-
-                TextBox17.Text = ""
-                TextBox29.Text = ""
-                TextBox29.Text = ""
-                TextBox17.Text = ""
-                For Each item In TvShows
-                    Dim tempstring As String = TreeView1.SelectedNode.Parent.Parent.Name
-                    If tempstring = item.fullpath Then
-                        For Each ep In item.missingepisodes
-                            Dim seasonno As String = ""
-                            Dim episodeno As String = ""
-                            If ep.episodepath = TreeView1.SelectedNode.Name Then
-                                If ep.seasonno.Length = 1 Then
-                                    seasonno = "0" & ep.seasonno
-                                Else
-                                    episodeno = ep.seasonno
-                                End If
-                                If ep.episodeno.Length = 1 Then
-                                    episodeno = "0" & ep.episodeno
-                                Else
-                                    episodeno = ep.episodeno
-                                End If
-                                TextBox2.Text = "S" & seasonno & "E" & episodeno & " - " & ep.title
-                                TextBox21.Text = "This episode is missing from your collection"
-                                TextBox24.Text = ep.playcount
-                                Exit For
-                            End If
-                        Next
-                    End If
-                Next
             Else
-
-                If TabControl3.TabPages(1).Text = "Screenshot" Then
-                    TabControl3.TabPages.RemoveAt(1)
-                End If
-                Panel9.Visible = False
-                ExpandSelectedShowToolStripMenuItem.Enabled = True
-                ExpandAllToolStripMenuItem.Enabled = True
-                CollapseAllToolStripMenuItem.Enabled = True
-                CollapseSelectedShowToolStripMenuItem.Enabled = True
-                RenameTVShowsToolStripMenuItem.Enabled = True
-                RenameTVShowsToolStripMenuItem.Visible = True
                 Try
-                    If workingTvShow.path <> TreeView1.SelectedNode.Parent.Name Then
-                        loadtvshow(TreeView1.SelectedNode.Parent.Name)
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
+                    PictureBox5.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                Catch
+                    PictureBox5.Image = Nothing
                 End Try
-                If workingTvShow.plot IsNot Nothing AndAlso workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
-                    TreeView1.SelectedNode.Parent.ForeColor = Color.Red
-                    TreeView1.SelectedNode.Parent.Collapse()
-                    Exit Sub
-                Else
-                    'TreeView1.SelectedNode.ForeColor = Color.Black
-                End If
-                PictureBox5.Image = Nothing
-                PictureBox4.Image = Nothing
-                'MsgBox("Season")
-                Dim season As String = TreeView1.SelectedNode.Text.Replace("Season ", "")
-                Dim trueseason As String = season
-                If season.IndexOf("0") = 0 Then
-                    season = season.Substring(1, 1)
-                End If
-
-
-                Try
-                    If trueseason <> "Specials" Then
-                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
-                            Try
-                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
-                            Catch
-                                PictureBox5.Image = Nothing
-                            End Try
-                        Else
-                            Try
-                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
-                            Catch
-                                PictureBox5.Image = Nothing
-                            End Try
-                        End If
-                    Else
-                        trueseason = "00"
-                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
-                            Try
-                                Dim fi As New FileInfo(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn"))
-                                Dim rename2 As String = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
-                                fi.MoveTo(rename2)
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                            End Try
-                        End If
-                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
-                            Try
-                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
-                            Catch
-                                PictureBox5.Image = Nothing
-                            End Try
-                        Else
-                            Try
-                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
-                            Catch
-                                PictureBox5.Image = Nothing
-                            End Try
-                        End If
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                End Try
-                If workingTvShow.path <> Nothing Then
-                    Try
-                        PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
-                    Catch
-                        PictureBox4.Image = Nothing
-                    End Try
-                End If
             End If
+        End If
+
+        If Show.NfoFilePath <> Nothing Then
+            Try
+                PictureBox4.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
+            Catch
+                PictureBox4.Image = Nothing
+            End Try
         End If
 
     End Sub
 
-    Public Sub TvShowSelected()
+    Public Sub EpisodeSelected(ByRef SelectedEpisode As Nfo.TvEpisode)
+        'loadepisode
+        If TabControl3.TabPages(1).Text <> "Screenshot" Then
+            If screenshotTab IsNot Nothing Then
+                TabControl3.TabPages.Insert(1, screenshotTab)
+                TabControl3.Refresh()
+            End If
+        End If
+        Panel9.Visible = True
+        'If workingTvShow.plot IsNot Nothing AndAlso workingTvShow.plot.Contains("Unable to find folder:") Then
+        '    TvTreeview.SelectedNode.Parent.Parent.ForeColor = Color.Red
+        '    TvTreeview.SelectedNode.Parent.Parent.Collapse()
+        '    ExpandSelectedShowToolStripMenuItem.Enabled = True
+        '    ExpandAllToolStripMenuItem.Enabled = True
+        '    CollapseAllToolStripMenuItem.Enabled = True
+        '    CollapseSelectedShowToolStripMenuItem.Enabled = True
+        '    ReloadItemToolStripMenuItem.Enabled = True
+        '    Exit Sub
+        'Else
+        '    'TvTreeview.SelectedNode.ForeColor = Color.Black
+        'End Ifr
+
+
+        Dim season As Integer = SelectedEpisode.Season.Value
+        Dim episode As Integer = SelectedEpisode.Episode.Value
+        Dim SeasonObj As Nfo.TvSeason
+        If SelectedEpisode.EpisodeNode.Parent IsNot Nothing Then
+            SeasonObj = SelectedEpisode.EpisodeNode.Parent.Tag
+            If season = -1 Then season = SeasonObj.SeasonLabel
+        End If
+
+
+        Call LoadTvEpisode(SelectedEpisode)
+
+        ToolStripMenuItem1.Enabled = True
+        ExpandSelectedShowToolStripMenuItem.Enabled = True
+        ExpandAllToolStripMenuItem.Enabled = True
+        CollapseAllToolStripMenuItem.Enabled = True
+        CollapseSelectedShowToolStripMenuItem.Enabled = True
+        ReloadItemToolStripMenuItem.Enabled = True
+        OpenFolderToolStripMenuItem.Enabled = True
+        'If SelectedEpisode.Plot.IndexOf("xml error") = -1 And SelectedEpisode.Plot.IndexOf("missing file") = -1 Then
+
+        '    If TvTreeview.SelectedNode.ForeColor = Color.Red Then
+        '        For Each Sh In TvShows
+        '            If TvTreeview.SelectedNode.Name.IndexOf(Sh.fullpath.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
+        '                For Each ep In Sh.allepisodes
+
+        '                Next
+
+        '                'Call savetvdata()
+        '                Exit For
+        '            End If
+        '        Next
+        '        'TvTreeview.SelectedNode.ForeColor = Color.Black
+        '        Call reloadtvshow()
+        '    End If
+        'Else
+        '    If TvTreeview.SelectedNode.ForeColor = Color.Black Then
+        '        For Each Sh In TvShows
+        '            If TvTreeview.SelectedNode.Name.ToLower.IndexOf(Sh.fullpath.ToLower.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
+        '                For Each ep In Sh.allepisodes
+        '                    If ep.episodepath = TvTreeview.SelectedNode.Name Then
+        '                        'ep.status = "xml error"
+        '                        Exit For
+        '                    End If
+        '                Next
+        '                'Call savetvdata()
+        '                Exit For
+        '            End If
+        '        Next
+        '        'TvTreeview.SelectedNode.ForeColor = Color.Black
+        '        'Call reloadtvshow()
+        '        TvTreeview.SelectedNode.ForeColor = Color.Red
+        '    End If
+        'End If
 
     End Sub
 
-    Public Sub SeasonSelected()
+    Private Sub LoadTvEpisode(ByRef Episode As Nfo.TvEpisode)
+        Dim tempstring As String = ""
+        TextBox2.Text = ""
+        TextBox20.Text = ""
+        TextBox21.Text = ""
+        TextBox22.Text = ""
+        TextBox23.Text = ""
+        TextBox24.Text = ""
+        TextBox25.Text = ""
+        ComboBox5.Items.Clear()
+        ComboBox5.Text = ""
+
+        TextBox17.Text = ""
+        TextBox29.Text = ""
+        TextBox29.Text = IO.Path.GetFileName(Episode.NfoFilePath)
+        TextBox17.Text = Episode.FolderPath
+        If Not IO.File.Exists(Episode.NfoFilePath) Then
+            TextBox2.Text = "Unable to find episode: " & Episode.NfoFilePath
+            TextBox21.Text = "Unable to find episode: " & Episode.NfoFilePath
+            Panel9.Visible = True
+            Episode.EpisodeNode.BackColor = Color.Red
+            Exit Sub
+        Else
+            Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
+        End If
+        TextBox2.Text = Episode.Title.Value
+        TextBox20.Text = Episode.Rating.Value
+        TextBox21.Text = Episode.Plot.Value
+        TextBox22.Text = Episode.Director.Value
+        TextBox23.Text = Episode.Credits.Value
+        TextBox24.Text = Episode.Aired.Value
+
+        For Each actor In Episode.ListActors
+            If actor.actorname <> Nothing Then
+                ComboBox5.Items.Add(actor.actorname)
+            End If
+        Next
+        If ComboBox5.Items.Count = 0 Then
+            For Each actor In Episode.ListActors
+                If actor.actorname <> Nothing Then
+                    ComboBox5.Items.Add(actor.actorname)
+                End If
+            Next
+        Else
+            ComboBox5.SelectedIndex = 0
+        End If
+        '        Try
+
+
+        '        Catch ex As Exception
+        '#If SilentErrorScream Then
+        '            Throw ex
+        '#End If
+        '        End Try
+
+        'tempstring = Episode.NfoFilePath.Substring(0, Episode.NfoFilePath.Length - 3)
+        'tempstring = tempstring & "tbn"
+        If Episode.Thumbnail.Image IsNot Nothing Then
+
+            'Dim bitmap2 As New Bitmap(tempstring)
+            'Dim bitmap3 As New Bitmap(bitmap2)
+            'bitmap2.Dispose()
+            PictureBox4.Image = Episode.Thumbnail.Image
+            PictureBox14.Image = Episode.Thumbnail.Image
+
+        Else
+
+            PictureBox14.Image = Nothing
+
+            PictureBox4.Image = Nothing
+
+        End If
+
+        'If Episode.Season.Value <> 0 Then
+        '    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & Episode.Season.Value.ToString & ".tbn")) Then
+        '        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & Episode.Season.Value.ToString & ".tbn")
+        '    End If
+        'Else
+        '    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & Episode.Season.Value.ToString & ".tbn")) Then
+
+        '        Dim fi As New FileInfo(workingTvShow.path.Replace("tvshow.nfo", "season00.tbn"))
+        '        Dim rename2 As String = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
+        '        fi.MoveTo(rename2)
+
+        '    End If
+
+        '    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
+        '        PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
+        '    End If
+
+        'End If
+
+        'If Episode.Season.Value <> "Unknown" Then
+        '    TextBox2.Text = "S" & Episode.Season.Value & "E" & Episode.Season.Value & " - " & Episode.Title.Value
+        'Else
+        '    TextBox2.Text = Episode.Title.Value & ": " & IO.Path.GetFileName(Episode.NfoFilePath)
+        '    TextBox21.Text = "This media file has been found by Media Companion" & vbCrLf & "Within this TV Shows Folder" & vbCrLf & vbCrLf & "Season and/or episode numbers could" & vbCrLf & "identified from the filename"
+        'End If
+        Panel9.Visible = True
 
     End Sub
 
-    Public Sub EpisodeSelected()
-
-    End Sub
 
     Private Sub RebuildTvShows()
         tvrebuildlog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
@@ -468,7 +693,7 @@ Partial Public Class Form1
         TextBox33.Text = ""
         Me.Enabled = False
         TvShows.Clear()
-        TreeView1.Nodes.Clear()
+        TvTreeview.Nodes.Clear()
         For Each tvfolder In Preferences.tvFolders
             'tvrebuildlog("Adding " & tvfolder)
             Dim hg As New IO.DirectoryInfo(tvfolder)
@@ -493,6 +718,8 @@ Partial Public Class Form1
                     'Next
                     'If skip = False Then
                     TvShows.Add(newtvshownfo)
+                    newtvshownfo.SearchForEpisodesInFolder()
+                    TvTreeview.Nodes.Add(newtvshownfo.ShowNode)
                     'End If
                 End If
             End If
@@ -506,11 +733,11 @@ Partial Public Class Form1
 
 
         CleanFolderList()
-        Call populatetvtree()
+        'Call populatetvtree()
 
         Me.Enabled = True
 
-        Call savetvdata()
+        'Call savetvdata()
 
     End Sub
 
@@ -593,7 +820,7 @@ Partial Public Class Form1
                     PictureBox9.Image = Nothing
                 End Try
             End If
-      
+
             Call checklanguage()
             messbox.Close()
         Else
@@ -601,6 +828,21 @@ Partial Public Class Form1
         End If
     End Sub
 
+    Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            TvShowSelected(TvTreeview.SelectedNode.Tag)
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            SeasonSelected(TvTreeview.SelectedNode.Tag)
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            EpisodeSelected(TvTreeview.SelectedNode.Tag)
+        Else
+            MsgBox("None")
+        End If
+
+
+    End Sub
 
     Private Function gettoptvshow(ByVal tvshowname As String)
 
@@ -675,92 +917,93 @@ Partial Public Class Form1
 
         Dim NewShow As TvShow = e.UserState
 
-  
+
         ListtvFiles(NewShow, "*.NFO")
         realTvPaths.Add(NewShow.FolderPath)
+        TvTreeview.Nodes.Add(NewShow.ShowNode)
 
         CleanFolderList()
-        For Each item In TvShows
-            If item.FolderPath = NewShow.FolderPath Then
-                Dim cnode As TreeNode = Nothing
-                Dim tempstring As String = String.Empty
-                Dim tempint As Integer
+        'For Each item In TvShows
+        '    If item.FolderPath = NewShow.FolderPath Then
+        '        Dim cnode As TreeNode = Nothing
+        '        Dim tempstring As String = String.Empty
+        '        Dim tempint As Integer
 
-                totalTvShowCount += 1
-                Dim shownode As Integer = -1
+        '        totalTvShowCount += 1
+        '        Dim shownode As Integer = -1
 
-                If item.status IsNot Nothing AndAlso item.status.ToLower.IndexOf("xml error") <> -1 Then
-                    Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
-                Else
-                    Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
-                End If
+        '        If item.status IsNot Nothing AndAlso item.status.ToLower.IndexOf("xml error") <> -1 Then
+        '            Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
+        '        Else
+        '            Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
+        '        End If
 
-                For Each episode In item.allepisodes
-                    totalEpisodeCount += 1
+        '        For Each episode In item.allepisodes
+        '            totalEpisodeCount += 1
 
-                    Dim seasonno As Integer = -10
-                    seasonno = Convert.ToInt32(episode.seasonno)
+        '            Dim seasonno As Integer = -10
+        '            seasonno = Convert.ToInt32(episode.seasonno)
 
-                    For g = 0 To TreeView1.Nodes.Count - 1
-                        If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
-                            cnode = TreeView1.Nodes(g)
-                            shownode = g
-                            Exit For
-                        End If
-                    Next
+        '            For g = 0 To TvTreeview.Nodes.Count - 1
+        '                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
+        '                    cnode = TvTreeview.Nodes(g)
+        '                    shownode = g
+        '                    Exit For
+        '                End If
+        '            Next
 
-                    Dim seasonstring As String = Nothing
+        '            Dim seasonstring As String = Nothing
 
-                    If seasonno <> 0 And seasonno <> -1 Then
-                        If seasonno < 10 Then
-                            tempstring = "Season 0" & seasonno.ToString
-                        Else
-                            tempstring = "Season " & seasonno.ToString
-                        End If
-                    ElseIf seasonno = 0 Then
-                        tempstring = "Specials"
-                        'ElseIf seasonno = -1 Then
-                        '    tempstring = "Unknown"
-                    End If
-                    Dim node As TreeNode
-                    Dim alreadyexists As Boolean = False
-                    For Each node In cnode.Nodes
-                        If node.Text = tempstring Then
-                            alreadyexists = True
-                            Exit For
-                        End If
-                    Next
-                    If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+        '            If seasonno <> 0 And seasonno <> -1 Then
+        '                If seasonno < 10 Then
+        '                    tempstring = "Season 0" & seasonno.ToString
+        '                Else
+        '                    tempstring = "Season " & seasonno.ToString
+        '                End If
+        '            ElseIf seasonno = 0 Then
+        '                tempstring = "Specials"
+        '                'ElseIf seasonno = -1 Then
+        '                '    tempstring = "Unknown"
+        '            End If
+        '            Dim node As TreeNode
+        '            Dim alreadyexists As Boolean = False
+        '            For Each node In cnode.Nodes
+        '                If node.Text = tempstring Then
+        '                    alreadyexists = True
+        '                    Exit For
+        '                End If
+        '            Next
+        '            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
 
-                    For Each node In cnode.Nodes
-                        If node.Text = tempstring Then
-                            tempint = node.Index
+        '            For Each node In cnode.Nodes
+        '                If node.Text = tempstring Then
+        '                    tempint = node.Index
 
-                            Exit For
-                        End If
-                    Next
+        '                    Exit For
+        '                End If
+        '            Next
 
-                    Dim eps As String
-                    If episode.episodeno < 10 Then
-                        eps = "0" & episode.episodeno.ToString
-                    Else
-                        eps = episode.episodeno.ToString
-                    End If
-                    eps = eps & " - " & episode.title
-                    If episode.imdbid = Nothing Then
-                        episode.imdbid = ""
-                    End If
+        '            Dim eps As String
+        '            If episode.episodeno < 10 Then
+        '                eps = "0" & episode.episodeno.ToString
+        '            Else
+        '                eps = episode.episodeno.ToString
+        '            End If
+        '            eps = eps & " - " & episode.title
+        '            If episode.imdbid = Nothing Then
+        '                episode.imdbid = ""
+        '            End If
 
-                    If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
-                    Else
-                        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
-                    End If
+        '            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
+        '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+        '            Else
+        '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+        '            End If
 
 
-                Next
-            End If
-        Next
+        '        Next
+        '    End If
+        'Next
         TextBox32.Text = totalTvShowCount.ToString
         TextBox33.Text = totalEpisodeCount.ToString
         Me.BringToFront()
@@ -777,6 +1020,7 @@ Partial Public Class Form1
 
             If NewShow.FileContainsReadableXml Then
                 NewShow.Load()
+                NewShow.UpdateTreenode()
                 TvShows.Add(NewShow)
 
                 TvShows.Add(NewShow)
@@ -871,7 +1115,7 @@ Partial Public Class Form1
 
                         If Not String.IsNullOrEmpty(NewAct.actorthumb) Then
                             If NewAct.actorthumb <> "" And Preferences.actorseasy = True And speedy = False Then
-                                If workingTvShow.tvshowactorsource <> "imdb" Or workingTvShow.imdbid = Nothing Then
+                                If NewShow.tvshowactorsource <> "imdb" Or NewShow.imdbid = Nothing Then
                                     Dim workingpath As String = newtvshow.path.Replace(IO.Path.GetFileName(newtvshow.path), "")
                                     workingpath = workingpath & ".actors\"
 
@@ -1009,20 +1253,18 @@ Partial Public Class Form1
                 'End If
                 Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.tvdbid, True)
                 If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
-
-
                     If Preferences.downloadtvseasonthumbs = True Then
                         For f = 0 To ArtList.Items.SeasonMax
                             Dim seasonposter As String = ""
                             For Each Image In ArtList.Items
-                                If Image.Season = f.ToString And Image.Language = templanguage Then
+                                If Image.Season.Value = f.ToString And Image.Language.Value = templanguage Then
                                     seasonposter = Image.Url
                                     Exit For
                                 End If
                             Next
                             If seasonposter = "" Then
                                 For Each Image In ArtList.Items
-                                    If Image.Season = f.ToString And Image.Language = "en" Then
+                                    If Image.Season.Value = f.ToString And Image.Language.Value = "en" Then
                                         seasonposter = Image.Url
                                         Exit For
                                     End If
@@ -1030,7 +1272,7 @@ Partial Public Class Form1
                             End If
                             If seasonposter = "" Then
                                 For Each Image In ArtList.Items
-                                    If Image.Season = f.ToString Then
+                                    If Image.Season.Value = f.ToString Then
                                         seasonposter = Image.Url
                                         Exit For
                                     End If
@@ -1060,7 +1302,7 @@ Partial Public Class Form1
                         fanartposter = ""
                         If CheckBox7.CheckState = CheckState.Checked Then
                             For Each Image In ArtList.Items
-                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Fanart Then
+                                If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Fanart Then
                                     fanartposter = Image.Url
                                     Exit For
                                 End If
@@ -1068,7 +1310,7 @@ Partial Public Class Form1
                         End If
                         If fanartposter = "" Then
                             For Each Image In ArtList.Items
-                                If Image.Language = "en" And Image.Type = Tvdb.ArtType.Fanart Then
+                                If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Fanart Then
                                     fanartposter = Image.Url
                                     Exit For
                                 End If
@@ -1151,14 +1393,14 @@ Partial Public Class Form1
 
                         If Preferences.postertype = "poster" Then 'poster
                             For Each Image In ArtList.Items
-                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Poster Then
+                                If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Poster Then
                                     posterurl = Image.Url
                                     Exit For
                                 End If
                             Next
                             If posterurlpath = "" Then
                                 For Each Image In ArtList.Items
-                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Poster Then
+                                    If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Poster Then
                                         posterurlpath = Image.Url
                                         Exit For
                                     End If
@@ -1177,14 +1419,14 @@ Partial Public Class Form1
                             End If
                         ElseIf Preferences.postertype = "banner" Then 'banner
                             For Each Image In ArtList.Items
-                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Banner Then
+                                If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Banner Then
                                     posterurl = Image.Url
                                     Exit For
                                 End If
                             Next
                             If posterurlpath = "" Then
                                 For Each Image In ArtList.Items
-                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Banner Then
+                                    If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Banner Then
                                         posterurlpath = Image.Url
                                         Exit For
                                     End If
@@ -1217,14 +1459,14 @@ Partial Public Class Form1
                     If Preferences.seasonall <> "none" And seasonallpath = "" Then
                         If Preferences.seasonall = "poster" Then 'poster
                             For Each Image In ArtList.Items
-                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Poster Then
+                                If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Poster Then
                                     seasonallpath = Image.Url
                                     Exit For
                                 End If
                             Next
                             If seasonallpath = "" Then
                                 For Each Image In ArtList.Items
-                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Poster Then
+                                    If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Poster Then
                                         seasonallpath = Image.Url
                                         Exit For
                                     End If
@@ -1240,14 +1482,14 @@ Partial Public Class Form1
                             End If
                         ElseIf Preferences.seasonall = "wide" = True Then 'banner
                             For Each Image In ArtList.Items
-                                If Image.Language = templanguage And Image.Type = Tvdb.ArtType.Banner Then
+                                If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Banner Then
                                     seasonallpath = Image.Url
                                     Exit For
                                 End If
                             Next
                             If seasonallpath = "" Then
                                 For Each Image In ArtList.Items
-                                    If Image.Language = "en" And Image.Type = Tvdb.ArtType.Banner Then
+                                    If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Banner Then
                                         seasonallpath = Image.Url
                                         Exit For
                                     End If
@@ -1337,12 +1579,12 @@ Partial Public Class Form1
 
                 newtvshow.sortorder = Preferences.sortorder
 
-                nfoFunction.savetvshownfo(newtvshow.path, newtvshow, True)
+                'nfoFunction.savetvshownfo(newtvshow.path, newtvshow, True)
+
             End If
             'DownloadMissingArt(NewShow)
-
             NewShow.Save()
-
+            NewShow.UpdateTreenode()
             TvShows.Add(NewShow)
             If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                 Preferences.tvFolders.Add(newTvFolders(0))
@@ -1425,72 +1667,46 @@ Partial Public Class Form1
         extensioncount = 26
 
 
-        For Each tvfolder In listofshowfolders
-            Dim add As Boolean = True
-            For Each tvshow In TvShows
-                If tvshow.fullpath.IndexOf(tvfolder) <> -1 Then
-                    If tvshow.locked = True Or tvshow.locked = 2 Then
-                        If manual = False Then
-                            add = False
-                            Exit For
-                        End If
-                    End If
+        Dim TvFolder As String
+        For Each TvShow As Nfo.TvShow In TvShows
+            TvFolder = IO.Path.GetDirectoryName(TvShow.FolderPath)
+            Dim Add As Boolean = True
+            If TvShow.State.Value <> Nfo.ShowState.Open Then
+                If manual = False Then
+                    Add = False
+                    Exit For
                 End If
-            Next
-            If add = True Then
-                tvfolder = IO.Path.GetDirectoryName(tvfolder)
-                progresstext = String.Concat("Adding subfolders: " & tvfolder)
+            End If
+
+            If Add = True Then
+                progresstext = String.Concat("Adding subfolders: " & TvFolder)
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 If bckgroundscanepisodes.CancellationPending Then
                     Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation cancelled by user"
                     Exit Sub
                 End If
                 tempstring = "" 'tvfolder
-                Dim hg As New IO.DirectoryInfo(tvfolder)
+                Dim hg As New IO.DirectoryInfo(TvFolder)
                 If hg.Exists Then
                     scraperLog = scraperLog & "found" & hg.FullName.ToString & vbCrLf
-                    newtvfolders.Add(tvfolder)
+                    newtvfolders.Add(TvFolder)
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
-
-                    Try
-                        For Each strfolder As String In My.Computer.FileSystem.GetDirectories(tvfolder)
-                            Try
-                                If strfolder.IndexOf("System Volume Information") = -1 Then
-                                    Preferences.tvScraperLog = Preferences.tvScraperLog & "Subfolder added :- " & strfolder.ToString & vbCrLf
-                                    newtvfolders.Add(strfolder)
-                                    For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder, FileIO.SearchOption.SearchAllSubDirectories)
-                                        Try
-                                            If strfolder2.IndexOf("System Volume Information") = -1 Then
-                                                Preferences.tvScraperLog = Preferences.tvScraperLog & "Subfolder added :- " & strfolder2.ToString & vbCrLf
-                                                newtvfolders.Add(strfolder2)
-                                            End If
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
-                                    Next
-                                End If
-                            Catch ex As Exception
-                                MsgBox(ex.Message)
-                            End Try
-                        Next
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
-                    End Try
+                    Dim ExtraFolder As List(Of String) = Utilities.EnumerateFolders(TvFolder, 3)
+                    newtvfolders.AddRange(ExtraFolder)
+                    newtvfolders.Add(TvFolder)
+                    For Each Item In ExtraFolder
+                        Preferences.tvScraperLog = Preferences.tvScraperLog & "Subfolder added :- " & Item & vbCrLf
+                    Next
                 End If
             Else
-                Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Show Locked, Ignoring: " & tvfolder & vbCrLf
+                Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Show Locked, Ignoring: " & TvFolder & vbCrLf
             End If
         Next
 
         scraperLog = scraperLog & vbCrLf
-        Application.DoEvents()
+        'Application.DoEvents()
         Dim mediacounter As Integer = newEpisodeList.Count
         For g = 0 To newtvfolders.Count - 1
-            If bckgroundscanepisodes.CancellationPending Then
-                Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
-                Exit Sub
-            End If
-
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation cancelled by user"
@@ -1498,14 +1714,12 @@ Partial Public Class Form1
             End If
             progresstext = String.Concat("Searching for episodes in " & newtvfolders(g))
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
-            For f = 1 To extensioncount
-
-
-                If bckgroundscanepisodes.CancellationPending Then
-                    Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation cancelled by user"
-                    Exit Sub
-                End If
-                moviepattern = extensions(f)
+            For Each f In Utilities.VideoExtensions
+                'If bckgroundscanepisodes.CancellationPending Then
+                '    Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation cancelled by user"
+                '    Exit Sub
+                'End If
+                moviepattern = f
                 dirpath = newtvfolders(g)
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
                 findnewepisodes(dirpath, moviepattern)
@@ -1525,16 +1739,6 @@ Partial Public Class Form1
         Dim S As String = ""
         For Each newepisode In newEpisodeList
             S = ""
-            Dim newEpisodeToAdd As New TvEpisode
-            newEpisodeToAdd.episodeno = ""
-            newEpisodeToAdd.episodepath = ""
-            'newepisodetoadd.status = ""
-            newEpisodeToAdd.imdbid = ""
-            newEpisodeToAdd.playcount = ""
-            newEpisodeToAdd.rating = ""
-            newEpisodeToAdd.seasonno = ""
-            newEpisodeToAdd.title = ""
-            newEpisodeToAdd.tvdbid = ""
 
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
@@ -2110,255 +2314,255 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub add_tvshow_to_treeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
-        If xmlerror = True Then
-            TreeView1.Nodes.Add(fullpath, title)
-            For Each tn As TreeNode In TreeView1.Nodes
-                If tn.Name = fullpath Then
-                    If locked = True Or locked = 2 Then tn.StateImageIndex = 0
-                    tn.ForeColor = Color.Red
-                End If
-            Next
-        Else
-            TreeView1.Nodes.Add(fullpath, title)
-            For Each tn As TreeNode In TreeView1.Nodes
-                If tn.Name = fullpath Then
-                    tn.ForeColor = Color.Black
-                    If locked = True Or locked = 2 Then tn.StateImageIndex = 0
-                End If
-            Next
-        End If
-    End Sub
+    'Private Sub add_tvshow_to_treeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
+    '    If xmlerror = True Then
+    '        TvTreeview.Nodes.Add(fullpath, title)
+    '        For Each tn As TreeNode In TvTreeview.Nodes
+    '            If tn.Name = fullpath Then
+    '                If locked = True Or locked = 2 Then tn.StateImageIndex = 0
+    '                tn.ForeColor = Color.Red
+    '            End If
+    '        Next
+    '    Else
+    '        TvTreeview.Nodes.Add(fullpath, title)
+    '        For Each tn As TreeNode In TvTreeview.Nodes
+    '            If tn.Name = fullpath Then
+    '                tn.ForeColor = Color.Black
+    '                If locked = True Or locked = 2 Then tn.StateImageIndex = 0
+    '            End If
+    '        Next
+    '    End If
+    'End Sub
 
-    Private Sub add_episode_to_treeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
-        Try
-            Dim ccnode As TreeNode
-            ccnode = TreeView1.Nodes(rootnode).Nodes(childnode)
-            For Each nod In ccnode.Nodes
-                If nod.text = title Then
-                    ccnode.Nodes.Remove(nod)
-                    Exit For
-                End If
-            Next
-            ccnode.Nodes.Add(fullpath, title)
+    '    Private Sub add_episode_to_treeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
+    '        Try
+    '            Dim ccnode As TreeNode
+    '            ccnode = TvTreeview.Nodes(rootnode).Nodes(childnode)
+    '            For Each nod In ccnode.Nodes
+    '                If nod.text = title Then
+    '                    ccnode.Nodes.Remove(nod)
+    '                    Exit For
+    '                End If
+    '            Next
+    '            ccnode.Nodes.Add(fullpath, title)
 
-            If xmlerror = True Then
-                For Each no As TreeNode In ccnode.Nodes
-                    If no.Name = fullpath Then
-                        no.ForeColor = Color.Red
-                        Exit For
-                    End If
-                Next
-            Else
-                For Each no As TreeNode In ccnode.Nodes
-                    If no.Name = fullpath Then
-                        no.ForeColor = Color.Black
-                        Exit For
-                    End If
-                Next
-            End If
-            'TreeView1.Nodes.Remove(node)
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            'MsgBox(ex.ToString)
-        End Try
-    End Sub
+    '            If xmlerror = True Then
+    '                For Each no As TreeNode In ccnode.Nodes
+    '                    If no.Name = fullpath Then
+    '                        no.ForeColor = Color.Red
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            Else
+    '                For Each no As TreeNode In ccnode.Nodes
+    '                    If no.Name = fullpath Then
+    '                        no.ForeColor = Color.Black
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '            'TvTreeview.Nodes.Remove(node)
+    '        Catch ex As Exception
+    '#If SilentErrorScream Then
+    '            Throw ex
+    '#End If
+    '            'MsgBox(ex.ToString)
+    '        End Try
+    '    End Sub
 
-    Private Sub populatetvtree()
-        Dim tempint As Integer
-        Dim tempstring As String = String.Empty
-        Dim cnode As TreeNode = Nothing
+    'Private Sub populatetvtree()
+    '    Dim tempint As Integer
+    '    Dim tempstring As String = String.Empty
+    '    Dim cnode As TreeNode = Nothing
 
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = String.Empty
-
-
-        PictureBox6.Image = Nothing
-        PictureBox4.Image = Nothing
-        PictureBox5.Image = Nothing
-        TextBox10.Text = String.Empty
-        TextBox11.Text = String.Empty
-        TextBox9.Text = String.Empty
-        TextBox12.Text = String.Empty
-        TextBox13.Text = String.Empty
-        TextBox14.Text = String.Empty
-        TextBox15.Text = String.Empty
-        TextBox16.Text = String.Empty
-        TextBox18.Text = String.Empty
-        TextBox19.Text = String.Empty
-        If Not workingTvShow Is Nothing Then workingTvShow.path = String.Empty
-        ComboBox4.Items.Clear()
-        ComboBox4.Text = String.Empty
-        TextBox20.Text = String.Empty
-        TextBox21.Text = String.Empty
-        TextBox22.Text = String.Empty
-        TextBox23.Text = String.Empty
-        TextBox24.Text = String.Empty
-        TextBox25.Text = String.Empty
-        ComboBox5.Items.Clear()
-        ComboBox5.Text = String.Empty
-        Panel9.Visible = False
-        TextBox2.Text = String.Empty
-        totalTvShowCount = 0
-        totalEpisodeCount = 0
-        TreeView1.Nodes.Clear()
-
-        For Each item In TvShows
-            totalTvShowCount += 1
-            Dim shownode As Integer = -1
-
-            If item.status IsNot Nothing AndAlso Not item.status.ToLower.Contains("xml error") Then
-                Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
-            Else
-                Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
-            End If
+    '    ComboBox4.Items.Clear()
+    '    ComboBox4.Text = String.Empty
 
 
-            For Each episode In item.allepisodes
-                totalEpisodeCount += 1
+    '    PictureBox6.Image = Nothing
+    '    PictureBox4.Image = Nothing
+    '    PictureBox5.Image = Nothing
+    '    TextBox10.Text = String.Empty
+    '    TextBox11.Text = String.Empty
+    '    TextBox9.Text = String.Empty
+    '    TextBox12.Text = String.Empty
+    '    TextBox13.Text = String.Empty
+    '    TextBox14.Text = String.Empty
+    '    TextBox15.Text = String.Empty
+    '    TextBox16.Text = String.Empty
+    '    TextBox18.Text = String.Empty
+    '    TextBox19.Text = String.Empty
+    '    If Not workingTvShow Is Nothing Then workingTvShow.path = String.Empty
+    '    ComboBox4.Items.Clear()
+    '    ComboBox4.Text = String.Empty
+    '    TextBox20.Text = String.Empty
+    '    TextBox21.Text = String.Empty
+    '    TextBox22.Text = String.Empty
+    '    TextBox23.Text = String.Empty
+    '    TextBox24.Text = String.Empty
+    '    TextBox25.Text = String.Empty
+    '    ComboBox5.Items.Clear()
+    '    ComboBox5.Text = String.Empty
+    '    Panel9.Visible = False
+    '    TextBox2.Text = String.Empty
+    '    totalTvShowCount = 0
+    '    totalEpisodeCount = 0
+    '    TvTreeview.Nodes.Clear()
 
-                Dim seasonno As Integer = -10
-                seasonno = Convert.ToInt32(episode.seasonno)
+    '    For Each item In TvShows
+    '        totalTvShowCount += 1
+    '        Dim shownode As Integer = -1
 
-                For g = 0 To TreeView1.Nodes.Count - 1
-                    If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
-                        cnode = TreeView1.Nodes(g)
-                        shownode = g
-                        Exit For
-                    End If
-                Next
-
-                Dim seasonstring As String = Nothing
-
-                If seasonno <> 0 And seasonno <> -1 Then
-                    If seasonno < 10 Then
-                        tempstring = "Season 0" & seasonno.ToString
-                    Else
-                        tempstring = "Season " & seasonno.ToString
-                    End If
-                ElseIf seasonno = 0 Then
-                    tempstring = "Specials"
-                End If
-
-                Dim node As TreeNode
-                Dim alreadyexists As Boolean = False
-                For Each node In cnode.Nodes
-                    If node.Text = tempstring Then
-                        alreadyexists = True
-                        Exit For
-                    End If
-                Next
-                If alreadyexists = False Then cnode.Nodes.Add(tempstring)
-
-                For Each node In cnode.Nodes
-                    If node.Text = tempstring Then
-                        tempint = node.Index
-                        Exit For
-                    End If
-                Next
-
-                Dim eps As String
-                If episode.episodeno < 10 Then
-                    eps = "0" & episode.episodeno.ToString
-                Else
-                    eps = episode.episodeno.ToString
-                End If
-
-                eps = eps & " - " & episode.title
-                If episode.imdbid = Nothing Then
-                    episode.imdbid = ""
-                End If
-
-                If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
-                Else
-                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
-                End If
-
-            Next
-
-            For Each missingep In item.missingepisodes
-                For g = 0 To TreeView1.Nodes.Count - 1
-                    If TreeView1.Nodes(g).Name.ToString = item.fullpath Then
-                        cnode = TreeView1.Nodes(g)
-                        shownode = g
-                        Exit For
-                    End If
-                Next
-
-                Dim seasonstring As String = Nothing
-                Dim seasonno As Integer = Convert.ToInt32(missingep.seasonno)
-                If seasonno <> 0 And seasonno <> -1 Then
-                    If seasonno < 10 Then
-                        tempstring = "Season 0" & seasonno.ToString
-                    Else
-                        tempstring = "Season " & seasonno.ToString
-                    End If
-                ElseIf seasonno = 0 Then
-                    tempstring = "Specials"
-                End If
-
-                Dim node As TreeNode
-                Dim alreadyexists As Boolean = False
-                For Each node In cnode.Nodes
-                    If node.Text = tempstring Then
-                        alreadyexists = True
-                        Exit For
-                    End If
-                Next
-
-                If alreadyexists = False Then cnode.Nodes.Add(tempstring)
-                For Each node In cnode.Nodes
-                    If node.Text = tempstring Then
-                        tempint = node.Index
-                        Exit For
-                    End If
-                Next
-
-                Dim eps As String
-                Dim episodeno As Integer = Convert.ToInt32(missingep.episodeno)
-                If episodeno < 10 Then
-                    eps = "0" & episodeno.ToString
-                Else
-                    eps = episodeno.ToString
-                End If
-
-                eps = eps & " - " & missingep.title
-                Dim ccnode As TreeNode
-                ccnode = TreeView1.Nodes(shownode).Nodes(tempint)
-                Dim tempstring2 As String = "Missing: " & eps
-                ccnode.Nodes.Add(tempstring2, eps)
-
-                For Each no As TreeNode In ccnode.Nodes
-                    If no.Name = tempstring2 Then
-                        no.ForeColor = Color.Blue
-                        no.Parent.ForeColor = Color.Blue
-                        no.Parent.Parent.ForeColor = Color.Blue
-                        Exit For
-                    End If
-                Next
-            Next
-        Next
+    '        If item.status IsNot Nothing AndAlso Not item.status.ToLower.Contains("xml error") Then
+    '            Call add_tvshow_to_treeview(item.fullpath, item.title, True, item.locked)
+    '        Else
+    '            Call add_tvshow_to_treeview(item.fullpath, item.title, False, item.locked)
+    '        End If
 
 
+    '        For Each episode In item.allepisodes
+    '            totalEpisodeCount += 1
 
-        Dim MyNode As TreeNode
-        If Not TreeView1.Nodes.Count = 0 Then
-            MyNode = TreeView1.Nodes(0) 'First Level
-            'MyNode = MyNode.Nodes(6)  ' Second Level
-            TreeView1.SelectedNode = MyNode
-            TabLevel1.Focus()
-            TabControl3.Focus()
-            TreeView1.Focus()
-        End If
-        TreeView1.Refresh()
-        TreeView1.CollapseAll()
+    '            Dim seasonno As Integer = -10
+    '            seasonno = Convert.ToInt32(episode.seasonno)
 
-        TextBox32.Text = totalTvShowCount.ToString
-        TextBox33.Text = totalEpisodeCount.ToString
-    End Sub
+    '            For g = 0 To TvTreeview.Nodes.Count - 1
+    '                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
+    '                    cnode = TvTreeview.Nodes(g)
+    '                    shownode = g
+    '                    Exit For
+    '                End If
+    '            Next
+
+    '            Dim seasonstring As String = Nothing
+
+    '            If seasonno <> 0 And seasonno <> -1 Then
+    '                If seasonno < 10 Then
+    '                    tempstring = "Season 0" & seasonno.ToString
+    '                Else
+    '                    tempstring = "Season " & seasonno.ToString
+    '                End If
+    '            ElseIf seasonno = 0 Then
+    '                tempstring = "Specials"
+    '            End If
+
+    '            Dim node As TreeNode
+    '            Dim alreadyexists As Boolean = False
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    alreadyexists = True
+    '                    Exit For
+    '                End If
+    '            Next
+    '            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    tempint = node.Index
+    '                    Exit For
+    '                End If
+    '            Next
+
+    '            Dim eps As String
+    '            If episode.episodeno < 10 Then
+    '                eps = "0" & episode.episodeno.ToString
+    '            Else
+    '                eps = episode.episodeno.ToString
+    '            End If
+
+    '            eps = eps & " - " & episode.title
+    '            If episode.imdbid = Nothing Then
+    '                episode.imdbid = ""
+    '            End If
+
+    '            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
+    '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+    '            Else
+    '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+    '            End If
+
+    '        Next
+
+    '        For Each missingep In item.missingepisodes
+    '            For g = 0 To TvTreeview.Nodes.Count - 1
+    '                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
+    '                    cnode = TvTreeview.Nodes(g)
+    '                    shownode = g
+    '                    Exit For
+    '                End If
+    '            Next
+
+    '            Dim seasonstring As String = Nothing
+    '            Dim seasonno As Integer = Convert.ToInt32(missingep.seasonno)
+    '            If seasonno <> 0 And seasonno <> -1 Then
+    '                If seasonno < 10 Then
+    '                    tempstring = "Season 0" & seasonno.ToString
+    '                Else
+    '                    tempstring = "Season " & seasonno.ToString
+    '                End If
+    '            ElseIf seasonno = 0 Then
+    '                tempstring = "Specials"
+    '            End If
+
+    '            Dim node As TreeNode
+    '            Dim alreadyexists As Boolean = False
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    alreadyexists = True
+    '                    Exit For
+    '                End If
+    '            Next
+
+    '            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+    '            For Each node In cnode.Nodes
+    '                If node.Text = tempstring Then
+    '                    tempint = node.Index
+    '                    Exit For
+    '                End If
+    '            Next
+
+    '            Dim eps As String
+    '            Dim episodeno As Integer = Convert.ToInt32(missingep.episodeno)
+    '            If episodeno < 10 Then
+    '                eps = "0" & episodeno.ToString
+    '            Else
+    '                eps = episodeno.ToString
+    '            End If
+
+    '            eps = eps & " - " & missingep.title
+    '            Dim ccnode As TreeNode
+    '            ccnode = TvTreeview.Nodes(shownode).Nodes(tempint)
+    '            Dim tempstring2 As String = "Missing: " & eps
+    '            ccnode.Nodes.Add(tempstring2, eps)
+
+    '            For Each no As TreeNode In ccnode.Nodes
+    '                If no.Name = tempstring2 Then
+    '                    no.ForeColor = Color.Blue
+    '                    no.Parent.ForeColor = Color.Blue
+    '                    no.Parent.Parent.ForeColor = Color.Blue
+    '                    Exit For
+    '                End If
+    '            Next
+    '        Next
+    '    Next
+
+
+
+    '    Dim MyNode As TreeNode
+    '    If Not TvTreeview.Nodes.Count = 0 Then
+    '        MyNode = TvTreeview.Nodes(0) 'First Level
+    '        'MyNode = MyNode.Nodes(6)  ' Second Level
+    '        TvTreeview.SelectedNode = MyNode
+    '        TabLevel1.Focus()
+    '        TabControl3.Focus()
+    '        TvTreeview.Focus()
+    '    End If
+    '    TvTreeview.Refresh()
+    '    TvTreeview.CollapseAll()
+
+    '    TextBox32.Text = totalTvShowCount.ToString
+    '    TextBox33.Text = totalEpisodeCount.ToString
+    'End Sub
 
     Private Sub ListtvFiles(ByVal tvshow As TvShow, ByVal pattern As String)
 
@@ -2372,7 +2576,7 @@ Partial Public Class Form1
 
         newlist = Utilities.EnumerateFolders(tvshow.FolderPath, 6) 'TODO: Restore loging functions
 
-        newlist.Insert(0, tvshow.fullpath.Substring(0, tvshow.fullpath.Length - 11))
+        newlist.Insert(0, tvshow.FolderPath)
         If newlist.Count > 0 Then
             tvrebuildlog(newlist.Count - 1.ToString & " subfolders found in: " & newlist(0) & vbCrLf)
         End If
@@ -2415,8 +2619,70 @@ Partial Public Class Form1
   
     End Sub
 
+    Public Function tvCurrentlySelectedShow() As Nfo.TvShow
+        If TvTreeview.SelectedNode Is Nothing Then Return Nothing
+        Dim Show As Nfo.TvShow = Nothing
+        Dim Season As Nfo.TvSeason = Nothing
+        Dim Episode As Nfo.TvEpisode = Nothing
+
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Show = TvTreeview.SelectedNode.Tag
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            Season = TvTreeview.SelectedNode.Tag
+            Show = Season.GetParentShow
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Episode = TvTreeview.SelectedNode.Tag
+            Season = Episode.SeasonObj
+            Show = Episode.ShowObj
+        End If
+
+        Return Show
+    End Function
+
+    Public Function tvCurrentlySelectedSeason() As Nfo.TvSeason
+        If TvTreeview.SelectedNode Is Nothing Then Return Nothing
+
+        Dim Show As Nfo.TvShow = Nothing
+        Dim Season As Nfo.TvSeason = Nothing
+        Dim Episode As Nfo.TvEpisode = Nothing
+
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Show = TvTreeview.SelectedNode.Tag
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            Season = TvTreeview.SelectedNode.Tag
+            Show = Season.GetParentShow
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Episode = TvTreeview.SelectedNode.Tag
+            Season = Episode.SeasonObj
+            Show = Episode.ShowObj
+        End If
+
+        Return Season
+    End Function
+
+    Public Function tvCurrentlySelectedEpisode() As TvEpisode
+        If TvTreeview.SelectedNode Is Nothing Then Return Nothing
+
+        Dim Show As Nfo.TvShow = Nothing
+        Dim Season As Nfo.TvSeason = Nothing
+        Dim Episode As Nfo.TvEpisode = Nothing
+
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Show = TvTreeview.SelectedNode.Tag
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            Season = TvTreeview.SelectedNode.Tag
+            Show = Season.GetParentShow
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Episode = TvTreeview.SelectedNode.Tag
+            Season = Episode.SeasonObj
+            Show = Episode.ShowObj
+        End If
+
+        Return Episode
+    End Function
+
     Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
-        DownloadMissingArt(workingTvShow)
+        DownloadMissingArt(tvCurrentlySelectedShow)
     End Sub
 
     Public Sub DownloadMissingArt(ByVal BrokenShow As TvShow)
@@ -2460,7 +2726,7 @@ Partial Public Class Form1
             For f = 0 To 1000
                 Dim seasonposter As String = ""
                 For Each Image In artlist
-                    If Image.Season = f.ToString And Image.Language = Preferences.tvdblanguagecode Then
+                    If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode Then
                         seasonposter = Image.Url
                         Exit For
                     End If
@@ -2500,7 +2766,7 @@ Partial Public Class Form1
             Dim fanartposter As String
             fanartposter = ""
             For Each Image In artlist
-                If Image.Language = Preferences.tvdblanguagecode And Image.BannerType = "fanart" Then
+                If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
                     fanartposter = Image.Url
                     Exit For
                 End If
@@ -2594,7 +2860,7 @@ Partial Public Class Form1
             Dim posterurl As String = ""
             If Preferences.postertype = "poster" Then 'poster
                 For Each Image In artlist
-                    If Image.Language = Preferences.tvdblanguagecode And Image.BannerType = "poster" Then
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
                         posterurl = Image.Url
                         Exit For
                     End If
@@ -2620,7 +2886,7 @@ Partial Public Class Form1
                 End If
             ElseIf Preferences.postertype = "banner" Then 'banner
                 For Each Image In artlist
-                    If Image.Language = Preferences.tvdblanguagecode And Image.BannerType = "series" And Image.Season = Nothing Then
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
                         posterurl = Image.Url
                         Exit For
                     End If
@@ -2683,7 +2949,7 @@ Partial Public Class Form1
             If Preferences.seasonall <> "none" And seasonallpath = "" Then
                 If Preferences.seasonall = "poster" Then 'poster
                     For Each Image In artlist
-                        If Image.Language = Preferences.tvdblanguagecode And Image.BannerType = "poster" Then
+                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
                             seasonallpath = Image.Url
                             Exit For
                         End If
@@ -2706,7 +2972,7 @@ Partial Public Class Form1
                     End If
                 ElseIf Preferences.seasonall = "wide" = True Then 'banner
                     For Each Image In artlist
-                        If Image.Language = Preferences.tvdblanguagecode And Image.BannerType = "series" And Image.Season = Nothing Then
+                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
                             seasonallpath = Image.Url
                             Exit For
                         End If
@@ -2789,10 +3055,337 @@ Partial Public Class Form1
             End If
         Catch
         End Try
-        Call loadtvshow(BrokenShow.NfoFilePath)
+        Call LoadTvShow(BrokenShow)
         messbox.Close()
 
         CleanFolderList()
     End Sub
 
+    Private Sub TvFilter(ByVal butt As String)
+        If Not startup = True Then
+            If butt = "missingeps" Then
+                For Each item As Nfo.TvShow In TvShows
+                    For Each Season As Nfo.TvSeason In item.Seasons.Values
+                        For Each episode As Nfo.TvEpisode In Season.Episodes
+                            If Not episode.IsMissing Then
+                                episode.Visible = False
+                            Else
+                                episode.Visible = True
+                                episode.EpisodeNode.EnsureVisible()
+                            End If
+                        Next
+                        If Season.VisibleEpisodeCount = 0 Then
+                            Season.Visible = False
+                        Else
+                            Season.Visible = True
+                        End If
+                    Next
+                    If item.VisibleSeasonCount = 0 Then
+                        item.Visible = False
+                    Else
+                        item.Visible = True
+                    End If
+                Next
+            ElseIf butt = "screenshot" Then
+                For Each item As Nfo.TvShow In TvShows
+                    For Each Season As Nfo.TvSeason In item.Seasons.Values
+                        For Each episode As Nfo.TvEpisode In Season.Episodes
+                            If String.IsNullOrEmpty(episode.Thumbnail.FileName) Then
+                                episode.Visible = False
+                                episode.EpisodeNode.EnsureVisible()
+                            Else
+                                episode.Visible = True
+                            End If
+                        Next
+                        If Season.VisibleEpisodeCount = 0 Then
+                            Season.Visible = False
+                        Else
+                            Season.Visible = True
+                        End If
+                    Next
+                    If item.VisibleSeasonCount = 0 Then
+                        item.Visible = False
+                    Else
+                        item.Visible = True
+                    End If
+                Next
+            ElseIf butt = "all" Then
+                For Each item As Nfo.TvShow In TvShows
+                    item.Visible = True
+                    For Each Season As Nfo.TvSeason In item.Seasons.Values
+                        For Each episode As Nfo.TvEpisode In Season.Episodes
+
+                            episode.Visible = True
+
+                        Next
+                        Season.Visible = True
+                    Next
+                    item.Visible = True
+                Next
+            ElseIf butt = "fanart" Then
+                For Each item As Nfo.TvShow In TvShows
+                    item.Visible = True
+                    For Each Season As Nfo.TvSeason In item.Seasons.Values
+                        For Each episode As Nfo.TvEpisode In Season.Episodes
+                            episode.Visible = False
+                        Next
+                        Season.Visible = False
+                    Next
+                    If item.ImageFanart.Exists Then
+                        item.Visible = False
+                    Else
+                        item.Visible = True
+                    End If
+                Next
+            ElseIf butt = "posters" Then
+                For Each item As Nfo.TvShow In TvShows
+
+
+                    For Each Season As Nfo.TvSeason In item.Seasons.Values
+                        If Season.Poster.Exists Then
+                            Season.Visible = False
+                        Else
+                            Season.Visible = True
+                        End If
+                        For Each Episode As Nfo.TvEpisode In Season.Episodes
+                            Episode.Visible = False
+                        Next
+                    Next
+                    item.Visible = Not item.ImagePoster.Exists
+
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
+        Call findmissingepisodes()
+    End Sub
+
+    Private Sub Bckgrndfindmissingepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles Bckgrndfindmissingepisodes.ProgressChanged
+        If e.ProgressPercentage = 1 Then
+            If TypeOf e.UserState Is Nfo.TvEpisode Then
+                Dim MissingEpisode As Nfo.TvEpisode = e.UserState
+
+                MissingEpisode.ShowObj.AddEpisode(MissingEpisode)
+            End If
+
+            'Dim newshow As New Nfo.TvEpisode
+            'newshow = e.UserState
+            'For Each item In TvShows
+            '    If item.fullpath = newshow.Episode.Then Then
+            '        If Convert.ToInt32(newshow.seasonno) > 0 And newshow.Title <> "" And newshow.TvdbId = "true" Then
+            '            Dim exists As Boolean = False
+            '            For Each ep In item.allepisodes
+            '                If ep.episodeno = newshow.episodeno And ep.seasonno = newshow.seasonno Then
+            '                    exists = True
+            '                    Exit For
+            '                End If
+            '            Next
+            '            If exists = False Then
+            '                Dim cnode As TreeNode = Nothing
+            '                Dim shownode As Integer = -1
+            '                For g = 0 To TvTreeview.Nodes.Count - 1
+            '                    If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
+            '                        cnode = TvTreeview.Nodes(g)
+            '                        shownode = g
+            '                        Exit For
+            '                    End If
+            '                Next
+
+            '                Dim seasonstring As String = Nothing
+            '                Dim seasonno As Integer = Convert.ToInt32(newshow.seasonno)
+            '                Dim tempstring As String = String.Empty
+            '                If seasonno <> 0 And seasonno <> -1 Then
+            '                    If seasonno < 10 Then
+            '                        tempstring = "Season 0" & seasonno.ToString
+            '                    Else
+            '                        tempstring = "Season " & seasonno.ToString
+            '                    End If
+            '                ElseIf seasonno = 0 Then
+            '                    tempstring = "Specials"
+            '                End If
+            '                Dim node As TreeNode
+            '                Dim alreadyexists As Boolean = False
+            '                For Each node In cnode.Nodes
+            '                    If node.Text = tempstring Then
+            '                        alreadyexists = True
+            '                        Exit For
+            '                    End If
+            '                Next
+            '                If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+            '                Dim tempint As Integer
+            '                For Each node In cnode.Nodes
+            '                    If node.Text = tempstring Then
+            '                        tempint = node.Index
+            '                        Exit For
+            '                    End If
+            '                Next
+
+            '                Dim eps As String
+            '                Dim episodeno As Integer = Convert.ToInt32(newshow.episodeno)
+            '                If episodeno < 10 Then
+            '                    eps = "0" & episodeno.ToString
+            '                Else
+            '                    eps = episodeno.ToString
+            '                End If
+            '                eps = eps & " - " & newshow.Title
+            '                Dim ccnode As TreeNode
+            '                ccnode = TvTreeview.Nodes(shownode).Nodes(tempint)
+            '                Dim tempstring2 As String = "Missing: " & eps
+            '                alreadyexists = False
+            '                For Each node In ccnode.Nodes
+            '                    If node.Text = eps Then
+            '                        alreadyexists = True
+            '                        Exit For
+            '                    End If
+            '                Next
+            '                If alreadyexists = False Then
+            '                    ccnode.Nodes.Add(tempstring2, eps)
+            '                    For Each no As TreeNode In ccnode.Nodes
+            '                        If no.Name = tempstring2 Then
+            '                            no.ForeColor = Color.Blue
+            '                            no.Parent.ForeColor = Color.Blue
+            '                            no.Parent.Parent.ForeColor = Color.Blue
+            '                            Exit For
+            '                        End If
+            '                    Next
+            '                    newshow.episodepath = tempstring2
+            '                    item.missingepisodes.Add(newshow)
+            '                    ToolStripStatusLabel2.Text = "Adding: " & eps
+            '                End If
+            '            End If
+            '        End If
+            '    End If
+            'Next
+        Else
+            ToolStripStatusLabel2.Text = e.UserState
+        End If
+    End Sub
+
+    Private Sub Bckgrndfindmissingepisodes_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles Bckgrndfindmissingepisodes.RunWorkerCompleted
+        ToolStripStatusLabel2.Visible = False
+        ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
+
+        TvTreeview.Sort()
+    End Sub
+
+    Private Sub findmissingepisodes()
+        Utilities.EnsureFolderExists(IO.Path.Combine(Preferences.applicationPath, "missing\"))
+        For Each item In TvShows
+
+            Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.title)
+            'If item.locked = Nfo.ShowState.Open Then
+            Dim showid As String = item.tvdbid
+            If IsNumeric(showid) Then
+                'http://www.thetvdb.com/api/6E82FED600783400/series/85137/all/en.xml
+                Dim language As String = ""
+                If item.language <> "" Then
+                    language = item.language
+                Else
+                    language = "en"
+                End If
+                Dim sortorder As String = item.sortorder
+                Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & showid & "/all/" & language & ".xml"
+                If sortorder = "" Then
+                    sortorder = "default"
+                End If
+                Dim xmlfile As String
+
+                xmlfile = Utilities.DownloadTextFiles(url)
+
+                Dim SeriesInfo As New Tvdb.ShowData
+                SeriesInfo.LoadXml(xmlfile)
+
+                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                    Dim AlreadyExists As Boolean = False
+                    For Each ExistingEpisode As Nfo.TvEpisode In item.Episodes
+                        If ExistingEpisode.Season.Value = NewEpisode.SeasonNumber.Value AndAlso ExistingEpisode.Episode.Value = NewEpisode.EpisodeNumber Then
+                            AlreadyExists = True
+                            Exit For
+                        End If
+                    Next
+
+                    If Not AlreadyExists Then
+                        Dim MissingEpisode As New Nfo.TvEpisode
+
+                        MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.tvdbid & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+                        MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
+                        MissingEpisode.IsMissing = True
+                        MissingEpisode.ShowObj = item
+                        MissingEpisode.Save()
+                        Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
+                    End If
+                Next
+                'Try
+                '    Dim ShowList As New XmlDocument
+                '    ShowList.LoadXml(xmlfile)
+                '    Dim thisresult As XmlNode = Nothing
+                '    For Each thisresult In ShowList("Data")
+                '        Select Case thisresult.Name
+                '            Case "Episode"
+                '                Dim newshow As New TvEpisode
+                '                Dim premdate As String = String.Empty
+                '                Dim aired As Boolean = True
+                '                Dim mirrorselection As XmlNode = Nothing
+                '                For Each mirrorselection In thisresult.ChildNodes
+                '                    Select Case mirrorselection.Name
+                '                        Case "DVD_episodenumber"
+                '                            If sortorder = "dvd" Then
+                '                                If mirrorselection.InnerText <> "" Then
+                '                                    Dim temp As String = mirrorselection.InnerText
+                '                                    If temp.IndexOf(".") <> -1 Then
+                '                                        temp = temp.Substring(0, temp.IndexOf("."))
+                '                                    End If
+                '                                    newshow.episodeno = Convert.ToInt32(temp).ToString
+                '                                Else
+                '                                    sortorder = "default"
+                '                                End If
+                '                            End If
+                '                        Case "EpisodeNumber"
+                '                            If sortorder = "default" Then
+                '                                newshow.episodeno = mirrorselection.InnerText
+                '                            End If
+                '                        Case "SeasonNumber"
+                '                            newshow.seasonno = mirrorselection.InnerText
+                '                        Case "EpisodeName"
+                '                            newshow.title = mirrorselection.InnerText
+                '                        Case "FirstAired"
+                '                            premdate = mirrorselection.InnerText
+                '                    End Select
+                '                Next
+                '                If premdate = "" Then
+                '                    aired = False
+                '                Else
+                '                    If premdate <> "0000-00-00" Then
+                '                        Try
+                '                            Dim myDate2 As Date = System.DateTime.Now
+                '                            Dim epdate As Date = CDate(premdate)
+                '                            newshow.playcount = premdate
+                '                            Dim strepdate As String
+                '                            strepdate = Format(epdate, "yyyyMMdd")
+                '                            Dim strcurrentdate As String
+                '                            strcurrentdate = Format(myDate2, "yyyyMMdd")
+                '                            Dim oldint As Integer = Convert.ToInt32(strepdate)
+                '                            Dim newint As Integer = Convert.ToInt32(strcurrentdate)
+                '                            If oldint > newint Then
+                '                                aired = False
+                '                            End If
+                '                        Catch ex2 As Exception
+                '                        End Try
+                '                    Else
+                '                        'MsgBox("boo")
+                '                    End If
+                '                End If
+
+                '                If aired = True Then newshow.tvdbid = "true"
+                '                If aired = False Then newshow.tvdbid = "false"
+                '                newshow.episodepath = item.fullpath
+                '                Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
+                '        End Select
+                '    Next
+            End If
+            ''End If
+        Next
+    End Sub
 End Class

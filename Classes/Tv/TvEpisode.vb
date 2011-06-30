@@ -2,16 +2,13 @@
     Inherits Nfo.TvEpisode
 
 
-    Private _EpisodePath As String
     Public Property episodepath As String
         Get
-            Return _EpisodePath
+            Return MyBase.VideoFilePath
         End Get
         Set(ByVal value As String)
-            _EpisodePath = value
-            Dim Parts As String() = _EpisodePath.Split(".")
-            _MediaExtension = Parts(Parts.GetUpperBound(0))
-            MyBase.NfoFilePath = _EpisodePath.Replace("." & _MediaExtension, ".nfo")
+            value = value
+            MyBase.NfoFilePath = value.Replace(IO.Path.GetExtension(value), ".nfo")
         End Set
     End Property
 
@@ -30,10 +27,12 @@
 
     Public Shadows Property title As String
         Get
+            Me.EpisodeNode.Text = MyBase.Title.Value
             Return MyBase.Title.Value
         End Get
         Set(ByVal value As String)
             MyBase.Title.Value = value
+            Me.EpisodeNode.Text = value
         End Set
     End Property
 
@@ -109,14 +108,6 @@
         End Set
     End Property
 
-    Public Shadows Property missing As Boolean
-        Get
-            Return MyBase.Missing.Value
-        End Get
-        Set(ByVal value As Boolean)
-            MyBase.Missing.Value = value
-        End Set
-    End Property
 
     Public Shadows Property credits As String
         Get

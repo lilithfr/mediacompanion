@@ -126,64 +126,6 @@
   <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>318, 134</value>
   </metadata>
-  <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>127, 56</value>
-  </metadata>
-  <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 56</value>
-  </metadata>
-  <data name="ImageList2.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAB8
-        CgAAAk1TRnQBSQFMAgEBAwEAAcgBKwHIASsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
-        AwABQAMAARADAAEBAQABCAYAAQQYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
-        AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
-        AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
-        AWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYCAAFm
-        AZkCAAFmAcwCAAFmAf8CAAGZAwABmQEzAgABmQFmAgACmQIAAZkBzAIAAZkB/wIAAcwDAAHMATMCAAHM
-        AWYCAAHMAZkCAALMAgABzAH/AgAB/wFmAgAB/wGZAgAB/wHMAQABMwH/AgAB/wEAATMBAAEzAQABZgEA
-        ATMBAAGZAQABMwEAAcwBAAEzAQAB/wEAAf8BMwIAAzMBAAIzAWYBAAIzAZkBAAIzAcwBAAIzAf8BAAEz
-        AWYCAAEzAWYBMwEAATMCZgEAATMBZgGZAQABMwFmAcwBAAEzAWYB/wEAATMBmQIAATMBmQEzAQABMwGZ
-        AWYBAAEzApkBAAEzAZkBzAEAATMBmQH/AQABMwHMAgABMwHMATMBAAEzAcwBZgEAATMBzAGZAQABMwLM
-        AQABMwHMAf8BAAEzAf8BMwEAATMB/wFmAQABMwH/AZkBAAEzAf8BzAEAATMC/wEAAWYDAAFmAQABMwEA
-        AWYBAAFmAQABZgEAAZkBAAFmAQABzAEAAWYBAAH/AQABZgEzAgABZgIzAQABZgEzAWYBAAFmATMBmQEA
-        AWYBMwHMAQABZgEzAf8BAAJmAgACZgEzAQADZgEAAmYBmQEAAmYBzAEAAWYBmQIAAWYBmQEzAQABZgGZ
-        AWYBAAFmApkBAAFmAZkBzAEAAWYBmQH/AQABZgHMAgABZgHMATMBAAFmAcwBmQEAAWYCzAEAAWYBzAH/
-        AQABZgH/AgABZgH/ATMBAAFmAf8BmQEAAWYB/wHMAQABzAEAAf8BAAH/AQABzAEAApkCAAGZATMBmQEA
-        AZkBAAGZAQABmQEAAcwBAAGZAwABmQIzAQABmQEAAWYBAAGZATMBzAEAAZkBAAH/AQABmQFmAgABmQFm
-        ATMBAAGZATMBZgEAAZkBZgGZAQABmQFmAcwBAAGZATMB/wEAApkBMwEAApkBZgEAA5kBAAKZAcwBAAKZ
-        Af8BAAGZAcwCAAGZAcwBMwEAAWYBzAFmAQABmQHMAZkBAAGZAswBAAGZAcwB/wEAAZkB/wIAAZkB/wEz
-        AQABmQHMAWYBAAGZAf8BmQEAAZkB/wHMAQABmQL/AQABzAMAAZkBAAEzAQABzAEAAWYBAAHMAQABmQEA
-        AcwBAAHMAQABmQEzAgABzAIzAQABzAEzAWYBAAHMATMBmQEAAcwBMwHMAQABzAEzAf8BAAHMAWYCAAHM
-        AWYBMwEAAZkCZgEAAcwBZgGZAQABzAFmAcwBAAGZAWYB/wEAAcwBmQIAAcwBmQEzAQABzAGZAWYBAAHM
-        ApkBAAHMAZkBzAEAAcwBmQH/AQACzAIAAswBMwEAAswBZgEAAswBmQEAA8wBAALMAf8BAAHMAf8CAAHM
-        Af8BMwEAAZkB/wFmAQABzAH/AZkBAAHMAf8BzAEAAcwC/wEAAcwBAAEzAQAB/wEAAWYBAAH/AQABmQEA
-        AcwBMwIAAf8CMwEAAf8BMwFmAQAB/wEzAZkBAAH/ATMBzAEAAf8BMwH/AQAB/wFmAgAB/wFmATMBAAHM
-        AmYBAAH/AWYBmQEAAf8BZgHMAQABzAFmAf8BAAH/AZkCAAH/AZkBMwEAAf8BmQFmAQAB/wKZAQAB/wGZ
-        AcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC/wEz
-        AQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC/wFm
-        AQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gBAAHw
-        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD/wIAAv8C9AHzAfID8QHy
-        AfMC9AL/AgAGWAdSBAAB/wEJAbQErQG0AfIVAAHzAUsKMQEwAUoDAAFYCVkCWAFSAwAB9AHPBK0BswLV
-        ArQB/xMAARUBMQFYCDEBUgFYATECAAFYAVkHWARSAVgBUgEAAfQErQG0AfMBGQLVAtsBtAH/EgABFQFY
-        DDECAAJYAREBWAMRAbwBEQHvAREBWAEaAlIBAAG0BK0BtQL0AdUB1AHVAtsBCRIAARUBWAwxAgACWAEA
-        AVgDAAEHAwABEQEAAlIB8QatAgkC1ALVAdsBtAH0EQABFQF5AVILMQIAAlgBAAFYAwABBwMAAVgBAAJY
-        AbUFrQG1AvQBswPUAdUBtAEJEQABFQN5AVgJMQIAAlgBAAFYAwABBwMAAVgBAAJYBq0BtAL0AbQCswLU
-        AbQBtREAARUCeQZSBTECAAJYAQABWAMAAQcDAAFYAQACWAetAd0B9AHdBLMBtAG1EQABFQN5BFgCUgQx
-        AgABWAFZAQABWAEAARQBAAEHAwABWAEAAlgBrQHPBq0B8wH0AQkErQG1EQABbQExBlgCUgMxATACAAJZ
-        AQABWQEAAZkBAAEHBQACWAHPAbQGrQG0AvQErQG1EgABvAFECRUBSgH0AgACWQEAAVkBAAF6AQABBwMA
-        AlgBSgFYAQkBtAOtAgkBtAEJAvQBtAOtAfETAAG8AvAFAAHtAbwBbQMAAlkBAAFZAQABWQEAAQcBAAHs
-        AQAEWAH1Aa0BtAKtA/8C9QHzBK0B/xMAAe8B8AHrBAAB/wG8AfAB7AMAAVkBWAdZBFgBUgFYAQAB7gHP
-        AbQBrQG0Ad0C/wEJAbQDrQHzFAAB7AG8AfAB9wH/AQAB9AHsAfEB8AHyBAABWQVYBlIBWAMAAbUBzwG0
-        CK0B8RUAAf8B7AHxAfIB8wHyAf8B8wHwAewFAAtZAlgEAAHwAa0BzwO0Aq0BzwHzGAABvAHsA20B9wH0
-        GAAB/wHxAQkCtAG8AfMVAAFCAU0BPgcAAT4DAAEoAwABQAMAARADAAEBAQABAQUAAYAXAAP/AQABgAEA
-        AcABAQHgAQ8CAAGAAQEBwAEBAcABAwIAAYABAQGAAQABgAEBAgABgAEBAYABAAGAAQECAAGAAQEBgAUA
-        AYABAQGABQABgAEBAYAFAAGAAQEBgAUAAYABAQGABQABgAEBAYAFAAHAAQEBgAUAAuMBgAUAAeMBwwGA
-        AQABgAEBAgAB4AGDAcABAQHAAQMCAAHgAQcBwAEBAeABBwIAAfgBDwL/AfABHwIACw==
-</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Button43.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -966,8 +908,68 @@ eg "C:\MovieStuff\ActorThumbs"</value>
         o8U4elShScORt736HoNFFFesfnoUUUUAFFFFABRRRQAUUUUAf//Z
 </value>
   </data>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>444, 17</value>
+  <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 56</value>
+  </metadata>
+  <data name="ImageList2.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAB4
+        CwAAAk1TRnQBSQFMAgEBBQEAARABLAEQASwBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
+        AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
+        AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
+        AWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYCAAFm
+        AZkCAAFmAcwCAAFmAf8CAAGZAwABmQEzAgABmQFmAgACmQIAAZkBzAIAAZkB/wIAAcwDAAHMATMCAAHM
+        AWYCAAHMAZkCAALMAgABzAH/AgAB/wFmAgAB/wGZAgAB/wHMAQABMwH/AgAB/wEAATMBAAEzAQABZgEA
+        ATMBAAGZAQABMwEAAcwBAAEzAQAB/wEAAf8BMwIAAzMBAAIzAWYBAAIzAZkBAAIzAcwBAAIzAf8BAAEz
+        AWYCAAEzAWYBMwEAATMCZgEAATMBZgGZAQABMwFmAcwBAAEzAWYB/wEAATMBmQIAATMBmQEzAQABMwGZ
+        AWYBAAEzApkBAAEzAZkBzAEAATMBmQH/AQABMwHMAgABMwHMATMBAAEzAcwBZgEAATMBzAGZAQABMwLM
+        AQABMwHMAf8BAAEzAf8BMwEAATMB/wFmAQABMwH/AZkBAAEzAf8BzAEAATMC/wEAAWYDAAFmAQABMwEA
+        AWYBAAFmAQABZgEAAZkBAAFmAQABzAEAAWYBAAH/AQABZgEzAgABZgIzAQABZgEzAWYBAAFmATMBmQEA
+        AWYBMwHMAQABZgEzAf8BAAJmAgACZgEzAQADZgEAAmYBmQEAAmYBzAEAAWYBmQIAAWYBmQEzAQABZgGZ
+        AWYBAAFmApkBAAFmAZkBzAEAAWYBmQH/AQABZgHMAgABZgHMATMBAAFmAcwBmQEAAWYCzAEAAWYBzAH/
+        AQABZgH/AgABZgH/ATMBAAFmAf8BmQEAAWYB/wHMAQABzAEAAf8BAAH/AQABzAEAApkCAAGZATMBmQEA
+        AZkBAAGZAQABmQEAAcwBAAGZAwABmQIzAQABmQEAAWYBAAGZATMBzAEAAZkBAAH/AQABmQFmAgABmQFm
+        ATMBAAGZATMBZgEAAZkBZgGZAQABmQFmAcwBAAGZATMB/wEAApkBMwEAApkBZgEAA5kBAAKZAcwBAAKZ
+        Af8BAAGZAcwCAAGZAcwBMwEAAWYBzAFmAQABmQHMAZkBAAGZAswBAAGZAcwB/wEAAZkB/wIAAZkB/wEz
+        AQABmQHMAWYBAAGZAf8BmQEAAZkB/wHMAQABmQL/AQABzAMAAZkBAAEzAQABzAEAAWYBAAHMAQABmQEA
+        AcwBAAHMAQABmQEzAgABzAIzAQABzAEzAWYBAAHMATMBmQEAAcwBMwHMAQABzAEzAf8BAAHMAWYCAAHM
+        AWYBMwEAAZkCZgEAAcwBZgGZAQABzAFmAcwBAAGZAWYB/wEAAcwBmQIAAcwBmQEzAQABzAGZAWYBAAHM
+        ApkBAAHMAZkBzAEAAcwBmQH/AQACzAIAAswBMwEAAswBZgEAAswBmQEAA8wBAALMAf8BAAHMAf8CAAHM
+        Af8BMwEAAZkB/wFmAQABzAH/AZkBAAHMAf8BzAEAAcwC/wEAAcwBAAEzAQAB/wEAAWYBAAH/AQABmQEA
+        AcwBMwIAAf8CMwEAAf8BMwFmAQAB/wEzAZkBAAH/ATMBzAEAAf8BMwH/AQAB/wFmAgAB/wFmATMBAAHM
+        AmYBAAH/AWYBmQEAAf8BZgHMAQABzAFmAf8BAAH/AZkCAAH/AZkBMwEAAf8BmQFmAQAB/wKZAQAB/wGZ
+        AcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC/wEz
+        AQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC/wFm
+        AQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gBAAHw
+        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD/wEAAwEBvAoAAgEwAAQB
+        AfQIAAG8AgEwAAQBAUUHAAGTAwEwAAUBAW8FAAFFBAEwAAYBAW8DAAFFBQEwAAGTBgEBkwH/AUUGATEA
+        AUUOATIAAUUMAQH/MwABbgkBAUU0AAH/AUUIAQFvNAAB8goBAUUzAAGTDQEB/zEADwEBBzAABgEBkwEA
+        AW4HATAABQEB8AMAAW4GATAABAEB/wUAAQcFATEAAv8C9AHzAfID8QHyAfMC9AL/AgAGWAdSBAAB/wEJ
+        AbQErQG0AfIVAAHzAUsKMQEwAUoDAAFYCVkCWAFSAwAB9AHPBK0BswLVArQB/xMAARUBMQFYCDEBUgFY
+        ATECAAFYAVkHWARSAVgBUgEAAfQErQG0AfMBGQLVAtsBtAH/EgABFQFYDDECAAJYAREBWAMRAbwBEQHv
+        AREBWAEaAlIBAAG0BK0BtQL0AdUB1AHVAtsBCRIAARUBWAwxAgACWAEAAVgDAAEHAwABEQEAAlIB8Qat
+        AgkC1ALVAdsBtAH0EQABFQF5AVILMQIAAlgBAAFYAwABBwMAAVgBAAJYAbUFrQG1AvQBswPUAdUBtAEJ
+        EQABFQN5AVgJMQIAAlgBAAFYAwABBwMAAVgBAAJYBq0BtAL0AbQCswLUAbQBtREAARUCeQZSBTECAAJY
+        AQABWAMAAQcDAAFYAQACWAetAd0B9AHdBLMBtAG1EQABFQN5BFgCUgQxAgABWAFZAQABWAEAARQBAAEH
+        AwABWAEAAlgBrQHPBq0B8wH0AQkErQG1EQABbQExBlgCUgMxATACAAJZAQABWQEAAZkBAAEHBQACWAHP
+        AbQGrQG0AvQErQG1EgABvAFECRUBSgH0AgACWQEAAVkBAAF6AQABBwMAAlgBSgFYAQkBtAOtAgkBtAEJ
+        AvQBtAOtAfETAAG8AvAFAAHtAbwBbQMAAlkBAAFZAQABWQEAAQcBAAHsAQAEWAH/Aa0BtAKtBf8B8wSt
+        Af8TAAHvAfAB6wQAAf8BvAHwAewDAAFZAVgHWQRYAVIBWAEAAbwBzwG0Aa0BtAHdAv8BCQG0A60B8xQA
+        AewBvAHwAfcB/wEAAfQB7AHxAfAB8gQAAVkFWAZSAVgDAAG1Ac8BtAitAfEVAAH/AewB8QHyAfMB8gH/
+        AfMB8AHsBQALWQJYBAAB8AGtAc8DtAKtAc8B8xgAAbwB7ANtAfcB9BgAAf8B8QEJArQBvAHzFQABQgFN
+        AT4HAAE+AwABKAMAAUADAAEgAwABAQEAAQEGAAEBFgAD/wEAAQ8B/AYAAQcB+AYAAQcB8AYAAQMB4AYA
+        AQEBwA4AAYAHAAHABwAB4AEDBgABwAEHBgABgAEHBwABAQ4AAQEHAAEDAYAGAAEHAcAGAAGAAQABwAEB
+        AeABDwL/AYABAQHAAQEBwAEDAv8BgAEBAYABAAGAAQEC/wGAAQEBgAEAAYABAQL/AYABAQGAAwAC/wGA
+        AQEBgAMAAv8BgAEBAYADAAL/AYABAQGAAwAC/wGAAQEBgAMAAv8BgAEBAYADAAL/AcABAQGAAwAC/wLj
+        AYADAAL/AeMBwwGAAQABgAEBAv8B4AGDAcABAQHAAQMC/wHgAQcBwAEBAeABBwL/AfgBDwL/AfABHwL/
+        Cw==
+</value>
+  </data>
+  <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>127, 56</value>
   </metadata>
   <data name="Button66.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2045,6 +2047,9 @@ eg "C:\MovieStuff\ActorThumbs"</value>
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>444, 17</value>
+  </metadata>
   <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1187, 17</value>
   </metadata>
@@ -3136,9 +3141,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>444, 17</value>
-  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>632, 17</value>
   </metadata>
@@ -3169,11 +3171,78 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>347, 95</value>
   </metadata>
-  <data name="Label139.Text" xml:space="preserve">
-    <value>Enabling the 'Quick Add' option will speed up the
-scraping of TV Shows by not downloading available
-Art. All show art can be scraped at any time by using
-the TV context menu item to 'Download missing art'</value>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>135, 134</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>Use this page to edit what movie sets are available.
+These sets can be used to group collections of movies together within XBMC,
+eg. If you were to add the movie set "Star Wars Collection", and make all Star Wars movies
+part of this set, then they would be added to the XBMC library as "Star Wars Collection",
+Selecting this in XBMC would list all the movies in this collection.</value>
+  </data>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Rebuild" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
+  <data name="Label102.Text" xml:space="preserve">
+    <value>If your movies are stored in individual folders, enabling
+this option will allow Media Companion to save the
+Poster as folder.jpg. This will allow XBMC to display
+the poster when browsing movies in file mode.</value>
+  </data>
+  <data name="Label148.Text" xml:space="preserve">
+    <value>If your movies are stored in individual folders, enabling
+this option will allow Media Companion to save the
+Poster as folder.jpg. This will allow XBMC to display
+the poster when browsing movies in file mode.</value>
+  </data>
+  <data name="Label99.Text" xml:space="preserve">
+    <value>Media Companion can attempt to automatically download
+a Poster when a movie is first scraped, if this option is
+enabled, then the setting below allows you to prioritise the
+order that sources are checked for an available  poster</value>
+  </data>
+  <data name="Label109.Text" xml:space="preserve">
+    <value>Some people prefer to save their files as movie.nfo, movie.tbn
+and fanart.jpg to keep compatability with other media managers.
+
+This is not reccomended since it breaks MCs ability to see the 
+media file, used for playback and filedetails information.</value>
   </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>284, 56</value>
@@ -3183,7 +3252,7 @@ the TV context menu item to 'Download missing art'</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        LgAAAk1TRnQBSQFMAgEBBAEAAcQBMwHEATMBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        LgAAAk1TRnQBSQFMAgEBBAEAAQwBNAEMATQBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABHgMAAQEBAAEYBQABUAFG/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
         /wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8AAwABOAG5AdIBOAG5AdIBOAG4AdEBOAG4AdEBOAG3
         AdEBNwG2AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAc0BNgGy
@@ -3384,79 +3453,6 @@ the TV context menu item to 'Download missing art'</value>
         DwAB/wQAAX8B/AUAAXAPAAH/AwABAQH/Af4FAAHwDwAB/wHAAgABAQf/AfAPAAs=
 </value>
   </data>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>135, 134</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>Use this page to edit what movie sets are available.
-These sets can be used to group collections of movies together within XBMC,
-eg. If you were to add the movie set "Star Wars Collection", and make all Star Wars movies
-part of this set, then they would be added to the XBMC library as "Star Wars Collection",
-Selecting this in XBMC would list all the movies in this collection.</value>
-  </data>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Rebuild" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
-  <data name="Label102.Text" xml:space="preserve">
-    <value>If your movies are stored in individual folders, enabling
-this option will allow Media Companion to save the
-Poster as folder.jpg. This will allow XBMC to display
-the poster when browsing movies in file mode.</value>
-  </data>
-  <data name="Label148.Text" xml:space="preserve">
-    <value>If your movies are stored in individual folders, enabling
-this option will allow Media Companion to save the
-Poster as folder.jpg. This will allow XBMC to display
-the poster when browsing movies in file mode.</value>
-  </data>
-  <data name="Label99.Text" xml:space="preserve">
-    <value>Media Companion can attempt to automatically download
-a Poster when a movie is first scraped, if this option is
-enabled, then the setting below allows you to prioritise the
-order that sources are checked for an available  poster</value>
-  </data>
-  <data name="Label109.Text" xml:space="preserve">
-    <value>Some people prefer to save their files as movie.nfo, movie.tbn
-and fanart.jpg to keep compatability with other media managers.
-
-This is not reccomended since it breaks MCs ability to see the 
-media file, used for playback and filedetails information.</value>
-  </data>
   <data name="Label56.Text" xml:space="preserve">
     <value>If one of the above TV Shows is the Correct one then
 select your preferred options from the panel opposite
@@ -3509,6 +3505,12 @@ This preference gives you the option to copy an actors
 thumb, if available, to the episodes actor folder, allowing
 the higher 
 quality TVDB actor thumb to be used for the episode.</value>
+  </data>
+  <data name="Label139.Text" xml:space="preserve">
+    <value>Enabling the 'Quick Add' option will speed up the
+scraping of TV Shows by not downloading available
+Art. All show art can be scraped at any time by using
+the TV context menu item to 'Download missing art'</value>
   </data>
   <data name="Label140.Text" xml:space="preserve">
     <value>Media Companion now offers the option to
@@ -3570,9 +3572,6 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>475, 134</value>
-  </metadata>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>682, 134</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>811, 134</value>

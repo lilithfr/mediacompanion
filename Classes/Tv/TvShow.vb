@@ -8,9 +8,11 @@ Public Class TvShow
 
     Public Shadows Property title As String
         Get
+            ShowNode.Text = MyBase.Title.Value
             Return MyBase.Title.Value
         End Get
         Set(ByVal value As String)
+            ShowNode.Text = value
             MyBase.Title.Value = value
         End Set
     End Property
@@ -170,32 +172,71 @@ Public Class TvShow
     End Property
 
     Public Property path As String
-    Public Property fullpath As String
         Get
-            Return Me.NfoFilePath
+            Return MyBase.NfoFilePath
         End Get
         Set(ByVal value As String)
-            Me.NfoFilePath = value
+            MyBase.NfoFilePath = value
+        End Set
+    End Property
+
+    Public Property fullpath As String
+        Get
+            Return MyBase.NfoFilePath
+        End Get
+        Set(ByVal value As String)
+            MyBase.NfoFilePath = value
         End Set
     End Property
 
 
     Public Property locked As Nfo.ShowState
         Get
-            Return Me.State.Value
+            Return MyBase.State.Value
         End Get
         Set(ByVal value As Nfo.ShowState)
-            Me.State.Value = value
-            Select Case value
+            MyBase.State.Value = value
+        End Set
+    End Property
+
+    Public Shadows Property State As Nfo.ShowState
+        Get
+            Select Case MyBase.State.Value
                 Case Nfo.ShowState.Open
-                    ShowNode.ImageIndex = 0
+                    ShowNode.ImageKey = "blank"
+                    ShowNode.SelectedImageKey = "blank"
                 Case Nfo.ShowState.Locked
-                    ShowNode.ImageIndex = 1
+                    ShowNode.ImageKey = "padlock"
+                    ShowNode.SelectedImageKey = "padlock"
                 Case Nfo.ShowState.Unverified
-                    ShowNode.ImageIndex = 2
+                    ShowNode.ImageKey = "qmark"
+                    ShowNode.SelectedImageKey = "qmark"
+                Case Nfo.ShowState.Error
+                    ShowNode.ImageKey = "error"
+                    ShowNode.SelectedImageKey = "error"
+            End Select
+            Return MyBase.State.Value
+        End Get
+        Set(ByVal value As Nfo.ShowState)
+            MyBase.State.Value = value
+            Select Case MyBase.State.Value
+                Case Nfo.ShowState.Open
+                    ShowNode.ImageKey = "blank"
+                    ShowNode.SelectedImageKey = "blank"
+                Case Nfo.ShowState.Locked
+                    ShowNode.ImageKey = "padlock"
+                    ShowNode.SelectedImageKey = "padlock"
+                Case Nfo.ShowState.Unverified
+                    ShowNode.ImageKey = "qmark"
+                    ShowNode.SelectedImageKey = "qmark"
+                Case Nfo.ShowState.Error
+                    ShowNode.ImageKey = "error"
+                    ShowNode.SelectedImageKey = "error"
+
             End Select
         End Set
     End Property
+
     Public Property posterpath As String
     Public Property fanartpath As String
 
@@ -205,9 +246,9 @@ Public Class TvShow
     Public Property posters As New List(Of String)
     Public Property fanart As New List(Of String)
 
-    Public ShowNode As New TreeNode
-    Public SeasonNode As New TreeNode()
+ 
 
-    
+
+
 
 End Class

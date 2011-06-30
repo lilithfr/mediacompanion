@@ -135,6 +135,7 @@
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\TVhtml.vb" />
     <Compile Include="Classes\Tv\TvEpisode.vb" />
+    <Compile Include="Classes\Tv\TvSeason.vb" />
     <Compile Include="Classes\Tv\TvShow.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Forms\Form1\Form1.Tv.vb">

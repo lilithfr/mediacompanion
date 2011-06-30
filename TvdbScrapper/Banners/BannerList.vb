@@ -31,7 +31,7 @@ Namespace Tvdb
         Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
 
             Dim NewActor As New Banner()
-
+            NewActor.ParentClass = Me.ParentClass
             NewActor.ProcessNode(Element)
 
             Me.Add(NewActor)

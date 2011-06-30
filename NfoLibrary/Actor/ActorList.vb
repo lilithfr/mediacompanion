@@ -17,21 +17,21 @@ Public Class ActorList
     Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
 
         Dim NewActor As New Actor()
-
+        NewActor.ParentClass = Me
         NewActor.ProcessNode(Element)
 
         Me.Add(NewActor)
 
     End Sub
 
-    Public Shadows Sub Add(ByVal item As Actor)
+    'Public Shadows Sub Add(ByVal item As Actor)
 
-        For Each Search As Actor In Me
-            If (Search.Name.Value = item.Name.Value) Then
-                Exit Sub
-            End If
-        Next
+    '    For Each Search As Actor In Me
+    '        If (Search.Name.Value = item.Name.Value) Then
+    '            Exit Sub
+    '        End If
+    '    Next
 
-        MyBase.Add(item)
-    End Sub
+    '    MyBase.Add(item)
+    'End Sub
 End Class

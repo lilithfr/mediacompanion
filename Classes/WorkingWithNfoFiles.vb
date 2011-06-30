@@ -478,383 +478,384 @@ Public Class WorkingWithNfoFiles
         'End Try
     End Function
 
-    Public Function loadfullepisodenfo(ByVal path As String) ', ByVal season As String, ByVal episode As String)
-        Form1.workingEpisode.Clear()
-        Dim newepisode As New TvEpisode
-        If Not IO.File.Exists(path) Then
-            newepisode.title = IO.Path.GetFileName(path)
-            newepisode.plot = "missing file"
-            newepisode.episodepath = path
-            newepisode.episodepath = path
-            If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                For Each regexp In Form1.tvRegex
+    'Public Function loadfullepisodenfo(ByVal path As String) ', ByVal season As String, ByVal episode As String)
 
-                    Dim M As Match
-                    M = Regex.Match(newepisode.episodepath, regexp)
-                    If M.Success = True Then
-                        Try
-                            newepisode.seasonno = M.Groups(1).Value.ToString
-                            newepisode.episodeno = M.Groups(2).Value.ToString
-                            Exit For
-                        Catch
-                            newepisode.seasonno = "-1"
-                            newepisode.seasonno = "-1"
-                        End Try
-                    End If
-                Next
-            End If
-            If newepisode.episodeno = Nothing Then
-                newepisode.episodeno = "-1"
-            End If
-            If newepisode.seasonno = Nothing Then
-                newepisode.seasonno = "-1"
-            End If
-            Form1.workingEpisode.Add(newepisode)
-            Return ""
-            Exit Function
-        Else
-            Dim tvshow As New XmlDocument
-            Try
-                tvshow.Load(path)
-            Catch ex As Exception
-                'If Not validate_nfo(path) Then
-                '    Exit Function
-                'End If
-                newepisode.title = IO.Path.GetFileName(path)
-                newepisode.plot = "problem / xml error"
-                newepisode.episodepath = path
-                newepisode.episodepath = path
-                If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvRegex
+    '    Form1.workingEpisode.Clear()
+    '    Dim newepisode As New TvEpisode
+    '    If Not IO.File.Exists(path) Then
+    '        newepisode.title = IO.Path.GetFileName(path)
+    '        newepisode.plot = "missing file"
+    '        newepisode.episodepath = path
+    '        newepisode.episodepath = path
+    '        If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
+    '            For Each regexp In Form1.tvRegex
 
-                        Dim M As Match
-                        M = Regex.Match(newepisode.episodepath, regexp)
-                        If M.Success = True Then
-                            Try
-                                newepisode.seasonno = M.Groups(1).Value.ToString
-                                newepisode.episodeno = M.Groups(2).Value.ToString
-                                Exit For
-                            Catch
-                                newepisode.seasonno = "-1"
-                                newepisode.seasonno = "-1"
-                            End Try
-                        End If
-                    Next
-                End If
-                If newepisode.episodeno = Nothing Then
-                    newepisode.episodeno = "-1"
-                End If
-                If newepisode.seasonno = Nothing Then
-                    newepisode.seasonno = "-1"
-                End If
-                Form1.workingEpisode.Add(newepisode)
-                Return ""
-                Exit Function
-            End Try
+    '                Dim M As Match
+    '                M = Regex.Match(newepisode.episodepath, regexp)
+    '                If M.Success = True Then
+    '                    Try
+    '                        newepisode.seasonno = M.Groups(1).Value.ToString
+    '                        newepisode.episodeno = M.Groups(2).Value.ToString
+    '                        Exit For
+    '                    Catch
+    '                        newepisode.seasonno = "-1"
+    '                        newepisode.seasonno = "-1"
+    '                    End Try
+    '                End If
+    '            Next
+    '        End If
+    '        If newepisode.episodeno = Nothing Then
+    '            newepisode.episodeno = "-1"
+    '        End If
+    '        If newepisode.seasonno = Nothing Then
+    '            newepisode.seasonno = "-1"
+    '        End If
+    '        Form1.workingEpisode.Add(newepisode)
+    '        Return ""
+    '        Exit Function
+    '    Else
+    '        Dim tvshow As New XmlDocument
+    '        Try
+    '            tvshow.Load(path)
+    '        Catch ex As Exception
+    '            'If Not validate_nfo(path) Then
+    '            '    Exit Function
+    '            'End If
+    '            newepisode.title = IO.Path.GetFileName(path)
+    '            newepisode.plot = "problem / xml error"
+    '            newepisode.episodepath = path
+    '            newepisode.episodepath = path
+    '            If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
+    '                For Each regexp In Form1.tvRegex
 
-            Dim thisresult As XmlNode = Nothing
-            Dim tempid As String = ""
-            If tvshow.DocumentElement.Name = "episodedetails" Then
-                Dim newtvepisode As New TvEpisode
-                For Each thisresult In tvshow("episodedetails")
-                    Try
-                        newtvepisode.episodepath = path
-                        Select Case thisresult.Name
-                            Case "credits"
-                                newtvepisode.credits = thisresult.InnerText
-                            Case "director"
-                                newtvepisode.director = thisresult.InnerText
-                            Case "aired"
-                                newtvepisode.aired = thisresult.InnerText
-                            Case "plot"
-                                newtvepisode.plot = thisresult.InnerText
-                            Case "title"
-                                newtvepisode.title = thisresult.InnerText
-                            Case "season"
-                                newtvepisode.seasonno = thisresult.InnerText
-                            Case "episode"
-                                newtvepisode.episodeno = thisresult.InnerText
-                            Case "rating"
-                                newtvepisode.rating = thisresult.InnerText
-                                If newtvepisode.rating.IndexOf("/10") <> -1 Then newtvepisode.rating.Replace("/10", "")
-                                If newtvepisode.rating.IndexOf(" ") <> -1 Then newtvepisode.rating.Replace(" ", "")
-                            Case "playcount"
-                                newtvepisode.playcount = thisresult.InnerText
-                            Case "thumb"
-                                newtvepisode.thumb = thisresult.InnerText
-                            Case "actor"
-                                Dim actordetail As XmlNode = Nothing
-                                Dim newactor As New MovieActors
-                                For Each actordetail In thisresult.ChildNodes
-                                    Select Case actordetail.Name
-                                        Case "name"
-                                            newactor.actorname = actordetail.InnerText
-                                        Case "role"
-                                            newactor.actorrole = actordetail.InnerText
-                                        Case "thumb"
-                                            newactor.actorthumb = actordetail.InnerText
-                                    End Select
-                                Next
-                                newtvepisode.listactors.Add(newactor)
-                            Case "fileinfo"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 In thisresult.ChildNodes
-                                    Select Case detail2.Name
-                                        Case "streamdetails"
-                                            Dim newfilenfo As New FullFileDetails
-                                            Dim detail As XmlNode = Nothing
-                                            For Each detail In detail2.ChildNodes
-                                                Select Case detail.Name
-                                                    Case "video"
-                                                        Dim videodetails As XmlNode = Nothing
-                                                        For Each videodetails In detail.ChildNodes
-                                                            Select Case videodetails.Name
-                                                                Case "width"
-                                                                    newfilenfo.filedetails_video.width = videodetails.InnerText
-                                                                Case "height"
-                                                                    newfilenfo.filedetails_video.height = videodetails.InnerText
-                                                                Case "aspect"
-                                                                    newfilenfo.filedetails_video.aspect = videodetails.InnerText
-                                                                Case "codec"
-                                                                    newfilenfo.filedetails_video.codec = videodetails.InnerText
-                                                                Case "formatinfo"
-                                                                    newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
-                                                                Case "duration"
-                                                                    newfilenfo.filedetails_video.duration = videodetails.InnerText
-                                                                Case "bitrate"
-                                                                    newfilenfo.filedetails_video.bitrate = videodetails.InnerText
-                                                                Case "bitratemode"
-                                                                    newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
-                                                                Case "bitratemax"
-                                                                    newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
-                                                                Case "container"
-                                                                    newfilenfo.filedetails_video.container = videodetails.InnerText
-                                                                Case "codecid"
-                                                                    newfilenfo.filedetails_video.codecid = videodetails.InnerText
-                                                                Case "codecidinfo"
-                                                                    newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
-                                                                Case "scantype"
-                                                                    newfilenfo.filedetails_video.scantype = videodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                    Case "audio"
-                                                        Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New MediaNFOAudio
-                                                        For Each audiodetails In detail.ChildNodes
-                                                            Select Case audiodetails.Name
-                                                                Case "language"
-                                                                    audio.language = audiodetails.InnerText
-                                                                Case "codec"
-                                                                    audio.codec = audiodetails.InnerText
-                                                                Case "channels"
-                                                                    audio.channels = audiodetails.InnerText
-                                                                Case "bitrate"
-                                                                    audio.bitrate = audiodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                        newfilenfo.filedetails_audio.Add(audio)
-                                                    Case "subtitle"
-                                                        Dim subsdetails As XmlNode = Nothing
-                                                        For Each subsdetails In detail.ChildNodes
-                                                            Select Case subsdetails.Name
-                                                                Case "language"
-                                                                    Dim sublang As New MediaNFOSubtitles
-                                                                    sublang.language = subsdetails.InnerText
-                                                                    newfilenfo.filedetails_subtitles.Add(sublang)
-                                                            End Select
-                                                        Next
-                                                End Select
-                                            Next
-                                            newtvepisode.filedetails = newfilenfo
-                                    End Select
-                                Next
-                        End Select
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
-                    End Try
-                Next
+    '                    Dim M As Match
+    '                    M = Regex.Match(newepisode.episodepath, regexp)
+    '                    If M.Success = True Then
+    '                        Try
+    '                            newepisode.seasonno = M.Groups(1).Value.ToString
+    '                            newepisode.episodeno = M.Groups(2).Value.ToString
+    '                            Exit For
+    '                        Catch
+    '                            newepisode.seasonno = "-1"
+    '                            newepisode.seasonno = "-1"
+    '                        End Try
+    '                    End If
+    '                Next
+    '            End If
+    '            If newepisode.episodeno = Nothing Then
+    '                newepisode.episodeno = "-1"
+    '            End If
+    '            If newepisode.seasonno = Nothing Then
+    '                newepisode.seasonno = "-1"
+    '            End If
+    '            Form1.workingEpisode.Add(newepisode)
+    '            Return ""
+    '            Exit Function
+    '        End Try
 
-                If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvRegex
+    '        Dim thisresult As XmlNode = Nothing
+    '        Dim tempid As String = ""
+    '        If tvshow.DocumentElement.Name = "episodedetails" Then
+    '            Dim newtvepisode As New TvEpisode
+    '            For Each thisresult In tvshow("episodedetails")
+    '                Try
+    '                    newtvepisode.episodepath = path
+    '                    Select Case thisresult.Name
+    '                        Case "credits"
+    '                            newtvepisode.credits = thisresult.InnerText
+    '                        Case "director"
+    '                            newtvepisode.director = thisresult.InnerText
+    '                        Case "aired"
+    '                            newtvepisode.aired = thisresult.InnerText
+    '                        Case "plot"
+    '                            newtvepisode.plot = thisresult.InnerText
+    '                        Case "title"
+    '                            newtvepisode.title = thisresult.InnerText
+    '                        Case "season"
+    '                            newtvepisode.seasonno = thisresult.InnerText
+    '                        Case "episode"
+    '                            newtvepisode.episodeno = thisresult.InnerText
+    '                        Case "rating"
+    '                            newtvepisode.rating = thisresult.InnerText
+    '                            If newtvepisode.rating.IndexOf("/10") <> -1 Then newtvepisode.rating.Replace("/10", "")
+    '                            If newtvepisode.rating.IndexOf(" ") <> -1 Then newtvepisode.rating.Replace(" ", "")
+    '                        Case "playcount"
+    '                            newtvepisode.playcount = thisresult.InnerText
+    '                        Case "thumb"
+    '                            newtvepisode.thumb = thisresult.InnerText
+    '                        Case "actor"
+    '                            Dim actordetail As XmlNode = Nothing
+    '                            Dim newactor As New MovieActors
+    '                            For Each actordetail In thisresult.ChildNodes
+    '                                Select Case actordetail.Name
+    '                                    Case "name"
+    '                                        newactor.actorname = actordetail.InnerText
+    '                                    Case "role"
+    '                                        newactor.actorrole = actordetail.InnerText
+    '                                    Case "thumb"
+    '                                        newactor.actorthumb = actordetail.InnerText
+    '                                End Select
+    '                            Next
+    '                            newtvepisode.ListActors.Add(newactor)
+    '                        Case "fileinfo"
+    '                            Dim detail2 As XmlNode = Nothing
+    '                            For Each detail2 In thisresult.ChildNodes
+    '                                Select Case detail2.Name
+    '                                    Case "streamdetails"
+    '                                        Dim newfilenfo As New FullFileDetails
+    '                                        Dim detail As XmlNode = Nothing
+    '                                        For Each detail In detail2.ChildNodes
+    '                                            Select Case detail.Name
+    '                                                Case "video"
+    '                                                    Dim videodetails As XmlNode = Nothing
+    '                                                    For Each videodetails In detail.ChildNodes
+    '                                                        Select Case videodetails.Name
+    '                                                            Case "width"
+    '                                                                newfilenfo.filedetails_video.width = videodetails.InnerText
+    '                                                            Case "height"
+    '                                                                newfilenfo.filedetails_video.height = videodetails.InnerText
+    '                                                            Case "aspect"
+    '                                                                newfilenfo.filedetails_video.aspect = videodetails.InnerText
+    '                                                            Case "codec"
+    '                                                                newfilenfo.filedetails_video.codec = videodetails.InnerText
+    '                                                            Case "formatinfo"
+    '                                                                newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
+    '                                                            Case "duration"
+    '                                                                newfilenfo.filedetails_video.duration = videodetails.InnerText
+    '                                                            Case "bitrate"
+    '                                                                newfilenfo.filedetails_video.bitrate = videodetails.InnerText
+    '                                                            Case "bitratemode"
+    '                                                                newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
+    '                                                            Case "bitratemax"
+    '                                                                newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
+    '                                                            Case "container"
+    '                                                                newfilenfo.filedetails_video.container = videodetails.InnerText
+    '                                                            Case "codecid"
+    '                                                                newfilenfo.filedetails_video.codecid = videodetails.InnerText
+    '                                                            Case "codecidinfo"
+    '                                                                newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
+    '                                                            Case "scantype"
+    '                                                                newfilenfo.filedetails_video.scantype = videodetails.InnerText
+    '                                                        End Select
+    '                                                    Next
+    '                                                Case "audio"
+    '                                                    Dim audiodetails As XmlNode = Nothing
+    '                                                    Dim audio As New MediaNFOAudio
+    '                                                    For Each audiodetails In detail.ChildNodes
+    '                                                        Select Case audiodetails.Name
+    '                                                            Case "language"
+    '                                                                audio.language = audiodetails.InnerText
+    '                                                            Case "codec"
+    '                                                                audio.codec = audiodetails.InnerText
+    '                                                            Case "channels"
+    '                                                                audio.channels = audiodetails.InnerText
+    '                                                            Case "bitrate"
+    '                                                                audio.bitrate = audiodetails.InnerText
+    '                                                        End Select
+    '                                                    Next
+    '                                                    newfilenfo.filedetails_audio.Add(audio)
+    '                                                Case "subtitle"
+    '                                                    Dim subsdetails As XmlNode = Nothing
+    '                                                    For Each subsdetails In detail.ChildNodes
+    '                                                        Select Case subsdetails.Name
+    '                                                            Case "language"
+    '                                                                Dim sublang As New MediaNFOSubtitles
+    '                                                                sublang.language = subsdetails.InnerText
+    '                                                                newfilenfo.filedetails_subtitles.Add(sublang)
+    '                                                        End Select
+    '                                                    Next
+    '                                            End Select
+    '                                        Next
+    '                                        newtvepisode.filedetails = newfilenfo
+    '                                End Select
+    '                            Next
+    '                    End Select
+    '                Catch ex As Exception
+    '                    MsgBox(ex.ToString)
+    '                End Try
+    '            Next
 
-                        Dim M As Match
-                        M = Regex.Match(newtvepisode.episodepath, regexp)
-                        If M.Success = True Then
-                            Try
-                                newtvepisode.seasonno = M.Groups(1).Value.ToString
-                                newtvepisode.episodeno = M.Groups(2).Value.ToString
-                                Exit For
-                            Catch
-                                newtvepisode.seasonno = "-1"
-                                newtvepisode.seasonno = "-1"
-                            End Try
-                        End If
-                    Next
-                End If
-                If newtvepisode.episodeno = Nothing Then
-                    newtvepisode.episodeno = "-1"
-                End If
-                If newtvepisode.seasonno = Nothing Then
-                    newtvepisode.seasonno = "-1"
-                End If
-                If newtvepisode.rating = Nothing Then newtvepisode.rating = ""
-                Form1.workingEpisode.Add(newtvepisode)
-                Return ""
-                Exit Function
-            ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Then
-                For Each thisresult In tvshow("multiepisodenfo")
-                    Select Case thisresult.Name
-                        Case "episodedetails"
-                            Dim newepisodenfo As XmlNode = Nothing
-                            Dim anotherepisode As New TvEpisode
+    '            If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
+    '                For Each regexp In Form1.tvRegex
 
-                            anotherepisode.episodepath = ""
-                            anotherepisode.playcount = ""
-                            anotherepisode.rating = ""
-                            anotherepisode.seasonno = ""
-                            anotherepisode.title = ""
-                            ' For Each newepisodenfo In thisresult.ChildNodes
-                            Dim tempint As Integer = thisresult.ChildNodes.Count - 1
-                            For f = 0 To tempint
-                                Try
+    '                    Dim M As Match
+    '                    M = Regex.Match(newtvepisode.episodepath, regexp)
+    '                    If M.Success = True Then
+    '                        Try
+    '                            newtvepisode.seasonno = M.Groups(1).Value.ToString
+    '                            newtvepisode.episodeno = M.Groups(2).Value.ToString
+    '                            Exit For
+    '                        Catch
+    '                            newtvepisode.seasonno = "-1"
+    '                            newtvepisode.seasonno = "-1"
+    '                        End Try
+    '                    End If
+    '                Next
+    '            End If
+    '            If newtvepisode.episodeno = Nothing Then
+    '                newtvepisode.episodeno = "-1"
+    '            End If
+    '            If newtvepisode.seasonno = Nothing Then
+    '                newtvepisode.seasonno = "-1"
+    '            End If
+    '            If newtvepisode.rating = Nothing Then newtvepisode.rating = ""
+    '            Form1.workingEpisode.Add(newtvepisode)
+    '            Return ""
+    '            Exit Function
+    '        ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Then
+    '            For Each thisresult In tvshow("multiepisodenfo")
+    '                Select Case thisresult.Name
+    '                    Case "episodedetails"
+    '                        Dim newepisodenfo As XmlNode = Nothing
+    '                        Dim anotherepisode As New TvEpisode
 
-
-                                    'Public credits As String
-                                    'Public director As String
-                                    'Public aired As String
-                                    'Public plot As Integer
-                                    'Public fanartpath As String
-                                    'Public listactors As New List(Of movieactors)
-                                    'Public filedetails As New fullfiledetails
+    '                        anotherepisode.episodepath = ""
+    '                        anotherepisode.playcount = ""
+    '                        anotherepisode.rating = ""
+    '                        anotherepisode.seasonno = ""
+    '                        anotherepisode.title = ""
+    '                        ' For Each newepisodenfo In thisresult.ChildNodes
+    '                        Dim tempint As Integer = thisresult.ChildNodes.Count - 1
+    '                        For f = 0 To tempint
+    '                            Try
 
 
-                                    Select Case thisresult.ChildNodes(f).Name
-                                        Case "credits"
-                                            anotherepisode.credits = thisresult.ChildNodes(f).InnerText
-                                        Case "director"
-                                            anotherepisode.director = thisresult.ChildNodes(f).InnerText
-                                        Case "aired"
-                                            anotherepisode.aired = thisresult.ChildNodes(f).InnerText
-                                        Case "plot"
-                                            anotherepisode.plot = thisresult.ChildNodes(f).InnerText
-                                        Case "title"
-                                            anotherepisode.title = thisresult.ChildNodes(f).InnerText
-                                        Case "season"
-                                            anotherepisode.seasonno = thisresult.ChildNodes(f).InnerText
-                                        Case "episode"
-                                            anotherepisode.episodeno = thisresult.ChildNodes(f).InnerText
-                                        Case "rating"
-                                            anotherepisode.rating = thisresult.ChildNodes(f).InnerText
-                                            If anotherepisode.rating.IndexOf("/10") <> -1 Then anotherepisode.rating.Replace("/10", "")
-                                            If anotherepisode.rating.IndexOf(" ") <> -1 Then anotherepisode.rating.Replace(" ", "")
-                                        Case "playcount"
-                                            anotherepisode.playcount = thisresult.ChildNodes(f).InnerText
-                                        Case "thumb"
-                                            anotherepisode.thumb = thisresult.ChildNodes(f).InnerText
-                                        Case "runtime"
-                                            anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "actor"
-                                            Dim detail As XmlNode = Nothing
-                                            Dim newactor As New MovieActors
-                                            For Each detail In thisresult.ChildNodes(f).ChildNodes
-                                                Select Case detail.Name
-                                                    Case "name"
-                                                        newactor.actorname = detail.InnerText
-                                                    Case "role"
-                                                        newactor.actorrole = detail.InnerText
-                                                    Case "thumb"
-                                                        newactor.actorthumb = detail.InnerText
-                                                End Select
-                                            Next
-                                            anotherepisode.listactors.Add(newactor)
-                                        Case "streamdetails"
-                                            Dim detail2 As XmlNode = Nothing
-                                            For Each detail2 In thisresult.ChildNodes(f).ChildNodes
-                                                Select Case detail2.Name
-                                                    Case "fileinfo"
-                                                        Dim newfilenfo As New FullFileDetails
-                                                        Dim detail As XmlNode = Nothing
-                                                        For Each detail In detail2.ChildNodes
-                                                            Select Case detail.Name
-                                                                Case "video"
-                                                                    Dim videodetails As XmlNode = Nothing
-                                                                    For Each videodetails In detail.ChildNodes
-                                                                        Select Case videodetails.Name
-                                                                            Case "width"
-                                                                                newfilenfo.filedetails_video.width = videodetails.InnerText
-                                                                            Case "height"
-                                                                                newfilenfo.filedetails_video.height = videodetails.InnerText
-                                                                            Case "codec"
-                                                                                newfilenfo.filedetails_video.codec = videodetails.InnerText
-                                                                            Case "formatinfo"
-                                                                                newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
-                                                                            Case "duration"
-                                                                                newfilenfo.filedetails_video.duration = videodetails.InnerText
-                                                                            Case "bitrate"
-                                                                                newfilenfo.filedetails_video.bitrate = videodetails.InnerText
-                                                                            Case "bitratemode"
-                                                                                newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
-                                                                            Case "bitratemax"
-                                                                                newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
-                                                                            Case "container"
-                                                                                newfilenfo.filedetails_video.container = videodetails.InnerText
-                                                                            Case "codecid"
-                                                                                newfilenfo.filedetails_video.codecid = videodetails.InnerText
-                                                                            Case "codecidinfo"
-                                                                                newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
-                                                                            Case "scantype"
-                                                                                newfilenfo.filedetails_video.scantype = videodetails.InnerText
-                                                                        End Select
-                                                                    Next
-                                                                Case "audio"
-                                                                    Dim audiodetails As XmlNode = Nothing
-                                                                    Dim audio As New MediaNFOAudio
-                                                                    For Each audiodetails In detail.ChildNodes
-
-                                                                        Select Case audiodetails.Name
-                                                                            Case "language"
-                                                                                audio.language = audiodetails.InnerText
-                                                                            Case "codec"
-                                                                                audio.codec = audiodetails.InnerText
-                                                                            Case "channels"
-                                                                                audio.channels = audiodetails.InnerText
-                                                                            Case "bitrate"
-                                                                                audio.bitrate = audiodetails.InnerText
-                                                                        End Select
-                                                                    Next
-                                                                    newfilenfo.filedetails_audio.Add(audio)
-                                                                Case "subtitle"
-                                                                    Dim subsdetails As XmlNode = Nothing
-                                                                    For Each subsdetails In detail.ChildNodes
-                                                                        Select Case subsdetails.Name
-                                                                            Case "language"
-                                                                                Dim sublang As New MediaNFOSubtitles
-                                                                                sublang.language = subsdetails.InnerText
-                                                                                newfilenfo.filedetails_subtitles.Add(sublang)
-                                                                        End Select
-                                                                    Next
-                                                            End Select
-                                                        Next
-                                                        anotherepisode.filedetails = newfilenfo
-                                                End Select
-                                            Next
-                                    End Select
+    '                                'Public credits As String
+    '                                'Public director As String
+    '                                'Public aired As String
+    '                                'Public plot As Integer
+    '                                'Public fanartpath As String
+    '                                'Public listactors As New List(Of movieactors)
+    '                                'Public filedetails As New fullfiledetails
 
 
-                                Catch ex As Exception
-                                    MsgBox(ex.ToString)
-                                End Try
-                            Next f
-                            anotherepisode.episodepath = path
-                            Form1.workingEpisode.Add(anotherepisode)
-                    End Select
-                Next
-            End If
+    '                                Select Case thisresult.ChildNodes(f).Name
+    '                                    Case "credits"
+    '                                        anotherepisode.credits = thisresult.ChildNodes(f).InnerText
+    '                                    Case "director"
+    '                                        anotherepisode.director = thisresult.ChildNodes(f).InnerText
+    '                                    Case "aired"
+    '                                        anotherepisode.aired = thisresult.ChildNodes(f).InnerText
+    '                                    Case "plot"
+    '                                        anotherepisode.plot = thisresult.ChildNodes(f).InnerText
+    '                                    Case "title"
+    '                                        anotherepisode.title = thisresult.ChildNodes(f).InnerText
+    '                                    Case "season"
+    '                                        anotherepisode.seasonno = thisresult.ChildNodes(f).InnerText
+    '                                    Case "episode"
+    '                                        anotherepisode.episodeno = thisresult.ChildNodes(f).InnerText
+    '                                    Case "rating"
+    '                                        anotherepisode.rating = thisresult.ChildNodes(f).InnerText
+    '                                        If anotherepisode.rating.IndexOf("/10") <> -1 Then anotherepisode.rating.Replace("/10", "")
+    '                                        If anotherepisode.rating.IndexOf(" ") <> -1 Then anotherepisode.rating.Replace(" ", "")
+    '                                    Case "playcount"
+    '                                        anotherepisode.playcount = thisresult.ChildNodes(f).InnerText
+    '                                    Case "thumb"
+    '                                        anotherepisode.thumb = thisresult.ChildNodes(f).InnerText
+    '                                    Case "runtime"
+    '                                        anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "actor"
+    '                                        Dim detail As XmlNode = Nothing
+    '                                        Dim newactor As New MovieActors
+    '                                        For Each detail In thisresult.ChildNodes(f).ChildNodes
+    '                                            Select Case detail.Name
+    '                                                Case "name"
+    '                                                    newactor.actorname = detail.InnerText
+    '                                                Case "role"
+    '                                                    newactor.actorrole = detail.InnerText
+    '                                                Case "thumb"
+    '                                                    newactor.actorthumb = detail.InnerText
+    '                                            End Select
+    '                                        Next
+    '                                        anotherepisode.ListActors.Add(newactor)
+    '                                    Case "streamdetails"
+    '                                        Dim detail2 As XmlNode = Nothing
+    '                                        For Each detail2 In thisresult.ChildNodes(f).ChildNodes
+    '                                            Select Case detail2.Name
+    '                                                Case "fileinfo"
+    '                                                    Dim newfilenfo As New FullFileDetails
+    '                                                    Dim detail As XmlNode = Nothing
+    '                                                    For Each detail In detail2.ChildNodes
+    '                                                        Select Case detail.Name
+    '                                                            Case "video"
+    '                                                                Dim videodetails As XmlNode = Nothing
+    '                                                                For Each videodetails In detail.ChildNodes
+    '                                                                    Select Case videodetails.Name
+    '                                                                        Case "width"
+    '                                                                            newfilenfo.filedetails_video.width = videodetails.InnerText
+    '                                                                        Case "height"
+    '                                                                            newfilenfo.filedetails_video.height = videodetails.InnerText
+    '                                                                        Case "codec"
+    '                                                                            newfilenfo.filedetails_video.codec = videodetails.InnerText
+    '                                                                        Case "formatinfo"
+    '                                                                            newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
+    '                                                                        Case "duration"
+    '                                                                            newfilenfo.filedetails_video.duration = videodetails.InnerText
+    '                                                                        Case "bitrate"
+    '                                                                            newfilenfo.filedetails_video.bitrate = videodetails.InnerText
+    '                                                                        Case "bitratemode"
+    '                                                                            newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
+    '                                                                        Case "bitratemax"
+    '                                                                            newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
+    '                                                                        Case "container"
+    '                                                                            newfilenfo.filedetails_video.container = videodetails.InnerText
+    '                                                                        Case "codecid"
+    '                                                                            newfilenfo.filedetails_video.codecid = videodetails.InnerText
+    '                                                                        Case "codecidinfo"
+    '                                                                            newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
+    '                                                                        Case "scantype"
+    '                                                                            newfilenfo.filedetails_video.scantype = videodetails.InnerText
+    '                                                                    End Select
+    '                                                                Next
+    '                                                            Case "audio"
+    '                                                                Dim audiodetails As XmlNode = Nothing
+    '                                                                Dim audio As New MediaNFOAudio
+    '                                                                For Each audiodetails In detail.ChildNodes
+
+    '                                                                    Select Case audiodetails.Name
+    '                                                                        Case "language"
+    '                                                                            audio.language = audiodetails.InnerText
+    '                                                                        Case "codec"
+    '                                                                            audio.codec = audiodetails.InnerText
+    '                                                                        Case "channels"
+    '                                                                            audio.channels = audiodetails.InnerText
+    '                                                                        Case "bitrate"
+    '                                                                            audio.bitrate = audiodetails.InnerText
+    '                                                                    End Select
+    '                                                                Next
+    '                                                                newfilenfo.filedetails_audio.Add(audio)
+    '                                                            Case "subtitle"
+    '                                                                Dim subsdetails As XmlNode = Nothing
+    '                                                                For Each subsdetails In detail.ChildNodes
+    '                                                                    Select Case subsdetails.Name
+    '                                                                        Case "language"
+    '                                                                            Dim sublang As New MediaNFOSubtitles
+    '                                                                            sublang.language = subsdetails.InnerText
+    '                                                                            newfilenfo.filedetails_subtitles.Add(sublang)
+    '                                                                    End Select
+    '                                                                Next
+    '                                                        End Select
+    '                                                    Next
+    '                                                    anotherepisode.filedetails = newfilenfo
+    '                                            End Select
+    '                                        Next
+    '                                End Select
 
 
-        End If
-        Return "Error"
-    End Function
+    '                            Catch ex As Exception
+    '                                MsgBox(ex.ToString)
+    '                            End Try
+    '                        Next f
+    '                        anotherepisode.episodepath = path
+    '                        Form1.workingEpisode.Add(anotherepisode)
+    '                End Select
+    '            Next
+    '        End If
+
+
+    '    End If
+    '    Return "Error"
+    'End Function
 
     Public Function loadfulltnshownfo(ByVal path As String) As TvShow
 
@@ -1303,11 +1304,12 @@ Public Class WorkingWithNfoFiles
     Public Sub saveepisodenfo(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
         'Monitor.Enter(Me)
         'Try
+        Dim WorkingTvShow As TvShow = Form1.tvCurrentlySelectedShow()
         If seasonno <> -2 And episodeno <> -2 Then
             If batch = False Then
                 Dim timetoexit As Boolean = False
                 For Each show In Form1.TvShows
-                    If show.fullpath = Form1.workingTvShow.path Then
+                    If show.fullpath = WorkingTvShow.path Then
                         For Each episode In show.allepisodes
                             If episode.episodeno = episodeno And episode.seasonno = seasonno Then
 

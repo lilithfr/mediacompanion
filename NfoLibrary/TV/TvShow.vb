@@ -41,6 +41,19 @@ Public Class TvShow
 
     Public Property State As New ProtoProperty(Me, "state")
 
+    Public Property Seasons As New Dictionary(Of String, TvSeason)
+    Public Property Episodes As New List(Of TvEpisode)
+
+    Public Property ImageFanart As New ProtoImage(Me, "fanart") With {.FileName = "fanart.jpg"}
+    Public Property ImagePoster As New ProtoImage(Me, "poster") With {.FileName = "folder.jpg"}
+    Public Property ImageBanner As New ProtoImage(Me, "banner") With {.FileName = "folder.jpg"}
+    Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons") With {.FileName = "seasonall.tbn"}
+    Public Property ImageClearArt As New ProtoImage(Me, "clearart") With {.FileName = "clearart.png"}
+    Public Property ImageLogo As New ProtoImage(Me, "logo") With {.FileName = "logo.png"}
+
+
+
+
     Public ReadOnly Property TitleAndYear As String
         Get
             Return Title.Value & " " & Year.Value
@@ -101,11 +114,125 @@ Public Class TvShow
         Me.Studio.Value = Series.Network.Value
 
     End Sub
+
+    Public Sub SearchForEpisodesInFolder()
+
+        Dim episode As New List(Of TvEpisode)
+        Dim propfile As Boolean = False
+        Dim allok As Boolean = False
+
+
+        Dim newlist As New List(Of String)
+        newlist.Clear()
+
+        newlist = Utilities.EnumerateFolders(Me.FolderPath, 6) 'TODO: Restore loging functions
+
+        newlist.Insert(0, Me.FolderPath)
+     
+        For Each folder In newlist
+            Dim dir_info As New System.IO.DirectoryInfo(folder)
+
+            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
+            For Each fs_info As System.IO.FileInfo In fs_infos
+                'Application.DoEvents()
+                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
+                    Dim NewEpisode As New TvEpisode
+                    NewEpisode.NfoFilePath = fs_info.FullName
+                    NewEpisode.Load()
+
+                    Me.AddEpisode(NewEpisode)
+                End If
+
+            Next fs_info
+        Next
+    End Sub
+
+    Public Sub AddEpisode(ByRef Episode As TvEpisode)
+        If Not Me.Episodes.Contains(Episode) Then
+            Me.Episodes.Add(Episode)
+        End If
+
+        If Episode.Season.Value IsNot Nothing AndAlso Not Me.Seasons.ContainsKey(Episode.Season.Value) Then
+            Dim NewSeason As New TvSeason
+
+            If Utilities.IsNumeric(Episode.Season.Value) Then
+                NewSeason.SeasonNumber = Episode.Season.Value
+                NewSeason.SeasonLabel = "Season " & Utilities.PadNumber(Episode.Season.Value, 2)
+                NewSeason.Poster.FolderPath = Me.FolderPath
+                NewSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & ".tbn"
+            Else
+                NewSeason.SeasonNumber = -1
+                NewSeason.SeasonLabel = Episode.Season.Value
+                NewSeason.Poster.FolderPath = Me.FolderPath
+                NewSeason.Poster.FileName = "season-all.tbn"
+            End If
+
+            Me.ShowNode.Nodes.Add(NewSeason.SeasonNode)
+            NewSeason.UpdateTreenode()
+            NewSeason.SeasonNode.Nodes.Add(Episode.EpisodeNode)
+            NewSeason.Episodes.Add(Episode)
+            NewSeason.ShowObj = Me
+            Me.Seasons.Add(Episode.Season.Value, NewSeason)
+            Episode.SeasonObj = NewSeason
+        ElseIf Episode.Season.Value IsNot Nothing Then
+            Me.Seasons(Episode.Season.Value).SeasonNode.Nodes.Add(Episode.EpisodeNode)
+            Me.Seasons(Episode.Season.Value).Episodes.Add(Episode)
+            Me.Seasons(Episode.Season.Value).UpdateTreenode()
+            Episode.SeasonObj = Me.Seasons(Episode.Season.Value)
+        Else
+            Dim Test = False
+        End If
+        Episode.ShowObj = Me
+    End Sub
+
+    Private _Visible As Boolean
+    Public Property Visible As Boolean
+        Get
+            If _Visible Then
+                ShowNode.ForeColor = Drawing.Color.Black
+            Else
+                ShowNode.ForeColor = Drawing.Color.LightGray
+            End If
+            Return _Visible
+        End Get
+        Set(ByVal value As Boolean)
+            _Visible = value
+            If _Visible Then
+                ShowNode.ForeColor = Drawing.Color.Black
+            Else
+                ShowNode.ForeColor = Drawing.Color.LightGray
+            End If
+        End Set
+    End Property
+
+
+    Public ReadOnly Property VisibleEpisodeCount As Integer
+        Get
+            Dim Count As Integer = 0
+            For Each Ep As TvEpisode In Episodes
+                If Ep.Visible Then
+                    Count += 1
+                End If
+            Next
+            Return Count
+        End Get
+    End Property
+    Public ReadOnly Property VisibleSeasonCount As Integer
+        Get
+            Dim Count As Integer = 0
+            For Each Ep As TvSeason In Seasons.Values
+                If Ep.Visible Then
+                    Count += 1
+                End If
+            Next
+            Return Count
+        End Get
+    End Property
 End Class
 
 Public Enum ShowState
     Open
     Locked
     Unverified
-
+    [Error]
 End Enum

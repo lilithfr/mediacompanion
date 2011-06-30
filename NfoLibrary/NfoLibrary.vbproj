@@ -49,6 +49,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -93,7 +95,11 @@
     <Compile Include="Music\Shared\SubtitleDetails.vb" />
     <Compile Include="Music\Shared\SubtitleList.vb" />
     <Compile Include="Music\Shared\VideoDetails.vb" />
+    <Compile Include="TV\TvEpisode.Treeview.vb" />
     <Compile Include="TV\TvEpisode.vb" />
+    <Compile Include="TV\TvSeason.Treenode.vb" />
+    <Compile Include="TV\TvSeason.vb" />
+    <Compile Include="TV\TvShow.Treenode.vb" />
     <Compile Include="TV\TvShow.vb" />
   </ItemGroup>
   <ItemGroup>

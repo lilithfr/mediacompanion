@@ -22,29 +22,35 @@
         If Me.Orphan Then
             Me.Node = Element
         End If
-        
-        If Me.ParentClass IsNot Nothing AndAlso Not XDocument.ReferenceEquals(Me.Node.Document, Element.Document) Then
-            If Element.Parent IsNot Nothing Then
-                Element.Remove()
-            End If
-            ParentClass.Node.Add(Element)
 
+        If Me.ParentClass IsNot Nothing Then
             If Me.Node.Parent IsNot Nothing Then
-                Me.Node.Remove()
+
+                If Not Me.Node.Parent.Nodes.Contains(Element) Then
+                    If Element.Parent IsNot Nothing Then
+                        Element.Remove()
+                    End If
+                    ParentClass.Node.Add(Element)
+
+                    If Me.Node.Parent IsNot Nothing Then
+                        Me.Node.Remove()
+                    End If
+                End If
+            Else
+
             End If
-            Me.Node = Element
         End If
+            Me.Node = Element
 
 
+            Dim ChildProperty As IProtoXChild
+            For Each Child As XElement In Me.Node.Nodes
+                If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
+                    ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
 
-        Dim ChildProperty As IProtoXChild
-        For Each Child As XElement In Me.Node.Nodes
-            If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
-                ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
-
-                ChildProperty.ProcessNode(Child)
-            End If
-        Next
+                    ChildProperty.ProcessNode(Child)
+                End If
+            Next
 
     End Sub
 

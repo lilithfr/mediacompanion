@@ -48,26 +48,6 @@ Me.Button17 = New System.Windows.Forms.Button()
 Me.Button18 = New System.Windows.Forms.Button()
 Me.Button19 = New System.Windows.Forms.Button()
 Me.Button22 = New System.Windows.Forms.Button()
-Me.TreeView1 = New System.Windows.Forms.TreeView()
-Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-Me.ExpandSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.CollapseSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.CollapseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.LockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.UnlockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-Me.SearchThisShowForNewEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.ReloadItemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.RenameTVShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.RebuildThisShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.MissingepisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.DisplayEpisodesByAiredDateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
 Me.Button34 = New System.Windows.Forms.Button()
 Me.Button43 = New System.Windows.Forms.Button()
 Me.Button44 = New System.Windows.Forms.Button()
@@ -113,6 +93,26 @@ Me.TextBox_GenreFilter = New System.Windows.Forms.TextBox()
 Me.Button110 = New System.Windows.Forms.Button()
 Me.Panel8 = New System.Windows.Forms.Panel()
 Me.txt_tableplot = New System.Windows.Forms.TextBox()
+Me.TvTreeview = New System.Windows.Forms.TreeView()
+Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
+Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+Me.ExpandSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.CollapseSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.CollapseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.LockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.UnlockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+Me.SearchThisShowForNewEpisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.ReloadItemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RenameTVShowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.RebuildThisShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.MissingepisodesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.DisplayEpisodesByAiredDateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.GroupBox_TMDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
 Me.Label155 = New System.Windows.Forms.Label()
 Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings = New System.Windows.Forms.CheckBox()
@@ -466,7 +466,6 @@ Me.TabPage2 = New System.Windows.Forms.TabPage()
 Me.TabControl3 = New System.Windows.Forms.TabControl()
 Me.TabPage11 = New System.Windows.Forms.TabPage()
 Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
-Me.TvTreeview = New System.Windows.Forms.TreeView()
 Me.RadioButton44 = New System.Windows.Forms.RadioButton()
 Me.RadioButton32 = New System.Windows.Forms.RadioButton()
 Me.RadioButton31 = New System.Windows.Forms.RadioButton()
@@ -856,9 +855,9 @@ Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.compon
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
-Me.ContextMenuStrip2.SuspendLayout
 Me.GroupBox11.SuspendLayout
 Me.GroupBox12.SuspendLayout
+Me.ContextMenuStrip2.SuspendLayout
 Me.GroupBox_TMDB_Scraper_Preferences.SuspendLayout
 Me.GroupBox_MovieIMDBMirror.SuspendLayout
 Me.GroupBox_IMDB_Scraper_Preferences.SuspendLayout
@@ -1204,141 +1203,6 @@ Me.Button22.Text = "Resize"
 Me.ToolTip1.SetToolTip(Me.Button22, "Resize image according to prefs"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This may effect the aspect.")
 Me.Button22.UseVisualStyleBackColor = true
 Me.Button22.Visible = false
-'
-'TreeView1
-'
-Me.TreeView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TreeView1.BackColor = System.Drawing.SystemColors.Window
-Me.TreeView1.ContextMenuStrip = Me.ContextMenuStrip2
-Me.TreeView1.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-Me.TreeView1.ForeColor = System.Drawing.SystemColors.WindowText
-Me.TreeView1.HideSelection = false
-Me.TreeView1.Location = New System.Drawing.Point(8, 36)
-Me.TreeView1.Margin = New System.Windows.Forms.Padding(4)
-Me.TreeView1.MinimumSize = New System.Drawing.Size(249, 4)
-Me.TreeView1.Name = "TreeView1"
-Me.TreeView1.ShowLines = false
-Me.TreeView1.Size = New System.Drawing.Size(361, 224)
-Me.TreeView1.StateImageList = Me.ImageList2
-Me.TreeView1.TabIndex = 0
-Me.ToolTip1.SetToolTip(Me.TreeView1, "Double click an episode to playback,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Use context menu (Right Mouse Click)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for a"& _ 
-        "dditional options")
-'
-'ContextMenuStrip2
-'
-Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem, Me.ToolStripSeparator2, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.MissingepisodesToolStripMenuItem, Me.DisplayEpisodesByAiredDateToolStripMenuItem})
-Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 346)
-Me.ContextMenuStrip2.Text = "Open Folder at file"
-'
-'OpenFolderToolStripMenuItem
-'
-Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
-Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
-'
-'ToolStripMenuItem1
-'
-Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-Me.ToolStripMenuItem1.Size = New System.Drawing.Size(255, 22)
-Me.ToolStripMenuItem1.Text = "Open File"
-'
-'ToolStripSeparator1
-'
-Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-Me.ToolStripSeparator1.Size = New System.Drawing.Size(252, 6)
-'
-'ExpandSelectedShowToolStripMenuItem
-'
-Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
-Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
-'
-'CollapseSelectedShowToolStripMenuItem
-'
-Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
-Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
-'
-'CollapseAllToolStripMenuItem
-'
-Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
-Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
-'
-'ExpandAllToolStripMenuItem
-'
-Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
-Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.ExpandAllToolStripMenuItem.Text = "Expand All"
-'
-'LockAllToolStripMenuItem
-'
-Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
-Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
-'
-'UnlockAllToolStripMenuItem
-'
-Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
-Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
-'
-'ToolStripSeparator2
-'
-Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-Me.ToolStripSeparator2.Size = New System.Drawing.Size(252, 6)
-'
-'SearchThisShowForNewEpisodesToolStripMenuItem
-'
-Me.SearchThisShowForNewEpisodesToolStripMenuItem.Name = "SearchThisShowForNewEpisodesToolStripMenuItem"
-Me.SearchThisShowForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search this Show for new episodes"
-'
-'DownloadAvaileableMissingArtForShowToolStripMenuItem
-'
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Name = "DownloadAvaileableMissingArtForShowToolStripMenuItem"
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "missing art for show"
-'
-'ReloadItemToolStripMenuItem
-'
-Me.ReloadItemToolStripMenuItem.Name = "ReloadItemToolStripMenuItem"
-Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.ReloadItemToolStripMenuItem.Text = "Reload Item"
-'
-'RenameTVShowsToolStripMenuItem
-'
-Me.RenameTVShowsToolStripMenuItem.Name = "RenameTVShowsToolStripMenuItem"
-Me.RenameTVShowsToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.RenameTVShowsToolStripMenuItem.Text = "Rename Episode(s)"
-'
-'RebuildThisShowToolStripMenuItem
-'
-Me.RebuildThisShowToolStripMenuItem.Name = "RebuildThisShowToolStripMenuItem"
-Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.RebuildThisShowToolStripMenuItem.Text = "Rebuild this Show"
-'
-'MissingepisodesToolStripMenuItem
-'
-Me.MissingepisodesToolStripMenuItem.Name = "MissingepisodesToolStripMenuItem"
-Me.MissingepisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.MissingepisodesToolStripMenuItem.Text = "missingepisodes"
-'
-'DisplayEpisodesByAiredDateToolStripMenuItem
-'
-Me.DisplayEpisodesByAiredDateToolStripMenuItem.Name = "DisplayEpisodesByAiredDateToolStripMenuItem"
-Me.DisplayEpisodesByAiredDateToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-Me.DisplayEpisodesByAiredDateToolStripMenuItem.Text = "Display Episodes by Aired Date"
-'
-'ImageList2
-'
-Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"),System.Windows.Forms.ImageListStreamer)
-Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
-Me.ImageList2.Images.SetKeyName(0, "padlock.ico")
-Me.ImageList2.Images.SetKeyName(1, "imdb-logo.png")
-Me.ImageList2.Images.SetKeyName(2, "qmark.png")
 '
 'Button34
 '
@@ -1877,6 +1741,139 @@ Me.txt_tableplot.Name = "txt_tableplot"
 Me.txt_tableplot.Size = New System.Drawing.Size(100, 21)
 Me.txt_tableplot.TabIndex = 34
 Me.ToolTip1.SetToolTip(Me.txt_tableplot, "Edit Plot of the selected Movies")
+'
+'TvTreeview
+'
+Me.TvTreeview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+Me.TvTreeview.HideSelection = false
+Me.TvTreeview.ImageIndex = 0
+Me.TvTreeview.ImageList = Me.ImageList2
+Me.TvTreeview.Location = New System.Drawing.Point(8, 32)
+Me.TvTreeview.Name = "TvTreeview"
+Me.TvTreeview.SelectedImageKey = "blank"
+Me.TvTreeview.Size = New System.Drawing.Size(361, 490)
+Me.TvTreeview.TabIndex = 10
+Me.ToolTip1.SetToolTip(Me.TvTreeview, "Double click an episode to playback,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Use context menu (Right Mouse Click)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for a"& _ 
+        "dditional options")
+'
+'ImageList2
+'
+Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"),System.Windows.Forms.ImageListStreamer)
+Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
+Me.ImageList2.Images.SetKeyName(0, "padlock")
+Me.ImageList2.Images.SetKeyName(1, "imdb-logo")
+Me.ImageList2.Images.SetKeyName(2, "qmark")
+Me.ImageList2.Images.SetKeyName(3, "blank")
+Me.ImageList2.Images.SetKeyName(4, "error")
+'
+'ContextMenuStrip2
+'
+Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem, Me.ToolStripSeparator2, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.MissingepisodesToolStripMenuItem, Me.DisplayEpisodesByAiredDateToolStripMenuItem})
+Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
+Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 346)
+Me.ContextMenuStrip2.Text = "Open Folder at file"
+'
+'OpenFolderToolStripMenuItem
+'
+Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
+Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
+'
+'ToolStripMenuItem1
+'
+Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+Me.ToolStripMenuItem1.Size = New System.Drawing.Size(255, 22)
+Me.ToolStripMenuItem1.Text = "Open File"
+'
+'ToolStripSeparator1
+'
+Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+Me.ToolStripSeparator1.Size = New System.Drawing.Size(252, 6)
+'
+'ExpandSelectedShowToolStripMenuItem
+'
+Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
+Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
+'
+'CollapseSelectedShowToolStripMenuItem
+'
+Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
+Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
+'
+'CollapseAllToolStripMenuItem
+'
+Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
+Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
+'
+'ExpandAllToolStripMenuItem
+'
+Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
+Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.ExpandAllToolStripMenuItem.Text = "Expand All"
+'
+'LockAllToolStripMenuItem
+'
+Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
+Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
+'
+'UnlockAllToolStripMenuItem
+'
+Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
+Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
+'
+'ToolStripSeparator2
+'
+Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+Me.ToolStripSeparator2.Size = New System.Drawing.Size(252, 6)
+'
+'SearchThisShowForNewEpisodesToolStripMenuItem
+'
+Me.SearchThisShowForNewEpisodesToolStripMenuItem.Name = "SearchThisShowForNewEpisodesToolStripMenuItem"
+Me.SearchThisShowForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search this Show for new episodes"
+'
+'DownloadAvaileableMissingArtForShowToolStripMenuItem
+'
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Name = "DownloadAvaileableMissingArtForShowToolStripMenuItem"
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "missing art for show"
+'
+'ReloadItemToolStripMenuItem
+'
+Me.ReloadItemToolStripMenuItem.Name = "ReloadItemToolStripMenuItem"
+Me.ReloadItemToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.ReloadItemToolStripMenuItem.Text = "Reload Item"
+'
+'RenameTVShowsToolStripMenuItem
+'
+Me.RenameTVShowsToolStripMenuItem.Name = "RenameTVShowsToolStripMenuItem"
+Me.RenameTVShowsToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.RenameTVShowsToolStripMenuItem.Text = "Rename Episode(s)"
+'
+'RebuildThisShowToolStripMenuItem
+'
+Me.RebuildThisShowToolStripMenuItem.Name = "RebuildThisShowToolStripMenuItem"
+Me.RebuildThisShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.RebuildThisShowToolStripMenuItem.Text = "Rebuild this Show"
+'
+'MissingepisodesToolStripMenuItem
+'
+Me.MissingepisodesToolStripMenuItem.Name = "MissingepisodesToolStripMenuItem"
+Me.MissingepisodesToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.MissingepisodesToolStripMenuItem.Text = "missingepisodes"
+'
+'DisplayEpisodesByAiredDateToolStripMenuItem
+'
+Me.DisplayEpisodesByAiredDateToolStripMenuItem.Name = "DisplayEpisodesByAiredDateToolStripMenuItem"
+Me.DisplayEpisodesByAiredDateToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
+Me.DisplayEpisodesByAiredDateToolStripMenuItem.Text = "Display Episodes by Aired Date"
 '
 'GroupBox_TMDB_Scraper_Preferences
 '
@@ -6081,7 +6078,6 @@ Me.SplitContainer3.Panel1.Controls.Add(Me.TextBox33)
 Me.SplitContainer3.Panel1.Controls.Add(Me.TextBox32)
 Me.SplitContainer3.Panel1.Controls.Add(Me.Label74)
 Me.SplitContainer3.Panel1.Controls.Add(Me.Label71)
-Me.SplitContainer3.Panel1.Controls.Add(Me.TreeView1)
 Me.SplitContainer3.Panel1MinSize = 300
 '
 'SplitContainer3.Panel2
@@ -6127,16 +6123,6 @@ Me.SplitContainer3.Size = New System.Drawing.Size(1203, 603)
 Me.SplitContainer3.SplitterDistance = 376
 Me.SplitContainer3.SplitterWidth = 5
 Me.SplitContainer3.TabIndex = 1
-'
-'TvTreeview
-'
-Me.TvTreeview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.TvTreeview.Location = New System.Drawing.Point(8, 261)
-Me.TvTreeview.Name = "TvTreeview"
-Me.TvTreeview.Size = New System.Drawing.Size(361, 261)
-Me.TvTreeview.TabIndex = 10
 '
 'RadioButton44
 '
@@ -8373,7 +8359,7 @@ Me.ListBox5.Location = New System.Drawing.Point(15, 34)
 Me.ListBox5.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox5.Name = "ListBox5"
 Me.ListBox5.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ListBox5.Size = New System.Drawing.Size(309, 379)
+Me.ListBox5.Size = New System.Drawing.Size(309, 349)
 Me.ListBox5.TabIndex = 0
 '
 'Button67
@@ -8502,7 +8488,7 @@ Me.ListBox6.Location = New System.Drawing.Point(21, 34)
 Me.ListBox6.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox6.Name = "ListBox6"
 Me.ListBox6.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ListBox6.Size = New System.Drawing.Size(314, 379)
+Me.ListBox6.Size = New System.Drawing.Size(314, 349)
 Me.ListBox6.TabIndex = 0
 '
 'TabPage24
@@ -8511,10 +8497,10 @@ Me.TabPage24.AutoScroll = true
 Me.TabPage24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
 Me.TabPage24.Controls.Add(Me.TabControl6)
 Me.TabPage24.Controls.Add(Me.Button92)
-Me.TabPage24.Location = New System.Drawing.Point(4, 27)
+Me.TabPage24.Location = New System.Drawing.Point(4, 25)
 Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage24.Name = "TabPage24"
-Me.TabPage24.Size = New System.Drawing.Size(1207, 607)
+Me.TabPage24.Size = New System.Drawing.Size(1207, 609)
 Me.TabPage24.TabIndex = 9
 Me.TabPage24.Text = "TV Preferences"
 Me.TabPage24.UseVisualStyleBackColor = true
@@ -8530,7 +8516,7 @@ Me.TabControl6.Location = New System.Drawing.Point(1, 0)
 Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
 Me.TabControl6.Name = "TabControl6"
 Me.TabControl6.SelectedIndex = 0
-Me.TabControl6.Size = New System.Drawing.Size(1203, 554)
+Me.TabControl6.Size = New System.Drawing.Size(1203, 556)
 Me.TabControl6.TabIndex = 15
 '
 'TabPage30
@@ -8540,7 +8526,7 @@ Me.TabPage30.Location = New System.Drawing.Point(4, 24)
 Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage30.Name = "TabPage30"
 Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage30.Size = New System.Drawing.Size(1195, 526)
+Me.TabPage30.Size = New System.Drawing.Size(1195, 528)
 Me.TabPage30.TabIndex = 0
 Me.TabPage30.Text = "General / Scraper"
 Me.TabPage30.UseVisualStyleBackColor = true
@@ -8565,7 +8551,7 @@ Me.GroupBox17.Location = New System.Drawing.Point(4, 4)
 Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
 Me.GroupBox17.Name = "GroupBox17"
 Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-Me.GroupBox17.Size = New System.Drawing.Size(1187, 518)
+Me.GroupBox17.Size = New System.Drawing.Size(1187, 520)
 Me.GroupBox17.TabIndex = 22
 Me.GroupBox17.TabStop = false
 Me.GroupBox17.Text = "Default TV Scraper Settings"
@@ -9261,7 +9247,7 @@ Me.Label119.Text = "New Regex"
 '
 Me.Button92.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-Me.Button92.Location = New System.Drawing.Point(545, 561)
+Me.Button92.Location = New System.Drawing.Point(545, 563)
 Me.Button92.Margin = New System.Windows.Forms.Padding(4)
 Me.Button92.Name = "Button92"
 Me.Button92.Size = New System.Drawing.Size(94, 30)
@@ -10508,11 +10494,11 @@ Me.Text = "Media Companion"
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).EndInit
 Me.ContextMenuStrip4.ResumeLayout(false)
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).EndInit
-Me.ContextMenuStrip2.ResumeLayout(false)
 Me.GroupBox11.ResumeLayout(false)
 Me.GroupBox11.PerformLayout
 Me.GroupBox12.ResumeLayout(false)
 Me.GroupBox12.PerformLayout
+Me.ContextMenuStrip2.ResumeLayout(false)
 Me.GroupBox_TMDB_Scraper_Preferences.ResumeLayout(false)
 Me.GroupBox_TMDB_Scraper_Preferences.PerformLayout
 Me.GroupBox_MovieIMDBMirror.ResumeLayout(false)
@@ -10895,7 +10881,6 @@ End Sub
     Friend WithEvents TabPage12 As System.Windows.Forms.TabPage
     Friend WithEvents TextBox8 As System.Windows.Forms.TextBox
     Friend WithEvents WebBrowser2 As System.Windows.Forms.WebBrowser
-    Friend WithEvents TreeView1 As System.Windows.Forms.TreeView
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents SplitContainer4 As System.Windows.Forms.SplitContainer
     Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox

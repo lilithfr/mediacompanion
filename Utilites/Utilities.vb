@@ -46,6 +46,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     End Function
 
+    Public Shared Function IsNumeric(ByVal TestString As String) As Boolean
+        Dim SeasonInt As Integer
+        If Integer.TryParse(TestString, SeasonInt) Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Shared Function PadNumber(ByVal input As String, ByVal Length As Integer) As String
+        Do Until input.Length >= Length
+            input = "0" & input
+        Loop
+        Return input
+    End Function
+
     Public Shared Function CreateScreenShot(ByVal FilePath As String, Optional ByVal Overwrite As Boolean = False) As String
         Dim thumbpathandfilename As String = FilePath.Replace(IO.Path.GetExtension(FilePath), ".tbn")
 
@@ -2383,7 +2399,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
             Dim CurrentPath As String = Drive
             For I = 4 To Parts.GetUpperBound(0)
-                CurrentPath = IO.Path.Combine(CurrentPath, Parts(I))
+                CurrentPath = IO.Path.Combine(CurrentPath & "\", Parts(I))
 
                 If Not IO.Directory.Exists(CurrentPath) Then
                     IO.Directory.CreateDirectory(CurrentPath)
@@ -2394,7 +2410,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
             Dim CurrentPath As String = Drive
             For I = 1 To Parts.GetUpperBound(0)
-                CurrentPath = IO.Path.Combine(CurrentPath, Parts(I))
+                CurrentPath = IO.Path.Combine(CurrentPath & "\", Parts(I))
 
                 If Not IO.Directory.Exists(CurrentPath) Then
                     IO.Directory.CreateDirectory(CurrentPath)

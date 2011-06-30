@@ -62,11 +62,12 @@
         End Get
     End Property
 
-    Public Sub Load() Implements IProtoXFile.Load
+    Public Overridable Sub Load() Implements IProtoXFile.Load
         Me.Load(Me.NfoFilePath)
     End Sub
 
-    Public Sub Load(ByVal Path As String) Implements IProtoXFile.Load
+    Public Overridable Sub Load(ByVal Path As String) Implements IProtoXFile.Load
+        Me.CleanDoc()
         Me.Doc = XDocument.Load(Path)
 
         LoadDoc()

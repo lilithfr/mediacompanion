@@ -656,7 +656,9 @@ Public Class Preferences
 
         doc.AppendChild(root)
 
-
+        If Preferences.workingProfile.config Is Nothing Then
+            Preferences.workingProfile.config = IO.Path.Combine(Preferences.applicationPath, "settings\config.xml")
+        End If
 
         Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
         output.Formatting = Formatting.Indented
