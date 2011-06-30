@@ -584,9 +584,9 @@ Public Class WorkingWithNfoFiles
     '                        Case "thumb"
     '                            newtvepisode.thumb = thisresult.InnerText
     '                        Case "actor"
-    '                            Dim actordetail As XmlNode = Nothing
-                                Dim newactor As New str_MovieActors(SetDefaults)
-    '                            For Each actordetail In thisresult.ChildNodes
+    ''                            Dim actordetail As XmlNode = Nothing
+    '                            Dim newactor As New str_MovieActors(SetDefaults)
+    ''                            For Each actordetail In thisresult.ChildNodes
     '                                Select Case actordetail.Name
     '                                    Case "name"
     '                                        newactor.actorname = actordetail.InnerText
@@ -637,31 +637,31 @@ Public Class WorkingWithNfoFiles
     '                                                            Case "scantype"
     '                                                                newfilenfo.filedetails_video.scantype = videodetails.InnerText
     '                                                        End Select
-    '                                                    Next
-    '                                                Case "audio"
-    '                                                    Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New str_MediaNFOAudio(SetDefaults)
-    '                                                    For Each audiodetails In detail.ChildNodes
-    '                                                        Select Case audiodetails.Name
-    '                                                            Case "language"
-    '                                                                audio.language = audiodetails.InnerText
-    '                                                            Case "codec"
-    '                                                                audio.codec = audiodetails.InnerText
-    '                                                            Case "channels"
-    '                                                                audio.channels = audiodetails.InnerText
-    '                                                            Case "bitrate"
-    '                                                                audio.bitrate = audiodetails.InnerText
-    '                                                        End Select
-    '                                                    Next
-    '                                                    newfilenfo.filedetails_audio.Add(audio)
-    '                                                Case "subtitle"
-    '                                                    Dim subsdetails As XmlNode = Nothing
-    '                                                    For Each subsdetails In detail.ChildNodes
-    '                                                        Select Case subsdetails.Name
-    '                                                            Case "language"
-                                                                    Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
-    '                                                                sublang.language = subsdetails.InnerText
-    '                                                                newfilenfo.filedetails_subtitles.Add(sublang)
+    ''                                                    Next
+    ''                                                Case "audio"
+    ''                                                    Dim audiodetails As XmlNode = Nothing
+    '                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
+    ''                                                    For Each audiodetails In detail.ChildNodes
+    ''                                                        Select Case audiodetails.Name
+    ''                                                            Case "language"
+    ''                                                                audio.language = audiodetails.InnerText
+    ''                                                            Case "codec"
+    ''                                                                audio.codec = audiodetails.InnerText
+    ''                                                            Case "channels"
+    ''                                                                audio.channels = audiodetails.InnerText
+    ''                                                            Case "bitrate"
+    ''                                                                audio.bitrate = audiodetails.InnerText
+    ''                                                        End Select
+    ''                                                    Next
+    ''                                                    newfilenfo.filedetails_audio.Add(audio)
+    ''                                                Case "subtitle"
+    ''                                                    Dim subsdetails As XmlNode = Nothing
+    ''                                                    For Each subsdetails In detail.ChildNodes
+    ''                                                        Select Case subsdetails.Name
+    ''                                                            Case "language"
+    '                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
+    ''                                                                sublang.language = subsdetails.InnerText
+    ''                                                                newfilenfo.filedetails_subtitles.Add(sublang)
     '                                                        End Select
     '                                                    Next
     '                                            End Select
@@ -805,12 +805,12 @@ Public Class WorkingWithNfoFiles
     '                                                                            newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
     '                                                                        Case "scantype"
     '                                                                            newfilenfo.filedetails_video.scantype = videodetails.InnerText
-    '                                                                    End Select
-    '                                                                Next
-    '                                                            Case "audio"
-    '                                                                Dim audiodetails As XmlNode = Nothing
-                                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
-    '                                                                For Each audiodetails In detail.ChildNodes
+    ''                                                                    End Select
+    ''                                                                Next
+    ''                                                            Case "audio"
+    ''                                                                Dim audiodetails As XmlNode = Nothing
+    '                                                                Dim audio As New str_MediaNFOAudio(SetDefaults)
+    ''                                                                For Each audiodetails In detail.ChildNodes
 
     '                                                                    Select Case audiodetails.Name
     '                                                                        Case "language"
@@ -828,10 +828,10 @@ Public Class WorkingWithNfoFiles
     '                                                                Dim subsdetails As XmlNode = Nothing
     '                                                                For Each subsdetails In detail.ChildNodes
     '                                                                    Select Case subsdetails.Name
-    '                                                                        Case "language"
-                                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
-    '                                                                            sublang.language = subsdetails.InnerText
-    '                                                                            newfilenfo.filedetails_subtitles.Add(sublang)
+    ''                                                                        Case "language"
+    '                                                                            Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
+    ''                                                                            sublang.language = subsdetails.InnerText
+    ''                                                                            newfilenfo.filedetails_subtitles.Add(sublang)
     '                                                                    End Select
     '                                                                Next
     '                                                        End Select

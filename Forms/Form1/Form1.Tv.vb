@@ -732,7 +732,7 @@ Partial Public Class Form1
         Next
 
 
-        CleanFolderList()
+        TV_CleanFolderList()
         'Call populatetvtree()
 
         Me.Enabled = True
@@ -922,83 +922,83 @@ Partial Public Class Form1
         realTvPaths.Add(NewShow.FolderPath)
         TvTreeview.Nodes.Add(NewShow.ShowNode)
 
-        CleanFolderList()
-        'For Each item In TvShows
-        '    If item.FolderPath = NewShow.FolderPath Then
-        '        Dim cnode As TreeNode = Nothing
-        '        Dim tempstring As String = String.Empty
-        '        Dim tempint As Integer
+        'CleanFolderList()
+        ''For Each item In TvShows
+        ''    If item.FolderPath = NewShow.FolderPath Then
+        ''        Dim cnode As TreeNode = Nothing
+        ''        Dim tempstring As String = String.Empty
+        ''        Dim tempint As Integer
 
-        '        totalTvShowCount += 1
-        '        Dim shownode As Integer = -1
+        ''        totalTvShowCount += 1
+        ''        Dim shownode As Integer = -1
 
-        '        If item.status IsNot Nothing AndAlso item.status.ToLower.IndexOf("xml error") <> -1 Then
-                    Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
-        '        Else
-                    Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
-        '        End If
+        ''        If item.status IsNot Nothing AndAlso item.status.ToLower.IndexOf("xml error") <> -1 Then
+        '            Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
+        ''        Else
+        '            Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
+        ''        End If
 
-        '        For Each episode In item.allepisodes
-        '            totalEpisodeCount += 1
+        ''        For Each episode In item.allepisodes
+        ''            totalEpisodeCount += 1
 
-        '            Dim seasonno As Integer = -10
-        '            seasonno = Convert.ToInt32(episode.seasonno)
+        ''            Dim seasonno As Integer = -10
+        ''            seasonno = Convert.ToInt32(episode.seasonno)
 
-        '            For g = 0 To TvTreeview.Nodes.Count - 1
-        '                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
-        '                    cnode = TvTreeview.Nodes(g)
-        '                    shownode = g
-        '                    Exit For
-        '                End If
-        '            Next
+        ''            For g = 0 To TvTreeview.Nodes.Count - 1
+        ''                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
+        ''                    cnode = TvTreeview.Nodes(g)
+        ''                    shownode = g
+        ''                    Exit For
+        ''                End If
+        ''            Next
 
-        '            Dim seasonstring As String = Nothing
+        ''            Dim seasonstring As String = Nothing
 
-        '            If seasonno <> 0 And seasonno <> -1 Then
-        '                If seasonno < 10 Then
-        '                    tempstring = "Season 0" & seasonno.ToString
-        '                Else
-        '                    tempstring = "Season " & seasonno.ToString
-        '                End If
-        '            ElseIf seasonno = 0 Then
-        '                tempstring = "Specials"
-        '                'ElseIf seasonno = -1 Then
-        '                '    tempstring = "Unknown"
-        '            End If
-        '            Dim node As TreeNode
-        '            Dim alreadyexists As Boolean = False
-        '            For Each node In cnode.Nodes
-        '                If node.Text = tempstring Then
-        '                    alreadyexists = True
-        '                    Exit For
-        '                End If
-        '            Next
-        '            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
+        ''            If seasonno <> 0 And seasonno <> -1 Then
+        ''                If seasonno < 10 Then
+        ''                    tempstring = "Season 0" & seasonno.ToString
+        ''                Else
+        ''                    tempstring = "Season " & seasonno.ToString
+        ''                End If
+        ''            ElseIf seasonno = 0 Then
+        ''                tempstring = "Specials"
+        ''                'ElseIf seasonno = -1 Then
+        ''                '    tempstring = "Unknown"
+        ''            End If
+        ''            Dim node As TreeNode
+        ''            Dim alreadyexists As Boolean = False
+        ''            For Each node In cnode.Nodes
+        ''                If node.Text = tempstring Then
+        ''                    alreadyexists = True
+        ''                    Exit For
+        ''                End If
+        ''            Next
+        ''            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
 
-        '            For Each node In cnode.Nodes
-        '                If node.Text = tempstring Then
-        '                    tempint = node.Index
+        ''            For Each node In cnode.Nodes
+        ''                If node.Text = tempstring Then
+        ''                    tempint = node.Index
 
-        '                    Exit For
-        '                End If
-        '            Next
+        ''                    Exit For
+        ''                End If
+        ''            Next
 
-        '            Dim eps As String
-        '            If episode.episodeno < 10 Then
-        '                eps = "0" & episode.episodeno.ToString
-        '            Else
-        '                eps = episode.episodeno.ToString
-        '            End If
-        '            eps = eps & " - " & episode.title
-        '            If episode.imdbid = Nothing Then
-        '                episode.imdbid = ""
-        '            End If
+        ''            Dim eps As String
+        ''            If episode.episodeno < 10 Then
+        ''                eps = "0" & episode.episodeno.ToString
+        ''            Else
+        ''                eps = episode.episodeno.ToString
+        ''            End If
+        ''            eps = eps & " - " & episode.title
+        ''            If episode.imdbid = Nothing Then
+        ''                episode.imdbid = ""
+        ''            End If
 
-        '            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                        Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
-        '            Else
-                        Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
-        '            End If
+        ''            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
+        '                Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
+        ''            Else
+        '                Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
+        ''            End If
 
 
         '        Next
@@ -1699,9 +1699,7 @@ Partial Public Class Form1
                     newtvfolders.AddRange(ExtraFolder)
                     newtvfolders.Add(TvFolder)
                     For Each Item In ExtraFolder
-                                If strfolder.IndexOf("System Volume Information") = -1 And strfolder.IndexOf(".actors") = -1 Then
-                                    Preferences.tvScraperLog &= "Subfolder added :- " & strfolder.ToString & vbCrLf
-                                                Preferences.tvScraperLog &= "Subfolder added :- " & strfolder2.ToString & vbCrLf
+                        Preferences.tvScraperLog &= "Subfolder added :- " & Item.ToString & vbCrLf
                     Next
                 End If
             Else
@@ -2352,7 +2350,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub TV_AddTvshowToTreeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
+    'Private Sub TV_AddTvshowToTreeview(ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False, Optional ByVal locked As Boolean = True)
     '    If xmlerror = True Then
     '        TvTreeview.Nodes.Add(fullpath, title)
     '        For Each tn As TreeNode In TvTreeview.Nodes
@@ -2372,7 +2370,7 @@ Partial Public Class Form1
     '    End If
     'End Sub
 
-    Private Sub TV_AddEpisodeToTreeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
+    'Private Sub TV_AddEpisodeToTreeview(ByVal rootnode As Integer, ByVal childnode As Integer, ByVal fullpath As String, ByVal title As String, Optional ByVal xmlerror As Boolean = False)
     '        Try
     '            Dim ccnode As TreeNode
     '            ccnode = TvTreeview.Nodes(rootnode).Nodes(childnode)
@@ -2408,7 +2406,7 @@ Partial Public Class Form1
     '        End Try
     '    End Sub
 
-    Private Sub TV_PopulateTvTree()
+    'Private Sub TV_PopulateTvTree()
     '    Dim tempint As Integer
     '    Dim tempstring As String = String.Empty
     '    Dim cnode As TreeNode = Nothing
@@ -2452,10 +2450,10 @@ Partial Public Class Form1
     '        Dim shownode As Integer = -1
 
     '        If item.status IsNot Nothing AndAlso Not item.status.ToLower.Contains("xml error") Then
-                Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
-    '        Else
-                Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
-    '        End If
+    'Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
+    ''        Else
+    'Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
+    ''        End If
 
 
     '        For Each episode In item.allepisodes
@@ -2513,11 +2511,11 @@ Partial Public Class Form1
     '                episode.imdbid = ""
     '            End If
 
-    '            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-                    Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
-    '            Else
-                    Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
-    '            End If
+    ''            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
+    'Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, True)
+    ''            Else
+    'Call TV_AddEpisodeToTreeview(shownode, tempint, episode.episodepath, eps, False)
+    ''            End If
 
     '        Next
 
@@ -3099,7 +3097,7 @@ Partial Public Class Form1
         TV_CleanFolderList()
     End Sub
 
-    Private Sub TvFilter(ByVal butt As String)
+    Private Sub TV_TvFilter(ByVal butt As String)
         If Not startup = True Then
             If butt = "missingeps" Then
                 For Each item As Nfo.TvShow In TvShows

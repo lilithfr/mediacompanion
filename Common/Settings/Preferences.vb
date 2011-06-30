@@ -623,6 +623,7 @@ Public Class Preferences
         child.InnerText = Preferences.externalbrowser.ToString.ToLower
         root.AppendChild(child)
 
+
         child = doc.CreateElement("moviethumbpriority")
         Dim tempstring As String
         tempstring = Preferences.moviethumbpriority(0) & "|" & Preferences.moviethumbpriority(1) & "|" & Preferences.moviethumbpriority(2) & "|" & Preferences.moviethumbpriority(3)
@@ -793,13 +794,13 @@ Public Class Preferences
         If Preferences.workingProfile.config Is Nothing Then
             Preferences.workingProfile.config = IO.Path.Combine(Preferences.applicationPath, "settings\config.xml")
         End If
-            Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-            doc.WriteTo(output)
-            output.Close()
-        Catch ex As Exception
-            MsgBox("Can't find the following path..." & vbCrLf & Preferences.workingProfile.config & vbCrLf & "Please Check/Delete Settings Folder & Restart MC")
-        End Try
+        Dim output As New XmlTextWriter(Preferences.workingProfile.config, System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
+        'Catch ex As Exception
+        '    MsgBox("Can't find the following path..." & vbCrLf & Preferences.workingProfile.config & vbCrLf & "Please Check/Delete Settings Folder & Restart MC")
+        'End Try
     End Sub
 
 
@@ -1691,7 +1692,7 @@ Public Class Preferences
             'get audio data
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
-                    Dim audio As New MediaNFOAudio
+                    Dim audio As New str_MediaNFOAudio
                     audio.language = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.codec = "MP3"
@@ -1716,7 +1717,7 @@ Public Class Preferences
             Dim curSS As Integer = 0
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
-                    Dim sublanguage As New MediaNFOSubtitles
+                    Dim sublanguage As New str_MediaNFOSubtitles
                     sublanguage.language = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1

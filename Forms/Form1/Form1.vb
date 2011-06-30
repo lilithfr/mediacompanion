@@ -221,7 +221,7 @@ Public Class Form1
         Call TV_SaveTvData()
         Preferences.startuptab = TabLevel1.SelectedIndex
 
-        Preferences.saveconfig()
+        Preferences.SaveConfig()
         Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
     End Sub
 
@@ -232,9 +232,9 @@ Public Class Form1
     End Sub
 
     'TODO: (Form1_Load) Need to refactor
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Load
         Preferences.applicationPath = Application.StartupPath
-        Utilities.ApplicationPath = Application.StartupPath
+        Utilities.applicationPath = Application.StartupPath
 
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -499,7 +499,7 @@ Public Class Form1
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call rebuildtvshows()
+            Call RebuildTvShows()
         Else
             loadinginfo = "Status :- Loading TV Database"
             frmSplash.Label3.Text = loadinginfo
@@ -673,13 +673,13 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeEnd
+    Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
         If startup = False Then
             Preferences.locx = Me.Location.X
             Preferences.locy = Me.Location.Y
             'Preferences.SaveConfig()              'this is run when we close MC, no need to run it each time we resize MC
         End If
-        
+
     End Sub
     Sub mov_SplitContainerAutoPosition(ByVal from As String)
         'Set Movie Splitter Auto Position
@@ -720,6 +720,7 @@ Public Class Form1
         End Try
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
     End Sub
+
     Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeEnd
         
         If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
@@ -1139,12 +1140,12 @@ Public Class Form1
         '                                    newepisode.seasonno = episodenew.InnerText
         '                                Case "episodeno"
         '                                    newepisode.episodeno = episodenew.InnerText
-        '                                    'Case "status"
-        '                                    '    newepisode.status = episodenew.InnerText
-        '                                Case "aired"
-        '                                    newepisode.aired = episodenew.InnerText
-        Call TV_PopulateTvTree()
-        '                                    newepisode.playcount = episodenew.InnerText
+        ''                                    'Case "status"
+        ''                                    '    newepisode.status = episodenew.InnerText
+        ''                                Case "aired"
+        ''                                    newepisode.aired = episodenew.InnerText
+        'Call TV_PopulateTvTree()
+        ''                                    newepisode.playcount = episodenew.InnerText
         '                                Case "rating"
         '                                    newepisode.rating = episodenew.InnerText
         '                                Case "tvdbid"
@@ -1183,7 +1184,7 @@ Public Class Form1
         '            Next
         '    End Select
         'Next
-        CleanFolderList()
+        'CleanFolderList()
         'Call populatetvtree()
     End Sub
 
@@ -2035,16 +2036,16 @@ Public Class Form1
     '    Next
 
     '    For Each tv In TvShows
-    '        ListtvFiles(tv, "*.NFO")
-    '    Next
+    ''        ListtvFiles(tv, "*.NFO")
+    ''    Next
 
 
-        TV_CleanFolderList()
-        Call TV_PopulateTvTree()
+    '    TV_CleanFolderList()
+    '    Call TV_PopulateTvTree()
 
-    '    Me.Enabled = True
+    ''    Me.Enabled = True
 
-        Call TV_SaveTvData()
+    '    Call TV_SaveTvData()
 
     'End Sub
 
@@ -5287,9 +5288,9 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Call PreferencesRefactor()
-    End Sub
+    'Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Call PreferencesRefactor()
+    'End Sub
 
     Private Sub PreferencesRefactor()
         'If formsize2 = False Then options.chk_rememberformsize.CheckState = CheckState.Unchecked
@@ -6087,46 +6088,46 @@ Public Class Form1
         'End If
     End Sub
 
-    Private Sub btnmoviescrapercancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        BckWrkScnMovies.CancelAsync()
-    End Sub
+    'Private Sub btnmoviescrapercancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    BckWrkScnMovies.CancelAsync()
+    'End Sub
 
-    Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
-            MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
-            Exit Sub
-        End If
-        Dim t As New frmCoverArt
-        t.ShowDialog()
-    End Sub
+    'Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
+    '        MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
+    '        Exit Sub
+    '    End If
+    '    Dim t As New frmCoverArt
+    '    t.ShowDialog()
+    'End Sub
 
-    Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
-            MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
-            Exit Sub
-        End If
-        Dim t As New frmMovieFanart
-        t.ShowDialog()
-        Try
-            If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-                PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                PictureBox7.Load()
-            Else
-                PictureBox7.Image = Nothing
-            End If
+    '    Private Sub ToolStripButton9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '        If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
+    '            MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
+    '            Exit Sub
+    '        End If
+    '        Dim t As New frmMovieFanart
+    '        t.ShowDialog()
+    '        Try
+    '            If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+    '                PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+    '                PictureBox7.Load()
+    '            Else
+    '                PictureBox7.Image = Nothing
+    '            End If
 
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-    End Sub
+    '        Catch ex As Exception
+    '#If SilentErrorScream Then
+    '            Throw ex
+    '#End If
+    '        End Try
+    '    End Sub
 
     'paypal
-    Private Sub ToolStripButton11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
-        Process.Start(webAddress)
-    End Sub
+    'Private Sub ToolStripButton11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
+    '    Process.Start(webAddress)
+    'End Sub
 
     Private Sub exitallthreads()
         Dim busy As Boolean = False
@@ -6186,9 +6187,9 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ToolStripButton10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Call exitallthreads()
-    End Sub
+    'Private Sub ToolStripButton10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Call exitallthreads()
+    'End Sub
 
     
 
@@ -7748,9 +7749,9 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Call rescrapemovie()
-    End Sub
+    'Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Call rescrapemovie()
+    'End Sub
 
     'quicksavenfo
     Private Sub quicksavemovie()
@@ -8052,9 +8053,9 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Call movieedit()
-    End Sub
+    'Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    Call movieedit()
+    'End Sub
 
     Private Sub EditMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMovieToolStripMenuItem.Click
         Call movieedit()
@@ -8137,7 +8138,7 @@ Public Class Form1
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         Try
-            If Not IO.File.Exists(workingmoviedetails.fileinfo.trailerpath) Then
+            If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
 
                 If workingMovieDetails.fullmoviebody.trailer <> "" Then
                     Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
@@ -8149,7 +8150,7 @@ Public Class Form1
                         FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
                     Catch ex As Exception
 #If SilentErrorScream Then
-                        Throw ex
+                            Throw ex
 #End If
                     End Try
                 End If
@@ -8178,13 +8179,13 @@ Public Class Form1
                     End If
                 Catch ex As Exception
 #If SilentErrorScream Then
-                    Throw ex
+                        Throw ex
 #End If
                 End Try
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
         End Try
 
@@ -8292,9 +8293,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub bckrescrapewizard_Disposed(sender As Object, e As System.EventArgs) Handles bckrescrapewizard.Disposed
-
-    End Sub
 
     Private Sub bckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckrescrapewizard.DoWork
         'Now works on the filtered list rather than the full list V3.407
@@ -10347,7 +10345,7 @@ Public Class Form1
         If e.ProgressPercentage = 999999 Then
             ToolStripStatusLabel4.Text = e.UserState
         ElseIf e.ProgressPercentage = 999998 Then
-            Call applyfilters()
+            Call ApplyFilters()
             ToolStripStatusLabel4.Text = e.UserState
         End If
         'ToolStrip1.Refresh()
@@ -10851,7 +10849,7 @@ Public Class Form1
                         End If
                     Next
                     If checkvalidmediafile(files(f)) = True Then
-                        If skip = False Then droppeditems.Add(files(f))
+                        If skip = False Then droppedItems.Add(files(f))
                     End If
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -10869,20 +10867,20 @@ Public Class Form1
                     For Each dra In diar1
                         Try
                             Dim skip As Boolean = False
-                            For Each item In fullmovielist
+                            For Each item In fullMovieList
                                 If item.fullpathandfilename = dra.FullName Then
                                     skip = True
                                     Exit For
                                 End If
                             Next
-                            For Each item In droppeditems
+                            For Each item In droppedItems
                                 If item = dra.FullName Then
                                     skip = True
                                     Exit For
                                 End If
                             Next
                             If checkvalidmediafile(dra.FullName) = True Then
-                                If skip = False Then droppeditems.Add(dra.FullName)
+                                If skip = False Then droppedItems.Add(dra.FullName)
                             End If
                         Catch ex As Exception
 #If SilentErrorScream Then
@@ -10895,7 +10893,7 @@ Public Class Form1
         Next
 
 
-        If droppeditems.Count > 0 Then
+        If droppedItems.Count > 0 Then
             If Not bckgrounddroppedfiles.IsBusy Then
                 ToolStripStatusLabel4.Visible = True
                 'ToolStripProgressBar4.Visible = True
@@ -10923,7 +10921,7 @@ Public Class Form1
         indexunderthemouse = Me.MovieListComboBox.IndexFromPoint(MousePositionInClientCoords)
         If indexunderthemouse > -1 Then
             Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
-            Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).value
+            Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).Value
             If overItem <> tempstring Then
                 overItem = tempstring
                 For Each movie In fullMovieList
@@ -10985,7 +10983,7 @@ Public Class Form1
                 TextBox34.Visible = True
                 Dim done As Boolean = False
                 For Each movie In filteredList
-                    If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value Then
+                    If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value Then
                         If IO.File.Exists(movie.fullpathandfilename) Then
                             If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
                                 workingMovie.filedate = movie.filedate
@@ -11138,7 +11136,7 @@ Public Class Form1
                 TextBox1.BackColor = Color.White
             End If
             TextBox1.Refresh()
-            Call applyfilters()
+            Call ApplyFilters()
         End If
     End Sub
 
@@ -11356,49 +11354,49 @@ Public Class Form1
                 Call loadfanart()
             End If
             currentTabIndex = TabControl2.SelectedIndex
-            ElseIf tab.ToLower = "open folder" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
-            ElseIf tab.ToLower = "Posters" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-            ElseIf tab.ToLower = "rescrape movie" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                Call rescrapemovie()
-            ElseIf tab.ToLower = "change movie" Then
-                Call setup_changemovie()
-                currentTabIndex = TabControl2.SelectedIndex
-            ElseIf tab.ToLower = "search for new movies" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                If Not BckWrkScnMovies.IsBusy Then
-                    'ToolStripButton10.Visible = True
-                    'ToolStripProgressBar4.Visible = True
-                    ToolStripStatusLabel1.Visible = True
-                    ToolStripProgressBar1.Visible = True
-                    TabPage14.Text = "Cancel Movie Search"
-                    TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
-                    BckWrkScnMovies.RunWorkerAsync()
-                Else
-                    MsgBox("This task is already running")
-                End If
-            ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
-                TabPage14.Text = "...Cancelling..."
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                BckWrkScnMovies.CancelAsync()
-            ElseIf tab.ToLower = "wall" Then
-                Call setupwall()
-            ElseIf tab.ToLower = "movie sets" Then
-                ListBox4.Items.Clear()
-                For Each mset In Preferences.moviesets
-                If mset <> "-None-" Then ListBox4.Items.Add(mset)
-                Next
-            ElseIf tab.ToLower = "movie preferences" Then
-                Call setupmoviepreferences()
-            ElseIf tab.ToLower = "table" Then
-                currentTabIndex = TabControl2.SelectedIndex
-                Call setuptable()
+        ElseIf tab.ToLower = "open folder" Then
+            Me.TabControl2.SelectedIndex = currentTabIndex
+            Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
+        ElseIf tab.ToLower = "Posters" Then
+            Me.TabControl2.SelectedIndex = currentTabIndex
+        ElseIf tab.ToLower = "rescrape movie" Then
+            Me.TabControl2.SelectedIndex = currentTabIndex
+            Call rescrapemovie()
+        ElseIf tab.ToLower = "change movie" Then
+            Call setup_changemovie()
+            currentTabIndex = TabControl2.SelectedIndex
+        ElseIf tab.ToLower = "search for new movies" Then
+            Me.TabControl2.SelectedIndex = currentTabIndex
+            If Not BckWrkScnMovies.IsBusy Then
+                'ToolStripButton10.Visible = True
+                'ToolStripProgressBar4.Visible = True
+                ToolStripStatusLabel1.Visible = True
+                ToolStripProgressBar1.Visible = True
+                TabPage14.Text = "Cancel Movie Search"
+                TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
+                BckWrkScnMovies.RunWorkerAsync()
             Else
-                currentTabIndex = TabControl2.SelectedIndex
+                MsgBox("This task is already running")
             End If
+        ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
+            TabPage14.Text = "...Cancelling..."
+            Me.TabControl2.SelectedIndex = currentTabIndex
+            BckWrkScnMovies.CancelAsync()
+        ElseIf tab.ToLower = "wall" Then
+            Call setupwall()
+        ElseIf tab.ToLower = "movie sets" Then
+            ListBox4.Items.Clear()
+            For Each mset In Preferences.moviesets
+                If mset <> "-None-" Then ListBox4.Items.Add(mset)
+            Next
+        ElseIf tab.ToLower = "movie preferences" Then
+            Call setupmoviepreferences()
+        ElseIf tab.ToLower = "table" Then
+            currentTabIndex = TabControl2.SelectedIndex
+            Call setuptable()
+        Else
+            currentTabIndex = TabControl2.SelectedIndex
+        End If
     End Sub
   
     Private Sub setup_changemovie()
@@ -12282,7 +12280,7 @@ Public Class Form1
 
 
 
-                            Catch ex As Exception
+        Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
@@ -12538,7 +12536,6 @@ Public Class Form1
     End Sub
 
     Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
-
         For i = Panel8.Controls.Count - 1 To 0 Step -1
             Panel8.Controls.RemoveAt(i)
         Next
@@ -13021,7 +13018,7 @@ Public Class Form1
         Panel6.Visible = True
     End Sub
 
-    Private Sub Button22_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub Button22_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button22.Click
         WebBrowser1.GoBack()
     End Sub
 
@@ -13700,7 +13697,7 @@ Public Class Form1
                         newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
                         'Createdate becomes new because we have changed the movie (i.e. not a recrape of the same movie)
                         newfullmovie.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
-                        
+
 
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -13764,7 +13761,7 @@ Public Class Form1
         WebBrowser1.GoBack()
     End Sub
 
-    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseDown
+    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.Click
         'crop top
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -13774,7 +13771,7 @@ Public Class Form1
         Timer3.Enabled = True
     End Sub
 
-    Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseDown
+    Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.Click
         'crop bottom
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -13784,7 +13781,7 @@ Public Class Form1
         Timer3.Enabled = True
     End Sub
 
-    Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseDown
+    Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.Click
         'crop left
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -13794,7 +13791,7 @@ Public Class Form1
         Timer3.Enabled = True
     End Sub
 
-    Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseDown
+    Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.Click
         'crop right
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -13948,15 +13945,15 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ToolStripButton2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If Not BckWrkScnMovies.IsBusy Then
-            'ToolStripButton10.Visible = True
-            'ToolStripProgressBar4.Visible = True
-            ToolStripStatusLabel1.Visible = True
-            ToolStripProgressBar1.Visible = True
-            BckWrkScnMovies.RunWorkerAsync()
-        End If
-    End Sub
+    'Private Sub ToolStripButton2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    If Not BckWrkScnMovies.IsBusy Then
+    '        'ToolStripButton10.Visible = True
+    '        'ToolStripProgressBar4.Visible = True
+    '        ToolStripStatusLabel1.Visible = True
+    '        ToolStripProgressBar1.Visible = True
+    '        BckWrkScnMovies.RunWorkerAsync()
+    '    End If
+    'End Sub
 
     Private Sub WebBrowser1_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles WebBrowser1.NewWindow
         e.Cancel = True
@@ -14145,16 +14142,16 @@ Public Class Form1
     '                If workingTvShow.path <> Nothing Then
     '                    TextBox2.Text = workingTvShow.title
     '                    Try
-    '                        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
-                        PictureBox5.Load()
-    '                        PictureBox5.Image = Nothing
-    '                    End Try
-    '                    Try
-    '                        PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
-    '                    Catch
-                        PictureBox4.Load()
-    '                    End Try
-    '                End If
+    ''                        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+    '                    PictureBox5.Load()
+    ''                        PictureBox5.Image = Nothing
+    ''                    End Try
+    ''                    Try
+    ''                        PictureBox4.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+    ''                    Catch
+    '                    PictureBox4.Load()
+    ''                    End Try
+    ''                End If
     '                Panel9.Visible = False
     '            End If
     '        ElseIf TvTreeview.SelectedNode.Name.ToLower.IndexOf(".nfo") <> -1 Then
@@ -14165,13 +14162,13 @@ Public Class Form1
     '                    TabControl3.Refresh()
     '                End If
     '            End If
-    '            Panel9.Visible = True
-    '            If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
-    '                TvTreeview.SelectedNode.Parent.Parent.ForeColor = Color.Red
-            RescrapeThisShowToolStripMenuItem.Text = "Rescrape This Epsiode"
-    '                ExpandSelectedShowToolStripMenuItem.Enabled = True
-    '                ExpandAllToolStripMenuItem.Enabled = True
-    '                CollapseAllToolStripMenuItem.Enabled = True
+    ''            Panel9.Visible = True
+    ''            If workingTvShow.plot.IndexOf("Unable to find folder:") = 0 Then
+    ''                TvTreeview.SelectedNode.Parent.Parent.ForeColor = Color.Red
+    '        RescrapeThisShowToolStripMenuItem.Text = "Rescrape This Epsiode"
+    ''                ExpandSelectedShowToolStripMenuItem.Enabled = True
+    ''                ExpandAllToolStripMenuItem.Enabled = True
+    ''                CollapseAllToolStripMenuItem.Enabled = True
     '                CollapseSelectedShowToolStripMenuItem.Enabled = True
     '                ReloadItemToolStripMenuItem.Enabled = True
     '                Exit Sub
@@ -14243,16 +14240,16 @@ Public Class Form1
     '            Else
     '                'seasons
     '            If TvTreeview.SelectedNode.ForeColor = Color.Blue And TvTreeview.SelectedNode.Level = 2 Then
-                    PictureBox5.Load()
-    '                Dim todo As Boolean = False
-    '                If workingTvShow.path <> TvTreeview.SelectedNode.Parent.Parent.Name Then todo = True
-    '                If todo = True Then
-    '                    Call loadtvshow(TvTreeview.SelectedNode.Parent.Parent.Name)
-    '                    For tt = 0 To TvShows.Count
-                    PictureBox4.Load()
-    '                            TvShows(tt).imdbid = workingTvShow.imdbid
-    '                            TvShows(tt).language = workingTvShow.language
-    '                            TvShows(tt).locked = workingTvShow.locked
+    '                PictureBox5.Load()
+    ''                Dim todo As Boolean = False
+    ''                If workingTvShow.path <> TvTreeview.SelectedNode.Parent.Parent.Name Then todo = True
+    ''                If todo = True Then
+    ''                    Call loadtvshow(TvTreeview.SelectedNode.Parent.Parent.Name)
+    ''                    For tt = 0 To TvShows.Count
+    '                PictureBox4.Load()
+    ''                            TvShows(tt).imdbid = workingTvShow.imdbid
+    ''                            TvShows(tt).language = workingTvShow.language
+    ''                            TvShows(tt).locked = workingTvShow.locked
     '                            TvShows(tt).rating = workingTvShow.rating
     '                            TvShows(tt).sortorder = workingTvShow.sortorder
     '                            TvShows(tt).status = workingTvShow.status
@@ -14355,19 +14352,19 @@ Public Class Form1
 
     '                Try
     '                    If trueseason <> "Specials" Then
-    '                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
-    '                            Try
-                                PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
-                                PictureBox5.Load()
-    '                                PictureBox5.Image = Nothing
-    '                            End Try
-                                MsgBox("Caught Exception")
-    '                            Try
-    '                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
-    '                            Catch
-    '                                PictureBox5.Image = Nothing
-                                PictureBox5.Load()
-    '                        End If
+    ''                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
+    ''                            Try
+    '                            PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")
+    '                            PictureBox5.Load()
+    ''                                PictureBox5.Image = Nothing
+    ''                            End Try
+    '                            MsgBox("Caught Exception")
+    ''                            Try
+    ''                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+    ''                            Catch
+    ''                                PictureBox5.Image = Nothing
+    '                            PictureBox5.Load()
+    ''                        End If
     '                    Else
     '                        trueseason = "00"
     '                        If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & trueseason.ToString & ".tbn")) Then
@@ -14385,18 +14382,18 @@ Public Class Form1
     '                            Try
     '                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
     '                            Catch
-    '                                PictureBox5.Image = Nothing
-    '                            End Try
-                                PictureBox5.Load()
-    '                            Try
-    '                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
-    '                            Catch
-    '                                PictureBox5.Image = Nothing
-    '                            End Try
-    '                        End If
-                                PictureBox5.Load()
-    '                Catch ex As Exception
-    '#If SilentErrorScream Then
+    ''                                PictureBox5.Image = Nothing
+    ''                            End Try
+    '                            PictureBox5.Load()
+    ''                            Try
+    ''                                PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "folder.jpg")
+    ''                            Catch
+    ''                                PictureBox5.Image = Nothing
+    ''                            End Try
+    ''                        End If
+    '                            PictureBox5.Load()
+    ''                Catch ex As Exception
+    ''#If SilentErrorScream Then
     '                        Throw ex
     '#End If
     '                End Try
@@ -14407,10 +14404,10 @@ Public Class Form1
     '                        PictureBox4.Image = Nothing
     '                    End Try
     '                End If
-    '            End If
-                        PictureBox4.Load()
-        tv_SplitContainerAutoPosition("TreeView Select") 'TreeView1_AfterSelect
-    '    End Sub
+    ''            End If
+    '                    PictureBox4.Load()
+    '    tv_SplitContainerAutoPosition("TreeView Select") 'TreeView1_AfterSelect
+    ''    End Sub
 
     '    Private Sub loadtvshow(ByVal path As String)
     '        Dim tempstring As String = ""
@@ -14833,19 +14830,19 @@ Public Class Form1
     '#End If
     '        End Try
     '    End Sub
-                    tempstring = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
-                    If IO.File.Exists(tempstring) Then
-                        PictureBox4.ImageLocation = tempstring
-                        PictureBox4.Load()
-                    Else
-                        PictureBox4.Image = Nothing                     'if there is no screenshot & no fanart then clear the picturebox & show nothing
-                        PictureBox4.Invalidate()
-                        'PictureBox4.ImageLocation = defaultScreenShot      ' other option is to show a picture of some sort indicating that there is no picture available
-                    End If
+    'tempstring = workingTvShow.path.Replace("tvshow.nfo", "fanart.jpg")
+    'If IO.File.Exists(tempstring) Then
+    '    PictureBox4.ImageLocation = tempstring
+    '    PictureBox4.Load()
+    'Else
+    '    PictureBox4.Image = Nothing                     'if there is no screenshot & no fanart then clear the picturebox & show nothing
+    '    PictureBox4.Invalidate()
+    '    'PictureBox4.ImageLocation = defaultScreenShot      ' other option is to show a picture of some sort indicating that there is no picture available
+    'End If
 
-                        PictureBox5.Load()
+    '    PictureBox5.Load()
 
-                        PictureBox5.Load()
+    '    PictureBox5.Load()
 
     Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
         Dim Episode As Nfo.TvEpisode
@@ -14872,23 +14869,23 @@ Public Class Form1
                 temppath = temppath & ".actors\" & tempname
                 If IO.File.Exists(temppath) Then
                     PictureBox8.ImageLocation = temppath
-                        PictureBox8.Load()
+                    PictureBox8.Load()
                     Exit Sub
                 End If
                 If actor.actorthumb <> Nothing Then
                     If actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb) Then
                         PictureBox8.ImageLocation = actor.actorthumb
-                            PictureBox8.Load()
+                        PictureBox8.Load()
                     Else
                         PictureBox8.ImageLocation = defaultActor
-                            PictureBox8.Load()
+                        PictureBox8.Load()
                     End If
                 Else
                     PictureBox8.ImageLocation = defaultActor
-                        PictureBox8.Load()
+                    PictureBox8.Load()
                 End If
                 PictureBox8.SizeMode = PictureBoxSizeMode.Zoom
-                    PictureBox8.Load()
+                PictureBox8.Load()
             End If
         Next
     End Sub
@@ -14897,11 +14894,11 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
         PictureBox6.Image = Nothing
 
-        For Each actor In workingTvShow.listactors
+        For Each actor In WorkingTvShow.ListActors
             If actor.actorname = ComboBox4.Text Then
                 TextBox18.Text = actor.actorrole
                 Try
-                    Dim temppath As String = workingTvShow.path.Replace(IO.Path.GetFileName(workingTvShow.path), "")
+                    Dim temppath As String = WorkingTvShow.path.Replace(IO.Path.GetFileName(WorkingTvShow.path), "")
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
@@ -14929,13 +14926,13 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem1.Click
+    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildMoviesToolStripMenuItem1.Click
         Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
         Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
         Dim tempstring As String = ""
         Try
             If TvTreeview.SelectedNode.Parent.Text = "" Then
-                tempstring = workingTvShow.path
+                tempstring = WorkingTvShow.path
             ElseIf TvTreeview.SelectedNode.Parent.Text.ToLower.IndexOf("season") <> -1 Then
                 tempstring = WorkingEpisode.episodepath
             ElseIf TvTreeview.SelectedNode.Parent.Text.ToLower.IndexOf("specials") <> -1 Then
@@ -14944,7 +14941,7 @@ Public Class Form1
                 Exit Sub
             End If
         Catch
-            tempstring = workingTvShow.path
+            tempstring = WorkingTvShow.path
         End Try
         Try
             Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
@@ -14975,7 +14972,7 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
         Dim node As TreeNode
         For Each node In TvTreeview.Nodes
-            If node.Name = workingTvShow.path Then
+            If node.Name = WorkingTvShow.path Then
                 node.ExpandAll()
             End If
         Next
@@ -14985,7 +14982,7 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
         Dim node As TreeNode
         For Each node In TvTreeview.Nodes
-            If node.Name = workingTvShow.path Then
+            If node.Name = WorkingTvShow.path Then
                 node.Collapse()
             End If
         Next
@@ -15070,13 +15067,13 @@ Public Class Form1
 
     
 
-        If e.Button = MouseButtons.Right Then
-            Dim n As TreeNode = Me.TvTreeview.GetNodeAt(e.X, e.Y)
-            If Not n Is Nothing Then
-                Me.TvTreeview.SelectedNode = n
-            End If
-        End If
-    End Sub
+    '    If e.Button = MouseButtons.Right Then
+    '        Dim n As TreeNode = Me.TvTreeview.GetNodeAt(e.X, e.Y)
+    '        If Not n Is Nothing Then
+    '            Me.TvTreeview.SelectedNode = n
+    '        End If
+    '    End If
+    'End Sub
 
     Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadItemToolStripMenuItem.Click
         Call reloadtvshow(True)
@@ -18272,10 +18269,10 @@ Public Class Form1
                         End Try
                     End If
                 End If
-                Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).episodepath)
-                Call loadtvepisode(workingEpisode(workingEpisodeIndex).episodepath, workingEpisode(workingEpisodeIndex).seasonno, workingEpisode(workingEpisodeIndex).episodeno)
+                'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).episodepath)
+                'Call loadtvepisode(workingEpisode(workingEpisodeIndex).episodepath, workingEpisode(workingEpisodeIndex).seasonno, workingEpisode(workingEpisodeIndex).episodeno)
                 WorkingEpisode.Save()
-                Call LoadTvEpisode(WorkingEpisode)
+                'Call LoadTvEpisode(WorkingEpisode)
                 messbox.Close()
             End If
         End If
