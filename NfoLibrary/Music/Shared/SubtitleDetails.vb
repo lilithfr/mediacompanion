@@ -7,7 +7,6 @@ Public Class SubtitleDetails
 
     Public Sub New()
         MyBase.New(Nothing, Nothing)
-        'Throw New NotImplementedException()
     End Sub
 
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)

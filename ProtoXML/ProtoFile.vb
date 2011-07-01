@@ -2,7 +2,9 @@
     Implements IProtoXFile
 
 
-
+    Public Sub New(ByVal NodeName As String)
+        Me.NodeName = NodeName
+    End Sub
 
     Friend Property Doc As System.Xml.Linq.XDocument = <?xml version="1.0" encoding="UTF-8" standalone="yes"?><tvshow></tvshow> Implements IProtoXFile.Doc
 
@@ -36,6 +38,7 @@
     Friend Property ChildrenLookup As New System.Collections.Generic.Dictionary(Of String, IProtoXChild) Implements IProtoXBase.ChildrenLookup
 
 
+    Public Property IsCache As Boolean
 
 #Region "File Access"
     Private _NfoFilePath As String
@@ -68,12 +71,25 @@
 
     Public Overridable Sub Load(ByVal Path As String) Implements IProtoXFile.Load
         Me.CleanDoc()
-        Me.Doc = XDocument.Load(Path)
+        If IO.File.Exists(Path) Then
+            Me.Doc = XDocument.Load(Path)
+        Else
+            Exit Sub
+        End If
+        LoadDoc()
+    End Sub
+
+
+    Public Sub LoadXml(ByVal Input As XNode)
+
+        Me.Doc = New XDocument(Input)
 
         LoadDoc()
     End Sub
 
+
     Public Sub LoadXml(ByVal Input As String)
+
         Me.Doc = XDocument.Parse(Input)
 
         LoadDoc()
@@ -94,6 +110,7 @@
         Next
 
         Me.CleanDoc()
+        Me.IsCache = False
     End Sub
 
     Public Sub Save() Implements IProtoXFile.Save
@@ -104,6 +121,8 @@
         Me.CleanDoc()
 
         Doc.Save(Path)
+
+        Me.IsCache = False
     End Sub
 
     Private Sub CleanDoc()

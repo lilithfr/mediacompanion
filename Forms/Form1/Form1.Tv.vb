@@ -2,15 +2,17 @@
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Text
-Imports System.Threading
-Imports Media_Companion.ScraperFunctions
+'Imports System.Threading
+'Imports Media_Companion.ScraperFunctions
 
 Imports System.Xml
-Imports System.Reflection
-Imports System.Windows.Forms
-Imports System.ComponentModel
+'Imports System.Reflection
+'Imports System.Windows.Forms
+'Imports System.ComponentModel
 
 Partial Public Class Form1
+    Public TvCache As New TvCache
+
     Public TvShows As New List(Of TvShow)
     'Public workingTvShow As New TvShow
     'Public workingEpisode As New List(Of TvEpisode)
@@ -49,7 +51,7 @@ Partial Public Class Form1
         CollapseAllToolStripMenuItem.Enabled = False
         ReloadItemToolStripMenuItem.Enabled = False
         OpenFolderToolStripMenuItem.Enabled = False
-        
+
         TextBox10.Text = ""
         TextBox11.Text = ""
         TextBox9.Text = ""
@@ -270,7 +272,7 @@ Partial Public Class Form1
     'End Sub
 
     Public Sub TvShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
-        loadtvshow(SelectedTvShow)
+        LoadTvShow(SelectedTvShow)
 
     End Sub
 
@@ -686,7 +688,7 @@ Partial Public Class Form1
 
     Private Sub RebuildTvShows()
         tvrebuildlog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
-
+        TV_CleanFolderList()
         totalTvShowCount = 0
         totalEpisodeCount = 0
         TextBox32.Text = ""
@@ -846,7 +848,7 @@ Partial Public Class Form1
 
     Private Function gettoptvshow(ByVal tvshowname As String)
 
-        templanguage = Preferences.tvdblanguagecode
+        templanguage = Preferences.TvdbLanguageCode
         Try
             Dim tvdbstuff As New TVDBScraper
 
@@ -1023,7 +1025,7 @@ Partial Public Class Form1
                 NewShow.UpdateTreenode()
                 TvShows.Add(NewShow)
 
-                TvShows.Add(NewShow)
+                'TvShows.Add(NewShow)
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))
                 End If
@@ -1551,7 +1553,7 @@ Partial Public Class Form1
                 '    Next
                 'End If
 
-                For Each url In artlist.Items
+                For Each url In ArtList.Items
                     If url.Type = Tvdb.ArtType.Fanart Then
                         newtvshow.posters.Add(url.Url)
                     Else
@@ -1703,7 +1705,7 @@ Partial Public Class Form1
                     Next
                 End If
             Else
-                Preferences.tvScraperLog &= vbCrLf & "Show Locked, Ignoring: " & tvfolder & vbCrLf
+                Preferences.tvScraperLog &= vbCrLf & "Show Locked, Ignoring: " & TvFolder & vbCrLf
             End If
         Next
 
@@ -1711,7 +1713,7 @@ Partial Public Class Form1
         'Application.DoEvents()
         Dim mediacounter As Integer = newEpisodeList.Count
         For g = 0 To newtvfolders.Count - 1
-                Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
@@ -1723,7 +1725,7 @@ Partial Public Class Form1
                 'If bckgroundscanepisodes.CancellationPending Then
                 '    Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation cancelled by user"
                 '    Exit Sub
-                    Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
+                Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
                 moviepattern = f
                 dirpath = newtvfolders(g)
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
@@ -1771,7 +1773,7 @@ Partial Public Class Form1
                     Try
                         newepisode.seasonno = M.Groups(1).Value.ToString
                         newepisode.episodeno = M.Groups(2).Value.ToString
-                        
+
                         Try
                             newepisode.fanartpath = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
                         Catch ex As Exception
@@ -2696,7 +2698,7 @@ Partial Public Class Form1
         Return Season
     End Function
 
-    Public Function tvCurrentlySelectedEpisode() As TvEpisode
+    Public Function tvCurrentlySelectedEpisode() As Nfo.TvEpisode
         If TvTreeview.SelectedNode Is Nothing Then Return Nothing
 
         Dim Show As Nfo.TvShow = Nothing
@@ -3423,5 +3425,44 @@ Partial Public Class Form1
             End If
             ''End If
         Next
+    End Sub
+
+    Public Sub LoadTvCache(ByVal Text As String)
+        TvCache.TvCachePath = Preferences.workingProfile.tvcache
+
+        TvCache.Load()
+
+        'Dirty work around until TvShows is repalced with TvCache.Shows universally
+        For Each TvShow As Nfo.TvShow In TvCache.Shows
+            'Dim NewShow As New TvShow
+            'NewShow.LoadXml(TvShow.Node)
+            'NewShow.NfoFilePath = TvShow.NfoFilePath
+            'NewShow.UpdateTreenode()
+            TvShows.Add(TvShow)
+
+            'For Each Episode As Nfo.TvEpisode In TvShow.Episodes
+            '    NewShow.AddEpisode(Episode)
+            'Next
+
+            TvTreeview.Nodes.Add(TvShow.ShowNode)
+        Next
+        TvTreeview.Sort()
+    End Sub
+
+    Public Sub TV_SaveTvData(ByVal Text As String)
+        TvCache.TvCachePath = Preferences.workingProfile.tvcache
+        TvCache.Clear()
+        For Each TvShow In TvShows
+            TvCache.Add(TvShow)
+            'For Each Season As Nfo.TvSeason In TvShow.Seasons.Values
+            '    TvCache.Add(Season)
+            For Each Episode As Nfo.TvEpisode In TvShow.Episodes
+                TvCache.Add(Episode)
+            Next
+            'Next
+        Next
+
+
+        TvCache.Save()
     End Sub
 End Class
