@@ -4,6 +4,10 @@
 Public Class TvEpisode
     Inherits ProtoFile
 
+    Public Sub New()
+        MyBase.New("episodedetails")
+    End Sub
+
     Private _PureName As String
     Private Property PureName As String
         Get
@@ -72,6 +76,7 @@ Public Class TvEpisode
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
 
+    Public Property ShowId As New ProtoProperty(Me, "ShowId")
 
     Public Property Details As New FileInfo(Me, "fileinfo")
 

@@ -3,6 +3,7 @@
 Partial Public Class TvShow
     Public ShowNode As New TreeNode
 
+
     Public Sub UpdateTreenode()
         Me.ShowNode.Tag = Me
         Me.ShowNode.Text = Me.Title.Value

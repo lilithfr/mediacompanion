@@ -1,5 +1,9 @@
 ﻿Public Class TvSeason
-    Inherits ProtoXML.ProtoXChildBase
+    Inherits ProtoXML.ProtoFile
+
+    Public Sub New()
+        MyBase.New("season")
+    End Sub
 
     Public Property ShowObj As TvShow
 
@@ -32,6 +36,7 @@
         End Set
     End Property
 
+    Public Property ShowId As New ProtoXML.ProtoProperty(Me, "ShowId")
     Public Property Poster As New ProtoXML.ProtoImage(Me, "poster") With {.FileName = "seasonX.tbn"}
 
     Public Property Episodes As New List(Of TvEpisode)
@@ -74,7 +79,4 @@
         End Get
     End Property
 
-    Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
-
-    End Sub
 End Class

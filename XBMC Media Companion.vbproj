@@ -134,9 +134,7 @@
     <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
     <Compile Include="Classes\TVhtml.vb" />
-    <Compile Include="Classes\Tv\TvEpisode.vb" />
-    <Compile Include="Classes\Tv\TvSeason.vb" />
-    <Compile Include="Classes\Tv\TvShow.vb" />
+    <Compile Include="Classes\TvWrap\TvCache.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Forms\Form1\Form1.Tv.vb">
       <SubType>Form</SubType>
@@ -300,6 +298,8 @@
     <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
     <Compile Include="Structures\TvShowLanguages.vb" />
+    <Compile Include="Classes\TvWrap\TvEpisode.vb" />
+    <Compile Include="Classes\TvWrap\TvShow.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBatchScraper.resx">

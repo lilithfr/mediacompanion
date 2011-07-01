@@ -24,14 +24,4 @@ Public Class ActorList
 
     End Sub
 
-    'Public Shadows Sub Add(ByVal item As Actor)
-
-    '    For Each Search As Actor In Me
-    '        If (Search.Name.Value = item.Name.Value) Then
-    '            Exit Sub
-    '        End If
-    '    Next
-
-    '    MyBase.Add(item)
-    'End Sub
 End Class

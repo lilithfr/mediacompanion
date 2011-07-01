@@ -218,7 +218,7 @@ Public Class Form1
             Next
         End If
         Call Movie_SaveMovieData()
-        Call TV_SaveTvData()
+        Call TV_SaveTvData("New Function")
         Preferences.startuptab = TabLevel1.SelectedIndex
 
         Preferences.SaveConfig()
@@ -229,6 +229,10 @@ Public Class Form1
         If messbox.Visible = True Then
             messbox.Activate()
         End If
+    End Sub
+
+    Private Sub Form1_Invalidated(ByVal sender As Object, ByVal e As System.Windows.Forms.InvalidateEventArgs) Handles Me.Invalidated
+
     End Sub
 
     'TODO: (Form1_Load) Need to refactor
@@ -504,7 +508,7 @@ Public Class Form1
             loadinginfo = "Status :- Loading TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call loadtvcache()
+            Call LoadTvCache(("New Function"))
         End If
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building Actor Database"
@@ -15483,7 +15487,7 @@ Public Class Form1
 
     Private Sub ReloadShowCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadShowCacheToolStripMenuItem.Click
         If IO.File.Exists(workingProfile.tvcache) Then
-            Call loadtvcache()
+            Call LoadTvCache(("New Function"))
         Else
             MsgBox("No Cache exists to load")
         End If
@@ -17599,8 +17603,8 @@ Public Class Form1
                         'newitem.titleandyear = item.titleandyear
                         newitem.tvdbid = workingTvShow.tvdbid
                         newitem.year = workingTvShow.year
-                        TvShows.Remove(item)
-                        TvShows.Add(newitem)
+                        'TvShows.Remove(item)
+                        'TvShows.Add(newitem)
                         'Call populatetvtree()
                         Exit For
                     End If
@@ -17924,8 +17928,8 @@ Public Class Form1
                         'newitem.titleandyear = item.titleandyear
                         newitem.tvdbid = workingTvShow.tvdbid
                         newitem.year = workingTvShow.year
-                        TvShows.Remove(item)
-                        TvShows.Add(newitem)
+                        'TvShows.Remove(item)
+                        'TvShows.Add(newitem)
                         'Call populatetvtree()
                         Exit For
                     End If
@@ -18285,19 +18289,14 @@ Public Class Form1
 
     Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
         Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+
         Dim TVShowNFOContent As String = ""
         If Button45.Text = "TVDB" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "tvshowactorsource", "imdb")
+            WorkingTvShow.tvshowactorsource = "imdb"
+            Button45.Text = "IMDB"
         Else
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "tvshowactorsource", "tvdb")
-        End If
-        Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
-        If DiditWork = True Then
-            If Button45.Text = "TVDB" Then
-                Button45.Text = "IMDB"
-            Else
-                Button45.Text = "TVDB"
-            End If
+            WorkingTvShow.tvshowactorsource = "tvdb"
+            Button45.Text = "TVDB"
         End If
     End Sub
 
@@ -18305,18 +18304,13 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
         Dim TVShowNFOContent As String = ""
         If Button46.Text = "TVDB" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "episodeactorsource", "imdb")
+            WorkingTvShow.episodeactorsource = "imdb"
+            Button46.Text = "IMDB"
         Else
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "episodeactorsource", "tvdb")
+            WorkingTvShow.episodeactorsource = "tvdb"
+            Button46.Text = "TVDB"
         End If
-        Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
-        If DiditWork = True Then
-            If Button46.Text = "TVDB" Then
-                Button46.Text = "IMDB"
-            Else
-                Button46.Text = "TVDB"
-            End If
-        End If
+
     End Sub
 
     Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
@@ -18324,34 +18318,31 @@ Public Class Form1
 
         Dim TVShowNFOContent As String = ""
         If Button47.Text = "Default" Then
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "sortorder", "dvd")
+            WorkingTvShow.sortorder = "dvd"
+            Button47.Text = "DVD"
         Else
-            TVShowNFOContent = nfoFunction.ChangeFieldTVShow(workingTvShow.path, "sortorder", "default")
+            WorkingTvShow.sortorder = "default"
+            Button47.Text = "deault"
         End If
-        Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
-        If DiditWork = True Then
-            If Button47.Text = "Default" Then
-                Button47.Text = "DVD"
-                workingTvShow.sortorder = "dvd"
-            Else
-                Button47.Text = "Default"
-                workingTvShow.sortorder = "default"
-            End If
-            For Each Shows In TvShows
-                If workingTvShow.path = Shows.fullpath Then
-                    Dim newtv As New TvShow
-                    newtv = Shows
-                    If Button47.Text = "Default" Then
-                        newtv.sortorder = "default"
-                    Else
-                        newtv.sortorder = "dvd"
-                    End If
-                    TvShows.Remove(Shows)
-                    TvShows.Add(newtv)
-                    Exit For
-                End If
-            Next
-        End If
+        'Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
+        'If DiditWork = True Then
+
+
+        '    For Each Shows In TvShows
+        '        If WorkingTvShow.path = Shows.fullpath Then
+        '            Dim newtv As New TvShow
+        '            newtv = Shows
+        '            If Button47.Text = "Default" Then
+        '                newtv.sortorder = "default"
+        '            Else
+        '                newtv.sortorder = "dvd"
+        '            End If
+        '            TvShows.Remove(Shows)
+        '            TvShows.Add(newtv)
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
         '        Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
     End Sub
 
@@ -18668,7 +18659,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call TV_SaveTvData()
+        Call TV_SaveTvData("New Function")
         messbox.Close()
         If Preferences.disabletvlogs = False Then
             Dim MyFormObject As New frmoutputlog(renamelog, True)
@@ -22215,120 +22206,120 @@ Public Class Form1
         'Call setuptvfolders()
     End Sub
 
-    Public Sub updatetree(Optional ByVal addnew As Boolean = True)
+    '    Public Sub updatetree(Optional ByVal addnew As Boolean = True)
 
 
-        Dim oldfolders As New List(Of String)
-        totalTvShowCount = 0
-        totalEpisodeCount = 0
-        TextBox32.Text = ""
-        TextBox33.Text = ""
-        'Me.Enabled = False
-        'basictvlist.Clear()
-        TvTreeview.Nodes.Clear()
+    '        Dim oldfolders As New List(Of String)
+    '        totalTvShowCount = 0
+    '        totalEpisodeCount = 0
+    '        TextBox32.Text = ""
+    '        TextBox33.Text = ""
+    '        'Me.Enabled = False
+    '        'basictvlist.Clear()
+    '        TvTreeview.Nodes.Clear()
 
-        For Each tvshow In TvShows
-            If tvshow.fullpath IsNot Nothing Then
-                Dim tempstring As String = tvshow.fullpath.Replace("\tvshow.nfo", "")
-                If Not tvFolders.Contains(tempstring) Then
-                    oldfolders.Add(tempstring)
-                End If
-            End If
-        Next
-        For Each folder In oldfolders
-            For Each oldshow In TvShows
-                Dim tempstring As String = oldshow.fullpath.Replace("\tvshow.nfo", "")
-                If tempstring = folder Then
-                    TvShows.Remove(oldshow)
-                    For Each fol In tvFolders
-                        If oldshow.fullpath.IndexOf(fol) <> -1 Then
-                            tvFolders.Remove(fol)
-                            Exit For
-                        End If
-                    Next
-                    Exit For
-                End If
-            Next
-        Next
+    '        For Each tvshow In TvShows
+    '            If tvshow.fullpath IsNot Nothing Then
+    '                Dim tempstring As String = tvshow.fullpath.Replace("\tvshow.nfo", "")
+    '                If Not tvFolders.Contains(tempstring) Then
+    '                    oldfolders.Add(tempstring)
+    '                End If
+    '            End If
+    '        Next
+    '        For Each folder In oldfolders
+    '            For Each oldshow In TvShows
+    '                Dim tempstring As String = oldshow.fullpath.Replace("\tvshow.nfo", "")
+    '                If tempstring = folder Then
+    '                    TvShows.Remove(oldshow)
+    '                    For Each fol In tvFolders
+    '                        If oldshow.fullpath.IndexOf(fol) <> -1 Then
+    '                            tvFolders.Remove(fol)
+    '                            Exit For
+    '                        End If
+    '                    Next
+    '                    Exit For
+    '                End If
+    '            Next
+    '        Next
 
-        'get list of new
-        Dim folderstoadd As New List(Of String)
-        For Each folder In tvFolders
-            Dim add As Boolean = True
-            Dim tempstring2 As String = folder
-            For Each tvshow In TvShows
-                Dim tempstring As String = tvshow.fullpath.Replace("\tvshow.nfo", "")
-                If folder = tempstring Then
-                    add = False
-                    Exit For
-                End If
-            Next
-            If add = True Then
-                folderstoadd.Add(tempstring2)
-            End If
-        Next
+    '        'get list of new
+    '        Dim folderstoadd As New List(Of String)
+    '        For Each folder In tvFolders
+    '            Dim add As Boolean = True
+    '            Dim tempstring2 As String = folder
+    '            For Each tvshow In TvShows
+    '                Dim tempstring As String = tvshow.fullpath.Replace("\tvshow.nfo", "")
+    '                If folder = tempstring Then
+    '                    add = False
+    '                    Exit For
+    '                End If
+    '            Next
+    '            If add = True Then
+    '                folderstoadd.Add(tempstring2)
+    '            End If
+    '        Next
 
-        If folderstoadd.Count > 0 Then
-            messbox = New frmMessageBox("New TV Folders Found", "Adding to DB", "Please Wait")
-            'remove old
-            messbox.Show()
-            messbox.Refresh()
-            Application.DoEvents()
-            messbox.Show()
-            Try
-                For Each tvfolder In folderstoadd
-                    Try
-                        Dim shownfopath As String = IO.Path.Combine(tvfolder, "tvshow.nfo")
-                        Dim newtvshownfo As TvShow
-                        newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
-                        'Try
-                        '    If addnew = True Then
-                        '        If Not IO.File.Exists(shownfopath) Then
-                        'Call setgoingnewtvshows(shownfopath)
-                        '        End If
-                        '    End If
-                        'Catch
-                        'End Try
-                        If newtvshownfo.title <> Nothing Then
-                            If newtvshownfo.status.IndexOf("skipthisfile") = -1 Then
-                                Dim skip As Boolean = False
-                                For Each tvshow In TvShows
-                                    If newtvshownfo.fullpath = tvshow.fullpath Then
-                                        skip = True
-                                        Exit For
-                                    End If
-                                Next
-                                If skip = False Then
-                                    ListtvFiles(newtvshownfo, "*.NFO")
-                                    TvShows.Add(newtvshownfo)
-                                End If
-                            End If
-                        End If
-                        realTvPaths.Add(tvfolder)
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
-                Next
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-            messbox.Close()
-            Me.Activate()               'bring main form back to front
-        End If
-        'For Each tv In basictvlist
-        '    ListtvFiles(tv, "*.NFO")
-        'Next
-        'Call populatetvtree()
-        'messbox.Close()
-        Me.Enabled = True
+    '        If folderstoadd.Count > 0 Then
+    '            messbox = New frmMessageBox("New TV Folders Found", "Adding to DB", "Please Wait")
+    '            'remove old
+    '            messbox.Show()
+    '            messbox.Refresh()
+    '            Application.DoEvents()
+    '            messbox.Show()
+    '            Try
+    '                For Each tvfolder In folderstoadd
+    '                    Try
+    '                        Dim shownfopath As String = IO.Path.Combine(tvfolder, "tvshow.nfo")
+    '                        Dim newtvshownfo As TvShow
+    '                        newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
+    '                        'Try
+    '                        '    If addnew = True Then
+    '                        '        If Not IO.File.Exists(shownfopath) Then
+    '                        'Call setgoingnewtvshows(shownfopath)
+    '                        '        End If
+    '                        '    End If
+    '                        'Catch
+    '                        'End Try
+    '                        If newtvshownfo.title <> Nothing Then
+    '                            If newtvshownfo.status.IndexOf("skipthisfile") = -1 Then
+    '                                Dim skip As Boolean = False
+    '                                For Each tvshow In TvShows
+    '                                    If newtvshownfo.fullpath = tvshow.fullpath Then
+    '                                        skip = True
+    '                                        Exit For
+    '                                    End If
+    '                                Next
+    '                                If skip = False Then
+    '                                    ListtvFiles(newtvshownfo, "*.NFO")
+    '                                    TvShows.Add(newtvshownfo)
+    '                                End If
+    '                            End If
+    '                        End If
+    '                        realTvPaths.Add(tvfolder)
+    '                    Catch ex As Exception
+    '#If SilentErrorScream Then
+    '                        Throw ex
+    '#End If
+    '                    End Try
+    '                Next
+    '            Catch ex As Exception
+    '#If SilentErrorScream Then
+    '                Throw ex
+    '#End If
+    '            End Try
+    '            messbox.Close()
+    '            Me.Activate()               'bring main form back to front
+    '        End If
+    '        'For Each tv In basictvlist
+    '        '    ListtvFiles(tv, "*.NFO")
+    '        'Next
+    '        'Call populatetvtree()
+    '        'messbox.Close()
+    '        Me.Enabled = True
 
-        Call TV_SaveTvData()
+    '        Call TV_SaveTvData("New Function")
 
-    End Sub
+    '    End Sub
 
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
         setuptvfolders()
@@ -24799,7 +24790,7 @@ Public Class Form1
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
             Call rebuildtvshows()
         Else
-            Call loadtvcache()
+            Call LoadTvCache(("New Function"))
         End If
 
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
@@ -28713,7 +28704,7 @@ Public Class Form1
 
 
 
-        Call TV_SaveTvData()
+        Call TV_SaveTvData("New Function")
     End Sub
 
     Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildThisShowToolStripMenuItem.Click
@@ -28772,7 +28763,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call TV_SaveTvData()
+        Call TV_SaveTvData("New Function")
     End Sub
 
     Private Sub UnlockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnlockAllToolStripMenuItem.Click
@@ -28795,7 +28786,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call TV_SaveTvData()
+        Call TV_SaveTvData("New Function")
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
@@ -29679,7 +29670,10 @@ Public Class Form1
 #End If
                                         'MsgBox("hekp")
                                     End Try
-                                    Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).episodepath, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno, True)
+                                    For Each Episode In listofnewepisodes
+                                        Episode.Save()
+                                    Next
+                                    'Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).episodepath, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno, True )
                                     Exit For
                                 End If
 
@@ -29726,7 +29720,9 @@ Public Class Form1
                                         Throw ex
 #End If
                                     End Try
-                                    Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).episodepath, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno, True)
+                                    For Each Episode In listofnewepisodes
+                                        Episode.Save()
+                                    Next
                                 End If
                             Next
                         End If

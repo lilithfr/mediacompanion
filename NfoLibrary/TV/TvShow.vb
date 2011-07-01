@@ -52,7 +52,9 @@ Public Class TvShow
     Public Property ImageLogo As New ProtoImage(Me, "logo") With {.FileName = "logo.png"}
 
 
-
+    Sub New()
+        MyBase.New("tvshow")
+    End Sub
 
     Public ReadOnly Property TitleAndYear As String
         Get
@@ -150,6 +152,8 @@ Public Class TvShow
     Public Sub AddEpisode(ByRef Episode As TvEpisode)
         If Not Me.Episodes.Contains(Episode) Then
             Me.Episodes.Add(Episode)
+        Else
+            Exit Sub
         End If
 
         If Episode.Season.Value IsNot Nothing AndAlso Not Me.Seasons.ContainsKey(Episode.Season.Value) Then
@@ -173,6 +177,7 @@ Public Class TvShow
             NewSeason.Episodes.Add(Episode)
             NewSeason.ShowObj = Me
             Me.Seasons.Add(Episode.Season.Value, NewSeason)
+            NewSeason.ShowId.Value = Me.Id.Value
             Episode.SeasonObj = NewSeason
         ElseIf Episode.Season.Value IsNot Nothing Then
             Me.Seasons(Episode.Season.Value).SeasonNode.Nodes.Add(Episode.EpisodeNode)
@@ -183,6 +188,7 @@ Public Class TvShow
             Dim Test = False
         End If
         Episode.ShowObj = Me
+        Episode.ShowId.Value = Me.Id.Value
     End Sub
 
     Private _Visible As Boolean
