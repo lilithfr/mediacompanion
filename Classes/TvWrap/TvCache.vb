@@ -164,7 +164,7 @@ Public Class TvCache
 
         Dom = New XDocument(<tvcache ver="3.5"></tvcache>)
 
-        For Each Item As ProtoFile In Items
+        For Each Item As TvShow In Shows
 
 
             If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
@@ -174,6 +174,20 @@ Public Class TvCache
             End If
             Dom.Root.Add(Item.Node)
 
+        Next
+
+
+        For Each Item As TvEpisode In Episodes
+            If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
+                Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
+                Item.Node.Add(NfoPath)
+
+            End If
+            If String.IsNullOrEmpty(Item.ShowId.Value) Then
+                Item.ShowId.Value = Item.ShowObj.Id.Value
+            End If
+
+            Dom.Root.Add(Item.Node)
         Next
 
         Dom.Save(TvCachePath)
