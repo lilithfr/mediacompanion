@@ -556,6 +556,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         For Each Item In ChildList
+            If (Item.ToString.IndexOf(".actors") <> -1) Then Exit For
             If Level <= MaxLevels Then
                 If ValidMovieDir(Item) Then
                     TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))

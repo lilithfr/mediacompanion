@@ -737,7 +737,7 @@ Partial Public Class Form1
                     'Next
                     'If skip = False Then
                     TvShows.Add(newtvshownfo)
-                    newtvshownfo.SearchForEpisodesInFolder()
+                    'newtvshownfo.SearchForEpisodesInFolder()
                     TvTreeview.Nodes.Add(newtvshownfo.ShowNode)
                     'End If
                 End If
