@@ -19,6 +19,7 @@ Public Class TvEpisode
             For Each Item As String In Media_Companion.Utilities.VideoExtensions
                 If IO.File.Exists(_PureName & Item) Then
                     _VideoFilePath = _PureName & Item
+                    Exit For
                 End If
             Next
             Me.Thumbnail.FileName = _PureName & ".tbn"
