@@ -420,3 +420,9 @@ C:\SVN MC\bin\Release\Utilites.xml
 C:\SVN MC\obj\Release\GenerateResource-ResGen.read.4.tlog
 C:\SVN MC\obj\Release\GenerateResource.read.13.tlog
 C:\SVN MC\obj\Release\GenerateResource.read.3.tlog
+C:\MC SVN\bin\Release\TvdbScrapper.dll
+C:\MC SVN\bin\Release\Utilites.dll
+C:\MC SVN\bin\Release\TvdbScrapper.pdb
+C:\MC SVN\bin\Release\TvdbScrapper.xml
+C:\MC SVN\bin\Release\Utilites.pdb
+C:\MC SVN\bin\Release\Utilites.xml

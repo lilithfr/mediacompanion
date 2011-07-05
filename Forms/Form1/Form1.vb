@@ -787,7 +787,7 @@ Public Class Form1
         Dim childchild As XmlElement
 
         Dim count2 As Integer = 0
-
+        frmSplash2.Label2.Text = "Creating cache xml...."
         For Each movie In fullMovieList
             
             child = doc.CreateElement("movie")
@@ -26165,16 +26165,29 @@ Public Class Form1
     End Sub
 
     Private Sub savetablechanges()
-        Dim mess As New frmMessageBox("Saving Changes", "", "Please Wait")
-        mess.Show()
-        mess.Refresh()
+        'Dim mess As New frmMessageBox("Saving Changes", "", "Please Wait")
+        'mess.Show()
+        'mess.Refresh()
+        frmSplash2.Text = "Saving Table Changes..."
+        frmSplash2.Label1.Text = "Saving Movie Data....."
+        frmSplash2.Label1.Visible = True
+        frmSplash2.Label2.Visible = True
+        frmSplash2.ProgressBar1.Visible = True
+        frmSplash2.ProgressBar1.Maximum = DataGridView1.Rows.Count
+        frmSplash2.Show()
+        Dim progcount As Integer = 0
         Application.DoEvents()
         Dim gridrow As DataGridViewRow
 
         For Each gridrow In DataGridView1.Rows
+            progcount += 1
+            frmSplash2.ProgressBar1.Value = progcount
+
+
             Dim changed As Boolean = False
             Dim idpath As String = gridrow.Cells("fullpathandfilename").Value
             Dim array As New List(Of String)
+            frmSplash2.Label2.Text = gridrow.Cells("Title").Value
             For f = fullMovieList.Count - 1 To 0 Step -1
                 changed = False
                 If Not array.Contains(fullMovieList(f).fullpathandfilename) Then
@@ -26423,7 +26436,8 @@ Public Class Form1
         Call Movie_SaveMovieData()
         Call loadinfofile()
         Call applyfilters()
-        mess.Close()
+        frmSplash2.Hide()
+        'mess.Close()
         Application.DoEvents()
         Me.BringToFront()
     End Sub
