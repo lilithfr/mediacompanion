@@ -24,7 +24,8 @@ Public Class Form1
     Public tvRebuildNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
     Public startup As Boolean = True
-    Public tvRegex As New List(Of String)
+    Public tv_RegexScraper As New List(Of String)
+    Public tv_RegexRename As New List(Of String)
     Public dList As New List(Of String)
     Public scraperFunction2 As New ScraperFunctions
     Public globalThreadStop As Boolean = False
@@ -440,14 +441,14 @@ Public Class Form1
 
         'ToolStrip1.Enabled = False
 
+        Call LoadRegex()
+
         Call loadprefs()
 
         'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
         'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
 
 
-
-        Call LoadRegex()
 
         Select Case Preferences.moviedefaultlist
             Case 0
@@ -1583,7 +1584,8 @@ Public Class Form1
 
         Dim tempstring As String
         tempstring = workingProfile.regexlist
-        tvRegex.Clear()
+        tv_RegexScraper.Clear()
+        tv_RegexRename.Clear()
         Dim path As String = tempstring
 
         If File.Exists(path) Then
@@ -1595,8 +1597,10 @@ Public Class Form1
                 If regexList.DocumentElement.Name = "regexlist" Then
                     For Each result As XmlElement In regexList("regexlist")
                         Select Case result.Name
-                            Case "tvregex"
-                                tvRegex.Add(result.InnerText)
+                            Case "tvregexscrape"
+                                tv_RegexScraper.Add(result.InnerText)
+                            Case "tvregexrename"
+                                tv_RegexRename.Add(result.InnerText)
                         End Select
                     Next
                 End If
@@ -1623,17 +1627,30 @@ Public Class Form1
         Dim child As XmlElement
 
         If newDefault = True Then
-            tvRegex.Clear()
-            tvRegex.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
-            tvRegex.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
-            tvRegex.Add("([0-9]+)([0-9][0-9])")
+            tv_RegexScraper.Clear()
+            tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
+            tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
+            tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
+            tv_RegexRename.Clear()
+            tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
+            tv_RegexRename.Add("S01E01 - Episode Title.ext")
+            tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
+            tv_RegexRename.Add("1x01 - Episode Title.ext")
+            tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
+            tv_RegexRename.Add("101 - Episode Title.ext")
         End If
 
         doc.AppendChild(xmlProc)
         root = doc.CreateElement("regexlist")
 
-        For Each Regex In tvRegex
-            child = doc.CreateElement("tvregex")
+        For Each Regex In tv_RegexScraper
+            child = doc.CreateElement("tvregexscrape")
+            child.InnerText = Regex
+            root.AppendChild(child)
+        Next
+
+        For Each Regex In tv_RegexRename
+            child = doc.CreateElement("tvregexrename")
             child.InnerText = Regex
             root.AppendChild(child)
         Next
@@ -23562,11 +23579,14 @@ Public Class Form1
     End Sub
 
     Private Sub setuptvpreferences()
-        ComboBox9.SelectedIndex = Preferences.tvrename
+        For Each Regex In tv_RegexRename
+            ComboBox_tv_EpisodeRename.Items.Add(Regex)
+        Next
+        ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
         If Preferences.eprenamelowercase = True Then
-            CheckBox40.CheckState = CheckState.Checked
+            CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked
         Else
-            CheckBox40.CheckState = CheckState.Unchecked
+            CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Unchecked
         End If
         If Preferences.enabletvhdtags = True Then
             CheckBox20.CheckState = CheckState.Checked
@@ -23574,9 +23594,9 @@ Public Class Form1
             CheckBox20.CheckState = CheckState.Unchecked
         End If
         If Preferences.autorenameepisodes = True Then
-            CheckBox37.CheckState = CheckState.Checked
+            CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Checked
         Else
-            CheckBox37.CheckState = CheckState.Unchecked
+            CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Unchecked
         End If
         If Preferences.autoepisodescreenshot = True Then
             CheckBox36.CheckState = CheckState.Checked
@@ -23636,10 +23656,16 @@ Public Class Form1
 
         ComboBox8.SelectedIndex = Preferences.tvdbactorscrape
 
-        ListBox14.Items.Clear()
-        For Each regexc In tvRegex
-            ListBox14.Items.Add(regexc)
+        ListBox_tv_RegexScrape.Items.Clear()
+        For Each regexc In tv_RegexScraper
+            ListBox_tv_RegexScrape.Items.Add(regexc)
         Next
+
+        ListBox_tv_RegexRename.Items.Clear()
+        For Each regexc In tv_RegexRename
+            ListBox_tv_RegexRename.Items.Add(regexc)
+        Next
+
         If Preferences.enabletvhdtags = True Then
             CheckBox20.CheckState = CheckState.Checked
         Else
@@ -23665,14 +23691,28 @@ Public Class Form1
         generalprefschanged = False
     End Sub
 
-    Private Sub Button86_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button86.Click
-        tvRegex.Clear()
-        tvRegex.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
-        tvRegex.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
-        tvRegex.Add("([0-9]+)([0-9][0-9])")
-        ListBox14.Items.Clear()
-        For Each Regex In tvRegex
-            ListBox14.Items.Add(Regex)
+    Private Sub Button_tv_RegexScrape_Restore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Restore.Click
+        tv_RegexScraper.Clear()
+        tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
+        tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
+        tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
+        ListBox_tv_RegexScrape.Items.Clear()
+        For Each Regex In tv_RegexScraper
+            ListBox_tv_RegexScrape.Items.Add(Regex)
+        Next
+    End Sub
+
+    Private Sub Button_tv_RegexRename_Restore_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Restore.Click
+        tv_RegexRename.Clear()
+        tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
+        tv_RegexRename.Add("S01E01 - Episode Title.ext")
+        tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
+        tv_RegexRename.Add("1x01 - Episode Title.ext")
+        tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
+        tv_RegexRename.Add("101 - Episode Title.ext")
+        ListBox_tv_RegexRename.Items.Clear()
+        For Each Regex In tv_RegexRename
+            ListBox_tv_RegexRename.Items.Add(Regex)
         Next
     End Sub
 
@@ -23685,19 +23725,19 @@ Public Class Form1
         generalprefschanged = True
     End Sub
 
-    Private Sub Button89_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button89.Click
+    Private Sub Button_tv_RegexScrape_Remove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Remove.Click
         'remove selected
-        Dim tempstring = ListBox14.SelectedItem
+        Dim tempstring = ListBox_tv_RegexScrape.SelectedItem
         Try
-            ListBox14.Items.Remove(ListBox14.SelectedItem)
+            ListBox_tv_RegexScrape.Items.Remove(ListBox_tv_RegexScrape.SelectedItem)
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
         End Try
-        For Each regexp In tvRegex
+        For Each regexp In tv_RegexScraper
             If regexp = tempstring Then
-                tvRegex.Remove(regexp)
+                tv_RegexScraper.Remove(regexp)
                 Exit For
             End If
         Next
@@ -23713,43 +23753,105 @@ Public Class Form1
         Return True
     End Function
 
-    Private Sub Button87_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button87.Click
+    Private Sub Button_tv_RegexScrape_Edit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Edit.Click
         'edit
-        If TextBox46.Text = "" Then
+        If TextBox_tv_RegexScrape_Edit.Text = "" Then
             MsgBox("No Text")
-            TextBox46.Text = ListBox7.SelectedItem
+            'TextBox46.Text = ListBox7.SelectedItem     'WTF? Listbox7 = Movie Folder?
             Exit Sub
         End If
-        If Not validateregex(TextBox46.Text) Then
+        If Not validateregex(TextBox_tv_RegexScrape_Edit.Text) Then
             MsgBox("Invalid Regex")
             Exit Sub
         End If
-        Dim tempint As Integer = ListBox14.SelectedIndex
-        ListBox14.Items.RemoveAt(tempint)
-        ListBox14.Items.Insert(tempint, TextBox46.Text)
-        ListBox14.SelectedIndex = tempint
-        tvRegex.Clear()
-        For Each regexp In ListBox14.Items
-            tvRegex.Add(regexp)
+        Dim tempint As Integer = ListBox_tv_RegexScrape.SelectedIndex
+        ListBox_tv_RegexScrape.Items.RemoveAt(tempint)
+        ListBox_tv_RegexScrape.Items.Insert(tempint, TextBox_tv_RegexScrape_Edit.Text)
+        ListBox_tv_RegexScrape.SelectedIndex = tempint
+        tv_RegexScraper.Clear()
+        For Each regexp In ListBox_tv_RegexScrape.Items
+            tv_RegexScraper.Add(regexp)
         Next
         generalprefschanged = True
     End Sub
 
-    Private Sub Button90_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button90.Click
+    Private Sub Button_tv_RegexScrape_Add_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Add.Click
         'add textbox49
-        If Not validateregex(TextBox49.Text) Then
+        If Not validateregex(TextBox_tv_RegexScrape_New.Text) Then
             MsgBox("Invalid Regex")
             Exit Sub
         End If
-        ListBox14.Items.Add(TextBox49.Text)
-        tvRegex.Add(TextBox49.Text)
+        ListBox_tv_RegexScrape.Items.Add(TextBox_tv_RegexScrape_New.Text)
+        tv_RegexScraper.Add(TextBox_tv_RegexScrape_New.Text)
 
         generalprefschanged = True
     End Sub
 
-    Private Sub Button92_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button92.Click
+    Private Sub Button_tv_RegexRename_Remove_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Remove.Click
+        Dim tempstring = ListBox_tv_RegexRename.SelectedItem
+        Dim tempIndex = ListBox_tv_RegexRename.SelectedIndex
+        Try
+            ListBox_tv_RegexRename.Items.RemoveAt(tempIndex)
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+        For Each regexp In tv_RegexRename
+            If regexp = tempstring Then
+                tv_RegexRename.Remove(regexp)
+                Exit For
+            End If
+        Next
+        TextBox_tv_RegexRename_Edit.Clear()
+        If ComboBox_tv_EpisodeRename.SelectedIndex = tempIndex Or Preferences.tvrename = tempIndex Then
+            ComboBox_tv_EpisodeRename.SelectedIndex = 0
+            MsgBox("Rename preference has been removed" & vbLf & "Please update the TV Prefs General tab")
+        End If
+        Try
+            ComboBox_tv_EpisodeRename.Items.RemoveAt(tempIndex)
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+        generalprefschanged = True
+    End Sub
+
+    Private Sub Button_tv_RegexRename_Add_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Add.Click
+        'add
+        ListBox_tv_RegexRename.Items.Add(TextBox_tv_RegexRename_New.Text)
+        tv_RegexRename.Add(TextBox_tv_RegexRename_New.Text)
+        TextBox_tv_RegexRename_New.Clear()
+        generalprefschanged = True
+    End Sub
+
+    Private Sub Button_tv_RegexRename_Edit_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Edit.Click
+        'edit
+        If TextBox_tv_RegexRename_Edit.Text = "" Then
+            MsgBox("No Text")
+            'TextBox50.Text = ListBox7.SelectedItem
+            Exit Sub
+        End If
+        Dim tempint As Integer = ListBox_tv_RegexRename.SelectedIndex
+        ListBox_tv_RegexRename.Items.RemoveAt(tempint)
+        ListBox_tv_RegexRename.Items.Insert(tempint, TextBox_tv_RegexRename_Edit.Text)
+        ListBox_tv_RegexRename.SelectedIndex = tempint
+        tv_RegexScraper.Clear()
+        For Each regexp In ListBox_tv_RegexRename.Items
+            tv_RegexScraper.Add(regexp)
+        Next
+        TextBox_tv_RegexRename_Edit.Clear()
+        generalprefschanged = True
+    End Sub
+
+    Private Sub Button_tv_RegexPrefSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexPrefSave.Click
         Preferences.saveconfig()
         Call saveregex()
+        ComboBox_tv_EpisodeRename.Items.Clear()
+        For Each Regex In tv_RegexRename
+            ComboBox_tv_EpisodeRename.Items.Add(Regex)
+        Next
         MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
         generalprefschanged = False
     End Sub
@@ -23771,26 +23873,26 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Button88_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button88.Click
+    Private Sub Button_tv_RegexScrape_Test_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Test.Click
         Try
-            If TextBox48.Text = "" Then
+            If TextBox_tv_RegexScrape_TestString.Text = "" Then
                 MsgBox("Please Enter a filename or any string to test")
                 Exit Sub
             End If
-            If ListBox14.SelectedItem = Nothing Then
+            If ListBox_tv_RegexScrape.SelectedItem = Nothing Then
                 MsgBox("Please Select a Regex to test")
                 Exit Sub
             End If
-            TextBox47.Text = ""
+            TextBox_tv_RegexScrape_TestResult.Text = ""
             Dim tvseries As String
             Dim tvepisode As String
             Dim s As String
-            Dim tempstring As String = TextBox48.Text
+            Dim tempstring As String = TextBox_tv_RegexScrape_TestString.Text
             s = tempstring '.ToLower
             Dim M As Match
 
 
-            M = Regex.Match(s, ListBox14.SelectedItem)
+            M = Regex.Match(s, ListBox_tv_RegexScrape.SelectedItem)
             If M.Success = True Then
                 Try
                     tvseries = M.Groups(1).Value
@@ -23801,10 +23903,10 @@ Public Class Form1
                 End Try
                 Try
                     If tvseries <> "-1" Then
-                        TextBox47.Text = "Series No = " & tvseries & vbCrLf
+                        TextBox_tv_RegexScrape_TestResult.Text = "Series No = " & tvseries & vbCrLf
                     End If
                     If tvepisode <> "-1" Then
-                        TextBox47.Text = TextBox47.Text & "Episode No = " & tvepisode
+                        TextBox_tv_RegexScrape_TestResult.Text = TextBox_tv_RegexScrape_TestResult.Text & "Episode No = " & tvepisode
                     End If
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -23812,7 +23914,7 @@ Public Class Form1
 #End If
                 End Try
             Else
-                TextBox47.Text = "No Matches"
+                TextBox_tv_RegexScrape_TestResult.Text = "No Matches"
             End If
 
         Catch ex As Exception
@@ -24920,19 +25022,19 @@ Public Class Form1
         generalprefschanged = True
     End Sub
 
-    Private Sub Button94_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button94.Click
+    Private Sub Button_tv_RegexScrape_MoveUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_MoveUp.Click
         'up
         Try
             Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox14.SelectedIndex <> 0 Then
-                mSelectedIndex = Me.ListBox14.SelectedIndex
+            If Me.ListBox_tv_RegexScrape.SelectedIndex <> 0 Then
+                mSelectedIndex = Me.ListBox_tv_RegexScrape.SelectedIndex
                 mOtherIndex = mSelectedIndex - 1
-                ListBox14.Items.Insert(mSelectedIndex + 1, ListBox14.Items(mOtherIndex))
-                ListBox14.Items.RemoveAt(mOtherIndex)
+                ListBox_tv_RegexScrape.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexScrape.Items(mOtherIndex))
+                ListBox_tv_RegexScrape.Items.RemoveAt(mOtherIndex)
             End If
-            tvRegex.Clear()
-            For Each item In ListBox14.Items
-                tvRegex.Add(item)
+            tv_RegexScraper.Clear()
+            For Each item In ListBox_tv_RegexScrape.Items
+                tv_RegexScraper.Add(item)
             Next
             generalprefschanged = True
         Catch ex As Exception
@@ -24942,19 +25044,19 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button95_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button95.Click
+    Private Sub Button_tv_RegexScrape_MoveDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_MoveDown.Click
         'down
         Try
             Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox14.SelectedIndex <> Me.ListBox14.Items.Count - 1 Then
-                mSelectedIndex = Me.ListBox14.SelectedIndex
+            If Me.ListBox_tv_RegexScrape.SelectedIndex <> Me.ListBox_tv_RegexScrape.Items.Count - 1 Then
+                mSelectedIndex = Me.ListBox_tv_RegexScrape.SelectedIndex
                 mOtherIndex = mSelectedIndex + 1
-                ListBox14.Items.Insert(mSelectedIndex, ListBox14.Items(mOtherIndex))
-                ListBox14.Items.RemoveAt(mOtherIndex + 1)
+                ListBox_tv_RegexScrape.Items.Insert(mSelectedIndex, ListBox_tv_RegexScrape.Items(mOtherIndex))
+                ListBox_tv_RegexScrape.Items.RemoveAt(mOtherIndex + 1)
             End If
-            tvRegex.Clear()
-            For Each item In ListBox14.Items
-                tvRegex.Add(item)
+            tv_RegexScraper.Clear()
+            For Each item In ListBox_tv_RegexScrape.Items
+                tv_RegexScraper.Add(item)
             Next
             generalprefschanged = True
         Catch ex As Exception
@@ -24964,8 +25066,52 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ComboBox9_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox9.SelectedIndexChanged
-        Preferences.tvrename = ComboBox9.SelectedIndex
+    Private Sub Button_tv_RegexRename_MoveUp_Click(sender As System.Object, e As System.EventArgs) Handles Button_tv_RegexRename_MoveUp.Click
+        'up
+        Try
+            Dim mSelectedIndex, mOtherIndex As Integer
+            If Me.ListBox_tv_RegexRename.SelectedIndex <> 0 Then
+                mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
+                mOtherIndex = mSelectedIndex - 1
+                ListBox_tv_RegexRename.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexRename.Items(mOtherIndex))
+                ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex)
+            End If
+            tv_RegexRename.Clear()
+            For Each item In ListBox_tv_RegexScrape.Items
+                tv_RegexRename.Add(item)
+            Next
+            generalprefschanged = True
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+    End Sub
+
+    Private Sub Button_tv_RegexRename_MoveDown_Click(sender As System.Object, e As System.EventArgs) Handles Button_tv_RegexRename_MoveDown.Click
+        'down
+        Try
+            Dim mSelectedIndex, mOtherIndex As Integer
+            If Me.ListBox_tv_RegexRename.SelectedIndex <> Me.ListBox_tv_RegexRename.Items.Count - 1 Then
+                mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
+                mOtherIndex = mSelectedIndex + 1
+                ListBox_tv_RegexRename.Items.Insert(mSelectedIndex, ListBox_tv_RegexRename.Items(mOtherIndex))
+                ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex + 1)
+            End If
+            tv_RegexRename.Clear()
+            For Each item In ListBox_tv_RegexRename.Items
+                tv_RegexRename.Add(item)
+            Next
+            generalprefschanged = True
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+    End Sub
+
+    Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
+        Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
         generalprefschanged = True
     End Sub
 
@@ -25719,9 +25865,15 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ListBox14_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox14.SelectedIndexChanged
-        If ListBox14.SelectedItem <> Nothing Then
-            TextBox46.Text = ListBox14.SelectedItem
+    Private Sub ListBox_tv_RegexScrape_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox_tv_RegexScrape.SelectedIndexChanged
+        If ListBox_tv_RegexScrape.SelectedItem <> Nothing Then
+            TextBox_tv_RegexScrape_Edit.Text = ListBox_tv_RegexScrape.SelectedItem
+        End If
+    End Sub
+
+    Private Sub ListBox_tv_RegexRename_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox_tv_RegexRename.SelectedIndexChanged
+        If ListBox_tv_RegexRename.SelectedItem <> Nothing Then
+            TextBox_tv_RegexRename_Edit.Text = ListBox_tv_RegexRename.SelectedItem
         End If
     End Sub
 
@@ -28225,8 +28377,8 @@ Public Class Form1
         generalprefschanged = True
     End Sub
 
-    Private Sub CheckBox37_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox37.CheckedChanged
-        If CheckBox37.CheckState = CheckState.Checked Then
+    Private Sub CheckBox_tv_EpisodeRenameAuto_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameAuto.CheckedChanged
+        If CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Checked Then
             Preferences.autorenameepisodes = True
         Else
             Preferences.autorenameepisodes = False
@@ -28695,7 +28847,7 @@ Public Class Form1
             If skip = False Then
                 TvShows.Add(newtvshownfo)
             End If
-       
+
         End If
         realTvPaths.Add(show)
 
@@ -29753,8 +29905,8 @@ Public Class Form1
         ToolStripProgressBar7.Visible = False
     End Sub
 
-    Private Sub CheckBox40_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox40.CheckedChanged
-        If CheckBox40.CheckState = CheckState.Checked Then
+    Private Sub CheckBox_tv_EpisodeRenameCase_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_tv_EpisodeRenameCase.CheckedChanged
+        If CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked Then
             Preferences.eprenamelowercase = True
         Else
             Preferences.eprenamelowercase = False

@@ -53,7 +53,7 @@ Public Class frmOptions
             CheckBox11.CheckState = CheckState.Unchecked
         End If
 
-        For Each Regex In Form1.tvRegex
+        For Each Regex In Form1.tv_RegexScraper
             ListBox7.Items.Add(Regex)
         Next
         ComboBox3.SelectedIndex = Preferences.tvrename
@@ -1292,7 +1292,7 @@ Public Class frmOptions
             End If
         Next
         ListBox7.Items.Add(TextBox3.Text)
-        Form1.tvRegex.Add(TextBox3.Text)
+        Form1.tv_RegexScraper.Add(TextBox3.Text)
     End Sub
 
     Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
@@ -1301,21 +1301,21 @@ Public Class frmOptions
             ListBox7.Items.Remove(ListBox7.SelectedItem)
         Catch
         End Try
-        For Each regexp In Form1.tvRegex
+        For Each regexp In Form1.tv_RegexScraper
             If regexp = tempstring Then
-                Form1.tvRegex.Remove(regexp)
+                Form1.tv_RegexScraper.Remove(regexp)
                 Exit For
             End If
         Next
     End Sub
 
     Private Sub Button13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button13.Click
-        Form1.tvRegex.Clear()
-        Form1.tvRegex.Add("[Ss]([\d]{1,2}).?[Ee]([\d]{1,2})")
-        Form1.tvRegex.Add("([\d]{1,2}) ?[xX] ?([\d]{1,2})")
-        Form1.tvRegex.Add("([0-9]+)([0-9][0-9])")
+        Form1.tv_RegexScraper.Clear()
+        Form1.tv_RegexScraper.Add("[Ss]([\d]{1,2}).?[Ee]([\d]{1,2})")
+        Form1.tv_RegexScraper.Add("([\d]{1,2}) ?[xX] ?([\d]{1,2})")
+        Form1.tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
         ListBox7.Items.Clear()
-        For Each Regex In Form1.tvRegex
+        For Each Regex In Form1.tv_RegexScraper
             ListBox7.Items.Add(Regex)
         Next
     End Sub

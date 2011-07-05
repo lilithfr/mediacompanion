@@ -1757,7 +1757,7 @@ Partial Public Class Form1
             End If
             Dim episode As New TvEpisode
 
-            For Each Regexs In tvRegex
+            For Each Regexs In tv_RegexScraper
 
                 S = newepisode.episodepath '.ToLower
                 S = S.Replace("x264", "")

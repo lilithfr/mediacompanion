@@ -294,7 +294,7 @@ Public Class WorkingWithNfoFiles
                 newtvshow.tvdbid = ""
                 newtvshow.episodepath = path
                 If newtvshow.episodeno = Nothing Or newtvshow.episodeno = Nothing Then
-                    For Each regexp In Form1.tvRegex
+                    For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
                         M = Regex.Match(newtvshow.episodepath, regexp)
@@ -369,7 +369,7 @@ Public Class WorkingWithNfoFiles
                 Next
 
                 If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvRegex
+                    For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
                         M = Regex.Match(newtvepisode.episodepath, regexp)
@@ -438,7 +438,7 @@ Public Class WorkingWithNfoFiles
                             Try
                                 anotherepisode.episodepath = path
                                 If anotherepisode.episodeno = Nothing Or anotherepisode.episodeno = Nothing Then
-                                    For Each regexp In Form1.tvRegex
+                                    For Each regexp In Form1.tv_RegexScraper
 
                                         Dim M As Match
                                         M = Regex.Match(anotherepisode.episodepath, regexp)
@@ -2839,7 +2839,7 @@ Public Class WorkingWithNfoFiles
             newepisode.episodepath = path
             newepisode.episodepath = path
             If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                For Each regexp In Form1.tvRegex
+                For Each regexp In Form1.tv_RegexScraper
 
                     Dim M As Match
                     M = Regex.Match(newepisode.episodepath, regexp)
@@ -2877,7 +2877,7 @@ Public Class WorkingWithNfoFiles
                 newepisode.episodepath = path
                 newepisode.episodepath = path
                 If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvRegex
+                    For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
                         M = Regex.Match(newepisode.episodepath, regexp)
@@ -3027,7 +3027,7 @@ Public Class WorkingWithNfoFiles
                 Next
 
                 If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
-                    For Each regexp In Form1.tvRegex
+                    For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
                         M = Regex.Match(newtvepisode.episodepath, regexp)
