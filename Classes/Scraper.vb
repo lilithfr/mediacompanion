@@ -689,13 +689,13 @@ Public Class Classimdb
 
 
                     'rating
-                    If webpage(f).IndexOf("<span>/10</span>") <> -1 Then
+                    If webpage(f).IndexOf("/10</span>") <> -1 Then
                         Try
                             movienfoarray = webpage(f)
                             webpage(f) = webpage(f).Substring(webpage(f).IndexOf(">") + 1, webpage(f).Length - webpage(f).IndexOf(">") - 1)
-                            movienfoarray = webpage(f).Substring(0, 3)
+                            movienfoarray = webpage(f).Substring(0, 10)
                             movienfoarray = movienfoarray.Replace("<b>", "")
-                            movienfoarray = movienfoarray.Replace("/<b>", "")
+                            movienfoarray = movienfoarray.Replace("</b>", "")
                             movienfoarray = movienfoarray.Replace(",", ".")
                             movienfoarray = movienfoarray.Replace(" ", "")
                             movienfoarray = encodespecialchrs(movienfoarray)
