@@ -1022,7 +1022,8 @@ Module General
 
         End If
         '-----------------End Resize Fanart
-        Return True
+            Return True
+
     End Function
     Public Function SearchExtraIDinNFO(ByVal Filename As String) As String
         Dim extrapossibleID As String = Nothing
@@ -1979,9 +1980,13 @@ Module General
         End If
         ' 3st stage
         FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
-        Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
-        FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
-        FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
+        If FinalScrapResult.ToLower <> "error" Then
+
+            Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
+            FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+            FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
+
+        End If
         Return FinalScrapResult
     End Function
 

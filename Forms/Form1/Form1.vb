@@ -3512,7 +3512,7 @@ Public Class Form1
                 End Try
                 newMovieFoundTitle = newMovieList(f).title.ToString
                 newMovieFoundFilename = newMovieList(f).mediapathandfilename.ToString
-                scraperLog &= newMovieFoundTitle & vbCrLf
+                scraperLog &= newMovieFoundTitle
                 novaThread = New Thread(New ThreadStart(AddressOf TempStartMoviesScraping))
                 novaThread.SetApartmentState(ApartmentState.STA)
                 novaThread.Start()
@@ -3520,7 +3520,7 @@ Public Class Form1
                 ToolStripProgressBar1.Value = f
                 ToolStripProgressBar1.ProgressBar.Refresh()
                 ToolStripProgressBar1.ProgressBar.PerformStep()
-                ToolStripStatusLabel1.Text = "Scraping " & (f + 1).ToString & " of " & newMovieList.Count.ToString
+                ToolStripStatusLabel1.Text = Preferences.XBMC_Scraper & " XBMC Scraper - Scraping " & (f + 1).ToString & " of " & newMovieList.Count.ToString
                 ToolStripStatusLabel6.Visible = True
                 ToolStripStatusLabel6.Text = "Movie Name : " & newMovieFoundTitle
 
@@ -3541,18 +3541,21 @@ Public Class Form1
             ToolStripProgressBar1.Maximum = TempProgressBarValue
             ToolStripStatusLabel6.Text = TempLabel
         End If
-        scraperLog &= vbCrLf & "Completed!" & vbCrLf
+
     End Sub
     Private Sub TempStartMoviesScraping()
         Dim FullFileContent As String = ""
         Dim Scraper As String = Preferences.XBMC_Scraper
         FullFileContent = Start_XBMC_MoviesScraping(Scraper, newMovieFoundTitle, newMovieFoundFilename)
         If FullFileContent.ToLower <> "error" Then
+            scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then AddScrapedMovietoDB(newMovieFoundFilename)
             ApplyFilters()
             If messbox.Visible = True Then messbox.Close()
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
+        Else
+            scraperLog &= " - Scrape ERROR!" & vbCrLf
         End If
     End Sub
     Private Sub AddScrapedMovietoDB(ByVal Filename As String)
@@ -3642,10 +3645,10 @@ Public Class Form1
 
             If Preferences.usefoldernames = True Then
                 progressbase &= "FOLDERNAMES"
-                scraperLog &= "Using FOLDERNAMES to determine Movie Title...." & vbCrLf
+
             Else
                 progressbase &= "FILENAMES"
-                scraperLog &= "Using FILENAMES to determine Movie Title...." & vbCrLf
+
             End If
 
             'BckWrkScnMovies.ReportProgress(progress, ProgressBase)
