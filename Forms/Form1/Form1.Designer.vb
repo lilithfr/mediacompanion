@@ -4496,12 +4496,12 @@ Me.ToolTip2.IsBalloon = true
 '
 'StatusStrip1
 '
-Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.ToolStripProgressBar1, Me.ToolStripStatusLabel6, Me.ToolStripProgressBar5, Me.ToolStripStatusLabel2, Me.ToolStripProgressBar2, Me.ToolStripStatusLabel3, Me.ToolStripProgressBar3, Me.ToolStripStatusLabel4, Me.ToolStripProgressBar4, Me.ToolStripStatusLabel7, Me.ToolStripProgressBar6, Me.ToolStripStatusLabel5, Me.ToolStripStatusLabel8, Me.ToolStripProgressBar7})
+Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripProgressBar1, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel6, Me.ToolStripProgressBar5, Me.ToolStripStatusLabel2, Me.ToolStripProgressBar2, Me.ToolStripStatusLabel3, Me.ToolStripProgressBar3, Me.ToolStripStatusLabel4, Me.ToolStripProgressBar4, Me.ToolStripStatusLabel7, Me.ToolStripProgressBar6, Me.ToolStripStatusLabel5, Me.ToolStripStatusLabel8, Me.ToolStripProgressBar7})
 Me.StatusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
-Me.StatusStrip1.Location = New System.Drawing.Point(0, 702)
+Me.StatusStrip1.Location = New System.Drawing.Point(0, 646)
 Me.StatusStrip1.Name = "StatusStrip1"
 Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 18, 0)
-Me.StatusStrip1.Size = New System.Drawing.Size(1235, 0)
+Me.StatusStrip1.Size = New System.Drawing.Size(1235, 56)
 Me.StatusStrip1.TabIndex = 46
 Me.StatusStrip1.Text = "StatusStrip1"
 '
@@ -9123,7 +9123,7 @@ Me.TabPage31.Location = New System.Drawing.Point(4, 22)
 Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
 Me.TabPage31.Name = "TabPage31"
 Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-Me.TabPage31.Size = New System.Drawing.Size(1195, 528)
+Me.TabPage31.Size = New System.Drawing.Size(1195, 530)
 Me.TabPage31.TabIndex = 1
 Me.TabPage31.Text = "Regex"
 Me.TabPage31.UseVisualStyleBackColor = true

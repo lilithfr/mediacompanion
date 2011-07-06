@@ -3637,10 +3637,18 @@ Public Class Form1
                 scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                 Exit Sub
             End If
+            Dim ProgressBase As String = ""
+            progressbase = "Using MC IMDB scraper/"
 
+            If Preferences.usefoldernames = True Then
+                progressbase &= "FOLDERNAMES"
+                scraperLog &= "Using FOLDERNAMES to determine Movie Title...." & vbCrLf
+            Else
+                progressbase &= "FILENAMES"
+                scraperLog &= "Using FILENAMES to determine Movie Title...." & vbCrLf
+            End If
 
-            progresstext = String.Concat("Scanning Folders For New Movies")
-            BckWrkScnMovies.ReportProgress(progress, progresstext)
+            'BckWrkScnMovies.ReportProgress(progress, ProgressBase)
 
 
             scraperLog &= "Starting Folder Scan" & vbCrLf & vbCrLf
@@ -3745,7 +3753,7 @@ Public Class Form1
                 End If
                 Try
                     progress = ((100 / newmoviefolders.Count) * g) * 10
-                    progresstext = String.Concat("Scanning folder " & g + 1 & " of " & newmoviefolders.Count)
+                    progresstext = "Scanning folder " & g + 1 & " of " & newmoviefolders.Count
                     BckWrkScnMovies.ReportProgress(progress, progresstext)
                     If BckWrkScnMovies.CancellationPending Then
                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
@@ -3863,7 +3871,7 @@ Public Class Form1
                     Dim year As String = ""
                     Dim thumbstring As New XmlDocument
                     progress = ((100 / newmoviecount) * (f + 1) * 10)
-                    progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
+                    progresstext = ProgressBase & String.Concat(" Scraping " & f + 1 & " of " & newmoviecount)
                     BckWrkScnMovies.ReportProgress(progress, progresstext)
                     If newMovieList(f).title = Nothing Then
                         scraperLog = scraperLog & "No Filename found for" & newMovieList(f).nfopathandfilename & vbCrLf
@@ -3996,13 +4004,17 @@ Public Class Form1
                                 movieyear = movieyear.Replace(")", "")
                                 movieyear = movieyear.Replace("[", "")
                                 movieyear = movieyear.Replace("]", "")
-                                progresstext &= " - " & movieyear   'Display Found Year in Progress String
-                                BckWrkScnMovies.ReportProgress(progress, progresstext)
                                 scraperLog = scraperLog & "Year found for movie:- " & movieyear.ToString & vbCrLf
                             End If
                         End If
                         title = Utilities.CleanFileName(title, False)
-                        progresstext &= " - " & title & "(" & movieyear & ")"   'Display Clean Title & Year for search
+                        progresstext &= " - using '" & title
+                        If movieyear <> "" Then
+                            progresstext &= " " & movieyear & "'"
+                        Else
+                            progresstext &= "'"
+                        End If
+
                         BckWrkScnMovies.ReportProgress(progress, progresstext)
                         scraperLog = scraperLog & "Cleaned Title for search :- " & title & vbCrLf
                         Dim newmovie As New FullMovieDetails
@@ -4020,7 +4032,7 @@ Public Class Form1
                         End If
 
                         imdbCounter += 1
-                        progresstext &= " - Scraping..."
+                        progresstext &= " * Now Scraping..."
                         BckWrkScnMovies.ReportProgress(progress, progresstext)
 
                         body = scraperfunction.getimdbbody(title, movieyear, extrapossibleID, Preferences.imdbmirror, imdbCounter)
@@ -4136,7 +4148,7 @@ Public Class Form1
                             End If
                         Else
                             Try
-                                progresstext &= " - OK!"
+                                progresstext &= " - OK!"            'movie scraped OK
                                 BckWrkScnMovies.ReportProgress(progress, progresstext)
                                 scraperLog = scraperLog & "Movie Body Scraped OK"
                                 thumbstring.LoadXml(body)
@@ -4262,7 +4274,7 @@ Public Class Form1
                             End If
                             stage = 2
                             'stage 2 = get movie actors
-                            progresstext &= " - Actors"
+                            progresstext &= " * Actors"
                             BckWrkScnMovies.ReportProgress(progress, progresstext)
                             actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, newmovie.fullmoviebody.imdbid, newmovie.fullmoviebody.title, Preferences.maxactors)
                             Try
@@ -4388,7 +4400,7 @@ Public Class Form1
 
                                     End Select
                                 Next
-                                progresstext &= " - OK!"
+                                progresstext &= " - OK!"                                    'actors scraped OK
                                 BckWrkScnMovies.ReportProgress(progress, progresstext)
                                 scraperLog = scraperLog & "Actors scraped OK"
                                 While newmovie.listactors.Count > Preferences.maxactors
@@ -4418,7 +4430,7 @@ Public Class Form1
                             End If
                             Try
                                 If Preferences.gettrailer = True Then
-                                    progresstext &= " - Trailer"
+                                    progresstext &= " * Trailer"
                                     BckWrkScnMovies.ReportProgress(progress, progresstext)
                                     trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
                                     If trailer <> Nothing Then
@@ -4440,6 +4452,8 @@ Public Class Form1
                                 Exit Sub
                             End If
                             If Preferences.nfoposterscraper <> 0 Then
+                                progresstext &= " * Thumb"
+                                BckWrkScnMovies.ReportProgress(progress, progresstext)
                                 Dim thumbs As String = ""
                                 If Preferences.nfoposterscraper = 1 Or Preferences.nfoposterscraper = 3 Or Preferences.nfoposterscraper = 5 Or Preferences.nfoposterscraper = 7 Or Preferences.nfoposterscraper = 9 Or Preferences.nfoposterscraper = 11 Or Preferences.nfoposterscraper = 13 Or Preferences.nfoposterscraper = 15 Then
                                     Dim newobject3 As New IMPA.getimpaposters
@@ -4536,6 +4550,8 @@ Public Class Form1
                                                 newmovie.listthumbs.Add(thisresult.InnerText)
                                         End Select
                                     Next
+                                    progresstext &= " - OK"
+                                    BckWrkScnMovies.ReportProgress(progress, progresstext)
                                     scraperLog = scraperLog & "Poster URLs Scraped OK" & vbCrLf
                                 Catch ex As Exception
                                     scraperLog = scraperLog & "Error with " & newMovieList(f).nfopathandfilename & vbCrLf
@@ -4556,6 +4572,8 @@ Public Class Form1
                                     newmovie.filedetails = Preferences.Get_HdTags(newMovieList(f).mediapathandfilename)
                                     If newmovie.filedetails.filedetails_video.duration <> Nothing Then
                                         Try
+                                            progresstext &= " - HD tags"
+                                            BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             '1h 24mn 48s 546ms
                                             Dim hours As Integer
                                             Dim minutes As Integer
@@ -4584,6 +4602,8 @@ Public Class Form1
                                                 End If
                                             End If
                                             newmovie.fullmoviebody.runtime = minutes.ToString & " min"
+                                            progresstext &= " - OK"
+                                            BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             scraperLog = scraperLog & "HD Tags Added OK" & vbCrLf
                                         Catch ex As Exception
                                             scraperLog = scraperLog & "Error getting HD Tags:- " & ex.Message.ToString & vbCrLf
@@ -4706,6 +4726,8 @@ Public Class Form1
                                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                                         Exit Sub
                                     End If
+                                    progresstext &= " * Poster"
+                                    BckWrkScnMovies.ReportProgress(progress, progresstext)
                                     Select Case Preferences.moviethumbpriority(0)
                                         Case "Internet Movie Poster Awards"
                                             moviethumburl = scraperFunction2.impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -4808,6 +4830,10 @@ Public Class Form1
                                             fstrm.Write(buffer, 0, bytesRead)
                                             contents.Close()
                                             fstrm.Close()
+
+                                            progresstext &= " - OK"
+                                            BckWrkScnMovies.ReportProgress(progress, progresstext)
+
                                             scraperLog = scraperLog & "Poster scraped and saved OK" & vbCrLf
 
                                             Dim temppath As String = newmoviethumbpath.Replace(System.IO.Path.GetFileName(newmoviethumbpath), "folder.jpg")
@@ -4849,6 +4875,10 @@ Public Class Form1
                                             scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                                             Exit Sub
                                         End If
+
+                                        progresstext &= " * Fanart"
+                                        BckWrkScnMovies.ReportProgress(progress, progresstext)
+
                                         Dim moviefanartexists As Boolean
                                         Dim fanarturlpath As String = Preferences.GetFanartPath(newMovieList(f).nfopathandfilename)
 
@@ -4913,6 +4943,8 @@ Public Class Form1
                                             End Try
 
                                             If moviethumburl <> "" Then
+                                                progresstext &= " - OK!"
+                                                BckWrkScnMovies.ReportProgress(progress, progresstext)
                                                 'scraperlog = scraperlog & "Fanart URL is " & fanarturl & vbCrLf
                                                 scraperLog = scraperLog & "Saving Fanart As :- " & fanarturlpath & vbCrLf
 
@@ -5019,8 +5051,8 @@ Public Class Form1
 
                         scraperLog = scraperLog & "Movie added to list" & vbCrLf
                         progress = 999999
-                        progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
-                        BckWrkScnMovies.ReportProgress(progress, progresstext)
+                        ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
+                        'BckWrkScnMovies.ReportProgress(progress, progresstext)
                     End If
 
 
