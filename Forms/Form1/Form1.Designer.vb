@@ -333,8 +333,8 @@ Me.TextBox8 = New System.Windows.Forms.TextBox()
 Me.ToolTip2 = New System.Windows.Forms.ToolTip(Me.components)
 Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
 Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
 Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
+Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
 Me.ToolStripStatusLabel6 = New System.Windows.Forms.ToolStripStatusLabel()
 Me.ToolStripProgressBar5 = New System.Windows.Forms.ToolStripProgressBar()
 Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
@@ -867,6 +867,7 @@ Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+Me.YearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -2241,7 +2242,7 @@ Me.MovieListComboBox.TabIndex = 53
 '
 Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem1, Me.ToolStripSeparator17, Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
 Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 220)
+Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 242)
 Me.ContextMenuStrip1.Text = "whatever"
 '
 'PlayMovieToolStripMenuItem1
@@ -2285,7 +2286,7 @@ Me.ToolStripSeparator5.Size = New System.Drawing.Size(217, 6)
 '
 'ToolStripMenuItem2
 '
-Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem3, Me.ToolStripMenuItem4, Me.ToolStripMenuItem5, Me.ToolStripMenuItem6, Me.ToolStripMenuItem7, Me.ToolStripMenuItem8, Me.ToolStripMenuItem9, Me.ToolStripMenuItem10, Me.ToolStripMenuItem11, Me.ToolStripMenuItem14, Me.ToolStripMenuItem19, Me.ToolStripMenuItem20, Me.ToolStripMenuItem21, Me.ToolStripMenuItem15, Me.ToolStripSeparator6, Me.ToolStripMenuItem16, Me.ToolStripMenuItem17, Me.ToolStripMenuItem18, Me.ToolStripSeparator7})
+Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem15, Me.ToolStripMenuItem8, Me.ToolStripMenuItem7, Me.ToolStripMenuItem6, Me.ToolStripMenuItem9, Me.ToolStripMenuItem10, Me.ToolStripMenuItem4, Me.ToolStripMenuItem19, Me.ToolStripMenuItem11, Me.ToolStripMenuItem21, Me.ToolStripMenuItem14, Me.ToolStripMenuItem5, Me.ToolStripMenuItem3, Me.ToolStripMenuItem20, Me.YearToolStripMenuItem, Me.ToolStripSeparator6, Me.ToolStripMenuItem16, Me.ToolStripMenuItem17, Me.ToolStripMenuItem18, Me.ToolStripSeparator7})
 Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
 Me.ToolStripMenuItem2.Size = New System.Drawing.Size(220, 22)
 Me.ToolStripMenuItem2.Text = "Recrape Specific"
@@ -2293,56 +2294,56 @@ Me.ToolStripMenuItem2.Text = "Recrape Specific"
 'ToolStripMenuItem3
 '
 Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-Me.ToolStripMenuItem3.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem3.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem3.Text = "Title"
 '
 'ToolStripMenuItem4
 '
 Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-Me.ToolStripMenuItem4.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem4.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem4.Text = "Plot"
 '
 'ToolStripMenuItem5
 '
 Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-Me.ToolStripMenuItem5.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem5.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem5.Text = "Tagline"
 '
 'ToolStripMenuItem6
 '
 Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-Me.ToolStripMenuItem6.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem6.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem6.Text = "Director"
 '
 'ToolStripMenuItem7
 '
 Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-Me.ToolStripMenuItem7.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem7.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem7.Text = "Credits"
 '
 'ToolStripMenuItem8
 '
 Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
-Me.ToolStripMenuItem8.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem8.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem8.Text = "Cert"
 '
 'ToolStripMenuItem9
 '
 Me.ToolStripMenuItem9.Name = "ToolStripMenuItem9"
-Me.ToolStripMenuItem9.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem9.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem9.Text = "Genre"
 '
 'ToolStripMenuItem10
 '
 Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
-Me.ToolStripMenuItem10.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem10.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem10.Text = "Outline"
 '
 'ToolStripMenuItem11
 '
 Me.ToolStripMenuItem11.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem12, Me.ToolStripMenuItem13})
 Me.ToolStripMenuItem11.Name = "ToolStripMenuItem11"
-Me.ToolStripMenuItem11.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem11.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem11.Text = "Runtime"
 '
 'ToolStripMenuItem12
@@ -2360,62 +2361,62 @@ Me.ToolStripMenuItem13.Text = "From File"
 'ToolStripMenuItem14
 '
 Me.ToolStripMenuItem14.Name = "ToolStripMenuItem14"
-Me.ToolStripMenuItem14.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem14.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem14.Text = "Studio"
 '
 'ToolStripMenuItem19
 '
 Me.ToolStripMenuItem19.Name = "ToolStripMenuItem19"
-Me.ToolStripMenuItem19.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem19.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem19.Text = "Rating"
 '
 'ToolStripMenuItem20
 '
 Me.ToolStripMenuItem20.Name = "ToolStripMenuItem20"
-Me.ToolStripMenuItem20.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem20.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem20.Text = "Votes"
 '
 'ToolStripMenuItem21
 '
 Me.ToolStripMenuItem21.Name = "ToolStripMenuItem21"
-Me.ToolStripMenuItem21.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem21.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem21.Text = "Stars"
 '
 'ToolStripMenuItem15
 '
 Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
-Me.ToolStripMenuItem15.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem15.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem15.Text = "Actors"
 '
 'ToolStripSeparator6
 '
 Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-Me.ToolStripSeparator6.Size = New System.Drawing.Size(132, 6)
+Me.ToolStripSeparator6.Size = New System.Drawing.Size(149, 6)
 '
 'ToolStripMenuItem16
 '
 Me.ToolStripMenuItem16.Name = "ToolStripMenuItem16"
-Me.ToolStripMenuItem16.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem16.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem16.Text = "Backdrop"
 Me.ToolStripMenuItem16.Visible = false
 '
 'ToolStripMenuItem17
 '
 Me.ToolStripMenuItem17.Name = "ToolStripMenuItem17"
-Me.ToolStripMenuItem17.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem17.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem17.Text = "Poster"
 Me.ToolStripMenuItem17.Visible = false
 '
 'ToolStripMenuItem18
 '
 Me.ToolStripMenuItem18.Name = "ToolStripMenuItem18"
-Me.ToolStripMenuItem18.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem18.Size = New System.Drawing.Size(152, 22)
 Me.ToolStripMenuItem18.Text = "Media Tags"
 '
 'ToolStripSeparator7
 '
 Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-Me.ToolStripSeparator7.Size = New System.Drawing.Size(132, 6)
+Me.ToolStripSeparator7.Size = New System.Drawing.Size(149, 6)
 '
 'BrowseFanartToolStripMenuItem
 '
@@ -4498,12 +4499,22 @@ Me.ToolTip2.IsBalloon = true
 '
 Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripProgressBar1, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel6, Me.ToolStripProgressBar5, Me.ToolStripStatusLabel2, Me.ToolStripProgressBar2, Me.ToolStripStatusLabel3, Me.ToolStripProgressBar3, Me.ToolStripStatusLabel4, Me.ToolStripProgressBar4, Me.ToolStripStatusLabel7, Me.ToolStripProgressBar6, Me.ToolStripStatusLabel5, Me.ToolStripStatusLabel8, Me.ToolStripProgressBar7})
 Me.StatusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow
-Me.StatusStrip1.Location = New System.Drawing.Point(0, 646)
+Me.StatusStrip1.Location = New System.Drawing.Point(0, 702)
 Me.StatusStrip1.Name = "StatusStrip1"
 Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 18, 0)
-Me.StatusStrip1.Size = New System.Drawing.Size(1235, 56)
+Me.StatusStrip1.Size = New System.Drawing.Size(1235, 0)
 Me.StatusStrip1.TabIndex = 46
 Me.StatusStrip1.Text = "StatusStrip1"
+'
+'ToolStripProgressBar1
+'
+Me.ToolStripProgressBar1.BackColor = System.Drawing.SystemColors.ControlLightLight
+Me.ToolStripProgressBar1.Maximum = 1000
+Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
+Me.ToolStripProgressBar1.Size = New System.Drawing.Size(125, 22)
+Me.ToolStripProgressBar1.Step = 1
+Me.ToolStripProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous
+Me.ToolStripProgressBar1.Visible = false
 '
 'ToolStripStatusLabel1
 '
@@ -4515,16 +4526,6 @@ Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 19)
 Me.ToolStripStatusLabel1.Text = "Movie Scan Progress"
 Me.ToolStripStatusLabel1.ToolTipText = "pooooooo"
 Me.ToolStripStatusLabel1.Visible = false
-'
-'ToolStripProgressBar1
-'
-Me.ToolStripProgressBar1.BackColor = System.Drawing.SystemColors.ControlLightLight
-Me.ToolStripProgressBar1.Maximum = 1000
-Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
-Me.ToolStripProgressBar1.Size = New System.Drawing.Size(125, 22)
-Me.ToolStripProgressBar1.Step = 1
-Me.ToolStripProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous
-Me.ToolStripProgressBar1.Visible = false
 '
 'ToolStripStatusLabel6
 '
@@ -10662,6 +10663,12 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
 '
+'YearToolStripMenuItem
+'
+Me.YearToolStripMenuItem.Name = "YearToolStripMenuItem"
+Me.YearToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+Me.YearToolStripMenuItem.Text = "Year"
+'
 'Form1
 '
 Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -11741,6 +11748,7 @@ End Sub
     Friend WithEvents Button_tv_RegexRename_Add As System.Windows.Forms.Button
     Friend WithEvents Button_tv_RegexRename_Edit As System.Windows.Forms.Button
     Friend WithEvents GroupBox18 As System.Windows.Forms.GroupBox
+    Friend WithEvents YearToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 
 

@@ -11057,14 +11057,17 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
-        If e.Button = MouseButtons.Right Then
-            Dim pt As Point
-            pt.X = e.X
-            pt.Y = e.Y
-            MovieListComboBox.SelectionMode = SelectionMode.One     'this stops right click adding the selectio & makes it the only selection 
-            MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
-            MovieListComboBox.SelectionMode = SelectionMode.MultiExtended   'this returns the selection mode to 'our normal'
+        If MovieListComboBox.SelectedItems.Count < 2 Then               'if we haven't selected multiples, then right click will select whats under it for context menu
+            If e.Button = MouseButtons.Right Then
+                Dim pt As Point
+                pt.X = e.X
+                pt.Y = e.Y
+                MovieListComboBox.SelectionMode = SelectionMode.One     'this stops right click adding the selectio & makes it the only selection 
+                MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
+                MovieListComboBox.SelectionMode = SelectionMode.MultiExtended   'this returns the selection mode to 'our normal'
+            End If
         End If
+
     End Sub
 
     Private Sub ComboBox11_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox11.SelectedValueChanged
@@ -27005,25 +27008,49 @@ Public Class Form1
     End Sub
 
     Private Sub scrapespecific(ByVal field As String)
+
         Try
+            Dim frmProgSplash As New frmProgressScreen
+            frmProgSplash.Text = "ReScraping Specific Field : " & field
+            frmProgSplash.Label1.Text = ""
+            frmProgSplash.Label1.Visible = True
+            frmProgSplash.Label2.Visible = False
+            frmProgSplash.ProgressBar1.Visible = True
+            frmProgSplash.Show()
+
+
+
             Dim originalworking As String = workingMovieDetails.fileinfo.fullpathandfilename
             Dim list As New List(Of String)
             For Each selected In MovieListComboBox.SelectedItems
                 list.Add(selected.value)
             Next
 
-            Dim mes As String = "Rescraping " & field & " for selected movies"
+            'Dim mes As String = "Rescraping " & field & " for selected movies"
 
-            Dim messbox As New frmMessageBox("Please Wait", "", mes)
-            messbox.Show()
-            messbox.Refresh()
-            Application.DoEvents()
+            'Dim messbox As New frmMessageBox("Please Wait", "", mes)
+            'messbox.Show()
+            'messbox.Refresh()
+            'Application.DoEvents()
 
+            frmProgSplash.ProgressBar1.Maximum = list.Count            'for user feedback - when only 1 movie, max is 2, we show prog @50% effect diminishes as count goes up
+
+            Dim progcount As Integer = 0
             For Each ite In list
+                progcount += 1
+
+
+                frmProgSplash.ProgressBar1.Value = progcount
+                frmProgSplash.ProgressBar1.Invalidate()
+
+                Application.DoEvents()
+
                 Dim process As Boolean = True
-                For Each movie In filteredList
+                For Each movie In filteredList                              'find matching movie to selected movie & load current values
                     If movie.fullpathandfilename = ite Then
-                        If IO.File.Exists(movie.fullpathandfilename) Then
+                        frmProgSplash.Label1.Text = movie.title
+                        frmProgSplash.Label1.Refresh()
+                        If IO.File.Exists(movie.fullpathandfilename) Then       'if nfo exists, & workingMovie contains wrong data, reload data from memory
                             If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
                                 workingMovie.filedate = movie.filedate
                                 workingMovie.filename = movie.foldername
@@ -27034,10 +27061,18 @@ Public Class Form1
                                 workingMovie.playcount = movie.playcount
                                 workingMovie.rating = movie.rating
                                 workingMovie.title = movie.title
+                                workingMovie.originaltitle = movie.originaltitle     'added 7/7/11 SK    these extras should be here I think?
                                 workingMovie.titleandyear = movie.titleandyear
                                 workingMovie.top250 = movie.top250
                                 workingMovie.year = movie.year
-                                Call loadinfofile()
+                                workingMovie.plot = movie.plot            'added 7/7/11 SK
+                                workingMovie.movieset = movie.movieset  'added 7/7/11 SK
+                                workingMovie.createdate = movie.createdate  'added 7/7/11 SK
+                                workingMovie.missingdata1 = movie.missingdata1  'added 7/7/11 SK
+                                workingMovie.outline = movie.outline    'added 7/7/11 SK
+                                workingMovie.runtime = movie.runtime    'added 7/7/11 SK
+                                workingMovie.sortorder = movie.sortorder    'added 7/7/11 SK
+                                'Call loadinfofile()                         'not sure why we call to display data when we will do it at end with new data
                             End If
                             Exit For
                         Else
@@ -27045,8 +27080,12 @@ Public Class Form1
                         End If
                     End If
                 Next
+                frmProgSplash.Activate()
                 If process = True Then
                     Dim newnfo As Boolean = False
+                    frmProgSplash.Label1.Text &= " - Scraping..."
+                    frmProgSplash.Label1.Refresh()
+
                     If field <> "hdtags" And field <> "poster" And field <> "backdrop" And field <> "runtime_file" And field <> "actors" Then
                         '                    Dim scraper As New imdb.Classimdbscraper
                         Dim scraper As New Classimdb
@@ -27057,6 +27096,7 @@ Public Class Form1
                         'Dim newscraper As New Classimdb
                         'body = newscraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                         If body <> "MIC" Then
+                            frmProgSplash.Label1.Text &= "OK!"
                             If field = "title" Then
                                 workingMovieDetails.alternativetitles.Clear()
                             End If
@@ -27185,6 +27225,7 @@ Public Class Form1
                         'Call loadinfofile()
                     ElseIf field = "hdtags" Or field = "runtime_file" Then
                         Try
+                            frmProgSplash.Label1.Text &= " - Scraping..."
                             Dim tempstring As String
                             Dim tempint As Integer
                             Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -27193,6 +27234,7 @@ Public Class Form1
                             If newfiledetails.filedetails_video.duration <> Nothing Then
                                 Try
                                     '1h 24mn 48s 546ms
+                                    frmProgSplash.Label1.Text &= "OK!"
                                     Dim hours As Integer
                                     Dim minutes As Integer
                                     tempstring = newfiledetails.filedetails_video.duration
@@ -27234,6 +27276,7 @@ Public Class Form1
                                     If field = "hdtags" Then
                                         workingMovieDetails.filedetails = newfiledetails
                                     End If
+
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                     Throw ex
@@ -27249,12 +27292,15 @@ Public Class Form1
                         newnfo = True
                         'Call loadinfofile()
                     ElseIf field = "actors" Then
+                        frmProgSplash.Label1.Text &= " - Scraping..."
                         Dim actorlist As String
                         '                    Dim scraper As New imdb.Classimdbscraper
                         Dim scraper As New Classimdb
                         actorlist = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, Preferences.maxactors)
                         workingMovieDetails.listactors.Clear()
                         If actorlist <> Nothing Then
+                            frmProgSplash.Label1.Text &= "OK!"
+
                             Dim tempstring As String
                             Dim thumbstring As New XmlDocument
                             Dim thisresult As XmlNode = Nothing
@@ -27444,13 +27490,14 @@ Public Class Form1
             Next
             ApplyFilters()
             Call loadinfofile()
-            messbox.Close()
+            frmProgSplash.Close()
+            'messbox.Close()
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
         Finally
-            messbox.Close()
+            ' MsgBox("There was an error during specific rescrape of movie field : " & field)
         End Try
     End Sub
 
@@ -27507,6 +27554,9 @@ Public Class Form1
     End Sub
     Private Sub ToolStripMenuItem21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem21.Click
         Call scrapespecific("stars")
+    End Sub
+    Private Sub YearToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles YearToolStripMenuItem.Click
+        Call scrapespecific("year")
     End Sub
 
     Private Sub PictureBox7_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.MouseEnter
@@ -30873,4 +30923,6 @@ Public Class Form1
             TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position))
         End If
     End Sub
+
+    
 End Class

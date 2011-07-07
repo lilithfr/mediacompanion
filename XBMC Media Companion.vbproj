@@ -487,6 +487,7 @@
     </Content>
     <Content Include="Assets\scrapers\metadata.imdb.com\imdb.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
