@@ -2075,7 +2075,7 @@ Public Class Form1
         If movieFolders.Count = 0 Then
             Me.Close()
         End If
-        Call scanfornewmovies()
+        Call Mov_ScanForNewMovies()
 
     End Sub
 
@@ -2218,7 +2218,7 @@ Public Class Form1
     '        End Try
     '    End Sub
 
-    Private Sub nfos_to_array(ByVal folderlist As List(Of String), Optional mode As Boolean = False)
+    Private Sub nfos_to_array(ByVal folderlist As List(Of String), Optional ByVal mode As Boolean = False)
         Dim tempint As Integer
         Dim dirinfo As String = String.Empty
         Dim pattern As String = "*.nfo"
@@ -2251,7 +2251,7 @@ Public Class Form1
             frmSplash2.ProgressBar1.Visible = True
 
             For f = 0 To realMoviePaths.Count - 1
-        
+
                 frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
 
                 If mode = False Then frmSplash2.ProgressBar1.Value = f
@@ -3365,7 +3365,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub scanfornewmovies()
+    Private Sub Mov_ScanForNewMovies()
         If Not BckWrkScnMovies.IsBusy Then
             If scrapeAndQuit = False Then
                 ToolStripStatusLabel1.Visible = True
@@ -8565,6 +8565,8 @@ Public Class Form1
                                 thumbstring.LoadXml(body)
                                 For Each thisresult In thumbstring("movie")
                                     Select Case thisresult.Name
+                                        Case "year"
+                                            movietemplate.fullmoviebody.year = thisresult.InnerText
                                         Case "credits"
                                             movietemplate.fullmoviebody.credits = thisresult.InnerText
                                         Case "director"
