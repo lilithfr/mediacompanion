@@ -947,17 +947,37 @@ Public Class Classimdb
                     End If
 
                     'outline
-                    If webpage(f).IndexOf("<p>") <> -1 Then
+                    ''If webpage(f).IndexOf("<p>") <> -1 Then
+                    If webpage(f).IndexOf("<p>").Equals(0) And webpage(f + 1).IndexOf("<p>").Equals(0) Then
                         Try
-                            If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
-                                movienfoarray = webpage(f + 1)
+                            'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
+                            'movienfoarray = webpage(f + 1)
+                            movienfoarray = ""
+                            Dim endofoutline = f + 1
+                            For endofoutline = (f + 1) To webpage.Count - 2
+                                If webpage(endofoutline).IndexOf("</p>").Equals(0) And webpage(endofoutline + 1).IndexOf("</p>").Equals(0) Then
+                                    Exit For
+                                Else
+                                    movienfoarray = movienfoarray & webpage(endofoutline)
+                                End If
+                            Next
+                            If movienfoarray.Length > 0 Then
                                 movienfoarray = movienfoarray.Replace("<p>", "")
-                                movienfoarray = specchars(movienfoarray)
+                                ' Some outlines are a partial listing and link to the plot summary
+                                Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
+                                If erasepos <> -1 Then
+                                    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
+                                End If
+                                'movienfoarray = specchars(movienfoarray)
+                                movienfoarray = encodespecialchrs(movienfoarray.Trim())
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
+                            Else
+                                totalinfo = totalinfo & "<outline>scaper error: possible format change</outline><plot></plot>" & vbCrLf
                             End If
                         Catch
-                            totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+                            'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+                            totalinfo = totalinfo & "<outline>scraper error</outline><plot></plot>" & vbCrLf
                         End Try
                     End If
 
@@ -1300,6 +1320,8 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
+
+
         Return "Error"
     End Function
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String)
@@ -1308,10 +1330,8 @@ Public Class Classimdb
         Dim first As Integer
         Dim last As Integer
 
-        Dim tempstring As String
+        Dim tempstring As String = ""
         Try
-
-
             Dim webpage As List(Of String)
             tempstring = imdbmirror & "title/" & imdbid & "/trailers"
             webpage = loadwebpage(tempstring, False)
