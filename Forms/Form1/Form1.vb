@@ -8426,6 +8426,7 @@ Public Class Form1
         If batchList.top250 = True Then bodyscraper = True
         If batchList.votes = True Then bodyscraper = True
         If batchList.country = True Then bodyscraper = True
+        If batchList.year = True Then bodyscraper = True
         If batchList.trailer = True Then trailerscraper = True
 
         If batchList.posterurls = True Then thumburlscraper = True
@@ -8956,6 +8957,14 @@ Public Class Form1
                         If movietemplate.fullmoviebody.director <> Nothing Then
                             If movietemplate.fullmoviebody.director <> "" Then
                                 movietoalter.fullmoviebody.director = movietemplate.fullmoviebody.director
+                            End If
+                        End If
+                    End If
+
+                    If batchList.year = True Then
+                        If movietemplate.fullmoviebody.year <> Nothing Then
+                            If movietemplate.fullmoviebody.year <> "" Then
+                                movietoalter.fullmoviebody.year = movietemplate.fullmoviebody.year
                             End If
                         End If
                     End If
