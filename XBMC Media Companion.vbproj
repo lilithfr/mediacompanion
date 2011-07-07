@@ -130,6 +130,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Renamer.vb" />
     <Compile Include="Classes\Profiles.vb" />
     <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
