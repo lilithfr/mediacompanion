@@ -8110,7 +8110,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub SetMovieAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SetMovieAsWatchedToolStripMenuItem.Click
+    Private Sub Mov_OpenMovieFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_OpenMovieFolderToolStripMenuItem.Click
         'Try
         If Not workingMovieDetails.fileinfo.fullpathandfilename Is Nothing Then
             Call openfolder(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -8121,7 +8121,7 @@ Public Class Form1
         'End Try
     End Sub
 
-    Private Sub RescrapeMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeMovieToolStripMenuItem.Click
+    Private Sub Mov_OpenFileToolStripMenuItem2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_OpenFileToolStripMenuItem.Click
         Dim tempstring As String = ""
         Try
             tempstring = workingMovieDetails.fileinfo.fullpathandfilename
@@ -11075,6 +11075,21 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox1_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
+        Dim myBool As Boolean = True
+        If MovieListComboBox.SelectedItems.Count > 1 Then
+            myBool = False
+        End If
+
+        PlayMovieToolStripMenuItem1.Visible = myBool
+        Mov_OpenMovieFolderToolStripMenuItem.Visible = myBool
+        Mov_OpenFileToolStripMenuItem.Visible = myBool
+        ToolStripSeparator17.Visible = myBool
+        ToolStripSeparator5.Visible = myBool
+        ToolStripSeparator4.Visible = myBool
+        BrowseFanartToolStripMenuItem.Visible = myBool
+        PosterBrowserToolStripMenuItem.Visible = myBool
+        EditMovieToolStripMenuItem.Visible = myBool
+        ReloadItemToolStripMenuItem1.Visible = myBool
 
         Try
             Dim needtoload As Boolean = False

@@ -145,28 +145,29 @@ Me.MovieListComboBox = New System.Windows.Forms.ListBox()
 Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
 Me.PlayMovieToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripSeparator17 = New System.Windows.Forms.ToolStripSeparator()
-Me.SetMovieAsWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-Me.RescrapeMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.Mov_OpenMovieFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+Me.Mov_OpenFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
 Me.ReloadItemToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
 Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem8 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem9 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem10 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem19 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem11 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem12 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem13 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem14 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem19 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem20 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem21 = New System.Windows.Forms.ToolStripMenuItem()
-Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem14 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
+Me.ToolStripMenuItem20 = New System.Windows.Forms.ToolStripMenuItem()
+Me.YearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
 Me.ToolStripMenuItem16 = New System.Windows.Forms.ToolStripMenuItem()
 Me.ToolStripMenuItem17 = New System.Windows.Forms.ToolStripMenuItem()
@@ -867,7 +868,6 @@ Me.tvbckrescrapewizard = New System.ComponentModel.BackgroundWorker()
 Me.BindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
 Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-Me.YearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
 Me.ContextMenuStrip4.SuspendLayout
 CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -2240,7 +2240,7 @@ Me.MovieListComboBox.TabIndex = 53
 '
 'ContextMenuStrip1
 '
-Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem1, Me.ToolStripSeparator17, Me.SetMovieAsWatchedToolStripMenuItem, Me.RescrapeMovieToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
+Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem1, Me.ToolStripSeparator17, Me.Mov_OpenMovieFolderToolStripMenuItem, Me.Mov_OpenFileToolStripMenuItem, Me.ToolStripSeparator4, Me.ReloadItemToolStripMenuItem1, Me.ToolStripSeparator5, Me.ToolStripMenuItem2, Me.BrowseFanartToolStripMenuItem, Me.PosterBrowserToolStripMenuItem, Me.EditMovieToolStripMenuItem, Me.ExportmoviesMenuItem})
 Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
 Me.ContextMenuStrip1.Size = New System.Drawing.Size(221, 242)
 Me.ContextMenuStrip1.Text = "whatever"
@@ -2256,17 +2256,17 @@ Me.PlayMovieToolStripMenuItem1.Text = "Play Movie"
 Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
 Me.ToolStripSeparator17.Size = New System.Drawing.Size(217, 6)
 '
-'SetMovieAsWatchedToolStripMenuItem
+'Mov_OpenMovieFolderToolStripMenuItem
 '
-Me.SetMovieAsWatchedToolStripMenuItem.Name = "SetMovieAsWatchedToolStripMenuItem"
-Me.SetMovieAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
-Me.SetMovieAsWatchedToolStripMenuItem.Text = "Open Folder"
+Me.Mov_OpenMovieFolderToolStripMenuItem.Name = "Mov_OpenMovieFolderToolStripMenuItem"
+Me.Mov_OpenMovieFolderToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+Me.Mov_OpenMovieFolderToolStripMenuItem.Text = "Open Folder"
 '
-'RescrapeMovieToolStripMenuItem
+'Mov_OpenFileToolStripMenuItem
 '
-Me.RescrapeMovieToolStripMenuItem.Name = "RescrapeMovieToolStripMenuItem"
-Me.RescrapeMovieToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
-Me.RescrapeMovieToolStripMenuItem.Text = "Open File"
+Me.Mov_OpenFileToolStripMenuItem.Name = "Mov_OpenFileToolStripMenuItem"
+Me.Mov_OpenFileToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+Me.Mov_OpenFileToolStripMenuItem.Text = "Open File"
 '
 'ToolStripSeparator4
 '
@@ -2291,59 +2291,59 @@ Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
 Me.ToolStripMenuItem2.Size = New System.Drawing.Size(220, 22)
 Me.ToolStripMenuItem2.Text = "Recrape Specific"
 '
-'ToolStripMenuItem3
+'ToolStripMenuItem15
 '
-Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-Me.ToolStripMenuItem3.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem3.Text = "Title"
-'
-'ToolStripMenuItem4
-'
-Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-Me.ToolStripMenuItem4.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem4.Text = "Plot"
-'
-'ToolStripMenuItem5
-'
-Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-Me.ToolStripMenuItem5.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem5.Text = "Tagline"
-'
-'ToolStripMenuItem6
-'
-Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-Me.ToolStripMenuItem6.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem6.Text = "Director"
-'
-'ToolStripMenuItem7
-'
-Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-Me.ToolStripMenuItem7.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem7.Text = "Credits"
+Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
+Me.ToolStripMenuItem15.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem15.Text = "Actors"
 '
 'ToolStripMenuItem8
 '
 Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
-Me.ToolStripMenuItem8.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem8.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem8.Text = "Cert"
+'
+'ToolStripMenuItem7
+'
+Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
+Me.ToolStripMenuItem7.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem7.Text = "Credits"
+'
+'ToolStripMenuItem6
+'
+Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
+Me.ToolStripMenuItem6.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem6.Text = "Director"
 '
 'ToolStripMenuItem9
 '
 Me.ToolStripMenuItem9.Name = "ToolStripMenuItem9"
-Me.ToolStripMenuItem9.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem9.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem9.Text = "Genre"
 '
 'ToolStripMenuItem10
 '
 Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
-Me.ToolStripMenuItem10.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem10.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem10.Text = "Outline"
+'
+'ToolStripMenuItem4
+'
+Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
+Me.ToolStripMenuItem4.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem4.Text = "Plot"
+'
+'ToolStripMenuItem19
+'
+Me.ToolStripMenuItem19.Name = "ToolStripMenuItem19"
+Me.ToolStripMenuItem19.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem19.Text = "Rating"
 '
 'ToolStripMenuItem11
 '
 Me.ToolStripMenuItem11.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem12, Me.ToolStripMenuItem13})
 Me.ToolStripMenuItem11.Name = "ToolStripMenuItem11"
-Me.ToolStripMenuItem11.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem11.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem11.Text = "Runtime"
 '
 'ToolStripMenuItem12
@@ -2358,65 +2358,71 @@ Me.ToolStripMenuItem13.Name = "ToolStripMenuItem13"
 Me.ToolStripMenuItem13.Size = New System.Drawing.Size(134, 22)
 Me.ToolStripMenuItem13.Text = "From File"
 '
+'ToolStripMenuItem21
+'
+Me.ToolStripMenuItem21.Name = "ToolStripMenuItem21"
+Me.ToolStripMenuItem21.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem21.Text = "Stars"
+'
 'ToolStripMenuItem14
 '
 Me.ToolStripMenuItem14.Name = "ToolStripMenuItem14"
-Me.ToolStripMenuItem14.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem14.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem14.Text = "Studio"
 '
-'ToolStripMenuItem19
+'ToolStripMenuItem5
 '
-Me.ToolStripMenuItem19.Name = "ToolStripMenuItem19"
-Me.ToolStripMenuItem19.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem19.Text = "Rating"
+Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
+Me.ToolStripMenuItem5.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem5.Text = "Tagline"
+'
+'ToolStripMenuItem3
+'
+Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+Me.ToolStripMenuItem3.Size = New System.Drawing.Size(135, 22)
+Me.ToolStripMenuItem3.Text = "Title"
 '
 'ToolStripMenuItem20
 '
 Me.ToolStripMenuItem20.Name = "ToolStripMenuItem20"
-Me.ToolStripMenuItem20.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem20.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem20.Text = "Votes"
 '
-'ToolStripMenuItem21
+'YearToolStripMenuItem
 '
-Me.ToolStripMenuItem21.Name = "ToolStripMenuItem21"
-Me.ToolStripMenuItem21.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem21.Text = "Stars"
-'
-'ToolStripMenuItem15
-'
-Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
-Me.ToolStripMenuItem15.Size = New System.Drawing.Size(152, 22)
-Me.ToolStripMenuItem15.Text = "Actors"
+Me.YearToolStripMenuItem.Name = "YearToolStripMenuItem"
+Me.YearToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
+Me.YearToolStripMenuItem.Text = "Year"
 '
 'ToolStripSeparator6
 '
 Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-Me.ToolStripSeparator6.Size = New System.Drawing.Size(149, 6)
+Me.ToolStripSeparator6.Size = New System.Drawing.Size(132, 6)
 '
 'ToolStripMenuItem16
 '
 Me.ToolStripMenuItem16.Name = "ToolStripMenuItem16"
-Me.ToolStripMenuItem16.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem16.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem16.Text = "Backdrop"
 Me.ToolStripMenuItem16.Visible = false
 '
 'ToolStripMenuItem17
 '
 Me.ToolStripMenuItem17.Name = "ToolStripMenuItem17"
-Me.ToolStripMenuItem17.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem17.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem17.Text = "Poster"
 Me.ToolStripMenuItem17.Visible = false
 '
 'ToolStripMenuItem18
 '
 Me.ToolStripMenuItem18.Name = "ToolStripMenuItem18"
-Me.ToolStripMenuItem18.Size = New System.Drawing.Size(152, 22)
+Me.ToolStripMenuItem18.Size = New System.Drawing.Size(135, 22)
 Me.ToolStripMenuItem18.Text = "Media Tags"
 '
 'ToolStripSeparator7
 '
 Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-Me.ToolStripSeparator7.Size = New System.Drawing.Size(149, 6)
+Me.ToolStripSeparator7.Size = New System.Drawing.Size(132, 6)
 '
 'BrowseFanartToolStripMenuItem
 '
@@ -10663,12 +10669,6 @@ Me.HelpProvider1.HelpNamespace = "media_companion.chm"
 Me.tvbckrescrapewizard.WorkerReportsProgress = true
 Me.tvbckrescrapewizard.WorkerSupportsCancellation = true
 '
-'YearToolStripMenuItem
-'
-Me.YearToolStripMenuItem.Name = "YearToolStripMenuItem"
-Me.YearToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-Me.YearToolStripMenuItem.Text = "Year"
-'
 'Form1
 '
 Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -10933,8 +10933,8 @@ End Sub
     Friend WithEvents TabLevel1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents SetMovieAsWatchedToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents RescrapeMovieToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Mov_OpenMovieFolderToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Mov_OpenFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BrowseFanartToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PosterBrowserToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EditMovieToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
