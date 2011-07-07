@@ -181,6 +181,13 @@
         End If
 
     End Sub
+    Private Sub CheckBox20_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox20.CheckedChanged
+        If CheckBox20.CheckState = CheckState.Checked Then
+            Form1.batchList.year = True
+        Else
+            Form1.batchList.year = False
+        End If
+    End Sub
 
     Public Sub New()
         
@@ -190,4 +197,6 @@
         ' Add any initialization after the InitializeComponent() call.
         
     End Sub
+
+    
 End Class

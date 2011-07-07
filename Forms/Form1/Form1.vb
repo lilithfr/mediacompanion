@@ -218,7 +218,7 @@ Public Class Form1
                 Preferences.tableview.Add(tempstring)
             Next
         End If
-        Call Movie_SaveMovieData()
+        Call Movie_SaveMovieDataToXML()
         Call TV_SaveTvData("New Function")
         Preferences.startuptab = TabLevel1.SelectedIndex
 
@@ -232,9 +232,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Form1_Invalidated(ByVal sender As Object, ByVal e As System.Windows.Forms.InvalidateEventArgs) Handles Me.Invalidated
-
-    End Sub
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -483,7 +480,7 @@ Public Class Form1
             loadinginfo = "Status :- Building Movie Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call rebuildmovies(movieFolders)
+            Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
 
         Else
             loadinginfo = "Status :- Loading Movie Database"
@@ -745,7 +742,7 @@ Public Class Form1
         tv_SplitContainerAutoPosition("resize tv")
     End Sub
 
-    Private Sub Movie_SaveMovieData()
+    Private Sub Movie_SaveMovieDataToXML()   'save memory data to cache
         Dim fullpath As String = workingProfile.moviecache
         If IO.File.Exists(fullpath) Then
             Dim don As Boolean = False
@@ -789,7 +786,7 @@ Public Class Form1
         Dim count2 As Integer = 0
         frmSplash2.Label2.Text = "Creating cache xml...."
         For Each movie In fullMovieList
-            
+
             child = doc.CreateElement("movie")
             childchild = doc.CreateElement("filedate")
             childchild.InnerText = movie.filedate
@@ -1557,7 +1554,7 @@ Public Class Form1
 
 
         If fullMovieList.Count = 0 Then
-            Call rebuildmovies(movieFolders)
+            Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
             Exit Sub
         End If
 
@@ -1565,8 +1562,8 @@ Public Class Form1
         For Each movie In fullMovieList
             filteredList.Add(movie)
         Next
-        Call sortorder()
-        Call loadmovielist()
+        Call Mov_SortMovieList()
+        Call Mov_LoadMovieListInMovieCombo()
         Try
             'ignore = False
             MovieListComboBox.SelectedIndex = 0
@@ -2218,7 +2215,7 @@ Public Class Form1
     '        End Try
     '    End Sub
 
-    Private Sub nfos_to_array(ByVal folderlist As List(Of String), Optional ByVal mode As Boolean = False)
+    Private Sub Mov_LoadNfoToArray(ByVal folderlist As List(Of String), Optional ByVal mode As Boolean = False)
         Dim tempint As Integer
         Dim dirinfo As String = String.Empty
         Dim pattern As String = "*.nfo"
@@ -2265,7 +2262,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub loadinfofile()
+    Private Sub Mov_ShowMovieDetails()
 
         Dim tempstring As String
         Try
@@ -3984,7 +3981,7 @@ Public Class Form1
                                 Dim M As Match
                                 M = Regex.Match(newMovieList(f).nfopathandfilename, "(\([\d]{4}\))")
                                 If M.Success = True Then
-                                    
+
                                     movieyear = M.Value
                                 Else
                                     movieyear = Nothing
@@ -3992,7 +3989,7 @@ Public Class Form1
                                 If movieyear = Nothing Then
                                     M = Regex.Match(newMovieList(f).nfopathandfilename, "(\[[\d]{4}\])")
                                     If M.Success = True Then
-                                        
+
                                         movieyear = M.Value
                                     Else
                                         movieyear = Nothing
@@ -5185,12 +5182,12 @@ Public Class Form1
         Next
 
         If fullMovieList.Count = 0 Then
-            Call rebuildmovies(movieFolders)
+            Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
             Exit Sub
         End If
 
-        Call sortorder()
-        Call loadmovielist()
+        Call Mov_SortMovieList()
+        Call Mov_LoadMovieListInMovieCombo()
         Try
             'ignore = False
             MovieListComboBox.SelectedIndex = 0
@@ -5204,7 +5201,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub rebuildmovies(ByVal folderlist As List(Of String))
+    Private Sub Mov_RebuildMoviesFromNfoToXML(ByVal folderlist As List(Of String))
         Me.Enabled = False
 
         frmSplash2.Text = "Rebuild Movies..."
@@ -5223,13 +5220,13 @@ Public Class Form1
             progressmode = True
         End If
 
-        Call nfos_to_array(movieFolders, progressmode)
+        Call Mov_LoadNfoToArray(movieFolders, progressmode)
 
 
         frmSplash2.Label1.Text = "Searching for Offline Movie Folders....."
         Application.DoEvents()                                  ' If not called previous progress bar is not hidden as requested 
         progressmode = False                                            'offlines folders always are folders of folders that contain nfo's
-        Call nfos_to_array(Preferences.offlinefolders, progressmode)
+        Call Mov_LoadNfoToArray(Preferences.offlinefolders, progressmode)
         Application.DoEvents()
         '----------------------------------------------
 
@@ -5255,13 +5252,13 @@ Public Class Form1
         End Try
         frmSplash2.Label2.Visible = True
         frmSplash2.Label2.Text = "Save Data..."
-        Call Movie_SaveMovieData()
+        Call Movie_SaveMovieDataToXML()
 
         'Call sortorder()    ApplyFilters calls sortorder()
         frmSplash2.Label2.Text = "Apply Filters..."
         Call ApplyFilters()
         frmSplash2.Label2.Text = "Reload Main Page..."
-        Call loadinfofile()
+        Call Mov_ShowMovieDetails()
         Try
             MovieListComboBox.SelectionMode = SelectionMode.One         'if we just select index 0 (the top one) & we already had selected another other than 0 before callingthis function then both will be selected
             MovieListComboBox.SelectedIndex = 0
@@ -5442,7 +5439,7 @@ Public Class Form1
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Call rebuildmovies(movieFolders)
+            Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
             messbox.Close()
         End If
 
@@ -6295,7 +6292,7 @@ Public Class Form1
     '    Call exitallthreads()
     'End Sub
 
-    
+
 
     Private Sub actorcb_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles actorcb.MouseEnter
         actorcb.Focus()
@@ -6582,7 +6579,7 @@ Public Class Form1
                 filteredList = dupelist
             End If
             'Call applyotherfilters()
-            Call sortorder()
+            Call Mov_SortMovieList()
         Catch ex As Exception
             MsgBox(ex.ToString)
         Finally
@@ -6591,7 +6588,7 @@ Public Class Form1
     End Sub
 
     'create list to browse
-    Private Sub loadmovielist()
+    Private Sub Mov_LoadMovieListInMovieCombo()
         Dim tempint As Integer = MovieListComboBox.SelectedIndex
         Dim oldmovie As String = ""
         Try
@@ -6767,7 +6764,7 @@ Public Class Form1
     End Sub
 
     'View Title, Filename, or Foldername
-    Private Sub sortorder()
+    Private Sub Mov_SortMovieList()
         Monitor.Enter(Me)
         'Try
         Dim comboarray2 As New List(Of str_ComboList)
@@ -6803,7 +6800,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6845,7 +6842,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6899,7 +6896,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -6947,7 +6944,7 @@ Public Class Form1
 
             For Each movie In ListBox2.Items
                 For Each film In filteredList
-                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).value Then
+                    If film.fullpathandfilename Is CType(movie, ValueDescriptionPair).Value Then
                         comboarray2.Add(film)
                         Exit For
                     End If
@@ -7030,7 +7027,7 @@ Public Class Form1
                 Next
             End If
         End If
-        loadmovielist()
+        Mov_LoadMovieListInMovieCombo()
         'Catch
         'Finally
         Monitor.Exit(Me)
@@ -7276,7 +7273,7 @@ Public Class Form1
         If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
     End Sub
     Private Sub RefreshMovieList()
-        Call loadinfofile()
+        Call Mov_ShowMovieDetails()
 
         For f = 0 To fullMovieList.Count - 1
             If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -7784,7 +7781,7 @@ Public Class Form1
                 messbox.TextBox1.Text = "Save Nfo"
                 nfoFunction.savemovienfo(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                 messbox.TextBox1.Text = "Load Nfo"
-                Call loadinfofile()
+                Call Mov_ShowMovieDetails()
                 messbox.TextBox1.Text = "Refesh Movie List"
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -7858,7 +7855,7 @@ Public Class Form1
     'End Sub
 
     'quicksavenfo
-    Private Sub quicksavemovie()
+    Private Sub Mov_QuickSaveMovie()
         If MovieListComboBox.SelectedItems.Count = 0 Then
             Exit Sub
         End If
@@ -7950,13 +7947,13 @@ Public Class Form1
                     End If
                     fullMovieList.RemoveAt(f)
                     fullMovieList.Add(newfullmovie)
-                    Call Movie_SaveMovieData()
+                    Call Movie_SaveMovieDataToXML()
                     Exit For
                 End If
             Next
             If Label39.Text.ToLower.IndexOf(" of ") <> -1 Then
                 Call ApplyFilters()
-                Call loadinfofile()
+                Call Mov_ShowMovieDetails()
             End If
         Else
             Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
@@ -8040,14 +8037,14 @@ Public Class Form1
                         '              newfullmovie.year = movie.fullmoviebody.year
                         fullMovieList.RemoveAt(f)
                         fullMovieList.Add(newfullmovie)
-                        Call Movie_SaveMovieData()
+                        Call Movie_SaveMovieDataToXML()
                         Exit For
                     End If
                 Next
             Next
             workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
             Call ApplyFilters()
-            Call loadinfofile()
+            Call Mov_ShowMovieDetails()
 
             mess.Close()
         End If
@@ -8067,7 +8064,7 @@ Public Class Form1
                 Button13.Refresh()
                 workingMovieDetails.fullmoviebody.playcount = "1"
             End If
-            Call quicksavemovie()
+            Call Mov_QuickSaveMovie()
         ElseIf MovieListComboBox.SelectedItems.Count > 1 Then
             Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")
             mess.Show()
@@ -8226,7 +8223,7 @@ Public Class Form1
                 Exit For
             End If
         Next
-        Call loadinfofile()
+        Call Mov_ShowMovieDetails()
         ApplyFilters()
     End Sub
 
@@ -8301,7 +8298,7 @@ Public Class Form1
         'messbox.Show()
         'Me.Refresh()
         'messbox.Refresh()
-        Call rebuildmovies(movieFolders)
+        Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
         'messbox.Close()
     End Sub
 
@@ -8325,7 +8322,7 @@ Public Class Form1
         Next
 
         filteredList = newlist
-        Call loadmovielist()
+        Call Mov_LoadMovieListInMovieCombo()
         filterOverride = False
     End Sub
 
@@ -8349,7 +8346,7 @@ Public Class Form1
         Next
 
         filteredList = newlist
-        Call loadmovielist()
+        Call Mov_LoadMovieListInMovieCombo()
         filterOverride = False
     End Sub
 
@@ -9408,7 +9405,9 @@ Public Class Form1
                             filteredList.Add(newfullmovie)
 
                             If workingMovie.fullpathandfilename = newfullmovie.fullpathandfilename Then
-                                Call loadinfofile()
+
+                                'Call Movie_SaveMovieDataToXML()
+                                Call Mov_ShowMovieDetails()
                             End If
                             Exit For
                         End If
@@ -9418,7 +9417,7 @@ Public Class Form1
 #End If
                     End Try
                 Next
-
+                'Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
                 progresstext = tempmovielist(f)
                 bckrescrapewizard.ReportProgress(888888, progresstext)
             Catch ex As Exception
@@ -9427,7 +9426,8 @@ Public Class Form1
 #End If
             End Try
         Next
-        Call ApplyFilters()
+
+        'MsgBox("Please Rebuild Movies to reload details")
     End Sub
 
     Private Sub bckrescrapewizard_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bckrescrapewizard.ProgressChanged
@@ -9435,7 +9435,7 @@ Public Class Form1
             ToolStripStatusLabel7.Text = e.UserState
         ElseIf e.ProgressPercentage = 888888 Then
             If e.UserState = workingMovieDetails.fileinfo.fullpathandfilename Then
-                Call loadinfofile()
+                Call Mov_ShowMovieDetails()
             End If
         End If
     End Sub
@@ -9453,6 +9453,8 @@ Public Class Form1
         ToolStripStatusLabel7.Visible = False
 
         Call checkforrunningthreads()
+        Mov_RebuildMoviesFromNfoToXML(movieFolders)      'we do this because the wizard writes to the nfo's & not the cache - this reloads the cache from the nfo's & reloads
+        ' movie list with the new data (required if year updated)
 
     End Sub
 
@@ -11131,9 +11133,9 @@ Public Class Form1
                                 workingMovie.titleandyear = movie.titleandyear
                                 workingMovie.top250 = movie.top250
                                 workingMovie.year = movie.year
-                                Call loadinfofile()
+                                Call Mov_ShowMovieDetails()
                             Else
-                                If needtoload = True Then Call loadinfofile()
+                                If needtoload = True Then Call Mov_ShowMovieDetails()
                             End If
                             done = True
                             Exit For
@@ -11344,7 +11346,7 @@ Public Class Form1
 
             'Preferences.SaveConfig()   'we don't need to save this till MC Closes
             'Call applyfilters()
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -11353,7 +11355,7 @@ Public Class Form1
             Preferences.moviedefaultlist = 1
 
             'Preferences.SaveConfig()'we don't need to save this till MC Closes
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -11362,7 +11364,7 @@ Public Class Form1
             Preferences.moviedefaultlist = 2
 
             'Preferences.SaveConfig()'we don't need to save this till MC Closes
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -11372,7 +11374,7 @@ Public Class Form1
             Preferences.moviesortorder = 0
 
             'Preferences.SaveConfig()'we don't need to save this till MC Closes
-            sortorder()
+            Mov_SortMovieList()
         End If
     End Sub
 
@@ -11381,7 +11383,7 @@ Public Class Form1
             Preferences.moviesortorder = 1
 
             'Preferences.SaveConfig()'we don't need to save this till MC Closes
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
 
     End Sub
@@ -11391,7 +11393,7 @@ Public Class Form1
             Preferences.moviesortorder = 2
 
             ' Preferences.SaveConfig()'we don't need to save this till MC Closes
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -11400,7 +11402,7 @@ Public Class Form1
             Preferences.moviesortorder = 4
 
             'Preferences.SaveConfig()'we don't need to save this till MC Closes
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -11409,7 +11411,7 @@ Public Class Form1
         'If btnreverse.Checked = True Then
         '    Preferences.moviesortorder = 7
         'End If
-        Call sortorder()
+        Call Mov_SortMovieList()
     End Sub
 
     Private Sub TabControl2_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl2.MouseWheel
@@ -12051,7 +12053,7 @@ Public Class Form1
 
         If replace = True Then
             Call ApplyFilters()
-            Call loadinfofile()
+            Call Mov_ShowMovieDetails()
             'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
             'currentTabIndex = TabControl2.SelectedIndex
         End If
@@ -13806,7 +13808,7 @@ Public Class Form1
             End If
             stage = stage & vbCrLf
             stage = stage & "Populating form with updated details" & vbCrLf
-            Call loadinfofile()
+            Call Mov_ShowMovieDetails()
             stage = stage & vbCrLf
             stage = stage & "Adding movie to internal list" & vbCrLf
             For f = 0 To fullMovieList.Count - 1
@@ -19589,7 +19591,7 @@ Public Class Form1
     Private Sub RadioButton19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton19.CheckedChanged
         If RadioButton19.Checked = True Then
             Preferences.moviesortorder = 5
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -19605,7 +19607,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button62_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button62.Click
-        Call quicksavemovie()
+        Call Mov_QuickSaveMovie()
     End Sub
 
     Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
@@ -19830,7 +19832,7 @@ Public Class Form1
                 filteredList.Add(movie)
             End If
         Next
-        Call sortorder()
+        Call Mov_SortMovieList()
         Label39.Text = "Displaying " & filteredList.Count & " " & topactorname & " movies"
     End Sub
 
@@ -20285,7 +20287,7 @@ Public Class Form1
             Preferences.moviesortorder = 3
 
             Preferences.SaveConfig()
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
 
     End Sub
@@ -20295,7 +20297,7 @@ Public Class Form1
             Preferences.moviesortorder = 6
 
             Preferences.SaveConfig()
-            Call sortorder()
+            Call Mov_SortMovieList()
         End If
     End Sub
 
@@ -21372,7 +21374,7 @@ Public Class Form1
     End Function
 
     Private Sub ReloadItemToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadItemToolStripMenuItem1.Click
-        Call loadinfofile()
+        Call Mov_ShowMovieDetails()
     End Sub
 
     Private Sub TabPage22_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage22.LostFocus
@@ -21484,7 +21486,7 @@ Public Class Form1
                 End If
             Next
         End If
-        Call sortorder()
+        Call Mov_SortMovieList()
     End Sub
 
     Private Sub RadioButton32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton32.CheckedChanged
@@ -22079,7 +22081,7 @@ Public Class Form1
                 If remove = True Then Preferences.offlinefolders.RemoveAt(f)
             Next
             Preferences.saveconfig()
-            Call Movie_SaveMovieData()
+            Call Movie_SaveMovieDataToXML()
         End If
         frmSplash2.ProgressBar1.Visible = True
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
@@ -22101,7 +22103,7 @@ Public Class Form1
                 Else
                     progressmode = True
                 End If
-                Call nfos_to_array(folderstoadd, progressmode)
+                Call Mov_LoadNfoToArray(folderstoadd, progressmode)
                 Preferences.saveconfig()
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -22121,12 +22123,12 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-        Call Movie_SaveMovieData()
+        Call Movie_SaveMovieDataToXML()
         'filteredlist = fullmovielist
-        Call sortorder()
+        Call Mov_SortMovieList()
         'Call loadmovielist()
         Call ApplyFilters()
-        Call loadinfofile()
+        Call Mov_ShowMovieDetails()
         frmSplash2.Hide()
     End Sub
 
@@ -24991,7 +24993,7 @@ Public Class Form1
         End If
 
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            Call rebuildmovies(movieFolders)
+            Call Mov_RebuildMoviesFromNfoToXML(movieFolders)
         Else
             Call reloadmoviecache()
         End If
@@ -26544,8 +26546,8 @@ Public Class Form1
             Next
         Next gridrow
 
-        Call Movie_SaveMovieData()
-        Call loadinfofile()
+        Call Movie_SaveMovieDataToXML()
+        Call Mov_ShowMovieDetails()
         Call applyfilters()
         frmSplash2.Hide()
         'mess.Close()
@@ -27515,7 +27517,7 @@ Public Class Form1
                 End If
             Next
             ApplyFilters()
-            Call loadinfofile()
+            Call Mov_ShowMovieDetails()
             frmProgSplash.Close()
             'messbox.Close()
         Catch ex As Exception
@@ -29206,7 +29208,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub BatchRescrapeWizardToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BatchRescrapeWizardToolStripMenuItem.Click
+    Private Sub TV_BatchRescrapeWizardToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TV_BatchRescrapeWizardToolStripMenuItem.Click
         If Not tvbckrescrapewizard.IsBusy Then
 
 
@@ -30757,7 +30759,7 @@ Public Class Form1
         Else
             Preferences.showsortdate = False
         End If
-        Call sortorder()
+        Call Mov_SortMovieList()
     End Sub
 
     Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click

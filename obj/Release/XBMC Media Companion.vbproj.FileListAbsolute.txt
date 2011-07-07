@@ -409,8 +409,6 @@ C:\MC SVN\bin\Release\media_companion.chm
 C:\SVN MC\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
 C:\SVN MC\bin\Release\mc_com.exe
 C:\SVN MC\bin\Release\media_companion.chm
-C:\MC SVN\obj\Release\ResGen.read.1.tlog
-C:\MC SVN\obj\Release\ResGen.write.1.tlog
 C:\SVN MC\bin\Release\TvdbScrapper.dll
 C:\SVN MC\bin\Release\Utilites.dll
 C:\SVN MC\bin\Release\TvdbScrapper.pdb
@@ -426,3 +424,6 @@ C:\MC SVN\bin\Release\TvdbScrapper.pdb
 C:\MC SVN\bin\Release\TvdbScrapper.xml
 C:\MC SVN\bin\Release\Utilites.pdb
 C:\MC SVN\bin\Release\Utilites.xml
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.1.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.read.4.tlog
+C:\MC SVN\obj\Release\GenerateResource-ResGen.write.1.tlog

@@ -22,107 +22,107 @@ Partial Class frmTvEdit
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.idtxt = New System.Windows.Forms.TextBox
-        Me.yeartxt = New System.Windows.Forms.TextBox
-        Me.imdb = New System.Windows.Forms.Label
-        Me.plot = New System.Windows.Forms.Label
-        Me.year = New System.Windows.Forms.Label
-        Me.genre = New System.Windows.Forms.Label
-        Me.title = New System.Windows.Forms.Label
-        Me.genretxt = New System.Windows.Forms.TextBox
-        Me.titletxt = New System.Windows.Forms.TextBox
-        Me.plottxt = New System.Windows.Forms.TextBox
-        Me.TextBox4 = New System.Windows.Forms.TextBox
-        Me.TextBox2 = New System.Windows.Forms.TextBox
-        Me.pathtxt = New System.Windows.Forms.TextBox
-        Me.roletxt = New System.Windows.Forms.TextBox
-        Me.Label5 = New System.Windows.Forms.Label
-        Me.TextBox3 = New System.Windows.Forms.TextBox
-        Me.TextBox1 = New System.Windows.Forms.TextBox
-        Me.actorcb = New System.Windows.Forms.ComboBox
-        Me.path = New System.Windows.Forms.Label
-        Me.TextBox24 = New System.Windows.Forms.TextBox
-        Me.Label19 = New System.Windows.Forms.Label
-        Me.Button5 = New System.Windows.Forms.Button
-        Me.Button6 = New System.Windows.Forms.Button
-        Me.Button7 = New System.Windows.Forms.Button
+        Me.components = New System.ComponentModel.Container()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.idtxt = New System.Windows.Forms.TextBox()
+        Me.yeartxt = New System.Windows.Forms.TextBox()
+        Me.imdb = New System.Windows.Forms.Label()
+        Me.plot = New System.Windows.Forms.Label()
+        Me.year = New System.Windows.Forms.Label()
+        Me.genre = New System.Windows.Forms.Label()
+        Me.title = New System.Windows.Forms.Label()
+        Me.genretxt = New System.Windows.Forms.TextBox()
+        Me.titletxt = New System.Windows.Forms.TextBox()
+        Me.plottxt = New System.Windows.Forms.TextBox()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.pathtxt = New System.Windows.Forms.TextBox()
+        Me.roletxt = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.actorcb = New System.Windows.Forms.ComboBox()
+        Me.path = New System.Windows.Forms.Label()
+        Me.TextBox24 = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button6 = New System.Windows.Forms.Button()
+        Me.Button7 = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Button15 = New System.Windows.Forms.Button
-        Me.runtimetxt = New System.Windows.Forms.TextBox
-        Me.ratingtxt = New System.Windows.Forms.TextBox
-        Me.label25 = New System.Windows.Forms.Label
-        Me.Label26 = New System.Windows.Forms.Label
-        Me.savetv = New System.Windows.Forms.Button
-        Me.Button2 = New System.Windows.Forms.Button
-        Me.Button1 = New System.Windows.Forms.Button
-        Me.Button4 = New System.Windows.Forms.Button
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox
-        Me.TextBox23 = New System.Windows.Forms.TextBox
-        Me.TextBox22 = New System.Windows.Forms.TextBox
-        Me.Label18 = New System.Windows.Forms.Label
-        Me.TextBox21 = New System.Windows.Forms.TextBox
-        Me.TextBox20 = New System.Windows.Forms.TextBox
-        Me.TextBox19 = New System.Windows.Forms.TextBox
-        Me.TextBox18 = New System.Windows.Forms.TextBox
-        Me.TextBox17 = New System.Windows.Forms.TextBox
-        Me.TextBox16 = New System.Windows.Forms.TextBox
-        Me.TextBox15 = New System.Windows.Forms.TextBox
-        Me.Label16 = New System.Windows.Forms.Label
-        Me.Label15 = New System.Windows.Forms.Label
-        Me.Label13 = New System.Windows.Forms.Label
-        Me.Label10 = New System.Windows.Forms.Label
-        Me.Label8 = New System.Windows.Forms.Label
-        Me.Label7 = New System.Windows.Forms.Label
-        Me.TextBox9 = New System.Windows.Forms.TextBox
-        Me.TextBox8 = New System.Windows.Forms.TextBox
-        Me.TextBox6 = New System.Windows.Forms.TextBox
-        Me.TextBox5 = New System.Windows.Forms.TextBox
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox
-        Me.Button8 = New System.Windows.Forms.Button
-        Me.Button10 = New System.Windows.Forms.Button
-        Me.Button11 = New System.Windows.Forms.Button
-        Me.Button12 = New System.Windows.Forms.Button
-        Me.Panel1 = New System.Windows.Forms.Panel
-        Me.Label30 = New System.Windows.Forms.Label
-        Me.Label29 = New System.Windows.Forms.Label
-        Me.Label28 = New System.Windows.Forms.Label
-        Me.Label27 = New System.Windows.Forms.Label
-        Me.TextBox13 = New System.Windows.Forms.TextBox
-        Me.Label24 = New System.Windows.Forms.Label
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox
-        Me.Button13 = New System.Windows.Forms.Button
-        Me.TextBox10 = New System.Windows.Forms.TextBox
-        Me.TextBox7 = New System.Windows.Forms.TextBox
-        Me.Label9 = New System.Windows.Forms.Label
-        Me.Label6 = New System.Windows.Forms.Label
+        Me.Button15 = New System.Windows.Forms.Button()
+        Me.runtimetxt = New System.Windows.Forms.TextBox()
+        Me.ratingtxt = New System.Windows.Forms.TextBox()
+        Me.label25 = New System.Windows.Forms.Label()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.savetv = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.TextBox23 = New System.Windows.Forms.TextBox()
+        Me.TextBox22 = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.TextBox21 = New System.Windows.Forms.TextBox()
+        Me.TextBox20 = New System.Windows.Forms.TextBox()
+        Me.TextBox19 = New System.Windows.Forms.TextBox()
+        Me.TextBox18 = New System.Windows.Forms.TextBox()
+        Me.TextBox17 = New System.Windows.Forms.TextBox()
+        Me.TextBox16 = New System.Windows.Forms.TextBox()
+        Me.TextBox15 = New System.Windows.Forms.TextBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.TextBox8 = New System.Windows.Forms.TextBox()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.TextBox5 = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.Button8 = New System.Windows.Forms.Button()
+        Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button11 = New System.Windows.Forms.Button()
+        Me.Button12 = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.TextBox13 = New System.Windows.Forms.TextBox()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Button13 = New System.Windows.Forms.Button()
+        Me.TextBox10 = New System.Windows.Forms.TextBox()
+        Me.TextBox7 = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Label11 = New System.Windows.Forms.Label
-        Me.Label12 = New System.Windows.Forms.Label
-        Me.Label14 = New System.Windows.Forms.Label
-        Me.Label17 = New System.Windows.Forms.Label
-        Me.TextBox11 = New System.Windows.Forms.TextBox
-        Me.TextBox12 = New System.Windows.Forms.TextBox
-        Me.ComboBox3 = New System.Windows.Forms.ComboBox
-        Me.ComboBox5 = New System.Windows.Forms.ComboBox
-        Me.Button16 = New System.Windows.Forms.Button
-        Me.Button17 = New System.Windows.Forms.Button
-        Me.Label2222 = New System.Windows.Forms.Label
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox
-        Me.Button3 = New System.Windows.Forms.Button
-        Me.Panel2 = New System.Windows.Forms.Panel
-        Me.Label23 = New System.Windows.Forms.Label
-        Me.Button14 = New System.Windows.Forms.Button
-        Me.Button9 = New System.Windows.Forms.Button
-        Me.Label21 = New System.Windows.Forms.Label
-        Me.ListBox1 = New System.Windows.Forms.ListBox
-        Me.Label20 = New System.Windows.Forms.Label
-        Me.PictureBox3 = New System.Windows.Forms.PictureBox
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.TextBox11 = New System.Windows.Forms.TextBox()
+        Me.TextBox12 = New System.Windows.Forms.TextBox()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox5 = New System.Windows.Forms.ComboBox()
+        Me.Button16 = New System.Windows.Forms.Button()
+        Me.Button17 = New System.Windows.Forms.Button()
+        Me.Label2222 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Button14 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
@@ -396,7 +396,7 @@ Partial Class frmTvEdit
         'Button15
         '
         Me.Button15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button15.Location = New System.Drawing.Point(595, 341)
+        Me.Button15.Location = New System.Drawing.Point(613, 353)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(153, 23)
         Me.Button15.TabIndex = 166
@@ -489,7 +489,7 @@ Partial Class frmTvEdit
         Me.ComboBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(185, 320)
+        Me.ComboBox1.Location = New System.Drawing.Point(185, 332)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(174, 21)
         Me.ComboBox1.TabIndex = 142
@@ -497,7 +497,7 @@ Partial Class frmTvEdit
         'TextBox23
         '
         Me.TextBox23.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox23.Location = New System.Drawing.Point(185, 351)
+        Me.TextBox23.Location = New System.Drawing.Point(185, 363)
         Me.TextBox23.Name = "TextBox23"
         Me.TextBox23.Size = New System.Drawing.Size(174, 20)
         Me.TextBox23.TabIndex = 148
@@ -505,7 +505,7 @@ Partial Class frmTvEdit
         'TextBox22
         '
         Me.TextBox22.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox22.Location = New System.Drawing.Point(185, 381)
+        Me.TextBox22.Location = New System.Drawing.Point(185, 393)
         Me.TextBox22.Name = "TextBox22"
         Me.TextBox22.Size = New System.Drawing.Size(174, 20)
         Me.TextBox22.TabIndex = 150
@@ -515,7 +515,7 @@ Partial Class frmTvEdit
         Me.Label18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label18.AutoSize = True
         Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(418, 301)
+        Me.Label18.Location = New System.Drawing.Point(418, 313)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(37, 16)
         Me.Label18.TabIndex = 144
@@ -525,7 +525,7 @@ Partial Class frmTvEdit
         '
         Me.TextBox21.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TextBox21.BackColor = System.Drawing.Color.White
-        Me.TextBox21.Location = New System.Drawing.Point(365, 322)
+        Me.TextBox21.Location = New System.Drawing.Point(365, 334)
         Me.TextBox21.Name = "TextBox21"
         Me.TextBox21.ReadOnly = True
         Me.TextBox21.Size = New System.Drawing.Size(167, 20)
@@ -534,7 +534,7 @@ Partial Class frmTvEdit
         'TextBox20
         '
         Me.TextBox20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox20.Location = New System.Drawing.Point(186, 430)
+        Me.TextBox20.Location = New System.Drawing.Point(186, 442)
         Me.TextBox20.Name = "TextBox20"
         Me.TextBox20.Size = New System.Drawing.Size(347, 20)
         Me.TextBox20.TabIndex = 146
@@ -542,7 +542,7 @@ Partial Class frmTvEdit
         'TextBox19
         '
         Me.TextBox19.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox19.Location = New System.Drawing.Point(186, 457)
+        Me.TextBox19.Location = New System.Drawing.Point(186, 469)
         Me.TextBox19.Name = "TextBox19"
         Me.TextBox19.Size = New System.Drawing.Size(347, 20)
         Me.TextBox19.TabIndex = 147
@@ -550,7 +550,7 @@ Partial Class frmTvEdit
         'TextBox18
         '
         Me.TextBox18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox18.Location = New System.Drawing.Point(365, 351)
+        Me.TextBox18.Location = New System.Drawing.Point(365, 363)
         Me.TextBox18.Name = "TextBox18"
         Me.TextBox18.Size = New System.Drawing.Size(167, 20)
         Me.TextBox18.TabIndex = 149
@@ -558,7 +558,7 @@ Partial Class frmTvEdit
         'TextBox17
         '
         Me.TextBox17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox17.Location = New System.Drawing.Point(365, 381)
+        Me.TextBox17.Location = New System.Drawing.Point(365, 393)
         Me.TextBox17.Name = "TextBox17"
         Me.TextBox17.Size = New System.Drawing.Size(167, 20)
         Me.TextBox17.TabIndex = 151
@@ -566,13 +566,13 @@ Partial Class frmTvEdit
         'TextBox16
         '
         Me.TextBox16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TextBox16.BackColor = System.Drawing.Color.White
         Me.TextBox16.Location = New System.Drawing.Point(186, 110)
         Me.TextBox16.Multiline = True
         Me.TextBox16.Name = "TextBox16"
         Me.TextBox16.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox16.Size = New System.Drawing.Size(347, 185)
+        Me.TextBox16.Size = New System.Drawing.Size(347, 197)
         Me.TextBox16.TabIndex = 130
         '
         'TextBox15
@@ -680,7 +680,7 @@ Partial Class frmTvEdit
         Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(182, 301)
+        Me.Label3.Location = New System.Drawing.Point(182, 313)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(39, 16)
         Me.Label3.TabIndex = 143
@@ -691,7 +691,7 @@ Partial Class frmTvEdit
         Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(92, 435)
+        Me.Label2.Location = New System.Drawing.Point(92, 447)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(70, 16)
         Me.Label2.TabIndex = 152
@@ -701,7 +701,7 @@ Partial Class frmTvEdit
         '
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(92, 464)
+        Me.Label1.Location = New System.Drawing.Point(92, 476)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(35, 13)
         Me.Label1.TabIndex = 153
@@ -710,11 +710,11 @@ Partial Class frmTvEdit
         'PictureBox2
         '
         Me.PictureBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox2.Location = New System.Drawing.Point(539, 12)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(209, 257)
+        Me.PictureBox2.Size = New System.Drawing.Size(227, 269)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox2.TabIndex = 154
         Me.PictureBox2.TabStop = False
@@ -722,7 +722,7 @@ Partial Class frmTvEdit
         'PictureBox4
         '
         Me.PictureBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox4.Location = New System.Drawing.Point(32, 249)
+        Me.PictureBox4.Location = New System.Drawing.Point(32, 261)
         Me.PictureBox4.MaximumSize = New System.Drawing.Size(226, 173)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(130, 173)
@@ -734,7 +734,7 @@ Partial Class frmTvEdit
         'Button8
         '
         Me.Button8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button8.Location = New System.Drawing.Point(595, 502)
+        Me.Button8.Location = New System.Drawing.Point(613, 514)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(153, 23)
         Me.Button8.TabIndex = 156
@@ -744,7 +744,7 @@ Partial Class frmTvEdit
         'Button10
         '
         Me.Button10.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button10.Location = New System.Drawing.Point(595, 399)
+        Me.Button10.Location = New System.Drawing.Point(613, 411)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(153, 23)
         Me.Button10.TabIndex = 157
@@ -754,7 +754,7 @@ Partial Class frmTvEdit
         'Button11
         '
         Me.Button11.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button11.Location = New System.Drawing.Point(594, 456)
+        Me.Button11.Location = New System.Drawing.Point(612, 468)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(153, 23)
         Me.Button11.TabIndex = 158
@@ -764,7 +764,7 @@ Partial Class frmTvEdit
         'Button12
         '
         Me.Button12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button12.Location = New System.Drawing.Point(595, 427)
+        Me.Button12.Location = New System.Drawing.Point(613, 439)
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(153, 23)
         Me.Button12.TabIndex = 159
@@ -819,7 +819,7 @@ Partial Class frmTvEdit
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(774, 534)
+        Me.Panel1.Size = New System.Drawing.Size(792, 546)
         Me.Panel1.TabIndex = 118
         '
         'Label30
@@ -881,7 +881,7 @@ Partial Class frmTvEdit
         '
         Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(595, 485)
+        Me.CheckBox3.Location = New System.Drawing.Point(613, 497)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(148, 17)
         Me.CheckBox3.TabIndex = 165
@@ -891,7 +891,7 @@ Partial Class frmTvEdit
         'Button13
         '
         Me.Button13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button13.Location = New System.Drawing.Point(595, 370)
+        Me.Button13.Location = New System.Drawing.Point(613, 382)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(153, 23)
         Me.Button13.TabIndex = 164
@@ -1093,7 +1093,7 @@ Partial Class frmTvEdit
         Me.Label23.Size = New System.Drawing.Size(142, 65)
         Me.Label23.TabIndex = 5
         Me.Label23.Text = "If you change the language" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "then you will need to use the" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & """Scrape TV Show Detail" & _
-            "s""" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Button to update the nfo to" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "the new language"
+    "s""" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Button to update the nfo to" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "the new language"
         '
         'Button14
         '
@@ -1149,11 +1149,11 @@ Partial Class frmTvEdit
         Me.PictureBox3.TabStop = False
         Me.PictureBox3.WaitOnLoad = True
         '
-        'tvedit
+        'frmTvEdit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(774, 534)
+        Me.ClientSize = New System.Drawing.Size(792, 546)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Button3)
@@ -1205,7 +1205,7 @@ Partial Class frmTvEdit
         Me.Controls.Add(Me.PictureBox3)
         Me.MaximumSize = New System.Drawing.Size(800, 580)
         Me.MinimumSize = New System.Drawing.Size(800, 580)
-        Me.Name = "tvedit"
+        Me.Name = "frmTvEdit"
         Me.Text = "XBMC Media Companion - TV Show Nfo Editor"
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
