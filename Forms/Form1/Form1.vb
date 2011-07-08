@@ -6,6 +6,7 @@ Imports System.Text
 Imports System.Threading
 Imports Media_Companion.ScraperFunctions
 Imports Media_Companion.Preferences
+Imports Media_Companion.Renamer
 Imports System.Xml
 Imports System.Reflection
 Imports System.Windows.Forms
@@ -18623,94 +18624,8 @@ Public Class Form1
                             episodeno(f) = "0" & episodeno(f)
                         End If
                     Next
-                    Select Case Preferences.tvrename
-                        Case 0
-                            'Show Title - S01E01 - Episode Title.ext
-                            newfilename = showtitle & " - " & s & seasonno
-                            For Each ep In episodeno
-                                newfilename = newfilename & ee & ep
-                            Next
-                            newfilename = newfilename & " - " & episodetitle
-                        Case 1
-                            'S01E01 - Episode Title.ext
-                            newfilename = s & seasonno
-                            For Each ep In episodeno
-                                newfilename = newfilename & ee & ep
-                            Next
-                            newfilename = newfilename & " - " & episodetitle
-                        Case 2
-                            'Show Title - 1x01 - Episode Title.ext
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            newfilename = showtitle & " - " & seasonno
-                            For Each ep In episodeno
-                                newfilename = newfilename & x & ep
-                            Next
-                            newfilename = newfilename & " - " & episodetitle
-                        Case 3
-                            '1x01 - Episode Title.ext
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            newfilename = seasonno
-                            For Each ep In episodeno
-                                newfilename = newfilename & x & ep
-                            Next
-                            newfilename = newfilename & " - " & episodetitle
-                        Case 4
-                            'Show Title - 101 - Episode Title.ext
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            newfilename = showtitle & " - " & seasonno
-                            For f = 0 To episodeno.Count - 1
-                                If f = 0 Then
-                                    newfilename = newfilename & episodeno(f)
-                                Else
-                                    newfilename = newfilename & x & episodeno(f)
-                                End If
-                            Next
-                            newfilename = newfilename & " - " & episodetitle
-                        Case 5
-                            '101 - Episode Title.ext
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                                seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                            End If
-                            newfilename = seasonno
-                            For f = 0 To episodeno.Count - 1
-                                If f = 0 Then
-                                    newfilename = newfilename & episodeno(f)
-                                Else
-                                    newfilename = newfilename & x & episodeno(f)
-                                End If
-                            Next
-                            newfilename = newfilename & " - " & episodetitle
-                    End Select
+                    newfilename = Renamer.setTVFilename(showtitle, episodetitle, episodeno, seasonno)
+
                     newfilename = newfilename.Replace("?", "")
                     newfilename = newfilename.Replace("/", "")
                     newfilename = newfilename.Replace("\", "")
@@ -23708,6 +23623,7 @@ Public Class Form1
     End Sub
 
     Private Sub setuptvpreferences()
+        ComboBox_tv_EpisodeRename.Items.Clear()
         For Each Regex In tv_RegexRename
             ComboBox_tv_EpisodeRename.Items.Add(Regex)
         Next
@@ -23966,9 +23882,9 @@ Public Class Form1
         ListBox_tv_RegexRename.Items.RemoveAt(tempint)
         ListBox_tv_RegexRename.Items.Insert(tempint, TextBox_tv_RegexRename_Edit.Text)
         ListBox_tv_RegexRename.SelectedIndex = tempint
-        tv_RegexScraper.Clear()
+        tv_RegexRename.Clear()
         For Each regexp In ListBox_tv_RegexRename.Items
-            tv_RegexScraper.Add(regexp)
+            tv_RegexRename.Add(regexp)
         Next
         TextBox_tv_RegexRename_Edit.Clear()
         generalprefschanged = True
@@ -25206,7 +25122,7 @@ Public Class Form1
                 ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex)
             End If
             tv_RegexRename.Clear()
-            For Each item In ListBox_tv_RegexScrape.Items
+            For Each item In ListBox_tv_RegexRename.Items
                 tv_RegexRename.Add(item)
             Next
             generalprefschanged = True
@@ -25240,8 +25156,12 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
-        Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
-        generalprefschanged = True
+        If Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename)) Then
+            Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
+            generalprefschanged = True
+        Else
+            MsgBox("Format does not match scraper regex" & vbCrLf & "Please check")
+        End If
     End Sub
 
     Private Sub SearchForNewMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewMoviesToolStripMenuItem.Click
@@ -30804,8 +30724,10 @@ Public Class Form1
                     EpAired = WorkingEpisode.aired
 
                     'Convert episode to 2 digits for formatting
-                    Dim episode2digit As String = WorkingEpisode.episodeno
-                    If episode2digit.Length = 1 Then episode2digit = "0" & episode2digit
+                    Dim episode2digit As New List(Of String)
+                    episode2digit.Clear()
+                    episode2digit.Add(WorkingEpisode.episodeno)
+                    If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
 
                     'Convert season to 2 digits for formatting
                     Dim season2digit As String = WorkingEpisode.seasonno
@@ -30814,7 +30736,7 @@ Public Class Form1
                     'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
                     'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
                     'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
-                    mySortedList.Add(WorkingEpisode.aired, FormatTVFilename(WorkingTvShow.title, WorkingEpisode.title, episode2digit, season2digit))
+                    mySortedList.Add(WorkingEpisode.aired, Renamer.setTVFilename(WorkingTvShow.title, WorkingEpisode.title, episode2digit, season2digit))
 
                 End If
             Next
@@ -30842,109 +30764,6 @@ Public Class Form1
             MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
         End If
     End Sub
-    Private Function FormatTVFilename(ByVal showtitle As String, ByVal episodetitle As String, ByVal episodeno As String, ByVal seasonno As String) As String
-        'TODO
-        'change this so that we can use it in the episode rename funtion to save duplication
-        'the episode rename function sends all episodes as a string list, this currently can only handle 1 episode at a time which it how the aired date display function needs it.
-        'eventually this will be universal for both & allow the end user to change the format themselves
-
-        Dim newfilename As String = ""
-
-        Dim s As String = ""
-        Dim ee As String = ""
-        Dim x As String = ""
-        If Preferences.eprenamelowercase = False Then
-            s = "S"
-            ee = "E"
-            x = "X"
-        Else
-            s = "s"
-            ee = "e"
-            x = "x"
-        End If
-
-        Select Case Preferences.tvrename
-            Case 0
-                'Show Title - S01E01 - Episode Title.ext
-                newfilename = showtitle & " - " & s & seasonno
-
-                newfilename = newfilename & ee & episodeno
-
-                newfilename = newfilename & " - " & episodetitle
-            Case 1
-                'S01E01 - Episode Title.ext
-                newfilename = s & seasonno
-
-                newfilename = newfilename & ee & episodeno
-
-                newfilename = newfilename & " - " & episodetitle
-            Case 2
-                'Show Title - 1x01 - Episode Title.ext
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                newfilename = showtitle & " - " & seasonno
-
-                newfilename = newfilename & x & episodeno
-
-                newfilename = newfilename & " - " & episodetitle
-            Case 3
-                '1x01 - Episode Title.ext
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                newfilename = seasonno
-
-                newfilename = newfilename & x & episodeno
-
-                newfilename = newfilename & " - " & episodetitle
-            Case 4
-                'Show Title - 101 - Episode Title.ext
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                newfilename = showtitle & " - " & seasonno
-
-                newfilename = newfilename & x & episodeno     '(f)
-
-                newfilename = newfilename & " - " & episodetitle
-            Case 5
-                '101 - Episode Title.ext
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                    seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                End If
-                newfilename = seasonno
-
-                newfilename = newfilename & x & episodeno       '(f)
-
-                newfilename = newfilename & " - " & episodetitle
-        End Select
-        Return newfilename
-    End Function
 
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
         Movie_PlayMovie()
