@@ -9436,7 +9436,6 @@ Public Class Form1
     Private Sub Mov_MergeFilteredListDataToFullMovieList()
         Dim FullCount As Integer = fullMovieList.Count - 1
         Dim FilterCount As Integer = filteredList.Count - 1
-
         For FullPass = 0 To FullCount
             For FilterPass = 0 To FilterCount
                 If fullMovieList(FullPass).fullpathandfilename = filteredList(FilterPass).fullpathandfilename Then
