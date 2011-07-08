@@ -1646,36 +1646,36 @@ Partial Public Class Form1
 
         Preferences.tvScraperLog &= "Starting Folder Scan" & vbCrLf & vbCrLf
 
-        Dim extensions(100) As String
-        Dim extensioncount As Integer
-        extensions(1) = "*.avi"
-        extensions(2) = "*.xvid"
-        extensions(3) = "*.divx"
-        extensions(4) = "*.img"
-        extensions(5) = "*.mpg"
-        extensions(6) = "*.mpeg"
-        extensions(7) = "*.mov"
-        extensions(8) = "*.rm"
-        extensions(9) = "*.3gp"
-        extensions(10) = "*.m4v"
-        extensions(11) = "*.wmv"
-        extensions(12) = "*.asf"
-        extensions(13) = "*.mp4"
-        extensions(14) = "*.mkv"
-        extensions(15) = "*.nrg"
-        extensions(16) = "*.iso"
-        extensions(17) = "*.rmvb"
-        extensions(18) = "*.ogm"
-        extensions(19) = "*.bin"
-        extensions(20) = "*.ts"
-        extensions(21) = "*.vob"
-        extensions(22) = "*.m2ts"
-        extensions(23) = "*.rar"
-        extensions(24) = "*.flv"
-        extensions(25) = "*.dvr-ms"
-        extensions(26) = "VIDEO_TS.IFO"
+        'Dim extensions(100) As String
+        'Dim extensioncount As Integer
+        'extensions(1) = "*.avi"
+        'extensions(2) = "*.xvid"
+        'extensions(3) = "*.divx"
+        'extensions(4) = "*.img"
+        'extensions(5) = "*.mpg"
+        'extensions(6) = "*.mpeg"
+        'extensions(7) = "*.mov"
+        'extensions(8) = "*.rm"
+        'extensions(9) = "*.3gp"
+        'extensions(10) = "*.m4v"
+        'extensions(11) = "*.wmv"
+        'extensions(12) = "*.asf"
+        'extensions(13) = "*.mp4"
+        'extensions(14) = "*.mkv"
+        'extensions(15) = "*.nrg"
+        'extensions(16) = "*.iso"
+        'extensions(17) = "*.rmvb"
+        'extensions(18) = "*.ogm"
+        'extensions(19) = "*.bin"
+        'extensions(20) = "*.ts"
+        'extensions(21) = "*.vob"
+        'extensions(22) = "*.m2ts"
+        'extensions(23) = "*.rar"
+        'extensions(24) = "*.flv"
+        'extensions(25) = "*.dvr-ms"
+        'extensions(26) = "VIDEO_TS.IFO"
 
-        extensioncount = 26
+        'extensioncount = 26
 
 
         Dim TvFolder As String
@@ -1718,8 +1718,8 @@ Partial Public Class Form1
         'Application.DoEvents()
         Dim mediacounter As Integer = newEpisodeList.Count
         For g = 0 To newtvfolders.Count - 1
-            Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
-            bckgroundscanepisodes.ReportProgress(progress, progresstext)
+            'Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+            'bckgroundscanepisodes.ReportProgress(progress, progresstext)
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
                 Exit Sub
@@ -1730,11 +1730,11 @@ Partial Public Class Form1
                 'If bckgroundscanepisodes.CancellationPending Then
                 '    Preferences.tvScraperLog = Preferences.tvScraperLog & vbCrLf & "Operation cancelled by user"
                 '    Exit Sub
-                Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
-                moviepattern = f
+                'Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
+                'moviepattern = f
                 dirpath = newtvfolders(g)
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                findnewepisodes(dirpath, moviepattern)
+                findnewepisodes(dirpath, f)
             Next f
             tempint = newEpisodeList.Count - mediacounter
 
@@ -1840,7 +1840,7 @@ Partial Public Class Form1
                 eps.Rating.Value = "0"
                 eps.PlayCount.Value = "0"
                 eps.Genre.Value = "Unknown Episode Season and/or Episode Number"
-                eps.Details = Preferences.Get_HdTags(eps.MediaExtension)
+                eps.GetFileDetails()
                 episodearray.Add(eps)
                 savepath = episodearray(0).VideoFilePath
             Else
