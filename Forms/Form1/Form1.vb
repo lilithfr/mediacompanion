@@ -972,19 +972,19 @@ Public Class Form1
                 Dim episodechild As XmlElement
                 childchild = doc.CreateElement("episode")
                 episodechild = doc.CreateElement("title")
-                episodechild.InnerText = episode.title
+                episodechild.InnerText = episode.Title.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("episodepath")
-                episodechild.InnerText = episode.episodepath
+                episodechild.InnerText = episode.VideoFilePath
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("seasonno")
-                episodechild.InnerText = episode.seasonno
+                episodechild.InnerText = episode.Season.value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("episodeno")
-                episodechild.InnerText = episode.episodeno
+                episodechild.InnerText = episode.Episode.Value
                 childchild.AppendChild(episodechild)
 
                 'episodechild = doc.CreateElement("status")
@@ -992,19 +992,19 @@ Public Class Form1
                 'childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("aired")
-                episodechild.InnerText = episode.aired
+                episodechild.InnerText = episode.Aired.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("playcount")
-                episodechild.InnerText = episode.playcount
+                episodechild.InnerText = episode.PlayCount.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("rating")
-                episodechild.InnerText = episode.rating
+                episodechild.InnerText = episode.Rating.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("tvdbid")
-                episodechild.InnerText = episode.tvdbid
+                episodechild.InnerText = episode.TvdbId.Value
                 childchild.AppendChild(episodechild)
                 child.AppendChild(childchild)
             Next
@@ -1013,27 +1013,27 @@ Public Class Form1
                 Dim episodechild As XmlElement
                 childchild = doc.CreateElement("missingepisode")
                 episodechild = doc.CreateElement("title")
-                episodechild.InnerText = episode.title
+                episodechild.InnerText = episode.Title.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("aired")
-                episodechild.InnerText = episode.aired
+                episodechild.InnerText = episode.Aired.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("playcount")
-                episodechild.InnerText = episode.playcount
+                episodechild.InnerText = episode.PlayCount.Value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("episodepath")
-                episodechild.InnerText = episode.episodepath
+                episodechild.InnerText = episode.VideoFilePath
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("seasonno")
-                episodechild.InnerText = episode.seasonno
+                episodechild.InnerText = episode.Season.value
                 childchild.AppendChild(episodechild)
 
                 episodechild = doc.CreateElement("episodeno")
-                episodechild.InnerText = episode.episodeno
+                episodechild.InnerText = episode.Episode.Value
                 childchild.AppendChild(episodechild)
                 child.AppendChild(childchild)
             Next
@@ -1139,9 +1139,9 @@ Public Class Form1
         '                                Case "title"
         '                                    newepisode.title = episodenew.InnerText
         '                                Case "episodepath"
-        '                                    newepisode.episodepath = episodenew.InnerText
+        '                                    newepisode.VideoFilePath = episodenew.InnerText
         '                                Case "seasonno"
-        '                                    newepisode.seasonno = episodenew.InnerText
+        '                                    newepisode.Season.value = episodenew.InnerText
         '                                Case "episodeno"
         '                                    newepisode.episodeno = episodenew.InnerText
         ''                                    'Case "status"
@@ -1165,9 +1165,9 @@ Public Class Form1
         '                                Case "title"
         '                                    newepisode.title = episodenew.InnerText
         '                                Case "episodepath"
-        '                                    newepisode.episodepath = episodenew.InnerText
+        '                                    newepisode.VideoFilePath = episodenew.InnerText
         '                                Case "seasonno"
-        '                                    newepisode.seasonno = episodenew.InnerText
+        '                                    newepisode.Season.value = episodenew.InnerText
         '                                Case "episodeno"
         '                                    newepisode.episodeno = episodenew.InnerText
         '                                    'Case "status"
@@ -1302,7 +1302,7 @@ Public Class Form1
     '            totalEpisodeCount += 1
 
     '            Dim seasonno As Integer = -10
-    '            seasonno = Convert.ToInt32(episode.seasonno)
+    '            seasonno = Convert.ToInt32(episode.Season.value)
 
     '            For g = 0 To TvTreeview.Nodes.Count - 1
     '                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
@@ -1354,9 +1354,9 @@ Public Class Form1
     '            End If
 
     '            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-    '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+    '                Call add_episode_to_treeview(shownode, tempint, episode.VideoFilePath, eps, True)
     '            Else
-    '                Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+    '                Call add_episode_to_treeview(shownode, tempint, episode.VideoFilePath, eps, False)
     '            End If
 
     '        Next
@@ -1371,7 +1371,7 @@ Public Class Form1
     '            Next
 
     '            Dim seasonstring As String = Nothing
-    '            Dim seasonno As Integer = Convert.ToInt32(missingep.seasonno)
+    '            Dim seasonno As Integer = Convert.ToInt32(missingep.Season.value)
     '            If seasonno <> 0 And seasonno <> -1 Then
     '                If seasonno < 10 Then
     '                    tempstring = "Season 0" & seasonno.ToString
@@ -2192,7 +2192,7 @@ Public Class Form1
     '                                    If ep.title <> Nothing Then
     '                                        Dim skip As Boolean = False
     '                                        For Each eps In tvshow.allepisodes
-    '                                            If eps.seasonno = ep.seasonno And eps.episodeno = ep.episodeno And eps.episodepath = ep.episodepath Then
+    '                                            If eps.Season.value = ep.Season.value And eps.episodeno = ep.episodeno And eps.VideoFilePath = ep.VideoFilePath Then
     '                                                skip = True
     '                                                Exit For
     '                                            End If
@@ -4571,14 +4571,14 @@ Public Class Form1
                                 If Not IO.File.Exists(tempsb) Then
 
                                     newmovie.filedetails = Preferences.Get_HdTags(newMovieList(f).mediapathandfilename)
-                                    If newmovie.filedetails.filedetails_video.duration <> Nothing Then
+                                    If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                                         Try
                                             progresstext &= " - HD tags"
                                             BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             '1h 24mn 48s 546ms
                                             Dim hours As Integer
                                             Dim minutes As Integer
-                                            tempstring = newmovie.filedetails.filedetails_video.duration
+                                            tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
                                             tempint = tempstring.IndexOf("h")
                                             If tempint <> -1 Then
                                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -5543,7 +5543,7 @@ Public Class Form1
                         strNFOprop = newplotdetails.fullmoviebody.genre
                     End If
                     If tokenInstr(0) = "format" Then
-                        strNFOprop = newplotdetails.filedetails.filedetails_video.container.Remove(0, 1)
+                        'strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Remove(0, 1)
                     End If
                     If tokenInstr(0) = "releasedate" Then
                         strNFOprop = newplotdetails.fullmoviebody.premiered
@@ -5635,17 +5635,17 @@ Public Class Form1
                 If text.IndexOf("<<season") <> -1 Then inclSeason = True
                 If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
                 For Each episode In tvShow.allepisodes
-                    If episode.seasonno <> "-1" And episode.episodeno <> "-1" Then
-                        keySE = episode.seasonno & "-" & episode.episodeno
+                    If episode.Season.value <> "-1" And episode.Episode.Value <> "-1" Then
+                        keySE = episode.Season.value & "-" & episode.Episode.Value
                         episode.IsMissing = False
                         If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
-                        If episode.seasonno > UBound(arrSeasonPresent) Then
-                            ReDim Preserve arrSeasonPresent(episode.seasonno)
-                            arrSeasonPresent(episode.seasonno) = True
+                        If episode.Season.value > UBound(arrSeasonPresent) Then
+                            ReDim Preserve arrSeasonPresent(episode.Season.value)
+                            arrSeasonPresent(episode.Season.value) = True
                         End If
-                        If episode.seasonno < firstSeason Then
-                            firstSeason = episode.seasonno
-                            If episode.seasonno = 0 Then arrSeasonPresent(0) = True
+                        If episode.Season.value < firstSeason Then
+                            firstSeason = episode.Season.value
+                            If episode.Season.value = 0 Then arrSeasonPresent(0) = True
                         End If
                     End If
                 Next
@@ -5655,17 +5655,17 @@ Public Class Form1
                     If text.IndexOf("<<season") <> -1 Then inclMissingSeason = True
                     If text.IndexOf("<<episode") <> -1 Then inclMissingEpisode = True
                     For Each episode In tvShow.missingepisodes
-                        If episode.seasonno <> "-1" And episode.episodeno <> "-1" Then
-                            keySE = episode.seasonno & "-" & episode.episodeno
+                        If episode.Season.value <> "-1" And episode.Episode.Value <> "-1" Then
+                            keySE = episode.Season.value & "-" & episode.Episode.Value
                             episode.IsMissing = True
                             If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
-                            If episode.seasonno > UBound(arrSeasonPresent) Then
-                                ReDim Preserve arrSeasonPresent(episode.seasonno)
-                                arrSeasonPresent(episode.seasonno) = True
+                            If episode.Season.value > UBound(arrSeasonPresent) Then
+                                ReDim Preserve arrSeasonPresent(episode.Season.value)
+                                arrSeasonPresent(episode.Season.value) = True
                             End If
-                            If episode.seasonno < firstSeason Then
-                                firstSeason = episode.seasonno
-                                If episode.seasonno = 0 Then arrSeasonPresent(0) = True
+                            If episode.Season.value < firstSeason Then
+                                firstSeason = episode.Season.value
+                                If episode.Season.value = 0 Then arrSeasonPresent(0) = True
                             End If
                         End If
                     Next
@@ -5717,7 +5717,7 @@ Public Class Form1
                         lastEpisode = True
                     End If
                     ' If season changes or reach end of sorted list, aggregate season and episode HTML
-                    If lastEpisode Or episode.Value.seasonno > currSeason Then
+                    If lastEpisode Or episode.Value.Season.value > currSeason Then
                         If inclSeason Or inclMissingSeason Then
                             strHTMLseason = getTVseasontags(blockSeason, tvShow, showCounter, currSeason, counterSeasonEpisodes, counterSeasonMissingEpisodes, _
                                                             counterSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
@@ -5734,7 +5734,7 @@ Public Class Form1
                         End If
                         strHTMLseason = ""
                         strHTMLepisode = ""
-                        currSeason = episode.Value.seasonno
+                        currSeason = episode.Value.Season.value
                         counterSeason += 1
                         counterSeasonEpisodes = 0
                         counterSeasonMissingEpisodes = 0
@@ -5995,28 +5995,28 @@ Public Class Form1
                 Case "show_counter"
                     strNFOprop = showCounter.ToString
                 Case "ep_title"
-                    strNFOprop = tvEpisode.title
+                    strNFOprop = tvEpisode.Title.Value
 
                 Case "ep_season"
-                    strNFOprop = If(tvEpisode.seasonno.Length = 1 And padNumber, "0", "") & tvEpisode.seasonno
+                    strNFOprop = If(tvEpisode.Season.value.Length = 1 And padNumber, "0", "") & tvEpisode.Season.value
 
                 Case "ep_number"
-                    strNFOprop = If(tvEpisode.episodeno.Length = 1 And padNumber, "0", "") & tvEpisode.episodeno
+                    strNFOprop = If(tvEpisode.Episode.Value.Length = 1 And padNumber, "0", "") & tvEpisode.Episode.Value
 
                 Case "ep_rating"
-                    strNFOprop = If(tvEpisode.rating <> Nothing, tvEpisode.rating & If(tvEpisode.rating.IndexOf(".") <> -1, "", ".0"), "")
+                    strNFOprop = If(tvEpisode.Rating <> Nothing, tvEpisode.Rating.Value & If(tvEpisode.Rating.Value.IndexOf(".") <> -1, "", ".0"), "")
 
                 Case "ep_playcount"
-                    strNFOprop = tvEpisode.playcount
+                    strNFOprop = tvEpisode.PlayCount.Value
 
                 Case "ep_imdbid"
-                    strNFOprop = tvEpisode.imdbid
+                    strNFOprop = tvEpisode.ImdbId.Value
 
                 Case "ep_imdburl"
-                    strNFOprop = If(tvEpisode.imdbid <> Nothing, Preferences.imdbmirror & "title/" & tvEpisode.imdbid & "/", Preferences.imdbmirror)
+                    strNFOprop = If(tvEpisode.ImdbId <> Nothing, Preferences.imdbmirror & "title/" & tvEpisode.ImdbId.Value & "/", Preferences.imdbmirror)
 
                 Case "ep_tvdbid"
-                    strNFOprop = tvEpisode.tvdbid
+                    strNFOprop = tvEpisode.TvdbId.Value
 
                 Case "class"
                     If tokenInstr.Length > 1 Then
@@ -6030,28 +6030,28 @@ Public Class Form1
                     End If
 
                 Case "ep_nfo"
-                    Dim TVEpisodeNFO As List(Of TvEpisode) = nfoFunction.loadfullepisodenfogeneric(tvEpisode.episodepath)
+                    Dim TVEpisodeNFO As List(Of TvEpisode) = nfoFunction.loadfullepisodenfogeneric(tvEpisode.VideoFilePath)
                     Dim fullTVEpisodeDetails As TvEpisode = TVEpisodeNFO(0)
                     Try
                         Select Case tokenInstr(1)
                             Case "file"
                                 Select Case tokenInstr(2)
                                     Case "video"
-                                        strNFOprop = CallByName(fullTVEpisodeDetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
+                                        strNFOprop = CallByName(fullTVEpisodeDetails.Details.StreamDetails.Video, tokenInstr(3), vbGet)
                                     Case "audio"
                                         Dim i As Integer = 1
-                                        For Each audioStream In fullTVEpisodeDetails.filedetails.filedetails_audio
+                                        For Each audioStream In fullTVEpisodeDetails.Details.StreamDetails.Audio
                                             strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
-                                            If (fullTVEpisodeDetails.filedetails.filedetails_audio.Count > 1 And i <> fullTVEpisodeDetails.filedetails.filedetails_audio.Count) Then
+                                            If (fullTVEpisodeDetails.Details.StreamDetails.Audio.Count > 1 And i <> fullTVEpisodeDetails.Details.StreamDetails.Audio.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
                                             i += 1
                                         Next
                                     Case "subtitles"
                                         Dim i As Integer = 1
-                                        For Each subLang In fullTVEpisodeDetails.filedetails.filedetails_subtitles
+                                        For Each subLang In fullTVEpisodeDetails.Details.StreamDetails.Subtitles
                                             strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
-                                            If (fullTVEpisodeDetails.filedetails.filedetails_subtitles.Count > 1 And i <> fullTVEpisodeDetails.filedetails.filedetails_subtitles.Count) Then
+                                            If (fullTVEpisodeDetails.Details.StreamDetails.Subtitles.Count > 1 And i <> fullTVEpisodeDetails.Details.StreamDetails.Subtitles.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
                                             i += 1
@@ -7726,12 +7726,12 @@ Public Class Form1
                     Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                     If tempname <> Nothing Then workingMovieDetails.filedetails = Preferences.Get_HdTags(tempname)
                     messbox.TextBox1.Text = "Video Duration"
-                    If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
+                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
                             Dim hours As Integer
                             Dim minutes As Integer
-                            tempstring = workingMovieDetails.filedetails.filedetails_video.duration
+                            tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -8486,7 +8486,7 @@ Public Class Form1
                 movietemplate.filedetails.filedetails_video.codecid = Nothing
                 movietemplate.filedetails.filedetails_video.codecinfo = Nothing
                 movietemplate.filedetails.filedetails_video.container = Nothing
-                movietemplate.filedetails.filedetails_video.duration = Nothing
+                movietemplate.filedetails.filedetails_video.DurationInSeconds.Value = Nothing
                 movietemplate.filedetails.filedetails_video.formatinfo = Nothing
                 movietemplate.filedetails.filedetails_video.height = Nothing
                 movietemplate.filedetails.filedetails_video.scantype = Nothing
@@ -8534,7 +8534,7 @@ Public Class Form1
                 movietoalter.filedetails.filedetails_video.codecid = Nothing
                 movietoalter.filedetails.filedetails_video.codecinfo = Nothing
                 movietoalter.filedetails.filedetails_video.container = Nothing
-                movietoalter.filedetails.filedetails_video.duration = Nothing
+                movietoalter.filedetails.filedetails_video.DurationInSeconds.Value = Nothing
                 movietoalter.filedetails.filedetails_video.formatinfo = Nothing
                 movietoalter.filedetails.filedetails_video.height = Nothing
                 movietoalter.filedetails.filedetails_video.scantype = Nothing
@@ -8899,7 +8899,7 @@ Public Class Form1
                                     Dim tempint As Integer
                                     Dim hours As Integer
                                     Dim minutes As Integer
-                                    tempstring = movietemplate.filedetails.filedetails_video.duration
+                                    tempstring = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
                                     tempint = tempstring.IndexOf("h")
                                     If tempint <> -1 Then
                                         hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -8935,13 +8935,13 @@ Public Class Form1
                     End If
 
                     If batchList.runtime = True Then
-                        If movietemplate.filedetails.filedetails_video.duration <> Nothing Then
+                        If movietemplate.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                             Dim tempstring As String
-                            tempstring = movietemplate.filedetails.filedetails_video.duration
+                            tempstring = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
                             tempstring = tempstring.Replace("min", "")
                             tempstring = tempstring.Replace(" ", "")
                             If IsNumeric(tempstring) Then
-                                movietemplate.fullmoviebody.runtime = movietemplate.filedetails.filedetails_video.duration
+                                movietemplate.fullmoviebody.runtime = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
                             End If
                         End If
                         If movietemplate.fullmoviebody.runtime <> Nothing Then
@@ -10035,12 +10035,12 @@ Public Class Form1
 
                             Try
                                 newmovie.filedetails = Preferences.Get_HdTags(newdetails.mediapathandfilename)
-                                If newmovie.filedetails.filedetails_video.duration <> Nothing Then
+                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
                                         Dim hours As Integer
                                         Dim minutes As Integer
-                                        tempstring = newmovie.filedetails.filedetails_video.duration
+                                        tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
                                         tempint = tempstring.IndexOf("h")
                                         If tempint <> -1 Then
                                             hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -13526,12 +13526,12 @@ Public Class Form1
                 Next
             End If
             Try
-                If workingMovieDetails.filedetails.filedetails_video.duration <> Nothing Then
+                If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
 
                     '1h 24mn 48s 546ms
                     Dim hours As Integer
                     Dim minutes As Integer
-                    tempstring = workingMovieDetails.filedetails.filedetails_video.duration
+                    tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
                     tempint = tempstring.IndexOf("h")
                     If tempint <> -1 Then
                         hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -14354,7 +14354,7 @@ Public Class Form1
     '                        For Each Sh In TvShows
     '                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf(Sh.fullpath.ToLower.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
     '                                For Each ep In Sh.allepisodes
-    '                                    If ep.episodepath = TvTreeview.SelectedNode.Name Then
+    '                                    If ep.VideoFilePath = TvTreeview.SelectedNode.Name Then
     '                                        'ep.status = "xml error"
     '                                        Exit For
     '                                    End If
@@ -14429,11 +14429,11 @@ Public Class Form1
     '                        For Each ep In item.missingepisodes
     '                            Dim seasonno As String = ""
     '                            Dim episodeno As String = ""
-    '                            If ep.episodepath = TvTreeview.SelectedNode.Name Then
-    '                                If ep.seasonno.Length = 1 Then
-    '                                    seasonno = "0" & ep.seasonno
+    '                            If ep.VideoFilePath = TvTreeview.SelectedNode.Name Then
+    '                                If ep.Season.value.Length = 1 Then
+    '                                    seasonno = "0" & ep.Season.value
     '                                Else
-    '                                    episodeno = ep.seasonno
+    '                                    episodeno = ep.Season.value
     '                                End If
     '                                If ep.episodeno.Length = 1 Then
     '                                    episodeno = "0" & ep.episodeno
@@ -14801,14 +14801,14 @@ Public Class Form1
     '            'workingEpisode(workingEpisodeIndex).credits = Nothing
     '            'workingEpisode(workingEpisodeIndex).director = Nothing
     '            'workingEpisode(workingEpisodeIndex).episodeno = Nothing
-    '            'workingEpisode(workingEpisodeIndex).episodepath = TvTreeview.SelectedNode.Parent.Parent.Name
+    '            'workingEpisode(workingEpisodeIndex).VideoFilePath = TvTreeview.SelectedNode.Parent.Parent.Name
     '            'workingEpisode(workingEpisodeIndex).fanartpath = Nothing
     '            'workingEpisode(workingEpisodeIndex).filedetails = Nothing
     '            'workingEpisode(workingEpisodeIndex).ListActors.Clear()
     '            'workingEpisode(workingEpisodeIndex).playcount = Nothing
     '            'workingEpisode(workingEpisodeIndex).plot = TextBox21.Text
     '            'workingEpisode(workingEpisodeIndex).rating = Nothing
-    '            'workingEpisode(workingEpisodeIndex).seasonno = Nothing
+    '            'workingEpisode(workingEpisodeIndex).Season.value = Nothing
     '            'workingEpisode(workingEpisodeIndex).thumb = Nothing
     '            'workingEpisode(workingEpisodeIndex).title = TextBox2.Text
     '            Panel9.Visible = True
@@ -14836,7 +14836,7 @@ Public Class Form1
     '        workingEpisodeIndex = -5
     '        nfoFunction.loadfullepisodenfo(path) ', season, episode)
     '        For f = 0 To workingEpisode.Count - 1
-    '            If workingEpisode(f).seasonno = season And workingEpisode(f).episodeno = episode Then
+    '            If workingEpisode(f).Season.value = season And workingEpisode(f).episodeno = episode Then
     '                workingEpisodeIndex = f
     '                Exit For
     '            End If
@@ -14901,7 +14901,7 @@ Public Class Form1
     '        '#End If
     '        '        End Try
     '        Try
-    '            tempstring = workingEpisode(workingEpisodeIndex).episodepath.Substring(0, workingEpisode(workingEpisodeIndex).episodepath.Length - 3)
+    '            tempstring = workingEpisode(workingEpisodeIndex).VideoFilePath.Substring(0, workingEpisode(workingEpisodeIndex).VideoFilePath.Length - 3)
     '            tempstring = tempstring & "tbn"
     '            If IO.File.Exists(tempstring) Then
     '                Try
@@ -15070,9 +15070,9 @@ Public Class Form1
     '            If TvTreeview.SelectedNode.Parent.Text = "" Then
     '                tempstring = WorkingTvShow.path
     '            ElseIf TvTreeview.SelectedNode.Parent.Text.ToLower.IndexOf("season") <> -1 Then
-    '                tempstring = WorkingEpisode.episodepath
+    '                tempstring = WorkingEpisode.VideoFilePath
     '            ElseIf TvTreeview.SelectedNode.Parent.Text.ToLower.IndexOf("specials") <> -1 Then
-    '                tempstring = WorkingEpisode.episodepath
+    '                tempstring = WorkingEpisode.VideoFilePath
     '            Else
     '                Exit Sub
     '            End If
@@ -15355,8 +15355,8 @@ Public Class Form1
             tvCurrentTabIndex = TabControl3.SelectedIndex
         ElseIf tab.ToLower = "screenshot" Then
             tvCurrentTabIndex = TabControl3.SelectedIndex
-            If IO.File.Exists(WorkingEpisode.episodepath.Replace(IO.Path.GetExtension(WorkingEpisode.episodepath), ".tbn")) Then
-                PictureBox14.ImageLocation = WorkingEpisode.episodepath.Replace(IO.Path.GetExtension(WorkingEpisode.episodepath), ".tbn")
+            If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
+                PictureBox14.ImageLocation = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
                 PictureBox14.Load()
             Else
                 PictureBox14.Image = Nothing
@@ -16662,9 +16662,9 @@ Public Class Form1
             Dim eps As New List(Of String)
             eps.Clear()
             For Each ep In alleps
-                eps.Add(ep.episodeno)
+                eps.Add(ep.Episode.Value)
             Next
-            Dim tempspath As String = renameepisode(path, alleps(0).seasonno, eps, show, alleps(0).title)
+            Dim tempspath As String = renameepisode(path, alleps(0).Season.value, eps, show, alleps(0).Title.Value)
             If tempspath <> "false" Then
                 path = tempspath
             End If
@@ -16676,10 +16676,10 @@ Public Class Form1
         For Each Episode As Nfo.TvEpisode In alleps
             Episode.Save()
         Next
-        
+
         Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
 
-        If (IO.File.Exists(ext) Or alleps(0).thumb = Nothing) And Preferences.autoepisodescreenshot = True Then
+        If (IO.File.Exists(ext) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
             If Not IO.File.Exists(ext) Then
                 tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
                 Call doscreenshot(ext)
@@ -16690,7 +16690,7 @@ Public Class Form1
             Dim buffer(400000) As Byte
             Dim size As Integer = 0
             Dim bytesRead As Integer = 0
-            Dim url As String = alleps(0).thumb
+            Dim url As String = alleps(0).Thumbnail.FileName
             If url = Nothing Then
             Else
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
@@ -16888,7 +16888,7 @@ Public Class Form1
                 End If
                 If add = True Then
                     Dim newep As New TvEpisode
-                    newep.episodepath = filename2
+                    newep.VideoFilePath = filename2
                     newep.mediaextension = filename
                     newEpisodeList.Add(newep)
                 End If
@@ -17504,7 +17504,7 @@ Public Class Form1
                 TextBox2.Text = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
             End If
         Else
-            TextBox2.Text = WorkingEpisode.title
+            TextBox2.Text = WorkingEpisode.Title.Value
         End If
     End Sub
 
@@ -17520,14 +17520,14 @@ Public Class Form1
                     TextBox2.Text = TextBox2.Text.Substring(4, TextBox2.Text.Length - 4) & ", The"
                 End If
             End If
-            workingTvShow.title = TextBox2.Text
+            WorkingTvShow.title = TextBox2.Text
         Else
-            WorkingEpisode.title = TextBox2.Text
-            Dim trueseason As String = WorkingEpisode.seasonno
-            Dim trueepisode As String = WorkingEpisode.episodeno
+            WorkingEpisode.Title.Value = TextBox2.Text
+            Dim trueseason As String = WorkingEpisode.Season.value
+            Dim trueepisode As String = WorkingEpisode.Episode.Value
             If trueseason.Length = 1 Then trueseason = "0" & trueseason
             If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-            TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.title
+            TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
         End If
     End Sub
 
@@ -17636,13 +17636,13 @@ Public Class Form1
 
             Episode.Save()
             'Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempWorkingEpisode)
-            'If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).episodepath, TVShowEpisodeNFOContent)
+            'If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).VideoFilePath, TVShowEpisodeNFOContent)
 
             'For Each node As TreeNode In TvTreeview.Nodes
             '    For Each childnode As TreeNode In node.Nodes
             '        Dim counter As Integer = -1
             '        For Each epie In childnode.Nodes
-            '            If epie.Name = workingEpisode(0).episodepath Then
+            '            If epie.Name = workingEpisode(0).VideoFilePath Then
             '                counter += 1
             '                If counter = workingEpisodeIndex Then
             '                    Dim eps As String
@@ -17663,16 +17663,16 @@ Public Class Form1
             'For Each item In TvShows
             '    If item.fullpath = showpath Then
             '        For f = 0 To item.allepisodes.Count - 1
-            '            If item.allepisodes(f).episodepath = workingEpisode(0).episodepath Then
+            '            If item.allepisodes(f).VideoFilePath = workingEpisode(0).VideoFilePath Then
             '                item.allepisodes.RemoveAt(f)
             '                For Each ep In workingEpisode
-            '                    If ep.seasonno = workingEpisode(workingEpisodeIndex).seasonno And ep.episodeno = workingEpisode(workingEpisodeIndex).episodeno Then
+            '                    If ep.Season.value = workingEpisode(workingEpisodeIndex).Season.value And ep.episodeno = workingEpisode(workingEpisodeIndex).episodeno Then
             '                        Dim newwp As New TvEpisode
             '                        newwp.episodeno = ep.episodeno
-            '                        newwp.episodepath = ep.episodepath
+            '                        newwp.VideoFilePath = ep.VideoFilePath
             '                        newwp.playcount = "0"
             '                        newwp.rating = ep.rating
-            '                        newwp.seasonno = ep.seasonno
+            '                        newwp.Season.value = ep.Season.value
             '                        newwp.title = ep.title
             '                        item.allepisodes.Add(newwp)
             '                        Exit For
@@ -18084,8 +18084,8 @@ Public Class Form1
             Dim actorsource As String = workingTvShow.episodeactorsource
             Dim tvdbid As String = workingTvShow.tvdbid
             Dim imdbid As String = workingTvShow.imdbid
-            Dim seasonno As String = WorkingEpisode.seasonno
-            Dim episodeno As String = WorkingEpisode.episodeno
+            Dim seasonno As String = WorkingEpisode.Season.value
+            Dim episodeno As String = WorkingEpisode.Episode.Value
             'its an episode
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim episodescraper As New TVDBScraper
@@ -18102,27 +18102,27 @@ Public Class Form1
                 For Each thisresult In scrapedepisode("episodedetails")
                     Select Case thisresult.Name
                         Case "title"
-                            newepisode.title = thisresult.InnerText
+                            newepisode.Title.Value = thisresult.InnerText
                         Case "premiered"
-                            newepisode.aired = thisresult.InnerText
+                            newepisode.Aired.Value = thisresult.InnerText
                         Case "plot"
-                            newepisode.plot = thisresult.InnerText
+                            newepisode.Plot.Value = thisresult.InnerText
                         Case "director"
-                            newepisode.director = thisresult.InnerText
-                            newepisode.director = newepisode.director.TrimStart("|")
-                            newepisode.director = newepisode.director.TrimEnd("|")
-                            newepisode.director = newepisode.director.Replace("|", " / ")
+                            newepisode.Director.Value = thisresult.InnerText
+                            newepisode.Director.Value = newepisode.Director.Value.TrimStart("|")
+                            newepisode.Director.Value = newepisode.Director.Value.TrimEnd("|")
+                            newepisode.Director.Value = newepisode.Director.Value.Replace("|", " / ")
                         Case "credits"
-                            newepisode.credits = thisresult.InnerText
-                            newepisode.credits = newepisode.credits.TrimStart("|")
-                            newepisode.credits = newepisode.credits.TrimEnd("|")
-                            newepisode.credits = newepisode.credits.Replace("|", " / ")
+                            newepisode.Credits.Value = thisresult.InnerText
+                            newepisode.Credits.Value = newepisode.Credits.Value.TrimStart("|")
+                            newepisode.Credits.Value = newepisode.Credits.Value.TrimEnd("|")
+                            newepisode.Credits.Value = newepisode.Credits.Value.Replace("|", " / ")
                         Case "rating"
-                            newepisode.rating = thisresult.InnerText
+                            newepisode.Rating.Value = thisresult.InnerText
                         Case "thumb"
-                            newepisode.thumb = thisresult.InnerText
+                            newepisode.Thumbnail.FileName = thisresult.InnerText
                         Case "genre"
-                            newepisode.genre = thisresult.InnerText
+                            newepisode.Genre.Value = thisresult.InnerText
                         Case "actor"
                             Dim actors As XmlNode = Nothing
                             For Each actorl In thisresult.ChildNodes
@@ -18135,7 +18135,7 @@ Public Class Form1
                             Next
                     End Select
                 Next
-                newepisode.playcount = "0"
+                newepisode.PlayCount.Value = "0"
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -18232,7 +18232,7 @@ Public Class Form1
                                                         Case "actorid"
                                                             If newactor.actorthumb <> Nothing Then
                                                                 If detail.InnerText <> "" And Preferences.actorseasy = True Then
-                                                                    Dim workingpath As String = WorkingEpisode.episodepath.Replace(IO.Path.GetFileName(WorkingEpisode.episodepath), "")
+                                                                    Dim workingpath As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetFileName(WorkingEpisode.VideoFilePath), "")
                                                                     workingpath = workingpath & ".actors\"
                                                                     Dim hg As New IO.DirectoryInfo(workingpath)
                                                                     Dim destsorted As Boolean = False
@@ -18362,27 +18362,27 @@ Public Class Form1
                     Next
                 End If
             End If
-            If newepisode.title <> "" Then
-                WorkingEpisode.aired = newepisode.aired
-                WorkingEpisode.credits = newepisode.credits
-                WorkingEpisode.director = newepisode.director
-                WorkingEpisode.genre = newepisode.genre
-                WorkingEpisode.plot = newepisode.plot
-                WorkingEpisode.rating = newepisode.rating
-                WorkingEpisode.title = newepisode.title
+            If newepisode.Title.Value <> "" Then
+                WorkingEpisode.Aired = newepisode.Aired
+                WorkingEpisode.Credits = newepisode.Credits
+                WorkingEpisode.Director = newepisode.Director
+                WorkingEpisode.Genre = newepisode.Genre
+                WorkingEpisode.Plot = newepisode.Plot
+                WorkingEpisode.Rating = newepisode.Rating
+                WorkingEpisode.Title = newepisode.Title
                 WorkingEpisode.ListActors.Clear()
                 For Each actor In newepisode.ListActors
                     WorkingEpisode.ListActors.Add(actor)
                 Next
 
                 If Preferences.enablehdtags = True Then
-                    WorkingEpisode.filedetails = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.episodepath))
-                    If WorkingEpisode.filedetails.filedetails_video.duration <> Nothing Then
+                    WorkingEpisode.Details = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
+                    If WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
                             Dim hours As Integer
                             Dim minutes As Integer
-                            tempstring = WorkingEpisode.filedetails.filedetails_video.duration
+                            tempstring = WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -18405,8 +18405,8 @@ Public Class Form1
                         End Try
                     End If
                 End If
-                'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).episodepath)
-                'Call loadtvepisode(workingEpisode(workingEpisodeIndex).episodepath, workingEpisode(workingEpisodeIndex).seasonno, workingEpisode(workingEpisodeIndex).episodeno)
+                'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).VideoFilePath)
+                'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
                 WorkingEpisode.Save()
                 'Call LoadTvEpisode(WorkingEpisode)
                 messbox.Close()
@@ -18588,14 +18588,14 @@ Public Class Form1
                 If renamefile.IndexOf(showpath) <> -1 Then
                     showtitle = tvshow.title
                     For Each episode In tvshow.allepisodes
-                        If episode.episodepath = renamefile Then
+                        If episode.VideoFilePath = renamefile Then
                             If seasonno = "" Then
-                                seasonno = episode.seasonno
+                                seasonno = episode.Season.value
                             End If
                             If episodetitle = "" Then
-                                episodetitle = episode.title
+                                episodetitle = episode.Title.Value
                             End If
-                            episodeno.Add(episode.episodeno)
+                            episodeno.Add(episode.Episode.Value)
                         End If
                     Next
                     Dim newfilename As String
@@ -18692,8 +18692,8 @@ Public Class Form1
                         Next
                         For Each item In TvShows
                             For Each ep In item.allepisodes
-                                If ep.episodepath = oldnfofile Then
-                                    ep.episodepath = newnfofile
+                                If ep.VideoFilePath = oldnfofile Then
+                                    ep.VideoFilePath = newnfofile
                                 End If
                             Next
                         Next
@@ -18726,16 +18726,16 @@ Public Class Form1
         Try
             If IsNumeric(workingepisode.playcount) Then
                 If Convert.ToInt32(workingepisode.playcount) <= 0 Then
-                    WorkingEpisode.playcount = "1"
+                    WorkingEpisode.PlayCount.Value = "1"
                     Button48.Text = "Watched"
                     Button48.BackColor = Color.Green
                 Else
-                    WorkingEpisode.playcount = "0"
+                    WorkingEpisode.PlayCount.Value = "0"
                     Button48.Text = "UnWatched"
                     Button48.BackColor = Color.Red
                 End If
             Else
-                WorkingEpisode.playcount = "0"
+                WorkingEpisode.PlayCount.Value = "0"
                 Button48.Text = "UnWatched"
                 Button48.BackColor = Color.Red
             End If
@@ -19535,8 +19535,8 @@ Public Class Form1
 
         Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
         If IsNumeric(TextBox35.Text) Then
-            Dim thumbpathandfilename As String = WorkingEpisode.episodepath.Replace(IO.Path.GetExtension(WorkingEpisode.episodepath), ".tbn")
-            Dim pathandfilename As String = WorkingEpisode.episodepath.Replace(IO.Path.GetExtension(WorkingEpisode.episodepath), "")
+            Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
+            Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")
             Dim extensions(100) As String
             Dim extensioncount As Integer
             extensions(1) = ".avi"
@@ -19635,8 +19635,8 @@ Public Class Form1
         Dim episodescraper As New TVDBScraper
         Dim id As String = workingTvShow.tvdbid
         Dim sortorder As String = workingTvShow.sortorder
-        Dim seasonno As String = WorkingEpisode.seasonno
-        Dim episodeno As String = WorkingEpisode.episodeno
+        Dim seasonno As String = WorkingEpisode.Season.value
+        Dim episodeno As String = WorkingEpisode.Episode.Value
         Dim language As String = workingTvShow.language
         If language = Nothing Then language = "en"
         If language = "" Then language = "en"
@@ -19693,7 +19693,7 @@ Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim tempstring As String = WorkingEpisode.episodepath.Replace(IO.Path.GetExtension(WorkingEpisode.episodepath), ".tbn")
+                    Dim tempstring As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
                     Dim MyWebClient As New System.Net.WebClient
                     Try
                         Dim ImageInBytes() As Byte = MyWebClient.DownloadData(thumburl)
@@ -21054,9 +21054,9 @@ Public Class Form1
                 Dim xmlerroer As Boolean = False
                 Dim newepisodetoadd2 As New TvEpisode
                 newepisodetoadd2 = ep
-                fullpath = newepisodetoadd2.episodepath
-                title = newepisodetoadd2.title
-                Dim seasonno As Integer = Convert.ToInt32(newepisodetoadd2.seasonno)
+                fullpath = newepisodetoadd2.VideoFilePath
+                title = newepisodetoadd2.Title.Value
+                Dim seasonno As Integer = Convert.ToInt32(newepisodetoadd2.Season.value)
                 'newepisodetoadd2.ShowObj.AddEpisode(newepisodetoadd2)
 
 
@@ -21094,7 +21094,7 @@ Public Class Form1
                 '    End If
                 'Next
                 'If alreadyexists = False Then
-                '    Call newseason_checkforposter(tempstring, newepisodetoadd2.episodepath, tempTVDBiD) 'newepisodetoadd2.tvdbid)
+                '    Call newseason_checkforposter(tempstring, newepisodetoadd2.VideoFilePath, tempTVDBiD) 'newepisodetoadd2.tvdbid)
                 '    cnode.Nodes.Add(tempstring)
                 'End If
 
@@ -21450,7 +21450,7 @@ Public Class Form1
     '                        totalEpisodeCount += 1
     '                        Try
     '                            Dim seasonno As Integer = -10
-    '                            seasonno = Convert.ToInt32(episode.seasonno)
+    '                            seasonno = Convert.ToInt32(episode.Season.value)
 
     '                            For g = 0 To TvTreeview.Nodes.Count - 1
     '                                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
@@ -21504,14 +21504,14 @@ Public Class Form1
     '                            End If
 
     '                            'If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-    '                            '    Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
+    '                            '    Dim path As String = episode.VideoFilePath.Replace(IO.Path.GetExtension(episode.VideoFilePath), ".tbn")
     '                            '    If Not IO.File.Exists(path) Then
-    '                            '        Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+    '                            '        Call add_episode_to_treeview(shownode, tempint, episode.VideoFilePath, eps, True)
     '                            '    End If
     '                            'Else
-    '                            '    Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
+    '                            '    Dim path As String = episode.VideoFilePath.Replace(IO.Path.GetExtension(episode.VideoFilePath), ".tbn")
     '                            '    If Not IO.File.Exists(path) Then
-    '                            Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+    '                            Call add_episode_to_treeview(shownode, tempint, episode.VideoFilePath, eps, False)
     '                            Dim child As TreeNode
     '                            Dim childchild As TreeNode
     '                            Dim childchildchild As TreeNode
@@ -21567,7 +21567,7 @@ Public Class Form1
     '                        totalEpisodeCount += 1
     '                        Try
     '                            Dim seasonno As Integer = -10
-    '                            seasonno = Convert.ToInt32(episode.seasonno)
+    '                            seasonno = Convert.ToInt32(episode.Season.value)
 
     '                            For g = 0 To TvTreeview.Nodes.Count - 1
     '                                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
@@ -21621,14 +21621,14 @@ Public Class Form1
     '                            End If
 
     '                            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-    '                                Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
+    '                                Dim path As String = episode.VideoFilePath.Replace(IO.Path.GetExtension(episode.VideoFilePath), ".tbn")
     '                                If Not IO.File.Exists(path) Then
-    '                                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, True)
+    '                                    Call add_episode_to_treeview(shownode, tempint, episode.VideoFilePath, eps, True)
     '                                End If
     '                            Else
-    '                                Dim path As String = episode.episodepath.Replace(IO.Path.GetExtension(episode.episodepath), ".tbn")
+    '                                Dim path As String = episode.VideoFilePath.Replace(IO.Path.GetExtension(episode.VideoFilePath), ".tbn")
     '                                If Not IO.File.Exists(path) Then
-    '                                    Call add_episode_to_treeview(shownode, tempint, episode.episodepath, eps, False)
+    '                                    Call add_episode_to_treeview(shownode, tempint, episode.VideoFilePath, eps, False)
     '                                End If
     '                            End If
     '                        Catch ex As Exception
@@ -26442,7 +26442,7 @@ Public Class Form1
                             End Try
 
                             changedmoviedetails.fullmoviebody.runtime = changedmovie.runtime
-                            changedmoviedetails.filedetails.filedetails_video.duration = changedmovie.runtime.ToString
+                            changedmoviedetails.filedetails.filedetails_video.DurationInSeconds.Value = changedmovie.runtime.ToString
 
                             changedmoviedetails.fullmoviebody.title = changedmovie.title
                             changedmoviedetails.fullmoviebody.year = changedmovie.year
@@ -27179,13 +27179,13 @@ Public Class Form1
                             Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim newfiledetails As New FullFileDetails
                             If tempname <> Nothing Then newfiledetails = Preferences.Get_HdTags(tempname)
-                            If newfiledetails.filedetails_video.duration <> Nothing Then
+                            If newfiledetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                                 Try
                                     '1h 24mn 48s 546ms
                                     frmProgSplash.Label1.Text &= "OK!"
                                     Dim hours As Integer
                                     Dim minutes As Integer
-                                    tempstring = newfiledetails.filedetails_video.duration
+                                    tempstring = newfiledetails.filedetails_video.DurationInSeconds.Value
                                     tempint = tempstring.IndexOf("h")
                                     If tempint <> -1 Then
                                         hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -28728,7 +28728,7 @@ Public Class Form1
     '                                        newshow.episodeno = mirrorselection.InnerText
     '                                    End If
     '                                Case "SeasonNumber"
-    '                                    newshow.seasonno = mirrorselection.InnerText
+    '                                    newshow.Season.value = mirrorselection.InnerText
     '                                Case "EpisodeName"
     '                                    newshow.title = mirrorselection.InnerText
     '                                Case "FirstAired"
@@ -28761,7 +28761,7 @@ Public Class Form1
 
     '                        If aired = True Then newshow.tvdbid = "true"
     '                        If aired = False Then newshow.tvdbid = "false"
-    '                        newshow.episodepath = item.fullpath
+    '                        newshow.VideoFilePath = item.fullpath
     '                        Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
     '                End Select
     '            Next
@@ -28807,11 +28807,11 @@ Public Class Form1
     '        Dim newshow As New TvEpisode
     '        newshow = e.UserState
     '        For Each item In TvShows
-    '            If item.fullpath = newshow.episodepath Then
-    '                If Convert.ToInt32(newshow.seasonno) > 0 And newshow.title <> "" And newshow.tvdbid = "true" Then
+    '            If item.fullpath = newshow.VideoFilePath Then
+    '                If Convert.ToInt32(newshow.Season.value) > 0 And newshow.title <> "" And newshow.tvdbid = "true" Then
     '                    Dim exists As Boolean = False
     '                    For Each ep In item.allepisodes
-    '                        If ep.episodeno = newshow.episodeno And ep.seasonno = newshow.seasonno Then
+    '                        If ep.episodeno = newshow.episodeno And ep.Season.value = newshow.Season.value Then
     '                            exists = True
     '                            Exit For
     '                        End If
@@ -28828,7 +28828,7 @@ Public Class Form1
     '                        Next
 
     '                        Dim seasonstring As String = Nothing
-    '                        Dim seasonno As Integer = Convert.ToInt32(newshow.seasonno)
+    '                        Dim seasonno As Integer = Convert.ToInt32(newshow.Season.value)
     '                        Dim tempstring As String = String.Empty
     '                        If seasonno <> 0 And seasonno <> -1 Then
     '                            If seasonno < 10 Then
@@ -28884,7 +28884,7 @@ Public Class Form1
     '                                    Exit For
     '                                End If
     '                            Next
-    '                            newshow.episodepath = tempstring2
+    '                            newshow.VideoFilePath = tempstring2
     '                            item.missingepisodes.Add(newshow)
     '                            ToolStripStatusLabel2.Text = "Adding: " & eps
     '                        End If
@@ -29763,8 +29763,8 @@ Public Class Form1
                     'progresstext = "Working on Episodes: " & basictvlist(f).title
                     'tvbckrescrapewizard.ReportProgress(999999, progresstext)
                     For g = TvShows(f).allepisodes.Count - 1 To 0 Step -1
-                        progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount & ", Episode: " & TvShows(f).allepisodes(g).seasonno & "x" & TvShows(f).allepisodes(g).episodeno
-                        'progresstext = "Working on " & basictvlist(f).title & ", Episode: " & basictvlist(f).allepisodes(g).seasonno & "x" & basictvlist(f).allepisodes(g).episodeno
+                        progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount & ", Episode: " & TvShows(f).allepisodes(g).Season.value & "x" & TvShows(f).allepisodes(g).Episode.Value
+                        'progresstext = "Working on " & basictvlist(f).title & ", Episode: " & basictvlist(f).allepisodes(g).Season.value & "x" & basictvlist(f).allepisodes(g).episodeno
                         If done > 0 Then
                             progress = (100 / showprocesscount) * done
                         Else
@@ -29774,9 +29774,9 @@ Public Class Form1
                         If tvBatchList.doEpisodeBody = True Or (tvBatchList.doEpisodeActors = True And TvShows(f).episodeactorsource <> "") Or (tvBatchList.doEpisodeArt = True) Then
                             Dim listofnewepisodes As New List(Of TvEpisode)
                             listofnewepisodes.Clear()
-                            listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(TvShows(f).allepisodes(g).episodepath)
+                            listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(TvShows(f).allepisodes(g).VideoFilePath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1
-                                If listofnewepisodes(h).seasonno = TvShows(f).allepisodes(g).seasonno And listofnewepisodes(h).episodeno = TvShows(f).allepisodes(g).episodeno Then
+                                If listofnewepisodes(h).Season.value = TvShows(f).allepisodes(g).Season.value And listofnewepisodes(h).Episode.Value = TvShows(f).allepisodes(g).Episode.Value Then
                                     Dim newactors As New List(Of str_MovieActors)
                                     newactors.Clear()
                                     Dim sortorder As String = TvShows(f).sortorder
@@ -29784,8 +29784,8 @@ Public Class Form1
                                     Dim actorsource As String = TvShows(f).episodeactorsource
                                     Dim tvdbid As String = TvShows(f).tvdbid
                                     Dim imdbid As String = TvShows(f).imdbid
-                                    Dim seasonno As String = TvShows(f).allepisodes(g).seasonno
-                                    Dim episodeno As String = TvShows(f).allepisodes(g).episodeno
+                                    Dim seasonno As String = TvShows(f).allepisodes(g).Season.value
+                                    Dim episodeno As String = TvShows(f).allepisodes(g).Episode.Value
                                     'its an episode
                                     Dim episodescreenurl As String = ""
                                     'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -29804,11 +29804,11 @@ Public Class Form1
                                                     'listofnewepisodes(h).title = thisresult.InnerText
                                                 Case "premiered"
                                                     If tvBatchList.epAired = True Then
-                                                        listofnewepisodes(h).aired = thisresult.InnerText
+                                                        listofnewepisodes(h).Aired.Value = thisresult.InnerText
                                                     End If
                                                 Case "plot"
                                                     If tvBatchList.epPlot = True Then
-                                                        listofnewepisodes(h).plot = thisresult.InnerText
+                                                        listofnewepisodes(h).Plot.Value = thisresult.InnerText
                                                     End If
                                                 Case "director"
                                                     If tvBatchList.epDirector = True Then
@@ -29817,7 +29817,7 @@ Public Class Form1
                                                         tempstring = tempstring.TrimStart("|")
                                                         tempstring = tempstring.TrimEnd("|")
                                                         tempstring = tempstring.Replace("|", " / ")
-                                                        listofnewepisodes(h).director = tempstring
+                                                        listofnewepisodes(h).Director.Value = tempstring
                                                     End If
                                                 Case "credits"
                                                     Dim tempstring As String = ""
@@ -29826,20 +29826,20 @@ Public Class Form1
                                                         tempstring = tempstring.TrimStart("|")
                                                         tempstring = tempstring.TrimEnd("|")
                                                         tempstring = tempstring.Replace("|", " / ")
-                                                        listofnewepisodes(h).credits = tempstring
+                                                        listofnewepisodes(h).Credits.Value = tempstring
                                                     End If
                                                 Case "rating"
                                                     If tvBatchList.epRating = True Then
-                                                        listofnewepisodes(h).rating = thisresult.InnerText
+                                                        listofnewepisodes(h).Rating.Value = thisresult.InnerText
                                                     End If
-                                                    TvShows(f).allepisodes(g).rating = thisresult.InnerText
+                                                    TvShows(f).allepisodes(g).Rating.Value = thisresult.InnerText
                                                 Case "thumb"
                                                     episodescreenurl = thisresult.InnerText
                                                     Dim downloadok As Boolean = True
                                                     If tvBatchList.doEpisodeArt = True And tvBatchList.epScreenshot = True Then
                                                         If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
                                                             Try
-                                                                Dim screenshotpath As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
+                                                                Dim screenshotpath As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
                                                                 If Not IO.File.Exists(screenshotpath) Then
                                                                     Dim buffer(4000000) As Byte
                                                                     Dim size As Integer = 0
@@ -29865,18 +29865,18 @@ Public Class Form1
                                                             Catch
                                                             End Try
                                                         Else
-                                                            Dim thumbpathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
-                                                            Dim pathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), "")
+                                                            Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
+                                                            Dim pathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "")
                                                             If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
-                                                                progresstext = listofnewepisodes(h).episodepath
+                                                                progresstext = listofnewepisodes(h).VideoFilePath
                                                                 tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
                                                         End If
                                                         If downloadok = False Then
-                                                            Dim thumbpathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), ".tbn")
-                                                            Dim pathandfilename As String = listofnewepisodes(h).episodepath.Replace(IO.Path.GetExtension(listofnewepisodes(h).episodepath), "")
+                                                            Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
+                                                            Dim pathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "")
                                                             If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
-                                                                progresstext = listofnewepisodes(h).episodepath
+                                                                progresstext = listofnewepisodes(h).VideoFilePath
                                                                 tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
                                                         End If
@@ -29905,9 +29905,9 @@ Public Class Form1
                                         If TvShows(f).episodeactorsource = "imdb" And tvBatchList.epActor = True Then
                                             Dim ac As New actors
                                             Dim actorlist As New List(Of str_MovieActors)
-                                            actorlist = ac.EpisodeGetImdbActors(TvShows(f).imdbid, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno)
+                                            actorlist = ac.EpisodeGetImdbActors(TvShows(f).imdbid, listofnewepisodes(h).Season.value, listofnewepisodes(h).Episode.Value)
                                             If Preferences.actorseasy = True Then
-                                                ac.savelocalactors(listofnewepisodes(h).episodepath, actorlist, TvShows(f).fullpath, True)
+                                                ac.savelocalactors(listofnewepisodes(h).VideoFilePath, actorlist, TvShows(f).fullpath, True)
                                             End If
                                         End If
                                     Catch ex As Exception
@@ -29919,7 +29919,7 @@ Public Class Form1
                                     For Each Episode In listofnewepisodes
                                         Episode.Save()
                                     Next
-                                    'Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).episodepath, listofnewepisodes(h).seasonno, listofnewepisodes(h).episodeno, True )
+                                    'Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).VideoFilePath, listofnewepisodes(h).Season.value, listofnewepisodes(h).episodeno, True )
                                     Exit For
                                 End If
 
@@ -29935,17 +29935,17 @@ Public Class Form1
                         If tvBatchList.doEpisodeMediaTags = True Then
                             Dim listofnewepisodes As New List(Of TvEpisode)
                             listofnewepisodes.Clear()
-                            listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(TvShows(f).allepisodes(g).episodepath)
+                            listofnewepisodes = nfoFunction.loadfullepisodenfogeneric(TvShows(f).allepisodes(g).VideoFilePath)
                             For h = listofnewepisodes.Count - 1 To 0 Step -1
-                                listofnewepisodes(h).filedetails = Preferences.Get_HdTags(Utilities.GetFileName(listofnewepisodes(h).episodepath))
-                                If listofnewepisodes(h).filedetails.filedetails_video.duration <> Nothing Then
+                                listofnewepisodes(h).Details = Preferences.Get_HdTags(Utilities.GetFileName(listofnewepisodes(h).VideoFilePath))
+                                If listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
                                         Dim tempint As Integer
                                         Dim hours As Integer
                                         Dim minutes As Integer
                                         Dim tempstring As String
-                                        tempstring = listofnewepisodes(h).filedetails.filedetails_video.duration
+                                        tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
                                         tempint = tempstring.IndexOf("h")
                                         If tempint <> -1 Then
                                             hours = Convert.ToInt32(tempstring.Substring(0, tempint))
@@ -30705,22 +30705,22 @@ Public Class Form1
                 '
                 Dim f = 0                                           'We find each episode individually so we only need to look at the first index
                 If WorkingEpisode.aired <> Nothing Then          'If we have a valid date figure then set our date figure
-                    EpAired = WorkingEpisode.aired
+                    EpAired = WorkingEpisode.Aired.Value
 
                     'Convert episode to 2 digits for formatting
                     Dim episode2digit As New List(Of String)
                     episode2digit.Clear()
-                    episode2digit.Add(WorkingEpisode.episodeno)
+                    episode2digit.Add(WorkingEpisode.Episode.Value)
                     If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
 
                     'Convert season to 2 digits for formatting
-                    Dim season2digit As String = WorkingEpisode.seasonno
+                    Dim season2digit As String = WorkingEpisode.Season.value
                     If season2digit.Length = 1 Then season2digit = "0" & season2digit
 
                     'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
                     'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
                     'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
-                    mySortedList.Add(WorkingEpisode.aired, Renamer.setTVFilename(WorkingTvShow.title, WorkingEpisode.title, episode2digit, season2digit))
+                    mySortedList.Add(WorkingEpisode.Aired, Renamer.setTVFilename(WorkingTvShow.title, WorkingEpisode.Title.Value, episode2digit, season2digit))
 
                 End If
             Next

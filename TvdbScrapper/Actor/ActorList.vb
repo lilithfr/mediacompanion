@@ -23,5 +23,6 @@ Namespace Tvdb
             Me.Add(NewActor)
 
         End Sub
+
     End Class
 End Namespace

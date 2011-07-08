@@ -1071,7 +1071,7 @@ Public Class Form2
         workingmovieedit.filedetails.filedetails_video.codecid = Nothing
         workingmovieedit.filedetails.filedetails_video.codecinfo = Nothing
         workingmovieedit.filedetails.filedetails_video.container = Nothing
-        workingmovieedit.filedetails.filedetails_video.duration = Nothing
+        workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value = Nothing
         workingmovieedit.filedetails.filedetails_video.formatinfo = Nothing
         workingmovieedit.filedetails.filedetails_video.height = Nothing
         workingmovieedit.filedetails.filedetails_video.scantype = Nothing

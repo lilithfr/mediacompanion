@@ -234,6 +234,15 @@ Public Class TvShow
             Return Count
         End Get
     End Property
+
+    Public Sub SearchForNewEpisodes()
+        'Enumerate Files in this shows folder
+        '   Does it have an nfo file?
+        '       Yes? Is it already added to the tv show?
+        '           Load if nececery and skip without comment
+        '       No? Create an episode object for the file, add it to the show
+        'Enumerate all shows and make sure they are nfoed and if not scrape
+    End Sub
 End Class
 
 Public Enum ShowState

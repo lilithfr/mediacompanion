@@ -733,8 +733,8 @@ Module General
             Dim tempmediainfo As String
             Dim tempmediainfo2 As String
 
-            workingfiledetails.filedetails_video.width = MI.Get_(StreamKind.Visual, curVS, "Width")
-            workingfiledetails.filedetails_video.height = MI.Get_(StreamKind.Visual, curVS, "Height")
+            workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
+            workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
             If workingfiledetails.filedetails_video.width <> Nothing Then
                 If IsNumeric(workingfiledetails.filedetails_video.width) Then
                     If workingfiledetails.filedetails_video.height <> Nothing Then
@@ -754,9 +754,9 @@ Module General
                                 Dim DisplayAspectRatio As String = Information.Substring(BeginString, SizeofString).Trim(" ", ":", Chr(10), Chr(13))
                                 'DisplayAspectRatio = DisplayAspectRatio.Substring(0, Len(DisplayAspectRatio) - 1)
                                 If Len(DisplayAspectRatio) > 0 Then
-                                    workingfiledetails.filedetails_video.aspect = DisplayAspectRatio
+                                    workingfiledetails.filedetails_video.Aspect.Value = DisplayAspectRatio
                                 Else
-                                    workingfiledetails.filedetails_video.aspect = "Unknown"
+                                    workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
                                 End If
 
                             Catch ex As Exception
@@ -778,15 +778,15 @@ Module General
 
             'workingfiledetails.filedetails_video.codec = tempmediainfo2
             'workingfiledetails.filedetails_video.formatinfo = tempmediainfo
-            workingfiledetails.filedetails_video.codec = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            If workingfiledetails.filedetails_video.codec = "DX50" Then
-                workingfiledetails.filedetails_video.codec = "DIVX"
+            workingfiledetails.filedetails_video.Codec.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            If workingfiledetails.filedetails_video.Codec.Value = "DX50" Then
+                workingfiledetails.filedetails_video.Codec.Value = "DIVX"
             End If
             '_MPEG4/ISO/AVC
-            If workingfiledetails.filedetails_video.codec.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
-                workingfiledetails.filedetails_video.codec = "h264"
+            If workingfiledetails.filedetails_video.Codec.Value.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
+                workingfiledetails.filedetails_video.Codec.Value = "h264"
             End If
-            workingfiledetails.filedetails_video.formatinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            workingfiledetails.filedetails_video.FormatInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
             Dim fs(100) As String
             For f = 1 To 100
                 fs(f) = MI.Get_(StreamKind.Visual, 0, f)
@@ -794,7 +794,7 @@ Module General
 
             Try
                 If playlist.Count = 1 Then
-                    workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 61)
+                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 61)
                 ElseIf playlist.Count > 1 Then
                     Dim totalmins As Integer = 0
                     For f = 0 To playlist.Count - 1
@@ -828,22 +828,22 @@ Module General
                             End Try
                         End If
                     Next
-                    workingfiledetails.filedetails_video.duration = totalmins & " min"
+                    workingfiledetails.filedetails_video.DurationInSeconds.Value = totalmins & " min"
                 End If
             Catch
-                workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 57)
+                workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 57)
             End Try
-            workingfiledetails.filedetails_video.bitrate = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
-            workingfiledetails.filedetails_video.bitratemode = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
+            workingfiledetails.filedetails_video.Bitrate.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
+            workingfiledetails.filedetails_video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
 
-            workingfiledetails.filedetails_video.bitratemax = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
+            workingfiledetails.filedetails_video.BitrateMax.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
 
             tempmediainfo = IO.Path.GetExtension(filename) '"This is the extension of the file"
-            workingfiledetails.filedetails_video.container = tempmediainfo
+            workingfiledetails.filedetails_video.Container.Value = tempmediainfo
             'workingfiledetails.filedetails_video.codecid = MI.Get_(StreamKind.Visual, curVS, "CodecID")
 
-            workingfiledetails.filedetails_video.codecinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
-            workingfiledetails.filedetails_video.scantype = MI.Get_(StreamKind.Visual, curVS, 102)
+            workingfiledetails.filedetails_video.CodecInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
+            workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, 102)
             'Video()
             'Format                     : MPEG-4 Visual
             'Format profile             : Streaming Video@L1
@@ -873,21 +873,21 @@ Module General
             'get audio data
             If numOfAudioStreams > 0 Then
                 While curAS < numOfAudioStreams
-                    Dim audio As New str_MediaNFOAudio(SetDefaults)
-                    audio.language = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
+                    Dim audio As New Nfo.AudioDetails
+                    audio.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
-                        audio.codec = "MP3"
+                        audio.Codec.Value = "MP3"
                     Else
-                        audio.codec = MI.Get_(StreamKind.Audio, curAS, "Format")
+                        audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
                     End If
-                    If audio.codec = "AC-3" Then
-                        audio.codec = "AC3"
+                    If audio.Codec.Value = "AC-3" Then
+                        audio.Codec.Value = "AC3"
                     End If
-                    If audio.codec = "DTS" Then
-                        audio.codec = "dca"
+                    If audio.Codec.Value = "DTS" Then
+                        audio.Codec.Value = "dca"
                     End If
-                    audio.channels = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
-                    audio.bitrate = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
+                    audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
+                    audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
                     workingfiledetails.filedetails_audio.Add(audio)
                     curAS += 1
                 End While
@@ -898,8 +898,8 @@ Module General
             Dim curSS As Integer = 0
             If numOfSubtitleStreams > 0 Then
                 While curSS < numOfSubtitleStreams
-                    Dim sublanguage As New str_MediaNFOSubtitles(SetDefaults)
-                    sublanguage.language = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
+                    Dim sublanguage As New Nfo.SubtitleDetails
+                    sublanguage.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
                 End While
@@ -916,33 +916,33 @@ Module General
         Dim WorkingFileDetails As FullFileDetails = get_hdtags(Filename)
         Dim FileInfoString As String = "<movie>" & vbLf & "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
 
-        If WorkingFileDetails.filedetails_video.width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.width & "</width>" & vbLf
-        If WorkingFileDetails.filedetails_video.height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.height & "</height>" & vbLf
-        If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
-        If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
-        If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
-        If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
-        If WorkingFileDetails.filedetails_video.container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.container & "</container>" & vbLf
-        If WorkingFileDetails.filedetails_video.codecid <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.codecid & "</codecid>" & vbLf
-        If WorkingFileDetails.filedetails_video.codecinfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.codecinfo & "</codecinfo>" & vbLf
-        If WorkingFileDetails.filedetails_video.scantype <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.scantype & "</scantype>" & vbLf
+        If WorkingFileDetails.filedetails_video.Width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.Width.Value & "</width>" & vbLf
+        If WorkingFileDetails.filedetails_video.Height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.Height.Value & "</height>" & vbLf
+        If WorkingFileDetails.filedetails_video.Aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.Aspect.Value & "</aspect>" & vbLf
+        If WorkingFileDetails.filedetails_video.Codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.Codec.Value & "</codec>" & vbLf
+        If WorkingFileDetails.filedetails_video.FormatInfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.FormatInfo.Value & "</format>" & vbLf
+        If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</duration>" & vbLf
+        If WorkingFileDetails.filedetails_video.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.Bitrate.Value & "</bitrate>" & vbLf
+        If WorkingFileDetails.filedetails_video.BitrateMode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.BitrateMode.Value & "</bitratemode>" & vbLf
+        If WorkingFileDetails.filedetails_video.BitrateMax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.BitrateMax.Value & "</bitratemax>" & vbLf
+        If WorkingFileDetails.filedetails_video.Container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.Container.Value & "</container>" & vbLf
+        If WorkingFileDetails.filedetails_video.CodecId <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.CodecId.Value & "</codecid>" & vbLf
+        If WorkingFileDetails.filedetails_video.CodecInfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.CodecInfo.Value & "</codecinfo>" & vbLf
+        If WorkingFileDetails.filedetails_video.ScanType <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.ScanType.Value & "</scantype>" & vbLf
         FileInfoString &= "</video>" & vbLf
         If WorkingFileDetails.filedetails_audio.Count > 0 Then
             For Each item In WorkingFileDetails.filedetails_audio
                 FileInfoString &= "<audio>" & vbLf
-                If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
-                If item.codec <> Nothing Then FileInfoString &= "<codec>" & item.codec & "</codec>" & vbLf
-                If item.channels <> Nothing Then FileInfoString &= "<channels>" & item.channels & "</channels>" & vbLf
-                If item.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.bitrate & "</bitrate>" & vbLf
+                If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
+                If item.Codec <> Nothing Then FileInfoString &= "<codec>" & item.Codec.Value & "</codec>" & vbLf
+                If item.Channels <> Nothing Then FileInfoString &= "<channels>" & item.Channels.Value & "</channels>" & vbLf
+                If item.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.Bitrate.Value & "</bitrate>" & vbLf
                 FileInfoString &= "</audio>" & vbLf
             Next
             If WorkingFileDetails.filedetails_subtitles.Count > 0 Then
                 FileInfoString &= "<subtitle>" & vbLf
                 For Each item In WorkingFileDetails.filedetails_subtitles
-                    If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
+                    If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
                 Next
                 FileInfoString &= "</subtitle>" & vbLf
             End If
@@ -1022,7 +1022,7 @@ Module General
 
         End If
         '-----------------End Resize Fanart
-            Return True
+        Return True
 
     End Function
     Public Function SearchExtraIDinNFO(ByVal Filename As String) As String
@@ -1395,7 +1395,7 @@ Module General
         'Teste.plot = entrada.plot
         'Teste.rating = entrada.rating
         'Teste.runtime = entrada.runtime
-        'Teste.seasonno = entrada.seasonNO
+        'Teste.Season.value = entrada.Season.value
         'Teste.thumb = entrada.thumb
         'Teste.title = entrada.title
         Return entrada
@@ -1567,34 +1567,34 @@ Module General
         For n As Integer = 0 To Entrada.Length - 1
             FileInfoString &= "<episodedetails>" & vbLf & "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
 
-            If WorkingFileDetails.filedetails_video.width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.width & "</width>" & vbLf
-            If WorkingFileDetails.filedetails_video.height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.height & "</height>" & vbLf
-            If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
-            If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
-            If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
-            If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
-            If WorkingFileDetails.filedetails_video.duration <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.duration).ToString
-            If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
-            If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
-            If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
-            If WorkingFileDetails.filedetails_video.container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.container & "</container>" & vbLf
-            If WorkingFileDetails.filedetails_video.codecid <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.codecid & "</codecid>" & vbLf
-            If WorkingFileDetails.filedetails_video.codecinfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.codecinfo & "</codecinfo>" & vbLf
-            If WorkingFileDetails.filedetails_video.scantype <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.scantype & "</scantype>" & vbLf
+            If WorkingFileDetails.filedetails_video.Width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.Width.Value & "</width>" & vbLf
+            If WorkingFileDetails.filedetails_video.Height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.Height.Value & "</height>" & vbLf
+            If WorkingFileDetails.filedetails_video.Aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.Aspect.Value & "</aspect>" & vbLf
+            If WorkingFileDetails.filedetails_video.Codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.Codec.Value & "</codec>" & vbLf
+            If WorkingFileDetails.filedetails_video.FormatInfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.FormatInfo.Value & "</format>" & vbLf
+            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</duration>" & vbLf
+            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value).ToString
+            If WorkingFileDetails.filedetails_video.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.Bitrate.Value & "</bitrate>" & vbLf
+            If WorkingFileDetails.filedetails_video.BitrateMode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.BitrateMode.Value & "</bitratemode>" & vbLf
+            If WorkingFileDetails.filedetails_video.BitrateMax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.BitrateMax.Value & "</bitratemax>" & vbLf
+            If WorkingFileDetails.filedetails_video.Container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.Container.Value & "</container>" & vbLf
+            If WorkingFileDetails.filedetails_video.CodecId <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.CodecId.Value & "</codecid>" & vbLf
+            If WorkingFileDetails.filedetails_video.CodecInfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.CodecInfo.Value & "</codecinfo>" & vbLf
+            If WorkingFileDetails.filedetails_video.ScanType <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.ScanType.Value & "</scantype>" & vbLf
             FileInfoString &= "</video>" & vbLf
             If WorkingFileDetails.filedetails_audio.Count > 0 Then
                 For Each item In WorkingFileDetails.filedetails_audio
                     FileInfoString &= "<audio>" & vbLf
-                    If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
-                    If item.codec <> Nothing Then FileInfoString &= "<codec>" & item.codec & "</codec>" & vbLf
-                    If item.channels <> Nothing Then FileInfoString &= "<channels>" & item.channels & "</channels>" & vbLf
-                    If item.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.bitrate & "</bitrate>" & vbLf
+                    If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
+                    If item.Codec <> Nothing Then FileInfoString &= "<codec>" & item.Codec.Value & "</codec>" & vbLf
+                    If item.Channels <> Nothing Then FileInfoString &= "<channels>" & item.Channels.Value & "</channels>" & vbLf
+                    If item.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.Bitrate.Value & "</bitrate>" & vbLf
                     FileInfoString &= "</audio>" & vbLf
                 Next
                 If WorkingFileDetails.filedetails_subtitles.Count > 0 Then
                     FileInfoString &= "<subtitle>" & vbLf
                     For Each item In WorkingFileDetails.filedetails_subtitles
-                        If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
+                        If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
                     Next
                     FileInfoString &= "</subtitle>" & vbLf
                 End If
@@ -1631,47 +1631,47 @@ Module General
         Dim Counter As Integer = 0
 
         For Each m_node In m_nodelist
-            TempXMLEpisode.aired = Nothing
-            TempXMLEpisode.credits = Nothing
-            TempXMLEpisode.director = Nothing
-            TempXMLEpisode.episodeNO = Nothing
-            TempXMLEpisode.genre = Nothing
-            TempXMLEpisode.plot = Nothing
-            TempXMLEpisode.rating = Nothing
-            TempXMLEpisode.seasonNO = Nothing
-            TempXMLEpisode.thumb = Nothing
-            TempXMLEpisode.title = Nothing
-            TempXMLEpisode.listactors.Clear()
+            TempXMLEpisode.Aired = Nothing
+            TempXMLEpisode.Credits = Nothing
+            TempXMLEpisode.Director = Nothing
+            TempXMLEpisode.Episode.Value = Nothing
+            TempXMLEpisode.Genre = Nothing
+            TempXMLEpisode.Plot = Nothing
+            TempXMLEpisode.Rating = Nothing
+            TempXMLEpisode.Season.Value = Nothing
+            TempXMLEpisode.Thumbnail.FileName = Nothing
+            TempXMLEpisode.Title = Nothing
+            TempXMLEpisode.ListActors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
-                        TempXMLEpisode.aired = NodeChild.InnerText
+                        TempXMLEpisode.Aired.Value = NodeChild.InnerText
                     Case "credits"
-                        If TempXMLEpisode.credits = Nothing Then
-                            TempXMLEpisode.credits = NodeChild.InnerText
+                        If TempXMLEpisode.Credits.Value Is Nothing Then
+                            TempXMLEpisode.Credits.Value = NodeChild.InnerText
                         Else
-                            TempXMLEpisode.credits &= " / " & NodeChild.InnerText
+                            TempXMLEpisode.Credits.Value &= " / " & NodeChild.InnerText
                         End If
                     Case "director"
-                        TempXMLEpisode.director = NodeChild.InnerText
+                        TempXMLEpisode.Director.Value = NodeChild.InnerText
                     Case "genre"
-                        If TempXMLEpisode.genre = Nothing Then
-                            TempXMLEpisode.genre = NodeChild.InnerText
+                        If TempXMLEpisode.Genre.Value Is Nothing Then
+                            TempXMLEpisode.Genre.Value = NodeChild.InnerText
                         Else
-                            TempXMLEpisode.genre &= " / " & NodeChild.InnerText
+                            TempXMLEpisode.Genre.Value &= " / " & NodeChild.InnerText
                         End If
                     Case "plot"
-                        TempXMLEpisode.plot = NodeChild.InnerText
+                        TempXMLEpisode.Plot.Value = NodeChild.InnerText
                     Case "rating"
-                        TempXMLEpisode.rating = NodeChild.InnerText
+                        TempXMLEpisode.Rating.Value = NodeChild.InnerText
                     Case "thumb"
-                        TempXMLEpisode.thumb = NodeChild.InnerText
+                        TempXMLEpisode.Thumbnail.FileName = NodeChild.InnerText
                     Case "title"
-                        TempXMLEpisode.title = NodeChild.InnerText
+                        TempXMLEpisode.Title.Value = NodeChild.InnerText
                     Case "season"
-                        TempXMLEpisode.seasonNO = NodeChild.InnerText
+                        TempXMLEpisode.Season.Value = NodeChild.InnerText
                     Case "episode"
-                        TempXMLEpisode.episodeNO = NodeChild.InnerText
+                        TempXMLEpisode.Episode.Value = NodeChild.InnerText
                     Case "actor"
                         For Each Nodechild1 In NodeChild.ChildNodes
                             Select Case Nodechild1.Name
@@ -1684,7 +1684,7 @@ Module General
                                 Case "actorid"
                             End Select
                         Next
-                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.listactors.Add(newActor)
+                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.ListActors.Add(newActor)
                 End Select
             Next
             episodeXMLinformation.Add(TempXMLEpisode)
@@ -1838,20 +1838,20 @@ Module General
         Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
 
         For n As Integer = 0 To EpisodeArray.Count - 1
-            EpisodeArray(n).seasonno = CInt(EpisodeArray(n).seasonno)
-            EpisodeArray(n).episodeno = CInt(EpisodeArray(n).episodeno)
-            TempXMLEpisode.episodePath = EpisodeArray(n).mediaextension.Substring(0, EpisodeArray(n).mediaextension.LastIndexOf(".")) & ".nfo"
-            TempXMLEpisode.episodeNO = EpisodeArray(n).episodeno
-            TempXMLEpisode.seasonNO = EpisodeArray(n).seasonno
+            EpisodeArray(n).Season.value = CInt(EpisodeArray(n).Season.value)
+            EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
+            TempXMLEpisode.VideoFilePath = EpisodeArray(n).MediaExtension.Substring(0, EpisodeArray(n).MediaExtension.LastIndexOf(".")) & ".nfo"
+            TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
+            TempXMLEpisode.Season.value = EpisodeArray(n).Season.value
             TempXMLEpisode.mediaExtension = EpisodeArray(n).mediaextension
-            TempXMLEpisode.playCount = "0"
+            TempXMLEpisode.PlayCount.Value = "0"
             ParametersForScraper(1) = TVDBId
             ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
             ParametersForScraper(4) = Nothing
             Try
                 For x As Integer = 0 To 20
-                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).seasonno & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
-                    'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).seasonno & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
+                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
+                    'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
                     If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
                         Exit For
                     Else
@@ -1874,12 +1874,12 @@ Module General
 
         FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).mediaextension)
         episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
-        If episodeInformation(0).thumb <> Nothing Then
+        If episodeInformation(0).Thumbnail.FileName <> Nothing Then
             Dim myWebClient As New System.Net.WebClient()
-            Dim ImageFilename As String = EpisodeArray(0).mediaextension.Substring(0, EpisodeArray(0).mediaextension.LastIndexOf(".")) & ".tbn"
-            myWebClient.DownloadFile(episodeInformation(0).thumb, ImageFilename)
+            Dim ImageFilename As String = EpisodeArray(0).MediaExtension.Substring(0, EpisodeArray(0).MediaExtension.LastIndexOf(".")) & ".tbn"
+            myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
         End If
-        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.episodePath, FinalScrapResult)
+        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.VideoFilePath, FinalScrapResult)
 
         Return episodeInformation
     End Function

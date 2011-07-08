@@ -42,10 +42,13 @@ Public Class TvEpisode
             Return _VideoFilePath
         End Get
         Set(ByVal value As String)
-            Me.PureName = value.Replace(IO.Path.GetExtension(value), "")
+            Me.MediaExtension = IO.Path.GetExtension(value)
+            Me.PureName = value.Replace(Me.MediaExtension, "")
             _VideoFilePath = value
         End Set
     End Property
+
+    Public Property MediaExtension As String
 
     Public Property Title As New ProtoProperty(Me, "title")
     Public Property Rating As New ProtoProperty(Me, "rating")
@@ -111,7 +114,7 @@ Public Class TvEpisode
             Else
                 Me.EpisodeNode.ForeColor = Drawing.Color.Black
             End If
-            Return _Missing
+            Return CBool(_Missing.Value)
         End Get
         Set(ByVal value As Boolean)
             Missing.Value = CStr(value)

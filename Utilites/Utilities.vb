@@ -434,6 +434,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim tempfilename As String = path
         Dim actualpathandfilename As String = ""
 
+        If String.IsNullOrEmpty(path) Then Return Nothing
 
         If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
             actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
@@ -556,7 +557,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         For Each Item In ChildList
-            If (Item.ToString.IndexOf(".actors") <> -1) Then Exit For
+            If (Item.ToString.Contains(".actors")) Then Continue For
             If Level <= MaxLevels Then
                 If ValidMovieDir(Item) Then
                     TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))

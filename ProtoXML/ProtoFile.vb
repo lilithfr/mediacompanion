@@ -1,7 +1,6 @@
 ﻿Public Class ProtoFile
     Implements IProtoXFile
 
-
     Public Sub New(ByVal NodeName As String)
         Me.NodeName = NodeName
     End Sub
@@ -47,6 +46,7 @@
             Return _NfoFilePath
         End Get
         Set(ByVal value As String)
+            If _NfoFilePath <> value Then Me.IsAltered = True
             Dim Parts() As String
             Parts = value.Split("\")
             _FolderPath = Parts(0)
@@ -55,6 +55,7 @@
             Next
             _FolderPath &= "\"
             _NfoFilePath = value
+
         End Set
     End Property
 
@@ -66,10 +67,12 @@
     End Property
 
     Public Overridable Sub Load() Implements IProtoXFile.Load
+        Me.IsAltered = False
         Me.Load(Me.NfoFilePath)
     End Sub
 
     Public Overridable Sub Load(ByVal Path As String) Implements IProtoXFile.Load
+        Me.IsAltered = True
         Me.CleanDoc()
         If IO.File.Exists(Path) Then
             Me.Doc = XDocument.Load(Path)
@@ -81,7 +84,6 @@
 
 
     Public Sub LoadXml(ByVal Input As XNode)
-
         Me.Doc = New XDocument(Input)
 
         LoadDoc()
@@ -89,7 +91,7 @@
 
 
     Public Sub LoadXml(ByVal Input As String)
-
+        Me.IsAltered = True
         Me.Doc = XDocument.Parse(Input)
 
         LoadDoc()
@@ -114,10 +116,12 @@
     End Sub
 
     Public Sub Save() Implements IProtoXFile.Save
+        Me.IsAltered = True
         Me.Save(Me.NfoFilePath)
     End Sub
 
     Public Sub Save(ByVal Path As String) Implements IProtoXFile.Save
+        'IsAltred shouldn't be set here, Save() isn't called the actual file referenced in NfoFilePath may not match what is in the current file
         Me.CleanDoc()
 
         Doc.Save(Path)
@@ -180,4 +184,19 @@
             Return IO.File.Exists(Me.NfoFilePath)
         End Get
     End Property
+
+    Public Sub HandleChildValueChanged(ByRef ProtoChild As ProtoXChildBase) Implements IProtoXBase.HandleChildValueChanged
+        Me.IsAltered = True
+        RaiseEvent ValueChanged(ProtoChild)
+    End Sub
+
+    Public Sub RaiseValueChanged(ByRef ProtoChild As ProtoXChildBase) Implements IProtoXBase.RaiseValueChanged
+        Me.IsAltered = True
+        RaiseEvent ValueChanged(ProtoChild)
+    End Sub
+
+    Public Event ValueChanged(ByRef ProtoChild As ProtoXChildBase) Implements IProtoXBase.ValueChanged
+
+    Public Property IsAltered As Boolean Implements IProtoXBase.IsAltered
+
 End Class

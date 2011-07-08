@@ -1,7 +1,8 @@
 ﻿Public Class ProtoPropertyGroup
     Inherits ProtoXChildBase
 
-   
+
+
     Public Sub New()
         MyBase.New()
     End Sub
@@ -40,19 +41,18 @@
 
             End If
         End If
-            Me.Node = Element
+        Me.Node = Element
 
 
-            Dim ChildProperty As IProtoXChild
-            For Each Child As XElement In Me.Node.Nodes
-                If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
-                    ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+        Dim ChildProperty As IProtoXChild
+        For Each Child As XElement In Me.Node.Nodes
+            If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
+                ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
 
-                    ChildProperty.ProcessNode(Child)
-                End If
-            Next
+                ChildProperty.ProcessNode(Child)
+            End If
+        Next
 
     End Sub
 
-    
 End Class

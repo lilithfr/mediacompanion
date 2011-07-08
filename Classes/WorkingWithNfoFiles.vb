@@ -100,7 +100,7 @@ Public Class WorkingWithNfoFiles
     '    Dim FinalString As String = "<episodedetails>"
 
     '    m_xmld = New XmlDocument()
-    '    m_xmld.Load(TempEpisode.episodepath)
+    '    m_xmld.Load(TempEpisode.VideoFilePath)
     '    m_nodelist = m_xmld.SelectNodes("/episodedetails")
     '    For Each m_node In m_nodelist
     '        If m_node.HasChildNodes Then
@@ -287,40 +287,40 @@ Public Class WorkingWithNfoFiles
                 'If Not validate_nfo(path) Then
                 '    Exit Function
                 'End If
-                newtvshow.title = IO.Path.GetFileName(path)
-                newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
-                newtvshow.imdbid = "xml error"
-                newtvshow.episodepath = path
-                newtvshow.tvdbid = ""
-                newtvshow.episodepath = path
-                If newtvshow.episodeno = Nothing Or newtvshow.episodeno = Nothing Then
+                newtvshow.Title.Value = IO.Path.GetFileName(path)
+                'newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
+                newtvshow.ImdbId.Value = "xml error"
+                newtvshow.VideoFilePath = path
+                newtvshow.TvdbId.Value = ""
+                newtvshow.VideoFilePath = path
+                If newtvshow.Episode.Value = Nothing Or newtvshow.Episode.Value = Nothing Then
                     For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newtvshow.episodepath, regexp)
+                        M = Regex.Match(newtvshow.VideoFilePath, regexp)
                         If M.Success = True Then
                             Try
-                                newtvshow.seasonno = M.Groups(1).Value.ToString
-                                newtvshow.episodeno = M.Groups(2).Value.ToString
+                                newtvshow.Season.value = M.Groups(1).Value.ToString
+                                newtvshow.Episode.Value = M.Groups(2).Value.ToString
                                 Exit For
                             Catch
-                                newtvshow.seasonno = "-1"
-                                newtvshow.seasonno = "-1"
+                                newtvshow.Season.value = "-1"
+                                newtvshow.Season.value = "-1"
                             End Try
                         End If
                     Next
                 End If
-                If newtvshow.episodeno = Nothing Then
-                    newtvshow.episodeno = "-1"
+                If newtvshow.Episode.Value = Nothing Then
+                    newtvshow.Episode.Value = "-1"
                 End If
-                If newtvshow.seasonno = Nothing Then
-                    newtvshow.seasonno = "-1"
+                If newtvshow.Season.value = Nothing Then
+                    newtvshow.Season.value = "-1"
                 End If
-                If newtvshow.seasonno.IndexOf("0") = 0 Then
-                    newtvshow.seasonno = newtvshow.seasonno.Substring(1, 1)
+                If newtvshow.Season.value.IndexOf("0") = 0 Then
+                    newtvshow.Season.value = newtvshow.Season.value.Substring(1, 1)
                 End If
-                If newtvshow.episodeno.IndexOf("0") = 0 Then
-                    newtvshow.episodeno = newtvshow.episodeno.Substring(1, 1)
+                If newtvshow.Episode.Value.IndexOf("0") = 0 Then
+                    newtvshow.Episode.Value = newtvshow.Episode.Value.Substring(1, 1)
                 End If
 
                 episodelist.Add(newtvshow)
@@ -343,24 +343,24 @@ Public Class WorkingWithNfoFiles
                 Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
-                        newtvepisode.episodepath = path
+                        newtvepisode.VideoFilePath = path
                         Select Case thisresult.Name
                             Case "title"
-                                newtvepisode.title = thisresult.InnerText
+                                newtvepisode.Title.Value = thisresult.InnerText
                             Case "season"
-                                newtvepisode.seasonno = thisresult.InnerText
+                                newtvepisode.Season.value = thisresult.InnerText
                             Case "episode"
-                                newtvepisode.episodeno = thisresult.InnerText
+                                newtvepisode.Episode.Value = thisresult.InnerText
                             Case "tvdbid"
-                                newtvepisode.tvdbid = thisresult.InnerText
+                                newtvepisode.TvdbId.Value = thisresult.InnerText
                             Case "rating"
-                                newtvepisode.rating = thisresult.InnerText
-                                If newtvepisode.rating.IndexOf("/10") <> -1 Then newtvepisode.rating.Replace("/10", "")
-                                If newtvepisode.rating.IndexOf(" ") <> -1 Then newtvepisode.rating.Replace(" ", "")
+                                newtvepisode.Rating.Value = thisresult.InnerText
+                                If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
+                                If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
                             Case "playcount"
-                                newtvepisode.playcount = thisresult.InnerText
+                                newtvepisode.PlayCount.Value = thisresult.InnerText
                             Case "aired"
-                                newtvepisode.aired = thisresult.InnerText
+                                newtvepisode.Aired.Value = thisresult.InnerText
                         End Select
 
                     Catch ex As Exception
@@ -368,32 +368,32 @@ Public Class WorkingWithNfoFiles
                     End Try
                 Next
 
-                If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
+                If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
                     For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newtvepisode.episodepath, regexp)
+                        M = Regex.Match(newtvepisode.VideoFilePath, regexp)
                         If M.Success = True Then
                             Try
-                                newtvepisode.seasonno = M.Groups(1).Value.ToString
-                                newtvepisode.episodeno = M.Groups(2).Value.ToString
+                                newtvepisode.Season.value = M.Groups(1).Value.ToString
+                                newtvepisode.Episode.Value = M.Groups(2).Value.ToString
                                 Exit For
                             Catch
-                                newtvepisode.seasonno = "-1"
-                                newtvepisode.seasonno = "-1"
+                                newtvepisode.Season.value = "-1"
+                                newtvepisode.Season.value = "-1"
                             End Try
                         End If
                     Next
                 End If
-                If newtvepisode.episodeno = Nothing Then
-                    newtvepisode.episodeno = "-1"
+                If newtvepisode.Episode.Value = Nothing Then
+                    newtvepisode.Episode.Value = "-1"
                 End If
-                If newtvepisode.seasonno = Nothing Then
-                    newtvepisode.seasonno = "-1"
+                If newtvepisode.Season.value = Nothing Then
+                    newtvepisode.Season.value = "-1"
                 End If
-                If newtvepisode.tvdbid = Nothing Then newtvepisode.tvdbid = ""
+                If newtvepisode.TvdbId = Nothing Then newtvepisode.TvdbId.Value = ""
                 'If newtvepisode.status = Nothing Then newtvepisode.status = ""
-                If newtvepisode.rating = Nothing Then newtvepisode.rating = ""
+                If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
                 episodelist.Add(newtvepisode)
             ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
                 Dim temp As String = tvshow.DocumentElement.Name
@@ -403,32 +403,25 @@ Public Class WorkingWithNfoFiles
                             Dim newepisodenfo As XmlNode = Nothing
                             Dim anotherepisode As New TvEpisode
 
-                            anotherepisode.episodepath = ""                 'Nothing
-                            'anotherepisode.status = ""                     'Nothing
-                            anotherepisode.playcount = ""                   'Nothing
-                            anotherepisode.rating = ""                      'Nothing
-                            anotherepisode.seasonno = ""                    'Nothing
-                            anotherepisode.title = ""                       'Nothing
-                            anotherepisode.tvdbid = ""                      'Nothing
                             ' For Each newepisodenfo In thisresult.ChildNodes
                             Dim tempint As Integer = thisresult.ChildNodes.Count - 1
                             For f = 0 To tempint
                                 Try
                                     Select Case thisresult.ChildNodes(f).Name
                                         Case "title"
-                                            anotherepisode.title = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
                                         Case "season"
-                                            anotherepisode.seasonno = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
                                         Case "episode"
-                                            anotherepisode.episodeno = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
                                         Case "tvdbid"
-                                            anotherepisode.tvdbid = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.TvdbId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "rating"
-                                            anotherepisode.rating = thisresult.ChildNodes(f).InnerText
-                                            If anotherepisode.rating.IndexOf("/10") <> -1 Then anotherepisode.rating.Replace("/10", "")
-                                            If anotherepisode.rating.IndexOf(" ") <> -1 Then anotherepisode.rating.Replace(" ", "")
+                                            anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
+                                            If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
+                                            If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
                                         Case "playcount"
-                                            anotherepisode.playcount = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
 
                                     End Select
                                 Catch ex As Exception
@@ -436,33 +429,33 @@ Public Class WorkingWithNfoFiles
                                 End Try
                             Next f
                             Try
-                                anotherepisode.episodepath = path
-                                If anotherepisode.episodeno = Nothing Or anotherepisode.episodeno = Nothing Then
+                                anotherepisode.VideoFilePath = path
+                                If anotherepisode.Episode.Value = Nothing Or anotherepisode.Episode.Value = Nothing Then
                                     For Each regexp In Form1.tv_RegexScraper
 
                                         Dim M As Match
-                                        M = Regex.Match(anotherepisode.episodepath, regexp)
+                                        M = Regex.Match(anotherepisode.VideoFilePath, regexp)
                                         If M.Success = True Then
                                             Try
-                                                anotherepisode.seasonno = M.Groups(1).Value.ToString
-                                                anotherepisode.episodeno = M.Groups(2).Value.ToString
+                                                anotherepisode.Season.value = M.Groups(1).Value.ToString
+                                                anotherepisode.Episode.Value = M.Groups(2).Value.ToString
                                                 Exit For
                                             Catch
-                                                anotherepisode.seasonno = "-1"
-                                                anotherepisode.seasonno = "-1"
+                                                anotherepisode.Season.value = "-1"
+                                                anotherepisode.Season.value = "-1"
                                             End Try
                                         End If
                                     Next
                                 End If
-                                If anotherepisode.episodeno = Nothing Then
-                                    anotherepisode.episodeno = "-1"
+                                If anotherepisode.Episode.Value = Nothing Then
+                                    anotherepisode.Episode.Value = "-1"
                                 End If
-                                If anotherepisode.seasonno = Nothing Then
-                                    anotherepisode.seasonno = "-1"
+                                If anotherepisode.Season.value = Nothing Then
+                                    anotherepisode.Season.value = "-1"
                                 End If
-                                If anotherepisode.tvdbid = Nothing Then anotherepisode.tvdbid = ""
+                                If anotherepisode.TvdbId = Nothing Then anotherepisode.TvdbId.Value = ""
                                 'If anotherepisode.status = Nothing Then anotherepisode.status = ""
-                                If anotherepisode.rating = Nothing Then anotherepisode.rating = ""
+                                If anotherepisode.Rating = Nothing Then anotherepisode.Rating.Value = ""
                                 episodelist.Add(anotherepisode)
                             Catch ex As Exception
                                 MsgBox(ex.ToString)
@@ -485,21 +478,21 @@ Public Class WorkingWithNfoFiles
     '    If Not IO.File.Exists(path) Then
     '        newepisode.title = IO.Path.GetFileName(path)
     '        newepisode.plot = "missing file"
-    '        newepisode.episodepath = path
-    '        newepisode.episodepath = path
+    '        newepisode.VideoFilePath = path
+    '        newepisode.VideoFilePath = path
     '        If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
     '            For Each regexp In Form1.tvRegex
 
     '                Dim M As Match
-    '                M = Regex.Match(newepisode.episodepath, regexp)
+    '                M = Regex.Match(newepisode.VideoFilePath, regexp)
     '                If M.Success = True Then
     '                    Try
-    '                        newepisode.seasonno = M.Groups(1).Value.ToString
+    '                        newepisode.Season.value = M.Groups(1).Value.ToString
     '                        newepisode.episodeno = M.Groups(2).Value.ToString
     '                        Exit For
     '                    Catch
-    '                        newepisode.seasonno = "-1"
-    '                        newepisode.seasonno = "-1"
+    '                        newepisode.Season.value = "-1"
+    '                        newepisode.Season.value = "-1"
     '                    End Try
     '                End If
     '            Next
@@ -507,8 +500,8 @@ Public Class WorkingWithNfoFiles
     '        If newepisode.episodeno = Nothing Then
     '            newepisode.episodeno = "-1"
     '        End If
-    '        If newepisode.seasonno = Nothing Then
-    '            newepisode.seasonno = "-1"
+    '        If newepisode.Season.value = Nothing Then
+    '            newepisode.Season.value = "-1"
     '        End If
     '        Form1.workingEpisode.Add(newepisode)
     '        Return ""
@@ -523,21 +516,21 @@ Public Class WorkingWithNfoFiles
     '            'End If
     '            newepisode.title = IO.Path.GetFileName(path)
     '            newepisode.plot = "problem / xml error"
-    '            newepisode.episodepath = path
-    '            newepisode.episodepath = path
+    '            newepisode.VideoFilePath = path
+    '            newepisode.VideoFilePath = path
     '            If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
     '                For Each regexp In Form1.tvRegex
 
     '                    Dim M As Match
-    '                    M = Regex.Match(newepisode.episodepath, regexp)
+    '                    M = Regex.Match(newepisode.VideoFilePath, regexp)
     '                    If M.Success = True Then
     '                        Try
-    '                            newepisode.seasonno = M.Groups(1).Value.ToString
+    '                            newepisode.Season.value = M.Groups(1).Value.ToString
     '                            newepisode.episodeno = M.Groups(2).Value.ToString
     '                            Exit For
     '                        Catch
-    '                            newepisode.seasonno = "-1"
-    '                            newepisode.seasonno = "-1"
+    '                            newepisode.Season.value = "-1"
+    '                            newepisode.Season.value = "-1"
     '                        End Try
     '                    End If
     '                Next
@@ -545,8 +538,8 @@ Public Class WorkingWithNfoFiles
     '            If newepisode.episodeno = Nothing Then
     '                newepisode.episodeno = "-1"
     '            End If
-    '            If newepisode.seasonno = Nothing Then
-    '                newepisode.seasonno = "-1"
+    '            If newepisode.Season.value = Nothing Then
+    '                newepisode.Season.value = "-1"
     '            End If
     '            Form1.workingEpisode.Add(newepisode)
     '            Return ""
@@ -559,7 +552,7 @@ Public Class WorkingWithNfoFiles
     '            Dim newtvepisode As New TvEpisode
     '            For Each thisresult In tvshow("episodedetails")
     '                Try
-    '                    newtvepisode.episodepath = path
+    '                    newtvepisode.VideoFilePath = path
     '                    Select Case thisresult.Name
     '                        Case "credits"
     '                            newtvepisode.credits = thisresult.InnerText
@@ -572,7 +565,7 @@ Public Class WorkingWithNfoFiles
     '                        Case "title"
     '                            newtvepisode.title = thisresult.InnerText
     '                        Case "season"
-    '                            newtvepisode.seasonno = thisresult.InnerText
+    '                            newtvepisode.Season.value = thisresult.InnerText
     '                        Case "episode"
     '                            newtvepisode.episodeno = thisresult.InnerText
     '                        Case "rating"
@@ -621,7 +614,7 @@ Public Class WorkingWithNfoFiles
     '                                                            Case "formatinfo"
     '                                                                newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
     '                                                            Case "duration"
-    '                                                                newfilenfo.filedetails_video.duration = videodetails.InnerText
+    '                                                                newfilenfo.filedetails_video.DurationInSeconds.Value = videodetails.InnerText
     '                                                            Case "bitrate"
     '                                                                newfilenfo.filedetails_video.bitrate = videodetails.InnerText
     '                                                            Case "bitratemode"
@@ -679,15 +672,15 @@ Public Class WorkingWithNfoFiles
     '                For Each regexp In Form1.tvRegex
 
     '                    Dim M As Match
-    '                    M = Regex.Match(newtvepisode.episodepath, regexp)
+    '                    M = Regex.Match(newtvepisode.VideoFilePath, regexp)
     '                    If M.Success = True Then
     '                        Try
-    '                            newtvepisode.seasonno = M.Groups(1).Value.ToString
+    '                            newtvepisode.Season.value = M.Groups(1).Value.ToString
     '                            newtvepisode.episodeno = M.Groups(2).Value.ToString
     '                            Exit For
     '                        Catch
-    '                            newtvepisode.seasonno = "-1"
-    '                            newtvepisode.seasonno = "-1"
+    '                            newtvepisode.Season.value = "-1"
+    '                            newtvepisode.Season.value = "-1"
     '                        End Try
     '                    End If
     '                Next
@@ -695,8 +688,8 @@ Public Class WorkingWithNfoFiles
     '            If newtvepisode.episodeno = Nothing Then
     '                newtvepisode.episodeno = "-1"
     '            End If
-    '            If newtvepisode.seasonno = Nothing Then
-    '                newtvepisode.seasonno = "-1"
+    '            If newtvepisode.Season.value = Nothing Then
+    '                newtvepisode.Season.value = "-1"
     '            End If
     '            If newtvepisode.rating = Nothing Then newtvepisode.rating = ""
     '            Form1.workingEpisode.Add(newtvepisode)
@@ -709,10 +702,10 @@ Public Class WorkingWithNfoFiles
     '                        Dim newepisodenfo As XmlNode = Nothing
     '                        Dim anotherepisode As New TvEpisode
 
-    '                        anotherepisode.episodepath = ""
+    '                        anotherepisode.VideoFilePath = ""
     '                        anotherepisode.playcount = ""
     '                        anotherepisode.rating = ""
-    '                        anotherepisode.seasonno = ""
+    '                        anotherepisode.Season.value = ""
     '                        anotherepisode.title = ""
     '                        ' For Each newepisodenfo In thisresult.ChildNodes
     '                        Dim tempint As Integer = thisresult.ChildNodes.Count - 1
@@ -741,7 +734,7 @@ Public Class WorkingWithNfoFiles
     '                                    Case "title"
     '                                        anotherepisode.title = thisresult.ChildNodes(f).InnerText
     '                                    Case "season"
-    '                                        anotherepisode.seasonno = thisresult.ChildNodes(f).InnerText
+    '                                        anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
     '                                    Case "episode"
     '                                        anotherepisode.episodeno = thisresult.ChildNodes(f).InnerText
     '                                    Case "rating"
@@ -756,7 +749,7 @@ Public Class WorkingWithNfoFiles
     '                                        anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
     '                                    Case "actor"
     '                                        Dim detail As XmlNode = Nothing
-                                            Dim newactor As New str_MovieActors(SetDefaults)
+    Dim newactor As New str_MovieActors(SetDefaults)
     '                                        For Each detail In thisresult.ChildNodes(f).ChildNodes
     '                                            Select Case detail.Name
     '                                                Case "name"
@@ -790,7 +783,7 @@ Public Class WorkingWithNfoFiles
     '                                                                        Case "formatinfo"
     '                                                                            newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
     '                                                                        Case "duration"
-    '                                                                            newfilenfo.filedetails_video.duration = videodetails.InnerText
+    '                                                                            newfilenfo.filedetails_video.DurationInSeconds.Value = videodetails.InnerText
     '                                                                        Case "bitrate"
     '                                                                            newfilenfo.filedetails_video.bitrate = videodetails.InnerText
     '                                                                        Case "bitratemode"
@@ -846,7 +839,7 @@ Public Class WorkingWithNfoFiles
     '                                MsgBox(ex.ToString)
     '                            End Try
     '                        Next f
-    '                        anotherepisode.episodepath = path
+    '                        anotherepisode.VideoFilePath = path
     '                        Form1.workingEpisode.Add(anotherepisode)
     '                End Select
     '            Next
@@ -1311,14 +1304,14 @@ Public Class WorkingWithNfoFiles
     '            For Each show In Form1.TvShows
     '                If show.fullpath = WorkingTvShow.path Then
     '                    For Each episode In show.allepisodes
-    '                        If episode.episodeno = episodeno And episode.seasonno = seasonno Then
+    '                        If episode.episodeno = episodeno And episode.Season.value = seasonno Then
 
     '                            For Each epis In listofepisodes
-    '                                If epis.seasonno = seasonno And epis.episodeno = episodeno Then
+    '                                If epis.Season.value = seasonno And epis.episodeno = episodeno Then
     '                                    Dim newep As New TvEpisode
-    '                                    newep.episodepath = epis.episodepath
+    '                                    newep.VideoFilePath = epis.VideoFilePath
     '                                    newep.title = epis.title
-    '                                    newep.seasonno = epis.seasonno
+    '                                    newep.Season.value = epis.Season.value
     '                                    newep.episodeno = epis.episodeno
     '                                    newep.playcount = epis.playcount
     '                                    newep.rating = epis.rating
@@ -1393,10 +1386,10 @@ Public Class WorkingWithNfoFiles
     '                        filedetailschild.AppendChild(filedetailschildchild)
     '                    End If
     '                End If
-    '                If listofepisodes(0).filedetails.filedetails_video.duration <> Nothing Then
-    '                    If listofepisodes(0).filedetails.filedetails_video.duration <> "" Then
+    '                If listofepisodes(0).filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+    '                    If listofepisodes(0).filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
     '                        filedetailschildchild = doc.CreateElement("duration")
-    '                        filedetailschildchild.InnerText = listofepisodes(0).filedetails.filedetails_video.duration
+    '                        filedetailschildchild.InnerText = listofepisodes(0).filedetails.filedetails_video.DurationInSeconds.Value
     '                        filedetailschild.AppendChild(filedetailschildchild)
     '                    End If
     '                End If
@@ -1511,7 +1504,7 @@ Public Class WorkingWithNfoFiles
     '        root.AppendChild(child)
 
     '        child = doc.CreateElement("season")
-    '        child.InnerText = listofepisodes(0).seasonno
+    '        child.InnerText = listofepisodes(0).Season.value
     '        root.AppendChild(child)
 
     '        child = doc.CreateElement("episode")
@@ -1623,10 +1616,10 @@ Public Class WorkingWithNfoFiles
     '                                childchildchild.AppendChild(childchildchildchild)
     '                            End If
     '                        End If
-    '                        If ep.filedetails.filedetails_video.duration <> Nothing Then
-    '                            If ep.filedetails.filedetails_video.duration <> "" Then
+    '                        If ep.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+    '                            If ep.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
     '                                childchildchildchild = document.CreateElement("duration")
-    '                                childchildchildchild.InnerText = ep.filedetails.filedetails_video.duration
+    '                                childchildchildchild.InnerText = ep.filedetails.filedetails_video.DurationInSeconds.Value
     '                                childchildchild.AppendChild(childchildchildchild)
     '                            End If
     '                        End If
@@ -1740,7 +1733,7 @@ Public Class WorkingWithNfoFiles
     '            child.AppendChild(childchild)
 
     '            childchild = document.CreateElement("season")
-    '            childchild.InnerText = ep.seasonno
+    '            childchild.InnerText = ep.Season.value
     '            child.AppendChild(childchild)
 
     '            childchild = document.CreateElement("episode")
@@ -2120,47 +2113,47 @@ Public Class WorkingWithNfoFiles
                                                     For Each videodetails In detail.ChildNodes
                                                         Select Case videodetails.Name
                                                             Case "width"
-                                                                newfilenfo.filedetails_video.width = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
                                                             Case "height"
-                                                                newfilenfo.filedetails_video.height = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
                                                             Case "aspect"
-                                                                newfilenfo.filedetails_video.aspect = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
                                                             Case "codec"
-                                                                newfilenfo.filedetails_video.codec = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
                                                             Case "formatinfo"
-                                                                newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
                                                             Case "duration"
-                                                                newfilenfo.filedetails_video.duration = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.DurationInSeconds.Value = videodetails.InnerText
                                                             Case "bitrate"
-                                                                newfilenfo.filedetails_video.bitrate = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Bitrate.Value = videodetails.InnerText
                                                             Case "bitratemode"
-                                                                newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.BitrateMode.Value = videodetails.InnerText
                                                             Case "bitratemax"
-                                                                newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.BitrateMax.Value = videodetails.InnerText
                                                             Case "container"
-                                                                newfilenfo.filedetails_video.container = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Container.Value = videodetails.InnerText
                                                             Case "codecid"
-                                                                newfilenfo.filedetails_video.codecid = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.CodecId.Value = videodetails.InnerText
                                                             Case "codecidinfo"
-                                                                newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.CodecInfo.Value = videodetails.InnerText
                                                             Case "scantype"
-                                                                newfilenfo.filedetails_video.scantype = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.ScanType.Value = videodetails.InnerText
                                                         End Select
                                                     Next
                                                 Case "audio"
                                                     Dim audiodetails As XmlNode = Nothing
-                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
+                                                    Dim audio As New Nfo.AudioDetails
                                                     For Each audiodetails In detail.ChildNodes
 
                                                         Select Case audiodetails.Name
                                                             Case "language"
-                                                                audio.language = audiodetails.InnerText
+                                                                audio.Language.Value = audiodetails.InnerText
                                                             Case "codec"
-                                                                audio.codec = audiodetails.InnerText
+                                                                audio.Codec.Value = audiodetails.InnerText
                                                             Case "channels"
-                                                                audio.channels = audiodetails.InnerText
+                                                                audio.Channels.Value = audiodetails.InnerText
                                                             Case "bitrate"
-                                                                audio.bitrate = audiodetails.InnerText
+                                                                audio.Bitrate.Value = audiodetails.InnerText
                                                         End Select
                                                     Next
                                                     newfilenfo.filedetails_audio.Add(audio)
@@ -2169,8 +2162,8 @@ Public Class WorkingWithNfoFiles
                                                     For Each subsdetails In detail.ChildNodes
                                                         Select Case subsdetails.Name
                                                             Case "language"
-                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
-                                                                sublang.language = subsdetails.InnerText
+                                                                Dim sublang As New Nfo.SubtitleDetails
+                                                                sublang.Language.Value = subsdetails.InnerText
                                                                 newfilenfo.filedetails_subtitles.Add(sublang)
                                                         End Select
                                                     Next
@@ -2250,10 +2243,10 @@ Public Class WorkingWithNfoFiles
                     Catch
                     End Try
                     Try
-                        If movietosave.filedetails.filedetails_video.width <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.width <> "" Then
+                        If movietosave.filedetails.filedetails_video.Width.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.Width.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("width")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.width
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Width.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2261,20 +2254,20 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 4
                     Try
-                        If movietosave.filedetails.filedetails_video.height <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.height <> "" Then
+                        If movietosave.filedetails.filedetails_video.Height.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.Height.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("height")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.height
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Height.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
                     Catch
                     End Try
                     Try
-                        If movietosave.filedetails.filedetails_video.aspect <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.aspect <> "" Then
+                        If movietosave.filedetails.filedetails_video.Aspect.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.Aspect.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("aspect")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.aspect
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Aspect.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2282,10 +2275,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 5
                     Try
-                        If movietosave.filedetails.filedetails_video.codec <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.codec <> "" Then
+                        If movietosave.filedetails.filedetails_video.Codec.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.Codec.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("codec")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.codec
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Codec.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2293,10 +2286,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 6
                     Try
-                        If movietosave.filedetails.filedetails_video.formatinfo <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.formatinfo <> "" Then
+                        If movietosave.filedetails.filedetails_video.FormatInfo.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.FormatInfo.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("format")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.formatinfo
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.FormatInfo.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2304,21 +2297,21 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 7
                     Try
-                        If movietosave.filedetails.filedetails_video.duration <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.duration <> "" Then
+                        If movietosave.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("duration")
-                                Dim temptemp As String = movietosave.filedetails.filedetails_video.duration
+                                Dim temptemp As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
                                 If Preferences.intruntime = True Then
-                                    temptemp = Utilities.cleanruntime(movietosave.filedetails.filedetails_video.duration)
+                                    temptemp = Utilities.cleanruntime(movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
                                     If IsNumeric(temptemp) Then
                                         filedetailschildchild.InnerText = temptemp
                                         filedetailschild.AppendChild(filedetailschildchild)
                                     Else
-                                        filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.duration
+                                        filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
                                         filedetailschild.AppendChild(filedetailschildchild)
                                     End If
                                 Else
-                                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.duration
+                                    filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 End If
 
@@ -2328,10 +2321,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 8
                     Try
-                        If movietosave.filedetails.filedetails_video.bitrate <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.bitrate <> "" Then
+                        If movietosave.filedetails.filedetails_video.Bitrate.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.Bitrate.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("bitrate")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.bitrate
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Bitrate.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2339,10 +2332,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 9
                     Try
-                        If movietosave.filedetails.filedetails_video.bitratemode <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.bitratemode <> "" Then
+                        If movietosave.filedetails.filedetails_video.BitrateMode.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.BitrateMode.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("bitratemode")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.bitratemode
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.BitrateMode.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2350,10 +2343,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 10
                     Try
-                        If movietosave.filedetails.filedetails_video.bitratemax <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.bitratemax <> "" Then
+                        If movietosave.filedetails.filedetails_video.BitrateMax.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.BitrateMax.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("bitratemax")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.bitratemax
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.BitrateMax.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2361,10 +2354,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 11
                     Try
-                        If movietosave.filedetails.filedetails_video.container <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.container <> "" Then
+                        If movietosave.filedetails.filedetails_video.Container.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.Container.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("container")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.container
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Container.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2372,10 +2365,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 12
                     Try
-                        If movietosave.filedetails.filedetails_video.codecid <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.codecid <> "" Then
+                        If movietosave.filedetails.filedetails_video.CodecId.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.CodecId.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("codecid")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.codecid
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.CodecId.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2383,10 +2376,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 13
                     Try
-                        If movietosave.filedetails.filedetails_video.codecinfo <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.codecinfo <> "" Then
+                        If movietosave.filedetails.filedetails_video.CodecInfo.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.CodecInfo.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("codecidinfo")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.codecinfo
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.CodecInfo.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2394,10 +2387,10 @@ Public Class WorkingWithNfoFiles
                     End Try
                     stage = 14
                     Try
-                        If movietosave.filedetails.filedetails_video.scantype <> Nothing Then
-                            If movietosave.filedetails.filedetails_video.scantype <> "" Then
+                        If movietosave.filedetails.filedetails_video.ScanType.Value <> Nothing Then
+                            If movietosave.filedetails.filedetails_video.ScanType.Value <> "" Then
                                 filedetailschildchild = doc.CreateElement("scantype")
-                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.scantype
+                                filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.ScanType.Value
                                 filedetailschild.AppendChild(filedetailschildchild)
                             End If
                         End If
@@ -2417,40 +2410,40 @@ Public Class WorkingWithNfoFiles
                         Catch
                         End Try
                         Try
-                            If item.language <> Nothing Then
-                                If item.language <> "" Then
+                            If item.Language.Value <> Nothing Then
+                                If item.Language.Value <> "" Then
                                     filedetailschildchild = doc.CreateElement("language")
-                                    filedetailschildchild.InnerText = item.language
+                                    filedetailschildchild.InnerText = item.Language.Value
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 End If
                             End If
                         Catch
                         End Try
                         Try
-                            If item.codec <> Nothing Then
-                                If item.codec <> "" Then
+                            If item.Codec.Value <> Nothing Then
+                                If item.Codec.Value <> "" Then
                                     filedetailschildchild = doc.CreateElement("codec")
-                                    filedetailschildchild.InnerText = item.codec
+                                    filedetailschildchild.InnerText = item.Codec.Value
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 End If
                             End If
                         Catch
                         End Try
                         Try
-                            If item.channels <> Nothing Then
-                                If item.channels <> "" Then
+                            If item.Channels.Value <> Nothing Then
+                                If item.Channels.Value <> "" Then
                                     filedetailschildchild = doc.CreateElement("channels")
-                                    filedetailschildchild.InnerText = item.channels
+                                    filedetailschildchild.InnerText = item.Channels.Value
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 End If
                             End If
                         Catch
                         End Try
                         Try
-                            If item.bitrate <> Nothing Then
-                                If item.bitrate <> "" Then
+                            If item.Bitrate.Value <> Nothing Then
+                                If item.Bitrate.Value <> "" Then
                                     filedetailschildchild = doc.CreateElement("bitrate")
-                                    filedetailschildchild.InnerText = item.bitrate
+                                    filedetailschildchild.InnerText = item.Bitrate.Value
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 End If
                             End If
@@ -2467,10 +2460,10 @@ Public Class WorkingWithNfoFiles
                     For Each entry In movietosave.filedetails.filedetails_subtitles
                         Try
                             If entry.language <> Nothing Then
-                                If entry.language <> "" Then
+                                If entry.Language.Value <> "" Then
                                     tempint += 1
                                     filedetailschildchild = doc.CreateElement("language")
-                                    filedetailschildchild.InnerText = entry.language
+                                    filedetailschildchild.InnerText = entry.Language.Value
                                     filedetailschild.AppendChild(filedetailschildchild)
                                 End If
                             End If
@@ -2834,32 +2827,32 @@ Public Class WorkingWithNfoFiles
         Dim newepisodelist As New List(Of TvEpisode)
         Dim newepisode As New TvEpisode
         If Not IO.File.Exists(path) Then
-            newepisode.title = IO.Path.GetFileName(path)
-            newepisode.plot = "missing file"
-            newepisode.episodepath = path
-            newepisode.episodepath = path
-            If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
+            newepisode.Title.Value = IO.Path.GetFileName(path)
+            newepisode.Plot.Value = "missing file"
+
+            newepisode.VideoFilePath = path
+            If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
                 For Each regexp In Form1.tv_RegexScraper
 
                     Dim M As Match
-                    M = Regex.Match(newepisode.episodepath, regexp)
+                    M = Regex.Match(newepisode.VideoFilePath, regexp)
                     If M.Success = True Then
                         Try
-                            newepisode.seasonno = M.Groups(1).Value.ToString
-                            newepisode.episodeno = M.Groups(2).Value.ToString
+                            newepisode.Season.value = M.Groups(1).Value.ToString
+                            newepisode.Episode.Value = M.Groups(2).Value.ToString
                             Exit For
                         Catch
-                            newepisode.seasonno = "-1"
-                            newepisode.seasonno = "-1"
+                            newepisode.Season.value = "-1"
+                            newepisode.Season.value = "-1"
                         End Try
                     End If
                 Next
             End If
-            If newepisode.episodeno = Nothing Then
-                newepisode.episodeno = "-1"
+            If newepisode.Episode.Value = Nothing Then
+                newepisode.Episode.Value = "-1"
             End If
-            If newepisode.seasonno = Nothing Then
-                newepisode.seasonno = "-1"
+            If newepisode.Season.value = Nothing Then
+                newepisode.Season.value = "-1"
             End If
             newepisodelist.Add(newepisode)
             Return newepisodelist
@@ -2872,32 +2865,32 @@ Public Class WorkingWithNfoFiles
                 'If Not validate_nfo(path) Then
                 '    Exit Function
                 'End If
-                newepisode.title = IO.Path.GetFileName(path)
-                newepisode.plot = "problem / xml error"
-                newepisode.episodepath = path
-                newepisode.episodepath = path
-                If newepisode.episodeno = Nothing Or newepisode.episodeno = Nothing Then
+                newepisode.Title.Value = IO.Path.GetFileName(path)
+                newepisode.Plot.Value = "problem / xml error"
+                newepisode.VideoFilePath = path
+                newepisode.VideoFilePath = path
+                If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
                     For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newepisode.episodepath, regexp)
+                        M = Regex.Match(newepisode.VideoFilePath, regexp)
                         If M.Success = True Then
                             Try
-                                newepisode.seasonno = M.Groups(1).Value.ToString
-                                newepisode.episodeno = M.Groups(2).Value.ToString
+                                newepisode.Season.value = M.Groups(1).Value.ToString
+                                newepisode.Episode.Value = M.Groups(2).Value.ToString
                                 Exit For
                             Catch
-                                newepisode.seasonno = "-1"
-                                newepisode.seasonno = "-1"
+                                newepisode.Season.value = "-1"
+                                newepisode.Season.value = "-1"
                             End Try
                         End If
                     Next
                 End If
-                If newepisode.episodeno = Nothing Then
-                    newepisode.episodeno = "-1"
+                If newepisode.Episode.Value = Nothing Then
+                    newepisode.Episode.Value = "-1"
                 End If
-                If newepisode.seasonno = Nothing Then
-                    newepisode.seasonno = "-1"
+                If newepisode.Season.value = Nothing Then
+                    newepisode.Season.value = "-1"
                 End If
                 newepisodelist.Add(newepisode)
                 Return newepisodelist
@@ -2910,30 +2903,30 @@ Public Class WorkingWithNfoFiles
                 Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
-                        newtvepisode.episodepath = path
+                        newtvepisode.VideoFilePath = path
                         Select Case thisresult.Name
                             Case "credits"
-                                newtvepisode.credits = thisresult.InnerText
+                                newtvepisode.Credits.Value = thisresult.InnerText
                             Case "director"
-                                newtvepisode.director = thisresult.InnerText
+                                newtvepisode.Director.Value = thisresult.InnerText
                             Case "aired"
-                                newtvepisode.aired = thisresult.InnerText
+                                newtvepisode.Aired.Value = thisresult.InnerText
                             Case "plot"
-                                newtvepisode.plot = thisresult.InnerText
+                                newtvepisode.Plot.Value = thisresult.InnerText
                             Case "title"
-                                newtvepisode.title = thisresult.InnerText
+                                newtvepisode.Title.Value = thisresult.InnerText
                             Case "season"
-                                newtvepisode.seasonno = thisresult.InnerText
+                                newtvepisode.Season.value = thisresult.InnerText
                             Case "episode"
-                                newtvepisode.episodeno = thisresult.InnerText
+                                newtvepisode.Episode.Value = thisresult.InnerText
                             Case "rating"
-                                newtvepisode.rating = thisresult.InnerText
-                                If newtvepisode.rating.IndexOf("/10") <> -1 Then newtvepisode.rating.Replace("/10", "")
-                                If newtvepisode.rating.IndexOf(" ") <> -1 Then newtvepisode.rating.Replace(" ", "")
+                                newtvepisode.Rating.Value = thisresult.InnerText
+                                If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
+                                If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
                             Case "playcount"
-                                newtvepisode.playcount = thisresult.InnerText
+                                newtvepisode.PlayCount.Value = thisresult.InnerText
                             Case "thumb"
-                                newtvepisode.thumb = thisresult.InnerText
+                                newtvepisode.Thumbnail.FileName = thisresult.InnerText
                             Case "actor"
                                 Dim actordetail As XmlNode = Nothing
                                 Dim newactor As New str_MovieActors(SetDefaults)
@@ -2953,7 +2946,7 @@ Public Class WorkingWithNfoFiles
                                 For Each detail2 In thisresult.ChildNodes
                                     Select Case detail2.Name
                                         Case "streamdetails"
-                                            Dim newfilenfo As New FullFileDetails
+
                                             Dim detail As XmlNode = Nothing
                                             For Each detail In detail2.ChildNodes
                                                 Select Case detail.Name
@@ -2962,62 +2955,62 @@ Public Class WorkingWithNfoFiles
                                                         For Each videodetails In detail.ChildNodes
                                                             Select Case videodetails.Name
                                                                 Case "width"
-                                                                    newfilenfo.filedetails_video.width = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
                                                                 Case "height"
-                                                                    newfilenfo.filedetails_video.height = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
                                                                 Case "aspect"
-                                                                    newfilenfo.filedetails_video.aspect = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
                                                                 Case "codec"
-                                                                    newfilenfo.filedetails_video.codec = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
                                                                 Case "formatinfo"
-                                                                    newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
                                                                 Case "duration"
-                                                                    newfilenfo.filedetails_video.duration = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
                                                                 Case "bitrate"
-                                                                    newfilenfo.filedetails_video.bitrate = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
                                                                 Case "bitratemode"
-                                                                    newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
                                                                 Case "bitratemax"
-                                                                    newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
                                                                 Case "container"
-                                                                    newfilenfo.filedetails_video.container = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
                                                                 Case "codecid"
-                                                                    newfilenfo.filedetails_video.codecid = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
                                                                 Case "codecidinfo"
-                                                                    newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
                                                                 Case "scantype"
-                                                                    newfilenfo.filedetails_video.scantype = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
                                                             End Select
                                                         Next
                                                     Case "audio"
                                                         Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New str_MediaNFOAudio(SetDefaults)
+                                                        Dim audio As New Nfo.AudioDetails
                                                         For Each audiodetails In detail.ChildNodes
                                                             Select Case audiodetails.Name
                                                                 Case "language"
-                                                                    audio.language = audiodetails.InnerText
+                                                                    audio.Language.Value = audiodetails.InnerText
                                                                 Case "codec"
-                                                                    audio.codec = audiodetails.InnerText
+                                                                    audio.Codec.Value = audiodetails.InnerText
                                                                 Case "channels"
-                                                                    audio.channels = audiodetails.InnerText
+                                                                    audio.Channels.Value = audiodetails.InnerText
                                                                 Case "bitrate"
-                                                                    audio.bitrate = audiodetails.InnerText
+                                                                    audio.Bitrate.Value = audiodetails.InnerText
                                                             End Select
                                                         Next
-                                                        newfilenfo.filedetails_audio.Add(audio)
+                                                        newtvepisode.Details.StreamDetails.Audio.Add(audio)
                                                     Case "subtitle"
                                                         Dim subsdetails As XmlNode = Nothing
                                                         For Each subsdetails In detail.ChildNodes
                                                             Select Case subsdetails.Name
                                                                 Case "language"
-                                                                    Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
-                                                                    sublang.language = subsdetails.InnerText
-                                                                    newfilenfo.filedetails_subtitles.Add(sublang)
+                                                                    Dim sublang As New Nfo.SubtitleDetails
+                                                                    sublang.Language.Value = subsdetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Subtitles.Add(sublang)
                                                             End Select
                                                         Next
                                                 End Select
                                             Next
-                                            newtvepisode.filedetails = newfilenfo
+                                            'newtvepisode.Details = newfilenfo
                                     End Select
                                 Next
                         End Select
@@ -3026,30 +3019,30 @@ Public Class WorkingWithNfoFiles
                     End Try
                 Next
 
-                If newtvepisode.episodeno = Nothing Or newtvepisode.episodeno = Nothing Then
+                If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
                     For Each regexp In Form1.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newtvepisode.episodepath, regexp)
+                        M = Regex.Match(newtvepisode.VideoFilePath, regexp)
                         If M.Success = True Then
                             Try
-                                newtvepisode.seasonno = M.Groups(1).Value.ToString
-                                newtvepisode.episodeno = M.Groups(2).Value.ToString
+                                newtvepisode.Season.value = M.Groups(1).Value.ToString
+                                newtvepisode.Episode.Value = M.Groups(2).Value.ToString
                                 Exit For
                             Catch
-                                newtvepisode.seasonno = "-1"
-                                newtvepisode.seasonno = "-1"
+                                newtvepisode.Season.value = "-1"
+                                newtvepisode.Season.value = "-1"
                             End Try
                         End If
                     Next
                 End If
-                If newtvepisode.episodeno = Nothing Then
-                    newtvepisode.episodeno = "-1"
+                If newtvepisode.Episode.Value = Nothing Then
+                    newtvepisode.Episode.Value = "-1"
                 End If
-                If newtvepisode.seasonno = Nothing Then
-                    newtvepisode.seasonno = "-1"
+                If newtvepisode.Season.value = Nothing Then
+                    newtvepisode.Season.value = "-1"
                 End If
-                If newtvepisode.rating = Nothing Then newtvepisode.rating = ""
+                If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
                 newepisodelist.Add(newtvepisode)
                 Return newepisodelist
                 Exit Function
@@ -3060,10 +3053,10 @@ Public Class WorkingWithNfoFiles
                             Dim newepisodenfo As XmlNode = Nothing
                             Dim anotherepisode As New TvEpisode
 
-                            anotherepisode.episodepath = Nothing
+                            anotherepisode.VideoFilePath = Nothing
                             anotherepisode.playcount = Nothing
                             anotherepisode.rating = Nothing
-                            anotherepisode.seasonno = Nothing
+                            anotherepisode.Season.value = Nothing
                             anotherepisode.title = Nothing
                             ' For Each newepisodenfo In thisresult.ChildNodes
                             Dim tempint As Integer = thisresult.ChildNodes.Count - 1
@@ -3082,27 +3075,27 @@ Public Class WorkingWithNfoFiles
 
                                     Select Case thisresult.ChildNodes(f).Name
                                         Case "credits"
-                                            anotherepisode.credits = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Credits.Value = thisresult.ChildNodes(f).InnerText
                                         Case "director"
-                                            anotherepisode.director = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Director.Value = thisresult.ChildNodes(f).InnerText
                                         Case "aired"
-                                            anotherepisode.aired = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Aired.Value = thisresult.ChildNodes(f).InnerText
                                         Case "plot"
-                                            anotherepisode.plot = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Plot.Value = thisresult.ChildNodes(f).InnerText
                                         Case "title"
-                                            anotherepisode.title = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
                                         Case "season"
-                                            anotherepisode.seasonno = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
                                         Case "episode"
-                                            anotherepisode.episodeno = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
                                         Case "rating"
-                                            anotherepisode.rating = thisresult.ChildNodes(f).InnerText
-                                            If anotherepisode.rating.IndexOf("/10") <> -1 Then anotherepisode.rating.Replace("/10", "")
-                                            If anotherepisode.rating.IndexOf(" ") <> -1 Then anotherepisode.rating.Replace(" ", "")
+                                            anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
+                                            If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
+                                            If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
                                         Case "playcount"
-                                            anotherepisode.playcount = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
                                         Case "thumb"
-                                            anotherepisode.thumb = thisresult.ChildNodes(f).InnerText
+                                            anotherepisode.Thumbnail.FileName = thisresult.ChildNodes(f).InnerText
                                         Case "runtime"
                                             anotherepisode.Runtime.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"
@@ -3124,7 +3117,7 @@ Public Class WorkingWithNfoFiles
                                             For Each detail2 In thisresult.ChildNodes(f).ChildNodes
                                                 Select Case detail2.Name
                                                     Case "fileinfo"
-                                                        Dim newfilenfo As New FullFileDetails
+
                                                         Dim detail As XmlNode = Nothing
                                                         For Each detail In detail2.ChildNodes
                                                             Select Case detail.Name
@@ -3133,61 +3126,61 @@ Public Class WorkingWithNfoFiles
                                                                     For Each videodetails In detail.ChildNodes
                                                                         Select Case videodetails.Name
                                                                             Case "width"
-                                                                                newfilenfo.filedetails_video.width = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.Width.Value = videodetails.InnerText
                                                                             Case "height"
-                                                                                newfilenfo.filedetails_video.height = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
                                                                             Case "codec"
-                                                                                newfilenfo.filedetails_video.codec = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
                                                                             Case "formatinfo"
-                                                                                newfilenfo.filedetails_video.formatinfo = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
                                                                             Case "duration"
-                                                                                newfilenfo.filedetails_video.duration = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
                                                                             Case "bitrate"
-                                                                                newfilenfo.filedetails_video.bitrate = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
                                                                             Case "bitratemode"
-                                                                                newfilenfo.filedetails_video.bitratemode = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
                                                                             Case "bitratemax"
-                                                                                newfilenfo.filedetails_video.bitratemax = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
                                                                             Case "container"
-                                                                                newfilenfo.filedetails_video.container = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.Container.Value = videodetails.InnerText
                                                                             Case "codecid"
-                                                                                newfilenfo.filedetails_video.codecid = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.CodecId.Value = videodetails.InnerText
                                                                             Case "codecidinfo"
-                                                                                newfilenfo.filedetails_video.codecinfo = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
                                                                             Case "scantype"
-                                                                                newfilenfo.filedetails_video.scantype = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.ScanType.Value = videodetails.InnerText
                                                                         End Select
                                                                     Next
                                                                 Case "audio"
                                                                     Dim audiodetails As XmlNode = Nothing
-                                                                    Dim audio As New str_MediaNFOAudio(SetDefaults)
+                                                                    Dim audio As New Nfo.AudioDetails ' str_MediaNFOAudio(SetDefaults)
                                                                     For Each audiodetails In detail.ChildNodes
 
                                                                         Select Case audiodetails.Name
                                                                             Case "language"
-                                                                                audio.language = audiodetails.InnerText
+                                                                                audio.language.value = audiodetails.InnerText
                                                                             Case "codec"
-                                                                                audio.codec = audiodetails.InnerText
+                                                                                audio.Codec.Value = audiodetails.InnerText
                                                                             Case "channels"
-                                                                                audio.channels = audiodetails.InnerText
+                                                                                audio.Channels.Value = audiodetails.InnerText
                                                                             Case "bitrate"
-                                                                                audio.bitrate = audiodetails.InnerText
+                                                                                audio.Bitrate.Value = audiodetails.InnerText
                                                                         End Select
                                                                     Next
-                                                                    newfilenfo.filedetails_audio.Add(audio)
+                                                                    anotherepisode.Details.StreamDetails.Audio.Add(audio)
                                                                 Case "subtitle"
                                                                     Dim subsdetails As XmlNode = Nothing
                                                                     For Each subsdetails In detail.ChildNodes
                                                                         Select Case subsdetails.Name
                                                                             Case "language"
-                                                                                Dim sublang As New str_MediaNFOSubtitles(SetDefaults)
-                                                                                sublang.language = subsdetails.InnerText
-                                                                                newfilenfo.filedetails_subtitles.Add(sublang)
+                                                                                Dim sublang As New Nfo.SubtitleDetails
+                                                                                sublang.Language.Value = subsdetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Subtitles.Add(sublang)
                                                                         End Select
                                                                     Next
                                                             End Select
                                                         Next
-                                                        anotherepisode.filedetails = newfilenfo
+                                                        'anotherepisode.Details = newfilenfo
                                                 End Select
                                             Next
                                     End Select
@@ -3197,7 +3190,7 @@ Public Class WorkingWithNfoFiles
                                     MsgBox(ex.ToString)
                                 End Try
                             Next f
-                            anotherepisode.episodepath = path
+                            anotherepisode.VideoFilePath = path
                             newepisodelist.Add(anotherepisode)
                     End Select
                 Next
