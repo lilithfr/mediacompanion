@@ -1813,12 +1813,12 @@ Partial Public Class Form1
             tempTVDBiD = ""
             Dim episodearray As New List(Of TvEpisode)
             episodearray.Clear()
-            Dim multieps2 As New TvEpisode
-            multieps2.Season.Value = eps.Season.Value
-            multieps2.Episode.Value = eps.Episode.Value
-            multieps2.VideoFilePath = eps.VideoFilePath
-            multieps2.MediaExtension = eps.MediaExtension
-            episodearray.Add(multieps2)
+            'Dim multieps2 As New TvEpisode
+            'multieps2.Season.Value = eps.Season.Value
+            'multieps2.Episode.Value = eps.Episode.Value
+            'multieps2.VideoFilePath = eps.VideoFilePath
+            'multieps2.MediaExtension = eps.MediaExtension
+            episodearray.Add(eps)
             If bckgroundscanepisodes.CancellationPending Then
                 Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                 Exit Sub
@@ -2321,7 +2321,7 @@ Partial Public Class Form1
                     ep.VideoFilePath = newnamepath
                 Next
                 'End If
-                bckgroundscanepisodes.ReportProgress(9999999, episodearray)
+                'bckgroundscanepisodes.ReportProgress(9999999, episodearray)
                 If bckgroundscanepisodes.CancellationPending Then
                     Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                     Exit Sub
@@ -2346,6 +2346,7 @@ Partial Public Class Form1
                             newwp.Season.Value = ep.Season.Value
                             newwp.Title = ep.Title
                             newwp.ShowObj = Shows
+                            bckgroundscanepisodes.ReportProgress(1, newwp)
                         Next
                     End If
                 Next

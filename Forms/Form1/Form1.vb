@@ -16956,9 +16956,9 @@ Public Class Form1
         globalThreadCounter -= 1
         Call checkforrunningthreads()
 
-        For Each Show As Nfo.TvShow In TvShows
-            Show.SearchForEpisodesInFolder()
-        Next
+        'For Each Show As Nfo.TvShow In TvShows
+        '    Show.SearchForEpisodesInFolder()
+        'Next
     End Sub
 
     Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
@@ -21064,7 +21064,7 @@ Public Class Form1
         ElseIf e.ProgressPercentage = 1 Then
             If TypeOf e.UserState Is TvEpisode Then
                 Dim TempEpisode As TvEpisode = CType(e.UserState, TvEpisode)
-
+                TempEpisode.UpdateTreenode()
                 TempEpisode.ShowObj.AddEpisode(TempEpisode)
             End If
         End If
