@@ -3,6 +3,7 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports System.IO
 Imports System.Xml
+Imports Nfo
 
 
 Module General
@@ -735,10 +736,10 @@ Module General
 
             workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
             workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
-            If workingfiledetails.filedetails_video.width <> Nothing Then
-                If IsNumeric(workingfiledetails.filedetails_video.width) Then
-                    If workingfiledetails.filedetails_video.height <> Nothing Then
-                        If IsNumeric(workingfiledetails.filedetails_video.height) Then
+            If workingfiledetails.filedetails_video.Width <> Nothing Then
+                If IsNumeric(workingfiledetails.filedetails_video.Width) Then
+                    If workingfiledetails.filedetails_video.Height <> Nothing Then
+                        If IsNumeric(workingfiledetails.filedetails_video.Height) Then
                             '                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
                             '                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
                             '                            Dim aspect As Decimal
@@ -1838,19 +1839,19 @@ Module General
         Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
 
         For n As Integer = 0 To EpisodeArray.Count - 1
-            EpisodeArray(n).Season.value = CInt(EpisodeArray(n).Season.value)
+            EpisodeArray(n).Season.Value = CInt(EpisodeArray(n).Season.Value)
             EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
             TempXMLEpisode.VideoFilePath = EpisodeArray(n).MediaExtension.Substring(0, EpisodeArray(n).MediaExtension.LastIndexOf(".")) & ".nfo"
             TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
-            TempXMLEpisode.Season.value = EpisodeArray(n).Season.value
-            TempXMLEpisode.mediaExtension = EpisodeArray(n).mediaextension
+            TempXMLEpisode.Season.Value = EpisodeArray(n).Season.Value
+            TempXMLEpisode.MediaExtension = EpisodeArray(n).MediaExtension
             TempXMLEpisode.PlayCount.Value = "0"
             ParametersForScraper(1) = TVDBId
             ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
             ParametersForScraper(4) = Nothing
             Try
                 For x As Integer = 0 To 20
-                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
+                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
                     'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
                     If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
                         Exit For
@@ -1872,7 +1873,7 @@ Module General
         Next
 
 
-        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).mediaextension)
+        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).MediaExtension)
         episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
         If episodeInformation(0).Thumbnail.FileName <> Nothing Then
             Dim myWebClient As New System.Net.WebClient()

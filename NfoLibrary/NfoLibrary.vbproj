@@ -93,6 +93,7 @@
     <Compile Include="Music\Shared\SubtitleDetails.vb" />
     <Compile Include="Music\Shared\SubtitleList.vb" />
     <Compile Include="Music\Shared\VideoDetails.vb" />
+    <Compile Include="TV\TvCache.vb" />
     <Compile Include="TV\TvEpisode.Treeview.vb" />
     <Compile Include="TV\TvEpisode.vb" />
     <Compile Include="TV\TvEpisodeList.vb" />

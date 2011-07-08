@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Threading
 Imports System.Text.RegularExpressions
+Imports Nfo
 
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
@@ -147,13 +148,13 @@ Public Class WorkingWithNfoFiles
         Dim newtvshow As New TvShow
         If Not IO.File.Exists(path) Then
             'Form1.tvrebuildlog(path & ", does not appear to exist")
-            newtvshow.title = Utilities.GetLastFolder(path)
-            newtvshow.year = newtvshow.title & " (0000)"
-            newtvshow.fullpath = path
-            newtvshow.year = "0000"
+            newtvshow.Title.Value = Utilities.GetLastFolder(path)
+            newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+            newtvshow.NfoFilePath = path
+            newtvshow.Year.Value = "0000"
             newtvshow.tvdbid = ""
-            newtvshow.status = "missing"
-            newtvshow.locked = 1
+            newtvshow.Status.Value = "missing"
+            newtvshow.State = Nfo.ShowState.Locked
             Return newtvshow
             Exit Function
         Else
@@ -855,15 +856,14 @@ Public Class WorkingWithNfoFiles
 
         Dim newtvshow As New TvShow
         If Not IO.File.Exists(path) Then
-            newtvshow.title = Utilities.GetLastFolder(path)
-            newtvshow.year = newtvshow.title & " (0000)"
-            newtvshow.plot = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
-            newtvshow.status = "file does not exist"
-            newtvshow.path = path
-            newtvshow.year = "0000"
+            newtvshow.Title.Value = Utilities.GetLastFolder(path)
+            newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+            newtvshow.Plot.Value = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
+            newtvshow.Status.Value = "file does not exist"
+            newtvshow.NfoFilePath = path
+            newtvshow.Year.Value = "0000"
             newtvshow.tvdbid = ""
-            newtvshow.path = path
-            newtvshow.locked = 1
+            newtvshow.State = Nfo.ShowState.Locked
             Return newtvshow
             Exit Function
         Else
@@ -1835,7 +1835,7 @@ Public Class WorkingWithNfoFiles
                         End If
 
                         newmovie.createdate = "999999999999"
-                        Dim filecreation2 As New FileInfo(path)
+                        Dim filecreation2 As New IO.FileInfo(path)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
@@ -1924,7 +1924,7 @@ Public Class WorkingWithNfoFiles
                     Next
 
                     'Now we need to make sure no varibles are still set to NOTHING before returning....
-                    Dim filecreation As New FileInfo(path)
+                    Dim filecreation As New IO.FileInfo(path)
                     Dim myDate As Date = filecreation.LastWriteTime
 
 

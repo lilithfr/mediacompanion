@@ -7,7 +7,7 @@ Partial Public Class TvShow
     Public Sub UpdateTreenode()
         Me.ShowNode.Tag = Me
         Me.ShowNode.Text = Me.Title.Value
-        Select Case Me.State.Value
+        Select Case Me.State
             Case Nfo.ShowState.Open
                 ShowNode.ImageKey = "blank"
                 ShowNode.SelectedImageKey = "blank"
