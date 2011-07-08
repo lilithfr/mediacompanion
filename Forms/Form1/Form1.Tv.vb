@@ -729,7 +729,7 @@ Partial Public Class Form1
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
             newtvshownfo.Load()
             If newtvshownfo.Title IsNot Nothing Then
-                If newtvshownfo.Status Is Nothing OrElse (newtvshownfo.Status IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
+                If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
                     'Dim skip As Boolean = False
                     'For Each tvshow In TvShows
                     '    If newtvshownfo.fullpath = tvshow.fullpath Then
@@ -1685,7 +1685,7 @@ Partial Public Class Form1
             If TvShow.State <> Nfo.ShowState.Open Then
                 If manual = False Then
                     Add = False
-                    Exit For
+                    Continue For
                 End If
             End If
 
@@ -1704,7 +1704,7 @@ Partial Public Class Form1
                     scraperLog = scraperLog & "Checking for subfolders" & vbCrLf
                     Dim ExtraFolder As List(Of String) = Utilities.EnumerateFolders(TvFolder, 3)
                     newtvfolders.AddRange(ExtraFolder)
-                    newtvfolders.Add(TvFolder)
+                    'newtvfolders.Add(TvFolder)
                     For Each Item In ExtraFolder
                         Preferences.tvScraperLog &= "Subfolder added :- " & Item.ToString & vbCrLf
                     Next
@@ -2345,7 +2345,7 @@ Partial Public Class Form1
                             newwp.Rating.Value = ep.Rating.Value
                             newwp.Season.Value = ep.Season.Value
                             newwp.Title = ep.Title
-                            Shows.AddEpisode(newwp)
+                            newwp.ShowObj = Shows
                         Next
                     End If
                 Next

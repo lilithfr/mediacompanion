@@ -19,7 +19,7 @@ Public Class SubtitleList
     Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
 
         Dim NewSubtitle As New SubtitleDetails()
-
+        NewSubtitle.ParentClass = Me.ParentClass
         NewSubtitle.ProcessNode(Element)
 
         Me.Add(NewSubtitle)

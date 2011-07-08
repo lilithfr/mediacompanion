@@ -21061,80 +21061,12 @@ Public Class Form1
         If e.ProgressPercentage = 0 Then
             ToolStripStatusLabel6.Text = e.UserState
             ToolStripStatusLabel6.Visible = True
-        ElseIf e.ProgressPercentage = 9999999 Then
-            'add episode to treeview
-            For Each ep In e.UserState
-                totalEpisodeCount += 1
-                TextBox33.Text = totalEpisodeCount.ToString
-                Dim fullpath As String
-                Dim title As String
-                Dim xmlerroer As Boolean = False
-                Dim newepisodetoadd2 As New TvEpisode
-                newepisodetoadd2 = ep
-                fullpath = newepisodetoadd2.VideoFilePath
-                title = newepisodetoadd2.Title.Value
-                Dim seasonno As Integer = Convert.ToInt32(newepisodetoadd2.Season.value)
-                'newepisodetoadd2.ShowObj.AddEpisode(newepisodetoadd2)
+        ElseIf e.ProgressPercentage = 1 Then
+            If TypeOf e.UserState Is TvEpisode Then
+                Dim TempEpisode As TvEpisode = CType(e.UserState, TvEpisode)
 
-
-                'Dim cnode As TreeNode = Nothing
-                'Dim shownode As Integer
-
-                'For g = 0 To TvTreeview.Nodes.Count - 1
-                '    Dim temppath As String = TvTreeview.Nodes(g).Name.ToString.Replace("tvshow.nfo", "")
-                '    If fullpath.IndexOf(temppath) <> -1 Then
-                '        cnode = TvTreeview.Nodes(g)
-                '        shownode = g
-                '        Exit For
-                '    End If
-                'Next
-
-
-                'Dim seasonstring As String = Nothing
-
-                'If seasonno <> 0 And seasonno <> -1 Then
-                '    If seasonno < 10 Then
-                '        tempstring = "Season 0" & seasonno.ToString
-                '    Else
-                '        tempstring = "Season " & seasonno.ToString
-                '    End If
-                'ElseIf seasonno = 0 Then
-                '    tempstring = "Specials"
-                'ElseIf seasonno = -1 Then
-                '    tempstring = "Unknown"
-                'End If
-                'alreadyexists = False
-                'For Each node In cnode.Nodes
-                '    If node.text = tempstring Then
-                '        alreadyexists = True
-                '        Exit For
-                '    End If
-                'Next
-                'If alreadyexists = False Then
-                '    Call newseason_checkforposter(tempstring, newepisodetoadd2.VideoFilePath, tempTVDBiD) 'newepisodetoadd2.tvdbid)
-                '    cnode.Nodes.Add(tempstring)
-                'End If
-
-
-                'For Each node In cnode.Nodes
-                '    If node.text = tempstring Then
-                '        tempint = node.index
-                '        Exit For
-                '    End If
-                'Next
-                'Dim episode As Integer = Convert.ToInt32(newepisodetoadd2.episodeno)
-                'Dim eps As String
-                'If episode < 10 Then
-                '    eps = "0" & episode.ToString
-                'Else
-                '    eps = episode.ToString
-                'End If
-                'eps = eps & " - " & title
-
-
-                'Call add_episode_to_treeview(shownode, tempint, fullpath, eps, False)
-            Next
-            'Call add_episode_to_treeview(e.Empty
+                TempEpisode.ShowObj.AddEpisode(TempEpisode)
+            End If
         End If
 
     End Sub

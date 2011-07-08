@@ -69,7 +69,7 @@
     <Compile Include="Music\Artist.vb" />
     <Compile Include="Movie.vb" />
     <Compile Include="Music\MusicVideo.vb" />
-    <Compile Include="Music\Shared\MediaNFO.vb" />
+    <Compile Include="Shared\MediaNFO.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -87,13 +87,13 @@
     </Compile>
     <Compile Include="Actor\Actor.vb" />
     <Compile Include="Actor\ActorList.vb" />
-    <Compile Include="Music\Shared\AudioDetails.vb" />
-    <Compile Include="Music\Shared\AudioList.vb" />
-    <Compile Include="Music\Shared\FileDetails.vb" />
-    <Compile Include="Music\Shared\StreamDetails.vb" />
-    <Compile Include="Music\Shared\SubtitleDetails.vb" />
-    <Compile Include="Music\Shared\SubtitleList.vb" />
-    <Compile Include="Music\Shared\VideoDetails.vb" />
+    <Compile Include="Shared\AudioDetails.vb" />
+    <Compile Include="Shared\AudioList.vb" />
+    <Compile Include="Shared\FileDetails.vb" />
+    <Compile Include="Shared\StreamDetails.vb" />
+    <Compile Include="Shared\SubtitleDetails.vb" />
+    <Compile Include="Shared\SubtitleList.vb" />
+    <Compile Include="Shared\VideoDetails.vb" />
     <Compile Include="TV\TvCache.vb" />
     <Compile Include="TV\TvEpisode.Treeview.vb" />
     <Compile Include="TV\TvEpisode.vb" />

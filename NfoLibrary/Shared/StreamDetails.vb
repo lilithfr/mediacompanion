@@ -7,9 +7,8 @@ Public Class StreamDetails
     Public Property Audio As New AudioList(Me, "audio")
     Public Property Subtitles As New SubtitleList(Me, "subtitle")
 
-    Private Sub New()
+    Public Sub New()
         MyBase.New(Nothing, Nothing)
-        Throw New NotImplementedException()
     End Sub
 
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)

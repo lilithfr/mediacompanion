@@ -226,6 +226,7 @@ Public Class TvShow
                 NewSeason.Poster.FileName = "season-all.tbn"
             End If
 
+
             Me.ShowNode.Nodes.Add(NewSeason.SeasonNode)
             NewSeason.UpdateTreenode()
             NewSeason.SeasonNode.Nodes.Add(Episode.EpisodeNode)
