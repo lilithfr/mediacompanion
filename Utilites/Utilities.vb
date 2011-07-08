@@ -441,7 +441,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
-            For f = 0 To VideoExtensions.Length
+            For f = 0 To VideoExtensions.Length - 1
                 tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), VideoExtensions(f))
                 If IO.File.Exists(tempfilename) Then
                     actualpathandfilename = tempfilename

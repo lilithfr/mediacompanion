@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Xml
 Imports System.Threading
+Imports Nfo
 
 
 Public Class Preferences
@@ -197,8 +198,8 @@ Public Class Preferences
         Preferences.tvposter = True
         Preferences.postertype = "poster"
         Preferences.downloadtvseasonthumbs = True
-        Preferences.tvdblanguage = "English"
-        Preferences.tvdblanguagecode = "en"
+        Preferences.TvdbLanguage = "English"
+        Preferences.TvdbLanguageCode = "en"
         Preferences.sortorder = "default"
         Preferences.tvdbactorscrape = 0
         Preferences.defaulttvthumb = "poster"
@@ -633,7 +634,7 @@ Public Class Preferences
 
         child = doc.CreateElement("tvdblanguage")
         tempstring = ""
-        tempstring = Preferences.tvdblanguagecode & "|" & Preferences.tvdblanguage
+        tempstring = Preferences.TvdbLanguageCode & "|" & Preferences.TvdbLanguage
         child.InnerText = tempstring
         root.AppendChild(child)
 
@@ -1141,12 +1142,12 @@ Public Class Preferences
                     partone = thisresult.InnerXml.Split("|")
                     For f = 0 To 1
                         If partone(0).Length = 2 Then
-                            Preferences.tvdblanguagecode = partone(0)
-                            Preferences.tvdblanguage = partone(1)
+                            Preferences.TvdbLanguageCode = partone(0)
+                            Preferences.TvdbLanguage = partone(1)
                             Exit For
                         Else
-                            Preferences.tvdblanguagecode = partone(1)
-                            Preferences.tvdblanguage = partone(0)
+                            Preferences.TvdbLanguageCode = partone(1)
+                            Preferences.TvdbLanguage = partone(0)
                         End If
                     Next
 
@@ -1554,10 +1555,10 @@ Public Class Preferences
 
             workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
             workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
-            If workingfiledetails.filedetails_video.width <> Nothing Then
-                If IsNumeric(workingfiledetails.filedetails_video.width) Then
-                    If workingfiledetails.filedetails_video.height <> Nothing Then
-                        If IsNumeric(workingfiledetails.filedetails_video.height) Then
+            If workingfiledetails.filedetails_video.Width <> Nothing Then
+                If IsNumeric(workingfiledetails.filedetails_video.Width) Then
+                    If workingfiledetails.filedetails_video.Height <> Nothing Then
+                        If IsNumeric(workingfiledetails.filedetails_video.Height) Then
                             '                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
                             '                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
                             '                            Dim aspect As Decimal

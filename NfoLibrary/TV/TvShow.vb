@@ -56,7 +56,7 @@ Public Class TvShow
                     ShowNode.ImageKey = "error"
                     ShowNode.SelectedImageKey = "error"
             End Select
-            Return _State.Value
+            Return CType(_State.Value, Nfo.ShowState)
         End Get
         Set(ByVal value As Nfo.ShowState)
             _State.Value = value
