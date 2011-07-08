@@ -69,6 +69,7 @@
     <Compile Include="Music\Artist.vb" />
     <Compile Include="Movie.vb" />
     <Compile Include="Music\MusicVideo.vb" />
+    <Compile Include="Music\Shared\MediaNFO.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -93,6 +94,7 @@
     <Compile Include="Music\Shared\SubtitleDetails.vb" />
     <Compile Include="Music\Shared\SubtitleList.vb" />
     <Compile Include="Music\Shared\VideoDetails.vb" />
+    <Compile Include="TV\TvCache.vb" />
     <Compile Include="TV\TvEpisode.Treeview.vb" />
     <Compile Include="TV\TvEpisode.vb" />
     <Compile Include="TV\TvEpisodeList.vb" />

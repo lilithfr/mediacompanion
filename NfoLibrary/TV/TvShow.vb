@@ -12,14 +12,14 @@ Public Class TvShow
     Public Property Rating As New ProtoProperty(Me, "rating")
     Public Property Genre As New ProtoProperty(Me, "genre")
     Public Property Id As New ProtoProperty(Me, "id")
-    Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
-    '    Get
-    '        Return Id
-    '    End Get
-    '    Set(ByVal value As ProtoProperty)
-    '        Id = value
-    '    End Set
-    'End Property
+    Public Property TvdbId As String
+        Get
+            Return Id.Value
+        End Get
+        Set(ByVal value As String)
+            Id.Value = value
+        End Set
+    End Property
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property SortOrder As New ProtoProperty(Me, "sortorder")
     Public Property Language As New ProtoProperty(Me, "language")
@@ -39,7 +39,44 @@ Public Class TvShow
 
     Public Property ListActors As New ActorList(Me, "actor")
 
-    Public Property State As New ProtoProperty(Me, "state")
+    Private Property _State As New ProtoProperty(Me, "state")
+    Public Shadows Property State As Nfo.ShowState
+        Get
+            Select Case _State.Value
+                Case Nfo.ShowState.Open
+                    ShowNode.ImageKey = "blank"
+                    ShowNode.SelectedImageKey = "blank"
+                Case Nfo.ShowState.Locked
+                    ShowNode.ImageKey = "padlock"
+                    ShowNode.SelectedImageKey = "padlock"
+                Case Nfo.ShowState.Unverified
+                    ShowNode.ImageKey = "qmark"
+                    ShowNode.SelectedImageKey = "qmark"
+                Case Nfo.ShowState.Error
+                    ShowNode.ImageKey = "error"
+                    ShowNode.SelectedImageKey = "error"
+            End Select
+            Return CType(_State.Value, Nfo.ShowState)
+        End Get
+        Set(ByVal value As Nfo.ShowState)
+            _State.Value = value
+            Select Case _State.Value
+                Case Nfo.ShowState.Open
+                    ShowNode.ImageKey = "blank"
+                    ShowNode.SelectedImageKey = "blank"
+                Case Nfo.ShowState.Locked
+                    ShowNode.ImageKey = "padlock"
+                    ShowNode.SelectedImageKey = "padlock"
+                Case Nfo.ShowState.Unverified
+                    ShowNode.ImageKey = "qmark"
+                    ShowNode.SelectedImageKey = "qmark"
+                Case Nfo.ShowState.Error
+                    ShowNode.ImageKey = "error"
+                    ShowNode.SelectedImageKey = "error"
+            End Select
+        End Set
+    End Property
+
 
     Public Property Seasons As New Dictionary(Of String, TvSeason)
     Public Property Episodes As New List(Of TvEpisode)
@@ -50,6 +87,24 @@ Public Class TvShow
     Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons") With {.FileName = "seasonall.tbn"}
     Public Property ImageClearArt As New ProtoImage(Me, "clearart") With {.FileName = "clearart.png"}
     Public Property ImageLogo As New ProtoImage(Me, "logo") With {.FileName = "logo.png"}
+
+
+    Public ReadOnly Property MissingEpisodes As List(Of TvEpisode)
+        Get
+            Dim TempList As New List(Of TvEpisode)
+
+            For Each Ep As TvEpisode In Me.Episodes
+                If Ep.IsMissing Then
+                    TempList.Add(Ep)
+                End If
+            Next
+            Return TempList
+        End Get
+    End Property
+
+    Public Property posters As New List(Of String)
+    Public Property fanart As New List(Of String)
+
 
 
     Sub New()
@@ -104,7 +159,7 @@ Public Class TvShow
 
     Public Sub AbsorbTvdbSeries(ByVal Series As Tvdb.Series)
         Me.Id.Value = Series.Id.Value
-        Me.TvdbId.Value = Series.Id.Value
+        Me.TvdbId = Series.Id.Value
         Me.Mpaa.Value = Series.ContentRating.Value
         Me.Genre.Value = Series.Genre.Value
         Me.ImdbId.Value = Series.ImdbId.Value
@@ -234,6 +289,17 @@ Public Class TvShow
             Return Count
         End Get
     End Property
+
+
+
+    Public Sub SearchForNewEpisodes()
+        'Enumerate Files in this shows folder
+        '   Does it have an nfo file?
+        '       Yes? Is it already added to the tv show?
+        '           Load if nececery and skip without comment
+        '       No? Create an episode object for the file, add it to the show
+        'Enumerate all shows and make sure they are nfoed and if not scrape
+    End Sub
 End Class
 
 Public Enum ShowState

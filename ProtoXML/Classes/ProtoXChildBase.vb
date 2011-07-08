@@ -1,13 +1,13 @@
 ﻿Public MustInherit Class ProtoXChildBase
     Implements IProtoXChild
 
-
     Public Property ParentClass As IProtoXBase Implements IProtoXChild.ParentClass
 
     Public Property ChildrenLookup As New System.Collections.Generic.Dictionary(Of String, IProtoXChild) Implements IProtoXBase.ChildrenLookup
     Public Overridable Property Node As XElement Implements IProtoXBase.Node
 
     Public Property Orphan As Boolean Implements IProtoXChild.Orphan
+
 
     Public Sub New()
         Me.New(Nothing, Nothing)
@@ -22,7 +22,7 @@
             End If
         Else
             Me.ParentClass = Parent
-
+            AddHandler Me.ValueChanged, AddressOf Me.ParentClass.HandleChildValueChanged
             Me.NodeName = NodeName
 
             ParentClass.ChildrenLookup.Add(Me.NodeName, Me)
@@ -94,5 +94,18 @@
         Next
     End Sub
 
-  
+    Public Sub RaiseValueChanged(ByRef ProtoChild As ProtoXChildBase) Implements IProtoXChild.RaiseValueChanged
+        Me.IsAltered = True
+        RaiseEvent ValueChanged(ProtoChild)
+    End Sub
+
+    Public Sub HandleChildValueChanged(ByRef ProtoChild As ProtoXChildBase) Implements IProtoXChild.HandleChildValueChanged
+        Me.IsAltered = True
+        RaiseEvent ValueChanged(ProtoChild)
+    End Sub
+
+    Public Event ValueChanged(ByRef ProtoChild As ProtoXChildBase) Implements IProtoXChild.ValueChanged
+
+    Public Property IsAltered As Boolean Implements IProtoXBase.IsAltered
+
 End Class

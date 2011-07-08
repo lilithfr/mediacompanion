@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FullFileDetails.vb" />
-    <Compile Include="MediaNFO.vb" />
     <Compile Include="MediaNFOAudio.vb" />
     <Compile Include="MediaNFOSubtitles.vb" />
     <Compile Include="MediaNFOVideo.vb" />

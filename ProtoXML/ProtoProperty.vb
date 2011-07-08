@@ -3,11 +3,10 @@ Public Class ProtoProperty
     Inherits ProtoXChildBase
 
 
+
     Public Property NotAttached As Boolean
 
     Private _value As String
-
-    Event ValueChanged(ByVal NewValue As String)
 
     Public Property Value As String
         Get
@@ -40,7 +39,7 @@ Public Class ProtoProperty
                 Me.Node.Value = CType(value, String)
             End If
 
-            RaiseEvent ValueChanged(value)
+            MyBase.RaiseValueChanged(Me)
             _value = value
         End Set
     End Property
@@ -81,9 +80,9 @@ Public Class ProtoProperty
     '    End If
     'End Sub
 
-    Public Shared Narrowing Operator CType(ByVal Left As ProtoProperty) As String
-        Return Left.Value
-    End Operator
+    'Public Shared Narrowing Operator CType(ByVal Left As ProtoProperty) As String
+    '    Return Left.Value
+    'End Operator
 
     Public Function IndexOf(ByVal Input As String) As Integer
         If Me.Value Is Nothing Then
@@ -92,4 +91,5 @@ Public Class ProtoProperty
 
         Return Me.Value.IndexOf(Input)
     End Function
+
 End Class

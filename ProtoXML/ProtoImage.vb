@@ -1,5 +1,6 @@
 ﻿Public Class ProtoImage
     Inherits ProtoXChildBase
+
     Private _FolderPath As String
     Public Property FolderPath As String
         Get
@@ -77,4 +78,5 @@
     Public Overrides Sub ProcessNode(ByRef Element As System.Xml.Linq.XElement)
 
     End Sub
+
 End Class
