@@ -13,9 +13,9 @@ Imports Nfo
 'Imports System.ComponentModel
 
 Partial Public Class Form1
-    Public TvCache As New TvCache
+    'Public TvCache As New TvCache
 
-    Public TvShows As New List(Of TvShow)
+    'Public TvShows As New List(Of TvShow)
     'Public workingTvShow As New TvShow
     'Public workingEpisode As New List(Of TvEpisode)
     'Public tempWorkingTvShow As New TvShow
@@ -708,12 +708,10 @@ Partial Public Class Form1
     Private Sub RebuildTvShows()
         tvrebuildlog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
         TV_CleanFolderList()
-        totalTvShowCount = 0
-        totalEpisodeCount = 0
         TextBox32.Text = ""
         TextBox33.Text = ""
         Me.Enabled = False
-        TvShows.Clear()
+        Cache.TvCache.Items.Clear()
         TvTreeview.Nodes.Clear()
         For Each tvfolder In Preferences.tvFolders
             'tvrebuildlog("Adding " & tvfolder)
@@ -738,7 +736,7 @@ Partial Public Class Form1
                     '    End If
                     'Next
                     'If skip = False Then
-                    TvShows.Add(newtvshownfo)
+                    Cache.TvCache.Add(newtvshownfo)
                     'newtvshownfo.SearchForEpisodesInFolder()
                     TvTreeview.Nodes.Add(newtvshownfo.ShowNode)
                     'End If
@@ -748,7 +746,7 @@ Partial Public Class Form1
             'End If
         Next
 
-        For Each tv In TvShows
+        For Each tv In Cache.TvCache.Shows
             ListtvFiles(tv, "*.NFO")
         Next
 
@@ -1011,8 +1009,8 @@ Partial Public Class Form1
         '        Next
         '    End If
         'Next
-        TextBox32.Text = totalTvShowCount.ToString
-        TextBox33.Text = totalEpisodeCount.ToString
+        TextBox32.Text = Cache.TvCache.Shows.Count
+        TextBox33.Text = Cache.TvCache.Episodes.Count
         Me.BringToFront()
         Me.Activate()
         ';
@@ -1028,7 +1026,7 @@ Partial Public Class Form1
             If NewShow.FileContainsReadableXml Then
                 NewShow.Load()
                 NewShow.UpdateTreenode()
-                TvShows.Add(NewShow)
+                Cache.TvCache.Shows.Add(NewShow)
 
                 'TvShows.Add(NewShow)
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
@@ -1592,7 +1590,7 @@ Partial Public Class Form1
             'DownloadMissingArt(NewShow)
             NewShow.Save()
             NewShow.UpdateTreenode()
-            TvShows.Add(NewShow)
+            Cache.TvCache.Shows.Add(NewShow)
             If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                 Preferences.tvFolders.Add(newTvFolders(0))
             End If
@@ -1679,7 +1677,7 @@ Partial Public Class Form1
 
 
         Dim TvFolder As String
-        For Each TvShow As Nfo.TvShow In TvShows
+        For Each TvShow As Nfo.TvShow In Cache.TvCache.Shows
             TvFolder = IO.Path.GetDirectoryName(TvShow.FolderPath)
             Dim Add As Boolean = True
             If TvShow.State <> Nfo.ShowState.Open Then
@@ -1893,7 +1891,7 @@ Partial Public Class Form1
 
                 savepath = episodearray(0).VideoFilePath
                 Dim EpisodeName As String = ""
-                For Each Shows In TvShows
+                For Each Shows In Cache.TvCache.Shows
                     If bckgroundscanepisodes.CancellationPending Then
                         Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                         Exit Sub
@@ -2326,7 +2324,7 @@ Partial Public Class Form1
                     Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
                     Exit Sub
                 End If
-                For Each Shows In TvShows
+                For Each Shows In Cache.TvCache.Shows
                     If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
                         'workingtvshow = nfofunction.loadfulltnshownfo(Shows.fullpath)
                         For Each ept In episodearray
@@ -3108,7 +3106,7 @@ Partial Public Class Form1
     Private Sub TV_TvFilter(ByVal butt As String)
         If Not startup = True Then
             If butt = "missingeps" Then
-                For Each item As Nfo.TvShow In TvShows
+                For Each item As Nfo.TvShow In Cache.TvCache.Shows
                     For Each Season As Nfo.TvSeason In item.Seasons.Values
                         For Each episode As Nfo.TvEpisode In Season.Episodes
                             If Not episode.IsMissing Then
@@ -3131,7 +3129,7 @@ Partial Public Class Form1
                     End If
                 Next
             ElseIf butt = "screenshot" Then
-                For Each item As Nfo.TvShow In TvShows
+                For Each item As Nfo.TvShow In Cache.TvCache.Shows
                     For Each Season As Nfo.TvSeason In item.Seasons.Values
                         For Each episode As Nfo.TvEpisode In Season.Episodes
                             If String.IsNullOrEmpty(episode.Thumbnail.FileName) Then
@@ -3154,7 +3152,7 @@ Partial Public Class Form1
                     End If
                 Next
             ElseIf butt = "all" Then
-                For Each item As Nfo.TvShow In TvShows
+                For Each item As Nfo.TvShow In Cache.TvCache.Shows
                     item.Visible = True
                     For Each Season As Nfo.TvSeason In item.Seasons.Values
                         For Each episode As Nfo.TvEpisode In Season.Episodes
@@ -3167,7 +3165,7 @@ Partial Public Class Form1
                     item.Visible = True
                 Next
             ElseIf butt = "fanart" Then
-                For Each item As Nfo.TvShow In TvShows
+                For Each item As Nfo.TvShow In Cache.TvCache.Shows
                     item.Visible = True
                     For Each Season As Nfo.TvSeason In item.Seasons.Values
                         For Each episode As Nfo.TvEpisode In Season.Episodes
@@ -3182,7 +3180,7 @@ Partial Public Class Form1
                     End If
                 Next
             ElseIf butt = "posters" Then
-                For Each item As Nfo.TvShow In TvShows
+                For Each item As Nfo.TvShow In Cache.TvCache.Shows
 
 
                     For Each Season As Nfo.TvSeason In item.Seasons.Values
@@ -3316,7 +3314,7 @@ Partial Public Class Form1
 
     Private Sub findmissingepisodes()
         Utilities.EnsureFolderExists(IO.Path.Combine(Preferences.applicationPath, "missing\"))
-        For Each item In TvShows
+        For Each item In Cache.TvCache.Shows
 
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
             'If item.locked = Nfo.ShowState.Open Then
@@ -3434,21 +3432,21 @@ Partial Public Class Form1
     End Sub
 
     Public Sub LoadTvCache(ByVal Text As String)
-        TvCache.TvCachePath = Preferences.workingProfile.tvcache
+        Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
 
-        TvCache.Load()
+        Cache.TvCache.Load()
 
-        'Dirty work around until TvShows is repalced with TvCache.Shows universally
-        For Each TvShow As Nfo.TvShow In TvCache.Shows
-            'Dim NewShow As New TvShow
-            'NewShow.LoadXml(TvShow.Node)
-            'NewShow.NfoFilePath = TvShow.NfoFilePath
-            'NewShow.UpdateTreenode()
-            TvShows.Add(TvShow)
+        ''Dirty work around until TvShows is repalced with TvCache.Shows universally
+        For Each TvShow As Nfo.TvShow In Cache.TvCache.Shows
+            '    'Dim NewShow As New TvShow
+            '    'NewShow.LoadXml(TvShow.Node)
+            '    'NewShow.NfoFilePath = TvShow.NfoFilePath
+            TvShow.UpdateTreenode()
+            '    TvShows.Add(TvShow)
 
-            'For Each Episode As Nfo.TvEpisode In TvShow.Episodes
-            '    NewShow.AddEpisode(Episode)
-            'Next
+            '    'For Each Episode As Nfo.TvEpisode In TvShow.Episodes
+            '    '    NewShow.AddEpisode(Episode)
+            '    'Next
 
             TvTreeview.Nodes.Add(TvShow.ShowNode)
         Next
@@ -3456,19 +3454,34 @@ Partial Public Class Form1
     End Sub
 
     Public Sub TV_SaveTvData(ByVal Text As String)
-        TvCache.TvCachePath = Preferences.workingProfile.tvcache
-        TvCache.Clear()
-        For Each TvShow In TvShows
-            TvCache.Add(TvShow)
-            'For Each Season As Nfo.TvSeason In TvShow.Seasons.Values
-            '    TvCache.Add(Season)
-            For Each Episode As Nfo.TvEpisode In TvShow.Episodes
-                TvCache.Add(Episode)
-            Next
-            'Next
-        Next
+        Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
+        'Cache.TvCache.Clear()
+        'For Each TvShow In TvShows
+        '    Cache.TvCache.Add(TvShow)
+        '    'For Each Season As Nfo.TvSeason In TvShow.Seasons.Values
+        '    '    TvCache.Add(Season)
+        '    For Each Episode As Nfo.TvEpisode In TvShow.Episodes
+        '        Cache.TvCache.Add(Episode)
+        '    Next
+        '    'Next
+        'Next
 
+        If Cache.TvCache.IsAltered Then
+            Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
 
-        TvCache.Save()
+            If Result = MsgBoxResult.Yes Then
+                For Each Item As ProtoXML.ProtoFile In Cache.TvCache.Items
+                    If Item.IsAltered Then
+                        Item.Save()
+                    End If
+                Next
+            ElseIf Result = MsgBoxResult.No Then
+                'Do Nothing
+            ElseIf Result = MsgBoxResult.Cancel Then
+                Exit Sub
+            End If
+        End If
+
+        Cache.TvCache.Save()
     End Sub
 End Class

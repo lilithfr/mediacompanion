@@ -10,6 +10,20 @@ Public Class TvCache
     Public Episodes As New List(Of TvEpisode)
     Public Other As New List(Of ProtoFile)
 
+    Public ReadOnly Property IsAltered As Boolean
+        Get
+            For Each Item As ProtoFile In Items
+                If Item.IsAltered Then
+                    Return True
+                End If
+            Next
+
+            Return False
+        End Get
+    End Property
+
+    
+
     Public Sub Add(ByVal item As ProtoFile) Implements System.Collections.Generic.ICollection(Of ProtoXML.ProtoFile).Add
         If TypeOf item Is TvShow Then
             Shows.Add(item)

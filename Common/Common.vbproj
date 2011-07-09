@@ -62,6 +62,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache.vb" />
     <Compile Include="FullFileDetails.vb" />
     <Compile Include="MediaNFOAudio.vb" />
     <Compile Include="MediaNFOSubtitles.vb" />
