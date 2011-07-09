@@ -31,7 +31,7 @@ Partial Public Class Form1
 
     Dim tvobjects As New List(Of String)
 
-    Public Sub ResetTvView()
+    Public Sub tv_ViewReset()
         'RenameTVShowsToolStripMenuItem.Enabled = False
         Button43.Enabled = True
         'RenameTVShowsToolStripMenuItem.Visible = False
@@ -118,9 +118,9 @@ Partial Public Class Form1
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
             TvShowSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
-            SeasonSelected(TvTreeview.SelectedNode.Tag)
+            tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
-            EpisodeSelected(TvTreeview.SelectedNode.Tag)
+            tv_EpisodeSelected(TvTreeview.SelectedNode.Tag)
         Else
             MsgBox("None")
         End If
@@ -289,11 +289,11 @@ Partial Public Class Form1
     'End Sub
 
     Public Sub TvShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
-        LoadTvShow(SelectedTvShow)
+        tv_Load(SelectedTvShow)
 
     End Sub
 
-    Private Sub LoadTvShow(ByVal Show As Nfo.TvShow)
+    Private Sub tv_Load(ByVal Show As Nfo.TvShow)
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
             TextBox19.Text = "Unable to find folder: " & Show.FolderPath
@@ -451,7 +451,7 @@ Partial Public Class Form1
     End Sub
 
 
-    Public Sub SeasonSelected(ByRef SelectedSeason As Nfo.TvSeason)
+    Public Sub tv_SeasonSelected(ByRef SelectedSeason As Nfo.TvSeason)
         Dim Show As Nfo.TvShow
         If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
             Show = SelectedSeason.SeasonNode.Parent.Tag
@@ -523,7 +523,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Public Sub EpisodeSelected(ByRef SelectedEpisode As Nfo.TvEpisode)
+    Public Sub tv_EpisodeSelected(ByRef SelectedEpisode As Nfo.TvEpisode)
         'loadepisode
         If TabControl3.TabPages(1).Text <> "Screenshot" Then
             If screenshotTab IsNot Nothing Then
@@ -555,7 +555,7 @@ Partial Public Class Form1
         End If
 
 
-        Call LoadTvEpisode(SelectedEpisode)
+        Call ep_Load(SelectedEpisode)
 
         ToolStripMenuItem1.Enabled = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
@@ -602,7 +602,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub LoadTvEpisode(ByRef Episode As Nfo.TvEpisode)
+    Private Sub ep_Load(ByRef Episode As Nfo.TvEpisode)
         Dim tempstring As String = ""
         TextBox2.Text = ""
         TextBox20.Text = ""
@@ -705,8 +705,8 @@ Partial Public Class Form1
     End Sub
 
 
-    Private Sub RebuildTvShows()
-        tvrebuildlog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
+    Private Sub tv_Rebuild()
+        tv_RebuildLog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
         TV_CleanFolderList()
         TextBox32.Text = ""
         TextBox33.Text = ""
@@ -747,7 +747,7 @@ Partial Public Class Form1
         Next
 
         For Each tv In Cache.TvCache.Shows
-            ListtvFiles(tv, "*.NFO")
+            tv_FilesList(tv, "*.NFO")
         Next
 
 
@@ -760,7 +760,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub loadshowlist()
+    Private Sub tv_ShowListLoad()
         If TextBox26.Text <> "" Then
 
             messbox = New frmMessageBox("Please wait,", "", "Getting possible TV Shows from TVDB")
@@ -840,7 +840,7 @@ Partial Public Class Form1
                 End Try
             End If
 
-            Call checklanguage()
+            Call util_LanguageCheck()
             messbox.Close()
         Else
             MsgBox("Please Enter a Search Term")
@@ -849,7 +849,7 @@ Partial Public Class Form1
 
 
 
-    Private Function gettoptvshow(ByVal tvshowname As String)
+    Private Function tv_TvShowTopGet(ByVal tvshowname As String)
 
         templanguage = Preferences.TvdbLanguageCode
         Try
@@ -883,7 +883,7 @@ Partial Public Class Form1
                                 End Select
                             Next
                             If lan.showtitle = tvshowname Then
-                                If checktvlanguage(lan.showid, templanguage) = True Then
+                                If tv_LanguageCheck(lan.showid, templanguage) = True Then
                                     Return lan.showid
                                 End If
                             End If
@@ -891,11 +891,11 @@ Partial Public Class Form1
                     End Select
                 Next
                 Dim returnid As String = ""
-                If checktvlanguage(newshows(0).showid, templanguage) = True Then
+                If tv_LanguageCheck(newshows(0).showid, templanguage) = True Then
                     Return newshows(0).showid
                 Else
                     If templanguage <> "en" Then
-                        If checktvlanguage(newshows(0).showid, "en") = True Then
+                        If tv_LanguageCheck(newshows(0).showid, "en") = True Then
                             templanguage = "en"
                             Return newshows(0).showid
                         Else
@@ -923,7 +923,7 @@ Partial Public Class Form1
         Dim NewShow As TvShow = e.UserState
 
 
-        ListtvFiles(NewShow, "*.NFO")
+        tv_FilesList(NewShow, "*.NFO")
         realTvPaths.Add(NewShow.FolderPath)
         TvTreeview.Nodes.Add(NewShow.ShowNode)
 
@@ -1732,7 +1732,7 @@ Partial Public Class Form1
                 'moviepattern = f
                 dirpath = newtvfolders(g)
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                findnewepisodes(dirpath, f)
+                ep_NewFind(dirpath, f)
             Next f
             tempint = newEpisodeList.Count - mediacounter
 
@@ -1949,7 +1949,7 @@ Partial Public Class Form1
                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
                         Dim episodeurl As String = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
                         'Preferences.tvScraperLog &= "Trying Episode URL: " & episodeurl & vbCrLf
-                        If Not UrlIsValid(episodeurl) Then
+                        If Not util_UrlIsValid(episodeurl) Then
                             If sortorder.ToLower = "dvd" Then
                                 tempsortorder = "default"
                                 Preferences.tvScraperLog &= "WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
@@ -1959,7 +1959,7 @@ Partial Public Class Form1
                             End If
                         End If
 
-                        If UrlIsValid(episodeurl) Then
+                        If util_UrlIsValid(episodeurl) Then
 
 
                             If Preferences.tvshow_useXBMC_Scraper = True Then
@@ -1978,7 +1978,7 @@ Partial Public Class Form1
                             End If
 
                             'Dim tempepisode As String = episodescraper.getepisode(tvdbid, tempsortorder, singleepisode.Season.value, singleepisode.episodeno, language)
-                            Dim tempepisode As String = getepisode(tvdbid, tempsortorder, singleepisode.Season.Value, singleepisode.Episode.Value, language)
+                            Dim tempepisode As String = ep_Get(tvdbid, tempsortorder, singleepisode.Season.Value, singleepisode.Episode.Value, language)
                             scrapedok = True
 
                             '                            Exit For
@@ -2313,7 +2313,7 @@ Partial Public Class Form1
                 'If Preferences.tvshow_useXBMC_Scraper = True Then
                 '    newnamepath = savepath
                 'Else
-                newnamepath = addepisode(episodearray, savepath, showtitle)
+                newnamepath = ep_add(episodearray, savepath, showtitle)
                 ''9999999                                                               'This was already commented out, it must be a note of some sort.
                 For Each ep In episodearray
                     ep.VideoFilePath = newnamepath
@@ -2606,7 +2606,7 @@ Partial Public Class Form1
     '    TextBox33.Text = totalEpisodeCount.ToString
     'End Sub
 
-    Private Sub ListtvFiles(ByVal tvshow As TvShow, ByVal pattern As String)
+    Private Sub tv_FilesList(ByVal tvshow As TvShow, ByVal pattern As String)
 
         Dim episode As New List(Of TvEpisode)
         Dim propfile As Boolean = False
@@ -2620,20 +2620,20 @@ Partial Public Class Form1
 
         newlist.Insert(0, tvshow.FolderPath)
         If newlist.Count > 0 Then
-            tvrebuildlog(newlist.Count - 1.ToString & " subfolders found in: " & newlist(0) & vbCrLf)
+            tv_RebuildLog(newlist.Count - 1.ToString & " subfolders found in: " & newlist(0) & vbCrLf)
         End If
         For Each folder In newlist
-            tvrebuildlog("Searching: " & vbCrLf & folder & vbCrLf & "for episodes")
+            tv_RebuildLog("Searching: " & vbCrLf & folder & vbCrLf & "for episodes")
             Dim dir_info As New System.IO.DirectoryInfo(folder)
-            tvrebuildlog("Looking in " & folder)
+            tv_RebuildLog("Looking in " & folder)
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern, SearchOption.TopDirectoryOnly)
             For Each fs_info As System.IO.FileInfo In fs_infos
 
                 Try
                     Application.DoEvents()
                     If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
-                        tvrebuildlog("possible episode nfo found: " & fs_info.FullName)
-                        episode = nfoFunction.loadbasicepisodenfo(fs_info.FullName)
+                        tv_RebuildLog("possible episode nfo found: " & fs_info.FullName)
+                        episode = nfoFunction.ep_NfoLoad(fs_info.FullName)
                         If Not episode Is Nothing Then
                             For Each ep In episode
                                 If ep.Title <> Nothing Then
@@ -2646,18 +2646,18 @@ Partial Public Class Form1
                                     Next
                                     If skip = False Then
                                         tvshow.AddEpisode(ep)
-                                        tvrebuildlog("Episode appears to have loaded ok")
+                                        tv_RebuildLog("Episode appears to have loaded ok")
                                     End If
                                 End If
                             Next
                         End If
                     End If
                 Catch ex As Exception
-                    tvrebuildlog(ex.ToString)
+                    tv_RebuildLog(ex.ToString)
                 End Try
             Next fs_info
         Next
-        tvrebuildlog(vbCrLf & vbCrLf & vbCrLf)
+        tv_RebuildLog(vbCrLf & vbCrLf & vbCrLf)
 
     End Sub
 
@@ -2724,10 +2724,10 @@ Partial Public Class Form1
     End Function
 
     Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
-        DownloadMissingArt(tvCurrentlySelectedShow)
+        tv_MissingArtDownload(tvCurrentlySelectedShow)
     End Sub
 
-    Public Sub DownloadMissingArt(ByVal BrokenShow As TvShow)
+    Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
         'Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
         'messbox.Show()
         'messbox.Refresh()
@@ -3097,13 +3097,13 @@ Partial Public Class Form1
             End If
         Catch
         End Try
-        Call LoadTvShow(BrokenShow)
+        Call tv_Load(BrokenShow)
         messbox.Close()
 
         TV_CleanFolderList()
     End Sub
 
-    Private Sub TV_TvFilter(ByVal butt As String)
+    Private Sub tv_Filter(ByVal butt As String)
         If Not startup = True Then
             If butt = "missingeps" Then
                 For Each item As Nfo.TvShow In Cache.TvCache.Shows
@@ -3201,7 +3201,7 @@ Partial Public Class Form1
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
-        Call findmissingepisodes()
+        Call tv_EpisodesMissingFind()
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles Bckgrndfindmissingepisodes.ProgressChanged
@@ -3312,7 +3312,7 @@ Partial Public Class Form1
         TvTreeview.Sort()
     End Sub
 
-    Private Sub findmissingepisodes()
+    Private Sub tv_EpisodesMissingFind()
         Utilities.EnsureFolderExists(IO.Path.Combine(Preferences.applicationPath, "missing\"))
         For Each item In Cache.TvCache.Shows
 
@@ -3431,7 +3431,7 @@ Partial Public Class Form1
         Next
     End Sub
 
-    Public Sub LoadTvCache(ByVal Text As String)
+    Public Sub tv_CacheLoad(ByVal Text As String)
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
 
         Cache.TvCache.Load()
@@ -3453,7 +3453,7 @@ Partial Public Class Form1
         TvTreeview.Sort()
     End Sub
 
-    Public Sub TV_SaveTvData(ByVal Text As String)
+    Public Sub tv_SaveTvData(ByVal Text As String)
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
         'Cache.TvCache.Clear()
         'For Each TvShow In TvShows
@@ -3483,5 +3483,14 @@ Partial Public Class Form1
         End If
 
         Cache.TvCache.Save()
+    End Sub
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
     End Sub
 End Class
