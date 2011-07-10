@@ -711,7 +711,7 @@ Partial Public Class Form1
         TextBox32.Text = ""
         TextBox33.Text = ""
         Me.Enabled = False
-        Cache.TvCache.Items.Clear()
+        Cache.TvCache.Clear()
         TvTreeview.Nodes.Clear()
         For Each tvfolder In Preferences.tvFolders
             'tvrebuildlog("Adding " & tvfolder)
