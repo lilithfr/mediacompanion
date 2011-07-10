@@ -726,8 +726,8 @@ Partial Public Class Form1
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
             newtvshownfo.Load()
-            If newtvshownfo.Title IsNot Nothing Then
-                If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
+            If newtvshownfo.Title.Value IsNot Nothing Then
+                If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
                     'Dim skip As Boolean = False
                     'For Each tvshow In TvShows
                     '    If newtvshownfo.fullpath = tvshow.fullpath Then
