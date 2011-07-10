@@ -1114,7 +1114,7 @@ Public Class frmOptions
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
         If ListBox8.Items.Count = 0 Then
             Try
-                Form1.LoadLanguageList()
+                Form1.util_LanguageListLoad()
                 For Each lan In Form1.ListBox1.Items
                     ListBox8.Items.Add(lan.language)
                 Next

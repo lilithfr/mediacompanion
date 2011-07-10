@@ -128,7 +128,7 @@ Public Class WorkingWithNfoFiles
     '    Return FinalString
     'End Function
 
-    Public Function validate_nfo(ByVal nfopath As String)
+    Public Function util_NfoValidate(ByVal nfopath As String)
         Dim tempstring As String
         Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
@@ -143,7 +143,7 @@ Public Class WorkingWithNfoFiles
         Return False
     End Function
 
-    Public Function loadbasictvshownfo(ByVal path As String) As TvShow
+    Public Function tv_NfoLoad(ByVal path As String) As TvShow
 
         Dim newtvshow As New TvShow
         If Not IO.File.Exists(path) Then
@@ -273,7 +273,7 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Function loadbasicepisodenfo(ByVal path As String)
+    Public Function ep_NfoLoad(ByVal path As String)
         'Try
         Dim episodelist As New List(Of TvEpisode)
 
@@ -851,7 +851,7 @@ Public Class WorkingWithNfoFiles
     '    Return "Error"
     'End Function
 
-    Public Function loadfulltnshownfo(ByVal path As String) As TvShow
+    Public Function tv_NfoLoadFull(ByVal path As String) As TvShow
 
 
         Dim newtvshow As New TvShow
@@ -1004,7 +1004,7 @@ Public Class WorkingWithNfoFiles
 
 
     End Function
-    Public Sub SaveTvShowNfo(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+    Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
         If IO.File.Exists(Path) And Not overwrite Then Exit Sub
 
 
@@ -1815,7 +1815,7 @@ Public Class WorkingWithNfoFiles
 
     'End Sub
 
-    Public Function loadbasicmovienfo(ByVal path As String, ByVal mode As String)
+    Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String)
 
         Try
             Dim newmovie As New str_ComboList(SetDefaults)
@@ -1828,7 +1828,7 @@ Public Class WorkingWithNfoFiles
                     Try
                         movie.Load(path)
                     Catch ex As Exception
-                        If Not validate_nfo(path) Then
+                        If Not util_NfoValidate(path) Then
                             newmovie.title = "ERROR"
                             Return "ERROR"
                             Exit Function
@@ -1971,7 +1971,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
 
-    Public Function loadfullmovienfo(ByVal path As String)
+    Public Function mov_NfoLoadFull(ByVal path As String)
         Monitor.Enter(Me)
         Try
             Dim newmovie As New FullMovieDetails
@@ -2204,7 +2204,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
 
-    Public Sub savemovienfo(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
+    Public Sub mov_NfoSave(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
         Monitor.Enter(Me)
         Dim stage As Integer = 1
         Try
@@ -2803,7 +2803,7 @@ Public Class WorkingWithNfoFiles
             Monitor.Exit(Me)
         End Try
     End Sub
-    Public Function decxmlchars(ByVal line As String)
+    Public Function util_CharsConvert(ByVal line As String)
         Monitor.Enter(Me)
         Try
             line = line.Replace("&amp;", "&")
@@ -2822,7 +2822,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
 
-    Public Function loadfullepisodenfogeneric(ByVal path As String) ', ByVal season As String, ByVal episode As String)
+    Public Function ep_NfoLoadGeneric(ByVal path As String) ', ByVal season As String, ByVal episode As String)
 
         Dim newepisodelist As New List(Of TvEpisode)
         Dim newepisode As New TvEpisode
