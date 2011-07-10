@@ -208,6 +208,8 @@ Public Class TvCache
     End Sub
 
     Public Sub Load()
+        Clear()        'empty the old cache before repopulation
+
         If String.IsNullOrEmpty(TvCachePath) Then
             Throw New Exception("Tv cache path not set")
         End If

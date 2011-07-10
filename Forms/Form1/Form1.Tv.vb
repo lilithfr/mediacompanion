@@ -3440,7 +3440,7 @@ Partial Public Class Form1
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
 
         Cache.TvCache.Load()
-
+        TvTreeview.Nodes.Clear()              'clear the treview of old data
         ''Dirty work around until TvShows is repalced with TvCache.Shows universally
         For Each TvShow As Nfo.TvShow In Cache.TvCache.Shows
             '    'Dim NewShow As New TvShow
