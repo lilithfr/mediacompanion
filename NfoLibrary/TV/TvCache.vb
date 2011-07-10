@@ -197,7 +197,7 @@ Public Class TvCache
                 Item.Node.Add(NfoPath)
 
             End If
-            If String.IsNullOrEmpty(Item.ShowId.Value) Then
+            If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.Id.Value) Then
                 Item.ShowId.Value = Item.ShowObj.Id.Value
             End If
 
