@@ -705,7 +705,7 @@ Partial Public Class Form1
     End Sub
 
 
-    Private Sub tv_Rebuild()
+    Private Sub tv_CacheRebuild()
         tv_RebuildLog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
         TV_CleanFolderList()
         TextBox32.Text = ""
@@ -714,51 +714,20 @@ Partial Public Class Form1
         Cache.TvCache.Clear()
         TvTreeview.Nodes.Clear()
         For Each tvfolder In Preferences.tvFolders
-            'tvrebuildlog("Adding " & tvfolder)
-            Dim hg As New IO.DirectoryInfo(tvfolder)
-            If Not hg.Exists Then
-                'Dim newtvshownfo As New basictvshownfo
-                'newtvshownfo.title = filefunction.getlastfolder(tvfolder)
-                'newtvshownfo.status = "Folder not found"
-                'basictvlist.Add(newtvshownfo)
-            End If
-            'tvrebuildlog("tvshow.nfo path is: " & shownfopath)
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
             newtvshownfo.Load(True)
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
-                    'Dim skip As Boolean = False
-                    'For Each tvshow In TvShows
-                    '    If newtvshownfo.fullpath = tvshow.fullpath Then
-                    '        skip = True
-                    '        Exit For
-                    '    End If
-                    'Next
-                    'If skip = False Then
-                    'newtvshownfo.SearchForEpisodesInFolder()
                     Cache.TvCache.Add(newtvshownfo)
-                    'newtvshownfo.SearchForEpisodesInFolder()
                     TvTreeview.Nodes.Add(newtvshownfo.ShowNode)
-                    'End If
                 End If
             End If
             realTvPaths.Add(tvfolder)
-            'End If
         Next
         Windows.Forms.Application.DoEvents()
-        'For Each tv In Cache.TvCache.Shows
-        '    ListtvFiles(tv, "*.NFO")
-        'Next
-
-
         TV_CleanFolderList()
-        'Call populatetvtree()
-
         Me.Enabled = True
-
-        'Call savetvdata()
-
     End Sub
 
     Private Sub tv_ShowListLoad()

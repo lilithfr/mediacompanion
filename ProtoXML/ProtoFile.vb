@@ -111,15 +111,21 @@
         Dim Root As XElement = Me.Doc.Root
 
         Dim ChildProperty As IProtoXChild
+        Dim XElementList As New List(Of XElement)
         For Each Child As XElement In Root.Nodes
+            XElementList.Add(Child)
+        Next
+
+        For Each Child As XElement In XElementList
             If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
                 ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
 
                 ChildProperty.ProcessNode(Child)
+                Dim chancetoseechild As Boolean = True
             End If
         Next
 
-        Me.CleanDoc()
+        'Me.CleanDoc()
         Me.IsCache = False
     End Sub
 

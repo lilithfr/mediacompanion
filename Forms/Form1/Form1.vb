@@ -510,7 +510,7 @@ Public Class Form1
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call tv_Rebuild()
+            Call tv_CacheRebuild()
         Else
             loadinginfo = "Status :- Loading TV Database"
             frmSplash.Label3.Text = loadinginfo
@@ -5482,7 +5482,7 @@ Public Class Form1
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Call tv_Rebuild()
+            Call tv_CacheRebuild()
             messbox.Close()
         End If
 
@@ -15630,7 +15630,7 @@ Public Class Form1
         'Me.Refresh()
         'messbox.Refresh()
 
-        Call tv_Rebuild()
+        Call tv_CacheRebuild()
         'messbox.Close()
     End Sub
 
@@ -24823,7 +24823,7 @@ Public Class Form1
         End If
 
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
-            Call tv_Rebuild()
+            Call tv_CacheRebuild()
         Else
             Call tv_CacheLoad(("New Function"))
         End If

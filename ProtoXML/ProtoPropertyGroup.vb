@@ -28,6 +28,7 @@
 
                 If Not Me.Node.Parent.Nodes.Contains(Element) Then
                     If Element.Parent IsNot Nothing Then
+
                         Element.Remove()
                     End If
                     ParentClass.Node.Add(Element)
