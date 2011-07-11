@@ -41,6 +41,12 @@ Public Class Renamer
         Dim posEpisodeTitle As Integer = If(posEpisode <> -1, strRenameWorking.IndexOf("title", posEpisode), -1)
         Dim posExt As Integer = strRenameWorking.IndexOf(".ext")
 
+        'Check for correct syntax for show and episode titles
+        Dim test4ShowTitle As Match = Regex.Match(strRenameWorking, "show.?title")
+        If Not test4ShowTitle.Success Then posShow = -1
+        Dim test4EpTitle As Match = Regex.Match(strRenameWorking, "episode.?title")
+        If Not test4EpTitle.Success Then posEpisode = -1
+
         Dim DoWeReturn As Boolean = True  'added result holder of test since m.sucess may still contain nothing if there are no regexp in Form1.tv_RegexScraper
 
         Dim M As Match = Nothing        'm.success is readonly so cannot be set to false in advance....

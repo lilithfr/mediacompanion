@@ -1579,6 +1579,23 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub util_RegexSetDefaultScraper()
+        tv_RegexScraper.Clear()
+        tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
+        tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
+        tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
+    End Sub
+
+    Private Sub util_RegexSetDefaultRename()
+        tv_RegexRename.Clear()
+        tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
+        tv_RegexRename.Add("S01E01 - Episode Title.ext")
+        tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
+        tv_RegexRename.Add("1x01 - Episode Title.ext")
+        tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
+        tv_RegexRename.Add("101 - Episode Title.ext")
+    End Sub
+
     Private Sub util_RegexLoad()
 
         Dim tempstring As String
@@ -1586,6 +1603,8 @@ Public Class Form1
         tv_RegexScraper.Clear()
         tv_RegexRename.Clear()
         Dim path As String = tempstring
+        Dim createDefaultRegexScrape As Boolean = True
+        Dim createDefaultRegexRename As Boolean = True
 
         If File.Exists(path) Then
 
@@ -1596,28 +1615,32 @@ Public Class Form1
                 If regexList.DocumentElement.Name = "regexlist" Then
                     For Each result As XmlElement In regexList("regexlist")
                         Select Case result.Name
+                            Case "tvregex"                              'This is the old tag before custom renamer was introduced,
+                                tv_RegexScraper.Add(result.InnerText)   'so add it to the scraper regex list in case there are custom regexs.
+                                createDefaultRegexScrape = False        'The rename regex will not be flagged so regex.xml will be created as new format.
                             Case "tvregexscrape"
                                 tv_RegexScraper.Add(result.InnerText)
+                                createDefaultRegexScrape = False
                             Case "tvregexrename"
                                 tv_RegexRename.Add(result.InnerText)
+                                createDefaultRegexRename = False
                         End Select
                     Next
                 End If
 
             Catch ex As Exception
-
-                Call util_RegexSave(True)
+                Call util_RegexSave(True, True)
 #If SilentErrorScream Then
                 Throw ex
 #End If
             End Try
-        Else
-            Call util_RegexSave(True)
-
+        End If
+        If createDefaultRegexScrape Or createDefaultRegexRename Then
+            Call util_RegexSave(createDefaultRegexScrape, createDefaultRegexRename) 'Valid regex XML doc not available, so create default one.
         End If
     End Sub
 
-    Private Sub util_RegexSave(Optional ByVal newDefault As Boolean = False)
+    Private Sub util_RegexSave(Optional ByVal setScraperDefault As Boolean = False, Optional ByVal setRenameDefault As Boolean = False)
 
         Dim path As String = workingProfile.regexlist
         Dim doc As New XmlDocument
@@ -1625,19 +1648,8 @@ Public Class Form1
         Dim root As XmlElement
         Dim child As XmlElement
 
-        If newDefault = True Then
-            tv_RegexScraper.Clear()
-            tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
-            tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
-            tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
-            tv_RegexRename.Clear()
-            tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
-            tv_RegexRename.Add("S01E01 - Episode Title.ext")
-            tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
-            tv_RegexRename.Add("1x01 - Episode Title.ext")
-            tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
-            tv_RegexRename.Add("101 - Episode Title.ext")
-        End If
+        If setScraperDefault = True Then util_RegexSetDefaultScraper()
+        If setRenameDefault = True Then util_RegexSetDefaultRename()
 
         doc.AppendChild(xmlProc)
         root = doc.CreateElement("regexlist")
@@ -23494,7 +23506,7 @@ Public Class Form1
         For Each Regex In tv_RegexRename
             ComboBox_tv_EpisodeRename.Items.Add(Regex)
         Next
-        ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+        ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Preferences.tvrename, 0)
         If Preferences.eprenamelowercase = True Then
             CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked
         Else
@@ -23604,10 +23616,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button_tv_RegexScrape_Restore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Restore.Click
-        tv_RegexScraper.Clear()
-        tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
-        tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
-        tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
+        util_RegexSetDefaultScraper()
         ListBox_tv_RegexScrape.Items.Clear()
         For Each Regex In tv_RegexScraper
             ListBox_tv_RegexScrape.Items.Add(Regex)
@@ -23615,17 +23624,17 @@ Public Class Form1
     End Sub
 
     Private Sub Button_tv_RegexRename_Restore_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Restore.Click
-        tv_RegexRename.Clear()
-        tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
-        tv_RegexRename.Add("S01E01 - Episode Title.ext")
-        tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
-        tv_RegexRename.Add("1x01 - Episode Title.ext")
-        tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
-        tv_RegexRename.Add("101 - Episode Title.ext")
+        util_RegexSetDefaultRename()
         ListBox_tv_RegexRename.Items.Clear()
         For Each Regex In tv_RegexRename
             ListBox_tv_RegexRename.Items.Add(Regex)
         Next
+        ComboBox_tv_EpisodeRename.Items.Clear()
+        For Each Regex In tv_RegexRename
+            ComboBox_tv_EpisodeRename.Items.Add(Regex)
+        Next
+        ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+
     End Sub
 
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
@@ -23700,33 +23709,32 @@ Public Class Form1
     End Sub
 
     Private Sub Button_tv_RegexRename_Remove_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Remove.Click
-        Dim tempstring = ListBox_tv_RegexRename.SelectedItem
-        Dim tempIndex = ListBox_tv_RegexRename.SelectedIndex
+        Dim strRegexSelected = ListBox_tv_RegexRename.SelectedItem
+        Dim idxRegexSelected = ListBox_tv_RegexRename.SelectedIndex
+
         Try
-            ListBox_tv_RegexRename.Items.RemoveAt(tempIndex)
+            ListBox_tv_RegexRename.Items.RemoveAt(idxRegexSelected)
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
         End Try
+
         For Each regexp In tv_RegexRename
-            If regexp = tempstring Then
+            If regexp = strRegexSelected Then
                 tv_RegexRename.Remove(regexp)
                 Exit For
             End If
         Next
+
         TextBox_tv_RegexRename_Edit.Clear()
-        If ComboBox_tv_EpisodeRename.SelectedIndex = tempIndex Or Preferences.tvrename = tempIndex Then
-            ComboBox_tv_EpisodeRename.SelectedIndex = 0
-            MsgBox("Rename preference has been removed" & vbLf & "Please update the TV Prefs General tab")
-        End If
-        Try
-            ComboBox_tv_EpisodeRename.Items.RemoveAt(tempIndex)
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
+
+        ComboBox_tv_EpisodeRename.Items.Clear()
+        For Each Regex In tv_RegexRename
+            ComboBox_tv_EpisodeRename.Items.Add(Regex)
+        Next
+        ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename >= idxRegexSelected, Preferences.tvrename - 1, Preferences.tvrename)
+
         generalprefschanged = True
     End Sub
 
@@ -23735,6 +23743,12 @@ Public Class Form1
         ListBox_tv_RegexRename.Items.Add(TextBox_tv_RegexRename_New.Text)
         tv_RegexRename.Add(TextBox_tv_RegexRename_New.Text)
         TextBox_tv_RegexRename_New.Clear()
+        ComboBox_tv_EpisodeRename.Items.Clear()
+        For Each Regex In tv_RegexRename
+            ComboBox_tv_EpisodeRename.Items.Add(Regex)
+        Next
+        ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+
         generalprefschanged = True
     End Sub
 
@@ -25023,7 +25037,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
-        If Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename)) Then
+        If Renamer.setRenamePref(tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex)) Then
             Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
             generalprefschanged = True
         Else
