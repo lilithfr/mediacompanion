@@ -3460,7 +3460,7 @@ Partial Public Class Form1
         TvTreeview.Sort()
     End Sub
 
-    Public Sub Tv_SaveTvData(ByVal Input As String)
+    Public Function Tv_SaveTvData(ByVal Input As String) As Boolean
 
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
         'Cache.TvCache.Clear()
@@ -3492,12 +3492,14 @@ Partial Public Class Form1
             ElseIf Result = MsgBoxResult.No Then
                 'Do Nothing
             ElseIf Result = MsgBoxResult.Cancel Then
-                Exit Sub
+                Return True
+                Exit Function
             End If
         End If
 
         Cache.TvCache.Save()
-    End Sub
+        Return False
+    End Function
 
     Public Sub New()
 

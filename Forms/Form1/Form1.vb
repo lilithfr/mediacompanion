@@ -180,6 +180,14 @@ Public Class Form1
 
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
+        Call mov_CacheSave()
+        If Tv_SaveTvData("New Function") Then
+            e.Cancel = True
+            Exit Sub
+        End If
+
+        'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
+
         'Todo: Code a better way to serialize the data
 
         'Me.LoadConfig()
@@ -220,8 +228,7 @@ Public Class Form1
                 Preferences.tableview.Add(tempstring)
             Next
         End If
-        Call mov_CacheSave()
-        Call tv_SaveTvData("New Function")
+
         Preferences.startuptab = TabLevel1.SelectedIndex
 
         Preferences.SaveConfig()
