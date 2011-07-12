@@ -68,8 +68,8 @@
     End Property
 
     Public Overridable Sub Load() Implements IProtoXFile.Load
-        Me.IsAltered = False
         Me.Load(Me.NfoFilePath)
+        Me.IsAltered = False
     End Sub
 
     Public Property FailedLoad As Boolean
@@ -121,7 +121,7 @@
                 ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
 
                 ChildProperty.ProcessNode(Child)
-                Dim chancetoseechild As Boolean = True
+                Dim ChanceToSeeChild As Boolean = True
             End If
         Next
 
@@ -150,6 +150,7 @@
     Private Sub CleanNode(ByVal Element As XElement)
         Dim Cursor As XElement
         Dim NextOne As XNode
+        If Element is Nothing then Exit Sub 
         If Element.FirstNode Is Nothing Then
             Element.Remove()
             Exit Sub

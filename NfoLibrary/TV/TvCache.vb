@@ -190,20 +190,30 @@ Public Class TvCache
 
         Next
 
+        Try
+            For Each Item As TvEpisode In Episodes
+                If Item IsNot Nothing Then
+                    If Not Item.FailedLoad Then
+                        If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
+                            Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
+                            Item.Node.Add(NfoPath)
 
-        For Each Item As TvEpisode In Episodes
-            If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
-                Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
-                Item.Node.Add(NfoPath)
+                        End If
+                        If Item.ShowObj IsNot Nothing Then
+                            If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.Id.Value) Then
+                                Item.ShowId.Value = Item.ShowObj.Id.Value
+                            End If
 
-            End If
-            If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.Id.Value) Then
-                Item.ShowId.Value = Item.ShowObj.Id.Value
-            End If
-
-            Dom.Root.Add(Item.Node)
-        Next
-
+                            Dom.Root.Add(Item.Node)
+                        Else
+                            Dim Test As Boolean = True
+                        End If
+                    End If
+                End If
+            Next
+        Catch
+            Dim Test As Boolean = True
+        End Try
         Dom.Save(TvCachePath)
     End Sub
 

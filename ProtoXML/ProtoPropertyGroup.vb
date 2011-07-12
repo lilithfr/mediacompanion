@@ -19,28 +19,24 @@
         'If Not Element.Name = Node.Name Then
         '    Throw New Exception("Wrong element sent")
         'End If
-        If Me.Orphan Then
-            Me.Node = Element
-        End If
+        'If Me.Orphan Then
+        '    Me.Node = Element
+        'End If
 
-        If Me.ParentClass IsNot Nothing Then
-            If Me.Node.Parent IsNot Nothing Then
+        'If Me.ParentClass IsNot Nothing Then
+        '    If Me.Node.Parent IsNot Nothing Then
+        '        If Not Me.Node.Parent.Nodes.Contains(Element) Then
+        '            If Element.Parent IsNot Nothing Then
+        '                Element.Remove()
+        '            End If
+        '            ParentClass.Node.Add(Element)
 
-                If Not Me.Node.Parent.Nodes.Contains(Element) Then
-                    If Element.Parent IsNot Nothing Then
-
-                        Element.Remove()
-                    End If
-                    ParentClass.Node.Add(Element)
-
-                    If Me.Node.Parent IsNot Nothing Then
-                        Me.Node.Remove()
-                    End If
-                End If
-            Else
-
-            End If
-        End If
+        '            If Me.Node.Parent IsNot Nothing Then
+        '                Me.Node.Remove()
+        '            End If
+        '        End If
+        '    End If
+        'End If
         Me.Node = Element
 
 

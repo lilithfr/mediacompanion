@@ -2,10 +2,8 @@
 Public Class ProtoProperty
     Inherits ProtoXChildBase
 
-
-
-
     Public Property NotAttached As Boolean
+    Public Property SurpressAlters As Boolean
 
     Private _value As String
 
@@ -40,16 +38,12 @@ Public Class ProtoProperty
                 Me.Node.Value = CType(value, String)
             End If
 
-            If Not SurpressAlters And Not _value = value Then
+            If Not SurpressAlters AndAlso Not _value = value Then
                 MyBase.RaiseValueChanged(Me)
             End If
             _value = value
         End Set
     End Property
-
-    Public Property SurpressAlters As Boolean
-
-    
 
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)
         MyBase.New(Parent, NodeName)

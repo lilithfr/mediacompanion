@@ -6,4 +6,17 @@
         NfoFile.Load()
         DisplayGrid.DataContext = NfoFile
     End Sub
+
+    Private Sub Button2_Click(sender As System.Object, e As System.Windows.RoutedEventArgs)
+        NfoFile.Save()
+    End Sub
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        'DisplayGrid.DataContext = NfoFile
+    End Sub
 End Class

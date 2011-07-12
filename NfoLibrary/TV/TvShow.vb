@@ -242,6 +242,7 @@ Public Class TvShow
             Me.Seasons(Episode.Season.Value).Episodes.Add(Episode)
             Me.Seasons(Episode.Season.Value).UpdateTreenode()
             Episode.SeasonObj = Me.Seasons(Episode.Season.Value)
+
         Else
             Dim Test = False
         End If
