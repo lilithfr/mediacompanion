@@ -58,9 +58,11 @@ Public Class TvEpisode
 
     Public Property MediaExtension As String
 
+    Public Property Id As New ProtoProperty(Me, "id")
+
     Public Property Title As New ProtoProperty(Me, "title")
     Public Property Rating As New ProtoProperty(Me, "rating")
-    Public Property EpBookmark As New ProtoProperty(Me, "epbookmark")
+
     Public Property Year As New ProtoProperty(Me, "year")
     Public Property Top250 As New ProtoProperty(Me, "top250")
     Public Property Season As New ProtoProperty(Me, "season")
@@ -74,7 +76,7 @@ Public Class TvEpisode
     Public Property MpaaCert As New ProtoProperty(Me, "mpaa")
     Public Property PlayCount As New ProtoProperty(Me, "playcount")
     Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")
-    Public Property Id As New ProtoProperty(Me, "id")
+
     Public Property Credits As New ProtoProperty(Me, "credits")
     Public Property Director As New ProtoProperty(Me, "director")
     Public Property Premiered As New ProtoProperty(Me, "premiered")
@@ -89,6 +91,10 @@ Public Class TvEpisode
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
 
     Public Property ShowId As New ProtoProperty(Me, "ShowId")
+
+    'TODO: Should be a list, used for multiple episodes per file
+    Public Property EpBookmark As New ProtoProperty(Me, "epbookmark")
+
 
     Public Property Details As New FileInfo(Me, "fileinfo")
 

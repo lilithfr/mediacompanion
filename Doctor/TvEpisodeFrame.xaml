@@ -1,0 +1,233 @@
+﻿<Page x:Class="TvEpisodeFrame"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="TvEpisodeFrame">
+    <Grid Name="DisplayGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="5*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="10*" />
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.ColumnSpan="6" Name="NfoPath" Text="\\Rally\tv 2\Dollhouse\Dollhouse Season 1\Dollhouse - S01E01 - Ghost.nfo" />
+        <Button Content="Load Nfo" Grid.Column="6" Name="Button1" />
+
+        <Label Content="Altered?"  Grid.Column="7"/>
+        <Label Content="{Binding Path=IsAltered, FallbackValue='IsAltered'}"  Grid.Column="8"/>
+        
+        
+        <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="13,15,0,0" Name="TextBox1" VerticalAlignment="Top" Width="120" />
+
+        <Label   Grid.Column="0" Grid.Row="2" Content="Title"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Title.Value}" />
+        <Label   Grid.Column="2" Grid.Row="2" Content="Plot"/>
+        <TextBox Grid.Column="3" Grid.Row="2" Text="{Binding Path=Plot.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="3" Content="Year"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=Year.Value}" />
+        <Label   Grid.Column="2" Grid.Row="3" Content="Top250"/>
+        <TextBox Grid.Column="3" Grid.Row="3" Text="{Binding Path=Top250.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="4" Content="Season"/>
+        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=Season.Value}" />
+        <Label   Grid.Column="2" Grid.Row="4" Content="Episode"/>
+        <TextBox Grid.Column="3" Grid.Row="4" Text="{Binding Path=Episode.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="5" Content="Display Season"/>
+        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Path=DisplaySeason.Value}" />
+        <Label   Grid.Column="2" Grid.Row="5" Content="Display Episode"/>
+        <TextBox Grid.Column="3" Grid.Row="5" Text="{Binding Path=DisplayEpisode.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="6" Content="Votes"/>
+        <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Path=Votes.Value}" />
+        <Label   Grid.Column="2" Grid.Row="6" Content="Rating"/>
+        <TextBox Grid.Column="3" Grid.Row="6" Text="{Binding Path=Rating.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="7" Content="Tag Line"/>
+        <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Path=TagLine.Value}" />
+        <Label   Grid.Column="2" Grid.Row="7" Content="Runtime"/>
+        <TextBox Grid.Column="3" Grid.Row="7" Text="{Binding Path=Runtime.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="8" Content="Mpaa Cert"/>
+        <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding Path=MpaaCert.Value}" />
+        <Label   Grid.Column="2" Grid.Row="8" Content="PlayCount"/>
+        <TextBox Grid.Column="3" Grid.Row="8" Text="{Binding Path=PlayCount.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="9" Content="Last Played"/>
+        <TextBox Grid.Column="1" Grid.Row="9" Text="{Binding Path=LastPlayed.Value}" />
+        <Label   Grid.Column="2" Grid.Row="9" Content="Credits"/>
+        <TextBox Grid.Column="3" Grid.Row="9" Text="{Binding Path=Credits.Value}" />
+        
+        <Label   Grid.Column="0" Grid.Row="10" Content="Director"/>
+        <TextBox Grid.Column="1" Grid.Row="10" Text="{Binding Path=Director.Value}" />
+        <Label   Grid.Column="2" Grid.Row="10" Content="Premiered"/>
+        <TextBox Grid.Column="3" Grid.Row="10" Text="{Binding Path=Premiered.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="11" Content="Status"/>
+        <TextBox Grid.Column="1" Grid.Row="11" Text="{Binding Path=Status.Value}" />
+        <Label   Grid.Column="2" Grid.Row="11" Content="Aired"/>
+        <TextBox Grid.Column="3" Grid.Row="11" Text="{Binding Path=Aired.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="12" Content="Studio"/>
+        <TextBox Grid.Column="1" Grid.Row="12" Text="{Binding Path=Studio.Value}" />
+        <Label   Grid.Column="2" Grid.Row="12" Content="Trailer"/>
+        <TextBox Grid.Column="3" Grid.Row="12" Text="{Binding Path=Trailer.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="13" Content="Genre"/>
+        <TextBox Grid.Column="1" Grid.Row="13" Text="{Binding Path=Genre.Value}" />
+        <Label   Grid.Column="2" Grid.Row="13" Content="Missing"/>
+        <TextBox Grid.Column="3" Grid.Row="13" Text="{Binding Path=Missing.Value}" />
+
+        <Label   Grid.Column="0" Grid.Row="14" Content="Tvdb Id"/>
+        <TextBox Grid.Column="1" Grid.Row="14" Text="{Binding Path=TvdbId.Value}" />
+        <Label   Grid.Column="2" Grid.Row="14" Content="Imdb Id"/>
+        <TextBox Grid.Column="3" Grid.Row="14" Text="{Binding Path=ImdbId.Value}" />
+
+        <Label Content="Video Codec" Grid.Column="6" Grid.Row="2"  />
+        <TextBox Grid.Column="7" Grid.Row="2" Text="{Binding Path=Details.StreamDetails.Video.Codec.Value}" />
+        <Label Content="Aspect" Grid.Column="8" Grid.Row="2"  />
+        <TextBox Grid.Column="9" Grid.Row="2" Text="{Binding Path=Details.StreamDetails.Video.Aspect.Value}" />
+
+        <Label Content="Width" Grid.Column="6" Grid.Row="3"  />
+        <TextBox Grid.Column="7" Grid.Row="3" Text="{Binding Path=Details.StreamDetails.Video.Width.Value}" />
+        <Label Content="Height" Grid.Column="8" Grid.Row="3"  />
+        <TextBox Grid.Column="9" Grid.Row="3" Text="{Binding Path=Details.StreamDetails.Video.Height.Value}" />
+
+        <Label   Grid.Column="6" Grid.Row="4" Content="Duration In Seconds"   />
+        <TextBox Grid.Column="7" Grid.Row="4" Text="{Binding Path=Details.StreamDetails.Video.DurationInSeconds.Value}" />
+        <Label   Grid.Column="8" Grid.Row="4" Content="Bitrate"   />
+        <TextBox Grid.Column="9" Grid.Row="4" Text="{Binding Path=Details.StreamDetails.Video.Bitrate.Value}" />
+
+        <Label   Grid.Column="6" Grid.Row="5" Content="Bitrate Mode"   />
+        <TextBox Grid.Column="7" Grid.Row="5" Text="{Binding Path=Details.StreamDetails.Video.BitrateMode.Value}" />
+        <Label   Grid.Column="8" Grid.Row="5" Content="Bitrate Max"   />
+        <TextBox Grid.Column="9" Grid.Row="5" Text="{Binding Path=Details.StreamDetails.Video.BitrateMax.Value}" />
+
+        <Label   Grid.Column="6" Grid.Row="6" Content="Container"   />
+        <TextBox Grid.Column="7" Grid.Row="6" Text="{Binding Path=Details.StreamDetails.Video.Container.Value}" />
+        <Label   Grid.Column="8" Grid.Row="6" Content="Codec Id"   />
+        <TextBox Grid.Column="9" Grid.Row="6" Text="{Binding Path=Details.StreamDetails.Video.CodedId.Value}" />
+
+        <Label   Grid.Column="6" Grid.Row="7" Content="Codec Info"   />
+        <TextBox Grid.Column="7" Grid.Row="7" Text="{Binding Path=Details.StreamDetails.Video.CodecInfo.Value}" />
+        <Label   Grid.Column="8" Grid.Row="7" Content="Scan Type"   />
+        <TextBox Grid.Column="9" Grid.Row="7" Text="{Binding Path=Details.StreamDetails.Video.ScanType.Value}" />
+
+
+
+        <ListBox Name="AudioList" Grid.Row="9" Grid.RowSpan="3" Grid.Column="5" ItemsSource="{Binding Path=Details.StreamDetails.Audio}" SelectedItem="0"  />
+        <Grid Grid.Column="6" Grid.Row="9" Grid.ColumnSpan="4" Grid.RowSpan="3" DataContext="{Binding ElementName=AudioList}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+            </Grid.ColumnDefinitions>
+            <Label   Grid.Column="0" Grid.Row="0" Content="Codec"  />
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=SelectedItem.Codec.Value}" />
+            <Label   Grid.Column="2" Grid.Row="0" Content="Language"  />
+            <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Path=SelectedItem.Language.Value}"  />
+
+            <Label   Grid.Column="0" Grid.Row="1" Content="Channels"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=SelectedItem.Channels.Value}"  />
+            <Label   Grid.Column="2" Grid.Row="1" Content="Bitrate"  />
+            <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding Path=SelectedItem.Bitrate.Value}"  />
+
+        </Grid>
+
+
+        <ListBox Name="SubtitleList" Grid.Row="13" Grid.RowSpan="3" Grid.Column="5" ItemsSource="{Binding Path=Details.StreamDetails.Subtitles}" SelectedItem="0"  />
+        <Grid Grid.Column="6" Grid.Row="13" Grid.ColumnSpan="4" Grid.RowSpan="3" DataContext="{Binding ElementName=SubtitleList}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+            </Grid.ColumnDefinitions>
+            <Label   Grid.Column="0" Grid.Row="0" Content="Language"  />
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=SelectedItem.Language.Value}"  />
+
+            
+
+        </Grid>
+
+
+        <ListBox Name="ActorList" Grid.Row="17" Grid.RowSpan="4" Grid.Column="5" ItemsSource="{Binding Path=ListActors}" SelectedItem="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=Name.Value}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Column="6" Grid.Row="17" Grid.ColumnSpan="4" Grid.RowSpan="4" DataContext="{Binding ElementName=ActorList}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="25*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="75*" />
+            </Grid.ColumnDefinitions>
+            <Label   Grid.Column="0" Grid.Row="0" Content="Name"  />
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=SelectedItem.Name.Value}" />
+            <Label   Grid.Column="0" Grid.Row="1" Content="Role"  />
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=SelectedItem.Role.Value}"  />
+            <Label   Grid.Column="0" Grid.Row="2" Content="Thumb"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=SelectedItem.Thumb.Value}"  />
+            <Label   Grid.Column="0" Grid.Row="3" Content="Actor Id"  />
+            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=SelectedItem.ActorId.Value}" />
+        </Grid>
+
+    </Grid>
+</Page>
