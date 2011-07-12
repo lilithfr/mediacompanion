@@ -116,7 +116,7 @@ Partial Public Class Form1
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
 
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
-            TvShowSelected(TvTreeview.SelectedNode.Tag)
+            Tv_ShowSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
             tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
@@ -288,7 +288,7 @@ Partial Public Class Form1
 
     'End Sub
 
-    Public Sub TvShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
+    Public Sub Tv_ShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
         tv_Load(SelectedTvShow)
 
     End Sub
@@ -707,9 +707,9 @@ Partial Public Class Form1
 
     Private Sub tv_CacheRebuild()
         tv_RebuildLog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
-        TV_CleanFolderList()
-        TextBox32.Text = ""
-        TextBox33.Text = ""
+        Tv_CleanFolderList()
+        TextBox_TotTVShowCount.Text = ""
+        TextBox_TotEpisodeCount.Text = ""
         Me.Enabled = False
         Cache.TvCache.Clear()
         TvTreeview.Nodes.Clear()
@@ -726,8 +726,11 @@ Partial Public Class Form1
             realTvPaths.Add(tvfolder)
         Next
         Windows.Forms.Application.DoEvents()
-        TV_CleanFolderList()
+        Tv_CleanFolderList()
+        Tv_CacheSave("New Function")
         Me.Enabled = True
+        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
     End Sub
 
     Private Sub tv_ShowListLoad()
@@ -981,8 +984,8 @@ Partial Public Class Form1
         '        Next
         '    End If
         'Next
-        TextBox32.Text = Cache.TvCache.Shows.Count
-        TextBox33.Text = Cache.TvCache.Episodes.Count
+        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
         Me.BringToFront()
         Me.Activate()
         ';
@@ -1572,10 +1575,10 @@ Partial Public Class Form1
             newTvFolders.RemoveAt(0)
         Loop
 
-        TV_CleanFolderList()
+        Tv_CleanFolderList()
     End Sub
 
-    Public Sub TV_CleanFolderList()
+    Public Sub Tv_CleanFolderList()
         Dim TempList As List(Of String)
         TempList = Preferences.tvFolders
         Dim ReturnList As New List(Of String)
@@ -2635,7 +2638,7 @@ Partial Public Class Form1
 
     'End Sub
 
-    Public Function tvCurrentlySelectedShow() As Nfo.TvShow
+    Public Function tv_ShowSelectedCurrently() As Nfo.TvShow
         If TvTreeview.SelectedNode Is Nothing Then Return Nothing
         Dim Show As Nfo.TvShow = Nothing
         Dim Season As Nfo.TvSeason = Nothing
@@ -2655,7 +2658,7 @@ Partial Public Class Form1
         Return Show
     End Function
 
-    Public Function tvCurrentlySelectedSeason() As Nfo.TvSeason
+    Public Function tv_SeasonSelectedCurrently() As Nfo.TvSeason
         If TvTreeview.SelectedNode Is Nothing Then Return Nothing
 
         Dim Show As Nfo.TvShow = Nothing
@@ -2676,7 +2679,7 @@ Partial Public Class Form1
         Return Season
     End Function
 
-    Public Function tvCurrentlySelectedEpisode() As Nfo.TvEpisode
+    Public Function ep_SelectedCurrently() As Nfo.TvEpisode
         If TvTreeview.SelectedNode Is Nothing Then Return Nothing
 
         Dim Show As Nfo.TvShow = Nothing
@@ -2698,7 +2701,7 @@ Partial Public Class Form1
     End Function
 
     Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
-        tv_MissingArtDownload(tvCurrentlySelectedShow)
+        tv_MissingArtDownload(tv_ShowSelectedCurrently)
     End Sub
 
     Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
@@ -3074,7 +3077,7 @@ Partial Public Class Form1
         Call tv_Load(BrokenShow)
         messbox.Close()
 
-        TV_CleanFolderList()
+        Tv_CleanFolderList()
     End Sub
 
     Private Sub tv_Filter(ByVal butt As String)
@@ -3425,11 +3428,12 @@ Partial Public Class Form1
             TvTreeview.Nodes.Add(TvShow.ShowNode)
         Next
 
-
+        TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+        TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
         TvTreeview.Sort()
     End Sub
 
-    Public Function Tv_SaveTvData(ByVal Input As String) As Boolean
+    Public Function Tv_CacheSave(ByVal Input As String) As Boolean
 
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
         'Cache.TvCache.Clear()
@@ -3460,8 +3464,8 @@ Partial Public Class Form1
                 Next
             ElseIf Result = MsgBoxResult.No Then
                 'Do Nothing
-            ElseIf Result = MsgBoxResult.Cancel Then
-                Return True
+            Else         '  If Result = MsgBoxResult.Cancel Then            'assume cancel for any other answers (if possible...)
+                Return True         'return true to indicate to the call routine that 'cancel' has been choosen (used mainly to cancel MC close)
                 Exit Function
             End If
         End If

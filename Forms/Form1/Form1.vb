@@ -181,7 +181,7 @@ Public Class Form1
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
 
         Call mov_CacheSave()
-        If Tv_SaveTvData("New Function") Then
+        If Tv_CacheSave("New Function") Then
             e.Cancel = True
             Exit Sub
         End If
@@ -15063,7 +15063,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox4_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox4.SelectedIndexChanged
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         PictureBox6.Image = Nothing
 
         For Each actor In WorkingTvShow.ListActors
@@ -15141,7 +15141,7 @@ Public Class Form1
     End Sub
 
     Private Sub ExpandSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandSelectedShowToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim node As TreeNode
         For Each node In TvTreeview.Nodes
             If node.Name = WorkingTvShow.NfoFilePath Then
@@ -15151,7 +15151,7 @@ Public Class Form1
     End Sub
 
     Private Sub CollapseSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CollapseSelectedShowToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim node As TreeNode
         For Each node In TvTreeview.Nodes
             If node.Name = WorkingTvShow.NfoFilePath Then
@@ -15252,9 +15252,9 @@ Public Class Form1
     End Sub
 
     Private Sub tv_ShowReload(Optional ByVal force As Boolean = False)
-        Dim Show As Nfo.TvShow = tvCurrentlySelectedShow()
-        Dim Season As Nfo.TvSeason = tvCurrentlySelectedSeason()
-        Dim Episode As Nfo.TvEpisode = tvCurrentlySelectedEpisode()
+        Dim Show As Nfo.TvShow = tv_ShowSelectedCurrently()
+        Dim Season As Nfo.TvSeason = tv_SeasonSelectedCurrently()
+        Dim Episode As Nfo.TvEpisode = ep_SelectedCurrently()
         PictureBox5.Load()
         PictureBox4.Load()
 
@@ -15264,10 +15264,10 @@ Public Class Form1
     End Sub
 
     Private Sub TabControl3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl3.SelectedIndexChanged
-        Dim Show As Nfo.TvShow = tvCurrentlySelectedShow()
+        Dim Show As Nfo.TvShow = tv_ShowSelectedCurrently()
         Dim tab As String = TabControl3.SelectedTab.Text
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         If (tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences") AndAlso Show Is Nothing Then
             MsgBox("No TV Show is selected")
             Exit Sub
@@ -15304,7 +15304,7 @@ Public Class Form1
         If tab = "TV Show Selector" Then
             If ListBox3.Items.Count = 0 Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                Call tv_ChangeShowPopulate()
+                Call tv_ShowChangedRePopulate()
             End If
         ElseIf tab = "Search for new Episodes" Then
             TabControl3.SelectedIndex = tvCurrentTabIndex
@@ -15424,8 +15424,8 @@ Public Class Form1
     End Sub
 
 
-    Private Sub tv_ChangeShowPopulate()
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+    Private Sub tv_ShowChangedRePopulate()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'messbox = New message_box("Please wait,", "", "Getting possible TV Shows from TVDB")
         'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         'messbox.Show()
@@ -15643,7 +15643,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button29_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button29.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
             MsgBox("No show is selected")
             Exit Sub
@@ -17002,7 +17002,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_Fanart_Load()
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         listOfTvFanarts.Clear()
         Button40.Visible = False
         Button39.Visible = False
@@ -17174,7 +17174,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button42_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button42.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Label2.Text = "Please Wait, Trying to Download Fanart"
         Me.Refresh()
         Application.DoEvents()
@@ -17386,7 +17386,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button39_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button39.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Try
             Dim stream As New System.IO.MemoryStream
             PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
@@ -17414,7 +17414,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button31_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button31.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'browser
         openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
         openFD.Title = "Select a jpeg image file"
@@ -17427,7 +17427,7 @@ Public Class Form1
 
     Private Sub Button33_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button33.Click
         'set thumb
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim MyWebClient As New System.Net.WebClient
         Try
             Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox27.Text)
@@ -17505,8 +17505,8 @@ Public Class Form1
     End Sub
 
     Private Sub TextBox2_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox2.Enter
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         If Panel9.Visible = False Then
             TextBox2.Text = WorkingTvShow.Title.Value
             If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 Then
@@ -17518,9 +17518,9 @@ Public Class Form1
     End Sub
 
     Private Sub TextBox2_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox2.Leave
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         On Error Resume Next
         If Panel9.Visible = False Then
             '-------------- Aqui
@@ -17699,9 +17699,9 @@ Public Class Form1
         End If
     End Sub
     Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
 
         Dim tempint As Integer
         Dim tempstring As String = ""
@@ -18428,7 +18428,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
         Dim TVShowNFOContent As String = ""
         If Button45.Text = "TVDB" Then
@@ -18441,7 +18441,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button46_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button46.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim TVShowNFOContent As String = ""
         If Button46.Text = "TVDB" Then
             WorkingTvShow.EpisodeActorSource.Value = "imdb"
@@ -18454,7 +18454,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
         Dim TVShowNFOContent As String = ""
         If Button47.Text = "Default" Then
@@ -18713,7 +18713,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call tv_SaveTvData("New Function")
+        Call Tv_CacheSave("New Function")
         messbox.Close()
         If Preferences.disabletvlogs = False Then
             Dim MyFormObject As New frmoutputlog(renamelog, True)
@@ -18731,7 +18731,7 @@ Public Class Form1
 
     Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         Try
             If IsNumeric(workingepisode.playcount) Then
                 If Convert.ToInt32(workingepisode.playcount) <= 0 Then
@@ -18757,7 +18757,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterSetup()
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'If workingTvShow.tvdbid = currentposterid Then
         '    Exit Sub
         'End If
@@ -18819,7 +18819,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim tempstring As String = ComboBox2.SelectedItem
         If tempstring = "Main Poster" Then
             CheckBox8.Visible = True
@@ -18915,7 +18915,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_TvdbThumbsGet()
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim showlist As New XmlDocument
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim tvdbstuff As New TVDBScraper
@@ -19421,7 +19421,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button58_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button58.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         If workingTvShow.imdbid = Nothing Then
             MsgBox("No IMDB ID is available for this movie, cant scrape posters")
             Exit Sub
@@ -19469,7 +19469,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button49_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button49.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'browse
         openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
         openFD.Title = "Select a jpeg image File"
@@ -19542,7 +19542,7 @@ Public Class Form1
 
     Private Sub Button64_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button64.Click
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         If IsNumeric(TextBox35.Text) Then
             Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
             Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")
@@ -19636,9 +19636,9 @@ Public Class Form1
     End Sub
 
     Private Sub Button63_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button63.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         Dim messbox As frmMessageBox = New frmMessageBox("Checking TVDB for screenshot", "", "Please Wait")
         'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim episodescraper As New TVDBScraper
@@ -22309,8 +22309,8 @@ Public Class Form1
 
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
         tv_FoldersSetup()
-        tv_ShowsFind()
-        tv_ShowsScrape()
+        tv_ShowFind()
+        tv_ShowScrape()
     End Sub
 
     Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Leave
@@ -22378,14 +22378,14 @@ Public Class Form1
     End Sub
 
     Private Sub Button83_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button83.Click
-        tv_ShowsScrape()
+        tv_ShowScrape()
     End Sub
 
     Private Sub Button84_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button84.Click
-        tv_ShowsFind()
+        tv_ShowFind()
     End Sub
 
-    Public Sub tv_ShowsFind()
+    Public Sub tv_ShowFind()
         Dim Folders As List(Of String)
         For Each folder In ListBox5.Items
             Folders = Utilities.EnumerateFolders(folder, 0)
@@ -22402,7 +22402,7 @@ Public Class Form1
         Next
     End Sub
 
-    Public Sub tv_ShowsScrape()
+    Public Sub tv_ShowScrape()
         tvFolders.Clear()
         For Each item In ListBox6.Items
             If Not newTvFolders.Contains(item) Then
@@ -28854,7 +28854,7 @@ Public Class Form1
 
 
 
-        Call tv_SaveTvData("New Function")
+        Call Tv_CacheSave("New Function")
     End Sub
 
     Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildThisShowToolStripMenuItem.Click
@@ -28892,7 +28892,7 @@ Public Class Form1
     End Sub
 
     Private Sub LockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LockAllToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim shownode As TreeNode = WorkingTvShow.ShowNode
         For Each shownode In TvTreeview.Nodes
             Dim tempint As Integer = Cache.TvCache.Shows.Count - 1
@@ -28913,11 +28913,11 @@ Public Class Form1
                 End If
             Next
         Next
-        Call tv_SaveTvData("New Function")
+        Call Tv_CacheSave("New Function")
     End Sub
 
     Private Sub UnlockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnlockAllToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim shownode As TreeNode = WorkingTvShow.ShowNode
         For Each shownode In TvTreeview.Nodes
             Dim tempint As Integer = Cache.TvCache.Shows.Count - 1
@@ -28936,7 +28936,7 @@ Public Class Form1
                 End If
             Next
         Next
-        Call tv_SaveTvData("New Function")
+        Call Tv_CacheSave("New Function")
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
@@ -29115,7 +29115,7 @@ Public Class Form1
         Dim showsdone As Integer = 0
         Dim showcounter As Integer = 0
         For f = Cache.TvCache.Shows.Count - 1 To 0 Step -1
-            Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             showcounter += 1
             If Cache.TvCache.Shows(f).State = Nfo.ShowState.Open Or Cache.TvCache.Shows(f).State = -1 Or tvBatchList.includeLocked = True Then
                 progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount
@@ -30587,9 +30587,9 @@ Public Class Form1
     End Sub
 
     Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tvCurrentlySelectedShow()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
-        Dim WorkingEpisode As TvEpisode = tvCurrentlySelectedEpisode()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         Dim testmax As Integer = 0
         Dim textstring As String = ""   'this is the string used to add our text together to make our final list to be shown
         Dim Abort As Boolean = True     'this is used to verify that we actually hjave episodes to process
