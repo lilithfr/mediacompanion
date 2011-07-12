@@ -15409,7 +15409,14 @@ Public Class Form1
     End Sub
 
     Public Sub util_LanguageListLoad()
+        ListBox12.Items.Add("Working...")
+        ListBox12.Invalidate()
+        'Me.Refresh()
+        Application.DoEvents()
+
+        System.Threading.Thread.Sleep(4000)
         Dim XmlFile As String
+
         XmlFile = Utilities.DownloadTextFiles("http://thetvdb.com/api/6E82FED600783400/languages.xml")
         Dim LangList As New Tvdb.Languages()
         LangList.LoadXml(XmlFile)
@@ -15418,8 +15425,10 @@ Public Class Form1
             languageList.Add(Lang)
         Next
 
+        ListBox12.Items.Clear()
+
         For Each lan In languageList
-            ListBox1.Items.Add(lan.Language.Value)
+            ListBox12.Items.Add(lan.Language.Value)
         Next
     End Sub
 
@@ -23415,7 +23424,7 @@ Public Class Form1
 
     Private Sub ListBox12_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox12.SelectedIndexChanged
         For Each lan In languageList
-            If lan.language = ListBox12.SelectedItem Then
+            If lan.Language.Value = ListBox12.SelectedItem Then
                 Preferences.TvdbLanguage = lan.Language.Value
                 Preferences.TvdbLanguageCode = lan.Abbreviation.Value
                 Exit For
