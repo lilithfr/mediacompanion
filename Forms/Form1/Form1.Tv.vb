@@ -495,18 +495,20 @@ Partial Public Class Form1
                 Try
                     PictureBox5.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
                 Catch
-                    PictureBox5.Image = Nothing
+                    PictureBox5.ImageLocation = defaultPoster
                 End Try
             Else
                 Try
                     PictureBox5.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
                 Catch
-                    PictureBox5.Image = Nothing
+                    PictureBox5.ImageLocation = defaultPoster
                 End Try
             End If
         Else
             PictureBox5.Image = SelectedSeason.Poster.Image
-            If PictureBox5.Image Is Nothing Then
+            If PictureBox5.Image Is Nothing And Show.ImageAllSeasons.Image Is Nothing Then
+                PictureBox5.ImageLocation = defaultPoster
+            Else
                 PictureBox5.Image = Show.ImageAllSeasons.Image
             End If
 
@@ -517,7 +519,7 @@ Partial Public Class Form1
             Try
                 PictureBox4.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
             Catch
-                PictureBox4.Image = Nothing
+                PictureBox4.ImageLocation = defaultFanart
             End Try
         End If
 
@@ -548,14 +550,14 @@ Partial Public Class Form1
 
         Dim season As Integer = SelectedEpisode.Season.Value
         Dim episode As Integer = SelectedEpisode.Episode.Value
-        Dim SeasonObj As Nfo.TvSeason
+        Dim SeasonObj As New Nfo.TvSeason
         If SelectedEpisode.EpisodeNode.Parent IsNot Nothing Then
             SeasonObj = SelectedEpisode.EpisodeNode.Parent.Tag
             If season = -1 Then season = SeasonObj.SeasonLabel
         End If
 
 
-        Call ep_Load(SelectedEpisode)
+        Call ep_Load(SeasonObj, SelectedEpisode)
 
         ToolStripMenuItem1.Enabled = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
@@ -602,7 +604,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Private Sub ep_Load(ByRef Episode As Nfo.TvEpisode)
+    Private Sub ep_Load(ByRef Season As Nfo.TvSeason, ByRef Episode As Nfo.TvEpisode)
         Dim tempstring As String = ""
         TextBox2.Text = ""
         TextBox20.Text = ""
@@ -660,19 +662,17 @@ Partial Public Class Form1
         'tempstring = Episode.NfoFilePath.Substring(0, Episode.NfoFilePath.Length - 3)
         'tempstring = tempstring & "tbn"
         If Episode.Thumbnail.Image IsNot Nothing Then
-
-            'Dim bitmap2 As New Bitmap(tempstring)
-            'Dim bitmap3 As New Bitmap(bitmap2)
-            'bitmap2.Dispose()
             PictureBox4.Image = Episode.Thumbnail.Image
             PictureBox14.Image = Episode.Thumbnail.Image
-
         Else
+            PictureBox14.ImageLocation = defaultScreenShot
+            PictureBox4.ImageLocation = defaultScreenShot
+        End If
 
-            PictureBox14.Image = Nothing
-
-            PictureBox4.Image = Nothing
-
+        If Season.Poster.Image IsNot Nothing Then
+            PictureBox5.Image = Episode.Thumbnail.Image
+        Else
+            PictureBox5.ImageLocation = defaultPoster
         End If
 
         'If Episode.Season.Value <> 0 Then
