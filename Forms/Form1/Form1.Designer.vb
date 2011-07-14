@@ -1247,7 +1247,7 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenFolderToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.RescrapeThisShowToolStripMenuItem, Me.SearchThisShowForNewEpisodesToolStripMenuItem, Me.DownloadAvaileableMissingArtForShowToolStripMenuItem, Me.RebuildThisShowToolStripMenuItem, Me.ReloadItemToolStripMenuItem, Me.RenameTVShowsToolStripMenuItem, Me.MissingepisodesToolStripMenuItem, Me.DisplayEpisodesByAiredDateToolStripMenuItem, Me.ToolStripSeparator2, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(347, 390)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(353, 390)
         Me.ContextMenuStrip2.Text = "Open Folder at file"
         '
         'OpenFolderToolStripMenuItem
@@ -1258,9 +1258,10 @@ Partial Class Form1
         '
         'ToolStripMenuItem1
         '
+        Me.ToolStripMenuItem1.Enabled = False
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(255, 22)
-        Me.ToolStripMenuItem1.Text = "View .nfo File"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(346, 22)
+        Me.ToolStripMenuItem1.Text = "View .nfo File (Under Construction)"
         '
         'ToolStripSeparator1
         '
@@ -1282,9 +1283,10 @@ Partial Class Form1
         '
         'DownloadAvaileableMissingArtForShowToolStripMenuItem
         '
+        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = False
         Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Name = "DownloadAvaileableMissingArtForShowToolStripMenuItem"
-        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
-        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "Find Missing Art For This Show"
+        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Size = New System.Drawing.Size(352, 22)
+        Me.DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "Find Missing Art For This Show (Under Construction)"
         '
         'RebuildThisShowToolStripMenuItem
         '
