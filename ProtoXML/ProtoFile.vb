@@ -112,8 +112,12 @@
 
         Dim ChildProperty As IProtoXChild
         Dim XElementList As New List(Of XElement)
-        For Each Child As XElement In Root.Nodes
-            XElementList.Add(Child)
+        For Each Child As XNode In Root.Nodes
+            If TypeOf Child Is XElement Then
+                XElementList.Add(Child)
+            Else
+                Dim Test As Boolean = False
+            End If
         Next
 
         For Each Child As XElement In XElementList

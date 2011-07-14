@@ -15142,22 +15142,14 @@ Public Class Form1
 
     Private Sub ExpandSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandSelectedShowToolStripMenuItem.Click
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim node As TreeNode
-        For Each node In TvTreeview.Nodes
-            If node.Name = WorkingTvShow.NfoFilePath Then
-                node.ExpandAll()
-            End If
-        Next
+
+        WorkingTvShow.ShowNode.ExpandAll()
     End Sub
 
     Private Sub CollapseSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CollapseSelectedShowToolStripMenuItem.Click
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim node As TreeNode
-        For Each node In TvTreeview.Nodes
-            If node.Name = WorkingTvShow.NfoFilePath Then
-                node.Collapse()
-            End If
-        Next
+
+        WorkingTvShow.ShowNode.Collapse()
     End Sub
 
     Private Sub TvTreeview_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.DoubleClick
@@ -21073,21 +21065,27 @@ Public Class Form1
     End Sub
 
     Private Sub bckgroundscanepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs, Optional ByVal manual As Boolean = False) Handles bckgroundscanepisodes.DoWork
-        Call TV_EpisodeScraper(showstoscrapelist, e.Argument)
+
+        Dim List As List(Of TvShow) = e.Argument(0)
+        Dim Force As Boolean = e.Argument(1)
+
+        Call TV_EpisodeScraper(List, Force)
     End Sub
 
     Private Sub ep_Search()
+        Dim ShowList As New List(Of TvShow)
+
         If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
             'ToolStripButton10.Visible = True
             TabPage15.Text = "Cancel Episode Search"
             TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
-            showstoscrapelist.Clear()
+
             For Each item In Cache.TvCache.Shows
                 If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And (item.State = Nfo.ShowState.Open) Then
-                    showstoscrapelist.Add(item.NfoFilePath)
+                    ShowList.Add(item)
                 End If
             Next
-            bckgroundscanepisodes.RunWorkerAsync()
+            bckgroundscanepisodes.RunWorkerAsync({ShowList, False})
         ElseIf bckgroundscanepisodes.IsBusy Then
             MsgBox("This Episode Scraper is already running")
         ElseIf Bckgrndfindmissingepisodes.IsBusy Then
@@ -21096,36 +21094,32 @@ Public Class Form1
     End Sub
 
     Private Sub SearchThisShowForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchThisShowForNewEpisodesToolStripMenuItem.Click
-        If Not bckgroundscanepisodes.IsBusy Then
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+
+        Dim Season As TvSeason
+        Dim Episode As TvEpisode
+        Dim ShowList As New List(Of TvShow)
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            ShowList.Add(TvTreeview.SelectedNode.Tag)
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+
+            Season = TvTreeview.SelectedNode.Tag
+            ShowList.Add(Season.ShowObj)
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Episode = TvTreeview.SelectedNode.Tag
+            ShowList.Add(Episode.ShowObj)
+        End If
+
+        If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
             'ToolStripButton10.Visible = True
             TabPage15.Text = "Cancel Episode Search"
             TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
-            showstoscrapelist.Clear()
-            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Then
-                Dim show As New TvShow
-                show = nfoFunction.tv_NfoLoad(TvTreeview.SelectedNode.Name)
-                If show.State = Nfo.ShowState.Locked Then
-                    Dim tempint As Integer = MessageBox.Show("This TV Show is locked" & vbCrLf & "Are you sure you want to search for new episodes?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then
-                        showstoscrapelist.Add(TvTreeview.SelectedNode.Name)
-                        bckgroundscanepisodes.RunWorkerAsync(True)
-                    End If
-                ElseIf show.State = Nfo.ShowState.Unverified Then
-                    Dim tempint As Integer = MessageBox.Show("This TV Show has been added automatically by Media Companion and has not been verified" & vbCrLf & "Are you sure you want to search for new episodes?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then
-                        showstoscrapelist.Add(TvTreeview.SelectedNode.Name)
-                        bckgroundscanepisodes.RunWorkerAsync(True)
-                    End If
-                Else
-                    showstoscrapelist.Add(TvTreeview.SelectedNode.Name)
-                    bckgroundscanepisodes.RunWorkerAsync(True)
-                End If
 
-            Else
-                MsgBox("Invalid Show")
-            End If
-        Else
-            MsgBox("This TV Scraper is already running")
+            bckgroundscanepisodes.RunWorkerAsync({ShowList, False})
+        ElseIf bckgroundscanepisodes.IsBusy Then
+            MsgBox("This Episode Scraper is already running")
+        ElseIf Bckgrndfindmissingepisodes.IsBusy Then
+            MsgBox("The missing episode search cannot be performed" & vbCrLf & "    while the episode scraper is running")
         End If
     End Sub
 
@@ -28689,21 +28683,21 @@ Public Class Form1
             For Each shows In Cache.TvCache.Shows
                 shows.MissingEpisodes.Clear()
             Next
-            Dim nod As TreeNode
-            For Each nod In TvTreeview.Nodes
-                Dim nod2 As TreeNode
-                For Each nod2 In nod.Nodes
-                    Dim nod3 As TreeNode
-                    For Each nod3 In nod2.Nodes
-                        If nod3.Name.IndexOf("Missing: ") = 0 Then
-                            nod3.Remove()
-                        End If
-                    Next
-                Next
-            Next
+            'Dim nod As TreeNode
+            'For Each nod In TvTreeview.Nodes
+            '    Dim nod2 As TreeNode
+            '    For Each nod2 In nod.Nodes
+            '        Dim nod3 As TreeNode
+            '        For Each nod3 In nod2.Nodes
+            '            If nod3.Name.IndexOf("Missing: ") = 0 Then
+            '                nod3.Remove()
+            '            End If
+            '        Next
+            '    Next
+            'Next
             ToolStripStatusLabel2.Text = "Starting search for missing episodes"
             ToolStripStatusLabel2.Visible = True
-            Bckgrndfindmissingepisodes.RunWorkerAsync()
+            Bckgrndfindmissingepisodes.RunWorkerAsync(Cache.TvCache.Shows)
         ElseIf Bckgrndfindmissingepisodes.IsBusy Then
             MsgBox("Process is already running")
         Else
@@ -28816,61 +28810,51 @@ Public Class Form1
 
     'End Sub
 
-    Private Sub tv_RebuildSelected(ByVal show As String)
+    Private Sub tv_RebuildSelected(Show As TvShow)
         messbox = New frmMessageBox("Rebuilding Selected Show", "", "Please Wait")
         'remove old
         messbox.Show()
         messbox.Refresh()
         Application.DoEvents()
-        'messbox.Show()
-        For Each nod In TvTreeview.Nodes
-            If nod.name = show Then
-                TvTreeview.Nodes.Remove(nod)
-                Exit For
-            End If
-        Next
-        For Each item In Cache.TvCache.Shows
-            If item.NfoFilePath = show Then
-                Cache.TvCache.Remove(item)
-                Exit For
-            End If
-        Next
+        ''messbox.Show()
+        'For Each nod In TvTreeview.Nodes
+        '    If nod.name = show Then
+        '        TvTreeview.Nodes.Remove(nod)
+        '        Exit For
+        '    End If
+        'Next
+        'For Each item In Cache.TvCache.Shows
+        '    If item.NfoFilePath = show Then
+        '        Cache.TvCache.Remove(item)
+        '        Exit For
+        '    End If
+        'Next
 
-        Dim shownfopath As String = show
-        Dim newtvshownfo As New TvShow
-        newtvshownfo.NfoFilePath = shownfopath
-        newtvshownfo.Load()
         'newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
-        If newtvshownfo.title <> Nothing Then
 
-            Dim skip As Boolean = False
-            For Each tvshow In Cache.TvCache.Shows
-                If newtvshownfo.NfoFilePath = tvshow.NfoFilePath Then
-                    skip = True
-                    Exit For
-                End If
-            Next
-            newtvshownfo.SearchForEpisodesInFolder()
-            If skip = False Then
-                Cache.TvCache.Shows.Add(newtvshownfo)
-            End If
-
-        End If
-        realTvPaths.Add(show)
+        Show.Load()
 
         messbox.Close()
         'Call populatetvtree()
 
-
-
-        Call Tv_CacheSave("New Function")
+        'Call Tv_CacheSave("New Function")
     End Sub
 
     Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildThisShowToolStripMenuItem.Click
-        Call tv_RebuildSelected(TvTreeview.SelectedNode.Name)
+        Dim Show As TvShow = tv_ShowSelectedCurrently()
+
+        If Show IsNot Nothing Then
+            Call tv_RebuildSelected(Show)
+        Else
+            MsgBox("No Show Selected")
+        End If
+
     End Sub
 
     Private Sub MissingepisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MissingepisodesToolStripMenuItem.Click
+
+        Dim Show As TvShow = tv_ShowSelectedCurrently()
+
         If Not Bckgrndfindmissingepisodes.IsBusy Then
             Dim tempstring As String = ""
             For Each sho In Cache.TvCache.Shows
@@ -28881,13 +28865,13 @@ Public Class Form1
             Next
             If tempstring = "" Then tempstring = "Checking for missing episodes"
             Dim messbox As New frmMessageBox(tempstring, "", "Please Wait")
-            Dim showlist As New List(Of String)
-            showlist.Clear()
-            showlist.Add(TvTreeview.SelectedNode.Name)
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
-            Call tv_EpisodesMissingFind()
+            Dim ShowList As New List(Of TvShow)
+            ShowList.add(Show)
+            Bckgrndfindmissingepisodes.RunWorkerAsync(showlist)
+            'Call tv_EpisodesMissingFind()
             messbox.Close()
         Else
             MsgBox("The missing episode thread is already running")
@@ -28901,51 +28885,15 @@ Public Class Form1
     End Sub
 
     Private Sub LockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LockAllToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim shownode As TreeNode = WorkingTvShow.ShowNode
-        For Each shownode In TvTreeview.Nodes
-            Dim tempint As Integer = Cache.TvCache.Shows.Count - 1
-            For f = tempint To 0 Step -1
-                If Cache.TvCache.Shows(f).NfoFilePath = shownode.Name Then
-                    If Cache.TvCache.Shows(f).State <> Nfo.ShowState.Unverified And Cache.TvCache.Shows(f).State <> Nfo.ShowState.Locked Then
-                        If shownode.Name = WorkingTvShow.NfoFilePath Then
-                            Button60.Text = "Locked"
-                            Button60.BackColor = Color.Red
-                        End If
-                        Cache.TvCache.Shows(f).State = Nfo.ShowState.Locked
-                        Cache.TvCache.Shows(f).NfoFilePath = shownode.Name
-
-                        Cache.TvCache.Shows(f).Save()
-
-                    End If
-                    Exit For
-                End If
-            Next
+        For Each Show As TvShow In Cache.TvCache.Shows
+            Show.State = ShowState.Locked
         Next
-        Call Tv_CacheSave("New Function")
     End Sub
 
     Private Sub UnlockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnlockAllToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim shownode As TreeNode = WorkingTvShow.ShowNode
-        For Each shownode In TvTreeview.Nodes
-            Dim tempint As Integer = Cache.TvCache.Shows.Count - 1
-            For f = tempint To 0 Step -1
-                If Cache.TvCache.Shows(f).NfoFilePath = shownode.Name Then
-                    If Cache.TvCache.Shows(f).State <> Nfo.ShowState.Unverified And Cache.TvCache.Shows(f).State <> Nfo.ShowState.Open Then
-                        If shownode.Name = WorkingTvShow.NfoFilePath Then
-                            Button60.Text = "Open"
-                            Button60.BackColor = Color.LawnGreen
-                        End If
-                        Cache.TvCache.Shows(f).State = Nfo.ShowState.Open
-                        Cache.TvCache.Shows(f).NfoFilePath = shownode.Name
-                        Cache.TvCache.Shows(f).Save()
-                    End If
-                    Exit For
-                End If
-            Next
+        For Each Show As TvShow In Cache.TvCache.Shows
+            Show.State = ShowState.Open
         Next
-        Call Tv_CacheSave("New Function")
     End Sub
 
     Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
@@ -30596,70 +30544,70 @@ Public Class Form1
     End Sub
 
     Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-        Dim testmax As Integer = 0
-        Dim textstring As String = ""   'this is the string used to add our text together to make our final list to be shown
-        Dim Abort As Boolean = True     'this is used to verify that we actually hjave episodes to process
+        'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        'Dim testmax As Integer = 0
+        'Dim textstring As String = ""   'this is the string used to add our text together to make our final list to be shown
+        'Dim Abort As Boolean = True     'this is used to verify that we actually hjave episodes to process
 
-        Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
+        'Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
 
-        Dim childNodeLevel1 As TreeNode = TvTreeview.SelectedNode    'this section steps down through the tree to get from the tvshow to each episode
-        For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
-            For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
-                Abort = False                                       'if we get here then there is at least 1 episode
-                Dim path As String = childNodeLevel3.Name           'this holds the full path to the actual nfo file of the episode
-                'we load that nfo so that we can retrieve the data we want from it in workingEpisode
-                Dim EpAired As String = ""                          'define & set our episode aired date as nothing
+        'Dim childNodeLevel1 As TreeNode = TvTreeview.SelectedNode    'this section steps down through the tree to get from the tvshow to each episode
+        'For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
+        '    For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+        '        Abort = False                                       'if we get here then there is at least 1 episode
+        '        Dim path As String = childNodeLevel3.Name           'this holds the full path to the actual nfo file of the episode
+        '        'we load that nfo so that we can retrieve the data we want from it in workingEpisode
+        '        Dim EpAired As String = ""                          'define & set our episode aired date as nothing
 
-                '
-                'If workingEpisode.Count > testmax Then testmax = workingEpisode.Count
-                '
-                Dim f = 0                                           'We find each episode individually so we only need to look at the first index
-                If WorkingEpisode.aired <> Nothing Then          'If we have a valid date figure then set our date figure
-                    EpAired = WorkingEpisode.Aired.Value
+        '        '
+        '        'If workingEpisode.Count > testmax Then testmax = workingEpisode.Count
+        '        '
+        '        Dim f = 0                                           'We find each episode individually so we only need to look at the first index
+        '        If WorkingEpisode.aired <> Nothing Then          'If we have a valid date figure then set our date figure
+        '            EpAired = WorkingEpisode.Aired.Value
 
-                    'Convert episode to 2 digits for formatting
-                    Dim episode2digit As New List(Of String)
-                    episode2digit.Clear()
-                    episode2digit.Add(WorkingEpisode.Episode.Value)
-                    If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
+        '            'Convert episode to 2 digits for formatting
+        '            Dim episode2digit As New List(Of String)
+        '            episode2digit.Clear()
+        '            episode2digit.Add(WorkingEpisode.Episode.Value)
+        '            If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
 
-                    'Convert season to 2 digits for formatting
-                    Dim season2digit As String = WorkingEpisode.Season.value
-                    If season2digit.Length = 1 Then season2digit = "0" & season2digit
+        '            'Convert season to 2 digits for formatting
+        '            Dim season2digit As String = WorkingEpisode.Season.value
+        '            If season2digit.Length = 1 Then season2digit = "0" & season2digit
 
-                    'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
-                    'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
-                    'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
-                    mySortedList.Add(WorkingEpisode.Aired, Renamer.setTVFilename(WorkingTvShow.Title.Value, WorkingEpisode.Title.Value, episode2digit, season2digit))
+        '            'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
+        '            'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
+        '            'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
+        '            mySortedList.Add(WorkingEpisode.Aired, Renamer.setTVFilename(WorkingTvShow.Title.Value, WorkingEpisode.Title.Value, episode2digit, season2digit))
 
-                End If
-            Next
-        Next
+        '        End If
+        '    Next
+        'Next
 
-        If Not Abort Then   'i.e. we have episodes in this show.... 
-            textstring = WorkingTvShow.Title.Value & vbCrLf                                               'start our text with the show title
-            textstring = textstring & StrDup(WorkingTvShow.Title.Value.Length, "-") & vbCrLf              'add an underline of the same length    
+        'If Not Abort Then   'i.e. we have episodes in this show.... 
+        '    textstring = WorkingTvShow.Title.Value & vbCrLf                                               'start our text with the show title
+        '    textstring = textstring & StrDup(WorkingTvShow.Title.Value.Length, "-") & vbCrLf              'add an underline of the same length    
 
-            For Line = 0 To mySortedList.Count - 1                                                  'read the data from the sorted list
-                textstring = textstring & mySortedList.GetKey(Line) & " " & mySortedList.GetByIndex(Line) & vbCrLf
-            Next
+        '    For Line = 0 To mySortedList.Count - 1                                                  'read the data from the sorted list
+        '        textstring = textstring & mySortedList.GetKey(Line) & " " & mySortedList.GetByIndex(Line) & vbCrLf
+        '    Next
 
-            textstring = textstring & vbCrLf & "* missing episodes are not listed" & vbCrLf         'add a note about the missing episodes (they use the playcount field but are not in workingEpisodes
+        '    textstring = textstring & vbCrLf & "* missing episodes are not listed" & vbCrLf         'add a note about the missing episodes (they use the playcount field but are not in workingEpisodes
 
-            '                                                                                   'Show Final Listing Screen
-            Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
-            MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
-            MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
-            MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
-            MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value              'change the form title text
-            MyFormObject.ShowDialog()                                                               'show the form
+        '    '                                                                                   'Show Final Listing Screen
+        '    Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
+        '    MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
+        '    MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
+        '    MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+        '    MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value              'change the form title text
+        '    MyFormObject.ShowDialog()                                                               'show the form
 
-        Else                    'we get here if abort still = true, i.e. no episodes
-            MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
-        End If
+        'Else                    'we get here if abort still = true, i.e. no episodes
+        '    MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
+        'End If
     End Sub
 
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
@@ -30667,6 +30615,7 @@ Public Class Form1
     End Sub
 
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeThisShowToolStripMenuItem.Click
+
         tv_Rescrape()
     End Sub
 

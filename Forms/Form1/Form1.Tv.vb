@@ -1592,7 +1592,7 @@ Partial Public Class Form1
         Preferences.tvFolders = TempList
     End Sub
 
-    Private Sub TV_EpisodeScraper(ByVal listofshowfolders As List(Of String), ByVal manual As Boolean)
+    Private Sub TV_EpisodeScraper(ByVal ListOfShows As List(Of TvShow), ByVal manual As Boolean)
         Dim tempstring As String = ""
         Dim tempint As Integer
         Dim errorcounter As Integer = 0
@@ -1621,40 +1621,8 @@ Partial Public Class Form1
 
         Preferences.tvScraperLog &= "Starting Folder Scan" & vbCrLf & vbCrLf
 
-        'Dim extensions(100) As String
-        'Dim extensioncount As Integer
-        'extensions(1) = "*.avi"
-        'extensions(2) = "*.xvid"
-        'extensions(3) = "*.divx"
-        'extensions(4) = "*.img"
-        'extensions(5) = "*.mpg"
-        'extensions(6) = "*.mpeg"
-        'extensions(7) = "*.mov"
-        'extensions(8) = "*.rm"
-        'extensions(9) = "*.3gp"
-        'extensions(10) = "*.m4v"
-        'extensions(11) = "*.wmv"
-        'extensions(12) = "*.asf"
-        'extensions(13) = "*.mp4"
-        'extensions(14) = "*.mkv"
-        'extensions(15) = "*.nrg"
-        'extensions(16) = "*.iso"
-        'extensions(17) = "*.rmvb"
-        'extensions(18) = "*.ogm"
-        'extensions(19) = "*.bin"
-        'extensions(20) = "*.ts"
-        'extensions(21) = "*.vob"
-        'extensions(22) = "*.m2ts"
-        'extensions(23) = "*.rar"
-        'extensions(24) = "*.flv"
-        'extensions(25) = "*.dvr-ms"
-        'extensions(26) = "VIDEO_TS.IFO"
-
-        'extensioncount = 26
-
-
         Dim TvFolder As String
-        For Each TvShow As Nfo.TvShow In Cache.TvCache.Shows
+        For Each TvShow As Nfo.TvShow In ListOfShows
             TvFolder = IO.Path.GetDirectoryName(TvShow.FolderPath)
             Dim Add As Boolean = True
             If TvShow.State <> Nfo.ShowState.Open Then
@@ -3178,7 +3146,7 @@ Partial Public Class Form1
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
-        Call tv_EpisodesMissingFind()
+        Call tv_EpisodesMissingFind(e.Argument)
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles Bckgrndfindmissingepisodes.ProgressChanged
@@ -3289,9 +3257,9 @@ Partial Public Class Form1
         TvTreeview.Sort()
     End Sub
 
-    Private Sub tv_EpisodesMissingFind()
+    Private Sub tv_EpisodesMissingFind(ShowList As List(Of TvShow))
         Utilities.EnsureFolderExists(IO.Path.Combine(Preferences.applicationPath, "missing\"))
-        For Each item In Cache.TvCache.Shows
+        For Each item In ShowList
 
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
             'If item.locked = Nfo.ShowState.Open Then
