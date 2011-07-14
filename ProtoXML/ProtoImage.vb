@@ -7,10 +7,12 @@
         Get
             If TypeOf (Me.ParentClass) Is ProtoFile Then
                 Dim TempFile As ProtoFile = Me.ParentClass
-
-                Return TempFile.FolderPath
+                If TempFile.NodeName = "tvshow" Then
+                    Return TempFile.FolderPath
+                Else
+                    Return _FolderPath
+                End If
             End If
-
             Return _FolderPath
         End Get
         Set(ByVal value As String)

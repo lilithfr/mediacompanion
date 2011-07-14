@@ -67,13 +67,13 @@ Partial Public Class Form1
         ComboBox4.Items.Clear()
         ComboBox4.Text = ""
         PictureBox6.Image = Nothing
-        PictureBox4.Image = Nothing
-        PictureBox5.Image = Nothing
+        tv_PictureBoxLeft.Image = Nothing
+        tv_PictureBoxRight.Image = Nothing
 
         tvdbposterlist.Clear()
         PictureBox6.Image = Nothing
-        PictureBox4.Image = Nothing
-        PictureBox5.Image = Nothing
+        tv_PictureBoxLeft.Image = Nothing
+        tv_PictureBoxRight.Image = Nothing
         TextBox10.Text = ""
         TextBox11.Text = ""
         TextBox9.Text = ""
@@ -104,8 +104,8 @@ Partial Public Class Form1
         ComboBox4.Text = ""
 
         PictureBox6.Image = Nothing
-        PictureBox4.Image = Nothing
-        PictureBox5.Image = Nothing
+        tv_PictureBoxLeft.Image = Nothing
+        tv_PictureBoxRight.Image = Nothing
         ComboBox4.Items.Clear()
         ComboBox4.Text = ""
         For i = Panel13.Controls.Count - 1 To 0 Step -1
@@ -365,12 +365,12 @@ Partial Public Class Form1
 
 
             If Preferences.postertype = "banner" Then
-                PictureBox5.Image = Show.ImageBanner.Image
+                tv_PictureBoxRight.Image = Show.ImageBanner.Image
             Else
-                PictureBox5.Image = Show.ImagePoster.Image
+                tv_PictureBoxRight.Image = Show.ImagePoster.Image
             End If
 
-            PictureBox4.Image = Show.ImageFanart.Image
+            tv_PictureBoxLeft.Image = Show.ImageFanart.Image
 
             Panel9.Visible = False
 
@@ -472,8 +472,8 @@ Partial Public Class Form1
         RenameTVShowsToolStripMenuItem.Enabled = True
         RenameTVShowsToolStripMenuItem.Visible = True
 
-        PictureBox5.Image = Nothing
-        PictureBox4.Image = Nothing
+        tv_PictureBoxRight.Image = Nothing
+        tv_PictureBoxLeft.Image = Nothing
         'MsgBox("Season")
         Dim season As String = SelectedSeason.SeasonLabel
         Dim trueseason As Integer = SelectedSeason.SeasonNumber
@@ -482,32 +482,35 @@ Partial Public Class Form1
 
         If trueseason = -1 Then
             If SelectedSeason.Poster.Image IsNot Nothing Then
-                PictureBox5.Image = SelectedSeason.Poster.Image
+                tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
             Else
                 If Preferences.postertype = "banner" Then
-                    PictureBox5.Image = Show.ImagePoster.Image
+                    tv_PictureBoxRight.Image = Show.ImagePoster.Image
                 Else
-                    PictureBox5.Image = Show.ImageBanner.Image
+                    tv_PictureBoxRight.Image = Show.ImageBanner.Image
                 End If
             End If
-        ElseIf trueseason = 0 Then
+        ElseIf trueseason = 0 Then          'Specials
             If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
                 Try
-                    PictureBox5.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
+                    tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
                 Catch
-                    PictureBox5.Image = Nothing
+                    tv_PictureBoxRight.ImageLocation = defaultPoster
                 End Try
             Else
                 Try
-                    PictureBox5.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                    tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
                 Catch
-                    PictureBox5.Image = Nothing
+                    tv_PictureBoxRight.ImageLocation = defaultPoster
                 End Try
             End If
-        Else
-            PictureBox5.Image = SelectedSeason.Poster.Image
-            If PictureBox5.Image Is Nothing Then
-                PictureBox5.Image = Show.ImageAllSeasons.Image
+        Else                                'Season01 & up
+
+            tv_PictureBoxRight.ImageLocation = SelectedSeason.Poster.FolderPath & SelectedSeason.Poster.FileName
+            If tv_PictureBoxRight.ImageLocation Is Nothing And Show.ImageAllSeasons.Image Is Nothing Then
+                tv_PictureBoxRight.ImageLocation = defaultPoster
+            Else
+                tv_PictureBoxRight.Image = Show.ImageAllSeasons.Image
             End If
 
 
@@ -515,9 +518,9 @@ Partial Public Class Form1
 
         If Show.NfoFilePath <> Nothing Then
             Try
-                PictureBox4.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
+                tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
             Catch
-                PictureBox4.Image = Nothing
+                tv_PictureBoxLeft.ImageLocation = defaultFanart
             End Try
         End If
 
@@ -532,30 +535,17 @@ Partial Public Class Form1
             End If
         End If
         Panel9.Visible = True
-        'If workingTvShow.plot IsNot Nothing AndAlso workingTvShow.plot.Contains("Unable to find folder:") Then
-        '    TvTreeview.SelectedNode.Parent.Parent.ForeColor = Color.Red
-        '    TvTreeview.SelectedNode.Parent.Parent.Collapse()
-        '    ExpandSelectedShowToolStripMenuItem.Enabled = True
-        '    ExpandAllToolStripMenuItem.Enabled = True
-        '    CollapseAllToolStripMenuItem.Enabled = True
-        '    CollapseSelectedShowToolStripMenuItem.Enabled = True
-        '    ReloadItemToolStripMenuItem.Enabled = True
-        '    Exit Sub
-        'Else
-        '    'TvTreeview.SelectedNode.ForeColor = Color.Black
-        'End Ifr
-
 
         Dim season As Integer = SelectedEpisode.Season.Value
         Dim episode As Integer = SelectedEpisode.Episode.Value
-        Dim SeasonObj As Nfo.TvSeason
+        Dim SeasonObj As New Nfo.TvSeason
         If SelectedEpisode.EpisodeNode.Parent IsNot Nothing Then
             SeasonObj = SelectedEpisode.EpisodeNode.Parent.Tag
             If season = -1 Then season = SeasonObj.SeasonLabel
         End If
 
 
-        Call ep_Load(SelectedEpisode)
+        Call ep_Load(SeasonObj, SelectedEpisode)
 
         ToolStripMenuItem1.Enabled = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
@@ -564,45 +554,11 @@ Partial Public Class Form1
         CollapseSelectedShowToolStripMenuItem.Enabled = True
         ReloadItemToolStripMenuItem.Enabled = True
         OpenFolderToolStripMenuItem.Enabled = True
-        'If SelectedEpisode.Plot.IndexOf("xml error") = -1 And SelectedEpisode.Plot.IndexOf("missing file") = -1 Then
 
-        '    If TvTreeview.SelectedNode.ForeColor = Color.Red Then
-        '        For Each Sh In TvShows
-        '            If TvTreeview.SelectedNode.Name.IndexOf(Sh.fullpath.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
-        '                For Each ep In Sh.allepisodes
-
-        '                Next
-
-        '                'Call savetvdata()
-        '                Exit For
-        '            End If
-        '        Next
-        '        'TvTreeview.SelectedNode.ForeColor = Color.Black
-        '        Call reloadtvshow()
-        '    End If
-        'Else
-        '    If TvTreeview.SelectedNode.ForeColor = Color.Black Then
-        '        For Each Sh In TvShows
-        '            If TvTreeview.SelectedNode.Name.ToLower.IndexOf(Sh.fullpath.ToLower.Substring(0, Sh.fullpath.Length - 10)) <> -1 Then
-        '                For Each ep In Sh.allepisodes
-        '                    If ep.VideoFilePath = TvTreeview.SelectedNode.Name Then
-        '                        'ep.status = "xml error"
-        '                        Exit For
-        '                    End If
-        '                Next
-        '                'Call savetvdata()
-        '                Exit For
-        '            End If
-        '        Next
-        '        'TvTreeview.SelectedNode.ForeColor = Color.Black
-        '        'Call reloadtvshow()
-        '        TvTreeview.SelectedNode.ForeColor = Color.Red
-        '    End If
-        'End If
 
     End Sub
 
-    Private Sub ep_Load(ByRef Episode As Nfo.TvEpisode)
+    Private Sub ep_Load(ByRef Season As Nfo.TvSeason, ByRef Episode As Nfo.TvEpisode)
         Dim tempstring As String = ""
         TextBox2.Text = ""
         TextBox20.Text = ""
@@ -648,58 +604,23 @@ Partial Public Class Form1
         Else
             ComboBox5.SelectedIndex = 0
         End If
-        '        Try
 
-
-        '        Catch ex As Exception
-        '#If SilentErrorScream Then
-        '            Throw ex
-        '#End If
-        '        End Try
-
-        'tempstring = Episode.NfoFilePath.Substring(0, Episode.NfoFilePath.Length - 3)
-        'tempstring = tempstring & "tbn"
-        If Episode.Thumbnail.Image IsNot Nothing Then
-
-            'Dim bitmap2 As New Bitmap(tempstring)
-            'Dim bitmap3 As New Bitmap(bitmap2)
-            'bitmap2.Dispose()
-            PictureBox4.Image = Episode.Thumbnail.Image
-            PictureBox14.Image = Episode.Thumbnail.Image
-
+        'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
+        If Episode.Thumbnail.FileName IsNot Nothing Then
+            tv_PictureBoxLeft.ImageLocation = Episode.Thumbnail.FileName
+            'PictureBox14.Image = Episode.Thumbnail.FileName
         Else
-
-            PictureBox14.Image = Nothing
-
-            PictureBox4.Image = Nothing
-
+            PictureBox14.ImageLocation = defaultScreenShot
+            'tv_PictureBoxLeft.ImageLocation = defaultScreenShot
         End If
 
-        'If Episode.Season.Value <> 0 Then
-        '    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & Episode.Season.Value.ToString & ".tbn")) Then
-        '        PictureBox5.ImageLocation = workingTvShow.path.Replace("tvshow.nfo", "season" & Episode.Season.Value.ToString & ".tbn")
-        '    End If
-        'Else
-        '    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season" & Episode.Season.Value.ToString & ".tbn")) Then
+        If Season.Poster.FolderPath IsNot Nothing And Season.Poster.FileName IsNot Nothing Then
+            tv_PictureBoxRight.ImageLocation = Season.Poster.FolderPath & Season.Poster.FileName
+        Else
+            tv_PictureBoxRight.ImageLocation = defaultPoster
+        End If
 
-        '        Dim fi As New FileInfo(workingTvShow.path.Replace("tvshow.nfo", "season00.tbn"))
-        '        Dim rename2 As String = workingTvShow.path.Replace("tvshow.nfo", "season-specials.tbn")
-        '        fi.MoveTo(rename2)
 
-        '    End If
-
-        '    If IO.File.Exists(workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
-        '        PictureBox5.ImageLocation = workingTvShow.path.ToLower.Replace("tvshow.nfo", "season-specials.tbn")
-        '    End If
-
-        'End If
-
-        'If Episode.Season.Value <> "Unknown" Then
-        '    TextBox2.Text = "S" & Episode.Season.Value & "E" & Episode.Season.Value & " - " & Episode.Title.Value
-        'Else
-        '    TextBox2.Text = Episode.Title.Value & ": " & IO.Path.GetFileName(Episode.NfoFilePath)
-        '    TextBox21.Text = "This media file has been found by Media Companion" & vbCrLf & "Within this TV Shows Folder" & vbCrLf & vbCrLf & "Season and/or episode numbers could" & vbCrLf & "identified from the filename"
-        'End If
         Panel9.Visible = True
 
     End Sub
