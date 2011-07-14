@@ -607,8 +607,15 @@ Partial Public Class Form1
         End If
 
         'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
-        'If Episode.Thumbnail.FileName IsNot Nothing Then
-        tv_PictureBoxLeft.Image = Episode.Thumbnail.Image
+        ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
+        ' It could have been why Billy has used two pictureboxes for each single one shown.....
+
+        Dim fs As System.IO.FileStream
+        fs = New System.IO.FileStream(Episode.Thumbnail.Path, IO.FileMode.Open, IO.FileAccess.Read)
+        tv_PictureBoxLeft.Image = System.Drawing.Image.FromStream(fs)
+        fs.Close()
+
+
         ''PictureBox14.Image = Episode.Thumbnail.FileName
         'Else
         'PictureBox14.ImageLocation = defaultScreenShot

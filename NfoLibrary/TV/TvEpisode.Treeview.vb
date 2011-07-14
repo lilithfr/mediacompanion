@@ -7,6 +7,7 @@ Partial Public Class TvEpisode
     Public Sub UpdateTreenode()
         Me.EpisodeNode.Tag = Me
         If Me.Title.Value IsNot Nothing Then
+            Me.EpisodeNode.Name = Me.NfoFilePath             ' save nfo path in this node
             If Me.Episode.Value IsNot Nothing Then
                 If IsNumeric(Me.Episode.Value) Then
 

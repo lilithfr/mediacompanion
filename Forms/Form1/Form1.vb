@@ -18597,8 +18597,9 @@ Public Class Form1
                 Dim showpath As String = tvshow.NfoFilePath.Replace(IO.Path.GetFileName(tvshow.NfoFilePath), "")
                 If renamefile.IndexOf(showpath) <> -1 Then
                     showtitle = tvshow.Title.Value
+
                     For Each episode In tvshow.Episodes
-                        If episode.VideoFilePath = renamefile Then
+                        If episode.NfoFilePath = renamefile Then
                             If seasonno = "" Then
                                 seasonno = episode.Season.Value
                             End If
