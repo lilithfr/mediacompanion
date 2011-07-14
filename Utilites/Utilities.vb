@@ -23,8 +23,26 @@ ByRef lpFreeBytesAvailableToCaller As Long, _
 ByRef lpTotalNumberOfBytes As Long, _
 ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
-    Public Shared applicationPath As String
+
+    Public Shared Property DefaultPosterPath As String
+    Public Shared Property DefaultBannerPath As String
+    Public Shared Property DefaultFanartPath As String
+
+    Private Shared _ApplicationPath As String
+    Public Shared Property applicationPath As String
+        Get
+            Return _ApplicationPath
+        End Get
+        Set(value As String)
+            _ApplicationPath = value
+            DefaultPosterPath = IO.Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
+            DefaultBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
+            DefaultFanartPath = IO.Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
+        End Set
+    End Property
     Public Shared tvScraperLog As String = ""
+
+
 
     Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
         'returns free space in MB, formatted to two decimal places

@@ -1,11 +1,22 @@
-﻿Public Class TvSeason
+﻿Imports Media_Companion
+
+Public Class TvSeason
     Inherits ProtoXML.ProtoFile
 
     Public Sub New()
         MyBase.New("season")
     End Sub
 
+    Private _ShowObj As TvShow
     Public Property ShowObj As TvShow
+        Get
+            Return _ShowObj
+        End Get
+        Set(value As TvShow)
+            _ShowObj = value
+            Me.Poster.FolderPath = _ShowObj.FolderPath
+        End Set
+    End Property
 
     Private _SeasonNumber As Integer
     Public Shadows Property SeasonNumber As Integer
@@ -37,7 +48,7 @@
     End Property
 
     Public Property ShowId As New ProtoXML.ProtoProperty(Me, "ShowId")
-    Public Property Poster As New ProtoXML.ProtoImage(Me, "poster") With {.FileName = "seasonX.tbn"}
+    Public Property Poster As New ProtoXML.ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "seasonX.tbn"}
 
     Public Property Episodes As New List(Of TvEpisode)
 

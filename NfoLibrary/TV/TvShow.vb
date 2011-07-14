@@ -49,12 +49,12 @@ Public Class TvShow
 
     Public Property ListActors As New ActorList(Me, "actor")
 
-    Public Property ImageFanart As New ProtoImage(Me, "fanart") With {.FileName = "fanart.jpg"}
-    Public Property ImagePoster As New ProtoImage(Me, "poster") With {.FileName = "folder.jpg"}
-    Public Property ImageBanner As New ProtoImage(Me, "banner") With {.FileName = "folder.jpg"}
-    Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons") With {.FileName = "seasonall.tbn"}
-    Public Property ImageClearArt As New ProtoImage(Me, "clearart") With {.FileName = "clearart.png"}
-    Public Property ImageLogo As New ProtoImage(Me, "logo") With {.FileName = "logo.png"}
+    Public Property ImageFanart As New ProtoImage(Me, "fanart", Utilities.DefaultFanartPath) With {.FileName = "fanart.jpg"}
+    Public Property ImagePoster As New ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "folder.jpg"}
+    Public Property ImageBanner As New ProtoImage(Me, "banner", Utilities.DefaultBannerPath) With {.FileName = "folder.jpg"}
+    Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons", Utilities.DefaultPosterPath) With {.FileName = "seasonall.tbn"}
+    Public Property ImageClearArt As New ProtoImage(Me, "clearart", Utilities.DefaultBannerPath) With {.FileName = "clearart.png"}
+    Public Property ImageLogo As New ProtoImage(Me, "logo", Utilities.DefaultBannerPath) With {.FileName = "logo.png"}
 
     'Media Companion Specific
 
@@ -122,7 +122,7 @@ Public Class TvShow
     Public Property posters As New List(Of String)
     Public Property fanart As New List(Of String)
 
-
+    
 
     Sub New()
         MyBase.New("tvshow")

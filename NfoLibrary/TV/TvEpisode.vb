@@ -29,8 +29,9 @@ Public Class TvEpisode
                 If IO.File.Exists(_PureName & Me.MediaExtension) Then
                     _VideoFilePath = _PureName & Me.MediaExtension
                 End If
-            End If            
-            Me.Thumbnail.FileName = _PureName & ".tbn"
+            End If
+
+            Me.Thumbnail.Path = _PureName & ".tbn"
         End Set
     End Property
 
@@ -105,7 +106,7 @@ Public Class TvEpisode
     Public Property SeasonObj As TvSeason
     Public Property ShowObj As TvShow
 
-    Public Property Thumbnail As New ProtoImage(Me, "thumbnail")
+    Public Property Thumbnail As New ProtoImage(Me, "thumbnail", Utilities.DefaultFanartPath)
 
     Public Sub AbsorbTvdbEpisode(ByRef TvdbEpisode As Media_Companion.Tvdb.Episode)
         Me.Title.Value = TvdbEpisode.EpisodeName.Value

@@ -396,7 +396,7 @@ Partial Class frmTvEdit
         'Button15
         '
         Me.Button15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button15.Location = New System.Drawing.Point(613, 353)
+        Me.Button15.Location = New System.Drawing.Point(605, 349)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(153, 23)
         Me.Button15.TabIndex = 166
@@ -489,7 +489,7 @@ Partial Class frmTvEdit
         Me.ComboBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(185, 332)
+        Me.ComboBox1.Location = New System.Drawing.Point(185, 328)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(174, 21)
         Me.ComboBox1.TabIndex = 142
@@ -497,7 +497,7 @@ Partial Class frmTvEdit
         'TextBox23
         '
         Me.TextBox23.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox23.Location = New System.Drawing.Point(185, 363)
+        Me.TextBox23.Location = New System.Drawing.Point(185, 359)
         Me.TextBox23.Name = "TextBox23"
         Me.TextBox23.Size = New System.Drawing.Size(174, 20)
         Me.TextBox23.TabIndex = 148
@@ -505,7 +505,7 @@ Partial Class frmTvEdit
         'TextBox22
         '
         Me.TextBox22.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox22.Location = New System.Drawing.Point(185, 393)
+        Me.TextBox22.Location = New System.Drawing.Point(185, 389)
         Me.TextBox22.Name = "TextBox22"
         Me.TextBox22.Size = New System.Drawing.Size(174, 20)
         Me.TextBox22.TabIndex = 150
@@ -515,7 +515,7 @@ Partial Class frmTvEdit
         Me.Label18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label18.AutoSize = True
         Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(418, 313)
+        Me.Label18.Location = New System.Drawing.Point(418, 309)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(37, 16)
         Me.Label18.TabIndex = 144
@@ -525,7 +525,7 @@ Partial Class frmTvEdit
         '
         Me.TextBox21.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TextBox21.BackColor = System.Drawing.Color.White
-        Me.TextBox21.Location = New System.Drawing.Point(365, 334)
+        Me.TextBox21.Location = New System.Drawing.Point(365, 330)
         Me.TextBox21.Name = "TextBox21"
         Me.TextBox21.ReadOnly = True
         Me.TextBox21.Size = New System.Drawing.Size(167, 20)
@@ -534,7 +534,7 @@ Partial Class frmTvEdit
         'TextBox20
         '
         Me.TextBox20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox20.Location = New System.Drawing.Point(186, 442)
+        Me.TextBox20.Location = New System.Drawing.Point(186, 438)
         Me.TextBox20.Name = "TextBox20"
         Me.TextBox20.Size = New System.Drawing.Size(347, 20)
         Me.TextBox20.TabIndex = 146
@@ -542,7 +542,7 @@ Partial Class frmTvEdit
         'TextBox19
         '
         Me.TextBox19.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox19.Location = New System.Drawing.Point(186, 469)
+        Me.TextBox19.Location = New System.Drawing.Point(186, 465)
         Me.TextBox19.Name = "TextBox19"
         Me.TextBox19.Size = New System.Drawing.Size(347, 20)
         Me.TextBox19.TabIndex = 147
@@ -550,7 +550,7 @@ Partial Class frmTvEdit
         'TextBox18
         '
         Me.TextBox18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox18.Location = New System.Drawing.Point(365, 363)
+        Me.TextBox18.Location = New System.Drawing.Point(365, 359)
         Me.TextBox18.Name = "TextBox18"
         Me.TextBox18.Size = New System.Drawing.Size(167, 20)
         Me.TextBox18.TabIndex = 149
@@ -558,7 +558,7 @@ Partial Class frmTvEdit
         'TextBox17
         '
         Me.TextBox17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBox17.Location = New System.Drawing.Point(365, 393)
+        Me.TextBox17.Location = New System.Drawing.Point(365, 389)
         Me.TextBox17.Name = "TextBox17"
         Me.TextBox17.Size = New System.Drawing.Size(167, 20)
         Me.TextBox17.TabIndex = 151
@@ -572,7 +572,7 @@ Partial Class frmTvEdit
         Me.TextBox16.Multiline = True
         Me.TextBox16.Name = "TextBox16"
         Me.TextBox16.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox16.Size = New System.Drawing.Size(347, 197)
+        Me.TextBox16.Size = New System.Drawing.Size(347, 193)
         Me.TextBox16.TabIndex = 130
         '
         'TextBox15
@@ -680,7 +680,7 @@ Partial Class frmTvEdit
         Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(182, 313)
+        Me.Label3.Location = New System.Drawing.Point(182, 309)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(39, 16)
         Me.Label3.TabIndex = 143
@@ -691,7 +691,7 @@ Partial Class frmTvEdit
         Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(92, 447)
+        Me.Label2.Location = New System.Drawing.Point(92, 443)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(70, 16)
         Me.Label2.TabIndex = 152
@@ -701,7 +701,7 @@ Partial Class frmTvEdit
         '
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(92, 476)
+        Me.Label1.Location = New System.Drawing.Point(92, 472)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(35, 13)
         Me.Label1.TabIndex = 153
@@ -714,7 +714,7 @@ Partial Class frmTvEdit
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox2.Location = New System.Drawing.Point(539, 12)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(227, 269)
+        Me.PictureBox2.Size = New System.Drawing.Size(219, 265)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox2.TabIndex = 154
         Me.PictureBox2.TabStop = False
@@ -722,7 +722,7 @@ Partial Class frmTvEdit
         'PictureBox4
         '
         Me.PictureBox4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PictureBox4.Location = New System.Drawing.Point(32, 261)
+        Me.PictureBox4.Location = New System.Drawing.Point(32, 257)
         Me.PictureBox4.MaximumSize = New System.Drawing.Size(226, 173)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(130, 173)
@@ -734,7 +734,7 @@ Partial Class frmTvEdit
         'Button8
         '
         Me.Button8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button8.Location = New System.Drawing.Point(613, 514)
+        Me.Button8.Location = New System.Drawing.Point(605, 510)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(153, 23)
         Me.Button8.TabIndex = 156
@@ -744,7 +744,7 @@ Partial Class frmTvEdit
         'Button10
         '
         Me.Button10.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button10.Location = New System.Drawing.Point(613, 411)
+        Me.Button10.Location = New System.Drawing.Point(605, 407)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(153, 23)
         Me.Button10.TabIndex = 157
@@ -754,7 +754,7 @@ Partial Class frmTvEdit
         'Button11
         '
         Me.Button11.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button11.Location = New System.Drawing.Point(612, 468)
+        Me.Button11.Location = New System.Drawing.Point(604, 464)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(153, 23)
         Me.Button11.TabIndex = 158
@@ -764,7 +764,7 @@ Partial Class frmTvEdit
         'Button12
         '
         Me.Button12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button12.Location = New System.Drawing.Point(613, 439)
+        Me.Button12.Location = New System.Drawing.Point(605, 435)
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(153, 23)
         Me.Button12.TabIndex = 159
@@ -819,7 +819,7 @@ Partial Class frmTvEdit
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(792, 546)
+        Me.Panel1.Size = New System.Drawing.Size(784, 542)
         Me.Panel1.TabIndex = 118
         '
         'Label30
@@ -881,7 +881,7 @@ Partial Class frmTvEdit
         '
         Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(613, 497)
+        Me.CheckBox3.Location = New System.Drawing.Point(605, 493)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(148, 17)
         Me.CheckBox3.TabIndex = 165
@@ -891,7 +891,7 @@ Partial Class frmTvEdit
         'Button13
         '
         Me.Button13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button13.Location = New System.Drawing.Point(613, 382)
+        Me.Button13.Location = New System.Drawing.Point(605, 378)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(153, 23)
         Me.Button13.TabIndex = 164
@@ -1153,7 +1153,7 @@ Partial Class frmTvEdit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(792, 546)
+        Me.ClientSize = New System.Drawing.Size(784, 542)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Button3)

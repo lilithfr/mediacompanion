@@ -506,12 +506,13 @@ Partial Public Class Form1
             End If
         Else                                'Season01 & up
 
-            tv_PictureBoxRight.ImageLocation = SelectedSeason.Poster.FolderPath & SelectedSeason.Poster.FileName
-            If tv_PictureBoxRight.ImageLocation Is Nothing And Show.ImageAllSeasons.Image Is Nothing Then
-                tv_PictureBoxRight.ImageLocation = defaultPoster
-            Else
-                tv_PictureBoxRight.Image = Show.ImageAllSeasons.Image
-            End If
+            tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+            'tv_PictureBoxRight.ImageLocation = SelectedSeason.Poster.FolderPath & SelectedSeason.Poster.FileName
+            'If tv_PictureBoxRight.ImageLocation Is Nothing And Show.ImageAllSeasons.Image Is Nothing Then
+            '    tv_PictureBoxRight.ImageLocation = defaultPoster
+            'Else
+            '    tv_PictureBoxRight.Image = Show.ImageAllSeasons.Image
+            'End If
 
 
         End If
@@ -606,19 +607,16 @@ Partial Public Class Form1
         End If
 
         'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
-        If Episode.Thumbnail.FileName IsNot Nothing Then
-            tv_PictureBoxLeft.ImageLocation = Episode.Thumbnail.FileName
-            'PictureBox14.Image = Episode.Thumbnail.FileName
-        Else
-            PictureBox14.ImageLocation = defaultScreenShot
-            'tv_PictureBoxLeft.ImageLocation = defaultScreenShot
-        End If
+        'If Episode.Thumbnail.FileName IsNot Nothing Then
+        tv_PictureBoxLeft.Image = Episode.Thumbnail.Image
+        ''PictureBox14.Image = Episode.Thumbnail.FileName
+        'Else
+        'PictureBox14.ImageLocation = defaultScreenShot
+        'tv_PictureBoxLeft.ImageLocation = defaultScreenShot
+        'End If
 
-        If Season.Poster.FolderPath IsNot Nothing And Season.Poster.FileName IsNot Nothing Then
-            tv_PictureBoxRight.ImageLocation = Season.Poster.FolderPath & Season.Poster.FileName
-        Else
-            tv_PictureBoxRight.ImageLocation = defaultPoster
-        End If
+        tv_PictureBoxRight.Image = Season.Poster.Image
+        
 
 
         Panel9.Visible = True

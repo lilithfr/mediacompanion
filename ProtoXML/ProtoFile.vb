@@ -56,7 +56,7 @@
             Next
             _FolderPath &= "\"
             _NfoFilePath = value
-
+            
         End Set
     End Property
 

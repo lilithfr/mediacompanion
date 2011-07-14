@@ -5,12 +5,12 @@
     Private _FolderPath As String
     Public Property FolderPath As String
         Get
-            If TypeOf (Me.ParentClass) Is ProtoFile Then
-                Dim TempFile As ProtoFile = Me.ParentClass
-                If TempFile.NodeName = "tvshow" Then
-                    Return TempFile.FolderPath
-                Else
-                    Return _FolderPath
+            If _FolderPath Is Nothing Then
+                If TypeOf ParentClass Is ProtoFile Then
+                    If ParentClass.NodeName = "tvshow" Then
+                        Dim TempFile As ProtoFile = ParentClass
+                        _FolderPath = TempFile.FolderPath
+                    End If
                 End If
             End If
             Return _FolderPath
@@ -19,7 +19,16 @@
             _FolderPath = value
         End Set
     End Property
+
+    Private _FileName As String
     Public Property FileName As String
+        Get
+            Return _FileName
+        End Get
+        Set(value As String)
+            _FileName = value
+        End Set
+    End Property
 
 
 
@@ -43,11 +52,13 @@
             '_PathOveride = value
             Me.FileName = IO.Path.GetFileName(value)
             Me.FolderPath = value.Replace(Me.FileName, "")
-            If IO.File.Exists(value) Then
-                _Image = Drawing.Bitmap.FromFile(value)
-            End If
+            'If IO.File.Exists(value) Then
+            '    _Image = Drawing.Bitmap.FromFile(value)
+            'End If
         End Set
     End Property
+
+    Public Property DefaultPath As String
 
     Private _Image As Drawing.Image
     Public Property Image As Drawing.Image
@@ -55,6 +66,8 @@
             If _Image Is Nothing Then
                 If IO.File.Exists(Me.Path) Then
                     _Image = Drawing.Bitmap.FromFile(Me.Path)
+                Else
+                    _Image = Drawing.Bitmap.FromFile(Me.DefaultPath)
                 End If
             End If
             Return _Image
@@ -68,8 +81,13 @@
         End Set
     End Property
 
-    Public Sub New(ByRef ParentClass As IProtoXBase, ByVal TagNameNotImplimented As String)
+    Public Sub New(ByRef ParentClass As IProtoXBase, ByVal TagNameNotImplimented As String, ByVal DefaultPath As String)
         Me.ParentClass = ParentClass
+        If TypeOf ParentClass Is ProtoFile Then
+            Dim TempFile As ProtoFile = ParentClass
+            Me.FolderPath = TempFile.FolderPath
+        End If
+        Me.DefaultPath = DefaultPath
     End Sub
 
     Public ReadOnly Property Exists As Boolean

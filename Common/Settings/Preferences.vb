@@ -7,12 +7,17 @@ Imports Nfo
 Public Class Preferences
     Const SetDefaults = True
     'Not saved items
+
+    
+
+
     Public Shared Property applicationPath As String
         Get
             Return Utilities.applicationPath
         End Get
         Set(ByVal value As String)
             Utilities.applicationPath = value
+
         End Set
     End Property
     Public Shared Property tvScraperLog As String

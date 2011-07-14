@@ -113,7 +113,12 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Utilites\Utilites.vbproj">
+      <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
+      <Name>Utilites</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
