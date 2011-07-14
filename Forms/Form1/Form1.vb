@@ -3569,7 +3569,7 @@ Public Class Form1
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
-            mov_FiltersApply()
+            mov_FiltersAndSortApply()
             If messbox.Visible = True Then messbox.Close()
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
         Else
@@ -4691,17 +4691,17 @@ Public Class Form1
                             movietoadd.runtime = newmovie.fullmoviebody.runtime
                             If newmovie.fullmoviebody.title <> Nothing Then
                                 If newmovie.fullmoviebody.year <> Nothing Then
-                                    '                            If newmovie.fullmoviebody.title.ToLower.IndexOf("the") = 0 Then
-                                    '                                movietoadd.titleandyear = newmovie.fullmoviebody.title.Substring(4, newmovie.fullmoviebody.title.Length - 4) & ", The (" & newmovie.fullmoviebody.year & ")"
-                                    '                            Else
-                                    movietoadd.titleandyear = newmovie.fullmoviebody.title & " (" & newmovie.fullmoviebody.year & ")"
-                                    '                            End If
+                                    If newmovie.fullmoviebody.title.ToLower.IndexOf("the") = 0 Then
+                                        movietoadd.titleandyear = newmovie.fullmoviebody.title.Substring(4, newmovie.fullmoviebody.title.Length - 4) & ", The (" & newmovie.fullmoviebody.year & ")"
+                                    Else
+                                        movietoadd.titleandyear = newmovie.fullmoviebody.title & " (" & newmovie.fullmoviebody.year & ")"
+                                    End If
                                 Else
                                     movietoadd.titleandyear = newmovie.fullmoviebody.title & " (0000)"
                                 End If
-                            Else
-                                movietoadd.titleandyear = "Unknown (0000)"
-                            End If
+                                Else
+                                    movietoadd.titleandyear = "Unknown (0000)"
+                                End If
                             movietoadd.outline = newmovie.fullmoviebody.outline
                             movietoadd.plot = newmovie.fullmoviebody.plot
                             movietoadd.year = newmovie.fullmoviebody.year
@@ -5277,7 +5277,7 @@ Public Class Form1
 
         'Call sortorder()    ApplyFilters calls sortorder()
         frmSplash2.Label2.Text = "Apply Filters..."
-        Call mov_FiltersApply()
+        Call mov_FiltersAndSortApply()
         frmSplash2.Label2.Text = "Reload Main Page..."
         Call mov_FormPopulate()
         Try
@@ -6160,7 +6160,7 @@ Public Class Form1
                 ToolStripProgressBar1.ProgressBar.PerformStep()
                 ToolStripStatusLabel1.Text = e.UserState
             Else
-                Call mov_FiltersApply()
+                Call mov_FiltersAndSortApply()
             End If
         End If
     End Sub
@@ -6199,7 +6199,7 @@ Public Class Form1
 
         globalThreadCounter -= 1
         Call util_ThreadsRunningCheck()
-
+        Call mov_FiltersAndSortApply()
     End Sub
 
     Private Sub util_ThreadsRunningCheck()
@@ -6362,7 +6362,7 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub mov_FiltersApply(Optional ByVal Filter As String = "blabla")
+    Private Sub mov_FiltersAndSortApply(Optional ByVal Filter As String = "blabla")
         Monitor.Enter(Me)
         Try
             Dim tempint2 As Integer = filteredList.Count - 1
@@ -6587,7 +6587,7 @@ Public Class Form1
                                 If exists = True Then
                                     dupelist.Add(filteredList(f))
                                     'dupelist.Add(filteredList(g))          'SK : Not required since duplicates will be found twice - imagine just two movies with the same ID.
-                                    '                                       'We check if 1=1 & skip that g <> f
+                                    '                                       'We check if 1=1 & skip that because g <> f
                                     '                                       'We check if 1=2 & it is true so we add movie f i.e. '1' to our list
                                     '                                       'We check if 2=1 & it is also true so we just add movie f i.e. '2' to our list
                                     '                                       'We check if 2=2 & skip due to g <> f
@@ -7235,7 +7235,7 @@ Public Class Form1
         Next
         RadioButton45.Checked = True     'set movie filters indication back to all
         ComboBox11.SelectedIndex = 0   'set filename filetype filter back to all
-        Call mov_FiltersApply()
+        Call mov_FiltersAndSortApply()
     End Sub
 
     'Medianfo.dll to outputlog
@@ -7349,7 +7349,7 @@ Public Class Form1
             End If
         Next
 
-        Call mov_FiltersApply()
+        Call mov_FiltersAndSortApply()
         If messbox.Visible = True Then messbox.Close()
 
         If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
@@ -7857,7 +7857,7 @@ Public Class Form1
                     End If
                 Next
 
-                Call mov_FiltersApply()
+                Call mov_FiltersAndSortApply()
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -7883,14 +7883,14 @@ Public Class Form1
         If MovieListComboBox.SelectedItems.Count = 1 Then   'Only one movie selected from movie list 
             Dim tempstring As String = ""
             Dim oldmovietitle As String = workingMovieDetails.fullmoviebody.title
-            '-------------- Aqui
-            If Preferences.ignorearticle = True Then
-                If oldmovietitle.ToLower.IndexOf("the") = 0 Then
-                    oldmovietitle = oldmovietitle.Substring(4, oldmovietitle.Length - 4) & ", The"
-                End If
-            Else
-                oldmovietitle = oldmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
-            End If
+            '-------------- Aqui       'SK This should be applied only when loading data into MC for Display, not when saving to cache or NFO
+            'If Preferences.ignorearticle = True Then
+            '    If oldmovietitle.ToLower.IndexOf("the") = 0 Then
+            '        oldmovietitle = oldmovietitle.Substring(4, oldmovietitle.Length - 4) & ", The"
+            '    End If
+            'Else
+            '    oldmovietitle = oldmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
+            'End If
             tempstring = " (" & workingMovieDetails.fullmoviebody.year & ")"
             workingMovieDetails.fullmoviebody.title = titletxt.Text.Replace(tempstring, "")
             If workingMovieDetails.fullmoviebody.originaltitle = Nothing Or workingMovieDetails.fullmoviebody.originaltitle = "" Then workingMovieDetails.fullmoviebody.originaltitle = workingMovieDetails.fullmoviebody.title
@@ -7923,16 +7923,16 @@ Public Class Form1
             Dim newmovietitleandyear As String
             newmovietitle = workingMovieDetails.fullmoviebody.title
             '-------------- Aqui
-            If Preferences.ignorearticle = True Then
-                If newmovietitle.ToLower.IndexOf("the") = 0 Then
-                    newmovietitleandyear = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The (" & workingMovieDetails.fullmoviebody.year & ")"
-                    newmovietitle = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The"
-                Else
-                    newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
-                End If
-            Else
-                newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
-            End If
+            'If Preferences.ignorearticle = True Then
+            '    If newmovietitle.ToLower.IndexOf("the") = 0 Then
+            '        newmovietitleandyear = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The (" & workingMovieDetails.fullmoviebody.year & ")"
+            '        newmovietitle = newmovietitle.Substring(4, newmovietitle.Length - 4) & ", The"
+            '    Else
+            '        newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
+            '    End If
+            'Else
+            '    newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
+            'End If
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).titleandyear = oldmovietitle Then
                     Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
@@ -7973,7 +7973,7 @@ Public Class Form1
                 End If
             Next
             If Label39.Text.ToLower.IndexOf(" of ") <> -1 Then
-                Call mov_FiltersApply()
+                Call mov_FiltersAndSortApply()
                 Call mov_FormPopulate()
             End If
         Else
@@ -8064,7 +8064,7 @@ Public Class Form1
                 Next
             Next
             workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
             mess.Close()
@@ -8245,7 +8245,7 @@ Public Class Form1
             End If
         Next
         Call mov_FormPopulate()
-        mov_FiltersApply()
+        mov_FiltersAndSortApply()
     End Sub
 
     Private Sub MediaCompanionForumToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionForumToolStripMenuItem.Click
@@ -9490,6 +9490,7 @@ Public Class Form1
         ToolStripStatusLabel7.Visible = False
 
         Call util_ThreadsRunningCheck()
+        mov_FiltersAndSortApply()
         'Mov_RebuildMoviesFromNfoToXML(movieFolders)      'we do this because the wizard writes to the nfo's & not the cache - this reloads the cache from the nfo's & reloads
         ' movie list with the new data (required if year updated)
 
@@ -10499,7 +10500,7 @@ Public Class Form1
         If e.ProgressPercentage = 999999 Then
             ToolStripStatusLabel4.Text = e.UserState
         ElseIf e.ProgressPercentage = 999998 Then
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
             ToolStripStatusLabel4.Text = e.UserState
         End If
         'ToolStrip1.Refresh()
@@ -11121,7 +11122,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox11_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox11.SelectedValueChanged
-        mov_FiltersApply()
+        mov_FiltersAndSortApply()
     End Sub
 
     Private Sub ComboBox1_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
@@ -11308,7 +11309,7 @@ Public Class Form1
                 TextBox1.BackColor = Color.White
             End If
             TextBox1.Refresh()
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
         End If
     End Sub
 
@@ -11320,7 +11321,7 @@ Public Class Form1
                 txt_titlesearch.BackColor = Color.White
             End If
             txt_titlesearch.Refresh()
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
         End If
     End Sub
 
@@ -11372,7 +11373,7 @@ Public Class Form1
         If filterOverride = False Then
             CheckedListBox1.Enabled = False
             '            Call applyfilters()
-            mov_FiltersApply()
+            mov_FiltersAndSortApply()
             CheckedListBox1.Enabled = True
         End If
     End Sub
@@ -12021,7 +12022,7 @@ Public Class Form1
                             ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
-                            Call mov_FiltersApply() 'Apply Filters to movielist combobox
+                            Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required as we no longer move back to main page
@@ -12089,7 +12090,7 @@ Public Class Form1
         Next
 
         If replace = True Then
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
             'currentTabIndex = TabControl2.SelectedIndex
@@ -13894,7 +13895,7 @@ Public Class Form1
             Next
             stage = stage & vbCrLf
             stage = stage & "applying filters" & vbCrLf
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
             stage = stage & vbCrLf
             stage = stage & "Finalising" & vbCrLf
             messbox.Close()
@@ -21987,7 +21988,7 @@ Public Class Form1
         'filteredlist = fullmovielist
         Call mov_MovieComboListSort()
         'Call loadmovielist()
-        Call mov_FiltersApply()
+        Call mov_FiltersAndSortApply()
         Call mov_FormPopulate()
         frmSplash2.Hide()
     End Sub
@@ -25156,7 +25157,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox10_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox10.SelectedIndexChanged
-        Call mov_FiltersApply()
+        Call mov_FiltersAndSortApply()
     End Sub
 
     Private Sub txt_titlesearch_ModifiedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txt_titlesearch.ModifiedChanged
@@ -25167,7 +25168,7 @@ Public Class Form1
                 txt_titlesearch.BackColor = Color.White
             End If
             txt_titlesearch.Refresh()
-            Call mov_FiltersApply()
+            Call mov_FiltersAndSortApply()
         End If
     End Sub
 
@@ -26376,7 +26377,7 @@ Public Class Form1
 
         Call mov_CacheSave()
         Call mov_FormPopulate()
-        Call mov_FiltersApply()
+        Call mov_FiltersAndSortApply()
         frmSplash2.Hide()
         'mess.Close()
         Application.DoEvents()
@@ -27344,7 +27345,7 @@ Public Class Form1
                     End If
                 End If
             Next
-            mov_FiltersApply()
+            mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             frmProgSplash.Close()
             'messbox.Close()
@@ -28504,7 +28505,7 @@ Public Class Form1
                             ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
-                            Call mov_FiltersApply() 'Apply Filters to movielist combobox
+                            Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
@@ -30114,7 +30115,7 @@ Public Class Form1
             '            ComboBox11.Enabled = True
             '            ComboBox11.SelectedIndex = 0
             '            Call CheckSpecials("all")
-            mov_FiltersApply("all")
+            mov_FiltersAndSortApply("all")
         End If
         '        applyfilters()
     End Sub
@@ -30127,7 +30128,7 @@ Public Class Form1
             '            ComboBox11.Enabled = False
             '            Call CheckSpecials("watched")
             '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-            mov_FiltersApply("watched")
+            mov_FiltersAndSortApply("watched")
         End If
     End Sub
 
@@ -30139,7 +30140,7 @@ Public Class Form1
             '            ComboBox11.Enabled = False
             '            Call CheckSpecials("unwatched")
             '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-            mov_FiltersApply("unwatched")
+            mov_FiltersAndSortApply("unwatched")
         End If
     End Sub
 
@@ -30151,7 +30152,7 @@ Public Class Form1
             '            ComboBox11.Enabled = False
             '            Call CheckSpecials("duplicates")
             '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-            mov_FiltersApply("duplicates")
+            mov_FiltersAndSortApply("duplicates")
         End If
     End Sub
 
@@ -30163,7 +30164,7 @@ Public Class Form1
             '            ComboBox11.Enabled = False
             '            Call CheckSpecials("missing posters")
             '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-            mov_FiltersApply("missing posters")
+            mov_FiltersAndSortApply("missing posters")
         End If
     End Sub
 
@@ -30175,7 +30176,7 @@ Public Class Form1
             '            ComboBox11.Enabled = False
             '            Call CheckSpecials("missing fanart")
             '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-            mov_FiltersApply("missing fanart")
+            mov_FiltersAndSortApply("missing fanart")
         End If
     End Sub
 
@@ -30460,7 +30461,7 @@ Public Class Form1
 
     Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles ButtonNextFanart.Click
         If noFanart = False Then
-            Call mov_FiltersApply("missing fanart") 'Apply Filters to movielist combobox
+            Call mov_FiltersAndSortApply("missing fanart") 'Apply Filters to movielist combobox
             Call mov_FanartLoad()   'refresh fanart for the current movie
             If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
                 ButtonNextFanart.Visible = True
