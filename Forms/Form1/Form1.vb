@@ -717,10 +717,10 @@ Public Class Form1
         Dim pic3ratio As Decimal
         Dim pic4ratio As Decimal
         Try
-            Dim pic3ImSzW = PictureBox4.Image.Size.Width
-            Dim pic3ImszH = PictureBox4.Image.Size.Height
-            Dim pic4ImSzW = PictureBox5.Image.Size.Width
-            Dim pic4ImszH = PictureBox5.Image.Size.Height
+            Dim pic3ImSzW = tv_PictureBoxLeft.Image.Size.Width
+            Dim pic3ImszH = tv_PictureBoxLeft.Image.Size.Height
+            Dim pic4ImSzW = tv_PictureBoxRight.Image.Size.Width
+            Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
             pic3ratio = pic3ImSzW / pic3ImszH
             pic4ratio = pic4ImSzW / pic4ImszH
             'MsgBox(from & " = " & SplitContainer4.SplitterDistance & " - " & pic3ImSzW & "x" & pic3ImszH & " " & pic4ImszH & "x" & pic4ImSzW)
@@ -15255,8 +15255,8 @@ Public Class Form1
         Dim Show As Nfo.TvShow = tv_ShowSelectedCurrently()
         Dim Season As Nfo.TvSeason = tv_SeasonSelectedCurrently()
         Dim Episode As Nfo.TvEpisode = ep_SelectedCurrently()
-        PictureBox5.Load()
-        PictureBox4.Load()
+        tv_PictureBoxRight.Load()
+        tv_PictureBoxLeft.Load()
 
         'This isn't required anymore
 
@@ -16986,25 +16986,25 @@ Public Class Form1
         e.Cancel = True
     End Sub
 
-    Private Sub PictureBox4_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.DoubleClick
-        If PictureBox4.ImageLocation <> Nothing Then
-            If IO.File.Exists(PictureBox4.ImageLocation) Then
+    Private Sub PictureBox4_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxLeft.DoubleClick
+        If tv_PictureBoxLeft.ImageLocation <> Nothing Then
+            If IO.File.Exists(tv_PictureBoxLeft.ImageLocation) Then
                 Me.ControlBox = False
                 MenuStrip1.Enabled = False
                 'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PictureBox4.ImageLocation)
+                Dim newimage As New Bitmap(tv_PictureBoxLeft.ImageLocation)
                 Call util_ZoomImage(newimage)
             End If
         End If
     End Sub
 
-    Private Sub PictureBox5_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox5.DoubleClick
-        If PictureBox5.ImageLocation <> Nothing Then
-            If IO.File.Exists(PictureBox5.ImageLocation) Then
+    Private Sub PictureBox5_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxRight.DoubleClick
+        If tv_PictureBoxRight.ImageLocation <> Nothing Then
+            If IO.File.Exists(tv_PictureBoxRight.ImageLocation) Then
                 Me.ControlBox = False
                 MenuStrip1.Enabled = False
                 'ToolStrip1.Enabled = False
-                Dim newimage As New Bitmap(PictureBox5.ImageLocation)
+                Dim newimage As New Bitmap(tv_PictureBoxRight.ImageLocation)
                 Call util_ZoomImage(newimage)
             End If
         End If
@@ -17016,9 +17016,9 @@ Public Class Form1
         Button40.Visible = False
         Button39.Visible = False
         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-            If Not PictureBox4.Image Is Nothing Then
-                PictureBox10.Image = PictureBox4.Image
-                PictureBox11.Image = PictureBox4.Image
+            If Not tv_PictureBoxLeft.Image Is Nothing Then
+                PictureBox10.Image = tv_PictureBoxLeft.Image
+                PictureBox11.Image = tv_PictureBoxLeft.Image
             Else
                 PictureBox10.Image = Nothing
                 PictureBox11.Image = Nothing
@@ -17271,8 +17271,8 @@ Public Class Form1
                         PictureBox10.Load()
                         PictureBox11.Image = PictureBox10.Image
                         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                            PictureBox4.ImageLocation = savepath
-                            PictureBox4.Load()
+                            tv_PictureBoxLeft.ImageLocation = savepath
+                            tv_PictureBoxLeft.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17401,7 +17401,7 @@ Public Class Form1
             PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
             PictureBox11.Image = PictureBox10.Image
             If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                PictureBox4.Image = PictureBox11.Image
+                tv_PictureBoxLeft.Image = PictureBox11.Image
             End If
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
@@ -17496,8 +17496,8 @@ Public Class Form1
                 PictureBox10.Load()
                 PictureBox11.Image = PictureBox10.Image
                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    PictureBox4.ImageLocation = savepath
-                    PictureBox4.Load()
+                    tv_PictureBoxLeft.ImageLocation = savepath
+                    tv_PictureBoxLeft.Load()
                 End If
             Else
                 PictureBox10.Image = Nothing
@@ -19311,7 +19311,7 @@ Public Class Form1
         If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
             PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
             If combostart = ComboBox2.SelectedItem Then
-                PictureBox5.Image = PictureBox13.Image
+                tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19344,7 +19344,7 @@ Public Class Form1
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
                     If combostart = ComboBox2.SelectedItem Then
-                        PictureBox5.Image = Image2
+                        tv_PictureBoxRight.Image = Image2
                     End If
                     PictureBox12.Image = Image2
                     Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19395,7 +19395,7 @@ Public Class Form1
                         Dim newpicbox As PictureBox = Control
                         newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
                         If combostart = ComboBox2.SelectedItem Then
-                            PictureBox5.Image = newpicbox.Image
+                            tv_PictureBoxRight.Image = newpicbox.Image
                         End If
                         PictureBox12.Image = newpicbox.Image
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19501,7 +19501,7 @@ Public Class Form1
             PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
 
             If combostart = ComboBox2.SelectedItem Then
-                PictureBox5.Image = PictureBox13.Image
+                tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19621,7 +19621,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(bitmap2)
                         bitmap2.Dispose()
                         PictureBox14.Image = bitmap3
-                        PictureBox4.Image = bitmap3
+                        tv_PictureBoxLeft.Image = bitmap3
                     End If
                     Exit For
                 End If
@@ -19723,7 +19723,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(bitmap2)
                         bitmap2.Dispose()
                         PictureBox14.Image = bitmap3
-                        PictureBox4.Image = bitmap3
+                        tv_PictureBoxLeft.Image = bitmap3
                         messbox.Close()
                     Catch ex As Exception
                         MsgBox("Unable To Download Image")
