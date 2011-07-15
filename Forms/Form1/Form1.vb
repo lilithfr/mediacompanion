@@ -7919,8 +7919,8 @@ Public Class Form1
             'change 
             'title
             'title & year
-            Dim newmovietitle As String
-            Dim newmovietitleandyear As String
+            Dim newmovietitle As String = ""
+            Dim newmovietitleandyear As String = ""
             newmovietitle = workingMovieDetails.fullmoviebody.title
             '-------------- Aqui
             'If Preferences.ignorearticle = True Then
