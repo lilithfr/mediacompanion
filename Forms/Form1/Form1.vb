@@ -3399,8 +3399,8 @@ Public Class Form1
 
     Private Sub mov_XBMCScrapingInitialization()
         Dim NewMoviesFolders As List(Of String)
-        Dim Extensions(100) As String
-        Dim ExtensionCount As Integer = 0
+        'Dim Extensions(100) As String
+        'Dim ExtensionCount As Integer = 0
         Dim Progress As Integer = 0
         Dim ProgressText As String = ""
         Dim MoviePattern As String = ""
@@ -3416,32 +3416,32 @@ Public Class Form1
         TempProgressBarValue = ToolStripProgressBar1.Maximum
         TempLabel = ToolStripStatusLabel6.Text
 
-        Extensions(1) = "*.avi"
-        Extensions(2) = "*.xvid"
-        Extensions(3) = "*.divx"
-        Extensions(4) = "*.img"
-        Extensions(5) = "*.mpg"
-        Extensions(6) = "*.mpeg"
-        Extensions(7) = "*.mov"
-        Extensions(8) = "*.rm"
-        Extensions(9) = "*.3gp"
-        Extensions(10) = "*.m4v"
-        Extensions(11) = "*.wmv"
-        Extensions(12) = "*.asf"
-        Extensions(13) = "*.mp4"
-        Extensions(14) = "*.mkv"
-        Extensions(15) = "*.nrg"
-        Extensions(16) = "*.iso"
-        Extensions(17) = "*.rmvb"
-        Extensions(18) = "*.ogm"
-        Extensions(19) = "*.bin"
-        Extensions(20) = "*.ts"
-        Extensions(21) = "*.vob"
-        Extensions(22) = "*.m2ts"
-        Extensions(23) = "*.rar"
-        Extensions(24) = "*.dvr-ms"
-        Extensions(25) = "VIDEO_TS.IFO"
-        ExtensionCount = 25
+        'Extensions(1) = "*.avi"
+        'Extensions(2) = "*.xvid"
+        'Extensions(3) = "*.divx"
+        'Extensions(4) = "*.img"
+        'Extensions(5) = "*.mpg"
+        'Extensions(6) = "*.mpeg"
+        'Extensions(7) = "*.mov"
+        'Extensions(8) = "*.rm"
+        'Extensions(9) = "*.3gp"
+        'Extensions(10) = "*.m4v"
+        'Extensions(11) = "*.wmv"
+        'Extensions(12) = "*.asf"
+        'Extensions(13) = "*.mp4"
+        'Extensions(14) = "*.mkv"
+        'Extensions(15) = "*.nrg"
+        'Extensions(16) = "*.iso"
+        'Extensions(17) = "*.rmvb"
+        'Extensions(18) = "*.ogm"
+        'Extensions(19) = "*.bin"
+        'Extensions(20) = "*.ts"
+        'Extensions(21) = "*.vob"
+        'Extensions(22) = "*.m2ts"
+        'Extensions(23) = "*.rar"
+        'Extensions(24) = "*.dvr-ms"
+        'Extensions(25) = "VIDEO_TS.IFO"
+        'ExtensionCount = 25
         '--------------------------Begin Search for New Media in Normal Folders
         NewMoviesFolders = Utilities.FindAllFolders(movieFolders)
 
@@ -3496,13 +3496,21 @@ Public Class Form1
             ToolStripStatusLabel1.Visible = True
             ToolStripStatusLabel1.Text = ProgressText
 
-            For f = 1 To ExtensionCount
-                MoviePattern = Extensions(f)
+            For Each ext In Utilities.VideoExtensions
+                MoviePattern = If(ext.IndexOf(".IFO"), ext, "*" & ext)
 
                 DirPath = NewMoviesFolders(g)
                 Dim Dir_Info As New System.IO.DirectoryInfo(DirPath)
                 mov_ListFiles2(DirInfo, MoviePattern, Dir_Info)
-            Next f
+            Next
+
+            'For f = 1 To ExtensionCount
+            '    MoviePattern = Extensions(f)
+
+            '    DirPath = NewMoviesFolders(g)
+            '    Dim Dir_Info As New System.IO.DirectoryInfo(DirPath)
+            '    mov_ListFiles2(DirInfo, MoviePattern, Dir_Info)
+            'Next f
             TempInt = newMovieList.Count - mediacounter
             mediacounter = newMovieList.Count
         Next
@@ -3676,34 +3684,34 @@ Public Class Form1
 
             Dim extension As String
             Dim filename2 As String
-            Dim extensions(100) As String
-            Dim extensioncount As Integer
-            extensions(1) = "*.avi"
-            extensions(2) = "*.xvid"
-            extensions(3) = "*.divx"
-            extensions(4) = "*.img"
-            extensions(5) = "*.mpg"
-            extensions(6) = "*.mpeg"
-            extensions(7) = "*.mov"
-            extensions(8) = "*.rm"
-            extensions(9) = "*.3gp"
-            extensions(10) = "*.m4v"
-            extensions(11) = "*.wmv"
-            extensions(12) = "*.asf"
-            extensions(13) = "*.mp4"
-            extensions(14) = "*.mkv"
-            extensions(15) = "*.nrg"
-            extensions(16) = "*.iso"
-            extensions(17) = "*.rmvb"
-            extensions(18) = "*.ogm"
-            extensions(19) = "*.bin"
-            extensions(20) = "*.ts"
-            extensions(21) = "*.vob"
-            extensions(22) = "*.m2ts"
-            extensions(23) = "*.rar"
-            extensions(24) = "*.dvr-ms"
-            extensions(25) = "VIDEO_TS.IFO"
-            extensioncount = 25
+            'Dim extensions(100) As String
+            'Dim extensioncount As Integer
+            'extensions(1) = "*.avi"
+            'extensions(2) = "*.xvid"
+            'extensions(3) = "*.divx"
+            'extensions(4) = "*.img"
+            'extensions(5) = "*.mpg"
+            'extensions(6) = "*.mpeg"
+            'extensions(7) = "*.mov"
+            'extensions(8) = "*.rm"
+            'extensions(9) = "*.3gp"
+            'extensions(10) = "*.m4v"
+            'extensions(11) = "*.wmv"
+            'extensions(12) = "*.asf"
+            'extensions(13) = "*.mp4"
+            'extensions(14) = "*.mkv"
+            'extensions(15) = "*.nrg"
+            'extensions(16) = "*.iso"
+            'extensions(17) = "*.rmvb"
+            'extensions(18) = "*.ogm"
+            'extensions(19) = "*.bin"
+            'extensions(20) = "*.ts"
+            'extensions(21) = "*.vob"
+            'extensions(22) = "*.m2ts"
+            'extensions(23) = "*.rar"
+            'extensions(24) = "*.dvr-ms"
+            'extensions(25) = "VIDEO_TS.IFO"
+            'extensioncount = 25
 
             For Each moviefolder In movieFolders
                 Dim hg As New IO.DirectoryInfo(moviefolder)
@@ -3781,17 +3789,29 @@ Public Class Form1
                         Exit Sub
                     End If
 
-                    For f = 1 To extensioncount
+                    For Each ext In Utilities.VideoExtensions
                         If BckWrkScnMovies.CancellationPending Then
                             scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                             Exit Sub
                         End If
-                        moviepattern = extensions(f)
+                        moviepattern = If(ext.IndexOf(".IFO"), ext, "*" & ext)
 
                         dirpath = newmoviefolders(g)
                         Dim dir_info As New System.IO.DirectoryInfo(dirpath)
                         mov_ListFiles2(dirinfo, moviepattern, dir_info)         'titlename is logged in here
-                    Next f
+                    Next
+
+                    'For f = 1 To extensioncount
+                    '    If BckWrkScnMovies.CancellationPending Then
+                    '        scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                    '        Exit Sub
+                    '    End If
+                    '    moviepattern = extensions(f)
+
+                    '    dirpath = newmoviefolders(g)
+                    '    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                    '    mov_ListFiles2(dirinfo, moviepattern, dir_info)         'titlename is logged in here
+                    'Next f
                     tempint = newMovieList.Count - mediacounter
 
                     scraperLog &= String.Format("{1} New movies found in directory:- {2}", tempint.ToString, dirpath) & vbCrLf
@@ -15163,37 +15183,38 @@ Public Class Form1
         If pathandfilename <> Nothing Then
             If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
                 pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
-                Dim extensions(100) As String
-                Dim extensioncount As Integer
-                extensions(1) = ".avi"
-                extensions(2) = ".xvid"
-                extensions(3) = ".divx"
-                extensions(4) = ".img"
-                extensions(5) = ".mpg"
-                extensions(6) = ".mpeg"
-                extensions(7) = ".mov"
-                extensions(8) = ".rm"
-                extensions(9) = ".3gp"
-                extensions(10) = ".m4v"
-                extensions(11) = ".wmv"
-                extensions(12) = ".asf"
-                extensions(13) = ".mp4"
-                extensions(14) = ".mkv"
-                extensions(15) = ".nrg"
-                extensions(16) = ".iso"
-                extensions(17) = ".rmvb"
-                extensions(18) = ".ogm"
-                extensions(19) = ".bin"
-                extensions(20) = ".ts"
-                extensions(21) = ".vob"
-                extensions(22) = ".m2ts"
-                extensions(23) = ".rar"
-                extensions(24) = ".IFO"
-                extensions(25) = ".dvr-ms"
-                extensioncount = 25
+                'Dim extensions(100) As String
+                'Dim extensioncount As Integer
+                'extensions(1) = ".avi"
+                'extensions(2) = ".xvid"
+                'extensions(3) = ".divx"
+                'extensions(4) = ".img"
+                'extensions(5) = ".mpg"
+                'extensions(6) = ".mpeg"
+                'extensions(7) = ".mov"
+                'extensions(8) = ".rm"
+                'extensions(9) = ".3gp"
+                'extensions(10) = ".m4v"
+                'extensions(11) = ".wmv"
+                'extensions(12) = ".asf"
+                'extensions(13) = ".mp4"
+                'extensions(14) = ".mkv"
+                'extensions(15) = ".nrg"
+                'extensions(16) = ".iso"
+                'extensions(17) = ".rmvb"
+                'extensions(18) = ".ogm"
+                'extensions(19) = ".bin"
+                'extensions(20) = ".ts"
+                'extensions(21) = ".vob"
+                'extensions(22) = ".m2ts"
+                'extensions(23) = ".rar"
+                'extensions(24) = ".IFO"
+                'extensions(25) = ".dvr-ms"
+                'extensioncount = 25
                 Dim exists As Boolean = False
-                For f = 1 To extensioncount
-                    tempstring2 = pathandfilename & extensions(f)
+                For Each ext In Utilities.VideoExtensions
+                    If ext = "VIDEO_TS.IFO" Then Continue For
+                    tempstring2 = pathandfilename & ext
 
                     If IO.File.Exists(tempstring2) Then
                         exists = True
@@ -16401,39 +16422,10 @@ Public Class Form1
     Private Sub ep_ScreenShotDo(ByVal filenameandpath As String)
         Dim thumbpathandfilename As String = filenameandpath
         Dim pathandfilename As String = filenameandpath.Replace(IO.Path.GetExtension(filenameandpath), "")
-        Dim extensions(100) As String
-        Dim extensioncount As Integer
-        extensions(1) = ".avi"
-        extensions(2) = ".xvid"
-        extensions(3) = ".divx"
-        extensions(4) = ".img"
-        extensions(5) = ".mpg"
-        extensions(6) = ".mpeg"
-        extensions(7) = ".mov"
-        extensions(8) = ".rm"
-        extensions(9) = ".3gp"
-        extensions(10) = ".m4v"
-        extensions(11) = ".wmv"
-        extensions(12) = ".asf"
-        extensions(13) = ".mp4"
-        extensions(14) = ".mkv"
-        extensions(15) = ".nrg"
-        extensions(16) = ".iso"
-        extensions(17) = ".rmvb"
-        extensions(18) = ".ogm"
-        extensions(19) = ".bin"
-        extensions(20) = ".ts"
-        extensions(21) = ".vob"
-        extensions(22) = ".m2ts"
-        extensions(23) = ".rar"
-        extensions(24) = ".flv"
-        extensions(25) = ".dvr-ms"
-        extensions(26) = "VIDEO_TS.IFO"
-        extensioncount = 26
         Dim exists As Boolean = False
-        For f = 1 To extensioncount
+        For Each ext In Utilities.VideoExtensions
             Dim tempstring2 As String
-            tempstring2 = pathandfilename & extensions(f)
+            tempstring2 = pathandfilename & ext
             If IO.File.Exists(tempstring2) Then
                 Dim seconds As Integer = 10
                 Dim myProcess As Process = New Process
@@ -16457,52 +16449,12 @@ Public Class Form1
             End If
         End If
 
-
-
-
-        Dim s As String = ""
-        Dim e As String = ""
-        Dim x As String = ""
-        If Preferences.eprenamelowercase = False Then
-            s = "S"
-            e = "E"
-            x = "X"
-        Else
-            s = "s"
-            e = "e"
-            x = "x"
-        End If
         Dim returnpath As String = "false"
-        Dim extensioncount As Integer
-        Dim extensions(100)
-        extensions(1) = ".avi"
-        extensions(2) = ".xvid"
-        extensions(3) = ".divx"
-        extensions(4) = ".img"
-        extensions(5) = ".mpg"
-        extensions(6) = ".mpeg"
-        extensions(7) = ".mov"
-        extensions(8) = ".rm"
-        extensions(9) = ".3gp"
-        extensions(10) = ".m4v"
-        extensions(11) = ".wmv"
-        extensions(12) = ".asf"
-        extensions(13) = ".mp4"
-        extensions(14) = ".mkv"
-        extensions(15) = ".nrg"
-        extensions(16) = ".iso"
-        extensions(17) = ".rmvb"
-        extensions(18) = ".ogm"
-        extensions(19) = ".bin"
-        extensions(20) = ".ts"
-        extensions(21) = ".vob"
-        extensions(22) = ".m2ts"
-        extensions(23) = ".flv"
-        extensions(24) = ".dvr-ms"
-        extensioncount = 24
+
         Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
-        For f = 1 To extensioncount
-            Dim actualname As String = medianame & extensions(f)
+        For Each ext In Utilities.VideoExtensions
+            If ext = "VIDEO_TS.IFO" Then Continue For
+            Dim actualname As String = medianame & ext
             If IO.File.Exists(actualname) Then
                 Dim newfilename As String
                 newfilename = ""
@@ -16514,94 +16466,8 @@ Public Class Form1
                         episodeno(g) = "0" & episodeno(g)
                     End If
                 Next
-                Select Case Preferences.tvrename
-                    Case 0
-                        'Show Title - S01E01 - Episode Title.ext
-                        newfilename = showtitle & " - " & s & seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & e & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 1
-                        'S01E01 - Episode Title.ext
-                        newfilename = s & seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & e & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 2
-                        'Show Title - 1x01 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = showtitle & " - " & seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & x & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 3
-                        '1x01 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & x & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 4
-                        'Show Title - 101 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = showtitle & " - " & seasonno
-                        For g = 0 To episodeno.Count - 1
-                            If g = 0 Then
-                                newfilename = newfilename & episodeno(g)
-                            Else
-                                newfilename = newfilename & x & episodeno(g)
-                            End If
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 5
-                        '101 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = seasonno
-                        For g = 0 To episodeno.Count - 1
-                            If g = 0 Then
-                                newfilename = newfilename & episodeno(g)
-                            Else
-                                newfilename = newfilename & x & episodeno(g)
-                            End If
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                End Select
+                newfilename = Renamer.setTVFilename(showtitle, episodetitle, episodeno, seasonno)
+
                 newfilename = newfilename.Replace("?", "")
                 newfilename = newfilename.Replace("/", "")
                 newfilename = newfilename.Replace("\", "")
@@ -18492,49 +18358,8 @@ Public Class Form1
         Dim renamelog As String = ""
         Dim tempint As Integer
 
-
-        Dim s As String = ""
-        Dim ee As String = ""
-        Dim x As String = ""
-        If Preferences.eprenamelowercase = False Then
-            s = "S"
-            ee = "E"
-            x = "X"
-        Else
-            s = "s"
-            ee = "e"
-            x = "x"
-        End If
-
         Dim oldname As String = ""
 
-        Dim extensioncount As Integer
-        Dim extensions(100)
-        extensions(1) = ".avi"
-        extensions(2) = ".xvid"
-        extensions(3) = ".divx"
-        extensions(4) = ".img"
-        extensions(5) = ".mpg"
-        extensions(6) = ".mpeg"
-        extensions(7) = ".mov"
-        extensions(8) = ".rm"
-        extensions(9) = ".3gp"
-        extensions(10) = ".m4v"
-        extensions(11) = ".wmv"
-        extensions(12) = ".asf"
-        extensions(13) = ".mp4"
-        extensions(14) = ".mkv"
-        extensions(15) = ".nrg"
-        extensions(16) = ".iso"
-        extensions(17) = ".rmvb"
-        extensions(18) = ".ogm"
-        extensions(19) = ".bin"
-        extensions(20) = ".ts"
-        extensions(21) = ".vob"
-        extensions(22) = ".m2ts"
-        extensions(23) = ".flv"
-        extensions(24) = ".dvr-ms"
-        extensioncount = 24
         Dim nfofilestorename As New List(Of String)
         nfofilestorename.Clear()
         Dim donelist As New List(Of String)
@@ -18633,8 +18458,9 @@ Public Class Form1
                     Dim listtorename As New List(Of String)
                     listtorename.Clear()
                     listtorename.Add(renamefile)
-                    For f = 1 To extensioncount
-                        Dim temppath2 As String = renamefile.Replace(IO.Path.GetExtension(renamefile), extensions(f))
+                    For Each ext In Utilities.VideoExtensions
+                        If ext = "VIDEO_TS.IFO" Then Continue For
+                        Dim temppath2 As String = renamefile.Replace(IO.Path.GetExtension(renamefile), ext)
                         If IO.File.Exists(temppath2) Then
                             listtorename.Add(temppath2)
                         End If
@@ -19549,40 +19375,40 @@ Public Class Form1
         If IsNumeric(TextBox35.Text) Then
             Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
             Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")
-            Dim extensions(100) As String
-            Dim extensioncount As Integer
-            extensions(1) = ".avi"
-            extensions(2) = ".xvid"
-            extensions(3) = ".divx"
-            extensions(4) = ".img"
-            extensions(5) = ".mpg"
-            extensions(6) = ".mpeg"
-            extensions(7) = ".mov"
-            extensions(8) = ".rm"
-            extensions(9) = ".3gp"
-            extensions(10) = ".m4v"
-            extensions(11) = ".wmv"
-            extensions(12) = ".asf"
-            extensions(13) = ".mp4"
-            extensions(14) = ".mkv"
-            extensions(15) = ".nrg"
-            extensions(16) = ".iso"
-            extensions(17) = ".rmvb"
-            extensions(18) = ".ogm"
-            extensions(19) = ".bin"
-            extensions(20) = ".ts"
-            extensions(21) = ".vob"
-            extensions(22) = ".m2ts"
-            extensions(23) = ".rar"
-            extensions(24) = ".flv"
-            extensions(25) = ".dvr-ms"
-            extensions(26) = "VIDEO_TS.IFO"
+            'Dim extensions(100) As String
+            'Dim extensioncount As Integer
+            'extensions(1) = ".avi"
+            'extensions(2) = ".xvid"
+            'extensions(3) = ".divx"
+            'extensions(4) = ".img"
+            'extensions(5) = ".mpg"
+            'extensions(6) = ".mpeg"
+            'extensions(7) = ".mov"
+            'extensions(8) = ".rm"
+            'extensions(9) = ".3gp"
+            'extensions(10) = ".m4v"
+            'extensions(11) = ".wmv"
+            'extensions(12) = ".asf"
+            'extensions(13) = ".mp4"
+            'extensions(14) = ".mkv"
+            'extensions(15) = ".nrg"
+            'extensions(16) = ".iso"
+            'extensions(17) = ".rmvb"
+            'extensions(18) = ".ogm"
+            'extensions(19) = ".bin"
+            'extensions(20) = ".ts"
+            'extensions(21) = ".vob"
+            'extensions(22) = ".m2ts"
+            'extensions(23) = ".rar"
+            'extensions(24) = ".flv"
+            'extensions(25) = ".dvr-ms"
+            'extensions(26) = "VIDEO_TS.IFO"
             Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-            extensioncount = 26
+            'extensioncount = 26
             Dim exists As Boolean = False
-            For f = 1 To extensioncount
+            For Each ext In Utilities.VideoExtensions
                 Dim tempstring2 As String
-                tempstring2 = pathandfilename & extensions(f)
+                tempstring2 = pathandfilename & ext
                 If IO.File.Exists(tempstring2) Then
                     Dim seconds As Integer = 10
                     If Convert.ToInt32(TextBox35.Text) > 0 Then
@@ -30527,6 +30353,7 @@ Public Class Form1
 
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
+        Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
         Read_XBMC_IMDB_Scraper_Config()
     End Sub
 

@@ -4,6 +4,7 @@ Public Class Renamer
     Const SetDefaults = True
 
     Private Structure str_renameTemplate
+        Dim previous As String
         Dim prefix As String
         Dim showTitleCase As String
         Dim episodeTitleCase As String
@@ -17,6 +18,7 @@ Public Class Renamer
         Dim suffix As String
 
         Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+            previous = ""
             prefix = ""
             showTitleCase = ""
             episodeTitleCase = ""
@@ -34,6 +36,7 @@ Public Class Renamer
     Shared rename As New str_renameTemplate(SetDefaults)
 
     Public Shared Function setRenamePref(ByVal strRenamePref As String) As Boolean
+        If String.Equals(strRenamePref, rename.previous) Then Return True
         Dim strRenameWorking As String = strRenamePref.ToLower
         Dim posShow As Integer = strRenameWorking.IndexOf("show")
         Dim posShowTitle As Integer = If(posShow <> -1, strRenameWorking.IndexOf("title"), -1)
@@ -61,6 +64,7 @@ Public Class Renamer
 
         If DoWeReturn Then Return False 'If Not M.Sucess then Return false     'If For Loop did not loop at all then M.Success still contains 'nothing' and we get an exception
 
+        rename.previous = strRenamePref
         rename.prefix = If(posShow > 0, strRenamePref.Substring(0, posShow), If(posShow < 0 And M.Index > 0, strRenamePref.Substring(0, M.Index), ""))
         rename.sepShowTitle = If(posShow <> -1 And posShowTitle <> -1, strRenamePref.Substring(posShow + 4, posShowTitle - (posShow + 4)), "")
         rename.sepEpisodeTitle = If(posEpisode <> -1, strRenamePref.Substring(posEpisode + 7, posEpisodeTitle - (posEpisode + 7)), "")
