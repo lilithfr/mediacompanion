@@ -18370,7 +18370,7 @@ Public Class Form1
         Dim donelist As New List(Of String)
         donelist.Clear()
         If TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
-            If IO.Path.GetExtension(TvTreeview.SelectedNode.Name).ToLower = ".nfo" And IO.Path.GetFileName(TvTreeview.SelectedNode.Name).ToLower <> "tvshow.nfo" Then
+            If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
                 'individual episode
                 tempint = MessageBox.Show("Using this option will rename the selected episode" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                 If tempint = DialogResult.No Then
@@ -18379,7 +18379,7 @@ Public Class Form1
                 If Not nfofilestorename.Contains(TvTreeview.SelectedNode.Name) And TvTreeview.SelectedNode.Name.IndexOf("Missing: ") <> 0 Then
                     nfofilestorename.Add(TvTreeview.SelectedNode.Name)
                 End If
-            ElseIf IO.Path.GetExtension(TvTreeview.SelectedNode.Name) = "" Then
+            ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
                 'season
                 tempint = MessageBox.Show("Using this option will rename all episode nfo's within the selected season" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                 If tempint = DialogResult.No Then
@@ -18391,7 +18391,7 @@ Public Class Form1
                         nfofilestorename.Add(childnode.Name)
                     End If
                 Next
-            ElseIf IO.Path.GetExtension(TvTreeview.SelectedNode.Name).ToLower = ".nfo" And IO.Path.GetFileName(TvTreeview.SelectedNode.Name).ToLower = "tvshow.nfo" Then
+            ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
                 'full show
                 tempint = MessageBox.Show("Using this option will rename all episode nfo's within the selected show" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
                 If tempint = DialogResult.No Then
@@ -18539,6 +18539,11 @@ Public Class Form1
                                     ep.VideoFilePath = newnfofile
                                 End If
                             Next
+                        Next
+                        For Each episode In tvshow.Episodes
+                            If episode.NfoFilePath = oldnfofile Then
+                                episode.NfoFilePath = newnfofile
+                            End If
                         Next
                         renamelog = renamelog & "Tables Updated" & vbCrLf & vbCrLf
                     Catch
