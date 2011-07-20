@@ -22254,6 +22254,7 @@ Public Class Form1
         For Each item In ListBox5.Items
             tvRootFolders.Add(item)
         Next
+        tv_CacheRebuild()
         Preferences.SaveConfig()
         'Call updatetree()
         If newTvFolders.Count = 0 Then

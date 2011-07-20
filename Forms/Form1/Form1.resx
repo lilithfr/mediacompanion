@@ -137,7 +137,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABK
-        CQAAAk1TRnQBSQFMAgEBAgEAAZgBLAGYASwBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        CQAAAk1TRnQBSQFMAgEBAgEAAaABLAGgASwBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAARADAAEBAQABCAYAAQQYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -3164,6 +3164,40 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>347, 95</value>
   </metadata>
+  <data name="Label81.Text" xml:space="preserve">
+    <value>Root Folders are folders that contain
+multiple TV Shows
+
+For example :-
+D:/Root/TV Show 1
+D:/Root/TV Show 2 
+You would add the path:
+D:/Root
+
+Folders added to this list can be
+checked for new TV Show folders
+and can be added to the Seperate
+Folders List automatically on startup.
+
+To check for new TV Folders when the
+program is running, use the 
+"Check Roots for New TV Shows"
+menu item, located in the "TV Shows"
+Drop down menu.</value>
+  </data>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>Seperate folders are those that
+contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method
+means that all shows must be
+added manually.</value>
+  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>318, 56</value>
   </metadata>
@@ -3172,7 +3206,7 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        LgAAAk1TRnQBSQFMAgEBBAEAAZQBNAGUATQBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        LgAAAk1TRnQBSQFMAgEBBAEAAZwBNAGcATQBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABHgMAAQEBAAEYBQABUAFG/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
         /wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8AAwABOAG5AdIBOAG5AdIBOAG4AdEBOAG4AdEBOAG3
         AdEBNwG2AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAc0BNgGy
@@ -3451,40 +3485,6 @@ media file, used for playback and filedetails information.</value>
 select your preferred options from the panel opposite
 and select scrape. If none of the above are correct
 then alter the search term and search again.</value>
-  </data>
-  <data name="Label81.Text" xml:space="preserve">
-    <value>Root Folders are folders that contain
-multiple TV Shows
-
-For example :-
-D:/Root/TV Show 1
-D:/Root/TV Show 2 
-You would add the path:
-D:/Root
-
-Folders added to this list can be
-checked for new TV Show folders
-and can be added to the Seperate
-Folders List automatically on startup.
-
-To check for new TV Folders when the
-program is running, use the 
-"Check Roots for New TV Shows"
-menu item, located in the "TV Shows"
-Drop down menu.</value>
-  </data>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>Seperate folders are those that
-contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method
-means that all shows must be
-added manually.</value>
   </data>
   <data name="Label138.Text" xml:space="preserve">
     <value>If you have enabled the option to 'Save Actor Thumbs to the
