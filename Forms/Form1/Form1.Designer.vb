@@ -8436,7 +8436,7 @@ Me.ListBox5.Location = New System.Drawing.Point(15, 34)
 Me.ListBox5.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox5.Name = "ListBox5"
 Me.ListBox5.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ListBox5.Size = New System.Drawing.Size(309, 364)
+Me.ListBox5.Size = New System.Drawing.Size(309, 349)
 Me.ListBox5.TabIndex = 0
 '
 'Button67
@@ -8565,7 +8565,7 @@ Me.ListBox6.Location = New System.Drawing.Point(21, 34)
 Me.ListBox6.Margin = New System.Windows.Forms.Padding(4)
 Me.ListBox6.Name = "ListBox6"
 Me.ListBox6.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-Me.ListBox6.Size = New System.Drawing.Size(314, 364)
+Me.ListBox6.Size = New System.Drawing.Size(314, 349)
 Me.ListBox6.TabIndex = 0
 '
 'TabPage24

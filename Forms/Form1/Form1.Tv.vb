@@ -362,11 +362,11 @@ Partial Public Class Form1
 
 
             If Preferences.postertype = "banner" Then
-                util_ImageLoad(tv_PictureBoxRight, Show.ImageBanner.Path)       'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
+                util_ImageLoad(tv_PictureBoxRight, Show.ImageBanner.Path, defaultBanner) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
             Else
-                util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path)        'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
             End If
-            util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path)            'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
+            util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, defaultFanart) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
 
             Panel9.Visible = False
 
@@ -478,42 +478,26 @@ Partial Public Class Form1
 
         If trueseason = -1 Then
             If SelectedSeason.Poster.Image IsNot Nothing Then
-                util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path) 'tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+                util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, defaultPoster) 'tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
             Else
                 If Preferences.postertype = "banner" Then
-                    util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                    util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
                 Else
-                    util_ImageLoad(tv_PictureBoxRight, Show.ImageBanner.Path) 'tv_PictureBoxRight.Image = Show.ImageBanner.Image
+                    util_ImageLoad(tv_PictureBoxRight, Show.ImageBanner.Path, defaultBanner) 'tv_PictureBoxRight.Image = Show.ImageBanner.Image
                 End If
             End If
         ElseIf trueseason = 0 Then          'Specials
             If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
-                Try
-                    util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn"))  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
-                Catch
-                    tv_PictureBoxRight.ImageLocation = defaultPoster    'we can load default poster directly because we will never want to overwrite it
-                End Try
+                util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn"), defaultPoster)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
             Else
-                Try
-                    util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"))     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
-                Catch
-                    tv_PictureBoxRight.ImageLocation = defaultPoster
-                End Try
+                util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), defaultPoster)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
             End If
         Else                                'Season01 & up
-
-            util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path)             ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
-            
-
-
+            util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, defaultPoster)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
         End If
 
         If Show.NfoFilePath <> Nothing Then
-            Try
-                util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"))    'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
-            Catch
-                tv_PictureBoxLeft.ImageLocation = defaultFanart
-            End Try
+            util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), defaultFanart) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
         End If
 
     End Sub
@@ -601,14 +585,14 @@ Partial Public Class Form1
         ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
         ' It could have been why Billy has used two pictureboxes for each single one shown.....
 
-        util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path)
-        util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path)  'tv_PictureBoxRight.Image = Season.Poster.Image
+        util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, defaultScreenShot)
+        util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Season.Poster.Image
 
         Panel9.Visible = True
 
     End Sub
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
-    Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String) As Boolean
+    Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
         Try
             Dim fs As System.IO.FileStream
             fs = New System.IO.FileStream(ImagePath, IO.FileMode.Open, IO.FileAccess.Read)
@@ -616,6 +600,7 @@ Partial Public Class Form1
             fs.Close()
         Catch ex As Exception
             'possibly no file to load or file is corrupt
+            PicBox.ImageLocation = DefaultPic
             Return False
         End Try
         Return True
@@ -628,6 +613,7 @@ Partial Public Class Form1
         Me.Enabled = False
         Cache.TvCache.Clear()
         TvTreeview.Nodes.Clear()
+        realTvPaths.Clear()
         For Each tvfolder In Preferences.tvFolders
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")

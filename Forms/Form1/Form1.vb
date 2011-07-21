@@ -17135,7 +17135,7 @@ Public Class Form1
                         PictureBox10.Load()
                         PictureBox11.Image = PictureBox10.Image
                         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                            util_ImageLoad(tv_PictureBoxLeft, savepath)  'tv_PictureBoxLeft.ImageLocation = savepath   'tv_PictureBoxLeft.Load()
+                            util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart)  'tv_PictureBoxLeft.ImageLocation = savepath   'tv_PictureBoxLeft.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17264,7 +17264,7 @@ Public Class Form1
             PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
             PictureBox11.Image = PictureBox10.Image
             If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                util_ImageLoad(tv_PictureBoxLeft, PictureBox11.ImageLocation) 'tv_PictureBoxLeft.Image = PictureBox11.Image
+                util_ImageLoad(tv_PictureBoxLeft, PictureBox11.ImageLocation, defaultFanart) 'tv_PictureBoxLeft.Image = PictureBox11.Image
             End If
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
@@ -17359,7 +17359,7 @@ Public Class Form1
                 PictureBox10.Load()
                 PictureBox11.Image = PictureBox10.Image
                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    util_ImageLoad(tv_PictureBoxLeft, savepath) 'tv_PictureBoxLeft.ImageLocation = savepath 'tv_PictureBoxLeft.Load()
+                    util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart) 'tv_PictureBoxLeft.ImageLocation = savepath 'tv_PictureBoxLeft.Load()
                 End If
             Else
                 PictureBox10.Image = Nothing
@@ -19140,7 +19140,7 @@ Public Class Form1
         If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
             PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
             If combostart = ComboBox2.SelectedItem Then
-                util_ImageLoad(tv_PictureBoxRight, PictureBox13.ImageLocation) 'tv_PictureBoxRight.Image = PictureBox13.Image
+                util_ImageLoad(tv_PictureBoxRight, PictureBox13.ImageLocation, defaultPoster) 'tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19172,7 +19172,7 @@ Public Class Form1
                     Dim OriginalImage As New Bitmap(path)
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
-                    util_ImageLoad(tv_PictureBoxRight, path)
+                    util_ImageLoad(tv_PictureBoxRight, path, defaultPoster)
                     PictureBox12.Image = Image2
                     Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 End If
@@ -19221,7 +19221,7 @@ Public Class Form1
                         End If
                         Dim newpicbox As PictureBox = Control
                         newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                        util_ImageLoad(tv_PictureBoxRight, path)
+                        util_ImageLoad(tv_PictureBoxRight, path, defaultPoster)
                         PictureBox12.Image = newpicbox.Image
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                     Catch ex As Exception
@@ -22249,10 +22249,11 @@ Public Class Form1
         For Each item In ListBox5.Items
             tvRootFolders.Add(item)
         Next
-        tv_CacheRebuild()
-        Preferences.SaveConfig()
+
+        Preferences.SaveConfig() 'save updated folders list
         'Call updatetree()
         If newTvFolders.Count = 0 Then
+            tv_CacheRebuild()        'rebuild tv cache so that it uses the updated list of folders 
             MsgBox("Changes Saved")
         Else
             MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
