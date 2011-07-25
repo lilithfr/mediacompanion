@@ -9,6 +9,7 @@ Imports System.Reflection
 Imports System.Drawing
 
 
+
 Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
@@ -42,7 +43,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Property
     Public Shared tvScraperLog As String = ""
 
-
+   
 
     Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
         'returns free space in MB, formatted to two decimal places
