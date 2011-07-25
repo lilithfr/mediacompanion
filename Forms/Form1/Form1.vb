@@ -2820,7 +2820,7 @@ Public Class Form1
 
     Private Sub mov_ListFiles2(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
         'scraperLog &= lst & " " & pattern & " " & dir_info.ToString & vbCrLf
-        Dim moviepattern As String = "*" & pattern
+        Dim moviepattern As String = pattern
         Monitor.Enter(Me)
         Dim tempint2 As Integer
         Dim tempstring As String
@@ -2830,7 +2830,12 @@ Public Class Form1
             Dim dofilter As Boolean = False
             Dim dvdfiles As Boolean
             For Each fs_info As System.IO.FileInfo In fs_infos
-                scraperLog &= ":" & fs_info.ToString                           'log title name
+                If Preferences.usefoldernames = True Then
+                    scraperLog &= ": '" & fs_info.Directory.Name.ToString & "'"                          'log directory name as Title due to use FOLDERNAMES
+                Else
+                    scraperLog &= ": '" & fs_info.ToString & "'"                                  'log title name
+                End If
+
                 Dim newmoviedetails As New str_NewMovie(SetDefaults)
                 Dim title As String = String.Empty
                 Dim remove As Boolean = False
@@ -2840,10 +2845,10 @@ Public Class Form1
                 newmoviedetails.mediapathandfilename = fs_info.FullName
                 newmoviedetails.nfopathandfilename = tempmovie
                 Dim basicmoviename As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), "movie.nfo")
-                'If IO.File.Exists(basicmoviename) Then   'left these lines commented out they don't seem to be needed to stop rescrape if movie.nfo already exists
-                'remove = True
-                'scraperLog &= "Remove Found!" & vbCrLf
-                'End If
+                If IO.File.Exists(basicmoviename) Then   'this removes this movie from the to scrape list if the folder contains a movie.nfo
+                    remove = True
+                    scraperLog &= " - 'movie.nfo' found - scrape skipped!"
+                End If
                 basicmoviename = Utilities.GetStackName(IO.Path.GetFileName(fs_info.FullName), fs_info.FullName)
                 Dim otherformat As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), basicmoviename & ".nfo")
                 If IO.File.Exists(otherformat) Then
@@ -2868,6 +2873,7 @@ Public Class Form1
                     End Try
                     If allok2 = True Then
                         remove = True
+                        scraperLog &= " - valid MC .nfo found ('" & otherformat & "') type other - scrape skipped!"
                     End If
                 End If
 
@@ -2907,6 +2913,9 @@ Public Class Form1
                         If allok = False Then
                             dofilter = True
                             title = fs_info.FullName
+                        Else
+                            remove = True
+                            scraperLog &= " - valid MC .nfo found ('" & fs_info.Name.Replace(System.IO.Path.GetExtension(fs_info.Name), ".nfo") & "') - scrape skipped!"
                         End If
                     Else
                         dofilter = True
@@ -17136,7 +17145,8 @@ Public Class Form1
                         PictureBox10.Load()
                         PictureBox11.Image = PictureBox10.Image
                         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                            util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart)  'tv_PictureBoxLeft.ImageLocation = savepath   'tv_PictureBoxLeft.Load()
+                            tv_PictureBoxLeft.ImageLocation = savepath
+                            tv_PictureBoxLeft.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17265,7 +17275,7 @@ Public Class Form1
             PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
             PictureBox11.Image = PictureBox10.Image
             If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                util_ImageLoad(tv_PictureBoxLeft, PictureBox11.ImageLocation, defaultFanart) 'tv_PictureBoxLeft.Image = PictureBox11.Image
+                tv_PictureBoxLeft.Image = PictureBox11.Image
             End If
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
@@ -17360,7 +17370,8 @@ Public Class Form1
                 PictureBox10.Load()
                 PictureBox11.Image = PictureBox10.Image
                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart) 'tv_PictureBoxLeft.ImageLocation = savepath 'tv_PictureBoxLeft.Load()
+                    tv_PictureBoxLeft.ImageLocation = savepath
+                    tv_PictureBoxLeft.Load()
                 End If
             Else
                 PictureBox10.Image = Nothing
@@ -18640,7 +18651,6 @@ Public Class Form1
             End If
         Next
 
-        ComboBox2.SelectedIndex = 0
 
         '        For Each item In tvobjects
         '            ComboBox2.Items.Add(item)
@@ -19141,7 +19151,7 @@ Public Class Form1
         If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
             PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
             If combostart = ComboBox2.SelectedItem Then
-                util_ImageLoad(tv_PictureBoxRight, PictureBox13.ImageLocation, defaultPoster) 'tv_PictureBoxRight.Image = PictureBox13.Image
+                tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19173,22 +19183,24 @@ Public Class Form1
                     Dim OriginalImage As New Bitmap(path)
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
-                    util_ImageLoad(tv_PictureBoxRight, path, defaultPoster)
+                    If combostart = ComboBox2.SelectedItem Then
+                        tv_PictureBoxRight.Image = Image2
+                    End If
                     PictureBox12.Image = Image2
                     Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 End If
 
-        If witherror = True And witherror2 = False Then
-            MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
-        End If
-        If witherror2 = True Then
-            MsgBox("Unable to download image")
-        End If
+                If witherror = True And witherror2 = False Then
+                    MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
+                End If
+                If witherror2 = True Then
+                    MsgBox("Unable to download image")
+                End If
             Catch ex As Exception
-            MsgBox(ex.ToString)
-        Finally
-            messbox.Close()
-        End Try
+                MsgBox(ex.ToString)
+            Finally
+                messbox.Close()
+            End Try
         End If
     End Sub
 
@@ -19222,7 +19234,9 @@ Public Class Form1
                         End If
                         Dim newpicbox As PictureBox = Control
                         newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                        util_ImageLoad(tv_PictureBoxRight, path, defaultPoster)
+                        If combostart = ComboBox2.SelectedItem Then
+                            tv_PictureBoxRight.Image = newpicbox.Image
+                        End If
                         PictureBox12.Image = newpicbox.Image
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                     Catch ex As Exception
@@ -19327,7 +19341,7 @@ Public Class Form1
             PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
 
             If combostart = ComboBox2.SelectedItem Then
-                tv_PictureBoxRight.Image = PictureBox13.Image 'image from memory so file is not locked
+                tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19447,7 +19461,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(bitmap2)
                         bitmap2.Dispose()
                         PictureBox14.Image = bitmap3
-                        tv_PictureBoxLeft.Image = bitmap3  'this is a load from memory it doesn't lock a file
+                        tv_PictureBoxLeft.Image = bitmap3
                     End If
                     Exit For
                 End If
@@ -19549,7 +19563,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(bitmap2)
                         bitmap2.Dispose()
                         PictureBox14.Image = bitmap3
-                        tv_PictureBoxLeft.Image = bitmap3    'this is a load from memory it doesn't lock a file
+                        tv_PictureBoxLeft.Image = bitmap3
                         messbox.Close()
                     Catch ex As Exception
                         MsgBox("Unable To Download Image")
@@ -22250,11 +22264,9 @@ Public Class Form1
         For Each item In ListBox5.Items
             tvRootFolders.Add(item)
         Next
-
-        Preferences.SaveConfig() 'save updated folders list
+        Preferences.SaveConfig()
         'Call updatetree()
         If newTvFolders.Count = 0 Then
-            tv_CacheRebuild()        'rebuild tv cache so that it uses the updated list of folders 
             MsgBox("Changes Saved")
         Else
             MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
