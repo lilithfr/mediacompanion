@@ -11630,7 +11630,7 @@ Public Class Form1
             If path <> "" Then
                 tempstring = path
                 Try
-                    Call Shell("explorer /select," & """" & tempstring & """", AppWinStyle.NormalFocus)
+                    Call Shell("explorer /select," & """" & tempstring & """", AppWinStyle.NormalFocus) 'this shows the item as selected provided as tempstring i.e. a folder or a file (.nfo)
                     'Process.Start(pathtxt.Text)
                     errors = "Trying to open Folder :- " & tempstring
                     action = "Command - ""Call Shell(""explorer /select,""" & tempstring & ", AppWinStyle.NormalFocus)"""
@@ -16837,9 +16837,12 @@ Public Class Form1
     End Sub
 
     Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_OpenFolder.Click
+
+
         If Not TvTreeview.SelectedNode Is Nothing Then
-            If Not TvTreeview.SelectedNode.Name Is Nothing Then
-                Call util_OpenFolder(TvTreeview.SelectedNode.Name)
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
+            If Not WorkingTvShow.NfoFilePath Is Nothing And Not WorkingTvShow.NfoFilePath = "" Then
+                Call util_OpenFolder(WorkingTvShow.NfoFilePath) 'we send the path of the tvshow.nfo, that way in explorer it will be highlighted in the folder
             Else
                 MsgBox("There is no show selected to open")
             End If

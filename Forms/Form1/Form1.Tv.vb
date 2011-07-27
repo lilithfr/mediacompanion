@@ -110,6 +110,10 @@ Partial Public Class Form1
         Next
     End Sub
     Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
+        'chooses which sub is run to load the relavent tv data to the screen
+        'note: context menu items are set during TvTreeView_MouseUp event because we only need to update if right click is done which we check in the mouseup sub
+        'mouseup sub selects the node underneath the mouse & then this runs since its an event 'AfterSelect'
+
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
             Tv_ShowSelected(TvTreeview.SelectedNode.Tag)
@@ -121,17 +125,20 @@ Partial Public Class Form1
             MsgBox("None")
         End If
 
-        tv_SplitContainerAutoPosition("TVTreeView_AfterSelect")
+        tv_SplitContainerAutoPosition("TVTreeView_AfterSelect") 'auto set container splits....after we have loaded data & pictures....
     End Sub
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
-
+        '                                                  'called from tv_treeview mouseup event where we check for a right click
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
         Dim showtitle As String = WorkingTvShow.Title.Value       'set our show title
 
         'now we set the items that have variable text in the context menu using the 'show' text set above
+        Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
         Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
         Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
         Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & showtitle & """"
+
+        'now we display what we need to display depending on what type of node we have selected
 
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
             Tv_TreeViewContext_OpenFolder.Enabled = True
@@ -170,7 +177,7 @@ Partial Public Class Form1
             MsgBox("None")
         End If
 
-        'these are the four items at the bottom of the menu to control Expand/Colapse the tv_treeview
+        'these are the four items at the bottom of the menu to control Expand/Colapse the tv_treeview (always shown)
         ExpandSelectedShowToolStripMenuItem.Enabled = True
         ExpandAllToolStripMenuItem.Enabled = True
         CollapseAllToolStripMenuItem.Enabled = True
