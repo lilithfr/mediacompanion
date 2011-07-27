@@ -30479,7 +30479,10 @@ Public Class Form1
             pt.X = e.X
             pt.Y = e.Y
             MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
-            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position))
+            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
+
+            'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
+            Tv_TreeViewContextMenuItemsEnable()
         End If
     End Sub
 

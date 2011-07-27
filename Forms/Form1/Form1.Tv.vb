@@ -111,15 +111,11 @@ Partial Public Class Form1
     End Sub
     Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
-        
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
-            Tv_MenuContextShow("show", TvTreeview.SelectedNode.Tag.title.value)
             Tv_ShowSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
-            Tv_MenuContextShow("season", TvTreeview.SelectedNode.Tag.ShowObj.title.value)
             tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
-            Tv_MenuContextShow("episode", TvTreeview.SelectedNode.Tag.title.value)
             tv_EpisodeSelected(TvTreeview.SelectedNode.Tag)
         Else
             MsgBox("None")
@@ -127,53 +123,58 @@ Partial Public Class Form1
 
         tv_SplitContainerAutoPosition("TVTreeView_AfterSelect")
     End Sub
-    Private Sub Tv_MenuContextShow(ByVal type As String, ByVal Show As String)        'enable/disable right click context menu items depending on sent node type
+    Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
 
-        Select Case type
-            Case "show"
-                Tv_TreeViewContext_SearchNewEp.Text = "Search """ & Show & """ for new episodes"
-                Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & Show & """"
-                Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & Show & """"
-                Dim tempstring As String = "Search """ & Show & """ for new episodes"
-                tempstring = "Download missing art for """ & Show & """"
-                tempstring = "Display missing episodes for """ & Show & """"
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
+        Dim showtitle As String = WorkingTvShow.Title.Value       'set our show title
 
-                Tv_TreeViewContext_OpenFolder.Enabled = True
-                Tv_TreeViewContext_ViewNfo.Enabled = True
-                Tv_TreeViewContext_RescrapeShow.Enabled = True
-                Tv_TreeViewContext_FindMissArt.Enabled = True
-                Tv_TreeViewContext_RebuildShow.Enabled = True
-                Tv_TreeViewContext_ReloadFromCache.Enabled = True
-                Tv_TreeViewContext_RenameEp.Enabled = True
-                Tv_TreeViewContext_ShowMissEps.Enabled = True
-                Tv_TreeViewContext_DispByAiredDate.Enabled = True
+        'now we set the items that have variable text in the context menu using the 'show' text set above
+        Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
+        Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
+        Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & showtitle & """"
 
-                ExpandSelectedShowToolStripMenuItem.Enabled = True
-                ExpandAllToolStripMenuItem.Enabled = True
-                CollapseAllToolStripMenuItem.Enabled = True
-                CollapseSelectedShowToolStripMenuItem.Enabled = True
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Tv_TreeViewContext_OpenFolder.Enabled = True
+            Tv_TreeViewContext_ViewNfo.Enabled = True
+            Tv_TreeViewContext_RescrapeShow.Enabled = True
+            Tv_TreeViewContext_FindMissArt.Enabled = True
+            Tv_TreeViewContext_RebuildShow.Enabled = True
+            Tv_TreeViewContext_ReloadFromCache.Enabled = True
+            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_ShowMissEps.Enabled = True
+            Tv_TreeViewContext_DispByAiredDate.Enabled = True
 
-            Case "season"
-                Tv_TreeViewContext_OpenFolder.Enabled = False
-                Tv_TreeViewContext_ViewNfo.Enabled = True
-                Tv_TreeViewContext_RescrapeShow.Enabled = False
-                Tv_TreeViewContext_FindMissArt.Enabled = False
-                Tv_TreeViewContext_RebuildShow.Enabled = False
-                Tv_TreeViewContext_ReloadFromCache.Enabled = False
-                Tv_TreeViewContext_RenameEp.Enabled = True
-                Tv_TreeViewContext_ShowMissEps.Enabled = True
-                Tv_TreeViewContext_DispByAiredDate.Enabled = True
-            Case "episode"
-                Tv_TreeViewContext_OpenFolder.Enabled = False
-                Tv_TreeViewContext_ViewNfo.Enabled = True
-                Tv_TreeViewContext_RescrapeShow.Enabled = False
-                Tv_TreeViewContext_FindMissArt.Enabled = False
-                Tv_TreeViewContext_RebuildShow.Enabled = False
-                Tv_TreeViewContext_ReloadFromCache.Enabled = False
-                Tv_TreeViewContext_RenameEp.Enabled = True
-                Tv_TreeViewContext_ShowMissEps.Enabled = True
-                Tv_TreeViewContext_DispByAiredDate.Enabled = True
-        End Select
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            Tv_TreeViewContext_OpenFolder.Enabled = False
+            Tv_TreeViewContext_ViewNfo.Enabled = True
+            Tv_TreeViewContext_RescrapeShow.Enabled = False
+            Tv_TreeViewContext_FindMissArt.Enabled = False
+            Tv_TreeViewContext_RebuildShow.Enabled = False
+            Tv_TreeViewContext_ReloadFromCache.Enabled = False
+            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_ShowMissEps.Enabled = True
+            Tv_TreeViewContext_DispByAiredDate.Enabled = True
+
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Tv_TreeViewContext_OpenFolder.Enabled = False
+            Tv_TreeViewContext_ViewNfo.Enabled = True
+            Tv_TreeViewContext_RescrapeShow.Enabled = False
+            Tv_TreeViewContext_FindMissArt.Enabled = False
+            Tv_TreeViewContext_RebuildShow.Enabled = False
+            Tv_TreeViewContext_ReloadFromCache.Enabled = False
+            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_ShowMissEps.Enabled = True
+            Tv_TreeViewContext_DispByAiredDate.Enabled = True
+
+        Else
+            MsgBox("None")
+        End If
+
+        'these are the four items at the bottom of the menu to control Expand/Colapse the tv_treeview
+        ExpandSelectedShowToolStripMenuItem.Enabled = True
+        ExpandAllToolStripMenuItem.Enabled = True
+        CollapseAllToolStripMenuItem.Enabled = True
+        CollapseSelectedShowToolStripMenuItem.Enabled = True
     End Sub
 
 
