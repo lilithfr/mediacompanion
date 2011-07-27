@@ -16535,6 +16535,7 @@ Public Class Form1
                         Dim fi As New IO.FileInfo(items)
                         If Not IO.File.Exists(newname) Then
                             fi.MoveTo(newname)
+                            Preferences.tvScraperLog &= "Renamed " & newname & vbCrLf
                         End If
                     Catch ex As Exception
                         done = path
@@ -16550,17 +16551,7 @@ Public Class Form1
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
 
 
-        If Preferences.autorenameepisodes = True Then
-            Dim eps As New List(Of String)
-            eps.Clear()
-            For Each ep In alleps
-                eps.Add(ep.Episode.Value)
-            Next
-            Dim tempspath As String = ep_Rename(path, alleps(0).Season.value, eps, show, alleps(0).Title.Value)
-            If tempspath <> "false" Then
-                path = tempspath
-            End If
-        End If
+        
 
 
 
@@ -16626,6 +16617,20 @@ Public Class Form1
                 End If
             End If
         End If
+
+        If Preferences.autorenameepisodes = True Then
+            Dim eps As New List(Of String)
+            eps.Clear()
+            For Each ep In alleps
+                eps.Add(ep.Episode.Value)
+            Next
+            Dim tempspath As String = ep_Rename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value)
+
+            If tempspath <> "false" Then
+                path = tempspath
+            End If
+        End If
+
         Return path
     End Function
 
@@ -30495,6 +30500,8 @@ Public Class Form1
     End Sub
 
     Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
-        MsgBox("Missing Art Coming soon")
+
+        tv_MissingArtDownload(tv_ShowSelectedCurrently)
+
     End Sub
 End Class

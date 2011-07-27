@@ -2602,9 +2602,7 @@ Partial Public Class Form1
         Return Episode
     End Function
 
-    Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
-        tv_MissingArtDownload(tv_ShowSelectedCurrently)
-    End Sub
+   
 
     Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
         'Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
