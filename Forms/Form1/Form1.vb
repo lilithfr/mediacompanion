@@ -15273,7 +15273,7 @@ Public Class Form1
     '    End If
     'End Sub
 
-    Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadItemToolStripMenuItem.Click
+    Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ReloadFromCache.Click
         Call tv_ShowReload(True)
     End Sub
 
@@ -15701,7 +15701,7 @@ Public Class Form1
 
             Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(ListBox3.SelectedIndex).showid, languageList(ListBox1.SelectedIndex).Abbreviation.Value, WorkingTvShow.NfoFilePath)
             If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
-            Call tv_Load(WorkingTvShow)
+            Call tv_ShowLoad(WorkingTvShow)
             TvTreeview.Refresh()
             messbox.Close()
             TabControl3.SelectedIndex = 0
@@ -16418,7 +16418,7 @@ Public Class Form1
             Next
 
             nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True, "unlocked")
-            Call tv_Load(WorkingTvShow)
+            Call tv_ShowLoad(WorkingTvShow)
             messbox.Close()
             TabControl3.SelectedIndex = 0
         End If
@@ -16836,7 +16836,7 @@ Public Class Form1
         'Next
     End Sub
 
-    Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
+    Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_OpenFolder.Click
         If Not TvTreeview.SelectedNode Is Nothing Then
             If Not TvTreeview.SelectedNode.Name Is Nothing Then
                 Call util_OpenFolder(TvTreeview.SelectedNode.Name)
@@ -17607,7 +17607,7 @@ Public Class Form1
 
                 Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.tvdbid, langu, WorkingTvShow.NfoFilePath)
                 If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
-                Call tv_Load(WorkingTvShow)
+                Call tv_ShowLoad(WorkingTvShow)
                 For Each item As TvShow In Cache.TvCache.Shows
                     If item.NfoFilePath = WorkingTvShow.NfoFilePath Then
                         Dim newitem As New TvShow
@@ -17932,7 +17932,7 @@ Public Class Form1
 
                 End If
                 Call nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True)
-                Call tv_Load(WorkingTvShow)
+                Call tv_ShowLoad(WorkingTvShow)
                 For Each item In Cache.TvCache.Shows
                     If item.NfoFilePath = WorkingTvShow.NfoFilePath Then
                         Dim newitem As New TvShow
@@ -18369,7 +18369,7 @@ Public Class Form1
         '        Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
     End Sub
 
-    Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RenameTVShowsToolStripMenuItem.Click
+    Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RenameEp.Click
         Dim renamelog As String = ""
         Dim tempint As Integer
 
@@ -20941,7 +20941,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub SearchThisShowForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchThisShowForNewEpisodesToolStripMenuItem.Click
+    Private Sub SearchThisShowForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_SearchNewEp.Click
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
 
         Dim Season As TvSeason
@@ -28688,7 +28688,7 @@ Public Class Form1
         'Call Tv_CacheSave("New Function")
     End Sub
 
-    Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildThisShowToolStripMenuItem.Click
+    Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RebuildShow.Click
         Dim Show As TvShow = tv_ShowSelectedCurrently()
 
         If Show IsNot Nothing Then
@@ -28699,7 +28699,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub MissingepisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MissingepisodesToolStripMenuItem.Click
+    Private Sub MissingepisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ShowMissEps.Click
 
         Dim Show As TvShow = tv_ShowSelectedCurrently()
 
@@ -30392,7 +30392,8 @@ Public Class Form1
         Call mov_MovieComboListSort()
     End Sub
 
-    Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click
+    Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_DispByAiredDate.Click
+        MsgBox("Aired Date Coming soon")
         'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
         'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
@@ -30463,7 +30464,7 @@ Public Class Form1
         mov_Play()
     End Sub
 
-    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeThisShowToolStripMenuItem.Click
+    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShow.Click
 
         tv_Rescrape()
     End Sub
@@ -30483,8 +30484,11 @@ Public Class Form1
     End Sub
 
     
-    Private Sub ToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem1.Click
-        MsgBox("Coming soon")
+    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
+        MsgBox("View NFO Coming soon")
     End Sub
 
+    Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
+        MsgBox("Missing Art Coming soon")
+    End Sub
 End Class
