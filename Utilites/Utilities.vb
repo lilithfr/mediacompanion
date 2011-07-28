@@ -42,8 +42,17 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Set
     End Property
     Public Shared tvScraperLog As String = ""
+    Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String)
+        Try
+            Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
+            thePSI.Arguments = """" & nfopath & """"
+            System.Diagnostics.Process.Start(thePSI)
+        Catch ex As Exception
+            MsgBox("Unable to open File")
+        End Try
+    End Sub
 
-   
+
 
     Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
         'returns free space in MB, formatted to two decimal places

@@ -8171,15 +8171,8 @@ Public Class Form1
     End Sub
 
     Private Sub Mov_OpenFileToolStripMenuItem2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_OpenFileToolStripMenuItem.Click
-        Dim tempstring As String = ""
-        Try
-            tempstring = workingMovieDetails.fileinfo.fullpathandfilename
-            Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
-            thePSI.Arguments = """" & tempstring & """"
-            System.Diagnostics.Process.Start(thePSI)
-        Catch ex As Exception
-            MsgBox("Unable to open File")
-        End Try
+        Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename)
+        
     End Sub
 
     Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PosterBrowserToolStripMenuItem.Click
@@ -30484,7 +30477,16 @@ Public Class Form1
 
     
     Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
-        MsgBox("View NFO Coming soon")
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Nfo.TvShow).NfoFilePath)
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            MsgBox("A Season NFO is invalid so it can't be shown")
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Nfo.TvEpisode).NfoFilePath)
+        Else
+            MsgBox("None")
+        End If
     End Sub
 
     Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click

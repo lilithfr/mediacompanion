@@ -141,6 +141,8 @@ Partial Public Class Form1
         'now we display what we need to display depending on what type of node we have selected
 
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Tv_TreeViewContext_ViewNfo.Text = "View TVShow .nfo"
+
             Tv_TreeViewContext_OpenFolder.Enabled = True
             Tv_TreeViewContext_ViewNfo.Enabled = True
             Tv_TreeViewContext_RescrapeShow.Enabled = True
@@ -152,8 +154,10 @@ Partial Public Class Form1
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
-            Tv_TreeViewContext_OpenFolder.Enabled = False
-            Tv_TreeViewContext_ViewNfo.Enabled = True
+            Tv_TreeViewContext_ViewNfo.Text = "View Season .nfo"
+
+            Tv_TreeViewContext_OpenFolder.Enabled = True
+            Tv_TreeViewContext_ViewNfo.Enabled = False
             Tv_TreeViewContext_RescrapeShow.Enabled = False
             Tv_TreeViewContext_FindMissArt.Enabled = False
             Tv_TreeViewContext_RebuildShow.Enabled = False
@@ -163,7 +167,9 @@ Partial Public Class Form1
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
-            Tv_TreeViewContext_OpenFolder.Enabled = False
+            Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
+
+            Tv_TreeViewContext_OpenFolder.Enabled = True
             Tv_TreeViewContext_ViewNfo.Enabled = True
             Tv_TreeViewContext_RescrapeShow.Enabled = False
             Tv_TreeViewContext_FindMissArt.Enabled = False
