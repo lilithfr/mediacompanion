@@ -16446,7 +16446,7 @@ Public Class Form1
                 Dim myProcess As Process = New Process
                 myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 myProcess.StartInfo.CreateNoWindow = False
-                myProcess.StartInfo.FileName = applicationPath & "\ffmpeg.exe"
+                myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
                 Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                 myProcess.StartInfo.Arguments = proc_arguments
                 myProcess.Start()
@@ -16549,11 +16549,6 @@ Public Class Form1
     End Function
 
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
-
-
-        
-
-
 
         tvScraperLog = tvScraperLog & "Saving episode" & vbCrLf
         For Each Episode As Nfo.TvEpisode In alleps
@@ -18551,13 +18546,6 @@ Public Class Form1
                                 Next
                             Next
                         Next
-                        For Each item In Cache.TvCache.Shows
-                            For Each ep In item.Episodes
-                                If ep.VideoFilePath = oldnfofile Then
-                                    ep.VideoFilePath = newnfofile
-                                End If
-                            Next
-                        Next
                         For Each episode In tvshow.Episodes
                             If episode.NfoFilePath = oldnfofile Then
                                 episode.NfoFilePath = newnfofile
@@ -19457,7 +19445,7 @@ Public Class Form1
                     Dim myProcess As Process = New Process
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
-                    myProcess.StartInfo.FileName = applicationPath & "\ffmpeg.exe"
+                    myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
                     Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
@@ -27731,7 +27719,7 @@ Public Class Form1
             Dim myProcess As Process = New Process
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             myProcess.StartInfo.CreateNoWindow = False
-            myProcess.StartInfo.FileName = applicationPath & "\ffmpeg.exe"
+            myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
             Dim proc_arguments As String = "-r 1 -b 1800 -qmax 6 -i """ & applicationPath & "\Settings\%03d.jpg"" -vcodec msmpeg4v2 """ & mediapath & """"
             myProcess.StartInfo.Arguments = proc_arguments
             myProcess.Start()
