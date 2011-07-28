@@ -15274,8 +15274,8 @@ Public Class Form1
         Dim Show As Nfo.TvShow = tv_ShowSelectedCurrently()
         Dim Season As Nfo.TvSeason = tv_SeasonSelectedCurrently()
         Dim Episode As Nfo.TvEpisode = ep_SelectedCurrently()
-        tv_PictureBoxRight.Load()
-        tv_PictureBoxLeft.Load()
+        'tv_PictureBoxRight.Load()
+        'tv_PictureBoxLeft.Load()
 
         'This isn't required anymore
 
@@ -18264,7 +18264,7 @@ Public Class Form1
                 Next
 
                 If Preferences.enablehdtags = True Then
-                    WorkingEpisode.Details = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
+                    WorkingEpisode.Details.StreamDetails.Video = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath)).filedetails_video
                     If WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -18297,6 +18297,7 @@ Public Class Form1
                 'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
                 WorkingEpisode.Save()
                 'Call LoadTvEpisode(WorkingEpisode)
+                tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
             End If
         End If
@@ -30453,7 +30454,7 @@ Public Class Form1
         mov_Play()
     End Sub
 
-    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShow.Click
+    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
 
         tv_Rescrape()
     End Sub

@@ -53,7 +53,7 @@ Partial Class Form1
         Me.Tv_TreeViewContext_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tv_TreeViewContext_ViewNfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_RescrapeShow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tv_TreeViewContext_SearchNewEp = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tv_TreeViewContext_FindMissArt = New System.Windows.Forms.ToolStripMenuItem()
         Me.Tv_TreeViewContext_RebuildShow = New System.Windows.Forms.ToolStripMenuItem()
@@ -1245,7 +1245,7 @@ Partial Class Form1
         '
         'ContextMenuStrip2
         '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tv_TreeViewContext_OpenFolder, Me.Tv_TreeViewContext_ViewNfo, Me.ToolStripSeparator1, Me.Tv_TreeViewContext_RescrapeShow, Me.Tv_TreeViewContext_SearchNewEp, Me.Tv_TreeViewContext_FindMissArt, Me.Tv_TreeViewContext_RebuildShow, Me.Tv_TreeViewContext_ReloadFromCache, Me.Tv_TreeViewContext_RenameEp, Me.Tv_TreeViewContext_ShowMissEps, Me.Tv_TreeViewContext_DispByAiredDate, Me.ToolStripSeparator2, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem})
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tv_TreeViewContext_OpenFolder, Me.Tv_TreeViewContext_ViewNfo, Me.ToolStripSeparator1, Me.Tv_TreeViewContext_RescrapeShowOrEpisode, Me.Tv_TreeViewContext_SearchNewEp, Me.Tv_TreeViewContext_FindMissArt, Me.Tv_TreeViewContext_RebuildShow, Me.Tv_TreeViewContext_ReloadFromCache, Me.Tv_TreeViewContext_RenameEp, Me.Tv_TreeViewContext_ShowMissEps, Me.Tv_TreeViewContext_DispByAiredDate, Me.ToolStripSeparator2, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.UnlockAllToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
         Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 390)
         Me.ContextMenuStrip2.Text = "Open Folder at file"
@@ -1267,11 +1267,11 @@ Partial Class Form1
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(252, 6)
         '
-        'Tv_TreeViewContext_RescrapeShow
+        'Tv_TreeViewContext_RescrapeShowOrEpisode
         '
-        Me.Tv_TreeViewContext_RescrapeShow.Name = "Tv_TreeViewContext_RescrapeShow"
-        Me.Tv_TreeViewContext_RescrapeShow.Size = New System.Drawing.Size(255, 22)
-        Me.Tv_TreeViewContext_RescrapeShow.Text = "Rescrape This Show"
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Name = "Tv_TreeViewContext_RescrapeShowOrEpisode"
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Size = New System.Drawing.Size(255, 22)
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape This Show"
         '
         'Tv_TreeViewContext_SearchNewEp
         '
@@ -11733,7 +11733,7 @@ End Sub
     Friend WithEvents Tv_TreeViewContext_DispByAiredDate As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator17 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents PlayMovieToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Tv_TreeViewContext_RescrapeShow As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Tv_TreeViewContext_RescrapeShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBox_tv_RegexScrape As System.Windows.Forms.GroupBox
     Friend WithEvents GroupBox_tv_RegexRename As System.Windows.Forms.GroupBox
     Friend WithEvents Button_tv_RegexRename_Restore As System.Windows.Forms.Button
