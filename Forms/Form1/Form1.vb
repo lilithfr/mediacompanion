@@ -18629,7 +18629,7 @@ Public Class Form1
                         If ep.Season.Value < 1 Then
                             seasonstring = "Specials"
                         Else
-                            seasonstring = "Season " & ep.Season.Value.ToString
+                            seasonstring = "Season " & Utilities.PadNumber(ep.Season.Value.ToString, 2)
                         End If
 
                         If Not ComboBox2.Items.Contains(seasonstring) Then
@@ -19174,25 +19174,29 @@ Public Class Form1
                     Dim OriginalImage As New Bitmap(path)
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
-                    If combostart = ComboBox2.SelectedItem Then
-                        tv_PictureBoxRight.Image = Image2
-                    End If
+
+                    'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                    tv_PictureBoxRight.ImageLocation = path
+                    tv_PictureBoxRight.Load()
+                    'End If
+                    workingposterpath = path
+
                     PictureBox12.Image = Image2
                     Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 End If
 
-                If witherror = True And witherror2 = False Then
-                    MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
-                End If
-                If witherror2 = True Then
-                    MsgBox("Unable to download image")
-                End If
+        If witherror = True And witherror2 = False Then
+            MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
+        End If
+        If witherror2 = True Then
+            MsgBox("Unable to download image")
+        End If
             Catch ex As Exception
-                MsgBox(ex.ToString)
-            Finally
-                workingposterpath = path
-                messbox.Close()
-            End Try
+            MsgBox(ex.ToString)
+        Finally
+
+            messbox.Close()
+        End Try
         End If
     End Sub
 
@@ -19231,6 +19235,12 @@ Public Class Form1
                         End If
                         PictureBox12.Image = newpicbox.Image
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+
+                        If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                            tv_PictureBoxRight.ImageLocation = path
+                            tv_PictureBoxRight.Load()
+                        End If
+                        workingposterpath = path
                     Catch ex As Exception
                         MsgBox(ex.ToString)
                     End Try
