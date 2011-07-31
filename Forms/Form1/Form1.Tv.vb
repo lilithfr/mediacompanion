@@ -355,7 +355,7 @@ Partial Public Class Form1
 
     'End Sub
 
-    
+
 
     Private Sub tv_ShowLoad(ByVal Show As Nfo.TvShow)
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
@@ -370,7 +370,7 @@ Partial Public Class Form1
                 TabControl3.TabPages.RemoveAt(1)
             End If
 
-           
+
 
             'load tvshow.nfo
             ListBox3.Items.Clear()
@@ -2204,7 +2204,7 @@ Partial Public Class Form1
                 End If
                 For Each Shows In Cache.TvCache.Shows
                     If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
-                        'workingtvshow = nfofunction.loadfulltnshownfo(Shows.fullpath)
+                        'workingtvshow = nfoFunction.loadfulltnshownfo(Shows.fullpath)
                         For Each ept In episodearray
                             For j = Shows.MissingEpisodes.Count - 1 To 0 Step -1
                                 If Shows.MissingEpisodes(j).Title = ept.Title Then
@@ -2215,13 +2215,10 @@ Partial Public Class Form1
                         Next
                         For Each ep In episodearray
                             Dim newwp As New TvEpisode
-                            newwp.Episode.Value = ep.Episode.Value
-                            newwp.VideoFilePath = newnamepath
-                            newwp.PlayCount.Value = "0"
-                            newwp.Rating.Value = ep.Rating.Value
-                            newwp.Season.Value = ep.Season.Value
-                            newwp.Title = ep.Title
-                            newwp.ShowObj = Shows
+                            newwp = ep                      'added this kline becuase plot + others were not being dispolay after a new ep was found
+                            newwp.VideoFilePath = newnamepath 'left these as they were....
+                            newwp.PlayCount.Value = "0"         '
+                            newwp.ShowObj = Shows               '
                             bckgroundscanepisodes.ReportProgress(1, newwp)
                         Next
                     End If
@@ -2608,7 +2605,7 @@ Partial Public Class Form1
         Return Episode
     End Function
 
-   
+
 
     Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
         'Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
