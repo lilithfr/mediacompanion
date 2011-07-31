@@ -1425,17 +1425,17 @@ Module General
         Dim Counter As Integer = 0
 
         For Each m_node In m_nodelist
-            TempXMLEpisode.Aired = Nothing
-            TempXMLEpisode.Credits = Nothing
-            TempXMLEpisode.Director = Nothing
-            TempXMLEpisode.Episode.Value = Nothing
-            TempXMLEpisode.Genre = Nothing
-            TempXMLEpisode.Plot = Nothing
-            TempXMLEpisode.Rating = Nothing
-            TempXMLEpisode.Season.Value = Nothing
-            TempXMLEpisode.Thumbnail.FileName = Nothing
-            TempXMLEpisode.Title = Nothing
-            TempXMLEpisode.ListActors.Clear()
+            'TempXMLEpisode.Aired = Nothing
+            'TempXMLEpisode.Credits = Nothing
+            'TempXMLEpisode.Director = Nothing
+            'TempXMLEpisode.Episode.Value = Nothing
+            'TempXMLEpisode.Genre = Nothing
+            'TempXMLEpisode.Plot = Nothing
+            'TempXMLEpisode.Rating = Nothing
+            'TempXMLEpisode.Season.Value = Nothing
+            'TempXMLEpisode.Thumbnail.FileName = Nothing
+            'TempXMLEpisode.Title = Nothing
+            'TempXMLEpisode.ListActors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
