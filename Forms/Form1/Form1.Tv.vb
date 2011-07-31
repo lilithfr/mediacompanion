@@ -35,24 +35,24 @@ Partial Public Class Form1
         'RenameTVShowsToolStripMenuItem.Enabled = False
         Button43.Enabled = True
         'RenameTVShowsToolStripMenuItem.Visible = False
-        RebuildThisShowToolStripMenuItem.Enabled = False
-        RebuildThisShowToolStripMenuItem.Visible = False
-        MissingepisodesToolStripMenuItem.Enabled = False
-        MissingepisodesToolStripMenuItem.Visible = False
-        DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = False
-        DisplayEpisodesByAiredDateToolStripMenuItem.Visible = False
-        SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = False
-        SearchThisShowForNewEpisodesToolStripMenuItem.Visible = False
-        DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = False
-        DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = False
+        Tv_TreeViewContext_RebuildShow.Enabled = False
+        Tv_TreeViewContext_RebuildShow.Visible = False
+        Tv_TreeViewContext_ShowMissEps.Enabled = False
+        Tv_TreeViewContext_ShowMissEps.Visible = False
+        Tv_TreeViewContext_DispByAiredDate.Enabled = False
+        Tv_TreeViewContext_DispByAiredDate.Visible = False
+        Tv_TreeViewContext_SearchNewEp.Enabled = False
+        Tv_TreeViewContext_SearchNewEp.Visible = False
+        Tv_TreeViewContext_FindMissArt.Enabled = False
+        Tv_TreeViewContext_FindMissArt.Visible = False
 
-        ToolStripMenuItem1.Enabled = False
+        Tv_TreeViewContext_ViewNfo.Enabled = False
         ExpandSelectedShowToolStripMenuItem.Enabled = False
         CollapseSelectedShowToolStripMenuItem.Enabled = False
         ExpandAllToolStripMenuItem.Enabled = False
         CollapseAllToolStripMenuItem.Enabled = False
-        ReloadItemToolStripMenuItem.Enabled = False
-        OpenFolderToolStripMenuItem.Enabled = False
+        Tv_TreeViewContext_ReloadFromCache.Enabled = False
+        Tv_TreeViewContext_OpenFolder.Enabled = False
 
         TextBox10.Text = ""
         TextBox11.Text = ""
@@ -102,7 +102,7 @@ Partial Public Class Form1
         ComboBox4.Text = ""
 
 
-        
+
         ComboBox4.Items.Clear()
         ComboBox4.Text = ""
         For i = Panel13.Controls.Count - 1 To 0 Step -1
@@ -110,10 +110,13 @@ Partial Public Class Form1
         Next
     End Sub
     Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
-        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+        'chooses which sub is run to load the relavent tv data to the screen
+        'note: context menu items are set during TvTreeView_MouseUp event because we only need to update if right click is done which we check in the mouseup sub
+        'mouseup sub selects the node underneath the mouse & then this runs since its an event 'AfterSelect'
 
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
-            Tv_ShowSelected(TvTreeview.SelectedNode.Tag)
+            tv_ShowLoad(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
             tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
@@ -122,8 +125,75 @@ Partial Public Class Form1
             MsgBox("None")
         End If
 
-        tv_SplitContainerAutoPosition("TVTreeView_AfterSelect")
+        tv_SplitContainerAutoPosition("TVTreeView_AfterSelect") 'auto set container splits....after we have loaded data & pictures....
     End Sub
+    Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
+        '                                                  'called from tv_treeview mouseup event where we check for a right click
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
+        Dim showtitle As String = WorkingTvShow.Title.Value       'set our show title
+
+        'now we set the items that have variable text in the context menu using the 'show' text set above
+        Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
+        Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
+        Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
+        Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & showtitle & """"
+
+        'now we display what we need to display depending on what type of node we have selected
+
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Tv_TreeViewContext_ViewNfo.Text = "View TVShow .nfo"
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape TVShow"
+
+            Tv_TreeViewContext_OpenFolder.Enabled = True
+            Tv_TreeViewContext_ViewNfo.Enabled = True
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_FindMissArt.Enabled = True
+            Tv_TreeViewContext_RebuildShow.Enabled = True
+            Tv_TreeViewContext_ReloadFromCache.Enabled = True
+            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_ShowMissEps.Enabled = True
+            Tv_TreeViewContext_DispByAiredDate.Enabled = True
+
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            Tv_TreeViewContext_ViewNfo.Text = "View Season .nfo"
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Season"
+
+            Tv_TreeViewContext_OpenFolder.Enabled = True
+            Tv_TreeViewContext_ViewNfo.Enabled = False
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = False
+            Tv_TreeViewContext_FindMissArt.Enabled = False
+            Tv_TreeViewContext_RebuildShow.Enabled = False
+            Tv_TreeViewContext_ReloadFromCache.Enabled = False
+            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_ShowMissEps.Enabled = True
+            Tv_TreeViewContext_DispByAiredDate.Enabled = True
+
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Episode"
+
+            Tv_TreeViewContext_OpenFolder.Enabled = True
+            Tv_TreeViewContext_ViewNfo.Enabled = True
+            Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_FindMissArt.Enabled = False
+            Tv_TreeViewContext_RebuildShow.Enabled = False
+            Tv_TreeViewContext_ReloadFromCache.Enabled = False
+            Tv_TreeViewContext_RenameEp.Enabled = True
+            Tv_TreeViewContext_ShowMissEps.Enabled = True
+            Tv_TreeViewContext_DispByAiredDate.Enabled = True
+
+        Else
+            MsgBox("None")
+        End If
+
+        'these are the four items at the bottom of the menu to control Expand/Colapse the tv_treeview (always shown)
+        ExpandSelectedShowToolStripMenuItem.Enabled = True
+        ExpandAllToolStripMenuItem.Enabled = True
+        CollapseAllToolStripMenuItem.Enabled = True
+        CollapseSelectedShowToolStripMenuItem.Enabled = True
+    End Sub
+
+
 
     'Private Sub TvTreeview_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
     '    ResetTvView()
@@ -285,12 +355,9 @@ Partial Public Class Form1
 
     'End Sub
 
-    Public Sub Tv_ShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
-        tv_Load(SelectedTvShow)
+    
 
-    End Sub
-
-    Private Sub tv_Load(ByVal Show As Nfo.TvShow)
+    Private Sub tv_ShowLoad(ByVal Show As Nfo.TvShow)
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
             TextBox19.Text = "Unable to find folder: " & Show.FolderPath
@@ -303,48 +370,13 @@ Partial Public Class Form1
                 TabControl3.TabPages.RemoveAt(1)
             End If
 
-            ToolStripMenuItem1.Enabled = True
-            ExpandSelectedShowToolStripMenuItem.Enabled = True
-            ExpandAllToolStripMenuItem.Enabled = True
-            CollapseAllToolStripMenuItem.Enabled = True
-            CollapseSelectedShowToolStripMenuItem.Enabled = True
-            ReloadItemToolStripMenuItem.Enabled = True
-            OpenFolderToolStripMenuItem.Enabled = True
+           
+
             'load tvshow.nfo
             ListBox3.Items.Clear()
             TextBox26.Text = ""
             Dim todo As Boolean = False
 
-            SearchThisShowForNewEpisodesToolStripMenuItem.Text = "Search """ & Show.Title.Value & """ for new episodes"
-            SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
-            SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
-            DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = "Download missing art for """ & Show.Title.Value & """"
-            DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
-            DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-            MissingepisodesToolStripMenuItem.Text = "Display missing episodes for """ & Show.Title.Value & """"
-            MissingepisodesToolStripMenuItem.Enabled = True
-            MissingepisodesToolStripMenuItem.Visible = True
-            DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
-            DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
-            RebuildThisShowToolStripMenuItem.Enabled = True
-            RebuildThisShowToolStripMenuItem.Visible = True
-
-            Dim tempstring As String = "Search """ & Show.Title.Value & """ for new episodes"
-            SearchThisShowForNewEpisodesToolStripMenuItem.Text = tempstring
-            SearchThisShowForNewEpisodesToolStripMenuItem.Enabled = True
-            SearchThisShowForNewEpisodesToolStripMenuItem.Visible = True
-            tempstring = "Download missing art for """ & Show.Title.Value & """"
-            DownloadAvaileableMissingArtForShowToolStripMenuItem.Text = tempstring
-            DownloadAvaileableMissingArtForShowToolStripMenuItem.Enabled = True
-            DownloadAvaileableMissingArtForShowToolStripMenuItem.Visible = True
-            tempstring = "Display missing episodes for """ & Show.Title.Value & """"
-            MissingepisodesToolStripMenuItem.Text = tempstring
-            MissingepisodesToolStripMenuItem.Enabled = True
-            MissingepisodesToolStripMenuItem.Visible = True
-            DisplayEpisodesByAiredDateToolStripMenuItem.Enabled = True
-            DisplayEpisodesByAiredDateToolStripMenuItem.Visible = True
-            RebuildThisShowToolStripMenuItem.Enabled = True
-            RebuildThisShowToolStripMenuItem.Visible = True
             If Show.State = Nfo.ShowState.Locked Then
                 Button60.Text = "Locked"
                 Button60.BackColor = Color.Red
@@ -465,8 +497,8 @@ Partial Public Class Form1
         ExpandAllToolStripMenuItem.Enabled = True
         CollapseAllToolStripMenuItem.Enabled = True
         CollapseSelectedShowToolStripMenuItem.Enabled = True
-        RenameTVShowsToolStripMenuItem.Enabled = True
-        RenameTVShowsToolStripMenuItem.Visible = True
+        Tv_TreeViewContext_RenameEp.Enabled = True
+        Tv_TreeViewContext_RenameEp.Visible = True
 
         tv_PictureBoxRight.Image = Nothing
         tv_PictureBoxLeft.Image = Nothing
@@ -523,13 +555,13 @@ Partial Public Class Form1
 
         Call ep_Load(SeasonObj, SelectedEpisode)
 
-        ToolStripMenuItem1.Enabled = True
+        Tv_TreeViewContext_ViewNfo.Enabled = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
         ExpandAllToolStripMenuItem.Enabled = True
         CollapseAllToolStripMenuItem.Enabled = True
         CollapseSelectedShowToolStripMenuItem.Enabled = True
-        ReloadItemToolStripMenuItem.Enabled = True
-        OpenFolderToolStripMenuItem.Enabled = True
+        Tv_TreeViewContext_ReloadFromCache.Enabled = True
+        Tv_TreeViewContext_OpenFolder.Enabled = True
 
 
     End Sub
@@ -2576,9 +2608,7 @@ Partial Public Class Form1
         Return Episode
     End Function
 
-    Private Sub DownloadAvaileableMissingArtForShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DownloadAvaileableMissingArtForShowToolStripMenuItem.Click
-        tv_MissingArtDownload(tv_ShowSelectedCurrently)
-    End Sub
+   
 
     Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
         'Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
@@ -2950,7 +2980,7 @@ Partial Public Class Form1
             End If
         Catch
         End Try
-        Call tv_Load(BrokenShow)
+        Call tv_ShowLoad(BrokenShow)
         messbox.Close()
 
         Tv_CleanFolderList()

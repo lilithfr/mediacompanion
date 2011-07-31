@@ -25,11 +25,16 @@ Public Class TvSeason
             Return _SeasonNumber
         End Get
         Set(ByVal value As Integer)
-            If value <> -1 Then
-                Me.Poster.FileName = "season" & Media_Companion.Utilities.PadNumber(value, 2) & ".tbn"
-            Else
-                Me.Poster.FileName = "season-specials.tbn"
-            End If
+
+            Select Case value
+                Case -1                  'case -1 is unknown season
+                    Me.Poster.FileName = "season-specials.tbn"
+                Case 0                   'case 0 is specials
+                    Me.Poster.FileName = "season-specials.tbn"
+                Case Else                'all other are normal seasons 
+                    Me.Poster.FileName = "season" & Media_Companion.Utilities.PadNumber(value, 2) & ".tbn"
+            End Select
+            
             _SeasonNumber = value
 
             Me.SeasonNode.Text = "Season " & Media_Companion.Utilities.PadNumber(_SeasonNumber, 2)

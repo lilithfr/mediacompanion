@@ -2820,7 +2820,7 @@ Public Class Form1
 
     Private Sub mov_ListFiles2(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
         'scraperLog &= lst & " " & pattern & " " & dir_info.ToString & vbCrLf
-        Dim moviepattern As String = "*" & pattern
+        Dim moviepattern As String = pattern
         Monitor.Enter(Me)
         Dim tempint2 As Integer
         Dim tempstring As String
@@ -2830,7 +2830,12 @@ Public Class Form1
             Dim dofilter As Boolean = False
             Dim dvdfiles As Boolean
             For Each fs_info As System.IO.FileInfo In fs_infos
-                scraperLog &= ":" & fs_info.ToString                           'log title name
+                If Preferences.usefoldernames = True Then
+                    scraperLog &= ": '" & fs_info.Directory.Name.ToString & "'"                          'log directory name as Title due to use FOLDERNAMES
+                Else
+                    scraperLog &= ": '" & fs_info.ToString & "'"                                  'log title name
+                End If
+
                 Dim newmoviedetails As New str_NewMovie(SetDefaults)
                 Dim title As String = String.Empty
                 Dim remove As Boolean = False
@@ -2840,10 +2845,10 @@ Public Class Form1
                 newmoviedetails.mediapathandfilename = fs_info.FullName
                 newmoviedetails.nfopathandfilename = tempmovie
                 Dim basicmoviename As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), "movie.nfo")
-                'If IO.File.Exists(basicmoviename) Then   'left these lines commented out they don't seem to be needed to stop rescrape if movie.nfo already exists
-                'remove = True
-                'scraperLog &= "Remove Found!" & vbCrLf
-                'End If
+                If IO.File.Exists(basicmoviename) Then   'this removes this movie from the to scrape list if the folder contains a movie.nfo
+                    remove = True
+                    scraperLog &= " - 'movie.nfo' found - scrape skipped!"
+                End If
                 basicmoviename = Utilities.GetStackName(IO.Path.GetFileName(fs_info.FullName), fs_info.FullName)
                 Dim otherformat As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), basicmoviename & ".nfo")
                 If IO.File.Exists(otherformat) Then
@@ -2868,6 +2873,7 @@ Public Class Form1
                     End Try
                     If allok2 = True Then
                         remove = True
+                        scraperLog &= " - valid MC .nfo found ('" & otherformat & "') type other - scrape skipped!"
                     End If
                 End If
 
@@ -2907,6 +2913,9 @@ Public Class Form1
                         If allok = False Then
                             dofilter = True
                             title = fs_info.FullName
+                        Else
+                            remove = True
+                            scraperLog &= " - valid MC .nfo found ('" & fs_info.Name.Replace(System.IO.Path.GetExtension(fs_info.Name), ".nfo") & "') - scrape skipped!"
                         End If
                     Else
                         dofilter = True
@@ -8162,15 +8171,8 @@ Public Class Form1
     End Sub
 
     Private Sub Mov_OpenFileToolStripMenuItem2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_OpenFileToolStripMenuItem.Click
-        Dim tempstring As String = ""
-        Try
-            tempstring = workingMovieDetails.fileinfo.fullpathandfilename
-            Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
-            thePSI.Arguments = """" & tempstring & """"
-            System.Diagnostics.Process.Start(thePSI)
-        Catch ex As Exception
-            MsgBox("Unable to open File")
-        End Try
+        Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename)
+        
     End Sub
 
     Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PosterBrowserToolStripMenuItem.Click
@@ -11621,7 +11623,7 @@ Public Class Form1
             If path <> "" Then
                 tempstring = path
                 Try
-                    Call Shell("explorer /select," & """" & tempstring & """", AppWinStyle.NormalFocus)
+                    Call Shell("explorer /select," & """" & tempstring & """", AppWinStyle.NormalFocus) 'this shows the item as selected provided as tempstring i.e. a folder or a file (.nfo)
                     'Process.Start(pathtxt.Text)
                     errors = "Trying to open Folder :- " & tempstring
                     action = "Command - ""Call Shell(""explorer /select,""" & tempstring & ", AppWinStyle.NormalFocus)"""
@@ -15264,7 +15266,7 @@ Public Class Form1
     '    End If
     'End Sub
 
-    Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadItemToolStripMenuItem.Click
+    Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ReloadFromCache.Click
         Call tv_ShowReload(True)
     End Sub
 
@@ -15272,8 +15274,8 @@ Public Class Form1
         Dim Show As Nfo.TvShow = tv_ShowSelectedCurrently()
         Dim Season As Nfo.TvSeason = tv_SeasonSelectedCurrently()
         Dim Episode As Nfo.TvEpisode = ep_SelectedCurrently()
-        tv_PictureBoxRight.Load()
-        tv_PictureBoxLeft.Load()
+        'tv_PictureBoxRight.Load()
+        'tv_PictureBoxLeft.Load()
 
         'This isn't required anymore
 
@@ -15692,7 +15694,7 @@ Public Class Form1
 
             Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(ListBox3.SelectedIndex).showid, languageList(ListBox1.SelectedIndex).Abbreviation.Value, WorkingTvShow.NfoFilePath)
             If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
-            Call tv_Load(WorkingTvShow)
+            Call tv_ShowLoad(WorkingTvShow)
             TvTreeview.Refresh()
             messbox.Close()
             TabControl3.SelectedIndex = 0
@@ -16409,7 +16411,7 @@ Public Class Form1
             Next
 
             nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True, "unlocked")
-            Call tv_Load(WorkingTvShow)
+            Call tv_ShowLoad(WorkingTvShow)
             messbox.Close()
             TabControl3.SelectedIndex = 0
         End If
@@ -16437,7 +16439,7 @@ Public Class Form1
                 Dim myProcess As Process = New Process
                 myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 myProcess.StartInfo.CreateNoWindow = False
-                myProcess.StartInfo.FileName = applicationPath & "\ffmpeg.exe"
+                myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
                 Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                 myProcess.StartInfo.Arguments = proc_arguments
                 myProcess.Start()
@@ -16526,6 +16528,7 @@ Public Class Form1
                         Dim fi As New IO.FileInfo(items)
                         If Not IO.File.Exists(newname) Then
                             fi.MoveTo(newname)
+                            Preferences.tvScraperLog &= "Renamed " & newname & vbCrLf
                         End If
                     Catch ex As Exception
                         done = path
@@ -16539,21 +16542,6 @@ Public Class Form1
     End Function
 
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
-
-
-        If Preferences.autorenameepisodes = True Then
-            Dim eps As New List(Of String)
-            eps.Clear()
-            For Each ep In alleps
-                eps.Add(ep.Episode.Value)
-            Next
-            Dim tempspath As String = ep_Rename(path, alleps(0).Season.value, eps, show, alleps(0).Title.Value)
-            If tempspath <> "false" Then
-                path = tempspath
-            End If
-        End If
-
-
 
         tvScraperLog = tvScraperLog & "Saving episode" & vbCrLf
         For Each Episode As Nfo.TvEpisode In alleps
@@ -16617,6 +16605,20 @@ Public Class Form1
                 End If
             End If
         End If
+
+        If Preferences.autorenameepisodes = True Then
+            Dim eps As New List(Of String)
+            eps.Clear()
+            For Each ep In alleps
+                eps.Add(ep.Episode.Value)
+            Next
+            Dim tempspath As String = ep_Rename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value)
+
+            If tempspath <> "false" Then
+                path = tempspath
+            End If
+        End If
+
         Return path
     End Function
 
@@ -16827,10 +16829,13 @@ Public Class Form1
         'Next
     End Sub
 
-    Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
+    Private Sub OpenFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_OpenFolder.Click
+
+
         If Not TvTreeview.SelectedNode Is Nothing Then
-            If Not TvTreeview.SelectedNode.Name Is Nothing Then
-                Call util_OpenFolder(TvTreeview.SelectedNode.Name)
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
+            If Not WorkingTvShow.NfoFilePath Is Nothing And Not WorkingTvShow.NfoFilePath = "" Then
+                Call util_OpenFolder(WorkingTvShow.NfoFilePath) 'we send the path of the tvshow.nfo, that way in explorer it will be highlighted in the folder
             Else
                 MsgBox("There is no show selected to open")
             End If
@@ -17136,7 +17141,8 @@ Public Class Form1
                         PictureBox10.Load()
                         PictureBox11.Image = PictureBox10.Image
                         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                            util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart)  'tv_PictureBoxLeft.ImageLocation = savepath   'tv_PictureBoxLeft.Load()
+                            tv_PictureBoxLeft.ImageLocation = savepath
+                            tv_PictureBoxLeft.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17265,7 +17271,7 @@ Public Class Form1
             PictureBox10.Image.Save(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg)
             PictureBox11.Image = PictureBox10.Image
             If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                util_ImageLoad(tv_PictureBoxLeft, PictureBox11.ImageLocation, defaultFanart) 'tv_PictureBoxLeft.Image = PictureBox11.Image
+                tv_PictureBoxLeft.Image = PictureBox11.Image
             End If
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
@@ -17360,7 +17366,8 @@ Public Class Form1
                 PictureBox10.Load()
                 PictureBox11.Image = PictureBox10.Image
                 If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                    util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart) 'tv_PictureBoxLeft.ImageLocation = savepath 'tv_PictureBoxLeft.Load()
+                    tv_PictureBoxLeft.ImageLocation = savepath
+                    tv_PictureBoxLeft.Load()
                 End If
             Else
                 PictureBox10.Image = Nothing
@@ -17596,7 +17603,7 @@ Public Class Form1
 
                 Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.tvdbid, langu, WorkingTvShow.NfoFilePath)
                 If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
-                Call tv_Load(WorkingTvShow)
+                Call tv_ShowLoad(WorkingTvShow)
                 For Each item As TvShow In Cache.TvCache.Shows
                     If item.NfoFilePath = WorkingTvShow.NfoFilePath Then
                         Dim newitem As New TvShow
@@ -17921,7 +17928,7 @@ Public Class Form1
 
                 End If
                 Call nfoFunction.tv_NfoSave(WorkingTvShow.NfoFilePath, WorkingTvShow, True)
-                Call tv_Load(WorkingTvShow)
+                Call tv_ShowLoad(WorkingTvShow)
                 For Each item In Cache.TvCache.Shows
                     If item.NfoFilePath = WorkingTvShow.NfoFilePath Then
                         Dim newitem As New TvShow
@@ -18257,7 +18264,7 @@ Public Class Form1
                 Next
 
                 If Preferences.enablehdtags = True Then
-                    WorkingEpisode.Details = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
+                    WorkingEpisode.Details.StreamDetails.Video = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath)).filedetails_video
                     If WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
@@ -18290,6 +18297,7 @@ Public Class Form1
                 'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
                 WorkingEpisode.Save()
                 'Call LoadTvEpisode(WorkingEpisode)
+                tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
             End If
         End If
@@ -18358,7 +18366,7 @@ Public Class Form1
         '        Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
     End Sub
 
-    Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RenameTVShowsToolStripMenuItem.Click
+    Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RenameEp.Click
         Dim renamelog As String = ""
         Dim tempint As Integer
 
@@ -18530,13 +18538,6 @@ Public Class Form1
                                         noder4.name = newnfofile
                                     End If
                                 Next
-                            Next
-                        Next
-                        For Each item In Cache.TvCache.Shows
-                            For Each ep In item.Episodes
-                                If ep.VideoFilePath = oldnfofile Then
-                                    ep.VideoFilePath = newnfofile
-                                End If
                             Next
                         Next
                         For Each episode In tvshow.Episodes
@@ -19141,7 +19142,7 @@ Public Class Form1
         If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
             PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
             If combostart = ComboBox2.SelectedItem Then
-                util_ImageLoad(tv_PictureBoxRight, PictureBox13.ImageLocation, defaultPoster) 'tv_PictureBoxRight.Image = PictureBox13.Image
+                tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19173,22 +19174,25 @@ Public Class Form1
                     Dim OriginalImage As New Bitmap(path)
                     Dim Image2 As New Bitmap(OriginalImage)
                     OriginalImage.Dispose()
-                    util_ImageLoad(tv_PictureBoxRight, path, defaultPoster)
+                    If combostart = ComboBox2.SelectedItem Then
+                        tv_PictureBoxRight.Image = Image2
+                    End If
                     PictureBox12.Image = Image2
                     Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 End If
 
-        If witherror = True And witherror2 = False Then
-            MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
-        End If
-        If witherror2 = True Then
-            MsgBox("Unable to download image")
-        End If
+                If witherror = True And witherror2 = False Then
+                    MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
+                End If
+                If witherror2 = True Then
+                    MsgBox("Unable to download image")
+                End If
             Catch ex As Exception
-            MsgBox(ex.ToString)
-        Finally
-            messbox.Close()
-        End Try
+                MsgBox(ex.ToString)
+            Finally
+                workingposterpath = path
+                messbox.Close()
+            End Try
         End If
     End Sub
 
@@ -19222,7 +19226,9 @@ Public Class Form1
                         End If
                         Dim newpicbox As PictureBox = Control
                         newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                        util_ImageLoad(tv_PictureBoxRight, path, defaultPoster)
+                        If combostart = ComboBox2.SelectedItem Then
+                            tv_PictureBoxRight.Image = newpicbox.Image
+                        End If
                         PictureBox12.Image = newpicbox.Image
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                     Catch ex As Exception
@@ -19327,7 +19333,7 @@ Public Class Form1
             PictureBox13.Image.Save(workingposterpath, Imaging.ImageFormat.Jpeg)
 
             If combostart = ComboBox2.SelectedItem Then
-                tv_PictureBoxRight.Image = PictureBox13.Image 'image from memory so file is not locked
+                tv_PictureBoxRight.Image = PictureBox13.Image
             End If
             PictureBox12.Image = PictureBox13.Image
             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
@@ -19435,7 +19441,7 @@ Public Class Form1
                     Dim myProcess As Process = New Process
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
-                    myProcess.StartInfo.FileName = applicationPath & "\ffmpeg.exe"
+                    myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
                     Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
@@ -19447,7 +19453,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(bitmap2)
                         bitmap2.Dispose()
                         PictureBox14.Image = bitmap3
-                        tv_PictureBoxLeft.Image = bitmap3  'this is a load from memory it doesn't lock a file
+                        tv_PictureBoxLeft.Image = bitmap3
                     End If
                     Exit For
                 End If
@@ -19549,7 +19555,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(bitmap2)
                         bitmap2.Dispose()
                         PictureBox14.Image = bitmap3
-                        tv_PictureBoxLeft.Image = bitmap3    'this is a load from memory it doesn't lock a file
+                        tv_PictureBoxLeft.Image = bitmap3
                         messbox.Close()
                     Catch ex As Exception
                         MsgBox("Unable To Download Image")
@@ -20927,7 +20933,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub SearchThisShowForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchThisShowForNewEpisodesToolStripMenuItem.Click
+    Private Sub SearchThisShowForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_SearchNewEp.Click
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
 
         Dim Season As TvSeason
@@ -22250,11 +22256,9 @@ Public Class Form1
         For Each item In ListBox5.Items
             tvRootFolders.Add(item)
         Next
-
-        Preferences.SaveConfig() 'save updated folders list
+        Preferences.SaveConfig()
         'Call updatetree()
         If newTvFolders.Count = 0 Then
-            tv_CacheRebuild()        'rebuild tv cache so that it uses the updated list of folders 
             MsgBox("Changes Saved")
         Else
             MsgBox("Changes Saved, additional folders will be added to your list as they are scraped")
@@ -27711,7 +27715,7 @@ Public Class Form1
             Dim myProcess As Process = New Process
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             myProcess.StartInfo.CreateNoWindow = False
-            myProcess.StartInfo.FileName = applicationPath & "\ffmpeg.exe"
+            myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
             Dim proc_arguments As String = "-r 1 -b 1800 -qmax 6 -i """ & applicationPath & "\Settings\%03d.jpg"" -vcodec msmpeg4v2 """ & mediapath & """"
             myProcess.StartInfo.Arguments = proc_arguments
             myProcess.Start()
@@ -28676,7 +28680,7 @@ Public Class Form1
         'Call Tv_CacheSave("New Function")
     End Sub
 
-    Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildThisShowToolStripMenuItem.Click
+    Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RebuildShow.Click
         Dim Show As TvShow = tv_ShowSelectedCurrently()
 
         If Show IsNot Nothing Then
@@ -28687,7 +28691,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub MissingepisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MissingepisodesToolStripMenuItem.Click
+    Private Sub MissingepisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ShowMissEps.Click
 
         Dim Show As TvShow = tv_ShowSelectedCurrently()
 
@@ -30380,7 +30384,8 @@ Public Class Form1
         Call mov_MovieComboListSort()
     End Sub
 
-    Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayEpisodesByAiredDateToolStripMenuItem.Click
+    Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_DispByAiredDate.Click
+        MsgBox("Aired Date Coming soon")
         'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
         'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
@@ -30451,7 +30456,7 @@ Public Class Form1
         mov_Play()
     End Sub
 
-    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeThisShowToolStripMenuItem.Click
+    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
 
         tv_Rescrape()
     End Sub
@@ -30466,13 +30471,30 @@ Public Class Form1
             pt.X = e.X
             pt.Y = e.Y
             MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
-            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position))
+            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
+
+            'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
+            Tv_TreeViewContextMenuItemsEnable()
         End If
     End Sub
 
     
-    Private Sub ToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem1.Click
-        MsgBox("Coming soon")
+    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+            Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Nfo.TvShow).NfoFilePath)
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+            MsgBox("A Season NFO is invalid so it can't be shown")
+        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+            Utilities.NfoNotepadDisplay(DirectCast(TvTreeview.SelectedNode.Tag, Nfo.TvEpisode).NfoFilePath)
+        Else
+            MsgBox("None")
+        End If
     End Sub
 
+    Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
+
+        tv_MissingArtDownload(tv_ShowSelectedCurrently)
+
+    End Sub
 End Class
