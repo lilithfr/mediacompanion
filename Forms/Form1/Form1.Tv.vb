@@ -116,7 +116,7 @@ Partial Public Class Form1
 
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
         If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
-            Tv_ShowSelected(TvTreeview.SelectedNode.Tag)
+            tv_ShowLoad(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
             tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
@@ -355,10 +355,7 @@ Partial Public Class Form1
 
     'End Sub
 
-    Public Sub Tv_ShowSelected(ByRef SelectedTvShow As Nfo.TvShow)
-        tv_ShowLoad(SelectedTvShow)
-
-    End Sub
+    
 
     Private Sub tv_ShowLoad(ByVal Show As Nfo.TvShow)
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)

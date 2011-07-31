@@ -236,8 +236,13 @@ Public Class TvShow
             If Utilities.IsNumeric(Episode.Season.Value) Then
                 NewSeason.SeasonNumber = Episode.Season.Value
                 NewSeason.SeasonLabel = "Season " & Utilities.PadNumber(Episode.Season.Value, 2)
-                NewSeason.Poster.FolderPath = Me.FolderPath
-                NewSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & ".tbn"
+                If Episode.Season.Value = 0 Then
+                    NewSeason.Poster.FolderPath = Me.FolderPath
+                    NewSeason.Poster.FileName = "season-specials.tbn"
+                Else
+                    NewSeason.Poster.FolderPath = Me.FolderPath
+                    NewSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & ".tbn"
+                End If
             Else
                 NewSeason.SeasonNumber = -1
                 NewSeason.SeasonLabel = Episode.Season.Value

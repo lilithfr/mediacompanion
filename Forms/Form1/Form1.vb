@@ -18641,6 +18641,7 @@ Public Class Form1
             End If
         Next
 
+        ComboBox2.SelectedIndex = 0
 
         '        For Each item In tvobjects
         '            ComboBox2.Items.Add(item)
@@ -19189,6 +19190,7 @@ Public Class Form1
             Catch ex As Exception
                 MsgBox(ex.ToString)
             Finally
+                workingposterpath = path
                 messbox.Close()
             End Try
         End If
