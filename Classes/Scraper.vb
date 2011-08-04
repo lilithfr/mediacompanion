@@ -602,6 +602,10 @@ Public Class Classimdb
                                 movienfoarray = movienfoarray.Replace("(VG)", "")
                             End If
 
+                            If movienfoarray.IndexOf("IMDb - ") <> -1 Then
+                                movienfoarray = movienfoarray.Replace("IMDb - ", "")
+                            End If
+
                             first = movienfoarray.LastIndexOf("(")
                             If first <> -1 Then
                                 If movienfoarray.Substring(first + 2, 1) = ")" Then
@@ -725,21 +729,26 @@ Public Class Classimdb
                             Dim listofdirectors As New List(Of String)
                             listofdirectors.Clear()
                             For g = 1 To 10
-                                If webpage(f + g).IndexOf("<div") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("Writer") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
-                                    If webpage(f + g).IndexOf("/name/nm") <> webpage(f + g).LastIndexOf("/name/nm") Then
-                                        webpage(f + g + 1) = webpage(f + g).Replace(webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>") + 4), "")
-                                        webpage(f + g) = webpage(f + g).Replace(webpage(f + g + 1), "")
-                                    End If
-                                    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                    If webpage(f + g) <> "" Then
-                                        listofdirectors.Add(webpage(f + g))
-                                    End If
+                                'If webpage(f + g).IndexOf("<div") <> -1 Then Exit For
+                                'If webpage(f + g).IndexOf("Writer") <> -1 Then Exit For
+                                'If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
+                                '    If webpage(f + g).IndexOf("/name/nm") <> webpage(f + g).LastIndexOf("/name/nm") Then
+                                '        webpage(f + g + 1) = webpage(f + g).Replace(webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>") + 4), "")
+                                '        webpage(f + g) = webpage(f + g).Replace(webpage(f + g + 1), "")
+                                '    End If
+                                '    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
+                                '    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
+                                '    webpage(f + g) = webpage(f + g).TrimEnd(" ")
+                                '    webpage(f + g) = webpage(f + g).TrimEnd(",")
+                                '    If webpage(f + g) <> "" Then
+                                '        listofdirectors.Add(webpage(f + g))
+                                '    End If
+                                'End If
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                                If M.Success = True And M.Groups(1).Length Then
+                                    listofdirectors.Add(M.Groups(1).Value)
                                 End If
+                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
                             Next
                             For g = 0 To listofdirectors.Count - 1
                                 If g = 0 Then
@@ -763,17 +772,22 @@ Public Class Classimdb
                             Dim listofwriters As New List(Of String)
                             listofwriters.Clear()
                             For g = 1 To 10
-                                If webpage(f + 1).IndexOf("<div") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
+                                'If webpage(f + 1).IndexOf("<div") <> -1 Then Exit For
+                                'If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
 
-                                    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                    If webpage(f + g) <> "" Then
-                                        listofwriters.Add(webpage(f + g))
-                                    End If
+                                '    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
+                                '    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
+                                '    webpage(f + g) = webpage(f + g).TrimEnd(" ")
+                                '    webpage(f + g) = webpage(f + g).TrimEnd(",")
+                                '    If webpage(f + g) <> "" Then
+                                '        listofwriters.Add(webpage(f + g))
+                                '    End If
+                                'End If
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                                If M.Success = True And M.Groups(1).Length Then
+                                    listofwriters.Add(M.Groups(1).Value)
                                 End If
+                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
                             Next
                             For g = 0 To listofwriters.Count - 1
                                 If g = 0 Then
@@ -797,21 +811,11 @@ Public Class Classimdb
                             Dim listofstars As New List(Of String)
                             listofstars.Clear()
                             For g = 1 To 10
-                                If webpage(f + g).IndexOf("<tr") <> -1 Then Exit For
-                                'If webpage(f + g).IndexOf("Writer") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
-                                    If webpage(f + g).IndexOf("/name/nm") <> webpage(f + g).LastIndexOf("/name/nm") Then
-                                        webpage(f + g + 1) = webpage(f + g).Replace(webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>") + 4), "")
-                                        webpage(f + g) = webpage(f + g).Replace(webpage(f + g + 1), "")
-                                    End If
-                                    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                    If webpage(f + g) <> "" Then
-                                        listofstars.Add(webpage(f + g))
-                                    End If
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                                If M.Success = True And M.Groups(1).Length Then
+                                    listofstars.Add(M.Groups(1).Value)
                                 End If
+                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
                             Next
                             For g = 0 To listofstars.Count - 1
                                 If g = 0 Then
@@ -885,23 +889,30 @@ Public Class Classimdb
                         Try
                             For g = 1 To 5
                                 If webpage(f + g).IndexOf("min") <> -1 Then
-                                    movienfoarray = webpage(f + g)
-                                    movienfoarray = movienfoarray.Replace("min", "")
-                                    movienfoarray = movienfoarray.Trim(" ")
-                                    If Not IsNumeric(movienfoarray) Then
-                                        For h = 0 To movienfoarray.Length - 1
-                                            If IsNumeric(movienfoarray.Substring(h, 1)) Then
-                                                movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
-                                                Exit For
-                                            End If
-                                        Next
+                                    'movienfoarray = webpage(f + g)
+                                    Dim M As Match = Regex.Match(webpage(f + g), ">(\d+ min)</time>")
+                                    If M.Success = True Then
+                                        movienfoarray = M.Groups(1).Value
+                                    Else
+                                        movienfoarray = "scraper error"
                                     End If
+                                    'movienfoarray = movienfoarray.Substring(movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1, webpage(f + g).IndexOf("min") - movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1)
+                                    'movienfoarray = movienfoarray.Replace("min", "")
+                                    'movienfoarray = movienfoarray.Trim(" ")
+                                    'If Not IsNumeric(movienfoarray) Then
+                                    '    For h = 0 To movienfoarray.Length - 1
+                                    '        If IsNumeric(movienfoarray.Substring(h, 1)) Then
+                                    '            movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
+                                    '            Exit For
+                                    '        End If
+                                    '    Next
+                                    'End If
                                     Exit For
                                 End If
                             Next
-                            If movienfoarray <> "" Then
-                                movienfoarray = movienfoarray & " min"
-                            End If
+                            'If movienfoarray <> "" Then
+                            '    movienfoarray = movienfoarray & " min"
+                            'End If
                             movienfoarray = specchars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
@@ -937,8 +948,14 @@ Public Class Classimdb
                     'votes
                     If webpage(f).IndexOf("votes</a>") <> -1 Then
                         Try
-                            webpage(f) = webpage(f).Replace(" votes</a>)", "")
-                            movienfoarray = webpage(f).Substring(webpage(f).LastIndexOf(">") + 1, webpage(f).Length - webpage(f).LastIndexOf(">") - 1)
+                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},?]*[0-9]?)</span>")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
+                            End If
+                            'webpage(f) = webpage(f).Replace(" votes</a>)", "")
+                            'movienfoarray = webpage(f).Substring(webpage(f).LastIndexOf(">") + 1, webpage(f).Length - webpage(f).LastIndexOf(">") - 1)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<votes>" & movienfoarray & "</votes>" & vbCrLf
                         Catch
@@ -948,7 +965,7 @@ Public Class Classimdb
 
                     'outline
                     ''If webpage(f).IndexOf("<p>") <> -1 Then
-                    If webpage(f).IndexOf("<p>").Equals(0) And webpage(f + 1).IndexOf("<p>").Equals(0) Then
+                    If webpage(f).IndexOf("<p>").Equals(0) And webpage(f + 1).IndexOf("<p").Equals(0) Then
                         Try
                             'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
                             'movienfoarray = webpage(f + 1)
@@ -962,14 +979,14 @@ Public Class Classimdb
                                 End If
                             Next
                             If movienfoarray.Length > 0 Then
-                                movienfoarray = movienfoarray.Replace("<p>", "")
+                                movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
                                 ' Some outlines are a partial listing and link to the plot summary
                                 Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
                                 If erasepos <> -1 Then
                                     movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
                                 End If
-                                'movienfoarray = specchars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray.Trim())
+                                movienfoarray = specchars(movienfoarray.Trim())
+                                'movienfoarray = encodespecialchrs(movienfoarray.Trim())
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
                             Else
@@ -1408,8 +1425,8 @@ Public Class Classimdb
 
     Private Function encodespecialchrs(ByVal text As String)
         If text.IndexOf("&") <> -1 Then text = text.Replace("&", "&amp;")
-        If text.IndexOf("<") <> -1 Then text = text.Replace("", "&lt;")
-        If text.IndexOf(">") <> -1 Then text = text.Replace("", "&gt;")
+        If text.IndexOf("<") <> -1 Then text = text.Replace("<", "&lt;")
+        If text.IndexOf(">") <> -1 Then text = text.Replace(">", "&gt;")
         If text.IndexOf(Chr(34)) <> -1 Then text = text.Replace(Chr(34), "&quot;")
         If text.IndexOf("'") <> -1 Then text = text.Replace("'", "&apos;")
         Return text
