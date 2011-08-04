@@ -3507,7 +3507,7 @@ Public Class Form1
             ToolStripStatusLabel1.Text = ProgressText
 
             For Each ext In Utilities.VideoExtensions
-                MoviePattern = If(ext.IndexOf(".IFO"), ext, "*" & ext)
+                MoviePattern = If(ext.IndexOf(".IFO") <> -1, ext, "*" & ext)
 
                 DirPath = NewMoviesFolders(g)
                 Dim Dir_Info As New System.IO.DirectoryInfo(DirPath)
