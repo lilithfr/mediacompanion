@@ -571,3 +571,149 @@ C:\SVN MC\mediacompanion\obj\Release\GenerateResource-ResGen.read.1.tlog
 C:\SVN MC\mediacompanion\obj\Release\GenerateResource-ResGen.write.1.tlog
 C:\SVN MC\mediacompanion\obj\Release\Media Companion.exe
 C:\SVN MC\mediacompanion\obj\Release\Media Companion.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Media Companion.exe.config
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media Companion.exe
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\class_mpdb_thumbs.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\crclib.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\ffmpeg.exe
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\ICSharpCode.SharpZipLib.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\imdb.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\imdb_thumbs.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\IMPA.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\mc_com.exe
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\Media Companion icon5.ico
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\MediaInfo.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\pthreadGC2.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.imdb.com\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.impa.com\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.impa.com\impa.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\changelog.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\icon.png
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\imdb.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.mtv.com\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.mtv.com\icon.png
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.mtv.com\mtv.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\icon.png
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\changelog.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\icon.png
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Chinese (Simple)\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\xbmc.core\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\xbmc.metadata\addon.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\tmdb_posters.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\TVDB.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\_imdb.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\another template.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\html_template.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\INFO_HTMLoutputTags.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\Movie Card 2up Filter.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\Movie Card 2up.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\Movie Card.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\new template.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\Table List.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\tv_adv_template.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\tv_basic_template.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\html_templates\tv_missing_episode_list.txt
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Resources\default_actor.jpg
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Resources\default_banner.jpg
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Resources\default_fanart.jpg
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Resources\default_offline.jpg
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Resources\default_poster.jpg
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Assets\scrapers\xbmc.metadata\scraper.xsd
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\media_companion.chm
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Media Companion.exe
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Media Companion.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\class_mpdb_thumbs.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Common.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\crclib.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\ICSharpCode.SharpZipLib.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\imdb_thumbs.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\IMPA.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\NfoLibrary.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\ProtoXML.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\tmdb_posters.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\TvdbScrapper.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Utilites.dll
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Common.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Common.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\NfoLibrary.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\NfoLibrary.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\ProtoXML.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\ProtoXML.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\TvdbScrapper.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\TvdbScrapper.xml
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Utilites.pdb
+D:\Development\Visual Studio Projects\MediaCompanion\bin\Release\Utilites.xml
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\ResolveAssemblyReference.cache
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmBatchScraper.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmCopyProgress.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmCoverArt.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.Delete_Dialogue.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmDialog1.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.Form1.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.Form2.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmoutputlog.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmMessageBox.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmMovieFanart.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmProgressScreen.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.Resources.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmOptions.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmSplashscreen.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.tv_batch_wizard.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmTvEdit.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmTvFanart.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmTvPosters.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media_Companion.frmTVShowBrowser.resources
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\GenerateResource-ResGen.read.1.tlog
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\GenerateResource-ResGen.read.4.tlog
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\GenerateResource-ResGen.write.1.tlog
+D:\Development\Visual Studio Projects\MediaCompanion\obj\Release\Media Companion.pdb

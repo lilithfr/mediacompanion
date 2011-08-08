@@ -20809,7 +20809,7 @@ Public Class Form1
                     overallcancel = True
                     Exit For
                 End If
-                frmhtmloutput.Label3.Text = "Processing: " & mediaItem.title
+                frmhtmloutput.Label3.Text = "Processing: " & If(htmlType = "Movies", mediaItem.title, mediaItem.title.Value)
                 Dim tempint As Integer = mediaCollection.Count - (counter + 1)
                 frmhtmloutput.Label4.Text = tempint.ToString & " " & htmlType & " Remaining"
                 frmhtmloutput.Label3.Refresh()
