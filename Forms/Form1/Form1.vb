@@ -20907,8 +20907,10 @@ Public Class Form1
         ElseIf e.ProgressPercentage = 1 Then
             If TypeOf e.UserState Is TvEpisode Then
                 Dim TempEpisode As TvEpisode = CType(e.UserState, TvEpisode)
-                TempEpisode.UpdateTreenode()
+
                 TempEpisode.ShowObj.AddEpisode(TempEpisode)
+                TempEpisode.SeasonObj.UpdateTreenode()
+                TempEpisode.UpdateTreenode()
             End If
         End If
 

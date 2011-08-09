@@ -61,7 +61,7 @@ Public Class TVDBScraper
                             Select Case bannerselection.Name
                                 Case "BannerPath"
 
-                                    bannerlist = bannerlist & "<url>http://thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
+                                    bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
                                 Case "BannerType"
                                     bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
                                 Case "BannerType2"

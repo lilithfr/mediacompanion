@@ -278,6 +278,16 @@ Public Class TvCache
                 End If
             Next
         Next
+
+        For Each Show As TvShow In Shows
+            For Each Season As TvSeason In Show.Seasons.Values
+                For Each Episode As TvEpisode In Season.Episodes
+                    Episode.UpdateTreenode()
+                Next
+                Season.UpdateTreenode()
+            Next
+            Show.UpdateTreenode()
+        Next
     End Sub
     
 End Class

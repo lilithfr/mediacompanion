@@ -19,7 +19,7 @@ Namespace Tvdb
 
         Public ReadOnly Property Url As String
             Get
-                Return "http://thetvdb.com/banners/" & BannerPath.Value
+                Return "http://www.thetvdb.com/banners/" & BannerPath.Value
             End Get
         End Property
 

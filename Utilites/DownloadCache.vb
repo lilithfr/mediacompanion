@@ -13,11 +13,17 @@ Public Class DownloadCache
         Dim size As Integer = 0
         Dim bytesRead As Integer = 0
         Dim req As HttpWebRequest = WebRequest.Create(URL)
+        req.AllowAutoRedirect = True
+        'req.AllowWriteStreamBuffering = True
+
         Dim res As HttpWebResponse = req.GetResponse()
 
         Dim contents As Stream = res.GetResponseStream()
-        Dim buffer(contents.Length()) As Byte
-        Dim bytesToRead As Integer = CInt(buffer.Length)
+        Dim Reader As New StreamReader(contents)
+
+
+        Dim buffer(res.ContentLength) As Byte
+        Dim bytesToRead As Integer = CInt(buffer.Length - 1)
         While bytesToRead > 0
             size = contents.Read(buffer, bytesRead, bytesToRead)
             If size = 0 Then Exit While
