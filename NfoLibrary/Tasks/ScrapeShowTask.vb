@@ -429,25 +429,26 @@ Public Class ScrapeShowTask
                         Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "fanart.jpg")
                         If Not IO.File.Exists(seasonpath) Then
 
-                            Dim buffer(4000000) As Byte
-                            Dim size As Integer = 0
-                            Dim bytesRead As Integer = 0
+                            'Dim buffer(4000000) As Byte
+                            'Dim size As Integer = 0
+                            'Dim bytesRead As Integer = 0
 
-                            Dim thumburl As String = fanartposter
-                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                            Dim res As HttpWebResponse = req.GetResponse()
-                            Dim contents As Stream = res.GetResponseStream()
-                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                            Dim bmp As New Bitmap(contents)
+                            'Dim thumburl As String = fanartposter
+                            'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                            'Dim res As HttpWebResponse = req.GetResponse()
+                            'Dim contents As Stream = res.GetResponseStream()
+                            'Dim bytesToRead As Integer = CInt(buffer.Length)
+                            Utilities.DownloadFile(fanartposter, seasonpath)
+                            Dim bmp As New Bitmap(seasonpath)
 
 
 
-                            While bytesToRead > 0
-                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                If size = 0 Then Exit While
-                                bytesToRead -= size
-                                bytesRead += size
-                            End While
+                            'While bytesToRead > 0
+                            '    size = contents.Read(buffer, bytesRead, bytesToRead)
+                            '    If size = 0 Then Exit While
+                            '    bytesToRead -= size
+                            '    bytesRead += size
+                            'End While
 
 
 

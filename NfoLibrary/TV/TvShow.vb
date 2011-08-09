@@ -8,15 +8,16 @@ Public Class TvShow
     Inherits ProtoFile
 
     Public Property Id As New ProtoProperty(Me, "id")
-    Public Property TvdbId As New ProtoProperty(Me, "tvdbid") 'Changed TvdbId to a ProtoProperty like the rest; the TvdbId As String doesn't appear to do anything, anyway.
-    'Public Property TvdbId As String
-    '    Get
-    '        Return Id.Value
-    '    End Get
-    '    Set(ByVal value As String)
-    '        Id.Value = value
-    '    End Set
-    'End Property
+    'Id contains the TvdbId, XBMC doesn't recognize the tvdbid tag... TvdbId is included for clarity and possible future use.
+    '--- corrected --- Public Property TvdbId As New ProtoProperty(Me, "tvdbid") 'Changed TvdbId to a ProtoProperty like the rest; the TvdbId As String doesn't appear to do anything, anyway.
+    Public Property TvdbId As String
+        Get
+            Return Id.Value
+        End Get
+        Set(ByVal value As String)
+            Id.Value = value
+        End Set
+    End Property
 
     Public Property Title As New ProtoProperty(Me, "title")
     Public Property Rating As New ProtoProperty(Me, "rating")
@@ -194,7 +195,7 @@ Public Class TvShow
 
     Public Sub AbsorbTvdbSeries(ByVal Series As Tvdb.Series)
         Me.Id.Value = Series.Id.Value
-        Me.TvdbId.Value = Series.TvdbId.Value
+        'Me.TvdbId.Value = Series.TvdbId.Value
         Me.Mpaa.Value = Series.ContentRating.Value
         Me.Genre.Value = Series.Genre.Value
         Me.ImdbId.Value = Series.ImdbId.Value
