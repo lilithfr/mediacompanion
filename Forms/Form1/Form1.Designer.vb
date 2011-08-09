@@ -472,15 +472,6 @@ Partial Class Form1
         Me.TabControl3 = New System.Windows.Forms.TabControl()
         Me.TabPage11 = New System.Windows.Forms.TabPage()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
-        Me.RadioButton44 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton32 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton31 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton30 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton29 = New System.Windows.Forms.RadioButton()
-        Me.TextBox_TotEpisodeCount = New System.Windows.Forms.TextBox()
-        Me.TextBox_TotTVShowCount = New System.Windows.Forms.TextBox()
-        Me.Label74 = New System.Windows.Forms.Label()
-        Me.Label71 = New System.Windows.Forms.Label()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.ComboBox5 = New System.Windows.Forms.ComboBox()
         Me.TextBox25 = New System.Windows.Forms.TextBox()
@@ -503,6 +494,15 @@ Partial Class Form1
         Me.Label46 = New System.Windows.Forms.Label()
         Me.Label45 = New System.Windows.Forms.Label()
         Me.Button48 = New System.Windows.Forms.Button()
+        Me.RadioButton44 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton32 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton31 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton30 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton29 = New System.Windows.Forms.RadioButton()
+        Me.TextBox_TotEpisodeCount = New System.Windows.Forms.TextBox()
+        Me.TextBox_TotTVShowCount = New System.Windows.Forms.TextBox()
+        Me.Label74 = New System.Windows.Forms.Label()
+        Me.Label71 = New System.Windows.Forms.Label()
         Me.Label42 = New System.Windows.Forms.Label()
         Me.Button46 = New System.Windows.Forms.Button()
         Me.Label66 = New System.Windows.Forms.Label()
@@ -6200,117 +6200,6 @@ Partial Class Form1
         Me.SplitContainer3.SplitterWidth = 5
         Me.SplitContainer3.TabIndex = 1
         '
-        'RadioButton44
-        '
-        Me.RadioButton44.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.RadioButton44.AutoSize = true
-        Me.RadioButton44.Checked = true
-        Me.RadioButton44.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton44.Location = New System.Drawing.Point(198, 529)
-        Me.RadioButton44.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton44.Name = "RadioButton44"
-        Me.RadioButton44.Size = New System.Drawing.Size(122, 19)
-        Me.RadioButton44.TabIndex = 9
-        Me.RadioButton44.TabStop = true
-        Me.RadioButton44.Text = "Missing Episodes"
-        Me.RadioButton44.UseVisualStyleBackColor = true
-        '
-        'RadioButton32
-        '
-        Me.RadioButton32.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.RadioButton32.AutoSize = true
-        Me.RadioButton32.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton32.Location = New System.Drawing.Point(8, 559)
-        Me.RadioButton32.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton32.Name = "RadioButton32"
-        Me.RadioButton32.Size = New System.Drawing.Size(133, 19)
-        Me.RadioButton32.TabIndex = 8
-        Me.RadioButton32.Text = "Missing Screenshot"
-        Me.RadioButton32.UseVisualStyleBackColor = true
-        '
-        'RadioButton31
-        '
-        Me.RadioButton31.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.RadioButton31.AutoSize = true
-        Me.RadioButton31.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton31.Location = New System.Drawing.Point(161, 559)
-        Me.RadioButton31.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton31.Name = "RadioButton31"
-        Me.RadioButton31.Size = New System.Drawing.Size(112, 19)
-        Me.RadioButton31.TabIndex = 7
-        Me.RadioButton31.Text = "Missing Posters"
-        Me.RadioButton31.UseVisualStyleBackColor = true
-        '
-        'RadioButton30
-        '
-        Me.RadioButton30.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.RadioButton30.AutoSize = true
-        Me.RadioButton30.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton30.Location = New System.Drawing.Point(72, 529)
-        Me.RadioButton30.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton30.Name = "RadioButton30"
-        Me.RadioButton30.Size = New System.Drawing.Size(106, 19)
-        Me.RadioButton30.TabIndex = 6
-        Me.RadioButton30.Text = "Missing Fanart"
-        Me.RadioButton30.UseVisualStyleBackColor = true
-        '
-        'RadioButton29
-        '
-        Me.RadioButton29.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.RadioButton29.AutoSize = true
-        Me.RadioButton29.Checked = true
-        Me.RadioButton29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton29.Location = New System.Drawing.Point(8, 529)
-        Me.RadioButton29.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton29.Name = "RadioButton29"
-        Me.RadioButton29.Size = New System.Drawing.Size(60, 19)
-        Me.RadioButton29.TabIndex = 5
-        Me.RadioButton29.TabStop = true
-        Me.RadioButton29.Text = "List All"
-        Me.RadioButton29.UseVisualStyleBackColor = true
-        '
-        'TextBox_TotEpisodeCount
-        '
-        Me.TextBox_TotEpisodeCount.Location = New System.Drawing.Point(287, 4)
-        Me.TextBox_TotEpisodeCount.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_TotEpisodeCount.Name = "TextBox_TotEpisodeCount"
-        Me.TextBox_TotEpisodeCount.ReadOnly = true
-        Me.TextBox_TotEpisodeCount.Size = New System.Drawing.Size(46, 21)
-        Me.TextBox_TotEpisodeCount.TabIndex = 4
-        Me.TextBox_TotEpisodeCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'TextBox_TotTVShowCount
-        '
-        Me.TextBox_TotTVShowCount.Location = New System.Drawing.Point(114, 4)
-        Me.TextBox_TotTVShowCount.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox_TotTVShowCount.Name = "TextBox_TotTVShowCount"
-        Me.TextBox_TotTVShowCount.ReadOnly = true
-        Me.TextBox_TotTVShowCount.Size = New System.Drawing.Size(46, 21)
-        Me.TextBox_TotTVShowCount.TabIndex = 3
-        Me.TextBox_TotTVShowCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'Label74
-        '
-        Me.Label74.AutoSize = true
-        Me.Label74.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label74.Location = New System.Drawing.Point(5, 5)
-        Me.Label74.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label74.Name = "Label74"
-        Me.Label74.Size = New System.Drawing.Size(102, 16)
-        Me.Label74.TabIndex = 2
-        Me.Label74.Text = "TV Show Count:"
-        '
-        'Label71
-        '
-        Me.Label71.AutoSize = true
-        Me.Label71.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label71.Location = New System.Drawing.Point(180, 5)
-        Me.Label71.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label71.Name = "Label71"
-        Me.Label71.Size = New System.Drawing.Size(99, 16)
-        Me.Label71.TabIndex = 1
-        Me.Label71.Text = "Episode Count:"
-        '
         'Panel9
         '
         Me.Panel9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
@@ -6337,7 +6226,7 @@ Partial Class Form1
         Me.Panel9.Controls.Add(Me.Label46)
         Me.Panel9.Controls.Add(Me.Label45)
         Me.Panel9.Controls.Add(Me.Button48)
-        Me.Panel9.Location = New System.Drawing.Point(4, 261)
+        Me.Panel9.Location = New System.Drawing.Point(4, 263)
         Me.Panel9.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel9.Name = "Panel9"
         Me.Panel9.Size = New System.Drawing.Size(814, 336)
@@ -6592,6 +6481,117 @@ Partial Class Form1
         Me.Button48.Size = New System.Drawing.Size(210, 29)
         Me.Button48.TabIndex = 20
         Me.Button48.UseVisualStyleBackColor = false
+        '
+        'RadioButton44
+        '
+        Me.RadioButton44.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.RadioButton44.AutoSize = true
+        Me.RadioButton44.Checked = true
+        Me.RadioButton44.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.RadioButton44.Location = New System.Drawing.Point(198, 529)
+        Me.RadioButton44.Margin = New System.Windows.Forms.Padding(4)
+        Me.RadioButton44.Name = "RadioButton44"
+        Me.RadioButton44.Size = New System.Drawing.Size(122, 19)
+        Me.RadioButton44.TabIndex = 9
+        Me.RadioButton44.TabStop = true
+        Me.RadioButton44.Text = "Missing Episodes"
+        Me.RadioButton44.UseVisualStyleBackColor = true
+        '
+        'RadioButton32
+        '
+        Me.RadioButton32.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.RadioButton32.AutoSize = true
+        Me.RadioButton32.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.RadioButton32.Location = New System.Drawing.Point(8, 559)
+        Me.RadioButton32.Margin = New System.Windows.Forms.Padding(4)
+        Me.RadioButton32.Name = "RadioButton32"
+        Me.RadioButton32.Size = New System.Drawing.Size(133, 19)
+        Me.RadioButton32.TabIndex = 8
+        Me.RadioButton32.Text = "Missing Screenshot"
+        Me.RadioButton32.UseVisualStyleBackColor = true
+        '
+        'RadioButton31
+        '
+        Me.RadioButton31.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.RadioButton31.AutoSize = true
+        Me.RadioButton31.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.RadioButton31.Location = New System.Drawing.Point(161, 559)
+        Me.RadioButton31.Margin = New System.Windows.Forms.Padding(4)
+        Me.RadioButton31.Name = "RadioButton31"
+        Me.RadioButton31.Size = New System.Drawing.Size(112, 19)
+        Me.RadioButton31.TabIndex = 7
+        Me.RadioButton31.Text = "Missing Posters"
+        Me.RadioButton31.UseVisualStyleBackColor = true
+        '
+        'RadioButton30
+        '
+        Me.RadioButton30.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.RadioButton30.AutoSize = true
+        Me.RadioButton30.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.RadioButton30.Location = New System.Drawing.Point(72, 529)
+        Me.RadioButton30.Margin = New System.Windows.Forms.Padding(4)
+        Me.RadioButton30.Name = "RadioButton30"
+        Me.RadioButton30.Size = New System.Drawing.Size(106, 19)
+        Me.RadioButton30.TabIndex = 6
+        Me.RadioButton30.Text = "Missing Fanart"
+        Me.RadioButton30.UseVisualStyleBackColor = true
+        '
+        'RadioButton29
+        '
+        Me.RadioButton29.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.RadioButton29.AutoSize = true
+        Me.RadioButton29.Checked = true
+        Me.RadioButton29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.RadioButton29.Location = New System.Drawing.Point(8, 529)
+        Me.RadioButton29.Margin = New System.Windows.Forms.Padding(4)
+        Me.RadioButton29.Name = "RadioButton29"
+        Me.RadioButton29.Size = New System.Drawing.Size(60, 19)
+        Me.RadioButton29.TabIndex = 5
+        Me.RadioButton29.TabStop = true
+        Me.RadioButton29.Text = "List All"
+        Me.RadioButton29.UseVisualStyleBackColor = true
+        '
+        'TextBox_TotEpisodeCount
+        '
+        Me.TextBox_TotEpisodeCount.Location = New System.Drawing.Point(287, 4)
+        Me.TextBox_TotEpisodeCount.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_TotEpisodeCount.Name = "TextBox_TotEpisodeCount"
+        Me.TextBox_TotEpisodeCount.ReadOnly = true
+        Me.TextBox_TotEpisodeCount.Size = New System.Drawing.Size(46, 21)
+        Me.TextBox_TotEpisodeCount.TabIndex = 4
+        Me.TextBox_TotEpisodeCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'TextBox_TotTVShowCount
+        '
+        Me.TextBox_TotTVShowCount.Location = New System.Drawing.Point(114, 4)
+        Me.TextBox_TotTVShowCount.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_TotTVShowCount.Name = "TextBox_TotTVShowCount"
+        Me.TextBox_TotTVShowCount.ReadOnly = true
+        Me.TextBox_TotTVShowCount.Size = New System.Drawing.Size(46, 21)
+        Me.TextBox_TotTVShowCount.TabIndex = 3
+        Me.TextBox_TotTVShowCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label74
+        '
+        Me.Label74.AutoSize = true
+        Me.Label74.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label74.Location = New System.Drawing.Point(5, 5)
+        Me.Label74.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label74.Name = "Label74"
+        Me.Label74.Size = New System.Drawing.Size(102, 16)
+        Me.Label74.TabIndex = 2
+        Me.Label74.Text = "TV Show Count:"
+        '
+        'Label71
+        '
+        Me.Label71.AutoSize = true
+        Me.Label71.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label71.Location = New System.Drawing.Point(180, 5)
+        Me.Label71.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label71.Name = "Label71"
+        Me.Label71.Size = New System.Drawing.Size(99, 16)
+        Me.Label71.TabIndex = 1
+        Me.Label71.Text = "Episode Count:"
         '
         'Label42
         '
@@ -8576,10 +8576,10 @@ Partial Class Form1
         Me.TabPage24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TabPage24.Controls.Add(Me.TabControl6)
         Me.TabPage24.Controls.Add(Me.Button_tv_RegexPrefSave)
-        Me.TabPage24.Location = New System.Drawing.Point(4, 27)
+        Me.TabPage24.Location = New System.Drawing.Point(4, 25)
         Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage24.Name = "TabPage24"
-        Me.TabPage24.Size = New System.Drawing.Size(1207, 607)
+        Me.TabPage24.Size = New System.Drawing.Size(1207, 609)
         Me.TabPage24.TabIndex = 9
         Me.TabPage24.Text = "TV Preferences"
         Me.TabPage24.UseVisualStyleBackColor = true
@@ -8595,7 +8595,7 @@ Partial Class Form1
         Me.TabControl6.Margin = New System.Windows.Forms.Padding(4)
         Me.TabControl6.Name = "TabControl6"
         Me.TabControl6.SelectedIndex = 0
-        Me.TabControl6.Size = New System.Drawing.Size(1203, 554)
+        Me.TabControl6.Size = New System.Drawing.Size(1203, 556)
         Me.TabControl6.TabIndex = 15
         '
         'TabPage30
@@ -8605,7 +8605,7 @@ Partial Class Form1
         Me.TabPage30.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage30.Name = "TabPage30"
         Me.TabPage30.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage30.Size = New System.Drawing.Size(1195, 526)
+        Me.TabPage30.Size = New System.Drawing.Size(1195, 528)
         Me.TabPage30.TabIndex = 0
         Me.TabPage30.Text = "General / Scraper"
         Me.TabPage30.UseVisualStyleBackColor = true
@@ -8632,7 +8632,7 @@ Partial Class Form1
         Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox17.Name = "GroupBox17"
         Me.GroupBox17.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox17.Size = New System.Drawing.Size(1187, 518)
+        Me.GroupBox17.Size = New System.Drawing.Size(1187, 520)
         Me.GroupBox17.TabIndex = 22
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
@@ -9152,7 +9152,7 @@ Partial Class Form1
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(1195, 528)
+        Me.TabPage31.Size = New System.Drawing.Size(1195, 530)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -9468,7 +9468,7 @@ Partial Class Form1
         '
         Me.Button_tv_RegexPrefSave.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button_tv_RegexPrefSave.Location = New System.Drawing.Point(545, 561)
+        Me.Button_tv_RegexPrefSave.Location = New System.Drawing.Point(545, 563)
         Me.Button_tv_RegexPrefSave.Margin = New System.Windows.Forms.Padding(4)
         Me.Button_tv_RegexPrefSave.Name = "Button_tv_RegexPrefSave"
         Me.Button_tv_RegexPrefSave.Size = New System.Drawing.Size(94, 30)

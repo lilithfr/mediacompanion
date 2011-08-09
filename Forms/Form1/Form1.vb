@@ -15089,40 +15089,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox4_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox4.SelectedIndexChanged
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        If WorkingTvShow Is Nothing Then Exit Sub
-        PictureBox6.Image = Nothing
-
-        For Each actor In WorkingTvShow.ListActors
-            If actor.actorname = ComboBox4.Text Then
-                TextBox18.Text = actor.actorrole
-                Try
-                    Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
-                    Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
-                    temppath = temppath & ".actors\" & tempname
-                    If IO.File.Exists(temppath) Then
-                        PictureBox6.ImageLocation = temppath
-                        PictureBox6.Load()
-                        Exit Sub
-                    End If
-                    If actor.actorthumb <> Nothing Then
-                        If actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb) Then
-                            PictureBox6.ImageLocation = actor.actorthumb
-                            PictureBox6.Load()
-                        Else
-                            PictureBox6.ImageLocation = defaultActor
-                            PictureBox6.Load()
-                        End If
-                    Else
-                        PictureBox6.ImageLocation = defaultActor
-                        PictureBox6.Load()
-                    End If
-                    PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
-                Catch ex As Exception
-                    MsgBox(ex)
-                End Try
-            End If
-        Next
+        Call tv_ActorDisplay()
     End Sub
     '    THIS SUB IS A DUPLICATION OF AN EXISTING SUB, ODDLY IT HAS TV RELATED CODE WHEN REFERING TO A MOVIE REBUILD.
     '    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildMoviesToolStripMenuItem1.Click
