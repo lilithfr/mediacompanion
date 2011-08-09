@@ -466,18 +466,50 @@ Partial Public Class Form1
             ElseIf Show.TvShowActorSource.Value = "tvdb" Then
                 Button45.Text = "TVDB"
             End If
-
+            ComboBox4.Items.Clear()
             For Each actor In Show.ListActors
-                ComboBox4.Items.Add(actor.actorname)
+                If Not ComboBox4.Items.Contains(actor.actorname) Then
+                    ComboBox4.Items.Add(actor.actorname)
+                End If
             Next
 
-            If Not ComboBox4.Items.Count = 0 Then
+            If ComboBox4.Items.Count = 0 Then
+                Call tv_ActorDisplay(True)
+            Else
                 ComboBox4.SelectedIndex = 0
             End If
         End If
         Panel9.Visible = False
     End Sub
 
+    Public Sub tv_ActorDisplay(Optional ByVal useDefault As Boolean = False)
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        If WorkingTvShow Is Nothing Then Exit Sub
+        Dim imgLocation As String = defaultActor
+        TextBox18.Clear()
+        PictureBox6.Image = Nothing
+        If useDefault Then
+            imgLocation = defaultActor
+        Else
+            For Each actor In WorkingTvShow.ListActors
+                If actor.actorname = ComboBox4.Text Then
+                    TextBox18.Text = actor.actorrole
+                    Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
+                    Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
+                    temppath = temppath & ".actors\" & tempname
+                    If IO.File.Exists(temppath) Then
+                        imgLocation = temppath
+                    ElseIf actor.actorthumb <> Nothing And (actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb)) Then
+                        imgLocation = actor.actorthumb
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        PictureBox6.ImageLocation = imgLocation
+        PictureBox6.Load()
+        PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
+    End Sub
 
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Nfo.TvSeason)
         Dim Show As Nfo.TvShow
