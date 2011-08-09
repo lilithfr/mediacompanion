@@ -405,7 +405,7 @@ Partial Public Class Form1
             If Show.Title <> Nothing Then TextBox2.Text = Show.Title.Value
             If Show.Premiered <> Nothing Then TextBox10.Text = Show.Premiered.Value
             If Show.Genre <> Nothing Then TextBox11.Text = Show.Genre.Value
-            If Show.TvdbId <> Nothing Then TextBox9.Text = Show.TvdbId
+            If Show.TvdbId <> Nothing Then TextBox9.Text = Show.TvdbId.Value
             If Show.ImdbId <> Nothing Then TextBox12.Text = Show.ImdbId.Value
             If Show.Rating <> Nothing Then TextBox13.Text = Show.Rating.Value
             If Show.Mpaa <> Nothing Then TextBox14.Text = Show.Mpaa.Value
@@ -652,6 +652,12 @@ Partial Public Class Form1
             newtvshownfo.Load(True)
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
+                    If Preferences.fixnfoid And newtvshownfo.Id.Value.IndexOf("tt").Equals(0) Then
+                        newtvshownfo.ImdbId.Value = newtvshownfo.Id.Value
+                        newtvshownfo.Id.Value = newtvshownfo.TvdbId.Value
+                        Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True)
+                        Call tv_ShowLoad(newtvshownfo)
+                    End If
                     Cache.TvCache.Add(newtvshownfo)
                     TvTreeview.Nodes.Add(newtvshownfo.ShowNode)
                 End If
@@ -661,6 +667,7 @@ Partial Public Class Form1
         Windows.Forms.Application.DoEvents()
         Tv_CleanFolderList()
         Tv_CacheSave("New Function")
+        If Preferences.fixnfoid Then CheckBox_fixNFOid.CheckState = CheckState.Unchecked
         Me.Enabled = True
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
@@ -993,7 +1000,7 @@ Partial Public Class Form1
             If IsNumeric(tvshowid) Then
                 'tvshow found
                 Dim newtvshow As New TvShow
-                newtvshow.TvdbId = tvshowid
+                newtvshow.TvdbId.Value = tvshowid
                 newtvshow.NfoFilePath = IO.Path.Combine(newTvFolders(0), "tvshow.nfo")
 
                 Dim tvdbstuff As New TVDBScraper
@@ -1165,7 +1172,7 @@ Partial Public Class Form1
                 '        ArtList.Add(NewItem)
                 '    Next
                 'End If
-                Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.TvdbId, True)
+                Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.TvdbId.Value, True)
                 If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
                     If Preferences.downloadtvseasonthumbs = True Then
                         For f = 0 To ArtList.Items.SeasonMax
@@ -1777,8 +1784,8 @@ Partial Public Class Form1
                     If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
                         language = Shows.Language.Value
                         sortorder = Shows.SortOrder.Value
-                        tvdbid = Shows.TvdbId
-                        tempTVDBiD = Shows.TvdbId
+                        tvdbid = Shows.TvdbId.Value
+                        tempTVDBiD = Shows.TvdbId.Value
                         imdbid = Shows.ImdbId.Value
                         showtitle = Shows.Title.Value
                         EpisodeName = Shows.Title.Value
@@ -2616,7 +2623,7 @@ Partial Public Class Form1
             'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim tvdbstuff As New TVDBScraper
             Dim showlist As New XmlDocument
-            Dim thumblist As String = tvdbstuff.GetPosterList(BrokenShow.TvdbId)
+            Dim thumblist As String = tvdbstuff.GetPosterList(BrokenShow.TvdbId.Value)
             showlist.LoadXml(thumblist)
             Dim thisresult As XmlNode = Nothing
             Dim artlist As New List(Of TvBanners)
@@ -3198,7 +3205,7 @@ Partial Public Class Form1
 
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
             'If item.locked = Nfo.ShowState.Open Then
-            Dim showid As String = item.TvdbId
+            Dim showid As String = item.TvdbId.Value
             If IsNumeric(showid) Then
                 'http://www.thetvdb.com/api/6E82FED600783400/series/85137/all/en.xml
                 Dim language As String = ""
@@ -3231,7 +3238,7 @@ Partial Public Class Form1
                     If Not AlreadyExists Then
                         Dim MissingEpisode As New Nfo.TvEpisode
 
-                        MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+                        MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
                         MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
                         MissingEpisode.IsMissing = True
                         MissingEpisode.ShowObj = item

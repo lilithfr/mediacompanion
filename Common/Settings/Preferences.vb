@@ -124,6 +124,7 @@ Public Class Preferences
     Public Shared actorseasy As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared showsortdate As Boolean
+    Public Shared fixnfoid As Boolean
 
     Public Shared moviesortorder As Byte
     Public Shared moviedefaultlist As Byte
@@ -210,6 +211,7 @@ Public Class Preferences
         Preferences.tvdbactorscrape = 0
         Preferences.defaulttvthumb = "poster"
         Preferences.OfflineDVDTitle = "Please Load '%T' Media To Play..."
+        Preferences.fixnfoid = False
 
         'Unknown - need to be sorted/named better
         Preferences.eprenamelowercase = False

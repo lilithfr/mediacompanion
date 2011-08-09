@@ -7,6 +7,7 @@ Namespace Tvdb
 
         'Documented
         Public Property Id As New ProtoProperty(Me, "id")
+        Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
         Public Property ActorsNames As New ProtoProperty(Me, "actors")
         Public Property AirsDayOfWeek As New ProtoProperty(Me, "Airs_DayOfWeek")
         Public Property AirsTime As New ProtoProperty(Me, "Airs_Time")
