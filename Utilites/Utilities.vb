@@ -2222,14 +2222,20 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
         Dim intCounter As Integer = 0
         Dim lstStringFolders As New List(Of String)
-        Dim strSubFolders As String()
+        'Dim strSubFolders As String()
 
         For Each SourceFolder In SourcePaths
             lstStringFolders.Add(SourceFolder)
         Next
         Do Until intCounter = lstStringFolders.Count
-            strSubFolders = System.IO.Directory.GetDirectories(lstStringFolders.Item(intCounter))
-            lstStringFolders.AddRange(strSubFolders)
+            'strSubFolders = System.IO.Directory.GetDirectories(lstStringFolders.Item(intCounter))
+            'lstStringFolders.AddRange(strSubFolders)
+            Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
+            For Each foundDirectory In workingFolder.GetDirectories
+                If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden Then
+                    lstStringFolders.Add(foundDirectory.FullName)
+                End If
+            Next
             intCounter += 1
         Loop
         'sorts the folders so that related folders (parent/child) are together
