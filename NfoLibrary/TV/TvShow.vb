@@ -7,17 +7,18 @@ Imports Media_Companion
 Public Class TvShow
     Inherits ProtoFile
 
-    Public Property Id As New ProtoProperty(Me, "id")
+    'Public Property Id As New ProtoProperty(Me, "id")
     'Id contains the TvdbId, XBMC doesn't recognize the tvdbid tag... TvdbId is included for clarity and possible future use.
     '--- corrected --- Public Property TvdbId As New ProtoProperty(Me, "tvdbid") 'Changed TvdbId to a ProtoProperty like the rest; the TvdbId As String doesn't appear to do anything, anyway.
-    Public Property TvdbId As String
-        Get
-            Return Id.Value
-        End Get
-        Set(ByVal value As String)
-            Id.Value = value
-        End Set
-    End Property
+    Public Property TvdbId As New ProtoProperty(Me,"id")
+    '    Get
+    '        Return Id.Value
+    '    End Get
+    '    Set(ByVal value As String)
+    '        Id.Value = value
+    '    End Set
+    'End Property
+    Private Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
 
     Public Property Title As New ProtoProperty(Me, "title")
     Public Property Rating As New ProtoProperty(Me, "rating")
@@ -128,7 +129,21 @@ Public Class TvShow
 
     Sub New()
         MyBase.New("tvshow")
+
+
     End Sub
+
+    Protected Overrides Sub LoadDoc()
+        MyBase.LoadDoc()
+
+        If Me.IdTagCatch.Value IsNot Nothing Then
+            If Me.TvdbId.Value Is Nothing Then
+                Me.TvdbId.Value = Me.IdTagCatch.Value
+                Me.IdTagCatch.Value = Nothing
+            End If
+        End If
+    End Sub
+
 
     Public ReadOnly Property TitleAndYear As String
         Get
@@ -194,7 +209,7 @@ Public Class TvShow
     End Sub
 
     Public Sub AbsorbTvdbSeries(ByVal Series As Tvdb.Series)
-        Me.Id.Value = Series.Id.Value
+        Me.TvdbId.Value = Series.Id.Value
         'Me.TvdbId.Value = Series.TvdbId.Value
         Me.Mpaa.Value = Series.ContentRating.Value
         Me.Genre.Value = Series.Genre.Value
@@ -237,7 +252,7 @@ Public Class TvShow
         Next
     End Sub
 
-   Public Sub AddEpisode(ByRef Episode As TvEpisode)
+    Public Sub AddEpisode(ByRef Episode As TvEpisode)
         If Not Cache.TvCache.Contains(Episode) Then
             Cache.TvCache.Add(Episode)
         End If
@@ -272,11 +287,11 @@ Public Class TvShow
             Episode.SeasonObj = CurrentSeason
 
             CurrentSeason.ShowObj = Me
-            CurrentSeason.ShowId.Value = Me.Id.Value
+            CurrentSeason.ShowId.Value = Me.TvdbId.Value
             CurrentSeason.Episodes.Add(Episode)
 
             Episode.ShowObj = Me
-            Episode.ShowId.Value = Me.Id.Value
+            Episode.ShowId.Value = Me.TvdbId.Value
         End If
     End Sub
 
@@ -352,7 +367,7 @@ Public Class TvShow
 
         Return Nothing
     End Function
- 
+
 End Class
 
 Public Enum ShowState

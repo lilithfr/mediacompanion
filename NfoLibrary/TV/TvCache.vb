@@ -200,8 +200,8 @@ Public Class TvCache
 
                         End If
                         If Item.ShowObj IsNot Nothing Then
-                            If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.Id.Value) Then
-                                Item.ShowId.Value = Item.ShowObj.Id.Value
+                            If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.TvdbId.Value) Then
+                                Item.ShowId.Value = Item.ShowObj.TvdbId.Value
                             End If
 
                             Dom.Root.Add(Item.Node)
@@ -273,7 +273,7 @@ Public Class TvCache
 
         For Each Show As TvShow In Shows
             For Each Episode As Nfo.TvEpisode In Me.Episodes
-                If Show.Id.Value = Episode.ShowId.Value Then
+                If Show.TvdbId.Value = Episode.ShowId.Value Then
                     Show.AddEpisode(Episode)
                 End If
             Next

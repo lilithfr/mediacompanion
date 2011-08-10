@@ -5862,10 +5862,10 @@ Public Class Form1
                     strNFOprop = If(tvShow.ImdbId <> Nothing, Preferences.imdbmirror & "title/" & tvShow.ImdbId.Value & "/", Preferences.imdbmirror)
 
                 Case "show_tvdbid"
-                    strNFOprop = tvShow.TvdbId
+                    strNFOprop = tvShow.TvdbId.Value
 
                 Case "show_tvdburl"
-                    strNFOprop = If(tvShow.TvdbId <> Nothing, "http://thetvdb.com/?tab=series&id=" & tvShow.TvdbId, "http://thetvdb.com/")
+                    strNFOprop = If(tvShow.TvdbId <> Nothing, "http://thetvdb.com/?tab=series&id=" & tvShow.TvdbId.Value, "http://thetvdb.com/")
 
                 Case "show_genre"
                     strNFOprop = tvShow.Genre.Value
@@ -15347,7 +15347,7 @@ Public Class Form1
 
         ElseIf tab = "TVDB" Then
             Dim TvdbId As Integer
-            If Not String.IsNullOrEmpty(Show.TvdbId) AndAlso Integer.TryParse(Show.TvdbId, TvdbId) Then
+            If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
                 If Preferences.externalbrowser = True Then
                     Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                     tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
@@ -15691,7 +15691,7 @@ Public Class Form1
             WorkingTvShow.State = Nfo.ShowState.Open
 
             WorkingTvShow.Title.Value = listOfShows(ListBox3.SelectedIndex).showtitle
-            WorkingTvShow.TvdbId = listOfShows(ListBox3.SelectedIndex).showid
+            WorkingTvShow.TvdbId.Value = listOfShows(ListBox3.SelectedIndex).showid
             WorkingTvShow.Language.Value = LanCode
 
 
@@ -16891,7 +16891,7 @@ Public Class Form1
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
-        Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & WorkingTvShow.TvdbId & "/banners.xml"
+        Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & WorkingTvShow.TvdbId.Value & "/banners.xml"
         Dim apple2(2000) As String
         Dim fanartlinecount As Integer = 0
         Try
@@ -17411,7 +17411,7 @@ Public Class Form1
         Dim tempstring As String = ""
         If Show IsNot Nothing Then
             Dim changed As Integer = 0
-            If Show.TvdbId <> TextBox9.Text Then
+            If Show.TvdbId.Value <> TextBox9.Text Then
                 changed += 1
             End If
             If Show.ImdbId.Value.ToLower <> TextBox12.Text.ToLower Then
@@ -17448,7 +17448,7 @@ Public Class Form1
             Show.Studio.Value = TextBox16.Text
             Show.Rating.Value = TextBox13.Text
             Show.ImdbId.Value = TextBox12.Text
-            Show.TvdbId = TextBox9.Text
+            Show.TvdbId.Value = TextBox9.Text
             Show.Mpaa.Value = TextBox14.Text
 
             Show.Save()
@@ -17569,7 +17569,7 @@ Public Class Form1
 
             If Preferences.tvshow_useXBMC_Scraper = True Then
 
-                Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.TvdbId, langu, WorkingTvShow.NfoFilePath)
+                Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.TvdbId.Value, langu, WorkingTvShow.NfoFilePath)
                 If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
                 Call tv_ShowLoad(WorkingTvShow)
                 For Each item As TvShow In Cache.TvCache.Shows
@@ -17603,7 +17603,7 @@ Public Class Form1
 
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
-                Dim tvshowxmlstring As String = tvdbstuff.GetShow(WorkingTvShow.TvdbId, langu)
+                Dim tvshowxmlstring As String = tvdbstuff.GetShow(WorkingTvShow.TvdbId.Value, langu)
                 If tvshowxmlstring = "!!!Error!!!" Then
                     MsgBox("Error scraping show")
                     Exit Sub
@@ -17938,7 +17938,7 @@ Public Class Form1
             Dim sortorder As String = WorkingTvShow.SortOrder.Value
             Dim language As String = WorkingTvShow.Language.Value
             Dim actorsource As String = WorkingTvShow.EpisodeActorSource.Value
-            Dim tvdbid As String = WorkingTvShow.TvdbId
+            Dim tvdbid As String = WorkingTvShow.TvdbId.Value
             Dim imdbid As String = WorkingTvShow.ImdbId.Value
             Dim seasonno As String = WorkingEpisode.Season.value
             Dim episodeno As String = WorkingEpisode.Episode.Value
@@ -18589,7 +18589,7 @@ Public Class Form1
         ComboBox2.Items.Add("Season All")
         For Each tvshow In Cache.TvCache.Shows
             If tvshow.TvdbId = WorkingTvShow.TvdbId Then
-                currentposterid = tvshow.TvdbId
+                currentposterid = tvshow.TvdbId.Value
                 For Each Season As Nfo.TvSeason In tvshow.Seasons.Values
                     For Each ep As Nfo.TvEpisode In Season.Episodes
                         Dim seasonstring As String = ""
@@ -18727,7 +18727,7 @@ Public Class Form1
         Dim showlist As New XmlDocument
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim tvdbstuff As New TVDBScraper
-        Dim thumblist As String = tvdbstuff.GetPosterList(WorkingTvShow.TvdbId)
+        Dim thumblist As String = tvdbstuff.GetPosterList(WorkingTvShow.TvdbId.Value)
         Try
             showlist.LoadXml(thumblist)
         Catch ex As Exception
@@ -19461,7 +19461,7 @@ Public Class Form1
         Dim messbox As frmMessageBox = New frmMessageBox("Checking TVDB for screenshot", "", "Please Wait")
         'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim episodescraper As New TVDBScraper
-        Dim id As String = WorkingTvShow.TvdbId
+        Dim id As String = WorkingTvShow.TvdbId.Value
         Dim sortorder As String = WorkingTvShow.SortOrder.Value
         Dim seasonno As String = WorkingEpisode.Season.value
         Dim episodeno As String = WorkingEpisode.Episode.Value
@@ -19499,7 +19499,7 @@ Public Class Form1
         messbox.Show()
         messbox.Refresh()
         Application.DoEvents()
-        Dim tempepisode As String = episodescraper.getepisode(WorkingTvShow.TvdbId, sortorder, seasonno, episodeno, language)
+        Dim tempepisode As String = episodescraper.getepisode(WorkingTvShow.TvdbId.Value, sortorder, seasonno, episodeno, language)
         Dim thumburl As String = ""
         messbox.Close()
         Dim scrapedepisode As New XmlDocument
@@ -28911,7 +28911,7 @@ Public Class Form1
                         Dim language As String = editshow.Language.Value
                         If language = "" Then language = "en"
 
-                        Dim tvshowxmlstring As String = tvdbstuff.GetShow(editshow.TvdbId, language)
+                        Dim tvshowxmlstring As String = tvdbstuff.GetShow(editshow.TvdbId.Value, language)
                         Try
                             Dim actorlist As New List(Of str_MovieActors)
                             actorlist.Clear()
@@ -29191,7 +29191,7 @@ Public Class Form1
                     Dim artdone As Boolean = False
                     If tvBatchList.doShowArt = True Then
 
-                        Dim thumblist As String = tvdbstuff.GetPosterList(Cache.TvCache.Shows(f).TvdbId)
+                        Dim thumblist As String = tvdbstuff.GetPosterList(Cache.TvCache.Shows(f).TvdbId.Value)
                         showlist2.LoadXml(thumblist)
                         artdone = True
                         thisresult2 = Nothing
@@ -29463,7 +29463,7 @@ Public Class Form1
                                     Dim sortorder As String = Cache.TvCache.Shows(f).SortOrder.Value
                                     Dim language As String = Cache.TvCache.Shows(f).Language.Value
                                     Dim actorsource As String = Cache.TvCache.Shows(f).EpisodeActorSource.Value
-                                    Dim tvdbid As String = Cache.TvCache.Shows(f).TvdbId
+                                    Dim tvdbid As String = Cache.TvCache.Shows(f).TvdbId.Value
                                     Dim imdbid As String = Cache.TvCache.Shows(f).ImdbId.Value
                                     Dim seasonno As String = Cache.TvCache.Shows(f).Episodes(g).Season.Value
                                     Dim episodeno As String = Cache.TvCache.Shows(f).Episodes(g).Episode.Value

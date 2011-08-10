@@ -152,7 +152,7 @@ Public Class WorkingWithNfoFiles
             newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
             newtvshow.NfoFilePath = path
             newtvshow.Year.Value = "0000"
-            newtvshow.TvdbId = ""
+            newtvshow.TvdbId.Value = ""
             newtvshow.Status.Value = "missing"
             newtvshow.State = Nfo.ShowState.Locked
             Return newtvshow
@@ -862,7 +862,7 @@ Public Class WorkingWithNfoFiles
             newtvshow.Status.Value = "file does not exist"
             newtvshow.NfoFilePath = path
             newtvshow.Year.Value = "0000"
-            newtvshow.TvdbId = ""
+            newtvshow.TvdbId.Value = ""
             newtvshow.State = Nfo.ShowState.Locked
             Return newtvshow
             Exit Function

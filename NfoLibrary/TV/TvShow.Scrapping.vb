@@ -6,7 +6,7 @@ Partial Public Class TvShow
 
     Public Property FanartData As New FanartScraper.Fanart
     Public Sub DownloadFanartData()
-        Dim Data As String = Utilities.DownloadTextFiles("http://fanart.tv/api/fanart.php?id=" & Me.Id.Value)
+        Dim Data As String = Utilities.DownloadTextFiles("http://fanart.tv/api/fanart.php?id=" & Me.TvdbId.Value)
 
         FanartData.LoadXml(Data)
         FanartData.FolderPath = Me.FolderPath

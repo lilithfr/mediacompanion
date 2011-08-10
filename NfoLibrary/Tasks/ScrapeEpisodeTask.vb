@@ -205,7 +205,7 @@ Public Class ScrapeEpisodeTask
 
         Dim tempstring As String
         Dim progresstext As String = ""
-        tvdbid = Me.Show.TvdbId
+        tvdbid = Me.Show.TvdbId.Value
         Preferences.tvScraperLog &= "Using Settings: TVdbID: " & tvdbid & " SortOrder: " & sortorder & " Language: " & language & " Actor Source: " & actorsource & vbCrLf
         If tvdbid <> "" Then
             progresstext &= " - Scraping..."

@@ -123,7 +123,7 @@ Public Class ScrapeShowTask
             Exit Sub
         End If
 
-        If Me.Show.Id.Value IsNot Nothing Then
+        If Me.Show.TvdbId.Value IsNot Nothing Then
             Dim FolderName As String = Utilities.GetLastFolder(Me.Show.FolderPath)
 
             Dim showyear As String = ""
@@ -157,7 +157,7 @@ Public Class ScrapeShowTask
                 ElseIf Me.Show.PossibleShowList.Count = 1 Then
                     Me.Show.State = Nfo.ShowState.Open
 
-                    Me.Show.Id.Value = Me.Show.PossibleShowList.Item(0).Id.Value
+                    Me.Show.TvdbId.Value = Me.Show.PossibleShowList.Item(0).Id.Value
                     Me.Show.Title.Value = Me.Show.PossibleShowList.Item(0).SeriesName.Value
                     Me.Show.Language.Value = Me.Show.PossibleShowList.Item(0).Language.Value
 
@@ -165,7 +165,7 @@ Public Class ScrapeShowTask
                 Else
                     Me.Show.State = Nfo.ShowState.Unverified
 
-                    Me.Show.Id.Value = Me.Show.PossibleShowList.Item(0).Id.Value
+                    Me.Show.TvdbId.Value = Me.Show.PossibleShowList.Item(0).Id.Value
 
                     Messages.Add("Multiple possible matches found, first returned used, but show remains unverified")
                     Options.Clear()
@@ -193,7 +193,7 @@ Public Class ScrapeShowTask
             End If
         Next
 
-        If Me.Show.Id.Value IsNot Nothing Then
+        If Me.Show.TvdbId.Value IsNot Nothing Then
             'tvshow found
             Me.Show.NfoFilePath = IO.Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
 
@@ -204,7 +204,7 @@ Public Class ScrapeShowTask
             Dim TempLanguage As String = Preferences.TvdbLanguageCode
             If String.IsNullOrEmpty(TempLanguage) Then TempLanguage = "en"
 
-            Me.Show.TvdbData = tvdbstuff.GetShow(Me.Show.Id.Value, TempLanguage, True)
+            Me.Show.TvdbData = tvdbstuff.GetShow(Me.Show.TvdbId.Value, TempLanguage, True)
 
             Me.Show.AbsorbTvdbSeries(Me.Show.TvdbData.Series(0))
 
@@ -212,7 +212,7 @@ Public Class ScrapeShowTask
             Dim DownloadImdbActors As Boolean = (Preferences.TvdbActorScrape = 1) OrElse (Preferences.TvdbActorScrape = 3) AndAlso Me.Show.ImdbId.Value IsNot Nothing
             Dim DownloadActors As Boolean = Preferences.actorseasy
 
-            Dim TvdbActors As Tvdb.Actors = tvdbstuff.GetActors(Me.Show.Id.Value, TempLanguage)
+            Dim TvdbActors As Tvdb.Actors = tvdbstuff.GetActors(Me.Show.TvdbId.Value, TempLanguage)
             For Each Act As Tvdb.Actor In TvdbActors.Items
                 If Me.Show.ListActors.Count >= Preferences.maxactors Then
                     Exit For
@@ -351,7 +351,7 @@ Public Class ScrapeShowTask
 
             End If
 
-            Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(Me.Show.TvdbId, True)
+            Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(Me.Show.TvdbId.Value, True)
             If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
                 If Preferences.downloadtvseasonthumbs = True Then
                     For f = 0 To ArtList.Items.SeasonMax

@@ -112,7 +112,7 @@
         LoadDoc()
     End Sub
 
-    Private Sub LoadDoc()
+    Protected Overridable Sub LoadDoc()
         If Me.Doc.Root Is Nothing Then Throw New Exception("Invalid NFO file")
         Me._node = Me.Doc.Root
         Dim Root As XElement = Me.Doc.Root
