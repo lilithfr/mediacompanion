@@ -22267,6 +22267,7 @@ Public Class Form1
             Preferences.lastpath = thefoldernames
             If allok = True Then
                 ListBox6.Items.Add(thefoldernames)
+                newTvFolders.Add(thefoldernames)
             Else
                 MsgBox("        Folder Already Exists", MsgBoxStyle.OkOnly)
             End If
