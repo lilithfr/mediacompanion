@@ -7965,7 +7965,7 @@ Public Class Form1
             '    newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
             'End If
             For f = 0 To fullMovieList.Count - 1
-                If fullMovieList(f).titleandyear = oldmovietitle Then
+                If fullMovieList(f).title = oldmovietitle Then
                     Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
                     newfullmovie = fullMovieList(f)
                     Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -7979,7 +7979,7 @@ Public Class Form1
                     End Try
 
                     newfullmovie.title = newmovietitle
-                    newfullmovie.titleandyear = newmovietitleandyear
+                    newfullmovie.titleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
                     newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
                     newfullmovie.playcount = workingMovieDetails.fullmoviebody.playcount
                     newfullmovie.rating = workingMovieDetails.fullmoviebody.rating
@@ -7989,6 +7989,7 @@ Public Class Form1
                     newfullmovie.runtime = workingMovieDetails.fullmoviebody.runtime
                     newfullmovie.id = workingMovieDetails.fullmoviebody.imdbid
                     newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
+                    newfullmovie.plot = workingMovieDetails.fullmoviebody.plot
                     newfullmovie.movieset = workingMovieDetails.fullmoviebody.movieset
                     newfullmovie.year = workingMovieDetails.fullmoviebody.year
                     If newfullmovie.movieset = Nothing Then
@@ -7999,10 +8000,11 @@ Public Class Form1
                     End If
                     fullMovieList.RemoveAt(f)
                     fullMovieList.Add(newfullmovie)
-                    Call mov_CacheSave()
+
                     Exit For
                 End If
             Next
+            Call mov_CacheSave()
             If Label39.Text.ToLower.IndexOf(" of ") <> -1 Then
                 Call mov_FiltersAndSortApply()
                 Call mov_FormPopulate()
@@ -8089,11 +8091,12 @@ Public Class Form1
                         '              newfullmovie.year = movie.fullmoviebody.year
                         fullMovieList.RemoveAt(f)
                         fullMovieList.Add(newfullmovie)
-                        Call mov_CacheSave()
+
                         Exit For
                     End If
                 Next
             Next
+            Call mov_CacheSave()
             workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
             Call mov_FiltersAndSortApply()
             Call mov_FormPopulate()
