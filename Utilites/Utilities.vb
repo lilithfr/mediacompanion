@@ -531,6 +531,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Try
             If Strings.Right(s, 7) = "trailer" Then
                 passed = False
+            ElseIf Strings.Right(s, 7) = ".actors" Then
+                passed = False
             ElseIf Strings.Right(s, 8) = "(noscan)" Then
                 passed = False
             ElseIf Strings.Right(s, 6) = "sample" Then
@@ -2233,7 +2235,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
             For Each foundDirectory In workingFolder.GetDirectories
                 If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden Then
-                    lstStringFolders.Add(foundDirectory.FullName)
+                    If ValidMovieDir(foundDirectory.FullName) Then
+                        lstStringFolders.Add(foundDirectory.FullName)
+                    End If
                 End If
             Next
             intCounter += 1
