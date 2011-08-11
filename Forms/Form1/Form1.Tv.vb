@@ -499,7 +499,7 @@ Partial Public Class Form1
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
-                    ElseIf actor.actorthumb <> Nothing And (actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb)) Then
+                    ElseIf actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
                         imgLocation = actor.actorthumb
                     End If
                     Exit For
