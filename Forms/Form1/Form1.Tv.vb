@@ -686,7 +686,7 @@ Partial Public Class Form1
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
                     If Preferences.fixnfoid And newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
                         newtvshownfo.ImdbId.Value = newtvshownfo.TvdbId.Value
-                        newtvshownfo.TvdbId.Value = newtvshownfo.TvdbId.Value
+                        newtvshownfo.TvdbId.Value = newtvshownfo.IdTagCatch.Value
                         Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True)
                         Call tv_ShowLoad(newtvshownfo)
                     End If
@@ -3390,26 +3390,25 @@ Partial Public Class Form1
         'Next
 
         If Cache.TvCache.IsAltered Then
-            Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
+            'Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
+            'If Result = MsgBoxResult.Yes Then
+            For Each Item As ProtoXML.ProtoFile In Cache.TvCache.Items
 
-            If Result = MsgBoxResult.Yes Then
-                For Each Item As ProtoXML.ProtoFile In Cache.TvCache.Items
+                If Not Item.FailedLoad And Item.IsAltered Then
+                    Try
+                        Item.Save()
+                    Catch
+                        Dim Test As Boolean = True
+                    End Try
+                End If
 
-                    If Not Item.FailedLoad And Item.IsAltered Then
-                        Try
-                            Item.Save()
-                        Catch
-                            Dim Test As Boolean = True
-                        End Try
-                    End If
-
-                Next
-            ElseIf Result = MsgBoxResult.No Then
-                'Do Nothing
-            Else         '  If Result = MsgBoxResult.Cancel Then            'assume cancel for any other answers (if possible...)
-                Return True         'return true to indicate to the call routine that 'cancel' has been choosen (used mainly to cancel MC close)
-                Exit Function
-            End If
+            Next
+            'ElseIf Result = MsgBoxResult.No Then
+            '    'Do Nothing
+            'Else         '  If Result = MsgBoxResult.Cancel Then            'assume cancel for any other answers (if possible...)
+            '    Return True         'return true to indicate to the call routine that 'cancel' has been choosen (used mainly to cancel MC close)
+            '    Exit Function
+            'End If
         End If
 
         Cache.TvCache.Save()

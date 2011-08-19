@@ -18,7 +18,7 @@ Public Class TvShow
     '        Id.Value = value
     '    End Set
     'End Property
-    Private Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
+    Public Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
 
     Public Property Title As New ProtoProperty(Me, "title")
     Public Property Rating As New ProtoProperty(Me, "rating")

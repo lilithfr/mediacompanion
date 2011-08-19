@@ -2234,7 +2234,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             'lstStringFolders.AddRange(strSubFolders)
             Dim workingFolder As New IO.DirectoryInfo(lstStringFolders.Item(intCounter))
             For Each foundDirectory In workingFolder.GetDirectories
-                If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden Then
+                If Not (foundDirectory.Attributes And IO.FileAttributes.Hidden) = IO.FileAttributes.Hidden And _
+                    Not (foundDirectory.Attributes And IO.FileAttributes.System) = IO.FileAttributes.System Then
                     If ValidMovieDir(foundDirectory.FullName) Then
                         lstStringFolders.Add(foundDirectory.FullName)
                     End If
