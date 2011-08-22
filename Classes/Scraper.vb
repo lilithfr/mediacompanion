@@ -88,7 +88,7 @@ Public Class Classimdb
             Dim urllinecount As Integer
             Dim GOT_IMDBID As String
             Dim allok As Boolean = False
-            Dim websource(2000)
+            Dim websource(3000)
             For f = 1 To 10
                 Try
                     Dim wrGETURL As WebRequest
@@ -187,43 +187,63 @@ Public Class Classimdb
                     Next
                     Dim temps As String
                     If GOT_IMDBID = "" And exacttotal <> "" Then
-                        temps = exacttotal
-                        If temps.IndexOf(movieyear) <> -1 Then
-                            Dim count As Integer
-                            count = CharCount(temps, movieyear)
-                            If count = 1 Then
+                        If exacttotal.IndexOf(movieyear) <> -1 Then
+                            If CharCount(exacttotal, movieyear) = 1 Then
                                 temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                                Dim first As Integer
-                                Dim length As Integer
                                 Dim calc As String
                                 calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                                If temps.IndexOf("&#34;") = -1 Then
-                                    first = temps.LastIndexOf("href=""/title/tt") + 13
-                                    length = 9
-                                    GOT_IMDBID = temps.Substring(first, length)
-                                End If
+                                Dim regMatch As New Regex("tt(\d){6,8}")
+                                GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
                             End If
                         End If
+                        'temps = exacttotal
+                        'If temps.IndexOf(movieyear) <> -1 Then
+                        '    Dim count As Integer
+                        '    count = CharCount(temps, movieyear)
+                        '    If count = 1 Then
+                        '        temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
+                        '        Dim first As Integer
+                        '        Dim length As Integer
+                        '        Dim calc As String
+                        '        calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+                        '        If temps.IndexOf("&#34;") = -1 Then
+                        '            first = temps.LastIndexOf("href=""/title/tt") + 13
+                        '            length = 9
+                        '            GOT_IMDBID = temps.Substring(first, length)
+                        '        End If
+                        '    End If
+                        'End If
 
                         If GOT_IMDBID = "" And populartotal <> "" Then
-                            temps = populartotal
-                            If temps.IndexOf(movieyear) <> -1 Then
-                                Dim count As Integer
-                                count = CharCount(temps, movieyear)
-                                If count = 1 Then
-                                    temps = populartotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                                    Dim first As Integer
-                                    Dim length As Integer
+                            If populartotal.IndexOf(movieyear) <> -1 Then
+                                If CharCount(populartotal, movieyear) = 1 Then
+                                    temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
                                     Dim calc As String
                                     calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                                    If temps.IndexOf("&#34;") = -1 Then
-                                        first = temps.LastIndexOf("href=""/title/tt") + 13
-                                        length = 9
-                                        GOT_IMDBID = temps.Substring(first, length)
-                                    End If
+                                    Dim regMatch As New Regex("tt(\d){6,8}")
+                                    GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
                                 End If
                             End If
                         End If
+                        'If GOT_IMDBID = "" And populartotal <> "" Then
+                        '    temps = populartotal
+                        '    If temps.IndexOf(movieyear) <> -1 Then
+                        '        Dim count As Integer
+                        '        count = CharCount(temps, movieyear)
+                        '        If count = 1 Then
+                        '            temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
+                        '            Dim first As Integer
+                        '            Dim length As Integer
+                        '            Dim calc As String
+                        '            calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+                        '            If temps.IndexOf("&#34;") = -1 Then
+                        '                first = temps.LastIndexOf("href=""/title/tt") + 13
+                        '                length = 9
+                        '                GOT_IMDBID = temps.Substring(first, length)
+                        '            End If
+                        '        End If
+                        '    End If
+                        'End If
                     End If
                 End If
             ElseIf movieyear = Nothing Then
@@ -693,22 +713,21 @@ Public Class Classimdb
 
 
                     'rating
-                    If webpage(f).IndexOf("/10</span>") <> -1 Then
+                    If webpage(f).IndexOf("/<span itemprop=""ratingValue"">10</span>") <> -1 Then
                         Try
-                            movienfoarray = webpage(f)
-                            webpage(f) = webpage(f).Substring(webpage(f).IndexOf(">") + 1, webpage(f).Length - webpage(f).IndexOf(">") - 1)
-                            movienfoarray = webpage(f).Substring(0, 10)
-                            movienfoarray = movienfoarray.Replace("<b>", "")
-                            movienfoarray = movienfoarray.Replace("</b>", "")
-                            movienfoarray = movienfoarray.Replace(",", ".")
-                            movienfoarray = movienfoarray.Replace(" ", "")
+                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
+                            End If
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<rating>" & movienfoarray & "</rating>" & vbCrLf
                         Catch
                             totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
                         End Try
-                    End If
 
+                    End If
 
                     If webpage(f).IndexOf("<strong>Top 250 #") <> -1 Then
                         Try
@@ -1259,9 +1278,11 @@ Public Class Classimdb
                             scrapertempint -= 1
                         End If
                     Loop
-                    scrapertempint = scrapertempint + 1
-                    actors(scrapertempint, 0) = scrapertempstring
-                    actorcount = scrapertempint
+                    If scrapertempstring <> "" Then
+                        scrapertempint = scrapertempint + 1
+                        actors(scrapertempint, 0) = scrapertempstring
+                        actorcount = scrapertempint
+                    End If
                     If actorcount > maxactors Then
                         actorcount = maxactors
                     End If
