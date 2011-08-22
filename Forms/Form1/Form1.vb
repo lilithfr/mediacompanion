@@ -93,7 +93,6 @@ Public Class Form1
     Dim progressmode As Boolean
     Dim templateList As New List(Of str_HTMLTemplate)
     Dim overItem As String
-    Dim oldIndexUnderTheMouse As Integer
     Dim scrapeAndQuit As Boolean = False
     Dim mouseDelta As Integer = 0
     Dim resLabels As Label
@@ -106,7 +105,7 @@ Public Class Form1
     Dim currentPage As Integer = 0
     Dim posterThumbedItsMade As Boolean = False
     Dim posterCropString As String
-    Dim tab1 As Integer
+    Dim tab1 As Integer = 0
 
     Dim listOfTvFanarts As New List(Of str_FanartList)
     Dim lockedList As Boolean = False
@@ -130,7 +129,7 @@ Public Class Form1
     Dim WithEvents tvreslabel As Label
     Dim tvposterpage As Integer = 1
     Dim walllocked As Boolean = False
-    Dim maxcount As Integer
+    Dim maxcount As Integer = 0
     Dim moviecount_bak As Integer = 0
     Private ClickedControl As String
 
@@ -2238,7 +2237,7 @@ Public Class Form1
     '    End Sub
 
     Private Sub mov_NfoLoad(ByVal folderlist As List(Of String), Optional ByVal mode As Boolean = False)
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim dirinfo As String = String.Empty
         Dim pattern As String = "*.nfo"
 
@@ -2561,7 +2560,7 @@ Public Class Form1
 
     Private Function mov_FileCheckValid(ByVal fullpathandfilename As String) As Boolean
         Dim validfile As Boolean = True
-        Dim tempint2 As Integer
+        Dim tempint2 As Integer = 0
         Dim tempstring As String
 
         'if the file is a .vob then check it is not part of a dvd folder (Stop dvdfolders vobs getting seperate nfos)
@@ -2694,9 +2693,8 @@ Public Class Form1
         If IO.File.Exists(tempmovie2) = True Then
             If IO.File.Exists(fullpathandfilename) = False Then
                 Dim rarname As String = tempmovie2
-                Dim SizeOfFile As Integer
+                Dim SizeOfFile As Integer = FileLen(rarname)
                 tempint2 = Convert.ToInt32(Preferences.rarsize) * 1048576
-                SizeOfFile = FileLen(rarname)
                 If SizeOfFile > tempint2 Then
                     Dim mat As Match
                     mat = Regex.Match(rarname, "\.part[0-9][0-9]?[0-9]?[0-9]?.rar")
@@ -2822,7 +2820,7 @@ Public Class Form1
         'scraperLog &= lst & " " & pattern & " " & dir_info.ToString & vbCrLf
         Dim moviepattern As String = pattern
         Monitor.Enter(Me)
-        Dim tempint2 As Integer
+        Dim tempint2 As Integer = 0
         Dim tempstring As String
         Try
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(moviepattern)
@@ -3202,9 +3200,8 @@ Public Class Form1
                     If IO.File.Exists(tempmovie2) = True Then
                         If IO.File.Exists(tempmovie) = False Then
                             Dim rarname As String = tempmovie2
-                            Dim SizeOfFile As Integer
+                            Dim SizeOfFile As Integer = FileLen(rarname)
                             tempint2 = Convert.ToInt32(Preferences.rarsize) * 1048576
-                            SizeOfFile = FileLen(rarname)
                             If SizeOfFile > tempint2 Then
                                 Dim mat As Match
                                 mat = Regex.Match(rarname, "\.part[0-9][0-9]?[0-9]?[0-9]?.rar")
@@ -3327,8 +3324,7 @@ Public Class Form1
                                 ElseIf newmoviedetails.nfopathandfilename.IndexOf("/") <> -1 Then
                                     paths = newmoviedetails.nfopathandfilename.Split("/")
                                 End If
-                                Dim depthecount As Integer
-                                depthecount = paths.GetUpperBound(0)
+                                Dim depthecount As Integer = paths.GetUpperBound(0)
                                 newmoviedetails.title = Nothing
 
                                 For h = depthecount To 0 Step -1
@@ -3644,15 +3640,15 @@ Public Class Form1
     Private Sub mov_StartNew()
         Dim dft As New List(Of String)
         Dim moviepattern As String
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim tempstring As String
         Dim errorcounter As Integer = 0
         Dim trailer As String
-        Dim newmoviecount As Integer
+        Dim newmoviecount As Integer = 0
         Dim dirinfo As String = String.Empty
         newMovieList.Clear()
         Dim newmoviefolders As New List(Of String)
-        Dim progress As Integer
+        Dim progress As Integer = 0
         progress = 0
         Dim progresstext As String
         scraperLog = ""
@@ -3825,7 +3821,7 @@ Public Class Form1
                     'Next f
                     tempint = newMovieList.Count - mediacounter
 
-                    scraperLog &= String.Format("{1} New movies found in directory:- {2}", tempint.ToString, dirpath) & vbCrLf
+                    scraperLog &= String.Format("{0} New movies found in directory:- {1}", tempint.ToString, dirpath) & vbCrLf
                     mediacounter = newMovieList.Count
                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -4627,8 +4623,8 @@ Public Class Form1
                                             progresstext &= " - HD tags"
                                             BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             '1h 24mn 48s 546ms
-                                            Dim hours As Integer
-                                            Dim minutes As Integer
+                                            Dim hours As Integer = 0
+                                            Dim minutes As Integer = 0
                                             tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
                                             tempint = tempstring.IndexOf("h")
                                             If tempint <> -1 Then
@@ -7390,7 +7386,7 @@ Public Class Form1
 
     Private Sub mov_Rescrape()
         Dim tempstring As String = ""
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
             MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
             Exit Sub
@@ -7780,8 +7776,8 @@ Public Class Form1
                     If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
-                            Dim hours As Integer
-                            Dim minutes As Integer
+                            Dim hours As Integer = 0
+                            Dim minutes As Integer = 0
                             tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
@@ -8943,9 +8939,9 @@ Public Class Form1
                                 movietemplate.filedetails = Preferences.Get_HdTags(mediapath)
                                 Try
                                     Dim tempstring As String
-                                    Dim tempint As Integer
-                                    Dim hours As Integer
-                                    Dim minutes As Integer
+                                    Dim tempint As Integer = 0
+                                    Dim hours As Integer = 0
+                                    Dim minutes As Integer = 0
                                     tempstring = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
                                     tempint = tempstring.IndexOf("h")
                                     If tempint <> -1 Then
@@ -9524,7 +9520,7 @@ Public Class Form1
     End Sub
 
     Private Sub bckgrounddroppedfiles_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrounddroppedfiles.DoWork
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim tempstring As String = ""
         globalThreadCounter += 1
         Dim added As Boolean = False
@@ -9624,7 +9620,7 @@ Public Class Form1
                         ElseIf newdetails.nfopathandfilename.IndexOf("/") <> -1 Then
                             paths = newdetails.nfopathandfilename.Split("/")
                         End If
-                        Dim depthecount As Integer
+                        Dim depthecount As Integer = 0
                         depthecount = paths.GetUpperBound(0)
                         newdetails.title = Nothing
 
@@ -10102,8 +10098,8 @@ Public Class Form1
                                 If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
-                                        Dim hours As Integer
-                                        Dim minutes As Integer
+                                        Dim hours As Integer = 0
+                                        Dim minutes As Integer = 0
                                         tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
                                         tempint = tempstring.IndexOf("h")
                                         If tempint <> -1 Then
@@ -11099,8 +11095,7 @@ Public Class Form1
         'tootip4.Active = True
         'tootip5.SetToolTip(Me.ComboBox1, "")
         Dim MousePositionInClientCoords As Point = New Point(e.X, e.Y)
-        Dim indexunderthemouse As Integer
-        indexunderthemouse = Me.MovieListComboBox.IndexFromPoint(MousePositionInClientCoords)
+        Dim indexunderthemouse As Integer = Me.MovieListComboBox.IndexFromPoint(MousePositionInClientCoords)
         If indexunderthemouse > -1 Then
             Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
             Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).Value
@@ -11812,7 +11807,7 @@ Public Class Form1
 
         Dim tempstring As String = sender.name
         Dim tempstring2 As String = String.Empty
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         If tempstring.IndexOf("poster") <> -1 Then
             tempstring = tempstring.Replace("poster", "")
             tempint = Convert.ToDecimal(tempstring)
@@ -11946,7 +11941,7 @@ Public Class Form1
             Application.DoEvents()
 
             Dim tempstring As String
-            Dim tempint As Integer
+            Dim tempint As Integer = 0
             Dim tempstring2 As String = String.Empty
             Dim allok As Boolean = False
             For Each button As Control In Me.Panel2.Controls
@@ -12661,7 +12656,7 @@ Public Class Form1
 
     Private Sub mov_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
         Dim tempstring As String = sender.name
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim tempstring2 As String = tempstring
         Dim allok As Boolean = False
         tempstring = tempstring.Replace("postercheckbox", "")
@@ -13227,7 +13222,7 @@ Public Class Form1
 
         Try
             Dim tempstring As String = ""
-            Dim tempint As Integer
+            Dim tempint As Integer = 0
             tempstring = WebBrowser1.Url.ToString
 
 
@@ -13593,8 +13588,8 @@ Public Class Form1
                 If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
 
                     '1h 24mn 48s 546ms
-                    Dim hours As Integer
-                    Dim minutes As Integer
+                    Dim hours As Integer = 0
+                    Dim minutes As Integer = 0
                     tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
                     tempint = tempstring.IndexOf("h")
                     If tempint <> -1 Then
@@ -15349,7 +15344,7 @@ Public Class Form1
             End If
 
         ElseIf tab = "TVDB" Then
-            Dim TvdbId As Integer
+            Dim TvdbId As Integer = 0
             If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
                 If Preferences.externalbrowser = True Then
                     Me.TabControl3.SelectedIndex = tvCurrentTabIndex
@@ -16672,15 +16667,14 @@ Public Class Form1
                 End If
                 If pattern = "*.rar" Then
                     Dim tempmovie As String = String.Empty
-                    Dim tempint2 As Integer
+                    Dim tempint2 As Integer = 0
                     Dim tempmovie2 As String = FilePath
                     If IO.Path.GetExtension(tempmovie2).ToLower = ".rar" Then
                         If IO.File.Exists(tempmovie2) = True Then
                             If IO.File.Exists(tempmovie) = False Then
                                 Dim rarname As String = tempmovie2
-                                Dim SizeOfFile As Integer
+                                Dim SizeOfFile As Integer = FileLen(rarname)
                                 tempint2 = Convert.ToInt32(Preferences.rarsize) * 1048576
-                                SizeOfFile = FileLen(rarname)
                                 If SizeOfFile > tempint2 Then
                                     Dim mat As Match
                                     mat = Regex.Match(rarname, "\.part[0-9][0-9]?[0-9]?[0-9]?.rar")
@@ -17030,7 +17024,7 @@ Public Class Form1
         Application.DoEvents()
 
         Dim miscvar As String = String.Empty
-        Dim miscint As Integer
+        Dim miscint As Integer = 0
         Dim miscvar2 As String = String.Empty
         Dim allok As Boolean = False
         For Each button As Control In Me.Panel13.Controls
@@ -17410,7 +17404,7 @@ Public Class Form1
             Exit Sub
         End If
 
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim tempstring As String = ""
         If Show IsNot Nothing Then
             Dim changed As Integer = 0
@@ -17553,7 +17547,7 @@ Public Class Form1
 
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
 
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim tempstring As String = ""
         If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
@@ -18051,7 +18045,7 @@ Public Class Form1
                     tvtempstring = "Season " & seasonno & ", Episode " & episodeno & ":"
                     For g = 1 To tvfblinecount
                         If tvdbwebsource(g).indexof(tvtempstring) <> -1 Then
-                            Dim tvtempint As Integer
+                            Dim tvtempint As Integer = 0
                             tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
                             If tvtempint <> -1 Then
                                 tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
@@ -18239,8 +18233,8 @@ Public Class Form1
                     If WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                         Try
                             '1h 24mn 48s 546ms
-                            Dim hours As Integer
-                            Dim minutes As Integer
+                            Dim hours As Integer = 0
+                            Dim minutes As Integer = 0
                             tempstring = WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
@@ -18339,7 +18333,7 @@ Public Class Form1
 
     Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RenameEp.Click
         Dim renamelog As String = ""
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
 
         Dim oldname As String = ""
 
@@ -18981,7 +18975,7 @@ Public Class Form1
     Private Sub tv_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
         PictureBox13.Image = Nothing
         Dim tempstring As String = sender.name
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         Dim tempstring2 As String = tempstring
         Dim allok As Boolean = False
         tempstring = tempstring.Replace("postercheckbox", "")
@@ -20993,9 +20987,9 @@ Public Class Form1
                                             tempstring = tempstring.TrimStart("|")
                                             tempstring = tempstring.TrimEnd("|")
                                             Dim tvtempstring2 As String
-                                            Dim tvtempint As Integer
+                                            Dim tvtempint As Integer = 0
                                             Dim a() As String
-                                            Dim j As Integer
+                                            Dim j As Integer = 0
                                             tvtempstring2 = ""
                                             a = tempstring.Split("|")
                                             tvtempint = a.GetUpperBound(0)
@@ -21952,8 +21946,8 @@ Public Class Form1
         Dim theFolderBrowser As New FolderBrowserDialog
         Dim strfolder As String
         Dim tempstring3 As String
-        Dim tempint As Integer
-        Dim tempint2 As Integer
+        Dim tempint As Integer = 0
+        Dim tempint2 As Integer = 0
         theFolderBrowser.Description = "Please Select Root Folder of the TV Shows You Wish To Add to DB"
         theFolderBrowser.ShowNewFolderButton = True
         theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
@@ -24396,7 +24390,7 @@ Public Class Form1
             End If
         Next
         Dim done As Boolean = False
-        Dim tempint As Integer
+        Dim tempint As Integer = 0
         For f = 1 To 1000
             Dim tempstring2 As String = applicationPath & "\Settings\"
             Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
@@ -24522,7 +24516,7 @@ Public Class Form1
         End If
         Dim tempint As Integer = MessageBox.Show("Removing a profile will delete all associated cache files and settings," & vbCrLf & "Are you sure you want to remove the selected profile", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If tempint = DialogResult.Yes Then
-            Dim tempint2 As Integer
+            Dim tempint2 As Integer = 0
             For f = 0 To profileStruct.profilelist.Count - 1
 
                 If profileStruct.profilelist(f).profilename = ListBox13.SelectedItem Then
@@ -26906,7 +26900,7 @@ Public Class Form1
                         Try
                             frmProgSplash.Label1.Text &= " - Scraping..."
                             Dim tempstring As String
-                            Dim tempint As Integer
+                            Dim tempint As Integer = 0
                             Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim newfiledetails As New FullFileDetails
                             If tempname <> Nothing Then newfiledetails = Preferences.Get_HdTags(tempname)
@@ -26914,8 +26908,8 @@ Public Class Form1
                                 Try
                                     '1h 24mn 48s 546ms
                                     frmProgSplash.Label1.Text &= "OK!"
-                                    Dim hours As Integer
-                                    Dim minutes As Integer
+                                    Dim hours As Integer = 0
+                                    Dim minutes As Integer = 0
                                     tempstring = newfiledetails.filedetails_video.DurationInSeconds.Value
                                     tempint = tempstring.IndexOf("h")
                                     If tempint <> -1 Then
@@ -28222,7 +28216,7 @@ Public Class Form1
             Application.DoEvents()
 
             Dim tempstring As String = String.Empty
-            Dim tempint As Integer
+            Dim tempint As Integer = 0
             Dim tempstring2 As String = String.Empty
             Dim allok As Boolean = False
             For Each button As Control In Me.Panel2.Controls
@@ -28876,9 +28870,9 @@ Public Class Form1
     End Sub
 
     Private Sub tvbckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles tvbckrescrapewizard.DoWork
-        Dim showprocesscount As Integer
+        Dim showprocesscount As Integer = 0
         Dim progresstext As String = ""
-        Dim progress As Integer
+        Dim progress As Integer = 0
         Dim progcount As Integer = 0
         Dim done As Integer = 0
         For f = Cache.TvCache.Shows.Count - 1 To 0 Step -1
@@ -29627,9 +29621,9 @@ Public Class Form1
                                 If listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                                     Try
                                         '1h 24mn 48s 546ms
-                                        Dim tempint As Integer
-                                        Dim hours As Integer
-                                        Dim minutes As Integer
+                                        Dim tempint As Integer = 0
+                                        Dim hours As Integer = 0
+                                        Dim minutes As Integer = 0
                                         Dim tempstring As String
                                         tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
                                         tempint = tempstring.IndexOf("h")
