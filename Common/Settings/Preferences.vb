@@ -1567,9 +1567,9 @@ Public Class Preferences
             workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
             workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
             If workingfiledetails.filedetails_video.Width <> Nothing Then
-                If IsNumeric(workingfiledetails.filedetails_video.Width) Then
+                If IsNumeric(workingfiledetails.filedetails_video.Width.Value) Then
                     If workingfiledetails.filedetails_video.Height <> Nothing Then
-                        If IsNumeric(workingfiledetails.filedetails_video.Height) Then
+                        If IsNumeric(workingfiledetails.filedetails_video.Height.Value) Then
                             '                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
                             '                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
                             '                            Dim aspect As Decimal

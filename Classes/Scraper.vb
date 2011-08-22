@@ -713,7 +713,7 @@ Public Class Classimdb
 
 
                     'rating
-                    If webpage(f).IndexOf("/<span itemprop=""ratingValue"">10</span>") <> -1 Then
+                    If webpage(f).IndexOf("ratingValue") <> -1 Then
                         Try
                             Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
                             If M.Success = True Then
@@ -726,7 +726,6 @@ Public Class Classimdb
                         Catch
                             totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
                         End Try
-
                     End If
 
                     If webpage(f).IndexOf("<strong>Top 250 #") <> -1 Then
@@ -973,8 +972,6 @@ Public Class Classimdb
                             Else
                                 movienfoarray = "scraper error"
                             End If
-                            'webpage(f) = webpage(f).Replace(" votes</a>)", "")
-                            'movienfoarray = webpage(f).Substring(webpage(f).LastIndexOf(">") + 1, webpage(f).Length - webpage(f).LastIndexOf(">") - 1)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<votes>" & movienfoarray & "</votes>" & vbCrLf
                         Catch
@@ -984,28 +981,32 @@ Public Class Classimdb
 
                     'outline
                     ''If webpage(f).IndexOf("<p>") <> -1 Then
-                    If webpage(f).IndexOf("<p>").Equals(0) And webpage(f + 1).IndexOf("<p").Equals(0) Then
+                    If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
                         Try
                             'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
                             'movienfoarray = webpage(f + 1)
                             movienfoarray = ""
-                            Dim endofoutline = f + 1
-                            For endofoutline = (f + 1) To webpage.Count - 2
-                                If webpage(endofoutline).IndexOf("</p>").Equals(0) And webpage(endofoutline + 1).IndexOf("</p>").Equals(0) Then
+                            Dim endofoutline = f
+                            For endofoutline = (f) To webpage.Count - 2
+                                movienfoarray = movienfoarray & webpage(endofoutline)
+                                If webpage(endofoutline).IndexOf("</p>") <> -1 Then
                                     Exit For
-                                Else
-                                    movienfoarray = movienfoarray & webpage(endofoutline)
                                 End If
                             Next
                             If movienfoarray.Length > 0 Then
-                                movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
-                                ' Some outlines are a partial listing and link to the plot summary
-                                Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
-                                If erasepos <> -1 Then
-                                    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
+                                'movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
+                                '' Some outlines are a partial listing and link to the plot summary
+                                'Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
+                                'If erasepos <> -1 Then
+                                '    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
+                                'End If
+                                Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+                                If M.Success = True Then
+                                    movienfoarray = M.Groups(1).Value
+                                Else
+                                    movienfoarray = "scraper error"
                                 End If
                                 movienfoarray = specchars(movienfoarray.Trim())
-                                'movienfoarray = encodespecialchrs(movienfoarray.Trim())
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
                             Else
@@ -1018,13 +1019,18 @@ Public Class Classimdb
                     End If
 
                     'premiered
-                    If webpage(f).IndexOf("<h4 class=""inline"">Release Date") <> -1 Then
+                    If webpage(f).IndexOf("datePublished") <> -1 Then
                         Try
-                            movienfoarray = webpage(f + 1)
-                            movienfoarray = specchars(movienfoarray)
+                            Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
+                            End If
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
                         Catch
+                            totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
                         End Try
                     End If
 
@@ -1057,19 +1063,36 @@ Public Class Classimdb
                     '</div>
                     'country
                     If webpage(f).IndexOf("class=""inline"">Countr") <> -1 Then
+                        'Try
+                        '    For g = 1 To 5
+                        '        If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                        '        If webpage(f + g).IndexOf("</a>") <> -1 Then
+                        '            movienfoarray = webpage(f + g)
+                        '            movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1, movienfoarray.LastIndexOf("<") - movienfoarray.IndexOf(">") - 1)
+                        '            movienfoarray = specchars(movienfoarray)
+                        '            movienfoarray = encodespecialchrs(movienfoarray)
+                        '            totalinfo = totalinfo & "<country>" & movienfoarray & "</country>" & vbCrLf
+                        '            Exit For
+                        '        End If
+                        '    Next
+                        'Catch
+                        'End Try
                         Try
+                            tempstring = ""
                             For g = 1 To 5
                                 If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("</a>") <> -1 Then
-                                    movienfoarray = webpage(f + g)
-                                    movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1, movienfoarray.LastIndexOf("<") - movienfoarray.IndexOf(">") - 1)
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.+)</a>")
+                                If M.Success = True Then
+                                    movienfoarray = M.Groups(1).Value
                                     movienfoarray = specchars(movienfoarray)
                                     movienfoarray = encodespecialchrs(movienfoarray)
-                                    totalinfo = totalinfo & "<country>" & movienfoarray & "</country>" & vbCrLf
+                                    tempstring = tempstring & "<country>" & movienfoarray & "</country>" & vbCrLf
                                     Exit For
                                 End If
                             Next
+                            totalinfo = totalinfo & tempstring
                         Catch
+                            totalinfo = totalinfo & "<country>scraper error</country>" & vbCrLf
                         End Try
                     End If
                 Next

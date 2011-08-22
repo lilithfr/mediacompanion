@@ -346,7 +346,7 @@ Public Class ScraperFunctions
             fanarturl = fanarturl & temp & "+" & year
             fanarturl = fanarturl & "&sitesearch=www.impawards.com"
             'Try
-            Dim apple2(2000) As String
+            Dim apple2(3000) As String
             Dim fanartlinecount As Integer = 0
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
