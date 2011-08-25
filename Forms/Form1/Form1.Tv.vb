@@ -684,21 +684,22 @@ Partial Public Class Form1
             newtvshownfo.Load(True)
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
-                    If Preferences.fixnfoid And newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
+                    If Preferences.fixnfoid And newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then 'test if ID value should be fixed - i.e. IMDB value should be replaced by TVDB value
                         newtvshownfo.ImdbId.Value = newtvshownfo.TvdbId.Value
                         newtvshownfo.TvdbId.Value = newtvshownfo.IdTagCatch.Value
-                        Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True)
-                        Call tv_ShowLoad(newtvshownfo)
+                        Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True) 'save the nfo with the new ID data
+                        'Call tv_ShowLoad(newtvshownfo) ' reload the show to display..... SK: I think the current show will refresh anyway so this doesn't have to be called....
                     End If
-                    Cache.TvCache.Add(newtvshownfo)
-                    TvTreeview.Nodes.Add(newtvshownfo.ShowNode)
+                    Cache.TvCache.Add(newtvshownfo) 'add this show & episode data to the cache
+                    ' TvTreeview.Nodes.Add(newtvshownfo.ShowNode) 'Instead of updating the treeview directly we reload the treeview with the created cache at the end....
                 End If
             End If
             realTvPaths.Add(tvfolder)
         Next
         Windows.Forms.Application.DoEvents()
         Tv_CleanFolderList()
-        Tv_CacheSave("New Function")
+        Tv_CacheSave("New Function")    'save the cache file
+        tv_CacheLoad("New Function")    'reload the cache file to update the treeview
         If Preferences.fixnfoid Then CheckBox_fixNFOid.CheckState = CheckState.Unchecked
         Me.Enabled = True
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
@@ -1550,18 +1551,18 @@ Partial Public Class Form1
         Tv_CleanFolderList()
     End Sub
 
-    Public Sub Tv_CleanFolderList()
-        Dim TempList As List(Of String)
-        TempList = Preferences.tvFolders
-        Dim ReturnList As New List(Of String)
+    Public Sub Tv_CleanFolderList()   'not sure of the purpose of this......returnlist is never used.....
+        'Dim TempList As List(Of String)
+        'TempList = Preferences.tvFolders
+        'Dim ReturnList As New List(Of String)
 
-        For Each item In newTvFolders
-            If Not ReturnList.Contains(item) Then
-                ReturnList.Add(item)
-            End If
-        Next
+        'For Each item In newTvFolders
+        '    If Not ReturnList.Contains(item) Then
+        '        ReturnList.Add(item)
+        '    End If
+        'Next
 
-        Preferences.tvFolders = TempList
+        'Preferences.tvFolders = TempList
     End Sub
 
     Private Sub TV_EpisodeScraper(ByVal ListOfShows As List(Of TvShow), ByVal manual As Boolean)
