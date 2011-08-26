@@ -8,19 +8,33 @@ Public Class DownloadCache
 
     Public Shared Property CacheFolder As String
 
-    Private Shared Function DownloadFileToByte(ByVal URL As String) As Byte()
+    Public Shared Sub DownloadFileToDisk(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False)
+        Dim CacheFileName As String = GetCacheFileName(URL)
+        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
+
+        Utilities.EnsureFolderExists(CacheFolder)
 
         Dim size As Integer = 0
         Dim bytesRead As Integer = 0
         Dim req As HttpWebRequest = WebRequest.Create(URL)
+
+        If IO.File.Exists(CachePath) AndAlso Not ForceDownload Then
+            req.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
+        End If
+
         req.AllowAutoRedirect = True
         'req.AllowWriteStreamBuffering = True
 
         Dim res As HttpWebResponse = req.GetResponse()
 
+        If res.StatusCode = HttpStatusCode.NotModified Then
+            IO.File.Copy(CachePath, Path)
+
+            Exit Sub
+        End If
+
         Dim contents As Stream = res.GetResponseStream()
         Dim Reader As New StreamReader(contents)
-
 
         Dim buffer(res.ContentLength) As Byte
         Dim bytesToRead As Integer = CInt(buffer.Length - 1)
@@ -30,21 +44,6 @@ Public Class DownloadCache
             bytesToRead -= size
             bytesRead += size
         End While
-
-        Return buffer
-    End Function
-
-    Public Shared Sub DownloadFileToDisk(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False)
-        Dim CacheFileName As String = GetCacheFileName(URL)
-        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
-
-        Utilities.EnsureFolderExists(CacheFolder)
-
-        If IO.File.Exists(CachePath) AndAlso Not ForceDownload Then
-            Exit Sub
-        End If
-
-        Dim buffer() As Byte = DownloadFileToByte(URL)
 
         Utilities.EnsureFolderExists(Path.ToString.Replace(IO.Path.GetFileName(Path.ToString), ""))
 
@@ -78,13 +77,18 @@ Public Class DownloadCache
 
         Utilities.EnsureFolderExists(CacheFolder)
 
-        If IO.File.Exists(CachePath) AndAlso Not ForceDownload Then
-            Return IO.File.ReadAllText(CachePath)
-        End If
-
         Dim Http As HttpWebRequest = WebRequest.Create(URL)
+
+        Http.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
+
         Dim html As String
         Using WebResponse As HttpWebResponse = Http.GetResponse()
+
+            If IO.File.Exists(CachePath) AndAlso Not ForceDownload Then
+                If WebResponse.StatusCode = HttpStatusCode.NotModified Then
+                    Return IO.File.ReadAllText(CachePath)
+                End If
+            End If
 
             Dim responseStream As Stream = WebResponse.GetResponseStream()
             If (WebResponse.ContentEncoding.ToLower().Contains("gzip")) Then
