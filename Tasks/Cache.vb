@@ -1,16 +1,27 @@
 ﻿Imports System.Threading
+Imports System.ComponentModel
+
+Public Class Common
+    Public Shared Tasks As New TaskCache
+End Class
 
 Public Class TaskCache
-    Public Shared Tasks As New List(Of ITask)
-
-    Public Shared MainThread As New Thread(New ThreadStart(AddressOf RunTasks))
-    Public Shared Threads As New List(Of Threading.Thread)
-    Public Shared Property MaxThreads As Integer = 16
-
-    Public Shared Property Done As Boolean
+    Implements IList(Of ITask), System.ComponentModel.INotifyPropertyChanged
 
 
-    Public Shared Sub RunTasks()
+    Private Tasks As New List(Of ITask)
+
+    Public MainThread As New Thread(New ThreadStart(AddressOf RunTasks))
+    Public Threads As New List(Of Threading.Thread)
+    Public Property MaxThreads As Integer = 16
+
+    Public Property Done As Boolean
+
+    Public Sub StartTaskEngine()
+        MainThread.Start()
+    End Sub
+
+    Private Sub RunTasks()
         Do Until Done
             Try 'This Try block lets me be really lazy and ignore the fact that if a new task is created it breaks the enumeration and starts the whole process
                 For Each Task In Tasks
@@ -40,8 +51,101 @@ Public Class TaskCache
             Finally
                 Thread.Sleep(1)
             End Try
+            Me.NotifyPropertyChanged("UnrunTaskCount")
+            Me.NotifyPropertyChanged("UserWaitTaskCount")
+            Me.NotifyPropertyChanged("CompletedTaskCount")
+
         Loop
     End Sub
+
+    Public Sub Add(item As ITask) Implements System.Collections.Generic.ICollection(Of ITask).Add
+        Tasks.Add(item)
+    End Sub
+
+    Public Sub Clear() Implements System.Collections.Generic.ICollection(Of ITask).Clear
+        Tasks.Clear()
+        Threads.Clear()
+    End Sub
+
+    Public Function Contains(item As ITask) As Boolean Implements System.Collections.Generic.ICollection(Of ITask).Contains
+        Return Tasks.Contains(item)
+    End Function
+
+    Public Sub CopyTo(array() As ITask, arrayIndex As Integer) Implements System.Collections.Generic.ICollection(Of ITask).CopyTo
+        Tasks.CopyTo(array)
+    End Sub
+
+    Public ReadOnly Property Count As Integer Implements System.Collections.Generic.ICollection(Of ITask).Count
+        Get
+            Return Tasks.Count
+        End Get
+    End Property
+
+    Public ReadOnly Property IsReadOnly As Boolean Implements System.Collections.Generic.ICollection(Of ITask).IsReadOnly
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Function Remove(item As ITask) As Boolean Implements System.Collections.Generic.ICollection(Of ITask).Remove
+        Return Tasks.Remove(item)
+    End Function
+
+    Public Function GetEnumerator() As System.Collections.Generic.IEnumerator(Of ITask) Implements System.Collections.Generic.IEnumerable(Of ITask).GetEnumerator
+        Return Tasks.GetEnumerator
+    End Function
+
+    Public Function IndexOf(item As ITask) As Integer Implements System.Collections.Generic.IList(Of ITask).IndexOf
+        Return Tasks.IndexOf(item)
+    End Function
+
+    Public Sub Insert(index As Integer, item As ITask) Implements System.Collections.Generic.IList(Of ITask).Insert
+        Tasks.Insert(index, item)
+    End Sub
+
+    Default Public Property Item(index As Integer) As ITask Implements System.Collections.Generic.IList(Of ITask).Item
+        Get
+            Return Tasks.Item(index)
+        End Get
+        Set(value As ITask)
+            Tasks.Item(index) = value
+        End Set
+    End Property
+
+    Public Sub RemoveAt(index As Integer) Implements System.Collections.Generic.IList(Of ITask).RemoveAt
+        Tasks.RemoveAt(index)
+    End Sub
+
+    Public Function GetEnumerator1() As System.Collections.IEnumerator Implements System.Collections.IEnumerable.GetEnumerator
+        Return Me.GetEnumerator
+    End Function
+
+    Public ReadOnly Property UnrunTaskCount
+        Get
+            Dim Count = (From Task As ITask In Tasks Where Task.State = TaskState.NotStarted Or Task.State = TaskState.WaitingForDependancies).Count
+            Return Count
+        End Get
+    End Property
+
+    Public ReadOnly Property UserWaitTaskCount
+        Get
+            Dim Count = (From Task As ITask In Tasks Where Task.State = TaskState.WaitingForUserInput).Count
+            Return Count
+        End Get
+    End Property
+
+    Public ReadOnly Property CompletedTaskCount
+        Get
+            Dim Count = (From Task As ITask In Tasks Where Task.State = TaskState.Completed Or Task.State = TaskState.CriticalFault Or Task.State = TaskState.Fault).Count
+            Return Count
+        End Get
+    End Property
+
+    Public Event PropertyChanged(sender As Object, e As System.ComponentModel.PropertyChangedEventArgs) Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+    Private Sub NotifyPropertyChanged(ByVal info As String)
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(info))
+    End Sub
+
 End Class
 
 'Private Sub cmdTasks_Refresh_Click(sender As System.Object, e As System.EventArgs) Handles cmdTasks_Refresh.Click

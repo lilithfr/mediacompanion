@@ -1,5 +1,4 @@
-﻿Imports Tasks
-Imports Media_Companion
+﻿Imports Media_Companion
 
 Public Class TvSeason
     Inherits ProtoXML.ProtoFile

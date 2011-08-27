@@ -9,7 +9,7 @@
     </SchemaVersion>
     <ProjectGuid>{34E2C884-046F-4E79-9FCD-D67DC9592489}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Tasks</RootNamespace>
+    <RootNamespace>Media_Companion</RootNamespace>
     <AssemblyName>Tasks</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
@@ -65,6 +65,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlankTask.vb" />
     <Compile Include="Cache.vb" />
     <Compile Include="TaskBase.vb" />
     <Compile Include="DownloadFileTask.vb" />
