@@ -1,6 +1,5 @@
 ﻿Imports System.Net
 Imports System.IO
-Imports Tasks
 Imports Media_Companion
 Imports System.Text.RegularExpressions
 Imports Media_Companion.Tvdb
@@ -189,7 +188,7 @@ Public Class ScrapeShowTask
             ScrapeEpTask.Show = Me.Show
             ScrapeEpTask.VideoPath = Item
             If Utilities.VideoExtensions.Contains(IO.Path.GetExtension(Item)) Then
-                Tasks.TaskCache.Tasks.Add(ScrapeEpTask)
+                Common.Tasks.Add(ScrapeEpTask)
             End If
         Next
 

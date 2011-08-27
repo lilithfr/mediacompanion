@@ -27,7 +27,7 @@ Partial Public Class TvShow
     Public Sub Scrape(Optional ByVal IgnoreCache As Boolean = False)
         Dim ScrapeTask As ScrapeShowTask = New ScrapeShowTask(Me)
 
-        Tasks.TaskCache.Tasks.Add(ScrapeTask)
+        Common.Tasks.Add(ScrapeTask)
 
     End Sub
 

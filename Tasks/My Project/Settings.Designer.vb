@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Tasks.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Media_Companion.My.MySettings
             Get
-                Return Global.Tasks.My.MySettings.Default
+                Return Global.Media_Companion.My.MySettings.Default
             End Get
         End Property
     End Module
