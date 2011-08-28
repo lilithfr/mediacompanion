@@ -670,6 +670,16 @@ Partial Public Class Form1
         Return True
     End Function
     Private Sub tv_CacheRebuild()
+        frmSplash2.Text = "Rebuild TV Shows..."
+        frmSplash2.Label1.Text = "Searching TV Folders....."
+        frmSplash2.Label1.Visible = True
+        frmSplash2.Label2.Visible = True
+        frmSplash2.ProgressBar1.Visible = True
+        frmSplash2.ProgressBar1.Maximum = Preferences.tvFolders.Count - 1
+        frmSplash2.Show()
+        Application.DoEvents()
+
+
         tv_RebuildLog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
         Tv_CleanFolderList()
         TextBox_TotTVShowCount.Text = ""
@@ -678,7 +688,12 @@ Partial Public Class Form1
         Cache.TvCache.Clear()
         TvTreeview.Nodes.Clear()
         realTvPaths.Clear()
+        Dim prgCount As Integer = 0
         For Each tvfolder In Preferences.tvFolders
+            frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
+            frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
+            prgCount += 1
+            Application.DoEvents()
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
             newtvshownfo.Load(True)
@@ -696,14 +711,20 @@ Partial Public Class Form1
             End If
             realTvPaths.Add(tvfolder)
         Next
-        Windows.Forms.Application.DoEvents()
+        frmSplash2.Label2.Visible = False
+
         Tv_CleanFolderList()
+        frmSplash2.Label1.Text = "Saving Cache..."
+        Windows.Forms.Application.DoEvents()
         Tv_CacheSave("New Function")    'save the cache file
+        frmSplash2.Label1.Text = "Loading Cache..."
+        Windows.Forms.Application.DoEvents()
         tv_CacheLoad("New Function")    'reload the cache file to update the treeview
         If Preferences.fixnfoid Then CheckBox_fixNFOid.CheckState = CheckState.Unchecked
         Me.Enabled = True
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+        frmSplash2.Hide()
     End Sub
 
     Private Sub tv_ShowListLoad()
