@@ -13973,7 +13973,7 @@ Public Class Form1
         WebBrowser1.GoBack()
     End Sub
 
-    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.Click
+    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseDown
         'crop top
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -13983,7 +13983,7 @@ Public Class Form1
         Timer3.Enabled = True
     End Sub
 
-    Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.Click
+    Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseDown
         'crop bottom
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -13993,7 +13993,7 @@ Public Class Form1
         Timer3.Enabled = True
     End Sub
 
-    Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.Click
+    Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseDown
         'crop left
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
@@ -14003,7 +14003,7 @@ Public Class Form1
         Timer3.Enabled = True
     End Sub
 
-    Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.Click
+    Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseDown
         'crop right
         If PictureBox3.Image Is Nothing Then Exit Sub
         posterThumbedItsMade = True
