@@ -2339,6 +2339,7 @@ Public Class Form1
         outlinetxt.Text = ""
         plottxt.Text = ""
         taglinetxt.Text = ""
+        txtStars.Text = ""
         genretxt.Text = ""
         creditstxt.Text = ""
         directortxt.Text = ""
@@ -2405,6 +2406,7 @@ Public Class Form1
                 outlinetxt.Text = workingMovieDetails.fullmoviebody.outline
                 plottxt.Text = workingMovieDetails.fullmoviebody.plot
                 taglinetxt.Text = workingMovieDetails.fullmoviebody.tagline
+                txtStars.Text = workingMovieDetails.fullmoviebody.stars
                 genretxt.Text = workingMovieDetails.fullmoviebody.genre
                 creditstxt.Text = workingMovieDetails.fullmoviebody.credits
                 directortxt.Text = workingMovieDetails.fullmoviebody.director
@@ -7940,6 +7942,7 @@ Public Class Form1
             workingMovieDetails.fullmoviebody.outline = outlinetxt.Text
             workingMovieDetails.fullmoviebody.plot = plottxt.Text
             workingMovieDetails.fullmoviebody.tagline = taglinetxt.Text
+            workingMovieDetails.fullmoviebody.stars = txtStars.Text
             workingMovieDetails.fullmoviebody.mpaa = certtxt.Text
             workingMovieDetails.fullmoviebody.sortorder = TextBox34.Text
             If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "-None-"
@@ -8049,6 +8052,9 @@ Public Class Form1
                 End If
                 If taglinetxt.Text <> "" Then
                     movie.fullmoviebody.tagline = taglinetxt.Text
+                End If
+                If txtStars.Text <> "" Then
+                    movie.fullmoviebody.stars = txtStars.Text
                 End If
                 If ratingtxt.Text <> "" Then
                     movie.fullmoviebody.rating = ratingtxt.Text
@@ -11225,6 +11231,7 @@ Public Class Form1
                             outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
                             plottxt.Text = ""
                             taglinetxt.Text = ""
+                            txtStars.Text = ""
                             genretxt.Text = ""
                             creditstxt.Text = ""
                             directortxt.Text = ""
@@ -11248,6 +11255,7 @@ Public Class Form1
                 outlinetxt.Text = ""
                 plottxt.Text = ""
                 taglinetxt.Text = ""
+                txtStars.Text = ""
                 genretxt.Text = ""
                 creditstxt.Text = ""
                 directortxt.Text = ""
@@ -11268,6 +11276,7 @@ Public Class Form1
                 outlinetxt.Text = ""
                 plottxt.Text = ""
                 taglinetxt.Text = ""
+                txtStars.Text = ""
                 genretxt.Text = ""
                 creditstxt.Text = ""
                 directortxt.Text = ""
