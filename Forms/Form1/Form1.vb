@@ -25604,6 +25604,7 @@ Public Class Form1
                     ComboBox3.Font = newFont
                     MovieListComboBox.Font = newFont
                     plottxt.Font = newFont
+                    txtStars.Font = newFont
                     'titletxt.Font = newFont
                     ComboBox3.Font = newFont
                     ComboBox5.Font = newFont
