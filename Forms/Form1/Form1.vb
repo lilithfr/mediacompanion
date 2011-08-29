@@ -13972,45 +13972,37 @@ Public Class Form1
     Private Sub Button12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button12.Click
         WebBrowser1.GoBack()
     End Sub
-
-    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseDown
-        'crop top
-        If PictureBox3.Image Is Nothing Then Exit Sub
+    Private Sub mov_PosterTimerSet(ByVal direction As String)
         posterThumbedItsMade = True
         Button27.Visible = True
         Button28.Visible = True
-        posterCropString = "top"
-        Timer3.Enabled = True
+        posterCropString = direction
+        Timer3.Interval = 1000 ' timer is set initially to 1000ms, user clicks & holds for over 1sec, then timer fires for repeat action, timer sets itself to 150ms when activated
+        mov_PosterCrop() ' we do a crop immediately that the button is pushed down, repeat will happen if button is not MouseUp which disables the timer
+        Timer3.Enabled = True   'start timer, repeat will happen after 1000ms unless mouse up
+    End Sub
+    Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseDown
+        'crop top
+        If PictureBox3.Image Is Nothing Then Exit Sub
+        mov_PosterTimerSet("top")
     End Sub
 
     Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseDown
         'crop bottom
         If PictureBox3.Image Is Nothing Then Exit Sub
-        posterThumbedItsMade = True
-        Button27.Visible = True
-        Button28.Visible = True
-        posterCropString = "bottom"
-        Timer3.Enabled = True
+        mov_PosterTimerSet("bottom")
     End Sub
 
     Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseDown
         'crop left
         If PictureBox3.Image Is Nothing Then Exit Sub
-        posterThumbedItsMade = True
-        Button27.Visible = True
-        Button28.Visible = True
-        posterCropString = "left"
-        Timer3.Enabled = True
+        mov_PosterTimerSet("left")
     End Sub
 
     Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseDown
         'crop right
         If PictureBox3.Image Is Nothing Then Exit Sub
-        posterThumbedItsMade = True
-        Button27.Visible = True
-        Button28.Visible = True
-        posterCropString = "right"
-        Timer3.Enabled = True
+        mov_PosterTimerSet("right")
     End Sub
 
     Private Sub Button28_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button28.Click
@@ -14062,61 +14054,32 @@ Public Class Form1
 
     End Sub
 
-    Private Sub mov_PosterImageCropTop()
-        If PictureBox3.Image Is Nothing Then Exit Sub
-        Dim imagewidth As Integer
-        Dim imageheight As Integer
-        imagewidth = PictureBox3.Image.Width
-        imageheight = PictureBox3.Image.Height
-        PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone
-        PictureBox3.SizeMode = PictureBoxSizeMode.Zoom
+    Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick   'timer from movie poster crop - used for repeat crop if buttom held down
+        Timer3.Interval = 75 'if this timer fires, then from now on we want it to fire quicker for repeat function
+        mov_PosterCrop()
     End Sub
-
-    Private Sub mov_PosterImageCropBottom()
-        If PictureBox3.Image Is Nothing Then Exit Sub
-        Dim imagewidth As Integer
-        Dim imageheight As Integer
-        imagewidth = PictureBox3.Image.Width
-        imageheight = PictureBox3.Image.Height
-        'PictureBox2.Image = moviethumb.Image
-        PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone
-        PictureBox3.SizeMode = PictureBoxSizeMode.Zoom
-    End Sub
-
-    Private Sub mov_PosterImageCropLeft()
-        If PictureBox3.Image Is Nothing Then Exit Sub
-        Dim imagewidth As Integer
-        Dim imageheight As Integer
-        imagewidth = PictureBox3.Image.Width
-        imageheight = PictureBox3.Image.Height
-        'PictureBox2.Image = moviethumb.Image
-        PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone
-        PictureBox3.SizeMode = PictureBoxSizeMode.Zoom
-    End Sub
-
-    Private Sub mov_PosterImageCropRight()
-        If PictureBox3.Image Is Nothing Then Exit Sub
-        Dim imagewidth As Integer
-        Dim imageheight As Integer
+    Private Sub mov_PosterCrop()
+        Dim imagewidth As Integer = PictureBox3.Image.Width
+        Dim imageheight As Integer = PictureBox3.Image.Height
         thumbedItsMade = True
-        imagewidth = PictureBox3.Image.Width
-        imageheight = PictureBox3.Image.Height
-        'PictureBox2.Image = moviethumb.Image
-        PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone
-        PictureBox3.SizeMode = PictureBoxSizeMode.Zoom
-    End Sub
 
-    Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick
-        If posterCropString = "top" Then Call mov_PosterImageCropTop()
-        If posterCropString = "bottom" Then Call mov_PosterImageCropBottom()
-        If posterCropString = "left" Then Call mov_PosterImageCropLeft()
-        If posterCropString = "right" Then Call mov_PosterImageCropRight()
+        Select Case posterCropString
+            Case "top"
+                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone()
+            Case "bottom"
+                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone()
+            Case "left"
+                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone()
+            Case "right"
+                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone()
+        End Select
+        PictureBox3.SizeMode = PictureBoxSizeMode.Zoom
+        Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
     End Sub
 
     Private Sub Button23_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -14127,7 +14090,6 @@ Public Class Form1
     Private Sub Button24_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -14138,7 +14100,6 @@ Public Class Form1
     Private Sub Button25_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -14149,7 +14110,6 @@ Public Class Form1
     Private Sub Button26_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseUp
         Try
             Timer3.Enabled = False
-            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
