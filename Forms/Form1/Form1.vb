@@ -7464,9 +7464,9 @@ Public Class Form1
                 body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 messbox.TextBox1.Text = "Get Trailer"
                 trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
-                Dim actors As String
+                'Dim actors As String
                 messbox.TextBox1.Text = "Get Actors"
-                actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
+                'actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
                 messbox.TextBox1.Text = "Processing..."
                 If body = "MIC" Then
                     workingMovieDetails.fullmoviebody.genre = "problem"
@@ -26703,26 +26703,27 @@ Public Class Form1
                         frmProgSplash.Label1.Refresh()
                         If IO.File.Exists(movie.fullpathandfilename) Then       'if nfo exists, & workingMovie contains wrong data, reload data from memory
                             If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
-                                workingMovie.filedate = movie.filedate
-                                workingMovie.filename = movie.foldername
-                                workingMovie.foldername = movie.foldername
-                                workingMovie.fullpathandfilename = movie.fullpathandfilename
-                                workingMovie.genre = movie.genre
-                                workingMovie.id = movie.id
-                                workingMovie.playcount = movie.playcount
-                                workingMovie.rating = movie.rating
-                                workingMovie.title = movie.title
-                                workingMovie.originaltitle = movie.originaltitle     'added 7/7/11 SK    these extras should be here I think?
-                                workingMovie.titleandyear = movie.titleandyear
-                                workingMovie.top250 = movie.top250
-                                workingMovie.year = movie.year
-                                workingMovie.plot = movie.plot            'added 7/7/11 SK
-                                workingMovie.movieset = movie.movieset  'added 7/7/11 SK
-                                workingMovie.createdate = movie.createdate  'added 7/7/11 SK
-                                workingMovie.missingdata1 = movie.missingdata1  'added 7/7/11 SK
-                                workingMovie.outline = movie.outline    'added 7/7/11 SK
-                                workingMovie.runtime = movie.runtime    'added 7/7/11 SK
-                                workingMovie.sortorder = movie.sortorder    'added 7/7/11 SK
+                                workingMovieDetails = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
+                                'workingMovie.filedate = movie.filedate
+                                'workingMovie.filename = movie.foldername
+                                'workingMovie.foldername = movie.foldername
+                                'workingMovie.fullpathandfilename = movie.fullpathandfilename
+                                'workingMovie.genre = movie.genre
+                                'workingMovie.id = movie.id
+                                'workingMovie.playcount = movie.playcount
+                                'workingMovie.rating = movie.rating
+                                'workingMovie.title = movie.title
+                                'workingMovie.originaltitle = movie.originaltitle     'added 7/7/11 SK    these extras should be here I think?
+                                'workingMovie.titleandyear = movie.titleandyear
+                                'workingMovie.top250 = movie.top250
+                                'workingMovie.year = movie.year
+                                'workingMovie.plot = movie.plot            'added 7/7/11 SK
+                                'workingMovie.movieset = movie.movieset  'added 7/7/11 SK
+                                'workingMovie.createdate = movie.createdate  'added 7/7/11 SK
+                                'workingMovie.missingdata1 = movie.missingdata1  'added 7/7/11 SK
+                                'workingMovie.outline = movie.outline    'added 7/7/11 SK
+                                'workingMovie.runtime = movie.runtime    'added 7/7/11 SK
+                                'workingMovie.sortorder = movie.sortorder    'added 7/7/11 SK
                                 'Call loadinfofile()                         'not sure why we call to display data when we will do it at end with new data
                             End If
                             Exit For

@@ -714,7 +714,7 @@ Public Class Classimdb
 
 
                     'rating
-                    If webpage(f).IndexOf("ratingValue") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""ratingValue") <> -1 Then
                         Try
                             Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
                             If M.Success = True Then
@@ -743,65 +743,46 @@ Public Class Classimdb
 
                     'director
                     If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Director") <> -1 Then
-                        Try
-                            movienfoarray = ""
-                            Dim listofdirectors As New List(Of String)
-                            listofdirectors.Clear()
-                            For g = 1 To 10
-                                'If webpage(f + g).IndexOf("<div") <> -1 Then Exit For
-                                'If webpage(f + g).IndexOf("Writer") <> -1 Then Exit For
-                                'If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
-                                '    If webpage(f + g).IndexOf("/name/nm") <> webpage(f + g).LastIndexOf("/name/nm") Then
-                                '        webpage(f + g + 1) = webpage(f + g).Replace(webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>") + 4), "")
-                                '        webpage(f + g) = webpage(f + g).Replace(webpage(f + g + 1), "")
-                                '    End If
-                                '    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                '    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                '    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                '    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                '    If webpage(f + g) <> "" Then
-                                '        listofdirectors.Add(webpage(f + g))
-                                '    End If
-                                'End If
-                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
-                                If M.Success = True And M.Groups(1).Length Then
+                        tempstring = ""
+                        For g = 1 To 10
+                            tempstring = tempstring & webpage(f + g)
+                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                        Next
+                        If tempstring.IndexOf("itemprop=""director") <> -1 Then
+                            Try
+                                movienfoarray = ""
+                                Dim listofdirectors As New List(Of String)
+                                listofdirectors.Clear()
+                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director""\s?>(.+?)</a>")
+                                Do While M.Success
                                     listofdirectors.Add(M.Groups(1).Value)
+                                    M = M.NextMatch
+                                Loop
+                                If listofdirectors.Count > 0 Then
+                                    For g = 0 To listofdirectors.Count - 1
+                                        If g = 0 Then
+                                            movienfoarray = listofdirectors(g)
+                                        Else
+                                            movienfoarray = movienfoarray & " / " & listofdirectors(g)
+                                        End If
+                                    Next
                                 End If
-                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                            Next
-                            For g = 0 To listofdirectors.Count - 1
-                                If g = 0 Then
-                                    movienfoarray = listofdirectors(g)
-                                Else
-                                    movienfoarray = movienfoarray & " / " & listofdirectors(g)
-                                End If
-                            Next
-                            movienfoarray = specchars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
-                        End Try
+                                movienfoarray = specchars(movienfoarray)
+                                movienfoarray = encodespecialchrs(movienfoarray)
+                                totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
+                            Catch
+                                totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
+                            End Try
+                        End If
                     End If
 
-                    'credits
+                    'credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
                     If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
                         Try
                             movienfoarray = ""
                             Dim listofwriters As New List(Of String)
                             listofwriters.Clear()
                             For g = 1 To 10
-                                'If webpage(f + 1).IndexOf("<div") <> -1 Then Exit For
-                                'If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
-
-                                '    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                '    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                '    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                '    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                '    If webpage(f + g) <> "" Then
-                                '        listofwriters.Add(webpage(f + g))
-                                '    End If
-                                'End If
                                 Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
                                 If M.Success = True And M.Groups(1).Length Then
                                     listofwriters.Add(M.Groups(1).Value)
@@ -904,7 +885,7 @@ Public Class Classimdb
                     End If
 
                     'runtime
-                    If webpage(f).IndexOf("duration") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
                         movienfoarray = ""
                         Try
                             Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
@@ -1015,7 +996,7 @@ Public Class Classimdb
                     End If
 
                     'premiered
-                    If webpage(f).IndexOf("datePublished") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
                         Try
                             Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
                             If M.Success = True Then
@@ -1300,8 +1281,8 @@ Public Class Classimdb
                     If scrapertempstring <> "" Then
                         scrapertempint = scrapertempint + 1
                         actors(scrapertempint, 0) = scrapertempstring
-                        actorcount = scrapertempint
                     End If
+                    actorcount = scrapertempint
                     If actorcount > maxactors Then
                         actorcount = maxactors
                     End If
