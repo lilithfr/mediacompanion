@@ -2202,7 +2202,7 @@ Partial Public Class Form1
                             If Preferences.enablehdtags = True Then
                                 progresstext &= " HD Tags..."
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
-
+                                singleepisode.Details.StreamDetails.Video = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath)).filedetails_video
                                 If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
 
                                     '1h 24mn 48s 546ms

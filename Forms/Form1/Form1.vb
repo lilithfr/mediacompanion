@@ -16492,10 +16492,10 @@ Public Class Form1
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
 
         tvScraperLog = tvScraperLog & "Saving episode" & vbCrLf
-        For Each Episode As Nfo.TvEpisode In alleps
-            Episode.Save()
-        Next
-
+        'For Each Episode As Nfo.TvEpisode In alleps
+        '    Episode.Save()
+        'Next
+        Call nfoFunction.saveepisodenfo(alleps, path)
         Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
 
         If (IO.File.Exists(ext) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
