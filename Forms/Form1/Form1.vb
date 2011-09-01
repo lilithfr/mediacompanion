@@ -11144,17 +11144,22 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
-        If MovieListComboBox.SelectedItems.Count < 2 Then               'if we haven't selected multiples, then right click will select whats under it for context menu
-            If e.Button = MouseButtons.Right Then
-                Dim pt As Point
-                pt.X = e.X
-                pt.Y = e.Y
-                MovieListComboBox.SelectionMode = SelectionMode.One     'this stops right click adding the selectio & makes it the only selection 
-                MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
-                MovieListComboBox.SelectionMode = SelectionMode.MultiExtended   'this returns the selection mode to 'our normal'
+        If e.Button = MouseButtons.Right Then
+            Dim newSelection As Boolean = True
+            Dim pt As Point
+            pt.X = e.X
+            pt.Y = e.Y
+            Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(pt)
+            'If more than one movie is selected, check if right-click is on the selection.
+            If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
+                newSelection = False
+            End If
+            'Otherwise, bring up the context menu for a single movie
+            If newSelection Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = ptIndex
             End If
         End If
-
     End Sub
 
     Private Sub ComboBox11_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox11.SelectedValueChanged
