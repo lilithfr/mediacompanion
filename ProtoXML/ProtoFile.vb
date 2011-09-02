@@ -119,13 +119,26 @@
 
         Dim ChildProperty As IProtoXChild
         Dim XElementList As New List(Of XElement)
-        For Each Child As XNode In Root.Nodes
-            If TypeOf Child Is XElement Then
-                XElementList.Add(Child)
-            Else
-                Dim Test As Boolean = False
-            End If
-        Next
+        If Root.Name = "multiepisodenfo" Then
+            For Each episode As XElement In Root.Nodes
+                For Each Child As XNode In episode.Nodes
+                    If TypeOf Child Is XElement Then
+                        XElementList.Add(Child)
+                    Else
+                        Dim Test As Boolean = False
+                    End If
+                Next
+
+            Next
+        Else
+            For Each Child As XNode In Root.Nodes
+                If TypeOf Child Is XElement Then
+                    XElementList.Add(Child)
+                Else
+                    Dim Test As Boolean = False
+                End If
+            Next
+        End If
 
         For Each Child As XElement In XElementList
             If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then

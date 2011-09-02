@@ -675,7 +675,7 @@ Partial Public Class Form1
         frmSplash2.Label1.Visible = True
         frmSplash2.Label2.Visible = True
         frmSplash2.ProgressBar1.Visible = True
-        frmSplash2.ProgressBar1.Maximum = Preferences.tvFolders.Count - 1
+        frmSplash2.ProgressBar1.Maximum = Preferences.tvFolders.Count ' - 1
         frmSplash2.Show()
         Application.DoEvents()
 
@@ -2202,12 +2202,16 @@ Partial Public Class Form1
                             If Preferences.enablehdtags = True Then
                                 progresstext &= " HD Tags..."
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                singleepisode.Details.StreamDetails.Video = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath)).filedetails_video
-                                If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                                Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
+                                singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                                For Each audioStream In fileStreamDetails.filedetails_audio
+                                    singleepisode.Details.StreamDetails.Audio.Add(audioStream)
+                                Next
 
+                                If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
                                     '1h 24mn 48s 546ms
-                                    Dim hours As Integer
-                                    Dim minutes As Integer
+                                    Dim hours As Integer = 0
+                                    Dim minutes As Integer = 0
                                     tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
                                     tempint = tempstring.IndexOf("h")
                                     If tempint <> -1 Then
