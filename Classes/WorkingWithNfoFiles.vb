@@ -1336,7 +1336,16 @@ Public Class WorkingWithNfoFiles
         '        Next
         '    End If
         'End If
+
+
+
         If listofepisodes.Count = 1 Then
+            'Hack to get ShowID with the data available at this point
+            Dim ThumbnailPath As String = listofepisodes(0).Thumbnail.FileName
+            Dim Split As String() = ThumbnailPath.Split("/")
+            Dim FoundShowID As String = Split(5)
+            'end hack
+
             Dim document As New XmlDocument
             Dim root As XmlElement
             Dim child As XmlElement
@@ -1545,6 +1554,10 @@ Public Class WorkingWithNfoFiles
             child.InnerText = listofepisodes(0).Runtime.Value
             root.AppendChild(child)
 
+            child = document.CreateElement("showid")
+            child.InnerText = FoundShowID
+            root.AppendChild(child)
+
             Dim actorstosave As Integer = listofepisodes(0).ListActors.Count
             If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
             For f = 0 To actorstosave - 1
@@ -1586,6 +1599,13 @@ Public Class WorkingWithNfoFiles
             root = document.CreateElement("multiepisodenfo")
             Dim done As Boolean = False
             For Each ep In listofepisodes
+
+                'Hack to get ShowID with the data available at this point
+                Dim ThumbnailPath As String = ep.Thumbnail.FileName 'this path contains the showID - we just need to pull it out of the string
+                Dim Split As String() = ThumbnailPath.Split("/")
+                Dim FoundShowID As String = Split(5) ' ShowID is section 5 from the thumbnail string
+                'end hack
+
                 child = document.CreateElement("episodedetails")
                 If done = False Then
                     'done = True
@@ -1777,6 +1797,10 @@ Public Class WorkingWithNfoFiles
                 childchild = document.CreateElement("runtime")
                 childchild.InnerText = ep.Runtime.Value
                 child.AppendChild(childchild)
+
+                child = document.CreateElement("showid")
+                child.InnerText = FoundShowID
+                root.AppendChild(child)
 
                 For Each actor In ep.ListActors
                     Try

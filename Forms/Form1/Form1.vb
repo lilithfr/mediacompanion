@@ -28613,33 +28613,8 @@ Public Class Form1
     'End Sub
 
     Private Sub tv_RebuildSelected(Show As TvShow)
-        messbox = New frmMessageBox("Rebuilding Selected Show", "", "Please Wait")
-        'remove old
-        messbox.Show()
-        messbox.Refresh()
-        Application.DoEvents()
-        ''messbox.Show()
-        'For Each nod In TvTreeview.Nodes
-        '    If nod.name = show Then
-        '        TvTreeview.Nodes.Remove(nod)
-        '        Exit For
-        '    End If
-        'Next
-        'For Each item In Cache.TvCache.Shows
-        '    If item.NfoFilePath = show Then
-        '        Cache.TvCache.Remove(item)
-        '        Exit For
-        '    End If
-        'Next
-
-        'newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
-
-        Show.Load()
-
-        messbox.Close()
-        'Call populatetvtree()
-
-        'Call Tv_CacheSave("New Function")
+        MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
+        'we need to utilise the already created code for cache rebuild but be able to send to it a single TV show to clear & rebuild....
     End Sub
 
     Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RebuildShow.Click
