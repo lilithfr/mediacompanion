@@ -3514,13 +3514,14 @@ media file is named according to supported
 MC naming conventions.</value>
   </data>
   <data name="Label157.Text" xml:space="preserve">
-    <value>The default behaviour is for MC to overwrite none compliant nfo files, you can change this below.
-If you turn this off, MC will not overwrite existing conflicting nfo's &amp;&amp; as such will not add those files.</value>
+    <value>The default behaviour is for MC to overwrite none compliant nfo files, you can change this
+below. If you turn this off, MC will not overwrite existing conflicting nfo's &amp;&amp; as such will
+not add those files.</value>
   </data>
   <data name="Label115.Text" xml:space="preserve">
-    <value>Media Companion can be used to playback media files, Use the options below to select what
-program you want to use for playback. To allow playback of multi-part media files Media
-Companion creates a m3u playlist.</value>
+    <value>Media Companion can be used to playback media files, Use the options below to select
+what program you want to use for playback. To allow playback of multi-part media files,
+Media Companion creates a m3u playlist.</value>
   </data>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start
