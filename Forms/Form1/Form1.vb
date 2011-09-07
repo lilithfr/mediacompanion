@@ -18550,8 +18550,9 @@ Public Class Form1
         tvposterpage = 0
         imdbposterlist.Clear()
         tvdbposterlist.Clear()
-        CheckBox8.Checked = True
-        CheckBox8.Visible = False
+        rbTVposter.Checked = True
+        rbTVposter.Enabled = False
+        rbTVbanner.Enabled = False
         ComboBox2.Items.Clear()
         tvobjects.Clear()
         TextBox31.Text = WorkingTvShow.Title.Value
@@ -18609,7 +18610,13 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim tempstring As String = ComboBox2.SelectedItem
         If tempstring = "Main Poster" Then
-            CheckBox8.Visible = True
+            rbTVposter.Enabled = True
+            rbTVbanner.Enabled = True
+            If Preferences.postertype = "banner" Then
+                rbTVbanner.Checked = True
+            Else
+                rbTVposter.Checked = True
+            End If
             Button53.Enabled = True
             If IO.File.Exists(WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")) Then
                 Dim bmp As New Bitmap(WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"))
@@ -18628,7 +18635,9 @@ Public Class Form1
             End If
         ElseIf tempstring = "Specials" Then
             Button53.Enabled = True
-            CheckBox8.Visible = False
+            rbTVposter.Enabled = True
+            rbTVposter.Checked = True
+            rbTVbanner.Enabled = False
             Dim path As String = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
             If IO.File.Exists(path) Then
                 workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
@@ -18660,7 +18669,9 @@ Public Class Form1
             End If
         ElseIf tempstring.IndexOf("Season") = 0 And tempstring.IndexOf("Season All") = -1 Then
             Button53.Enabled = True
-            CheckBox8.Visible = False
+            rbTVposter.Enabled = True
+            rbTVposter.Checked = True
+            rbTVbanner.Enabled = False
             Dim path As String = tempstring.Replace("Season ", "")
             path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season" & path & ".tbn")
             If IO.File.Exists(path) Then
@@ -18679,7 +18690,13 @@ Public Class Form1
                 Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             End If
         ElseIf tempstring = "Season All" Then
-            CheckBox8.Visible = True
+            rbTVposter.Enabled = True
+            rbTVbanner.Enabled = True
+            If Preferences.seasonall = "wide" Then
+                rbTVbanner.Checked = True
+            Else
+                rbTVposter.Checked = True
+            End If
             Button53.Enabled = False
             Dim path As String = ""
             path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
@@ -18764,18 +18781,22 @@ Public Class Form1
         If ComboBox2.SelectedItem.indexof("Specials") <> -1 Then
             tempseason = "0"
         End If
-        If ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And CheckBox8.Checked = True Then
+        'If ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And CheckBox8.Checked = True Then
+        If ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And rbTVposter.Checked = True Then
             tempseason = "poster"
-        ElseIf ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And CheckBox8.Checked = False Then
+            'ElseIf ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And CheckBox8.Checked = False Then
+        ElseIf ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And rbTVposter.Checked = False Then
             tempseason = "series"
         End If
         If tempseason = "poster" Or tempseason = "series" Then
             For Each poster In tvdbposterlist
-                If poster.bannerType = "poster" And CheckBox8.Checked = True Then
-                    If poster.bannerType <> "fanart" Then usedlist.Add(poster)
+                'If poster.bannerType = "poster" And CheckBox8.Checked = True Then
+                If poster.BannerType = "poster" And rbTVposter.Checked = True Then
+                    If poster.BannerType <> "fanart" Then usedlist.Add(poster)
                 End If
-                If poster.bannerType = "series" And CheckBox8.Checked = False Then
-                    If poster.bannerType <> "fanart" Then usedlist.Add(poster)
+                'If poster.bannerType = "series" And CheckBox8.Checked = False Then
+                If poster.BannerType = "series" And rbTVposter.Checked = False Then
+                    If poster.BannerType <> "fanart" Then usedlist.Add(poster)
                 End If
             Next
         Else
@@ -18846,7 +18867,8 @@ Public Class Form1
         Dim location As Integer = 0
         Dim itemcounter As Integer = 0
         Dim tempboolean As Boolean = True
-        If CheckBox8.Checked = True Or CheckBox8.Visible = False Then
+        'If CheckBox8.Checked = True Or CheckBox8.Visible = False Then
+        If rbTVposter.Checked = True Or rbTVbanner.Enabled = False Then
             For f = tempint - 1 To tempint2 - 1
                 If tempboolean = True Then
                     tvposterpicboxes() = New PictureBox()
@@ -18855,8 +18877,8 @@ Public Class Form1
                         .Width = 123
                         .Height = 168
                         .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = usedlist(f).smallUrl
-                        .Tag = usedlist(f).url
+                        .ImageLocation = usedlist(f).SmallUrl
+                        .Tag = usedlist(f).Url
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
                         .Name = "poster" & itemcounter.ToString
@@ -18886,8 +18908,8 @@ Public Class Form1
                         .Width = 123
                         .Height = 168
                         .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = usedlist(f).smallUrl
-                        .Tag = usedlist(f).url
+                        .ImageLocation = usedlist(f).SmallUrl
+                        .Tag = usedlist(f).Url
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
                         .Name = "poster" & itemcounter.ToString
@@ -18923,8 +18945,8 @@ Public Class Form1
                         .Width = 600
                         .Height = 114
                         .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = usedlist(f).smallUrl
-                        .Tag = usedlist(f).url
+                        .ImageLocation = usedlist(f).SmallUrl
+                        .Tag = usedlist(f).Url
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
                         .Name = "poster" & itemcounter.ToString
@@ -19052,15 +19074,18 @@ Public Class Form1
             Call tv_TvdbThumbsGet()
         End If
         For Each poster In tvdbposterlist
-            If CheckBox8.Visible = False Then
-                If poster.bannerType <> "fanart" And poster.bannerType <> "series" Then
+            'If CheckBox8.Visible = False Then
+            If rbTVbanner.Enabled = False Then
+                If poster.BannerType <> "fanart" And poster.BannerType <> "series" Then
                     usedlist.Add(poster)
                 End If
             Else
-                If CheckBox8.Checked = False And poster.bannerType = "series" Then
+                'If CheckBox8.Checked = False And poster.BannerType = "series" Then
+                If rbTVposter.Checked = False And poster.BannerType = "series" Then
                     usedlist.Add(poster)
-                ElseIf CheckBox8.Checked = True And poster.bannerType <> "fanart" Then
-                    If poster.bannerType <> "series" Then usedlist.Add(poster)
+                    'ElseIf CheckBox8.Checked = True And poster.BannerType <> "fanart" Then
+                ElseIf rbTVposter.Checked = True And poster.BannerType <> "fanart" Then
+                    If poster.BannerType <> "series" Then usedlist.Add(poster)
                 End If
 
             End If
