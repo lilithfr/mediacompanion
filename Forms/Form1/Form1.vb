@@ -22574,8 +22574,10 @@ Public Class Form1
     Private Sub mov_PreferencesSetup()
         If Preferences.enablehdtags = True Then
             CheckBox19.CheckState = CheckState.Checked
+            PanelDisplayRuntime.Enabled = True
         Else
             CheckBox19.CheckState = CheckState.Unchecked
+            PanelDisplayRuntime.Enabled = False
         End If
 
         If Preferences.resizefanart = 1 Then
@@ -22994,8 +22996,8 @@ Public Class Form1
 
 
 
-            RadioButton51.Visible = True
-            RadioButton52.Visible = True
+            RadioButton51.Enabled = True
+            RadioButton52.Enabled = True
             If Preferences.XBMC_Scraper = "imdb" Then
                 RadioButton51.Checked = True
                 GroupBox_IMDB_Scraper_Preferences.Enabled = True
@@ -23031,8 +23033,8 @@ Public Class Form1
             ListBox10.Enabled = True
             Button73.Enabled = True
             Button61.Enabled = True
-            RadioButton51.Visible = False
-            RadioButton52.Visible = False
+            RadioButton51.Enabled = False
+            RadioButton52.Enabled = False
         End If
     End Sub
 
@@ -23085,7 +23087,7 @@ Public Class Form1
         generalprefschanged = True
     End Sub
 
-    Private Sub chkbx_createfolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_createfolderjpg.CheckedChanged, CheckBox39.CheckedChanged
+    Private Sub chkbx_createfolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_createfolderjpg.CheckedChanged
         If chkbx_createfolderjpg.CheckState = CheckState.Checked Then
             Preferences.createfolderjpg = True
         Else
@@ -24768,10 +24770,24 @@ Public Class Form1
     Private Sub CheckBox19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox19.CheckedChanged
         If CheckBox19.CheckState = CheckState.Checked Then
             Preferences.enablehdtags = True
+            PanelDisplayRuntime.Enabled = True
         Else
             Preferences.enablehdtags = False
+            PanelDisplayRuntime.Enabled = False
         End If
         generalprefschanged = True
+    End Sub
+
+    Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeScraper.CheckedChanged
+        If rbRuntimeScraper.Checked = True Then
+            Preferences.movieRuntimeDisplay = "scraper"
+        End If
+    End Sub
+
+    Private Sub rbRuntimeFile_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeFile.CheckedChanged
+        If rbRuntimeFile.Checked = True Then
+            Preferences.movieRuntimeDisplay = "file"
+        End If
     End Sub
 
     Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
@@ -30319,8 +30335,8 @@ Public Class Form1
         Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
         Me.GroupBox_TVDB_Scraper_Preferences.BringToFront()
 
-        Me.RadioButton51.Visible = Preferences.movies_useXBMC_Scraper
-        Me.RadioButton52.Visible = Preferences.movies_useXBMC_Scraper
+        Me.RadioButton51.Enabled = Preferences.movies_useXBMC_Scraper
+        Me.RadioButton52.Enabled = Preferences.movies_useXBMC_Scraper
         Me.RadioButton51.Checked = CBool(Preferences.whatXBMCScraperIMBD)
 
         Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles

@@ -3164,10 +3164,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>347, 95</value>
   </metadata>
-  <data name="Label56.Text" xml:space="preserve">
-    <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
-If none of the above are correct, then alter the search term and search again.</value>
-  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>318, 56</value>
   </metadata>
@@ -3425,18 +3421,6 @@ The search for offline movies is not recursive, so make
 sure the folders you want added are in one of your
 offline movie folder roots.</value>
   </data>
-  <data name="Label102.Text" xml:space="preserve">
-    <value>If your movies are stored in individual folders, enabling
-this option will allow Media Companion to save the
-Poster as folder.jpg. This will allow XBMC to display
-the poster when browsing movies in file mode.</value>
-  </data>
-  <data name="Label148.Text" xml:space="preserve">
-    <value>If your movies are stored in individual folders, enabling
-this option will allow Media Companion to save the
-Poster as folder.jpg. This will allow XBMC to display
-the poster when browsing movies in file mode.</value>
-  </data>
   <data name="Label99.Text" xml:space="preserve">
     <value>Media Companion can attempt to automatically download
 a Poster when a movie is first scraped, if this option is
@@ -3449,6 +3433,10 @@ and fanart.jpg to keep compatability with other media managers.
 
 This is not reccomended since it breaks MCs ability to see the 
 media file, used for playback and filedetails information.</value>
+  </data>
+  <data name="Label56.Text" xml:space="preserve">
+    <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
+If none of the above are correct, then alter the search term and search again.</value>
   </data>
   <data name="Label81.Text" xml:space="preserve">
     <value>Root Folders are folders that contain

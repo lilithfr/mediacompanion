@@ -79,6 +79,7 @@ Public Class Preferences
     Public Shared episodeacrorsource As String
     Public Shared seasonall As String
     Public Shared tablesortorder As String
+    Public Shared movieRuntimeDisplay As String
 
     Public Shared intruntime As Boolean
     Public Shared autorenameepisodes As Boolean
@@ -190,6 +191,7 @@ Public Class Preferences
         Preferences.moviethumbpriority(1) = "themoviedb.org"
         Preferences.moviethumbpriority(2) = "Movie Poster DB"
         Preferences.moviethumbpriority(3) = "IMDB"
+        Preferences.movieRuntimeDisplay = "scraper"
 
         'TV
         Preferences.tvshow_useXBMC_Scraper = False
@@ -368,6 +370,10 @@ Public Class Preferences
 
         child = doc.CreateElement("enablehdtags")
         child.InnerText = Preferences.enablehdtags.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("movieruntimedisplay")
+        child.InnerText = Preferences.movieRuntimeDisplay
         root.AppendChild(child)
 
 
@@ -973,6 +979,9 @@ Public Class Preferences
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.enablehdtags = False
                     End If
+
+                Case "movieruntimedisplay"
+                    Preferences.movieRuntimeDisplay = thisresult.InnerXml
 
                 Case "hdtvtags"
                     If thisresult.InnerXml = "true" Then
