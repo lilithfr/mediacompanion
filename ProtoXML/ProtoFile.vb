@@ -56,9 +56,17 @@
             Next
             _FolderPath &= "\"
             _NfoFilePath = value
-            
+            EditAttribute("NfoPath", _NfoFilePath)
         End Set
     End Property
+
+    Private Sub EditAttribute(ByVal Name As String, ByVal Value As String)
+        If Me.Node.Attribute(Name) Is Nothing Then
+            Me.Node.Add(New XAttribute(Name, Value))
+        End If
+
+        Me.Node.Attribute(Name).SetValue(Value)
+    End Sub
 
     Private _FolderPath As String
     Public Property FolderPath As String Implements IProtoXBase.FolderPath

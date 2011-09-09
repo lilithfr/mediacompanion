@@ -32,6 +32,8 @@ Public Class TaskCache
                             Threads.Add(NewThread)
 
                             NewThread.Start()
+                            Me.NotifyPropertyChanged("UnrunTaskCount")
+                            Me.NotifyPropertyChanged("UserWaitTaskCount")
                         End If
                     End If
                 Next
@@ -43,6 +45,7 @@ Public Class TaskCache
                     If Threads(I).ThreadState = ThreadState.Stopped Then
                         Threads.Remove(Threads(I))
                         Continue Do
+                        Me.NotifyPropertyChanged("CompletedTaskCount")
                     End If
                     I += 1
                 Loop
@@ -51,9 +54,6 @@ Public Class TaskCache
             Finally
                 Thread.Sleep(1)
             End Try
-            Me.NotifyPropertyChanged("UnrunTaskCount")
-            Me.NotifyPropertyChanged("UserWaitTaskCount")
-            Me.NotifyPropertyChanged("CompletedTaskCount")
 
         Loop
     End Sub

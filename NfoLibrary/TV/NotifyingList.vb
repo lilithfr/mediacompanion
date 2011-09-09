@@ -42,8 +42,11 @@ Public Class NotifyingList(Of T)
     End Property
 
     Public Function Remove(item As T) As Boolean Implements System.Collections.Generic.ICollection(Of T).Remove
-        Return List.Remove(item)
-        NotifyPropertyChanged(Me.PropertyName)
+        Dim RemoveTest As Boolean = List.Remove(item)
+        If RemoveTest Then
+            NotifyPropertyChanged(Me.PropertyName)
+        End If
+        Return RemoveTest
     End Function
 
     Public Function GetEnumerator() As System.Collections.Generic.IEnumerator(Of T) Implements System.Collections.Generic.IEnumerable(Of T).GetEnumerator
