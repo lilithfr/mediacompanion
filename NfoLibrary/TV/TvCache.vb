@@ -5,9 +5,9 @@ Public Class TvCache
     Implements IList(Of ProtoFile)
 
     Public Items As New List(Of ProtoFile)
-    Public Shows As New List(Of TvShow)
-    Public Seasons As New List(Of Nfo.TvSeason)
-    Public Episodes As New List(Of TvEpisode)
+    Public Shows As New NotifyingList(Of TvShow)("Shows")
+    Public Seasons As New NotifyingList(Of Nfo.TvSeason)("Seasons")
+    Public Episodes As New NotifyingList(Of TvEpisode)("Episodes")
     Public Other As New List(Of ProtoFile)
 
     Public ReadOnly Property IsAltered As Boolean

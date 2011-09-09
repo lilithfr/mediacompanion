@@ -90,6 +90,7 @@
     <Compile Include="Static\Cache.vb" />
     <Compile Include="Tasks\ScrapeEpisodeTask.vb" />
     <Compile Include="Tasks\ScrapeShowTask.vb" />
+    <Compile Include="TV\NotifyingList.vb" />
     <Compile Include="TV\TvCache.vb" />
     <Compile Include="TV\TvEpisode.Treeview.vb" />
     <Compile Include="TV\TvEpisode.vb" />
