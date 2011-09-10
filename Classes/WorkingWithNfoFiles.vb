@@ -1343,7 +1343,7 @@ Public Class WorkingWithNfoFiles
             'Hack to get ShowID with the data available at this point
             Dim ThumbnailPath As String = listofepisodes(0).Thumbnail.FileName
             Dim Split As String() = ThumbnailPath.Split("/")
-            Dim FoundShowID As String
+            Dim FoundShowID As String = ""
             If Split.Length >= 6 Then
                 FoundShowID = Split(5)
             End If
@@ -1606,7 +1606,7 @@ Public Class WorkingWithNfoFiles
                 'Hack to get ShowID with the data available at this point
                 Dim ThumbnailPath As String = ep.Thumbnail.FileName 'this path contains the showID - we just need to pull it out of the string
                 Dim Split As String() = ThumbnailPath.Split("/")
-                Dim FoundShowID As String
+                Dim FoundShowID As String = ""
                 If Split.Length >= 6 Then
                     FoundShowID = Split(5) ' ShowID is section 5 from the thumbnail string
                 End If
