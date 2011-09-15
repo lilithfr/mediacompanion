@@ -2162,64 +2162,47 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
     Public Shared Function cleanruntime(ByVal runtime As String)
         Try
-            Dim temptime As String = runtime
-            Dim totalmins As Integer = -1
+            Dim tempstring As String = runtime
+            Dim hours As Integer = 0
+            Dim minutes As Integer = 0
             If runtime.ToLower.IndexOf("min") <> -1 Then
-                Dim tempstring As String = runtime
-                Dim tempint As Integer
-                Dim newmins As String
-                tempint = runtime.ToLower.IndexOf("min")
-                newmins = runtime.Substring(0, tempint)
-                newmins = Trim(newmins)
-                If Not IsNumeric(newmins) Then
+                tempstring = runtime.Substring(0, runtime.ToLower.IndexOf("min"))
+                tempstring = Trim(tempstring)
+                If Not IsNumeric(tempstring) Then
                     Dim guess As String = ""
-                    For f = 0 To newmins.Length - 1
-                        If IsNumeric(newmins.Substring(f, 1)) Then
-                            guess = guess & newmins.Substring(f, 1)
+                    For f = 0 To tempstring.Length - 1
+                        If IsNumeric(tempstring.Substring(f, 1)) Then
+                            guess = guess & tempstring.Substring(f, 1)
                         End If
                     Next
                     If IsNumeric(guess) Then
-                        totalmins = Convert.ToInt32(guess)
+                        minutes = Convert.ToInt32(guess)
                     End If
                 End If
             ElseIf runtime.ToLower.IndexOf("h") <> -1 Or runtime.ToLower.IndexOf("mn") <> -1 Then
                 Try
-                    Dim tempint As Integer = 0
                     '1h 24mn 48s 546ms
-                    Dim hours As Integer = 0
-                    Dim minutes As Integer = 0
-                    Dim tempstring2 As String = temptime
-                    tempint = tempstring2.IndexOf("h")
+                    Dim tempint As Integer = tempstring.IndexOf("h")
                     If tempint <> -1 Then
-                        hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                        tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                        tempstring2 = Trim(tempstring2)
+                        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                        tempstring = Trim(tempstring)
                     End If
-                    tempint = tempstring2.IndexOf("mn")
+                    tempint = tempstring.IndexOf("mn")
                     If tempint <> -1 Then
-                        minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
                     End If
-                    If hours <> 0 Then
-                        hours = hours * 60
-                    End If
-                    minutes = minutes + hours
-                    totalmins = totalmins + minutes
+                    minutes = minutes + (hours * 60)
                 Catch
                 End Try
             End If
 
-            If totalmins <> -1 Then
-                runtime = totalmins.ToString
-            End If
-
-
-
-            Return runtime
+            Return minutes.ToString
         Catch
         Finally
 
         End Try
-        Return "Error"
+        Return "0"
     End Function
     Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
         Dim intCounter As Integer = 0

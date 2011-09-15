@@ -131,6 +131,7 @@ Public Class Form1
     Dim walllocked As Boolean = False
     Dim maxcount As Integer = 0
     Dim moviecount_bak As Integer = 0
+    Dim displayRuntimeScraper As Boolean = True
     Private ClickedControl As String
 
 
@@ -2413,9 +2414,15 @@ Public Class Form1
                 studiotxt.Text = workingMovieDetails.fullmoviebody.studio
                 pathtxt.Text = workingMovie.fullpathandfilename
                 ratingtxt.Text = workingMovieDetails.fullmoviebody.rating
-                runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
+                'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
+                If Preferences.movieRuntimeDisplay = "file" Then
+                    displayRuntimeScraper = False
+                Else
+                    displayRuntimeScraper = True
+                End If
+                Call mov_SwitchRuntime()
 
                 workingMovieDetails.fileinfo.fullpathandfilename = workingMovie.fullpathandfilename
                 workingMovieDetails.fileinfo.filename = IO.Path.GetFileName(workingMovie.fullpathandfilename)
@@ -4628,38 +4635,38 @@ Public Class Form1
                                 If Not IO.File.Exists(tempsb) Then
 
                                     newmovie.filedetails = Preferences.Get_HdTags(newMovieList(f).mediapathandfilename)
-                                    If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                                    If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
                                         Try
                                             progresstext &= " - HD tags"
                                             BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             '1h 24mn 48s 546ms
-                                            Dim hours As Integer = 0
-                                            Dim minutes As Integer = 0
-                                            tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
-                                            tempint = tempstring.IndexOf("h")
-                                            If tempint <> -1 Then
-                                                hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                                tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                                tempstring = Trim(tempstring)
-                                            End If
-                                            tempint = tempstring.IndexOf("mn")
-                                            If tempint <> -1 Then
-                                                minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            End If
-                                            If hours <> 0 Then
-                                                hours = hours * 60
-                                            End If
-                                            minutes = minutes + hours
-                                            If minutes = 0 Then
-                                                If tempstring.IndexOf("min") <> -1 Then
-                                                    tempstring = tempstring.Replace("min", "")
-                                                    tempstring = tempstring.Replace(" ", "")
-                                                    If IsNumeric(tempstring) Then
-                                                        minutes = Convert.ToInt32(tempstring)
-                                                    End If
-                                                End If
-                                            End If
-                                            newmovie.fullmoviebody.runtime = minutes.ToString & " min"
+                                            'Dim hours As Integer = 0
+                                            'Dim minutes As Integer = 0
+                                            'tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
+                                            'tempint = tempstring.IndexOf("h")
+                                            'If tempint <> -1 Then
+                                            '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                            '    tempstring = Trim(tempstring)
+                                            'End If
+                                            'tempint = tempstring.IndexOf("mn")
+                                            'If tempint <> -1 Then
+                                            '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            'End If
+                                            'If hours <> 0 Then
+                                            '    hours = hours * 60
+                                            'End If
+                                            'minutes = minutes + hours
+                                            'If minutes = 0 Then
+                                            '    If tempstring.IndexOf("min") <> -1 Then
+                                            '        tempstring = tempstring.Replace("min", "")
+                                            '        tempstring = tempstring.Replace(" ", "")
+                                            '        If IsNumeric(tempstring) Then
+                                            '            minutes = Convert.ToInt32(tempstring)
+                                            '        End If
+                                            '    End If
+                                            'End If
+                                            newmovie.fullmoviebody.runtime = Utilities.cleanruntime(newmovie.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
                                             progresstext &= " - OK"
                                             BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             scraperLog = scraperLog & "HD Tags Added OK" & vbCrLf
@@ -7783,47 +7790,47 @@ Public Class Form1
                     Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                     If tempname <> Nothing Then workingMovieDetails.filedetails = Preferences.Get_HdTags(tempname)
                     messbox.TextBox1.Text = "Video Duration"
-                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
                         Try
                             '1h 24mn 48s 546ms
-                            Dim hours As Integer = 0
-                            Dim minutes As Integer = 0
-                            tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
-                            tempint = tempstring.IndexOf("h")
-                            If tempint <> -1 Then
-                                hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                tempstring = Trim(tempstring)
-                            End If
-                            tempint = tempstring.IndexOf("mn")
-                            If tempint <> -1 Then
-                                minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                            End If
-                            If hours <> 0 Then
-                                hours = hours * 60
-                            End If
-                            minutes = minutes + hours
-                            If minutes = 0 Then
-                                If tempstring.IndexOf("min") <> -1 Then
-                                    tempstring = tempstring.Replace("min", "")
-                                    tempstring = tempstring.Replace(" ", "")
-                                    If IsNumeric(tempstring) Then
-                                        minutes = Convert.ToInt32(tempstring)
-                                    End If
-                                End If
-                            End If
-                            If minutes = 0 Then
-                                If tempstring.IndexOf("min") <> -1 Then
-                                    tempstring = tempstring.Replace("min", "")
-                                    tempstring = tempstring.Replace(" ", "")
-                                    If IsNumeric(tempstring) Then
-                                        minutes = Convert.ToInt32(tempstring)
-                                    End If
-                                End If
-                            End If
-                            If minutes <> 0 Then
-                                workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
-                            End If
+                            'Dim hours As Integer = 0
+                            'Dim minutes As Integer = 0
+                            'tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
+                            'tempint = tempstring.IndexOf("h")
+                            'If tempint <> -1 Then
+                            '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                            '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                            '    tempstring = Trim(tempstring)
+                            'End If
+                            'tempint = tempstring.IndexOf("mn")
+                            'If tempint <> -1 Then
+                            '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                            'End If
+                            'If hours <> 0 Then
+                            '    hours = hours * 60
+                            'End If
+                            'minutes = minutes + hours
+                            'If minutes = 0 Then
+                            '    If tempstring.IndexOf("min") <> -1 Then
+                            '        tempstring = tempstring.Replace("min", "")
+                            '        tempstring = tempstring.Replace(" ", "")
+                            '        If IsNumeric(tempstring) Then
+                            '            minutes = Convert.ToInt32(tempstring)
+                            '        End If
+                            '    End If
+                            'End If
+                            'If minutes = 0 Then
+                            '    If tempstring.IndexOf("min") <> -1 Then
+                            '        tempstring = tempstring.Replace("min", "")
+                            '        tempstring = tempstring.Replace(" ", "")
+                            '        If IsNumeric(tempstring) Then
+                            '            minutes = Convert.ToInt32(tempstring)
+                            '        End If
+                            '    End If
+                            'End If
+                            'If minutes <> 0 Then
+                            workingMovieDetails.fullmoviebody.runtime = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
+                            'End If
                         Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -8946,61 +8953,55 @@ Public Class Form1
 
 
 
-                    If mediatags = True Or batchList.runtime = True Then
-                        If Preferences.enablehdtags = True Then
-                            Try
-                                Dim mediapath As String = Utilities.GetFileName(movietoalter.fileinfo.fullpathandfilename)
-                                movietemplate.filedetails = Preferences.Get_HdTags(mediapath)
-                                Try
-                                    Dim tempstring As String
-                                    Dim tempint As Integer = 0
-                                    Dim hours As Integer = 0
-                                    Dim minutes As Integer = 0
-                                    tempstring = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
-                                    tempint = tempstring.IndexOf("h")
-                                    If tempint <> -1 Then
-                                        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                        tempstring = Trim(tempstring)
-                                    End If
-                                    tempint = tempstring.IndexOf("mn")
-                                    If tempint <> -1 Then
-                                        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                    End If
-                                    If hours <> 0 Then
-                                        hours = hours * 60
-                                    End If
-                                    minutes = minutes + hours
-                                    If minutes = 0 Then
-                                        If tempstring.IndexOf("min") <> -1 Then
-                                            tempstring = tempstring.Replace("min", "")
-                                            tempstring = tempstring.Replace(" ", "")
-                                            If IsNumeric(tempstring) Then
-                                                minutes = Convert.ToInt32(tempstring)
-                                            End If
-                                        End If
-                                    End If
-                                    movietemplate.fullmoviebody.runtime = minutes.ToString & " min"
-                                Catch ex As Exception
-                                End Try
-                            Catch
+                    If mediatags = True Or (batchList.runtime = True And Preferences.movieRuntimeDisplay = "file") Then
+                        Try
+                            Dim mediapath As String = Utilities.GetFileName(movietoalter.fileinfo.fullpathandfilename)
+                            Dim tempFileDetails As FullFileDetails = Preferences.Get_HdTags(mediapath)
+                            If Preferences.enablehdtags = True Then
+                                '    Dim tempstring As String
+                                '    Dim tempint As Integer = 0
+                                '    Dim hours As Integer = 0
+                                '    Dim minutes As Integer = 0
+                                '    tempstring = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
+                                '    tempint = tempstring.IndexOf("h")
+                                '    If tempint <> -1 Then
+                                '        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                '        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                '        tempstring = Trim(tempstring)
+                                '    End If
+                                '    tempint = tempstring.IndexOf("mn")
+                                '    If tempint <> -1 Then
+                                '        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                '    End If
+                                '    If hours <> 0 Then
+                                '        hours = hours * 60
+                                '    End If
+                                '    minutes = minutes + hours
+                                '    If minutes = 0 Then
+                                '        If tempstring.IndexOf("min") <> -1 Then
+                                '            tempstring = tempstring.Replace("min", "")
+                                '            tempstring = tempstring.Replace(" ", "")
+                                '            If IsNumeric(tempstring) Then
+                                '                minutes = Convert.ToInt32(tempstring)
+                                '            End If
+                                '        End If
+                                '    End If
+                                '    movietemplate.fullmoviebody.runtime = minutes.ToString & " min"
+                                'Catch ex As Exception
+                                'End Try
+                                movietemplate.filedetails = tempFileDetails
+                            Else
                                 movietemplate.filedetails = Nothing
-                            End Try
-                        Else
-                            movietemplate.filedetails = Nothing
-                        End If
-                    End If
-
-                    If batchList.runtime = True Then
-                        If movietemplate.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
-                            Dim tempstring As String
-                            tempstring = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
-                            tempstring = tempstring.Replace("min", "")
-                            tempstring = tempstring.Replace(" ", "")
-                            If IsNumeric(tempstring) Then
-                                movietemplate.fullmoviebody.runtime = movietemplate.filedetails.filedetails_video.DurationInSeconds.Value
                             End If
-                        End If
+
+                            If batchList.runtime = True And tempFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                                movietemplate.fullmoviebody.runtime = Utilities.cleanruntime(tempFileDetails.filedetails_video.DurationInSeconds.Value) & " min"
+                            End If
+                        Catch ex As Exception
+                            movietemplate.filedetails = Nothing
+                        End Try
+                    End If
+                    If batchList.runtime = True Then
                         If movietemplate.fullmoviebody.runtime <> Nothing Then
                             If movietemplate.fullmoviebody.runtime <> "" Then
                                 movietoalter.fullmoviebody.runtime = movietemplate.fullmoviebody.runtime
@@ -10109,36 +10110,36 @@ Public Class Form1
 
                             Try
                                 newmovie.filedetails = Preferences.Get_HdTags(newdetails.mediapathandfilename)
-                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
                                     Try
                                         '1h 24mn 48s 546ms
-                                        Dim hours As Integer = 0
-                                        Dim minutes As Integer = 0
-                                        tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
-                                        tempint = tempstring.IndexOf("h")
-                                        If tempint <> -1 Then
-                                            hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                            tempstring = Trim(tempstring)
-                                        End If
-                                        tempint = tempstring.IndexOf("mn")
-                                        If tempint <> -1 Then
-                                            minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        End If
-                                        If hours <> 0 Then
-                                            hours = hours * 60
-                                        End If
-                                        minutes = minutes + hours
-                                        If minutes = 0 Then
-                                            If tempstring.IndexOf("min") <> -1 Then
-                                                tempstring = tempstring.Replace("min", "")
-                                                tempstring = tempstring.Replace(" ", "")
-                                                If IsNumeric(tempstring) Then
-                                                    minutes = Convert.ToInt32(tempstring)
-                                                End If
-                                            End If
-                                        End If
-                                        newmovie.fullmoviebody.runtime = minutes.ToString & " min"
+                                        'Dim hours As Integer = 0
+                                        'Dim minutes As Integer = 0
+                                        'tempstring = newmovie.filedetails.filedetails_video.DurationInSeconds.Value
+                                        'tempint = tempstring.IndexOf("h")
+                                        'If tempint <> -1 Then
+                                        '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                        '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                        '    tempstring = Trim(tempstring)
+                                        'End If
+                                        'tempint = tempstring.IndexOf("mn")
+                                        'If tempint <> -1 Then
+                                        '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                        'End If
+                                        'If hours <> 0 Then
+                                        '    hours = hours * 60
+                                        'End If
+                                        'minutes = minutes + hours
+                                        'If minutes = 0 Then
+                                        '    If tempstring.IndexOf("min") <> -1 Then
+                                        '        tempstring = tempstring.Replace("min", "")
+                                        '        tempstring = tempstring.Replace(" ", "")
+                                        '        If IsNumeric(tempstring) Then
+                                        '            minutes = Convert.ToInt32(tempstring)
+                                        '        End If
+                                        '    End If
+                                        'End If
+                                        newmovie.fullmoviebody.runtime = Utilities.cleanruntime(newmovie.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
                                         scraperLog = scraperLog & "HD Tags Added OK" & vbCrLf
                                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -13607,27 +13608,27 @@ Public Class Form1
                 Next
             End If
             Try
-                If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
 
                     '1h 24mn 48s 546ms
-                    Dim hours As Integer = 0
-                    Dim minutes As Integer = 0
-                    tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
-                    tempint = tempstring.IndexOf("h")
-                    If tempint <> -1 Then
-                        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                        tempstring = Trim(tempstring)
-                    End If
-                    tempint = tempstring.IndexOf("mn")
-                    If tempint <> -1 Then
-                        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                    End If
-                    If hours <> 0 Then
-                        hours = hours * 60
-                    End If
-                    minutes = minutes + hours
-                    workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
+                    'Dim hours As Integer = 0
+                    'Dim minutes As Integer = 0
+                    'tempstring = workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value
+                    'tempint = tempstring.IndexOf("h")
+                    'If tempint <> -1 Then
+                    '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                    '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                    '    tempstring = Trim(tempstring)
+                    'End If
+                    'tempint = tempstring.IndexOf("mn")
+                    'If tempint <> -1 Then
+                    '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                    'End If
+                    'If hours <> 0 Then
+                    '    hours = hours * 60
+                    'End If
+                    'minutes = minutes + hours
+                    workingMovieDetails.fullmoviebody.runtime = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -22572,13 +22573,21 @@ Public Class Form1
     End Sub
 
     Private Sub mov_PreferencesSetup()
+        displayRuntimeScraper = True
         If Preferences.enablehdtags = True Then
             CheckBox19.CheckState = CheckState.Checked
             PanelDisplayRuntime.Enabled = True
+            If Preferences.movieRuntimeDisplay = "file" Then
+                rbRuntimeFile.Checked = True
+            Else
+                rbRuntimeScraper.Checked = True
+            End If
         Else
             CheckBox19.CheckState = CheckState.Unchecked
             PanelDisplayRuntime.Enabled = False
+            rbRuntimeScraper.Checked = True
         End If
+        Call mov_SwitchRuntime()
 
         If Preferences.resizefanart = 1 Then
             RadioButton35.Checked = True
@@ -24768,25 +24777,52 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBox19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox19.CheckedChanged
+        displayRuntimeScraper = True
         If CheckBox19.CheckState = CheckState.Checked Then
             Preferences.enablehdtags = True
             PanelDisplayRuntime.Enabled = True
+            If Preferences.movieRuntimeDisplay = "file" Then
+                rbRuntimeFile.Checked = True
+                displayRuntimeScraper = False
+            Else
+                rbRuntimeScraper.Checked = True
+            End If
         Else
             Preferences.enablehdtags = False
             PanelDisplayRuntime.Enabled = False
+            rbRuntimeScraper.Checked = True
         End If
+        Call mov_SwitchRuntime()
         generalprefschanged = True
+    End Sub
+
+    Private Sub Label27_Click(sender As System.Object, e As System.EventArgs) Handles Label27.Click
+        If runtimetxt.Enabled = True Then
+            displayRuntimeScraper = False
+        Else
+            displayRuntimeScraper = True
+        End If
+        Call mov_SwitchRuntime()
     End Sub
 
     Private Sub rbRuntimeScraper_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeScraper.CheckedChanged
         If rbRuntimeScraper.Checked = True Then
             Preferences.movieRuntimeDisplay = "scraper"
+            displayRuntimeScraper = True
+        Else
+            Preferences.movieRuntimeDisplay = "file"
+            displayRuntimeScraper = False
         End If
+        'Call mov_SwitchRuntime() 'Damn it - this call prevents MC starting, and I have no idea why! HueyHQ
     End Sub
 
-    Private Sub rbRuntimeFile_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbRuntimeFile.CheckedChanged
-        If rbRuntimeFile.Checked = True Then
-            Preferences.movieRuntimeDisplay = "file"
+    Private Sub mov_SwitchRuntime()
+        If Preferences.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
+            runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
+            runtimetxt.Enabled = False
+        Else
+            runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
+            runtimetxt.Enabled = True
         End If
     End Sub
 
@@ -26174,16 +26210,17 @@ Public Class Form1
                             End Try
 
                             Try
-                                Dim runtime As String = gridrow.Cells("runtime").Value
-                                runtime = runtime.Replace("min", "")
-                                runtime = runtime.Trim(" ")
-                                If IsNumeric(runtime) Then
-                                    Dim temruntime As Integer = Convert.ToInt32(runtime)
-                                    Dim tempstrin As String = temruntime.ToString & " min"
-                                    If changedmovie.runtime <> tempstrin Then
-                                        changedmovie.runtime = tempstrin
-                                    End If
-                                End If
+                                'Dim runtime As String = gridrow.Cells("runtime").Value
+                                'runtime = runtime.Replace("min", "")
+                                'runtime = runtime.Trim(" ")
+                                'If IsNumeric(runtime) Then
+                                '    Dim temruntime As Integer = Convert.ToInt32(runtime)
+                                '    Dim tempstrin As String = temruntime.ToString & " min"
+                                '    If changedmovie.runtime <> tempstrin Then
+                                '        changedmovie.runtime = tempstrin
+                                '    End If
+                                'End If
+                                changedmovie.runtime = Utilities.cleanruntime(gridrow.Cells("runtime").Value)
                             Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -26191,7 +26228,7 @@ Public Class Form1
                             End Try
 
                             changedmoviedetails.fullmoviebody.runtime = changedmovie.runtime
-                            changedmoviedetails.filedetails.filedetails_video.DurationInSeconds.Value = changedmovie.runtime.ToString
+                            'changedmoviedetails.filedetails.filedetails_video.DurationInSeconds.Value = changedmovie.runtime.ToString
 
                             changedmoviedetails.fullmoviebody.title = changedmovie.title
                             changedmoviedetails.fullmoviebody.year = changedmovie.year
@@ -26924,7 +26961,7 @@ Public Class Form1
                     ElseIf field = "hdtags" Or field = "runtime_file" Then
                         Try
                             frmProgSplash.Label1.Text &= " - Scraping..."
-                            Dim tempstring As String
+                            'Dim tempstring As String
                             Dim tempint As Integer = 0
                             Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim newfiledetails As New FullFileDetails
@@ -26932,44 +26969,46 @@ Public Class Form1
                             If newfiledetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
                                 Try
                                     '1h 24mn 48s 546ms
-                                    frmProgSplash.Label1.Text &= "OK!"
-                                    Dim hours As Integer = 0
-                                    Dim minutes As Integer = 0
-                                    tempstring = newfiledetails.filedetails_video.DurationInSeconds.Value
-                                    tempint = tempstring.IndexOf("h")
-                                    If tempint <> -1 Then
-                                        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                        tempstring = Trim(tempstring)
-                                    End If
-                                    tempint = tempstring.IndexOf("mn")
-                                    If tempint <> -1 Then
-                                        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                    End If
-                                    If hours <> 0 Then
-                                        hours = hours * 60
-                                    End If
-                                    minutes = minutes + hours
-                                    If minutes = 0 Then
-                                        If tempstring.IndexOf("min") <> -1 Then
-                                            tempstring = tempstring.Replace("min", "")
-                                            tempstring = tempstring.Replace(" ", "")
-                                            If IsNumeric(tempstring) Then
-                                                minutes = Convert.ToInt32(tempstring)
-                                            End If
-                                        End If
-                                    End If
-                                    If minutes = 0 Then
-                                        If tempstring.IndexOf("min") <> -1 Then
-                                            tempstring = tempstring.Replace("min", "")
-                                            tempstring = tempstring.Replace(" ", "")
-                                            If IsNumeric(tempstring) Then
-                                                minutes = Convert.ToInt32(tempstring)
-                                            End If
-                                        End If
-                                    End If
-                                    If minutes <> 0 And field = "runtime_file" Then
-                                        workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
+                                    'frmProgSplash.Label1.Text &= "OK!"
+                                    'Dim hours As Integer = 0
+                                    'Dim minutes As Integer = 0
+                                    'tempstring = newfiledetails.filedetails_video.DurationInSeconds.Value
+                                    'tempint = tempstring.IndexOf("h")
+                                    'If tempint <> -1 Then
+                                    '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                    '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                    '    tempstring = Trim(tempstring)
+                                    'End If
+                                    'tempint = tempstring.IndexOf("mn")
+                                    'If tempint <> -1 Then
+                                    '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                    'End If
+                                    'If hours <> 0 Then
+                                    '    hours = hours * 60
+                                    'End If
+                                    'minutes = minutes + hours
+                                    'If minutes = 0 Then
+                                    '    If tempstring.IndexOf("min") <> -1 Then
+                                    '        tempstring = tempstring.Replace("min", "")
+                                    '        tempstring = tempstring.Replace(" ", "")
+                                    '        If IsNumeric(tempstring) Then
+                                    '            minutes = Convert.ToInt32(tempstring)
+                                    '        End If
+                                    '    End If
+                                    'End If
+                                    'If minutes = 0 Then
+                                    '    If tempstring.IndexOf("min") <> -1 Then
+                                    '        tempstring = tempstring.Replace("min", "")
+                                    '        tempstring = tempstring.Replace(" ", "")
+                                    '        If IsNumeric(tempstring) Then
+                                    '            minutes = Convert.ToInt32(tempstring)
+                                    '        End If
+                                    '    End If
+                                    'End If
+                                    'If minutes <> 0 And field = "runtime_file" Then
+                                    '    workingMovieDetails.fullmoviebody.runtime = minutes.ToString & " min"
+                                    If field = "runtime_file" Then
+                                        workingMovieDetails.fullmoviebody.runtime = Utilities.cleanruntime(newfiledetails.filedetails_video.DurationInSeconds.Value)
                                     End If
                                     If field = "hdtags" Then
                                         workingMovieDetails.filedetails = newfiledetails
