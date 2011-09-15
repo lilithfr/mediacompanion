@@ -1,6 +1,10 @@
 ﻿Imports ProtoXML
+Imports System.Runtime.CompilerServices
+
 
 Namespace Tvdb
+
+
     Public Class Series
         Inherits ProtoPropertyGroup
 
@@ -53,5 +57,114 @@ Namespace Tvdb
         Public Overrides Function CreateNew() As ProtoXML.IProtoXChild
             Return New Series()
         End Function
+
+
+        Public Property Similarity As Double
     End Class
+
+
+
+    Public Module ExtentionMethods
+        Dim arrLetters1
+        Dim arrLetters2
+
+        <Extension()>
+        Public Function CompareString(String1 As String, String2 As String) As Double
+            Dim intLength1
+            Dim intLength2
+            Dim x
+            Dim dblResult
+
+
+            If UCase(String1) = UCase(String2) Then
+                dblResult = 1
+            Else
+                intLength1 = Len(String1)
+                intLength2 = Len(String2)
+
+
+                If intLength1 = 0 Or intLength2 = 0 Then
+                    dblResult = 0
+                Else
+                    ReDim arrLetters1(intLength1 - 1)
+                    ReDim arrLetters2(intLength2 - 1)
+
+                    For x = LBound(arrLetters1) To UBound(arrLetters1)
+                        arrLetters1(x) = Asc(UCase(Mid(String1, x + 1, 1)))
+                    Next
+
+                    For x = LBound(arrLetters2) To UBound(arrLetters2)
+                        arrLetters2(x) = Asc(UCase(Mid(String2, x + 1, 1)))
+                    Next
+
+                    dblResult = SubSim(1, intLength1, 1, intLength2) / (intLength1 + intLength2) * 2
+                End If
+            End If
+
+            CompareString = dblResult
+        End Function
+
+
+        Private Function SubSim(intStart1, intEnd1, intStart2, intEnd2) As Double
+            Dim y
+            Dim z
+            Dim ns1 As Integer
+            Dim ns2 As Integer
+            Dim i
+            Dim intMax As Integer = Integer.MinValue
+
+            If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
+                Return 0
+            End If
+
+            For y = intStart1 To intEnd1
+                For z = intStart1 To intEnd2
+                    i = 0
+
+                    Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
+                        i = i + 1
+
+                        If i > intMax Then
+                            ns1 = y
+                            ns2 = z
+                            intMax = i
+                        End If
+
+                        If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
+                            Exit Do
+                        End If
+                    Loop
+                Next
+            Next
+
+            intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
+            intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
+
+            Return intMax
+        End Function
+
+        <Extension()>
+        Public Function FindBestPossibleShow(ByVal ThisList As List(Of Tvdb.Series), ByVal FolderName As String, ByVal PreferedLang As String) As Tvdb.Series
+
+            For Each Item In ThisList
+                Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
+            Next
+
+            Dim Search = From Ser As Tvdb.Series In ThisList Order By Ser.Similarity Descending ', Ser.FirstAired Descending
+
+            If Search.Count > 0 Then
+                For Each Item As Series In Search
+                    If Item.Language.Value = PreferedLang Then
+                        Return Item
+                    End If
+                Next
+
+                Dim Test As Tvdb.Series = Search.FirstOrDefault()
+                Return Test
+            End If
+
+            'Catch All
+            Return ThisList.Item(0)
+        End Function
+    End Module
 End Namespace

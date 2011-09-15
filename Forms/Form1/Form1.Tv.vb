@@ -893,6 +893,7 @@ Partial Public Class Form1
         'ListtvFiles(NewShow, "*.NFO")
         realTvPaths.Add(NewShow.FolderPath)
         TvTreeview.Nodes.Add(NewShow.ShowNode)
+        NewShow.UpdateTreenode()
         'For Each Episode As TvEpisode In NewShow.Episodes
         '    Episode.UpdateTreenode()
         'Next
@@ -1037,17 +1038,26 @@ Partial Public Class Form1
                     NewShow.State = Nfo.ShowState.Unverified
 
                     tvshowid = "none"
+                    NewShow.State = ShowState.Error
                 ElseIf NewShow.PossibleShowList.Count = 1 Then
                     NewShow.State = Nfo.ShowState.Open
 
                     tvshowid = NewShow.PossibleShowList.Item(0).Id.Value
                 Else
-                    NewShow.State = Nfo.ShowState.Unverified
+                    Dim TempSeries As Tvdb.Series = Tvdb.FindBestPossibleShow(NewShow.PossibleShowList, FolderName, Preferences.TvdbLanguageCode)
 
-                    tvshowid = NewShow.PossibleShowList.Item(0).Id.Value
+                    If TempSeries.Similarity > 0.9 AndAlso
+                        TempSeries.Language.Value = Preferences.TvdbLanguageCode Then
+                        NewShow.State = Nfo.ShowState.Open
+                    Else
+                        NewShow.State = Nfo.ShowState.Unverified
+                    End If
+
+                    tvshowid = TempSeries.Id.Value
                 End If
             Else
                 tvshowid = "none"
+                NewShow.State = ShowState.Error
             End If
             'tvshowid = gettoptvshow(FolderName)
 

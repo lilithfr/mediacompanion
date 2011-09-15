@@ -22,6 +22,11 @@ Partial Public Class TvShow
                 ShowNode.SelectedImageKey = "error"
         End Select
 
+        If Me.IsAltered Then
+            ShowNode.ImageKey = "edit"
+            ShowNode.SelectedImageKey = "edit"
+        End If
+
         If Me.FailedLoad Then
             ShowNode.ForeColor = Drawing.Color.Red
         End If

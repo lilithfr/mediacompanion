@@ -32,6 +32,11 @@ Partial Public Class TvEpisode
             EpisodeNode.ForeColor = Drawing.Color.Red
         End If
 
+        If Me.IsAltered Then
+            EpisodeNode.ImageKey = "edit"
+            EpisodeNode.SelectedImageKey = "edit"
+        End If
+
         If Me.EpisodeNode.TreeView Is Nothing Then
             If Me.SeasonObj IsNot Nothing Then
                 Me.SeasonObj.SeasonNode.Nodes.Add(Me.EpisodeNode)
