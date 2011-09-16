@@ -20966,6 +20966,7 @@ Public Class Form1
                 myProxy.BypassProxyOnLocal = True
 
                 xmlfile = Utilities.DownloadTextFiles(episodeurl2)
+
                 If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
 
                 Dim episode As New XmlDocument
@@ -28562,8 +28563,10 @@ Public Class Form1
     Private Sub SearchForMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForMissingEpisodesToolStripMenuItem.Click
 
         If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
+            Dim ShowList As New List(Of TvShow)
             For Each shows In Cache.TvCache.Shows
                 shows.MissingEpisodes.Clear()
+                ShowList.Add(shows)
             Next
             'Dim nod As TreeNode
             'For Each nod In TvTreeview.Nodes
@@ -28579,7 +28582,7 @@ Public Class Form1
             'Next
             ToolStripStatusLabel2.Text = "Starting search for missing episodes"
             ToolStripStatusLabel2.Visible = True
-            Bckgrndfindmissingepisodes.RunWorkerAsync(Cache.TvCache.Shows)
+            Bckgrndfindmissingepisodes.RunWorkerAsync(ShowList)
         ElseIf Bckgrndfindmissingepisodes.IsBusy Then
             MsgBox("Process is already running")
         Else

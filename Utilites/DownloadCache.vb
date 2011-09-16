@@ -100,7 +100,7 @@ Public Class DownloadCache
             Else
                 Utilities.tvScraperLog &= "**** TVDB Returned TEXT Stream *****" & vbCrLf
             End If
-            Dim reader As StreamReader = New StreamReader(responseStream, Encoding.Default)
+            Dim reader As StreamReader = New StreamReader(responseStream, Encoding.UTF8)
 
             html = reader.ReadToEnd()
             IO.File.WriteAllText(CachePath, html)

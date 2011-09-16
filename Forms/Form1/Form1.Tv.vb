@@ -3272,117 +3272,117 @@ Partial Public Class Form1
         For Each item In ShowList
 
             Bckgrndfindmissingepisodes.ReportProgress(0, "Downloading episode data for: " & item.Title.Value)
-            'If item.locked = Nfo.ShowState.Open Then
-            Dim showid As String = item.TvdbId.Value
-            If IsNumeric(showid) Then
-                'http://www.thetvdb.com/api/6E82FED600783400/series/85137/all/en.xml
-                Dim language As String = ""
-                If item.Language.Value <> "" Then
-                    language = item.Language.Value
-                Else
-                    language = "en"
-                End If
-                Dim sortorder As String = item.SortOrder.Value
-                Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & showid & "/all/" & language & ".xml"
-                If sortorder = "" Then
-                    sortorder = "default"
-                End If
-                Dim xmlfile As String
+            If item.State = Nfo.ShowState.Open Then
+                Dim showid As String = item.TvdbId.Value
+                If IsNumeric(showid) Then
+                    'http://www.thetvdb.com/api/6E82FED600783400/series/85137/all/en.xml
+                    Dim language As String = ""
+                    If item.Language.Value <> "" Then
+                        language = item.Language.Value
+                    Else
+                        language = "en"
+                    End If
+                    Dim sortorder As String = item.SortOrder.Value
+                    Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & showid & "/all/" & language & ".xml"
+                    If sortorder = "" Then
+                        sortorder = "default"
+                    End If
+                    Dim xmlfile As String
 
-                xmlfile = Utilities.DownloadTextFiles(url)
+                    xmlfile = Utilities.DownloadTextFiles(url)
 
-                Dim SeriesInfo As New Tvdb.ShowData
-                SeriesInfo.LoadXml(xmlfile)
+                    Dim SeriesInfo As New Tvdb.ShowData
+                    SeriesInfo.LoadXml(xmlfile)
 
-                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                    Dim AlreadyExists As Boolean = False
-                    For Each ExistingEpisode As Nfo.TvEpisode In item.Episodes
-                        If ExistingEpisode.Season.Value = NewEpisode.SeasonNumber.Value AndAlso ExistingEpisode.Episode.Value = NewEpisode.EpisodeNumber.Value Then
-                            AlreadyExists = True
-                            Exit For
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        Dim AlreadyExists As Boolean = False
+                        For Each ExistingEpisode As Nfo.TvEpisode In item.Episodes
+                            If ExistingEpisode.Season.Value = NewEpisode.SeasonNumber.Value AndAlso ExistingEpisode.Episode.Value = NewEpisode.EpisodeNumber.Value Then
+                                AlreadyExists = True
+                                Exit For
+                            End If
+                        Next
+
+                        If Not AlreadyExists Then
+                            Dim MissingEpisode As New Nfo.TvEpisode
+
+                            MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+                            MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
+                            MissingEpisode.IsMissing = True
+                            MissingEpisode.ShowObj = item
+                            MissingEpisode.Save()
+                            Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
                         End If
                     Next
+                    'Try
+                    '    Dim ShowList As New XmlDocument
+                    '    ShowList.LoadXml(xmlfile)
+                    '    Dim thisresult As XmlNode = Nothing
+                    '    For Each thisresult In ShowList("Data")
+                    '        Select Case thisresult.Name
+                    '            Case "Episode"
+                    '                Dim newshow As New TvEpisode
+                    '                Dim premdate As String = String.Empty
+                    '                Dim aired As Boolean = True
+                    '                Dim mirrorselection As XmlNode = Nothing
+                    '                For Each mirrorselection In thisresult.ChildNodes
+                    '                    Select Case mirrorselection.Name
+                    '                        Case "DVD_episodenumber"
+                    '                            If sortorder = "dvd" Then
+                    '                                If mirrorselection.InnerText <> "" Then
+                    '                                    Dim temp As String = mirrorselection.InnerText
+                    '                                    If temp.IndexOf(".") <> -1 Then
+                    '                                        temp = temp.Substring(0, temp.IndexOf("."))
+                    '                                    End If
+                    '                                    newshow.episodeno = Convert.ToInt32(temp).ToString
+                    '                                Else
+                    '                                    sortorder = "default"
+                    '                                End If
+                    '                            End If
+                    '                        Case "EpisodeNumber"
+                    '                            If sortorder = "default" Then
+                    '                                newshow.episodeno = mirrorselection.InnerText
+                    '                            End If
+                    '                        Case "SeasonNumber"
+                    '                            newshow.Season.value = mirrorselection.InnerText
+                    '                        Case "EpisodeName"
+                    '                            newshow.title = mirrorselection.InnerText
+                    '                        Case "FirstAired"
+                    '                            premdate = mirrorselection.InnerText
+                    '                    End Select
+                    '                Next
+                    '                If premdate = "" Then
+                    '                    aired = False
+                    '                Else
+                    '                    If premdate <> "0000-00-00" Then
+                    '                        Try
+                    '                            Dim myDate2 As Date = System.DateTime.Now
+                    '                            Dim epdate As Date = CDate(premdate)
+                    '                            newshow.playcount = premdate
+                    '                            Dim strepdate As String
+                    '                            strepdate = Format(epdate, "yyyyMMdd")
+                    '                            Dim strcurrentdate As String
+                    '                            strcurrentdate = Format(myDate2, "yyyyMMdd")
+                    '                            Dim oldint As Integer = Convert.ToInt32(strepdate)
+                    '                            Dim newint As Integer = Convert.ToInt32(strcurrentdate)
+                    '                            If oldint > newint Then
+                    '                                aired = False
+                    '                            End If
+                    '                        Catch ex2 As Exception
+                    '                        End Try
+                    '                    Else
+                    '                        'MsgBox("boo")
+                    '                    End If
+                    '                End If
 
-                    If Not AlreadyExists Then
-                        Dim MissingEpisode As New Nfo.TvEpisode
-
-                        MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
-                        MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
-                        MissingEpisode.IsMissing = True
-                        MissingEpisode.ShowObj = item
-                        MissingEpisode.Save()
-                        Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
-                    End If
-                Next
-                'Try
-                '    Dim ShowList As New XmlDocument
-                '    ShowList.LoadXml(xmlfile)
-                '    Dim thisresult As XmlNode = Nothing
-                '    For Each thisresult In ShowList("Data")
-                '        Select Case thisresult.Name
-                '            Case "Episode"
-                '                Dim newshow As New TvEpisode
-                '                Dim premdate As String = String.Empty
-                '                Dim aired As Boolean = True
-                '                Dim mirrorselection As XmlNode = Nothing
-                '                For Each mirrorselection In thisresult.ChildNodes
-                '                    Select Case mirrorselection.Name
-                '                        Case "DVD_episodenumber"
-                '                            If sortorder = "dvd" Then
-                '                                If mirrorselection.InnerText <> "" Then
-                '                                    Dim temp As String = mirrorselection.InnerText
-                '                                    If temp.IndexOf(".") <> -1 Then
-                '                                        temp = temp.Substring(0, temp.IndexOf("."))
-                '                                    End If
-                '                                    newshow.episodeno = Convert.ToInt32(temp).ToString
-                '                                Else
-                '                                    sortorder = "default"
-                '                                End If
-                '                            End If
-                '                        Case "EpisodeNumber"
-                '                            If sortorder = "default" Then
-                '                                newshow.episodeno = mirrorselection.InnerText
-                '                            End If
-                '                        Case "SeasonNumber"
-                '                            newshow.Season.value = mirrorselection.InnerText
-                '                        Case "EpisodeName"
-                '                            newshow.title = mirrorselection.InnerText
-                '                        Case "FirstAired"
-                '                            premdate = mirrorselection.InnerText
-                '                    End Select
-                '                Next
-                '                If premdate = "" Then
-                '                    aired = False
-                '                Else
-                '                    If premdate <> "0000-00-00" Then
-                '                        Try
-                '                            Dim myDate2 As Date = System.DateTime.Now
-                '                            Dim epdate As Date = CDate(premdate)
-                '                            newshow.playcount = premdate
-                '                            Dim strepdate As String
-                '                            strepdate = Format(epdate, "yyyyMMdd")
-                '                            Dim strcurrentdate As String
-                '                            strcurrentdate = Format(myDate2, "yyyyMMdd")
-                '                            Dim oldint As Integer = Convert.ToInt32(strepdate)
-                '                            Dim newint As Integer = Convert.ToInt32(strcurrentdate)
-                '                            If oldint > newint Then
-                '                                aired = False
-                '                            End If
-                '                        Catch ex2 As Exception
-                '                        End Try
-                '                    Else
-                '                        'MsgBox("boo")
-                '                    End If
-                '                End If
-
-                '                If aired = True Then newshow.tvdbid = "true"
-                '                If aired = False Then newshow.tvdbid = "false"
-                '                newshow.VideoFilePath = item.fullpath
-                '                Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
-                '        End Select
-                '    Next
+                    '                If aired = True Then newshow.tvdbid = "true"
+                    '                If aired = False Then newshow.tvdbid = "false"
+                    '                newshow.VideoFilePath = item.fullpath
+                    '                Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
+                    '        End Select
+                    '    Next
+                End If
             End If
-            ''End If
         Next
     End Sub
 

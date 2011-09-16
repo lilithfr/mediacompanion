@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports System.IO.Compression
 Imports System.Text
+Imports System.Web
 Imports System.Reflection
 Imports System.Drawing
 Imports System.Security.Cryptography
@@ -191,11 +192,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Return ""
     End Function
-
-
-
-
-
 
     Public Shared Function GetStackName(ByVal filenames As String, ByVal filepath As String) As String
         Dim tempboolean As Boolean = False
@@ -2475,5 +2471,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim enc As New System.Text.ASCIIEncoding()
         str = enc.GetString(dBytes)
         Return str
+    End Function
+
+    Public Shared Function cleanSpecChars(ByVal string2clean As String) As String
+        Return HttpUtility.HtmlDecode(string2clean)
     End Function
 End Class
