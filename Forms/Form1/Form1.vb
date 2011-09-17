@@ -10554,6 +10554,7 @@ Public Class Form1
 
     End Sub
     Private Sub mov_Play()
+        If MovieListComboBox.SelectedItems.Count = 0 Then Return
         Dim tempstring As String
         tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
         Dim playlist As New List(Of String)
@@ -11145,7 +11146,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
-        If e.Button = MouseButtons.Right Then
+        If e.Button = MouseButtons.Right AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
             Dim newSelection As Boolean = True
             Dim pt As Point
             pt.X = e.X
@@ -30524,6 +30525,18 @@ Public Class Form1
             Preferences.fixnfoid = True
         Else
             Preferences.fixnfoid = False
+        End If
+    End Sub
+
+    Private Sub ContextMenuStrip1_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
+        If (MovieListComboBox.SelectedItems.Count = 0) Then
+            e.Cancel = True
+        End If
+    End Sub
+
+    Private Sub ContextMenuStrip2_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip2.Opening
+        If (TvTreeview.SelectedNode Is Nothing) Then
+            e.Cancel = True
         End If
     End Sub
 End Class

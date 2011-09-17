@@ -129,6 +129,7 @@ Partial Public Class Form1
     End Sub
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
         '                                                  'called from tv_treeview mouseup event where we check for a right click
+        If TvTreeview.SelectedNode Is Nothing Then Return
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
         Dim showtitle As String = WorkingTvShow.Title.Value       'set our show title
 
