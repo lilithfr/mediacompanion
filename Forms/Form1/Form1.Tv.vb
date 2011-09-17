@@ -693,6 +693,11 @@ Partial Public Class Form1
         For Each tvfolder In Preferences.tvFolders
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
+            If Not (Directory.Exists(tvfolder)) Then 'Temporary fix to skip any removed directory. Final fix should be capable of removing info from preferences file
+                MessageBox.Show(String.Format("{0} could not found and will be skipped.", tvfolder), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Continue For
+            End If
+
             prgCount += 1
             Application.DoEvents()
             Dim newtvshownfo As New TvShow
