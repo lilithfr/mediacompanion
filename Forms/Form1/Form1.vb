@@ -12243,13 +12243,17 @@ Public Class Form1
     End Sub
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
-        openFD.Title = "Select a jpeg image file"
-        openFD.FileName = ""
-        openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
-        openFD.FilterIndex = 0
-        openFD.ShowDialog()
-        TextBox5.Text = openFD.FileName
+        Try
+            openFD.InitialDirectory = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
+            openFD.Title = "Select a jpeg image file"
+            openFD.FileName = ""
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.FilterIndex = 0
+            openFD.ShowDialog()
+            TextBox5.Text = openFD.FileName
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
@@ -12506,26 +12510,30 @@ Public Class Form1
     End Sub
 
     Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavecropped.Click
-        thumbedItsMade = False
         Try
-            Dim stream As New System.IO.MemoryStream
-            PictureBox2.Image.Save(workingMovieDetails.fileinfo.fanartpath, System.Drawing.Imaging.ImageFormat.Jpeg)
-            PictureBox7.Image = PictureBox2.Image
-            Label16.Text = PictureBox2.Image.Width
-            Label17.Text = PictureBox2.Image.Height
-            For Each paths In Preferences.offlinefolders
-                If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
-                    Dim mediapath As String
-                    mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                    Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                End If
-            Next
-            btnresetimage.Visible = False
-            btnsavecropped.Visible = False
-        Catch ex As Exception
+            thumbedItsMade = False
+            Try
+                Dim stream As New System.IO.MemoryStream
+                PictureBox2.Image.Save(workingMovieDetails.fileinfo.fanartpath, System.Drawing.Imaging.ImageFormat.Jpeg)
+                PictureBox7.Image = PictureBox2.Image
+                Label16.Text = PictureBox2.Image.Width
+                Label17.Text = PictureBox2.Image.Height
+                For Each paths In Preferences.offlinefolders
+                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
+                        Dim mediapath As String
+                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                    End If
+                Next
+                btnresetimage.Visible = False
+                btnsavecropped.Visible = False
+            Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
@@ -23631,16 +23639,20 @@ Public Class Form1
     End Sub
 
     Private Sub Button_tv_RegexRename_Restore_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Restore.Click
-        util_RegexSetDefaultRename()
-        ListBox_tv_RegexRename.Items.Clear()
-        For Each Regex In tv_RegexRename
-            ListBox_tv_RegexRename.Items.Add(Regex)
-        Next
-        ComboBox_tv_EpisodeRename.Items.Clear()
-        For Each Regex In tv_RegexRename
-            ComboBox_tv_EpisodeRename.Items.Add(Regex)
-        Next
-        ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+        Try
+            util_RegexSetDefaultRename()
+            ListBox_tv_RegexRename.Items.Clear()
+            For Each Regex In tv_RegexRename
+                ListBox_tv_RegexRename.Items.Add(Regex)
+            Next
+            ComboBox_tv_EpisodeRename.Items.Clear()
+            For Each Regex In tv_RegexRename
+                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+            Next
+            ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
@@ -23682,111 +23694,135 @@ Public Class Form1
     End Function
 
     Private Sub Button_tv_RegexScrape_Edit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Edit.Click
-        'edit
-        If TextBox_tv_RegexScrape_Edit.Text = "" Then
-            MsgBox("No Text")
-            'TextBox46.Text = ListBox7.SelectedItem     'WTF? Listbox7 = Movie Folder?
-            Exit Sub
-        End If
-        If Not util_RegexValidate(TextBox_tv_RegexScrape_Edit.Text) Then
-            MsgBox("Invalid Regex")
-            Exit Sub
-        End If
-        Dim tempint As Integer = ListBox_tv_RegexScrape.SelectedIndex
-        ListBox_tv_RegexScrape.Items.RemoveAt(tempint)
-        ListBox_tv_RegexScrape.Items.Insert(tempint, TextBox_tv_RegexScrape_Edit.Text)
-        ListBox_tv_RegexScrape.SelectedIndex = tempint
-        tv_RegexScraper.Clear()
-        For Each regexp In ListBox_tv_RegexScrape.Items
-            tv_RegexScraper.Add(regexp)
-        Next
-        generalprefschanged = True
+        Try
+            'edit
+            If TextBox_tv_RegexScrape_Edit.Text = "" Then
+                MsgBox("No Text")
+                'TextBox46.Text = ListBox7.SelectedItem     'WTF? Listbox7 = Movie Folder?
+                Exit Sub
+            End If
+            If Not util_RegexValidate(TextBox_tv_RegexScrape_Edit.Text) Then
+                MsgBox("Invalid Regex")
+                Exit Sub
+            End If
+            Dim tempint As Integer = ListBox_tv_RegexScrape.SelectedIndex
+            ListBox_tv_RegexScrape.Items.RemoveAt(tempint)
+            ListBox_tv_RegexScrape.Items.Insert(tempint, TextBox_tv_RegexScrape_Edit.Text)
+            ListBox_tv_RegexScrape.SelectedIndex = tempint
+            tv_RegexScraper.Clear()
+            For Each regexp In ListBox_tv_RegexScrape.Items
+                tv_RegexScraper.Add(regexp)
+            Next
+            generalprefschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button_tv_RegexScrape_Add_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Add.Click
-        'add textbox49
-        If Not util_RegexValidate(TextBox_tv_RegexScrape_New.Text) Then
-            MsgBox("Invalid Regex")
-            Exit Sub
-        End If
-        ListBox_tv_RegexScrape.Items.Add(TextBox_tv_RegexScrape_New.Text)
-        tv_RegexScraper.Add(TextBox_tv_RegexScrape_New.Text)
+        Try
+            'add textbox49
+            If Not util_RegexValidate(TextBox_tv_RegexScrape_New.Text) Then
+                MsgBox("Invalid Regex")
+                Exit Sub
+            End If
+            ListBox_tv_RegexScrape.Items.Add(TextBox_tv_RegexScrape_New.Text)
+            tv_RegexScraper.Add(TextBox_tv_RegexScrape_New.Text)
 
-        generalprefschanged = True
+            generalprefschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button_tv_RegexRename_Remove_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Remove.Click
-        Dim strRegexSelected = ListBox_tv_RegexRename.SelectedItem
-        Dim idxRegexSelected = ListBox_tv_RegexRename.SelectedIndex
-
         Try
-            ListBox_tv_RegexRename.Items.RemoveAt(idxRegexSelected)
-        Catch ex As Exception
+            Dim strRegexSelected = ListBox_tv_RegexRename.SelectedItem
+            Dim idxRegexSelected = ListBox_tv_RegexRename.SelectedIndex
+
+            Try
+                ListBox_tv_RegexRename.Items.RemoveAt(idxRegexSelected)
+            Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
+            End Try
+
+            For Each regexp In tv_RegexRename
+                If regexp = strRegexSelected Then
+                    tv_RegexRename.Remove(regexp)
+                    Exit For
+                End If
+            Next
+
+            TextBox_tv_RegexRename_Edit.Clear()
+
+            ComboBox_tv_EpisodeRename.Items.Clear()
+            For Each Regex In tv_RegexRename
+                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+            Next
+            ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename >= idxRegexSelected, Preferences.tvrename - 1, Preferences.tvrename)
+
+            generalprefschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
-
-        For Each regexp In tv_RegexRename
-            If regexp = strRegexSelected Then
-                tv_RegexRename.Remove(regexp)
-                Exit For
-            End If
-        Next
-
-        TextBox_tv_RegexRename_Edit.Clear()
-
-        ComboBox_tv_EpisodeRename.Items.Clear()
-        For Each Regex In tv_RegexRename
-            ComboBox_tv_EpisodeRename.Items.Add(Regex)
-        Next
-        ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename >= idxRegexSelected, Preferences.tvrename - 1, Preferences.tvrename)
-
-        generalprefschanged = True
     End Sub
 
     Private Sub Button_tv_RegexRename_Add_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Add.Click
-        'add
-        ListBox_tv_RegexRename.Items.Add(TextBox_tv_RegexRename_New.Text)
-        tv_RegexRename.Add(TextBox_tv_RegexRename_New.Text)
-        TextBox_tv_RegexRename_New.Clear()
-        ComboBox_tv_EpisodeRename.Items.Clear()
-        For Each Regex In tv_RegexRename
-            ComboBox_tv_EpisodeRename.Items.Add(Regex)
-        Next
-        ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+        Try
+            'add
+            ListBox_tv_RegexRename.Items.Add(TextBox_tv_RegexRename_New.Text)
+            tv_RegexRename.Add(TextBox_tv_RegexRename_New.Text)
+            TextBox_tv_RegexRename_New.Clear()
+            ComboBox_tv_EpisodeRename.Items.Clear()
+            For Each Regex In tv_RegexRename
+                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+            Next
+            ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
 
-        generalprefschanged = True
+            generalprefschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button_tv_RegexRename_Edit_Click(sender As Object, e As System.EventArgs) Handles Button_tv_RegexRename_Edit.Click
-        'edit
-        If TextBox_tv_RegexRename_Edit.Text = "" Then
-            MsgBox("No Text")
-            'TextBox50.Text = ListBox7.SelectedItem
-            Exit Sub
-        End If
-        Dim tempint As Integer = ListBox_tv_RegexRename.SelectedIndex
-        ListBox_tv_RegexRename.Items.RemoveAt(tempint)
-        ListBox_tv_RegexRename.Items.Insert(tempint, TextBox_tv_RegexRename_Edit.Text)
-        ListBox_tv_RegexRename.SelectedIndex = tempint
-        tv_RegexRename.Clear()
-        For Each regexp In ListBox_tv_RegexRename.Items
-            tv_RegexRename.Add(regexp)
-        Next
-        TextBox_tv_RegexRename_Edit.Clear()
-        generalprefschanged = True
+        Try
+            'edit
+            If TextBox_tv_RegexRename_Edit.Text = "" Then
+                MsgBox("No Text")
+                'TextBox50.Text = ListBox7.SelectedItem
+                Exit Sub
+            End If
+            Dim tempint As Integer = ListBox_tv_RegexRename.SelectedIndex
+            ListBox_tv_RegexRename.Items.RemoveAt(tempint)
+            ListBox_tv_RegexRename.Items.Insert(tempint, TextBox_tv_RegexRename_Edit.Text)
+            ListBox_tv_RegexRename.SelectedIndex = tempint
+            tv_RegexRename.Clear()
+            For Each regexp In ListBox_tv_RegexRename.Items
+                tv_RegexRename.Add(regexp)
+            Next
+            TextBox_tv_RegexRename_Edit.Clear()
+            generalprefschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button_tv_RegexPrefSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexPrefSave.Click
-        Preferences.saveconfig()
-        Call util_RegexSave()
-        ComboBox_tv_EpisodeRename.Items.Clear()
-        For Each Regex In tv_RegexRename
-            ComboBox_tv_EpisodeRename.Items.Add(Regex)
-        Next
-        MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
-        generalprefschanged = False
+        Try
+            Preferences.SaveConfig()
+            Call util_RegexSave()
+            ComboBox_tv_EpisodeRename.Items.Clear()
+            For Each Regex In tv_RegexRename
+                ComboBox_tv_EpisodeRename.Items.Add(Regex)
+            Next
+            MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
+            generalprefschanged = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TabPage24_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage24.Leave
@@ -25041,46 +25077,54 @@ Public Class Form1
     End Sub
 
     Private Sub Button_tv_RegexRename_MoveUp_Click(sender As System.Object, e As System.EventArgs) Handles Button_tv_RegexRename_MoveUp.Click
-        'up
         Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox_tv_RegexRename.SelectedIndex <> 0 Then
-                mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
-                mOtherIndex = mSelectedIndex - 1
-                ListBox_tv_RegexRename.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexRename.Items(mOtherIndex))
-                ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex)
-            End If
-            tv_RegexRename.Clear()
-            For Each item In ListBox_tv_RegexRename.Items
-                tv_RegexRename.Add(item)
-            Next
-            generalprefschanged = True
-        Catch ex As Exception
+            'up
+            Try
+                Dim mSelectedIndex, mOtherIndex As Integer
+                If Me.ListBox_tv_RegexRename.SelectedIndex <> 0 Then
+                    mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
+                    mOtherIndex = mSelectedIndex - 1
+                    ListBox_tv_RegexRename.Items.Insert(mSelectedIndex + 1, ListBox_tv_RegexRename.Items(mOtherIndex))
+                    ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex)
+                End If
+                tv_RegexRename.Clear()
+                For Each item In ListBox_tv_RegexRename.Items
+                    tv_RegexRename.Add(item)
+                Next
+                generalprefschanged = True
+            Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
     Private Sub Button_tv_RegexRename_MoveDown_Click(sender As System.Object, e As System.EventArgs) Handles Button_tv_RegexRename_MoveDown.Click
-        'down
         Try
-            Dim mSelectedIndex, mOtherIndex As Integer
-            If Me.ListBox_tv_RegexRename.SelectedIndex <> Me.ListBox_tv_RegexRename.Items.Count - 1 Then
-                mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
-                mOtherIndex = mSelectedIndex + 1
-                ListBox_tv_RegexRename.Items.Insert(mSelectedIndex, ListBox_tv_RegexRename.Items(mOtherIndex))
-                ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex + 1)
-            End If
-            tv_RegexRename.Clear()
-            For Each item In ListBox_tv_RegexRename.Items
-                tv_RegexRename.Add(item)
-            Next
-            generalprefschanged = True
-        Catch ex As Exception
+            'down
+            Try
+                Dim mSelectedIndex, mOtherIndex As Integer
+                If Me.ListBox_tv_RegexRename.SelectedIndex <> Me.ListBox_tv_RegexRename.Items.Count - 1 Then
+                    mSelectedIndex = Me.ListBox_tv_RegexRename.SelectedIndex
+                    mOtherIndex = mSelectedIndex + 1
+                    ListBox_tv_RegexRename.Items.Insert(mSelectedIndex, ListBox_tv_RegexRename.Items(mOtherIndex))
+                    ListBox_tv_RegexRename.Items.RemoveAt(mOtherIndex + 1)
+                End If
+                tv_RegexRename.Clear()
+                For Each item In ListBox_tv_RegexRename.Items
+                    tv_RegexRename.Add(item)
+                Next
+                generalprefschanged = True
+            Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
 

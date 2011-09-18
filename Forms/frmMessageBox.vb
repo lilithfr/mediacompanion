@@ -9,42 +9,74 @@ Public Class frmMessageBox
     End Sub
 
     Private Sub DeactivateMessageBox(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Deactivate
-        Me.Activate()
-        Me.BringToFront()
+        Try
+            Me.Activate()
+            Me.BringToFront()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub CloseMessageBox(ByVal sender As Object, ByVal e As FormClosingEventArgs) Handles Me.FormClosing
-        Me.Cursor = Cursors.Default
+        Try
+            Me.Cursor = Cursors.Default
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub LoadMessageBox(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
-        Me.Cursor = Cursors.WaitCursor
+        Try
+            Me.Cursor = Cursors.WaitCursor
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub MessageBoxLostFocus(ByVal sender As Object, ByVal e As EventArgs) Handles Me.LostFocus
-        Me.Activate()
+        Try
+            Me.Activate()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TextBox1_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles TextBox1.TextChanged
-        TextBox1.SelectionStart = TextBox1.Text.Length
+        Try
+            TextBox1.SelectionStart = TextBox1.Text.Length
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TextBox2_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles TextBox2.TextChanged
-        TextBox2.SelectionStart = TextBox2.Text.Length
+        Try
+            TextBox2.SelectionStart = TextBox2.Text.Length
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TextBox3_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles TextBox3.TextChanged
-        TextBox3.SelectionStart = TextBox3.Text.Length
+        Try
+            TextBox3.SelectionStart = TextBox3.Text.Length
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub MessageBoxVisibilityChanged(ByVal sender As Object, ByVal e As EventArgs) Handles Me.VisibleChanged
-        If Me.Visible = False Then
-            Windows.Forms.Cursor.Current = Cursors.Default
-        Else
-            Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        End If
-        TextBox1.SelectionStart = TextBox1.Text.Length
-        TextBox2.SelectionStart = TextBox2.Text.Length
-        TextBox3.SelectionStart = TextBox3.Text.Length
+        Try
+            If Me.Visible = False Then
+                Windows.Forms.Cursor.Current = Cursors.Default
+            Else
+                Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            End If
+            TextBox1.SelectionStart = TextBox1.Text.Length
+            TextBox2.SelectionStart = TextBox2.Text.Length
+            TextBox3.SelectionStart = TextBox3.Text.Length
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 End Class
