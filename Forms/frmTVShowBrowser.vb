@@ -20,14 +20,21 @@ Public Class frmTVShowBrowser
 
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Call loadresults()
+        Try
+            Call loadresults()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TextBox1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            Call loadresults()
-        End If
-
+        Try
+            If e.KeyCode = Keys.Enter Then
+                Call loadresults()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub loadresults()
@@ -112,22 +119,21 @@ Public Class frmTVShowBrowser
 
 
     Private Sub ListBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
-
-        Dim counter As Integer = ListBox1.SelectedIndex + 1
-        If returnedresults(counter, 2) <> Nothing Then
-            PictureBox1.ImageLocation = returnedresults(counter, 2)
-        Else
-            PictureBox1.Image = Nothing
-        End If
-
-
-        Call checklanguage()
+        Try
+            Dim counter As Integer = ListBox1.SelectedIndex + 1
+            If returnedresults(counter, 2) <> Nothing Then
+                PictureBox1.ImageLocation = returnedresults(counter, 2)
+            Else
+                PictureBox1.Image = Nothing
+            End If
 
 
-
-
-
+            Call checklanguage()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
+
     Private Sub checklanguage()
         url = "http://thetvdb.com/api/6E82FED600783400/series/" & returnedresults(ListBox1.SelectedIndex + 1, 1) & "/" & languagecode & ".xml"
         Call loadwebpage()
@@ -149,9 +155,13 @@ Public Class frmTVShowBrowser
 
 
     Private Sub ListBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox2.SelectedIndexChanged
-        Dim count As Integer = ListBox2.SelectedIndex + 1
-        languagecode = languages(count, 1)
-        Call checklanguage()
+        Try
+            Dim count As Integer = ListBox2.SelectedIndex + 1
+            languagecode = languages(count, 1)
+            Call checklanguage()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub getimdbactors(ByVal imdbid)

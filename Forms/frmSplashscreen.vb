@@ -13,31 +13,25 @@ Public Class frmSplashscreen
     Dim tempstring As String = ""
 
     Private Sub splashscreen_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        'Me.TopMost = True
-        CheckForIllegalCrossThreadCalls = False
+        Try
+            'Me.TopMost = True
+            CheckForIllegalCrossThreadCalls = False
 
-        Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
-        Label2.Text = sAssemblyVersion
+            Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
+            Label2.Text = sAssemblyVersion
 
-        'BackgroundWorker1.RunWorkerAsync()
-
-
-        'Dim t As System.Threading.Thread
-        't = New Thread(AddressOf MyMethod)
-        't.IsBackground = True
-        't.SetApartmentState(ApartmentState.STA)
-        't.Start()
+            'BackgroundWorker1.RunWorkerAsync()
 
 
+            'Dim t As System.Threading.Thread
+            't = New Thread(AddressOf MyMethod)
+            't.IsBackground = True
+            't.SetApartmentState(ApartmentState.STA)
+            't.Start()
 
-
-
-
-
-
-
-
-
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 

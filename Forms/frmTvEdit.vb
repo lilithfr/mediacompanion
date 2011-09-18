@@ -5,17 +5,6 @@ Imports System.Text.RegularExpressions
 Imports System.Text
 Imports System.Management
 
-
-
-
-
-
-
-
-
-
-
-
 Public Class frmTvEdit
 
 
