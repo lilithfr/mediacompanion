@@ -110,22 +110,26 @@ Partial Public Class Form1
         Next
     End Sub
     Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
-        'chooses which sub is run to load the relavent tv data to the screen
-        'note: context menu items are set during TvTreeView_MouseUp event because we only need to update if right click is done which we check in the mouseup sub
-        'mouseup sub selects the node underneath the mouse & then this runs since its an event 'AfterSelect'
+        Try
+            'chooses which sub is run to load the relavent tv data to the screen
+            'note: context menu items are set during TvTreeView_MouseUp event because we only need to update if right click is done which we check in the mouseup sub
+            'mouseup sub selects the node underneath the mouse & then this runs since its an event 'AfterSelect'
 
-        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
-        If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
-            tv_ShowLoad(TvTreeview.SelectedNode.Tag)
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
-            tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
-            tv_EpisodeSelected(TvTreeview.SelectedNode.Tag)
-        Else
-            MsgBox("None")
-        End If
+            If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+            If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+                tv_ShowLoad(TvTreeview.SelectedNode.Tag)
+            ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
+                tv_SeasonSelected(TvTreeview.SelectedNode.Tag)
+            ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
+                tv_EpisodeSelected(TvTreeview.SelectedNode.Tag)
+            Else
+                MsgBox("None")
+            End If
 
-        tv_SplitContainerAutoPosition() 'auto set container splits....after we have loaded data & pictures....
+            tv_SplitContainerAutoPosition() 'auto set container splits....after we have loaded data & pictures....
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
         '                                                  'called from tv_treeview mouseup event where we check for a right click
