@@ -255,25 +255,26 @@ Public Class frmTVShowBrowser
                                             Dim networkpath As String = Preferences.actorsavepath
                                             workingpath = networkpath & "\" & actors(f, 3) & ".jpg"
                                             If Not IO.File.Exists(workingpath) Then
-                                                Dim buffer(4000000) As Byte
-                                                Dim size As Integer = 0
-                                                Dim bytesRead As Integer = 0
-                                                Dim thumburl As String = actors(f, 2)
-                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                Dim res As HttpWebResponse = req.GetResponse()
-                                                Dim contents As Stream = res.GetResponseStream()
-                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                While bytesToRead > 0
-                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                    If size = 0 Then Exit While
-                                                    bytesToRead -= size
-                                                    bytesRead += size
-                                                End While
+                                                Utilities.DownloadFile(actors(f, 2), workingpath)
+                                                'Dim buffer(4000000) As Byte
+                                                'Dim size As Integer = 0
+                                                'Dim bytesRead As Integer = 0
+                                                'Dim thumburl As String = actors(f, 2)
+                                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                'Dim res As HttpWebResponse = req.GetResponse()
+                                                'Dim contents As Stream = res.GetResponseStream()
+                                                'Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                'While bytesToRead > 0
+                                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                '    If size = 0 Then Exit While
+                                                '    bytesToRead -= size
+                                                '    bytesRead += size
+                                                'End While
 
-                                                Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                fstrm.Write(buffer, 0, bytesRead)
-                                                contents.Close()
-                                                fstrm.Close()
+                                                'Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                                'fstrm.Write(buffer, 0, bytesRead)
+                                                'contents.Close()
+                                                'fstrm.Close()
                                             End If
                                             actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
                                         Catch
@@ -351,25 +352,26 @@ Public Class frmTVShowBrowser
                             workingpath = IO.Path.Combine(networkpath, actors(f, 3))
                             workingpath += ".jpg"
                             If Not IO.File.Exists(workingpath) Then
-                                Dim buffer(4000000) As Byte
-                                Dim size As Integer = 0
-                                Dim bytesRead As Integer = 0
-                                Dim thumburl As String = actors(f, 2)
-                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                Dim res As HttpWebResponse = req.GetResponse()
-                                Dim contents As Stream = res.GetResponseStream()
-                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                While bytesToRead > 0
-                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                    If size = 0 Then Exit While
-                                    bytesToRead -= size
-                                    bytesRead += size
-                                End While
+                                Utilities.DownloadFile(actors(f, 2), workingpath)
+                                'Dim buffer(4000000) As Byte
+                                'Dim size As Integer = 0
+                                'Dim bytesRead As Integer = 0
+                                'Dim thumburl As String = actors(f, 2)
+                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                'Dim res As HttpWebResponse = req.GetResponse()
+                                'Dim contents As Stream = res.GetResponseStream()
+                                'Dim bytesToRead As Integer = CInt(buffer.Length)
+                                'While bytesToRead > 0
+                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
+                                '    If size = 0 Then Exit While
+                                '    bytesToRead -= size
+                                '    bytesRead += size
+                                'End While
 
-                                Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                fstrm.Write(buffer, 0, bytesRead)
-                                contents.Close()
-                                fstrm.Close()
+                                'Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                'fstrm.Write(buffer, 0, bytesRead)
+                                'contents.Close()
+                                'fstrm.Close()
                             End If
                             actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
                             'Catch

@@ -345,25 +345,26 @@ Public Class Form2
                                                             End If
                                                             workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                             If Not IO.File.Exists(workingpath) Then
-                                                                Dim buffer(4000000) As Byte
-                                                                Dim size As Integer = 0
-                                                                Dim bytesRead As Integer = 0
-                                                                Dim thumburl As String = newactor.actorthumb
-                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                Dim res As HttpWebResponse = req.GetResponse()
-                                                                Dim contents As Stream = res.GetResponseStream()
-                                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                While bytesToRead > 0
-                                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                    If size = 0 Then Exit While
-                                                                    bytesToRead -= size
-                                                                    bytesRead += size
-                                                                End While
+                                                                Utilities.DownloadFile(newactor.actorthumb, workingpath)
+                                                                'Dim buffer(4000000) As Byte
+                                                                'Dim size As Integer = 0
+                                                                'Dim bytesRead As Integer = 0
+                                                                'Dim thumburl As String = newactor.actorthumb
+                                                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                                'Dim res As HttpWebResponse = req.GetResponse()
+                                                                'Dim contents As Stream = res.GetResponseStream()
+                                                                'Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                                'While bytesToRead > 0
+                                                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                                '    If size = 0 Then Exit While
+                                                                '    bytesToRead -= size
+                                                                '    bytesRead += size
+                                                                'End While
 
-                                                                Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                fstrm.Write(buffer, 0, bytesRead)
-                                                                contents.Close()
-                                                                fstrm.Close()
+                                                                'Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                                                'fstrm.Write(buffer, 0, bytesRead)
+                                                                'contents.Close()
+                                                                'fstrm.Close()
                                                             End If
                                                             newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                             If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
@@ -555,6 +556,7 @@ Public Class Form2
                                     Try
                                         If moviethumburl <> "" And moviethumburl <> "na" Then
                                             Try
+                                                'Utilities.DownloadFile(moviethumburl, posterpath)
                                                 Dim buffer(4000000) As Byte
                                                 Dim size As Integer = 0
                                                 Dim bytesRead As Integer = 0
@@ -650,6 +652,7 @@ Public Class Form2
 
 
                                             'need to resize thumbs
+                                            'Utilities.DownloadFile(moviethumburl, workingpath)
 
                                             Try
                                                 Dim buffer(4000000) As Byte

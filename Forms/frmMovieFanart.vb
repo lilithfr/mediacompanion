@@ -427,6 +427,7 @@ Public Class frmMovieFanart
             Else
                 Try
                     Panel1.Controls.Remove(Label1)
+                    'Utilities.DownloadFile(moviethumburl, bmp)
                     Dim buffer(4000000) As Byte
                     Dim size As Integer = 0
                     Dim bytesRead As Integer = 0

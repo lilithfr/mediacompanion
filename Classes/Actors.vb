@@ -155,24 +155,25 @@ Public Class actors
                         If actor.actorthumb <> Nothing Then
                             If actor.actorthumb <> "" And actor.actorthumb.IndexOf("http") <> -1 And actor.actorthumb.IndexOf(".jpg") <> -1 Then
                                 If Not IO.File.Exists(filename) Then
-                                    Dim buffer(4000000) As Byte
-                                    Dim size As Integer = 0
-                                    Dim bytesRead As Integer = 0
-                                    Dim thumburl As String = actor.actorthumb
-                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                    Dim res As HttpWebResponse = req.GetResponse()
-                                    Dim contents As Stream = res.GetResponseStream()
-                                    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                    While bytesToRead > 0
-                                        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                        If size = 0 Then Exit While
-                                        bytesToRead -= size
-                                        bytesRead += size
-                                    End While
-                                    Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-                                    fstrm.Write(buffer, 0, bytesRead)
-                                    contents.Close()
-                                    fstrm.Close()
+                                    Utilities.DownloadFile(actor.actorthumb, filename)
+                                    '    Dim buffer(4000000) As Byte
+                                    '    Dim size As Integer = 0
+                                    '    Dim bytesRead As Integer = 0
+                                    '    Dim thumburl As String = actor.actorthumb
+                                    '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                    '    Dim res As HttpWebResponse = req.GetResponse()
+                                    '    Dim contents As Stream = res.GetResponseStream()
+                                    '    Dim bytesToRead As Integer = CInt(buffer.Length)
+                                    '    While bytesToRead > 0
+                                    '        size = contents.Read(buffer, bytesRead, bytesToRead)
+                                    '        If size = 0 Then Exit While
+                                    '        bytesToRead -= size
+                                    '        bytesRead += size
+                                    '    End While
+                                    '    Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
+                                    '    fstrm.Write(buffer, 0, bytesRead)
+                                    '    contents.Close()
+                                    '    fstrm.Close()
                                 End If
                             End If
                         End If
