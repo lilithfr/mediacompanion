@@ -1295,50 +1295,6 @@ Public Class WorkingWithNfoFiles
     'End Sub
 
     Public Sub saveepisodenfo(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2", Optional ByVal batch As Boolean = False)
-        'Monitor.Enter(Me)
-        'Try
-        'Dim ShowList As New List(Of TvShow)
-        'For Each item In Cache.TvCache.Shows
-        '    If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And (item.State = Nfo.ShowState.Open) And (item.Title.Value = showName) Then
-        '        ShowList.Add(item)
-        '    End If
-        'Next
-        'Dim WorkingTvShow As TvShow = Form1.tv_ShowSelectedCurrently()
-        'If seasonno <> -2 And episodeno <> -2 Then
-        '    If batch = False Then
-        '        Dim timetoexit As Boolean = False
-        '        For Each show In ShowList
-        '            If show.NfoFilePath = WorkingTvShow.NfoFilePath Then
-        '                For Each episode In show.Episodes
-        '                    If episode.Episode.Value = episodeno And episode.Season.Value = seasonno Then
-
-        '                        For Each epis In listofepisodes
-        '                            If epis.Season.Value = seasonno And epis.Episode.Value = episodeno Then
-        '                                Dim newep As New TvEpisode
-        '                                newep.VideoFilePath = epis.VideoFilePath
-        '                                newep.Title = epis.Title
-        '                                newep.Season.Value = epis.Season.Value
-        '                                newep.Episode.Value = epis.Episode.Value
-        '                                newep.PlayCount = epis.PlayCount
-        '                                newep.Rating = epis.Rating
-        '                                show.Episodes.Remove(episode)
-        '                                show.Episodes.Add(newep)
-        '                                timetoexit = True
-        '                                Exit For
-        '                            End If
-
-        '                        Next
-        '                    End If
-        '                    If timetoexit = True Then Exit For
-        '                Next
-        '            End If
-        '            If timetoexit = True Then Exit For
-        '        Next
-        '    End If
-        'End If
-
-
-
         If listofepisodes.Count = 1 Then
             'Hack to get ShowID with the data available at this point
             Dim ThumbnailPath As String = listofepisodes(0).Thumbnail.FileName
@@ -1589,11 +1545,14 @@ Public Class WorkingWithNfoFiles
         Else
             Dim document As New XmlDocument
             Dim root As XmlElement
-            Dim child As XmlElement
-            Dim childchild As XmlElement
-            Dim childchildchild As XmlElement
-            Dim childchildchildchild As XmlElement
-            Dim middlechild As XmlElement
+            Dim xmlEpisode As XmlElement
+            Dim xmlEpisodechild As XmlElement
+            Dim xmlStreamDetails As XmlElement
+            Dim xmlFileInfo As XmlElement
+            Dim xmlFileInfoType As XmlElement
+            Dim xmlFileInfoTypechild As XmlElement
+            Dim xmlActor As XmlElement
+            Dim xmlActorchild As XmlElement
 
             Dim xmlproc As XmlDeclaration
             xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
@@ -1613,221 +1572,224 @@ Public Class WorkingWithNfoFiles
 
                 'end hack
 
-                child = document.CreateElement("episodedetails")
+                xmlEpisode = document.CreateElement("episodedetails")
                 If done = False Then
                     'done = True
                     If Preferences.enabletvhdtags = True Then
                         Try
-                            middlechild = document.CreateElement("streamdetails")
-                            childchild = document.CreateElement("fileinfo")
-                            childchildchild = document.CreateElement("video")
+                            xmlStreamDetails = document.CreateElement("streamdetails")
+                            xmlFileInfo = document.CreateElement("fileinfo")
+                            xmlFileInfoType = document.CreateElement("video")
                             If ep.Details.StreamDetails.Video.Width <> Nothing Then
                                 If ep.Details.StreamDetails.Video.Width.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("width")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.Width.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("width")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Width.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.Height <> Nothing Then
                                 If ep.Details.StreamDetails.Video.Height.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("height")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.Height.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("height")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Height.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.Codec <> Nothing Then
                                 If ep.Details.StreamDetails.Video.Codec.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("codec")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("codec")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Codec.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.FormatInfo <> Nothing Then
                                 If ep.Details.StreamDetails.Video.FormatInfo.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("format")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("format")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.FormatInfo.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                                 If ep.Details.StreamDetails.Video.DurationInSeconds.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("duration")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("duration")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.DurationInSeconds.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.Bitrate <> Nothing Then
                                 If ep.Details.StreamDetails.Video.Bitrate.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("width")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("width")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Bitrate.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.BitrateMode <> Nothing Then
                                 If ep.Details.StreamDetails.Video.BitrateMode.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("bitratemode")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("bitratemode")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMode.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.BitrateMax <> Nothing Then
                                 If ep.Details.StreamDetails.Video.BitrateMax.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("bitratemax")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("bitratemax")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.BitrateMax.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.Container <> Nothing Then
                                 If ep.Details.StreamDetails.Video.Container.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("container")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.Container.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("container")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.Container.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.CodecId <> Nothing Then
                                 If ep.Details.StreamDetails.Video.CodecId.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("codecid")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("codecid")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecId.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.CodecInfo <> Nothing Then
                                 If ep.Details.StreamDetails.Video.CodecInfo.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("codecidinfo")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("codecidinfo")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.CodecInfo.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
                             If ep.Details.StreamDetails.Video.ScanType <> Nothing Then
                                 If ep.Details.StreamDetails.Video.ScanType.Value <> "" Then
-                                    childchildchildchild = document.CreateElement("scantype")
-                                    childchildchildchild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
-                                    childchildchild.AppendChild(childchildchildchild)
+                                    xmlFileInfoTypechild = document.CreateElement("scantype")
+                                    xmlFileInfoTypechild.InnerText = ep.Details.StreamDetails.Video.ScanType.Value
+                                    xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                 End If
                             End If
-                            childchild.AppendChild(childchildchild)
+                            xmlFileInfo.AppendChild(xmlFileInfoType)
                             If ep.Details.StreamDetails.Audio.Count > 0 Then
                                 For Each aud In ep.Details.StreamDetails.Audio
-                                    childchildchild = document.CreateElement("audio")
+                                    xmlFileInfoType = document.CreateElement("audio")
                                     If aud.Language <> Nothing Then
                                         If aud.Language.Value <> "" Then
-                                            childchildchildchild = document.CreateElement("language")
-                                            childchildchildchild.InnerText = aud.Language.Value
-                                            childchildchild.AppendChild(childchildchildchild)
+                                            xmlFileInfoTypechild = document.CreateElement("language")
+                                            xmlFileInfoTypechild.InnerText = aud.Language.Value
+                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                         End If
                                     End If
                                     If aud.Codec <> Nothing Then
                                         If aud.Codec.Value <> "" Then
-                                            childchildchildchild = document.CreateElement("codec")
-                                            childchildchildchild.InnerText = aud.Codec.Value
-                                            childchildchild.AppendChild(childchildchildchild)
+                                            xmlFileInfoTypechild = document.CreateElement("codec")
+                                            xmlFileInfoTypechild.InnerText = aud.Codec.Value
+                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                         End If
                                     End If
                                     If aud.Channels <> Nothing Then
                                         If aud.Channels.Value <> "" Then
-                                            childchildchildchild = document.CreateElement("channels")
-                                            childchildchildchild.InnerText = aud.Channels.Value
-                                            childchildchild.AppendChild(childchildchildchild)
+                                            xmlFileInfoTypechild = document.CreateElement("channels")
+                                            xmlFileInfoTypechild.InnerText = aud.Channels.Value
+                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                         End If
                                     End If
                                     If aud.Bitrate <> Nothing Then
                                         If aud.Bitrate.Value <> "" Then
-                                            childchildchildchild = document.CreateElement("bitrate")
-                                            childchildchildchild.InnerText = aud.Bitrate.Value
-                                            childchildchild.AppendChild(childchildchildchild)
+                                            xmlFileInfoTypechild = document.CreateElement("bitrate")
+                                            xmlFileInfoTypechild.InnerText = aud.Bitrate.Value
+                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                         End If
                                     End If
-                                    childchild.AppendChild(childchildchild)
+                                    xmlFileInfo.AppendChild(xmlFileInfoType)
                                 Next
                             End If
                             If ep.Details.StreamDetails.Subtitles.Count > 0 Then
                                 For Each subt In ep.Details.StreamDetails.Subtitles
                                     If subt.Language <> Nothing Then
                                         If subt.Language.Value <> "" Then
-                                            childchildchild = document.CreateElement("subtitle")
-                                            childchildchildchild = document.CreateElement("language")
-                                            childchildchildchild.InnerText = subt.Language.Value
-                                            childchildchild.AppendChild(childchildchildchild)
+                                            xmlFileInfoType = document.CreateElement("subtitle")
+                                            xmlFileInfoTypechild = document.CreateElement("language")
+                                            xmlFileInfoTypechild.InnerText = subt.Language.Value
+                                            xmlFileInfoType.AppendChild(xmlFileInfoTypechild)
                                         End If
                                     End If
-                                    childchild.AppendChild(childchildchild)
+                                    xmlFileInfo.AppendChild(xmlFileInfoType)
                                 Next
                             End If
-                            middlechild.AppendChild(childchild)
-                            child.AppendChild(middlechild)
+                            xmlStreamDetails.AppendChild(xmlFileInfo)
+                            xmlEpisode.AppendChild(xmlStreamDetails)
                         Catch
                         End Try
                     End If
                 End If
 
 
-                childchild = document.CreateElement("title")
-                childchild.InnerText = ep.Title.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("title")
+                xmlEpisodechild.InnerText = ep.Title.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("season")
-                childchild.InnerText = ep.Season.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("season")
+                xmlEpisodechild.InnerText = ep.Season.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("episode")
-                childchild.InnerText = ep.Episode.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("episode")
+                xmlEpisodechild.InnerText = ep.Episode.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("playcount")
-                childchild.InnerText = ep.PlayCount.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("playcount")
+                xmlEpisodechild.InnerText = ep.PlayCount.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("credits")
-                childchild.InnerText = ep.Credits.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("credits")
+                xmlEpisodechild.InnerText = ep.Credits.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("director")
-                childchild.InnerText = ep.Director.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("director")
+                xmlEpisodechild.InnerText = ep.Director.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("rating")
-                childchild.InnerText = ep.Rating.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("rating")
+                xmlEpisodechild.InnerText = ep.Rating.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("aired")
-                childchild.InnerText = ep.Aired.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("aired")
+                xmlEpisodechild.InnerText = ep.Aired.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("plot")
-                childchild.InnerText = ep.Plot.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("plot")
+                xmlEpisodechild.InnerText = ep.Plot.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("thumb")
-                childchild.InnerText = ep.Thumbnail.Path
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("thumb")
+                xmlEpisodechild.InnerText = ep.Thumbnail.Path
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                childchild = document.CreateElement("runtime")
-                childchild.InnerText = ep.Runtime.Value
-                child.AppendChild(childchild)
+                xmlEpisodechild = document.CreateElement("runtime")
+                xmlEpisodechild.InnerText = ep.Runtime.Value
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                child = document.CreateElement("showid")
-                child.InnerText = FoundShowID
-                root.AppendChild(child)
+                xmlEpisodechild = document.CreateElement("showid")
+                xmlEpisodechild.InnerText = FoundShowID
+                xmlEpisode.AppendChild(xmlEpisodechild)
 
-                For Each actor In ep.ListActors
-                    Try
-                        childchild = document.CreateElement("actor")
-                        childchildchild = document.CreateElement("name")
-                        childchildchild.InnerText = actor.actorname
-                        childchild.AppendChild(childchildchild)
-                        childchildchild = document.CreateElement("role")
-                        childchildchild.InnerText = actor.actorrole
-                        childchild.AppendChild(childchildchild)
-                        childchildchild = document.CreateElement("thumb")
-                        childchildchild.InnerText = actor.actorthumb
-                        childchild.AppendChild(childchildchild)
-                        child.AppendChild(childchild)
-                    Catch
-                    End Try
+                Dim actorstosave As Integer = ep.ListActors.Count
+                If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
+                For f = 0 To actorstosave - 1
+                    xmlActor = document.CreateElement("actor")
+                    xmlActorchild = document.CreateElement("name")
+                    xmlActorchild.InnerText = ep.ListActors(f).actorname
+                    xmlActor.AppendChild(xmlActorchild)
+                    xmlActorchild = document.CreateElement("role")
+                    xmlActorchild.InnerText = ep.ListActors(f).actorrole
+                    xmlActor.AppendChild(xmlActorchild)
+                    If ep.ListActors(f).actorthumb <> Nothing Then
+                        If ep.ListActors(f).actorthumb <> "" Then
+                            xmlActorchild = document.CreateElement("thumb")
+                            xmlActorchild.InnerText = ep.ListActors(f).actorthumb
+                            xmlActor.AppendChild(xmlActorchild)
+                        End If
+                    End If
+                    xmlEpisode.AppendChild(xmlActor)
                 Next
-                root.AppendChild(child)
-                document.AppendChild(root)
+                root.AppendChild(xmlEpisode)
             Next
+            document.AppendChild(root)
             Try
                 Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
                 output.Formatting = Formatting.Indented
@@ -1836,20 +1798,7 @@ Public Class WorkingWithNfoFiles
                 output.Close()
             Catch
             End Try
-
-
         End If
-
-
-
-
-
-        'Catch ex As Exception
-
-        'Finally
-        '    Monitor.Exit(Me)
-        'End Try
-
     End Sub
 
     Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String)

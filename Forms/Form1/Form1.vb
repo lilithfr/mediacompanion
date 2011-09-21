@@ -26021,6 +26021,7 @@ Public Class Form1
     End Sub
 
     Private Sub mov_SwitchRuntime()
+        If workingMovieDetails Is Nothing Then Exit Sub
         If Preferences.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
             runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
             runtimetxt.Enabled = False
