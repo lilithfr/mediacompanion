@@ -4907,28 +4907,28 @@ Public Class Form1
                                     If moviethumburl <> "" And moviethumburl <> "na" Then
                                         Dim newmoviethumbpath As String = Preferences.GetPosterPath(newMovieList(f).nfopathandfilename)
                                         Try
-                                            Utilities.DownloadFile(moviethumburl, posterpath)
-                                            'Dim buffer(4000000) As Byte
-                                            'Dim size As Integer = 0
-                                            'Dim bytesRead As Integer = 0
-                                            'Dim thumburl As String = moviethumburl
-                                            'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                            'Dim res As HttpWebResponse = req.GetResponse()
-                                            'Dim contents As Stream = res.GetResponseStream()
-                                            'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                            'While bytesToRead > 0
-                                            '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                            '    If size = 0 Then Exit While
-                                            '    bytesToRead -= size
-                                            '    bytesRead += size
-                                            'End While
-                                            ''scraperlog = scraperlog & "Downloading Movie Thumbnail at URL :- " & newmoviethumbpath & vbCrLf
-                                            ''scraperlog = scraperlog & "Unable to Download Thumb" & vbCrLf
-                                            ''scraperlog = scraperlog & "Saving Thumbnail To Path :- " & newmoviethumbpath & vbCrLf
-                                            'Dim fstrm As New FileStream(posterpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                            'fstrm.Write(buffer, 0, bytesRead)
-                                            'contents.Close()
-                                            'fstrm.Close()
+                                            'Utilities.DownloadFile(moviethumburl, posterpath)
+                                            Dim buffer(4000000) As Byte
+                                            Dim size As Integer = 0
+                                            Dim bytesRead As Integer = 0
+                                            Dim thumburl As String = moviethumburl
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                            Dim res As HttpWebResponse = req.GetResponse()
+                                            Dim contents As Stream = res.GetResponseStream()
+                                            Dim bytesToRead As Integer = CInt(buffer.Length)
+                                            While bytesToRead > 0
+                                                size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                If size = 0 Then Exit While
+                                                bytesToRead -= size
+                                                bytesRead += size
+                                            End While
+                                            'scraperlog = scraperlog & "Downloading Movie Thumbnail at URL :- " & newmoviethumbpath & vbCrLf
+                                            'scraperlog = scraperlog & "Unable to Download Thumb" & vbCrLf
+                                            'scraperlog = scraperlog & "Saving Thumbnail To Path :- " & newmoviethumbpath & vbCrLf
+                                            Dim fstrm As New FileStream(posterpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                            fstrm.Write(buffer, 0, bytesRead)
+                                            contents.Close()
+                                            fstrm.Close()
 
                                             progresstext &= " - OK"
                                             BckWrkScnMovies.ReportProgress(progress, progresstext)
@@ -10499,25 +10499,25 @@ Public Class Form1
                                         If moviethumburl <> "" And moviethumburl <> "na" Then
                                             Dim newmoviethumbpath As String = Preferences.GetPosterPath(newdetails.nfopathandfilename)
                                             Try
-                                                Utilities.DownloadFile(moviethumburl, newmoviethumbpath)
-                                                'Dim buffer(4000000) As Byte
-                                                'Dim size As Integer = 0
-                                                'Dim bytesRead As Integer = 0
-                                                'Dim thumburl As String = moviethumburl
-                                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                'Dim res As HttpWebResponse = req.GetResponse()
-                                                'Dim contents As Stream = res.GetResponseStream()
-                                                'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                'While bytesToRead > 0
-                                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                '    If size = 0 Then Exit While
-                                                '    bytesToRead -= size
-                                                '    bytesRead += size
-                                                'End While
-                                                'Dim fstrm As New FileStream(newmoviethumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                'fstrm.Write(buffer, 0, bytesRead)
-                                                'contents.Close()
-                                                'fstrm.Close()
+                                                'Utilities.DownloadFile(moviethumburl, newmoviethumbpath)
+                                                Dim buffer(4000000) As Byte
+                                                Dim size As Integer = 0
+                                                Dim bytesRead As Integer = 0
+                                                Dim thumburl As String = moviethumburl
+                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                Dim res As HttpWebResponse = req.GetResponse()
+                                                Dim contents As Stream = res.GetResponseStream()
+                                                Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                While bytesToRead > 0
+                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                    If size = 0 Then Exit While
+                                                    bytesToRead -= size
+                                                    bytesRead += size
+                                                End While
+                                                Dim fstrm As New FileStream(newmoviethumbpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                                fstrm.Write(buffer, 0, bytesRead)
+                                                contents.Close()
+                                                fstrm.Close()
 
 
                                                 Dim temppath As String = newmoviethumbpath.Replace(System.IO.Path.GetFileName(newmoviethumbpath), "folder.jpg")

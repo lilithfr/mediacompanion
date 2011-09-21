@@ -943,7 +943,7 @@ Public Class Classimdb
                     End If
 
                     'votes
-                    If webpage(f).IndexOf("votes</a>") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""ratingCount""") <> -1 Then
                         Try
                             Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},?]*[0-9]?)</span>")
                             If M.Success = True Then
