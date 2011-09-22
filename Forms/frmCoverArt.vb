@@ -27,51 +27,65 @@ Public Class frmCoverArt
 
 
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Try
+            posterpath = Form1.workingMovieDetails.fileinfo.posterpath
 
+            folderjpgpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "folder.jpg")
 
-        posterpath = Form1.workingMovieDetails.fileinfo.posterpath
+            If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then
+                movieyear = Form1.workingMovieDetails.fullmoviebody.year
 
-        folderjpgpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "folder.jpg")
+            End If
 
+            TextBox1.Text = Preferences.maximumthumbs.ToString
 
+            Dim exists As Boolean = System.IO.File.Exists(posterpath)
+            If exists = True Then
 
+                Dim tempstring As String
+                mainposter = New PictureBox
+                Try
+                    Dim OriginalImage As New Bitmap(posterpath)
+                    Dim Image2 As New Bitmap(OriginalImage)
+                    OriginalImage.Dispose()
 
-
-
-
-
-
-
-        If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then
-            movieyear = Form1.workingMovieDetails.fullmoviebody.year
-
-        End If
-
-        TextBox1.Text = Preferences.maximumthumbs.ToString
-
-        Dim exists As Boolean = System.IO.File.Exists(posterpath)
-        If exists = True Then
-
-            Dim tempstring As String
-            mainposter = New PictureBox
-            Try
-                Dim OriginalImage As New Bitmap(posterpath)
-                Dim Image2 As New Bitmap(OriginalImage)
-                OriginalImage.Dispose()
-
-                With mainposter
-                    .Location = New Point(0, 0)
-                    .Width = 250
-                    .Height = 240
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .Image = Image2
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                End With
-                Me.Panel1.Controls.Add(mainposter)
-                tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
-                Label6.Text = tempstring
-            Catch
+                    With mainposter
+                        .Location = New Point(0, 0)
+                        .Width = 250
+                        .Height = 240
+                        .SizeMode = PictureBoxSizeMode.Zoom
+                        .Image = Image2
+                        .Visible = True
+                        .BorderStyle = BorderStyle.Fixed3D
+                    End With
+                    Me.Panel1.Controls.Add(mainposter)
+                    tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
+                    Label6.Text = tempstring
+                Catch
+                    mainposter = New PictureBox
+                    With mainposter
+                        .Location = New Point(0, 0)
+                        .Width = 250
+                        .Height = 240
+                        .SizeMode = PictureBoxSizeMode.Zoom
+                        .Visible = False
+                        .BorderStyle = BorderStyle.Fixed3D
+                    End With
+                    Me.Panel1.Controls.Add(mainposter)
+                    Dim mainlabel As Label
+                    mainlabel = New Label
+                    With mainlabel
+                        .Location = New Point(0, 100)
+                        .Width = 423
+                        .Height = 100
+                        .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
+                        .Text = "No Local Poster Is Available For This Movie"
+                        .BringToFront()
+                    End With
+                    Me.Panel1.Controls.Add(mainlabel)
+                    Label6.Visible = False
+                End Try
+            Else
                 mainposter = New PictureBox
                 With mainposter
                     .Location = New Point(0, 0)
@@ -94,193 +108,186 @@ Public Class frmCoverArt
                 End With
                 Me.Panel1.Controls.Add(mainlabel)
                 Label6.Visible = False
-            End Try
-        Else
-            mainposter = New PictureBox
-            With mainposter
-                .Location = New Point(0, 0)
-                .Width = 250
-                .Height = 240
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .Visible = False
-                .BorderStyle = BorderStyle.Fixed3D
-            End With
-            Me.Panel1.Controls.Add(mainposter)
-            Dim mainlabel As Label
-            mainlabel = New Label
-            With mainlabel
-                .Location = New Point(0, 100)
-                .Width = 423
-                .Height = 100
-                .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-                .Text = "No Local Poster Is Available For This Movie"
-                .BringToFront()
-            End With
-            Me.Panel1.Controls.Add(mainlabel)
-            Label6.Visible = False
-        End If
+            End If
 
-        panel2 = New Panel
-        With panel2
-            .Width = 782
-            .Height = 237
-            .Location = New Point(2, 2)
-            .AutoScroll = True
-        End With
-        Me.Controls.Add(panel2)
-
+            panel2 = New Panel
+            With panel2
+                .Width = 782
+                .Height = 237
+                .Location = New Point(2, 2)
+                .AutoScroll = True
+            End With
+            Me.Controls.Add(panel2)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
     Private Sub radiochanged(ByVal sender As Object, ByVal e As EventArgs)
-        Dim tempstring As String = sender.name
-        Dim tempint As Integer
-        Dim tempstring2 As String = tempstring
-        Dim allok As Boolean = False
-        tempstring = tempstring.Replace("checkbox", "")
-        tempint = Convert.ToDecimal(tempstring)
-        For Each button As Control In Me.panel2.Controls
-            If button.Name.IndexOf("checkbox") <> -1 Then
-                Dim b1 As RadioButton = CType(button, RadioButton)
-                If b1.Checked = True Then
-                    allok = True
-                    Exit For
+        Try
+            Dim tempstring As String = sender.name
+            Dim tempint As Integer
+            Dim tempstring2 As String = tempstring
+            Dim allok As Boolean = False
+            tempstring = tempstring.Replace("checkbox", "")
+            tempint = Convert.ToDecimal(tempstring)
+            For Each button As Control In Me.panel2.Controls
+                If button.Name.IndexOf("checkbox") <> -1 Then
+                    Dim b1 As RadioButton = CType(button, RadioButton)
+                    If b1.Checked = True Then
+                        allok = True
+                        Exit For
+                    End If
                 End If
+            Next
+            If allok = True Then
+                Button5.Visible = True
+                Button6.Visible = True
+            Else
+                Button5.Visible = False
+                Button6.Visible = False
             End If
-        Next
-        If allok = True Then
-            Button5.Visible = True
-            Button6.Visible = True
-        Else
-            Button5.Visible = False
-            Button6.Visible = False
-        End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
     Private Sub zoomimage(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            Dim tempstring As String = sender.name
+            Dim tempint As Integer
+            Dim tempstring2 As String = tempstring
+            tempstring = tempstring.Replace("picture", "")
+            tempint = Convert.ToDecimal(tempstring)
+            tempint = tempint + ((currentpage - 1) * maxthumbs)
+            rememberint = tempint
+            Dim buffer(4000000) As Byte
+            Dim size As Integer = 0
+            Dim bytesRead As Integer = 0
 
-        Dim tempstring As String = sender.name
-        Dim tempint As Integer
-        Dim tempstring2 As String = tempstring
-        tempstring = tempstring.Replace("picture", "")
-        tempint = Convert.ToDecimal(tempstring)
-        tempint = tempint + ((currentpage - 1) * maxthumbs)
-        rememberint = tempint
-        Dim buffer(4000000) As Byte
-        Dim size As Integer = 0
-        Dim bytesRead As Integer = 0
+            bigpanel = New Panel
+            With bigpanel
+                .Width = Me.Width
+                .Height = Me.Height
+                .BringToFront()
+                .Dock = DockStyle.Fill
+            End With
 
-        bigpanel = New Panel
-        With bigpanel
-            .Width = Me.Width
-            .Height = Me.Height
-            .BringToFront()
-            .Dock = DockStyle.Fill
-        End With
+            bigpicbox = New PictureBox()
 
-        bigpicbox = New PictureBox()
+            With bigpicbox
+                .Location = New Point(0, 0)
+                .Width = bigpanel.Width
+                .Height = bigpanel.Height
+                .SizeMode = PictureBoxSizeMode.Zoom
+                '.Image = sender.image
+                .ImageLocation = posterurls(tempint + 1, 0)
+                .Visible = True
+                .BorderStyle = BorderStyle.Fixed3D
+                AddHandler bigpicbox.DoubleClick, AddressOf closeimage
+                .Dock = DockStyle.Fill
+            End With
 
-        With bigpicbox
-            .Location = New Point(0, 0)
-            .Width = bigpanel.Width
-            .Height = bigpanel.Height
-            .SizeMode = PictureBoxSizeMode.Zoom
-            '.Image = sender.image
-            .ImageLocation = posterurls(tempint + 1, 0)
-            .Visible = True
-            .BorderStyle = BorderStyle.Fixed3D
-            AddHandler bigpicbox.DoubleClick, AddressOf closeimage
-            .Dock = DockStyle.Fill
-        End With
-
-        Dim sizex As Integer = bigpicbox.Width
-        Dim sizey As Integer = bigpicbox.Height
+            Dim sizex As Integer = bigpicbox.Width
+            Dim sizey As Integer = bigpicbox.Height
 
 
-        Me.Controls.Add(bigpanel)
-        bigpanel.BringToFront()
-        Me.bigpanel.Controls.Add(bigpicbox)
-        Me.Refresh()
+            Me.Controls.Add(bigpanel)
+            bigpanel.BringToFront()
+            Me.bigpanel.Controls.Add(bigpicbox)
+            Me.Refresh()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
     Private Sub imageres(ByVal sender As Object, ByVal e As EventArgs)
-        reslabel = New Label
-        Dim tempstring As String
-        tempstring = sender.image.width.ToString
-        tempstring = tempstring & " x "
-        tempstring = tempstring & sender.image.height.ToString
-        Dim locx As Integer = sender.location.x
-        Dim locy As Integer = sender.location.y
-        locy = locy + sender.height
-        With reslabel
-            .Location = New Point(locx + 30, locy)
-            .Text = tempstring
-            .BringToFront()
-        End With
-        Me.panel2.Controls.Add(reslabel)
-        Me.Refresh()
-        Application.DoEvents()
+        Try
+            reslabel = New Label
+            Dim tempstring As String
+            tempstring = sender.image.width.ToString
+            tempstring = tempstring & " x "
+            tempstring = tempstring & sender.image.height.ToString
+            Dim locx As Integer = sender.location.x
+            Dim locy As Integer = sender.location.y
+            locy = locy + sender.height
+            With reslabel
+                .Location = New Point(locx + 30, locy)
+                .Text = tempstring
+                .BringToFront()
+            End With
+            Me.panel2.Controls.Add(reslabel)
+            Me.Refresh()
+            Application.DoEvents()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub closeimage()
-        Me.Controls.Remove(bigpanel)
-        bigpanel = Nothing
-        Me.Controls.Remove(bigpicbox)
-        bigpicbox = Nothing
+        Try
+            Me.Controls.Remove(bigpanel)
+            bigpanel = Nothing
+            Me.Controls.Remove(bigpicbox)
+            bigpicbox = Nothing
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-
-        Call initialise()
-
-        Dim tempsimdbid As String = String.Empty
-        '------------------------------------
-        ''                                    Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
-        'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-        'Dim apple2(2000) As String
-        'Dim fanartlinecount As Integer = 0
-        'Try
-        '    Dim wrGETURL As WebRequest
-        '    wrGETURL = WebRequest.Create(fanarturl)
-        '    Dim myProxy As New WebProxy("myproxy", 80)
-        '    myProxy.BypassProxyOnLocal = True
-        '    Dim objStream As Stream
-        '    objStream = wrGETURL.GetResponse.GetResponseStream()
-        '    Dim objReader As New StreamReader(objStream)
-        '    Dim sLine As String = ""
-        '    fanartlinecount = 0
-        '    Do While Not sLine Is Nothing
-        '        fanartlinecount += 1
-        '        sLine = objReader.ReadLine
-        '        apple2(fanartlinecount) = sLine
-        '    Loop
-        '    fanartlinecount -= 1
-        ''    Dim fanartfound As Boolean = False
-        '    For f = 1 To fanartlinecount
-        '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
-        '            If apple2(g).IndexOf("size=""original""") <> -1 Then
-        '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
-        '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
-        '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
-        '                apple2(g) = apple2(g).Trim
-        '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
-        '                    moviethumburl = apple2(g)
-        '                    fanartfound = True
-        '                End If
-        '            End If
-        '            Exit For
-        '        End If
-        '    Next
-        '    If fanartfound = False Then moviethumburl = ""
-        'Catch
-        'End Try
-        '------------------------------------
-        Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & tmdbid
-        Dim apple2(2000) As String
-        Dim fanartlinecount As Integer = 0
         Try
+            Call initialise()
+
+            Dim tempsimdbid As String = String.Empty
+            '------------------------------------
+            ''                                    Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
+            'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
+            'Dim apple2(2000) As String
+            'Dim fanartlinecount As Integer = 0
+            'Try
+            '    Dim wrGETURL As WebRequest
+            '    wrGETURL = WebRequest.Create(fanarturl)
+            '    Dim myProxy As New WebProxy("myproxy", 80)
+            '    myProxy.BypassProxyOnLocal = True
+            '    Dim objStream As Stream
+            '    objStream = wrGETURL.GetResponse.GetResponseStream()
+            '    Dim objReader As New StreamReader(objStream)
+            '    Dim sLine As String = ""
+            '    fanartlinecount = 0
+            '    Do While Not sLine Is Nothing
+            '        fanartlinecount += 1
+            '        sLine = objReader.ReadLine
+            '        apple2(fanartlinecount) = sLine
+            '    Loop
+            '    fanartlinecount -= 1
+            ''    Dim fanartfound As Boolean = False
+            '    For f = 1 To fanartlinecount
+            '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
+            '            If apple2(g).IndexOf("size=""original""") <> -1 Then
+            '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
+            '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
+            '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
+            '                apple2(g) = apple2(g).Trim
+            '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
+            '                    moviethumburl = apple2(g)
+            '                    fanartfound = True
+            '                End If
+            '            End If
+            '            Exit For
+            '        End If
+            '    Next
+            '    If fanartfound = False Then moviethumburl = ""
+            'Catch
+            'End Try
+            '------------------------------------
+            Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & tmdbid
+            Dim apple2(2000) As String
+            Dim fanartlinecount As Integer = 0
+
             Dim wrGETURL As WebRequest
 
             wrGETURL = WebRequest.Create(fanarturl)
@@ -309,65 +316,64 @@ Public Class frmCoverArt
                     Exit For
                 End If
             Next
-        Catch
-        End Try
-        ReDim apple2(2000)
-        fanartlinecount = 0
 
-        fanarturl = "http://api.themoviedb.org/2.0/Movie.getInfo?id=" & tempsimdbid & "&api_key=3f026194412846e530a208cf8a39e9cb"
+            ReDim apple2(2000)
+            fanartlinecount = 0
 
-        'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & tempsimdbid
-        'Dim apple2(2000) As String
-        'Dim fanartlinecount As Integer = 0
-        'Try
-        '    Dim wrGETURL As WebRequest
+            fanarturl = "http://api.themoviedb.org/2.0/Movie.getInfo?id=" & tempsimdbid & "&api_key=3f026194412846e530a208cf8a39e9cb"
 
-        '    wrGETURL = WebRequest.Create(fanarturl)
-        '    Dim myProxy As New WebProxy("myproxy", 80)
-        '    myProxy.BypassProxyOnLocal = True
-        '    Dim objStream As Stream
-        '    objStream = wrGETURL.GetResponse.GetResponseStream()
-        '    Dim objReader As New StreamReader(objStream)
-        '    Dim sLine As String = ""
-        '    fanartlinecount = 0
+            'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & tempsimdbid
+            'Dim apple2(2000) As String
+            'Dim fanartlinecount As Integer = 0
+            'Try
+            '    Dim wrGETURL As WebRequest
 
-        '    Do While Not sLine Is Nothing
-        '        fanartlinecount += 1
-        '        sLine = objReader.ReadLine
-        '        apple2(fanartlinecount) = sLine
-        '    Loop
+            '    wrGETURL = WebRequest.Create(fanarturl)
+            '    Dim myProxy As New WebProxy("myproxy", 80)
+            '    myProxy.BypassProxyOnLocal = True
+            '    Dim objStream As Stream
+            '    objStream = wrGETURL.GetResponse.GetResponseStream()
+            '    Dim objReader As New StreamReader(objStream)
+            '    Dim sLine As String = ""
+            '    fanartlinecount = 0
 
-        '    fanartlinecount -= 1
-        '    Dim fanartfound As Boolean = False
-        '    For g = 1 To fanartlinecount
-        '        ' vou mudar para ser compativel com api 2.1'                                           If apple2(g).IndexOf("<backdrop size=""original"">") <> -1 Then
-        '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
-        '            If apple2(g).IndexOf("size=""original""") <> -1 Then
-        '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
-        '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
+            '    Do While Not sLine Is Nothing
+            '        fanartlinecount += 1
+            '        sLine = objReader.ReadLine
+            '        apple2(fanartlinecount) = sLine
+            '    Loop
 
-        '                '                                                    apple2(g) = apple2(g).Replace("<image type=""backdrop""", "")
-        '                '                                                    apple2(g) = apple2(g).Replace("</backdrop>", "")
-        '                '                                                    apple2(g) = apple2(g).Replace("  ", "")
-        '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
-        '                '                                                    Dim teste1 As String = apple2(g).Substring(posicaoinicial, 10)
-        '                '                                                    Dim teste2 As String = apple2(g).Substring(posicaoinicial, posicaofinal)
-        '                '                                                    Dim teste3 As String = apple2(g).Substring(posicaoinicial, ((posicaofinal - posicaoinicial) - 15))
+            '    fanartlinecount -= 1
+            '    Dim fanartfound As Boolean = False
+            '    For g = 1 To fanartlinecount
+            '        ' vou mudar para ser compativel com api 2.1'                                           If apple2(g).IndexOf("<backdrop size=""original"">") <> -1 Then
+            '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
+            '            If apple2(g).IndexOf("size=""original""") <> -1 Then
+            '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
+            '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
 
-        '                apple2(g) = apple2(g).Trim
-        '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
-        '                    moviethumburl = apple2(g)
-        '                    fanartfound = True
-        '                End If
-        '            End If
-        '            Exit For
-        '        End If
-        '    Next
-        '    If fanartfound = False Then moviethumburl = ""
-        'Catch
-        'End Try
+            '                '                                                    apple2(g) = apple2(g).Replace("<image type=""backdrop""", "")
+            '                '                                                    apple2(g) = apple2(g).Replace("</backdrop>", "")
+            '                '                                                    apple2(g) = apple2(g).Replace("  ", "")
+            '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
+            '                '                                                    Dim teste1 As String = apple2(g).Substring(posicaoinicial, 10)
+            '                '                                                    Dim teste2 As String = apple2(g).Substring(posicaoinicial, posicaofinal)
+            '                '                                                    Dim teste3 As String = apple2(g).Substring(posicaoinicial, ((posicaofinal - posicaoinicial) - 15))
 
-        Try
+            '                apple2(g) = apple2(g).Trim
+            '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
+            '                    moviethumburl = apple2(g)
+            '                    fanartfound = True
+            '                End If
+            '            End If
+            '            Exit For
+            '        End If
+            '    Next
+            '    If fanartfound = False Then moviethumburl = ""
+            'Catch
+            'End Try
+
+
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
             Dim myProxy2 As New WebProxy("myproxy", 80)
@@ -408,14 +414,16 @@ Public Class frmCoverArt
             Next
 
             Call displayselection()
-        Catch
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
+
     End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-
-        Call initialise()
         Try
+            Call initialise()
+
             Dim fanarturl As String
             Dim fanartlinecount As Integer = 0
             Dim allok As Boolean = True
@@ -524,91 +532,54 @@ Public Class frmCoverArt
             Else
 
             End If
-        Catch ex As Exception
-        End Try
 
-        For f = 1 To count
-            posterurls(f, 1) = posterurls(f, 0)
-        Next
-        Call displayselection()
+            For f = 1 To count
+                posterurls(f, 1) = posterurls(f, 0)
+            Next
+            Call displayselection()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Try
+            Call initialise()
+            Dim fanarturl As String
+            Dim fanartlinecount As Integer = 0
+            Dim allok As Boolean = True
+            Dim apple2(10000)
 
-        Call initialise()
-        Dim fanarturl As String
-        Dim fanartlinecount As Integer = 0
-        Dim allok As Boolean = True
-        Dim apple2(10000)
+            fanarturl = "http://www.imdb.com/title/" & tmdbid & "/mediaindex"
 
-        fanarturl = "http://www.imdb.com/title/" & tmdbid & "/mediaindex"
-
-        Dim wrGETURL2 As WebRequest
-        wrGETURL2 = WebRequest.Create(fanarturl)
-        Dim myProxy2 As New WebProxy("myproxy", 80)
-        myProxy2.BypassProxyOnLocal = True
-        Dim objStream2 As Stream
-        objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-        Dim objReader2 As New StreamReader(objStream2)
-        Dim sLine2 As String = ""
-        fanartlinecount = 0
-
-        Do While Not sLine2 Is Nothing
-            fanartlinecount += 1
-            sLine2 = objReader2.ReadLine
-            apple2(fanartlinecount) = sLine2
-        Loop
-        fanartlinecount -= 1
-
-        Dim totalpages As Integer
-        Dim tempint As Integer
-        Dim reached As Boolean = False
-        For f = 1 To fanartlinecount
-            If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
-                apple2(f) = apple2(f).Replace("<a href=""?page=", "")
-                apple2(f) = apple2(f).Substring(0, 1)
-                tempint = Convert.ToString(apple2(f))
-                If tempint > totalpages Then totalpages = tempint
-            End If
-            If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-                reached = True
-            End If
-            If reached = True Then
-                If apple2(f).IndexOf("</div>") <> -1 Then
-                    reached = False
-                    Exit For
-                End If
-                If apple2(f).IndexOf("src=""http://") <> -1 Then
-                    apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
-                    apple2(f).TrimStart()
-                    apple2(f) = apple2(f).Replace("src=""", "")
-                    count = count + 1
-                    posterurls(count, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
-                End If
-            End If
-        Next
-        For g = 2 To totalpages
-            fanarturl = "http://www.imdb.com/title/" & tmdbid & "/mediaindex?page=" & g.ToString
-            ReDim apple2(10000)
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
+            Dim wrGETURL2 As WebRequest
+            wrGETURL2 = WebRequest.Create(fanarturl)
+            Dim myProxy2 As New WebProxy("myproxy", 80)
+            myProxy2.BypassProxyOnLocal = True
+            Dim objStream2 As Stream
+            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
+            Dim objReader2 As New StreamReader(objStream2)
+            Dim sLine2 As String = ""
             fanartlinecount = 0
 
-            Do While Not sLine Is Nothing
+            Do While Not sLine2 Is Nothing
                 fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
+                sLine2 = objReader2.ReadLine
+                apple2(fanartlinecount) = sLine2
             Loop
             fanartlinecount -= 1
 
+            Dim totalpages As Integer
+            Dim tempint As Integer
+            Dim reached As Boolean = False
             For f = 1 To fanartlinecount
+                If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
+                    apple2(f) = apple2(f).Replace("<a href=""?page=", "")
+                    apple2(f) = apple2(f).Substring(0, 1)
+                    tempint = Convert.ToString(apple2(f))
+                    If tempint > totalpages Then totalpages = tempint
+                End If
                 If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
                     reached = True
                 End If
@@ -626,482 +597,535 @@ Public Class frmCoverArt
                     End If
                 End If
             Next
-        Next
-        Dim imdbcounter As Integer = 0
-        For f = count To 1 Step -1
-            imdbcounter += 1
-            posterurls(imdbcounter, 1) = posterurls(f, 0) & "_V1._SX1000_SY1000_.jpg"
-        Next
-        For f = 1 To count
-            posterurls(f, 0) = posterurls(f, 1)
-        Next
+            For g = 2 To totalpages
+                fanarturl = "http://www.imdb.com/title/" & tmdbid & "/mediaindex?page=" & g.ToString
+                ReDim apple2(10000)
+                Dim wrGETURL As WebRequest
+                wrGETURL = WebRequest.Create(fanarturl)
+                Dim myProxy As New WebProxy("myproxy", 80)
+                myProxy.BypassProxyOnLocal = True
+                Dim objStream As Stream
+                objStream = wrGETURL.GetResponse.GetResponseStream()
+                Dim objReader As New StreamReader(objStream)
+                Dim sLine As String = ""
+                fanartlinecount = 0
 
-        Call displayselection()
+                Do While Not sLine Is Nothing
+                    fanartlinecount += 1
+                    sLine = objReader.ReadLine
+                    apple2(fanartlinecount) = sLine
+                Loop
+                fanartlinecount -= 1
+
+                For f = 1 To fanartlinecount
+                    If apple2(f).IndexOf("<div class=""thumb_list""") <> -1 Then
+                        reached = True
+                    End If
+                    If reached = True Then
+                        If apple2(f).IndexOf("</div>") <> -1 Then
+                            reached = False
+                            Exit For
+                        End If
+                        If apple2(f).IndexOf("src=""http://") <> -1 Then
+                            apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
+                            apple2(f).TrimStart()
+                            apple2(f) = apple2(f).Replace("src=""", "")
+                            count = count + 1
+                            posterurls(count, 0) = apple2(f).Substring(1, apple2(f).IndexOf("._V1._"))
+                        End If
+                    End If
+                Next
+            Next
+            Dim imdbcounter As Integer = 0
+            For f = count To 1 Step -1
+                imdbcounter += 1
+                posterurls(imdbcounter, 1) = posterurls(f, 0) & "_V1._SX1000_SY1000_.jpg"
+            Next
+            For f = 1 To count
+                posterurls(f, 0) = posterurls(f, 1)
+            Next
+
+            Call displayselection()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
 
     End Sub
 
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Try
+            Call initialise()
 
-        Call initialise()
-
-        Dim fanarturl As String
-        Dim fanartlinecount As Integer = 0
-        Dim allok As Boolean = True
-        Dim apple2(10000)
-
-
-        fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
-        'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
-        title = title.ToLower
-        title = title.Replace(" ", "+")
-        title = title.Replace("&", "%26")
-        title = title.Replace("À", "%c0")
-        title = title.Replace("Á", "%c1")
-        title = title.Replace("Â", "%c2")
-        title = title.Replace("Ã", "%c3")
-        title = title.Replace("Ä", "%c4")
-        title = title.Replace("Å", "%c5")
-        title = title.Replace("Æ", "%c6")
-        title = title.Replace("Ç", "%c7")
-        title = title.Replace("È", "%c8")
-        title = title.Replace("É", "%c9")
-        title = title.Replace("Ê", "%ca")
-        title = title.Replace("Ë", "%cb")
-        title = title.Replace("Ì", "%cc")
-        title = title.Replace("Í", "%cd")
-        title = title.Replace("Î", "%ce")
-        title = title.Replace("Ï", "%cf")
-        title = title.Replace("Ð", "%d0")
-        title = title.Replace("Ñ", "%d1")
-        title = title.Replace("Ò", "%d2")
-        title = title.Replace("Ó", "%d3")
-        title = title.Replace("Ô", "%d4")
-        title = title.Replace("Õ", "%d5")
-        title = title.Replace("Ö", "%d6")
-        title = title.Replace("Ø", "%d8")
-        title = title.Replace("Ù", "%d9")
-        title = title.Replace("Ú", "%da")
-        title = title.Replace("Û", "%db")
-        title = title.Replace("Ü", "%dc")
-        title = title.Replace("Ý", "%dd")
-        title = title.Replace("Þ", "%de")
-        title = title.Replace("ß", "%df")
-        title = title.Replace("à", "%e0")
-        title = title.Replace("á", "%e1")
-        title = title.Replace("â", "%e2")
-        title = title.Replace("ã", "%e3")
-        title = title.Replace("ä", "%e4")
-        title = title.Replace("å", "%e5")
-        title = title.Replace("æ", "%e6")
-        title = title.Replace("ç", "%e7")
-        title = title.Replace("è", "%e8")
-        title = title.Replace("é", "%e9")
-        title = title.Replace("ê", "%ea")
-        title = title.Replace("ë", "%eb")
-        title = title.Replace("ì", "%ec")
-        title = title.Replace("í", "%ed")
-        title = title.Replace("î", "%ee")
-        title = title.Replace("ï", "%ef")
-        title = title.Replace("ð", "%f0")
-        title = title.Replace("ñ", "%f1")
-        title = title.Replace("ò", "%f2")
-        title = title.Replace("ó", "%f3")
-        title = title.Replace("ô", "%f4")
-        title = title.Replace("õ", "%f5")
-        title = title.Replace("ö", "%f6")
-        title = title.Replace("÷", "%f7")
-        title = title.Replace("ø", "%f8")
-        title = title.Replace("ù", "%f9")
-        title = title.Replace("ú", "%fa")
-        title = title.Replace("û", "%fb")
-        title = title.Replace("ü", "%fc")
-        title = title.Replace("ý", "%fd")
-        title = title.Replace("þ", "%fe")
-        title = title.Replace("ÿ", "%ff")
-        title = title.Replace(" ", "+")
-        title = title.Replace("&", "%26")
-        fanarturl = fanarturl & title & "+" & movieyear
-        fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-        ReDim apple2(10000)
-        Dim wrGETURL2 As WebRequest
-        wrGETURL2 = WebRequest.Create(fanarturl)
-        Dim myProxy2 As New WebProxy("myproxy", 80)
-        myProxy2.BypassProxyOnLocal = True
-        Dim objStream2 As Stream
-        objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-        Dim objReader2 As New StreamReader(objStream2)
-        Dim sLine2 As String = ""
-        fanartlinecount = 0
-
-        Do While Not sLine2 Is Nothing
-            fanartlinecount += 1
-            sLine2 = objReader2.ReadLine
-            apple2(fanartlinecount) = sLine2
-        Loop
-        fanartlinecount -= 1
-
-        For f = 1 To fanartlinecount
-            If apple2(f).indexof("http://www.impawards.com/") <> -1 Then
-                Dim first As Integer = apple2(f).indexof("http://www.impawards.com/")
-                apple2(f) = apple2(f).substring(first, apple2(f).length - first)
-                fanarturl = apple2(f).substring(0, apple2(f).indexof("html") + 4)
-            End If
-        Next
+            Dim fanarturl As String
+            Dim fanartlinecount As Integer = 0
+            Dim allok As Boolean = True
+            Dim apple2(10000)
 
 
-
-        Dim tempint As Integer
-        Dim tempstring As String
-        tempstring = fanarturl.Replace("http://", "")
-        tempint = tempstring.LastIndexOf("/")
-        If tempint - 5 = tempstring.IndexOf("/") Then
-            allok = True
-        Else
-            'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
             fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
-            fanarturl = fanarturl & title
+            'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
+            title = title.ToLower
+            title = title.Replace(" ", "+")
+            title = title.Replace("&", "%26")
+            title = title.Replace("À", "%c0")
+            title = title.Replace("Á", "%c1")
+            title = title.Replace("Â", "%c2")
+            title = title.Replace("Ã", "%c3")
+            title = title.Replace("Ä", "%c4")
+            title = title.Replace("Å", "%c5")
+            title = title.Replace("Æ", "%c6")
+            title = title.Replace("Ç", "%c7")
+            title = title.Replace("È", "%c8")
+            title = title.Replace("É", "%c9")
+            title = title.Replace("Ê", "%ca")
+            title = title.Replace("Ë", "%cb")
+            title = title.Replace("Ì", "%cc")
+            title = title.Replace("Í", "%cd")
+            title = title.Replace("Î", "%ce")
+            title = title.Replace("Ï", "%cf")
+            title = title.Replace("Ð", "%d0")
+            title = title.Replace("Ñ", "%d1")
+            title = title.Replace("Ò", "%d2")
+            title = title.Replace("Ó", "%d3")
+            title = title.Replace("Ô", "%d4")
+            title = title.Replace("Õ", "%d5")
+            title = title.Replace("Ö", "%d6")
+            title = title.Replace("Ø", "%d8")
+            title = title.Replace("Ù", "%d9")
+            title = title.Replace("Ú", "%da")
+            title = title.Replace("Û", "%db")
+            title = title.Replace("Ü", "%dc")
+            title = title.Replace("Ý", "%dd")
+            title = title.Replace("Þ", "%de")
+            title = title.Replace("ß", "%df")
+            title = title.Replace("à", "%e0")
+            title = title.Replace("á", "%e1")
+            title = title.Replace("â", "%e2")
+            title = title.Replace("ã", "%e3")
+            title = title.Replace("ä", "%e4")
+            title = title.Replace("å", "%e5")
+            title = title.Replace("æ", "%e6")
+            title = title.Replace("ç", "%e7")
+            title = title.Replace("è", "%e8")
+            title = title.Replace("é", "%e9")
+            title = title.Replace("ê", "%ea")
+            title = title.Replace("ë", "%eb")
+            title = title.Replace("ì", "%ec")
+            title = title.Replace("í", "%ed")
+            title = title.Replace("î", "%ee")
+            title = title.Replace("ï", "%ef")
+            title = title.Replace("ð", "%f0")
+            title = title.Replace("ñ", "%f1")
+            title = title.Replace("ò", "%f2")
+            title = title.Replace("ó", "%f3")
+            title = title.Replace("ô", "%f4")
+            title = title.Replace("õ", "%f5")
+            title = title.Replace("ö", "%f6")
+            title = title.Replace("÷", "%f7")
+            title = title.Replace("ø", "%f8")
+            title = title.Replace("ù", "%f9")
+            title = title.Replace("ú", "%fa")
+            title = title.Replace("û", "%fb")
+            title = title.Replace("ü", "%fc")
+            title = title.Replace("ý", "%fd")
+            title = title.Replace("þ", "%fe")
+            title = title.Replace("ÿ", "%ff")
+            title = title.Replace(" ", "+")
+            title = title.Replace("&", "%26")
+            fanarturl = fanarturl & title & "+" & movieyear
             fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-            ReDim apple2(2000)
-            fanartlinecount = 0
-            Dim wrGETURL4 As WebRequest
-            wrGETURL4 = WebRequest.Create(fanarturl)
-            Dim myProxy4 As New WebProxy("myproxy", 80)
-            myProxy4.BypassProxyOnLocal = True
-            Dim objStream4 As Stream
-            objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-            Dim objReader4 As New StreamReader(objStream4)
-            Dim sLine4 As String = ""
-            fanartlinecount = 0
-
-            Do While Not sLine4 Is Nothing
-                fanartlinecount += 1
-                sLine4 = objReader4.ReadLine
-                apple2(fanartlinecount) = sLine4
-            Loop
-            fanartlinecount -= 1
-            Dim first As Integer
-            For g = 1 To fanartlinecount
-                If apple2(g).IndexOf("http://www.impawards.com/") <> -1 Then
-                    first = apple2(g).IndexOf("http://www.impawards.com/")
-                    apple2(g) = apple2(g).Substring(first, apple2(g).Length - first)
-                    fanarturl = apple2(g).Substring(0, apple2(g).IndexOf("html") + 4)
-                    tempstring = fanarturl
-                    tempstring = tempstring.Replace("http://", "")
-                    tempint = tempstring.LastIndexOf("/")
-                    If tempint - 5 = tempstring.IndexOf("/") Then
-                        allok = True
-                    Else
-                        allok = False
-                    End If
-                End If
-            Next
-        End If
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        If fanarturl.IndexOf("art_machine") = -1 And allok = True Then
-            count = 1
             ReDim apple2(10000)
-            fanartlinecount = 0
-            Dim wrGETURL As WebRequest
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
+            Dim wrGETURL2 As WebRequest
+            wrGETURL2 = WebRequest.Create(fanarturl)
+            Dim myProxy2 As New WebProxy("myproxy", 80)
             myProxy2.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
-            fanartlinecount = -1
-            Dim vertest As Boolean = False
-            Do While Not sLine Is Nothing
+            Dim objStream2 As Stream
+            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
+            Dim objReader2 As New StreamReader(objStream2)
+            Dim sLine2 As String = ""
+            fanartlinecount = 0
+
+            Do While Not sLine2 Is Nothing
                 fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
+                sLine2 = objReader2.ReadLine
+                apple2(fanartlinecount) = sLine2
             Loop
             fanartlinecount -= 1
-            Dim highest As Integer = 0
-            Dim version As Boolean = False
+
             For f = 1 To fanartlinecount
-                If apple2(f).indexof("ver") <> -1 Then
-                    For g = 1 To 50
-                        Dim tempstring2 As String = "ver" & g.ToString & "."
-                        If apple2(f).IndexOf(tempstring2) <> -1 Then
-                            If g = 1 Then
-                                version = True
-                            End If
-                            If g > highest Then
-                                highest = g
-                            End If
-                        End If
-                    Next
+                If apple2(f).indexof("http://www.impawards.com/") <> -1 Then
+                    Dim first As Integer = apple2(f).indexof("http://www.impawards.com/")
+                    apple2(f) = apple2(f).substring(first, apple2(f).length - first)
+                    fanarturl = apple2(f).substring(0, apple2(f).indexof("html") + 4)
                 End If
             Next
-            Dim tempstring3 As String
-            Dim tempstring4 As String
-            tempstring3 = fanarturl.Substring(0, fanarturl.LastIndexOf("/") + 1)
-            tempstring4 = fanarturl.Substring(fanarturl.LastIndexOf("/") + 1, fanarturl.Length - fanarturl.LastIndexOf("/") - 1)
-            fanarturl = tempstring3 & "posters/" & tempstring4
-            fanarturl = fanarturl.Replace(".html", "")
-            If fanarturl.IndexOf("_ver") <> -1 Then
-                fanarturl = fanarturl.Substring(0, fanarturl.IndexOf("_ver"))
-            End If
 
-            If highest > count Then count = highest
-            If version = True Then
-                posterurls(1, 1) = fanarturl & "_ver1.jpg"
-                posterurls(1, 0) = fanarturl & "_ver1_xlg.jpg"
+
+
+            Dim tempint As Integer
+            Dim tempstring As String
+            tempstring = fanarturl.Replace("http://", "")
+            tempint = tempstring.LastIndexOf("/")
+            If tempint - 5 = tempstring.IndexOf("/") Then
+                allok = True
             Else
-                posterurls(1, 1) = fanarturl & ".jpg"
-                posterurls(1, 0) = fanarturl & "_xlg.jpg"
+                'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
+                fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
+                fanarturl = fanarturl & title
+                fanarturl = fanarturl & "&sitesearch=www.impawards.com"
+                ReDim apple2(2000)
+                fanartlinecount = 0
+                Dim wrGETURL4 As WebRequest
+                wrGETURL4 = WebRequest.Create(fanarturl)
+                Dim myProxy4 As New WebProxy("myproxy", 80)
+                myProxy4.BypassProxyOnLocal = True
+                Dim objStream4 As Stream
+                objStream4 = wrGETURL4.GetResponse.GetResponseStream()
+                Dim objReader4 As New StreamReader(objStream4)
+                Dim sLine4 As String = ""
+                fanartlinecount = 0
+
+                Do While Not sLine4 Is Nothing
+                    fanartlinecount += 1
+                    sLine4 = objReader4.ReadLine
+                    apple2(fanartlinecount) = sLine4
+                Loop
+                fanartlinecount -= 1
+                Dim first As Integer
+                For g = 1 To fanartlinecount
+                    If apple2(g).IndexOf("http://www.impawards.com/") <> -1 Then
+                        first = apple2(g).IndexOf("http://www.impawards.com/")
+                        apple2(g) = apple2(g).Substring(first, apple2(g).Length - first)
+                        fanarturl = apple2(g).Substring(0, apple2(g).IndexOf("html") + 4)
+                        tempstring = fanarturl
+                        tempstring = tempstring.Replace("http://", "")
+                        tempint = tempstring.LastIndexOf("/")
+                        If tempint - 5 = tempstring.IndexOf("/") Then
+                            allok = True
+                        Else
+                            allok = False
+                        End If
+                    End If
+                Next
             End If
 
-            For f = 2 To count
-                posterurls(f, 1) = fanarturl & "_ver" & f.ToString & ".jpg"
-                posterurls(f, 0) = fanarturl & "_ver" & f.ToString & "_xlg.jpg"
-            Next
-        End If
+            If fanarturl.IndexOf("art_machine") = -1 And allok = True Then
+                count = 1
+                ReDim apple2(10000)
+                fanartlinecount = 0
+                Dim wrGETURL As WebRequest
+                wrGETURL = WebRequest.Create(fanarturl)
+                Dim myProxy As New WebProxy("myproxy", 80)
+                myProxy2.BypassProxyOnLocal = True
+                Dim objStream As Stream
+                objStream = wrGETURL.GetResponse.GetResponseStream()
+                Dim objReader As New StreamReader(objStream)
+                Dim sLine As String = ""
+                fanartlinecount = -1
+                Dim vertest As Boolean = False
+                Do While Not sLine Is Nothing
+                    fanartlinecount += 1
+                    sLine = objReader.ReadLine
+                    apple2(fanartlinecount) = sLine
+                Loop
+                fanartlinecount -= 1
+                Dim highest As Integer = 0
+                Dim version As Boolean = False
+                For f = 1 To fanartlinecount
+                    If apple2(f).indexof("ver") <> -1 Then
+                        For g = 1 To 50
+                            Dim tempstring2 As String = "ver" & g.ToString & "."
+                            If apple2(f).IndexOf(tempstring2) <> -1 Then
+                                If g = 1 Then
+                                    version = True
+                                End If
+                                If g > highest Then
+                                    highest = g
+                                End If
+                            End If
+                        Next
+                    End If
+                Next
+                Dim tempstring3 As String
+                Dim tempstring4 As String
+                tempstring3 = fanarturl.Substring(0, fanarturl.LastIndexOf("/") + 1)
+                tempstring4 = fanarturl.Substring(fanarturl.LastIndexOf("/") + 1, fanarturl.Length - fanarturl.LastIndexOf("/") - 1)
+                fanarturl = tempstring3 & "posters/" & tempstring4
+                fanarturl = fanarturl.Replace(".html", "")
+                If fanarturl.IndexOf("_ver") <> -1 Then
+                    fanarturl = fanarturl.Substring(0, fanarturl.IndexOf("_ver"))
+                End If
 
-        Call displayselection()
+                If highest > count Then count = highest
+                If version = True Then
+                    posterurls(1, 1) = fanarturl & "_ver1.jpg"
+                    posterurls(1, 0) = fanarturl & "_ver1_xlg.jpg"
+                Else
+                    posterurls(1, 1) = fanarturl & ".jpg"
+                    posterurls(1, 0) = fanarturl & "_xlg.jpg"
+                End If
+
+                For f = 2 To count
+                    posterurls(f, 1) = fanarturl & "_ver" & f.ToString & ".jpg"
+                    posterurls(f, 0) = fanarturl & "_ver" & f.ToString & "_xlg.jpg"
+                Next
+            End If
+
+            Call displayselection()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
     Private Sub bigpicbox_LoadCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs) Handles bigpicbox.LoadCompleted
-        Dim bigpanellabel As Label
-        bigpanellabel = New Label
-        With bigpanellabel
-            .Location = New Point(20, 200)
-            .Width = 150
-            .Height = 50
-            .Visible = True
-            .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
-            '   .BringToFront()
-        End With
-
-        Me.bigpanel.Controls.Add(bigpanellabel)
-        bigpanellabel.BringToFront()
-        Application.DoEvents()
-
-
-
-        If Not bigpicbox.Image Is Nothing And bigpicbox.Image.Width > 20 Then
-
-            Dim sizey As Integer = bigpicbox.Image.Height
-            Dim sizex As Integer = bigpicbox.Image.Width
-            Dim tempstring As String
-            tempstring = "Full Image Resolution :- " & sizex.ToString & " x " & sizey.ToString
-            resolutionlbl = New Label
-            With resolutionlbl
-                .Location = New Point(311, 450)
-                .Width = 180
-                .Text = tempstring
-                .BackColor = Color.Transparent
+        Try
+            Dim bigpanellabel As Label
+            bigpanellabel = New Label
+            With bigpanellabel
+                .Location = New Point(20, 200)
+                .Width = 150
+                .Height = 50
+                .Visible = True
+                .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
+                '   .BringToFront()
             End With
 
-            Me.bigpanel.Controls.Add(resolutionlbl)
-            resolutionlbl.BringToFront()
-            Me.Refresh()
+            Me.bigpanel.Controls.Add(bigpanellabel)
+            bigpanellabel.BringToFront()
             Application.DoEvents()
-            Dim tempstring2 As String = resolutionlbl.Text
-        Else
-            bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
-        End If
+
+
+
+            If Not bigpicbox.Image Is Nothing And bigpicbox.Image.Width > 20 Then
+
+                Dim sizey As Integer = bigpicbox.Image.Height
+                Dim sizex As Integer = bigpicbox.Image.Width
+                Dim tempstring As String
+                tempstring = "Full Image Resolution :- " & sizex.ToString & " x " & sizey.ToString
+                resolutionlbl = New Label
+                With resolutionlbl
+                    .Location = New Point(311, 450)
+                    .Width = 180
+                    .Text = tempstring
+                    .BackColor = Color.Transparent
+                End With
+
+                Me.bigpanel.Controls.Add(resolutionlbl)
+                resolutionlbl.BringToFront()
+                Me.Refresh()
+                Application.DoEvents()
+                Dim tempstring2 As String = resolutionlbl.Text
+            Else
+                bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
 
 
     Private Sub mainposter_BackgroundImageChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles mainposter.BackgroundImageChanged
-        If Not mainposter.Image Is Nothing And mainposter.Image.Width > 20 Then
-            Dim tempstring As String
-            Label6.Visible = True
-            tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
-            Label6.Text = tempstring
-        Else
-            Label6.Visible = False
-        End If
+        Try
+            If Not mainposter.Image Is Nothing And mainposter.Image.Width > 20 Then
+                Dim tempstring As String
+                Label6.Visible = True
+                tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
+                Label6.Text = tempstring
+            Else
+                Label6.Visible = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox1.KeyPress
-        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-            If TextBox1.Text <> "" Then
-                If Convert.ToDecimal(TextBox1.Text) >= 1 Then
-                    e.Handled = True
-                    maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                    Preferences.maximumthumbs = maxthumbs
+        Try
+            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+                If TextBox1.Text <> "" Then
+                    If Convert.ToDecimal(TextBox1.Text) >= 1 Then
+                        e.Handled = True
+                        maxthumbs = Convert.ToDecimal(TextBox1.Text)
+                        Preferences.maximumthumbs = maxthumbs
+                    Else
+                        MsgBox("Please Enter A Number More Than 0")
+                    End If
                 Else
                     MsgBox("Please Enter A Number More Than 0")
                 End If
-            Else
-                MsgBox("Please Enter A Number More Than 0")
             End If
-        End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
+        Try
+            Button5.Visible = False
+            Me.Controls.Remove(panel2)
+            panel2 = Nothing
+            picboxes = Nothing
+            checkboxes = Nothing
 
-        Button5.Visible = False
-        Me.Controls.Remove(panel2)
-        panel2 = Nothing
-        picboxes = Nothing
-        checkboxes = Nothing
-
-        panel2 = New Panel
-        With panel2
-            .Width = 782
-            .Height = 232
-            .Location = New Point(2, 2)
-            .AutoScroll = True
-        End With
-        Me.Controls.Add(panel2)
-
-        currentpage += 1
-        Button7.Enabled = True
-
-        If currentpage = pagecount Then
-            Button8.Enabled = False
-        Else
-            Button8.Enabled = True
-        End If
-
-
-        Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
-        Dim tempint2 As Integer = currentpage * maxthumbs
-
-        If tempint2 > count Then
-            tempint2 = count
-        End If
-
-        Dim names As New List(Of String)()
-
-        For f = tempint To tempint2
-            names.Add(posterurls(f, 1))
-        Next
-        Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
-
-        Dim location As Integer = 0
-        Dim itemcounter As Integer = 0
-        For Each item As String In names
-
-
-            picboxes() = New PictureBox()
-            With picboxes
-                .Location = New Point(location, 0)
-                .Width = 140
-                .Height = 180
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .ImageLocation = item
-                .Visible = True
-                .BorderStyle = BorderStyle.Fixed3D
-                .Name = "picture" & itemcounter.ToString
-                AddHandler picboxes.DoubleClick, AddressOf zoomimage
-                AddHandler picboxes.LoadCompleted, AddressOf imageres
+            panel2 = New Panel
+            With panel2
+                .Width = 782
+                .Height = 232
+                .Location = New Point(2, 2)
+                .AutoScroll = True
             End With
+            Me.Controls.Add(panel2)
 
-            checkboxes() = New RadioButton()
-            With checkboxes
-                .Location = New Point(location + 60, 195)
-                .Name = "checkbox" & itemcounter.ToString
-                .SendToBack()
-                .Text = " "
-                AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
-            End With
+            currentpage += 1
+            Button7.Enabled = True
 
-            itemcounter += 1
-            location += 160
+            If currentpage = pagecount Then
+                Button8.Enabled = False
+            Else
+                Button8.Enabled = True
+            End If
 
-            Me.panel2.Controls.Add(picboxes())
-            Me.panel2.Controls.Add(checkboxes())
-            Me.Refresh()
-            Application.DoEvents()
-        Next
+
+            Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
+            Dim tempint2 As Integer = currentpage * maxthumbs
+
+            If tempint2 > count Then
+                tempint2 = count
+            End If
+
+            Dim names As New List(Of String)()
+
+            For f = tempint To tempint2
+                names.Add(posterurls(f, 1))
+            Next
+            Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
+
+            Dim location As Integer = 0
+            Dim itemcounter As Integer = 0
+            For Each item As String In names
+
+
+                picboxes() = New PictureBox()
+                With picboxes
+                    .Location = New Point(location, 0)
+                    .Width = 140
+                    .Height = 180
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .ImageLocation = item
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "picture" & itemcounter.ToString
+                    AddHandler picboxes.DoubleClick, AddressOf zoomimage
+                    AddHandler picboxes.LoadCompleted, AddressOf imageres
+                End With
+
+                checkboxes() = New RadioButton()
+                With checkboxes
+                    .Location = New Point(location + 60, 195)
+                    .Name = "checkbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
+                End With
+
+                itemcounter += 1
+                location += 160
+
+                Me.panel2.Controls.Add(picboxes())
+                Me.panel2.Controls.Add(checkboxes())
+                Me.Refresh()
+                Application.DoEvents()
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
     Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
-        Button5.Visible = False
-        Me.Controls.Remove(panel2)
-        panel2 = Nothing
-        picboxes = Nothing
-        checkboxes = Nothing
+        Try
+            Button5.Visible = False
+            Me.Controls.Remove(panel2)
+            panel2 = Nothing
+            picboxes = Nothing
+            checkboxes = Nothing
 
-        panel2 = New Panel
-        With panel2
-            .Width = 782
-            .Height = 232
-            .Location = New Point(2, 2)
-            .AutoScroll = True
-        End With
-        Me.Controls.Add(panel2)
+            panel2 = New Panel
+            With panel2
+                .Width = 782
+                .Height = 232
+                .Location = New Point(2, 2)
+                .AutoScroll = True
+            End With
+            Me.Controls.Add(panel2)
 
-        currentpage -= 1
-        Button7.Enabled = True
-        If currentpage <= 1 Then
-            Button7.Enabled = False
-        Else
+            currentpage -= 1
             Button7.Enabled = True
-        End If
-        If currentpage = pagecount Then
-            Button8.Enabled = False
-        Else
-            Button8.Enabled = True
-        End If
-        Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
-        Dim tempint2 As Integer = currentpage * maxthumbs
-        If tempint2 > count Then
-            tempint2 = count
-        End If
+            If currentpage <= 1 Then
+                Button7.Enabled = False
+            Else
+                Button7.Enabled = True
+            End If
+            If currentpage = pagecount Then
+                Button8.Enabled = False
+            Else
+                Button8.Enabled = True
+            End If
+            Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
+            Dim tempint2 As Integer = currentpage * maxthumbs
+            If tempint2 > count Then
+                tempint2 = count
+            End If
 
-        Dim names As New List(Of String)()
+            Dim names As New List(Of String)()
 
-        For f = tempint To tempint2
-            names.Add(posterurls(f, 1))
-        Next
-        Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
+            For f = tempint To tempint2
+                names.Add(posterurls(f, 1))
+            Next
+            Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
 
-        Dim location As Integer = 0
-        Dim itemcounter As Integer = 0
-        For Each item As String In names
-            picboxes() = New PictureBox()
-            With picboxes
-                .Location = New Point(location, 0)
-                .Width = 140
-                .Height = 180
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .ImageLocation = item
-                .Visible = True
-                .BorderStyle = BorderStyle.Fixed3D
-                .Name = "picture" & itemcounter.ToString
-                AddHandler picboxes.DoubleClick, AddressOf zoomimage
-                AddHandler picboxes.LoadCompleted, AddressOf imageres
-            End With
+            Dim location As Integer = 0
+            Dim itemcounter As Integer = 0
+            For Each item As String In names
+                picboxes() = New PictureBox()
+                With picboxes
+                    .Location = New Point(location, 0)
+                    .Width = 140
+                    .Height = 180
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .ImageLocation = item
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "picture" & itemcounter.ToString
+                    AddHandler picboxes.DoubleClick, AddressOf zoomimage
+                    AddHandler picboxes.LoadCompleted, AddressOf imageres
+                End With
 
-            checkboxes() = New RadioButton()
-            With checkboxes
-                .Location = New Point(location + 60, 195)
-                .Name = "checkbox" & itemcounter.ToString
-                .SendToBack()
-                .Text = " "
-                AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
-            End With
+                checkboxes() = New RadioButton()
+                With checkboxes
+                    .Location = New Point(location + 60, 195)
+                    .Name = "checkbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
+                End With
 
-            itemcounter += 1
-            location += 160
+                itemcounter += 1
+                location += 160
 
-            Me.panel2.Controls.Add(picboxes())
-            Me.panel2.Controls.Add(checkboxes())
-            Me.Refresh()
-            Application.DoEvents()
-        Next
+                Me.panel2.Controls.Add(picboxes())
+                Me.panel2.Controls.Add(checkboxes())
+                Me.Refresh()
+                Application.DoEvents()
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
     Private Sub displayselection()
@@ -1247,170 +1271,197 @@ Public Class frmCoverArt
 
 
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
-        Dim tempstring As String
-        Dim realnumber As Integer = 0
-        Dim tempint As Integer = 0
-        Dim tempstring2 As String = ""
-        Dim allok As Boolean = False
-        For Each button As Control In Me.panel2.Controls
-            If button.Name.IndexOf("checkbox") <> -1 Then
-                Dim b1 As RadioButton = CType(button, RadioButton)
-                If b1.Checked = True Then
-                    tempstring = b1.Name
-                    tempstring = tempstring.Replace("checkbox", "")
-                    tempint = Convert.ToDecimal(tempstring)
-                    realnumber = tempint + ((currentpage - 1) * maxthumbs)
-                    tempstring2 = posterurls(realnumber, 1)
-                    allok = True
-                    Exit For
-                End If
-            End If
-        Next
-        If allok = False Then
-            MsgBox("No Fanart Is Selected")
-        End If
-        If allok = True Then
-            For Each PictureBox2 As Control In Me.panel2.Controls
-                If PictureBox2.Name.IndexOf("picture") <> -1 And PictureBox2.Name.IndexOf(tempint) <> -1 Then
-                    Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
-                    If Not b1.Image Is Nothing Then
-                        If b1.Image.Width > 20 Then
-                            b1.Image.Save(posterpath)
-                            If Preferences.createfolderjpg = True Then
-                                b1.Image.Save(folderjpgpath)
-                            End If
-                            Form2.moviethumb.Image = b1.Image
-                            Form1.moviethumb.Image = b1.Image
-                            mainposter.Image = b1.Image
-                            Label6.Visible = True
-                            tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
-                            Label6.Text = tempstring
-                            mainposter.Visible = True
-                            Me.Close()
-                            Exit For
-                        Else
-                            Label6.Visible = False
-                        End If
-                    Else
-                        Label6.Visible = False
+        Try
+            Dim tempstring As String
+            Dim realnumber As Integer = 0
+            Dim tempint As Integer = 0
+            Dim tempstring2 As String = ""
+            Dim allok As Boolean = False
+            For Each button As Control In Me.panel2.Controls
+                If button.Name.IndexOf("checkbox") <> -1 Then
+                    Dim b1 As RadioButton = CType(button, RadioButton)
+                    If b1.Checked = True Then
+                        tempstring = b1.Name
+                        tempstring = tempstring.Replace("checkbox", "")
+                        tempint = Convert.ToDecimal(tempstring)
+                        realnumber = tempint + ((currentpage - 1) * maxthumbs)
+                        tempstring2 = posterurls(realnumber, 1)
+                        allok = True
+                        Exit For
                     End If
                 End If
             Next
-        End If
+            If allok = False Then
+                MsgBox("No Fanart Is Selected")
+            End If
+            If allok = True Then
+                For Each PictureBox2 As Control In Me.panel2.Controls
+                    If PictureBox2.Name.IndexOf("picture") <> -1 And PictureBox2.Name.IndexOf(tempint) <> -1 Then
+                        Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
+                        If Not b1.Image Is Nothing Then
+                            If b1.Image.Width > 20 Then
+                                b1.Image.Save(posterpath)
+                                If Preferences.createfolderjpg = True Then
+                                    b1.Image.Save(folderjpgpath)
+                                End If
+                                Form2.moviethumb.Image = b1.Image
+                                Form1.moviethumb.Image = b1.Image
+                                mainposter.Image = b1.Image
+                                Label6.Visible = True
+                                tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
+                                Label6.Text = tempstring
+                                mainposter.Visible = True
+                                Me.Close()
+                                Exit For
+                            Else
+                                Label6.Visible = False
+                            End If
+                        Else
+                            Label6.Visible = False
+                        End If
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
     Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
-        Dim tempstring As String
-        Dim tempint As Integer = 0
-        Dim realnumber As Integer = 0
-        Dim tempstring2 As String = ""
-        Dim allok As Boolean = False
-        For Each button As Control In Me.panel2.Controls
-            If button.Name.IndexOf("checkbox") <> -1 Then
-                Dim b1 As RadioButton = CType(button, RadioButton)
-                If b1.Checked = True Then
-                    tempstring = b1.Name
-                    tempstring = tempstring.Replace("checkbox", "")
-                    tempint = Convert.ToDecimal(tempstring)
-                    realnumber = tempint + ((currentpage - 1) * maxthumbs)
-                    tempstring2 = posterurls(realnumber, 1)
-                    allok = True
-                    Exit For
-                End If
-            End If
-        Next
-        If allok = False Then
-            MsgBox("No Fanart Is Selected")
-        End If
-        If allok = True Then
-            For Each PictureBox2 As Control In Me.panel2.Controls
-                If PictureBox2.Name.IndexOf("picture") <> -1 And PictureBox2.Name.IndexOf(tempint.ToString) <> -1 Then
-                    Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
-                    If Not b1.Image Is Nothing Then
-                        If b1.Image.Width > 20 Then
-                            With b1
-                                .WaitOnLoad = True
-                                Try
-                                    .ImageLocation = (posterurls(realnumber + 1, 0))
-                                Catch
-                                    .ImageLocation = (posterurls(realnumber + 1, 1))
-                                End Try
-                            End With
-                            b1.Image.Save(posterpath)
-                            If Preferences.createfolderjpg = True Then
-                                b1.Image.Save(folderjpgpath)
-                            End If
-                            Form2.moviethumb.Image = b1.Image
-                            Form1.moviethumb.Image = b1.Image
-                            mainposter.Image = b1.Image
-                            Label6.Visible = True
-                            tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
-                            Label6.Text = tempstring
-                            mainposter.Visible = True
-                            With b1
-                                .WaitOnLoad = True
-                                .ImageLocation = (posterurls(realnumber + 1, 1))
-                            End With
-                            Me.Close()
-                            Exit For
-                        Else
-                            Label6.Visible = False
-                        End If
-                    Else
-                        Label6.Visible = False
+        Try
+            Dim tempstring As String
+            Dim tempint As Integer = 0
+            Dim realnumber As Integer = 0
+            Dim tempstring2 As String = ""
+            Dim allok As Boolean = False
+            For Each button As Control In Me.panel2.Controls
+                If button.Name.IndexOf("checkbox") <> -1 Then
+                    Dim b1 As RadioButton = CType(button, RadioButton)
+                    If b1.Checked = True Then
+                        tempstring = b1.Name
+                        tempstring = tempstring.Replace("checkbox", "")
+                        tempint = Convert.ToDecimal(tempstring)
+                        realnumber = tempint + ((currentpage - 1) * maxthumbs)
+                        tempstring2 = posterurls(realnumber, 1)
+                        allok = True
+                        Exit For
                     End If
                 End If
             Next
-        End If
+            If allok = False Then
+                MsgBox("No Fanart Is Selected")
+            End If
+            If allok = True Then
+                For Each PictureBox2 As Control In Me.panel2.Controls
+                    If PictureBox2.Name.IndexOf("picture") <> -1 And PictureBox2.Name.IndexOf(tempint.ToString) <> -1 Then
+                        Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
+                        If Not b1.Image Is Nothing Then
+                            If b1.Image.Width > 20 Then
+                                With b1
+                                    .WaitOnLoad = True
+                                    Try
+                                        .ImageLocation = (posterurls(realnumber + 1, 0))
+                                    Catch
+                                        .ImageLocation = (posterurls(realnumber + 1, 1))
+                                    End Try
+                                End With
+                                b1.Image.Save(posterpath)
+                                If Preferences.createfolderjpg = True Then
+                                    b1.Image.Save(folderjpgpath)
+                                End If
+                                Form2.moviethumb.Image = b1.Image
+                                Form1.moviethumb.Image = b1.Image
+                                mainposter.Image = b1.Image
+                                Label6.Visible = True
+                                tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
+                                Label6.Text = tempstring
+                                mainposter.Visible = True
+                                With b1
+                                    .WaitOnLoad = True
+                                    .ImageLocation = (posterurls(realnumber + 1, 1))
+                                End With
+                                Me.Close()
+                                Exit For
+                            Else
+                                Label6.Visible = False
+                            End If
+                        Else
+                            Label6.Visible = False
+                        End If
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 
 
 
     Private Sub coverart_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-        '77%
-
         Try
+            '77%
             panel2.Width = Me.Width
             mainposter.Width = Panel1.Width
             mainposter.Height = Panel1.Height
-
-        Catch
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
         End Try
+
     End Sub
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
-        openFD.Title = "Select a jpeg image file File"
-        openFD.FileName = ""
-        openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
-        openFD.FilterIndex = 0
-        openFD.ShowDialog()
-        TextBox5.Text = openFD.FileName
+        Try
+            openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
+            openFD.Title = "Select a jpeg image file File"
+            openFD.FileName = ""
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.FilterIndex = 0
+            openFD.ShowDialog()
+            TextBox5.Text = openFD.FileName
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
-        Dim MyWebClient As New System.Net.WebClient
         Try
-            Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
-            Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+            Dim MyWebClient As New System.Net.WebClient
+            Try
+                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
+                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
-            mainposter.Image = New System.Drawing.Bitmap(ImageStream)
-            mainposter.Image.Save(posterpath)
-            Form2.moviethumb.Image = mainposter.Image
-            Form1.moviethumb.Image = mainposter.Image
+                mainposter.Image = New System.Drawing.Bitmap(ImageStream)
+                mainposter.Image.Save(posterpath)
+                Form2.moviethumb.Image = mainposter.Image
+                Form1.moviethumb.Image = mainposter.Image
+            Catch ex As Exception
+                MsgBox("Unable To Download Image")
+            End Try
+            Panel3.Visible = False
         Catch ex As Exception
-            MsgBox("Unable To Download Image")
+            ExceptionHandler.LogError(ex)
         End Try
-        Panel3.Visible = False
+
     End Sub
 
     Private Sub btncancelgetthumburl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btncancelgetthumburl.Click
-        Panel3.Visible = False
+        Try
+            Panel3.Visible = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
     Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
-        Panel3.Visible = True
+        Try
+            Panel3.Visible = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 
