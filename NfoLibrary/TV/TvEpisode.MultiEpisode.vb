@@ -17,7 +17,6 @@
                     MultiEpisodeNode.Add(Me.Node)
                     Me.Doc.Add(MultiEpisodeNode)
                 Else
-
                     Me.Node.Remove()
                     Me.Doc.Add(Me.Node)
 
@@ -37,9 +36,12 @@
 
     Public Sub MakeSecondaryTo(ByRef Prime As TvEpisode)
         Prime.HasSecondary = True
+        Me.Node.Remove()
         Prime.MultiEpisodeNode.Add(Me.Node)
 
         Prime.OtherEpisodes.Add(Me)
+
+        Me.Doc = Prime.Doc
 
         Me.VideoFilePath = Prime.VideoFilePath
 
@@ -52,6 +54,9 @@
         Me.Primary.OtherEpisodes.Remove(Me)
         Me.VideoFilePath = VideoFilePath
         _IsSecondary = False
+        Me.Doc = New XDocument(New XDeclaration("1.0", "UTF-8", "yes"))
+        Me.Node.Remove()
+        Me.Doc.Add(Me.Node)
     End Sub
 
     Public Property Primary As TvEpisode
