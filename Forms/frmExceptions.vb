@@ -3,7 +3,9 @@
 Public Class frmExceptions
 
     Private Sub btnQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnQuit.Click
-        Application.Exit()
+        For Each frmOpen As Form In My.Application.OpenForms
+            frmOpen.Close() 'Close form instead of existing application so background threads are properly terminated.
+        Next
     End Sub
 
     Private Sub btnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopy.Click
