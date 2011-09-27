@@ -162,7 +162,7 @@
     End Sub
 
     Public Sub Save() Implements IProtoXFile.Save
-        Me.IsAltered = True
+        Me.IsAltered = False
         Me.Save(Me.NfoFilePath)
     End Sub
 

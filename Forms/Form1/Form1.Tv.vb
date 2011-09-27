@@ -1816,7 +1816,7 @@ Partial Public Class Form1
                 'check for multiepisode files
                 Dim M2 As Match
                 Dim epcount As Integer = 0
-                Dim multiepisode As Boolean = False
+
                 Dim allepisodes(100) As Integer
                 S = eps.Thumbnail.FileName
                 eps.Thumbnail.FileName = ""
@@ -1878,6 +1878,9 @@ Partial Public Class Form1
                     End If
                 Next
                 If episodearray.Count > 1 Then
+                    For I = 1 To episodearray.Count - 1
+                        episodearray(I).MakeSecondaryTo(episodearray(0))
+                    Next
                     Preferences.tvScraperLog &= "Multipart episode found: " & vbCrLf
                     Preferences.tvScraperLog &= "Season: " & episodearray(0).Season.Value & " Episodes, "
                     For Each ep In episodearray

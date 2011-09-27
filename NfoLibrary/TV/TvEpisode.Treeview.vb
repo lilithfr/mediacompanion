@@ -35,6 +35,9 @@ Partial Public Class TvEpisode
         If Me.IsAltered Then
             EpisodeNode.ImageKey = "edit"
             EpisodeNode.SelectedImageKey = "edit"
+        Else
+            EpisodeNode.ImageKey = "blank"
+            EpisodeNode.SelectedImageKey = "blank"
         End If
 
         If Me.EpisodeNode.TreeView Is Nothing Then

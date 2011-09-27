@@ -17998,7 +17998,7 @@ Public Class Form1
             If TvTreeview.SelectedNode IsNot Nothing Then
                 If TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
                     Show = TvTreeview.SelectedNode.Tag
-                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvShow Then
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvEpisode Then
                     Episode = TvTreeview.SelectedNode.Tag
                 ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Nfo.TvSeason Then
                     Season = TvTreeview.SelectedNode.Tag
@@ -18055,6 +18055,7 @@ Public Class Form1
                 Show.Mpaa.Value = TextBox14.Text
 
                 Show.Save()
+                Show.UpdateTreenode()
                 'title(2)
                 'plot(19)
                 'Runtime(15)
@@ -18094,6 +18095,7 @@ Public Class Form1
                 Episode.Rating.Value = TextBox20.Text
 
                 Episode.Save()
+                Episode.UpdateTreenode()
                 'Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempWorkingEpisode)
                 'If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).VideoFilePath, TVShowEpisodeNFOContent)
 
