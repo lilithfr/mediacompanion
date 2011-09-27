@@ -29,6 +29,7 @@ Partial Class frmExceptions
         Me.lblExceptionTrace = New System.Windows.Forms.Label()
         Me.btnQuit = New System.Windows.Forms.Button()
         Me.lnkCodeplex = New System.Windows.Forms.LinkLabel()
+        Me.lblMessageEnd = New System.Windows.Forms.Label()
         CType(Me.pictSadFace, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -49,7 +50,7 @@ Partial Class frmExceptions
         Me.lblMessage.Size = New System.Drawing.Size(728, 48)
         Me.lblMessage.TabIndex = 1
         Me.lblMessage.Text = "Something went wrong and application needs to close. Why not file a bug to help u" & _
-            "s improve? Simply paste the exception trace below and create a new issue at "
+            "s improve? Create a new issue at "
         '
         'txtExceptionTrace
         '
@@ -91,12 +92,23 @@ Partial Class frmExceptions
         'lnkCodeplex
         '
         Me.lnkCodeplex.AutoSize = True
-        Me.lnkCodeplex.Location = New System.Drawing.Point(426, 292)
+        Me.lnkCodeplex.Font = New System.Drawing.Font("Lucida Console", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lnkCodeplex.Location = New System.Drawing.Point(119, 294)
         Me.lnkCodeplex.Name = "lnkCodeplex"
-        Me.lnkCodeplex.Size = New System.Drawing.Size(274, 13)
+        Me.lnkCodeplex.Size = New System.Drawing.Size(355, 12)
         Me.lnkCodeplex.TabIndex = 1
         Me.lnkCodeplex.TabStop = True
         Me.lnkCodeplex.Text = "http://mediacompanion.codeplex.com/WorkItem/Create"
+        '
+        'lblMessageEnd
+        '
+        Me.lblMessageEnd.AutoSize = True
+        Me.lblMessageEnd.Font = New System.Drawing.Font("Lucida Console", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMessageEnd.Location = New System.Drawing.Point(480, 294)
+        Me.lblMessageEnd.Name = "lblMessageEnd"
+        Me.lblMessageEnd.Size = New System.Drawing.Size(257, 12)
+        Me.lblMessageEnd.TabIndex = 5
+        Me.lblMessageEnd.Text = "and paste the exception trace below."
         '
         'frmExceptions
         '
@@ -105,6 +117,7 @@ Partial Class frmExceptions
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(776, 521)
         Me.ControlBox = False
+        Me.Controls.Add(Me.lblMessageEnd)
         Me.Controls.Add(Me.lnkCodeplex)
         Me.Controls.Add(Me.btnQuit)
         Me.Controls.Add(Me.lblExceptionTrace)
@@ -130,4 +143,5 @@ Partial Class frmExceptions
     Friend WithEvents lblExceptionTrace As System.Windows.Forms.Label
     Friend WithEvents btnQuit As System.Windows.Forms.Button
     Friend WithEvents lnkCodeplex As System.Windows.Forms.LinkLabel
+    Friend WithEvents lblMessageEnd As System.Windows.Forms.Label
 End Class
