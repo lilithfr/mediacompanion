@@ -215,7 +215,8 @@ Public Class frmMovieFanart
         fanartlinecount = 0
 
 
-        fanarturl = "http://api.themoviedb.org/2.0/Movie.getInfo?id=" & tmdbid & "&api_key=3f026194412846e530a208cf8a39e9cb"
+            fanarturl = String.Format("http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{0}/{1}", "3f026194412846e530a208cf8a39e9cb", tmdbid)
+
 
 
         Dim exists As Boolean = System.IO.File.Exists(fanartpath)
