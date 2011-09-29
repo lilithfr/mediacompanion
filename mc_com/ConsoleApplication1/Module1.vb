@@ -6210,7 +6210,7 @@ Label_1A0B:
             Return tvdbwebsource
         End Function
 
-        <STAThread> _
+        <STAThread()> _
         Public Shared Sub Main()
             Dim flag2 As Boolean = False
             Dim flag4 As Boolean = False
@@ -6244,18 +6244,18 @@ Label_1A0B:
                             Dim arguments4 As New arguments With { _
                                 .switch = Module1.arguments.Item(i) _
                             }
-                            Try 
+                            Try
                                 arguments4.argu = Module1.arguments.Item((i + 1))
                                 Module1.listofargs.Add(arguments4)
-                                goto Label_028B
+                                GoTo Label_028B
                             Catch exception1 As Exception
                                 ProjectData.SetProjectError(exception1)
-                                Module1.listofargs.Clear
+                                Module1.listofargs.Clear()
                                 Dim arguments5 As New arguments With { _
                                     .switch = "help" _
                                 }
                                 Module1.listofargs.Add(arguments5)
-                                ProjectData.ClearProjectError
+                                ProjectData.ClearProjectError()
                                 Exit Do
                             End Try
                         End If
@@ -6263,35 +6263,35 @@ Label_1A0B:
                             Dim arguments6 As New arguments With { _
                                 .switch = Module1.arguments.Item(i) _
                             }
-                            Try 
+                            Try
                                 arguments6.argu = Module1.arguments.Item((i + 1))
                                 Module1.listofargs.Add(arguments6)
-                                Try 
+                                Try
                                     Module1.htmlfileoutput = Module1.arguments.Item((i + 2))
                                     flag = True
                                 Catch exception2 As Exception
                                     ProjectData.SetProjectError(exception2)
                                     Dim exception As Exception = exception2
-                                    Module1.listofargs.Clear
+                                    Module1.listofargs.Clear()
                                     Dim arguments7 As New arguments With { _
                                         .switch = "help" _
                                     }
                                     Module1.listofargs.Add(arguments7)
-                                    ProjectData.ClearProjectError
+                                    ProjectData.ClearProjectError()
                                     Exit Do
                                 End Try
                             Catch exception3 As Exception
                                 ProjectData.SetProjectError(exception3)
-                                Module1.listofargs.Clear
+                                Module1.listofargs.Clear()
                                 Dim arguments8 As New arguments With { _
                                     .switch = "help" _
                                 }
                                 Module1.listofargs.Add(arguments8)
-                                ProjectData.ClearProjectError
+                                ProjectData.ClearProjectError()
                                 Exit Do
                             End Try
                         End If
-                    Label_028B:
+Label_028B:
                     End If
                     i += 1
                 Loop
@@ -6305,24 +6305,24 @@ Label_1A0B:
             Dim arguments12 As arguments = Module1.listofargs.Item(0)
             If (arguments12.switch = "help") Then
                 Console.WriteLine("Media Companion Command Line Tool")
-                Console.WriteLine
+                Console.WriteLine()
                 Console.WriteLine("Useage")
                 Console.WriteLine("mc_com.exe [-m] [-e] [-p ProfileName] [-h templatename outputpath]")
                 Console.WriteLine("-m to scrape movies")
                 Console.WriteLine("-e to scrape episodes")
                 Console.WriteLine("-h [templatename] [outputpath] to output html list ")
-                Console.WriteLine
+                Console.WriteLine()
                 Console.WriteLine("Example")
                 Console.WriteLine("mc_com.exe -m -e -p billy -h basiclist C:\Movielist\testfile.html")
                 Console.WriteLine("will search for and scrape any new movies and episodes")
                 Console.WriteLine("using the folders and settings of the 'billy' profile")
                 Console.WriteLine("then create a new html list using the named template")
                 Console.WriteLine("Without the profile arg the defauld profile will be used")
-                Console.WriteLine
+                Console.WriteLine()
                 Console.WriteLine("Tip: When using profile, template, or filenames that contain")
                 Console.WriteLine("spaces, enclose with quotes, eg.")
                 Console.WriteLine("mc_com.exe -m -p ""my profile"" -h ""new list"" ""C:\Movie list\test.html""")
-                Console.WriteLine
+                Console.WriteLine()
                 Console.WriteLine("****************************************************")
                 Environment.Exit(0)
             End If
@@ -6344,13 +6344,13 @@ Label_1A0B:
             Dim flag3 As Boolean = False
             Module1.defaultposter = Path.Combine(Module1.applicationpath, "Resources\default_poster.jpg")
             Console.WriteLine("Loading Config")
-            Module1.setuppreferences
+            Module1.setuppreferences()
             If Not File.Exists((Module1.applicationpath & "\settings\profile.xml")) Then
                 Console.WriteLine(("Unable to find profile file: " & Module1.applicationpath & "\settings\profile.xml"))
                 Console.WriteLine("****************************************************")
                 Environment.Exit(1)
             Else
-                Module1.loadprofiles
+                Module1.loadprofiles()
                 If (Module1.profile = "default") Then
                     Module1.profile = Module1.profile_structure.defaultprofile
                 End If
@@ -6377,26 +6377,26 @@ Label_1A0B:
             End If
             Module1.defaultofflineart = Path.Combine(Module1.applicationpath, "Resources\default_offline.jpg")
             If File.Exists(Module1.workingprofile.config) Then
-                Module1.loadconfig
+                Module1.loadconfig()
             End If
             If ((flag2 Or flag) AndAlso File.Exists(Module1.workingprofile.moviecache)) Then
-                Module1.loadmoviecache
+                Module1.loadmoviecache()
             End If
             If flag2 Then
-                Module1.startnewmovies
-                Module1.savemoviecache
-                Module1.saveactorcache
-                Console.WriteLine
+                Module1.startnewmovies()
+                Module1.savemoviecache()
+                Module1.saveactorcache()
+                Console.WriteLine()
                 Console.WriteLine("Movies search completed")
-                Console.WriteLine
-                Console.WriteLine
+                Console.WriteLine()
+                Console.WriteLine()
             End If
             If flag4 Then
                 If File.Exists(Module1.workingprofile.tvcache) Then
-                    Module1.loadtvcache
+                    Module1.loadtvcache()
                 End If
                 If File.Exists(Module1.workingprofile.regexlist) Then
-                    Module1.loadregex
+                    Module1.loadregex()
                 End If
                 If (Module1.tvregex.Count = 0) Then
                     Module1.tvregex.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
@@ -6411,7 +6411,7 @@ Label_1A0B:
                 Next
                 If (Module1.showstoscrapelist.Count > 0) Then
                     Module1.episodescraper(Module1.showstoscrapelist, False)
-                    Module1.savetvcache
+                    Module1.savetvcache()
                 End If
             End If
             If flag Then
@@ -6419,15 +6419,15 @@ Label_1A0B:
                 For Each arguments11 In Module1.listofargs
                     If (arguments11.switch = "-h") Then
                         Console.WriteLine("Starting HTML Output")
-                        Console.WriteLine
-                        Module1.addhtmltemplates
+                        Console.WriteLine()
+                        Module1.addhtmltemplates()
                         Module1.setuphtml(arguments11.argu)
                         Console.WriteLine("HTML output complete")
-                        Console.WriteLine
+                        Console.WriteLine()
                     End If
                 Next
             End If
-            Console.WriteLine
+            Console.WriteLine()
             Console.WriteLine("Tasks Completed")
             Console.WriteLine("****************************************************")
             Environment.Exit(0)
