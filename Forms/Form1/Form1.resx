@@ -118,26 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="FolderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>828, 17</value>
+    <value>988, 17</value>
   </metadata>
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>999, 17</value>
+    <value>1159, 17</value>
   </metadata>
   <metadata name="ContextMenuStrip4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>488, 17</value>
+    <value>648, 17</value>
   </metadata>
   <metadata name="ContextMenuStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>174, 17</value>
+    <value>334, 17</value>
   </metadata>
   <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>428, 56</value>
+    <value>682, 56</value>
   </metadata>
   <data name="ImageList2.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABY
-        DAAAAk1TRnQBSQFMAgEBBgEAAQgBLQEIAS0BEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DAAAAk1TRnQBSQFMAgEBBgEAARABLQEQAS0BEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -975,7 +975,7 @@ eg "C:\MovieStuff\ActorThumbs"</value>
 </value>
   </data>
   <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1098, 17</value>
+    <value>1258, 17</value>
   </metadata>
   <data name="Button66.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2054,10 +2054,10 @@ eg "C:\MovieStuff\ActorThumbs"</value>
 </value>
   </data>
   <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>177, 17</value>
   </metadata>
   <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>558, 134</value>
+    <value>767, 134</value>
   </metadata>
   <data name="Label128.Text" xml:space="preserve">
     <value>Using multisave mode it is possible to edit multiple movies at the same time,
@@ -3144,106 +3144,51 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         H4r5kaNDbHgkAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1258, 17</value>
+  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1197, 17</value>
-  </metadata>
-  <metadata name="StatusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1334, 17</value>
-  </metadata>
-  <metadata name="BckWrkScnMovies.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
+  <metadata name="StatusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>154, 56</value>
+  </metadata>
+  <metadata name="BckWrkScnMovies.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>271, 56</value>
+  </metadata>
   <metadata name="bckgroundversion.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>168, 56</value>
+    <value>422, 56</value>
   </metadata>
   <metadata name="bckgroundscanepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>538, 56</value>
+    <value>792, 56</value>
   </metadata>
   <metadata name="bckgroundfanart.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>858, 56</value>
+    <value>1112, 56</value>
   </metadata>
   <metadata name="bckgrounddroppedfiles.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1001, 56</value>
+    <value>17, 95</value>
   </metadata>
   <metadata name="bckgroundexit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1180, 56</value>
+    <value>196, 95</value>
   </metadata>
   <metadata name="bckepisodethumb.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>197, 95</value>
+    <value>506, 95</value>
   </metadata>
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>347, 95</value>
+    <value>656, 95</value>
   </metadata>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>645, 17</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>Use this page to edit what movie sets are available.
-These sets can be used to group collections of movies together within XBMC,
-eg. If you were to add the movie set "Star Wars Collection", and make all Star Wars movies
-part of this set, then they would be added to the XBMC library as "Star Wars Collection",
-Selecting this in XBMC would list all the movies in this collection.</value>
-  </data>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Rebuild" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
-  <data name="Label99.Text" xml:space="preserve">
-    <value>Media Companion can attempt to automatically download
-a Poster when a movie is first scraped, if this option is
-enabled, then the setting below allows you to prioritise the
-order that sources are checked for an available  poster</value>
-  </data>
-  <data name="Label109.Text" xml:space="preserve">
-    <value>Some people prefer to save their files as movie.nfo, movie.tbn
-and fanart.jpg to keep compatability with other media managers.
-
-This is not reccomended since it breaks MCs ability to see the 
-media file, used for playback and filedetails information.</value>
-  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>318, 56</value>
+    <value>572, 56</value>
   </metadata>
   <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        LgAAAk1TRnQBSQFMAgEBBAEAAQQBNQEEATUBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        LgAAAk1TRnQBSQFMAgEBBAEAAQwBNQEMATUBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABHgMAAQEBAAEYBQABUAFG/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
         /wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8AAwABOAG5AdIBOAG5AdIBOAG4AdEBOAG4AdEBOAG3
         AdEBNwG2AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAc0BNgGy
@@ -3444,6 +3389,67 @@ media file, used for playback and filedetails information.</value>
         DwAB/wQAAX8B/AUAAXAPAAH/AwABAQH/Af4FAAHwDwAB/wHAAgABAQf/AfAPAAs=
 </value>
   </data>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>805, 17</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>Use this page to edit what movie sets are available.
+These sets can be used to group collections of movies together within XBMC,
+eg. If you were to add the movie set "Star Wars Collection", and make all Star Wars movies
+part of this set, then they would be added to the XBMC library as "Star Wars Collection",
+Selecting this in XBMC would list all the movies in this collection.</value>
+  </data>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Rebuild" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
+  <data name="Label99.Text" xml:space="preserve">
+    <value>Media Companion can attempt to automatically download
+a Poster when a movie is first scraped, if this option is
+enabled, then the setting below allows you to prioritise the
+order that sources are checked for an available  poster</value>
+  </data>
+  <data name="Label109.Text" xml:space="preserve">
+    <value>Some people prefer to save their files as movie.nfo, movie.tbn
+and fanart.jpg to keep compatability with other media managers.
+
+This is not reccomended since it breaks MCs ability to see the 
+media file, used for playback and filedetails information.</value>
+  </data>
   <data name="Label56.Text" xml:space="preserve">
     <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
 If none of the above are correct, then alter the search term and search again.</value>
@@ -3536,46 +3542,49 @@ You can use this tab to export the entire MC database into an xml file that can 
 method is much faster than using XBMC scrapers to read the nfo files, and secondly, additional information, such as watched status will be included.</value>
   </data>
   <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>499, 95</value>
+    <value>808, 95</value>
   </metadata>
   <metadata name="openFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>614, 95</value>
+    <value>923, 95</value>
   </metadata>
   <metadata name="Timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>797, 95</value>
+    <value>1106, 95</value>
   </metadata>
   <metadata name="Timer3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>886, 95</value>
+    <value>1195, 95</value>
   </metadata>
   <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>708, 95</value>
+    <value>1017, 95</value>
   </metadata>
   <metadata name="Timer4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>975, 95</value>
+    <value>1284, 95</value>
   </metadata>
   <metadata name="ContextMenuStrip3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>331, 17</value>
+    <value>491, 17</value>
   </metadata>
   <metadata name="bckgrnd_tvshowscraper.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 95</value>
+    <value>326, 95</value>
   </metadata>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>233, 134</value>
+    <value>442, 134</value>
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>351, 134</value>
+    <value>560, 134</value>
+  </metadata>
+  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>767, 134</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>687, 134</value>
+    <value>896, 134</value>
   </metadata>
   <metadata name="BindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>721, 56</value>
+    <value>975, 56</value>
   </metadata>
   <metadata name="BasicmovienfoBindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 134</value>
+    <value>226, 134</value>
   </metadata>
   <metadata name="BasicmovienfoBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1064, 95</value>
+    <value>17, 134</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>53</value>
