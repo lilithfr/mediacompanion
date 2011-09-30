@@ -246,7 +246,9 @@ Public Class Form1
             Preferences.SaveConfig()
             Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            MessageBox.Show(ex.ToString, "Exception")
+            Environment.Exit(1)
+            'ExceptionHandler.LogError(ex)
         End Try
 
     End Sub
