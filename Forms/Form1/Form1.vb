@@ -132,6 +132,14 @@ Public Class Form1
     Dim maxcount As Integer = 0
     Dim moviecount_bak As Integer = 0
     Dim displayRuntimeScraper As Boolean = True
+    Dim tv_IMDbID_detected As Boolean = False
+    Dim tv_IMDbID_warned As Boolean = False
+    Dim tv_IMDbID_detectedMsg As String = String.Format("Media Companion has detected one or more TV Shows has an incorrect ID.{0}", vbCrLf) & _
+                            String.Format("To rectify, please select the following:{0}", vbCrLf) & _
+                            String.Format("  1. TV Preferences -> Fix NFO id during cache rebuild{0}", vbCrLf) & _
+                            String.Format("  2. TV Shows -> Rebuild Shows{0}", vbCrLf) & _
+                            String.Format("(This will only be reported once per session)", vbCrLf)
+
     Private ClickedControl As String
 
 
@@ -18162,6 +18170,7 @@ Public Class Form1
 
         Dim tempint As Integer = 0
         Dim tempstring As String = ""
+        If WorkingTvShow.TvdbId.Value.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
         If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
             tempint = MessageBox.Show("Rescraping the TV Show will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -18220,7 +18229,7 @@ Public Class Form1
                 End If
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(tvshowxmlstring)
-                workingTvShow.ListActors.Clear()
+                WorkingTvShow.ListActors.Clear()
                 Dim thisresult As XmlNode = Nothing
                 Dim maxcount As Integer = 0
                 For Each thisresult In showlist("fulltvshow")
@@ -18275,7 +18284,7 @@ Public Class Form1
 
                             If acts.actorthumb <> Nothing Then
                                 If acts.actorthumb <> "" And Preferences.actorseasy = True Then
-                                    If WorkingTvShow.TvShowActorSource.Value <> "imdb" Or WorkingTvShow.imdbid = Nothing Then
+                                    If WorkingTvShow.TvShowActorSource.Value <> "imdb" Or WorkingTvShow.ImdbId = Nothing Then
                                         Dim workingpath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                                         workingpath = workingpath & ".actors\"
                                         Dim hg As New IO.DirectoryInfo(workingpath)
@@ -18365,17 +18374,17 @@ Public Class Form1
                                 End If
                             End If
                             Dim exists As Boolean = False
-                            For Each actors In workingTvShow.ListActors
+                            For Each actors In WorkingTvShow.ListActors
                                 If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                     exists = True
                                 End If
                             Next
                             If exists = False Then
-                                workingTvShow.ListActors.Add(acts)
+                                WorkingTvShow.ListActors.Add(acts)
                             End If
                     End Select
                 Next
-                If WorkingTvShow.TvShowActorSource.Value = "imdb" And WorkingTvShow.imdbid <> Nothing Then
+                If WorkingTvShow.TvShowActorSource.Value = "imdb" And WorkingTvShow.ImdbId <> Nothing Then
                     WorkingTvShow.ListActors.Clear()
                     '                    Dim imdbscraper As New imdb.Classimdbscraper
                     Dim imdbscraper As New Classimdb
@@ -18554,7 +18563,7 @@ Public Class Form1
             Dim actorsource As String = WorkingTvShow.EpisodeActorSource.Value
             Dim tvdbid As String = WorkingTvShow.TvdbId.Value
             Dim imdbid As String = WorkingTvShow.ImdbId.Value
-            Dim seasonno As String = WorkingEpisode.Season.value
+            Dim seasonno As String = WorkingEpisode.Season.Value
             Dim episodeno As String = WorkingEpisode.Episode.Value
             'its an episode
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -18562,6 +18571,7 @@ Public Class Form1
             If sortorder = "" Then sortorder = "default"
             If language = "" Then language = "en"
             If actorsource = "" Then actorsource = "tvdb"
+            If tvdbid.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
             Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language)
 
 
@@ -18614,9 +18624,9 @@ Public Class Form1
 
             If actorsource = "tvdb" Then
                 If newepisode.ListActors.Count > 0 Then
-                    workingTvShow.ListActors.Clear()
+                    WorkingTvShow.ListActors.Clear()
                     For Each act In newepisode.ListActors
-                        workingTvShow.ListActors.Add(act)
+                        WorkingTvShow.ListActors.Add(act)
                     Next
                 End If
             Else
@@ -18884,6 +18894,10 @@ Public Class Form1
                 tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
             End If
+        End If
+        If Not tv_IMDbID_warned And tv_IMDbID_detected Then
+            MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            tv_IMDbID_warned = True
         End If
     End Sub
 
