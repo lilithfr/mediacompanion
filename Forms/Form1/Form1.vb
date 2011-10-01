@@ -278,13 +278,13 @@ Public Class Form1
         Try
 
             For I = 0 To 20
-                Common.Tasks.Add(New BlankTask())
+                Common.Tasks.Add(New Tasks.BlankTask())
             Next
 
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
             Common.Tasks.StartTaskEngine()
-            TasksList.DataSource = Common.Tasks
+            'TasksList.DataSource = Common.Tasks
 
             ForegroundWorkTimer.Interval = 500
             AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
@@ -32518,5 +32518,10 @@ Public Class Form1
             messbox.Close()
         End Try
 
+    End Sub
+
+
+    Private Sub TasksDontShowCompleted_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles TasksDontShowCompleted.CheckedChanged
+        Me.TasksOnlyIncompleteTasks = TasksDontShowCompleted.Checked
     End Sub
 End Class

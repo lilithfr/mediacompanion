@@ -12,5 +12,7 @@
                 System.Windows.Forms.Application.DoEvents()
             End Try
         End If
+
+        Form1.RefreshTaskList()
     End Sub
 End Module

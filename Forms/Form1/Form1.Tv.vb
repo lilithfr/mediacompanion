@@ -3589,6 +3589,72 @@ Partial Public Class Form1
         End If
     End Sub
 
+    Private Sub TasksTest_Click(sender As System.Object, e As System.EventArgs) Handles TasksTest.Click
+        For I = 0 To 20
+            Common.Tasks.Add(New Tasks.BlankTask())
+        Next
+
+        RefreshTaskList()
+    End Sub
+
+    Private Sub TasksRefresh_Click(sender As System.Object, e As System.EventArgs) Handles TasksRefresh.Click
+        RefreshTaskList()
+    End Sub
+
+    Private Sub TasksClearCompleted_Click(sender As System.Object, e As System.EventArgs) Handles TasksClearCompleted.Click
+        'Manually building a for loop
+        Dim Count As Long = Common.Tasks.Count
+        Dim Cursor As Long = 0
+
+        Dim CurrentTask As ITask
+        Do
+            CurrentTask = Common.Tasks(Cursor)
+            If CurrentTask.State = TaskState.Completed Then
+                Common.Tasks.Remove(CurrentTask)
+                Count -= 1
+            Else
+                Cursor += 1
+            End If
+            If Count < 1 Or Cursor >= Count Then
+                Exit Do
+            End If
+            System.Windows.Forms.Application.DoEvents()
+        Loop
+
+        RefreshTaskList()
+    End Sub
+
+    Public TasksOnlyIncompleteTasks As Boolean = True
+
+    Public Sub RefreshTaskList()
+        For Each Item As ITask In Common.Tasks
+            If Not (TasksOnlyIncompleteTasks AndAlso Item.State = TaskState.Completed) AndAlso Not TasksList.Items.Contains(Item) Then
+                TasksList.Items.Add(Item)
+                System.Windows.Forms.Application.DoEvents()
+            End If
+        Next
+
+        Dim Count As Long = TasksList.Items.Count
+        Dim Cursor As Long = 0
+
+        Dim CurrentTask As ITask
+        Do
+            If Count < 1 Or Cursor >= Count Then
+                Exit Do
+            End If
+
+            CurrentTask = TasksList.Items(Cursor)
+            If (TasksOnlyIncompleteTasks AndAlso CurrentTask.State = TaskState.Completed) OrElse Not Common.Tasks.Contains(CurrentTask) Then
+                TasksList.Items.Remove(CurrentTask)
+                Count -= 1
+
+            Else
+                Cursor += 1
+            End If
+
+            System.Windows.Forms.Application.DoEvents()
+        Loop
+    End Sub
 
     'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
     '    Try
