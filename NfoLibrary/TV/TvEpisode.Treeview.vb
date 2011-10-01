@@ -24,8 +24,6 @@ Partial Public Class TvEpisode
 
         If Me.IsMissing Then
             EpisodeNode.ForeColor = Drawing.Color.Blue
-        ElseIf Me.IsAltered Then
-            EpisodeNode.ForeColor = Drawing.Color.Gold
         End If
 
         If Me.FailedLoad Then
