@@ -3545,13 +3545,13 @@ Partial Public Class Form1
 
         'lblTask_Attempts.Text = SelectedTask.Attempts
 
-        TasksArugmentSelector.Items.Clear()
-        TasksArugmentSelector.Text = ""
+        TasksArgumentSelector.Items.Clear()
+        TasksArgumentSelector.Text = ""
         For Each Item In SelectedTask.Arguments
-            TasksArugmentSelector.Items.Add(Item)
+            TasksArgumentSelector.Items.Add(Item)
 
         Next
-        If TasksArugmentSelector.Items.Count > 0 Then TasksArugmentSelector.SelectedIndex = 0
+        If TasksArgumentSelector.Items.Count > 0 Then TasksArgumentSelector.SelectedIndex = 0
 
         TasksDependancies.Items.Clear()
         For Each Item In SelectedTask.Dependancies
@@ -3570,12 +3570,12 @@ Partial Public Class Form1
         TasksSelectedMessage.Text = TasksMessages.SelectedItem
     End Sub
 
-    Private Sub cmbTasks_Arguments_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksArugmentSelector.SelectedIndexChanged
-        If TasksArugmentSelector.SelectedItem Is Nothing Then Exit Sub
+    Private Sub cmbTasks_Arguments_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksArgumentSelector.SelectedIndexChanged
+        If TasksArgumentSelector.SelectedItem Is Nothing Then Exit Sub
 
         TasksArgumentDisplay.Controls.Clear()
 
-        Dim Item As KeyValuePair(Of String, Object) = TasksArugmentSelector.SelectedItem
+        Dim Item As KeyValuePair(Of String, Object) = TasksArgumentSelector.SelectedItem
         If TypeOf Item.Value Is String Then
             TasksArgumentDisplay.Controls.Add(New TextBox() With {.Text = Item.Value, .Dock = DockStyle.Fill, .Multiline = True, .ScrollBars = ScrollBars.Both})
         ElseIf TypeOf Item.Value Is TvShow Then
