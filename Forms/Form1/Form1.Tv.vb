@@ -710,11 +710,14 @@ Partial Public Class Form1
             newtvshownfo.Load(True)
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
-                    If Preferences.fixnfoid And newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then 'test if ID value should be fixed - i.e. IMDB value should be replaced by TVDB value
-                        newtvshownfo.ImdbId.Value = newtvshownfo.TvdbId.Value
-                        newtvshownfo.TvdbId.Value = newtvshownfo.IdTagCatch.Value
-                        Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True) 'save the nfo with the new ID data
-                        'Call tv_ShowLoad(newtvshownfo) ' reload the show to display..... SK: I think the current show will refresh anyway so this doesn't have to be called....
+                    If newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
+                        tv_IMDbID_detected = True
+                        If Preferences.fixnfoid Then 'test if ID value should be fixed - i.e. IMDB value should be replaced by TVDB value
+                            newtvshownfo.ImdbId.Value = newtvshownfo.TvdbId.Value
+                            newtvshownfo.TvdbId.Value = newtvshownfo.IdTagCatch.Value
+                            Call nfoFunction.tv_NfoSave(newtvshownfo.NfoFilePath, newtvshownfo, True) 'save the nfo with the new ID data
+                            'Call tv_ShowLoad(newtvshownfo) ' reload the show to display..... SK: I think the current show will refresh anyway so this doesn't have to be called....
+                        End If
                     End If
                     Cache.TvCache.Add(newtvshownfo) 'add this show & episode data to the cache
                     ' TvTreeview.Nodes.Add(newtvshownfo.ShowNode) 'Instead of updating the treeview directly we reload the treeview with the created cache at the end....
@@ -736,6 +739,10 @@ Partial Public Class Form1
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
         frmSplash2.Hide()
+        If Not tv_IMDbID_warned And tv_IMDbID_detected Then
+            MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            tv_IMDbID_warned = True
+        End If
     End Sub
 
     Private Sub tv_ShowListLoad()

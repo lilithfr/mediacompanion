@@ -132,6 +132,14 @@ Public Class Form1
     Dim maxcount As Integer = 0
     Dim moviecount_bak As Integer = 0
     Dim displayRuntimeScraper As Boolean = True
+    Dim tv_IMDbID_detected As Boolean = False
+    Dim tv_IMDbID_warned As Boolean = False
+    Dim tv_IMDbID_detectedMsg As String = String.Format("Media Companion has detected one or more TV Shows has an incorrect ID.{0}", vbCrLf) & _
+                            String.Format("To rectify, please select the following:{0}", vbCrLf) & _
+                            String.Format("  1. TV Preferences -> Fix NFO id during cache rebuild{0}", vbCrLf) & _
+                            String.Format("  2. TV Shows -> Rebuild Shows{0}", vbCrLf) & _
+                            String.Format("(This will only be reported once per session)", vbCrLf)
+
     Private ClickedControl As String
 
 
@@ -246,7 +254,9 @@ Public Class Form1
             Preferences.SaveConfig()
             Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            MessageBox.Show(ex.ToString, "Exception")
+            Environment.Exit(1)
+            'ExceptionHandler.LogError(ex)
         End Try
 
     End Sub
@@ -18175,6 +18185,7 @@ Public Class Form1
 
         Dim tempint As Integer = 0
         Dim tempstring As String = ""
+        If WorkingTvShow.TvdbId.Value.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
         If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
             tempint = MessageBox.Show("Rescraping the TV Show will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -18233,7 +18244,7 @@ Public Class Form1
                 End If
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(tvshowxmlstring)
-                workingTvShow.ListActors.Clear()
+                WorkingTvShow.ListActors.Clear()
                 Dim thisresult As XmlNode = Nothing
                 Dim maxcount As Integer = 0
                 For Each thisresult In showlist("fulltvshow")
@@ -18288,7 +18299,7 @@ Public Class Form1
 
                             If acts.actorthumb <> Nothing Then
                                 If acts.actorthumb <> "" And Preferences.actorseasy = True Then
-                                    If WorkingTvShow.TvShowActorSource.Value <> "imdb" Or WorkingTvShow.imdbid = Nothing Then
+                                    If WorkingTvShow.TvShowActorSource.Value <> "imdb" Or WorkingTvShow.ImdbId = Nothing Then
                                         Dim workingpath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                                         workingpath = workingpath & ".actors\"
                                         Dim hg As New IO.DirectoryInfo(workingpath)
@@ -18378,17 +18389,17 @@ Public Class Form1
                                 End If
                             End If
                             Dim exists As Boolean = False
-                            For Each actors In workingTvShow.ListActors
+                            For Each actors In WorkingTvShow.ListActors
                                 If actors.actorname = acts.actorname And actors.actorrole = acts.actorrole Then
                                     exists = True
                                 End If
                             Next
                             If exists = False Then
-                                workingTvShow.ListActors.Add(acts)
+                                WorkingTvShow.ListActors.Add(acts)
                             End If
                     End Select
                 Next
-                If WorkingTvShow.TvShowActorSource.Value = "imdb" And WorkingTvShow.imdbid <> Nothing Then
+                If WorkingTvShow.TvShowActorSource.Value = "imdb" And WorkingTvShow.ImdbId <> Nothing Then
                     WorkingTvShow.ListActors.Clear()
                     '                    Dim imdbscraper As New imdb.Classimdbscraper
                     Dim imdbscraper As New Classimdb
@@ -18567,7 +18578,7 @@ Public Class Form1
             Dim actorsource As String = WorkingTvShow.EpisodeActorSource.Value
             Dim tvdbid As String = WorkingTvShow.TvdbId.Value
             Dim imdbid As String = WorkingTvShow.ImdbId.Value
-            Dim seasonno As String = WorkingEpisode.Season.value
+            Dim seasonno As String = WorkingEpisode.Season.Value
             Dim episodeno As String = WorkingEpisode.Episode.Value
             'its an episode
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -18575,6 +18586,7 @@ Public Class Form1
             If sortorder = "" Then sortorder = "default"
             If language = "" Then language = "en"
             If actorsource = "" Then actorsource = "tvdb"
+            If tvdbid.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
             Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language)
 
 
@@ -18627,9 +18639,9 @@ Public Class Form1
 
             If actorsource = "tvdb" Then
                 If newepisode.ListActors.Count > 0 Then
-                    workingTvShow.ListActors.Clear()
+                    WorkingTvShow.ListActors.Clear()
                     For Each act In newepisode.ListActors
-                        workingTvShow.ListActors.Add(act)
+                        WorkingTvShow.ListActors.Add(act)
                     Next
                 End If
             Else
@@ -18897,6 +18909,10 @@ Public Class Form1
                 tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
             End If
+        End If
+        If Not tv_IMDbID_warned And tv_IMDbID_detected Then
+            MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            tv_IMDbID_warned = True
         End If
     End Sub
 
@@ -32383,12 +32399,124 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+    Private Sub SaveSelectedFanartAsToolStripMenuItem_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles SaveSelectedFanartAsToolStripMenuItem.Click
+        Try
+            messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            Me.Refresh()
+            messbox.Refresh()
+            Me.Refresh()
+            Application.DoEvents()
 
-    Private Sub Test_AddTasks_Click(sender As System.Object, e As System.EventArgs) Handles Test_AddTasks.Click
-        For I = 0 To 20
-            Common.Tasks.Add(New BlankTask)
-        Next
+            Dim tempstring As String
+            Dim tempint As Integer = 0
+            Dim tempstring2 As String = String.Empty
+            Dim allok As Boolean = False
+            For Each button As Control In Me.Panel2.Controls
+                If button.Name.IndexOf("checkbox") <> -1 Then
+                    Dim b1 As RadioButton = CType(button, RadioButton)
+                    If b1.Checked = True Then
+                        tempstring = b1.Name
+                        tempstring = tempstring.Replace("moviefanartcheckbox", "")
+                        tempint = Convert.ToDecimal(tempstring)
+                        tempstring2 = fanartArray(tempint).hdposter
+                        allok = True
+                        Exit For
+                    End If
+                End If
+            Next
+            If allok = False Then
+                MsgBox("No Fanart Is Selected")
+            Else
+                Try
+                    Panel1.Controls.Remove(Label1)
+                    Dim buffer(40000000) As Byte
+                    Dim size As Integer = 0
+                    Dim bytesRead As Integer = 0
 
+                    Dim fanartthumburl As String = tempstring2
+                    Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
+                    Dim res As HttpWebResponse = req.GetResponse()
+                    Dim contents As Stream = res.GetResponseStream()
+                    Dim bmp As New Bitmap(contents)
+                    Dim savepath As String
+
+                    Dim bytesToRead As Integer = CInt(buffer.Length)
+
+                    While bytesToRead > 0
+                        size = contents.Read(buffer, bytesRead, bytesToRead)
+                        If size = 0 Then Exit While
+                        bytesToRead -= size
+                        bytesRead += size
+                    End While
+                    With SaveFileDialog1
+                        .AddExtension = True
+                        .DefaultExt = "jpg"
+                        .Filter = "Jpg Pictures (*.jpg)|*.jpg"
+                        .Title = "Save Hi-Res Fanart as"
+                        .OverwritePrompt = True
+                        .CheckPathExists = True
+                        .InitialDirectory = workingMovieDetails.fileinfo.path
+                    End With
+                    If Preferences.resizefanart = 1 Then
+                        Try
+                            Dim tempbitmap As Bitmap = bmp
+                            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                savepath = SaveFileDialog1.FileName
+                                tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
+                            End If
+                        Catch ex As Exception
+                            tempstring = ex.Message.ToString
+                        End Try
+                    ElseIf Preferences.resizefanart = 2 Then
+                        If bmp.Width > 1280 Or bmp.Height > 720 Then
+                            Dim bm_source As New Bitmap(bmp)
+                            Dim bm_dest As New Bitmap(1280, 720)
+                            Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
+                            Dim tempbitmap As Bitmap = bm_dest
+                            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                savepath = SaveFileDialog1.FileName
+                                tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
+                            End If
+                        Else
+                            Thread.Sleep(30)
+                            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                savepath = SaveFileDialog1.FileName
+                                bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
+                            End If
+                        End If
+                    ElseIf Preferences.resizefanart = 3 Then
+                        If bmp.Width > 960 Or bmp.Height > 540 Then
+                            Dim bm_source As New Bitmap(bmp)
+                            Dim bm_dest As New Bitmap(960, 540)
+                            Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
+                            Dim tempbitmap As Bitmap = bm_dest
+                            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                savepath = SaveFileDialog1.FileName
+                                tempbitmap.Save(savepath, Imaging.ImageFormat.Jpeg)
+                            End If
+                        Else
+                            Thread.Sleep(30)
+                            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                savepath = SaveFileDialog1.FileName
+                                bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
+                            End If
+                        End If
+                    End If
+                Catch ex As WebException
+                    MsgBox(ex.Message)
+                End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        Finally
+            messbox.Close()
+        End Try
 
     End Sub
 End Class
