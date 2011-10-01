@@ -355,9 +355,9 @@ Public Class TvShow
     End Function
 
     Public Function GetEpisode(ByVal Season As Long, ByVal Episode As Long) As TvEpisode
-        For Each Item As TvSeason In Me.Seasons.Values
+        For Each Item As TvSeason In Me.Seasons.Values.ToList
             If Item.SeasonNumber = Season Then
-                For Each Ep As TvEpisode In Item.Episodes
+                For Each Ep As TvEpisode In Item.Episodes.ToList
                     If Ep.Episode.Value = Episode Then
                         Return Ep
                     End If

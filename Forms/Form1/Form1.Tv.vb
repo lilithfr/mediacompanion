@@ -3191,11 +3191,11 @@ Partial Public Class Form1
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
-        Try
-            Call tv_EpisodesMissingFind(e.Argument)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'Try
+        Call tv_EpisodesMissingFind(e.Argument)
+        'Catch ex As Exception
+        'ExceptionHandler.LogError(ex)
+        'End Try
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles Bckgrndfindmissingepisodes.ProgressChanged
@@ -3343,15 +3343,16 @@ Partial Public Class Form1
                     SeriesInfo.LoadXml(xmlfile)
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                        Dim AlreadyExists As Boolean = False
-                        For Each ExistingEpisode As Media_Companion.TvEpisode In item.Episodes
-                            If ExistingEpisode.Season.Value = NewEpisode.SeasonNumber.Value AndAlso ExistingEpisode.Episode.Value = NewEpisode.EpisodeNumber.Value Then
-                                AlreadyExists = True
-                                Exit For
-                            End If
-                        Next
+                        'Dim AlreadyExists As Boolean = False
+                        'For Each ExistingEpisode As Media_Companion.TvEpisode In item.Episodes
+                        '    If ExistingEpisode.Season.Value = NewEpisode.SeasonNumber.Value AndAlso ExistingEpisode.Episode.Value = NewEpisode.EpisodeNumber.Value Then
+                        '        AlreadyExists = True
+                        '        Exit For
+                        '    End If
+                        'Next
+                        Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
 
-                        If Not AlreadyExists Then
+                        If Episode Is Nothing Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
 
                             MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
