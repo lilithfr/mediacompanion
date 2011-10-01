@@ -130,6 +130,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ExceptionHandler.vb" />
     <Compile Include="Classes\Renamer.vb" />
     <Compile Include="Classes\Profiles.vb" />
@@ -760,6 +761,10 @@
       <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
       <Name>ProtoXML</Name>
     </ProjectReference>
+    <ProjectReference Include="Tasks\Tasks.vbproj">
+      <Project>{34E2C884-046F-4E79-9FCD-D67DC9592489}</Project>
+      <Name>Tasks</Name>
+    </ProjectReference>
     <ProjectReference Include="TvdbScrapper\TvdbScrapper.vbproj">
       <Project>{5B3BD48A-7DEE-4FF3-B7E8-8D41B83E25D3}</Project>
       <Name>TvdbScrapper</Name>
@@ -769,9 +774,7 @@
       <Name>Utilites</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Basics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

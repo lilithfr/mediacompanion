@@ -266,8 +266,21 @@ Public Class Form1
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
+
+            For I = 0 To 20
+                Common.Tasks.Add(New BlankTask())
+            Next
+
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
+            Common.Tasks.StartTaskEngine()
+            TasksList.DataSource = Common.Tasks
+
+            ForegroundWorkTimer.Interval = 500
+            AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
+            ForegroundWorkTimer.Start()
+
+
             DownloadCache.CacheFolder = IO.Path.Combine(Utilities.applicationPath, "cache\")
             Dim asm As Assembly = Assembly.GetExecutingAssembly
             Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -32326,6 +32339,8 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+
+        Debug.Print(Me.Controls.Count)
     End Sub
 
     Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
@@ -32367,5 +32382,13 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub Test_AddTasks_Click(sender As System.Object, e As System.EventArgs) Handles Test_AddTasks.Click
+        For I = 0 To 20
+            Common.Tasks.Add(New BlankTask)
+        Next
+
+
     End Sub
 End Class

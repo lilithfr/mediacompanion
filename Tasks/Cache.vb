@@ -6,8 +6,7 @@ Public Class Common
 End Class
 
 Public Class TaskCache
-    Implements IList(Of ITask), System.ComponentModel.INotifyPropertyChanged
-
+    Implements IList(Of ITask), System.ComponentModel.INotifyPropertyChanged, IListSource
 
     Private Tasks As New List(Of ITask)
 
@@ -146,6 +145,19 @@ Public Class TaskCache
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(info))
     End Sub
 
+    Public ReadOnly Property ContainsListCollection As Boolean Implements System.ComponentModel.IListSource.ContainsListCollection
+        Get
+            If Me.Count > 0 Then
+                Return True
+            Else
+                Return False
+            End If
+        End Get
+    End Property
+
+    Public Function GetList() As System.Collections.IList Implements System.ComponentModel.IListSource.GetList
+        Return Me.Tasks
+    End Function
 End Class
 
 'Private Sub cmdTasks_Refresh_Click(sender As System.Object, e As System.EventArgs) Handles cmdTasks_Refresh.Click

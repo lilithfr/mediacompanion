@@ -3500,4 +3500,107 @@ Partial Public Class Form1
         ' Add any initialization after the InitializeComponent() call.
 
     End Sub
+
+    'Private Sub cmdTasks_Refresh_Click(sender As System.Object, e As System.EventArgs) Handles cmdTasks_Refresh.Click
+    '    TasksList.Items.Clear()
+    '    'tv_MissingArtDownload(tv_ShowSelectedCurrently)
+
+    '    For Each Item As ITask In Common.Tasks
+    '        TasksList.Items.Add(Item)
+    '    Next
+    'End Sub
+
+    Private Sub lstTasks_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksList.SelectedIndexChanged
+        If TasksList.SelectedItem Is Nothing Then Exit Sub
+
+        Dim SelectedTask As ITask
+
+        SelectedTask = TasksList.SelectedItem
+
+        Select Case SelectedTask.State
+            Case TaskState.Completed
+                TasksStateLabel.Text = "Completed"
+            Case TaskState.BackgroundWorkComplete
+                TasksStateLabel.Text = "Background Completed"
+            Case TaskState.CriticalFault
+                TasksStateLabel.Text = "Critial Fault"
+            Case TaskState.Fault
+                TasksStateLabel.Text = "Fault"
+            Case TaskState.Halted
+                TasksStateLabel.Text = "Halted"
+            Case TaskState.NotStarted
+                TasksStateLabel.Text = "Not Started"
+            Case TaskState.WaitingForUserInput
+                TasksStateLabel.Text = "Waiting For Input"
+            Case TaskState.Running
+                TasksStateLabel.Text = "Running"
+        End Select
+
+        'lblTask_Attempts.Text = SelectedTask.Attempts
+
+        TasksArugmentSelector.Items.Clear()
+        TasksArugmentSelector.Text = ""
+        For Each Item In SelectedTask.Arguments
+            TasksArugmentSelector.Items.Add(Item)
+
+        Next
+        If TasksArugmentSelector.Items.Count > 0 Then TasksArugmentSelector.SelectedIndex = 0
+
+        TasksDependancies.Items.Clear()
+        For Each Item In SelectedTask.Dependancies
+            TasksDependancies.Items.Add(Item)
+        Next
+
+        TasksMessages.Items.Clear()
+        For Each Item In SelectedTask.Messages
+            TasksMessages.Items.Add(Item)
+        Next
+    End Sub
+
+    Private Sub lstTasks_Messages_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksMessages.SelectedIndexChanged
+        If TasksMessages.SelectedItem Is Nothing Then Exit Sub
+
+        TasksSelectedMessage.Text = TasksMessages.SelectedItem
+    End Sub
+
+    Private Sub cmbTasks_Arguments_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TasksArugmentSelector.SelectedIndexChanged
+        If TasksArugmentSelector.SelectedItem Is Nothing Then Exit Sub
+
+        TasksArgumentDisplay.Controls.Clear()
+
+        Dim Item As KeyValuePair(Of String, Object) = TasksArugmentSelector.SelectedItem
+        If TypeOf Item.Value Is String Then
+            TasksArgumentDisplay.Controls.Add(New TextBox() With {.Text = Item.Value, .Dock = DockStyle.Fill, .Multiline = True, .ScrollBars = ScrollBars.Both})
+        ElseIf TypeOf Item.Value Is TvShow Then
+            Dim TempShow As TvShow = Item.Value
+            TasksArgumentDisplay.Controls.Add(New TextBox() With {.Text = TempShow.TvdbId.Value & " - " & TempShow.Title.Value, .Dock = DockStyle.Fill, .ScrollBars = ScrollBars.Both})
+        ElseIf TypeOf Item.Value Is TvEpisode Then
+            Dim TempEpisode As TvEpisode = Item.Value
+            TasksArgumentDisplay.Controls.Add(New TextBox() With {.Text = TempEpisode.Id.Value & " - " & TempEpisode.Title.Value, .Dock = DockStyle.Fill, .ScrollBars = ScrollBars.Both})
+        ElseIf TypeOf Item.Value Is Image Then
+            TasksArgumentDisplay.Controls.Add(New PictureBox() With {.Image = Item.Value, .Dock = DockStyle.Fill})
+        End If
+    End Sub
+
+
+    'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
+    '    Try
+    '        For Each Task In TaskCache.Tasks
+    '            If Task.State = TaskState.BackgroundWorkComplete Then
+    '                Task.FinishWork()
+    '            End If
+    '            Windows.Forms.Application.DoEvents()
+    '        Next
+    '    Catch
+
+    '    End Try
+    'End Sub
+
+
+    'Private Sub TaskListUpdater_Tick(sender As System.Object, e As System.EventArgs) Handles TaskListUpdater.Tick
+    '    'cmdTasks_Refresh_Click(Nothing, Nothing)
+    '    TaskListUpdater.Enabled = False
+    '    lstTasks.ResetText()
+
+    'End Sub
 End Class
