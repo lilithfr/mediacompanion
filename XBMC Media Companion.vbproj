@@ -187,12 +187,6 @@
     <Compile Include="Forms\frmCoverArt.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmDeleteDialogue.Designer.vb">
-      <DependentUpon>frmDeleteDialogue.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmDeleteDialogue.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\frmDialog1.Designer.vb">
       <DependentUpon>frmDialog1.vb</DependentUpon>
     </Compile>
@@ -266,12 +260,6 @@
     <Compile Include="Forms\frmTvBatchWizard.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmTvEdit.Designer.vb">
-      <DependentUpon>frmTvEdit.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmTvEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\frmTvFanart.Designer.vb">
       <DependentUpon>frmTvFanart.vb</DependentUpon>
     </Compile>
@@ -322,10 +310,6 @@
       <DependentUpon>frmCoverArt.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmDeleteDialogue.resx">
-      <DependentUpon>frmDeleteDialogue.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmDialog1.resx">
       <DependentUpon>frmDialog1.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -374,10 +358,6 @@
       <DependentUpon>frmTvBatchWizard.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmTvEdit.resx">
-      <DependentUpon>frmTvEdit.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmTvFanart.resx">
       <DependentUpon>frmTvFanart.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -418,7 +398,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
-    <None Include="XBMC Media Companion_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\class_mpdb_thumbs.dll">

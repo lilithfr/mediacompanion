@@ -383,17 +383,8 @@ Public Class frmTvFanart
         bigpicbox = Nothing
     End Sub
 
-
-
-
-
-
-
     Private Sub loadwebpage()
         urllinecount = 0
-
-
-
         Try
             Dim wrGETURL As WebRequest
             wrGETURL = WebRequest.Create(url)
@@ -419,11 +410,6 @@ Public Class frmTvFanart
             'MsgBox("Unable to load webpage " & url & vbCrLf & vbCrLf & ex.ToString)
         End Try
 
-
-
-
-
-
     End Sub
 
 
@@ -435,7 +421,6 @@ Public Class frmTvFanart
             count = 0
             pagecount = 0
             Call initialise()
-            'url = "http://www.imdb.com/title/" & Form1.imdbidd & "/mediaindex"
             Call loadwebpage()
             Dim tempint As Integer
             Dim imdbsmall(2000) As String
@@ -471,7 +456,7 @@ Public Class frmTvFanart
                 End If
             Next
             For g = 2 To totalpages
-                'url = "http://www.imdb.com/title/" & Form1.imdbidd & "/mediaindex?page=" & g.ToString
+
                 Call loadwebpage()
                 For f = 1 To urllinecount
                     If websource(f).IndexOf("<div class=""thumb_list""") <> -1 Then
@@ -500,29 +485,11 @@ Public Class frmTvFanart
 
             Next
 
-
-
-            'ReDim downloadthumb(2000, 1)
-            'downloadthumbcount = 0
-
-
-
-
-
             For f = counter To 1 Step -1
                 downloadthumbcount = downloadthumbcount + 1
                 downloadthumb(downloadthumbcount, 0) = imdbsmall(f)
                 downloadthumb(downloadthumbcount, 1) = imdbsmall(f)
             Next
-
-
-            'If ComboBox2.Text = "Main TV Show Thumb" Then
-            '    For f = 1 To counter
-            '        downloadthumbcount = downloadthumbcount + 1
-            '        downloadthumb(downloadthumbcount) = imdbsmall(f)
-            '    Next
-            'End If
-
 
             count = downloadthumbcount
             Call displayselection()
@@ -754,7 +721,6 @@ Public Class frmTvFanart
             Dim tempstring As String
             Dim tempstring2 As String
             downloadthumbcount = 0
-            'url = "http://thetvdb.com/api/6E82FED600783400/series/" & Form1.tvdbidd & "/banners.xml"
             Call loadwebpage()
             Dim tempstring3 As String
 
@@ -767,8 +733,8 @@ Public Class frmTvFanart
                     tempstring2 = tempstring2.Replace("  ", "")
                     '_cache/posters/73739-4.jpg
                     tempstring = tempstring2
-                    tempstring2 = "http://images.thetvdb.com/banners/" & tempstring2
-                    tempstring = "http://images.thetvdb.com/banners/_cache/" & tempstring
+                    tempstring2 = URLs.TVdbBanners(tempstring2)
+                    tempstring = URLs.TVdbBannersCache(tempstring)
                     downloadthumbcount += 1
                     downloadthumb(downloadthumbcount, 0) = tempstring
                     downloadthumb(downloadthumbcount, 1) = tempstring2
@@ -782,117 +748,6 @@ Public Class frmTvFanart
         End Try
     End Sub
 
-    'Private Sub Button5_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button5.Click
-    '    Dim savepath As String
-    '    savepath = savethumbpath & "fanart.jpg"
-
-    '    Dim tempstring As String
-    '    Dim realnumber As Integer = 0
-    '    Dim tempint As Integer = 0
-    '    Dim tempstring2 As String = ""
-    '    Dim allok As Boolean = False
-    '    For Each button As Control In Me.panel2.Controls
-    '        If button.Name.IndexOf("checkbox") <> -1 Then
-    '            Dim b1 As RadioButton = CType(button, RadioButton)
-    '            If b1.Checked = True Then
-    '                tempstring = b1.Name
-    '                tempstring = tempstring.Replace("checkbox", "")
-    '                tempint = Convert.ToDecimal(tempstring)
-    '                realnumber = tempint + ((currentpage - 1) * maxthumbs)
-    '                realnumber += 1
-    '                tempstring2 = downloadthumb(realnumber, 1)
-    '                allok = True
-    '                Exit For
-    '            End If
-    '        End If
-    '    Next
-    '    If allok = False Then
-    '        MsgBox("No Fanart Is Selected")
-    '    Else
-    '        Try
-    '            Panel1.Controls.Remove(Label1)
-    '            Dim buffer(4000000) As Byte
-    '            Dim size As Integer = 0
-    '            Dim bytesRead As Integer = 0
-
-    '            Dim fanartthumburl As String = tempstring2
-    '            Dim req As HttpWebRequest = req.Create(tempstring2)
-    '            Dim res As HttpWebResponse = req.GetResponse()
-    '            Dim contents As Stream = res.GetResponseStream()
-    '            Dim bmp As New Bitmap(contents)
-
-
-    '            Dim bytesToRead As Integer = CInt(buffer.Length)
-
-    '            While bytesToRead > 0
-    '                size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                If size = 0 Then Exit While
-    '                bytesToRead -= size
-    '                bytesRead += size
-    '            End While
-    '            If Form1.resizefanart = 1 Then
-    '                Try
-    '                    bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                Catch ex As Exception
-    '                    tempstring = ex.Message.ToString
-    '                End Try
-    '            ElseIf Form1.resizefanart = 2 Then
-    '                If bmp.Width > 1280 Or bmp.Height > 720 Then
-    '                    Dim bm_source As New Bitmap(bmp)
-    '                    Dim bm_dest As New Bitmap(1280, 720)
-    '                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-    '                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-    '                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-    '                    bm_dest.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                Else
-    '                    bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                End If
-    '            ElseIf Form1.resizefanart = 3 Then
-    '                If bmp.Width > 960 Or bmp.Height > 540 Then
-    '                    Dim bm_source As New Bitmap(bmp)
-    '                    Dim bm_dest As New Bitmap(960, 540)
-    '                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-    '                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-    '                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-    '                    bm_dest.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                Else
-    '                    bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                End If
-    '            End If
-    '            Dim exists As Boolean = System.IO.File.Exists(savepath)
-    '            If exists = True Then
-
-
-    '                'mainfanart = New PictureBox
-    '                Dim OriginalImage As New Bitmap(savepath)
-    '                Dim Image2 As New Bitmap(OriginalImage)
-    '                OriginalImage.Dispose()
-    '                'With mainfanart
-    '                '    .Visible = True
-    '                '    .Location = New Point(0, 0)
-    '                '    .Width = 423
-    '                '    .Height = 240
-    '                '    .SizeMode = PictureBoxSizeMode.Zoom
-    '                '    .Image = Image2
-    '                '    .Visible = True
-    '                '    .BorderStyle = BorderStyle.Fixed3D
-    '                '    .BringToFront()
-    '                'End With
-    '                'Me.Panel1.Controls.Add(mainfanart)
-    '                'Label2.Visible = False
-    '                Me.Close()
-    '            Else
-    '                mainposter.Visible = False
-    '                Label2.Text = "No Local Fanart Is Available"
-    '                Label2.Visible = True
-    '            End If
-
-    '        Catch ex As WebException
-    '            MsgBox(ex.Message)
-    '        End Try
-    '    End If
-
-    'End Sub
 
     Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
         Try

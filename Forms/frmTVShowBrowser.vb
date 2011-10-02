@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Data
 Imports System.Text.RegularExpressions
+Imports Media_Companion.Utilities
 
 
 Public Class frmTVShowBrowser
@@ -42,7 +43,7 @@ Public Class frmTVShowBrowser
         ListBox1.Items.Clear()
         ReDim returnedresults(100, 2)
         resultcount = 0
-        url = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & TextBox1.Text & "&language=all"
+        url = URLs.TVdbGetSeries(TextBox1.Text)
         Call loadwebpage()
         For f = 1 To urllinecount
             If websource(f).IndexOf("<seriesid>") <> -1 Then
@@ -60,7 +61,7 @@ Public Class frmTVShowBrowser
                     websource(f + 3) = websource(f + 3).Replace("</banner>", "")
                     websource(f + 3) = websource(f + 3).Replace("  ", "")
                     returnedresults(resultcount, 2) = websource(f + 3)
-                    returnedresults(resultcount, 2) = "http://images.thetvdb.com/banners/_cache/" & returnedresults(resultcount, 2)
+                    returnedresults(resultcount, 2) = URLs.TVdbBannersCache(returnedresults(resultcount, 2))
                 End If
             End If
         Next
@@ -135,7 +136,7 @@ Public Class frmTVShowBrowser
     End Sub
 
     Private Sub checklanguage()
-        url = "http://thetvdb.com/api/6E82FED600783400/series/" & returnedresults(ListBox1.SelectedIndex + 1, 1) & "/" & languagecode & ".xml"
+        url = URLs.TVdbSeriesLanguageXML(returnedresults(ListBox1.SelectedIndex + 1, 1), languagecode)
         Call loadwebpage()
 
         For f = 1 To urllinecount
@@ -172,7 +173,7 @@ Public Class frmTVShowBrowser
         Dim last As Integer
         actorcount = 0
 
-        url = "http://www.imdb.com/title/" & imdbid
+        url = URLs.IMDBUrl(imdbid)
         Call loadwebpage()
 
         Dim tempstring As String = ""
@@ -194,8 +195,8 @@ Public Class frmTVShowBrowser
                 actorcount = tempint
                 For g = 1 To actorcount
                     actors(g, 3) = actors(g, 0).Substring(actors(g, 0).IndexOf("<a href=""/name/nm") + 15, 9)
-                    If actors(g, 0).IndexOf("http://resume.imdb.com") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://resume.imdb.com", "")
-                    If actors(g, 0).IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
+                    If actors(g, 0).IndexOf(URLs.IMDBResume) <> -1 Then actors(g, 0) = actors(g, 0).Replace(URLs.IMDBResume, "")
+                    If actors(g, 0).IndexOf(URLs.IMDBAddPhotoGif()) <> -1 Then actors(g, 0) = actors(g, 0).Replace(URLs.IMDBAddPhotoGif(), "")
                     If actors(g, 0).IndexOf("</td></tr></table>") <> -1 Then
                         tempint = actors(g, 0).IndexOf("</td></tr></table>")
                         tempstring = actors(g, 0).Substring(tempint, actors(g, 0).Length - tempint)
@@ -204,7 +205,7 @@ Public Class frmTVShowBrowser
                     If actors(g, 0).IndexOf("link=/name/") <> -1 And actors(g, 0).IndexOf("/';""><img") <> -1 Then
                         actors(g, 2) = actors(g, 0).Substring(actors(g, 0).IndexOf("link=/name/") + 11, actors(g, 0).IndexOf("/';""><img") - actors(g, 0).IndexOf("link=/name/") - 11)
                         actorcode(g) = actors(g, 2)
-                        actors(g, 2) = "http://www.imdb.com/name/" & actors(g, 2)
+                        actors(g, 2) = URLs.IMDBName(actors(g, 2))
                     End If
                     If actors(g, 0).IndexOf("a href=""/character") <> -1 Then
                         actors(g, 1) = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character") + 19, actors(g, 0).IndexOf("</td></tr><tr class") - actors(g, 0).IndexOf("a href=""/character") - 19)
@@ -256,25 +257,6 @@ Public Class frmTVShowBrowser
                                             workingpath = networkpath & "\" & actors(f, 3) & ".jpg"
                                             If Not IO.File.Exists(workingpath) Then
                                                 Utilities.DownloadFile(actors(f, 2), workingpath)
-                                                'Dim buffer(4000000) As Byte
-                                                'Dim size As Integer = 0
-                                                'Dim bytesRead As Integer = 0
-                                                'Dim thumburl As String = actors(f, 2)
-                                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                'Dim res As HttpWebResponse = req.GetResponse()
-                                                'Dim contents As Stream = res.GetResponseStream()
-                                                'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                'While bytesToRead > 0
-                                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                '    If size = 0 Then Exit While
-                                                '    bytesToRead -= size
-                                                '    bytesRead += size
-                                                'End While
-
-                                                'Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                'fstrm.Write(buffer, 0, bytesRead)
-                                                'contents.Close()
-                                                'fstrm.Close()
                                             End If
                                             actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
                                         Catch
@@ -314,7 +296,7 @@ Public Class frmTVShowBrowser
 
         Application.DoEvents()
 
-        url = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
+        url = URLs.TVdbActorsXML(tvdbid)
         Call loadwebpage()
 
         For f = 1 To urllinecount
@@ -327,7 +309,7 @@ Public Class frmTVShowBrowser
                 End If
 
                 actors(actorcount, 2) = websource(f)
-                If actors(actorcount, 2) <> "" Then actors(actorcount, 2) = "http://images.thetvdb.com/banners/" & actors(actorcount, 2)
+                If actors(actorcount, 2) <> "" Then actors(actorcount, 2) = URLs.TVdbBanners(actors(actorcount, 2))
                 websource(f + 1) = websource(f + 1).Replace("  <Name>", "")
                 websource(f + 1) = websource(f + 1).Replace("</Name>", "")
                 actors(actorcount, 0) = websource(f + 1)
@@ -348,34 +330,14 @@ Public Class frmTVShowBrowser
                     Dim networkpath As String = Preferences.actorsavepath
                     If actors(f, 2) <> Nothing Then
                         If actors(f, 2) <> "" Then
-                            'Try
+
                             workingpath = IO.Path.Combine(networkpath, actors(f, 3))
                             workingpath += ".jpg"
                             If Not IO.File.Exists(workingpath) Then
                                 Utilities.DownloadFile(actors(f, 2), workingpath)
-                                'Dim buffer(4000000) As Byte
-                                'Dim size As Integer = 0
-                                'Dim bytesRead As Integer = 0
-                                'Dim thumburl As String = actors(f, 2)
-                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                'Dim res As HttpWebResponse = req.GetResponse()
-                                'Dim contents As Stream = res.GetResponseStream()
-                                'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                'While bytesToRead > 0
-                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                '    If size = 0 Then Exit While
-                                '    bytesToRead -= size
-                                '    bytesRead += size
-                                'End While
-
-                                'Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                'fstrm.Write(buffer, 0, bytesRead)
-                                'contents.Close()
-                                'fstrm.Close()
                             End If
                             actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
-                            'Catch
-                            'End Try
+                           
                         End If
                     End If
                 End If
