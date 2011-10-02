@@ -15,21 +15,6 @@ Public Class frmMovieFanart
     Dim mainfanart As PictureBox
     Dim resolutionlbl As Label
 
-    'Private Sub moviefanart_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-
-    '    Dim exists As Boolean = System.IO.File.Exists(fanartpath)
-    '    If exists = True Then
-    '        Dim OriginalImage As New Bitmap(fanartpath)
-    '        Dim Image2 As New Bitmap(OriginalImage)
-    '        OriginalImage.Dispose()
-    '        Form1.Panel1.BackgroundImageLayout = ImageLayout.Stretch
-    '        Form1.Panel1.BackgroundImage = Image2
-    '    Else
-    '        Form1.Panel1.BackgroundImage = Nothing
-    '    End If
-
-    'End Sub
-
 
     Private Sub zoomimage(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -138,49 +123,10 @@ Public Class frmMovieFanart
 
     Private Sub moviefanart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
-            'If Form1.fanartnotstacked = True Then
-            '    fanartpath = Form1.movie(Form1.workinginfonumber, 0).Replace(".nfo", "-fanart.jpg")
-            'ElseIf Form1.fanartnotstacked = False Then
-            '    Dim tempstring As String
-            '    tempstring = Form1.getstackname(Form1.filenametxt.Text, Form1.pathtxt.Text)
-            '    If tempstring <> "na" Then
-            '        fanartpath = Form1.pathtxt.Text & tempstring & "-fanart.jpg"
-            '    Else
-            '        fanartpath = Form1.movie(Form1.workinginfonumber, 0).Replace(".nfo", "-fanart.jpg")
-            '    End If
-            'End If
-
-            'Dim fanartpath2 As String
-            '    Dim exists2 As Boolean = System.IO.File.Exists((Form1.movie(Form1.workinginfonumber, 0)).Replace(".nfo", "-fanart.jpg"))
-            '    If exists2 = True Then
-            '    fanartpath2 = (Form1.movie(Form1.workinginfonumber, 0)).Replace(".nfo", "-fanart.jpg")
-            '    Else
-            '        exists2 = System.IO.File.Exists(Form1.movie(Form1.workinginfonumber, 9) & Form1.movie(Form1.workinginfonumber, 8) & "-fanart.jpg")
-            '        If exists2 = True Then
-            '        fanartpath2 = Form1.movie(Form1.workinginfonumber, 9) & Form1.movie(Form1.workinginfonumber, 8) & "-fanart.jpg"
-            '    Else
-            '        fanartpath2 = fanartpath
-            '    End If
-            'End If
-
-            'If fanartpath <> fanartpath2 Then
-            '    If Form1.fanartnotstacked = True Then
-            '        MsgBox("The current fanart is named using the stacking convention" & vbCrLf & "Your Preference is to use unstacked fanart names" & vbCrLf & "The current file will be renamed")
-            '        Dim fi As New FileInfo(fanartpath2)
-            '        fi.MoveTo(fanartpath)
-            '    End If
-            '    If Form1.fanartnotstacked = False Then
-            '        MsgBox("The current fanart is not named using the stacking convention" & vbCrLf & "Your Preference is to use stacked fanart names" & vbCrLf & "The current file will be renamed")
-            '        Dim fi As New FileInfo(fanartpath2)
-            '        fi.MoveTo(fanartpath)
-            '    End If
-            'End If
-
-
 
             Dim tmdbid As String = String.Empty
             Dim temp As String = Form1.workingMovieDetails.fullmoviebody.imdbid
-            Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
+            Dim fanarturl As String = URLs.TMdbMovieLookup(temp)
             Dim apple2(2000) As String
             Dim fanartlinecount As Integer = 0
                 Dim wrGETURL As WebRequest
@@ -214,16 +160,10 @@ Public Class frmMovieFanart
         ReDim apple2(2000)
         fanartlinecount = 0
 
-
-            fanarturl = String.Format("http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{0}/{1}", "3f026194412846e530a208cf8a39e9cb", tmdbid)
-
+            fanarturl = URLs.TMdbGetInfo(tmdbid)
 
 
         Dim exists As Boolean = System.IO.File.Exists(fanartpath)
-        'If exists = False Then
-        '    fanartpath = fanartpath.Replace(IO.Path.GetFileName(fanartpath), "fanart.jpg")
-        '    exists = System.IO.File.Exists(fanartpath)
-        'End If
 
         If exists = True Then
             mainfanart = New PictureBox
@@ -243,18 +183,7 @@ Public Class frmMovieFanart
             Me.Panel1.Controls.Add(mainfanart)
             Label2.Visible = False
         Else
-            'mainfanart.Visible = False
-            'Dim mainlabel As Label
-            'mainlabel = New Label
-            'With mainlabel
-            '    .Location = New Point(0, 100)
-            '    .Width = 423
-            '    .Height = 100
-            '    .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-            '    .Text = "No Local Fanart Is Available For This Movie"
-            'End With
-            'Me.Panel1.Controls.Add(mainlabel)
-            mainfanart = New PictureBox
+                mainfanart = New PictureBox
             With mainfanart
                 .Location = New Point(0, 0)
                 .Width = 423
@@ -283,16 +212,7 @@ Public Class frmMovieFanart
                 apple2(fanartlinecount) = sLine2
             Loop
             fanartlinecount -= 1
-
-
-
-
-
-
             Dim count As Integer = 0
-
-
-
             For f = 1 To fanartlinecount
                 If apple2(f).IndexOf("<backdrop size=""original"">") <> -1 Then
                     count += 1
@@ -315,25 +235,10 @@ Public Class frmMovieFanart
                 End If
             Next
 
-
-
-
-
             Dim names As New List(Of String)()
 
             If count > 0 Then
 
-
-                'savebutton = New Button
-                'With savebutton
-                '    .Width = 90
-                '    .Height = 23
-                '    .Text = "Select Fanart"
-                '    .Location = New Point(680, 455)
-                '    .Anchor = AnchorStyles.Right
-                '    .Anchor = AnchorStyles.Bottom
-                'End With
-                'Me.Controls.Add(savebutton)
                 For f = 1 To count
 
                     names.Add(fanarturls(f, 1))
@@ -428,7 +333,7 @@ Public Class frmMovieFanart
             Else
                 Try
                     Panel1.Controls.Remove(Label1)
-                    'Utilities.DownloadFile(moviethumburl, bmp)
+
                     Dim buffer(4000000) As Byte
                     Dim size As Integer = 0
                     Dim bytesRead As Integer = 0
@@ -562,9 +467,6 @@ Public Class frmMovieFanart
                 Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
                 mainfanart.Image = New System.Drawing.Bitmap(ImageStream)
-
-
-
 
 
                 Dim tempstring As String

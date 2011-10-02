@@ -17,7 +17,6 @@ Public Class frmTvPosters
     Dim resolutionlbl As Label
     Dim panel2 As Panel
     Dim posterurls(1000, 1) As String
-    'Dim posterpath As String = Form1.fullposterpath
     Dim WithEvents mainposter As PictureBox
     Dim WithEvents bigpicbox As PictureBox
     Dim count As Integer = 0
@@ -35,128 +34,6 @@ Public Class frmTvPosters
     Dim urllinecount As Integer
     Dim series As Integer
     Dim savethumbpath As String = ""
-
-
-
-
-
-
-
-
-
-
-
-
-    'Private Sub tvposters_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-
-
-    '    'Public tvpath As String
-    '    'Public imdbidd As String
-    '    'Public tvdbidd As String
-
-    '    'posterpath = Form1.tvpath & "folder.jpg"
-
-
-    '    TextBox1.Text = maxthumbs.ToString
-    '    Me.Refresh()
-    '    Application.DoEvents()
-    '    Dim exists As Boolean = System.IO.File.Exists(posterpath)
-    '    If exists = True Then
-
-    '        Dim tempstring As String
-    '        mainposter = New PictureBox
-    '        Try
-    '            Dim OriginalImage As New Bitmap(posterpath)
-    '            Dim Image2 As New Bitmap(OriginalImage)
-    '            OriginalImage.Dispose()
-
-    '            With mainposter
-    '                .Location = New Point(0, 0)
-    '                .Width = 250
-    '                .Height = 240
-    '                .SizeMode = PictureBoxSizeMode.Zoom
-    '                .Image = Image2
-    '                .Visible = True
-    '                .BorderStyle = BorderStyle.Fixed3D
-    '            End With
-    '            Me.Panel1.Controls.Add(mainposter)
-    '            tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
-    '            Label6.Text = tempstring
-    '        Catch
-    '            mainposter = New PictureBox
-    '            With mainposter
-    '                .Location = New Point(0, 0)
-    '                .Width = 250
-    '                .Height = 240
-    '                .SizeMode = PictureBoxSizeMode.Zoom
-    '                .Visible = False
-    '                .BorderStyle = BorderStyle.Fixed3D
-    '            End With
-    '            Me.Panel1.Controls.Add(mainposter)
-    '            Dim mainlabel As Label
-    '            mainlabel = New Label
-    '            With mainlabel
-    '                .Location = New Point(0, 100)
-    '                .Width = 423
-    '                .Height = 100
-    '                .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-    '                .Text = "No Local Poster Is Available For This Movie"
-    '                .BringToFront()
-    '            End With
-    '            Me.Panel1.Controls.Add(mainlabel)
-    '            Label6.Visible = False
-    '        End Try
-    '    Else
-    '        mainposter = New PictureBox
-    '        With mainposter
-    '            .Location = New Point(0, 0)
-    '            .Width = 250
-    '            .Height = 240
-    '            .SizeMode = PictureBoxSizeMode.Zoom
-    '            .Visible = False
-    '            .BorderStyle = BorderStyle.Fixed3D
-    '        End With
-    '        Me.Panel1.Controls.Add(mainposter)
-    '        Dim mainlabel As Label
-    '        mainlabel = New Label
-    '        With mainlabel
-    '            .Location = New Point(0, 100)
-    '            .Width = 423
-    '            .Height = 100
-    '            .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-    '            .Text = "No Local Poster Is Available For This Movie"
-    '            .BringToFront()
-    '        End With
-    '        Me.Panel1.Controls.Add(mainlabel)
-    '        Label6.Visible = False
-    '    End If
-
-    '    panel2 = New Panel
-    '    With panel2
-    '        .Width = 772
-    '        .Height = 237
-    '        .Location = New Point(2, 2)
-    '        .AutoScroll = True
-    '    End With
-    '    Me.Controls.Add(panel2)
-
-    '    ComboBox2.Items.Add("Main TV Show Thumb")
-    '    For f = 1 To Form1.availableseasoncount
-    '        If Form1.availableseasons(f) <> "0" Then
-    '            ComboBox2.Items.Add(Form1.availableseasons(f))
-    '        Else
-    '            ComboBox2.Items.Add("Specials")
-    '        End If
-    '    Next
-    '    Try
-    '        ComboBox2.SelectedIndex = 0
-    '    Catch ex As Exception
-
-    '    End Try
-
-
-
-    'End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Try
@@ -190,7 +67,6 @@ Public Class frmTvPosters
         Dim tempstring As String
         Dim tempstring2 As String
         downloadthumbcount = 0
-        'url = "http://thetvdb.com/api/6E82FED600783400/series/" & Form1.tvdbidd & "/banners.xml"
         Call loadwebpage()
         Dim tempstring3 As String
         Dim line1 As String = "<BannerType>poster</BannerType>"
@@ -203,10 +79,9 @@ Public Class frmTvPosters
                     tempstring2 = tempstring2.Replace("<BannerPath>", "")
                     tempstring2 = tempstring2.Replace("</BannerPath>", "")
                     tempstring2 = tempstring2.Replace("  ", "")
-                    '_cache/posters/73739-4.jpg
                     tempstring = tempstring2
-                    tempstring2 = "http://images.thetvdb.com/banners/" & tempstring2
-                    tempstring = "http://images.thetvdb.com/banners/_cache/" & tempstring
+                    tempstring2 = URLs.TVdbBanners(tempstring2)
+                    tempstring = URLs.TVdbBannersCache(tempstring)
                     downloadthumbcount += 1
                     downloadthumb(downloadthumbcount, 0) = tempstring
                     downloadthumb(downloadthumbcount, 1) = tempstring2
@@ -217,15 +92,6 @@ Public Class frmTvPosters
 
 
 
-
-
-
-
-
-
-
-
-
     Private Sub downloadmain()
         ReDim downloadthumb(2000, 1)
         downloadthumbcount = 0
@@ -233,7 +99,6 @@ Public Class frmTvPosters
         Dim tempstring As String
         Dim tempstring2 As String
         downloadthumbcount = 0
-        'url = "http://thetvdb.com/api/6E82FED600783400/series/" & Form1.tvdbidd & "/banners.xml"
         Call loadwebpage()
 
         Dim line1 As String = "<BannerType>poster</BannerType>"
@@ -246,10 +111,9 @@ Public Class frmTvPosters
                     tempstring2 = tempstring2.Replace("<BannerPath>", "")
                     tempstring2 = tempstring2.Replace("</BannerPath>", "")
                     tempstring2 = tempstring2.Replace("  ", "")
-                    '_cache/posters/73739-4.jpg
                     tempstring = tempstring2
-                    tempstring2 = "http://thetvdb.com/banners/" & tempstring2
-                    tempstring = "http://thetvdb.com/banners/_cache/" & tempstring
+                    tempstring2 = URLs.TVdbBanners(tempstring2)
+                    tempstring = URLs.TVdbBannersCache(tempstring)
                     downloadthumbcount += 1
                     downloadthumb(downloadthumbcount, 0) = tempstring
                     downloadthumb(downloadthumbcount, 1) = tempstring2
@@ -427,10 +291,6 @@ Public Class frmTvPosters
         bigpicbox = Nothing
     End Sub
 
-
-
-
-
     Private Sub zoomimage(ByVal sender As Object, ByVal e As EventArgs)
 
         Dim tempstring As String = sender.name
@@ -479,16 +339,6 @@ Public Class frmTvPosters
     End Sub
 
 
-
-
-
-
-
-
-
-
-
-
     Private Sub initialise()
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
@@ -531,10 +381,9 @@ Public Class frmTvPosters
         count = 0
         pagecount = 0
     End Sub
+
     Private Sub loadwebpage()
         urllinecount = 0
-
-
 
         Try
             Dim wrGETURL As WebRequest
@@ -556,15 +405,6 @@ Public Class frmTvPosters
             Loop
             objReader.Close()
             urllinecount -= 1
-            'Dim tempboolean As Boolean
-            'tempboolean = Form1.forceexit
-            'If Form1.forceexit = True Then
-            '    objStream.Dispose()
-            '    Form1.completeclose = True
-            '    Application.Exit()
-            'End If
-
-
         Catch ex As WebException
             'MsgBox("Unable to load webpage " & url & vbCrLf & vbCrLf & ex.ToString)
         End Try
@@ -1045,7 +885,6 @@ Public Class frmTvPosters
             count = 0
             pagecount = 0
             Call initialise()
-            'url = "http://www.imdb.com/title/" & Form1.imdbidd & "/mediaindex"
             Call loadwebpage()
             Dim tempint As Integer
             Dim imdbsmall(2000) As String
@@ -1081,7 +920,6 @@ Public Class frmTvPosters
                 End If
             Next
             For g = 2 To totalpages
-                'url = "http://www.imdb.com/title/" & Form1.imdbidd & "/mediaindex?page=" & g.ToString
                 Call loadwebpage()
                 For f = 1 To urllinecount
                     If websource(f).IndexOf("<div class=""thumb_list""") <> -1 Then
@@ -1111,28 +949,11 @@ Public Class frmTvPosters
             Next
 
 
-
-            'ReDim downloadthumb(2000, 1)
-            'downloadthumbcount = 0
-
-
-
-
-
             For f = counter To 1 Step -1
                 downloadthumbcount = downloadthumbcount + 1
                 downloadthumb(downloadthumbcount, 0) = imdbsmall(f)
                 downloadthumb(downloadthumbcount, 1) = imdbsmall(f)
             Next
-
-
-            'If ComboBox2.Text = "Main TV Show Thumb" Then
-            '    For f = 1 To counter
-            '        downloadthumbcount = downloadthumbcount + 1
-            '        downloadthumb(downloadthumbcount) = imdbsmall(f)
-            '    Next
-            'End If
-
 
             count = downloadthumbcount
             Call displayselection()
@@ -1151,7 +972,7 @@ Public Class frmTvPosters
             Dim tempstring As String
             Dim tempstring2 As String
             downloadthumbcount = 0
-            'url = "http://thetvdb.com/api/6E82FED600783400/series/" & Form1.tvdbidd & "/banners.xml"
+
             Call loadwebpage()
             Dim tempstring3 As String
 
@@ -1163,10 +984,9 @@ Public Class frmTvPosters
                         tempstring2 = tempstring2.Replace("<BannerPath>", "")
                         tempstring2 = tempstring2.Replace("</BannerPath>", "")
                         tempstring2 = tempstring2.Replace("  ", "")
-                        '_cache/posters/73739-4.jpg
                         tempstring = tempstring2
-                        tempstring2 = "http://thetvdb.com/banners/" & tempstring2
-                        tempstring = "http://thetvdb.com/banners/_cache/" & tempstring
+                        tempstring2 = URLs.TVdbBanners(tempstring2)
+                        tempstring = URLs.TVdbBannersCache(tempstring)
                         downloadthumbcount += 1
                         downloadthumb(downloadthumbcount, 0) = tempstring
                         downloadthumb(downloadthumbcount, 1) = tempstring2

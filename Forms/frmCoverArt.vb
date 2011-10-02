@@ -243,48 +243,8 @@ Public Class frmCoverArt
             Call initialise()
 
             Dim tempsimdbid As String = String.Empty
-            '------------------------------------
-            ''                                    Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
-            'Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-            'Dim apple2(2000) As String
-            'Dim fanartlinecount As Integer = 0
-            'Try
-            '    Dim wrGETURL As WebRequest
-            '    wrGETURL = WebRequest.Create(fanarturl)
-            '    Dim myProxy As New WebProxy("myproxy", 80)
-            '    myProxy.BypassProxyOnLocal = True
-            '    Dim objStream As Stream
-            '    objStream = wrGETURL.GetResponse.GetResponseStream()
-            '    Dim objReader As New StreamReader(objStream)
-            '    Dim sLine As String = ""
-            '    fanartlinecount = 0
-            '    Do While Not sLine Is Nothing
-            '        fanartlinecount += 1
-            '        sLine = objReader.ReadLine
-            '        apple2(fanartlinecount) = sLine
-            '    Loop
-            '    fanartlinecount -= 1
-            ''    Dim fanartfound As Boolean = False
-            '    For f = 1 To fanartlinecount
-            '        If apple2(g).IndexOf("<image type=""backdrop""") <> -1 Then
-            '            If apple2(g).IndexOf("size=""original""") <> -1 Then
-            '                Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
-            '                Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
-            '                apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
-            '                apple2(g) = apple2(g).Trim
-            '                If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
-            '                    moviethumburl = apple2(g)
-            '                    fanartfound = True
-            '                End If
-            '            End If
-            '            Exit For
-            '        End If
-            '    Next
-            '    If fanartfound = False Then moviethumburl = ""
-            'Catch
-            'End Try
-            '------------------------------------
-            Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & tmdbid
+          
+            Dim fanarturl As String = URLs.TMdbMovieLookup(tmdbid)
             Dim apple2(2000) As String
             Dim fanartlinecount As Integer = 0
 
@@ -320,7 +280,7 @@ Public Class frmCoverArt
             ReDim apple2(2000)
             fanartlinecount = 0
 
-            fanarturl = String.Format("http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{0}/{1}", "3f026194412846e530a208cf8a39e9cb", tempsimdbid)
+            fanarturl = URLs.TMdbGetInfo(tempsimdbid)
 
 
             Dim wrGETURL2 As WebRequest
@@ -380,7 +340,7 @@ Public Class frmCoverArt
             Dim first As Integer
             Dim last As Integer
 
-            fanarturl = "http://www.movieposterdb.com/movie/"
+            fanarturl = URLs.MoviePosterDBMovie
             Dim temp As String = tmdbid
             fanarturl = fanarturl & temp.Replace("tt", "")
 
@@ -409,7 +369,7 @@ Public Class frmCoverArt
 
             If allok = True Then
                 For f = 1 To fanartlinecount
-                    If apple2(f).IndexOf("<img src=""http://www.movieposterdb.com/posters/") <> -1 Then
+                    If apple2(f).IndexOf("<img src=" & URLs.MoviePosterDBPoster) <> -1 Then
                         count = count + 1
                         first = apple2(f).IndexOf("http")
                         last = apple2(f).IndexOf("jpg")
@@ -427,7 +387,7 @@ Public Class frmCoverArt
                 Dim groupcount As Integer = 0
                 For f = 1 To fanartlinecount
                     If apple2(f) <> Nothing Then
-                        If apple2(f).IndexOf("http://www.movieposterdb.com/group/") <> -1 Then
+                        If apple2(f).IndexOf(URLs.MoviePosterDBGroup) <> -1 Then
                             If apple2(f).IndexOf("http") <> -1 And apple2(f).IndexOf(""">") <> -1 Then
                                 groupcount = groupcount + 1
                                 first = apple2(f).IndexOf("http")
@@ -462,7 +422,7 @@ Public Class frmCoverArt
 
                         For f = 1 To fanartlinecount
                             If apple2(f) <> Nothing Then
-                                If apple2(f).IndexOf("<img src=""http://www.movieposterdb.com/posters/") <> -1 Then
+                                If apple2(f).IndexOf("<img src=" & URLs.MoviePosterDBPoster) <> -1 Then
                                     count = count + 1
                                     first = apple2(f).IndexOf("http")
                                     last = apple2(f).IndexOf("jpg")
@@ -500,7 +460,7 @@ Public Class frmCoverArt
             Dim allok As Boolean = True
             Dim apple2(10000)
 
-            fanarturl = "http://www.imdb.com/title/" & tmdbid & "/mediaindex"
+            fanarturl = URLs.IMDBMediaIndex(tmdbid)
 
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
@@ -547,7 +507,7 @@ Public Class frmCoverArt
                 End If
             Next
             For g = 2 To totalpages
-                fanarturl = "http://www.imdb.com/title/" & tmdbid & "/mediaindex?page=" & g.ToString
+                fanarturl = URLs.IMDBMediaIndexPage(tmdbid, g)
                 ReDim apple2(10000)
                 Dim wrGETURL As WebRequest
                 wrGETURL = WebRequest.Create(fanarturl)
@@ -612,8 +572,8 @@ Public Class frmCoverArt
             Dim apple2(10000)
 
 
-            fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
-            'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
+            fanarturl = URLs.GoogleFanArt
+
             title = title.ToLower
             title = title.Replace(" ", "+")
             title = title.Replace("&", "%26")
