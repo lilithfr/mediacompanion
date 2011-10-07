@@ -12325,7 +12325,7 @@ Public Class Form1
                     End While
                     If Preferences.resizefanart = 1 Then
                         Try
-                            Dim tempbitmap As Bitmap = bmp
+                            Dim tempbitmap As Bitmap = New Bitmap(bmp)
                             tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Catch ex As Exception
                             tempstring = ex.Message.ToString
@@ -12337,7 +12337,7 @@ Public Class Form1
                             Dim gr As Graphics = Graphics.FromImage(bm_dest)
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                            Dim tempbitmap As Bitmap = bm_dest
+                            Dim tempbitmap As Bitmap = New Bitmap(bm_dest)
                             tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
                             Thread.Sleep(30)
@@ -12350,7 +12350,7 @@ Public Class Form1
                             Dim gr As Graphics = Graphics.FromImage(bm_dest)
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                            Dim tempbitmap As Bitmap = bm_dest
+                            Dim tempbitmap As Bitmap = New Bitmap(bm_dest)
                             tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
                         Else
                             Thread.Sleep(30)

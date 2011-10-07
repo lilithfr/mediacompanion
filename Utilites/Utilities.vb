@@ -2402,6 +2402,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Sub
 
+    Public Shared Sub DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False)
+        Try
+            DownloadCache.DownloadFileToDisk(URL, Path, ForceDownload)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Return asm.GetManifestResourceStream(resfile)

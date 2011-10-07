@@ -8,6 +8,20 @@ Public Class DownloadCache
 
     Public Shared Property CacheFolder As String
 
+    Private Shared Function GetCacheFileName(ByVal URL As String) As String
+        Dim Buffer As Byte() = Utilities.ComputeHashValueToByte(URL)
+
+        Dim Extention As String = URL.Split("?")(0)
+        Extention = IO.Path.GetExtension(Extention)
+
+        Dim Result As String = ""
+        For Each Item As Byte In Buffer
+            Result &= Conversion.Hex(Item)
+        Next
+
+        Return Result & Extention
+    End Function
+
     Public Shared Sub DownloadFileToDisk(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False)
         Dim CacheFileName As String = GetCacheFileName(URL)
         Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
@@ -16,27 +30,27 @@ Public Class DownloadCache
 
         Dim size As Integer = 0
         Dim bytesRead As Integer = 0
-        Dim req As HttpWebRequest = WebRequest.Create(URL)
+        Dim webReq As HttpWebRequest = WebRequest.Create(URL)
 
         If IO.File.Exists(CachePath) AndAlso Not ForceDownload Then
-            req.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
+            webReq.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
         End If
 
-        req.AllowAutoRedirect = True
+        webReq.AllowAutoRedirect = True
         'req.AllowWriteStreamBuffering = True
 
-        Dim res As HttpWebResponse = req.GetResponse()
+        Dim webResp As HttpWebResponse = webReq.GetResponse()
 
-        If res.StatusCode = HttpStatusCode.NotModified Then
+        If webResp.StatusCode = HttpStatusCode.NotModified Then
             IO.File.Copy(CachePath, Path)
 
             Exit Sub
         End If
 
-        Dim contents As Stream = res.GetResponseStream()
+        Dim contents As Stream = webResp.GetResponseStream()
         Dim Reader As New StreamReader(contents)
 
-        Dim buffer(res.ContentLength) As Byte
+        Dim buffer(webResp.ContentLength) As Byte
         Dim bytesToRead As Integer = CInt(buffer.Length - 1)
         While bytesToRead > 0
             size = contents.Read(buffer, bytesRead, bytesToRead)
@@ -57,44 +71,30 @@ Public Class DownloadCache
         fstrm.Close()
     End Sub
 
-    Private Shared Function GetCacheFileName(ByVal URL As String) As String
-        Dim Buffer As Byte() = Utilities.ComputeHashValueToByte(URL)
-
-        Dim Extention As String = URL.Split("?")(0)
-        Extention = IO.Path.GetExtension(Extention)
-
-        Dim Result As String = ""
-        For Each Item As Byte In Buffer
-            Result &= Conversion.Hex(Item)
-        Next
-
-        Return Result & Extention
-    End Function
-
     Public Shared Function DownloadFileToString(ByVal URL As String, Optional ByVal ForceDownload As Boolean = False) As String
         Dim CacheFileName As String = GetCacheFileName(URL)
         Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
 
         Utilities.EnsureFolderExists(CacheFolder)
 
-        Dim Http As HttpWebRequest = WebRequest.Create(URL)
+        Dim webReq As HttpWebRequest = WebRequest.Create(URL)
 
-        Http.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
+        webReq.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
 
         Dim html As String
-        Using WebResponse As HttpWebResponse = Http.GetResponse()
+        Using webResp As HttpWebResponse = webReq.GetResponse()
 
             If IO.File.Exists(CachePath) AndAlso Not ForceDownload Then
-                If WebResponse.StatusCode = HttpStatusCode.NotModified Then
+                If webResp.StatusCode = HttpStatusCode.NotModified Then
                     Return IO.File.ReadAllText(CachePath)
                 End If
             End If
 
-            Dim responseStream As Stream = WebResponse.GetResponseStream()
-            If (WebResponse.ContentEncoding.ToLower().Contains("gzip")) Then
+            Dim responseStream As Stream = webResp.GetResponseStream()
+            If (webResp.ContentEncoding.ToLower().Contains("gzip")) Then
                 responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
                 Utilities.tvScraperLog &= "**** TVDB Returned GZIP Encoded *****" & vbCrLf
-            ElseIf (WebResponse.ContentEncoding.ToLower().Contains("deflate")) Then
+            ElseIf (webResp.ContentEncoding.ToLower().Contains("deflate")) Then
                 responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
                 Utilities.tvScraperLog &= "**** TVDB Returned DEFLATE Encoded *****" & vbCrLf
             Else

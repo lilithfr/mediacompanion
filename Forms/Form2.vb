@@ -652,7 +652,7 @@ Public Class Form2
 
 
                                             'need to resize thumbs
-                                            'Utilities.DownloadFile(moviethumburl, workingpath)
+                                            'Utilities.DownloadImage(moviethumburl, fanartpath)
 
                                             Try
                                                 Dim buffer(4000000) As Byte
