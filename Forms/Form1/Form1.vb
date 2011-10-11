@@ -7684,7 +7684,7 @@ Public Class Form1
 
                     Try
                         If Preferences.gettrailer = True Then
-                            If trailer <> Nothing Then
+                            If trailer <> String.Empty And trailer <> "Error" Then
                                 workingMovieDetails.fullmoviebody.trailer = trailer
                             End If
                         End If
@@ -9007,9 +9007,9 @@ Public Class Form1
 
                         If trailerscraper = True Then
                             Try
-                                Dim trailer As String
+                                Dim trailer As String = String.Empty
                                 trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                If trailer <> Nothing Then
+                                If trailer <> String.Empty And trailer <> "Error" Then
                                     movietemplate.fullmoviebody.trailer = trailer
                                 End If
                             Catch ex As Exception
@@ -9298,6 +9298,9 @@ Public Class Form1
                         End If
 
                         If batchList.trailer = True Then
+                            If movietoalter.fullmoviebody.trailer = "Error" then
+                                movietoalter.fullmoviebody.trailer = ""
+                            End If
                             If movietemplate.fullmoviebody.trailer <> Nothing Then
                                 If movietemplate.fullmoviebody.trailer <> "" Then
                                     movietoalter.fullmoviebody.trailer = movietemplate.fullmoviebody.trailer
@@ -10176,12 +10179,12 @@ Public Class Form1
                                 End Try
 
                                 Try
-                                    Dim trailer As String
+                                    Dim trailer As String = String.Empty
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                     bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                     If Preferences.gettrailer = True Then
                                         trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                        If trailer <> Nothing Then
+                                        If trailer <> String.Empty And trailer <> "Error" Then
                                             newmovie.fullmoviebody.trailer = trailer
                                         End If
                                     End If
@@ -13892,7 +13895,7 @@ Public Class Form1
                         If Preferences.gettrailer = True Then
                             stage = stage & vbCrLf
                             stage = stage & "Scraping trailer url" & vbCrLf
-                            If trailer <> Nothing Then
+                            If trailer <> String.Empty And trailer <> "Error" Then
                                 workingMovieDetails.fullmoviebody.trailer = trailer
                             End If
                         End If

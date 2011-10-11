@@ -389,10 +389,10 @@ Public Class Form2
 
 
 
-                    Dim trailer As String = ""
+                    Dim trailer As String = String.Empty
                     If Preferences.gettrailer = True Then
                         trailer = scraperfunction.gettrailerurl(alternatemovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                        If trailer <> Nothing Then
+                        If trailer <> String.Empty And trailer <> "Error" Then
                             alternatemovie.fullmoviebody.trailer = trailer
                         End If
                     End If
