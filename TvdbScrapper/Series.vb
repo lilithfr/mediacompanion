@@ -106,39 +106,46 @@ Namespace Tvdb
 
 
         Private Function SubSim(intStart1, intEnd1, intStart2, intEnd2) As Double
-            Dim y
-            Dim z
-            Dim ns1 As Integer
-            Dim ns2 As Integer
-            Dim i
             Dim intMax As Integer = Integer.MinValue
 
-            If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
-                Return 0
-            End If
+            Try
+                Dim y
+                Dim z
+                Dim ns1 As Integer
+                Dim ns2 As Integer
+                Dim i
 
-            For y = intStart1 To intEnd1
-                For z = intStart1 To intEnd2
-                    i = 0
+                If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
+                    Return 0
+                End If
 
-                    Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
-                        i = i + 1
+                For y = intStart1 To intEnd1
+                    For z = intStart1 To intEnd2
+                        i = 0
 
-                        If i > intMax Then
-                            ns1 = y
-                            ns2 = z
-                            intMax = i
-                        End If
+                        Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
+                            i = i + 1
 
-                        If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
-                            Exit Do
-                        End If
-                    Loop
+                            If i > intMax Then
+                                ns1 = y
+                                ns2 = z
+                                intMax = i
+                            End If
+
+                            If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
+                                Exit Do
+                            End If
+                        Loop
+                    Next
                 Next
-            Next
 
-            intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
-            intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
+                intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
+                intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
+            Catch ex As OverflowException
+                Return Nothing
+            Catch ex As StackOverflowException
+                Return Nothing
+            End Try
 
             Return intMax
         End Function
