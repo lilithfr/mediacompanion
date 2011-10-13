@@ -137,6 +137,8 @@ Partial Public Class Form1
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
         Dim showtitle As String = WorkingTvShow.Title.Value       'set our show title
 
+
+
         'now we set the items that have variable text in the context menu using the 'show' text set above
         Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
         Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
@@ -407,7 +409,12 @@ Partial Public Class Form1
 
             Panel9.Visible = False
 
-            If Show.Title.Value <> Nothing Then TextBox2.Text = Show.Title.Value
+            If Show.State = ShowState.Unverified Or Show.State = ShowState.Error Then
+                TextBox2.Text = Show.FolderPath
+            Else
+                If Show.Title.Value <> Nothing Then TextBox2.Text = Show.Title.Value
+            End If
+
             If Show.Premiered.Value <> Nothing Then TextBox10.Text = Show.Premiered.Value
             If Show.Genre.Value <> Nothing Then TextBox11.Text = Show.Genre.Value
             If Show.TvdbId.Value <> Nothing Then TextBox9.Text = Show.TvdbId.Value

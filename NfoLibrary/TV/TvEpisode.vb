@@ -10,7 +10,7 @@ Public Class TvEpisode
     End Sub
 
     Private _PureName As String
-    Private Property PureName As String
+    Protected Property PureName As String
         Get
             Return _PureName
         End Get
@@ -26,12 +26,15 @@ Public Class TvEpisode
                     End If
                 Next
             Else
-                If IO.File.Exists(_PureName & Me.MediaExtension) Then
-                    _VideoFilePath = _PureName & Me.MediaExtension
-                End If
+                'If IO.File.Exists(_PureName & Me.MediaExtension) Then
+                _VideoFilePath = _PureName & Me.MediaExtension
+                'End If
             End If
 
             Me.Thumbnail.Path = _PureName & ".tbn"
+
+            Me.EditAttribute("PureName", Me.PureName)
+            Me.EditAttribute("MediaExtension", Me.MediaExtension)
         End Set
     End Property
 

@@ -238,7 +238,7 @@ Public Class TvCache
                     NewShow.IsAltered = False
                     NewShow.NfoFilePath = Node.Attribute("NfoPath")
                     NewShow.IsCache = True
-                    NewShow.UpdateTreenode()
+                    'NewShow.UpdateTreenode()
                     Shows.Add(NewShow)
                     Items.Add(NewShow)
                 Case "season"
@@ -247,16 +247,17 @@ Public Class TvCache
                     NewShow.IsAltered = False
                     'NewShow.NfoFilePath = Node.Attribute("NfoPath")
                     NewShow.IsCache = True
-                    NewShow.UpdateTreenode()
+                    'NewShow.UpdateTreenode()
                     Seasons.Add(NewShow)
                     Items.Add(NewShow)
                 Case "episodedetails"
                     Dim NewShow As New TvEpisode
                     NewShow.LoadXml(Node)
                     NewShow.IsAltered = False
+                    NewShow.MediaExtension = Node.Attribute("MediaExtension")
                     NewShow.NfoFilePath = Node.Attribute("NfoPath")
                     NewShow.IsCache = True
-                    NewShow.UpdateTreenode()
+                    'NewShow.UpdateTreenode()
                     Episodes.Add(NewShow)
                     Items.Add(NewShow)
                 Case Else
@@ -271,6 +272,11 @@ Public Class TvCache
 
         Next
 
+        AttachEpisodes()
+        UpdateTreeNodes()
+    End Sub
+
+    Private Sub AttachEpisodes()
         For Each Show As TvShow In Shows
             For Each Episode As Media_Companion.TvEpisode In Me.Episodes
                 If Show.TvdbId.Value = Episode.ShowId.Value Then
@@ -278,7 +284,9 @@ Public Class TvCache
                 End If
             Next
         Next
+    End Sub
 
+    Private Sub UpdateTreeNodes()
         For Each Show As TvShow In Shows
             For Each Season As TvSeason In Show.Seasons.Values
                 For Each Episode As TvEpisode In Season.Episodes

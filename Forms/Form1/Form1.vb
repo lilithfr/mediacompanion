@@ -283,12 +283,12 @@ Public Class Form1
 
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
-            Common.Tasks.StartTaskEngine()
+            
             'TasksList.DataSource = Common.Tasks
 
             ForegroundWorkTimer.Interval = 500
             AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
-            ForegroundWorkTimer.Start()
+
 
 
             DownloadCache.CacheFolder = IO.Path.Combine(Utilities.applicationPath, "cache\")
@@ -728,6 +728,9 @@ Public Class Form1
                 tv_ShowSelectedCurrently()
                 tv_SplitContainerAutoPosition()
             End If
+
+            Common.Tasks.StartTaskEngine()
+            ForegroundWorkTimer.Start()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -16140,18 +16143,18 @@ Public Class Form1
     End Sub
 
     Private Sub RebuildShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildShowsToolStripMenuItem.Click
-        Try
-            'Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Rebuilding TV DB")
-            'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            'messbox.Show()
-            'Me.Refresh()
-            'messbox.Refresh()
+        'Try
+        'Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Rebuilding TV DB")
+        'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        'messbox.Show()
+        'Me.Refresh()
+        'messbox.Refresh()
 
-            Call tv_CacheRebuild()
-            'messbox.Close()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Call tv_CacheRebuild()
+        'messbox.Close()
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
     End Sub
 
     Private Sub ReloadShowCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadShowCacheToolStripMenuItem.Click

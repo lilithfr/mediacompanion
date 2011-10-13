@@ -60,13 +60,34 @@
         End Set
     End Property
 
-    Private Sub EditAttribute(ByVal Name As String, ByVal Value As String)
+    Protected Friend Sub EditAttribute(ByVal Name As String, ByVal Value As String)
+
         If Me.Node.Attribute(Name) Is Nothing Then
-            Me.Node.Add(New XAttribute(Name, Value))
+            If Value IsNot Nothing Then
+                Me.Node.Add(New XAttribute(Name, Value))
+            Else
+                Exit Sub
+            End If
+        Else
+            If Value Is Nothing Then
+                Me.Node.Attribute(Name).Remove()
+
+                Exit Sub
+            End If
         End If
 
         Me.Node.Attribute(Name).SetValue(Value)
     End Sub
+
+
+    Protected Friend Function GetAttribute(ByVal Name As String) As String
+
+        If Me.Node.Attribute(Name) IsNot Nothing Then
+            Return Me.Node.Attribute(Name).Value
+        Else
+            Return Nothing
+        End If
+    End Function
 
     Private _FolderPath As String
     Public Property FolderPath As String Implements IProtoXBase.FolderPath
