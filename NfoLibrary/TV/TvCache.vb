@@ -197,8 +197,12 @@ Public Class TvCache
                         If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
                             Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
                             Item.Node.Add(NfoPath)
-
+                        Else
+                            Item.Node.Attribute("NfoPath").Value = Item.NfoFilePath
                         End If
+
+
+
                         If Item.ShowObj IsNot Nothing Then
                             If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.TvdbId.Value) Then
                                 Item.ShowId.Value = Item.ShowObj.TvdbId.Value
