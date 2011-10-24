@@ -184,7 +184,8 @@ Public Class TvCache
             If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
                 Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
                 Item.Node.Add(NfoPath)
-
+            Else
+                Item.Node.Attribute("NfoPath").Value = Item.NfoFilePath
             End If
             Dom.Root.Add(Item.Node)
 
