@@ -1148,10 +1148,11 @@ Partial Public Class Form1
                                         End If
                                         If destsorted = True Then
                                             Dim filename As String = NewAct.actorname.Replace(" ", "_")
+                                            filename = filename.Replace("""", "'")   'Simple hack to fix exception with quotes in filename; should be made more robust. Huey
                                             filename = filename & ".tbn"
                                             filename = IO.Path.Combine(workingpath, filename)
-
-                                            Utilities.DownloadFile(NewAct.actorthumb, filename)
+                                            'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
+                                            Utilities.DownloadFile("http://www.thetvdb.com/banners/" & NewAct.actorthumb, filename)
                                         End If
                                     End If
                                 End If
