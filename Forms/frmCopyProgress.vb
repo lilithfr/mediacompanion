@@ -2,11 +2,9 @@
 Imports System.IO
 
 
-
-
 Public Class frmCopyProgress
     Private Function GetFileSize(ByVal MyFilePath As String) As Long
-        Dim MyFile As New FileInfo(MyFilePath)
+        Dim MyFile As New System.IO.FileInfo(MyFilePath)
         Dim FileSize As Long = MyFile.Length
         Return FileSize
     End Function
@@ -124,22 +122,26 @@ Public Class frmCopyProgress
         End If
     End Sub
 
-
-
-
-
-    Dim closing As Boolean = False
+    Shadows closing As Boolean = False
     Private Sub copyprogress_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Me.Visible = False
-        Me.Refresh()
-        Application.DoEvents()
-        Call Exportmovies()
+        Try
+            Me.Visible = False
+            Me.Refresh()
+            Application.DoEvents()
+            Call Exportmovies()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Dim tempint As Integer = MessageBox.Show("The file export is still in progress" & vbCrLf & "Are you sure you wish to cancel?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        If tempint = DialogResult.Yes Then
-            closing = True
-        End If
+        Try
+            Dim tempint As Integer = MessageBox.Show("The file export is still in progress" & vbCrLf & "Are you sure you wish to cancel?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If tempint = DialogResult.Yes Then
+                closing = True
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 End Class

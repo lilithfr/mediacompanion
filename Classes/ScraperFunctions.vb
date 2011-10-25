@@ -136,13 +136,14 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
 
     Public Function tmdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
         Try
             Dim newobject2 As New tmdb_posters.Class1
-            Dim thumburl As String
+            Dim thumburl As String = String.Empty
             Dim xmllist As String
             Dim ok As Boolean = False
             Try
@@ -172,6 +173,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function mpdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
@@ -257,6 +259,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function impathumb(ByVal title As String, ByVal year As String)
         Monitor.Enter(Me)
@@ -343,7 +346,7 @@ Public Class ScraperFunctions
             fanarturl = fanarturl & temp & "+" & year
             fanarturl = fanarturl & "&sitesearch=www.impawards.com"
             'Try
-            Dim apple2(2000) As String
+            Dim apple2(3000) As String
             Dim fanartlinecount As Integer = 0
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
@@ -378,7 +381,7 @@ Public Class ScraperFunctions
                         fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
                         fanarturl = fanarturl & temp
                         fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-                        ReDim apple2(2000)
+                        ReDim apple2(3000)
                         fanartlinecount = 0
                         Dim wrGETURL4 As WebRequest
                         wrGETURL4 = WebRequest.Create(fanarturl)
@@ -471,6 +474,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
     Public Function imdbthumb(ByVal posterimdbid As String)
 
@@ -521,6 +525,6 @@ Public Class ScraperFunctions
 
             Monitor.Exit(Me)
         End Try
-
+        Return "Error"
     End Function
 End Class

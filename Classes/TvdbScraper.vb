@@ -1,15 +1,36 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports System.Threading
+
 Imports System.Xml
 
 
+
 Public Class TVDBScraper
-    Private Structure possibleshowlist
+    Const SetDefaults = True
+    Private Structure str_possibleshowlist
         Dim showtitle As String
         Dim showid As String
         Dim showbanner As String
+        Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+            showtitle = ""
+            showid = ""
+            showbanner = ""
+        End Sub
     End Structure
+
+    Public Function GetPosterList(ByVal TvdbId As String, ByVal ReturnPoster As Boolean) As Tvdb.Banners
+        If Not ReturnPoster Then Return Nothing
+
+        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/banners.xml"
+        Dim XmlFile As String
+
+        XmlFile = Utilities.DownloadTextFiles(mirrorsurl)
+
+        Dim BannerList As New Tvdb.Banners
+        BannerList.LoadXml(XmlFile)
+        Return BannerList
+    End Function
 
     Public Function getposterlist(ByVal tvdbid As String)
         Monitor.Enter(Me)
@@ -40,7 +61,7 @@ Public Class TVDBScraper
                             Select Case bannerselection.Name
                                 Case "BannerPath"
 
-                                    bannerlist = bannerlist & "<url>http://thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
+                                    bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
                                 Case "BannerType"
                                     bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
                                 Case "BannerType2"
@@ -57,7 +78,8 @@ Public Class TVDBScraper
             Next
             bannerlist = bannerlist & "</banners>"
             Return bannerlist
-
+        Catch ex As WebException
+            Return ex.ToString
         Catch EX As Exception
             Return EX.ToString
         Finally
@@ -110,7 +132,7 @@ Public Class TVDBScraper
     Public Function findshows(ByVal title As String, Optional ByVal mirror As String = "http://thetvdb.com")
         Monitor.Enter(Me)
         'Try
-        Dim possibleshows As New List(Of possibleshowlist)
+        Dim possibleshows As New List(Of str_possibleshowlist)
         Dim xmlfile As String
         Dim wrGETURL As WebRequest
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
@@ -129,7 +151,7 @@ Public Class TVDBScraper
 
                 Select Case thisresult.Name
                     Case "Series"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -178,6 +200,33 @@ Public Class TVDBScraper
         End Try
     End Function
 
+    Public Function GetShow(ByVal TvdbId As String, ByVal Language As String, ByVal ReturnSeries As Boolean) As Tvdb.ShowData
+        If Not ReturnSeries Then Return Nothing
+
+
+        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/" & Language & ".xml"
+        Dim xmlfile As String
+        xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
+        Dim showlist As New Tvdb.ShowData
+        'Try
+        showlist.LoadXml(xmlfile)
+
+        Return showlist
+
+    End Function
+
+    Public Function GetActors(ByVal TvdbId As String, ByVal Language As String) As Tvdb.Actors
+        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & TvdbId & "/actors.xml"
+
+        Dim xmlfile As String
+        xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
+        Dim showlist As New Tvdb.Actors
+        'Try
+        showlist.LoadXml(xmlfile)
+
+        Return showlist
+    End Function
+
     Public Function getshow(ByVal tvdbid As String, ByVal language As String)
         Monitor.Enter(Me)
         Try
@@ -201,7 +250,7 @@ Public Class TVDBScraper
 
                 Select Case thisresult.Name
                     Case "Series"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -253,7 +302,7 @@ Public Class TVDBScraper
                 Select Case thisresult.Name
                     Case "Actor"
                         tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -294,7 +343,7 @@ Public Class TVDBScraper
                 Select Case thisresult.Name
                     Case "Actor"
                         tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New possibleshowlist
+                        Dim newshow As New str_possibleshowlist(SetDefaults)
                         Dim mirrorselection As XmlNode = Nothing
                         For Each mirrorselection In thisresult.ChildNodes
                             Select Case mirrorselection.Name
@@ -354,6 +403,8 @@ Public Class TVDBScraper
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
+            If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
+
             Dim episode As New XmlDocument
 
             episode.LoadXml(xmlfile)

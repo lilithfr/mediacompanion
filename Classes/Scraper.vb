@@ -2,6 +2,7 @@
 Imports System.Threading
 Imports System.Net
 Imports System.IO
+Imports System.Web
 Imports System.Data
 Imports System.Text.RegularExpressions
 
@@ -88,7 +89,7 @@ Public Class Classimdb
             Dim urllinecount As Integer
             Dim GOT_IMDBID As String
             Dim allok As Boolean = False
-            Dim websource(2000)
+            Dim websource(3000)
             For f = 1 To 10
                 Try
                     Dim wrGETURL As WebRequest
@@ -187,43 +188,63 @@ Public Class Classimdb
                     Next
                     Dim temps As String
                     If GOT_IMDBID = "" And exacttotal <> "" Then
-                        temps = exacttotal
-                        If temps.IndexOf(movieyear) <> -1 Then
-                            Dim count As Integer
-                            count = CharCount(temps, movieyear)
-                            If count = 1 Then
+                        If exacttotal.IndexOf(movieyear) <> -1 Then
+                            If CharCount(exacttotal, movieyear) = 1 Then
                                 temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                                Dim first As Integer
-                                Dim length As Integer
                                 Dim calc As String
                                 calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                                If temps.IndexOf("&#34;") = -1 Then
-                                    first = temps.LastIndexOf("href=""/title/tt") + 13
-                                    length = 9
-                                    GOT_IMDBID = temps.Substring(first, length)
-                                End If
+                                Dim regMatch As New Regex("tt(\d){6,8}")
+                                GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
                             End If
                         End If
+                        'temps = exacttotal
+                        'If temps.IndexOf(movieyear) <> -1 Then
+                        '    Dim count As Integer
+                        '    count = CharCount(temps, movieyear)
+                        '    If count = 1 Then
+                        '        temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
+                        '        Dim first As Integer
+                        '        Dim length As Integer
+                        '        Dim calc As String
+                        '        calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+                        '        If temps.IndexOf("&#34;") = -1 Then
+                        '            first = temps.LastIndexOf("href=""/title/tt") + 13
+                        '            length = 9
+                        '            GOT_IMDBID = temps.Substring(first, length)
+                        '        End If
+                        '    End If
+                        'End If
 
                         If GOT_IMDBID = "" And populartotal <> "" Then
-                            temps = populartotal
-                            If temps.IndexOf(movieyear) <> -1 Then
-                                Dim count As Integer
-                                count = CharCount(temps, movieyear)
-                                If count = 1 Then
-                                    temps = populartotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                                    Dim first As Integer
-                                    Dim length As Integer
+                            If populartotal.IndexOf(movieyear) <> -1 Then
+                                If CharCount(populartotal, movieyear) = 1 Then
+                                    temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
                                     Dim calc As String
                                     calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                                    If temps.IndexOf("&#34;") = -1 Then
-                                        first = temps.LastIndexOf("href=""/title/tt") + 13
-                                        length = 9
-                                        GOT_IMDBID = temps.Substring(first, length)
-                                    End If
+                                    Dim regMatch As New Regex("tt(\d){6,8}")
+                                    GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
                                 End If
                             End If
                         End If
+                        'If GOT_IMDBID = "" And populartotal <> "" Then
+                        '    temps = populartotal
+                        '    If temps.IndexOf(movieyear) <> -1 Then
+                        '        Dim count As Integer
+                        '        count = CharCount(temps, movieyear)
+                        '        If count = 1 Then
+                        '            temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
+                        '            Dim first As Integer
+                        '            Dim length As Integer
+                        '            Dim calc As String
+                        '            calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+                        '            If temps.IndexOf("&#34;") = -1 Then
+                        '                first = temps.LastIndexOf("href=""/title/tt") + 13
+                        '                length = 9
+                        '                GOT_IMDBID = temps.Substring(first, length)
+                        '            End If
+                        '        End If
+                        '    End If
+                        'End If
                     End If
                 End If
             ElseIf movieyear = Nothing Then
@@ -508,13 +529,11 @@ Public Class Classimdb
           
             Dim first As Integer
             Dim tempstring As String
-            Dim tempstring2 As String
             Dim actors(10000, 3)
             Dim actorcount As Integer = 0
             Dim filterstring As String
             Dim last As Integer
             Dim length As Integer
-            Dim thumburl As String
             Dim tempint As Integer
             Dim mpaacount As Integer = -1
             Dim webpage As New List(Of String)
@@ -556,7 +575,7 @@ Public Class Classimdb
             mpaaresults(32, 0) = "Greece"
             mpaaresults(33, 0) = "Austria"
 
-            Dim movienfoarray As String
+            Dim movienfoarray As String = String.Empty
 
             Dim genre(20)
             Dim thumbs(500)
@@ -604,6 +623,10 @@ Public Class Classimdb
                                 movienfoarray = movienfoarray.Replace("(VG)", "")
                             End If
 
+                            If movienfoarray.IndexOf("IMDb - ") <> -1 Then
+                                movienfoarray = movienfoarray.Replace("IMDb - ", "")
+                            End If
+
                             first = movienfoarray.LastIndexOf("(")
                             If first <> -1 Then
                                 If movienfoarray.Substring(first + 2, 1) = ")" Then
@@ -620,7 +643,7 @@ Public Class Classimdb
                                 End If
                             End If
 
-                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             movieyear = encodespecialchrs(movieyear)
                             totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
@@ -667,7 +690,7 @@ Public Class Classimdb
                                 End If
                             End If
 
-                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             movieyear = encodespecialchrs(movieyear)
                             If FoundTitle = False Then
@@ -691,22 +714,20 @@ Public Class Classimdb
 
 
                     'rating
-                    If webpage(f).IndexOf("<span>/10</span>") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""ratingValue") <> -1 Then
                         Try
-                            movienfoarray = webpage(f)
-                            webpage(f) = webpage(f).Substring(webpage(f).IndexOf(">") + 1, webpage(f).Length - webpage(f).IndexOf(">") - 1)
-                            movienfoarray = webpage(f).Substring(0, 3)
-                            movienfoarray = movienfoarray.Replace("<b>", "")
-                            movienfoarray = movienfoarray.Replace("/<b>", "")
-                            movienfoarray = movienfoarray.Replace(",", ".")
-                            movienfoarray = movienfoarray.Replace(" ", "")
+                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
+                            End If
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<rating>" & movienfoarray & "</rating>" & vbCrLf
                         Catch
                             totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
                         End Try
                     End If
-
 
                     If webpage(f).IndexOf("<strong>Top 250 #") <> -1 Then
                         Try
@@ -722,60 +743,53 @@ Public Class Classimdb
 
                     'director
                     If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Director") <> -1 Then
-                        Try
-                            movienfoarray = ""
-                            Dim listofdirectors As New List(Of String)
-                            listofdirectors.Clear()
-                            For g = 1 To 10
-                                If webpage(f + g).IndexOf("<div") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("Writer") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
-                                    If webpage(f + g).IndexOf("/name/nm") <> webpage(f + g).LastIndexOf("/name/nm") Then
-                                        webpage(f + g + 1) = webpage(f + g).Replace(webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>") + 4), "")
-                                        webpage(f + g) = webpage(f + g).Replace(webpage(f + g + 1), "")
-                                    End If
-                                    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                    If webpage(f + g) <> "" Then
-                                        listofdirectors.Add(webpage(f + g))
-                                    End If
+                        tempstring = ""
+                        For g = 1 To 10
+                            tempstring = tempstring & webpage(f + g)
+                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                        Next
+                        If tempstring.IndexOf("itemprop=""director") <> -1 Then
+                            Try
+                                movienfoarray = ""
+                                Dim listofdirectors As New List(Of String)
+                                listofdirectors.Clear()
+                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director""\s?>(.+?)</a>")
+                                Do While M.Success
+                                    listofdirectors.Add(M.Groups(1).Value)
+                                    M = M.NextMatch
+                                Loop
+                                If listofdirectors.Count > 0 Then
+                                    For g = 0 To listofdirectors.Count - 1
+                                        If g = 0 Then
+                                            movienfoarray = listofdirectors(g)
+                                        Else
+                                            movienfoarray = movienfoarray & " / " & listofdirectors(g)
+                                        End If
+                                    Next
                                 End If
-                            Next
-                            For g = 0 To listofdirectors.Count - 1
-                                If g = 0 Then
-                                    movienfoarray = listofdirectors(g)
-                                Else
-                                    movienfoarray = movienfoarray & " / " & listofdirectors(g)
-                                End If
-                            Next
-                            movienfoarray = specchars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
-                        End Try
+                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                                movienfoarray = encodespecialchrs(movienfoarray)
+                                totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
+                            Catch
+                                totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
+                            End Try
+                        End If
                     End If
 
-                    'credits
-                    If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
+                    'credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
+                    'If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
+                    If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 And webpage(f + 1).IndexOf("href=""/keyword") < 0 Then
+                        '                                                                                           ^^^^^^^^^ Dirty hack to prevent this! ^^^^^^^^^^^
                         Try
                             movienfoarray = ""
                             Dim listofwriters As New List(Of String)
                             listofwriters.Clear()
                             For g = 1 To 10
-                                If webpage(f + 1).IndexOf("<div") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("href=""/name/nm") <> -1 Then
-
-                                    webpage(f + g) = webpage(f + g).Substring(0, webpage(f + g).IndexOf("</a>"))
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).LastIndexOf(">") + 1, webpage(f + g).Length - webpage(f + g).LastIndexOf(">") - 1)
-                                    webpage(f + g) = webpage(f + g).TrimEnd(" ")
-                                    webpage(f + g) = webpage(f + g).TrimEnd(",")
-                                    If webpage(f + g) <> "" Then
-                                        listofwriters.Add(webpage(f + g))
-                                    End If
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                                If M.Success = True And M.Groups(1).Length Then
+                                    listofwriters.Add(M.Groups(1).Value)
                                 End If
+                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
                             Next
                             For g = 0 To listofwriters.Count - 1
                                 If g = 0 Then
@@ -784,7 +798,7 @@ Public Class Classimdb
                                     movienfoarray = movienfoarray & " / " & listofwriters(g)
                                 End If
                             Next
-                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
                         Catch
@@ -792,6 +806,33 @@ Public Class Classimdb
                         End Try
                     End If
 
+                    'Stars
+                    If webpage(f).IndexOf("<h4 class=""inline"">Stars") <> -1 Then
+                        Try
+                            movienfoarray = ""
+                            Dim listofstars As New List(Of String)
+                            listofstars.Clear()
+                            For g = 1 To 10
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                                If M.Success = True And M.Groups(1).Length Then
+                                    listofstars.Add(M.Groups(1).Value)
+                                End If
+                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                            Next
+                            For g = 0 To listofstars.Count - 1
+                                If g = 0 Then
+                                    movienfoarray = listofstars(g)
+                                Else
+                                    movienfoarray = movienfoarray & ", " & listofstars(g)
+                                End If
+                            Next
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                            movienfoarray = encodespecialchrs(movienfoarray)
+                            totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
+                        Catch
+                            totalinfo = totalinfo & "<stars>scraper error</stars>" & vbCrLf
+                        End Try
+                    End If
 
 
                     'genre
@@ -822,7 +863,7 @@ Public Class Classimdb
                                         movienfoarray = movienfoarray & " / " & listofgenre(g)
                                     End If
                                 Next
-                                movienfoarray = specchars(movienfoarray)
+                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
                             Catch
@@ -836,7 +877,7 @@ Public Class Classimdb
                     If webpage(f).IndexOf("<h4 class=""inline"">Tagline") <> -1 Then
                         Try
                             movienfoarray = webpage(f + 1)
-                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             movienfoarray = movienfoarray.Trim()
                             totalinfo = totalinfo & "<tagline>" & movienfoarray & "</tagline>" & vbCrLf
@@ -845,29 +886,31 @@ Public Class Classimdb
                         End Try
                     End If
 
-                    If webpage(f).IndexOf("<h4 class=""inline"">Runtime") <> -1 Then
+                    'runtime
+                    If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
                         movienfoarray = ""
                         Try
-                            For g = 1 To 5
-                                If webpage(f + g).IndexOf("min") <> -1 Then
-                                    movienfoarray = webpage(f + g)
-                                    movienfoarray = movienfoarray.Replace("min", "")
-                                    movienfoarray = movienfoarray.Trim(" ")
-                                    If Not IsNumeric(movienfoarray) Then
-                                        For h = 0 To movienfoarray.Length - 1
-                                            If IsNumeric(movienfoarray.Substring(h, 1)) Then
-                                                movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
-                                                Exit For
-                                            End If
-                                        Next
-                                    End If
-                                    Exit For
-                                End If
-                            Next
-                            If movienfoarray <> "" Then
-                                movienfoarray = movienfoarray & " min"
+                            Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
                             End If
-                            movienfoarray = specchars(movienfoarray)
+                            'movienfoarray = movienfoarray.Substring(movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1, webpage(f + g).IndexOf("min") - movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1)
+                            'movienfoarray = movienfoarray.Replace("min", "")
+                            'movienfoarray = movienfoarray.Trim(" ")
+                            'If Not IsNumeric(movienfoarray) Then
+                            '    For h = 0 To movienfoarray.Length - 1
+                            '        If IsNumeric(movienfoarray.Substring(h, 1)) Then
+                            '            movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
+                            '            Exit For
+                            '        End If
+                            '    Next
+                            'End If
+                            'If movienfoarray <> "" Then
+                            '    movienfoarray = movienfoarray & " min"
+                            'End If
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
                         Catch
@@ -891,7 +934,7 @@ Public Class Classimdb
                                 If movienfoarray <> "" Then
                                     movienfoarray = movienfoarray & " min"
                                 End If
-                                movienfoarray = specchars(movienfoarray)
+                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
                             End If
@@ -900,10 +943,14 @@ Public Class Classimdb
                     End If
 
                     'votes
-                    If webpage(f).IndexOf("votes</a>") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""ratingCount""") <> -1 Then
                         Try
-                            webpage(f) = webpage(f).Replace(" votes</a>)", "")
-                            movienfoarray = webpage(f).Substring(webpage(f).LastIndexOf(">") + 1, webpage(f).Length - webpage(f).LastIndexOf(">") - 1)
+                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},?]*[0-9]?)</span>")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
+                            End If
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<votes>" & movienfoarray & "</votes>" & vbCrLf
                         Catch
@@ -912,28 +959,57 @@ Public Class Classimdb
                     End If
 
                     'outline
-                    If webpage(f).IndexOf("<p>") <> -1 Then
+                    ''If webpage(f).IndexOf("<p>") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
                         Try
-                            If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
-                                movienfoarray = webpage(f + 1)
-                                movienfoarray = movienfoarray.Replace("<p>", "")
-                                movienfoarray = specchars(movienfoarray)
+                            'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
+                            'movienfoarray = webpage(f + 1)
+                            movienfoarray = ""
+                            Dim endofoutline = f
+                            For endofoutline = (f) To webpage.Count - 2
+                                movienfoarray = movienfoarray & webpage(endofoutline)
+                                If webpage(endofoutline).IndexOf("</p>") <> -1 Then
+                                    Exit For
+                                End If
+                            Next
+                            If movienfoarray.Length > 0 Then
+                                'movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
+                                '' Some outlines are a partial listing and link to the plot summary
+                                'Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
+                                'If erasepos <> -1 Then
+                                '    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
+                                'End If
+                                Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+                                If M.Success = True Then
+                                    movienfoarray = M.Groups(1).Value
+                                Else
+                                    movienfoarray = "scraper error"
+                                End If
+                                movienfoarray = Utilities.cleanSpecChars(movienfoarray.Trim())
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
+                            Else
+                                totalinfo = totalinfo & "<outline>scaper error: possible format change</outline><plot></plot>" & vbCrLf
                             End If
                         Catch
-                            totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+                            'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+                            totalinfo = totalinfo & "<outline>scraper error</outline><plot></plot>" & vbCrLf
                         End Try
                     End If
 
                     'premiered
-                    If webpage(f).IndexOf("<h4 class=""inline"">Release Date") <> -1 Then
+                    If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
                         Try
-                            movienfoarray = webpage(f + 1)
-                            movienfoarray = specchars(movienfoarray)
+                            Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
+                            If M.Success = True Then
+                                movienfoarray = M.Groups(1).Value
+                            Else
+                                movienfoarray = "scraper error"
+                            End If
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
                         Catch
+                            totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
                         End Try
                     End If
 
@@ -950,7 +1026,7 @@ Public Class Classimdb
                                 End If
                             Next
                             movienfoarray = movienfoarray.Trim()
-                            movienfoarray = specchars(movienfoarray)
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<studio>" & movienfoarray & "</studio>" & vbCrLf
                             'Exit For
@@ -966,19 +1042,36 @@ Public Class Classimdb
                     '</div>
                     'country
                     If webpage(f).IndexOf("class=""inline"">Countr") <> -1 Then
+                        'Try
+                        '    For g = 1 To 5
+                        '        If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                        '        If webpage(f + g).IndexOf("</a>") <> -1 Then
+                        '            movienfoarray = webpage(f + g)
+                        '            movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1, movienfoarray.LastIndexOf("<") - movienfoarray.IndexOf(">") - 1)
+                        '            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                        '            movienfoarray = encodespecialchrs(movienfoarray)
+                        '            totalinfo = totalinfo & "<country>" & movienfoarray & "</country>" & vbCrLf
+                        '            Exit For
+                        '        End If
+                        '    Next
+                        'Catch
+                        'End Try
                         Try
+                            tempstring = ""
                             For g = 1 To 5
                                 If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                                If webpage(f + g).IndexOf("</a>") <> -1 Then
-                                    movienfoarray = webpage(f + g)
-                                    movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1, movienfoarray.LastIndexOf("<") - movienfoarray.IndexOf(">") - 1)
-                                    movienfoarray = specchars(movienfoarray)
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.+)</a>")
+                                If M.Success = True Then
+                                    movienfoarray = M.Groups(1).Value
+                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                                     movienfoarray = encodespecialchrs(movienfoarray)
-                                    totalinfo = totalinfo & "<country>" & movienfoarray & "</country>" & vbCrLf
+                                    tempstring = tempstring & "<country>" & movienfoarray & "</country>" & vbCrLf
                                     Exit For
                                 End If
                             Next
+                            totalinfo = totalinfo & tempstring
                         Catch
+                            totalinfo = totalinfo & "<country>scraper error</country>" & vbCrLf
                         End Try
                     End If
                 Next
@@ -1033,7 +1126,7 @@ Public Class Classimdb
                             Loop
                             movienfoarray = movienfoarray.Replace("</a>", "")
                         End If
-                        movienfoarray = specchars(movienfoarray)
+                        movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                         movienfoarray = encodespecialchrs(movienfoarray)
                         totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
                     End If
@@ -1069,7 +1162,11 @@ Public Class Classimdb
                                     tempstring = tempstring.Substring(tempstring.IndexOf(">") + 1, tempstring.IndexOf("</a>") - tempstring.IndexOf(">") - 1)
                                     mpaaresults(g, 1) = tempstring
                                     Try
-                                        mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
+                                        'line below determines if cert is full or short as e.g. UK:15 becomes 15
+                                        If Not Preferences.scrapefullcert Then
+                                            mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
+                                        End If
+
                                         mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
                                     Catch
                                         mpaaresults(g, 1) = "error"
@@ -1104,7 +1201,7 @@ Public Class Classimdb
                                         tempstring = webpage(g)
                                         tempstring = tempstring.Replace("<td>", "")
                                         tempstring = tempstring.Replace("</td>", "")
-                                        tempstring = specchars(tempstring)
+                                        tempstring = Utilities.cleanSpecChars(tempstring)
                                         tempstring = encodespecialchrs(tempstring)
                                         totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
                                     End If
@@ -1122,8 +1219,8 @@ Public Class Classimdb
             For f = 0 To 33
                 If mpaaresults(f, 1) <> Nothing Then
                     Try
-                        mpaaresults(f, 0) = specchars(mpaaresults(f, 0))
-                        mpaaresults(f, 1) = specchars(mpaaresults(f, 1))
+                        mpaaresults(f, 0) = Utilities.cleanSpecChars(mpaaresults(f, 0))
+                        mpaaresults(f, 1) = Utilities.cleanSpecChars(mpaaresults(f, 1))
                         mpaaresults(f, 0) = encodespecialchrs(mpaaresults(f, 0))
                         mpaaresults(f, 1) = encodespecialchrs(mpaaresults(f, 1))
                         totalinfo = totalinfo & "<cert>" & mpaaresults(f, 0) & "|" & mpaaresults(f, 1) & "</cert>" & vbCrLf
@@ -1147,8 +1244,6 @@ Public Class Classimdb
         Dim actors(5000, 3)
         Dim tempstring As String
         Dim filterstring As String
-        Dim first As Integer
-        Dim last As Integer
         Dim actorcount As Integer
         Dim totalinfo As String = "<actorlist>"
 
@@ -1185,8 +1280,10 @@ Public Class Classimdb
                             scrapertempint -= 1
                         End If
                     Loop
-                    scrapertempint = scrapertempint + 1
-                    actors(scrapertempint, 0) = scrapertempstring
+                    If scrapertempstring <> "" Then
+                        scrapertempint = scrapertempint + 1
+                        actors(scrapertempint, 0) = scrapertempstring
+                    End If
                     actorcount = scrapertempint
                     If actorcount > maxactors Then
                         actorcount = maxactors
@@ -1238,11 +1335,11 @@ Public Class Classimdb
             For f = 1 To actorcount
                 If actors(f, 0) <> Nothing Then
                     totalinfo = totalinfo & "<actor>" & vbCrLf
-                    actors(f, 0) = specchars(actors(f, 0))
+                    actors(f, 0) = Utilities.cleanSpecChars(actors(f, 0))
                     actors(f, 0) = encodespecialchrs(actors(f, 0))
                     totalinfo = totalinfo & "<name>" & actors(f, 0) & "</name>" & vbCrLf
                     If actors(f, 1) <> Nothing Then
-                        actors(f, 1) = specchars(actors(f, 1))
+                        actors(f, 1) = Utilities.cleanSpecChars(actors(f, 1))
                         actors(f, 1) = encodespecialchrs(actors(f, 1))
                         totalinfo = totalinfo & "<role>" & actors(f, 1) & "</role>" & vbCrLf
                     End If
@@ -1263,6 +1360,9 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
+
+
+        Return "Error"
     End Function
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String)
         Monitor.Enter(Me)
@@ -1270,10 +1370,8 @@ Public Class Classimdb
         Dim first As Integer
         Dim last As Integer
 
-        Dim tempstring As String
+        Dim tempstring As String = ""
         Try
-
-
             Dim webpage As List(Of String)
             tempstring = imdbmirror & "title/" & imdbid & "/trailers"
             webpage = loadwebpage(tempstring, False)
@@ -1344,13 +1442,14 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
+        Return "Error"
     End Function
 
 
     Private Function encodespecialchrs(ByVal text As String)
         If text.IndexOf("&") <> -1 Then text = text.Replace("&", "&amp;")
-        If text.IndexOf("<") <> -1 Then text = text.Replace("", "&lt;")
-        If text.IndexOf(">") <> -1 Then text = text.Replace("", "&gt;")
+        If text.IndexOf("<") <> -1 Then text = text.Replace("<", "&lt;")
+        If text.IndexOf(">") <> -1 Then text = text.Replace(">", "&gt;")
         If text.IndexOf(Chr(34)) <> -1 Then text = text.Replace(Chr(34), "&quot;")
         If text.IndexOf("'") <> -1 Then text = text.Replace("'", "&apos;")
         Return text
@@ -1400,396 +1499,7 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
-
-
-
     End Function
-    Private Function specchars(ByVal filterstring As String)
-        Monitor.Enter(Me)
-        Try
-            If filterstring.IndexOf("&#919;") <> -1 Then filterstring = filterstring.Replace("&#919;", "Η")
-            If filterstring.IndexOf("&#918;") <> -1 Then filterstring = filterstring.Replace("&#918;", "Ζ")
-            If filterstring.IndexOf("&#917;") <> -1 Then filterstring = filterstring.Replace("&#917;", "Ε")
-            If filterstring.IndexOf("&#916;") <> -1 Then filterstring = filterstring.Replace("&#916;", "Δ")
-            If filterstring.IndexOf("&#915;") <> -1 Then filterstring = filterstring.Replace("&#915;", "Γ")
-            If filterstring.IndexOf("&#914;") <> -1 Then filterstring = filterstring.Replace("&#914;", "Β")
-            If filterstring.IndexOf("&#913;") <> -1 Then filterstring = filterstring.Replace("&#913;", "Α")
-            If filterstring.IndexOf("&#732;") <> -1 Then filterstring = filterstring.Replace("&#732;", "˜")
-            If filterstring.IndexOf("&#710;") <> -1 Then filterstring = filterstring.Replace("&#710;", "ˆ")
-            If filterstring.IndexOf("&#402;") <> -1 Then filterstring = filterstring.Replace("&#402;", "ƒ")
-            If filterstring.IndexOf("&#376;") <> -1 Then filterstring = filterstring.Replace("&#376;", "Ÿ")
-            If filterstring.IndexOf("&#353;") <> -1 Then filterstring = filterstring.Replace("&#353;", "š")
-            If filterstring.IndexOf("&#352;") <> -1 Then filterstring = filterstring.Replace("&#352;", "Š")
-            If filterstring.IndexOf("&#339;") <> -1 Then filterstring = filterstring.Replace("&#339;", "œ")
-            If filterstring.IndexOf("&#338;") <> -1 Then filterstring = filterstring.Replace("&#338;", "Œ")
-            If filterstring.IndexOf("&#937;") <> -1 Then filterstring = filterstring.Replace("&#937;", "Ω")
-            If filterstring.IndexOf("&#936;") <> -1 Then filterstring = filterstring.Replace("&#936;", "Ψ")
-            If filterstring.IndexOf("&#935;") <> -1 Then filterstring = filterstring.Replace("&#935;", "Χ")
-            If filterstring.IndexOf("&#934;") <> -1 Then filterstring = filterstring.Replace("&#934;", "Φ")
-            If filterstring.IndexOf("&#933;") <> -1 Then filterstring = filterstring.Replace("&#933;", "Υ")
-            If filterstring.IndexOf("&#932;") <> -1 Then filterstring = filterstring.Replace("&#932;", "Τ")
-            If filterstring.IndexOf("&#931;") <> -1 Then filterstring = filterstring.Replace("&#931;", "Σ")
-            If filterstring.IndexOf("&#929;") <> -1 Then filterstring = filterstring.Replace("&#929;", "Ρ")
-            If filterstring.IndexOf("&#928;") <> -1 Then filterstring = filterstring.Replace("&#928;", "Π")
-            If filterstring.IndexOf("&#927;") <> -1 Then filterstring = filterstring.Replace("&#927;", "Ο")
-            If filterstring.IndexOf("&#926;") <> -1 Then filterstring = filterstring.Replace("&#926;", "Ξ")
-            If filterstring.IndexOf("&#924;") <> -1 Then filterstring = filterstring.Replace("&#924;", "Μ")
-            If filterstring.IndexOf("&#923;") <> -1 Then filterstring = filterstring.Replace("&#923;", "Λ")
-            If filterstring.IndexOf("&#922;") <> -1 Then filterstring = filterstring.Replace("&#922;", "Κ")
-            If filterstring.IndexOf("&#921;") <> -1 Then filterstring = filterstring.Replace("&#921;", "Ι")
-            If filterstring.IndexOf("&#920;") <> -1 Then filterstring = filterstring.Replace("&#920;", "Θ")
-            If filterstring.IndexOf("&#955;") <> -1 Then filterstring = filterstring.Replace("&#955;", "λ")
-            If filterstring.IndexOf("&#954;") <> -1 Then filterstring = filterstring.Replace("&#954;", "κ")
-            If filterstring.IndexOf("&#953;") <> -1 Then filterstring = filterstring.Replace("&#953;", "ι")
-            If filterstring.IndexOf("&#952;") <> -1 Then filterstring = filterstring.Replace("&#952;", "θ")
-            If filterstring.IndexOf("&#951;") <> -1 Then filterstring = filterstring.Replace("&#951;", "η")
-            If filterstring.IndexOf("&#950;") <> -1 Then filterstring = filterstring.Replace("&#950;", "ζ")
-            If filterstring.IndexOf("&#949;") <> -1 Then filterstring = filterstring.Replace("&#949;", "ε")
-            If filterstring.IndexOf("&#948;") <> -1 Then filterstring = filterstring.Replace("&#948;", "δ")
-            If filterstring.IndexOf("&#947;") <> -1 Then filterstring = filterstring.Replace("&#947;", "γ")
-            If filterstring.IndexOf("&#946;") <> -1 Then filterstring = filterstring.Replace("&#946;", "β")
-            If filterstring.IndexOf("&#945;") <> -1 Then filterstring = filterstring.Replace("&#945;", "α")
-            If filterstring.IndexOf("&#969;") <> -1 Then filterstring = filterstring.Replace("&#969;", "ω")
-            If filterstring.IndexOf("&#968;") <> -1 Then filterstring = filterstring.Replace("&#968;", "ψ")
-            If filterstring.IndexOf("&#967;") <> -1 Then filterstring = filterstring.Replace("&#967;", "χ")
-            If filterstring.IndexOf("&#966;") <> -1 Then filterstring = filterstring.Replace("&#966;", "φ")
-            If filterstring.IndexOf("&#965;") <> -1 Then filterstring = filterstring.Replace("&#965;", "υ")
-            If filterstring.IndexOf("&#964;") <> -1 Then filterstring = filterstring.Replace("&#964;", "τ")
-            If filterstring.IndexOf("&#963;") <> -1 Then filterstring = filterstring.Replace("&#963;", "σ")
-            If filterstring.IndexOf("&#962;") <> -1 Then filterstring = filterstring.Replace("&#962;", "ς")
-            If filterstring.IndexOf("&#961;") <> -1 Then filterstring = filterstring.Replace("&#961;", "ρ")
-            If filterstring.IndexOf("&#960;") <> -1 Then filterstring = filterstring.Replace("&#960;", "π")
-            If filterstring.IndexOf("&#959;") <> -1 Then filterstring = filterstring.Replace("&#959;", "ο")
-            If filterstring.IndexOf("&#958;") <> -1 Then filterstring = filterstring.Replace("&#958;", "ξ")
-            If filterstring.IndexOf("&#957;") <> -1 Then filterstring = filterstring.Replace("&#957;", "ν")
-            If filterstring.IndexOf("&#956;") <> -1 Then filterstring = filterstring.Replace("&#956;", "μ")
-            If filterstring.IndexOf("&#8240;") <> -1 Then filterstring = filterstring.Replace("&#8240;", "‰")
-            If filterstring.IndexOf("&#8230;") <> -1 Then filterstring = filterstring.Replace("&#8230;", "…")
-            If filterstring.IndexOf("&#8226;") <> -1 Then filterstring = filterstring.Replace("&#8226;", "•")
-            If filterstring.IndexOf("&#8225;") <> -1 Then filterstring = filterstring.Replace("&#8225;", "‡")
-            If filterstring.IndexOf("&#8224;") <> -1 Then filterstring = filterstring.Replace("&#8224;", "†")
-            If filterstring.IndexOf("&#8222;") <> -1 Then filterstring = filterstring.Replace("&#8222;", "„")
-            If filterstring.IndexOf("&#8218;") <> -1 Then filterstring = filterstring.Replace("&#8218;", "‚")
-            If filterstring.IndexOf("&#8217;") <> -1 Then filterstring = filterstring.Replace("&#8217;", "’")
-            If filterstring.IndexOf("&#8216;") <> -1 Then filterstring = filterstring.Replace("&#8216;", "‘")
-            If filterstring.IndexOf("&#8212;") <> -1 Then filterstring = filterstring.Replace("&#8212;", "—")
-            If filterstring.IndexOf("&#8211;") <> -1 Then filterstring = filterstring.Replace("&#8211;", "–")
-            If filterstring.IndexOf("&#8805;") <> -1 Then filterstring = filterstring.Replace("&#8805;", "≥")
-            If filterstring.IndexOf("&#8804;") <> -1 Then filterstring = filterstring.Replace("&#8804;", "≤")
-            If filterstring.IndexOf("&#8801;") <> -1 Then filterstring = filterstring.Replace("&#8801;", "≡")
-            If filterstring.IndexOf("&#8800;") <> -1 Then filterstring = filterstring.Replace("&#8800;", "≠")
-            If filterstring.IndexOf("&#8776;") <> -1 Then filterstring = filterstring.Replace("&#8776;", "≈")
-            If filterstring.IndexOf("&#8747;") <> -1 Then filterstring = filterstring.Replace("&#8747;", "∫")
-            If filterstring.IndexOf("&#8745;") <> -1 Then filterstring = filterstring.Replace("&#8745;", "∩")
-            If filterstring.IndexOf("&#8734;") <> -1 Then filterstring = filterstring.Replace("&#8734;", "∞")
-            If filterstring.IndexOf("&#8730;") <> -1 Then filterstring = filterstring.Replace("&#8730;", "√")
-            If filterstring.IndexOf("&#8721;") <> -1 Then filterstring = filterstring.Replace("&#8721;", "∑")
-            If filterstring.IndexOf("&#8719;") <> -1 Then filterstring = filterstring.Replace("&#8719;", "∏")
-            If filterstring.IndexOf("&#8706;") <> -1 Then filterstring = filterstring.Replace("&#8706;", "∂")
-            If filterstring.IndexOf("&#8596;") <> -1 Then filterstring = filterstring.Replace("&#8596;", "↔")
-            If filterstring.IndexOf("&#8595;") <> -1 Then filterstring = filterstring.Replace("&#8595;", "↓")
-            If filterstring.IndexOf("&#8594;") <> -1 Then filterstring = filterstring.Replace("&#8594;", "→")
-            If filterstring.IndexOf("&#8593;") <> -1 Then filterstring = filterstring.Replace("&#8593;", "↑")
-            If filterstring.IndexOf("&#8592;") <> -1 Then filterstring = filterstring.Replace("&#8592;", "←")
-            If filterstring.IndexOf("&#8482;") <> -1 Then filterstring = filterstring.Replace("&#8482;", "™")
-            If filterstring.IndexOf("&#8364;") <> -1 Then filterstring = filterstring.Replace("&#8364;", "€")
-            If filterstring.IndexOf("&#8260;") <> -1 Then filterstring = filterstring.Replace("&#8260;", "⁄")
-            If filterstring.IndexOf("&#8254;") <> -1 Then filterstring = filterstring.Replace("&#8254;", "‾")
-            If filterstring.IndexOf("&#8250;") <> -1 Then filterstring = filterstring.Replace("&#8250;", "›")
-            If filterstring.IndexOf("&#8249;") <> -1 Then filterstring = filterstring.Replace("&#8249;", "‹")
-            If filterstring.IndexOf("&#161;") <> -1 Then filterstring = filterstring.Replace("&#161;", Chr(161))
-            If filterstring.IndexOf("&#162;") <> -1 Then filterstring = filterstring.Replace("&#162;", Chr(162))
-            If filterstring.IndexOf("&#163;") <> -1 Then filterstring = filterstring.Replace("&#163;", Chr(163))
-            If filterstring.IndexOf("&#164;") <> -1 Then filterstring = filterstring.Replace("&#164;", Chr(164))
-            If filterstring.IndexOf("&#165;") <> -1 Then filterstring = filterstring.Replace("&#165;", Chr(165))
-            If filterstring.IndexOf("&#166;") <> -1 Then filterstring = filterstring.Replace("&#166;", Chr(166))
-            If filterstring.IndexOf("&#167;") <> -1 Then filterstring = filterstring.Replace("&#167;", Chr(167))
-            If filterstring.IndexOf("&#168;") <> -1 Then filterstring = filterstring.Replace("&#168;", Chr(168))
-            If filterstring.IndexOf("&#170;") <> -1 Then filterstring = filterstring.Replace("&#170;", Chr(170))
-            If filterstring.IndexOf("&#171;") <> -1 Then filterstring = filterstring.Replace("&#171;", Chr(171))
-            If filterstring.IndexOf("&#172;") <> -1 Then filterstring = filterstring.Replace("&#172;", Chr(172))
-            If filterstring.IndexOf("&#173;") <> -1 Then filterstring = filterstring.Replace("&#173;", Chr(173))
-            If filterstring.IndexOf("&#174;") <> -1 Then filterstring = filterstring.Replace("&#174;", Chr(174))
-            If filterstring.IndexOf("&#175;") <> -1 Then filterstring = filterstring.Replace("&#175;", Chr(175))
-            If filterstring.IndexOf("&#176;") <> -1 Then filterstring = filterstring.Replace("&#176;", Chr(176))
-            If filterstring.IndexOf("&#177;") <> -1 Then filterstring = filterstring.Replace("&#177;", Chr(177))
-            If filterstring.IndexOf("&#178;") <> -1 Then filterstring = filterstring.Replace("&#178;", Chr(178))
-            If filterstring.IndexOf("&#179;") <> -1 Then filterstring = filterstring.Replace("&#179;", Chr(179))
-            If filterstring.IndexOf("&#198;") <> -1 Then filterstring = filterstring.Replace("&#198;", Chr(198))
-            If filterstring.IndexOf("&amp;") <> -1 Then filterstring = filterstring.Replace("&amp;", "&")
-            If filterstring.IndexOf("&quot;") <> -1 Then filterstring = filterstring.Replace("&quot;", Chr(34))
-            If filterstring.IndexOf("&lt;") <> -1 Then filterstring = filterstring.Replace("&lt;", "<")
-            If filterstring.IndexOf("&gt;") <> -1 Then filterstring = filterstring.Replace("&gt;", ">")
-            If filterstring.IndexOf("&#138;") <> -1 Then filterstring = filterstring.Replace("&#138;", Chr(138))
-            If filterstring.IndexOf("&#140;") <> -1 Then filterstring = filterstring.Replace("&#140;", Chr(140))
-            If filterstring.IndexOf("&#142;") <> -1 Then filterstring = filterstring.Replace("&#142;", Chr(142))
-            If filterstring.IndexOf("&#153;") <> -1 Then filterstring = filterstring.Replace("&#153;", Chr(153))
-            If filterstring.IndexOf("&#154;") <> -1 Then filterstring = filterstring.Replace("&#154;", Chr(154))
-            If filterstring.IndexOf("&#156;") <> -1 Then filterstring = filterstring.Replace("&#156;", Chr(156))
-            If filterstring.IndexOf("&#158;") <> -1 Then filterstring = filterstring.Replace("&#158;", Chr(158))
-            If filterstring.IndexOf("&#159;") <> -1 Then filterstring = filterstring.Replace("&#159;", Chr(159))
-            If filterstring.IndexOf("&#160;") <> -1 Then filterstring = filterstring.Replace("&#160;", Chr(160))
-            If filterstring.IndexOf("&#169;") <> -1 Then filterstring = filterstring.Replace("&#169;", Chr(169))
-            If filterstring.IndexOf("&#178;") <> -1 Then filterstring = filterstring.Replace("&#178;", Chr(178))
-            If filterstring.IndexOf("&#179;") <> -1 Then filterstring = filterstring.Replace("&#179;", Chr(179))
-            If filterstring.IndexOf("&#181;") <> -1 Then filterstring = filterstring.Replace("&#181;", Chr(181))
-            If filterstring.IndexOf("&#183;") <> -1 Then filterstring = filterstring.Replace("&#183;", Chr(183))
-            If filterstring.IndexOf("&#188;") <> -1 Then filterstring = filterstring.Replace("&#188;", Chr(188))
-            If filterstring.IndexOf("&#189;") <> -1 Then filterstring = filterstring.Replace("&#189;", Chr(189))
-            If filterstring.IndexOf("&#190;") <> -1 Then filterstring = filterstring.Replace("&#190;", Chr(190))
-            If filterstring.IndexOf("&#192;") <> -1 Then filterstring = filterstring.Replace("&#192;", Chr(192))
-            If filterstring.IndexOf("&#193;") <> -1 Then filterstring = filterstring.Replace("&#193;", Chr(193))
-            If filterstring.IndexOf("&#194;") <> -1 Then filterstring = filterstring.Replace("&#194;", Chr(194))
-            If filterstring.IndexOf("&#195;") <> -1 Then filterstring = filterstring.Replace("&#195;", Chr(195))
-            If filterstring.IndexOf("&#196;") <> -1 Then filterstring = filterstring.Replace("&#196;", Chr(196))
-            If filterstring.IndexOf("&#197;") <> -1 Then filterstring = filterstring.Replace("&#197;", Chr(197))
-            If filterstring.IndexOf("&#199;") <> -1 Then filterstring = filterstring.Replace("&#199;", Chr(199))
-            If filterstring.IndexOf("&#200;") <> -1 Then filterstring = filterstring.Replace("&#200;", Chr(200))
-            If filterstring.IndexOf("&#201;") <> -1 Then filterstring = filterstring.Replace("&#201;", Chr(201))
-            If filterstring.IndexOf("&#203;") <> -1 Then filterstring = filterstring.Replace("&#203;", Chr(203))
-            If filterstring.IndexOf("&#204;") <> -1 Then filterstring = filterstring.Replace("&#204;", Chr(204))
-            If filterstring.IndexOf("&#205;") <> -1 Then filterstring = filterstring.Replace("&#205;", Chr(205))
-            If filterstring.IndexOf("&#206;") <> -1 Then filterstring = filterstring.Replace("&#206;", Chr(206))
-            If filterstring.IndexOf("&#207;") <> -1 Then filterstring = filterstring.Replace("&#207;", Chr(207))
-            If filterstring.IndexOf("&#208;") <> -1 Then filterstring = filterstring.Replace("&#208;", Chr(208))
-            If filterstring.IndexOf("&#209;") <> -1 Then filterstring = filterstring.Replace("&#209;", Chr(209))
-            If filterstring.IndexOf("&#210;") <> -1 Then filterstring = filterstring.Replace("&#210;", Chr(210))
-            If filterstring.IndexOf("&#211;") <> -1 Then filterstring = filterstring.Replace("&#211;", Chr(211))
-            If filterstring.IndexOf("&#212;") <> -1 Then filterstring = filterstring.Replace("&#212;", Chr(212))
-            If filterstring.IndexOf("&#213;") <> -1 Then filterstring = filterstring.Replace("&#213;", Chr(213))
-            If filterstring.IndexOf("&#214;") <> -1 Then filterstring = filterstring.Replace("&#214;", Chr(214))
-            If filterstring.IndexOf("&#215;") <> -1 Then filterstring = filterstring.Replace("&#215;", Chr(215))
-            If filterstring.IndexOf("&#216;") <> -1 Then filterstring = filterstring.Replace("&#216;", Chr(216))
-            If filterstring.IndexOf("&#217;") <> -1 Then filterstring = filterstring.Replace("&#217;", Chr(217))
-            If filterstring.IndexOf("&#218;") <> -1 Then filterstring = filterstring.Replace("&#218;", Chr(218))
-            If filterstring.IndexOf("&#219;") <> -1 Then filterstring = filterstring.Replace("&#219;", Chr(219))
-            If filterstring.IndexOf("&#220;") <> -1 Then filterstring = filterstring.Replace("&#220;", Chr(220))
-            If filterstring.IndexOf("&#221;") <> -1 Then filterstring = filterstring.Replace("&#221;", Chr(221))
-            If filterstring.IndexOf("&#222;") <> -1 Then filterstring = filterstring.Replace("&#222;", Chr(222))
-            If filterstring.IndexOf("&#223;") <> -1 Then filterstring = filterstring.Replace("&#223;", Chr(223))
-            If filterstring.IndexOf("&#224;") <> -1 Then filterstring = filterstring.Replace("&#224;", Chr(224))
-            If filterstring.IndexOf("&#225;") <> -1 Then filterstring = filterstring.Replace("&#225;", Chr(225))
-            If filterstring.IndexOf("&#226;") <> -1 Then filterstring = filterstring.Replace("&#226;", Chr(226))
-            If filterstring.IndexOf("&#227;") <> -1 Then filterstring = filterstring.Replace("&#227;", Chr(227))
-            If filterstring.IndexOf("&#228;") <> -1 Then filterstring = filterstring.Replace("&#228;", Chr(228))
-            If filterstring.IndexOf("&#229;") <> -1 Then filterstring = filterstring.Replace("&#229;", Chr(229))
-            If filterstring.IndexOf("&#230;") <> -1 Then filterstring = filterstring.Replace("&#230;", Chr(230))
-            If filterstring.IndexOf("&#231;") <> -1 Then filterstring = filterstring.Replace("&#231;", Chr(231))
-            If filterstring.IndexOf("&#232;") <> -1 Then filterstring = filterstring.Replace("&#232;", Chr(232))
-            If filterstring.IndexOf("&#233;") <> -1 Then filterstring = filterstring.Replace("&#233;", Chr(233))
-            If filterstring.IndexOf("&#234;") <> -1 Then filterstring = filterstring.Replace("&#234;", Chr(234))
-            If filterstring.IndexOf("&#235;") <> -1 Then filterstring = filterstring.Replace("&#235;", Chr(235))
-            If filterstring.IndexOf("&#236;") <> -1 Then filterstring = filterstring.Replace("&#236;", Chr(236))
-            If filterstring.IndexOf("&#237;") <> -1 Then filterstring = filterstring.Replace("&#237;", Chr(237))
-            If filterstring.IndexOf("&#238;") <> -1 Then filterstring = filterstring.Replace("&#238;", Chr(238))
-            If filterstring.IndexOf("&#239;") <> -1 Then filterstring = filterstring.Replace("&#239;", Chr(239))
-            If filterstring.IndexOf("&#240;") <> -1 Then filterstring = filterstring.Replace("&#240;", Chr(240))
-            If filterstring.IndexOf("&#241;") <> -1 Then filterstring = filterstring.Replace("&#241;", Chr(241))
-            If filterstring.IndexOf("&#242;") <> -1 Then filterstring = filterstring.Replace("&#242;", Chr(242))
-            If filterstring.IndexOf("&#243;") <> -1 Then filterstring = filterstring.Replace("&#243;", Chr(243))
-            If filterstring.IndexOf("&#244;") <> -1 Then filterstring = filterstring.Replace("&#244;", Chr(244))
-            If filterstring.IndexOf("&#245;") <> -1 Then filterstring = filterstring.Replace("&#245;", Chr(245))
-            If filterstring.IndexOf("&#246;") <> -1 Then filterstring = filterstring.Replace("&#246;", Chr(246))
-            If filterstring.IndexOf("&#247;") <> -1 Then filterstring = filterstring.Replace("&#247;", Chr(247))
-            If filterstring.IndexOf("&#248;") <> -1 Then filterstring = filterstring.Replace("&#248;", Chr(248))
-            If filterstring.IndexOf("&#249;") <> -1 Then filterstring = filterstring.Replace("&#249;", Chr(249))
-            If filterstring.IndexOf("&#250;") <> -1 Then filterstring = filterstring.Replace("&#250;", Chr(250))
-            If filterstring.IndexOf("&#251;") <> -1 Then filterstring = filterstring.Replace("&#251;", Chr(251))
-            If filterstring.IndexOf("&#252;") <> -1 Then filterstring = filterstring.Replace("&#252;", Chr(252))
-            If filterstring.IndexOf("&#253;") <> -1 Then filterstring = filterstring.Replace("&#253;", Chr(253))
-            If filterstring.IndexOf("&#254;") <> -1 Then filterstring = filterstring.Replace("&#254;", Chr(254))
-            If filterstring.IndexOf("&#255;") <> -1 Then filterstring = filterstring.Replace("&#255;", Chr(255))
-            If filterstring.IndexOf("&#38;") <> -1 Then filterstring = filterstring.Replace("&#38;", Chr(38))
-            If filterstring.IndexOf("&#34;") <> -1 Then filterstring = filterstring.Replace("&#34;", Chr(34))
-            If filterstring.IndexOf("&#x20;") <> -1 Then filterstring = filterstring.Replace("&#x27;", " ")
-            If filterstring.IndexOf("&#x21;") <> -1 Then filterstring = filterstring.Replace("&#x21;", "!")
-            If filterstring.IndexOf("&#x22;") <> -1 Then filterstring = filterstring.Replace("&#x22;", Chr(34))
-            If filterstring.IndexOf("&#x23;") <> -1 Then filterstring = filterstring.Replace("&#x23;", "#")
-            If filterstring.IndexOf("&#x24;") <> -1 Then filterstring = filterstring.Replace("&#x24;", "$")
-            If filterstring.IndexOf("&#x25;") <> -1 Then filterstring = filterstring.Replace("&#x25;", "%")
-            If filterstring.IndexOf("&#x26;") <> -1 Then filterstring = filterstring.Replace("&#x26;", "&")
-            If filterstring.IndexOf("&#x27;") <> -1 Then filterstring = filterstring.Replace("&#x27;", "'")
-            If filterstring.IndexOf("&#x28;") <> -1 Then filterstring = filterstring.Replace("&#x28;", "(")
-            If filterstring.IndexOf("&#x29;") <> -1 Then filterstring = filterstring.Replace("&#x29;", ")")
-            If filterstring.IndexOf("&#x2A;") <> -1 Then filterstring = filterstring.Replace("&#x2A;", "*")
-            If filterstring.IndexOf("&#x2B;") <> -1 Then filterstring = filterstring.Replace("&#x2B;", "+")
-            If filterstring.IndexOf("&#x2C;") <> -1 Then filterstring = filterstring.Replace("&#x2C;", ",")
-            If filterstring.IndexOf("&#x2D;") <> -1 Then filterstring = filterstring.Replace("&#x2D;", "-")
-            If filterstring.IndexOf("&#x2E;") <> -1 Then filterstring = filterstring.Replace("&#x2E;", ".")
-            If filterstring.IndexOf("&#x2F;") <> -1 Then filterstring = filterstring.Replace("&#x2F;", "/")
-
-
-            If filterstring.IndexOf("&#x3A;") <> -1 Then filterstring = filterstring.Replace("&#x3A;", ":")
-            If filterstring.IndexOf("&#x3B;") <> -1 Then filterstring = filterstring.Replace("&#x3B;", ";")
-            If filterstring.IndexOf("&#x3C;") <> -1 Then filterstring = filterstring.Replace("&#x3C;", "<")
-            If filterstring.IndexOf("&#x3D;") <> -1 Then filterstring = filterstring.Replace("&#x3D;", "=")
-            If filterstring.IndexOf("&#x3E;") <> -1 Then filterstring = filterstring.Replace("&#x3E;", ">")
-            If filterstring.IndexOf("&#x3F;") <> -1 Then filterstring = filterstring.Replace("&#x3F;", "?")
-
-
-            If filterstring.IndexOf("&#x40;") <> -1 Then filterstring = filterstring.Replace("&#x40;", "@")
-            If filterstring.IndexOf("&#x5B;") <> -1 Then filterstring = filterstring.Replace("&#x5B;", "[")
-            If filterstring.IndexOf("&#x5C;") <> -1 Then filterstring = filterstring.Replace("&#x5C;", "\")
-            If filterstring.IndexOf("&#x5D;") <> -1 Then filterstring = filterstring.Replace("&#x5D;", "]")
-            If filterstring.IndexOf("&#x5E;") <> -1 Then filterstring = filterstring.Replace("&#x5E;", "^")
-            If filterstring.IndexOf("&#x5F;") <> -1 Then filterstring = filterstring.Replace("&#x5F;", "_")
-            If filterstring.IndexOf("&#x60;") <> -1 Then filterstring = filterstring.Replace("&#x60;", "`")
-            If filterstring.IndexOf("&#x7B;") <> -1 Then filterstring = filterstring.Replace("&#x7B;", "{")
-            If filterstring.IndexOf("&#x7C;") <> -1 Then filterstring = filterstring.Replace("&#x7C;", "|")
-            If filterstring.IndexOf("&#x7D;") <> -1 Then filterstring = filterstring.Replace("&#x7D;", "}")
-            If filterstring.IndexOf("&#x7E;") <> -1 Then filterstring = filterstring.Replace("&#x7E;", "~")
-
-
-            If filterstring.IndexOf("&#x80;") <> -1 Then filterstring = filterstring.Replace("&#x80;", "€")
-            If filterstring.IndexOf("&#x82;") <> -1 Then filterstring = filterstring.Replace("&#x82;", "‚")
-            If filterstring.IndexOf("&#x83;") <> -1 Then filterstring = filterstring.Replace("&#x83;", "ƒ")
-            If filterstring.IndexOf("&#x84;") <> -1 Then filterstring = filterstring.Replace("&#x84;", "„")
-            If filterstring.IndexOf("&#x85;") <> -1 Then filterstring = filterstring.Replace("&#x85;", "…")
-            If filterstring.IndexOf("&#x86;") <> -1 Then filterstring = filterstring.Replace("&#x86;", "†")
-            If filterstring.IndexOf("&#x87;") <> -1 Then filterstring = filterstring.Replace("&#x87;", "‡")
-            If filterstring.IndexOf("&#x88;") <> -1 Then filterstring = filterstring.Replace("&#x88;", "ˆ")
-            If filterstring.IndexOf("&#x89;") <> -1 Then filterstring = filterstring.Replace("&#x89;", "‰")
-            If filterstring.IndexOf("&#x8A;") <> -1 Then filterstring = filterstring.Replace("&#x8A;", "Š")
-            If filterstring.IndexOf("&#x8B;") <> -1 Then filterstring = filterstring.Replace("&#x8B;", "‹")
-            If filterstring.IndexOf("&#x8C;") <> -1 Then filterstring = filterstring.Replace("&#x8C;", "Œ")
-            If filterstring.IndexOf("&#x8E;") <> -1 Then filterstring = filterstring.Replace("&#x8E;", "Ž")
-
-
-            If filterstring.IndexOf("&#x91;") <> -1 Then filterstring = filterstring.Replace("&#x91;", "‘")
-            If filterstring.IndexOf("&#x92;") <> -1 Then filterstring = filterstring.Replace("&#x92;", "’")
-            If filterstring.IndexOf("&#x93;") <> -1 Then filterstring = filterstring.Replace("&#x93;", """")
-            If filterstring.IndexOf("&#x94;") <> -1 Then filterstring = filterstring.Replace("&#x94;", """")
-            If filterstring.IndexOf("&#x95;") <> -1 Then filterstring = filterstring.Replace("&#x95;", "•")
-            If filterstring.IndexOf("&#x96;") <> -1 Then filterstring = filterstring.Replace("&#x96;", "–")
-            If filterstring.IndexOf("&#x97;") <> -1 Then filterstring = filterstring.Replace("&#x97;", "—")
-            If filterstring.IndexOf("&#x98;") <> -1 Then filterstring = filterstring.Replace("&#x98;", "˜")
-            If filterstring.IndexOf("&#x99;") <> -1 Then filterstring = filterstring.Replace("&#x99;", "™")
-            If filterstring.IndexOf("&#x9A;") <> -1 Then filterstring = filterstring.Replace("&#x9A;", "š")
-            If filterstring.IndexOf("&#x9B;") <> -1 Then filterstring = filterstring.Replace("&#x9B;", "›")
-            If filterstring.IndexOf("&#x9C;") <> -1 Then filterstring = filterstring.Replace("&#x9C;", "œ")
-            If filterstring.IndexOf("&#x9E;") <> -1 Then filterstring = filterstring.Replace("&#x9E;", "ž")
-            If filterstring.IndexOf("&#x9F;") <> -1 Then filterstring = filterstring.Replace("&#x9F;", "Ÿ")
-
-
-            If filterstring.IndexOf("&#xA0;") <> -1 Then filterstring = filterstring.Replace("&#xA0;", " ")
-            If filterstring.IndexOf("&#xA1;") <> -1 Then filterstring = filterstring.Replace("&#xA1;", "¡")
-            If filterstring.IndexOf("&#xA2;") <> -1 Then filterstring = filterstring.Replace("&#xA2;", "¢")
-            If filterstring.IndexOf("&#xA3;") <> -1 Then filterstring = filterstring.Replace("&#xA3;", "£")
-            If filterstring.IndexOf("&#xA4;") <> -1 Then filterstring = filterstring.Replace("&#xA4;", "¤")
-            If filterstring.IndexOf("&#xA5;") <> -1 Then filterstring = filterstring.Replace("&#xA5;", "¥")
-            If filterstring.IndexOf("&#xA6;") <> -1 Then filterstring = filterstring.Replace("&#xA6;", "¦")
-            If filterstring.IndexOf("&#xA7;") <> -1 Then filterstring = filterstring.Replace("&#xA7;", "§")
-            If filterstring.IndexOf("&#xA8;") <> -1 Then filterstring = filterstring.Replace("&#xA8;", "¨")
-            If filterstring.IndexOf("&#xA9;") <> -1 Then filterstring = filterstring.Replace("&#xA9;", "©")
-            If filterstring.IndexOf("&#xAA;") <> -1 Then filterstring = filterstring.Replace("&#xAA;", "ª")
-            If filterstring.IndexOf("&#xAB;") <> -1 Then filterstring = filterstring.Replace("&#xAB;", "«")
-            If filterstring.IndexOf("&#xAC;") <> -1 Then filterstring = filterstring.Replace("&#xAC;", "¬")
-            If filterstring.IndexOf("&#xAD;") <> -1 Then filterstring = filterstring.Replace("&#xAD;", " ")
-            If filterstring.IndexOf("&#xAE;") <> -1 Then filterstring = filterstring.Replace("&#xAE;", "®")
-            If filterstring.IndexOf("&#xAF;") <> -1 Then filterstring = filterstring.Replace("&#xAF;", "¯")
-
-
-            If filterstring.IndexOf("&#xB0;") <> -1 Then filterstring = filterstring.Replace("&#xB0;", "°")
-            If filterstring.IndexOf("&#xB1;") <> -1 Then filterstring = filterstring.Replace("&#xB1;", "±")
-            If filterstring.IndexOf("&#xB2;") <> -1 Then filterstring = filterstring.Replace("&#xB2;", "²")
-            If filterstring.IndexOf("&#xB3;") <> -1 Then filterstring = filterstring.Replace("&#xB3;", "³")
-            If filterstring.IndexOf("&#xB4;") <> -1 Then filterstring = filterstring.Replace("&#xB4;", "´")
-            If filterstring.IndexOf("&#xB5;") <> -1 Then filterstring = filterstring.Replace("&#xB5;", "µ")
-            If filterstring.IndexOf("&#xB6;") <> -1 Then filterstring = filterstring.Replace("&#xB6;", "¶")
-            If filterstring.IndexOf("&#xB7;") <> -1 Then filterstring = filterstring.Replace("&#xB7;", "·")
-            If filterstring.IndexOf("&#xB8;") <> -1 Then filterstring = filterstring.Replace("&#xB8;", "¸")
-            If filterstring.IndexOf("&#xB9;") <> -1 Then filterstring = filterstring.Replace("&#xB9;", "¹")
-            If filterstring.IndexOf("&#xBA;") <> -1 Then filterstring = filterstring.Replace("&#xBA;", "º")
-            If filterstring.IndexOf("&#xBB;") <> -1 Then filterstring = filterstring.Replace("&#xBB;", "»")
-            If filterstring.IndexOf("&#xBC;") <> -1 Then filterstring = filterstring.Replace("&#xBC;", "¼")
-            If filterstring.IndexOf("&#xBD;") <> -1 Then filterstring = filterstring.Replace("&#xBD;", "½")
-            If filterstring.IndexOf("&#xBE;") <> -1 Then filterstring = filterstring.Replace("&#xBE;", "¾")
-            If filterstring.IndexOf("&#xBF;") <> -1 Then filterstring = filterstring.Replace("&#xBF;", "¿")
-
-
-            If filterstring.IndexOf("&#xC0;") <> -1 Then filterstring = filterstring.Replace("&#xC0;", "À")
-            If filterstring.IndexOf("&#xC1;") <> -1 Then filterstring = filterstring.Replace("&#xC1;", "Á")
-            If filterstring.IndexOf("&#xC2;") <> -1 Then filterstring = filterstring.Replace("&#xC2;", "Â")
-            If filterstring.IndexOf("&#xC3;") <> -1 Then filterstring = filterstring.Replace("&#xC3;", "Ã")
-            If filterstring.IndexOf("&#xC4;") <> -1 Then filterstring = filterstring.Replace("&#xC4;", "Ä")
-            If filterstring.IndexOf("&#xC5;") <> -1 Then filterstring = filterstring.Replace("&#xC5;", "Å")
-            If filterstring.IndexOf("&#xC6;") <> -1 Then filterstring = filterstring.Replace("&#xC6;", "Æ")
-            If filterstring.IndexOf("&#xC7;") <> -1 Then filterstring = filterstring.Replace("&#xC7;", "Ç")
-            If filterstring.IndexOf("&#xC8;") <> -1 Then filterstring = filterstring.Replace("&#xC8;", "È")
-            If filterstring.IndexOf("&#xC9;") <> -1 Then filterstring = filterstring.Replace("&#xC9;", "É")
-            If filterstring.IndexOf("&#xCA;") <> -1 Then filterstring = filterstring.Replace("&#xCA;", "Ê")
-            If filterstring.IndexOf("&#xCB;") <> -1 Then filterstring = filterstring.Replace("&#xCB;", "Ë")
-            If filterstring.IndexOf("&#xCC;") <> -1 Then filterstring = filterstring.Replace("&#xCC;", "Ì")
-            If filterstring.IndexOf("&#xCD;") <> -1 Then filterstring = filterstring.Replace("&#xCD;", "Í")
-            If filterstring.IndexOf("&#xCE;") <> -1 Then filterstring = filterstring.Replace("&#xCE;", "Î")
-            If filterstring.IndexOf("&#xCF;") <> -1 Then filterstring = filterstring.Replace("&#xCF;", "Ï")
-
-
-            If filterstring.IndexOf("&#xD0;") <> -1 Then filterstring = filterstring.Replace("&#xD0;", "Ð")
-            If filterstring.IndexOf("&#xD1;") <> -1 Then filterstring = filterstring.Replace("&#xD1;", "Ñ")
-            If filterstring.IndexOf("&#xD2;") <> -1 Then filterstring = filterstring.Replace("&#xD2;", "Ò")
-            If filterstring.IndexOf("&#xD3;") <> -1 Then filterstring = filterstring.Replace("&#xD3;", "Ó")
-            If filterstring.IndexOf("&#xD4;") <> -1 Then filterstring = filterstring.Replace("&#xD4;", "Ô")
-            If filterstring.IndexOf("&#xD5;") <> -1 Then filterstring = filterstring.Replace("&#xD5;", "Õ")
-            If filterstring.IndexOf("&#xD6;") <> -1 Then filterstring = filterstring.Replace("&#xD6;", "Ö")
-            If filterstring.IndexOf("&#xD7;") <> -1 Then filterstring = filterstring.Replace("&#xD7;", "×")
-            If filterstring.IndexOf("&#xD8;") <> -1 Then filterstring = filterstring.Replace("&#xD8;", "Ø")
-            If filterstring.IndexOf("&#xD9;") <> -1 Then filterstring = filterstring.Replace("&#xD9;", "Ù")
-            If filterstring.IndexOf("&#xDA;") <> -1 Then filterstring = filterstring.Replace("&#xDA;", "Ú")
-            If filterstring.IndexOf("&#xDB;") <> -1 Then filterstring = filterstring.Replace("&#xDB;", "Û")
-            If filterstring.IndexOf("&#xDC;") <> -1 Then filterstring = filterstring.Replace("&#xDC;", "Ü")
-            If filterstring.IndexOf("&#xDD;") <> -1 Then filterstring = filterstring.Replace("&#xDD;", "Ý")
-            If filterstring.IndexOf("&#xDE;") <> -1 Then filterstring = filterstring.Replace("&#xDE;", "Þ")
-            If filterstring.IndexOf("&#xDF;") <> -1 Then filterstring = filterstring.Replace("&#xDF;", "ß")
-
-
-            If filterstring.IndexOf("&#xE0;") <> -1 Then filterstring = filterstring.Replace("&#xE0;", "à")
-            If filterstring.IndexOf("&#xE1;") <> -1 Then filterstring = filterstring.Replace("&#xE1;", "á")
-            If filterstring.IndexOf("&#xE2;") <> -1 Then filterstring = filterstring.Replace("&#xE2;", "â")
-            If filterstring.IndexOf("&#xE3;") <> -1 Then filterstring = filterstring.Replace("&#xE3;", "ã")
-            If filterstring.IndexOf("&#xE4;") <> -1 Then filterstring = filterstring.Replace("&#xE4;", "ä")
-            If filterstring.IndexOf("&#xE5;") <> -1 Then filterstring = filterstring.Replace("&#xE5;", "å")
-            If filterstring.IndexOf("&#xE6;") <> -1 Then filterstring = filterstring.Replace("&#xE6;", "æ")
-            If filterstring.IndexOf("&#xE7;") <> -1 Then filterstring = filterstring.Replace("&#xE7;", "ç")
-            If filterstring.IndexOf("&#xE8;") <> -1 Then filterstring = filterstring.Replace("&#xE8;", "è")
-            If filterstring.IndexOf("&#xE9;") <> -1 Then filterstring = filterstring.Replace("&#xE9;", "é")
-            If filterstring.IndexOf("&#xEA;") <> -1 Then filterstring = filterstring.Replace("&#xEA;", "ê")
-            If filterstring.IndexOf("&#xEB;") <> -1 Then filterstring = filterstring.Replace("&#xEB;", "ë")
-            If filterstring.IndexOf("&#xEC;") <> -1 Then filterstring = filterstring.Replace("&#xEC;", "ì")
-            If filterstring.IndexOf("&#xED;") <> -1 Then filterstring = filterstring.Replace("&#xED;", "í")
-            If filterstring.IndexOf("&#xEE;") <> -1 Then filterstring = filterstring.Replace("&#xEE;", "î")
-            If filterstring.IndexOf("&#xEF;") <> -1 Then filterstring = filterstring.Replace("&#xEF;", "ï")
-
-
-            If filterstring.IndexOf("&#xF0;") <> -1 Then filterstring = filterstring.Replace("&#xF0;", "ð")
-            If filterstring.IndexOf("&#xF1;") <> -1 Then filterstring = filterstring.Replace("&#xF1;", "ñ")
-            If filterstring.IndexOf("&#xF2;") <> -1 Then filterstring = filterstring.Replace("&#xF2;", "ò")
-            If filterstring.IndexOf("&#xF3;") <> -1 Then filterstring = filterstring.Replace("&#xF3;", "ó")
-            If filterstring.IndexOf("&#xF4;") <> -1 Then filterstring = filterstring.Replace("&#xF4;", "ô")
-            If filterstring.IndexOf("&#xF5;") <> -1 Then filterstring = filterstring.Replace("&#xF5;", "õ")
-            If filterstring.IndexOf("&#xF6;") <> -1 Then filterstring = filterstring.Replace("&#xF6;", "ö")
-            If filterstring.IndexOf("&#xF7;") <> -1 Then filterstring = filterstring.Replace("&#xF7;", "÷")
-            If filterstring.IndexOf("&#xF8;") <> -1 Then filterstring = filterstring.Replace("&#xF8;", "ø")
-            If filterstring.IndexOf("&#xF9;") <> -1 Then filterstring = filterstring.Replace("&#xF9;", "ù")
-            If filterstring.IndexOf("&#xFA;") <> -1 Then filterstring = filterstring.Replace("&#xFA;", "ú")
-            If filterstring.IndexOf("&#xFB;") <> -1 Then filterstring = filterstring.Replace("&#xFB;", "û")
-            If filterstring.IndexOf("&#xFC;") <> -1 Then filterstring = filterstring.Replace("&#xFC;", "ü")
-            If filterstring.IndexOf("&#xFD;") <> -1 Then filterstring = filterstring.Replace("&#xFD;", "ý")
-            If filterstring.IndexOf("&#xFE;") <> -1 Then filterstring = filterstring.Replace("&#xFE;", "þ")
-            If filterstring.IndexOf("&#xFF;") <> -1 Then filterstring = filterstring.Replace("&#xFF;", "ÿ")
-            If filterstring.IndexOf("&oacute;") <> -1 Then filterstring = filterstring.Replace("&oacute;", "ó")
-            If filterstring.IndexOf("&eacute;") <> -1 Then filterstring = filterstring.Replace("&eacute;", "é")
-            '
-
-            Return filterstring
-        Catch
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function ' Replace special IMDB chrs with ascii
-
-
-
 
 End Class
 

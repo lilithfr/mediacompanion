@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Data
 Imports System.Text.RegularExpressions
+Imports Media_Companion.Utilities
 
 
 Public Class frmTVShowBrowser
@@ -13,21 +14,28 @@ Public Class frmTVShowBrowser
     Dim urllinecount As Integer = 0
     Dim returnedresults(100, 2) As String
     Dim resultcount As Integer = 0
-    Dim languagecode As String = Form1.userprefs.tvdblanguagecode
+    Dim languagecode As String = Preferences.tvdblanguagecode
     Dim actors(1000, 3) As String
 
 
 
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Call loadresults()
+        Try
+            Call loadresults()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub TextBox1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            Call loadresults()
-        End If
-
+        Try
+            If e.KeyCode = Keys.Enter Then
+                Call loadresults()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub loadresults()
@@ -35,7 +43,7 @@ Public Class frmTVShowBrowser
         ListBox1.Items.Clear()
         ReDim returnedresults(100, 2)
         resultcount = 0
-        url = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & TextBox1.Text & "&language=all"
+        url = URLs.TVdbGetSeries(TextBox1.Text)
         Call loadwebpage()
         For f = 1 To urllinecount
             If websource(f).IndexOf("<seriesid>") <> -1 Then
@@ -53,7 +61,7 @@ Public Class frmTVShowBrowser
                     websource(f + 3) = websource(f + 3).Replace("</banner>", "")
                     websource(f + 3) = websource(f + 3).Replace("  ", "")
                     returnedresults(resultcount, 2) = websource(f + 3)
-                    returnedresults(resultcount, 2) = "http://images.thetvdb.com/banners/_cache/" & returnedresults(resultcount, 2)
+                    returnedresults(resultcount, 2) = URLs.TVdbBannersCache(returnedresults(resultcount, 2))
                 End If
             End If
         Next
@@ -112,24 +120,23 @@ Public Class frmTVShowBrowser
 
 
     Private Sub ListBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
-
-        Dim counter As Integer = ListBox1.SelectedIndex + 1
-        If returnedresults(counter, 2) <> Nothing Then
-            PictureBox1.ImageLocation = returnedresults(counter, 2)
-        Else
-            PictureBox1.Image = Nothing
-        End If
-
-
-        Call checklanguage()
+        Try
+            Dim counter As Integer = ListBox1.SelectedIndex + 1
+            If returnedresults(counter, 2) <> Nothing Then
+                PictureBox1.ImageLocation = returnedresults(counter, 2)
+            Else
+                PictureBox1.Image = Nothing
+            End If
 
 
-
-
-
+            Call checklanguage()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
+
     Private Sub checklanguage()
-        url = "http://thetvdb.com/api/6E82FED600783400/series/" & returnedresults(ListBox1.SelectedIndex + 1, 1) & "/" & languagecode & ".xml"
+        url = URLs.TVdbSeriesLanguageXML(returnedresults(ListBox1.SelectedIndex + 1, 1), languagecode)
         Call loadwebpage()
 
         For f = 1 To urllinecount
@@ -149,470 +156,14 @@ Public Class frmTVShowBrowser
 
 
     Private Sub ListBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox2.SelectedIndexChanged
-        Dim count As Integer = ListBox2.SelectedIndex + 1
-        languagecode = languages(count, 1)
-        Call checklanguage()
+        Try
+            Dim count As Integer = ListBox2.SelectedIndex + 1
+            languagecode = languages(count, 1)
+            Call checklanguage()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
-
-    'Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-    '    If Label5.Text.IndexOf("not available") <> -1 Then
-    '        MsgBox("This Show is not Available in your Selected Language" & vbCrLf & vbCrLf & "               Please Select Another Language")
-    '        Exit Sub
-    '    End If
-    '    Form1.messbox.TextBox1.Text = "Please Wait"
-    '    Form1.messbox.TextBox2.Text = ""
-    '    Form1.messbox.TextBox3.Text = "Scraping TV Show"
-    '    Form1.messbox.Refresh()
-    '    Form1.messbox.Visible = True
-
-
-    '    Dim path As String = Form1.TextBox16.Text
-    '    Dim episodeguideurl As String = ""
-    '    Dim title As String = ""
-    '    Dim tvdbid As String = ""
-    '    Dim imdbid As String = ""
-    '    Dim cert As String = ""
-    '    Dim premiered As String = ""
-    '    Dim genre As String = ""
-    '    Dim language As String = ""
-    '    Dim rating As String = ""
-    '    Dim runtime As String = ""
-    '    Dim studio As String = ""
-    '    Dim plot As String = ""
-    '    Dim episodeactors As String = ""
-    '    Dim tvshowactors As String = ""
-    '    Dim sortorder As String = ""
-    '    Dim fanarturl As String = ""
-    '    Dim posterurl As String = ""
-    '    Dim seasonurl(100) As String
-    '    Dim artstyle As String = ""
-    '    Dim episodeactorsource As String = ""
-
-
-    '    If RadioButton7.Checked = True Then
-    '        artstyle = "poster"
-    '    Else
-    '        artstyle = "banner"
-    '    End If
-
-    '    If RadioButton5.Checked = True Then
-    '        episodeactorsource = "tvdb"
-    '    Else
-    '        episodeactorsource = "imdb"
-    '    End If
-
-
-    '    If RadioButton1.Checked = True Then
-    '        sortorder = "default"
-    '    Else
-    '        sortorder = "dvd"
-    '    End If
-
-    '    If RadioButton3.Checked = True Then
-    '        tvshowactors = "tvdb"
-    '    Else
-    '        tvshowactors = "imdb"
-    '    End If
-    '    If RadioButton5.Checked = True Then
-    '        episodeactors = "tvdb"
-    '    Else
-    '        episodeactors = "imdb"
-    '    End If
-
-    '    url = "http://thetvdb.com/api/6E82FED600783400/series/" & returnedresults(ListBox1.SelectedIndex + 1, 1) & "/" & languagecode & ".xml"
-
-    '    Dim wrGETURL As WebRequest
-    '    wrGETURL = WebRequest.Create(url)
-    '    Dim myProxy As New WebProxy("myproxy", 80)
-    '    myProxy.BypassProxyOnLocal = True
-    '    Dim objStream As Stream
-    '    objStream = wrGETURL.GetResponse.GetResponseStream()
-    '    Dim objReader As New StreamReader(objStream)
-    '    Dim sLine As String = ""
-    '    urllinecount = 0
-    '    sLine = objReader.ReadToEnd
-    '    objReader.Close()
-
-    '    If sLine = "" Then
-    '        MsgBox("Unable to Download Show Info")
-    '        Exit Sub
-    '    End If
-
-    '    Dim matched() As String = {"<id>([^<]*)</id>", "<ContentRating>([^<]*)</ContentRating>", "<FirstAired>([^<]*)</FirstAired>", "<Genre>([^<]*)</Genre>", "<IMDB_ID>([^<]*)</IMDB_ID>", "<Language>([^<]*)</Language>", "<Network>([^<]*)</Network>", "<Overview>([^<]*)</Overview>", "<Rating>([^<]*)</Rating>", "<Runtime>([^<]*)</Runtime>", "<SeriesName>([^<]*)</SeriesName>"}
-
-
-
-    '    Dim M2 As Match
-
-    '    For f = 0 To UBound(matched)
-    '        M2 = Regex.Match(sLine, matched(f))
-    '        If M2.Success = True Then
-    '            If matched(f).IndexOf("</SeriesName>") <> -1 Then
-    '                title = M2.Groups(1).Value
-    '                title = specchars(title)
-    '                title = encodespecialchrs(title)
-    '            ElseIf matched(f).IndexOf("</Rating>") <> -1 Then
-    '                rating = M2.Groups(1).Value
-    '                rating = specchars(rating)
-    '                rating = encodespecialchrs(rating)
-    '            ElseIf matched(f).IndexOf("</FirstAired>") <> -1 Then
-    '                premiered = M2.Groups(1).Value
-    '                premiered = specchars(premiered)
-    '                premiered = encodespecialchrs(premiered)
-    '            ElseIf matched(f).IndexOf("</Overview>") <> -1 Then
-    '                plot = M2.Groups(1).Value
-    '                plot = specchars(plot)
-    '                plot = encodespecialchrs(plot)
-    '            ElseIf matched(f).IndexOf("</Runtime>") <> -1 Then
-    '                runtime = M2.Groups(1).Value
-    '                runtime = specchars(runtime)
-    '                runtime = encodespecialchrs(runtime)
-    '            ElseIf matched(f).IndexOf("</Genre>") <> -1 Then
-    '                genre = M2.Groups(1).Value
-    '                genre = specchars(genre)
-    '                genre = encodespecialchrs(genre)
-    '                genre = genre.TrimStart("|")
-    '                genre = genre.TrimEnd("|")
-    '                genre = genre.Replace("|", "/")
-    '            ElseIf matched(f).IndexOf("</Network>") <> -1 Then
-    '                studio = M2.Groups(1).Value
-    '                studio = specchars(studio)
-    '                studio = encodespecialchrs(studio)
-    '            ElseIf matched(f).IndexOf("</id>") <> -1 Then
-    '                tvdbid = M2.Groups(1).Value
-    '            ElseIf matched(f).IndexOf("</IMDB_ID>") <> -1 Then
-    '                imdbid = M2.Groups(1).Value
-    '            ElseIf matched(f).IndexOf("</ContentRating>") <> -1 Then
-    '                cert = M2.Groups(1).Value
-    '            ElseIf matched(f).IndexOf("</Language>") <> -1 Then
-    '                language = M2.Groups(1).Value
-    '            End If
-    '        End If
-    '    Next
-
-    '    If imdbid <> "" Then
-    '        If imdbid.IndexOf("tt") = -1 Then
-    '            If IsNumeric(imdbid) Then
-    '                If imdbid.Length = 7 Then
-    '                    imdbid = "tt" & imdbid
-    '                End If
-    '            Else
-    '                imdbid = ""
-    '            End If
-    '        End If
-    '    End If
-    '    episodeguideurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
-    '    'http://thetvdb.com/api/6E82FED600783400/series/73255/all/en.zip
-    '    If tvshowactors = "imdb" And imdbid <> "" Then
-    '        Call gettvdbactors(tvdbid)
-    '    End If
-
-    '    If tvshowactors = "tvdb" Or imdbid = "" Or actorcount = 0 Then
-    '        Call gettvdbactors(tvdbid)
-    '    End If
-
-    '    Dim tempstring As String
-    '    tempstring = path & "tvshow.nfo"
-    '    Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
-
-    '    file.WriteLine("<?xml version=""1.0"" encoding=""UTF-8""?>")
-    '    file.WriteLine("<tvshow>")
-    '    file.WriteLine("    <title>" & title & "</title>")
-    '    file.WriteLine("    <rating>" & rating & "</rating>")
-    '    file.WriteLine("    <season>-1</season>")
-    '    file.WriteLine("    <episode>0</episode>")
-    '    file.WriteLine("    <displayseason>-1</displayseason>")
-    '    file.WriteLine("    <displayepisode>-1</displayepisode>")
-    '    file.WriteLine("    <episodeguideurl>" & episodeguideurl & "</episodeguideurl>")
-    '    file.WriteLine("    <plot>" & plot & "</plot>")
-    '    file.WriteLine("    <runtime>" & runtime & "</runtime>")
-    '    file.WriteLine("    <mpaa>" & cert & "</mpaa>")
-    '    file.WriteLine("    <id>" & imdbid & "</id>")
-    '    file.WriteLine("    <tvdbid>" & tvdbid & "</tvdbid>")
-    '    file.WriteLine("    <genre>" & genre & "</genre>")
-    '    file.WriteLine("    <premiered>" & premiered & "</premiered>")
-    '    file.WriteLine("    <studio>" & studio & "</studio>")
-    '    file.WriteLine("    <sortorder>" & sortorder & "</sortorder>")
-    '    file.WriteLine("    <language>" & language & "</language>")
-    '    file.WriteLine("    <episodeactorsource>" & episodeactorsource & "</episodeactorsource>")
-
-    '    If actorcount > Form1.userprefs.maxactors Then actorcount = Form1.userprefs.maxactors
-
-    '    For f = 1 To actorcount
-    '        file.WriteLine("    <actor>")
-    '        file.WriteLine("        <name>" & actors(f, 0) & "</name>")
-    '        file.WriteLine("        <role>" & actors(f, 1) & "</role>")
-    '        If actors(f, 2) <> Nothing Then file.WriteLine("        <thumb>" & actors(f, 2) & "</thumb>")
-    '        file.WriteLine("    </actor>")
-    '    Next
-
-    '    file.WriteLine("</tvshow>")
-
-
-    '    file.Close()
-
-    '    If CheckBox1.CheckState = CheckState.Checked Or CheckBox2.CheckState = CheckState.Checked Then
-    '        url = "http://thetvdb.com/api/6E82FED600783400/series/" & returnedresults(ListBox1.SelectedIndex + 1, 1) & "/" & languagecode & ".xml"
-
-
-    '        wrGETURL = WebRequest.Create(url)
-    '        myProxy.BypassProxyOnLocal = True
-    '        objStream = wrGETURL.GetResponse.GetResponseStream()
-    '        Dim objReader2 As New StreamReader(objStream)
-    '        urllinecount = 0
-    '        sLine = objReader2.ReadToEnd
-    '        objReader2.Close()
-
-    '        Dim match As String = ""
-    '        If CheckBox1.CheckState = CheckState.Checked Then
-    '            If RadioButton7.Checked = True Then
-    '                'download poster
-    '                match = "<poster>([^<]*)</poster>"
-    '                M2 = Regex.Match(sLine, match)
-    '                If M2.Success = True And M2.Groups(1).Value <> "" Then
-    '                    match = "http://images.thetvdb.com/banners/" & M2.Groups(1).Value
-    '                    Try
-    '                        Dim buffer(4000000) As Byte
-    '                        Dim size As Integer = 0
-    '                        Dim bytesRead As Integer = 0
-    '                        Dim req As HttpWebRequest = req.Create(match)
-    '                        Dim res As HttpWebResponse = req.GetResponse()
-    '                        Dim contents As Stream = res.GetResponseStream()
-    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
-    '                        While bytesToRead > 0
-    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                            If size = 0 Then Exit While
-    '                            bytesToRead -= size
-    '                            bytesRead += size
-    '                        End While
-    '                        Dim showthumbpath As String = path & "folder.jpg"
-    '                        Dim fstrm As New FileStream(showthumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-    '                        fstrm.Write(buffer, 0, bytesRead)
-    '                        contents.Close()
-    '                        fstrm.Close()
-    '                    Catch
-    '                    End Try
-    '                End If
-    '            End If
-    '            If RadioButton8.Checked = True Then
-    '                'download banner
-    '                match = "<banner>([^<]*)</banner>"
-    '                M2 = Regex.Match(sLine, match)
-    '                If M2.Success = True And M2.Groups(1).Value <> "" Then
-    '                    match = "http://images.thetvdb.com/banners/" & M2.Groups(1).Value
-    '                    Try
-    '                        Dim buffer(4000000) As Byte
-    '                        Dim size As Integer = 0
-    '                        Dim bytesRead As Integer = 0
-    '                        Dim req As HttpWebRequest = req.Create(match)
-    '                        Dim res As HttpWebResponse = req.GetResponse()
-    '                        Dim contents As Stream = res.GetResponseStream()
-    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
-    '                        While bytesToRead > 0
-    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                            If size = 0 Then Exit While
-    '                            bytesToRead -= size
-    '                            bytesRead += size
-    '                        End While
-    '                        Dim showthumbpath As String = path & "folder.jpg"
-    '                        Dim fstrm As New FileStream(showthumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-    '                        fstrm.Write(buffer, 0, bytesRead)
-    '                        contents.Close()
-    '                        fstrm.Close()
-    '                    Catch
-    '                    End Try
-    '                End If
-    '            End If
-    '        End If
-    '        If CheckBox2.CheckState = CheckState.Checked Then
-    '            match = "<fanart>([^<]*)</fanart>"
-    '            M2 = Regex.Match(sLine, match)
-    '            If M2.Success = True And M2.Groups(1).Value <> "" Then
-    '                match = "http://images.thetvdb.com/banners/" & M2.Groups(1).Value
-    '                Try
-    '                    Dim buffer(4000000) As Byte
-    '                    Dim size As Integer = 0
-    '                    Dim bytesRead As Integer = 0
-    '                    Dim req As HttpWebRequest = req.Create(match)
-    '                    Dim res As HttpWebResponse = req.GetResponse()
-    '                    Dim contents As Stream = res.GetResponseStream()
-    '                    Dim bytesToRead As Integer = CInt(buffer.Length)
-    '                    Dim bmp As New Bitmap(contents)
-    '                    While bytesToRead > 0
-    '                        size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                        If size = 0 Then Exit While
-    '                        bytesToRead -= size
-    '                        bytesRead += size
-    '                    End While
-    '                    Dim showthumbpath As String = path & "fanart.jpg"
-
-    '                    If Form1.resizefanart = 1 Then
-    '                        bmp.Save(showthumbpath, Imaging.ImageFormat.Jpeg)
-    '                    ElseIf Form1.resizefanart = 2 Then
-    '                        If bmp.Width > 1280 Or bmp.Height > 720 Then
-    '                            Dim bm_source As New Bitmap(bmp)
-    '                            Dim bm_dest As New Bitmap(1280, 720)
-    '                            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-    '                            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-    '                            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-    '                            bm_dest.Save(showthumbpath, Imaging.ImageFormat.Jpeg)
-    '                        Else
-    '                            bmp.Save(showthumbpath, Imaging.ImageFormat.Jpeg)
-    '                        End If
-    '                    ElseIf Form1.resizefanart = 3 Then
-    '                        If bmp.Width > 960 Or bmp.Height > 540 Then
-    '                            Dim bm_source As New Bitmap(bmp)
-    '                            Dim bm_dest As New Bitmap(960, 540)
-    '                            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-    '                            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-    '                            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-    '                            bm_dest.Save(showthumbpath, Imaging.ImageFormat.Jpeg)
-    '                        Else
-    '                            bmp.Save(showthumbpath, Imaging.ImageFormat.Jpeg)
-    '                        End If
-    '                    End If
-    '                Catch
-    '                End Try
-    '            End If
-    '        End If
-    '        If CheckBox3.CheckState = CheckState.Checked Then
-    '            ReDim websource(10000)
-    '            url = "http://thetvdb.com/api/6E82FED600783400/series/" & returnedresults(ListBox1.SelectedIndex + 1, 1) & "/banners.xml"
-    '            wrGETURL = WebRequest.Create(url)
-    '            myProxy.BypassProxyOnLocal = True
-    '            objStream = wrGETURL.GetResponse.GetResponseStream()
-    '            Dim objReader3 As New StreamReader(objStream)
-    '            urllinecount = 0
-    '            sLine = ""
-    '            Do While Not sLine Is Nothing
-    '                urllinecount += 1
-    '                sLine = objReader3.ReadLine
-    '                If Not sLine Is Nothing Then
-    '                    websource(urllinecount) = sLine
-    '                End If
-    '            Loop
-    '            urllinecount -= 1
-    '            objReader3.Close()
-    '            '<Season>" & series.ToString & "</Season>
-    '            Dim done As Boolean = False
-    '            For f = 0 To 50
-    '                Dim preferredurl(1) As String
-    '                preferredurl(0) = ""
-    '                preferredurl(1) = ""
-    '                For g = 2 To urllinecount
-    '                    If websource(g).IndexOf("<Season>" & f.ToString & "</Season>") <> -1 And websource(g - 1).IndexOf("<Language>" & languagecode & "</Language>") <> -1 Then
-    '                        Dim urlstring As String = websource(g - 4)
-    '                        urlstring = urlstring.Replace("<BannerPath>", "")
-    '                        urlstring = urlstring.Replace("</BannerPath>", "")
-    '                        urlstring = urlstring.Replace("  ", "")
-    '                        preferredurl(0) = "http://images.thetvdb.com/banners/" & urlstring
-    '                    ElseIf websource(g).IndexOf("<Season>" & f.ToString & "</Season>") <> -1 And websource(g - 1).IndexOf("<Language>" & languagecode & "</Language>") = -1 Then
-    '                        Dim urlstring As String = websource(g - 4)
-    '                        urlstring = urlstring.Replace("<BannerPath>", "")
-    '                        urlstring = urlstring.Replace("</BannerPath>", "")
-    '                        urlstring = urlstring.Replace("  ", "")
-    '                        preferredurl(1) = "http://images.thetvdb.com/banners/" & urlstring
-    '                    End If
-    '                    If preferredurl(0) <> "" Then
-    '                        Dim urlstring As String = preferredurl(0)
-    '                        Try
-    '                            Dim buffer(4000000) As Byte
-    '                            Dim size As Integer = 0
-    '                            Dim bytesRead As Integer = 0
-    '                            Dim req As HttpWebRequest = req.Create(urlstring)
-    '                            Dim res As HttpWebResponse = req.GetResponse()
-    '                            Dim contents As Stream = res.GetResponseStream()
-    '                            Dim bytesToRead As Integer = CInt(buffer.Length)
-    '                            While bytesToRead > 0
-    '                                size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                                If size = 0 Then Exit While
-    '                                bytesToRead -= size
-    '                                bytesRead += size
-    '                            End While
-    '                            Dim showthumbpath As String = ""
-    '                            If f < 10 Then
-    '                                showthumbpath = path & "season0" & f.ToString & ".tbn"
-    '                            Else
-    '                                showthumbpath = path & "season" & f.ToString & ".tbn"
-    '                            End If
-    '                            Dim fstrm As New FileStream(showthumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-    '                            fstrm.Write(buffer, 0, bytesRead)
-    '                            contents.Close()
-    '                            fstrm.Close()
-    '                        Catch
-    '                        End Try
-    '                        done = True
-    '                        Exit For
-    '                    End If
-    '                Next
-    '                If done = False And preferredurl(1) <> "" Then
-    '                    Dim urlstring As String = preferredurl(1)
-    '                    Try
-    '                        Dim buffer(4000000) As Byte
-    '                        Dim size As Integer = 0
-    '                        Dim bytesRead As Integer = 0
-    '                        Dim req As HttpWebRequest = req.Create(urlstring)
-    '                        Dim res As HttpWebResponse = req.GetResponse()
-    '                        Dim contents As Stream = res.GetResponseStream()
-    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
-    '                        While bytesToRead > 0
-    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                            If size = 0 Then Exit While
-    '                            bytesToRead -= size
-    '                            bytesRead += size
-    '                        End While
-    '                        Dim showthumbpath As String = ""
-    '                        If f < 10 Then
-    '                            showthumbpath = path & "season0" & f.ToString & ".tbn"
-    '                        Else
-    '                            showthumbpath = path & "season" & f.ToString & ".tbn"
-    '                        End If
-    '                        Dim fstrm As New FileStream(showthumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-    '                        fstrm.Write(buffer, 0, bytesRead)
-    '                        contents.Close()
-    '                        fstrm.Close()
-    '                    Catch
-    '                    End Try
-    '                End If
-
-    '            Next
-
-
-
-    '        End If
-
-
-
-
-
-
-    '    End If
-    '    objReader.Close()
-
-
-    '    For f = 1 To Form1.ammountoftvpaths
-    '        If Form1.seriesname(f, 0) & "\" = path Then
-    '            Form1.seriesname(f, 1) = title
-    '            Form1.seriesname(f, 2) = tvdbid
-    '            Form1.seriesname(f, 3) = imdbid
-    '            Form1.seriesname(f, 5) = sortorder
-    '            Form1.seriesname(f, 6) = languagecode
-    '            Form1.seriesname(f, 7) = episodeactorsource
-    '        End If
-    '    Next
-
-    '    System.Windows.Forms.Cursor.Current = Cursors.Default
-    '    'newforem.Close()
-    '    Form1.messbox.Visible = False
-
-
-
-
-
-    '    Me.Close()
-
-
-    'End Sub
 
     Private Sub getimdbactors(ByVal imdbid)
 
@@ -622,7 +173,7 @@ Public Class frmTVShowBrowser
         Dim last As Integer
         actorcount = 0
 
-        url = "http://www.imdb.com/title/" & imdbid
+        url = URLs.IMDBUrl(imdbid)
         Call loadwebpage()
 
         Dim tempstring As String = ""
@@ -644,8 +195,8 @@ Public Class frmTVShowBrowser
                 actorcount = tempint
                 For g = 1 To actorcount
                     actors(g, 3) = actors(g, 0).Substring(actors(g, 0).IndexOf("<a href=""/name/nm") + 15, 9)
-                    If actors(g, 0).IndexOf("http://resume.imdb.com") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://resume.imdb.com", "")
-                    If actors(g, 0).IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
+                    If actors(g, 0).IndexOf(URLs.IMDBResume) <> -1 Then actors(g, 0) = actors(g, 0).Replace(URLs.IMDBResume, "")
+                    If actors(g, 0).IndexOf(URLs.IMDBAddPhotoGif()) <> -1 Then actors(g, 0) = actors(g, 0).Replace(URLs.IMDBAddPhotoGif(), "")
                     If actors(g, 0).IndexOf("</td></tr></table>") <> -1 Then
                         tempint = actors(g, 0).IndexOf("</td></tr></table>")
                         tempstring = actors(g, 0).Substring(tempint, actors(g, 0).Length - tempint)
@@ -654,7 +205,7 @@ Public Class frmTVShowBrowser
                     If actors(g, 0).IndexOf("link=/name/") <> -1 And actors(g, 0).IndexOf("/';""><img") <> -1 Then
                         actors(g, 2) = actors(g, 0).Substring(actors(g, 0).IndexOf("link=/name/") + 11, actors(g, 0).IndexOf("/';""><img") - actors(g, 0).IndexOf("link=/name/") - 11)
                         actorcode(g) = actors(g, 2)
-                        actors(g, 2) = "http://www.imdb.com/name/" & actors(g, 2)
+                        actors(g, 2) = URLs.IMDBName(actors(g, 2))
                     End If
                     If actors(g, 0).IndexOf("a href=""/character") <> -1 Then
                         actors(g, 1) = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character") + 19, actors(g, 0).IndexOf("</td></tr><tr class") - actors(g, 0).IndexOf("a href=""/character") - 19)
@@ -696,38 +247,20 @@ Public Class frmTVShowBrowser
                             If tempstring.IndexOf("http") <> -1 And tempstring.IndexOf("jpg") <> -1 Then
                                 actors(f, 2) = tempstring.Substring(tempstring.IndexOf("http"), tempstring.IndexOf("jpg") - tempstring.IndexOf("http") + 3)
                                 Exit For
-                                If Form1.userprefs.actorsave = True Then
-                                    Dim workingpath As String = ""
-                                    Dim networkpath As String = Form1.userprefs.actorsavepath
-                                    If actors(f, 2) <> Nothing Then
-                                        If actors(f, 2) <> "" Then
-                                            Try
-                                                workingpath = networkpath & "\" & actors(f, 3) & ".jpg"
-                                                If Not IO.File.Exists(workingpath) Then
-                                                    Dim buffer(4000000) As Byte
-                                                    Dim size As Integer = 0
-                                                    Dim bytesRead As Integer = 0
-                                                    Dim thumburl As String = actors(f, 2)
-                                                    Dim req As HttpWebRequest = req.Create(thumburl)
-                                                    Dim res As HttpWebResponse = req.GetResponse()
-                                                    Dim contents As Stream = res.GetResponseStream()
-                                                    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                    While bytesToRead > 0
-                                                        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                        If size = 0 Then Exit While
-                                                        bytesToRead -= size
-                                                        bytesRead += size
-                                                    End While
-
-                                                    Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                    fstrm.Write(buffer, 0, bytesRead)
-                                                    contents.Close()
-                                                    fstrm.Close()
-                                                End If
-                                                actors(f, 2) = IO.Path.Combine(Form1.userprefs.actornetworkpath, actors(f, 3) & ".jpg")
-                                            Catch
-                                            End Try
-                                        End If
+                            End If
+                            If Preferences.actorsave = True Then
+                                If actors(f, 2) <> Nothing Then
+                                    If actors(f, 2) <> "" Then
+                                        Try
+                                            Dim workingpath As String = ""
+                                            Dim networkpath As String = Preferences.actorsavepath
+                                            workingpath = networkpath & "\" & actors(f, 3) & ".jpg"
+                                            If Not IO.File.Exists(workingpath) Then
+                                                Utilities.DownloadFile(actors(f, 2), workingpath)
+                                            End If
+                                            actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
+                                        Catch
+                                        End Try
                                     End If
                                 End If
                             End If
@@ -763,7 +296,7 @@ Public Class frmTVShowBrowser
 
         Application.DoEvents()
 
-        url = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
+        url = URLs.TVdbActorsXML(tvdbid)
         Call loadwebpage()
 
         For f = 1 To urllinecount
@@ -776,7 +309,7 @@ Public Class frmTVShowBrowser
                 End If
 
                 actors(actorcount, 2) = websource(f)
-                If actors(actorcount, 2) <> "" Then actors(actorcount, 2) = "http://images.thetvdb.com/banners/" & actors(actorcount, 2)
+                If actors(actorcount, 2) <> "" Then actors(actorcount, 2) = URLs.TVdbBanners(actors(actorcount, 2))
                 websource(f + 1) = websource(f + 1).Replace("  <Name>", "")
                 websource(f + 1) = websource(f + 1).Replace("</Name>", "")
                 actors(actorcount, 0) = websource(f + 1)
@@ -792,38 +325,19 @@ Public Class frmTVShowBrowser
                 actors(f, 1) = specchars(actors(f, 1))
                 actors(f, 0) = encodespecialchrs(actors(f, 0))
                 actors(f, 1) = encodespecialchrs(actors(f, 1))
-                If Form1.userprefs.actorsave = True Then
+                If Preferences.actorsave = True Then
                     Dim workingpath As String = ""
-                    Dim networkpath As String = Form1.userprefs.actorsavepath
+                    Dim networkpath As String = Preferences.actorsavepath
                     If actors(f, 2) <> Nothing Then
                         If actors(f, 2) <> "" Then
-                            'Try
+
                             workingpath = IO.Path.Combine(networkpath, actors(f, 3))
                             workingpath += ".jpg"
                             If Not IO.File.Exists(workingpath) Then
-                                Dim buffer(4000000) As Byte
-                                Dim size As Integer = 0
-                                Dim bytesRead As Integer = 0
-                                Dim thumburl As String = actors(f, 2)
-                                Dim req As HttpWebRequest = req.Create(thumburl)
-                                Dim res As HttpWebResponse = req.GetResponse()
-                                Dim contents As Stream = res.GetResponseStream()
-                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                While bytesToRead > 0
-                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                    If size = 0 Then Exit While
-                                    bytesToRead -= size
-                                    bytesRead += size
-                                End While
-
-                                Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                fstrm.Write(buffer, 0, bytesRead)
-                                contents.Close()
-                                fstrm.Close()
+                                Utilities.DownloadFile(actors(f, 2), workingpath)
                             End If
-                            actors(f, 2) = IO.Path.Combine(Form1.userprefs.actornetworkpath, actors(f, 3) & ".jpg")
-                            'Catch
-                            'End Try
+                            actors(f, 2) = IO.Path.Combine(Preferences.actornetworkpath, actors(f, 3) & ".jpg")
+                           
                         End If
                     End If
                 End If
@@ -1043,6 +557,7 @@ Public Class frmTVShowBrowser
             Return filterstring
         Catch
         End Try
+        Return "Error"
     End Function ' Replace special IMDB chrs with ascii
 
 

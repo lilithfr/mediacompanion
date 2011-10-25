@@ -21,7 +21,7 @@ Public Class frmTvFanart
     Dim title As String = Form1.titletxt.Text
     Dim itemnumber As Integer
     Dim rememberint As Integer
-    Dim maxthumbs As Integer = Form1.userprefs.maximumthumbs
+    Dim maxthumbs As Integer = Preferences.maximumthumbs
     Dim pagecount As Integer = 0
     Dim currentpage As Integer = 1
     Dim downloadthumb(3000, 1) As String
@@ -33,37 +33,60 @@ Public Class frmTvFanart
     Dim series As Integer
 
 
-
-
     Private Sub tvfanart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        'posterpath = Form1.tvpath & "fanart.jpg"
-        TextBox1.Text = maxthumbs.ToString
-        Me.Refresh()
-        Application.DoEvents()
-        Dim exists As Boolean = System.IO.File.Exists(posterpath)
-        If exists = True Then
+        Try
+            'posterpath = Form1.tvpath & "fanart.jpg"
+            TextBox1.Text = maxthumbs.ToString
+            Me.Refresh()
+            Application.DoEvents()
+            Dim exists As Boolean = System.IO.File.Exists(posterpath)
+            If exists = True Then
 
-            Dim tempstring As String
-            mainposter = New PictureBox
-            Try
-                Dim OriginalImage As New Bitmap(posterpath)
-                Dim Image2 As New Bitmap(OriginalImage)
-                OriginalImage.Dispose()
+                Dim tempstring As String
+                mainposter = New PictureBox
+                Try
+                    Dim OriginalImage As New Bitmap(posterpath)
+                    Dim Image2 As New Bitmap(OriginalImage)
+                    OriginalImage.Dispose()
 
-                With mainposter
-                    .Location = New Point(0, 0)
-                    .Width = 250
-                    .Height = 240
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .Image = Image2
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Anchor = AnchorStyles.Bottom Or AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-                End With
-                Me.Panel1.Controls.Add(mainposter)
-                tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
-                Label6.Text = tempstring
-            Catch
+                    With mainposter
+                        .Location = New Point(0, 0)
+                        .Width = 250
+                        .Height = 240
+                        .SizeMode = PictureBoxSizeMode.Zoom
+                        .Image = Image2
+                        .Visible = True
+                        .BorderStyle = BorderStyle.Fixed3D
+                        .Anchor = AnchorStyles.Bottom Or AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+                    End With
+                    Me.Panel1.Controls.Add(mainposter)
+                    tempstring = mainposter.Image.Width.ToString & " x " & mainposter.Image.Height.ToString
+                    Label6.Text = tempstring
+                Catch
+                    mainposter = New PictureBox
+                    With mainposter
+                        .Location = New Point(0, 0)
+                        .Width = 250
+                        .Height = 240
+                        .SizeMode = PictureBoxSizeMode.Zoom
+                        .Visible = False
+                        .BorderStyle = BorderStyle.Fixed3D
+                    End With
+                    Me.Panel1.Controls.Add(mainposter)
+                    Dim mainlabel As Label
+                    mainlabel = New Label
+                    With mainlabel
+                        .Location = New Point(0, 100)
+                        .Width = 423
+                        .Height = 100
+                        .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
+                        .Text = "No Local Poster Is Available For This Movie"
+                        .BringToFront()
+                    End With
+                    Me.Panel1.Controls.Add(mainlabel)
+                    Label6.Visible = False
+                End Try
+            Else
                 mainposter = New PictureBox
                 With mainposter
                     .Location = New Point(0, 0)
@@ -86,41 +109,20 @@ Public Class frmTvFanart
                 End With
                 Me.Panel1.Controls.Add(mainlabel)
                 Label6.Visible = False
-            End Try
-        Else
-            mainposter = New PictureBox
-            With mainposter
-                .Location = New Point(0, 0)
-                .Width = 250
-                .Height = 240
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .Visible = False
-                .BorderStyle = BorderStyle.Fixed3D
-            End With
-            Me.Panel1.Controls.Add(mainposter)
-            Dim mainlabel As Label
-            mainlabel = New Label
-            With mainlabel
-                .Location = New Point(0, 100)
-                .Width = 423
-                .Height = 100
-                .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-                .Text = "No Local Poster Is Available For This Movie"
-                .BringToFront()
-            End With
-            Me.Panel1.Controls.Add(mainlabel)
-            Label6.Visible = False
-        End If
+            End If
 
-        panel2 = New Panel
-        With panel2
-            .Width = 772
-            .Height = 237
-            .Location = New Point(2, 2)
-            .AutoScroll = True
-        End With
-        Me.Controls.Add(panel2)
+            panel2 = New Panel
+            With panel2
+                .Width = 772
+                .Height = 237
+                .Location = New Point(2, 2)
+                .AutoScroll = True
+            End With
+            Me.Controls.Add(panel2)
 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
 
@@ -128,18 +130,18 @@ Public Class frmTvFanart
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
                 maxthumbs = Convert.ToDecimal(TextBox1.Text)
-                Form1.userprefs.maximumthumbs = maxthumbs
+                Preferences.maximumthumbs = maxthumbs
             Else
                 MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
                 maxthumbs = 10
                 TextBox1.Text = "10"
-                Form1.userprefs.maximumthumbs = 10
+                Preferences.maximumthumbs = 10
             End If
         Else
             MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
             maxthumbs = 10
             TextBox1.Text = "10"
-            Form1.userprefs.maximumthumbs = 10
+            Preferences.maximumthumbs = 10
         End If
 
         Button5.Visible = False
@@ -381,17 +383,8 @@ Public Class frmTvFanart
         bigpicbox = Nothing
     End Sub
 
-
-
-
-
-
-
     Private Sub loadwebpage()
         urllinecount = 0
-
-
-
         Try
             Dim wrGETURL As WebRequest
             wrGETURL = WebRequest.Create(url)
@@ -412,74 +405,37 @@ Public Class frmTvFanart
             Loop
             objReader.Close()
             urllinecount -= 1
-            Dim tempboolean As Boolean
-            'tempboolean = Form1.forceexit
-            'If Form1.forceexit = True Then
-            '    objStream.Dispose()
-            '    Form1.completeclose = True
-            '    Application.Exit()
-            'End If
-
 
         Catch ex As WebException
             'MsgBox("Unable to load webpage " & url & vbCrLf & vbCrLf & ex.ToString)
         End Try
-
-
-
-
-
 
     End Sub
 
 
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
-
-        downloadthumbcount = 0
-        ReDim posterurls(1000, 1)
-        count = 0
-        pagecount = 0
-        Call initialise()
-        'url = "http://www.imdb.com/title/" & Form1.imdbidd & "/mediaindex"
-        Call loadwebpage()
-        Dim tempint As Integer
-        Dim imdbsmall(2000) As String
-        Dim reached As Boolean = False
-        Dim counter As Integer = 0
-        For f = 1 To urllinecount
-            If websource(f).IndexOf("<a href=""?page=") <> -1 Then
-                websource(f) = websource(f).Replace("<a href=""?page=", "")
-                websource(f) = websource(f).Substring(0, 1)
-                tempint = Convert.ToString(websource(f))
-                If tempint > totalpages Then totalpages = tempint
-            End If
-            '<div class="thumb_list" 
-
-
-            If websource(f).IndexOf("<div class=""thumb_list""") <> -1 Then
-                reached = True
-            End If
-            If reached = True Then
-                If websource(f).IndexOf("</div>") <> -1 Then
-                    'reached = False
-                    'Exit For
-                End If
-                If websource(f).IndexOf("src=""http://") <> -1 Then
-                    websource(f) = websource(f).Substring(websource(f).IndexOf("src=""") - 1, websource(f).Length - websource(f).IndexOf("src=""") - 1)
-                    websource(f).TrimStart()
-                    websource(f) = websource(f).Replace("src=""", "")
-                    If websource(f).IndexOf("._V1._") <> -1 Then
-                        counter = counter + 1
-                        imdbsmall(counter) = websource(f).Substring(1, websource(f).IndexOf("._V1._"))
-                    End If
-                End If
-            End If
-        Next
-        For g = 2 To totalpages
-            'url = "http://www.imdb.com/title/" & Form1.imdbidd & "/mediaindex?page=" & g.ToString
+        Try
+            downloadthumbcount = 0
+            ReDim posterurls(1000, 1)
+            count = 0
+            pagecount = 0
+            Call initialise()
             Call loadwebpage()
+            Dim tempint As Integer
+            Dim imdbsmall(2000) As String
+            Dim reached As Boolean = False
+            Dim counter As Integer = 0
             For f = 1 To urllinecount
+                If websource(f).IndexOf("<a href=""?page=") <> -1 Then
+                    websource(f) = websource(f).Replace("<a href=""?page=", "")
+                    websource(f) = websource(f).Substring(0, 1)
+                    tempint = Convert.ToString(websource(f))
+                    If tempint > totalpages Then totalpages = tempint
+                End If
+                '<div class="thumb_list" 
+
+
                 If websource(f).IndexOf("<div class=""thumb_list""") <> -1 Then
                     reached = True
                 End If
@@ -499,421 +455,350 @@ Public Class frmTvFanart
                     End If
                 End If
             Next
-        Next
+            For g = 2 To totalpages
 
-        For f = 1 To counter
-            imdbsmall(f) = imdbsmall(f) & "_V1._SX1000_SY1000_.jpg"
+                Call loadwebpage()
+                For f = 1 To urllinecount
+                    If websource(f).IndexOf("<div class=""thumb_list""") <> -1 Then
+                        reached = True
+                    End If
+                    If reached = True Then
+                        If websource(f).IndexOf("</div>") <> -1 Then
+                            'reached = False
+                            'Exit For
+                        End If
+                        If websource(f).IndexOf("src=""http://") <> -1 Then
+                            websource(f) = websource(f).Substring(websource(f).IndexOf("src=""") - 1, websource(f).Length - websource(f).IndexOf("src=""") - 1)
+                            websource(f).TrimStart()
+                            websource(f) = websource(f).Replace("src=""", "")
+                            If websource(f).IndexOf("._V1._") <> -1 Then
+                                counter = counter + 1
+                                imdbsmall(counter) = websource(f).Substring(1, websource(f).IndexOf("._V1._"))
+                            End If
+                        End If
+                    End If
+                Next
+            Next
 
-        Next
+            For f = 1 To counter
+                imdbsmall(f) = imdbsmall(f) & "_V1._SX1000_SY1000_.jpg"
 
+            Next
 
+            For f = counter To 1 Step -1
+                downloadthumbcount = downloadthumbcount + 1
+                downloadthumb(downloadthumbcount, 0) = imdbsmall(f)
+                downloadthumb(downloadthumbcount, 1) = imdbsmall(f)
+            Next
 
-        'ReDim downloadthumb(2000, 1)
-        'downloadthumbcount = 0
-
-
-
-
-
-        For f = counter To 1 Step -1
-            downloadthumbcount = downloadthumbcount + 1
-            downloadthumb(downloadthumbcount, 0) = imdbsmall(f)
-            downloadthumb(downloadthumbcount, 1) = imdbsmall(f)
-        Next
-
-
-        'If ComboBox2.Text = "Main TV Show Thumb" Then
-        '    For f = 1 To counter
-        '        downloadthumbcount = downloadthumbcount + 1
-        '        downloadthumb(downloadthumbcount) = imdbsmall(f)
-        '    Next
-        'End If
-
-
-        count = downloadthumbcount
-        Call displayselection()
+            count = downloadthumbcount
+            Call displayselection()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
-        Button5.Visible = False
-        Me.Controls.Remove(panel2)
-        panel2 = Nothing
-        picboxes = Nothing
-        checkboxes = Nothing
+        Try
+            Button5.Visible = False
+            Me.Controls.Remove(panel2)
+            panel2 = Nothing
+            picboxes = Nothing
+            checkboxes = Nothing
 
-        panel2 = New Panel
-        With panel2
-            .Width = 782
-            .Height = 232
-            .Location = New Point(2, 2)
-            .AutoScroll = True
-        End With
-        Me.Controls.Add(panel2)
+            panel2 = New Panel
+            With panel2
+                .Width = 782
+                .Height = 232
+                .Location = New Point(2, 2)
+                .AutoScroll = True
+            End With
+            Me.Controls.Add(panel2)
 
-        currentpage -= 1
-        Button7.Enabled = True
-        If currentpage <= 1 Then
-            Button7.Enabled = False
-        Else
+            currentpage -= 1
             Button7.Enabled = True
-        End If
-        If currentpage = pagecount Then
-            Button8.Enabled = False
-        Else
-            Button8.Enabled = True
-        End If
-        Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
-        Dim tempint2 As Integer = currentpage * maxthumbs
-        If tempint2 > count Then
-            tempint2 = count
-        End If
+            If currentpage <= 1 Then
+                Button7.Enabled = False
+            Else
+                Button7.Enabled = True
+            End If
+            If currentpage = pagecount Then
+                Button8.Enabled = False
+            Else
+                Button8.Enabled = True
+            End If
+            Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
+            Dim tempint2 As Integer = currentpage * maxthumbs
+            If tempint2 > count Then
+                tempint2 = count
+            End If
 
-        Dim names As New List(Of String)()
+            Dim names As New List(Of String)()
 
-        For f = tempint To tempint2
-            names.Add(downloadthumb(f, 0))
-        Next
-        Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
+            For f = tempint To tempint2
+                names.Add(downloadthumb(f, 0))
+            Next
+            Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
 
-        Dim location As Integer = 0
-        Dim itemcounter As Integer = 0
-        For Each item As String In names
-            picboxes() = New PictureBox()
-            With picboxes
-                .Location = New Point(location, 0)
-                .Width = 280
-                .Height = 180
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .ImageLocation = item
-                .Visible = True
-                .BorderStyle = BorderStyle.Fixed3D
-                .Name = "picture" & itemcounter.ToString
-                AddHandler picboxes.DoubleClick, AddressOf zoomimage
-                AddHandler picboxes.LoadCompleted, AddressOf imageres
-            End With
+            Dim location As Integer = 0
+            Dim itemcounter As Integer = 0
+            For Each item As String In names
+                picboxes() = New PictureBox()
+                With picboxes
+                    .Location = New Point(location, 0)
+                    .Width = 280
+                    .Height = 180
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .ImageLocation = item
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "picture" & itemcounter.ToString
+                    AddHandler picboxes.DoubleClick, AddressOf zoomimage
+                    AddHandler picboxes.LoadCompleted, AddressOf imageres
+                End With
 
-            checkboxes() = New RadioButton()
-            With checkboxes
-                .Location = New Point(location + 135, 195)
-                .Name = "checkbox" & itemcounter.ToString
-                .SendToBack()
-                .Text = " "
-                AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
-            End With
+                checkboxes() = New RadioButton()
+                With checkboxes
+                    .Location = New Point(location + 135, 195)
+                    .Name = "checkbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
+                End With
 
-            itemcounter += 1
-            location += 280
+                itemcounter += 1
+                location += 280
 
-            Me.panel2.Controls.Add(picboxes())
-            Me.panel2.Controls.Add(checkboxes())
-            Me.Refresh()
-            Application.DoEvents()
-        Next
+                Me.panel2.Controls.Add(picboxes())
+                Me.panel2.Controls.Add(checkboxes())
+                Me.Refresh()
+                Application.DoEvents()
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
-        Button5.Visible = False
-        Me.Controls.Remove(panel2)
-        panel2 = Nothing
-        picboxes = Nothing
-        checkboxes = Nothing
+        Try
+            Button5.Visible = False
+            Me.Controls.Remove(panel2)
+            panel2 = Nothing
+            picboxes = Nothing
+            checkboxes = Nothing
 
-        panel2 = New Panel
-        With panel2
-            .Width = 782
-            .Height = 232
-            .Location = New Point(2, 2)
-            .AutoScroll = True
-        End With
-        Me.Controls.Add(panel2)
-
-        currentpage += 1
-        Button7.Enabled = True
-
-        If currentpage = pagecount Then
-            Button8.Enabled = False
-        Else
-            Button8.Enabled = True
-        End If
-
-
-        Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
-        Dim tempint2 As Integer = currentpage * maxthumbs
-
-        If tempint2 > count Then
-            tempint2 = count
-        End If
-
-        Dim names As New List(Of String)()
-
-        For f = tempint To tempint2
-            names.Add(downloadthumb(f, 0))
-        Next
-        Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
-
-        Dim location As Integer = 0
-        Dim itemcounter As Integer = 0
-        For Each item As String In names
-
-
-            picboxes() = New PictureBox()
-            With picboxes
-                .Location = New Point(location, 0)
-                .Width = 280
-                .Height = 180
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .ImageLocation = item
-                .Visible = True
-                .BorderStyle = BorderStyle.Fixed3D
-                .Name = "picture" & itemcounter.ToString
-                AddHandler picboxes.DoubleClick, AddressOf zoomimage
-                AddHandler picboxes.LoadCompleted, AddressOf imageres
+            panel2 = New Panel
+            With panel2
+                .Width = 782
+                .Height = 232
+                .Location = New Point(2, 2)
+                .AutoScroll = True
             End With
+            Me.Controls.Add(panel2)
 
-            checkboxes() = New RadioButton()
-            With checkboxes
-                .Location = New Point(location + 135, 195)
-                .Name = "checkbox" & itemcounter.ToString
-                .SendToBack()
-                .Text = " "
-                AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
-            End With
+            currentpage += 1
+            Button7.Enabled = True
 
-            itemcounter += 1
-            location += 280
+            If currentpage = pagecount Then
+                Button8.Enabled = False
+            Else
+                Button8.Enabled = True
+            End If
 
-            Me.panel2.Controls.Add(picboxes())
-            Me.panel2.Controls.Add(checkboxes())
-            Me.Refresh()
-            Application.DoEvents()
-        Next
+
+            Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
+            Dim tempint2 As Integer = currentpage * maxthumbs
+
+            If tempint2 > count Then
+                tempint2 = count
+            End If
+
+            Dim names As New List(Of String)()
+
+            For f = tempint To tempint2
+                names.Add(downloadthumb(f, 0))
+            Next
+            Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
+
+            Dim location As Integer = 0
+            Dim itemcounter As Integer = 0
+            For Each item As String In names
+
+
+                picboxes() = New PictureBox()
+                With picboxes
+                    .Location = New Point(location, 0)
+                    .Width = 280
+                    .Height = 180
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .ImageLocation = item
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                    .Name = "picture" & itemcounter.ToString
+                    AddHandler picboxes.DoubleClick, AddressOf zoomimage
+                    AddHandler picboxes.LoadCompleted, AddressOf imageres
+                End With
+
+                checkboxes() = New RadioButton()
+                With checkboxes
+                    .Location = New Point(location + 135, 195)
+                    .Name = "checkbox" & itemcounter.ToString
+                    .SendToBack()
+                    .Text = " "
+                    AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
+                End With
+
+                itemcounter += 1
+                location += 280
+
+                Me.panel2.Controls.Add(picboxes())
+                Me.panel2.Controls.Add(checkboxes())
+                Me.Refresh()
+                Application.DoEvents()
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
     Private Sub bigpicbox_LoadCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs) Handles bigpicbox.LoadCompleted
-        Dim bigpanellabel As Label
-        bigpanellabel = New Label
-        With bigpanellabel
-            .Location = New Point(20, 20)
-            .Width = 150
-            .Height = 50
-            .Visible = True
-            .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
-            '   .BringToFront()
-        End With
-
-        Me.bigpanel.Controls.Add(bigpanellabel)
-        bigpanellabel.BringToFront()
-        Application.DoEvents()
-
-
-
-        If Not bigpicbox.Image Is Nothing And bigpicbox.Image.Width > 20 Then
-
-            Dim sizey As Integer = bigpicbox.Image.Height
-            Dim sizex As Integer = bigpicbox.Image.Width
-            Dim tempstring As String
-            tempstring = "Full Image Resolution :- " & sizex.ToString & " x " & sizey.ToString
-            resolutionlbl = New Label
-            With resolutionlbl
-                .Location = New Point(Me.Width - 200, 20)
-                .Anchor = AnchorStyles.Right Or AnchorStyles.Top
-                .Width = 180
-                .Text = tempstring
-                .BackColor = Color.Transparent
+        Try
+            Dim bigpanellabel As Label
+            bigpanellabel = New Label
+            With bigpanellabel
+                .Location = New Point(20, 20)
+                .Width = 150
+                .Height = 50
+                .Visible = True
+                .Text = "Double Click Image To" & vbCrLf & "Return To Browser"
+                '   .BringToFront()
             End With
 
-            Me.bigpanel.Controls.Add(resolutionlbl)
-            resolutionlbl.BringToFront()
-            Me.Refresh()
+            Me.bigpanel.Controls.Add(bigpanellabel)
+            bigpanellabel.BringToFront()
             Application.DoEvents()
-            Dim tempstring2 As String = resolutionlbl.Text
-        Else
-            bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
-        End If
+
+
+
+            If Not bigpicbox.Image Is Nothing And bigpicbox.Image.Width > 20 Then
+
+                Dim sizey As Integer = bigpicbox.Image.Height
+                Dim sizex As Integer = bigpicbox.Image.Width
+                Dim tempstring As String
+                tempstring = "Full Image Resolution :- " & sizex.ToString & " x " & sizey.ToString
+                resolutionlbl = New Label
+                With resolutionlbl
+                    .Location = New Point(Me.Width - 200, 20)
+                    .Anchor = AnchorStyles.Right Or AnchorStyles.Top
+                    .Width = 180
+                    .Text = tempstring
+                    .BackColor = Color.Transparent
+                End With
+
+                Me.bigpanel.Controls.Add(resolutionlbl)
+                resolutionlbl.BringToFront()
+                Me.Refresh()
+                Application.DoEvents()
+                Dim tempstring2 As String = resolutionlbl.Text
+            Else
+                bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
     End Sub
 
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Try
+            Call initialise()
 
-        Call initialise()
+            ReDim downloadthumb(2000, 1)
+            downloadthumbcount = 0
+            workingthumb = 0
+            Dim tempstring As String
+            Dim tempstring2 As String
+            downloadthumbcount = 0
+            Call loadwebpage()
+            Dim tempstring3 As String
 
-        ReDim downloadthumb(2000, 1)
-        downloadthumbcount = 0
-        workingthumb = 0
-        Dim tempstring As String
-        Dim tempstring2 As String
-        downloadthumbcount = 0
-        'url = "http://thetvdb.com/api/6E82FED600783400/series/" & Form1.tvdbidd & "/banners.xml"
-        Call loadwebpage()
-        Dim tempstring3 As String
+            tempstring3 = "<BannerPath>fanart"
+            For f = 1 To urllinecount
+                If websource(f).IndexOf(tempstring3) <> -1 Then
+                    tempstring2 = websource(f)
+                    tempstring2 = tempstring2.Replace("<BannerPath>", "")
+                    tempstring2 = tempstring2.Replace("</BannerPath>", "")
+                    tempstring2 = tempstring2.Replace("  ", "")
+                    '_cache/posters/73739-4.jpg
+                    tempstring = tempstring2
+                    tempstring2 = URLs.TVdbBanners(tempstring2)
+                    tempstring = URLs.TVdbBannersCache(tempstring)
+                    downloadthumbcount += 1
+                    downloadthumb(downloadthumbcount, 0) = tempstring
+                    downloadthumb(downloadthumbcount, 1) = tempstring2
+                End If
+            Next
 
-        tempstring3 = "<BannerPath>fanart"
-        For f = 1 To urllinecount
-            If websource(f).IndexOf(tempstring3) <> -1 Then
-                tempstring2 = websource(f)
-                tempstring2 = tempstring2.Replace("<BannerPath>", "")
-                tempstring2 = tempstring2.Replace("</BannerPath>", "")
-                tempstring2 = tempstring2.Replace("  ", "")
-                '_cache/posters/73739-4.jpg
-                tempstring = tempstring2
-                tempstring2 = "http://images.thetvdb.com/banners/" & tempstring2
-                tempstring = "http://images.thetvdb.com/banners/_cache/" & tempstring
-                downloadthumbcount += 1
-                downloadthumb(downloadthumbcount, 0) = tempstring
-                downloadthumb(downloadthumbcount, 1) = tempstring2
-            End If
-        Next
-
-        count = downloadthumbcount
-        Call displayselection()
+            count = downloadthumbcount
+            Call displayselection()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
-    'Private Sub Button5_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button5.Click
-    '    Dim savepath As String
-    '    savepath = savethumbpath & "fanart.jpg"
-
-    '    Dim tempstring As String
-    '    Dim realnumber As Integer = 0
-    '    Dim tempint As Integer = 0
-    '    Dim tempstring2 As String = ""
-    '    Dim allok As Boolean = False
-    '    For Each button As Control In Me.panel2.Controls
-    '        If button.Name.IndexOf("checkbox") <> -1 Then
-    '            Dim b1 As RadioButton = CType(button, RadioButton)
-    '            If b1.Checked = True Then
-    '                tempstring = b1.Name
-    '                tempstring = tempstring.Replace("checkbox", "")
-    '                tempint = Convert.ToDecimal(tempstring)
-    '                realnumber = tempint + ((currentpage - 1) * maxthumbs)
-    '                realnumber += 1
-    '                tempstring2 = downloadthumb(realnumber, 1)
-    '                allok = True
-    '                Exit For
-    '            End If
-    '        End If
-    '    Next
-    '    If allok = False Then
-    '        MsgBox("No Fanart Is Selected")
-    '    Else
-    '        Try
-    '            Panel1.Controls.Remove(Label1)
-    '            Dim buffer(4000000) As Byte
-    '            Dim size As Integer = 0
-    '            Dim bytesRead As Integer = 0
-
-    '            Dim fanartthumburl As String = tempstring2
-    '            Dim req As HttpWebRequest = req.Create(tempstring2)
-    '            Dim res As HttpWebResponse = req.GetResponse()
-    '            Dim contents As Stream = res.GetResponseStream()
-    '            Dim bmp As New Bitmap(contents)
-
-
-    '            Dim bytesToRead As Integer = CInt(buffer.Length)
-
-    '            While bytesToRead > 0
-    '                size = contents.Read(buffer, bytesRead, bytesToRead)
-    '                If size = 0 Then Exit While
-    '                bytesToRead -= size
-    '                bytesRead += size
-    '            End While
-    '            If Form1.resizefanart = 1 Then
-    '                Try
-    '                    bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                Catch ex As Exception
-    '                    tempstring = ex.Message.ToString
-    '                End Try
-    '            ElseIf Form1.resizefanart = 2 Then
-    '                If bmp.Width > 1280 Or bmp.Height > 720 Then
-    '                    Dim bm_source As New Bitmap(bmp)
-    '                    Dim bm_dest As New Bitmap(1280, 720)
-    '                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-    '                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-    '                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-    '                    bm_dest.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                Else
-    '                    bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                End If
-    '            ElseIf Form1.resizefanart = 3 Then
-    '                If bmp.Width > 960 Or bmp.Height > 540 Then
-    '                    Dim bm_source As New Bitmap(bmp)
-    '                    Dim bm_dest As New Bitmap(960, 540)
-    '                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-    '                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-    '                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-    '                    bm_dest.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                Else
-    '                    bmp.Save(savepath, Imaging.ImageFormat.Jpeg)
-    '                End If
-    '            End If
-    '            Dim exists As Boolean = System.IO.File.Exists(savepath)
-    '            If exists = True Then
-
-
-    '                'mainfanart = New PictureBox
-    '                Dim OriginalImage As New Bitmap(savepath)
-    '                Dim Image2 As New Bitmap(OriginalImage)
-    '                OriginalImage.Dispose()
-    '                'With mainfanart
-    '                '    .Visible = True
-    '                '    .Location = New Point(0, 0)
-    '                '    .Width = 423
-    '                '    .Height = 240
-    '                '    .SizeMode = PictureBoxSizeMode.Zoom
-    '                '    .Image = Image2
-    '                '    .Visible = True
-    '                '    .BorderStyle = BorderStyle.Fixed3D
-    '                '    .BringToFront()
-    '                'End With
-    '                'Me.Panel1.Controls.Add(mainfanart)
-    '                'Label2.Visible = False
-    '                Me.Close()
-    '            Else
-    '                mainposter.Visible = False
-    '                Label2.Text = "No Local Fanart Is Available"
-    '                Label2.Visible = True
-    '            End If
-
-    '        Catch ex As WebException
-    '            MsgBox(ex.Message)
-    '        End Try
-    '    End If
-
-    'End Sub
 
     Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
-        Panel3.Visible = True
+        Try
+            Panel3.Visible = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub btncancelgetthumburl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btncancelgetthumburl.Click
-        Panel3.Visible = False
+        Try
+            Panel3.Visible = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
-        openFD.InitialDirectory = Form1.applicationpath
-        openFD.Title = "Select a jpeg image file File"
-        openFD.FileName = ""
-        openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
-        openFD.FilterIndex = 0
-        openFD.ShowDialog()
-        TextBox5.Text = openFD.FileName
+        Try
+            openFD.InitialDirectory = Preferences.applicationPath
+            openFD.Title = "Select a jpeg image file File"
+            openFD.FileName = ""
+            openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn|All Files|*.*"
+            openFD.FilterIndex = 0
+            openFD.ShowDialog()
+            TextBox5.Text = openFD.FileName
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
-        Dim savepath As String
-
-
-
-        Dim MyWebClient As New System.Net.WebClient
         Try
-            Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
-            Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+            Dim savepath As String = String.Empty
 
-            mainposter.Image = New System.Drawing.Bitmap(ImageStream)
-            mainposter.Image.Save(savepath)
 
+
+            Dim MyWebClient As New System.Net.WebClient
+            Try
+                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
+                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+
+                mainposter.Image = New System.Drawing.Bitmap(ImageStream)
+                mainposter.Image.Save(savepath)
+
+            Catch ex As Exception
+                MsgBox("Unable To Download Image")
+            End Try
+            Panel3.Visible = False
         Catch ex As Exception
-            MsgBox("Unable To Download Image")
+            ExceptionHandler.LogError(ex)
         End Try
-        Panel3.Visible = False
     End Sub
 End Class

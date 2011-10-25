@@ -182,21 +182,24 @@ Public Class ScraperQuery
       Const SettingReplacementRegex As String = "\$INFO\[([^\]]+)\]"
 
       Dim result As String = input
+        ' I've inserted the Try routine below, for handling null result
+        Try ' isto é meu
+            For Each m As Match In Regex.Matches(result, BufferReplacementRegEx)
+                If (m.Groups.Count > 1) Then
+                    result = result.Replace("$$" + m.Groups(1).Value, mVars(CInt(m.Groups(1).Value)))
+                End If
+            Next
 
-      For Each m As Match In Regex.Matches(result, BufferReplacementRegEx)
-         If (m.Groups.Count > 1) Then
-            result = result.Replace("$$" + m.Groups(1).Value, mVars(CInt(m.Groups(1).Value)))
-         End If
-      Next
-
-      For Each m As Match In Regex.Matches(result, SettingReplacementRegex)
-         If (m.Groups.Count > 1) Then
-            result = result.Replace("$INFO[" + m.Groups(1).Value + "]", mScraper.GetSetting(m.Groups(1).Value).ValueString)
-         End If
-      Next
-
-      Return result
-   End Function
+            For Each m As Match In Regex.Matches(result, SettingReplacementRegex)
+                If (m.Groups.Count > 1) Then
+                    result = result.Replace("$INFO[" + m.Groups(1).Value + "]", mScraper.GetSetting(m.Groups(1).Value).ValueString)
+                End If
+            Next
+        Catch
+            result = ""
+        End Try
+        Return result
+    End Function
 
    ''' <summary>
    ''' Replaces regex captures inside given output string.  (eg. \1 will be replaced with capture group one, etc)
@@ -321,7 +324,7 @@ Public Class ScraperQuery
       For Each e In functionElement.<RegExp>
          ' Does this sibling have any RegExp children?  If so, recursively call it
          If e.<RegExp>.Count > 0 Then
-            PerformRegEx(e)
+                PerformRegEx(e)
          End If
 
          ' =====================================================================================
@@ -331,122 +334,124 @@ Public Class ScraperQuery
 
          ' If the input attribute is missing we default to the first buffer for input
          If (e.@input = String.Empty) Then
-            input = ReplaceBuffers("$$1")
+                input = ReplaceBuffers("$$1")
          Else
             input = ReplaceBuffers(e.@input)
          End If
 
          Dim output As String = ReplaceBuffers(e.@output)
          Dim destination As String = e.@dest
-         Dim destinationAppend As Boolean = (e.@dest.Contains("+"))
-         Dim conditional As String = e.@conditional
+            On Error Resume Next  'isto é meu ' I've inserted the On Error, for handling null result coming from ReplaceBuffer
+            Dim destinationAppend As Boolean = (e.@dest.Contains("+"))
+            On Error GoTo 0 'isto é meu' I've inserted the On Error GoTo 0 for restoring error trapping again
+            Dim conditional As String = e.@conditional
 
-         ' =====================================================================================
-         '  If conditional exists then let's check it before we go any further
-         ' =====================================================================================
-         If (conditional <> String.Empty) Then
-            Dim setting As ScraperSetting = mScraper.GetSetting(conditional.Replace("!", ""))
+            ' =====================================================================================
+            '  If conditional exists then let's check it before we go any further
+            ' =====================================================================================
+            If (conditional <> String.Empty) Then
+                Dim setting As ScraperSetting = mScraper.GetSetting(conditional.Replace("!", ""))
 
-            If (setting IsNot Nothing) AndAlso (TypeOf (setting) Is ScraperSettingBool) Then
-               Dim reverseCondition As Boolean = False
+                If (setting IsNot Nothing) AndAlso (TypeOf (setting) Is ScraperSettingBool) Then
+                    Dim reverseCondition As Boolean = False
 
-               If (conditional.Contains("!")) Then
-                  reverseCondition = True
-               End If
+                    If (conditional.Contains("!")) Then
+                        reverseCondition = True
+                    End If
 
-               If (((Not CType(setting, ScraperSettingBool).Value) And Not reverseCondition) Or _
-                        (CType(setting, ScraperSettingBool).Value And reverseCondition)) Then
-                  Trace.WriteLine("Skipping RegEx because of conditional: " + conditional + " (" + setting.ValueString + ")")
-                  Continue For
-               End If
-            ElseIf (setting Is Nothing) Then
-               Trace.WriteLine("WARNING: Can't find setting (" + conditional + ") for conditional check.  Skipping check.")
-            End If
-         End If
-
-         ' =====================================================================================
-         '  Expression element attributes/value
-         ' =====================================================================================
-         Dim expression As String = DEFAULT_EXPRESSION
-         Dim clear As Boolean = False
-         Dim repeat As Boolean = False
-         Dim nocleanFields(MAX_FIELDS) As Boolean   ' defaults to false for each index
-         Dim trimFields(MAX_FIELDS) As Boolean      ' defaults to false for each index
-         Dim encodeFields(MAX_FIELDS) As Boolean    ' defaults to false for each index
-         Dim fixcharsFields(MAX_FIELDS) As Boolean  ' defaults to false for each index
-
-         ' =====================================================================================
-         ' Does the expression child exist?  If so we'll parse it's attributes and value
-         ' =====================================================================================
-         If (e.<expression>.Count > 0) Then
-            If (e.<expression>.Value <> String.Empty) Then expression = e.<expression>.Value
-            If (e.<expression>.@clear = "yes") Then clear = True
-            If (e.<expression>.@repeat = "yes") Then repeat = True
-
-            If (e.<expression>.@trim <> String.Empty) Then
-               For Each i As Integer In e.<expression>.@trim.Split(CChar(","))
-                  trimFields(i) = True
-               Next
+                    If (((Not CType(setting, ScraperSettingBool).Value) And Not reverseCondition) Or _
+                             (CType(setting, ScraperSettingBool).Value And reverseCondition)) Then
+                        Trace.WriteLine("Skipping RegEx because of conditional: " + conditional + " (" + setting.ValueString + ")")
+                        Continue For
+                    End If
+                ElseIf (setting Is Nothing) Then
+                    Trace.WriteLine("WARNING: Can't find setting (" + conditional + ") for conditional check.  Skipping check.")
+                End If
             End If
 
-            If (e.<expression>.@noclean <> String.Empty) Then
-               For Each i As Integer In e.<expression>.@noclean.Split(CChar(","))
-                  nocleanFields(i) = True
-               Next
+            ' =====================================================================================
+            '  Expression element attributes/value
+            ' =====================================================================================
+            Dim expression As String = DEFAULT_EXPRESSION
+            Dim clear As Boolean = False
+            Dim repeat As Boolean = False
+            Dim nocleanFields(MAX_FIELDS) As Boolean   ' defaults to false for each index
+            Dim trimFields(MAX_FIELDS) As Boolean      ' defaults to false for each index
+            Dim encodeFields(MAX_FIELDS) As Boolean    ' defaults to false for each index
+            Dim fixcharsFields(MAX_FIELDS) As Boolean  ' defaults to false for each index
+
+            ' =====================================================================================
+            ' Does the expression child exist?  If so we'll parse it's attributes and value
+            ' =====================================================================================
+            If (e.<expression>.Count > 0) Then
+                If (e.<expression>.Value <> String.Empty) Then expression = e.<expression>.Value
+                If (e.<expression>.@clear = "yes") Then clear = True
+                If (e.<expression>.@repeat = "yes") Then repeat = True
+
+                If (e.<expression>.@trim <> String.Empty) Then
+                    For Each i As Integer In e.<expression>.@trim.Split(CChar(","))
+                        trimFields(i) = True
+                    Next
+                End If
+
+                If (e.<expression>.@noclean <> String.Empty) Then
+                    For Each i As Integer In e.<expression>.@noclean.Split(CChar(","))
+                        nocleanFields(i) = True
+                    Next
+                End If
+
+                If (e.<expression>.@encode <> String.Empty) Then
+                    For Each i As Integer In e.<expression>.@encode.Split(CChar(","))
+                        encodeFields(i) = True
+                    Next
+                End If
+
+                If (e.<expression>.@fixchars <> String.Empty) Then
+                    For Each i As Integer In e.<expression>.@fixchars.Split(CChar(","))
+                        fixcharsFields(i) = True
+                    Next
+                End If
             End If
 
-            If (e.<expression>.@encode <> String.Empty) Then
-               For Each i As Integer In e.<expression>.@encode.Split(CChar(","))
-                  encodeFields(i) = True
-               Next
-            End If
+            ' =====================================================================================
+            '  Execute the actual regular expression, then replace captures ("fields") in output, 
+            '  and finally replaces buffer variables
+            ' =====================================================================================
+            'Trace.WriteLine("=================================================================")
+            'Trace.WriteLine("Performing Regular Expression     " + "Destination: " + destination + " (Append? " + (destinationAppend = True).ToString() + ")")
+            'Trace.WriteLine("=================================================================")
+            'Trace.WriteLine(e.ToString())
+            'Trace.WriteLine("=================================================================" + vbCrLf)
 
-            If (e.<expression>.@fixchars <> String.Empty) Then
-               For Each i As Integer In e.<expression>.@fixchars.Split(CChar(","))
-                  fixcharsFields(i) = True
-               Next
-            End If
-         End If
+            Dim matches As MatchCollection = Regex.Matches(input, HttpUtility.HtmlDecode(expression), RegexOptions.Singleline)
 
-         ' =====================================================================================
-         '  Execute the actual regular expression, then replace captures ("fields") in output, 
-         '  and finally replaces buffer variables
-         ' =====================================================================================
-         'Trace.WriteLine("=================================================================")
-         'Trace.WriteLine("Performing Regular Expression     " + "Destination: " + destination + " (Append? " + (destinationAppend = True).ToString() + ")")
-         'Trace.WriteLine("=================================================================")
-         'Trace.WriteLine(e.ToString())
-         'Trace.WriteLine("=================================================================" + vbCrLf)
-
-         Dim matches As MatchCollection = Regex.Matches(input, HttpUtility.HtmlDecode(expression), RegexOptions.Singleline)
-
-         If ((matches.Count = 0) And (Not clear)) Then
-            Continue For
-         ElseIf ((matches.Count = 0) And (clear)) Then
-            output = String.Empty
-         Else
-            If (repeat) Then
-               Dim finalOutput As String = String.Empty
-
-               For Each m As Match In matches
-                  finalOutput += ReplaceBuffers(ReplaceRegExCaptures(m, output, nocleanFields, trimFields, encodeFields, fixcharsFields))
-               Next
-
-               output = finalOutput
+            If ((matches.Count = 0) And (Not clear)) Then
+                Continue For
+            ElseIf ((matches.Count = 0) And (clear)) Then
+                output = String.Empty
             Else
-               output = ReplaceBuffers(ReplaceRegExCaptures(matches(0), output, nocleanFields, trimFields, encodeFields, fixcharsFields))
-            End If
-         End If
+                If (repeat) Then
+                    Dim finalOutput As String = String.Empty
 
-         ' =====================================================================================
-         '  Place output into destination variable/buffer
-         ' =====================================================================================
-         If (destinationAppend) Then
-            mVars(CInt(destination)) += output
-         Else
-            mVars(CInt(destination)) = output
-         End If
-      Next
+                    For Each m As Match In matches
+                        finalOutput += ReplaceBuffers(ReplaceRegExCaptures(m, output, nocleanFields, trimFields, encodeFields, fixcharsFields))
+                    Next
+
+                    output = finalOutput
+                Else
+                    output = ReplaceBuffers(ReplaceRegExCaptures(matches(0), output, nocleanFields, trimFields, encodeFields, fixcharsFields))
+                End If
+            End If
+
+            ' =====================================================================================
+            '  Place output into destination variable/buffer
+            ' =====================================================================================
+            If (destinationAppend) Then
+                mVars(CInt(destination)) += output
+            Else
+                mVars(CInt(destination)) = output
+            End If
+        Next
    End Sub
 
    ''' <summary>
@@ -488,15 +493,18 @@ Public Class ScraperQuery
 
          Dim functionName As String = chainElement.@function
 
-            Dim chainResultElement As XElement
+            Dim chainResultElement As XElement = Nothing
             ' I've inserted the Try routine below, for handling null result
-            Try
+            Try 'isto é meu
                 Dim chainResult As String = ScraperQuery.ExecuteQuery(mScraper, functionName, functionParams)
                 chainResultElement = XElement.Parse(chainResult)
 
             Catch
             End Try
-            ReplaceOrAddElements(rootElement, chainResultElement, chainElement)
+            If chainResultElement IsNot Nothing Then
+                ReplaceOrAddElements(rootElement, chainResultElement, chainElement)
+            End If
+            chainElement.Remove()
       End While
 
       Return rootElement
@@ -542,7 +550,7 @@ Public Class ScraperQuery
       Next
 
       ' Remove the chain element from our output so we don't reprocess it again
-      chainElement.Remove()
+        'chainElement.Remove()
    End Sub
 #End Region
 

@@ -3,16 +3,71 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports System.IO
 Imports System.Xml
+Imports Media_Companion
 
 
 Module General
-    Dim FileFolderFunctions As New FileAndFolderFunctions
+    Const SetDefaults = True
+    Dim TempEpisode As New TvEpisode
+    Dim episodeInformation As New List(Of TvEpisode)
+    Dim TempXMLEpisode As New TvEpisode
+    Dim episodeXMLinformation As New List(Of TvEpisode)
+
+
+
 
 #Region "Fields"
     Public mScraperManager As ScraperManager
     Public mLastQuery As ScraperQuery
     Public ParametersForScraper(10) As String
     Public FinalScrapResult As String
+#End Region
+
+#Region "Code Lines not Used...saved for Future Reference"
+    'FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False)
+    'FinalScrapResult = FinalScrapResult.Replace("<url>", "")
+    'FinalScrapResult = FinalScrapResult.Replace("</url>", "")
+    'FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
+    '' 2st stage
+    'ParametersForScraper(0) = FinalScrapResult
+    'ParametersForScraper(1) = FinalScrapResult
+    'FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
+    'Dim m_xmld As XmlDocument
+    'Dim m_nodelist As XmlNodeList
+    'Dim m_node As XmlNode
+    'm_xmld = New XmlDocument()
+    'm_xmld.LoadXml(FinalScrapResult)
+    'm_nodelist = m_xmld.SelectNodes("/results/entity")
+    'Dim GetDetailsURLS(2) As String
+    'For Each m_node In m_nodelist
+    '    Dim Title = m_node.ChildNodes.Item(0).InnerText
+    '    Dim url = m_node.ChildNodes.Item(2).InnerText
+    '    Dim id = m_node.ChildNodes.Item(3).InnerText
+    '    GetDetailsURLS(0) = url.Substring(0, url.LastIndexOf("/"))
+    '    GetDetailsURLS(0) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("/")) & "/en.xml"
+    '    GetDetailsURLS(1) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("/")) & "/banners.xml"
+    '    GetDetailsURLS(2) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("/")) & "/actors.xml"
+    '    ParametersForScraper(9) = id
+    '    Exit For
+    'Next
+
+
+    'ParametersForScraper(4) = GetDetailsURLS(0)
+    'GetDetailsURLS(0) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
+    'ParametersForScraper(4) = GetDetailsURLS(1)
+    'GetDetailsURLS(1) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
+    'ParametersForScraper(4) = GetDetailsURLS(2)
+    'GetDetailsURLS(2) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
+
+    'GetDetailsURLS(0) = GetDetailsURLS(0).Substring(0, GetDetailsURLS(0).LastIndexOf("<fanart url="))
+    'GetDetailsURLS(1) = GetDetailsURLS(1).Substring(GetDetailsURLS(1).IndexOf("<thumb>"), (GetDetailsURLS(1).LastIndexOf("</details>") - GetDetailsURLS(1).IndexOf("<thumb>")))
+    'GetDetailsURLS(2) = GetDetailsURLS(2).Substring(GetDetailsURLS(2).IndexOf("<actor>"), (GetDetailsURLS(2).LastIndexOf("<fanart url=") - GetDetailsURLS(2).IndexOf("<actor>"))) &  "</details>"
+    'Dim teste As String = GetDetailsURLS(0) & GetDetailsURLS(1) & GetDetailsURLS(2)
+    'ParametersForScraper(0) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/82066/all/en.xml")
+    'ParametersForScraper(1) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/82066/all/en.zip"
+    'ParametersForScraper(3) = GetDetailsURLS(0)
+    'ParametersForScraper(4) = Nothing
+
 #End Region
 
 #Region "XBMC Scraper Internal Routines"
@@ -25,11 +80,12 @@ Module General
             Return Saida
         Catch ex As WebException
             MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + URLAddress, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Throw ex
+            Return "ERROR" 'SK: added 
+            'Throw ex   'SK : this was originally uncommented 
         End Try
     End Function
     Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
-        Dim TempScraper As Scraper
+        Dim TempScraper As Scraper = Nothing
         For Each c In mScraperManager.Scrapers
             If c.ID = ScraperIdentification Then
                 TempScraper = c
@@ -38,15 +94,19 @@ Module General
         Next
         Return TempScraper
     End Function
-    Private Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String)
+    Private Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal InputBuffer As Integer = 1)
         Dim ChoosedScraper As Scraper
-
+        InputBuffer -= 1
         'Dim ScraperFunctions As List(Of System.Xml.Linq.XElement)
         Dim ScraperFunctiontoExecute As XElement
-        If WhatFunction.ToLower <> "createsearchurl" Then
-            Dim PrimaryString As String = RetrieveUrls(InputParameters(0))
-            InputParameters(0) = PrimaryString
-            If PrimaryString.Length = 0 Then
+        If GetURL = True Then
+            Dim PrimaryString As String = RetrieveUrls(InputParameters(InputBuffer))
+            If PrimaryString = "ERROR" Then 'SK: added this test but calling functions don't test for "error"
+                Return "Error"
+                Exit Function
+            End If
+            InputParameters(InputBuffer) = PrimaryString 'SK: Primary string was returning as Nothing when the Throw Ex was commented out with a failed causing an exception
+            If PrimaryString.Length = 0 Then 'SK: this test already existed
                 Return "Error"
                 Exit Function
             End If
@@ -68,7 +128,7 @@ Module General
 
 #End Region
 
-#Region "Misc.Routines"
+#Region "Misc.Movies Routines"
 
     Public Function GetYearByFilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Dim cleanname As String = filename
@@ -107,6 +167,7 @@ Module General
             Return movieyear
         Catch
         End Try
+        Return "Error"
     End Function
     Public Function cleanfilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
         Dim cleanname As String = filename
@@ -642,248 +703,45 @@ Module General
         Catch
         Finally
         End Try
+        Return "Error"
     End Function
-    Public Function get_hdtags(ByVal filename As String) As fullfiledetails
 
-        Try
-            If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
-                Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
-                If IO.File.Exists(temppath) Then
-                    filename = temppath
-                End If
-            End If
-
-            Dim playlist As New List(Of String)
-            Dim tempstring As String
-            tempstring = FileFolderFunctions.getfilename(filename)
-            playlist = FileFolderFunctions.getmedialist(tempstring)
-
-            If Not IO.File.Exists(filename) Then
-                Exit Function
-            End If
-            Dim workingfiledetails As New fullfiledetails
-            Dim MI As New mediainfo
-            'MI = New mediainfo
-            MI.Open(filename)
-            Dim curVS As Integer = 0
-            Dim addVS As Boolean = False
-            Dim numOfVideoStreams As Integer = MI.Count_Get(StreamKind.Visual)
-
-            Dim tempmediainfo As String
-            Dim tempmediainfo2 As String
-
-            workingfiledetails.filedetails_video.width = MI.Get_(StreamKind.Visual, curVS, "Width")
-            workingfiledetails.filedetails_video.height = MI.Get_(StreamKind.Visual, curVS, "Height")
-            If workingfiledetails.filedetails_video.width <> Nothing Then
-                If IsNumeric(workingfiledetails.filedetails_video.width) Then
-                    If workingfiledetails.filedetails_video.height <> Nothing Then
-                        If IsNumeric(workingfiledetails.filedetails_video.height) Then
-                            '                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
-                            '                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
-                            '                            Dim aspect As Decimal
-                            Try
-                                '                                aspect = tempwidth / tempheight  'Next three line are wrong for getting display aspect ratio
-                                '                                aspect = FormatNumber(aspect, 3)
-                                '                                If aspect > 0 Then workingfiledetails.filedetails_video.aspect = aspect.ToString
-
-                                Dim Information As String = MI.Inform
-                                Dim BeginString As Integer = Information.ToLower.IndexOf(":", Information.ToLower.IndexOf("display aspect ratio"))
-                                Dim EndString As Integer = Information.ToLower.IndexOf("frame rate")
-                                Dim SizeofString As Integer = EndString - BeginString
-                                Dim DisplayAspectRatio As String = Information.Substring(BeginString, SizeofString).Trim(" ", ":", Chr(10), Chr(13))
-                                'DisplayAspectRatio = DisplayAspectRatio.Substring(0, Len(DisplayAspectRatio) - 1)
-                                If Len(DisplayAspectRatio) > 0 Then
-                                    workingfiledetails.filedetails_video.aspect = DisplayAspectRatio
-                                Else
-                                    workingfiledetails.filedetails_video.aspect = "Unknown"
-                                End If
-
-                            Catch ex As Exception
-
-                            End Try
-                        End If
-                    End If
-                End If
-            End If
-            'workingfiledetails.filedetails_video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
-
-
-            tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
-            If tempmediainfo.ToLower = "avc" Then
-                tempmediainfo2 = "h264"
-            Else
-                tempmediainfo2 = tempmediainfo
-            End If
-
-            'workingfiledetails.filedetails_video.codec = tempmediainfo2
-            'workingfiledetails.filedetails_video.formatinfo = tempmediainfo
-            workingfiledetails.filedetails_video.codec = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            If workingfiledetails.filedetails_video.codec = "DX50" Then
-                workingfiledetails.filedetails_video.codec = "DIVX"
-            End If
-            '_MPEG4/ISO/AVC
-            If workingfiledetails.filedetails_video.codec.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
-                workingfiledetails.filedetails_video.codec = "h264"
-            End If
-            workingfiledetails.filedetails_video.formatinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            Dim fs(100) As String
-            For f = 1 To 100
-                fs(f) = MI.Get_(StreamKind.Visual, 0, f)
-            Next
-
-            Try
-                If playlist.Count = 1 Then
-                    workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 61)
-                ElseIf playlist.Count > 1 Then
-                    Dim totalmins As Integer = 0
-                    For f = 0 To playlist.Count - 1
-                        Dim M2 As mediainfo
-                        M2 = New mediainfo
-                        M2.Open(playlist(f))
-                        Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
-                        Dim tempint As Integer
-                        If temptime <> Nothing Then
-                            Try
-                                '1h 24mn 48s 546ms
-                                Dim hours As Integer = 0
-                                Dim minutes As Integer = 0
-                                Dim tempstring2 As String = temptime
-                                tempint = tempstring2.IndexOf("h")
-                                If tempint <> -1 Then
-                                    hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                    tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                                    tempstring2 = Trim(tempstring2)
-                                End If
-                                tempint = tempstring2.IndexOf("mn")
-                                If tempint <> -1 Then
-                                    minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                End If
-                                If hours <> 0 Then
-                                    hours = hours * 60
-                                End If
-                                minutes = minutes + hours
-                                totalmins = totalmins + minutes
-                            Catch
-                            End Try
-                        End If
-                    Next
-                    workingfiledetails.filedetails_video.duration = totalmins & " min"
-                End If
-            Catch
-                workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 57)
-            End Try
-            workingfiledetails.filedetails_video.bitrate = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
-            workingfiledetails.filedetails_video.bitratemode = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
-
-            workingfiledetails.filedetails_video.bitratemax = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
-
-            tempmediainfo = IO.Path.GetExtension(filename) '"This is the extension of the file"
-            workingfiledetails.filedetails_video.container = tempmediainfo
-            'workingfiledetails.filedetails_video.codecid = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-
-            workingfiledetails.filedetails_video.codecinfo = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
-            workingfiledetails.filedetails_video.scantype = MI.Get_(StreamKind.Visual, curVS, 102)
-            'Video()
-            'Format                     : MPEG-4 Visual
-            'Format profile             : Streaming Video@L1
-            'Format(settings, BVOP)     : Yes()
-            'Format(settings, QPel)     : No()
-            'Format(settings, GMC)      : No(warppoints)
-            'Format(settings, Matrix)   : Custom()
-            'Codec(ID)                  : XVID()
-            'Codec(ID / Hint)           : XviD()
-            'Duration                   : 1h 33mn
-            'Bit rate                   : 903 Kbps
-            'Width                      : 528 pixels
-            'Height                     : 272 pixels
-            'Display aspect ratio       : 1.941
-            'Frame rate                 : 25.000 fps
-            'Resolution                 : 24 bits
-            'Colorimetry                : 4:2:0
-            'Scan(Type)                 : Progressive()
-            'Bits/(Pixel*Frame)         : 0.252
-            'Stream size                : 604 MiB (86%)
-            'Writing library            : XviD 1.0.3 (UTC 2004-12-20)
-
-            Dim numOfAudioStreams As Integer = MI.Count_Get(StreamKind.Audio)
-            Dim curAS As Integer = 0
-            Dim addAS As Boolean = False
-
-            'get audio data
-            If numOfAudioStreams > 0 Then
-                While curAS < numOfAudioStreams
-                    Dim audio As New MediaNFOAudio
-                    audio.language = FileFolderFunctions.getlangcode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
-                    If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
-                        audio.codec = "MP3"
-                    Else
-                        audio.codec = MI.Get_(StreamKind.Audio, curAS, "Format")
-                    End If
-                    If audio.codec = "AC-3" Then
-                        audio.codec = "AC3"
-                    End If
-                    If audio.codec = "DTS" Then
-                        audio.codec = "dca"
-                    End If
-                    audio.channels = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
-                    audio.bitrate = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
-                    workingfiledetails.filedetails_audio.Add(audio)
-                    curAS += 1
-                End While
-            End If
-
-
-            Dim numOfSubtitleStreams As Integer = MI.Count_Get(StreamKind.Text)
-            Dim curSS As Integer = 0
-            If numOfSubtitleStreams > 0 Then
-                While curSS < numOfSubtitleStreams
-                    Dim sublanguage As New MediaNFOSubtitles
-                    sublanguage.language = FileFolderFunctions.getlangcode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
-                    workingfiledetails.filedetails_subtitles.Add(sublanguage)
-                    curSS += 1
-                End While
-            End If
-
-            Return workingfiledetails
-        Catch ex As Exception
-
-        Finally
-        End Try
-    End Function
     Public Function InsertFileInformationTags(ByVal Entrada As String, ByVal Filename As String) As String
-        Dim WorkingFileDetails As fullfiledetails = get_hdtags(Filename)
+        Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
         Dim FileInfoString As String = "<movie>" & vbLf & "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
 
-        If WorkingFileDetails.filedetails_video.width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.width & "</width>" & vbLf
-        If WorkingFileDetails.filedetails_video.height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.height & "</height>" & vbLf
-        If WorkingFileDetails.filedetails_video.aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.aspect & "</aspect>" & vbLf
-        If WorkingFileDetails.filedetails_video.codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.codec & "</codec>" & vbLf
-        If WorkingFileDetails.filedetails_video.formatinfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.formatinfo & "</format>" & vbLf
-        If WorkingFileDetails.filedetails_video.duration <> Nothing Then FileInfoString &= "<duration>" & FileFolderFunctions.cleanruntime(WorkingFileDetails.filedetails_video.duration) & "</duration>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.bitrate & "</bitrate>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitratemode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.bitratemode & "</bitratemode>" & vbLf
-        If WorkingFileDetails.filedetails_video.bitratemax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.bitratemax & "</bitratemax>" & vbLf
-        If WorkingFileDetails.filedetails_video.container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.container & "</container>" & vbLf
-        If WorkingFileDetails.filedetails_video.codecid <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.codecid & "</codecid>" & vbLf
-        If WorkingFileDetails.filedetails_video.codecinfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.codecinfo & "</codecinfo>" & vbLf
-        If WorkingFileDetails.filedetails_video.scantype <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.scantype & "</scantype>" & vbLf
+        If WorkingFileDetails.filedetails_video.Width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.Width.Value & "</width>" & vbLf
+        If WorkingFileDetails.filedetails_video.Height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.Height.Value & "</height>" & vbLf
+        If WorkingFileDetails.filedetails_video.Aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.Aspect.Value & "</aspect>" & vbLf
+        If WorkingFileDetails.filedetails_video.Codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.Codec.Value & "</codec>" & vbLf
+        If WorkingFileDetails.filedetails_video.FormatInfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.FormatInfo.Value & "</format>" & vbLf
+        If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</duration>" & vbLf
+        If WorkingFileDetails.filedetails_video.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.Bitrate.Value & "</bitrate>" & vbLf
+        If WorkingFileDetails.filedetails_video.BitrateMode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.BitrateMode.Value & "</bitratemode>" & vbLf
+        If WorkingFileDetails.filedetails_video.BitrateMax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.BitrateMax.Value & "</bitratemax>" & vbLf
+        If WorkingFileDetails.filedetails_video.Container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.Container.Value & "</container>" & vbLf
+        If WorkingFileDetails.filedetails_video.CodecId <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.CodecId.Value & "</codecid>" & vbLf
+        If WorkingFileDetails.filedetails_video.CodecInfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.CodecInfo.Value & "</codecinfo>" & vbLf
+        If WorkingFileDetails.filedetails_video.ScanType <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.ScanType.Value & "</scantype>" & vbLf
         FileInfoString &= "</video>" & vbLf
         If WorkingFileDetails.filedetails_audio.Count > 0 Then
             For Each item In WorkingFileDetails.filedetails_audio
                 FileInfoString &= "<audio>" & vbLf
-                If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
-                If item.codec <> Nothing Then FileInfoString &= "<codec>" & item.codec & "</codec>" & vbLf
-                If item.channels <> Nothing Then FileInfoString &= "<channels>" & item.channels & "</channels>" & vbLf
-                If item.bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.bitrate & "</bitrate>" & vbLf
+                If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
+                If item.Codec <> Nothing Then FileInfoString &= "<codec>" & item.Codec.Value & "</codec>" & vbLf
+                If item.Channels <> Nothing Then FileInfoString &= "<channels>" & item.Channels.Value & "</channels>" & vbLf
+                If item.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.Bitrate.Value & "</bitrate>" & vbLf
                 FileInfoString &= "</audio>" & vbLf
             Next
             If WorkingFileDetails.filedetails_subtitles.Count > 0 Then
                 FileInfoString &= "<subtitle>" & vbLf
                 For Each item In WorkingFileDetails.filedetails_subtitles
-                    If item.language <> Nothing Then FileInfoString &= "<language>" & item.language & "</language>" & vbLf
+                    If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
                 Next
                 FileInfoString &= "</subtitle>" & vbLf
             End If
+            FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
+        Else
             FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
         End If
         FileInfoString &= "<playcount>0</playcount>" & vbLf
@@ -939,18 +797,18 @@ Module General
         myWebClient.DownloadFile(MovieFanartURL, ImageFilename3)
         On Error GoTo 0
         '-----------------Start Resize Fanart
-        If Form1.userprefs.resizefanart = 2 Then
+        If Preferences.resizefanart = 2 Then
             Dim FanartToBeResized As New Bitmap(ImageFilename3)
             If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-                Dim ResizedFanart As Bitmap = Form1.imagefunctions.resizeimage(FanartToBeResized, 1280, 960)
+                Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
                 ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
             Else
                 'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
             End If
-        ElseIf Form1.userprefs.resizefanart = 3 Then
+        ElseIf Preferences.resizefanart = 3 Then
             Dim FanartToBeResized As New Bitmap(ImageFilename3)
             If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-                Dim ResizedFanart As Bitmap = Form1.imagefunctions.ResizeImage(FanartToBeResized, 960, 540)
+                Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
                 ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
             Else
                 'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
@@ -959,6 +817,7 @@ Module General
         End If
         '-----------------End Resize Fanart
         Return True
+
     End Function
     Public Function SearchExtraIDinNFO(ByVal Filename As String) As String
         Dim extrapossibleID As String = Nothing
@@ -998,7 +857,7 @@ Module General
                 extrapossibleID = Nothing
             End If
         Else
-            Dim stackname As String = FileFolderFunctions.getstackname(Filename, Filename.Replace(IO.Path.GetFileName(Filename), ""))
+            Dim stackname As String = Utilities.GetStackName(Filename, Filename.Replace(IO.Path.GetFileName(Filename), ""))
             Dim path As String = stackname & ".nfo"
             If IO.File.Exists(path) Then
                 '                scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
@@ -1026,7 +885,720 @@ Module General
         Return extrapossibleID
     End Function
 
+    Public Sub Read_XBMC_IMDB_Scraper_Config()
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
+        m_nodelist = m_xmld.SelectNodes("/settings")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        If Form1.ComboBox_IMDB_HD_Trailer.Items.Count > 0 Then Form1.ComboBox_IMDB_HD_Trailer.Items.Clear()
+        If Form1.ComboBox_IMDB_Poster_Actor_Size.Items.Count > 0 Then Form1.ComboBox_IMDB_Poster_Actor_Size.Items.Clear()
+        If Form1.ComboBox_IMDB_Title_Language.Items.Count > 0 Then Form1.ComboBox_IMDB_Title_Language.Items.Clear()
+        Try
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If (NodeChild.Name.ToLower = "setting") Then
+                        If NodeChild.Attributes.Count > 0 Then
+                            Try
+                                Select Case NodeChild.Attributes("id").Value.ToLower
+                                    Case "tmdbthumbs"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Checked = Test
+                                    Case "impawards"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Checked = Test
+                                    Case "movieposterdb"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Checked = Test
+                                    Case "fanart"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_IMDB_Fanart.Checked = Test
+                                    Case "trailerq"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim GetOut As Boolean = False
+                                        Do
+                                            Dim Position As Integer = AllValues.LastIndexOf("|")
+                                            Dim TempValue As String = ""
+                                            If Position = -1 Then
+                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+                                                GetOut = True
+                                            Else
+                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+                                            End If
+                                            Form1.ComboBox_IMDB_HD_Trailer.Items.Add(TempValue)
+                                        Loop Until GetOut = True
+                                        Form1.ComboBox_IMDB_HD_Trailer.Text = Test
+                                    Case "imdbtrailer"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_IMDB_Trailer.Checked = Test
+                                    Case "akatitles"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim GetOut As Boolean = False
+                                        Do
+                                            Dim Position As Integer = AllValues.LastIndexOf("|")
+                                            Dim TempValue As String = ""
+                                            If Position = -1 Then
+                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+                                                GetOut = True
+                                            Else
+                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+                                            End If
+                                            Form1.ComboBox_IMDB_Title_Language.Items.Add(TempValue)
+                                        Loop Until GetOut = True
+                                        Form1.ComboBox_IMDB_Title_Language.Text = Test
+                                    Case "fullcredits"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_IMDB_FullCredits.Checked = Test
+                                    Case "imdbscale"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim GetOut As Boolean = False
+                                        Do
+                                            Dim Position As Integer = AllValues.LastIndexOf("|")
+                                            Dim TempValue As String = ""
+                                            If Position = -1 Then
+                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+                                                GetOut = True
+                                            Else
+                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+                                            End If
+                                            Form1.ComboBox_IMDB_Poster_Actor_Size.Items.Add(TempValue)
+                                        Loop Until GetOut = True
+                                        Form1.ComboBox_IMDB_Poster_Actor_Size.Text = Test
+
+                                End Select
+                            Catch
+                                'empty node
+                            End Try
+                        End If
+                    End If
+                Next
+            Next
+        Catch
+        End Try
+
+    End Sub
+    Public Function Save_XBMC_IMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String) As Boolean
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
+        m_nodelist = m_xmld.SelectNodes("/settings")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        Try
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If (NodeChild.Name.ToLower = "setting") Then
+                        If NodeChild.Attributes.Count > 0 Then
+                            Try
+                                If KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
+                                    Select Case KeyToBeChanged
+                                        Case "tmdbthumbs"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "impawards"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "movieposterdb"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "fanart"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "trailerq"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "imdbtrailer"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "akatitles"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "fullcredits"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "imdbscale"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                    End Select
+                                End If
+                            Catch
+                                'empty node
+                            End Try
+                        End If
+                    End If
+                Next
+            Next
+        Catch
+        End Try
+        m_xmld.Save(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
+    End Function
+    Public Sub Read_XBMC_TMDB_Scraper_Config()
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
+        m_nodelist = m_xmld.SelectNodes("/settings")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        If Form1.ComboBox_TMDB_HD_Trailer.Items.Count > 0 Then Form1.ComboBox_TMDB_HD_Trailer.Items.Clear()
+        If Form1.ComboBox_TMDB_Title_Language.Items.Count > 0 Then Form1.ComboBox_TMDB_Title_Language.Items.Clear()
+        Try
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If (NodeChild.Name.ToLower = "setting") Then
+                        If NodeChild.Attributes.Count > 0 Then
+                            Try
+                                Select Case NodeChild.Attributes("id").Value.ToLower
+                                    Case "fanart"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_TMDB_Fanart.Checked = Test
+                                    Case "trailerq"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim GetOut As Boolean = False
+                                        Do
+                                            Dim Position As Integer = AllValues.LastIndexOf("|")
+                                            Dim TempValue As String = ""
+                                            If Position = -1 Then
+                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+                                                GetOut = True
+                                            Else
+                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+                                            End If
+                                            Form1.ComboBox_TMDB_HD_Trailer.Items.Add(TempValue)
+                                        Loop Until GetOut = True
+                                        Form1.ComboBox_TMDB_HD_Trailer.Text = Test
+                                    Case "language"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim GetOut As Boolean = False
+                                        Do
+                                            Dim Position As Integer = AllValues.LastIndexOf("|")
+                                            Dim TempValue As String = ""
+                                            If Position = -1 Then
+                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+                                                GetOut = True
+                                            Else
+                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+                                            End If
+                                            Form1.ComboBox_TMDB_Title_Language.Items.Add(TempValue)
+                                        Loop Until GetOut = True
+                                        Form1.ComboBox_TMDB_Title_Language.Text = Test
+                                    Case "imdbrating"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Checked = Test
+                                End Select
+                            Catch
+                                'empty node
+                            End Try
+                        End If
+                    End If
+                Next
+            Next
+        Catch
+        End Try
+
+    End Sub
+    Public Function Save_XBMC_TMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String) As Boolean
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
+        m_nodelist = m_xmld.SelectNodes("/settings")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        Try
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If (NodeChild.Name.ToLower = "setting") Then
+                        If NodeChild.Attributes.Count > 0 Then
+                            Try
+                                If KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
+                                    Select Case KeyToBeChanged
+                                        Case "imdbrating"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "fanart"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "trailerq"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "language"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                    End Select
+                                End If
+                            Catch
+                                'empty node
+                            End Try
+                        End If
+                    End If
+                Next
+            Next
+        Catch
+        End Try
+        m_xmld.Save(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
+    End Function
+
 #End Region
+
+#Region "Misc.TVShows Routines"
+
+    Public Function NeededConversion(ByVal entrada As TvEpisode) As TvEpisode
+        'Dim Teste As New EpisodeInfo
+
+        'Teste.aired = entrada.aired
+        'Teste.credits = entrada.credits
+        'Teste.director = entrada.director
+        'Teste.episodeno = entrada.episodeNO
+        'Teste.episodepath = entrada.episodePath
+        'Teste.fanartpath = entrada.fanartPath
+        'Teste.filedetails = entrada.fileDetails
+        'Teste.genre = entrada.genre
+        'For Each merda As Nfo.Actor In entrada.Actors
+
+        '    Teste.Actors.Add(merda1)
+        'Next
+        ''Teste.listactors = entrada.listactors
+        ''Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
+        'Teste.mediaextension = entrada.mediaExtension
+        'Teste.playcount = entrada.playCount
+        'Teste.plot = entrada.plot
+        'Teste.rating = entrada.rating
+        'Teste.runtime = entrada.runtime
+        'Teste.Season.value = entrada.Season.value
+        'Teste.thumb = entrada.thumb
+        'Teste.title = entrada.title
+        Return entrada
+    End Function
+
+    Public Function Clean_AddTVShowExtraFields(ByVal Entrada As String, ByVal Language As String, ByVal IMDB_ID As String) As String
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+        Dim TvDBId As String = ""
+        Dim Year As String = ""
+        Dim ExtraFields As Boolean = False
+        Dim FinalString As String = "<tvshow>"
+
+        m_xmld = New XmlDocument()
+        m_xmld.LoadXml(Entrada)
+        m_nodelist = m_xmld.SelectNodes("/details")
+        For Each m_node In m_nodelist
+            If m_node.HasChildNodes Then
+                For Each node1 As XmlNode In m_node
+                    If (node1.InnerText <> "") Then
+                        If node1.Name.ToLower = "actor" Then
+                            For Each node2 As XmlNode In node1
+                                Select Case node2.Name.ToLower
+                                    Case "thumb"
+                                        If node2.InnerText <> "" Then FinalString &= node1.OuterXml.ToString
+                                        Exit For
+                                End Select
+                            Next
+                        Else
+                            Select Case node1.Name.ToLower
+                                Case "id"
+                                    FinalString &= "<tvdbid>" & node1.InnerText & "</tvdbid>"
+                                    node1.InnerText = IMDB_ID
+                                Case "premiered"
+                                    FinalString &= "<year>" & node1.InnerText.Substring(0, 4) & "</year>"
+                                Case "genre"
+                                    If ExtraFields = False Then
+                                        Dim sortorder As String = String.Empty
+                                        If Form1.RadioButton14.Checked Then sortorder = "dvd"
+                                        If Form1.RadioButton15.Checked Then sortorder = "default"
+                                        FinalString &= "<top250>0</top250><season>-1</season><episode>-1</episode><displayseason>-1</displayseason><displayepisode>-1</displayepisode>" _
+                                            & "<votes></votes><outline></outline><tagline></tagline><episodeactorsource>tvdb</episodeactorsource><tvshowactorsource>tvdb</tvshowactorsource>"
+                                        FinalString &= "<runtime>60</runtime><sortorder>" & sortorder & "</sortorder><playcount>0</playcount><lastplayed></lastplayed><status></status>" _
+                                            & "<code></code><language>" & Language & "</language><locked>0</locked><trailer></trailer>"
+                                        ExtraFields = True
+                                    End If
+
+                            End Select
+                            FinalString &= node1.OuterXml.ToString
+                        End If
+                    End If
+                Next
+            End If
+        Next
+        FinalString &= "</tvshow>"
+        Return FinalString
+    End Function
+
+    Public Function TVShowPosterandFanartDownload(ByVal FullString As String, ByVal ArtforDownload() As String, ByVal Path As String) As Boolean
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.LoadXml(FullString)
+        m_nodelist = m_xmld.SelectNodes("/tvshow")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        If Preferences.downloadtvseasonthumbs = True Then
+            Try
+                For Each m_node In m_nodelist
+                    For Each NodeChild In m_node.ChildNodes
+                        If (NodeChild.Name.ToLower = "thumb") Then
+                            If NodeChild.Attributes.Count > 0 Then
+                                If (NodeChild.Attributes("type").Value = "season") Then
+                                    If SeasonPosters.Length < CInt(NodeChild.Attributes("season").Value) Then
+                                        ReDim Preserve SeasonPosters(NodeChild.Attributes("season").Value + 1)
+                                    End If
+                                    If CInt(NodeChild.Attributes("season").Value) >= 0 Then
+                                        If SeasonPosters(NodeChild.Attributes("season").Value) = Nothing Then
+                                            SeasonPosters(NodeChild.Attributes("season").Value) = NodeChild.InnerText
+                                        End If
+                                    Else
+                                        If Seasonall = Nothing Then Seasonall = NodeChild.InnerText
+                                    End If
+                                End If
+                            End If
+                        End If
+                    Next
+                Next
+            Catch
+            End Try
+        End If
+        Dim myWebClient As New System.Net.WebClient()
+        If Preferences.tvposter = True Then
+            If Preferences.postertype = "banner" Then
+                Dim ImageFilename As String = Path & "\folder.jpg"
+                If ArtforDownload(0) <> Nothing Then
+                    myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(0), ImageFilename)
+                End If
+            ElseIf Preferences.postertype = "poster" Then
+                Dim ImageFilename As String = Path & "\folder.jpg"
+                If ArtforDownload(1) <> Nothing Then
+                    myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(1), ImageFilename)
+                End If
+            End If
+        End If
+        If Preferences.tvfanart = True Then
+            Dim ImageFilename As String = Path & "\fanart.jpg"
+            If ArtforDownload(2) <> Nothing Then
+                myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
+                '-----------------Start Resize Fanart
+                If Preferences.resizefanart = 2 Then
+                    Dim FanartToBeResized As New Bitmap(ImageFilename)
+                    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
+                        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
+                        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
+                    Else
+                        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+                    End If
+                ElseIf Preferences.resizefanart = 3 Then
+                    Dim FanartToBeResized As New Bitmap(ImageFilename)
+                    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
+                        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
+                        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
+                    Else
+                        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+                    End If
+                End If
+                '-----------------End Resize Fanart
+            End If
+        End If
+
+        If Preferences.downloadtvseasonthumbs = True Then
+            For n As Integer = 0 To SeasonPosters.Length - 1
+                Dim SeasonTemp As String = ""
+                If n <= 9 Then
+                    SeasonTemp = "0" & n.ToString
+                Else
+                    SeasonTemp = n.ToString
+                End If
+                Dim ImageFilename As String = Path & "\season" & SeasonTemp & ".tbn"
+                If SeasonPosters(n) <> Nothing Then
+                    myWebClient.DownloadFile(SeasonPosters(n), ImageFilename)
+                    If n = 0 Then
+                        File.Copy(ImageFilename, Path & "\season-specials.tbn")
+                    End If
+                End If
+
+            Next
+            Dim ImageFilename1 As String = Path & "\season-all.tbn"
+            If Seasonall <> Nothing Then
+                myWebClient.DownloadFile(Seasonall, ImageFilename1)
+            End If
+        End If
+        Return True
+    End Function
+
+    Public Function InsertFileEpisodeInformationTags(ByVal Entrada() As String, ByVal Filename As String) As String
+        Dim WorkingFileDetails As FullFileDetails = Preferences.Get_HdTags(Filename)
+        Dim FileInfoString As String = ""
+        Dim TempString As String = ""
+
+        For n As Integer = 0 To Entrada.Length - 1
+            FileInfoString &= "<episodedetails>" & vbLf & "<fileinfo>" & vbLf & "<streamdetails>" & vbLf & "<video>" & vbLf
+
+            If WorkingFileDetails.filedetails_video.Width <> Nothing Then FileInfoString &= "<width>" & WorkingFileDetails.filedetails_video.Width.Value & "</width>" & vbLf
+            If WorkingFileDetails.filedetails_video.Height <> Nothing Then FileInfoString &= "<height>" & WorkingFileDetails.filedetails_video.Height.Value & "</height>" & vbLf
+            If WorkingFileDetails.filedetails_video.Aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.Aspect.Value & "</aspect>" & vbLf
+            If WorkingFileDetails.filedetails_video.Codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.Codec.Value & "</codec>" & vbLf
+            If WorkingFileDetails.filedetails_video.FormatInfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.FormatInfo.Value & "</format>" & vbLf
+            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<duration>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</duration>" & vbLf
+            If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value).ToString
+            If WorkingFileDetails.filedetails_video.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.Bitrate.Value & "</bitrate>" & vbLf
+            If WorkingFileDetails.filedetails_video.BitrateMode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.BitrateMode.Value & "</bitratemode>" & vbLf
+            If WorkingFileDetails.filedetails_video.BitrateMax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.BitrateMax.Value & "</bitratemax>" & vbLf
+            If WorkingFileDetails.filedetails_video.Container <> Nothing Then FileInfoString &= "<container>" & WorkingFileDetails.filedetails_video.Container.Value & "</container>" & vbLf
+            If WorkingFileDetails.filedetails_video.CodecId <> Nothing Then FileInfoString &= "<codecid>" & WorkingFileDetails.filedetails_video.CodecId.Value & "</codecid>" & vbLf
+            If WorkingFileDetails.filedetails_video.CodecInfo <> Nothing Then FileInfoString &= "<codecinfo>" & WorkingFileDetails.filedetails_video.CodecInfo.Value & "</codecinfo>" & vbLf
+            If WorkingFileDetails.filedetails_video.ScanType <> Nothing Then FileInfoString &= "<scantype>" & WorkingFileDetails.filedetails_video.ScanType.Value & "</scantype>" & vbLf
+            FileInfoString &= "</video>" & vbLf
+            If WorkingFileDetails.filedetails_audio.Count > 0 Then
+                For Each item In WorkingFileDetails.filedetails_audio
+                    FileInfoString &= "<audio>" & vbLf
+                    If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
+                    If item.Codec <> Nothing Then FileInfoString &= "<codec>" & item.Codec.Value & "</codec>" & vbLf
+                    If item.Channels <> Nothing Then FileInfoString &= "<channels>" & item.Channels.Value & "</channels>" & vbLf
+                    If item.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & item.Bitrate.Value & "</bitrate>" & vbLf
+                    FileInfoString &= "</audio>" & vbLf
+                Next
+                If WorkingFileDetails.filedetails_subtitles.Count > 0 Then
+                    FileInfoString &= "<subtitle>" & vbLf
+                    For Each item In WorkingFileDetails.filedetails_subtitles
+                        If item.Language <> Nothing Then FileInfoString &= "<language>" & item.Language.Value & "</language>" & vbLf
+                    Next
+                    FileInfoString &= "</subtitle>" & vbLf
+                End If
+            End If
+            FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
+            FileInfoString &= "<createdate>" & Format(System.DateTime.Now, "yyyyMMddHHmmss").ToString & "</createdate>" & vbLf
+            TempString = ""
+            TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))
+            TempString = TempString.Replace("<details>", "")
+            TempString = FileInfoString & TempString & "</episodedetails>"
+            If Entrada.Length > 1 Then TempString &= vbLf
+            FileInfoString = TempString
+        Next
+        If Entrada.Length > 1 Then TempString = "<multiepisodenfo>" & vbLf & TempString & vbLf & "</multiepisodenfo>"
+        Return TempString
+    End Function
+
+    Public Function ProcessEpisodeFile(ByVal Entrada As String, ByVal HowManyEpisodes As Integer) As List(Of TvEpisode)
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+        Dim newActor As New Media_Companion.Actor
+
+        episodeXMLinformation.Clear()
+        m_xmld = New XmlDocument()
+        m_xmld.LoadXml(Entrada)
+        If HowManyEpisodes > 1 Then
+            m_nodelist = m_xmld.SelectNodes("/multiepisodenfo/episodedetails")
+        Else
+            m_nodelist = m_xmld.SelectNodes("/episodedetails")
+        End If
+        Dim NodeChild As XmlNode
+        Dim Nodechild1 As XmlNode
+        Dim Counter As Integer = 0
+
+        For Each m_node In m_nodelist
+            'TempXMLEpisode.Aired = Nothing
+            'TempXMLEpisode.Credits = Nothing
+            'TempXMLEpisode.Director = Nothing
+            'TempXMLEpisode.Episode.Value = Nothing
+            'TempXMLEpisode.Genre = Nothing
+            'TempXMLEpisode.Plot = Nothing
+            'TempXMLEpisode.Rating = Nothing
+            'TempXMLEpisode.Season.Value = Nothing
+            'TempXMLEpisode.Thumbnail.FileName = Nothing
+            'TempXMLEpisode.Title = Nothing
+            'TempXMLEpisode.ListActors.Clear()
+            For Each NodeChild In m_node.ChildNodes
+                Select Case NodeChild.Name.ToLower
+                    Case "aired"
+                        TempXMLEpisode.Aired.Value = NodeChild.InnerText
+                    Case "credits"
+                        If TempXMLEpisode.Credits.Value Is Nothing Then
+                            TempXMLEpisode.Credits.Value = NodeChild.InnerText
+                        Else
+                            TempXMLEpisode.Credits.Value &= " / " & NodeChild.InnerText
+                        End If
+                    Case "director"
+                        TempXMLEpisode.Director.Value = NodeChild.InnerText
+                    Case "genre"
+                        If TempXMLEpisode.Genre.Value Is Nothing Then
+                            TempXMLEpisode.Genre.Value = NodeChild.InnerText
+                        Else
+                            TempXMLEpisode.Genre.Value &= " / " & NodeChild.InnerText
+                        End If
+                    Case "plot"
+                        TempXMLEpisode.Plot.Value = NodeChild.InnerText
+                    Case "rating"
+                        TempXMLEpisode.Rating.Value = NodeChild.InnerText
+                    Case "thumb"
+                        TempXMLEpisode.Thumbnail.FileName = NodeChild.InnerText
+                    Case "title"
+                        TempXMLEpisode.Title.Value = NodeChild.InnerText
+                    Case "season"
+                        TempXMLEpisode.Season.Value = NodeChild.InnerText
+                    Case "episode"
+                        TempXMLEpisode.Episode.Value = NodeChild.InnerText
+                    Case "actor"
+                        For Each Nodechild1 In NodeChild.ChildNodes
+                            Select Case Nodechild1.Name
+                                Case "name"
+                                    newActor.Name.Value = Nodechild1.InnerText
+                                Case "role"
+                                    newActor.Role.Value = Nodechild1.InnerText
+                                Case "thumb"
+                                    newActor.Thumb.Value = Nodechild1.InnerText
+                                Case "actorid"
+                            End Select
+                        Next
+                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.ListActors.Add(newActor)
+                End Select
+            Next
+            episodeXMLinformation.Add(TempXMLEpisode)
+        Next
+        Dim Teste As New List(Of TvEpisode)
+        Teste = episodeXMLinformation.ConvertAll(New Converter(Of TvEpisode, TvEpisode)(AddressOf NeededConversion))
+        Return Teste
+    End Function
+
+    Public Sub Read_XBMC_TVDB_Scraper_Config()
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
+        m_nodelist = m_xmld.SelectNodes("/settings")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        If Form1.ComboBox_TVDB_Language.Items.Count > 0 Then Form1.ComboBox_TVDB_Language.Items.Clear()
+        Try
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If (NodeChild.Name.ToLower = "setting") Then
+                        If NodeChild.Attributes.Count > 0 Then
+                            Try
+                                Select Case NodeChild.Attributes("id").Value.ToLower
+                                    Case "dvdorder"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.RadioButton_XBMC_Scraper_TVDB_DVDOrder.Checked = Test
+                                    Case "absolutenumber"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.RadioButton_XBMC_Scraper_TVDB_AbsoluteNumber.Checked = Test
+                                    Case "fanart"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_TVDB_Fanart.Checked = Test
+                                    Case "posters"
+                                        Dim Test As Boolean = NodeChild.Attributes("default").Value
+                                        Form1.CheckBox_XBMC_Scraper_TVDB_Posters.Checked = Test
+                                    Case "language"
+                                        Dim Test As String = NodeChild.Attributes("default").Value
+                                        Dim AllValues As String = NodeChild.Attributes("values").Value
+                                        Dim GetOut As Boolean = False
+                                        Do
+                                            Dim Position As Integer = AllValues.LastIndexOf("|")
+                                            Dim TempValue As String = ""
+                                            If Position = -1 Then
+                                                TempValue = Trim(AllValues.Substring(0, AllValues.Length))
+                                                GetOut = True
+                                            Else
+                                                TempValue = Trim(AllValues.Substring(Position + 1, (AllValues.Length - Position - 1)))
+                                                AllValues = AllValues.Remove(Position, (AllValues.Length - Position))
+                                            End If
+                                            Form1.ComboBox_TVDB_Language.Items.Add(TempValue)
+                                        Loop Until GetOut = True
+                                        Form1.ComboBox_TVDB_Language.Text = Test
+                                End Select
+                            Catch
+                                'empty node
+                            End Try
+                        End If
+                    End If
+                Next
+            Next
+        Catch
+        End Try
+
+    End Sub
+    Public Function Save_XBMC_TVDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String) As Boolean
+        Dim m_xmld As XmlDocument
+        Dim m_nodelist As XmlNodeList
+        Dim m_node As XmlNode
+
+        m_xmld = New XmlDocument()
+        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
+        m_nodelist = m_xmld.SelectNodes("/settings")
+        Dim NodeChild As XmlNode
+        Dim MoviePosterURL As String = ""
+        Dim MovieFanartURL As String = ""
+        Dim SeasonPosters(0) As String
+        Dim Seasonall As String = Nothing
+
+        Try
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If (NodeChild.Name.ToLower = "setting") Then
+                        If NodeChild.Attributes.Count > 0 Then
+                            Try
+                                If KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
+
+                                    Select Case KeyToBeChanged 'NodeChild.Attributes("id").Value.ToLower
+                                        Case "dvdorder"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "absolutenumber"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "fanart"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "posters"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                        Case "language"
+                                            NodeChild.Attributes("default").Value = ChangeValue
+                                    End Select
+                                End If
+                            Catch
+                                'empty node
+                            End Try
+                        End If
+                    End If
+                Next
+            Next
+        Catch
+        End Try
+        m_xmld.Save(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
+    End Function
+#End Region
+
 
 #Region "nfoFileFunctions"
 
@@ -1054,6 +1626,105 @@ Module General
 
 #End Region
 
+
+    Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of TvEpisode), ByVal Language As String) As List(Of TvEpisode)
+        episodeInformation.Clear()
+        Dim EpisodeInfoContent(EpisodeArray.Count - 1) As String
+
+        For n As Integer = 0 To EpisodeArray.Count - 1
+            EpisodeArray(n).Season.Value = CInt(EpisodeArray(n).Season.Value)
+            EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
+            TempXMLEpisode.VideoFilePath = EpisodeArray(n).MediaExtension.Substring(0, EpisodeArray(n).MediaExtension.LastIndexOf(".")) & ".nfo"
+            TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
+            TempXMLEpisode.Season.Value = EpisodeArray(n).Season.Value
+            TempXMLEpisode.MediaExtension = EpisodeArray(n).MediaExtension
+            TempXMLEpisode.PlayCount.Value = "0"
+            ParametersForScraper(1) = TVDBId
+            ParametersForScraper(3) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & Language & ".xml"
+            ParametersForScraper(4) = Nothing
+            Try
+                For x As Integer = 0 To 20
+                    ParametersForScraper(7) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.Value & "/" & EpisodeArray(n).Episode.Value & "/" & Language & ".xml")
+                    'ParametersForScraper(7) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVDBId & "/" & SortOrder & "/" & EpisodeArray(n).Season.value & "/" & EpisodeArray(n).episodeno & "/" & Language & ".xml")
+                    If ParametersForScraper(7).Substring(0, 5).ToLower = "<?xml" Then
+                        Exit For
+                    Else
+                        If x = 20 Then
+                            episodeInformation.Clear()
+                            Return episodeInformation
+                            Exit Function
+                        End If
+                    End If
+                Next
+                EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
+            Catch
+                episodeInformation.Clear()
+                Return episodeInformation
+                Exit Function
+                'não achou o episodio
+            End Try
+        Next
+
+
+        FinalScrapResult = InsertFileEpisodeInformationTags(EpisodeInfoContent, EpisodeArray(0).MediaExtension)
+        episodeInformation = ProcessEpisodeFile(FinalScrapResult, EpisodeArray.Count)
+        If episodeInformation(0).Thumbnail.FileName <> Nothing Then
+            Dim myWebClient As New System.Net.WebClient()
+            Dim ImageFilename As String = EpisodeArray(0).MediaExtension.Substring(0, EpisodeArray(0).MediaExtension.LastIndexOf(".")) & ".tbn"
+            myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
+        End If
+        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.VideoFilePath, FinalScrapResult)
+
+        Return episodeInformation
+    End Function
+
+    Public Function XBMCScrape_TVShow_General_Info(ByVal Scraper As String, ByVal TVShowid As String, ByVal Language As String, ByVal Path As String) As String
+        Try
+            Dim Parameters(2) As String
+            Dim ParametersForScraper(9) As String
+            ParametersForScraper(0) = Utilities.DownloadTextFiles("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
+            'ParametersForScraper(0) = New WebClient().DownloadString("http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml")
+            Dim m_xmld As XmlDocument
+            Dim m_nodelist As XmlNodeList
+            Dim m_node As XmlNode
+            m_xmld = New XmlDocument()
+            m_xmld.LoadXml(ParametersForScraper(0))
+            m_nodelist = m_xmld.SelectNodes("/Data/Series")
+            Dim ArtforDownload(2) As String
+            For Each m_node In m_nodelist
+                For Each NodeChild In m_node.ChildNodes
+                    If NodeChild.Name.ToLower = "banner" Then
+                        ArtforDownload(0) = NodeChild.InnerText
+                    ElseIf NodeChild.Name.ToLower = "poster" Then
+                        ArtforDownload(1) = NodeChild.InnerText
+                    ElseIf NodeChild.Name.ToLower = "fanart" Then
+                        ArtforDownload(2) = NodeChild.InnerText
+                    End If
+                Next
+            Next
+            Dim IMDB_ID As String = ParametersForScraper(0).Substring(ParametersForScraper(0).ToLower.IndexOf("<imdb_id>") + 9, (ParametersForScraper(0).ToLower.LastIndexOf("</imdb_id>") - ParametersForScraper(0).ToLower.IndexOf("<imdb_id>") - 9))
+            ParametersForScraper(1) = TVShowid
+            ParametersForScraper(9) = TVShowid
+            Parameters(0) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/" & Language & ".xml"
+            Parameters(1) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/banners.xml"
+            Parameters(2) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/actors.xml"
+            For n As Integer = 0 To 2
+                ParametersForScraper(4) = Parameters(n)
+                Parameters(n) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
+            Next
+            Parameters(0) = Parameters(0).Substring(0, Parameters(0).LastIndexOf("<fanart url="))
+            Parameters(1) = Parameters(1).Substring(Parameters(1).IndexOf("<thumb>"), (Parameters(1).LastIndexOf("</details>") - Parameters(1).IndexOf("<thumb>")))
+            Parameters(2) = Parameters(2).Substring(Parameters(2).IndexOf("<actor>"), (Parameters(2).LastIndexOf("<fanart url=") - Parameters(2).IndexOf("<actor>"))) & "</details>"
+            Dim Temp As String = Parameters(0) & Parameters(1) & Parameters(2)
+            Temp = Clean_AddTVShowExtraFields(Temp, Language, IMDB_ID)
+            Path = Path.Substring(0, Path.LastIndexOf("\"))
+            Dim Downloads As Boolean = TVShowPosterandFanartDownload(Temp, ArtforDownload, Path)
+            Return Temp
+        Catch
+            Return "error"
+        End Try
+    End Function
+
     Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
         ' 1st stage
         Dim ExtraID As String = SearchExtraIDinNFO(Filename)
@@ -1062,13 +1733,13 @@ Module General
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
             ParametersForScraper(0) = cleanfilename(MovieName, False)
             ParametersForScraper(1) = GetYearByFilename(MovieName, False)
-            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper)
+            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
             FinalScrapResult = FinalScrapResult.Replace("</url>", "")
             FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
             ' 2st stage
             ParametersForScraper(0) = FinalScrapResult
-            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper)
+            FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
             Dim m_xmld As XmlDocument
             Dim m_nodelist As XmlNodeList
             Dim m_node As XmlNode
@@ -1102,10 +1773,14 @@ Module General
             ParametersForScraper(1) = ExtraID
         End If
         ' 3st stage
-        FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper)
-        Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
-        FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
-        FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
+        FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
+        If FinalScrapResult.ToLower <> "error" Then
+
+            Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
+            FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+            FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
+
+        End If
         Return FinalScrapResult
     End Function
 
@@ -1133,7 +1808,7 @@ Module General
             End If
         End If
         ' 3st stage
-        FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper)
+        FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
         FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
         FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
         Return FinalScrapResult

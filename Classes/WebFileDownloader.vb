@@ -14,6 +14,7 @@ Public Class WebFileDownloader
             Return mCurrentFile
         End Get
     End Property
+
     Public Function DownloadFile(ByVal URL As String, ByVal Location As String) As Boolean
         Try
             mCurrentFile = GetFileName(URL)
@@ -35,7 +36,7 @@ Public Class WebFileDownloader
         End Try
     End Function
     Public Function DownloadFileWithProgress(ByVal URL As String, ByVal Location As String) As Boolean
-        Dim FS As FileStream
+        Dim FS As FileStream = Nothing
         Try
             mCurrentFile = GetFileName(URL)
             Dim wRemote As WebRequest
@@ -72,11 +73,11 @@ Public Class WebFileDownloader
             Return False
         End Try
     End Function
-
+    Const KB As Integer = 1024
+    Const MB As Integer = KB * KB
     Public Shared Function FormatFileSize(ByVal Size As Long) As String
         Try
-            Dim KB As Integer = 1024
-            Dim MB As Integer = KB * KB
+
             ' Return size of file in kilobytes.
             If Size < KB Then
                 Return (Size.ToString("D") & " bytes")
@@ -93,5 +94,6 @@ Public Class WebFileDownloader
         Catch ex As Exception
             Return Size.ToString
         End Try
+        Return "Error"
     End Function
 End Class

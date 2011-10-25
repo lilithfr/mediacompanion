@@ -22,32 +22,34 @@ Partial Class frmBatchScraper
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
-        Me.CheckBox22 = New System.Windows.Forms.CheckBox
-        Me.CheckBox21 = New System.Windows.Forms.CheckBox
-        Me.CheckBox14 = New System.Windows.Forms.CheckBox
-        Me.CheckBox13 = New System.Windows.Forms.CheckBox
-        Me.CheckBox12 = New System.Windows.Forms.CheckBox
-        Me.CheckBox11 = New System.Windows.Forms.CheckBox
-        Me.CheckBox10 = New System.Windows.Forms.CheckBox
-        Me.CheckBox9 = New System.Windows.Forms.CheckBox
-        Me.CheckBox8 = New System.Windows.Forms.CheckBox
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox
-        Me.CheckBox6 = New System.Windows.Forms.CheckBox
-        Me.CheckBox5 = New System.Windows.Forms.CheckBox
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox
-        Me.Button1 = New System.Windows.Forms.Button
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox
-        Me.CheckBox18 = New System.Windows.Forms.CheckBox
-        Me.CheckBox17 = New System.Windows.Forms.CheckBox
-        Me.Button2 = New System.Windows.Forms.Button
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox
-        Me.CheckBox16 = New System.Windows.Forms.CheckBox
-        Me.CheckBox15 = New System.Windows.Forms.CheckBox
-        Me.CheckBox19 = New System.Windows.Forms.CheckBox
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox22 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox21 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox13 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox12 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox9 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -55,6 +57,8 @@ Partial Class frmBatchScraper
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CheckBox20)
+        Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Controls.Add(Me.CheckBox22)
         Me.GroupBox1.Controls.Add(Me.CheckBox21)
@@ -72,10 +76,30 @@ Partial Class frmBatchScraper
         Me.GroupBox1.Controls.Add(Me.CheckBox3)
         Me.GroupBox1.Location = New System.Drawing.Point(14, 41)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(456, 111)
+        Me.GroupBox1.Size = New System.Drawing.Size(456, 133)
         Me.GroupBox1.TabIndex = 28
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Select Main Tags to Rescrape"
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(336, 88)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(50, 17)
+        Me.CheckBox2.TabIndex = 17
+        Me.CheckBox2.Text = "Stars"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(336, 65)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(62, 17)
+        Me.CheckBox1.TabIndex = 16
+        Me.CheckBox1.Text = "Country"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox22
         '
@@ -219,7 +243,7 @@ Partial Class frmBatchScraper
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(15, 278)
+        Me.Button1.Location = New System.Drawing.Point(15, 300)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 32
@@ -230,7 +254,7 @@ Partial Class frmBatchScraper
         '
         Me.GroupBox3.Controls.Add(Me.CheckBox18)
         Me.GroupBox3.Controls.Add(Me.CheckBox17)
-        Me.GroupBox3.Location = New System.Drawing.Point(15, 205)
+        Me.GroupBox3.Location = New System.Drawing.Point(15, 227)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(455, 67)
         Me.GroupBox3.TabIndex = 31
@@ -259,7 +283,7 @@ Partial Class frmBatchScraper
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(395, 278)
+        Me.Button2.Location = New System.Drawing.Point(395, 300)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 33
@@ -271,7 +295,7 @@ Partial Class frmBatchScraper
         Me.GroupBox4.Controls.Add(Me.CheckBox16)
         Me.GroupBox4.Controls.Add(Me.CheckBox15)
         Me.GroupBox4.Controls.Add(Me.CheckBox19)
-        Me.GroupBox4.Location = New System.Drawing.Point(14, 158)
+        Me.GroupBox4.Location = New System.Drawing.Point(14, 180)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(456, 41)
         Me.GroupBox4.TabIndex = 34
@@ -316,23 +340,23 @@ Partial Class frmBatchScraper
         Me.Label1.Size = New System.Drawing.Size(440, 26)
         Me.Label1.TabIndex = 29
         Me.Label1.Text = "This form can be used to rescrape all movies, you can select which tags are updat" & _
-            "ed below," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "all other tags will remain unchanged."
+    "ed below," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "all other tags will remain unchanged."
         '
-        'CheckBox1
+        'CheckBox20
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(336, 65)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(62, 17)
-        Me.CheckBox1.TabIndex = 16
-        Me.CheckBox1.Text = "Country"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox20.AutoSize = True
+        Me.CheckBox20.Location = New System.Drawing.Point(6, 111)
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Size = New System.Drawing.Size(48, 17)
+        Me.CheckBox20.TabIndex = 18
+        Me.CheckBox20.Text = "Year"
+        Me.CheckBox20.UseVisualStyleBackColor = True
         '
-        'batch_scraper
+        'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(477, 304)
+        Me.ClientSize = New System.Drawing.Size(485, 326)
         Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Button1)
@@ -340,9 +364,9 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.Label1)
-        Me.MaximumSize = New System.Drawing.Size(493, 342)
-        Me.MinimumSize = New System.Drawing.Size(493, 342)
-        Me.Name = "batch_scraper"
+        Me.MaximumSize = New System.Drawing.Size(493, 360)
+        Me.MinimumSize = New System.Drawing.Size(493, 360)
+        Me.Name = "frmBatchScraper"
         Me.Text = "Batch Update Wizard"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
@@ -380,4 +404,6 @@ Partial Class frmBatchScraper
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents CheckBox16 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
 End Class
