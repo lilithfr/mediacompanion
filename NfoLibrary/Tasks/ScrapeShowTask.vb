@@ -234,24 +234,25 @@ Namespace Tasks
                                     workingpath = workingpath & ".actors\"
 
                                     Utilities.EnsureFolderExists(workingpath)
+                                    '**Commented out the following as fairly certain Utilities.EnsureFolderExists() replaces this - Huey
+                                    'Dim hg As New IO.DirectoryInfo(workingpath)
+                                    'Dim destsorted As Boolean = False
+                                    'If Not hg.Exists Then
 
-                                    Dim hg As New IO.DirectoryInfo(workingpath)
-                                    Dim destsorted As Boolean = False
-                                    If Not hg.Exists Then
-                                        Utilities.EnsureFolderExists(workingpath)
-                                        IO.Directory.CreateDirectory(workingpath)
-                                        destsorted = True
+                                    '    IO.Directory.CreateDirectory(workingpath)
+                                    '    destsorted = True
 
-                                    Else
-                                        destsorted = True
-                                    End If
-                                    If destsorted = True Then
-                                        Dim filename As String = NewAct.actorname.Replace(" ", "_")
-                                        filename = filename & ".tbn"
-                                        filename = IO.Path.Combine(workingpath, filename)
+                                    'Else
+                                    '    destsorted = True
+                                    'End If
+                                    'If destsorted = True Then
+                                    Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
+                                    filename = filename.Replace(" ", "_")
+                                    filename = filename & ".tbn"
+                                    filename = IO.Path.Combine(workingpath, filename)
 
-                                        Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
-                                    End If
+                                    Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
+                                    'End If
                                 End If
                             End If
                             If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then

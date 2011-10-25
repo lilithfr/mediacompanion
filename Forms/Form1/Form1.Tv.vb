@@ -1135,25 +1135,25 @@ Partial Public Class Form1
                                         workingpath = workingpath & ".actors\"
 
                                         Utilities.EnsureFolderExists(workingpath)
+                                        '**Commented out the following as fairly certain Utilities.EnsureFolderExists() replaces this - Huey
+                                        'Dim hg As New IO.DirectoryInfo(workingpath)
+                                        'Dim destsorted As Boolean = False
+                                        'If Not hg.Exists Then
 
-                                        Dim hg As New IO.DirectoryInfo(workingpath)
-                                        Dim destsorted As Boolean = False
-                                        If Not hg.Exists Then
+                                        '    IO.Directory.CreateDirectory(workingpath)
+                                        '    destsorted = True
 
-                                            IO.Directory.CreateDirectory(workingpath)
-                                            destsorted = True
-
-                                        Else
-                                            destsorted = True
-                                        End If
-                                        If destsorted = True Then
-                                            Dim filename As String = NewAct.actorname.Replace(" ", "_")
-                                            filename = filename.Replace("""", "'")   'Simple hack to fix exception with quotes in filename; should be made more robust. Huey
-                                            filename = filename & ".tbn"
-                                            filename = IO.Path.Combine(workingpath, filename)
-                                            'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
-                                            Utilities.DownloadFile("http://www.thetvdb.com/banners/" & NewAct.actorthumb, filename)
-                                        End If
+                                        'Else
+                                        '    destsorted = True
+                                        'End If
+                                        'If destsorted = True Then
+                                        Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
+                                        filename = filename.Replace(" ", "_")
+                                        filename = filename & ".tbn"
+                                        filename = IO.Path.Combine(workingpath, filename)
+                                        'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
+                                        Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
+                                        'End If
                                     End If
                                 End If
                                 If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
