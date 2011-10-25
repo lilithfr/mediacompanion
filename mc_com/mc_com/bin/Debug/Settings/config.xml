@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xbmc_media_companion_config_v1.0>
+  <tvfolder>E:\TV Shows\Andromeda</tvfolder>
+  <tvfolder>E:\TV Shows\Angel</tvfolder>
+  <tvfolder>E:\TV Shows\Battlestar Galactica</tvfolder>
+  <tvfolder>E:\TV Shows\Buck Rogers</tvfolder>
+  <tvfolder>E:\TV Shows\Buffy</tvfolder>
+  <tvfolder>E:\TV Shows\Doctor Who (2005)</tvfolder>
+  <tvfolder>E:\TV Shows\Dollhouse</tvfolder>
+  <tvfolder>E:\TV Shows\Farscape</tvfolder>
+  <tvfolder>E:\TV Shows\Fawlty Towers</tvfolder>
+  <tvfolder>E:\TV Shows\Impact</tvfolder>
+  <tvfolder>E:\TV Shows\Legend of Earthsea</tvfolder>
+  <tvfolder>E:\TV Shows\Lexx</tvfolder>
+  <tvfolder>E:\TV Shows\Numb3rs</tvfolder>
+  <tvfolder>E:\TV Shows\Only Fools and Horses</tvfolder>
+  <tvfolder>E:\TV Shows\Prison Break</tvfolder>
+  <tvfolder>E:\TV Shows\Shogun</tvfolder>
+  <tvfolder>E:\TV Shows\Smallville</tvfolder>
+  <tvfolder>E:\TV Shows\Star Trek Of Gods and Men</tvfolder>
+  <tvfolder>E:\TV Shows\Supernatural</tvfolder>
+  <tvfolder>E:\TV Shows\Terminator - The Sarah Connor Chronicles</tvfolder>
+  <tvfolder>E:\TV Shows\The Day of the Triffids</tvfolder>
+  <tvfolder>E:\TV Shows\Torchwood</tvfolder>
+  <tvfolder>E:\TV Shows\V (2009)</tvfolder>
+  <tvfolder>D:\TV Shows\Frank Herbert's Children of Dune</tvfolder>
+  <tvfolder>D:\TV Shows\Frank Herbert's Dune</tvfolder>
+  <tvfolder>D:\TV Shows\Friends</tvfolder>
+  <tvfolder>D:\TV Shows\Heroes</tvfolder>
+  <tvfolder>D:\TV Shows\House</tvfolder>
+  <tvfolder>D:\TV Shows\Hulk</tvfolder>
+  <tvfolder>D:\TV Shows\Jonathan Creek</tvfolder>
+  <tvfolder>D:\TV Shows\Legend of the Seeker</tvfolder>
+  <tvfolder>D:\TV Shows\Lois &amp; Clark The New Adventures of Superman</tvfolder>
+  <tvfolder>D:\TV Shows\Lost</tvfolder>
+  <tvfolder>D:\TV Shows\Mutant X</tvfolder>
+  <tvfolder>D:\TV Shows\Red Dwarf</tvfolder>
+  <tvfolder>D:\TV Shows\Sharpe</tvfolder>
+  <tvfolder>D:\TV Shows\Star Trek - The Animated Series</tvfolder>
+  <tvfolder>D:\TV Shows\StarTrek - Deep Space Nine</tvfolder>
+  <tvfolder>D:\TV Shows\StarTrek - The Next Generation2</tvfolder>
+  <tvfolder>D:\TV Shows\StarTrek - TOS</tvfolder>
+  <tvfolder>D:\TV Shows\StarTrek - Voyager</tvfolder>
+  <tvfolder>D:\TV Shows\The A-Team</tvfolder>
+  <tvfolder>D:\TV Shows\The Hitchhiker's Guide to the Galaxy</tvfolder>
+  <tvfolder>D:\TV Shows\The Lone Gunmen</tvfolder>
+  <tvfolder>D:\TV Shows\The Simpsons</tvfolder>
+  <tvfolder>D:\TV Shows\The X-Files</tvfolder>
+  <tvfolder>D:\TV Shows\V</tvfolder>
+  <tvfolder>D:\TV Shows\24</tvfolder>
+  <tvfolder>D:\TV Shows\Babylon 5</tvfolder>
+  <tvfolder>D:\TV Shows\Bones</tvfolder>
+  <tvfolder>D:\TV Shows\Enterprise</tvfolder>
+  <tvfolder>D:\TV Shows\Eureka</tvfolder>
+  <tvfolder>D:\TV Shows\Firefly</tvfolder>
+  <tvrootfolder>E:\TV Shows</tvrootfolder>
+  <tvrootfolder>D:\TV Shows</tvrootfolder>
+  <nfofolder>H:\Movies</nfofolder>
+  <offlinefolder>C:\Offline Movies</offlinefolder>
+  <gettrailer>true</gettrailer>
+  <keepfoldername>false</keepfoldername>
+  <startupcache>true</startupcache>
+  <ignoretrailers>false</ignoretrailers>
+  <moviescraper>0</moviescraper>
+  <nfoposterscraper>0</nfoposterscraper>
+  <alwaysuseimdbid>false</alwaysuseimdbid>
+  <ignoreactorthumbs>false</ignoreactorthumbs>
+  <maxactors>15</maxactors>
+  <enablehdtags>true</enablehdtags>
+  <renamenfofiles>false</renamenfofiles>
+  <checkinfofiles>true</checkinfofiles>
+  <tvshowautoquick>false</tvshowautoquick>
+  <disablelogfiles>false</disablelogfiles>
+  <actorseasy>true</actorseasy>
+  <copytvactorthumbs>true</copytvactorthumbs>
+  <fanartnotstacked>false</fanartnotstacked>
+  <posternotstacked>false</posternotstacked>
+  <lastpath>H:\Movies</lastpath>
+  <downloadfanart>true</downloadfanart>
+  <scrapemovieposters>true</scrapemovieposters>
+  <usefanart>true</usefanart>
+  <dontdisplayposter>false</dontdisplayposter>
+  <usefoldernames>false</usefoldernames>
+  <rarsize>-1</rarsize>
+  <actorsave>false</actorsave>
+  <actorsavepath>
+  </actorsavepath>
+  <actornetworkpath>
+  </actornetworkpath>
+  <resizefanart>1</resizefanart>
+  <overwritethumbs>false</overwritethumbs>
+  <defaulttvthumb>poster</defaulttvthumb>
+  <imdbmirror>http://www.imdb.com/</imdbmirror>
+  <backgroundcolour>Silver</backgroundcolour>
+  <forgroundcolour>#D3D9DC</forgroundcolour>
+  <remembersize>false</remembersize>
+  <locx>0</locx>
+  <locy>0</locy>
+  <formheight>770</formheight>
+  <formwidth>1171</formwidth>
+  <videoplaybackmode>1</videoplaybackmode>
+  <createfolderjpg>false</createfolderjpg>
+  <basicsavemode>false</basicsavemode>
+  <startupdisplaynamemode>0</startupdisplaynamemode>
+  <namemode>1</namemode>
+  <tvdbmode>default</tvdbmode>
+  <tvdbactorscrape>3</tvdbactorscrape>
+  <usetransparency>false</usetransparency>
+  <transparencyvalue>255</transparencyvalue>
+  <downloadtvfanart>true</downloadtvfanart>
+  <downloadtvposter>true</downloadtvposter>
+  <keepfoldername>false</keepfoldername>
+  <downloadtvseasonthumbs>true</downloadtvseasonthumbs>
+  <maximumthumbs>10</maximumthumbs>
+  <startupmode>1</startupmode>
+  <hdtvtags>true</hdtvtags>
+  <disablelogs>false</disablelogs>
+  <disabletvlogs>true</disabletvlogs>
+  <overwritethumb>false</overwritethumb>
+  <savefanart>true</savefanart>
+  <postertype>poster</postertype>
+  <roundminutes>False</roundminutes>
+  <tvactorscrape>3</tvactorscrape>
+  <videomode>2</videomode>
+  <selectedvideoplayer>
+  </selectedvideoplayer>
+  <externalbrowser>true</externalbrowser>
+  <moviethumbpriority>Internet Movie Poster Awards|themoviedb.org|Movie Poster DB|IMDB</moviethumbpriority>
+  <tvdblanguage>en|English</tvdblanguage>
+  <certificatepriority>MPAA|UK|USA|Ireland|Australia|New Zealand|Norway|Singapore|South Korea|Philippines|Brazil|Netherlands|Malaysia|Argentina|Iceland|Canada (Quebec)|Canada (British Columbia/Ontario)|Canada (Alberta/Manitoba/Nova Scotia)|Peru|Sweden|Portugal|South Africa|Denmark|Hong Kong|Finland|India|Mexico|France|Italy|Switzerland (canton of Vaud)|Switzerland (canton of Geneva)|Germany|Greece|Austria</certificatepriority>
+  <splitcontainer1>300</splitcontainer1>
+  <splitcontainer2>537</splitcontainer2>
+  <splitcontainer3>306</splitcontainer3>
+  <splitcontainer4>569</splitcontainer4>
+  <splitcontainer5>469</splitcontainer5>
+  <seasonall>poster</seasonall>
+  <maximised>false</maximised>
+  <tvrename>2</tvrename>
+  <tvshowrebuildlog>False</tvshowrebuildlog>
+  <moviesortorder>0</moviesortorder>
+  <moviedefaultlist>0</moviedefaultlist>
+  <startuptab>1</startuptab>
+  <font>Verdana, 12pt</font>
+  <moviesets>
+    <set>James Bond Collection</set>
+    <set>Batman Collection</set>
+    <set>Carry On Collection</set>
+    <set>Star Trek Collection</set>
+    <set>Star Wars Collection</set>
+    <set>Jackie Chan Collection</set>
+    <set>Elvis Collection</set>
+    <set>Die Hard Collection</set>
+    <set>Sherlock Homes Collection</set>
+    <set>Harry Potter Collection</set>
+    <set>Halloween Collection</set>
+    <set>Lord of the Rings Collection</set>
+    <set>Norman Wisdom Collection</set>
+    <set>Rambo Collection</set>
+    <set>Bob Hope &amp; Bing Crosby Road Collection</set>
+    <set>Rocky Collection</set>
+    <set>Laurel &amp; Hardy Collection</set>
+    <set>Scarey Movie Collection</set>
+  </moviesets>
+  <table>
+    <sort>Sort Title|Ascending</sort>
+    <tab>title|150|0|True</tab>
+    <tab>year|35|1|True</tab>
+    <tab>playcount|55|2|True</tab>
+    <tab>fullpathandfilename|150|3|False</tab>
+    <tab>genre|150|4|True</tab>
+    <tab>runtime|45|5|True</tab>
+    <tab>outline|200|6|False</tab>
+    <tab>id|75|7|False</tab>
+    <tab>rating|40|8|True</tab>
+    <tab>set|150|9|True</tab>
+    <tab>sorttitle|150|10|False</tab>
+    <tab>top250|150|11|True</tab>
+    <tab>missingdata1|150|12|True</tab>
+  </table>
+</xbmc_media_companion_config_v1.0>

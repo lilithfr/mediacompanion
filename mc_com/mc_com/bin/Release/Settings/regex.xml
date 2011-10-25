@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<regexlist>
+  <tvregex>[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})</tvregex>
+  <tvregex>([\d]{1,4}) ?[xX] ?([\d]{1,4})</tvregex>
+  <tvregex>([0-9]+)([0-9][0-9])</tvregex>
+</regexlist>

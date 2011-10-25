@@ -1,0 +1,503 @@
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\bin\Debug\XBMC Media Companion.exe
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\bin\Debug\XBMC Media Companion.pdb
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\bin\Debug\XBMC Media Companion.xml
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\XBMC_Media_Companion.Form1.resources
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\XBMC_Media_Companion.Resources.resources
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\XBMC Media Companion.exe
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\XBMC Media Companion.xml
+C:\Documents and Settings\Billy\Local Settings\Application Data\Temporary Projects\XBMC Media Companion\obj\Debug\XBMC Media Companion.pdb
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AlphaBlendTextBox.pdb
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.exe
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.pdb
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.xml
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Filter.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.SplashScreen1.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.exe
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.xml
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.pdb
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+C:\Documents and Settings\Billy\My Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.xml
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.exe
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.xml
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AlphaBlendTextBox.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Filter.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.exe
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.splashscreen.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.exe
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.pdb
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Media Companion.xml
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AlphaBlendTextBox.pdb
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Filter.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.splashscreen.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.exe
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.xml
+D:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media Companion.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion\XBMC Media Companion\obj\Debug\Media_Companion.rescraperwizard.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.splashscreen.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.exe
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\class_mpdb_thumbs.dll
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.exe
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.xml
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.pdb
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.pdb
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.xml
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\class_mpdb_thumbs.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\tmdb_posters.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AlphaBlendTextBox.pdb
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.splashscreen.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.batch_scraper.resources
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.pdb
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.xml
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.dll
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.pdb
+D:\User Data\BIlly\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.xml
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.xml
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.pdb
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.xml
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.batch_scraper.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Dialog1.resources
+C:\Users\Billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tv_batch_wizard.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.exe
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.pdb
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.pdb
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\class_mpdb_thumbs.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.pdb
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.xml
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.pdb
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.xml
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.batch_scraper.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Dialog1.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.splashscreen.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tv_batch_wizard.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+D:\Users\billy\Documents\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.copyprogress.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe.config
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Interop.WMPLib.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\AxInterop.WMPLib.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.exe
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media Companion.pdb
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.exe
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Media Companion.pdb
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\class_mpdb_thumbs.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.pdb
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.xml
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.pdb
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.xml
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\Interop.WMPLib.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\AxInterop.WMPLib.dll
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\ResolveAssemblyReference.cache
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.batch_scraper.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.copyprogress.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.coverart.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Dialog1.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form1.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Form2.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.message_box.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.moviefanart.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.Resources.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.options.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.splashscreen.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tv_batch_wizard.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvedit.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvfanart.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.tvposters.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\Media_Companion.TVShowBrowser.resources
+C:\Visual Studio 2008\Projects\XBMC Media Companion new version\XBMC Media Companion\obj\Debug\XBMC Media Companion.vbproj.GenerateResource.Cache
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Media Companion.exe.config
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Interop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media Companion.exe
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media Companion.pdb
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Media Companion.exe
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Media Companion.pdb
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\Interop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Delete_Dialogue.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Form1.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Form2.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmoutputlog.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.message_box.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.Resources.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.tv_batch_wizard.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\GenerateResource-ResGen.write.1.tlog
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frnBatchScraper.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmCopyProgress.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmCoverArt.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmMovieFanart.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmDialog1.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmOptions.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmSplashscreen.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvEdit.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvFanart.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTvPosters.resources
+C:\Users\Eric\Desktop\MediaCompanionRepo\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Media Companion.exe.config
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Interop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\AxInterop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media Companion.exe
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media Companion.pdb
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Media Companion.exe
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Media Companion.pdb
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Interop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\AxInterop.WMPLib.dll
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\ResolveAssemblyReference.cache
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmCopyProgress.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmCoverArt.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Delete_Dialogue.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmDialog1.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Form1.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Form2.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmoutputlog.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.message_box.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmMovieFanart.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.Resources.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmOptions.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmSplashscreen.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.tv_batch_wizard.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTvEdit.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTvFanart.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTvPosters.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\GenerateResource-ResGen.read.1.tlog
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\GenerateResource-ResGen.write.1.tlog
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\obj\Debug\Media_Companion.frmBatchScraper.resources
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.imdb.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.impa.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.impa.com\impa.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\changelog.txt
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\icon.png
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\imdb.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.mtv.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.mtv.com\icon.png
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.mtv.com\mtv.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\icon.png
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\changelog.txt
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\daum-tv.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\icon.png
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\LICENSE.txt
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tv.daum.net\resources\settings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\ann.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\icon.png
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\resources\settings.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.core\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
+D:\Dados de Utilizador\Freddy Krueger\Os meus Documentos\Visual Studio 2010\MediaCompanion\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+I:\workingmc\bin\Debug\Media Companion.exe.config
+I:\workingmc\obj\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\obj\Debug\Interop.WMPLib.dll
+I:\workingmc\obj\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\obj\Debug\AxInterop.WMPLib.dll
+I:\workingmc\obj\Debug\XBMC Media Companion.vbproj.ResolveComReference.cache
+I:\workingmc\obj\Debug\Media Companion.exe
+I:\workingmc\obj\Debug\Media Companion.pdb
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.imdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.imdb.com\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.imdb.com\imdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.impa.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.impa.com\impa.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\imdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.imdb.com\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.mtv.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.mtv.com\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.mtv.com\mtv.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese (Simple)\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.themoviedb.org\tmdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\changelog.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\daum-tv.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\LICENSE.txt
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tv.daum.net\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvdb.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvdb.com\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvdb.com\tvdb.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\ann.xml
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\icon.png
+I:\workingmc\bin\Debug\Assets\scrapers\metadata.tvshows.animenewsnetwork.com\resources\settings.xml
+I:\workingmc\bin\Debug\Assets\scrapers\xbmc.core\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\xbmc.metadata\addon.xml
+I:\workingmc\bin\Debug\Assets\scrapers\xbmc.metadata\scraper.xsd
+I:\workingmc\bin\Debug\Media Companion.exe
+I:\workingmc\bin\Debug\Media Companion.pdb
+I:\workingmc\bin\Debug\Interop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\bin\Debug\Interop.WMPLib.dll
+I:\workingmc\bin\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.dll
+I:\workingmc\bin\Debug\AxInterop.WMPLib.dll
+I:\workingmc\obj\Debug\ResolveAssemblyReference.cache
+I:\workingmc\obj\Debug\Media_Companion.frmBatchScraper.resources
+I:\workingmc\obj\Debug\Media_Companion.frmCopyProgress.resources
+I:\workingmc\obj\Debug\Media_Companion.frmCoverArt.resources
+I:\workingmc\obj\Debug\Media_Companion.Delete_Dialogue.resources
+I:\workingmc\obj\Debug\Media_Companion.frmDialog1.resources
+I:\workingmc\obj\Debug\Media_Companion.Form1.resources
+I:\workingmc\obj\Debug\Media_Companion.Form2.resources
+I:\workingmc\obj\Debug\Media_Companion.frmoutputlog.resources
+I:\workingmc\obj\Debug\Media_Companion.message_box.resources
+I:\workingmc\obj\Debug\Media_Companion.frmMovieFanart.resources
+I:\workingmc\obj\Debug\Media_Companion.Resources.resources
+I:\workingmc\obj\Debug\Media_Companion.frmOptions.resources
+I:\workingmc\obj\Debug\Media_Companion.frmSplashscreen.resources
+I:\workingmc\obj\Debug\Media_Companion.tv_batch_wizard.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTvEdit.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTvFanart.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTvPosters.resources
+I:\workingmc\obj\Debug\Media_Companion.frmTVShowBrowser.resources
+I:\workingmc\obj\Debug\ResGen.read.1.tlog
+I:\workingmc\obj\Debug\ResGen.write.1.tlog
