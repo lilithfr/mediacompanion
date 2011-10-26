@@ -1969,7 +1969,7 @@ Partial Public Class Form1
                             scrapedok = True
 
                             '                            Exit For
-                            If tempepisode = Nothing Then
+                            If tempepisode = Nothing Or tempepisode = "Error" Then
                                 scrapedok = False
                                 Preferences.tvScraperLog &= "WARNING: This episode could not be found on TVDB" & vbCrLf
                             End If
