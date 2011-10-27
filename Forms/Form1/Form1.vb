@@ -3711,6 +3711,7 @@ Public Class Form1
 #End Region
 
 
+
     Private Sub mov_StartNew()
         Dim dft As New List(Of String)
         Dim moviepattern As String
@@ -3874,7 +3875,7 @@ Public Class Form1
                             scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                             Exit Sub
                         End If
-                        
+
                         moviepattern = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)  'this bit adds the * for the extension search in mov_ListFiles2 if its not the string VIDEO_TS.IFO 
 
                         dirpath = newmoviefolders(g)
@@ -4445,31 +4446,31 @@ Public Class Form1
                                                                     filename = IO.Path.Combine(workingpath, filename)
                                                                     If Not IO.File.Exists(filename) Then
                                                                         Utilities.DownloadFile(newactor.actorthumb, filename)
-'                                                                        Try
-'                                                                            Dim buffer(4000000) As Byte
-'                                                                            Dim size As Integer = 0
-'                                                                            Dim bytesRead As Integer = 0
-'                                                                            Dim thumburl As String = newactor.actorthumb
-'                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                                                            Dim res As HttpWebResponse = req.GetResponse()
-'                                                                            Dim contents As Stream = res.GetResponseStream()
-'                                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                                                            While bytesToRead > 0
-'                                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                                                                If size = 0 Then Exit While
-'                                                                                bytesToRead -= size
-'                                                                                bytesRead += size
-'                                                                            End While
+                                                                        '                                                                        Try
+                                                                        '                                                                            Dim buffer(4000000) As Byte
+                                                                        '                                                                            Dim size As Integer = 0
+                                                                        '                                                                            Dim bytesRead As Integer = 0
+                                                                        '                                                                            Dim thumburl As String = newactor.actorthumb
+                                                                        '                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                                        '                                                                            Dim res As HttpWebResponse = req.GetResponse()
+                                                                        '                                                                            Dim contents As Stream = res.GetResponseStream()
+                                                                        '                                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                                        '                                                                            While bytesToRead > 0
+                                                                        '                                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                                        '                                                                                If size = 0 Then Exit While
+                                                                        '                                                                                bytesToRead -= size
+                                                                        '                                                                                bytesRead += size
+                                                                        '                                                                            End While
 
-'                                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-'                                                                            fstrm.Write(buffer, 0, bytesRead)
-'                                                                            contents.Close()
-'                                                                            fstrm.Close()
-'                                                                        Catch ex As Exception
-'#If SilentErrorScream Then
-'                                                                                                                                                Throw ex
-'#End If
-'                                                                        End Try
+                                                                        '                                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
+                                                                        '                                                                            fstrm.Write(buffer, 0, bytesRead)
+                                                                        '                                                                            contents.Close()
+                                                                        '                                                                            fstrm.Close()
+                                                                        '                                                                        Catch ex As Exception
+                                                                        '#If SilentErrorScream Then
+                                                                        '                                                                                                                                                Throw ex
+                                                                        '#End If
+                                                                        '                                                                        End Try
                                                                     End If
                                                                 End If
                                                             End If
@@ -4802,9 +4803,9 @@ Public Class Form1
                                 Else
                                     movietoadd.titleandyear = newmovie.fullmoviebody.title & " (0000)"
                                 End If
-                                Else
-                                    movietoadd.titleandyear = "Unknown (0000)"
-                                End If
+                            Else
+                                movietoadd.titleandyear = "Unknown (0000)"
+                            End If
                             movietoadd.outline = newmovie.fullmoviebody.outline
                             movietoadd.plot = newmovie.fullmoviebody.plot
                             movietoadd.year = newmovie.fullmoviebody.year
@@ -4870,7 +4871,7 @@ Public Class Form1
                                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                                         Exit Sub
                                     End If
-                                    If moviethumburl = "na" Then
+                                    If moviethumburl.Length < 10 Then
                                         Select Case Preferences.moviethumbpriority(1)
                                             Case "Internet Movie Poster Awards"
                                                 moviethumburl = scraperFunction2.impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -4890,7 +4891,7 @@ Public Class Form1
                                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                                         Exit Sub
                                     End If
-                                    If moviethumburl = "na" Then
+                                    If moviethumburl.Length < 10 Then
                                         Select Case Preferences.moviethumbpriority(2)
                                             Case "Internet Movie Poster Awards"
                                                 moviethumburl = scraperFunction2.impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -4910,7 +4911,7 @@ Public Class Form1
                                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                                         Exit Sub
                                     End If
-                                    If moviethumburl = "na" Then
+                                    If moviethumburl.Length < 10 Then
                                         Select Case Preferences.moviethumbpriority(3)
                                             Case "Internet Movie Poster Awards"
                                                 moviethumburl = scraperFunction2.impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -4930,7 +4931,7 @@ Public Class Form1
                                         scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                                         Exit Sub
                                     End If
-                                    If moviethumburl <> "" And moviethumburl <> "na" Then
+                                    If moviethumburl.Length >= 10 Then
                                         Dim newmoviethumbpath As String = Preferences.GetPosterPath(newMovieList(f).nfopathandfilename)
                                         Try
                                             'Utilities.DownloadFile(moviethumburl, posterpath)
@@ -5238,6 +5239,7 @@ Public Class Form1
         End If
         scraperLog &= vbCrLf & "Search for New Movies Complete." & vbCrLf
     End Sub
+
 
     Private Sub ReloadMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadMovieCacheToolStripMenuItem.Click
         Call mov_CacheReload()
