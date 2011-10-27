@@ -14105,7 +14105,7 @@ Public Class Form1
                             moviethumburl = "na"
                         End Try
                         Try
-                            If moviethumburl = "na" Then
+                            If moviethumburl.Length < 10 Then
                                 Select Case Preferences.moviethumbpriority(1)
                                     Case "Internet Movie Poster Awards"
                                         moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
@@ -14121,7 +14121,7 @@ Public Class Form1
                             moviethumburl = "na"
                         End Try
                         Try
-                            If moviethumburl = "na" Then
+                            If moviethumburl.Length < 10 Then
                                 Select Case Preferences.moviethumbpriority(2)
                                     Case "Internet Movie Poster Awards"
                                         moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
@@ -14137,7 +14137,7 @@ Public Class Form1
                             moviethumburl = "na"
                         End Try
                         Try
-                            If moviethumburl = "na" Then
+                            If moviethumburl.Length < 10 Then
                                 Select Case Preferences.moviethumbpriority(3)
                                     Case "Internet Movie Poster Awards"
                                         moviethumburl = scraperFunction2.impathumb(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
@@ -14153,7 +14153,7 @@ Public Class Form1
                             moviethumburl = "na"
                         End Try
                         Try
-                            If moviethumburl <> "" And moviethumburl <> "na" Then
+                            If moviethumburl.Length >= 10 Then
                                 Dim newmoviethumbpath As String = workingMovieDetails.fileinfo.posterpath
                                 Try
                                     'Utilities.DownloadFile(moviethumburl, newmoviethumbpath)
