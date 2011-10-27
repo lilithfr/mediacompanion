@@ -1410,7 +1410,6 @@ Module General
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
-        Dim newActor As New Media_Companion.Actor
 
         episodeXMLinformation.Clear()
         m_xmld = New XmlDocument()
@@ -1425,23 +1424,23 @@ Module General
         Dim Counter As Integer = 0
 
         For Each m_node In m_nodelist
-            'TempXMLEpisode.Aired = Nothing
-            'TempXMLEpisode.Credits = Nothing
-            'TempXMLEpisode.Director = Nothing
-            'TempXMLEpisode.Episode.Value = Nothing
-            'TempXMLEpisode.Genre = Nothing
-            'TempXMLEpisode.Plot = Nothing
-            'TempXMLEpisode.Rating = Nothing
-            'TempXMLEpisode.Season.Value = Nothing
-            'TempXMLEpisode.Thumbnail.FileName = Nothing
-            'TempXMLEpisode.Title = Nothing
-            'TempXMLEpisode.ListActors.Clear()
+            TempXMLEpisode.Aired.Value = String.Empty
+            TempXMLEpisode.Credits.Value = String.Empty
+            TempXMLEpisode.Director.Value = String.Empty
+            TempXMLEpisode.Episode.Value = String.Empty
+            TempXMLEpisode.Genre.Value = String.Empty
+            TempXMLEpisode.Plot.Value = String.Empty
+            TempXMLEpisode.Rating.Value = String.Empty
+            TempXMLEpisode.Season.Value = String.Empty
+            TempXMLEpisode.Thumbnail.FileName = String.Empty
+            TempXMLEpisode.Title.Value = String.Empty
+            TempXMLEpisode.ListActors.Clear()
             For Each NodeChild In m_node.ChildNodes
                 Select Case NodeChild.Name.ToLower
                     Case "aired"
                         TempXMLEpisode.Aired.Value = NodeChild.InnerText
                     Case "credits"
-                        If TempXMLEpisode.Credits.Value Is Nothing Then
+                        If TempXMLEpisode.Credits.Value Is String.Empty Then
                             TempXMLEpisode.Credits.Value = NodeChild.InnerText
                         Else
                             TempXMLEpisode.Credits.Value &= " / " & NodeChild.InnerText
@@ -1449,7 +1448,7 @@ Module General
                     Case "director"
                         TempXMLEpisode.Director.Value = NodeChild.InnerText
                     Case "genre"
-                        If TempXMLEpisode.Genre.Value Is Nothing Then
+                        If TempXMLEpisode.Genre.Value Is String.Empty Then
                             TempXMLEpisode.Genre.Value = NodeChild.InnerText
                         Else
                             TempXMLEpisode.Genre.Value &= " / " & NodeChild.InnerText
@@ -1467,6 +1466,7 @@ Module General
                     Case "episode"
                         TempXMLEpisode.Episode.Value = NodeChild.InnerText
                     Case "actor"
+                        Dim newActor As New Media_Companion.Actor
                         For Each Nodechild1 In NodeChild.ChildNodes
                             Select Case Nodechild1.Name
                                 Case "name"
@@ -1478,7 +1478,9 @@ Module General
                                 Case "actorid"
                             End Select
                         Next
-                        If newActor.Name.Value <> Nothing Then TempXMLEpisode.ListActors.Add(newActor)
+                        If newActor.Name.Value <> Nothing And newActor.Name.Value.Length > 1 Then
+                            TempXMLEpisode.ListActors.Add(newActor)
+                        End If
                 End Select
             Next
             episodeXMLinformation.Add(TempXMLEpisode)
