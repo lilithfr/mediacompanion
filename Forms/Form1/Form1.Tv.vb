@@ -682,7 +682,7 @@ Partial Public Class Form1
         End Try
         Return True
     End Function
-    Private Sub tv_CacheRebuild()
+    Private Sub tv_CacheRebuild(Optional ByVal TvShowSelected As TvShow = Nothing)
         frmSplash2.Text = "Rebuild TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
         frmSplash2.Label1.Visible = True
@@ -698,11 +698,19 @@ Partial Public Class Form1
         TextBox_TotTVShowCount.Text = ""
         TextBox_TotEpisodeCount.Text = ""
         Me.Enabled = False
-        Cache.TvCache.Clear()
-        TvTreeview.Nodes.Clear()
-        realTvPaths.Clear()
+        Dim SingleShow As Boolean = False
         Dim prgCount As Integer = 0
-        For Each tvfolder In Preferences.tvFolders
+        Dim FolderList As New List(Of String)
+        If TvShowSelected IsNot Nothing Then ' if we have provided a tv show, then add just this show to the list, else scan through all of the folders
+            SingleShow = True
+            FolderList.Add(TvShowSelected.FolderPath) 'add the single show to our list
+        Else
+            FolderList = Preferences.tvFolders ' add all folders to list to scan
+            Cache.TvCache.Clear() 'Full rescan means clear all old data
+            TvTreeview.Nodes.Clear()
+            realTvPaths.Clear()
+        End If
+        For Each tvfolder In FolderList
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Preferences.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount   'range 0 to count -1
             If Not (Directory.Exists(tvfolder)) Then 'Temporary fix to skip any removed directory. Final fix should be capable of removing info from preferences file
@@ -726,12 +734,15 @@ Partial Public Class Form1
                             'Call tv_ShowLoad(newtvshownfo) ' reload the show to display..... SK: I think the current show will refresh anyway so this doesn't have to be called....
                         End If
                     End If
+                    If SingleShow Then Cache.TvCache.Remove(newtvshownfo)
                     Cache.TvCache.Add(newtvshownfo) 'add this show & episode data to the cache
-                    ' TvTreeview.Nodes.Add(newtvshownfo.ShowNode) 'Instead of updating the treeview directly we reload the treeview with the created cache at the end....
                 End If
+                ' TvTreeview.Nodes.Add(newtvshownfo.ShowNode) 'Instead of updating the treeview directly we reload the treeview with the created cache at the end....
             End If
+
             realTvPaths.Add(tvfolder)
         Next
+
         frmSplash2.Label2.Visible = False
 
         Tv_CleanFolderList()

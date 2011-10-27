@@ -30274,8 +30274,9 @@ Public Class Form1
 
     'End Sub
 
-    Private Sub tv_RebuildSelected(Show As TvShow)
-        MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
+    Private Sub tv_CacheRebuildSelected(ByVal Show As TvShow)
+        tv_CacheRebuild(Show)
+        'MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
         'we need to utilise the already created code for cache rebuild but be able to send to it a single TV show to clear & rebuild....
     End Sub
 
@@ -30284,7 +30285,7 @@ Public Class Form1
             Dim Show As TvShow = tv_ShowSelectedCurrently()
 
             If Show IsNot Nothing Then
-                Call tv_RebuildSelected(Show)
+                Call tv_CacheRebuildSelected(Show)
             Else
                 MsgBox("No Show Selected")
             End If
