@@ -17418,6 +17418,7 @@ Public Class Form1
 
     Private Sub tv_Fanart_Load()
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Me.Panel13.Controls.Clear()
         listOfTvFanarts.Clear()
         Button40.Visible = False
         Button39.Visible = False
@@ -17517,6 +17518,7 @@ Public Class Form1
 
 
         If listOfTvFanarts.Count > 0 Then
+
 
 
 
