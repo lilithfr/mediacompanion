@@ -698,12 +698,12 @@ Partial Public Class Form1
         TextBox_TotTVShowCount.Text = ""
         TextBox_TotEpisodeCount.Text = ""
         Me.Enabled = False
-        Dim SingleShow As Boolean = False
+
         Dim prgCount As Integer = 0
         Dim FolderList As New List(Of String)
         If TvShowSelected IsNot Nothing Then ' if we have provided a tv show, then add just this show to the list, else scan through all of the folders
-            SingleShow = True
             FolderList.Add(TvShowSelected.FolderPath) 'add the single show to our list
+            Cache.TvCache.Remove(TvShowSelected)
         Else
             FolderList = Preferences.tvFolders ' add all folders to list to scan
             Cache.TvCache.Clear() 'Full rescan means clear all old data
@@ -734,7 +734,7 @@ Partial Public Class Form1
                             'Call tv_ShowLoad(newtvshownfo) ' reload the show to display..... SK: I think the current show will refresh anyway so this doesn't have to be called....
                         End If
                     End If
-                    If SingleShow Then Cache.TvCache.Remove(newtvshownfo)
+
                     Cache.TvCache.Add(newtvshownfo) 'add this show & episode data to the cache
                 End If
                 ' TvTreeview.Nodes.Add(newtvshownfo.ShowNode) 'Instead of updating the treeview directly we reload the treeview with the created cache at the end....
