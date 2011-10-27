@@ -704,6 +704,9 @@ Partial Public Class Form1
         If TvShowSelected IsNot Nothing Then ' if we have provided a tv show, then add just this show to the list, else scan through all of the folders
             FolderList.Add(TvShowSelected.FolderPath) 'add the single show to our list
             Cache.TvCache.Remove(TvShowSelected)
+            For Each episode In TvShowSelected.Episodes
+                Cache.TvCache.Remove(episode)
+            Next
         Else
             FolderList = Preferences.tvFolders ' add all folders to list to scan
             Cache.TvCache.Clear() 'Full rescan means clear all old data
