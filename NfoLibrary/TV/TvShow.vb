@@ -212,7 +212,7 @@ Public Class TvShow
         Me.TvdbId.Value = Series.Id.Value
         'Me.TvdbId.Value = Series.TvdbId.Value
         Me.Mpaa.Value = Series.ContentRating.Value
-        Me.Genre.Value = Series.Genre.Value
+        Me.Genre.Value = Series.Genre.Value.Trim("|"c).Replace("|", " / ")
         Me.ImdbId.Value = Series.ImdbId.Value
         Me.Plot.Value = Series.Overview.Value
         Me.Title.Value = Series.SeriesName.Value
