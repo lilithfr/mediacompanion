@@ -273,16 +273,22 @@ Public Class TvShow
                     CurrentSeason.SeasonNumber = Episode.Season.Value
                     CurrentSeason.SeasonLabel = "Season " & Utilities.PadNumber(Episode.Season.Value, 2)
                     CurrentSeason.Poster.FolderPath = Me.FolderPath
-                    CurrentSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & ".tbn"
+                    If Episode.Season.Value <> 0 Then
+                        CurrentSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & ".tbn" 'here we set as example for season 1 the 'season01.tbn'
+                    Else
+                        CurrentSeason.Poster.FileName = "season-specials.tbn"  'if season is a special i.e. season00 then we use the season-specials.tbn
+                    End If
+
+
                 Else
                     CurrentSeason.SeasonNumber = -1
                     CurrentSeason.SeasonLabel = Episode.Season.Value
                     CurrentSeason.Poster.FolderPath = Me.FolderPath
                     CurrentSeason.Poster.FileName = "season-all.tbn"
                 End If
-            Else
-                CurrentSeason = Me.Seasons(Episode.Season.Value)
-            End If
+                Else
+                    CurrentSeason = Me.Seasons(Episode.Season.Value)
+                End If
 
             Episode.SeasonObj = CurrentSeason
 
