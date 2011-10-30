@@ -23257,11 +23257,13 @@ Public Class Form1
                 If f.Exists Then
                     ListBox6.Items.Add(tempstring)
                     TextBox40.Text = ""
+                    newTvFolders.Add(tempstring)
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
                         ListBox6.Items.Add(tempstring)
                         TextBox40.Text = ""
+                        newTvFolders.Add(tempstring)
                     End If
                 End If
             End If
