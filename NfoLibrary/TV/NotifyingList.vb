@@ -65,7 +65,7 @@ Public Class NotifyingList(Of T)
 
     Default Public Property Item(index As Integer) As T Implements System.Collections.Generic.IList(Of T).Item
         Get
-            Return Item(index)
+            Return List.Item(index)
         End Get
         Set(value As T)
             List(index) = value
