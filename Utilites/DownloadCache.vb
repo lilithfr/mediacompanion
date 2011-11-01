@@ -91,6 +91,7 @@ Public Class DownloadCache
             End If
 
             Dim responseStream As Stream = webResp.GetResponseStream()
+            'MsgBox("Encoding was: " & webResp.ContentEncoding.ToLower())   'uncomment this line to show encoding found....empty string means text format
             If (webResp.ContentEncoding.ToLower().Contains("gzip")) Then
                 responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
                 Utilities.tvScraperLog &= "**** TVDB Returned GZIP Encoded *****" & vbCrLf
@@ -104,20 +105,7 @@ Public Class DownloadCache
 
             html = reader.ReadToEnd()
             IO.File.WriteAllText(CachePath, html)
-            'Dim buffer() As Byte
-            'Dim bytesToRead As Integer = CInt(buffer.Length)
-            'Dim Size As Long
-            'Dim bytesRead As Long
-            'While bytesToRead > 0
-            '    Size = responseStream.Read(buffer, bytesRead, bytesToRead)
-            '    If size = 0 Then Exit While
-            '    bytesToRead -= size
-            '    bytesRead += size
-            'End While
-
-            'Dim Cache As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.ReadWrite)
-            'Cache.Write(buffer, 0, buffer.Length)
-            'Cache.Close()
+         
             responseStream.Close()
 
         End Using

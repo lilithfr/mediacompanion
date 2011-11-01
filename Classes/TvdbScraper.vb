@@ -396,13 +396,10 @@ Public Class TVDBScraper
                 language = language & ".xml"
             End If
             episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
-            wrGETURL = WebRequest.Create(episodeurl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            xmlfile = objReader.ReadToEnd
+          
+            xmlfile = Utilities.DownloadTextFiles(episodeurl) 'this function has gzip detection in it 
+
+
             If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
 
             Dim episode As New XmlDocument
