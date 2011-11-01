@@ -201,7 +201,7 @@ Public Class Form1
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Try
             Call mov_CacheSave()
-            If Tv_CacheSave("New Function") Then
+            If Tv_CacheSave() Then
                 e.Cancel = True
                 Exit Sub
             End If
@@ -560,7 +560,7 @@ Public Class Form1
                 loadinginfo = "Status :- Loading TV Database"
                 frmSplash.Label3.Text = loadinginfo
                 frmSplash.Label3.Refresh()
-                Call tv_CacheLoad(("New Function"))
+                Call tv_CacheLoad()
             End If
             If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
                 loadinginfo = "Status :- Building Actor Database"
@@ -16162,7 +16162,7 @@ Public Class Form1
     Private Sub ReloadShowCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadShowCacheToolStripMenuItem.Click
         Try
             If IO.File.Exists(workingProfile.tvcache) Then
-                Call tv_CacheLoad(("New Function"))
+                Call tv_CacheLoad()
             Else
                 MsgBox("No Cache exists to load")
             End If
@@ -18182,6 +18182,8 @@ Public Class Form1
                 'Call savetvdata()
                 '            rebuildselectedshow(MainNode.Name.ToString)
             End If
+            Tv_CacheSave()
+            tv_CacheLoad()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18918,12 +18920,14 @@ Public Class Form1
                 'Call LoadTvEpisode(WorkingEpisode)
                 tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
+
             End If
         End If
         If Not tv_IMDbID_warned And tv_IMDbID_detected Then
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
             tv_IMDbID_warned = True
         End If
+      
     End Sub
 
     Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
@@ -19192,7 +19196,7 @@ Public Class Form1
                     End If
                 Next
             Next
-            Call Tv_CacheSave("New Function")
+            Call Tv_CacheSave()
             messbox.Close()
             If Preferences.disabletvlogs = False Then
                 Dim MyFormObject As New frmoutputlog(renamelog, True)
@@ -25899,7 +25903,7 @@ Public Class Form1
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
             Call tv_CacheRebuild()
         Else
-            Call tv_CacheLoad(("New Function"))
+            Call tv_CacheLoad()
         End If
 
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then

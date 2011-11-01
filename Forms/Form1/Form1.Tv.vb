@@ -751,10 +751,10 @@ Partial Public Class Form1
         Tv_CleanFolderList()
         frmSplash2.Label1.Text = "Saving Cache..."
         Windows.Forms.Application.DoEvents()
-        Tv_CacheSave("New Function")    'save the cache file
+        Tv_CacheSave()    'save the cache file
         frmSplash2.Label1.Text = "Loading Cache..."
         Windows.Forms.Application.DoEvents()
-        tv_CacheLoad("New Function")    'reload the cache file to update the treeview
+        tv_CacheLoad()    'reload the cache file to update the treeview
         If Preferences.fixnfoid Then CheckBox_fixNFOid.CheckState = CheckState.Unchecked
         Me.Enabled = True
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
@@ -3457,7 +3457,7 @@ Partial Public Class Form1
         Next
     End Sub
 
-    Public Sub tv_CacheLoad(ByVal Text As String)
+    Public Sub tv_CacheLoad()
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
 
         Cache.TvCache.Load()
@@ -3482,7 +3482,7 @@ Partial Public Class Form1
         TvTreeview.Sort()
     End Sub
 
-    Public Function Tv_CacheSave(ByVal Input As String) As Boolean
+    Public Function Tv_CacheSave() As Boolean
 
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
         'Cache.TvCache.Clear()
