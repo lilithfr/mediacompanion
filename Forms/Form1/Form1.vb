@@ -18129,6 +18129,7 @@ Public Class Form1
 
                 Episode.Save()
                 Episode.UpdateTreenode()
+
                 'Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempWorkingEpisode)
                 'If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).VideoFilePath, TVShowEpisodeNFOContent)
 
@@ -18191,8 +18192,8 @@ Public Class Form1
     End Sub
 
     Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
 
         Dim tempint As Integer = 0
@@ -18872,13 +18873,13 @@ Public Class Form1
                 End If
             End If
             If newepisode.Title.Value <> "" Then
-                WorkingEpisode.Aired = newepisode.Aired
-                WorkingEpisode.Credits = newepisode.Credits
-                WorkingEpisode.Director = newepisode.Director
-                WorkingEpisode.Genre = newepisode.Genre
-                WorkingEpisode.Plot = newepisode.Plot
-                WorkingEpisode.Rating = newepisode.Rating
-                WorkingEpisode.Title = newepisode.Title
+                WorkingEpisode.Aired.Value = newepisode.Aired.Value
+                WorkingEpisode.Credits.Value = newepisode.Credits.Value
+                WorkingEpisode.Director.Value = newepisode.Director.Value
+                WorkingEpisode.Genre.Value = newepisode.Genre.Value
+                WorkingEpisode.Plot.Value = newepisode.Plot.Value
+                WorkingEpisode.Rating.Value = newepisode.Rating.Value
+                WorkingEpisode.Title.Value = newepisode.Title.Value
                 WorkingEpisode.ListActors.Clear()
                 For Each actor In newepisode.ListActors
                     WorkingEpisode.ListActors.Add(actor)
@@ -18917,17 +18918,22 @@ Public Class Form1
                 'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).VideoFilePath)
                 'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
                 WorkingEpisode.Save()
+
                 'Call LoadTvEpisode(WorkingEpisode)
                 tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
 
             End If
         End If
+        Tv_CacheSave()
+        tv_CacheLoad()
+
+
         If Not tv_IMDbID_warned And tv_IMDbID_detected Then
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
             tv_IMDbID_warned = True
         End If
-      
+
     End Sub
 
     Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
