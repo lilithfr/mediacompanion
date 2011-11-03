@@ -32249,72 +32249,98 @@ Public Class Form1
     End Sub
 
     Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_DispByAiredDate.Click
+        'This function displays in a Form with a fullscreen textbox, a list off all of a TvShows episodes in 'date aired' order, separated by calendar year.
+        'It can be called from a TVShow, Season or Episode context menu
+        'It handles the following errors - no aired date, episodes on the same aired date, episodes on same date with same series & same episode i.e. a duplicate.... 
+
         Try
-            MsgBox("Aired Date Coming soon")
-            'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim NoDateCountUp As Integer = 0
+            Dim Abort As Boolean = True     'this is used to verify that we actually have episodes to process
+            Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
+            Dim childNodeLevel1 As TreeNode
 
-            'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-            'Dim testmax As Integer = 0
-            'Dim textstring As String = ""   'this is the string used to add our text together to make our final list to be shown
-            'Dim Abort As Boolean = True     'this is used to verify that we actually hjave episodes to process
+            Select Case TvTreeview.SelectedNode.Level
+                Case Is = 0
+                    childNodeLevel1 = TvTreeview.SelectedNode
+                Case Is = 1
+                    childNodeLevel1 = TvTreeview.SelectedNode.Parent
+                Case Is = 2
+                    childNodeLevel1 = TvTreeview.SelectedNode.Parent.Parent
+                Case Else
+                    MsgBox("Unsupported TvTreeviewlevel in Aired Date Function", MsgBoxStyle.Exclamation, "Error!")
+                    Exit Sub
+            End Select
 
-            'Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
 
-            'Dim childNodeLevel1 As TreeNode = TvTreeview.SelectedNode    'this section steps down through the tree to get from the tvshow to each episode
-            'For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
-            '    For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
-            '        Abort = False                                       'if we get here then there is at least 1 episode
-            '        Dim path As String = childNodeLevel3.Name           'this holds the full path to the actual nfo file of the episode
-            '        'we load that nfo so that we can retrieve the data we want from it in workingEpisode
-            '        Dim EpAired As String = ""                          'define & set our episode aired date as nothing
 
-            '        '
-            '        'If workingEpisode.Count > testmax Then testmax = workingEpisode.Count
-            '        '
-            '        Dim f = 0                                           'We find each episode individually so we only need to look at the first index
-            '        If WorkingEpisode.aired <> Nothing Then          'If we have a valid date figure then set our date figure
-            '            EpAired = WorkingEpisode.Aired.Value
 
-            '            'Convert episode to 2 digits for formatting
-            '            Dim episode2digit As New List(Of String)
-            '            episode2digit.Clear()
-            '            episode2digit.Add(WorkingEpisode.Episode.Value)
-            '            If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
+            'this section steps down through the tree to get from the tvshow to each episode
+            For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
+                For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+                    Abort = False                                          'if we get here then there is at least 1 episode
+                    Dim EpAired As String = childNodeLevel3.Tag.aired.value  'this holds the 'aired' value
 
-            '            'Convert season to 2 digits for formatting
-            '            Dim season2digit As String = WorkingEpisode.Season.value
-            '            If season2digit.Length = 1 Then season2digit = "0" & season2digit
+                    If EpAired Is Nothing Then
+                        EpAired = "9999-" & Utilities.PadNumber(NoDateCountUp, 5)  'if the aired date is nothing then we add it as 9999-xxxxx where x increments
+                        NoDateCountUp += 1
+                    End If
 
-            '            'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
-            '            'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
-            '            'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
-            '            mySortedList.Add(WorkingEpisode.Aired, Renamer.setTVFilename(WorkingTvShow.Title.Value, WorkingEpisode.Title.Value, episode2digit, season2digit))
+                    'Convert episode to 2 digits for formatting
+                    Dim episode2digit As New List(Of String)
+                    episode2digit.Clear()
+                    episode2digit.Add(childNodeLevel3.Tag.Episode.Value)
+                    If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
 
-            '        End If
-            '    Next
-            'Next
+                    'Convert season to 2 digits for formatting
+                    Dim season2digit As String = childNodeLevel3.Tag.Season.Value
+                    If season2digit.Length = 1 Then season2digit = "0" & season2digit
 
-            'If Not Abort Then   'i.e. we have episodes in this show.... 
-            '    textstring = WorkingTvShow.Title.Value & vbCrLf                                               'start our text with the show title
-            '    textstring = textstring & StrDup(WorkingTvShow.Title.Value.Length, "-") & vbCrLf              'add an underline of the same length    
+                    'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
+                    'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
+                    'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
+                    Dim SameDateLoop As Boolean = True
+                    Dim Key As String
+                    Key = EpAired & season2digit & episode2digit(0)         'the key index (which is the string used to sort by) is the date+season+episode - this should be unique!
 
-            '    For Line = 0 To mySortedList.Count - 1                                                  'read the data from the sorted list
-            '        textstring = textstring & mySortedList.GetKey(Line) & " " & mySortedList.GetByIndex(Line) & vbCrLf
-            '    Next
+                    Do Until SameDateLoop = False
+                        If mySortedList.ContainsKey(Key) Then
+                            Key += "^"                          'we add an aditional ^ to the key if its still not unique.....
+                        Else
+                            SameDateLoop = False
+                        End If
+                    Loop
+                    mySortedList.Add(Key, EpAired & "    " & Renamer.setTVFilename(WorkingTvShow.Title.Value, childNodeLevel3.Tag.title.value, episode2digit, season2digit))
 
-            '    textstring = textstring & vbCrLf & "* missing episodes are not listed" & vbCrLf         'add a note about the missing episodes (they use the playcount field but are not in workingEpisodes
 
-            '    '                                                                                   'Show Final Listing Screen
-            '    Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
-            '    MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
-            '    MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
-            '    MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
-            '    MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value              'change the form title text
-            '    MyFormObject.ShowDialog()                                                               'show the form
+                Next
+            Next
 
-            'Else                    'we get here if abort still = true, i.e. no episodes
-            '    MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
-            'End If
+            If Not Abort Then   'i.e. we have episodes in this show.... 
+                Dim textstring As String = WorkingTvShow.Title.Value & vbCrLf                                 'start our text with the show title
+                textstring += StrDup(WorkingTvShow.Title.Value.Length, "-") & vbCrLf              'add an underline of the same length    
+                Dim prevkey As String = mySortedList.GetKey(0).Substring(0, 4)                      'load with first year value first four digits of aired date
+                For Line = 0 To mySortedList.Count - 1  'read the data from the sorted list
+                    If mySortedList.GetKey(Line).Substring(0, 4) <> prevkey Then textstring = textstring & "----------" & vbCrLf 'line break between years...
+                    prevkey = mySortedList.GetKey(Line).Substring(0, 4)                             'set so that we can compare with next iteration
+                    textstring += mySortedList.GetByIndex(Line) & vbCrLf
+                Next
+
+                textstring += vbCrLf & "* missing episodes are not listed" & vbCrLf         'add a note about the missing episodes (they use the playcount field but are not in workingEpisodes
+                'textstring += "^ episodes have the same aired date as another episode" & vbCrLf
+                textstring += "9999 episodes have no valid aired date stored" & vbCrLf
+
+                '                                                   'Show Final Listing Screen
+                Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
+                MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
+                MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
+                MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+                MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value          'change the form title text
+                MyFormObject.ShowDialog()                                                               'show the form
+
+            Else                    'we get here if abort still = true, i.e. no episodes
+                MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
