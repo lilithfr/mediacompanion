@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<profile>
+  <default>Default</default>
+  <startup>Default</startup>
+  <profiledetails>
+    <actorcache>G:\Media Companion\Settings\actorcache.xml</actorcache>
+    <config>G:\Media Companion\Settings\config.xml</config>
+    <moviecache>G:\Media Companion\Settings\moviecache.xml</moviecache>
+    <profilename>Default</profilename>
+    <regex>G:\Media Companion\Settings\regex.xml</regex>
+    <filters>G:\Media Companion\Settings\filters.txt</filters>
+    <tvcache>G:\Media Companion\Settings\tvcache.xml</tvcache>
+  </profiledetails>
+</profile>
