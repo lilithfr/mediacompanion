@@ -2162,6 +2162,18 @@ Public Class Form1
         Call mov_ScanForNew()
 
     End Sub
+    Public Class clsCompareFileInfo
+        Implements IComparer
+        Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+            Dim File1 As System.IO.FileInfo
+            Dim File2 As System.IO.FileInfo
+
+            File1 = DirectCast(x, System.IO.FileInfo)
+            File2 = DirectCast(y, System.IO.FileInfo)
+
+            Compare = String.Compare(File1.FullName, File2.FullName)
+        End Function
+    End Class
 
     Private Sub mov_ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
 
@@ -2169,6 +2181,7 @@ Public Class Form1
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
         Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+        Array.Sort(fs_infos, New clsCompareFileInfo)    'sorts found folder list
 
         Dim counter As Integer = 1
         Dim counter2 As Integer = 1
