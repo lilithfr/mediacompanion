@@ -1713,6 +1713,7 @@ Partial Public Class Form1
         scraperLog = scraperLog & vbCrLf
         'Application.DoEvents()
         Dim mediacounter As Integer = newEpisodeList.Count
+        newtvfolders.Sort()
         For g = 0 To newtvfolders.Count - 1
             'Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             'bckgroundscanepisodes.ReportProgress(progress, progresstext)

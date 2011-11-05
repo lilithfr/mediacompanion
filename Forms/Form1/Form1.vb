@@ -2162,6 +2162,18 @@ Public Class Form1
         Call mov_ScanForNew()
 
     End Sub
+    Public Class clsCompareFileInfo
+        Implements IComparer
+        Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+            Dim File1 As System.IO.FileInfo
+            Dim File2 As System.IO.FileInfo
+
+            File1 = DirectCast(x, System.IO.FileInfo)
+            File2 = DirectCast(y, System.IO.FileInfo)
+
+            Compare = String.Compare(File1.FullName, File2.FullName)
+        End Function
+    End Class
 
     Private Sub mov_ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
 
@@ -2169,6 +2181,7 @@ Public Class Form1
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
         Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+        Array.Sort(fs_infos, New clsCompareFileInfo)    'sorts found folder list
 
         Dim counter As Integer = 1
         Dim counter2 As Integer = 1
@@ -12282,7 +12295,9 @@ Public Class Form1
 
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
         Try
-            messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
+            messbox = New frmMessageBox("Downloading Fanart...")
+            messbox.Text = "Please Wait..."
+
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -12379,6 +12394,7 @@ Public Class Form1
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
                                 mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                messbox.TextBox1.Text = "Creating Offline Movie..."
                                 Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
