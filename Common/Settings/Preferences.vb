@@ -787,7 +787,7 @@ Public Class Preferences
         Next
         root.AppendChild(child)
 
-        'If Preferences.OfflineDVDTitle = "" Then Preferences.OfflineDVDTitle = OfflineDVDTitleDefault
+
         child = doc.CreateElement("offlinemovielabeltext")
         child.InnerText = Preferences.OfflineDVDTitle
         root.AppendChild(child)

@@ -12294,7 +12294,9 @@ Public Class Form1
 
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
         Try
-            messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
+            messbox = New frmMessageBox("Downloading Fanart...")
+            messbox.Text = "Please Wait..."
+
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -12391,6 +12393,7 @@ Public Class Form1
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
                                 mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                messbox.TextBox1.Text = "Creating Offline Movie..."
                                 Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
