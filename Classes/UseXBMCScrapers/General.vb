@@ -1816,4 +1816,45 @@ Module General
         Return FinalScrapResult
     End Function
 
+    'Date  : Nov11 
+    'By    : AnotherPhil 
+    'Blurb : This uses a revised hdtrailers.xml copied from metadata.common.hdtrailers.net
+    '        Main changes
+    '           - Scraping from http://www.hd-trailers.net/movie/movie-name instead of http://www.hd-trailers.net/blog/?s=&quot;movie-name_(Theatrical_Trailer)
+    '           - Adds RegExs for the following sources:
+    '               - http://videos.hd-trailers.net
+    '               - http://pdl.stream
+    '           - Fixed RegExs for:
+    '               - http://playlist.yahoo.com (working versions copied from here: http://code.google.com/p/xbmchuscraper/source/browse/trunk/HDTrailersForEMM/hdtrailers.xml?spec=svn53&r=53) 
+    '
+    Public Function MC_Scraper_Get_HD_Trailer_URL( ByVal Resolution As String, ByVal MovieTitle As String ) As String
+
+        Dim theScraper    As Scraper = ChooseScraper("metadata.mc.hdtrailers.net")
+        Dim funcName      As String  = "GetHDTrailersnet" & Resolution & "p"
+        Dim funcParams(0) As String  
+
+        'Prep movie title for HD-Trailers.net
+        MovieTitle = Regex.Replace( MovieTitle, "[ ,']"    , "-"   )
+        MovieTitle = Regex.Replace( MovieTitle, "[?!.;:@]" , ""    )
+        MovieTitle = Regex.Replace( MovieTitle, "[&]"      , "and" )
+        MovieTitle = Regex.Replace( MovieTitle, "-{2,}"    , "-"   )
+
+        funcParams(0) = MovieTitle
+
+        Dim url As String = ScraperQuery.ExecuteQuery(theScraper, funcName, funcParams)
+
+        Dim match As Match = Regex.Match(url, "<trailer>(.*?)</trailer>")
+
+        If match.Groups.Count = 2 Then
+	        url = match.Groups(1).Value
+            url = Replace( url, "&amp;", "&" )
+        Else
+            url = ""
+        End If
+
+        Return url
+
+    End Function
+
+
 End Module

@@ -177,4 +177,5 @@
     <tab>top250|150|11|True</tab>
     <tab>missingdata1|150|12|True</tab>
   </table>
+  <moviePreferredHDTrailerResolution>SD</moviePreferredHDTrailerResolution>
 </xbmc_media_companion_config_v1.0>

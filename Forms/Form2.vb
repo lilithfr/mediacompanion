@@ -391,7 +391,17 @@ Public Class Form2
 
                     Dim trailer As String = String.Empty
                     If Preferences.gettrailer = True Then
-                        trailer = scraperfunction.gettrailerurl(alternatemovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+
+                        trailer = ""
+
+                        If Preferences.moviePreferredTrailerResolution <> "SD" then
+                            trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, alternatemovie.fullmoviebody.title )
+                        End If
+
+                        If trailer = "" then
+                            trailer = scraperfunction.gettrailerurl(alternatemovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+                        End if
+
                         If trailer <> String.Empty And trailer <> "Error" Then
                             alternatemovie.fullmoviebody.trailer = trailer
                         End If

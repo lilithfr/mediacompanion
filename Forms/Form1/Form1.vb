@@ -4570,12 +4570,28 @@ Public Class Form1
                                 If Preferences.gettrailer = True Then
                                     progresstext &= " * Trailer"
                                     BckWrkScnMovies.ReportProgress(progress, progresstext)
-                                    trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                    If trailer <> Nothing Then
+
+                                    trailer = ""
+
+                                    If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                        trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+                                    End If
+
+                                    If trailer = "" then
+                                        trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                    End if
+
+
+'                                   If trailer <> Nothing Then
+                                    If trailer <> String.Empty And trailer <> "Error" Then
                                         newmovie.fullmoviebody.trailer = trailer
                                         progresstext &= " - OK"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
                                         scraperLog = scraperLog & "Trailer URL Scraped OK" & vbCrLf
+                                    Else
+                                        progresstext &= " - Failed"
+                                        BckWrkScnMovies.ReportProgress(progress, progresstext)
+                                        scraperLog = scraperLog & "Trailer URL Scrape failed" & vbCrLf
                                     End If
                                 End If
                             Catch ex As Exception
@@ -7598,8 +7614,8 @@ Public Class Form1
                 'trailer = newscraper.gettrailerurl(workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 messbox.TextBox1.Text = "Get IMDB Body"
                 body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
-                messbox.TextBox1.Text = "Get Trailer"
-                trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+
+                
                 'Dim actors As String
                 messbox.TextBox1.Text = "Get Actors"
                 'actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
@@ -7703,6 +7719,19 @@ Public Class Form1
 
                     Try
                         If Preferences.gettrailer = True Then
+
+                            messbox.TextBox1.Text = "Get Trailer"
+                            trailer = ""
+
+                            If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title )
+                            End If
+
+                            If trailer = "" then
+                                trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+                            End if
+
+
                             If trailer <> String.Empty And trailer <> "Error" Then
                                 workingMovieDetails.fullmoviebody.trailer = trailer
                             End If
@@ -9026,8 +9055,25 @@ Public Class Form1
 
                         If trailerscraper = True Then
                             Try
-                                Dim trailer As String = String.Empty
-                                trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                Dim trailer as String = ""
+
+                                If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                    Try
+                                        Monitor.Enter(Me)
+                                        trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, movietoalter.fullmoviebody.title )
+                                    Finally
+                                        Monitor.Exit(Me)
+                                    End Try
+                                End If
+
+                                If trailer = "" then
+                                    trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                End if
+
+
+'                                Dim trailer As String = String.Empty
+'                                trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+
                                 If trailer <> String.Empty And trailer <> "Error" Then
                                     movietemplate.fullmoviebody.trailer = trailer
                                 End If
@@ -10202,7 +10248,17 @@ Public Class Form1
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                     bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                     If Preferences.gettrailer = True Then
-                                        trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+
+                                        trailer = ""
+
+                                        If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                            trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+                                        End If
+
+                                        If trailer = "" then
+                                            trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                        End if
+
                                         If trailer <> String.Empty And trailer <> "Error" Then
                                             newmovie.fullmoviebody.trailer = trailer
                                         End If
@@ -23653,6 +23709,7 @@ Public Class Form1
         Else
             CheckBox11.CheckState = CheckState.Unchecked
         End If
+        cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
 
         Select Case Preferences.maxactors
             Case 9999
@@ -23840,6 +23897,10 @@ Public Class Form1
             GroupBox_MovieIMDBMirror.Visible = True
             GroupBox_MovieIMDBMirror.BringToFront()
         End If
+
+
+        cbPreferredTrailerResolution.Text = Preferences.moviePreferredTrailerResolution
+
 
         generalprefschanged = False
     End Sub
@@ -24048,16 +24109,11 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
-        Try
-            If CheckBox11.CheckState = CheckState.Checked Then
-                Preferences.gettrailer = True
-            Else
-                Preferences.gettrailer = False
-            End If
-            generalprefschanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+
+        Preferences.gettrailer               = CheckBox11.Checked
+        cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
+        generalprefschanged                  = True
+
     End Sub
 
     Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
@@ -32589,5 +32645,11 @@ Public Class Form1
 
     Private Sub TasksDontShowCompleted_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles TasksDontShowCompleted.CheckedChanged
         Me.TasksOnlyIncompleteTasks = TasksDontShowCompleted.Checked
+    End Sub
+
+
+    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
+        Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text
+        generalprefschanged = True
     End Sub
 End Class
