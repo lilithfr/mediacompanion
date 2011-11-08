@@ -3376,14 +3376,36 @@ Partial Public Class Form1
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
 
                         If Episode Is Nothing Then
-                            Dim MissingEpisode As New Media_Companion.TvEpisode
+                            ' Phyonics - Fix for issue #208
+                            Dim episodeAired As Boolean = True
 
-                            MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
-                            MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
-                            MissingEpisode.IsMissing = True
-                            MissingEpisode.ShowObj = item
-                            MissingEpisode.Save()
-                            Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
+                            If Not String.IsNullOrEmpty(NewEpisode.FirstAired.Value) Then
+                                'Check if the episode has been aired yet
+
+                                Dim airedDate As Date
+
+                                Try
+                                    airedDate = Convert.ToDateTime(NewEpisode.FirstAired.Value)
+
+                                    If airedDate > Now Then
+                                        episodeAired = False
+                                    End If
+                                Catch ex As Exception
+                                    ' Do nothing
+                                End Try
+                            End If
+
+                            ' Only add the episode if its been aired
+                            If episodeAired Then
+                                Dim MissingEpisode As New Media_Companion.TvEpisode
+
+                                MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+                                MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
+                                MissingEpisode.IsMissing = True
+                                MissingEpisode.ShowObj = item
+                                MissingEpisode.Save()
+                                Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
+                            End If
                         End If
                     Next
                     'Try

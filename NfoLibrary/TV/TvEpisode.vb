@@ -122,6 +122,7 @@ Public Class TvEpisode
         Me.Season.Value = TvdbEpisode.SeasonNumber.Value
         Me.Episode.Value = TvdbEpisode.EpisodeNumber.Value
         Me.Thumbnail.Url = TvdbEpisode.ScreenShotUrl
+        Aired.Value = TvdbEpisode.FirstAired.Value ' Phyonics - Fix for issue #208
         Me.UpdateTreenode()
     End Sub
 
