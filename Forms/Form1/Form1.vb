@@ -3726,6 +3726,11 @@ Public Class Form1
 
 
     Private Sub mov_StartNew()
+        '****  Movie Rename trigger variable until a preference tick box is created
+        Dim movierename As Boolean = False 'Set to true to test movie rename function - only renames on adding new movie at this stage '***************** remove me once this is a preference ***********
+        '****
+
+
         Dim dft As New List(Of String)
         Dim moviepattern As String
         Dim tempint As Integer = 0
@@ -3929,6 +3934,7 @@ Public Class Form1
                             scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                             Exit Sub
                         End If
+
                         extension = System.IO.Path.GetExtension(movie.nfopathandfilename)
                         filename2 = System.IO.Path.GetFileName(movie.nfopathandfilename)
                         scraperLog = scraperLog & "" & vbCrLf
@@ -4023,11 +4029,10 @@ Public Class Form1
                         If Preferences.basicsavemode = True Then
                             nfopath = newMovieList(f).nfopathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).nfopathandfilename), "movie.nfo")
                         End If
-                        scraperLog = scraperLog & "Output filename:- " & nfopath & vbCrLf
+
                         posterpath = Preferences.GetPosterPath(nfopath)
                         fanartpath = Preferences.GetFanartPath(nfopath)
-                        scraperLog = scraperLog & "Poster Path:- " & posterpath & vbCrLf
-                        scraperLog = scraperLog & "Fanart Path:- " & fanartpath & vbCrLf
+                        
 
                         extrapossibleID = Nothing
                         Dim T As String
@@ -4408,6 +4413,66 @@ Public Class Form1
 
                                 End If
                             End If
+
+
+                            '******************************** MOVIE FILE RENAME SECTION *************************************
+
+
+                            If movierename = True And Preferences.usefoldernames = False Then
+
+                                'create new filename (hopefully removing invalid chars first else move (rename) will fail)
+                                Dim newpath As String = newMovieList(f).nfopath                                                     'media & nfo path (not new, path doesn't change during rename)
+                                Dim newfilename As String = Utilities.cleanFilenameIllegalChars(newmovie.fullmoviebody.title & " (" & newmovie.fullmoviebody.year & ")")
+                                Dim newextension As String = System.IO.Path.GetExtension(newMovieList(f).mediapathandfilename)
+                                Dim newmoviepathandfilename As String = newMovieList(f).nfopath & newfilename & newextension
+
+                                'test the new filenames do not already exist
+                                Dim AFileExists As Boolean = False
+                                If System.IO.File.Exists(newmoviepathandfilename) Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & ".nfo") Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & ".tbn") Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & "-fanart.jpg") Then AFileExists = True
+
+                                If AFileExists = False Then
+
+                                    'rename found media file
+
+                                    System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename)
+                                    scraperLog = scraperLog & vbCrLf & "Renamed Movie File" & vbCrLf
+
+                                    'retrieve data already stored into a new array
+                                    Dim tempmovdetails As New str_NewMovie(SetDefaults)
+                                    tempmovdetails.mediapathandfilename = newMovieList(f).mediapathandfilename
+                                    tempmovdetails.nfopath = newMovieList(f).nfopath
+                                    tempmovdetails.nfopathandfilename = newMovieList(f).nfopathandfilename
+                                    tempmovdetails.title = newMovieList(f).title
+
+
+                                    'update the new temp array with the new data
+                                    tempmovdetails.mediapathandfilename = newmoviepathandfilename       'this is the new full path & filname to the rename media file
+                                    tempmovdetails.nfopathandfilename = newpath & newfilename & ".nfo"  'this is the new nfo path (yet to be created)
+                                    tempmovdetails.title = newfilename                                  'new title
+
+                                    'remove old record
+                                    newMovieList.RemoveAt(f)
+
+                                    'reinsert
+                                    newMovieList.Insert(f, tempmovdetails)
+
+                                    'correct nfopath variables
+                                    nfopath = tempmovdetails.nfopathandfilename
+                                    posterpath = Preferences.GetPosterPath(nfopath)
+                                    fanartpath = Preferences.GetFanartPath(nfopath)
+                                End If
+                            End If
+                            '******************************** MOVIE FILE RENAME SECTION *************************************
+
+
+
+                            scraperLog = scraperLog & "Output filename:- " & nfopath & vbCrLf
+                            scraperLog = scraperLog & "Poster Path:- " & posterpath & vbCrLf
+                            scraperLog = scraperLog & "Fanart Path:- " & fanartpath & vbCrLf & vbCrLf
+
                             stage = 2
                             'stage 2 = get movie actors
                             progresstext &= " * Actors"
@@ -4573,16 +4638,16 @@ Public Class Form1
 
                                     trailer = ""
 
-                                    If Preferences.moviePreferredTrailerResolution <> "SD" then
-                                        trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+                                    If Preferences.moviePreferredTrailerResolution <> "SD" Then
+                                        trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title)
                                     End If
 
-                                    If trailer = "" then
+                                    If trailer = "" Then
                                         trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                    End if
+                                    End If
 
 
-'                                   If trailer <> Nothing Then
+                                    '                                   If trailer <> Nothing Then
                                     If trailer <> String.Empty And trailer <> "Error" Then
                                         newmovie.fullmoviebody.trailer = trailer
                                         progresstext &= " - OK"
@@ -5088,7 +5153,7 @@ Public Class Form1
                                                                 Exit For
                                                             End If
                                                         End If
-'                                                        Exit For
+                                                        '                                                        Exit For
                                                     End If
                                                 Next
                                                 If fanartfound = False Then moviethumburl = ""
@@ -5203,12 +5268,12 @@ Public Class Form1
                             End If
                             movietoadd.missingdata1 = completebyte1
                             fullMovieList.Add(movietoadd)
-                        End If
+                            End If
 
-                        scraperLog = scraperLog & "Movie added to list" & vbCrLf
-                        progress = 999999
-                        ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
-                        'BckWrkScnMovies.ReportProgress(progress, progresstext)
+                            scraperLog = scraperLog & "Movie added to list" & vbCrLf
+                            progress = 999999
+                            ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
+                            'BckWrkScnMovies.ReportProgress(progress, progresstext)
                     End If
 
 
