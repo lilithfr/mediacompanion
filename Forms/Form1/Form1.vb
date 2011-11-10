@@ -32459,6 +32459,7 @@ Public Class Form1
                             SameDateLoop = False
                         End If
                     Loop
+                   
                     mySortedList.Add(Key, EpAired & "    " & Renamer.setTVFilename(WorkingTvShow.Title.Value, childNodeLevel3.Tag.title.value, episode2digit, season2digit))
 
 
@@ -32466,8 +32467,8 @@ Public Class Form1
             Next
 
             If Not Abort Then   'i.e. we have episodes in this show.... 
-                Dim textstring As String = WorkingTvShow.Title.Value & vbCrLf                                 'start our text with the show title
-                textstring += StrDup(WorkingTvShow.Title.Value.Length, "-") & vbCrLf              'add an underline of the same length    
+                Dim textstring As String = WorkingTvShow.Title.Value & "  Seasons: " & WorkingTvShow.Seasons.Count & "  Episodes: " & WorkingTvShow.Episodes.Count & vbCrLf 'start our text with the show title
+                textstring += StrDup(textstring.Length - 2, "-") & vbCrLf              'add an underline of the same length    
                 Dim prevkey As String = mySortedList.GetKey(0).Substring(0, 4)                      'load with first year value first four digits of aired date
                 For Line = 0 To mySortedList.Count - 1  'read the data from the sorted list
                     If mySortedList.GetKey(Line).Substring(0, 4) <> prevkey Then textstring = textstring & "----------" & vbCrLf 'line break between years...
@@ -32475,9 +32476,7 @@ Public Class Form1
                     textstring += mySortedList.GetByIndex(Line) & vbCrLf
                 Next
 
-                textstring += vbCrLf & "* missing episodes are not listed" & vbCrLf         'add a note about the missing episodes (they use the playcount field but are not in workingEpisodes
-                'textstring += "^ episodes have the same aired date as another episode" & vbCrLf
-                textstring += "9999 episodes have no valid aired date stored" & vbCrLf
+                textstring += vbCrLf & "9999 episodes have no valid aired date stored" & vbCrLf
 
                 '                                                   'Show Final Listing Screen
                 Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   

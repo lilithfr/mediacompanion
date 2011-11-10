@@ -110,6 +110,9 @@ Public Class Renamer
     End Function
 
     Public Shared Function setTVFilename(ByVal showtitle As String, ByVal episodetitle As String, ByVal episodeno As List(Of String), ByVal seasonno As String) As String
+        If showtitle = Nothing Then showtitle = ""
+        If episodetitle = Nothing Then episodetitle = ""
+
         Dim newfilename As String = ""
 
         If rename.showTitleCase <> "" Then
