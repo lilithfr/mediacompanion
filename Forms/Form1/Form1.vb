@@ -3766,13 +3766,13 @@ Public Class Form1
                 Exit Sub
             End If
             Dim ProgressBase As String = ""
-            progressbase = "Using MC IMDB scraper/"
+            ProgressBase = "Using MC IMDB scraper/"
 
             If Preferences.usefoldernames = True Then
-                progressbase &= "FOLDERNAMES"
+                ProgressBase &= "FOLDERNAMES"
 
             Else
-                progressbase &= "FILENAMES"
+                ProgressBase &= "FILENAMES"
 
             End If
 
@@ -4032,7 +4032,7 @@ Public Class Form1
 
                         posterpath = Preferences.GetPosterPath(nfopath)
                         fanartpath = Preferences.GetFanartPath(nfopath)
-                        
+
 
                         extrapossibleID = Nothing
                         Dim T As String
@@ -5268,12 +5268,12 @@ Public Class Form1
                             End If
                             movietoadd.missingdata1 = completebyte1
                             fullMovieList.Add(movietoadd)
-                            End If
+                        End If
 
-                            scraperLog = scraperLog & "Movie added to list" & vbCrLf
-                            progress = 999999
-                            ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
-                            'BckWrkScnMovies.ReportProgress(progress, progresstext)
+                        scraperLog = scraperLog & "Movie added to list" & vbCrLf
+                        progress = 999999
+                        ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
+                        'BckWrkScnMovies.ReportProgress(progress, progresstext)
                     End If
 
 
@@ -30480,6 +30480,17 @@ Public Class Form1
         Try
             If RadioButton44.Checked = True Then
                 Call tv_Filter("missingeps")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    ' Phyonics - Fix for issue #208
+    Private Sub RadioButton53_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton53.CheckedChanged
+        Try
+            If RadioButton53.Checked = True Then
+                Call tv_Filter("airedmissingeps")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

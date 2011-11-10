@@ -3127,8 +3127,62 @@ Partial Public Class Form1
                             If Not episode.IsMissing Then
                                 episode.Visible = False
                             Else
+                                ' Phyonics - Fix for issue #208
+                                If String.IsNullOrEmpty(episode.Aired.Value) Then
+                                    ' Change the colour to gray
+                                    episode.EpisodeNode.ForeColor = Color.Gray
+                                Else
+                                    Try
+                                        ' Is the episode in the future?
+                                        If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                            '  Yes, so change its colour to gray
+                                            episode.EpisodeNode.ForeColor = Color.Gray
+                                        End If
+                                    Catch ex As Exception
+                                        ' Do nothing
+                                    End Try
+                                End If
+
                                 episode.Visible = True
                                 episode.EpisodeNode.EnsureVisible()
+                            End If
+                        Next
+                        If Season.VisibleEpisodeCount = 0 Then
+                            Season.Visible = False
+                        Else
+                            Season.Visible = True
+                        End If
+                    Next
+                    If item.VisibleSeasonCount = 0 Then
+                        item.Visible = False
+                    Else
+                        item.Visible = True
+                    End If
+                Next
+            ElseIf butt = "airedmissingeps" Then
+                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                            If Not episode.IsMissing Then
+                                episode.Visible = False
+                            Else
+                                ' Phyonics - Fix for issue #208
+                                If String.IsNullOrEmpty(episode.Aired.Value) Then
+                                    episode.Visible = False
+                                Else
+                                    ' Has the episode been aired yet?
+                                    Try
+                                        If Convert.ToDateTime(episode.Aired.Value) <= Now Then
+                                            episode.Visible = True
+                                            episode.EpisodeNode.EnsureVisible()
+                                        Else
+                                            episode.Visible = False
+                                        End If
+                                    Catch ex As Exception
+                                        ' We failed to convert the aired date to a date, therefore don't show the episode
+                                        episode.Visible = False
+                                    End Try
+                                End If
                             End If
                         Next
                         If Season.VisibleEpisodeCount = 0 Then
@@ -3378,36 +3432,14 @@ Partial Public Class Form1
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
 
                         If Episode Is Nothing Then
-                            ' Phyonics - Fix for issue #208
-                            Dim episodeAired As Boolean = True
+                            Dim MissingEpisode As New Media_Companion.TvEpisode
 
-                            If Not String.IsNullOrEmpty(NewEpisode.FirstAired.Value) Then
-                                'Check if the episode has been aired yet
-
-                                Dim airedDate As Date
-
-                                Try
-                                    airedDate = Convert.ToDateTime(NewEpisode.FirstAired.Value)
-
-                                    If airedDate > Now Then
-                                        episodeAired = False
-                                    End If
-                                Catch ex As Exception
-                                    ' Do nothing
-                                End Try
-                            End If
-
-                            ' Only add the episode if its been aired
-                            If episodeAired Then
-                                Dim MissingEpisode As New Media_Companion.TvEpisode
-
-                                MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
-                                MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
-                                MissingEpisode.IsMissing = True
-                                MissingEpisode.ShowObj = item
-                                MissingEpisode.Save()
-                                Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
-                            End If
+                            MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+                            MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
+                            MissingEpisode.IsMissing = True
+                            MissingEpisode.ShowObj = item
+                            MissingEpisode.Save()
+                            Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
                         End If
                     Next
                     'Try
