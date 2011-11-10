@@ -150,6 +150,7 @@ Public Class Preferences
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared OfflineDVDTitle As String
+    Public Shared MovieRenameTemplate As String
 
     Public Shared moviePreferredTrailerResolution As String
 
@@ -196,6 +197,7 @@ Public Class Preferences
         Preferences.moviethumbpriority(3) = "IMDB"
         Preferences.movieRuntimeDisplay = "scraper"
         Preferences.moviePreferredTrailerResolution = "720"
+        Preferences.MovieRenameTemplate = "%T (%Y)"
 
         'TV
         Preferences.tvshow_useXBMC_Scraper = False
@@ -794,6 +796,12 @@ Public Class Preferences
         child.InnerText = Preferences.OfflineDVDTitle
         root.AppendChild(child)
 
+        child = doc.CreateElement("movierenametemplate")
+        child.InnerText = Preferences.MovieRenameTemplate
+        root.AppendChild(child)
+
+
+
         child = doc.CreateElement("showsortdate")
         child.InnerText = Preferences.showsortdate
         root.AppendChild(child)
@@ -1377,6 +1385,10 @@ Public Class Preferences
 
                 Case "offlinemovielabeltext"
                     If thisresult.InnerText <> "" Then Preferences.OfflineDVDTitle = thisresult.InnerText
+
+                Case "movierenametemplate"
+                    If thisresult.InnerText <> "" Then Preferences.MovieRenameTemplate = thisresult.InnerText
+
                 Case "showsortdate"
                     If thisresult.InnerText = Nothing Or thisresult.InnerText = "" Then
                         showsortdate = False

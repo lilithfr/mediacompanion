@@ -32369,6 +32369,8 @@ Public Class Form1
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
+        Me.MovieRenameTemplateTextBox.Text = Preferences.MovieRenameTemplate
+
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
         Read_XBMC_IMDB_Scraper_Config()
@@ -32726,5 +32728,13 @@ Public Class Form1
     Private Sub cbPreferredTrailerResolution_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
         Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text
         generalprefschanged = True
+    End Sub
+
+    Private Sub MovieRenameTemplateTextBox_TextChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameTemplateTextBox.TextChanged
+        Try
+            Preferences.MovieRenameTemplate = MovieRenameTemplateTextBox.Text
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 End Class
