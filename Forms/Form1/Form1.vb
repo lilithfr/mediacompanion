@@ -1637,7 +1637,7 @@ Public Class Form1
         For Each movie In fullMovieList
             filteredList.Add(movie)
         Next
-        'Call mov_MovieComboListSort()  'this function is a duplicate of the one below....
+        Call mov_MovieComboListSort()
         Call mov_MovieComboLoad()
         Try
             'ignore = False
@@ -5410,7 +5410,7 @@ Public Class Form1
             Exit Sub
         End If
 
-        'Call mov_MovieComboListSort() 'this function is a duplicate of the one below
+        Call mov_MovieComboListSort()
         Call mov_MovieComboLoad()
         Try
             'ignore = False
@@ -5481,7 +5481,6 @@ Public Class Form1
         'Call sortorder()    ApplyFilters calls sortorder()
         frmSplash2.Label2.Text = "Apply Filters..."
         Call mov_FiltersAndSortApply()
-        Call mov_MovieComboListSort()
         frmSplash2.Label2.Text = "Reload Main Page..."
         Call mov_FormPopulate()
         Try
@@ -6385,7 +6384,6 @@ Public Class Form1
                     ToolStripStatusLabel1.Text = e.UserState
                 Else
                     Call mov_FiltersAndSortApply()
-                    Call mov_MovieComboListSort()
                 End If
             End If
         Catch ex As Exception
@@ -6429,7 +6427,6 @@ Public Class Form1
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
             Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6841,7 +6838,7 @@ Public Class Form1
                 filteredList = dupelist
             End If
             'Call applyotherfilters()
-
+            Call mov_MovieComboListSort()
         Catch ex As Exception
             MsgBox(ex.ToString)
         Finally
@@ -6851,11 +6848,10 @@ Public Class Form1
 
     'create list to browse
     Private Sub mov_MovieComboLoad()
-
         Dim tempint As Integer = MovieListComboBox.SelectedIndex
         Dim oldmovie As String = ""
         Try
-            oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
+            oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -7000,7 +6996,7 @@ Public Class Form1
         If oldmovie <> "" Then
             Dim counted As Integer = MovieListComboBox.Items.Count - 1
             For f = 0 To counted
-                If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = oldmovie Then
+                If CType(MovieListComboBox.Items(f), ValueDescriptionPair).value = oldmovie Then
                     MovieListComboBox.SelectedIndex = f
                     Exit For
                 End If
@@ -7027,13 +7023,8 @@ Public Class Form1
 
     End Sub
 
-    'This function is a duplicate of mov_MovieComboLoad() - all calls to this function are redirected - when no issues arrise, please change all function calls & delete this function. changed 11/11/2011
     'View Title, Filename, or Foldername
     Private Sub mov_MovieComboListSort()
-        mov_MovieComboLoad()
-        Exit Sub
-
-
         Monitor.Enter(Me)
         'Try
         Dim comboarray2 As New List(Of str_ComboList)
@@ -7297,7 +7288,7 @@ Public Class Form1
                 Next
             End If
         End If
-        'mov_MovieComboLoad()
+        mov_MovieComboLoad()
         'Catch
         'Finally
         Monitor.Exit(Me)
@@ -7500,7 +7491,6 @@ Public Class Form1
             RadioButton45.Checked = True     'set movie filters indication back to all
             ComboBox11.SelectedIndex = 0   'set filename filetype filter back to all
             Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -7618,7 +7608,6 @@ Public Class Form1
         Next
 
         Call mov_FiltersAndSortApply()
-        Call mov_MovieComboListSort()
         If messbox.Visible = True Then messbox.Close()
 
         If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
@@ -8142,7 +8131,6 @@ Public Class Form1
                 Next
 
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -8270,7 +8258,6 @@ Public Class Form1
             If Label39.Text.ToLower.IndexOf(" of ") <> -1 Then
 
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
                 Call mov_FormPopulate()
             End If
         Else
@@ -8367,7 +8354,6 @@ Public Class Form1
             workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
 
             Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
             Call mov_FormPopulate()
 
             mess.Close()
@@ -8564,10 +8550,8 @@ Public Class Form1
                 Exit For
             End If
         Next
-
-        Call mov_FiltersAndSortApply()
-        Call mov_MovieComboListSort()
         Call mov_FormPopulate()
+        mov_FiltersAndSortApply()
     End Sub
 
     Private Sub MediaCompanionForumToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionForumToolStripMenuItem.Click
@@ -9868,9 +9852,7 @@ Public Class Form1
             ToolStripStatusLabel7.Visible = False
 
             Call util_ThreadsRunningCheck()
-            Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
-            Call mov_FormPopulate()
+            mov_FiltersAndSortApply()
             'Mov_RebuildMoviesFromNfoToXML(movieFolders)      'we do this because the wizard writes to the nfo's & not the cache - this reloads the cache from the nfo's & reloads
             ' movie list with the new data (required if year updated)
 
@@ -10906,7 +10888,6 @@ Public Class Form1
                 ToolStripStatusLabel4.Text = e.UserState
             ElseIf e.ProgressPercentage = 999998 Then
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
                 ToolStripStatusLabel4.Text = e.UserState
             End If
             'ToolStrip1.Refresh()
@@ -11567,8 +11548,7 @@ Public Class Form1
 
     Private Sub ComboBox11_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox11.SelectedValueChanged
         Try
-            Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
+            mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -11768,7 +11748,6 @@ Public Class Form1
                 End If
                 TextBox1.Refresh()
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -11785,7 +11764,6 @@ Public Class Form1
                 End If
                 txt_titlesearch.Refresh()
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -11869,8 +11847,7 @@ Public Class Form1
             If filterOverride = False Then
                 CheckedListBox1.Enabled = False
                 '            Call applyfilters()
-                Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
+                mov_FiltersAndSortApply()
                 CheckedListBox1.Enabled = True
             End If
         Catch ex As Exception
@@ -12571,7 +12548,6 @@ Public Class Form1
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
                             Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
-                            Call mov_MovieComboListSort()
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required as we no longer move back to main page
@@ -12640,7 +12616,6 @@ Public Class Form1
 
         If replace = True Then
             Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
             Call mov_FormPopulate()
             'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
             'currentTabIndex = TabControl2.SelectedIndex
@@ -14566,7 +14541,6 @@ Public Class Form1
                 stage = stage & vbCrLf
                 stage = stage & "applying filters" & vbCrLf
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
                 stage = stage & vbCrLf
                 stage = stage & "Finalising" & vbCrLf
                 messbox.Close()
@@ -22907,8 +22881,10 @@ Public Class Form1
 #End If
             End Try
             Call mov_CacheSave()
-            Call mov_FiltersAndSortApply()
+            'filteredlist = fullmovielist
             Call mov_MovieComboListSort()
+            'Call loadmovielist()
+            Call mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             frmSplash2.Hide()
         Catch ex As Exception
@@ -26485,7 +26461,6 @@ Public Class Form1
     Private Sub ComboBox10_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox10.SelectedIndexChanged
         Try
             Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -26501,7 +26476,6 @@ Public Class Form1
                 End If
                 txt_titlesearch.Refresh()
                 Call mov_FiltersAndSortApply()
-                Call mov_MovieComboListSort()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -27770,11 +27744,8 @@ Public Class Form1
         Next gridrow
 
         Call mov_CacheSave()
-
-        Call mov_FiltersAndSortApply()
-        Call mov_MovieComboListSort()
         Call mov_FormPopulate()
-
+        Call mov_FiltersAndSortApply()
         frmSplash2.Hide()
         'mess.Close()
         Application.DoEvents()
@@ -28813,8 +28784,7 @@ Public Class Form1
                     End If
                 End If
             Next
-            Call mov_FiltersAndSortApply()
-            Call mov_MovieComboListSort()
+            mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             frmProgSplash.Close()
             'messbox.Close()
@@ -30134,7 +30104,6 @@ Public Class Form1
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
                             Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
-                            Call mov_MovieComboListSort()
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
@@ -31832,8 +31801,7 @@ Public Class Form1
                 '            ComboBox11.Enabled = True
                 '            ComboBox11.SelectedIndex = 0
                 '            Call CheckSpecials("all")
-                Call mov_FiltersAndSortApply("all")
-                Call mov_MovieComboListSort()
+                mov_FiltersAndSortApply("all")
             End If
             '        applyfilters()
         Catch ex As Exception
@@ -31850,8 +31818,7 @@ Public Class Form1
                 '            ComboBox11.Enabled = False
                 '            Call CheckSpecials("watched")
                 '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-                Call mov_FiltersAndSortApply("watched")
-                Call mov_MovieComboListSort()
+                mov_FiltersAndSortApply("watched")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -31867,8 +31834,7 @@ Public Class Form1
                 '            ComboBox11.Enabled = False
                 '            Call CheckSpecials("unwatched")
                 '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-                Call mov_FiltersAndSortApply("unwatched")
-                Call mov_MovieComboListSort()
+                mov_FiltersAndSortApply("unwatched")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -31884,9 +31850,7 @@ Public Class Form1
                 '            ComboBox11.Enabled = False
                 '            Call CheckSpecials("duplicates")
                 '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-                Call mov_FiltersAndSortApply("duplicates")
-                Call mov_MovieComboListSort()
-
+                mov_FiltersAndSortApply("duplicates")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -31902,8 +31866,7 @@ Public Class Form1
                 '            ComboBox11.Enabled = False
                 '            Call CheckSpecials("missing posters")
                 '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-                Call mov_FiltersAndSortApply("missing posters")
-                Call mov_MovieComboListSort()
+                mov_FiltersAndSortApply("missing posters")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -31919,8 +31882,7 @@ Public Class Form1
                 '            ComboBox11.Enabled = False
                 '            Call CheckSpecials("missing fanart")
                 '            TextBox_GenreFilter.Text = "Genre Filter (AND)"
-                Call mov_FiltersAndSortApply("missing fanart")
-                Call mov_MovieComboListSort()
+                mov_FiltersAndSortApply("missing fanart")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -32346,7 +32308,6 @@ Public Class Form1
         Try
             If noFanart = False Then
                 Call mov_FiltersAndSortApply("missing fanart") 'Apply Filters to movielist combobox
-                Call mov_MovieComboListSort()
                 Call mov_FanartLoad()   'refresh fanart for the current movie
                 If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
                     ButtonNextFanart.Visible = True
