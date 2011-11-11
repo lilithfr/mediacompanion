@@ -9913,6 +9913,8 @@ Public Class Form1
                         validfile = True
                     Case ".ifo"
                         validfile = True
+                    Case ".strm"
+                        validfile = True
                 End Select
                 If validfile = True Then
 

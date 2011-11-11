@@ -437,7 +437,8 @@ Namespace ConsoleApplication1
             strArray(&H17) = "*.rar"
             strArray(&H18) = "*.flv"
             strArray(&H19) = "VIDEO_TS.IFO"
-            Dim num2 As Integer = &H19
+            strArray(&H1A) = "*.strm"
+            Dim num2 As Integer = &H1A
             Dim directoryName As String
             For Each directoryName In listofshowfolders
                 Dim flag2 As Boolean = True
@@ -1461,6 +1462,7 @@ Label_1A0B:
                 strArray(20) = ".ts"
                 strArray(&H15) = ".vob"
                 strArray(&H16) = ".m2ts"
+                strArray(&H17) = ".strm"
                 If File.Exists(str2.Replace(Path.GetFileName(str2), "VIDEO_TS.IFO")) Then
                     str = str2.Replace(Path.GetFileName(str2), "VIDEO_TS.IFO")
                 End If
@@ -3751,6 +3753,7 @@ Label_1A0B:
                 strArray(&H15) = ".vob"
                 strArray(&H16) = ".m2ts"
                 strArray(&H17) = ".rar"
+                strArray(&H17) = ".strm"
                 Dim num As Integer = &H17
                 Dim extension As String = Path.GetExtension(sPath)
                 Dim str4 As String = sPath.Replace(Path.GetExtension(sPath), "")
@@ -8025,6 +8028,7 @@ Label_028B:
             strArray(&H16) = "*.m2ts"
             strArray(&H17) = "*.rar"
             strArray(&H18) = "VIDEO_TS.IFO"
+            strArray(&H17) = ".strm"
             Dim num2 As Integer = &H18
             Dim str10 As String
             For Each str10 In Module1.moviefolders
