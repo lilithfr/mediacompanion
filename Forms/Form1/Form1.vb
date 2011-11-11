@@ -3726,11 +3726,6 @@ Public Class Form1
 
 
     Private Sub mov_StartNew()
-        '****  Movie Rename trigger variable until a preference tick box is created
-        Dim movierename As Boolean = False 'Set to true to test movie rename function - only renames on adding new movie at this stage '***************** remove me once this is a preference ***********
-        '****
-
-
         Dim dft As New List(Of String)
         Dim moviepattern As String
         Dim tempint As Integer = 0
@@ -4417,12 +4412,14 @@ Public Class Form1
 
                             '******************************** MOVIE FILE RENAME SECTION *************************************
 
-
-                            If movierename = True And Preferences.usefoldernames = False Then
+                            If Preferences.MovieRenameEnable = True And Preferences.usefoldernames = False Then
 
                                 'create new filename (hopefully removing invalid chars first else move (rename) will fail)
                                 Dim newpath As String = newMovieList(f).nfopath                                                     'media & nfo path (not new, path doesn't change during rename)
-                                Dim newfilename As String = Utilities.cleanFilenameIllegalChars(newmovie.fullmoviebody.title & " (" & newmovie.fullmoviebody.year & ")")
+                                Dim newfilename As String = Preferences.MovieRenameTemplate.Replace("%T", newmovie.fullmoviebody.title)  'replaces %T with movie title
+                                newfilename = newfilename.Replace("%Y", newmovie.fullmoviebody.year)                                     'replaces %Y with year   
+                                newfilename = Utilities.cleanFilenameIllegalChars(newfilename)          'removes chars that can't be in a filename
+
                                 Dim newextension As String = System.IO.Path.GetExtension(newMovieList(f).mediapathandfilename)
                                 Dim newmoviepathandfilename As String = newMovieList(f).nfopath & newfilename & newextension
 
