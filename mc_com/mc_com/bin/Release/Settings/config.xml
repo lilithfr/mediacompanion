@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xbmc_media_companion_config_v1.0>
+  <gettrailer>false</gettrailer>
+  <keepfoldername>false</keepfoldername>
+  <startupcache>true</startupcache>
+  <ignoretrailers>false</ignoretrailers>
+  <moviescraper>0</moviescraper>
+  <nfoposterscraper>0</nfoposterscraper>
+  <alwaysuseimdbid>false</alwaysuseimdbid>
+  <ignoreactorthumbs>false</ignoreactorthumbs>
+  <maxactors>9999</maxactors>
+  <enablehdtags>true</enablehdtags>
+  <renamenfofiles>false</renamenfofiles>
+  <checkinfofiles>true</checkinfofiles>
+  <tvshowautoquick>false</tvshowautoquick>
+  <disablelogfiles>false</disablelogfiles>
+  <actorseasy>true</actorseasy>
+  <copytvactorthumbs>true</copytvactorthumbs>
+  <fanartnotstacked>false</fanartnotstacked>
+  <posternotstacked>false</posternotstacked>
+  <lastpath>G:\Media Companion</lastpath>
+  <downloadfanart>true</downloadfanart>
+  <scrapemovieposters>true</scrapemovieposters>
+  <usefanart>true</usefanart>
+  <dontdisplayposter>false</dontdisplayposter>
+  <usefoldernames>false</usefoldernames>
+  <rarsize>-1</rarsize>
+  <actorsave>false</actorsave>
+  <actorsavepath>
+  </actorsavepath>
+  <actornetworkpath>
+  </actornetworkpath>
+  <resizefanart>1</resizefanart>
+  <overwritethumbs>false</overwritethumbs>
+  <defaulttvthumb>poster</defaulttvthumb>
+  <imdbmirror>http://www.imdb.com/</imdbmirror>
+  <backgroundcolour>Silver</backgroundcolour>
+  <forgroundcolour>#D3D9DC</forgroundcolour>
+  <remembersize>false</remembersize>
+  <locx>0</locx>
+  <locy>0</locy>
+  <formheight>725</formheight>
+  <formwidth>1060</formwidth>
+  <videoplaybackmode>1</videoplaybackmode>
+  <createfolderjpg>false</createfolderjpg>
+  <basicsavemode>false</basicsavemode>
+  <startupdisplaynamemode>0</startupdisplaynamemode>
+  <namemode>1</namemode>
+  <tvdbmode>default</tvdbmode>
+  <tvdbactorscrape>0</tvdbactorscrape>
+  <usetransparency>false</usetransparency>
+  <transparencyvalue>255</transparencyvalue>
+  <downloadtvfanart>true</downloadtvfanart>
+  <downloadtvposter>true</downloadtvposter>
+  <keepfoldername>false</keepfoldername>
+  <downloadtvseasonthumbs>true</downloadtvseasonthumbs>
+  <maximumthumbs>10</maximumthumbs>
+  <startupmode>1</startupmode>
+  <hdtvtags>true</hdtvtags>
+  <disablelogs>false</disablelogs>
+  <disabletvlogs>false</disabletvlogs>
+  <overwritethumb>false</overwritethumb>
+  <savefanart>true</savefanart>
+  <postertype>poster</postertype>
+  <roundminutes>False</roundminutes>
+  <tvactorscrape>0</tvactorscrape>
+  <videomode>1</videomode>
+  <selectedvideoplayer>
+  </selectedvideoplayer>
+  <externalbrowser>false</externalbrowser>
+  <moviethumbpriority>Internet Movie Poster Awards|themoviedb.org|Movie Poster DB|IMDB</moviethumbpriority>
+  <tvdblanguage>en|English</tvdblanguage>
+  <certificatepriority>MPAA|UK|USA|Ireland|Australia|New Zealand|Norway|Singapore|South Korea|Philippines|Brazil|Netherlands|Malaysia|Argentina|Iceland|Canada (Quebec)|Canada (British Columbia/Ontario)|Canada (Alberta/Manitoba/Nova Scotia)|Peru|Sweden|Portugal|South Africa|Denmark|Hong Kong|Finland|India|Mexico|France|Italy|Switzerland (canton of Vaud)|Switzerland (canton of Geneva)|Germany|Greece|Austria</certificatepriority>
+  <splitcontainer1>300</splitcontainer1>
+  <splitcontainer2>184</splitcontainer2>
+  <splitcontainer3>300</splitcontainer3>
+  <splitcontainer4>25</splitcontainer4>
+  <splitcontainer5>444</splitcontainer5>
+  <seasonall>none</seasonall>
+  <maximised>false</maximised>
+  <tvrename>0</tvrename>
+  <tvshowrebuildlog>False</tvshowrebuildlog>
+  <moviesortorder>0</moviesortorder>
+  <moviedefaultlist>0</moviedefaultlist>
+  <startuptab>0</startuptab>
+  <font>Times New Roman, 9pt</font>
+  <moviesets />
+  <table>
+    <sort>
+    </sort>
+  </table>
+</xbmc_media_companion_config_v1.0>
