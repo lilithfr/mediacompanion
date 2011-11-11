@@ -560,7 +560,7 @@ Public Class Form1
             loadinginfo = "Status :- Loading TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-                Call tv_CacheLoad(("New Function"))
+            Call tv_CacheLoad()
         End If
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building Actor Database"
