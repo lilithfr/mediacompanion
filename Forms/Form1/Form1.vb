@@ -32368,6 +32368,7 @@ Public Class Form1
         Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
+        Me.MovieRenameCheckBox.Checked = Preferences.MovieRenameEnable
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
         Me.MovieRenameTemplateTextBox.Text = Preferences.MovieRenameTemplate
 
@@ -32733,6 +32734,14 @@ Public Class Form1
     Private Sub MovieRenameTemplateTextBox_TextChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameTemplateTextBox.TextChanged
         Try
             Preferences.MovieRenameTemplate = MovieRenameTemplateTextBox.Text
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub MovieRenameCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameCheckBox.CheckedChanged
+        Try
+            Preferences.MovieRenameEnable = MovieRenameCheckBox.Checked
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
