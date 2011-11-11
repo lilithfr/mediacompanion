@@ -16,7 +16,7 @@ Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
-                                                 ".dvr-ms", ".img", "VIDEO_TS.IFO"}
+                                                 ".dvr-ms", ".img", ".strm", "VIDEO_TS.IFO"}
 
     Private Declare Function GetDiskFreeSpaceEx _
 Lib "kernel32" _
@@ -162,7 +162,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function DownloadTextFiles(ByVal StartURL As String) As String
-        Return DownloadCache.DownloadFileToString(StartURL)
+        Dim data As String = ""
+        Dim returnState As Boolean = DownloadCache.DownloadFileTo(StartURL, , , data)
+        Return data
+        'Return DownloadCache.DownloadFileToString(StartURL)
     End Function
 
     Public Shared Function GetCRC32(ByVal sFileName As String) As String
@@ -2396,7 +2399,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Sub DownloadFile(ByVal URL As String, ByVal Path As String)
         Try
-            DownloadCache.DownloadFileToDisk(URL, Path, True)
+            Dim returnState As Boolean = DownloadCache.DownloadFileTo(URL, Path, True)
+            'DownloadCache.DownloadFileToDisk(URL, Path, True)
         Catch ex As Exception
 
         End Try
@@ -2404,7 +2408,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Sub DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False)
         Try
-            DownloadCache.DownloadFileToDisk(URL, Path, ForceDownload)
+            Dim returnState As Boolean = DownloadCache.DownloadFileTo(URL, Path, ForceDownload)
         Catch ex As Exception
 
         End Try

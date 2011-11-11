@@ -201,7 +201,7 @@ Public Class Form1
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         Try
             Call mov_CacheSave()
-            If Tv_CacheSave("New Function") Then
+            If Tv_CacheSave() Then
                 e.Cancel = True
                 Exit Sub
             End If
@@ -560,7 +560,7 @@ Public Class Form1
             loadinginfo = "Status :- Loading TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call tv_CacheLoad(("New Function"))
+                Call tv_CacheLoad(("New Function"))
         End If
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building Actor Database"
@@ -2162,6 +2162,18 @@ Public Class Form1
         Call mov_ScanForNew()
 
     End Sub
+    Public Class clsCompareFileInfo
+        Implements IComparer
+        Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+            Dim File1 As System.IO.FileInfo
+            Dim File2 As System.IO.FileInfo
+
+            File1 = DirectCast(x, System.IO.FileInfo)
+            File2 = DirectCast(y, System.IO.FileInfo)
+
+            Compare = String.Compare(File1.FullName, File2.FullName)
+        End Function
+    End Class
 
     Private Sub mov_ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
 
@@ -2169,6 +2181,7 @@ Public Class Form1
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
         Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+        Array.Sort(fs_infos, New clsCompareFileInfo)    'sorts found folder list
 
         Dim counter As Integer = 1
         Dim counter2 As Integer = 1
@@ -3748,13 +3761,13 @@ Public Class Form1
                 Exit Sub
             End If
             Dim ProgressBase As String = ""
-            progressbase = "Using MC IMDB scraper/"
+            ProgressBase = "Using MC IMDB scraper/"
 
             If Preferences.usefoldernames = True Then
-                progressbase &= "FOLDERNAMES"
+                ProgressBase &= "FOLDERNAMES"
 
             Else
-                progressbase &= "FILENAMES"
+                ProgressBase &= "FILENAMES"
 
             End If
 
@@ -3916,6 +3929,7 @@ Public Class Form1
                             scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
                             Exit Sub
                         End If
+
                         extension = System.IO.Path.GetExtension(movie.nfopathandfilename)
                         filename2 = System.IO.Path.GetFileName(movie.nfopathandfilename)
                         scraperLog = scraperLog & "" & vbCrLf
@@ -4010,11 +4024,10 @@ Public Class Form1
                         If Preferences.basicsavemode = True Then
                             nfopath = newMovieList(f).nfopathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).nfopathandfilename), "movie.nfo")
                         End If
-                        scraperLog = scraperLog & "Output filename:- " & nfopath & vbCrLf
+
                         posterpath = Preferences.GetPosterPath(nfopath)
                         fanartpath = Preferences.GetFanartPath(nfopath)
-                        scraperLog = scraperLog & "Poster Path:- " & posterpath & vbCrLf
-                        scraperLog = scraperLog & "Fanart Path:- " & fanartpath & vbCrLf
+
 
                         extrapossibleID = Nothing
                         Dim T As String
@@ -4395,6 +4408,73 @@ Public Class Form1
 
                                 End If
                             End If
+
+
+                            '******************************** MOVIE FILE RENAME SECTION *************************************
+
+                            If Preferences.MovieRenameEnable = True And Preferences.usefoldernames = False Then
+
+                                'create new filename (hopefully removing invalid chars first else move (rename) will fail)
+                                Dim newpath As String = newMovieList(f).nfopath                                                     'media & nfo path (not new, path doesn't change during rename)
+                                Dim newfilename As String = Preferences.MovieRenameTemplate.Replace("%T", newmovie.fullmoviebody.title)  'replaces %T with movie title
+                                newfilename = newfilename.Replace("%Y", newmovie.fullmoviebody.year)                                     'replaces %Y with year   
+                                newfilename = newfilename.Replace("%I", newmovie.fullmoviebody.imdbid)                                   'replaces %I with imdid 
+                                newfilename = newfilename.Replace("%P", newmovie.fullmoviebody.premiered)                                'replaces %P with premiered date 
+                                newfilename = newfilename.Replace("%R", newmovie.fullmoviebody.rating)                                   'replaces %R with rating 
+                                newfilename = newfilename.Replace("%L", newmovie.fullmoviebody.runtime)                                  'replaces %L with runtime (length)
+
+                                newfilename = Utilities.cleanFilenameIllegalChars(newfilename)          'removes chars that can't be in a filename
+
+                                Dim newextension As String = System.IO.Path.GetExtension(newMovieList(f).mediapathandfilename)
+                                Dim newmoviepathandfilename As String = newMovieList(f).nfopath & newfilename & newextension
+
+                                'test the new filenames do not already exist
+                                Dim AFileExists As Boolean = False
+                                If System.IO.File.Exists(newmoviepathandfilename) Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & ".nfo") Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & ".tbn") Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & "-fanart.jpg") Then AFileExists = True
+
+                                If AFileExists = False Then
+
+                                    'rename found media file
+
+                                    System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename)
+                                    scraperLog = scraperLog & vbCrLf & "Renamed Movie File" & vbCrLf
+
+                                    'retrieve data already stored into a new array
+                                    Dim tempmovdetails As New str_NewMovie(SetDefaults)
+                                    tempmovdetails.mediapathandfilename = newMovieList(f).mediapathandfilename
+                                    tempmovdetails.nfopath = newMovieList(f).nfopath
+                                    tempmovdetails.nfopathandfilename = newMovieList(f).nfopathandfilename
+                                    tempmovdetails.title = newMovieList(f).title
+
+
+                                    'update the new temp array with the new data
+                                    tempmovdetails.mediapathandfilename = newmoviepathandfilename       'this is the new full path & filname to the rename media file
+                                    tempmovdetails.nfopathandfilename = newpath & newfilename & ".nfo"  'this is the new nfo path (yet to be created)
+                                    tempmovdetails.title = newfilename                                  'new title
+
+                                    'remove old record
+                                    newMovieList.RemoveAt(f)
+
+                                    'reinsert
+                                    newMovieList.Insert(f, tempmovdetails)
+
+                                    'correct nfopath variables
+                                    nfopath = tempmovdetails.nfopathandfilename
+                                    posterpath = Preferences.GetPosterPath(nfopath)
+                                    fanartpath = Preferences.GetFanartPath(nfopath)
+                                End If
+                            End If
+                            '******************************** MOVIE FILE RENAME SECTION *************************************
+
+
+
+                            scraperLog = scraperLog & "Output filename:- " & nfopath & vbCrLf
+                            scraperLog = scraperLog & "Poster Path:- " & posterpath & vbCrLf
+                            scraperLog = scraperLog & "Fanart Path:- " & fanartpath & vbCrLf & vbCrLf
+
                             stage = 2
                             'stage 2 = get movie actors
                             progresstext &= " * Actors"
@@ -4557,12 +4637,28 @@ Public Class Form1
                                 If Preferences.gettrailer = True Then
                                     progresstext &= " * Trailer"
                                     BckWrkScnMovies.ReportProgress(progress, progresstext)
-                                    trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                    If trailer <> Nothing Then
+
+                                    trailer = ""
+
+                                    If Preferences.moviePreferredTrailerResolution <> "SD" Then
+                                        trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title)
+                                    End If
+
+                                    If trailer = "" Then
+                                        trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                    End If
+
+
+                                    '                                   If trailer <> Nothing Then
+                                    If trailer <> String.Empty And trailer <> "Error" Then
                                         newmovie.fullmoviebody.trailer = trailer
                                         progresstext &= " - OK"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
                                         scraperLog = scraperLog & "Trailer URL Scraped OK" & vbCrLf
+                                    Else
+                                        progresstext &= " - Failed"
+                                        BckWrkScnMovies.ReportProgress(progress, progresstext)
+                                        scraperLog = scraperLog & "Trailer URL Scrape failed" & vbCrLf
                                     End If
                                 End If
                             Catch ex As Exception
@@ -5056,9 +5152,10 @@ Public Class Form1
                                                             If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
                                                                 moviethumburl = apple2(g)
                                                                 fanartfound = True
+                                                                Exit For
                                                             End If
                                                         End If
-                                                        Exit For
+                                                        '                                                        Exit For
                                                     End If
                                                 Next
                                                 If fanartfound = False Then moviethumburl = ""
@@ -6776,6 +6873,7 @@ Public Class Form1
                 Dim tempstring As String = movie.runtime
                 Try
                     If tempstring = "" Then tempstring = "00 mins"
+                    If IsNumeric(tempstring) Then tempstring &= " mins"
                     tempstring = tempstring.Substring(0, tempstring.IndexOf("min"))
                     tempstring = tempstring.Replace(" ", "")
                     Do Until IsNumeric(tempstring.Substring(0, 1))
@@ -6976,6 +7074,7 @@ Public Class Form1
             For Each movie In filteredList
                 Dim tempstring As String = movie.runtime
                 If tempstring = "" Then tempstring = "00 mins"
+                If IsNumeric(tempstring) Then tempstring &= " mins"
                 Try
                     tempstring = tempstring.Substring(0, tempstring.IndexOf("min"))
                     tempstring = tempstring.Replace(" ", "")
@@ -7584,8 +7683,8 @@ Public Class Form1
                 'trailer = newscraper.gettrailerurl(workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                 messbox.TextBox1.Text = "Get IMDB Body"
                 body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
-                messbox.TextBox1.Text = "Get Trailer"
-                trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+
+                
                 'Dim actors As String
                 messbox.TextBox1.Text = "Get Actors"
                 'actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
@@ -7689,6 +7788,19 @@ Public Class Form1
 
                     Try
                         If Preferences.gettrailer = True Then
+
+                            messbox.TextBox1.Text = "Get Trailer"
+                            trailer = ""
+
+                            If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title )
+                            End If
+
+                            If trailer = "" then
+                                trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+                            End if
+
+
                             If trailer <> String.Empty And trailer <> "Error" Then
                                 workingMovieDetails.fullmoviebody.trailer = trailer
                             End If
@@ -8095,6 +8207,13 @@ Public Class Form1
             'Else
             '    newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
             'End If
+
+            Dim oldmovietitletest As String = oldmovietitle                     'added this because the if test after the for below tests this way.
+            If oldmovietitletest.ToLower.IndexOf("the ") = 0 Then
+                oldmovietitletest = oldmovietitletest.Substring(4, tempstring.Length - 4)
+                oldmovietitletest = oldmovietitletest & ", The"
+            End If
+
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).title = oldmovietitle Then
                     Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
@@ -8137,6 +8256,7 @@ Public Class Form1
             Next
             Call mov_CacheSave()
             If Label39.Text.ToLower.IndexOf(" of ") <> -1 Then
+
                 Call mov_FiltersAndSortApply()
                 Call mov_FormPopulate()
             End If
@@ -8232,6 +8352,7 @@ Public Class Form1
             Next
             Call mov_CacheSave()
             workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
+
             Call mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
@@ -9012,8 +9133,25 @@ Public Class Form1
 
                         If trailerscraper = True Then
                             Try
-                                Dim trailer As String = String.Empty
-                                trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                Dim trailer as String = ""
+
+                                If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                    Try
+                                        Monitor.Enter(Me)
+                                        trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, movietoalter.fullmoviebody.title )
+                                    Finally
+                                        Monitor.Exit(Me)
+                                    End Try
+                                End If
+
+                                If trailer = "" then
+                                    trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                End if
+
+
+'                                Dim trailer As String = String.Empty
+'                                trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+
                                 If trailer <> String.Empty And trailer <> "Error" Then
                                     movietemplate.fullmoviebody.trailer = trailer
                                 End If
@@ -9788,6 +9926,8 @@ Public Class Form1
                         validfile = True
                     Case ".ifo"
                         validfile = True
+                    Case ".strm"
+                        validfile = True
                 End Select
                 If validfile = True Then
 
@@ -10188,7 +10328,17 @@ Public Class Form1
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                     bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                     If Preferences.gettrailer = True Then
-                                        trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+
+                                        trailer = ""
+
+                                        If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                            trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+                                        End If
+
+                                        If trailer = "" then
+                                            trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                        End if
+
                                         If trailer <> String.Empty And trailer <> "Error" Then
                                             newmovie.fullmoviebody.trailer = trailer
                                         End If
@@ -12281,7 +12431,9 @@ Public Class Form1
 
     Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
         Try
-            messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
+            messbox = New frmMessageBox("Downloading Fanart...")
+            messbox.Text = "Please Wait..."
+
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
@@ -12378,6 +12530,7 @@ Public Class Form1
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
                                 Dim mediapath As String
                                 mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                messbox.TextBox1.Text = "Creating Offline Movie..."
                                 Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
@@ -16162,7 +16315,7 @@ Public Class Form1
     Private Sub ReloadShowCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadShowCacheToolStripMenuItem.Click
         Try
             If IO.File.Exists(workingProfile.tvcache) Then
-                Call tv_CacheLoad(("New Function"))
+                Call tv_CacheLoad()
             Else
                 MsgBox("No Cache exists to load")
             End If
@@ -18129,6 +18282,7 @@ Public Class Form1
 
                 Episode.Save()
                 Episode.UpdateTreenode()
+
                 'Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempWorkingEpisode)
                 'If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).VideoFilePath, TVShowEpisodeNFOContent)
 
@@ -18182,6 +18336,8 @@ Public Class Form1
                 'Call savetvdata()
                 '            rebuildselectedshow(MainNode.Name.ToString)
             End If
+            Tv_CacheSave()
+            tv_CacheLoad()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18189,8 +18345,8 @@ Public Class Form1
     End Sub
 
     Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
 
         Dim tempint As Integer = 0
@@ -18870,13 +19026,13 @@ Public Class Form1
                 End If
             End If
             If newepisode.Title.Value <> "" Then
-                WorkingEpisode.Aired = newepisode.Aired
-                WorkingEpisode.Credits = newepisode.Credits
-                WorkingEpisode.Director = newepisode.Director
-                WorkingEpisode.Genre = newepisode.Genre
-                WorkingEpisode.Plot = newepisode.Plot
-                WorkingEpisode.Rating = newepisode.Rating
-                WorkingEpisode.Title = newepisode.Title
+                WorkingEpisode.Aired.Value = newepisode.Aired.Value
+                WorkingEpisode.Credits.Value = newepisode.Credits.Value
+                WorkingEpisode.Director.Value = newepisode.Director.Value
+                WorkingEpisode.Genre.Value = newepisode.Genre.Value
+                WorkingEpisode.Plot.Value = newepisode.Plot.Value
+                WorkingEpisode.Rating.Value = newepisode.Rating.Value
+                WorkingEpisode.Title.Value = newepisode.Title.Value
                 WorkingEpisode.ListActors.Clear()
                 For Each actor In newepisode.ListActors
                     WorkingEpisode.ListActors.Add(actor)
@@ -18915,15 +19071,22 @@ Public Class Form1
                 'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).VideoFilePath)
                 'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
                 WorkingEpisode.Save()
+
                 'Call LoadTvEpisode(WorkingEpisode)
                 tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
                 messbox.Close()
+
             End If
         End If
+        Tv_CacheSave()
+        tv_CacheLoad()
+
+
         If Not tv_IMDbID_warned And tv_IMDbID_detected Then
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
             tv_IMDbID_warned = True
         End If
+
     End Sub
 
     Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
@@ -19192,7 +19355,7 @@ Public Class Form1
                     End If
                 Next
             Next
-            Call Tv_CacheSave("New Function")
+            Call Tv_CacheSave()
             messbox.Close()
             If Preferences.disabletvlogs = False Then
                 Dim MyFormObject As New frmoutputlog(renamelog, True)
@@ -23626,6 +23789,7 @@ Public Class Form1
         Else
             CheckBox11.CheckState = CheckState.Unchecked
         End If
+        cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
 
         Select Case Preferences.maxactors
             Case 9999
@@ -23813,6 +23977,10 @@ Public Class Form1
             GroupBox_MovieIMDBMirror.Visible = True
             GroupBox_MovieIMDBMirror.BringToFront()
         End If
+
+
+        cbPreferredTrailerResolution.Text = Preferences.moviePreferredTrailerResolution
+
 
         generalprefschanged = False
     End Sub
@@ -24021,16 +24189,11 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
-        Try
-            If CheckBox11.CheckState = CheckState.Checked Then
-                Preferences.gettrailer = True
-            Else
-                Preferences.gettrailer = False
-            End If
-            generalprefschanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+
+        Preferences.gettrailer               = CheckBox11.Checked
+        cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
+        generalprefschanged                  = True
+
     End Sub
 
     Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
@@ -25899,7 +26062,7 @@ Public Class Form1
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
             Call tv_CacheRebuild()
         Else
-            Call tv_CacheLoad(("New Function"))
+            Call tv_CacheLoad()
         End If
 
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
@@ -28906,9 +29069,9 @@ Public Class Form1
                                 If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
                                     moviethumburl = apple2(g)
                                     fanartfound = True
+                                    Exit For
                                 End If
                             End If
-                            Exit For
                         End If
                     Next
                     If fanartfound = False Then moviethumburl = ""
@@ -30332,6 +30495,17 @@ Public Class Form1
         Try
             If RadioButton44.Checked = True Then
                 Call tv_Filter("missingeps")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    ' Phyonics - Fix for issue #208
+    Private Sub RadioButton53_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton53.CheckedChanged
+        Try
+            If RadioButton53.Checked = True Then
+                Call tv_Filter("airedmissingeps")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -32209,7 +32383,10 @@ Public Class Form1
         Me.CheckBoxRenameNFOtoINFO.Checked = Preferences.renamenfofiles
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
+        Me.MovieRenameCheckBox.Checked = Preferences.MovieRenameEnable
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
+        Me.MovieRenameTemplateTextBox.Text = Preferences.MovieRenameTemplate
+
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
         Read_XBMC_IMDB_Scraper_Config()
@@ -32239,72 +32416,97 @@ Public Class Form1
     End Sub
 
     Private Sub DisplayEpisodesByAiredDateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_DispByAiredDate.Click
+        'This function displays in a Form with a fullscreen textbox, a list off all of a TvShows episodes in 'date aired' order, separated by calendar year.
+        'It can be called from a TVShow, Season or Episode context menu
+        'It handles the following errors - no aired date, episodes on the same aired date, episodes on same date with same series & same episode i.e. a duplicate.... 
+
         Try
-            MsgBox("Aired Date Coming soon")
-            'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim NoDateCountUp As Integer = 0
+            Dim Abort As Boolean = True     'this is used to verify that we actually have episodes to process
+            Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
+            Dim childNodeLevel1 As TreeNode
 
-            'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-            'Dim testmax As Integer = 0
-            'Dim textstring As String = ""   'this is the string used to add our text together to make our final list to be shown
-            'Dim Abort As Boolean = True     'this is used to verify that we actually hjave episodes to process
+            Select Case TvTreeview.SelectedNode.Level
+                Case Is = 0
+                    childNodeLevel1 = TvTreeview.SelectedNode
+                Case Is = 1
+                    childNodeLevel1 = TvTreeview.SelectedNode.Parent
+                Case Is = 2
+                    childNodeLevel1 = TvTreeview.SelectedNode.Parent.Parent
+                Case Else
+                    MsgBox("Unsupported TvTreeviewlevel in Aired Date Function", MsgBoxStyle.Exclamation, "Error!")
+                    Exit Sub
+            End Select
 
-            'Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
 
-            'Dim childNodeLevel1 As TreeNode = TvTreeview.SelectedNode    'this section steps down through the tree to get from the tvshow to each episode
-            'For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
-            '    For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
-            '        Abort = False                                       'if we get here then there is at least 1 episode
-            '        Dim path As String = childNodeLevel3.Name           'this holds the full path to the actual nfo file of the episode
-            '        'we load that nfo so that we can retrieve the data we want from it in workingEpisode
-            '        Dim EpAired As String = ""                          'define & set our episode aired date as nothing
 
-            '        '
-            '        'If workingEpisode.Count > testmax Then testmax = workingEpisode.Count
-            '        '
-            '        Dim f = 0                                           'We find each episode individually so we only need to look at the first index
-            '        If WorkingEpisode.aired <> Nothing Then          'If we have a valid date figure then set our date figure
-            '            EpAired = WorkingEpisode.Aired.Value
 
-            '            'Convert episode to 2 digits for formatting
-            '            Dim episode2digit As New List(Of String)
-            '            episode2digit.Clear()
-            '            episode2digit.Add(WorkingEpisode.Episode.Value)
-            '            If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
+            'this section steps down through the tree to get from the tvshow to each episode
+            For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
+                For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+                    Abort = False                                          'if we get here then there is at least 1 episode
+                    Dim EpAired As String = childNodeLevel3.Tag.aired.value  'this holds the 'aired' value
 
-            '            'Convert season to 2 digits for formatting
-            '            Dim season2digit As String = WorkingEpisode.Season.value
-            '            If season2digit.Length = 1 Then season2digit = "0" & season2digit
+                    If EpAired Is Nothing Then
+                        EpAired = "9999-" & Utilities.PadNumber(NoDateCountUp, 5)  'if the aired date is nothing then we add it as 9999-xxxxx where x increments
+                        NoDateCountUp += 1
+                    End If
 
-            '            'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
-            '            'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
-            '            'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
-            '            mySortedList.Add(WorkingEpisode.Aired, Renamer.setTVFilename(WorkingTvShow.Title.Value, WorkingEpisode.Title.Value, episode2digit, season2digit))
+                    'Convert episode to 2 digits for formatting
+                    Dim episode2digit As New List(Of String)
+                    episode2digit.Clear()
+                    episode2digit.Add(childNodeLevel3.Tag.Episode.Value)
+                    If episode2digit(0).Length = 1 Then episode2digit(0) = "0" & episode2digit(0)
 
-            '        End If
-            '    Next
-            'Next
+                    'Convert season to 2 digits for formatting
+                    Dim season2digit As String = childNodeLevel3.Tag.Season.Value
+                    If season2digit.Length = 1 Then season2digit = "0" & season2digit
 
-            'If Not Abort Then   'i.e. we have episodes in this show.... 
-            '    textstring = WorkingTvShow.Title.Value & vbCrLf                                               'start our text with the show title
-            '    textstring = textstring & StrDup(WorkingTvShow.Title.Value.Length, "-") & vbCrLf              'add an underline of the same length    
+                    'here we add our data in the order that it is read in the tree - the sorted list will sort it for us
+                    'using the key value .aired (date format is yyyy-mm-dd so simple alphabetical sort is all that is required)
+                    'FormatTVFilename formats the show title,episode tile, season no & episode no as per the users preferences
+                    Dim SameDateLoop As Boolean = True
+                    Dim Key As String
+                    Key = EpAired & season2digit & episode2digit(0)         'the key index (which is the string used to sort by) is the date+season+episode - this should be unique!
 
-            '    For Line = 0 To mySortedList.Count - 1                                                  'read the data from the sorted list
-            '        textstring = textstring & mySortedList.GetKey(Line) & " " & mySortedList.GetByIndex(Line) & vbCrLf
-            '    Next
+                    Do Until SameDateLoop = False
+                        If mySortedList.ContainsKey(Key) Then
+                            Key += "^"                          'we add an aditional ^ to the key if its still not unique.....
+                        Else
+                            SameDateLoop = False
+                        End If
+                    Loop
+                   
+                    mySortedList.Add(Key, EpAired & "    " & Renamer.setTVFilename(WorkingTvShow.Title.Value, childNodeLevel3.Tag.title.value, episode2digit, season2digit))
 
-            '    textstring = textstring & vbCrLf & "* missing episodes are not listed" & vbCrLf         'add a note about the missing episodes (they use the playcount field but are not in workingEpisodes
 
-            '    '                                                                                   'Show Final Listing Screen
-            '    Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
-            '    MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
-            '    MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
-            '    MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
-            '    MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value              'change the form title text
-            '    MyFormObject.ShowDialog()                                                               'show the form
+                Next
+            Next
 
-            'Else                    'we get here if abort still = true, i.e. no episodes
-            '    MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
-            'End If
+            If Not Abort Then   'i.e. we have episodes in this show.... 
+                Dim textstring As String = WorkingTvShow.Title.Value & "  Seasons: " & WorkingTvShow.Seasons.Count & "  Episodes: " & WorkingTvShow.Episodes.Count & vbCrLf 'start our text with the show title
+                textstring += StrDup(textstring.Length - 2, "-") & vbCrLf              'add an underline of the same length    
+                Dim prevkey As String = mySortedList.GetKey(0).Substring(0, 4)                      'load with first year value first four digits of aired date
+                For Line = 0 To mySortedList.Count - 1  'read the data from the sorted list
+                    If mySortedList.GetKey(Line).Substring(0, 4) <> prevkey Then textstring = textstring & "----------" & vbCrLf 'line break between years...
+                    prevkey = mySortedList.GetKey(Line).Substring(0, 4)                             'set so that we can compare with next iteration
+                    textstring += mySortedList.GetByIndex(Line) & vbCrLf
+                Next
+
+                textstring += vbCrLf & "9999 episodes have no valid aired date stored" & vbCrLf
+
+                '                                                   'Show Final Listing Screen
+                Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
+                MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
+                MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
+                MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+                MyFormObject.Text = "Episodes in Aired Order for " & WorkingTvShow.Title.Value          'change the form title text
+                MyFormObject.ShowDialog()                                                               'show the form
+
+            Else                    'we get here if abort still = true, i.e. no episodes
+                MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -32536,5 +32738,27 @@ Public Class Form1
 
     Private Sub TasksDontShowCompleted_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles TasksDontShowCompleted.CheckedChanged
         Me.TasksOnlyIncompleteTasks = TasksDontShowCompleted.Checked
+    End Sub
+
+
+    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
+        Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text
+        generalprefschanged = True
+    End Sub
+
+    Private Sub MovieRenameTemplateTextBox_TextChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameTemplateTextBox.TextChanged
+        Try
+            Preferences.MovieRenameTemplate = MovieRenameTemplateTextBox.Text
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub MovieRenameCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameCheckBox.CheckedChanged
+        Try
+            Preferences.MovieRenameEnable = MovieRenameCheckBox.Checked
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 End Class

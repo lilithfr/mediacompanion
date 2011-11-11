@@ -23,7 +23,24 @@ Partial Public Class TvEpisode
         End If
 
         If Me.IsMissing Then
-            EpisodeNode.ForeColor = Drawing.Color.Blue
+            ' Phyonics - Fix for issue #208
+            If String.IsNullOrEmpty(Aired.Value) Then
+                ' Change the colour to gray
+                EpisodeNode.ForeColor = Drawing.Color.Gray
+            Else
+                Try
+                    ' Is the episode in the future?
+                    If Convert.ToDateTime(Aired.Value) > Now Then
+                        ' Yes, so change its colour to gray
+                        EpisodeNode.ForeColor = Drawing.Color.Gray
+                    Else
+                        EpisodeNode.ForeColor = Drawing.Color.Blue
+                    End If
+                Catch ex As Exception
+                    ' Set the colour to the missing colour
+                    EpisodeNode.ForeColor = Drawing.Color.Blue
+                End Try
+            End If
         End If
 
         If Me.FailedLoad Then

@@ -150,6 +150,11 @@ Public Class Preferences
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared OfflineDVDTitle As String
+    Public Shared MovieRenameEnable As Boolean
+    Public Shared MovieRenameTemplate As String
+
+    Public Shared moviePreferredTrailerResolution As String
+
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
     Public Shared Sub SetUpPreferences()
@@ -192,6 +197,9 @@ Public Class Preferences
         Preferences.moviethumbpriority(2) = "Movie Poster DB"
         Preferences.moviethumbpriority(3) = "IMDB"
         Preferences.movieRuntimeDisplay = "scraper"
+        Preferences.moviePreferredTrailerResolution = "720"
+        Preferences.MovieRenameEnable = False
+        Preferences.MovieRenameTemplate = "%T (%Y)"
 
         'TV
         Preferences.tvshow_useXBMC_Scraper = False
@@ -790,6 +798,24 @@ Public Class Preferences
         child.InnerText = Preferences.OfflineDVDTitle
         root.AppendChild(child)
 
+
+
+        root.AppendChild(child)
+        child = doc.CreateElement("movierenameenable")
+        If Preferences.MovieRenameEnable = True Then
+            child.InnerText = "true"
+        Else
+            child.InnerText = "false"
+        End If
+        root.AppendChild(child)
+
+
+        child = doc.CreateElement("movierenametemplate")
+        child.InnerText = Preferences.MovieRenameTemplate
+        root.AppendChild(child)
+
+
+
         child = doc.CreateElement("showsortdate")
         child.InnerText = Preferences.showsortdate
         root.AppendChild(child)
@@ -806,6 +832,12 @@ Public Class Preferences
                 root.AppendChild(child)
             End If
         Next
+
+
+        child = doc.CreateElement("moviePreferredHDTrailerResolution")
+        child.InnerText = Preferences.moviePreferredTrailerResolution.ToString.ToLower
+        root.AppendChild(child)
+
 
         doc.AppendChild(root)
 
@@ -881,17 +913,17 @@ Public Class Preferences
                         Preferences.commandlist.Add(newcom)
                     End If
                 Case "seasonall"
-                    Preferences.seasonall = thisresult.InnerText
+                    If thisresult.InnerText <> "" Then Preferences.seasonall = thisresult.InnerText
                 Case "splitcontainer1"
-                    Preferences.splt1 = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.splt1 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer2"
-                    Preferences.splt2 = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.splt2 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer3"
-                    Preferences.splt3 = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.splt3 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer4"
-                    Preferences.splt4 = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.splt4 = Convert.ToInt32(thisresult.InnerText)
                 Case "splitcontainer5"
-                    Preferences.splt5 = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.splt5 = Convert.ToInt32(thisresult.InnerText)
                 Case "maximised"
                     If thisresult.InnerText = "true" Then
                         Preferences.maximised = True
@@ -899,9 +931,9 @@ Public Class Preferences
                         Preferences.maximised = False
                     End If
                 Case "locx"
-                    Preferences.locx = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.locx = Convert.ToInt32(thisresult.InnerText)
                 Case "locy"
-                    Preferences.locy = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.locy = Convert.ToInt32(thisresult.InnerText)
                 Case "nfofolder"
                     Dim decodestring As String = decxmlchars(thisresult.InnerText)
                     Preferences.movieFolders.Add(decodestring)
@@ -968,10 +1000,10 @@ Public Class Preferences
                     End If
 
                 Case "maxactors"
-                    Preferences.maxactors = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.maxactors = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "maxmoviegenre"
-                    Preferences.maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "enablehdtags"
                     If thisresult.InnerXml = "true" Then
@@ -981,7 +1013,7 @@ Public Class Preferences
                     End If
 
                 Case "movieruntimedisplay"
-                    Preferences.movieRuntimeDisplay = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.movieRuntimeDisplay = thisresult.InnerXml
 
                 Case "hdtvtags"
                     If thisresult.InnerXml = "true" Then
@@ -1054,7 +1086,7 @@ Public Class Preferences
                     End If
 
                 Case "rarsize"
-                    Preferences.rarsize = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.rarsize = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "actorsave"
                     If thisresult.InnerXml = "true" Then
@@ -1079,14 +1111,14 @@ Public Class Preferences
 
                 Case "actorsavepath"
                     Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                    Preferences.actorsavepath = decodestring
+                    If thisresult.InnerText <> "" Then Preferences.actorsavepath = decodestring
 
                 Case "actornetworkpath"
                     Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                    Preferences.actornetworkpath = decodestring
+                    If thisresult.InnerText <> "" Then Preferences.actornetworkpath = decodestring
 
                 Case "resizefanart"
-                    Preferences.resizefanart = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.resizefanart = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "overwritethumbs"
                     If thisresult.InnerXml = "true" Then
@@ -1096,24 +1128,24 @@ Public Class Preferences
                     End If
 
                 Case "defaulttvthumb"
-                    Preferences.defaulttvthumb = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.defaulttvthumb = thisresult.InnerXml
 
                 Case "imdbmirror"
-                    Preferences.imdbmirror = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.imdbmirror = thisresult.InnerXml
 
                 Case "moviethumbpriority"
                     ReDim Preferences.moviethumbpriority(3)
-                    Preferences.moviethumbpriority = thisresult.InnerXml.Split("|")
+                    If thisresult.InnerText <> "" Then Preferences.moviethumbpriority = thisresult.InnerXml.Split("|")
 
                 Case "certificatepriority"
                     ReDim Preferences.certificatepriority(33)
-                    Preferences.certificatepriority = thisresult.InnerXml.Split("|")
+                    If thisresult.InnerText <> "" Then Preferences.certificatepriority = thisresult.InnerXml.Split("|")
 
                 Case "backgroundcolour"
-                    Preferences.backgroundcolour = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.backgroundcolour = thisresult.InnerXml
 
                 Case "forgroundcolour"
-                    Preferences.forgroundcolour = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.forgroundcolour = thisresult.InnerXml
 
                 Case "remembersize"
                     If thisresult.InnerXml = "true" Then
@@ -1123,12 +1155,12 @@ Public Class Preferences
                     End If
 
                 Case "formheight"
-                    Preferences.formheight = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.formheight = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "formwidth"
-                    Preferences.formwidth = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.formwidth = Convert.ToInt32(thisresult.InnerXml)
                 Case "videoplaybackmode"
-                    Preferences.videoplaybackmode = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.videoplaybackmode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "usefoldernames"
                     If thisresult.InnerXml = "true" Then
@@ -1152,10 +1184,10 @@ Public Class Preferences
                     End If
 
                 Case "startupdisplaynamemode"
-                    Preferences.startupdisplaynamemode = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.startupdisplaynamemode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "namemode"
-                    Preferences.namemode = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.namemode = thisresult.InnerXml
 
                 Case "tvdblanguage"
                     Dim partone() As String
@@ -1172,9 +1204,9 @@ Public Class Preferences
                     Next
 
                 Case "tvdbmode"
-                    Preferences.sortorder = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.sortorder = thisresult.InnerXml
                 Case "tvdbactorscrape"
-                    Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "usetransparency"
                     If thisresult.InnerXml = "true" Then
@@ -1184,7 +1216,7 @@ Public Class Preferences
                     End If
 
                 Case "transparencyvalue"
-                    Preferences.transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "downloadtvfanart"
                     If thisresult.InnerXml = "true" Then
@@ -1251,10 +1283,10 @@ Public Class Preferences
                     End If
 
                 Case "maximumthumbs"
-                    Preferences.maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "startupmode"
-                    Preferences.startupmode = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.startupmode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "hdtags"
                     If thisresult.InnerXml = "true" Then
@@ -1299,28 +1331,28 @@ Public Class Preferences
                     End If
 
                 Case "postertype"
-                    Preferences.postertype = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.postertype = thisresult.InnerXml
 
                 Case "tvactorscrape"
-                    Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "videomode"
-                    Preferences.videomode = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.videomode = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "selectedvideoplayer"
-                    Preferences.selectedvideoplayer = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.selectedvideoplayer = thisresult.InnerXml
 
                 Case "maximagecount"
-                    Preferences.maximagecount = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.maximagecount = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "lastpath"
-                    Preferences.lastpath = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.lastpath = thisresult.InnerXml
 
                 Case "moviescraper"
-                    Preferences.moviescraper = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.moviescraper = thisresult.InnerXml
 
                 Case "nfoposterscraper"
-                    Preferences.nfoposterscraper = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.nfoposterscraper = thisresult.InnerXml
 
                 Case "alwaysuseimdbid"
                     If thisresult.InnerXml = "true" Then
@@ -1336,7 +1368,7 @@ Public Class Preferences
                         Preferences.externalbrowser = False
                     End If
                 Case "tvrename"
-                    Preferences.tvrename = Convert.ToInt32(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.tvrename = Convert.ToInt32(thisresult.InnerText)
                 Case "tvshowrebuildlog"
                     If thisresult.InnerXml = "true" Then
                         Preferences.tvshowrebuildlog = True
@@ -1359,14 +1391,25 @@ Public Class Preferences
                         Preferences.eprenamelowercase = False
                     End If
                 Case "moviesortorder"
-                    Preferences.moviesortorder = Convert.ToByte(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.moviesortorder = Convert.ToByte(thisresult.InnerText)
                 Case "moviedefaultlist"
-                    Preferences.moviedefaultlist = Convert.ToByte(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                 Case "startuptab"
-                    Preferences.startuptab = Convert.ToByte(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then Preferences.startuptab = Convert.ToByte(thisresult.InnerText)
 
                 Case "offlinemovielabeltext"
-                    OfflineDVDTitle = thisresult.InnerText
+                    If thisresult.InnerText <> "" Then Preferences.OfflineDVDTitle = thisresult.InnerText
+
+                Case "movierenameenable"
+                    If thisresult.InnerXml = "true" Then
+                        Preferences.MovieRenameEnable = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Preferences.MovieRenameEnable = False
+                    End If
+
+                Case "movierenametemplate"
+                    If thisresult.InnerText <> "" Then Preferences.MovieRenameTemplate = thisresult.InnerText
+
                 Case "showsortdate"
                     If thisresult.InnerText = Nothing Or thisresult.InnerText = "" Then
                         showsortdate = False
@@ -1380,6 +1423,10 @@ Public Class Preferences
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.scrapefullcert = False
                     End If
+
+                Case "moviePreferredHDTrailerResolution"
+                    If thisresult.InnerText <> "" Then Preferences.moviePreferredTrailerResolution = thisresult.InnerXml
+
             End Select
             'Catch
             '    'MsgBox("Error : pr278")

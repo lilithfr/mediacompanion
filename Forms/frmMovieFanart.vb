@@ -1,6 +1,7 @@
 ﻿
 Imports System.Net
 Imports System.IO
+Imports System.Xml
 
 
 Public Class frmMovieFanart
@@ -10,8 +11,8 @@ Public Class frmMovieFanart
     Dim WithEvents checkboxes As RadioButton
     Dim WithEvents labels As Label
     Dim WithEvents savebutton As Button
-    Dim fanarturls(1000, 1) As String
     Dim fanartpath As String = Form1.workingMovieDetails.fileinfo.fanartpath
+    Dim fanartList As New List(Of str_ListOfPosters)
     Dim mainfanart As PictureBox
     Dim resolutionlbl As Label
 
@@ -23,7 +24,7 @@ Public Class frmMovieFanart
         Dim tempint As Integer
         tempstring = tempstring.Replace("picture", "")
         tempint = Convert.ToDecimal(tempstring)
-        tempstring2 = fanarturls(tempint + 1, 0)
+        tempstring2 = fanartList(tempint).hdposter
 
 
         Dim buffer(4000000) As Byte
@@ -123,144 +124,99 @@ Public Class frmMovieFanart
 
     Private Sub moviefanart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
-
-            Dim tmdbid As String = String.Empty
-            Dim temp As String = Form1.workingMovieDetails.fullmoviebody.imdbid
-            Dim fanarturl As String = URLs.TMdbMovieLookup(temp)
-            Dim apple2(2000) As String
-            Dim fanartlinecount As Integer = 0
-                Dim wrGETURL As WebRequest
-
-                wrGETURL = WebRequest.Create(fanarturl)
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
-                Dim objStream As Stream
-                objStream = wrGETURL.GetResponse.GetResponseStream()
-                Dim objReader As New StreamReader(objStream)
-                Dim sLine As String = ""
-                fanartlinecount = 0
-
-                Do While Not sLine Is Nothing
-                    fanartlinecount += 1
-                    sLine = objReader.ReadLine
-                    apple2(fanartlinecount) = sLine
-                Loop
-
-                fanartlinecount -= 1
-                For f = 1 To fanartlinecount
-                    If apple2(f).IndexOf("<id>") <> -1 Then
-                        tmdbid = apple2(f)
-                        tmdbid = tmdbid.Replace("<id>", "")
-                        tmdbid = tmdbid.Replace("</id>", "")
-                        tmdbid = tmdbid.Replace("  ", "")
-                        tmdbid = tmdbid.Trim
-                        Exit For
-                    End If
-            Next
-        ReDim apple2(2000)
-        fanartlinecount = 0
-
-            fanarturl = URLs.TMdbGetInfo(tmdbid)
-
-
-        Dim exists As Boolean = System.IO.File.Exists(fanartpath)
-
-        If exists = True Then
-            mainfanart = New PictureBox
-            With mainfanart
-                .Location = New Point(0, 0)
-                .Width = 423
-                .Height = 240
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .Visible = True
-                .BorderStyle = BorderStyle.Fixed3D
-            End With
-            mainfanart.Visible = True
-            Dim OriginalImage As New Bitmap(fanartpath)
-            Dim Image2 As New Bitmap(OriginalImage)
-            mainfanart.Image = Image2
-            OriginalImage.Dispose()
-            Me.Panel1.Controls.Add(mainfanart)
-            Label2.Visible = False
-        Else
+            Dim exists As Boolean = System.IO.File.Exists(fanartpath)
+            If exists = True Then
                 mainfanart = New PictureBox
-            With mainfanart
-                .Location = New Point(0, 0)
-                .Width = 423
-                .Height = 240
-                .SizeMode = PictureBoxSizeMode.Zoom
-                .Visible = False
-                .BorderStyle = BorderStyle.Fixed3D
-            End With
-            Me.Panel1.Controls.Add(mainfanart)
-            Label2.Visible = True
-        End If
+                With mainfanart
+                    .Location = New Point(0, 0)
+                    .Width = 423
+                    .Height = 240
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .Visible = True
+                    .BorderStyle = BorderStyle.Fixed3D
+                End With
+                mainfanart.Visible = True
+                Dim OriginalImage As New Bitmap(fanartpath)
+                Dim Image2 As New Bitmap(OriginalImage)
+                mainfanart.Image = Image2
+                OriginalImage.Dispose()
+                Me.Panel1.Controls.Add(mainfanart)
+                Label2.Visible = False
+            Else
+                mainfanart = New PictureBox
+                With mainfanart
+                    .Location = New Point(0, 0)
+                    .Width = 423
+                    .Height = 240
+                    .SizeMode = PictureBoxSizeMode.Zoom
+                    .Visible = False
+                    .BorderStyle = BorderStyle.Fixed3D
+                End With
+                Me.Panel1.Controls.Add(mainfanart)
+                Label2.Visible = True
+            End If
 
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
+            Try
+                Dim tmdbposterscraper As New tmdb_posters.Class1
+                fanartList.Clear()
+                Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(Form1.workingMovieDetails.fullmoviebody.imdbid)
+                Dim bannerslist As New XmlDocument
+                bannerslist.LoadXml(tmdbimageresults)
+                Dim thisresult As XmlNode = Nothing
+                For Each item In bannerslist("tmdb_posterlist")
+                    Select Case item.name
+                        Case "fanart"
+                            Dim newfanart As New str_ListOfPosters(True)
+                            For Each backdrop In item
+                                If backdrop.childnodes(0).innertext = "original" Then
+                                    newfanart.hdposter = backdrop.childnodes(1).innertext
+                                    newfanart.hdwidth = backdrop.childnodes(2).innertext
+                                    newfanart.hdheight = backdrop.childnodes(3).innertext
+                                End If
+                                If backdrop.childnodes(0).innertext = "poster" Then
+                                    newfanart.ldposter = backdrop.childnodes(1).innertext
+                                    newfanart.ldwidth = backdrop.childnodes(2).innertext
+                                    newfanart.ldheight = backdrop.childnodes(3).innertext
+                                End If
+                                If newfanart.hdposter <> Nothing And newfanart.ldposter <> Nothing Then
+                                    If newfanart.hdposter <> "" And newfanart.ldposter <> "" Then
+                                        If newfanart.hdposter.IndexOf("http") <> -1 And newfanart.ldposter.IndexOf("http") <> -1 Then
+                                            If newfanart.hdposter.IndexOf(".jpg") <> -1 Or newfanart.hdposter.IndexOf(".png") <> -1 Then
+                                                If newfanart.ldposter.IndexOf(".jpg") <> -1 Or newfanart.ldposter.IndexOf(".png") <> -1 Then
+                                                    fanartList.Add(newfanart)
+                                                    Exit For
+                                                End If
+                                            End If
+                                        End If
+                                    End If
+                                End If
+                            Next
 
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
-            fanartlinecount -= 1
-            Dim count As Integer = 0
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<backdrop size=""original"">") <> -1 Then
-                    count += 1
-                    fanarturls(count, 0) = apple2(f)
-                    If apple2(f + 1).IndexOf("<backdrop size=""mid"">") <> -1 Then
-                        fanarturls(count, 1) = apple2(f + 1)
-                    ElseIf apple2(f + 2).IndexOf("<backdrop size=""mid"">") <> -1 Then
-                        fanarturls(count, 1) = apple2(f + 2)
-                    ElseIf apple2(f - 1).IndexOf("<backdrop size=""mid"">") <> -1 Then
-                        fanarturls(count, 1) = apple2(f - 1)
-                    ElseIf apple2(f - 2).IndexOf("<backdrop size=""mid"">") <> -1 Then
-                        fanarturls(count, 1) = apple2(f - 2)
-                    End If
-
-                    fanarturls(count, 0) = fanarturls(count, 0).Replace("<backdrop size=""original"">", "")
-                    fanarturls(count, 0) = fanarturls(count, 0).Replace("</backdrop>", "")
-                    fanarturls(count, 1) = fanarturls(count, 1).Replace("<backdrop size=""mid"">", "")
-                    fanarturls(count, 1) = fanarturls(count, 1).Replace("</backdrop>", "")
-                    'Exit For
-                End If
-            Next
-
-            Dim names As New List(Of String)()
-
-            If count > 0 Then
-
-                For f = 1 To count
-
-                    names.Add(fanarturls(f, 1))
+                    End Select
                 Next
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
 
-
+            If fanartList.Count > 0 Then
                 Dim location As Integer = 0
                 Dim itemcounter As Integer = 0
-                For Each item As String In names
+                For Each item In fanartList
                     picboxes() = New PictureBox()
 
                     With picboxes
                         .Location = New Point(location, 0)
-                        If count > 2 Then
-                            .Width = 315
-                            .Height = 179
+                        If fanartList.Count > 2 Then
+                            .Width = 326
+                            .Height = 185
                         Else
                             .Width = 353
                             .Height = 200
                         End If
                         .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = item
+                        .ImageLocation = item.ldposter
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
                         .Name = "picture" & itemcounter.ToString
@@ -269,8 +225,8 @@ Public Class frmMovieFanart
 
                     checkboxes() = New RadioButton()
                     With checkboxes
-                        If count > 2 Then
-                            .Location = New Point(location + 150, 176)
+                        If fanartList.Count > 2 Then
+                            .Location = New Point(location + 150, 183)
                         Else
                             .Location = New Point(location + 180, 198)
                         End If
@@ -322,7 +278,7 @@ Public Class frmMovieFanart
                         tempstring = b1.Name
                         tempstring = tempstring.Replace("checkbox", "")
                         tempint = Convert.ToDecimal(tempstring)
-                        tempstring2 = fanarturls(tempint + 1, 0)
+                        tempstring2 = fanartList(tempint).hdposter
                         allok = True
                         Exit For
                     End If
