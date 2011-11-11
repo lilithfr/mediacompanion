@@ -365,6 +365,10 @@ Partial Public Class Form1
 
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
+        If Show.IsCache Then
+            Show.Load()
+        End If
+
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
             TextBox19.Text = "Unable to find folder: " & Show.FolderPath
@@ -436,7 +440,7 @@ Partial Public Class Form1
             '2	-	tv imdb, eps tvdb
             '3	-	tv TVDB, eps IMDB
             If Show.EpisodeActorSource.Value Is Nothing Then
-                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "2" Then
+                If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
                     Show.EpisodeActorSource.Value = "tvdb"
                 Else
                     Show.EpisodeActorSource.Value = "imdb"
@@ -444,7 +448,7 @@ Partial Public Class Form1
             End If
 
             If String.IsNullOrEmpty(Show.EpisodeActorSource.Value) Then
-                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "2" Then
+                If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "2" Then
                     Show.EpisodeActorSource.Value = "tvdb"
                 Else
                     Show.EpisodeActorSource.Value = "imdb"
@@ -458,7 +462,7 @@ Partial Public Class Form1
             End If
 
             If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
-                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "3" Then
+                If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
                     Show.TvShowActorSource.Value = "tvdb"
                 Else
                     Show.TvShowActorSource.Value = "imdb"
@@ -466,7 +470,7 @@ Partial Public Class Form1
             End If
 
             If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
-                If Preferences.tvdbactorscrape = "0" Or Preferences.tvdbactorscrape = "3" Then
+                If Preferences.TvdbActorScrape = "0" Or Preferences.TvdbActorScrape = "3" Then
                     Show.TvShowActorSource.Value = "tvdb"
                 Else
                     Show.TvShowActorSource.Value = "imdb"
@@ -524,6 +528,9 @@ Partial Public Class Form1
     End Sub
 
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
+        If SelectedSeason.ShowObj.IsCache Then
+            SelectedSeason.ShowObj.Load()
+        End If
         Dim Show As Media_Companion.TvShow
         If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
             Show = SelectedSeason.SeasonNode.Parent.Tag
@@ -611,6 +618,10 @@ Partial Public Class Form1
     End Sub
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
+        If Episode.IsCache Then
+            Episode.Load()
+        End If
+
 
         Dim tempstring As String = ""
         TextBox2.Text = ""
