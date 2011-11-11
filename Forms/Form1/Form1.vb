@@ -6873,6 +6873,7 @@ Public Class Form1
                 Dim tempstring As String = movie.runtime
                 Try
                     If tempstring = "" Then tempstring = "00 mins"
+                    If IsNumeric(tempstring) Then tempstring &= " mins"
                     tempstring = tempstring.Substring(0, tempstring.IndexOf("min"))
                     tempstring = tempstring.Replace(" ", "")
                     Do Until IsNumeric(tempstring.Substring(0, 1))
@@ -7073,6 +7074,7 @@ Public Class Form1
             For Each movie In filteredList
                 Dim tempstring As String = movie.runtime
                 If tempstring = "" Then tempstring = "00 mins"
+                If IsNumeric(tempstring) Then tempstring &= " mins"
                 Try
                     tempstring = tempstring.Substring(0, tempstring.IndexOf("min"))
                     tempstring = tempstring.Replace(" ", "")
@@ -8205,6 +8207,13 @@ Public Class Form1
             'Else
             '    newmovietitleandyear = newmovietitle & " (" & workingMovieDetails.fullmoviebody.year & ")"
             'End If
+
+            Dim oldmovietitletest As String = oldmovietitle                     'added this because the if test after the for below tests this way.
+            If oldmovietitletest.ToLower.IndexOf("the ") = 0 Then
+                oldmovietitletest = oldmovietitletest.Substring(4, tempstring.Length - 4)
+                oldmovietitletest = oldmovietitletest & ", The"
+            End If
+
             For f = 0 To fullMovieList.Count - 1
                 If fullMovieList(f).title = oldmovietitle Then
                     Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
@@ -8247,6 +8256,7 @@ Public Class Form1
             Next
             Call mov_CacheSave()
             If Label39.Text.ToLower.IndexOf(" of ") <> -1 Then
+
                 Call mov_FiltersAndSortApply()
                 Call mov_FormPopulate()
             End If
@@ -8342,6 +8352,7 @@ Public Class Form1
             Next
             Call mov_CacheSave()
             workingMovie.fullpathandfilename = MovieListComboBox.Items(startindex).description
+
             Call mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
