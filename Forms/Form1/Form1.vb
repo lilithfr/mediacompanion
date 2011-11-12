@@ -18336,8 +18336,7 @@ Public Class Form1
                 'Call savetvdata()
                 '            rebuildselectedshow(MainNode.Name.ToString)
             End If
-            Tv_CacheSave()
-            tv_CacheLoad()
+            tv_CacheRebuild()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21529,6 +21528,7 @@ Public Class Form1
                     Case Media_Companion.ShowState.Error
                     Case Media_Companion.ShowState.Unverified
                         TempShow.State = Media_Companion.ShowState.Open
+                        TextBox2.BackColor = Color.White
                 End Select
                 TempShow.UpdateTreenode()
 

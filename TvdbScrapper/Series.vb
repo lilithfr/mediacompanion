@@ -153,6 +153,8 @@ Namespace Tvdb
         <Extension()>
         Public Function FindBestPossibleShow(ByVal ThisList As List(Of Tvdb.Series), ByVal FolderName As String, ByVal PreferedLang As String) As Tvdb.Series
 
+            FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
+
             For Each Item In ThisList
                 Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
             Next
