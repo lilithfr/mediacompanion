@@ -413,11 +413,17 @@ Partial Public Class Form1
 
             Panel9.Visible = False
 
-            If Show.State = ShowState.Unverified Or Show.State = ShowState.Error Then
-                TextBox2.Text = Show.FolderPath
-            Else
-                If Show.Title.Value <> Nothing Then TextBox2.Text = Show.Title.Value
+            TextBox2.BackColor = Color.White
+            If Show.Title.Value <> Nothing Then
+                TextBox2.Text = Show.Title.Value
+
             End If
+
+            If Show.State = ShowState.Unverified Or Show.State = ShowState.Error Then
+                TextBox2.BackColor = Color.Red    ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits.
+            End If
+
+
 
             If Show.Premiered.Value <> Nothing Then TextBox10.Text = Show.Premiered.Value
             If Show.Genre.Value <> Nothing Then TextBox11.Text = Show.Genre.Value
