@@ -185,6 +185,7 @@ Public Class TvShow
         SearchTitle = SearchTitle.ToLower
         SearchTitle = SearchTitle.Replace(" & ", " ") 'Extra spacing for whole word match only
         SearchTitle = SearchTitle.Replace(" and ", " ")
+        SearchTitle = SearchTitle.Replace(".", " ")  'Replace periods in foldernames with spaces (linux OS support)
 
         mirrorsurl = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & SearchTitle & "&language=all"
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl)

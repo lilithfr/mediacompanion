@@ -135,6 +135,7 @@ Public Class TVDBScraper
         Dim possibleshows As New List(Of str_possibleshowlist)
         Dim xmlfile As String
         Dim wrGETURL As WebRequest
+        title = title.Replace(".", " ")  'Replace periods in foldernames with spaces (linux OS support)
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
         wrGETURL = WebRequest.Create(mirrorsurl)
         Dim myProxy As New WebProxy("myproxy", 80)
