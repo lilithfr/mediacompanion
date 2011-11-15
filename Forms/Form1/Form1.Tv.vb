@@ -419,10 +419,9 @@ Partial Public Class Form1
 
             End If
 
-            If Show.State = ShowState.Unverified Or Show.State = ShowState.Error Then
-                TextBox2.BackColor = Color.Red    ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits.
-            End If
-
+            ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits. Yellow is the same colour as the unverified Button
+            If Show.State = ShowState.Unverified Then TextBox2.BackColor = Color.Yellow
+            If Show.State = ShowState.Error Then TextBox2.BackColor = Color.Red
 
 
             If Show.Premiered.Value <> Nothing Then TextBox10.Text = Show.Premiered.Value
