@@ -290,21 +290,22 @@ Public Class TvCache
     End Sub
 
     Private Sub AttachEpisodes()
-        'For Each Show As TvShow In Shows
-        '    For Each Episode As Media_Companion.TvEpisode In Me.Episodes
-        '        If Show.TvdbId.Value = Episode.ShowId.Value Then
-        '            Show.AddEpisode(Episode)
-        '        End If
-        '    Next
-        'Next
-
-        For Each Episode As TvEpisode In Episodes
-            If Episode.ShowId.Value IsNot Nothing Then
-                ShowsByID(Episode.ShowId.Value).AddEpisode(Episode)
-            Else
-                Dim ThisIsBad = True
-            End If
+        For Each Show As TvShow In Shows
+            For Each Episode As Media_Companion.TvEpisode In Me.Episodes
+                If Show.TvdbId.Value = Episode.ShowId.Value Then
+                    Show.AddEpisode(Episode)
+                End If
+            Next
         Next
+
+        'For Each Episode As TvEpisode In Episodes
+
+        '    If Episode.ShowId.Value IsNot Nothing Then
+        '        ShowsByID(Episode.ShowId.Value).AddEpisode(Episode)
+        '    Else
+        '        Dim ThisIsBad = True
+        '    End If
+        'Next
 
     End Sub
 
