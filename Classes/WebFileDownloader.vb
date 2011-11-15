@@ -41,27 +41,53 @@ Public Class WebFileDownloader
             mCurrentFile = GetFileName(URL)
             Dim wRemote As WebRequest
             Dim bBuffer As Byte()
-            ReDim bBuffer(256)
+            ReDim bBuffer(300)
             Dim iBytesRead As Integer
             Dim iTotalBytesRead As Integer
+            Dim iRetries    as Integer = 0
+            Dim iMaxRetries as Integer = 10
 
             FS = New FileStream(Location, FileMode.Create, FileAccess.Write)
             wRemote = WebRequest.Create(URL)
             Dim myWebResponse As WebResponse = wRemote.GetResponse
-            RaiseEvent FileDownloadSizeObtained(myWebResponse.ContentLength)
+            Dim fSize As long = myWebResponse.ContentLength
+            RaiseEvent FileDownloadSizeObtained(fSize)
             Dim sChunks As Stream = myWebResponse.GetResponseStream
+
             Do
                 iBytesRead = sChunks.Read(bBuffer, 0, 256)
                 FS.Write(bBuffer, 0, iBytesRead)
                 iTotalBytesRead += iBytesRead
-                If myWebResponse.ContentLength < iTotalBytesRead Then
-                    RaiseEvent AmountDownloadedChanged(myWebResponse.ContentLength)
+                If fSize < iTotalBytesRead Then
+                    RaiseEvent AmountDownloadedChanged(fSize)
                 Else
                     RaiseEvent AmountDownloadedChanged(iTotalBytesRead)
                 End If
-            Loop While Not iBytesRead = 0
+
+                'Nov11 - AnotherPhil - Add retry handling with resume from last good position 
+                If iBytesRead = 0 then
+                    sChunks.Close()
+
+                    Dim wRequest As HttpWebRequest = WebRequest.Create( URL )
+
+                    wRequest.AddRange(iTotalBytesRead)
+
+                    myWebResponse = wRequest.GetResponse
+                    sChunks       = myWebResponse.GetResponseStream
+                    iRetries      = iRetries + 1
+                End If
+            Loop While (iTotalBytesRead < fSize) and (iRetries <= iMaxRetries)
             sChunks.Close()
             FS.Close()
+
+            If (iTotalBytesRead < fSize) or (iTotalBytesRead = 0) then
+                File.Delete(Location)
+
+                Dim ex As Exception = New Exception( "Download failed" )
+
+                RaiseEvent FileDownloadFailed(ex)
+            End If
+
             RaiseEvent FileDownloadComplete()
             Return True
         Catch ex As Exception
