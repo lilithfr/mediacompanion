@@ -1794,7 +1794,7 @@ Module General
                 ParametersForScraper(0) = "http://akas.imdb.com/title/" & MovieID & "/"
                 ParametersForScraper(1) = MovieID
             Else
-                MsgBox("Can't rescrape this movie because it was scraped with a scraper different from IMDB" & vbCrLf & "Delete the nfo file from the movie folder, rebuild movie database, and try again", MsgBoxStyle.OkOnly, "Error")
+                MsgBox("Can't rescrape this movie because it was scraped with a scraper different from IMDB" & vbCrLf & "Delete the nfo file from the movie folder, refresh movie database, and try again", MsgBoxStyle.OkOnly, "Error")
                 Return "Error"
                 Exit Function
             End If
@@ -1804,7 +1804,7 @@ Module General
                 ParametersForScraper(0) = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & MovieID
                 ParametersForScraper(1) = MovieID
             Else
-                MsgBox("Can't rescrape this movie because it was scraped with a scraper different from TheMovieDB" & vbCrLf & "Delete the nfo file from the movie folder, rebuild movie database, and try again", MsgBoxStyle.OkOnly, "Error")
+                MsgBox("Can't rescrape this movie because it was scraped with a scraper different from TheMovieDB" & vbCrLf & "Delete the nfo file from the movie folder, refresh movie database, and try again", MsgBoxStyle.OkOnly, "Error")
                 Return "Error"
                 Exit Function
             End If

@@ -1422,7 +1422,7 @@ Partial Class frmOptions
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(147, 17)
         Me.CheckBox11.TabIndex = 31
-        Me.CheckBox11.Text = "Enable tvshow rebuild log"
+        Me.CheckBox11.Text = "Enable tvshow refresh log"
         Me.CheckBox11.UseVisualStyleBackColor = True
         '
         'GroupBox17

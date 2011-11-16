@@ -35,8 +35,8 @@ Partial Public Class Form1
         'RenameTVShowsToolStripMenuItem.Enabled = False
         Button43.Enabled = True
         'RenameTVShowsToolStripMenuItem.Visible = False
-        Tv_TreeViewContext_RebuildShow.Enabled = False
-        Tv_TreeViewContext_RebuildShow.Visible = False
+        Tv_TreeViewContext_RefreshShow.Enabled = False
+        Tv_TreeViewContext_RefreshShow.Visible = False
         Tv_TreeViewContext_ShowMissEps.Enabled = False
         Tv_TreeViewContext_ShowMissEps.Visible = False
         Tv_TreeViewContext_DispByAiredDate.Enabled = False
@@ -140,10 +140,13 @@ Partial Public Class Form1
 
 
         'now we set the items that have variable text in the context menu using the 'show' text set above
-        Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
-        Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
-        Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
-        Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & showtitle & """"
+        Tv_TreeViewContext_ShowTitle.BackColor = Color.Honeydew                 'SK - same color as the refresh tv show splash - comments required to see if it works or not....
+
+        Tv_TreeViewContext_ShowTitle.Text = "For TVShow '" & showtitle & "'..."
+        'Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
+        'Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
+        'Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
+        'Tv_TreeViewContext_ShowMissEps.Text = "Display missing episodes for """ & showtitle & """"
 
         'now we display what we need to display depending on what type of node we have selected
 
@@ -155,7 +158,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_ViewNfo.Enabled = True
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
             Tv_TreeViewContext_FindMissArt.Enabled = True
-            Tv_TreeViewContext_RebuildShow.Enabled = True
+            Tv_TreeViewContext_RefreshShow.Enabled = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = True
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
@@ -169,7 +172,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_ViewNfo.Enabled = False
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = False
             Tv_TreeViewContext_FindMissArt.Enabled = False
-            Tv_TreeViewContext_RebuildShow.Enabled = False
+            Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
@@ -183,7 +186,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_ViewNfo.Enabled = True
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
             Tv_TreeViewContext_FindMissArt.Enabled = False
-            Tv_TreeViewContext_RebuildShow.Enabled = False
+            Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
@@ -698,8 +701,8 @@ Partial Public Class Form1
         End Try
         Return True
     End Function
-    Private Sub tv_CacheRebuild(Optional ByVal TvShowSelected As TvShow = Nothing)
-        frmSplash2.Text = "Rebuild TV Shows..."
+    Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
+        frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
         frmSplash2.Label1.Visible = True
         frmSplash2.Label2.Visible = True
@@ -709,7 +712,7 @@ Partial Public Class Form1
         Application.DoEvents()
 
 
-        tv_RebuildLog("Starting TV Show Rebuild" & vbCrLf & vbCrLf, , True)
+        tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
         Tv_CleanFolderList()
         TextBox_TotTVShowCount.Text = ""
         TextBox_TotEpisodeCount.Text = ""

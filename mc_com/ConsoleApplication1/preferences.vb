@@ -83,7 +83,7 @@ Namespace ConsoleApplication1
         Public tvposter As Boolean
         Public tvrename As Integer
         Public tvshowautoquick As Boolean
-        Public tvshowrebuildlog As Boolean
+        Public tvshowrefreshlog As Boolean
         Public usefanart As Boolean
         Public usefoldernames As Boolean
         Public usetransparency As Boolean

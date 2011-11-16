@@ -5449,11 +5449,11 @@ Label_1A0B:
                             Case "tvrename"
                                 Module1.userprefs.tvrename = Convert.ToInt32(current.InnerText)
                                 Continue Do
-                            Case "tvshowrebuildlog"
+                            Case "tvshowrefreshlog"
                                 If (current.InnerXml = "true") Then
-                                    Module1.userprefs.tvshowrebuildlog = True
+                                    Module1.userprefs.tvshowrefreshlog = True
                                 ElseIf (current.InnerXml = "false") Then
-                                    Module1.userprefs.tvshowrebuildlog = False
+                                    Module1.userprefs.tvshowrefreshlog = False
                                 End If
                                 Continue Do
                         End Select
@@ -7931,7 +7931,7 @@ Label_028B:
             Module1.userprefs.moviedefaultlist = 0
             Module1.userprefs.moviesortorder = 0
             Module1.userprefs.enabletvhdtags = True
-            Module1.userprefs.tvshowrebuildlog = False
+            Module1.userprefs.tvshowrefreshlog = False
             Module1.userprefs.seasonall = "none"
             Module1.userprefs.tvrename = 0
             Module1.userprefs.externalbrowser = False

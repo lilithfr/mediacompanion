@@ -46,7 +46,7 @@ Public Class frmOptions
                     RadioButton10.Checked = True
             End Select
 
-            If Preferences.tvshowrebuildlog = True Then
+            If Preferences.tvshowrefreshlog = True Then
                 CheckBox11.CheckState = CheckState.Checked
             Else
                 CheckBox11.CheckState = CheckState.Unchecked
@@ -1600,9 +1600,9 @@ Public Class frmOptions
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
         Try
             If CheckBox11.CheckState = CheckState.Checked Then
-                Preferences.tvshowrebuildlog = True
+                Preferences.tvshowrefreshlog = True
             Else
-                Preferences.tvshowrebuildlog = False
+                Preferences.tvshowrefreshlog = False
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

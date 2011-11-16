@@ -89,7 +89,7 @@ Public Class Preferences
     Public Shared movies_useXBMC_Scraper As Boolean
     Public Shared eprenamelowercase As Boolean
     Public Shared tvshowautoquick As Boolean
-    Public Shared tvshowrebuildlog As Boolean
+    Public Shared tvshowrefreshlog As Boolean
     Public Shared roundminutes As Boolean
     Public Shared keepfoldername As Boolean
     Public Shared startupCache As Boolean
@@ -208,7 +208,7 @@ Public Class Preferences
         Preferences.tvshowautoquick = False
         Preferences.copytvactorthumbs = True
         Preferences.enabletvhdtags = True
-        Preferences.tvshowrebuildlog = False
+        Preferences.tvshowrefreshlog = False
         Preferences.seasonall = "none"
         Preferences.tvrename = 0
         Preferences.tvfanart = True
@@ -715,8 +715,8 @@ Public Class Preferences
         child.InnerText = Preferences.eprenamelowercase.ToString.ToLower
         root.AppendChild(child)
 
-        child = doc.CreateElement("tvshowrebuildlog")
-        child.InnerText = Preferences.tvshowrebuildlog.ToString.ToLower
+        child = doc.CreateElement("tvshowrefreshlog")
+        child.InnerText = Preferences.tvshowrefreshlog.ToString.ToLower
         root.AppendChild(child)
 
         child = doc.CreateElement("moviesortorder")
@@ -1369,11 +1369,11 @@ Public Class Preferences
                     End If
                 Case "tvrename"
                     If thisresult.InnerText <> "" Then Preferences.tvrename = Convert.ToInt32(thisresult.InnerText)
-                Case "tvshowrebuildlog"
+                Case "tvshowrefreshlog"
                     If thisresult.InnerXml = "true" Then
-                        Preferences.tvshowrebuildlog = True
+                        Preferences.tvshowrefreshlog = True
                     ElseIf thisresult.InnerXml = "false" Then
-                        Preferences.tvshowrebuildlog = False
+                        Preferences.tvshowrefreshlog = False
                     End If
                     'public shared moviesortorder As Byte
                     'public shared moviedefaultlist As Byte

@@ -22,8 +22,8 @@ Public Class Form1
     'Public Shared Preferences As New Structures
 
     Public Const SetDefaults = True
-    Public movieRebuildNeeded As Boolean = True
-    Public tvRebuildNeeded As Boolean = True
+    Public movieRefreshNeeded As Boolean = True
+    Public tvRefreshNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
     Public startup As Boolean = True
     Public tv_RegexScraper As New List(Of String)
@@ -136,8 +136,8 @@ Public Class Form1
     Dim tv_IMDbID_warned As Boolean = False
     Dim tv_IMDbID_detectedMsg As String = String.Format("Media Companion has detected one or more TV Shows has an incorrect ID.{0}", vbCrLf) & _
                             String.Format("To rectify, please select the following:{0}", vbCrLf) & _
-                            String.Format("  1. TV Preferences -> Fix NFO id during cache rebuild{0}", vbCrLf) & _
-                            String.Format("  2. TV Shows -> Rebuild Shows{0}", vbCrLf) & _
+                            String.Format("  1. TV Preferences -> Fix NFO id during cache refresh{0}", vbCrLf) & _
+                            String.Format("  2. TV Shows -> Refresh Shows{0}", vbCrLf) & _
                             String.Format("(This will only be reported once per session)", vbCrLf)
 
     Private ClickedControl As String
@@ -150,7 +150,7 @@ Public Class Form1
 
 
     Private Sub util_BatchUpdate()
-        messbox = New frmMessageBox("Please wait,", "", "rebuilding Movie nfo files")
+        messbox = New frmMessageBox("Please wait,", "", "refreshing Movie nfo files")
         Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
         Me.Refresh()
@@ -252,7 +252,7 @@ Public Class Form1
             Preferences.startuptab = TabLevel1.SelectedIndex
 
             Preferences.SaveConfig()
-            Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
+            Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
         Catch ex As Exception
             MessageBox.Show(ex.ToString, "Exception")
             Environment.Exit(1)
@@ -534,7 +534,7 @@ Public Class Form1
             loadinginfo = "Status :- Building Movie Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call mov_CacheRebuild(movieFolders)
+            Call mov_CacheRefresh(movieFolders)
 
         Else
             loadinginfo = "Status :- Loading Movie Database"
@@ -555,7 +555,7 @@ Public Class Form1
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call tv_CacheRebuild()
+            Call tv_CacheRefresh()
         Else
             loadinginfo = "Status :- Loading TV Database"
             frmSplash.Label3.Text = loadinginfo
@@ -1629,7 +1629,7 @@ Public Class Form1
 
 
         If fullMovieList.Count = 0 Then
-            Call mov_CacheRebuild(movieFolders)
+            Call mov_CacheRefresh(movieFolders)
             Exit Sub
         End If
 
@@ -1979,7 +1979,7 @@ Public Class Form1
         templateList.Clear()
         Dim folder As String = IO.Path.Combine(applicationPath, "html_templates\")
         Dim dir_info As New System.IO.DirectoryInfo(folder)
-        tv_RebuildLog("Looking in " & folder)
+        tv_RefreshLog("Looking in " & folder)
         Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.txt", SearchOption.TopDirectoryOnly)
         For Each info In fs_infos
             Try
@@ -5406,7 +5406,7 @@ Public Class Form1
         Next
 
         If fullMovieList.Count = 0 Then
-            Call mov_CacheRebuild(movieFolders)
+            Call mov_CacheRefresh(movieFolders)
             Exit Sub
         End If
 
@@ -5425,10 +5425,10 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub mov_CacheRebuild(ByVal folderlist As List(Of String))
+    Private Sub mov_CacheRefresh(ByVal folderlist As List(Of String))
         Me.Enabled = False
 
-        frmSplash2.Text = "Rebuild Movies..."
+        frmSplash2.Text = "Refresh Movies..."
         frmSplash2.Label1.Text = "Searching for Movie Folders....."
         frmSplash2.Label2.Visible = False
         frmSplash2.Show()
@@ -5553,12 +5553,12 @@ Public Class Form1
 
     End Sub
 
-    Public Sub tv_RebuildLog(ByVal action As String, Optional ByVal errors As String = "", Optional ByVal clear As Boolean = False)
-        If Preferences.tvshowrebuildlog = False Then
+    Public Sub tv_RefreshLog(ByVal action As String, Optional ByVal errors As String = "", Optional ByVal clear As Boolean = False)
+        If Preferences.tvshowrefreshlog = False Then
             Exit Sub
         End If
 
-        Dim errpath As String = IO.Path.Combine(applicationPath, "tvrebuild.log")
+        Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
         If clear = True Then
             If IO.File.Exists(errpath) Then
                 Try
@@ -5673,12 +5673,12 @@ Public Class Form1
         End If
 
         If result = False Then
-            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, Movie Folders have Changed", "", "Rebuilding Movie DB")
+            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, Movie Folders have Changed", "", "Refreshing Movie DB")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Call mov_CacheRebuild(movieFolders)
+            Call mov_CacheRefresh(movieFolders)
             messbox.Close()
         End If
 
@@ -5695,12 +5695,12 @@ Public Class Form1
             Next
         End If
         If result = False Then
-            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, TV Folders have Changed", "", "Rebuilding TV DB")
+            Dim messbox As frmMessageBox = New frmMessageBox("Please wait, TV Folders have Changed", "", "Refreshing TV DB")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Call tv_CacheRebuild()
+            Call tv_CacheRefresh()
             messbox.Close()
         End If
 
@@ -7634,7 +7634,7 @@ Public Class Form1
         If Preferences.movies_useXBMC_Scraper = True Then
             If workingMovieDetails.fullmoviebody.title = Nothing And workingMovieDetails.fullmoviebody.imdbid = Nothing Then
                 messbox.Close()
-                MsgBox("Can't rescrape this movie because it doesn't have any NFO File" & vbCrLf & "rebuild movie database, and search for new movies", MsgBoxStyle.OkOnly, "Error")
+                MsgBox("Can't rescrape this movie because it doesn't have any NFO File" & vbCrLf & "refresh movie database, and search for new movies", MsgBoxStyle.OkOnly, "Error")
                 Exit Sub
             Else
                 ' If NovaThread.IsAlive Then NovaThread.Abort()
@@ -8632,14 +8632,14 @@ Public Class Form1
 
     End Sub
 
-    Private Sub RebuildMoviesToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildMoviesToolStripMenuItem1.Click
+    Private Sub RefreshMoviesToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMoviesToolStripMenuItem1.Click
         Try
             'messbox = New frmMessageBox("Please wait,", "", "Rebuilding Movie DB")
             'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             'messbox.Show()
             'Me.Refresh()
             'messbox.Refresh()
-            Call mov_CacheRebuild(movieFolders)
+            Call mov_CacheRefresh(movieFolders)
             'messbox.Close()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -16297,7 +16297,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub RebuildShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildShowsToolStripMenuItem.Click
+    Private Sub RefreshShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshShowsToolStripMenuItem.Click
         'Try
         'Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Rebuilding TV DB")
         'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -16305,7 +16305,7 @@ Public Class Form1
         'Me.Refresh()
         'messbox.Refresh()
 
-        Call tv_CacheRebuild()
+        Call tv_CacheRefresh()
         'messbox.Close()
         'Catch ex As Exception
         '    ExceptionHandler.LogError(ex)
@@ -18336,7 +18336,7 @@ Public Class Form1
                 'Call savetvdata()
                 '            rebuildselectedshow(MainNode.Name.ToString)
             End If
-            tv_CacheRebuild()
+            tv_CacheRefresh()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19349,7 +19349,7 @@ Public Class Form1
                             Next
                             renamelog = renamelog & "Tables Updated" & vbCrLf & vbCrLf
                         Catch
-                            renamelog = renamelog & "Failed to update tables, use 'Rebuild TV Shows' menu item to fix" & vbCrLf & vbCrLf
+                            renamelog = renamelog & "Failed to update tables, use 'Refresh TV Shows' menu item to fix" & vbCrLf & vbCrLf
                         End Try
                     End If
                 Next
@@ -20273,7 +20273,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub RebuildMovieNfoFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildMovieNfoFilesToolStripMenuItem.Click
+    Private Sub RefreshMovieNfoFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMovieNfoFilesToolStripMenuItem.Click
         Try
             Call util_BatchUpdate()
         Catch ex As Exception
@@ -22084,7 +22084,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub RebuildActorDBToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildActorDBToolStripMenuItem.Click
+    Private Sub RefreshActorDBToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildActorDBToolStripMenuItem.Click
         Try
             Call mov_ActorRebuild()
         Catch ex As Exception
@@ -22765,7 +22765,7 @@ Public Class Form1
 
     Private Sub Button110_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button110.Click
         Try
-            frmSplash2.Text = "Save & Quick Rebuild Movies..."
+            frmSplash2.Text = "Save & Quick Refresh Movies..."
             frmSplash2.Label1.Text = "Searching for Movie Folders....."
             frmSplash2.Label2.Visible = False
             frmSplash2.ProgressBar1.Visible = False
@@ -26050,7 +26050,7 @@ Public Class Form1
         End If
 
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            Call mov_CacheRebuild(movieFolders)
+            Call mov_CacheRefresh(movieFolders)
         Else
             Call mov_CacheReload()
         End If
@@ -26060,7 +26060,7 @@ Public Class Form1
         End If
 
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
-            Call tv_CacheRebuild()
+            Call tv_CacheRefresh()
         Else
             Call tv_CacheLoad()
         End If
@@ -30439,18 +30439,18 @@ Public Class Form1
 
     'End Sub
 
-    Private Sub tv_CacheRebuildSelected(ByVal Show As TvShow)
-        tv_CacheRebuild(Show)
+    Private Sub tv_CacheRefreshSelected(ByVal Show As TvShow)
+        tv_CacheRefresh(Show)
         'MsgBox("Please use 'Full Rebuild' as this is not implemented yet")
         'we need to utilise the already created code for cache rebuild but be able to send to it a single TV show to clear & rebuild....
     End Sub
 
-    Private Sub RebuildThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RebuildShow.Click
+    Private Sub RefreshThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RefreshShow.Click
         Try
             Dim Show As TvShow = tv_ShowSelectedCurrently()
 
             If Show IsNot Nothing Then
-                Call tv_CacheRebuildSelected(Show)
+                Call tv_CacheRefreshSelected(Show)
             Else
                 MsgBox("No Show Selected")
             End If
