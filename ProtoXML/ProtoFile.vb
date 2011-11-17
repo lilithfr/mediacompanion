@@ -193,15 +193,25 @@
         Dim MultiCount As Integer = 0
         If Root.Name = "multiepisodenfo" Then
             For Each episode As XElement In Root.Nodes
-                MultiCount += 1
-                If MultiCount = Me.MultiEpIndex Then
+                If MultiEpIndex < 1000 Then
+                    MultiCount += 1
+                    If MultiCount = Me.MultiEpIndex Then
+                        For Each Child As XNode In episode.Nodes
+                            If TypeOf Child Is XElement Then
+                                XElementList.Add(Child)
+                            End If
+                        Next
+                    End If
+                Else
+                    Dim found As Boolean = False
                     For Each Child As XNode In episode.Nodes
                         If TypeOf Child Is XElement Then
                             XElementList.Add(Child)
-                        Else
-                            Dim Test As Boolean = False
                         End If
+                        'if MultiEpIndex -1000 (episode number) = the value in the 'child' xelement then exit for - we have found our episode & we now exit
+                        'the XElementList data will contain all the nodes up to our episode & later the last episode will be loaded into the episode structure  
                     Next
+
                 End If
 
             Next

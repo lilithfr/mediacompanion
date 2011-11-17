@@ -627,6 +627,7 @@ Partial Public Class Form1
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
         If Episode.IsCache Then
+            Episode.MultiEpIndex = 0
             Episode.Load()
         End If
 
