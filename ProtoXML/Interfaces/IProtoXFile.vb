@@ -5,6 +5,7 @@
     Property CacheDoc As XDocument
 
     Property NfoFilePath As String
+    Property MultiEpCount As Integer
 
     ReadOnly Property FileExists As Boolean
     ReadOnly Property FileContainsReadableXml As Boolean

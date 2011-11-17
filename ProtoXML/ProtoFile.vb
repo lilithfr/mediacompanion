@@ -72,7 +72,17 @@
             EditAttribute("NfoPath", _NfoFilePath)
         End Set
     End Property
-
+    Private _MultiEpCount As Integer
+    Public Property MultiEpCount As Integer Implements IProtoXFile.MultiEpCount
+        Get
+            Return _MultiEpCount
+        End Get
+        Set(ByVal value As Integer)
+            'If _MultiEpCount <> value And _MultiEpCount IsNot Nothing Then Me.IsAltered = True
+            _MultiEpCount = value
+            EditAttribute("MultiEpCount", _MultiEpCount)
+        End Set
+    End Property
     Protected Friend Sub EditAttribute(ByVal Name As String, ByVal Value As String)
 
         If Me.Node.Attribute(Name) Is Nothing Then
@@ -148,6 +158,7 @@
         If IO.File.Exists(Path) Then
             Try
                 Me.Doc = XDocument.Load(Path)
+
             Catch
                 FailedLoad = True
                 Exit Sub
@@ -183,7 +194,7 @@
         If Root.Name = "multiepisodenfo" Then
             For Each episode As XElement In Root.Nodes
                 MultiCount += 1
-                If MultiCount = 1 Then
+                If MultiCount = Me.MultiEpCount Then
                     For Each Child As XNode In episode.Nodes
                         If TypeOf Child Is XElement Then
                             XElementList.Add(Child)
