@@ -73,7 +73,7 @@
         End Set
     End Property
     Private _MultiEpCount As Integer
-    Public Property MultiEpCount As Integer Implements IProtoXFile.MultiEpCount
+    Public Property MultiEpIndex As Integer Implements IProtoXFile.MultiEpCount
         Get
             Return _MultiEpCount
         End Get
@@ -194,7 +194,7 @@
         If Root.Name = "multiepisodenfo" Then
             For Each episode As XElement In Root.Nodes
                 MultiCount += 1
-                If MultiCount = Me.MultiEpCount Then
+                If MultiCount = Me.MultiEpIndex Then
                     For Each Child As XNode In episode.Nodes
                         If TypeOf Child Is XElement Then
                             XElementList.Add(Child)

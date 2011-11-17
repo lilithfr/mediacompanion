@@ -242,10 +242,14 @@ Public Class TvShow
             For Each fs_info As System.IO.FileInfo In fs_infos
                 'Application.DoEvents()
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
-                    For test = 1 To 1
+                    If fs_info.FullName.ToLower = "t:\videos\tv\terra nova\s01\s01e01e02 - genesis.nfo" Then
+                        Dim breakhere As Integer
+                        breakhere = True
+                    End If
+                    For multiepisodeindex = 1 To Tv_EpisodeMultipartCount(fs_info.FullName)
                         Dim NewEpisode As New TvEpisode
                         NewEpisode.NfoFilePath = fs_info.FullName
-                        NewEpisode.MultiEpCount = test                      'this value deternines which episode in a multiepisode is returned
+                        NewEpisode.MultiEpIndex = multiepisodeindex                      'this value deternines which episode in a multiepisode is returned
                         NewEpisode.Load()
                         Me.AddEpisode(NewEpisode)
                     Next
@@ -254,7 +258,37 @@ Public Class TvShow
             Next fs_info
         Next
     End Sub
+    Public Function Tv_EpisodeMultipartCount(Path As String) As Integer
 
+        If Not IO.File.Exists(Path) Then
+            Return 0
+        Else
+            Dim tvshow As New XmlDocument
+            Try
+                tvshow.Load(Path)
+            Catch ex As Exception
+                Return 0
+            End Try
+
+            Dim thisresult As XmlNode = Nothing
+
+            If tvshow.DocumentElement.Name = "episodedetails" Then
+                Return 1
+            ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
+                Dim temp As String = tvshow.DocumentElement.Name
+                Dim epsfound As Integer = 0
+                For Each thisresult In tvshow(temp)
+                    Select Case thisresult.Name
+                        Case "episodedetails"
+                            epsfound += 1
+                    End Select
+                Next
+                Return epsfound
+            End If
+            Return 0
+
+        End If
+    End Function
     Public Sub AddEpisode(ByRef Episode As TvEpisode)
         If Not Cache.TvCache.Contains(Episode) Then
             Cache.TvCache.Add(Episode)
@@ -289,9 +323,9 @@ Public Class TvShow
                     CurrentSeason.Poster.FolderPath = Me.FolderPath
                     CurrentSeason.Poster.FileName = "season-all.tbn"
                 End If
-                Else
-                    CurrentSeason = Me.Seasons(Episode.Season.Value)
-                End If
+            Else
+                CurrentSeason = Me.Seasons(Episode.Season.Value)
+            End If
 
             Episode.SeasonObj = CurrentSeason
 
