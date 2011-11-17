@@ -20,7 +20,6 @@ Imports Media_Companion
 Public Class Form1
 
     'Public Shared Preferences As New Structures
-
     Public Const SetDefaults = True
     Public movieRefreshNeeded As Boolean = True
     Public tvRefreshNeeded As Boolean = True

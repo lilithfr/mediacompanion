@@ -177,18 +177,21 @@
         If Me.Doc.Root Is Nothing Then Throw New Exception("Invalid NFO file")
         Me._node = Me.Doc.Root
         Dim Root As XElement = Me.Doc.Root
-
         Dim ChildProperty As IProtoXChild
         Dim XElementList As New List(Of XElement)
+        Dim MultiCount As Integer = 0
         If Root.Name = "multiepisodenfo" Then
             For Each episode As XElement In Root.Nodes
-                For Each Child As XNode In episode.Nodes
-                    If TypeOf Child Is XElement Then
-                        XElementList.Add(Child)
-                    Else
-                        Dim Test As Boolean = False
-                    End If
-                Next
+                MultiCount += 1
+                If MultiCount = 1 Then
+                    For Each Child As XNode In episode.Nodes
+                        If TypeOf Child Is XElement Then
+                            XElementList.Add(Child)
+                        Else
+                            Dim Test As Boolean = False
+                        End If
+                    Next
+                End If
 
             Next
         Else

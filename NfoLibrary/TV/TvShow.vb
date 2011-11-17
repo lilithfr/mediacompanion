@@ -242,8 +242,10 @@ Public Class TvShow
             For Each fs_info As System.IO.FileInfo In fs_infos
                 'Application.DoEvents()
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
+
                     Dim NewEpisode As New TvEpisode
                     NewEpisode.NfoFilePath = fs_info.FullName
+                    NewEpisode.PlayCount.Value = 1                      'temp use this var to hold part value
                     NewEpisode.Load()
 
                     Me.AddEpisode(NewEpisode)
