@@ -11493,7 +11493,7 @@ Public Class Form1
                     overItem = tempstring
                     For Each movie In fullMovieList
                         If movie.fullpathandfilename = tempstring Then
-                            s = s & movie.title & " (" & movie.year & ")" & vbCrLf & vbCrLf
+                            s = s & movie.title & " (" & movie.year & ")" & vbCrLf & "IMDB# " & movie.id & vbCrLf & vbCrLf
                             Dim tempstring2 As String
                             Try
                                 tempstring2 = movie.runtime.Substring(0, movie.runtime.IndexOf("min") + 3)

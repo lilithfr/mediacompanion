@@ -1883,7 +1883,7 @@ Public Class WorkingWithNfoFiles
                                         newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
                                     End If
                                 Case "id"
-                                    newmovie.id = thisresult.InnerText
+                                    If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
                                 Case "playcount"
                                     newmovie.playcount = thisresult.InnerText
                                 Case "rating"
