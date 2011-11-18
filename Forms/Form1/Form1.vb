@@ -30309,6 +30309,7 @@ Public Class Form1
                     shows.MissingEpisodes.Clear()
                     ShowList.Add(shows)
                 Next
+                If MsgBox("This function will download & populate the treeview with all of the episode details missing from your collection." & vbCrLf & "The download will be completed in the background. You can watch the status in the status bar below." & vbCrLf & vbCrLf & "Do you want to proceed with the download for " & ShowList.Count & " shows?", MsgBoxStyle.YesNo, "Download Missing Episode Details") = Windows.Forms.DialogResult.No Then Exit Sub
                 'Dim nod As TreeNode
                 'For Each nod In TvTreeview.Nodes
                 '    Dim nod2 As TreeNode

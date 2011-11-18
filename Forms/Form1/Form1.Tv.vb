@@ -3408,6 +3408,7 @@ Partial Public Class Form1
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
 
             TvTreeview.Sort()
+            MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
