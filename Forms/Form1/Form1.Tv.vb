@@ -3137,8 +3137,18 @@ Partial Public Class Form1
         Tv_CleanFolderList()
     End Sub
 
-    Private Sub tv_Filter(ByVal butt As String)
-        If Not startup = True Then
+    Private Sub tv_Filter() 'ByVal butt As String)
+        Dim butt As String = ""
+
+        If RadioButton29.Checked = True Then butt = "all"
+        If RadioButton30.Checked = True Then butt = "fanart"
+        If RadioButton31.Checked = True Then butt = "posters"
+        If RadioButton32.Checked = True Then butt = "screenshot"
+        If RadioButton44.Checked = True Then butt = "missingeps"
+        If RadioButton53.Checked = True Then butt = "airedmissingeps"
+
+
+        If startup = True Then
             If butt = "missingeps" Then
                 For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                     For Each Season As Media_Companion.TvSeason In item.Seasons.Values
@@ -3156,9 +3166,12 @@ Partial Public Class Form1
                                         If Convert.ToDateTime(episode.Aired.Value) > Now Then
                                             '  Yes, so change its colour to gray
                                             episode.EpisodeNode.ForeColor = Color.Gray
+                                        Else
+                                            episode.EpisodeNode.ForeColor = Drawing.Color.Blue
                                         End If
                                     Catch ex As Exception
-                                        ' Do nothing
+                                        ' Set the colour to the missing colour
+                                        episode.EpisodeNode.ForeColor = Drawing.Color.Blue
                                     End Try
                                 End If
 
@@ -3408,6 +3421,8 @@ Partial Public Class Form1
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
 
             TvTreeview.Sort()
+            Call tv_Filter()
+
             MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -3538,7 +3553,7 @@ Partial Public Class Form1
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
 
         Cache.TvCache.Load()
-        TvTreeview.Nodes.Clear()              'clear the treview of old data
+        TvTreeview.Nodes.Clear()              'clear the treeview of old data
         ''Dirty work around until TvShows is repalced with TvCache.Shows universally
         For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
             '    'Dim NewShow As New TvShow

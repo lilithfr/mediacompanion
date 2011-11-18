@@ -22210,7 +22210,7 @@ Public Class Form1
     Private Sub RadioButton32_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton32.CheckedChanged
         Try
             If RadioButton32.Checked = True Then
-                Call tv_Filter("screenshot")
+                Call tv_Filter()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -22220,7 +22220,7 @@ Public Class Form1
     Private Sub RadioButton30_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton30.CheckedChanged
         Try
             If RadioButton30.Checked = True Then
-                Call tv_Filter("fanart")
+                Call tv_Filter()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -22230,7 +22230,7 @@ Public Class Form1
     Private Sub RadioButton29_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton29.CheckedChanged
         Try
             If RadioButton29.Checked = True Then
-                Call tv_Filter("all")
+                Call tv_Filter()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -22240,7 +22240,7 @@ Public Class Form1
     Private Sub RadioButton31_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton31.CheckedChanged
         Try
             If RadioButton31.Checked = True Then
-                Call tv_Filter("posters")
+                Call tv_Filter()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -30495,7 +30495,7 @@ Public Class Form1
     Private Sub RadioButton44_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton44.CheckedChanged
         Try
             If RadioButton44.Checked = True Then
-                Call tv_Filter("missingeps")
+                Call tv_Filter()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -30506,7 +30506,7 @@ Public Class Form1
     Private Sub RadioButton53_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton53.CheckedChanged
         Try
             If RadioButton53.Checked = True Then
-                Call tv_Filter("airedmissingeps")
+                Call tv_Filter()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
