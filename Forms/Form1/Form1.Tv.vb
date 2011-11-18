@@ -3139,7 +3139,7 @@ Partial Public Class Form1
     End Sub
 
     Private Sub tv_Filter(ByVal butt As String)
-        If Not startup = True Then
+        If Not startup = True Then 'added remark for branch test
             If butt = "missingeps" Then
                 For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                     For Each Season As Media_Companion.TvSeason In item.Seasons.Values
