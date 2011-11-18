@@ -32552,6 +32552,7 @@ Public Class Form1
 
                 'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
                 Tv_TreeViewContextMenuItemsEnable()
+
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

@@ -140,9 +140,9 @@ Partial Public Class Form1
 
 
         'now we set the items that have variable text in the context menu using the 'show' text set above
-        Tv_TreeViewContext_ShowTitle.BackColor = Color.Honeydew                 'SK - same color as the refresh tv show splash - comments required to see if it works or not....
-
-        Tv_TreeViewContext_ShowTitle.Text = "For TVShow '" & showtitle & "'..."
+        Tv_TreeViewContext_ShowTitle.BackColor = Color.Honeydew                'SK - same color as the refresh tv show splash - comments required to see if it works or not....
+        
+        
         'Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
         'Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
         'Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
@@ -151,6 +151,9 @@ Partial Public Class Form1
         'now we display what we need to display depending on what type of node we have selected
 
         If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
+            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "'"
+            Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
+
             Tv_TreeViewContext_ViewNfo.Text = "View TVShow .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape TVShow"
 
@@ -165,6 +168,9 @@ Partial Public Class Form1
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - " & tv_SeasonSelectedCurrently.SeasonLabel
+            Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
+
             Tv_TreeViewContext_ViewNfo.Text = "View Season .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Season"
 
@@ -179,6 +185,9 @@ Partial Public Class Form1
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - S" & Utilities.PadNumber(ep_SelectedCurrently.Season.Value, 2) & "E" & Utilities.PadNumber(ep_SelectedCurrently.Episode.Value, 2) & " '" & ep_SelectedCurrently.Title.Value & "'"
+            Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
+
             Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Episode"
 
