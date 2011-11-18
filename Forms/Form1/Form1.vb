@@ -32447,7 +32447,10 @@ Public Class Form1
             For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
                 For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
                     Abort = False                                          'if we get here then there is at least 1 episode
-                    Dim EpAired As String = childNodeLevel3.Tag.aired.value  'this holds the 'aired' value
+                    Dim episode As New TvEpisode
+                    episode.Load(childNodeLevel3.Name)
+
+                    Dim EpAired As String = episode.Aired.Value  'this holds the 'aired' value
 
                     If EpAired Is Nothing Then
                         EpAired = "9999-" & Utilities.PadNumber(NoDateCountUp, 5)  'if the aired date is nothing then we add it as 9999-xxxxx where x increments
@@ -32478,7 +32481,7 @@ Public Class Form1
                             SameDateLoop = False
                         End If
                     Loop
-                   
+
                     mySortedList.Add(Key, EpAired & "    " & Renamer.setTVFilename(WorkingTvShow.Title.Value, childNodeLevel3.Tag.title.value, episode2digit, season2digit))
 
 
