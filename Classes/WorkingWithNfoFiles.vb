@@ -306,7 +306,7 @@ Public Class WorkingWithNfoFiles
                                 Exit For
                             Catch
                                 newtvshow.Season.Value = "-1"
-                                newtvshow.Season.Value = "-1"
+                                newtvshow.Episode.Value = "-1"
                             End Try
                         End If
                     Next

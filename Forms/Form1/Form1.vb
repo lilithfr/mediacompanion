@@ -32509,14 +32509,45 @@ Public Class Form1
                 MyFormObject.ShowDialog()                                                               'show the form
 
             Else                    'we get here if abort still = true, i.e. no episodes
-                MsgBox("There are no epsiodes scraped for this show" & vbCrLf & "Missing Episodes do not have the 'aired' date detail", MsgBoxStyle.OkOnly, "No Episodes")
+                MsgBox("There are no Epsiodes or Missing Episodes for this show.", MsgBoxStyle.OkOnly, "No Episodes")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
 
     End Sub
+    Private Sub FixSeasonEpisode() 'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
+        Dim childNodeLevel1 As TreeNode
+        For Each childNodeLevel1 In TvTreeview.Nodes
+            For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
+                For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+                    Dim episode As New TvEpisode
+                    episode.Load(childNodeLevel3.Name)
 
+                    If episode.Season.Value = -1 Or episode.Episode.Value = -1 Then
+                        For Each regexp In Preferences.tv_RegexScraper
+
+                            Dim M As Match
+                            M = Regex.Match(episode.Title.Value, regexp)
+                            If M.Success = True Then
+                                Try
+                                    episode.Season.Value = M.Groups(1).Value.ToString
+                                    episode.Episode.Value = M.Groups(2).Value.ToString
+                                    Exit For
+                                Catch
+                                    episode.Season.Value = "-1"
+                                    episode.Episode.Value = "-1"
+                                End Try
+                            End If
+                        Next
+                        episode.Save(childNodeLevel3.Name)
+                    End If
+                Next
+            Next
+        Next
+
+
+    End Sub
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
         Try
             mov_Play()
@@ -32766,4 +32797,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+    
+
 End Class
