@@ -546,7 +546,11 @@ Partial Public Class Form1
             MsgBox("Show tag not set")
             Exit Sub
         End If
+        TextBox2.BackColor = Color.White
+        If Show.Title.Value <> Nothing Then
+            TextBox2.Text = Show.Title.Value
 
+        End If
 
         If TabControl3.TabPages(1).Text = "Screenshot" Then
             TabControl3.TabPages.RemoveAt(1)
