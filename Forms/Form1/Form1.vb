@@ -17331,7 +17331,7 @@ Public Class Form1
         Return False
     End Function
 
-    Private Sub ep_NewFind(ByVal path As String, ByVal pattern As String)
+    Private Sub mov_NewFind(ByVal path As String, ByVal pattern As String)
         Dim episode As New List(Of TvEpisode)
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
@@ -32516,37 +32516,59 @@ Public Class Form1
         End Try
 
     End Sub
-    Private Sub  'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
+    Private Sub FixSeasonEpisode() 'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
+        Dim textstring As String = ""
+        Dim correctionsfound As Integer = 0
+        Dim correctionsfixed As Integer = 0
         Dim childNodeLevel1 As TreeNode
+        Dim originallabeltext = Label148.Text
         For Each childNodeLevel1 In TvTreeview.Nodes
             For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
-                For Each childNodeLevel3 As TrFixSeasonEpisode()eeNode In childNodeLevel2.Nodes
+                Label148.Text = childNodeLevel1.Text & " - " & childNodeLevel2.Text
+                Label148.Invalidate()
+                Windows.Forms.Application.DoEvents()
+                For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
                     Dim episode As New TvEpisode
                     episode.Load(childNodeLevel3.Name)
 
                     If episode.Season.Value = -1 Or episode.Episode.Value = -1 Then
-                        For Each regexp In Preferences.tv_RegexScraper
+                        textstring += vbCrLf & childNodeLevel1.Text & " - " & childNodeLevel3.Name
+                        correctionsfound += 1
+                        For Each regexp In tv_RegexScraper
 
                             Dim M As Match
+
                             M = Regex.Match(episode.Title.Value, regexp)
                             If M.Success = True Then
                                 Try
                                     episode.Season.Value = M.Groups(1).Value.ToString
                                     episode.Episode.Value = M.Groups(2).Value.ToString
+                                    correctionsfixed += 1
+                                    episode.Save(childNodeLevel3.Name)
+                                    textstring += " *** Corrected - S" & episode.Season.Value & "E" & episode.Episode.Value
                                     Exit For
+
                                 Catch
                                     episode.Season.Value = "-1"
                                     episode.Episode.Value = "-1"
                                 End Try
                             End If
                         Next
-                        episode.Save(childNodeLevel3.Name)
+
                     End If
                 Next
             Next
         Next
-
-
+        Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
+        MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
+        MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
+        MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+        MyFormObject.Text = "Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & " Fixed: " & correctionsfixed            'change the form title text
+        MyFormObject.ShowDialog()                                                               'show the form
+        If MsgBox("Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & "Fixed: " & correctionsfixed & vbCrLf & vbCrLf & "Do you want to perform a refresh to relaod the corrected nfo's?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            tv_CacheRefresh()
+        End If
+        Label148.Text = originallabeltext
     End Sub
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
         Try
@@ -32590,7 +32612,7 @@ Public Class Form1
         End Try
     End Sub
 
-    
+
     Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ViewNfo.Click
         Try
             If TvTreeview.SelectedNode Is Nothing Then Exit Sub
@@ -32777,7 +32799,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
+    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
         Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text
         generalprefschanged = True
     End Sub
@@ -32797,7 +32819,7 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-    
+
 
     Private Sub Button2_Click_1(sender As System.Object, e As System.EventArgs) Handles Button2.Click
         FixSeasonEpisode()

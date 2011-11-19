@@ -1763,7 +1763,7 @@ Partial Public Class Form1
                 'moviepattern = f
                 dirpath = newtvfolders(g)
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                ep_NewFind(dirpath, f)
+                mov_NewFind(dirpath, f)
             Next f
             tempint = newEpisodeList.Count - mediacounter
 
