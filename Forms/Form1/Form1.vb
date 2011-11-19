@@ -8306,10 +8306,15 @@ Public Class Form1
                 If votestxt.Text <> "" Then
                     movie.fullmoviebody.votes = votestxt.Text
                 End If
-                If ComboBox3.SelectedIndex <> -1 Then
-                    movie.fullmoviebody.movieset = ComboBox3.SelectedItem
+
+                If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "-None-"
+                If ComboBox3.SelectedItem <> "-None-" Then
+                    movie.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
+                Else
+                    movie.fullmoviebody.movieset = Nothing
                 End If
                 nfoFunction.mov_NfoSave(filepath, movie, True)
+
                 For f = 0 To fullMovieList.Count - 1
                     If fullMovieList(f).fullpathandfilename = movie.fileinfo.fullpathandfilename Then
                         Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
@@ -8323,12 +8328,7 @@ Public Class Form1
                             Throw ex
 #End If
                         End Try
-                        If newfullmovie.movieset = Nothing Then
-                            newfullmovie.movieset = "-None-"
-                        End If
-                        If newfullmovie.movieset = "" Then
-                            newfullmovie.movieset = "-None-"
-                        End If
+                        
                         'Commented out items are not saved when multiple movies are selected
                         '              newfullmovie.title = movie.fullmoviebody.title
                         '              newfullmovie.titleandyear = newfullmovie.title & " (" & movie.fullmoviebody.year & ")"
@@ -8342,6 +8342,12 @@ Public Class Form1
                         '              newfullmovie.id = movie.fullmoviebody.imdbid
                         newfullmovie.outline = movie.fullmoviebody.outline
                         newfullmovie.movieset = movie.fullmoviebody.movieset
+                        If newfullmovie.movieset = Nothing Then
+                            newfullmovie.movieset = "-None-"
+                        End If
+                        If newfullmovie.movieset = "" Then
+                            newfullmovie.movieset = "-None-"
+                        End If
                         '              newfullmovie.year = movie.fullmoviebody.year
                         fullMovieList.RemoveAt(f)
                         fullMovieList.Add(newfullmovie)
