@@ -4434,13 +4434,25 @@ Public Class Form1
                                 If System.IO.File.Exists(newpath & newfilename & ".nfo") Then AFileExists = True
                                 If System.IO.File.Exists(newpath & newfilename & ".tbn") Then AFileExists = True
                                 If System.IO.File.Exists(newpath & newfilename & "-fanart.jpg") Then AFileExists = True
+                                If System.IO.File.Exists(newpath & newfilename & ".sub") Then AFileExists = True 'check if subtitle file already exists
+                                If System.IO.File.Exists(newpath & newfilename & ".srt") Then AFileExists = True 'check if subtitle file already exists
 
                                 If AFileExists = False Then
 
-                                    'rename found media file
+                                    'rename found media files
 
-                                    System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename)
-                                    scraperLog = scraperLog & vbCrLf & "Renamed Movie File" & vbCrLf
+                                    System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename) ' movie file
+                                    scraperLog = scraperLog & "Renamed Movie File" & vbCrLf
+
+                                    If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, ".sub")) Then
+                                        System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, ".sub"), newmoviepathandfilename.Replace(newextension, ".sub")) ' subtitles file with .sub extension
+                                        scraperLog = scraperLog & "Renamed '.sub' subtitle File" & vbCrLf
+                                    End If
+
+                                    If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, ".srt")) Then
+                                        System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, ".srt"), newmoviepathandfilename.Replace(newextension, ".srt")) ' subtitles file with .srt extension
+                                        scraperLog = scraperLog & "Renamed '.srt' subtitle File" & vbCrLf
+                                    End If
 
                                     'retrieve data already stored into a new array
                                     Dim tempmovdetails As New str_NewMovie(SetDefaults)
@@ -5270,12 +5282,12 @@ Public Class Form1
                             End If
                             movietoadd.missingdata1 = completebyte1
                             fullMovieList.Add(movietoadd)
-                        End If
+                            End If
 
-                        scraperLog = scraperLog & "Movie added to list" & vbCrLf
-                        progress = 999999
-                        ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
-                        'BckWrkScnMovies.ReportProgress(progress, progresstext)
+                            scraperLog = scraperLog & "Movie added to list" & vbCrLf
+                            progress = 999999
+                            ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
+                            'BckWrkScnMovies.ReportProgress(progress, progresstext)
                     End If
 
 
