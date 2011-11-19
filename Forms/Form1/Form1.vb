@@ -32516,11 +32516,11 @@ Public Class Form1
         End Try
 
     End Sub
-    Private Sub FixSeasonEpisode() 'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
+    Private Sub  'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
         Dim childNodeLevel1 As TreeNode
         For Each childNodeLevel1 In TvTreeview.Nodes
             For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
-                For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
+                For Each childNodeLevel3 As TrFixSeasonEpisode()eeNode In childNodeLevel2.Nodes
                     Dim episode As New TvEpisode
                     episode.Load(childNodeLevel3.Name)
 
@@ -32799,4 +32799,7 @@ Public Class Form1
     End Sub
     
 
+    Private Sub Button2_Click_1(sender As System.Object, e As System.EventArgs) Handles Button2.Click
+        FixSeasonEpisode()
+    End Sub
 End Class
