@@ -32540,43 +32540,48 @@ Public Class Form1
         Dim correctionsfixed As Integer = 0
         Dim childNodeLevel1 As TreeNode
         Dim originallabeltext = Label148.Text
-        For Each childNodeLevel1 In TvTreeview.Nodes
+        For Each childNodeLevel1 In TvTreeview.Nodes    'step thru each tvshow/season/episode in the treeview
             For Each childNodeLevel2 As TreeNode In childNodeLevel1.Nodes
-                Label148.Text = childNodeLevel1.Text & " - " & childNodeLevel2.Text
+                Label148.Text = childNodeLevel1.Text & " - " & childNodeLevel2.Text 'display some sort of progress using the text label associated with the fix
                 Label148.Invalidate()
-                Windows.Forms.Application.DoEvents()
+                Windows.Forms.Application.DoEvents()    'this refreshes the label whilst we are still in this sub
                 For Each childNodeLevel3 As TreeNode In childNodeLevel2.Nodes
                     Dim episode As New TvEpisode
-                    episode.Load(childNodeLevel3.Name)
+                    episode.Load(childNodeLevel3.Name)  'load the episode from the nfo using the path stored in the treeview
 
-                    If episode.Season.Value = -1 Or episode.Episode.Value = -1 Then
-                        textstring += vbCrLf & childNodeLevel1.Text & " - " & childNodeLevel3.Name
-                        correctionsfound += 1
+                    If episode.Season.Value = -1 Or episode.Episode.Value = -1 Then ' check if we have the issue
+                        textstring += vbCrLf & childNodeLevel1.Text & " - " & childNodeLevel3.Name      'add details to the log
+                        correctionsfound += 1   'increment the found issues counter
                         For Each regexp In tv_RegexScraper
 
                             Dim M As Match
-
+                            Dim sourcetext As String = ""
+                            If RadioButton_Fix_Filename.Checked Then
+                                sourcetext = childNodeLevel3.Name       'use nfo filename to retrieve season/episode
+                            Else
+                                sourcetext = episode.Title.Value        'use 'title' node in nfo to retieve season/episode
+                            End If
                             M = Regex.Match(episode.Title.Value, regexp)
-                            If M.Success = True Then
+                            If M.Success = True Then                            'we found a valid regex match
                                 Try
-                                    episode.Season.Value = M.Groups(1).Value.ToString
+                                    episode.Season.Value = M.Groups(1).Value.ToString   'set new values
                                     episode.Episode.Value = M.Groups(2).Value.ToString
                                     correctionsfixed += 1
-                                    episode.Save(childNodeLevel3.Name)
+                                    episode.Save(childNodeLevel3.Name)                  'save episode
                                     textstring += " *** Corrected - S" & episode.Season.Value & "E" & episode.Episode.Value
                                     Exit For
 
                                 Catch
-                                    episode.Season.Value = "-1"
-                                    episode.Episode.Value = "-1"
+                                    textstring += vbCrLf & "**** exception created during nfo save **** - " & childNodeLevel3.Name
                                 End Try
                             End If
-                        Next
+                Next
 
                     End If
                 Next
             Next
         Next
+        Label148.Text = originallabeltext           'return the label text back after we have used it to diplay progress
         Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
         MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
         MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
@@ -32584,9 +32589,9 @@ Public Class Form1
         MyFormObject.Text = "Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & " Fixed: " & correctionsfixed            'change the form title text
         MyFormObject.ShowDialog()                                                               'show the form
         If MsgBox("Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & "Fixed: " & correctionsfixed & vbCrLf & vbCrLf & "Do you want to perform a refresh to relaod the corrected nfo's?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-            tv_CacheRefresh()
+            tv_CacheRefresh()   'ask to do a refresh or not, user may want to try both methods before do a refresh.
         End If
-        Label148.Text = originallabeltext
+
     End Sub
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
         Try
@@ -32843,5 +32848,5 @@ Public Class Form1
         FixSeasonEpisode()
     End Sub
 
-    
+
 End Class
