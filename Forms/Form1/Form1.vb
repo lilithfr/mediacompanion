@@ -9649,9 +9649,10 @@ Public Class Form1
                                                     If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
                                                         moviefanarturl = apple2(g)
                                                         fanartfound = True
+                                                        Exit For
                                                     End If
                                                 End If
-                                                Exit For
+
                                             End If
                                         Next
                                         If fanartfound = False Then moviefanarturl = ""
