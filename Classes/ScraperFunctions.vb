@@ -8,7 +8,7 @@ Public Class ScraperFunctions
 
     Dim tvdburl As String
     Dim tvfblinecount As Integer
-    Dim tvdbwebsource(3000) As String
+    Dim tvdbwebsource(4000) As String
 
     Public Function getimdbactors(ByVal imdbid As String, ByVal mirror As String)
 
@@ -188,7 +188,7 @@ Public Class ScraperFunctions
             Dim fanarturl As String = "http://www.movieposterdb.com/movie/" & temp
 
 
-            Dim apple2(2000) As String
+            Dim apple2(4000) As String
             Dim fanartlinecount As Integer = 0
             'Try
             Dim wrGETURL As WebRequest
@@ -346,7 +346,7 @@ Public Class ScraperFunctions
             fanarturl = fanarturl & temp & "+" & year
             fanarturl = fanarturl & "&sitesearch=www.impawards.com"
             'Try
-            Dim apple2(3000) As String
+            Dim apple2(4000) As String
             Dim fanartlinecount As Integer = 0
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
@@ -381,7 +381,7 @@ Public Class ScraperFunctions
                         fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
                         fanarturl = fanarturl & temp
                         fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-                        ReDim apple2(3000)
+                        ReDim apple2(4000)
                         fanartlinecount = 0
                         Dim wrGETURL4 As WebRequest
                         wrGETURL4 = WebRequest.Create(fanarturl)
@@ -422,7 +422,7 @@ Public Class ScraperFunctions
                 If apple2(f).IndexOf("xlg.html") <> -1 Then xtralge = True
             Next
 
-            ReDim apple2(2000)
+            ReDim apple2(4000)
             fanartlinecount = 0
             Dim wrGETURL3 As WebRequest
 
@@ -487,7 +487,7 @@ Public Class ScraperFunctions
             Dim temp As String = posterimdbid
             Dim fanarturl As String = "http://www.imdb.com/title/" & temp
 
-            Dim apple2(2000) As String
+            Dim apple2(4000) As String
             Dim fanartlinecount As Integer = 0
 
             Dim wrGETURL As WebRequest

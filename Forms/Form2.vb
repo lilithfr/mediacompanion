@@ -619,7 +619,7 @@ Public Class Form2
                                         Dim temp As String = alternatemovie.fullmoviebody.imdbid
 
                                         Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
-                                        Dim apple2(2000) As String
+                                        Dim apple2(3000) As String
                                         Dim fanartlinecount As Integer = 0
                                         Try
                                             Dim wrGETURL As WebRequest

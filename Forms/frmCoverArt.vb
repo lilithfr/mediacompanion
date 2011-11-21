@@ -245,7 +245,7 @@ Public Class frmCoverArt
             Dim tempsimdbid As String = String.Empty
           
             Dim fanarturl As String = URLs.TMdbMovieLookup(tmdbid)
-            Dim apple2(2000) As String
+            Dim apple2(3000) As String
             Dim fanartlinecount As Integer = 0
 
             Dim wrGETURL As WebRequest
@@ -277,7 +277,7 @@ Public Class frmCoverArt
                 End If
             Next
 
-            ReDim apple2(2000)
+            ReDim apple2(3000)
             fanartlinecount = 0
 
             fanarturl = URLs.TMdbGetInfo(tempsimdbid)
@@ -683,7 +683,7 @@ Public Class frmCoverArt
                 fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
                 fanarturl = fanarturl & title
                 fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-                ReDim apple2(2000)
+                ReDim apple2(3000)
                 fanartlinecount = 0
                 Dim wrGETURL4 As WebRequest
                 wrGETURL4 = WebRequest.Create(fanarturl)

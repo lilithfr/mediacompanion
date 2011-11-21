@@ -5123,7 +5123,7 @@ Public Class Form1
                                             Dim temp As String = newmovie.fullmoviebody.imdbid
 
                                             Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-                                            Dim apple2(2000) As String
+                                            Dim apple2(4000) As String
                                             Dim fanartlinecount As Integer = 0
                                             Try
                                                 Dim wrGETURL As WebRequest
@@ -6985,7 +6985,7 @@ Public Class Form1
                 Dim tempstring As String = ""
                 If CheckBox_ShowDateOnMovieList.Checked = True Then             'If this is false tempstring will stay as "" in the list below
                     Dim tempdate As Date = Nothing
-                    If RadioButtonSortCreate.Checked = True Then 'create=create modified=filedate
+                    If RadioButtonSortCreate.Checked = True And movie.createdate.Length = 8 Then 'create=create modified=filedate
                         tempdate = DateSerial(movie.createdate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
                     Else
                         tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.filedate.Substring(4, 2), movie.filedate.Substring(6, 2))
@@ -9510,7 +9510,7 @@ Public Class Form1
                                         moviethumburl = "na"
                                     End Try
                                     Try
-                                        If moviethumburl = "na" Then
+                                        If moviethumburl = "na" Or moviethumburl = "error" Then
                                             Select Case Preferences.moviethumbpriority(1)
                                                 Case "Internet Movie Poster Awards"
                                                     moviethumburl = scraperFunction2.impathumb(movietoalter.fullmoviebody.title, movietoalter.fullmoviebody.year)
@@ -9526,7 +9526,7 @@ Public Class Form1
                                         moviethumburl = "na"
                                     End Try
                                     Try
-                                        If moviethumburl = "na" Then
+                                        If moviethumburl = "na" Or moviethumburl = "error" Then
                                             Select Case Preferences.moviethumbpriority(2)
                                                 Case "Internet Movie Poster Awards"
                                                     moviethumburl = scraperFunction2.impathumb(movietoalter.fullmoviebody.title, movietoalter.fullmoviebody.year)
@@ -9542,7 +9542,7 @@ Public Class Form1
                                         moviethumburl = "na"
                                     End Try
                                     Try
-                                        If moviethumburl = "na" Then
+                                        If moviethumburl = "na" Or moviethumburl = "error" Then
                                             Select Case Preferences.moviethumbpriority(3)
                                                 Case "Internet Movie Poster Awards"
                                                     moviethumburl = scraperFunction2.impathumb(movietoalter.fullmoviebody.title, movietoalter.fullmoviebody.year)
@@ -9558,7 +9558,7 @@ Public Class Form1
                                         moviethumburl = "na"
                                     End Try
                                     Try
-                                        If moviethumburl <> "" And moviethumburl <> "na" Then
+                                        If moviethumburl <> "" And moviethumburl <> "na" And moviethumburl <> "error" Then
                                             Dim newmoviethumbpath As String = movietoalter.fileinfo.posterpath
                                             'Utilities.DownloadFile(moviethumburl, movietoalter.fileinfo.posterpath)
                                             Try
@@ -9569,6 +9569,10 @@ Public Class Form1
                                                 Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                 Dim contents As Stream = res.GetResponseStream()
+                                                If res.ResponseUri.AbsoluteUri.Contains("404.html") Then
+                                                    MsgBox("Automatic Search has failed to locate a valid Poster for" & vbCrLf & "'" & movietoalter.fileinfo.filename & "'." & vbCrLf & "Please use the poster tab & choose a poster manually.", MsgBoxStyle.Exclamation)
+                                                    GoTo MyExit         'abort trying to load an empty returned picture
+                                                End If
                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
                                                 While bytesToRead > 0
                                                     size = contents.Read(buffer, bytesRead, bytesToRead)
@@ -9599,6 +9603,7 @@ Public Class Form1
 #End If
                                             End Try
                                         End If
+MyExit:
                                     Catch ex As Exception
 #If SilentErrorScream Then
                                     Throw ex
@@ -9620,7 +9625,7 @@ Public Class Form1
                                     If BckWrkScnMovies.CancellationPending Then Exit Sub
                                     Dim temp As String = movietoalter.fullmoviebody.imdbid
                                     Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-                                    Dim apple2(2000) As String
+                                    Dim apple2(4000) As String
                                     Dim fanartlinecount As Integer = 0
                                     Try
                                         Dim wrGETURL As WebRequest
@@ -10765,7 +10770,7 @@ Public Class Form1
                                                 Dim temp As String = newmovie.fullmoviebody.imdbid
 
                                                 Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-                                                Dim apple2(2000) As String
+                                                Dim apple2(4000) As String
                                                 Dim fanartlinecount As Integer = 0
                                                 Try
                                                     Dim wrGETURL As WebRequest
@@ -14386,7 +14391,7 @@ Public Class Form1
                         Dim temp As String = workingMovieDetails.fullmoviebody.imdbid
 
                         Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-                        Dim apple2(2000) As String
+                        Dim apple2(4000) As String
                         Dim fanartlinecount As Integer = 0
                         Try
                             Dim wrGETURL As WebRequest
@@ -17633,7 +17638,7 @@ Public Class Form1
         Me.Refresh()
         messbox.Refresh()
         Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & WorkingTvShow.TvdbId.Value & "/banners.xml"
-        Dim apple2(2000) As String
+        Dim apple2(4000) As String
         Dim fanartlinecount As Integer = 0
         Try
             Dim wrGETURL As WebRequest
@@ -29059,7 +29064,7 @@ Public Class Form1
                 Dim temp As String = workingMovieDetails.fullmoviebody.imdbid
 
                 Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
-                Dim apple2(2000) As String
+                Dim apple2(3000) As String
                 Dim fanartlinecount As Integer = 0
                 Try
                     Dim wrGETURL As WebRequest

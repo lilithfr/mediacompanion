@@ -89,7 +89,7 @@ Public Class Classimdb
             Dim urllinecount As Integer
             Dim GOT_IMDBID As String
             Dim allok As Boolean = False
-            Dim websource(3000)
+            Dim websource(4000)
             For f = 1 To 10
                 Try
                     Dim wrGETURL As WebRequest
