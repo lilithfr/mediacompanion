@@ -6985,7 +6985,7 @@ Public Class Form1
                 Dim tempstring As String = ""
                 If CheckBox_ShowDateOnMovieList.Checked = True Then             'If this is false tempstring will stay as "" in the list below
                     Dim tempdate As Date = Nothing
-                    If RadioButtonSortCreate.Checked = True And movie.createdate.Length = 8 Then 'create=create modified=filedate
+                    If RadioButtonSortCreate.Checked = True And movie.createdate.Length = 14 Then 'create=create modified=filedate   'yyyymmddhhmmss' - 14 chars
                         tempdate = DateSerial(movie.createdate.Substring(0, 4), movie.createdate.Substring(4, 2), movie.createdate.Substring(6, 2))
                     Else
                         tempdate = DateSerial(movie.filedate.Substring(0, 4), movie.filedate.Substring(4, 2), movie.filedate.Substring(6, 2))
