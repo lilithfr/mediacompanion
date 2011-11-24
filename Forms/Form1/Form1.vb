@@ -4452,11 +4452,12 @@ Public Class Form1
                                 'test the new filenames do not already exist
                                 Dim AFileExists As Boolean = False
                                 If System.IO.File.Exists(newmoviepathandfilename) Then AFileExists = True
-                                If System.IO.File.Exists(newpath & newfilename & ".nfo") Then AFileExists = True
-                                If System.IO.File.Exists(newpath & newfilename & ".tbn") Then AFileExists = True
-                                If System.IO.File.Exists(newpath & newfilename & "-fanart.jpg") Then AFileExists = True
-                                If System.IO.File.Exists(newpath & newfilename & ".sub") Then AFileExists = True 'check if subtitle file already exists
-                                If System.IO.File.Exists(newpath & newfilename & ".srt") Then AFileExists = True 'check if subtitle file already exists
+                                For Each testextension As String In {".nfo", "tbn", "-fanart.jpg", ".sub", ".srt", "smi", "idx"}  'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
+                                    If System.IO.File.Exists(newpath & newfilename & testextension) Then
+                                        AFileExists = True
+                                        Exit For
+                                    End If
+                                Next
 
                                 If AFileExists = False Then
 
@@ -4465,15 +4466,12 @@ Public Class Form1
                                     System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename) ' movie file
                                     scraperLog = scraperLog & "Renamed Movie File" & vbCrLf
 
-                                    If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, ".sub")) Then
-                                        System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, ".sub"), newmoviepathandfilename.Replace(newextension, ".sub")) ' subtitles file with .sub extension
-                                        scraperLog = scraperLog & "Renamed '.sub' subtitle File" & vbCrLf
-                                    End If
-
-                                    If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, ".srt")) Then
-                                        System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, ".srt"), newmoviepathandfilename.Replace(newextension, ".srt")) ' subtitles file with .srt extension
-                                        scraperLog = scraperLog & "Renamed '.srt' subtitle File" & vbCrLf
-                                    End If
+                                    For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
+                                        If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle)) Then
+                                            System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle), newmoviepathandfilename.Replace(newextension, subtitle)) ' subtitles file with .sub extension
+                                            scraperLog = scraperLog & "Renamed '" & subtitle & "' subtitle File" & vbCrLf
+                                        End If
+                                    Next
 
                                     'retrieve data already stored into a new array
                                     Dim tempmovdetails As New str_NewMovie(SetDefaults)
