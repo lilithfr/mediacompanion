@@ -2332,7 +2332,7 @@ Module Module1
                     Dim newepisode As New episodeinfo
                     newepisode.episodepath = thisresult.Attributes(0).Value
                     newepisode.pure = thisresult.Attributes(1).Value
-                    newepisode.extension = thisresult.Attributes(2).Value
+                    If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
                     For Each episodenew In thisresult.ChildNodes
                         Select Case episodenew.Name
                             Case "title"
