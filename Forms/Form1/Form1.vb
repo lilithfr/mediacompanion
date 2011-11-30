@@ -3744,22 +3744,22 @@ Public Class Form1
         scraperLog = ""
         Dim dirpath As String = String.Empty
 
-        scraperLog &= "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
+        scraperLog &= "!!! MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
 
         If Preferences.usefoldernames = True Then
-            scraperLog &= "Using FOLDERNAMES to determine Movie Title...." & vbCrLf
+            scraperLog &= "!!! Using FOLDERNAMES to determine Movie Title...." & vbCrLf
         Else
-            scraperLog &= "Using FILENAMES to determine Movie Title...." & vbCrLf
+            scraperLog &= "!!! Using FILENAMES to determine Movie Title...." & vbCrLf
         End If
 
 
         If Preferences.movies_useXBMC_Scraper = True Then
-            scraperLog &= "Using XBMC Scraper...." & vbCrLf
+            scraperLog &= "!!! Using XBMC Scraper...." & vbCrLf
             mov_XBMCScrapingInitialization()
         Else
-            scraperLog &= "Using MC IMDB Scraper" & vbCrLf
+            scraperLog &= "!!! Using MC IMDB Scraper" & vbCrLf
             If BckWrkScnMovies.CancellationPending Then
-                scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
             End If
             Dim ProgressBase As String = ""
@@ -3941,8 +3941,8 @@ Public Class Form1
                             Try
                                 movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
                             Catch
-                                scraperLog = scraperLog & "Unable to get movie title, stage1" & vbCrLf
-                                scraperLog = scraperLog & "Path is: " & movie.nfopathandfilename & vbCrLf
+                                scraperLog = scraperLog & "!!! Unable to get movie title, stage1" & vbCrLf
+                                scraperLog = scraperLog & "!!! Path is: " & movie.nfopathandfilename & vbCrLf
                             End Try
                         End If
 
@@ -3952,8 +3952,8 @@ Public Class Form1
                                 movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
                                 movie.title = Utilities.GetLastFolder(movie.nfopathandfilename)
                             Catch
-                                scraperLog = scraperLog & "Unable to get movie title, stage2" & vbCrLf
-                                scraperLog = scraperLog & "Path is: " & movie.nfopathandfilename & vbCrLf
+                                scraperLog = scraperLog & "!!! Unable to get movie title, stage2" & vbCrLf
+                                scraperLog = scraperLog & "!!! Path is: " & movie.nfopathandfilename & vbCrLf
                             End Try
                         End If
 
@@ -3966,13 +3966,13 @@ Public Class Form1
                                         If tempstring <> "error" Then
                                             movie.title = tempstring
                                         Else
-                                            scraperLog = scraperLog & "Unable to clean title: " & movie.title & vbCrLf
+                                            scraperLog = scraperLog & "!!! Unable to clean title: " & movie.title & vbCrLf
                                         End If
                                     Else
-                                        scraperLog = scraperLog & "Cleaning title returns blank: " & movie.title & vbCrLf
+                                        scraperLog = scraperLog & "!!! Cleaning title returns blank: " & movie.title & vbCrLf
                                     End If
                                 Else
-                                    scraperLog = scraperLog & "Cleaning title returns nothing: " & movie.title & vbCrLf
+                                    scraperLog = scraperLog & "!!! Cleaning title returns nothing: " & movie.title & vbCrLf
                                 End If
                             End If
                         End If
@@ -4060,10 +4060,10 @@ Public Class Form1
                                         IO.File.Move(nfopath, nfopath.Replace(".nfo", ".info"))
                                         scraperLog = scraperLog & "renaming nfo file to:- " & nfopath.Replace(".nfo", ".info") & vbCrLf
                                     Else
-                                        scraperLog = scraperLog & "Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
+                                        scraperLog = scraperLog & "!!! Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
                                     End If
                                 Catch
-                                    scraperLog = scraperLog & "Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
+                                    scraperLog = scraperLog & "!!! Unable to rename file, """ & nfopath & """ already exists" & vbCrLf
                                 End Try
                             Else
                                 scraperLog = scraperLog & "Current nfo file will be overwritten" & vbCrLf
@@ -4109,7 +4109,7 @@ Public Class Form1
                                 extrapossibleID = mat.Value
                             Else
                                 extrapossibleID = Nothing
-                                scraperLog = scraperLog & "No IMDB ID found" & vbCrLf
+                                scraperLog = scraperLog & "!!! No IMDB ID found" & vbCrLf
                             End If
                         End If
 
@@ -4177,9 +4177,9 @@ Public Class Form1
                         If BckWrkScnMovies.CancellationPending Then Exit Sub
                         Dim thisresult As XmlNode = Nothing
                         If body = "MIC" Then
-                            progresstext &= " - ERROR!, please add Movie Manually!"
+                            progresstext &= "!!! - ERROR!, please add Movie Manually!"
                             BckWrkScnMovies.ReportProgress(progress, progresstext)
-                            scraperLog = scraperLog & "Unable to scrape body with refs """ & title & """, """ & movieyear & """, """ & extrapossibleID & """, """ & Preferences.imdbmirror & """" & vbCrLf
+                            scraperLog = scraperLog & "!!! Unable to scrape body with refs """ & title & """, """ & movieyear & """, """ & extrapossibleID & """, """ & Preferences.imdbmirror & """" & vbCrLf
                             If imdbCounter < 50 Then
                                 scraperLog = scraperLog & "Searching using Google" & vbCrLf
                             Else
@@ -4281,7 +4281,7 @@ Public Class Form1
                             movietoadd.runtime = "0"
                             fullMovieList.Add(movietoadd)
                             If BckWrkScnMovies.CancellationPending Then
-                                scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                 Exit Sub
                             End If
                         Else
@@ -4468,12 +4468,12 @@ Public Class Form1
                                     'rename found media files
 
                                     System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename) ' movie file
-                                    scraperLog = scraperLog & "Renamed Movie File" & vbCrLf
+                                    scraperLog = scraperLog & "!!! Renamed Movie File" & vbCrLf
 
                                     For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
                                         If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle)) Then
                                             System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle), newmoviepathandfilename.Replace(newextension, subtitle)) ' subtitles file with .sub extension
-                                            scraperLog = scraperLog & "Renamed '" & subtitle & "' subtitle File" & vbCrLf
+                                            scraperLog = scraperLog & "!!! Renamed '" & subtitle & "' subtitle File" & vbCrLf
                                         End If
                                     Next
 
@@ -4506,9 +4506,9 @@ Public Class Form1
 
 
 
-                            scraperLog = scraperLog & "Output filename:- " & nfopath & vbCrLf
-                            scraperLog = scraperLog & "Poster Path:- " & posterpath & vbCrLf
-                            scraperLog = scraperLog & "Fanart Path:- " & fanartpath & vbCrLf & vbCrLf
+                            scraperLog = scraperLog & "!!! Output filename:- " & nfopath & vbCrLf
+                            scraperLog = scraperLog & "!!! Poster Path:- " & posterpath & vbCrLf
+                            scraperLog = scraperLog & "!!! Fanart Path:- " & fanartpath & vbCrLf & vbCrLf
 
                             stage = 2
                             'stage 2 = get movie actors
@@ -4653,8 +4653,8 @@ Public Class Form1
                                     actorDB.Add(actornew)
                                 Next
                             Catch ex As Exception
-                                scraperLog = scraperLog & "Error with " & newMovieList(f).nfopathandfilename & vbCrLf
-                                scraperLog = scraperLog & "An error was encountered at stage 2, Downloading Actors" & vbCrLf
+                                scraperLog = scraperLog & "!!! Error with " & newMovieList(f).nfopathandfilename & vbCrLf
+                                scraperLog = scraperLog & "!!! An error was encountered at stage 2, Downloading Actors" & vbCrLf
                                 scraperLog = scraperLog & ex.Message.ToString & vbCrLf & vbCrLf
                                 errorcounter += 1
                                 newmovie.listactors.Clear()
@@ -4665,7 +4665,7 @@ Public Class Form1
                             'stage 3 = get movie trailer
 
                             If BckWrkScnMovies.CancellationPending Then
-                                scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                 Exit Sub
                             End If
                             Try
@@ -4693,7 +4693,7 @@ Public Class Form1
                                     Else
                                         progresstext &= " - Failed"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
-                                        scraperLog = scraperLog & "Trailer URL Scrape failed" & vbCrLf
+                                        scraperLog = scraperLog & "!!! Trailer URL Scrape failed" & vbCrLf
                                     End If
                                 End If
                             Catch ex As Exception
@@ -4704,7 +4704,7 @@ Public Class Form1
                             stage = 4
                             'stage 4 = get movie thumblist(for nfo)
                             If BckWrkScnMovies.CancellationPending Then
-                                scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                 Exit Sub
                             End If
                             If Preferences.nfoposterscraper <> 0 Then
@@ -4810,8 +4810,8 @@ Public Class Form1
                                     BckWrkScnMovies.ReportProgress(progress, progresstext)
                                     scraperLog = scraperLog & "Poster URLs Scraped OK" & vbCrLf
                                 Catch ex As Exception
-                                    scraperLog = scraperLog & "Error with " & newMovieList(f).nfopathandfilename & vbCrLf
-                                    scraperLog = scraperLog & "An error was encountered at stage 4, Downloading poster list for nfo file" & vbCrLf
+                                    scraperLog = scraperLog & "!!! Error with " & newMovieList(f).nfopathandfilename & vbCrLf
+                                    scraperLog = scraperLog & "!!! An error was encountered at stage 4, Downloading poster list for nfo file" & vbCrLf
                                     scraperLog = scraperLog & ex.Message.ToString & vbCrLf & vbCrLf
                                     errorcounter += 1
                                     newmovie.listthumbs.Clear()
@@ -4862,12 +4862,12 @@ Public Class Form1
                                             BckWrkScnMovies.ReportProgress(progress, progresstext)
                                             scraperLog = scraperLog & "HD Tags Added OK" & vbCrLf
                                         Catch ex As Exception
-                                            scraperLog = scraperLog & "Error getting HD Tags:- " & ex.Message.ToString & vbCrLf
+                                            scraperLog = scraperLog & "!!! Error getting HD Tags:- " & ex.Message.ToString & vbCrLf
                                         End Try
                                     End If
                                 End If
                             Catch ex As Exception
-                                scraperLog = scraperLog & "Error getting HD Tags:- " & ex.Message.ToString & vbCrLf
+                                scraperLog = scraperLog & "!!! Error getting HD Tags:- " & ex.Message.ToString & vbCrLf
                             End Try
 
                             If newmovie.fullmoviebody.title = Nothing Then
@@ -4979,7 +4979,7 @@ Public Class Form1
                             If Preferences.scrapemovieposters = True And Preferences.overwritethumbs = True Or IO.File.Exists(Preferences.GetPosterPath(newMovieList(f).nfopathandfilename)) = False Then
                                 Try
                                     If BckWrkScnMovies.CancellationPending Then
-                                        scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                        scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                         Exit Sub
                                     End If
                                     progresstext &= " * Poster"
@@ -4999,7 +4999,7 @@ Public Class Form1
                                 End Try
                                 Try
                                     If BckWrkScnMovies.CancellationPending Then
-                                        scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                        scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                         Exit Sub
                                     End If
                                     If moviethumburl.Length < 10 Then
@@ -5019,7 +5019,7 @@ Public Class Form1
                                 End Try
                                 Try
                                     If BckWrkScnMovies.CancellationPending Then
-                                        scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                        scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                         Exit Sub
                                     End If
                                     If moviethumburl.Length < 10 Then
@@ -5039,7 +5039,7 @@ Public Class Form1
                                 End Try
                                 Try
                                     If BckWrkScnMovies.CancellationPending Then
-                                        scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                        scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                         Exit Sub
                                     End If
                                     If moviethumburl.Length < 10 Then
@@ -5059,7 +5059,7 @@ Public Class Form1
                                 End Try
                                 Try
                                     If BckWrkScnMovies.CancellationPending Then
-                                        scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                        scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                         Exit Sub
                                     End If
                                     If moviethumburl.Length >= 10 Then
@@ -5103,12 +5103,12 @@ Public Class Form1
                                                     fstrm2.Close()
                                                     scraperLog = scraperLog & "Poster also saved as ""folder.jpg"" OK" & vbCrLf
                                                 Else
-                                                    scraperLog = scraperLog & "folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
+                                                    scraperLog = scraperLog & "!!! folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
                                                 End If
                                             End If
                                         Catch ex As Exception
-                                            scraperLog = scraperLog & "Problem Saving Thumbnail" & vbCrLf
-                                            scraperLog = scraperLog & "Error Returned :- " & ex.ToString & vbCrLf & vbCrLf
+                                            scraperLog = scraperLog & "!!! Problem Saving Thumbnail" & vbCrLf
+                                            scraperLog = scraperLog & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf
                                         End Try
                                     End If
                                 Catch ex As Exception
@@ -5129,7 +5129,7 @@ Public Class Form1
                                 Else
                                     Try
                                         If BckWrkScnMovies.CancellationPending Then
-                                            scraperLog = scraperLog & vbCrLf & "Operation cancelled by user"
+                                            scraperLog = scraperLog & vbCrLf & "!!! Operation cancelled by user"
                                             Exit Sub
                                         End If
 
@@ -5264,8 +5264,8 @@ Public Class Form1
                                                     End If
                                                 Catch ex As Exception
                                                     Try
-                                                        scraperLog = scraperLog & "Fanart Not Saved to :- " & fanarturlpath & vbCrLf
-                                                        scraperLog = scraperLog & "Error received :- " & ex.ToString & vbCrLf & vbCrLf
+                                                        scraperLog = scraperLog & "!!! Fanart Not Saved to :- " & fanarturlpath & vbCrLf
+                                                        scraperLog = scraperLog & "!!! Error received :- " & ex.ToString & vbCrLf & vbCrLf
                                                     Catch ex2 As Exception
 #If SilentErrorScream Then
                                                     Throw ex2
@@ -5369,7 +5369,7 @@ Public Class Form1
 
             End If
         End If
-        scraperLog &= vbCrLf & "Search for New Movies Complete." & vbCrLf
+        scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
     End Sub
 
 
@@ -17238,7 +17238,7 @@ MyExit:
                         Dim fi As New IO.FileInfo(items)
                         If Not IO.File.Exists(newname) Then
                             fi.MoveTo(newname)
-                            Preferences.tvScraperLog &= "!!!Renamed " & newname & vbCrLf
+                            Preferences.tvScraperLog &= "!!! Renamed " & newname & vbCrLf
                         End If
                     Catch ex As Exception
                         done = path
@@ -17300,8 +17300,8 @@ MyExit:
                             contents.Close()
                             fstrm.Close()
                         Catch ex As Exception
-                            tvScraperLog = tvScraperLog & "!!!Unable to Save Thumb" & vbCrLf
-                            tvScraperLog = tvScraperLog & "!!!Error :- " & ex.Message.ToString & vbCrLf
+                            tvScraperLog = tvScraperLog & "!!! Unable to Save Thumb" & vbCrLf
+                            tvScraperLog = tvScraperLog & "!!! Error :- " & ex.Message.ToString & vbCrLf
                         End Try
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17505,11 +17505,11 @@ MyExit:
 
             If Not (e.Error Is Nothing) Then
                 tvScraperLog = tvScraperLog & vbCrLf
-                tvScraperLog = tvScraperLog & "!!!Error, exiting TV episode scraper" & vbCrLf
+                tvScraperLog = tvScraperLog & "!!! Error, exiting TV episode scraper" & vbCrLf
                 tvScraperLog = tvScraperLog & "Error:-" & vbCrLf
                 tvScraperLog = tvScraperLog & e.Error.ToString & vbCrLf
             Else
-                tvScraperLog = tvScraperLog & vbCrLf & "!!!Operation Completed" & vbCrLf
+                tvScraperLog = tvScraperLog & vbCrLf & "!!! Operation Completed" & vbCrLf
             End If
 
 
@@ -18450,7 +18450,7 @@ MyExit:
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
                 Dim tvshowxmlstring As String = tvdbstuff.GetShow(WorkingTvShow.TvdbId.Value, langu)
-                If tvshowxmlstring = "!!!Error!!!" Then
+                If tvshowxmlstring = "!!! Error !!!" Then
                     MsgBox("Error scraping show")
                     Exit Sub
                 End If

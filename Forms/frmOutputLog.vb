@@ -4,7 +4,7 @@ Public Class frmoutputlog
     Public output As String = ""
     Private Sub frmoutputlog_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
-            ShowLog()
+            ShowLog() 'call the subroutine to actually show the log when the form is created.
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19,7 +19,7 @@ Public Class frmoutputlog
             output = displaystring
             ComboBoxLogViewType.Items.Add("Full")   'index 0
             ComboBoxLogViewType.Items.Add("Breif")  'index 1 
-            ComboBoxLogViewType.SelectedIndex = Preferences.logview
+            ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -27,7 +27,7 @@ Public Class frmoutputlog
 
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Try
+        Try 'this is the save button, it will save the displayed text (full or brief)
             Dim strFileName As String
 
             With SaveFileDialog1
@@ -62,27 +62,27 @@ Public Class frmoutputlog
 
     Private Sub TextBox1_GotFocus(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.GotFocus
         Try
-            TextBox1.Select(TextBox1.Text.Length, 0)
+            TextBox1.Select(TextBox1.Text.Length, 0) 'this removes the whole text being selected when the form is created
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
     Private Sub ComboBoxLogViewType_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBoxLogViewType.SelectedIndexChanged
-        ShowLog()
+        ShowLog() 'if we change the combobox selection display the relavent log
     End Sub
     Private Sub ShowLog()
         If ComboBoxLogViewType.SelectedIndex = 0 Then 'full
-            TextBox1.Text = output
-            Preferences.logview = 0
+            TextBox1.Text = output  'full means we show all of the log (output)
+            Preferences.logview = 0 'set the new preference, it will be saved when MC exits.
         End If
-        If ComboBoxLogViewType.SelectedIndex = 1 Then 'breif
+        If ComboBoxLogViewType.SelectedIndex = 1 Then 'breif we only show lines that contain "!!!" - this is a quick hack.....a better system would be required if more log view types were added.
             TextBox1.Text = ""
-            Dim breifoutput() As String = output.Split(vbCrLf)
+            Dim breifoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below
             For Each line In breifoutput
-                If line.Contains("!!!") Then TextBox1.Text &= line & vbCrLf
+                If line.Contains("!!!") Then TextBox1.Text &= line & vbCrLf 'if logged textline contains this text it will appear in the brief logview 
             Next
-            Preferences.logview = 1
+            Preferences.logview = 1 'set the new preference, it will be saved when MC exits.
         End If
     End Sub
 End Class
