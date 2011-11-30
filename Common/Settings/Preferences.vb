@@ -1456,18 +1456,22 @@ Public Class Preferences
         posterpath = FullPath.Substring(0, FullPath.Length - 4)
         posterpath = posterpath & ".tbn"
         'If Not IO.File.Exists(posterpath) Then
-        Dim stackname As String = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
-        stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
-        stackname = stackname & ".tbn"
-        If stackname <> "na" And IO.File.Exists(stackname) Then
-            posterpath = stackname
-        Else
-            posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-            posterpath = posterpath & "movie.tbn"
-            If Not IO.File.Exists(posterpath) Then
-                posterpath = ""
-            End If
-        End If
+
+        '********************** disabled this section poster should include stackname *******************
+        'Dim stackname As String = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
+        'stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
+        'stackname = stackname & ".tbn"
+        'If stackname <> "na" And IO.File.Exists(stackname) Then
+        '    posterpath = stackname
+        'Else
+        '    posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
+        '    posterpath = posterpath & "movie.tbn"
+        '    If Not IO.File.Exists(posterpath) Then
+        '        posterpath = ""
+        '    End If
+        'End If
+        '***********************end disabled section **************************************
+
         '    Else
         'posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
         'End If
@@ -1504,23 +1508,28 @@ Public Class Preferences
         Dim posterpath As String = ""
         posterpath = FullPath.Substring(0, FullPath.Length - 4)
         posterpath = posterpath & "-fanart.jpg"
-        If Not IO.File.Exists(posterpath) Then
-            Dim stackname As String = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
 
-            stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
-            stackname = stackname & "-fanart.jpg"
-            If stackname <> "na" And IO.File.Exists(stackname) Then
-                posterpath = stackname
-            Else
-                posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-                posterpath = posterpath & "fanart.jpg"
-                If Not IO.File.Exists(posterpath) Then
-                    posterpath = ""
-                End If
-            End If
-            'Else
-            '    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-        End If
+        '********************** disabled this section fanart should include stackname *******************
+        'If Not IO.File.Exists(posterpath) Then
+        '    Dim stackname As String = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
+
+        '    stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
+        '    stackname = stackname & "-fanart.jpg"
+        '    If stackname <> "na" And IO.File.Exists(stackname) Then
+        '        posterpath = stackname
+        '    Else
+        '        posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
+        '        posterpath = posterpath & "fanart.jpg"
+        '        If Not IO.File.Exists(posterpath) Then
+        '            posterpath = ""
+        '        End If
+        '    End If
+        '    'Else
+        '    '    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
+        'End If
+        '***********************end disabled section **************************************
+
+
         If posterpath = "" Then
             If FullPath.IndexOf("movie.nfo") <> -1 Then
                 posterpath = FullPath.Replace("movie.nfo", "fanart.jpg")

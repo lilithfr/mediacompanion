@@ -4442,7 +4442,7 @@ Public Class Form1
                                 newfilename = newfilename.Replace("%R", newmovie.fullmoviebody.rating)                                   'replaces %R with rating 
                                 newfilename = newfilename.Replace("%L", newmovie.fullmoviebody.runtime)                                  'replaces %L with runtime (length)
 
-                                If partfound Then newfilename &= " " & searchtext ' we readd the found 'part' e.g. part1,cd.1,dvd_3
+                                If partfound Then newfilename &= " -" & searchtext ' we readd the found 'part' e.g. part1,cd.1,dvd_3 with ' -' as spacer 
 
                                 newfilename = Utilities.cleanFilenameIllegalChars(newfilename)          'removes chars that can't be in a filename
 
@@ -4452,14 +4452,16 @@ Public Class Form1
                                 'test the new filenames do not already exist
                                 Dim AFileExists As Boolean = False
                                 If System.IO.File.Exists(newmoviepathandfilename) Then AFileExists = True
-                                For Each testextension As String In {".nfo", "tbn", "-fanart.jpg", ".sub", ".srt", "smi", "idx"}  'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
-                                    If System.IO.File.Exists(newpath & newfilename & testextension) Then
+                               
+                                For Each item As String In {".nfo", ".tbn", "-fanart.jpg", ".sub", ".srt", ".smi", ".idx"} 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
+                                    If System.IO.File.Exists(newpath & newfilename & item) = True Then
                                         AFileExists = True
                                         Exit For
                                     End If
+                                    'msgbox(item)       'uncomment this if you want to see each iteration of the for each loop, without it you will only see the first iteration
                                 Next
 
-                                If AFileExists = False Then
+                                If AFileExists = False Then 'if none of the possible renamed files already exist then we rename
 
                                     'rename found media files
 
