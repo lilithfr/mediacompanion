@@ -25,6 +25,7 @@ Partial Class frmoutputlog
         Me.Button1 = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.ComboBoxLogViewType = New System.Windows.Forms.ComboBox()
         Me.SuspendLayout()
         '
         'Button1
@@ -40,10 +41,10 @@ Partial Class frmoutputlog
         'TextBox1
         '
         Me.TextBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox1.BackColor = System.Drawing.Color.White
-        Me.TextBox1.Font = New System.Drawing.Font("DejaVu Sans Mono", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox1.Location = New System.Drawing.Point(0, -1)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
@@ -52,11 +53,20 @@ Partial Class frmoutputlog
         Me.TextBox1.Size = New System.Drawing.Size(855, 510)
         Me.TextBox1.TabIndex = 0
         '
+        'ComboBoxLogViewType
+        '
+        Me.ComboBoxLogViewType.FormattingEnabled = True
+        Me.ComboBoxLogViewType.Location = New System.Drawing.Point(580, 515)
+        Me.ComboBoxLogViewType.Name = "ComboBoxLogViewType"
+        Me.ComboBoxLogViewType.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBoxLogViewType.TabIndex = 2
+        '
         'frmoutputlog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(853, 546)
+        Me.Controls.Add(Me.ComboBoxLogViewType)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TextBox1)
         Me.Name = "frmoutputlog"
@@ -69,4 +79,5 @@ Partial Class frmoutputlog
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents ComboBoxLogViewType As System.Windows.Forms.ComboBox
 End Class
