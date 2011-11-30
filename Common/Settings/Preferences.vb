@@ -135,7 +135,7 @@ Public Class Preferences
     Public Shared tableview As New List(Of String)
     Public Shared offlinefolders As New List(Of String)
 
-
+    Public Shared logview As Integer
 
     Public Shared tvRootFolders As New List(Of String)
 
@@ -201,6 +201,7 @@ Public Class Preferences
         Preferences.MovieRenameEnable = False
         Preferences.MovieRenameTemplate = "%T (%Y)"
 
+
         'TV
         Preferences.tvshow_useXBMC_Scraper = False
         Preferences.autorenameepisodes = False
@@ -222,6 +223,7 @@ Public Class Preferences
         Preferences.defaulttvthumb = "poster"
         Preferences.OfflineDVDTitle = "Please Load '%T' Media To Play..."
         Preferences.fixnfoid = False
+        Preferences.logview = "0"  'first entry in combobox is 'Full' (log view)
 
         'Unknown - need to be sorted/named better
         Preferences.eprenamelowercase = False
@@ -285,6 +287,7 @@ Public Class Preferences
         Preferences.certificatepriority(32) = "Greece"
         Preferences.certificatepriority(33) = "Austria"
         Preferences.maximagecount = 10
+
 
         movieFolders.Clear()
         tvFolders.Clear()
@@ -820,6 +823,10 @@ Public Class Preferences
         child.InnerText = Preferences.showsortdate
         root.AppendChild(child)
 
+        child = doc.CreateElement("logview")
+        child.InnerText = Preferences.logview
+        root.AppendChild(child)
+
         For Each com In Preferences.commandlist
             If com.command <> "" And com.title <> "" Then
                 child = doc.CreateElement("comms")
@@ -1043,6 +1050,9 @@ Public Class Preferences
                         Preferences.disablelogfiles = False
                     End If
 
+                Case "logview"
+                    Preferences.logview = thisresult.InnerXml
+
                 Case "fanartnotstacked"
                     If thisresult.InnerXml = "true" Then
                         Preferences.fanartnotstacked = True
@@ -1206,7 +1216,7 @@ Public Class Preferences
                 Case "tvdbmode"
                     If thisresult.InnerText <> "" Then Preferences.sortorder = thisresult.InnerXml
                 Case "tvdbactorscrape"
-                    If thisresult.InnerText <> "" Then Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "usetransparency"
                     If thisresult.InnerXml = "true" Then
@@ -1334,7 +1344,7 @@ Public Class Preferences
                     If thisresult.InnerText <> "" Then Preferences.postertype = thisresult.InnerXml
 
                 Case "tvactorscrape"
-                    If thisresult.InnerText <> "" Then Preferences.tvdbactorscrape = Convert.ToInt32(thisresult.InnerXml)
+                    If thisresult.InnerText <> "" Then Preferences.TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
 
                 Case "videomode"
                     If thisresult.InnerText <> "" Then Preferences.videomode = Convert.ToInt32(thisresult.InnerXml)

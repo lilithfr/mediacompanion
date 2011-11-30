@@ -4,7 +4,7 @@ Public Class frmoutputlog
     Public output As String = ""
     Private Sub frmoutputlog_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
-            TextBox1.Text = output
+            ShowLog()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17,6 +17,9 @@ Public Class frmoutputlog
                 Me.Close()
             End If
             output = displaystring
+            ComboBoxLogViewType.Items.Add("Full")   'index 0
+            ComboBoxLogViewType.Items.Add("Breif")  'index 1 
+            ComboBoxLogViewType.SelectedIndex = Preferences.logview
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -63,5 +66,23 @@ Public Class frmoutputlog
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub ComboBoxLogViewType_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBoxLogViewType.SelectedIndexChanged
+        ShowLog()
+    End Sub
+    Private Sub ShowLog()
+        If ComboBoxLogViewType.SelectedIndex = 0 Then 'full
+            TextBox1.Text = output
+            Preferences.logview = 0
+        End If
+        If ComboBoxLogViewType.SelectedIndex = 1 Then 'breif
+            TextBox1.Text = ""
+            Dim breifoutput() As String = output.Split(vbCrLf)
+            For Each line In breifoutput
+                If line.Contains("!!!") Then TextBox1.Text &= line & vbCrLf
+            Next
+            Preferences.logview = 1
+        End If
     End Sub
 End Class

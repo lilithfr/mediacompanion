@@ -295,6 +295,8 @@ Public Class Form1
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
 
+       
+
         'Update Main Form Window Title to show Currrent Version
         Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
         sAssemblyVersion = Microsoft.VisualBasic.Right(sAssemblyVersion, 7)       'Cuts Version=3.4.0.2 down to just 3.4.0.2
@@ -17236,7 +17238,7 @@ MyExit:
                         Dim fi As New IO.FileInfo(items)
                         If Not IO.File.Exists(newname) Then
                             fi.MoveTo(newname)
-                            Preferences.tvScraperLog &= "Renamed " & newname & vbCrLf
+                            Preferences.tvScraperLog &= "!!!Renamed " & newname & vbCrLf
                         End If
                     Catch ex As Exception
                         done = path
@@ -17298,8 +17300,8 @@ MyExit:
                             contents.Close()
                             fstrm.Close()
                         Catch ex As Exception
-                            tvScraperLog = tvScraperLog & "Unable to Save Thumb" & vbCrLf
-                            tvScraperLog = tvScraperLog & "Error :- " & ex.Message.ToString & vbCrLf
+                            tvScraperLog = tvScraperLog & "!!!Unable to Save Thumb" & vbCrLf
+                            tvScraperLog = tvScraperLog & "!!!Error :- " & ex.Message.ToString & vbCrLf
                         End Try
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -17503,11 +17505,11 @@ MyExit:
 
             If Not (e.Error Is Nothing) Then
                 tvScraperLog = tvScraperLog & vbCrLf
-                tvScraperLog = tvScraperLog & "Error, exiting TV episode scraper" & vbCrLf
+                tvScraperLog = tvScraperLog & "!!!Error, exiting TV episode scraper" & vbCrLf
                 tvScraperLog = tvScraperLog & "Error:-" & vbCrLf
                 tvScraperLog = tvScraperLog & e.Error.ToString & vbCrLf
             Else
-                tvScraperLog = tvScraperLog & vbCrLf & "Operation Completed" & vbCrLf
+                tvScraperLog = tvScraperLog & vbCrLf & "!!!Operation Completed" & vbCrLf
             End If
 
 

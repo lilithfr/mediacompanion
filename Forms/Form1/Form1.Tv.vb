@@ -1691,13 +1691,13 @@ Partial Public Class Form1
         Dim moviepattern As String = String.Empty
         Dim showtitle As String = ""
         If bckgroundscanepisodes.CancellationPending Then
-            Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
+            Preferences.tvScraperLog &= vbCrLf & "!!!Operation cancelled by user"
             Exit Sub
         End If
         If Preferences.tvshow_useXBMC_Scraper = True Then
-            Preferences.tvScraperLog &= "---Using XBMC TVDB Scraper---" & vbCrLf
+            Preferences.tvScraperLog &= "!!!---Using XBMC TVDB Scraper---" & vbCrLf
         Else
-            Preferences.tvScraperLog &= "---Using MC TVDB Scraper---" & vbCrLf
+            Preferences.tvScraperLog &= "!!!---Using MC TVDB Scraper---" & vbCrLf
         End If
 
         progresstext = String.Concat("Scanning TV Folders For New Episodes")
@@ -1773,7 +1773,7 @@ Partial Public Class Form1
 
         Preferences.tvScraperLog &= vbCrLf
         If newEpisodeList.Count <= 0 Then
-            Preferences.tvScraperLog &= "No new episodes found, exiting scraper." & vbCrLf
+            Preferences.tvScraperLog &= "!!!No new episodes found, exiting scraper." & vbCrLf
             Exit Sub
         End If
 
@@ -1783,7 +1783,7 @@ Partial Public Class Form1
             S = ""
 
             If bckgroundscanepisodes.CancellationPending Then
-                Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                 Exit Sub
             End If
             Dim episode As New TvEpisode
@@ -1831,12 +1831,12 @@ Partial Public Class Form1
         Dim epscount As Integer = 0
         For Each eps In newEpisodeList
             epscount += 1
-            Preferences.tvScraperLog &= "********** WORKING ON: " & eps.VideoFilePath & " **********" & vbCrLf
+            Preferences.tvScraperLog &= "!!!********** WORKING ON: " & eps.VideoFilePath & " **********" & vbCrLf
             If eps.Season.Value <> "-1" And eps.Episode.Value <> "-1" Then
-                Preferences.tvScraperLog &= "Season : " & eps.Season.Value & vbCrLf
-                Preferences.tvScraperLog &= "Episode: " & eps.Episode.Value & vbCrLf
+                Preferences.tvScraperLog &= "!!!Season : " & eps.Season.Value & vbCrLf
+                Preferences.tvScraperLog &= "!!!Episode: " & eps.Episode.Value & vbCrLf
             Else
-                Preferences.tvScraperLog &= "WARNING: Cant extract Season and Episode details from filename: " & vbCrLf
+                Preferences.tvScraperLog &= "!!!WARNING: Cant extract Season and Episode details from filename: " & vbCrLf
             End If
 
             tempTVDBiD = ""
@@ -1849,7 +1849,7 @@ Partial Public Class Form1
             'multieps2.MediaExtension = eps.MediaExtension
             episodearray.Add(eps)
             If bckgroundscanepisodes.CancellationPending Then
-                Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                 Exit Sub
             End If
 
@@ -1909,7 +1909,7 @@ Partial Public Class Form1
                         End Try
                     End If
                     If bckgroundscanepisodes.CancellationPending Then
-                        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                        Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
                 Loop Until M2.Success = False
@@ -1924,7 +1924,7 @@ Partial Public Class Form1
                 Dim EpisodeName As String = ""
                 For Each Shows In Cache.TvCache.Shows
                     If bckgroundscanepisodes.CancellationPending Then
-                        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                        Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
                     If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
@@ -1955,7 +1955,7 @@ Partial Public Class Form1
                 For Each singleepisode In episodearray
 
                     If bckgroundscanepisodes.CancellationPending Then
-                        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                        Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
                     If singleepisode.Season.Value.Length > 0 Or singleepisode.Season.Value.IndexOf("0") = 0 Then
@@ -1986,7 +1986,7 @@ Partial Public Class Form1
                         If Not util_UrlIsValid(episodeurl) Then
                             If sortorder.ToLower = "dvd" Then
                                 tempsortorder = "default"
-                                Preferences.tvScraperLog &= "WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
+                                Preferences.tvScraperLog &= "!!!WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
                                 Preferences.tvScraperLog &= "Attempting to find using default sort order" & vbCrLf
                                 episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/default/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
                                 Preferences.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
@@ -2005,7 +2005,7 @@ Partial Public Class Form1
                                     Next
                                     scrapedok = True
                                 Else
-                                    Preferences.tvScraperLog &= "WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                                    Preferences.tvScraperLog &= "!!!WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
                                     scrapedok = False
                                 End If
                                 Exit For
@@ -2018,7 +2018,7 @@ Partial Public Class Form1
                             '                            Exit For
                             If tempepisode = Nothing Or tempepisode = "Error" Then
                                 scrapedok = False
-                                Preferences.tvScraperLog &= "WARNING: This episode could not be found on TVDB" & vbCrLf
+                                Preferences.tvScraperLog &= "!!!WARNING: This episode could not be found on TVDB" & vbCrLf
                             End If
                             If scrapedok = True Then
                                 progresstext &= " OK."
@@ -2137,7 +2137,7 @@ Partial Public Class Form1
                                                 Dim countactors As Integer = 0
                                                 For Each thisresult As XmlNode In thumbstring("actorlist")
                                                     If bckgroundscanepisodes.CancellationPending Then
-                                                        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                                                        Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                                                         Exit Sub
                                                     End If
                                                     Select Case thisresult.Name
@@ -2250,14 +2250,14 @@ Partial Public Class Form1
                                                                         End If
                                                                 End Select
                                                                 If bckgroundscanepisodes.CancellationPending Then
-                                                                    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                                                                    Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                                                                     Exit Sub
                                                                 End If
                                                             Next
                                                             tempactorlist.Add(newactor)
                                                     End Select
                                                     If bckgroundscanepisodes.CancellationPending Then
-                                                        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                                                        Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                                                         Exit Sub
                                                     End If
                                                 Next
@@ -2279,14 +2279,14 @@ Partial Public Class Form1
                                                     Next
                                                     tempactorlist.Clear()
                                                 Else
-                                                    Preferences.tvScraperLog &= "WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
+                                                    Preferences.tvScraperLog &= "!!!WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
                                                 End If
 
                                                 'Exit For
                                             End If
                                         End If
                                         If bckgroundscanepisodes.CancellationPending Then
-                                            Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                                            Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                                             Exit Sub
                                         End If
                                         'Next
@@ -2333,10 +2333,10 @@ Partial Public Class Form1
 
                             End If
                         Else
-                            Preferences.tvScraperLog &= "WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                            Preferences.tvScraperLog &= "!!!WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
                         End If
                     Else
-                        Preferences.tvScraperLog &= "WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
+                        Preferences.tvScraperLog &= "!!!WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
                     End If
 
                 Next
@@ -2344,7 +2344,7 @@ Partial Public Class Form1
             End If
             If savepath <> "" And scrapedok = True Then
                 If bckgroundscanepisodes.CancellationPending Then
-                    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                    Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                     Exit Sub
                 End If
                 Dim newnamepath As String = ""
@@ -2363,7 +2363,7 @@ Partial Public Class Form1
                 'End If
                 'bckgroundscanepisodes.ReportProgress(9999999, episodearray)
                 If bckgroundscanepisodes.CancellationPending Then
-                    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
+                    Preferences.tvScraperLog &= vbCrLf & "!!!Operation Cancelled by user" & vbCrLf
                     Exit Sub
                 End If
                 For Each Shows In Cache.TvCache.Shows
