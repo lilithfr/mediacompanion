@@ -1695,9 +1695,9 @@ Partial Public Class Form1
             Exit Sub
         End If
         If Preferences.tvshow_useXBMC_Scraper = True Then
-            Preferences.tvScraperLog &= "!!! ---Using XBMC TVDB Scraper---" & vbCrLf
+            Preferences.tvScraperLog &= "---Using XBMC TVDB Scraper---" & vbCrLf
         Else
-            Preferences.tvScraperLog &= "!!! ---Using MC TVDB Scraper---" & vbCrLf
+            Preferences.tvScraperLog &= "---Using MC TVDB Scraper---" & vbCrLf
         End If
 
         progresstext = String.Concat("Scanning TV Folders For New Episodes")
@@ -1721,7 +1721,7 @@ Partial Public Class Form1
                 progresstext = String.Concat("Adding subfolders: " & TvFolder)
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 If bckgroundscanepisodes.CancellationPending Then
-                    Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
+                    Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                     Exit Sub
                 End If
                 tempstring = "" 'tvfolder
@@ -1750,7 +1750,7 @@ Partial Public Class Form1
             'Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
             'bckgroundscanepisodes.ReportProgress(progress, progresstext)
             If bckgroundscanepisodes.CancellationPending Then
-                Preferences.tvScraperLog &= vbCrLf & "Operation cancelled by user"
+                Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
             End If
             progresstext = String.Concat("Searching for episodes in " & newtvfolders(g))
@@ -1833,8 +1833,8 @@ Partial Public Class Form1
             epscount += 1
             Preferences.tvScraperLog &= "!!! ********** WORKING ON: " & eps.VideoFilePath & " **********" & vbCrLf
             If eps.Season.Value <> "-1" And eps.Episode.Value <> "-1" Then
-                Preferences.tvScraperLog &= "!!! Season : " & eps.Season.Value & vbCrLf
-                Preferences.tvScraperLog &= "!!! Episode: " & eps.Episode.Value & vbCrLf
+                Preferences.tvScraperLog &= "Season : " & eps.Season.Value & vbCrLf
+                Preferences.tvScraperLog &= "Episode: " & eps.Episode.Value & vbCrLf
             Else
                 Preferences.tvScraperLog &= "!!! WARNING: Cant extract Season and Episode details from filename: " & vbCrLf
             End If
