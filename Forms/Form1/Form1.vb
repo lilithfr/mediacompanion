@@ -2366,7 +2366,7 @@ Public Class Form1
 
     Private Sub mov_FormPopulate()
 
-        Dim tempstring As String
+
         Try
             If Not IsNothing(workingMovieDetails) Then
                 If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -2503,11 +2503,15 @@ Public Class Form1
                 workingMovieDetails.fileinfo.posterpath = Preferences.GetPosterPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename)
 
-                tempstring = Utilities.GetStackName(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
-                If tempstring = "na" Then
-                    tempstring = Utilities.CleanFileName(workingMovieDetails.fileinfo.filename)
-                End If
-                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), tempstring & "-trailer.flv")
+                '*******Removed this section - trailer must be teh same name as the movie file with '-trailer.xxx' appended
+                'tempstring = Utilities.GetStackName(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
+                'If tempstring = "na" Then
+                '    tempstring = Utilities.CleanFileName(workingMovieDetails.fileinfo.filename)
+                'End If
+                ' workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), tempstring & "-trailer.flv")
+                '*******
+
+                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), System.IO.Path.GetFileNameWithoutExtension(workingMovieDetails.fileinfo.path) & "-trailer.flv")
                 Button3.Visible = False
                 If IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
                     Button3.Visible = True
