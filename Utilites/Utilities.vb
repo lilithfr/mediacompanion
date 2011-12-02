@@ -440,7 +440,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return filename
 
     End Function
-
+    Public Shared Function GetTrailerName(ByVal path As String)
+        Dim ext As String = IO.Path.GetExtension(path)
+        Dim length As Integer = Strings.Len(path)
+        Dim lengthext As Integer = Strings.Len(ext)
+        Dim TrailerPath As String = Strings.Left(path, length - lengthext) & "-trailer.flv"
+        Return TrailerPath
+    End Function
     Public Shared Function GetFileName(ByVal path As String)
         Dim tempstring As String
         Dim tempfilename As String = path

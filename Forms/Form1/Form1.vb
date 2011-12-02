@@ -10970,11 +10970,8 @@ MyExit:
                 tempstring = Utilities.GetFileName(tempstring)
                 playlist = Utilities.GetMediaList(tempstring)
             Case "Trailer"
-                Dim ext As String = IO.Path.GetExtension(tempstring)
-                Dim length As Integer = Strings.Len(tempstring)
-                Dim lengthext As Integer = Strings.Len(ext)
-                Dim TrailerPath As String = Strings.Left(tempstring, length - lengthext) & "-trailer.flv"
-                If System.IO.File.Exists(TrailerPath) Then playlist.Add(TrailerPath)
+                Dim TrailerPath As String = Utilities.GetTrailerName(tempstring)
+                If System.IO.File.Exists(trailerpath) Then playlist.Add(Trailerpath)
         End Select
         frmSplash2.Text = "Playing Movie..."
         frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
@@ -11614,6 +11611,9 @@ MyExit:
     End Sub
 
     Private Sub ComboBox1_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
+
+        If MovieListComboBox.SelectedItems.Count = 0 Then Exit Sub 'this sub is called when we clear the selection, in that case we don't want to do anything
+
         Try
             Dim myBool As Boolean = True
             If MovieListComboBox.SelectedItems.Count > 1 Then
@@ -11621,6 +11621,7 @@ MyExit:
             End If
 
             PlayMovieToolStripMenuItem1.Visible = myBool
+
             Mov_OpenMovieFolderToolStripMenuItem.Visible = myBool
             Mov_OpenFileToolStripMenuItem.Visible = myBool
             ToolStripSeparator17.Visible = myBool
@@ -11631,12 +11632,13 @@ MyExit:
             EditMovieToolStripMenuItem.Visible = myBool
             ReloadItemToolStripMenuItem1.Visible = myBool
 
+
+
+
+
             Try
-                Dim needtoload As Boolean = False
+
                 If MovieListComboBox.SelectedItems.Count = 1 Then
-                    If titletxt.Visible = False Then
-                        needtoload = True
-                    End If
                     titletxt.Visible = True
                     Label127.Visible = False
                     SplitContainer2.Visible = True
@@ -11647,6 +11649,15 @@ MyExit:
                     For Each movie In filteredList
                         If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value Then
                             If IO.File.Exists(movie.fullpathandfilename) Then
+
+                                If System.IO.File.Exists(Utilities.GetTrailerName(movie.fullpathandfilename)) And myBool Then
+                                    PlayTrailerToolStripMenuItem.Visible = True
+                                Else
+                                    PlayTrailerToolStripMenuItem.Visible = False
+                                End If
+
+
+
                                 If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
                                     workingMovie.filedate = movie.filedate
                                     workingMovie.filename = movie.foldername
@@ -11662,7 +11673,7 @@ MyExit:
                                     workingMovie.year = movie.year
                                     Call mov_FormPopulate()
                                 Else
-                                    If needtoload = True Then Call mov_FormPopulate()
+                                    Call mov_FormPopulate()
                                 End If
                                 done = True
                                 Exit For
