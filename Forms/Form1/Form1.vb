@@ -10960,14 +10960,22 @@ MyExit:
         End Try
 
     End Sub
-    Private Sub mov_Play()
+    Private Sub mov_Play(type As String)
         If MovieListComboBox.SelectedItems.Count = 0 Then Return
         Dim tempstring As String
         tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
         Dim playlist As New List(Of String)
-        tempstring = Utilities.GetFileName(tempstring)
-        playlist = Utilities.GetMediaList(tempstring)
-
+        Select type
+            Case "Movie"
+                tempstring = Utilities.GetFileName(tempstring)
+                playlist = Utilities.GetMediaList(tempstring)
+            Case "Trailer"
+                Dim ext As String = IO.Path.GetExtension(tempstring)
+                Dim length As Integer = Strings.Len(tempstring)
+                Dim lengthext As Integer = Strings.Len(ext)
+                Dim TrailerPath As String = Strings.Left(tempstring, length - lengthext) & "-trailer.flv"
+                If System.IO.File.Exists(TrailerPath) Then playlist.Add(TrailerPath)
+        End Select
         frmSplash2.Text = "Playing Movie..."
         frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
         frmSplash2.Label1.Visible = True
@@ -11012,7 +11020,7 @@ MyExit:
     End Sub
     Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
         Try
-            mov_Play()
+            mov_Play("Movie")
 
             'Dim tempstring As String
             'tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
@@ -32635,12 +32643,18 @@ MyExit:
     End Sub
     Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem1.Click
         Try
-            mov_Play()
+            mov_Play("Movie")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
+    Private Sub PlayTrailerToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayTrailerToolStripMenuItem.Click
+        Try
+            mov_Play("Trailer")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
         Try
             tv_Rescrape()
