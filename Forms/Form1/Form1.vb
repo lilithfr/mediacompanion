@@ -2365,8 +2365,7 @@ Public Class Form1
     End Sub
 
     Private Sub mov_FormPopulate()
-
-
+        'MsgBox("mov_FormPopulate()")
         Try
             If Not IsNothing(workingMovieDetails) Then
                 If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -2396,49 +2395,49 @@ Public Class Form1
         'PictureBox1.CancelAsync()
         'PictureBox1.Image = Nothing
         'PictureBox1.Refresh()
-        ComboBox5.Text = ""
+        'ComboBox5.Text = ""
 
-        Button27.Visible = False
-        Button28.Visible = False
-        thumbedItsMade = False
-        posterThumbedItsMade = False
-        CheckBox1.Visible = False
-        Button15.Visible = False
-        Button9.Visible = False
-        Button10.Visible = False
-        Label18.Visible = False
-        titletxt.Text = ""
-        TextBox3.Text = ""
-        outlinetxt.Text = ""
-        plottxt.Text = ""
-        taglinetxt.Text = ""
-        txtStars.Text = ""
-        genretxt.Text = ""
-        creditstxt.Text = ""
-        directortxt.Text = ""
-        studiotxt.Text = ""
-        pathtxt.Text = ""
-        'actorarray.Clear()
-        actorcb.Items.Clear()
-        ratingtxt.Text = ""
-        runtimetxt.Text = ""
-        votestxt.Text = ""
-        certtxt.Text = ""
-        PictureBox7.Image = Nothing
-        PictureBox2.Image = Nothing
-        moviethumb.Image = Nothing
-        Label16.Text = ""
-        Label17.Text = ""
-        PictureBox3.Image = Nothing
-        Label19.Text = ""
-        TextBox34.Text = ""
-        titletxt.Text = ""
+        'Button27.Visible = False
+        'Button28.Visible = False
+        'thumbedItsMade = False
+        'posterThumbedItsMade = False
+        'CheckBox1.Visible = False
+        'Button15.Visible = False
+        'Button9.Visible = False
+        'Button10.Visible = False
+        'Label18.Visible = False
+        'titletxt.Text = ""
+        'TextBox3.Text = ""
+        'outlinetxt.Text = ""
+        'plottxt.Text = ""
+        'taglinetxt.Text = ""
+        'txtStars.Text = ""
+        'genretxt.Text = ""
+        'creditstxt.Text = ""
+        'directortxt.Text = ""
+        'studiotxt.Text = ""
+        'pathtxt.Text = ""
+        ''actorarray.Clear()
+        'actorcb.Items.Clear()
+        'ratingtxt.Text = ""
+        'runtimetxt.Text = ""
+        'votestxt.Text = ""
+        'certtxt.Text = ""
+        'PictureBox7.Image = Nothing
+        'PictureBox2.Image = Nothing
+        'moviethumb.Image = Nothing
+        'Label16.Text = ""
+        'Label17.Text = ""
+        'PictureBox3.Image = Nothing
+        'Label19.Text = ""
+        'TextBox34.Text = ""
+        'titletxt.Text = ""
 
-        roletxt.Text = ""
-        PictureBox1.Image = Nothing
+        'roletxt.Text = ""
+        'PictureBox1.Image = Nothing
 
-        Me.Refresh()
-        Application.DoEvents()
+        'Me.Refresh()
+        'Application.DoEvents()
         Try
             If workingMovie.fullpathandfilename <> Nothing Then
                 workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
@@ -2503,7 +2502,7 @@ Public Class Form1
                 workingMovieDetails.fileinfo.posterpath = Preferences.GetPosterPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename)
 
-                '*******Removed this section - trailer must be teh same name as the movie file with '-trailer.xxx' appended
+                '*******Removed this section - trailer must be the same name as the movie file with '-trailer.xxx' appended
                 'tempstring = Utilities.GetStackName(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
                 'If tempstring = "na" Then
                 '    tempstring = Utilities.CleanFileName(workingMovieDetails.fileinfo.filename)
@@ -2564,17 +2563,9 @@ Public Class Form1
                             Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
                             Dim Image2 As New Bitmap(OriginalImage)
                             OriginalImage.Dispose()
-                            PictureBox2.Image = Image2 'moviethumb - 3
                             PictureBox7.Image = Image2 '2
-                            Label16.Text = PictureBox2.Image.Width
-                            Label17.Text = PictureBox2.Image.Height
                         Else
-                            Label16.Text = ""
-                            Label17.Text = ""
-                            PictureBox2.ImageLocation = defaultFanart 'moviethumb - 3
-                            PictureBox2.Load()
                             PictureBox7.ImageLocation = defaultFanart '2
-                            PictureBox7.Load()
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -11637,8 +11628,11 @@ MyExit:
 
 
             Try
-
+                Dim needtoload As Boolean = False
                 If MovieListComboBox.SelectedItems.Count = 1 Then
+                    If titletxt.Visible = False Then
+                        needtoload = True
+                    End If
                     titletxt.Visible = True
                     Label127.Visible = False
                     SplitContainer2.Visible = True
@@ -11673,7 +11667,7 @@ MyExit:
                                     workingMovie.year = movie.year
                                     Call mov_FormPopulate()
                                 Else
-                                    Call mov_FormPopulate()
+                                    If needtoload = True Then Call mov_FormPopulate()
                                 End If
                                 done = True
                                 Exit For
@@ -12223,6 +12217,29 @@ MyExit:
     Private Sub mov_FanartLoad()
 
         '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
+        If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
+            Try
+                If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                    Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
+                    Dim Image2 As New Bitmap(OriginalImage)
+                    OriginalImage.Dispose()
+                    PictureBox2.Image = Image2 'moviethumb - 3
+                    Label16.Text = PictureBox2.Image.Width
+                    Label17.Text = PictureBox2.Image.Height
+                Else
+                    
+                    PictureBox2.ImageLocation = defaultFanart 'moviethumb - 3
+                    Label16.Text = ""
+                    Label17.Text = ""
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+            End Try
+        End If
+        Me.Refresh()
+        Application.DoEvents()
         Dim scraperfunction As New Classimdb
         Dim tmdbposterscraper As New tmdb_posters.Class1
         fanartArray.Clear()
