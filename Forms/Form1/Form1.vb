@@ -2418,7 +2418,7 @@ Public Class Form1
         'studiotxt.Text = ""
         'pathtxt.Text = ""
         ''actorarray.Clear()
-        'actorcb.Items.Clear()
+
         'ratingtxt.Text = ""
         'runtimetxt.Text = ""
         'votestxt.Text = ""
@@ -2438,6 +2438,7 @@ Public Class Form1
 
         'Me.Refresh()
         'Application.DoEvents()
+
         Try
             If workingMovie.fullpathandfilename <> Nothing Then
                 workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
@@ -2465,6 +2466,7 @@ Public Class Form1
                 If workingMovieDetails.fullmoviebody.year = Nothing Then workingMovieDetails.fullmoviebody.year = ""
 
                 titletxt.Items.Clear()
+
                 titletxt.Items.Add(workingMovieDetails.fullmoviebody.title)
                 For Each title In workingMovieDetails.alternativetitles
                     titletxt.Items.Add(title)
@@ -2584,6 +2586,7 @@ Public Class Form1
                     Button13.Refresh()
                 End If
 
+                actorcb.Items.Clear()
                 For Each actor In workingMovieDetails.listactors
                     If actor.actorname <> Nothing Then actorcb.Items.Add(actor.actorname)
                 Next

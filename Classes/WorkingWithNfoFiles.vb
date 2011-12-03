@@ -1995,7 +1995,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.votes = ""
                     newmovie.fullmoviebody.sortorder = ""
                     newmovie.fullmoviebody.country = ""
-                    newmovie.fileinfo.createdate = "99999999"
+                    newmovie.fileinfo.createdate = "99991230235999"
                     Return newmovie
                     Exit Function
                 End Try
