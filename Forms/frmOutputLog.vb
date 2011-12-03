@@ -18,7 +18,7 @@ Public Class frmoutputlog
             End If
             output = displaystring
             ComboBoxLogViewType.Items.Add("Full")   'index 0
-            ComboBoxLogViewType.Items.Add("Breif")  'index 1 
+            ComboBoxLogViewType.Items.Add("Brief")  'index 1 
             ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -76,10 +76,10 @@ Public Class frmoutputlog
             TextBox1.Text = output  'full means we show all of the log (output)
             Preferences.logview = 0 'set the new preference, it will be saved when MC exits.
         End If
-        If ComboBoxLogViewType.SelectedIndex = 1 Then 'breif we only show lines that contain "!!!" - this is a quick hack.....a better system would be required if more log view types were added.
+        If ComboBoxLogViewType.SelectedIndex = 1 Then 'brief we only show lines that contain "!!!" - this is a quick hack.....a better system would be required if more log view types were added.
             TextBox1.Text = ""
-            Dim breifoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below
-            For Each line In breifoutput
+            Dim briefoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below
+            For Each line In briefoutput
                 If line.Contains("!!!") Then TextBox1.Text &= line & vbCrLf 'if logged textline contains this text it will appear in the brief logview 
             Next
             Preferences.logview = 1 'set the new preference, it will be saved when MC exits.

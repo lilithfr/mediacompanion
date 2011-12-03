@@ -17281,7 +17281,7 @@ MyExit:
                         Dim fi As New IO.FileInfo(items)
                         If Not IO.File.Exists(newname) Then
                             fi.MoveTo(newname)
-                            If FirstCount Then  'we only want to show the renamed mediafile in the breif view
+                            If FirstCount Then  'we only want to show the renamed mediafile in the brief view
                                 Preferences.tvScraperLog &= "!!! Renamed to " & newname & vbCrLf
                                 FirstCount = False
                             Else
