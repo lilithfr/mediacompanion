@@ -4412,7 +4412,7 @@ Public Class Form1
 
                             '******************************** MOVIE FILE RENAME SECTION *************************************
 
-                            If Preferences.MovieRenameEnable = True And Preferences.usefoldernames = False Then
+                            If Preferences.MovieRenameEnable = True AndAlso Preferences.usefoldernames = False AndAlso newMovieList(f).nfopathandfilename.ToLower.Contains("video_ts") = False Then
                                 'determine if any 'part' names are in the original title - if so we will tack them on to the final name before renaming
                                 Dim partnames As String() = {"cd", "dvd", "part", "disk", "pt"}
                                 Dim midnames As String() = {"", " ", ".", "_"}
@@ -4452,7 +4452,7 @@ Public Class Form1
                                 'test the new filenames do not already exist
                                 Dim AFileExists As Boolean = False
                                 If System.IO.File.Exists(newmoviepathandfilename) Then AFileExists = True
-                               
+
                                 For Each item As String In {".nfo", ".tbn", "-fanart.jpg", ".sub", ".srt", ".smi", ".idx"} 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
                                     If System.IO.File.Exists(newpath & newfilename & item) = True Then
                                         AFileExists = True
@@ -4500,7 +4500,7 @@ Public Class Form1
                                     fanartpath = Preferences.GetFanartPath(nfopath)
                                 End If
                             End If
-                            '******************************** MOVIE FILE RENAME SECTION *************************************
+                            '******************************** END MOVIE FILE RENAME SECTION *************************************
 
 
 
