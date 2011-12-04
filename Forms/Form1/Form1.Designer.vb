@@ -909,7 +909,7 @@ Partial Class Form1
         Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.ForegroundWorkTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.GroupBox30 = New System.Windows.Forms.GroupBox()
+        Me.GroupBoxFanartExtrathumbs = New System.Windows.Forms.GroupBox()
         Me.RadioButtonFanart = New System.Windows.Forms.RadioButton()
         Me.RadioButtonThumb1 = New System.Windows.Forms.RadioButton()
         Me.RadioButtonThumb3 = New System.Windows.Forms.RadioButton()
@@ -1069,7 +1069,7 @@ Partial Class Form1
         CType(Me.BindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.GroupBox30.SuspendLayout
+        Me.GroupBoxFanartExtrathumbs.SuspendLayout
         Me.SuspendLayout
         '
         'ToolTip1
@@ -3729,7 +3729,7 @@ Partial Class Form1
         Me.TabPage5.AutoScrollMinSize = New System.Drawing.Size(956, 450)
         Me.TabPage5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TabPage5.Controls.Add(Me.Panel3)
-        Me.TabPage5.Controls.Add(Me.GroupBox30)
+        Me.TabPage5.Controls.Add(Me.GroupBoxFanartExtrathumbs)
         Me.TabPage5.Controls.Add(Me.ButtonNextFanart)
         Me.TabPage5.Controls.Add(Me.ButtonFanartSaveLoRes)
         Me.TabPage5.Controls.Add(Me.TextBox3)
@@ -11147,18 +11147,18 @@ Partial Class Form1
         '
         'GroupBox30
         '
-        Me.GroupBox30.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox30.Controls.Add(Me.RadioButtonThumb4)
-        Me.GroupBox30.Controls.Add(Me.RadioButtonThumb2)
-        Me.GroupBox30.Controls.Add(Me.RadioButtonThumb3)
-        Me.GroupBox30.Controls.Add(Me.RadioButtonThumb1)
-        Me.GroupBox30.Controls.Add(Me.RadioButtonFanart)
-        Me.GroupBox30.Location = New System.Drawing.Point(733, 373)
-        Me.GroupBox30.Name = "GroupBox30"
-        Me.GroupBox30.Size = New System.Drawing.Size(270, 100)
-        Me.GroupBox30.TabIndex = 130
-        Me.GroupBox30.TabStop = False
-        Me.GroupBox30.Text = "Fanart (Extrathumbs)"
+        Me.GroupBoxFanartExtrathumbs.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonThumb4)
+        Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonThumb2)
+        Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonThumb3)
+        Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonThumb1)
+        Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonFanart)
+        Me.GroupBoxFanartExtrathumbs.Location = New System.Drawing.Point(733, 373)
+        Me.GroupBoxFanartExtrathumbs.Name = "GroupBox30"
+        Me.GroupBoxFanartExtrathumbs.Size = New System.Drawing.Size(270, 100)
+        Me.GroupBoxFanartExtrathumbs.TabIndex = 130
+        Me.GroupBoxFanartExtrathumbs.TabStop = False
+        Me.GroupBoxFanartExtrathumbs.Text = "Fanart (Extrathumbs)"
         '
         'RadioButtonFanart
         '
@@ -11465,8 +11465,8 @@ Partial Class Form1
         CType(Me.BindingSource1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).EndInit
-        Me.GroupBox30.ResumeLayout(false)
-        Me.GroupBox30.PerformLayout
+        Me.GroupBoxFanartExtrathumbs.ResumeLayout(false)
+        Me.GroupBoxFanartExtrathumbs.PerformLayout
         Me.ResumeLayout(false)
         Me.PerformLayout
 
@@ -12357,7 +12357,7 @@ End Sub
     Friend WithEvents GroupBox29 As System.Windows.Forms.GroupBox
     Friend WithEvents ToolStripSeparator23 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents PlayTrailerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GroupBox30 As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBoxFanartExtrathumbs As System.Windows.Forms.GroupBox
     Friend WithEvents RadioButtonThumb4 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButtonThumb2 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButtonThumb3 As System.Windows.Forms.RadioButton
