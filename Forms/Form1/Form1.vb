@@ -12519,7 +12519,7 @@ MyExit:
 
     End Sub
 
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
+    Private Sub FanartHiresSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
         Try
             messbox = New frmMessageBox("Downloading Fanart...")
             messbox.Text = "Please Wait..."
@@ -12576,7 +12576,7 @@ MyExit:
                     If Preferences.resizefanart = 1 Then
                         Try
                             Dim tempbitmap As Bitmap = New Bitmap(bmp)
-                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         Catch ex As Exception
                             tempstring = ex.Message.ToString
                         End Try
@@ -12588,10 +12588,10 @@ MyExit:
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                             Dim tempbitmap As Bitmap = New Bitmap(bm_dest)
-                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         Else
                             Thread.Sleep(30)
-                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         End If
                     ElseIf Preferences.resizefanart = 3 Then
                         If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -12601,17 +12601,17 @@ MyExit:
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                             Dim tempbitmap As Bitmap = New Bitmap(bm_dest)
-                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         Else
                             Thread.Sleep(30)
-                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         End If
                     End If
-                    Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
+                    Dim exists As Boolean = System.IO.File.Exists(DetermineFanartPath())
                     If exists = True Then
 
 
-                        PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox2.ImageLocation = DetermineFanartPath()
                         PictureBox2.Load()
                         PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         PictureBox7.Load()
@@ -12755,7 +12755,7 @@ MyExit:
                 If Preferences.resizefanart = 1 Then
                     Try
                         Dim tempbitmap As Bitmap = bmp
-                        tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                        tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                     Catch ex As Exception
                         tempstring = ex.Message.ToString
                     End Try
@@ -12767,10 +12767,10 @@ MyExit:
                         gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                         gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                         Dim tempbitmap As Bitmap = bm_dest
-                        tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                        tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                     Else
                         Thread.Sleep(30)
-                        bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                        bmp.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                     End If
                 ElseIf Preferences.resizefanart = 3 Then
                     If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -12780,10 +12780,10 @@ MyExit:
                         gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                         gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                         Dim tempbitmap As Bitmap = bm_dest
-                        tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                        tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                     Else
                         Thread.Sleep(30)
-                        bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                        bmp.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                     End If
                 End If
 
@@ -12798,7 +12798,7 @@ MyExit:
                     Next
 
                     'mainfanart = New PictureBox
-                    PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                    PictureBox2.ImageLocation = DetermineFanartPath()
                     PictureBox2.Load()
                     PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                     PictureBox7.Load()
@@ -30138,7 +30138,7 @@ MyExit:
                     If Preferences.resizefanart = 1 Then
                         Try
                             Dim tempbitmap As Bitmap = bmp
-                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         Catch ex As Exception
                             tempstring = ex.Message.ToString
                         End Try
@@ -30150,10 +30150,10 @@ MyExit:
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                             Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         Else
                             Thread.Sleep(30)
-                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         End If
                     ElseIf Preferences.resizefanart = 3 Then
                         If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -30163,10 +30163,10 @@ MyExit:
                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                             gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                             Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            tempbitmap.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         Else
                             Thread.Sleep(30)
-                            bmp.Save(workingMovieDetails.fileinfo.fanartpath, Imaging.ImageFormat.Jpeg)
+                            bmp.Save(DetermineFanartPath(), Imaging.ImageFormat.Jpeg)
                         End If
                     End If
                     Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
@@ -30174,7 +30174,7 @@ MyExit:
 
 
                         'mainfanart = New PictureBox
-                        PictureBox2.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        PictureBox2.ImageLocation = DetermineFanartPath()
                         PictureBox2.Load()
                         PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         PictureBox7.Load()
@@ -32935,22 +32935,73 @@ MyExit:
 
 
     Private Sub RadioButtonFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonFanart.CheckedChanged
-
+        DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb1.CheckedChanged
-
+        DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb2.CheckedChanged
-
+        DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb3.CheckedChanged
+        DisplayFanart()
 
     End Sub
-
     Private Sub RadioButtonThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb4.CheckedChanged
+        DisplayFanart()
+    End Sub
+    Private Sub DisplayFanart()
+        If workingMovieDetails Is Nothing Then Exit Sub
+        If usefoldernames = False Then Exit Sub
+        If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
+            Try
+                Dim fanartpath = DetermineFanartPath()
+                If IO.File.Exists(fanartpath) Then
+                    Dim OriginalImage As New Bitmap(fanartpath)
+                    Dim Image2 As New Bitmap(OriginalImage)
+                    OriginalImage.Dispose()
+                    PictureBox2.Image = Image2 'moviethumb - 3
+                    Label16.Text = PictureBox2.Image.Width
+                    Label17.Text = PictureBox2.Image.Height
+                Else
+
+                    PictureBox2.ImageLocation = defaultFanart 'moviethumb - 3
+                    Label16.Text = ""
+                    Label17.Text = ""
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
+            End Try
+        End If
 
     End Sub
+    Private Function DetermineFanartPath() As String
+        Dim fanarttype As String = ""
+        If RadioButtonFanart.Checked Then fanarttype = "Fanart"
+        If RadioButtonThumb1.Checked Then fanarttype = "Thumb1"
+        If RadioButtonThumb2.Checked Then fanarttype = "Thumb2"
+        If RadioButtonThumb3.Checked Then fanarttype = "Thumb3"
+        If RadioButtonThumb4.Checked Then fanarttype = "Thumb4"
+        Dim fanartpath As String = ""
+        Select Case fanarttype
+            Case "Fanart"
+                fanartpath = workingMovieDetails.fileinfo.fanartpath
+            Case "Thumb1"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb1.jpg"
+            Case "Thumb2"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb2.jpg"
+            Case "Thumb3"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb3.jpg"
+            Case "Thumb4"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrathumbs\thumb4.jpg"
+
+        End Select
+        Return fanartpath
+    End Function
+
 End Class
