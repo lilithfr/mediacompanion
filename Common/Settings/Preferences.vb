@@ -109,6 +109,7 @@ Public Class Preferences
     Public Shared overwritethumbs As Boolean
     Public Shared remembersize As Boolean
     Public Shared usefoldernames As Boolean
+    Public Shared allfolders As Boolean
     Public Shared createfolderjpg As Boolean
     Public Shared basicsavemode As Boolean
     Public Shared usetransparency As Boolean
@@ -190,6 +191,7 @@ Public Class Preferences
         Preferences.moviesortorder = 0
         Preferences.imdbmirror = "http://www.imdb.com/"
         Preferences.usefoldernames = False
+        Preferences.allfolders = False
         ReDim Preferences.moviethumbpriority(3)
         Preferences.maxmoviegenre = 99
         Preferences.moviethumbpriority(0) = "Internet Movie Poster Awards"
@@ -450,6 +452,9 @@ Public Class Preferences
         child.InnerText = Preferences.usefoldernames.ToString.ToLower
         root.AppendChild(child)
 
+        child = doc.CreateElement("allfolders")
+        child.InnerText = Preferences.allfolders.ToString.ToLower
+        root.AppendChild(child)
 
         child = doc.CreateElement("rarsize")
         child.InnerText = Preferences.rarsize.ToString.ToLower
@@ -1177,6 +1182,13 @@ Public Class Preferences
                         Preferences.usefoldernames = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.usefoldernames = False
+                    End If
+
+                Case "allfolders"
+                    If thisresult.InnerXml = "true" Then
+                        Preferences.allfolders = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Preferences.allfolders = False
                     End If
 
                 Case "createfolderjpg"

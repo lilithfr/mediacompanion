@@ -12103,6 +12103,7 @@ MyExit:
                 currentTabIndex = TabControl2.SelectedIndex
                 If TextBox8.Text = "" Then Call util_FileDetailsGet()
             ElseIf tab.ToLower = "fanart" Then
+                GroupBoxFanartExtrathumbs.Visible = usefoldernames Or allfolders 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
                 If Panel2.Controls.Count = 0 Then
                     Call mov_FanartLoad()
                 End If
@@ -12220,7 +12221,6 @@ MyExit:
     Private Sub mov_FanartLoad()
         RadioButtonFanart.Checked = True
 
-        GroupBoxFanartExtrathumbs.Visible = usefoldernames 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
 
         '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -23878,6 +23878,12 @@ MyExit:
             chkbx_usefoldernames.CheckState = CheckState.Unchecked
         End If
 
+        If Preferences.allfolders = True Then
+            CheckBoxMovieAllFolders.CheckState = CheckState.Checked
+        Else
+            CheckBoxMovieAllFolders.CheckState = CheckState.Unchecked
+        End If
+
         If Preferences.createfolderjpg = True Then
             chkbx_createfolderjpg.CheckState = CheckState.Checked
         Else
@@ -32938,25 +32944,25 @@ MyExit:
 
 
     Private Sub RadioButtonFanart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonFanart.CheckedChanged
-        DisplayFanart()
+        mov_DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb1.CheckedChanged
-        DisplayFanart()
+        mov_DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb2.CheckedChanged
-        DisplayFanart()
+        mov_DisplayFanart()
     End Sub
 
     Private Sub RadioButtonThumb3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb3.CheckedChanged
-        DisplayFanart()
+        mov_DisplayFanart()
 
     End Sub
     Private Sub RadioButtonThumb4_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles RadioButtonThumb4.CheckedChanged
-        DisplayFanart()
+        mov_DisplayFanart()
     End Sub
-    Private Sub DisplayFanart()
+    Private Sub mov_DisplayFanart()
         If workingMovieDetails Is Nothing Then Exit Sub
         If usefoldernames = False Then Exit Sub
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -33007,4 +33013,12 @@ MyExit:
         Return fanartpath
     End Function
 
+    Private Sub CheckBoxMovieAllFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxMovieAllFolders.CheckedChanged
+        Try
+            Preferences.allfolders = CheckBoxMovieAllFolders.Checked
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+        If prefsload = False Then generalprefschanged = True
+    End Sub
 End Class
