@@ -17285,20 +17285,23 @@ MyExit:
                         If Not IO.File.Exists(newname) Then
                             fi.MoveTo(newname)
                             If FirstCount Then  'we only want to show the renamed mediafile in the brief view
-                                Preferences.tvScraperLog &= "!!! Renamed to " & newname & vbCrLf
+                                Preferences.tvScraperLog &= "!!! RENAMED TO: " & newname & vbCrLf
                                 FirstCount = False
                             Else
-                                Preferences.tvScraperLog &= "    Renamed to " & newname & vbCrLf
+                                Preferences.tvScraperLog &= "                " & newname & vbCrLf
                             End If
 
                         End If
+
+                        Exit For
                     Catch ex As Exception
                         done = path
                         Preferences.tvScraperLog &= "!!! Renamed FAILED for" & newname & vbCrLf
                     End Try
+
                 Next
                 returnpath = done
-                Exit For
+               
             End If
         Next
         Return returnpath

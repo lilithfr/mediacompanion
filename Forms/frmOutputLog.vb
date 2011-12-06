@@ -72,15 +72,23 @@ Public Class frmoutputlog
         ShowLog() 'if we change the combobox selection display the relavent log
     End Sub
     Private Sub ShowLog()
-        If ComboBoxLogViewType.SelectedIndex = 0 Then 'full
+        'DISPLAY FULL LOG
+        If ComboBoxLogViewType.SelectedIndex = 0 Then 'full log display
             TextBox1.Text = output  'full means we show all of the log (output)
             Preferences.logview = 0 'set the new preference, it will be saved when MC exits.
         End If
+
+        'DISPLAY BREIF LOG
         If ComboBoxLogViewType.SelectedIndex = 1 Then 'brief we only show lines that contain "!!!" - this is a quick hack.....a better system would be required if more log view types were added.
             TextBox1.Text = ""
-            Dim briefoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below
-            For Each line In briefoutput
-                If line.Contains("!!!") Then TextBox1.Text &= line & vbCrLf 'if logged textline contains this text it will appear in the brief logview 
+            Dim briefoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below. second & rest of lines have extra char at front so we test first 4 chars.
+            For Each line In briefoutput 'if each line is at least 4 chars then test if first 4 chars has "!!!". If true then add the line directly to the textbox minus the "!!!" on the front. 
+                line = Strings.Replace(line, Chr(10), "") 'strips out the leading 'new line'
+                If line = "!!!" Then
+                    TextBox1.Text &= vbCrLf
+                ElseIf line.Contains("!!! ") Then
+                    TextBox1.Text &= Strings.Right(line, Strings.Len(line) - 4) & vbCrLf
+                End If
             Next
             Preferences.logview = 1 'set the new preference, it will be saved when MC exits.
         End If

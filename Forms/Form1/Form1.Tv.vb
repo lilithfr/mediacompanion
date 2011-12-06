@@ -1831,7 +1831,8 @@ Partial Public Class Form1
         Dim epscount As Integer = 0
         For Each eps In newEpisodeList
             epscount += 1
-            Preferences.tvScraperLog &= "!!! ********** WORKING ON: " & eps.VideoFilePath & " **********" & vbCrLf
+
+            Preferences.tvScraperLog &= "!!! WORKING ON: " & eps.VideoFilePath & vbCrLf
             If eps.Season.Value <> "-1" And eps.Episode.Value <> "-1" Then
                 Preferences.tvScraperLog &= "Season : " & eps.Season.Value & vbCrLf
                 Preferences.tvScraperLog &= "Episode: " & eps.Episode.Value & vbCrLf
@@ -2388,7 +2389,7 @@ Partial Public Class Form1
                     End If
                 Next
             End If
-            Preferences.tvScraperLog &= vbCrLf
+            Preferences.tvScraperLog &= "!!!" & vbCrLf
         Next
 
         bckgroundscanepisodes.ReportProgress(0, progresstext)
