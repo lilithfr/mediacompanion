@@ -2372,6 +2372,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function SaveImage(ByVal image As Bitmap, ByVal path As String) As Boolean
 
         Try
+            If Not Directory.Exists(IO.Path.GetDirectoryName(path)) Then
+                Directory.CreateDirectory(IO.Path.GetDirectoryName(path))
+            End If
             image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg)
             Return True
         Catch ex As Exception
