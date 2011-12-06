@@ -355,7 +355,7 @@ Partial Class Form1
         Me.ToolTip2 = New System.Windows.Forms.ToolTip(Me.components)
         Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox()
         Me.chkbx_usefoldernames = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxMovieAllFolders = New System.Windows.Forms.CheckBox()
+        Me.chkbx_MovieAllFolders = New System.Windows.Forms.CheckBox()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
@@ -4796,15 +4796,15 @@ Partial Class Form1
         '
         'CheckBoxMovieAllFolders
         '
-        Me.CheckBoxMovieAllFolders.AutoSize = true
-        Me.CheckBoxMovieAllFolders.Location = New System.Drawing.Point(7, 46)
-        Me.CheckBoxMovieAllFolders.Name = "CheckBoxMovieAllFolders"
-        Me.CheckBoxMovieAllFolders.Size = New System.Drawing.Size(277, 19)
-        Me.CheckBoxMovieAllFolders.TabIndex = 52
-        Me.CheckBoxMovieAllFolders.Text = "All Movies are in Folders (allows Extrathumbs)"
-        Me.ToolTip2.SetToolTip(Me.CheckBoxMovieAllFolders, "Check this box if all of your movies are in folders, but you are still using the "& _ 
+        Me.chkbx_MovieAllFolders.AutoSize = true
+        Me.chkbx_MovieAllFolders.Location = New System.Drawing.Point(7, 46)
+        Me.chkbx_MovieAllFolders.Name = "CheckBoxMovieAllFolders"
+        Me.chkbx_MovieAllFolders.Size = New System.Drawing.Size(277, 19)
+        Me.chkbx_MovieAllFolders.TabIndex = 52
+        Me.chkbx_MovieAllFolders.Text = "All Movies are in Folders (allows Extrathumbs)"
+        Me.ToolTip2.SetToolTip(Me.chkbx_MovieAllFolders, "Check this box if all of your movies are in folders, but you are still using the "& _ 
         "actual movie name for searches."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Extrathumbs Possible.")
-        Me.CheckBoxMovieAllFolders.UseVisualStyleBackColor = true
+        Me.chkbx_MovieAllFolders.UseVisualStyleBackColor = true
         '
         'StatusStrip1
         '
@@ -5993,7 +5993,7 @@ Partial Class Form1
         '
         'GroupBox24
         '
-        Me.GroupBox24.Controls.Add(Me.CheckBoxMovieAllFolders)
+        Me.GroupBox24.Controls.Add(Me.chkbx_MovieAllFolders)
         Me.GroupBox24.Controls.Add(Me.chkbx_usefoldernames)
         Me.GroupBox24.Controls.Add(Me.chkbx_createfolderjpg)
         Me.GroupBox24.Location = New System.Drawing.Point(8, 344)
@@ -12381,7 +12381,7 @@ End Sub
     Friend WithEvents RadioButtonThumb3 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButtonThumb1 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButtonFanart As System.Windows.Forms.RadioButton
-    Friend WithEvents CheckBoxMovieAllFolders As System.Windows.Forms.CheckBox
+    Friend WithEvents chkbx_MovieAllFolders As System.Windows.Forms.CheckBox
 
 
 

@@ -23879,9 +23879,9 @@ MyExit:
         End If
 
         If Preferences.allfolders = True Then
-            CheckBoxMovieAllFolders.CheckState = CheckState.Checked
+            chkbx_MovieAllFolders.CheckState = CheckState.Checked
         Else
-            CheckBoxMovieAllFolders.CheckState = CheckState.Unchecked
+            chkbx_MovieAllFolders.CheckState = CheckState.Unchecked
         End If
 
         If Preferences.createfolderjpg = True Then
@@ -24423,6 +24423,7 @@ MyExit:
         Try
             If chkbx_usefoldernames.CheckState = CheckState.Checked Then
                 Preferences.usefoldernames = True
+                chkbx_MovieAllFolders.Checked = False
             Else
                 Preferences.usefoldernames = False
             End If
@@ -32964,7 +32965,7 @@ MyExit:
     End Sub
     Private Sub mov_DisplayFanart()
         If workingMovieDetails Is Nothing Then Exit Sub
-        If usefoldernames = False Then Exit Sub
+        If (usefoldernames = False) And (allfolders = False) Then Exit Sub
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
             Try
                 Dim fanartpath = mov_DetermineFanartPath()
@@ -33013,9 +33014,10 @@ MyExit:
         Return fanartpath
     End Function
 
-    Private Sub CheckBoxMovieAllFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxMovieAllFolders.CheckedChanged
+    Private Sub CheckBoxMovieAllFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkbx_MovieAllFolders.CheckedChanged
         Try
-            Preferences.allfolders = CheckBoxMovieAllFolders.Checked
+            Preferences.allfolders = chkbx_MovieAllFolders.Checked
+            If chkbx_MovieAllFolders.Checked = True Then chkbx_usefoldernames.Checked = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
