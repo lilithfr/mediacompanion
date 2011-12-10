@@ -189,7 +189,7 @@ Partial Class Form1
         Me.PosterBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportmoviesMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.TabPageLevel2MovMainBrowser = New System.Windows.Forms.TabPage()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
         Me.DebugSplitter5PosLabel = New System.Windows.Forms.Label()
@@ -497,7 +497,7 @@ Partial Class Form1
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.TabControl3 = New System.Windows.Forms.TabControl()
-        Me.TabPage11 = New System.Windows.Forms.TabPage()
+        Me.TabPageLevel2TVMainBrowser = New System.Windows.Forms.TabPage()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
         Me.RadioButton53 = New System.Windows.Forms.RadioButton()
         Me.RadioButton44 = New System.Windows.Forms.RadioButton()
@@ -926,7 +926,7 @@ Partial Class Form1
         Me.GroupBox_MovieIMDBMirror.SuspendLayout
         Me.GroupBox_IMDB_Scraper_Preferences.SuspendLayout
         Me.ContextMenuStrip1.SuspendLayout
-        Me.TabPage3.SuspendLayout
+        Me.TabPageLevel2MovMainBrowser.SuspendLayout
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -989,7 +989,7 @@ Partial Class Form1
         Me.GroupBox16.SuspendLayout
         Me.TabPage2.SuspendLayout
         Me.TabControl3.SuspendLayout
-        Me.TabPage11.SuspendLayout
+        Me.TabPageLevel2TVMainBrowser.SuspendLayout
         CType(Me.SplitContainer3,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer3.Panel1.SuspendLayout
         Me.SplitContainer3.Panel2.SuspendLayout
@@ -2613,18 +2613,18 @@ Partial Class Form1
         '
         'TabPage3
         '
-        Me.TabPage3.AutoScroll = True
-        Me.TabPage3.AutoScrollMinSize = New System.Drawing.Size(956, 450)
-        Me.TabPage3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.TabPage3.Controls.Add(Me.SplitContainer1)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 27)
-        Me.TabPage3.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(1129, 606)
-        Me.TabPage3.TabIndex = 0
-        Me.TabPage3.Text = "Main Browser"
-        Me.TabPage3.ToolTipText = "Main Movie Browser"
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.TabPageLevel2MovMainBrowser.AutoScroll = True
+        Me.TabPageLevel2MovMainBrowser.AutoScrollMinSize = New System.Drawing.Size(956, 450)
+        Me.TabPageLevel2MovMainBrowser.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageLevel2MovMainBrowser.Controls.Add(Me.SplitContainer1)
+        Me.TabPageLevel2MovMainBrowser.Location = New System.Drawing.Point(4, 27)
+        Me.TabPageLevel2MovMainBrowser.Margin = New System.Windows.Forms.Padding(4)
+        Me.TabPageLevel2MovMainBrowser.Name = "TabPage3"
+        Me.TabPageLevel2MovMainBrowser.Size = New System.Drawing.Size(1129, 606)
+        Me.TabPageLevel2MovMainBrowser.TabIndex = 0
+        Me.TabPageLevel2MovMainBrowser.Text = "Main Browser"
+        Me.TabPageLevel2MovMainBrowser.ToolTipText = "Main Movie Browser"
+        Me.TabPageLevel2MovMainBrowser.UseVisualStyleBackColor = True
         '
         'SplitContainer1
         '
@@ -5025,7 +5025,7 @@ Partial Class Form1
         'TabControl2
         '
         Me.TabControl2.Appearance = System.Windows.Forms.TabAppearance.Buttons
-        Me.TabControl2.Controls.Add(Me.TabPage3)
+        Me.TabControl2.Controls.Add(Me.TabPageLevel2MovMainBrowser)
         Me.TabControl2.Controls.Add(Me.TabPage22)
         Me.TabControl2.Controls.Add(Me.TabPage32)
         Me.TabControl2.Controls.Add(Me.TabPage5)
@@ -6436,7 +6436,7 @@ Partial Class Form1
         'TabControl3
         '
         Me.TabControl3.Appearance = System.Windows.Forms.TabAppearance.Buttons
-        Me.TabControl3.Controls.Add(Me.TabPage11)
+        Me.TabControl3.Controls.Add(Me.TabPageLevel2TVMainBrowser)
         Me.TabControl3.Controls.Add(Me.TabPage21)
         Me.TabControl3.Controls.Add(Me.TabPage12)
         Me.TabControl3.Controls.Add(Me.TabPage20)
@@ -6458,16 +6458,16 @@ Partial Class Form1
         '
         'TabPage11
         '
-        Me.TabPage11.AutoScroll = True
-        Me.TabPage11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.TabPage11.Controls.Add(Me.SplitContainer3)
-        Me.TabPage11.Location = New System.Drawing.Point(4, 27)
-        Me.TabPage11.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabPage11.Name = "TabPage11"
-        Me.TabPage11.Size = New System.Drawing.Size(1129, 606)
-        Me.TabPage11.TabIndex = 0
-        Me.TabPage11.Text = "Main Browser"
-        Me.TabPage11.UseVisualStyleBackColor = True
+        Me.TabPageLevel2TVMainBrowser.AutoScroll = True
+        Me.TabPageLevel2TVMainBrowser.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageLevel2TVMainBrowser.Controls.Add(Me.SplitContainer3)
+        Me.TabPageLevel2TVMainBrowser.Location = New System.Drawing.Point(4, 27)
+        Me.TabPageLevel2TVMainBrowser.Margin = New System.Windows.Forms.Padding(4)
+        Me.TabPageLevel2TVMainBrowser.Name = "TabPage11"
+        Me.TabPageLevel2TVMainBrowser.Size = New System.Drawing.Size(1129, 606)
+        Me.TabPageLevel2TVMainBrowser.TabIndex = 0
+        Me.TabPageLevel2TVMainBrowser.Text = "Main Browser"
+        Me.TabPageLevel2TVMainBrowser.UseVisualStyleBackColor = True
         '
         'SplitContainer3
         '
@@ -11267,7 +11267,7 @@ Partial Class Form1
         Me.GroupBox_IMDB_Scraper_Preferences.ResumeLayout(false)
         Me.GroupBox_IMDB_Scraper_Preferences.PerformLayout
         Me.ContextMenuStrip1.ResumeLayout(false)
-        Me.TabPage3.ResumeLayout(false)
+        Me.TabPageLevel2MovMainBrowser.ResumeLayout(false)
         Me.SplitContainer1.Panel1.ResumeLayout(false)
         Me.SplitContainer1.Panel2.ResumeLayout(false)
         Me.SplitContainer1.Panel2.PerformLayout
@@ -11365,7 +11365,7 @@ Partial Class Form1
         Me.GroupBox16.PerformLayout
         Me.TabPage2.ResumeLayout(false)
         Me.TabControl3.ResumeLayout(false)
-        Me.TabPage11.ResumeLayout(false)
+        Me.TabPageLevel2TVMainBrowser.ResumeLayout(false)
         Me.SplitContainer3.Panel1.ResumeLayout(false)
         Me.SplitContainer3.Panel1.PerformLayout
         Me.SplitContainer3.Panel2.ResumeLayout(false)
@@ -11536,7 +11536,7 @@ End Sub
     Friend WithEvents ListMoviesWithoutPostersToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BatchRescraperToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabControl2 As System.Windows.Forms.TabControl
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPageLevel2MovMainBrowser As System.Windows.Forms.TabPage
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents ButtonResetFilters As System.Windows.Forms.Button
     Friend WithEvents Label39 As System.Windows.Forms.Label
@@ -11664,7 +11664,7 @@ End Sub
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents TabControl3 As System.Windows.Forms.TabControl
-    Friend WithEvents TabPage11 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPageLevel2TVMainBrowser As System.Windows.Forms.TabPage
     Friend WithEvents SplitContainer3 As System.Windows.Forms.SplitContainer
     Friend WithEvents TabPage12 As System.Windows.Forms.TabPage
     Friend WithEvents TextBox8 As System.Windows.Forms.TextBox

@@ -2540,19 +2540,25 @@ Public Class Form1
                 End If
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Try
-                        If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
-                            Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.posterpath)
-                            Dim Image2 As New Bitmap(OriginalImage)
-                            OriginalImage.Dispose()
-                            PictureBox3.Image = Image2 '7 - 2
-                            moviethumb.Image = Image2 'picturebox3
-                            Label19.Text = "Current Loaded Poster - " & Image2.Width.ToString & " x " & Image2.Height.ToString
-                        Else
-                            moviethumb.ImageLocation = defaultPoster 'picturebox3
-                            moviethumb.Load()
-                            PictureBox3.ImageLocation = defaultPoster '7 - 2
-                            PictureBox3.Load()
-                        End If
+                        util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, defaultPoster)
+                        util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, defaultPoster)
+                        Label19.Text = "Current Loaded Poster - " & PictureBox3.Width.ToString & " x " & PictureBox3.Height.ToString
+
+
+
+                        'If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
+                        '    Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.posterpath)
+                        '    Dim Image2 As New Bitmap(OriginalImage)
+                        '    OriginalImage.Dispose()
+                        '    PictureBox3.Image = Image2 '7 - 2
+                        '    moviethumb.Image = Image2 'picturebox3
+                        '    Label19.Text = "Current Loaded Poster - " & Image2.Width.ToString & " x " & Image2.Height.ToString
+                        'Else
+                        '    moviethumb.ImageLocation = defaultPoster 'picturebox3
+                        '    moviethumb.Load()
+                        '    PictureBox3.ImageLocation = defaultPoster '7 - 2
+                        '    PictureBox3.Load()
+                        'End If
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -2561,14 +2567,15 @@ Public Class Form1
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Try
-                        If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-                            Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
-                            Dim Image2 As New Bitmap(OriginalImage)
-                            OriginalImage.Dispose()
-                            PictureBox7.Image = Image2 '2
-                        Else
-                            PictureBox7.ImageLocation = defaultFanart '2
-                        End If
+                        util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, defaultFanart)
+                        'If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                        '    Dim OriginalImage As New Bitmap(workingMovieDetails.fileinfo.fanartpath)
+                        '    Dim Image2 As New Bitmap(OriginalImage)
+                        '    OriginalImage.Dispose()
+                        '    PictureBox7.Image = Image2 '2
+                        'Else
+                        '    PictureBox7.ImageLocation = defaultFanart '2
+                        'End If
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -12027,6 +12034,8 @@ MyExit:
         End Try
     End Sub
 
+    
+
     Private Sub TabControl2_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl2.MouseWheel
         Try
             If TabControl2.SelectedIndex = 1 Then
@@ -12802,13 +12811,16 @@ MyExit:
                     Next
 
                     'mainfanart = New PictureBox
-                    PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
-                    PictureBox2.Load()
-                    PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                    PictureBox7.Load()
-                Else
-                    PictureBox2.ImageLocation = defaultFanart
-                    PictureBox2.Load()
+                    util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), defaultFanart)
+                    'PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
+                    'PictureBox2.Load()
+                    util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, defaultFanart)
+                    'PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                    'PictureBox7.Load()
+                    mov_SplitContainerAutoPosition()
+                    'Else
+                    '    PictureBox2.ImageLocation = defaultFanart
+                    '    PictureBox2.Load()
                 End If
                 Call mov_FanartSaved()
             Catch ex As Exception
@@ -16137,10 +16149,8 @@ MyExit:
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
-                    PictureBox14.ImageLocation = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
-                    PictureBox14.Load()
-                Else
-                    PictureBox14.Image = Nothing
+                    util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), defaultScreenShot)
+                    
                 End If
                 If TextBox35.Text = "" Then
                     TextBox35.Text = "10"
@@ -17690,20 +17700,9 @@ MyExit:
                 PictureBox11.Image = Nothing
             End If
         Else
-            If IO.File.Exists(WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")) Then
-                Try
-                    PictureBox10.ImageLocation = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-                    PictureBox10.Load()
-                    PictureBox11.ImageLocation = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
-                    PictureBox11.Load()
-                Catch
-                    PictureBox10.Image = Nothing
-                    PictureBox11.Image = Nothing
-                End Try
-            Else
-                PictureBox10.Image = Nothing
-                PictureBox11.Image = Nothing
-            End If
+            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), defaultFanart)
+            util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), defaultFanart)
+            
         End If
         Try
             Label58.Text = PictureBox10.Image.Height.ToString
@@ -17936,8 +17935,7 @@ MyExit:
                     If exists = True Then
 
                         Try
-                            PictureBox10.ImageLocation = savepath
-                            PictureBox10.Load()
+                            util_ImageLoad(PictureBox10, savepath, defaultFanart)
                             PictureBox11.Image = PictureBox10.Image
                             If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
                                 tv_PictureBoxLeft.ImageLocation = savepath
@@ -18170,13 +18168,6 @@ MyExit:
             Try
                 Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox27.Text)
                 Dim ImageStream As New IO.MemoryStream(ImageInBytes)
-
-                'mainfanart.Image = New System.Drawing.Bitmap(ImageStream)
-
-
-
-
-
                 Dim tempstring As String
 
                 Dim bmp As New Bitmap(ImageStream)
@@ -18220,20 +18211,16 @@ MyExit:
                 Dim exists As Boolean = System.IO.File.Exists(savepath)
                 If exists = True Then
 
-
-                    PictureBox10.ImageLocation = savepath
-                    PictureBox10.Load()
-                    PictureBox11.Image = PictureBox10.Image
+                    util_ImageLoad(PictureBox10, savepath, defaultFanart)
+                    
                     If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                        tv_PictureBoxLeft.ImageLocation = savepath
-                        tv_PictureBoxLeft.Load()
+                        util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart)
+
                     End If
-                Else
-                    PictureBox10.Image = Nothing
-                    PictureBox11.Image = Nothing
+                    
                 End If
-                Label59.Text = PictureBox2.Image.Width
-                Label58.Text = PictureBox2.Image.Height
+                Label59.Text = PictureBox10.Image.Width
+                Label58.Text = PictureBox10.Image.Height
 
 
             Catch ex As Exception
@@ -20037,8 +20024,8 @@ MyExit:
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
-        PictureBox13.ImageLocation = sender.tag
-        PictureBox13.Load()
+        util_ImageLoad(PictureBox13, sender.tag, defaultPoster)
+
         messbox.Close()
         Call util_ZoomImage(PictureBox13.Image)
     End Sub
@@ -30187,13 +30174,9 @@ MyExit:
                     End If
                     Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
                     If exists = True Then
+                        util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), defaultFanart)
+                        util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, defaultFanart)
 
-
-                        'mainfanart = New PictureBox
-                        PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
-                        PictureBox2.Load()
-                        PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                        PictureBox7.Load()
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
@@ -30202,9 +30185,6 @@ MyExit:
                                 Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
-                    Else
-                        PictureBox2.ImageLocation = defaultFanart
-                        PictureBox2.Load()
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
@@ -33028,5 +33008,15 @@ MyExit:
             ExceptionHandler.LogError(ex)
         End Try
         If prefsload = False Then generalprefschanged = True
+    End Sub
+
+    Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
+        mov_SplitContainerAutoPosition()
+        'MsgBox("TabPageMainBrowser - MOV")  
+    End Sub
+
+    Private Sub TabPageTVMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2TVMainBrowser.Enter
+        tv_SplitContainerAutoPosition()
+        'MsgBox("TabPageMainBrowser - tv")
     End Sub
 End Class

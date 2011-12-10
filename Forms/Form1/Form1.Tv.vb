@@ -539,8 +539,7 @@ Partial Public Class Form1
                 End If
             Next
         End If
-        PictureBox6.ImageLocation = imgLocation
-        PictureBox6.Load()
+        util_ImageLoad(PictureBox6, imgLocation, defaultActor)
         PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
     End Sub
 
@@ -872,7 +871,8 @@ Partial Public Class Form1
             ListBox3.SelectedIndex = 0
             If listOfShows(0).showbanner <> Nothing Then
                 Try
-                    PictureBox9.ImageLocation = listOfShows(0).showbanner
+                    util_ImageLoad(PictureBox9, listOfShows(0).showbanner, defaultBanner)
+
                 Catch ex As Exception
                     PictureBox9.Image = Nothing
                 End Try
