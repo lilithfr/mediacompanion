@@ -297,10 +297,7 @@ Public Class Form1
 
        
 
-        'Update Main Form Window Title to show Currrent Version
-        Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
-        sAssemblyVersion = Microsoft.VisualBasic.Right(sAssemblyVersion, 7)       'Cuts Version=3.4.0.2 down to just 3.4.0.2
-        Me.Text = "Media Companion - V" & sAssemblyVersion
+        
 
         For Each Temp In InternalResourceNames
             Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
@@ -440,6 +437,11 @@ Public Class Form1
                 End If
             Next
         End If
+
+        'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
+        util_MainFormTitleUpdate()
+
+
 
         'Application data folder
 
@@ -755,6 +757,17 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+    Sub util_MainFormTitleUpdate()
+        'Update Main Form Window Title to show Currrent Version
+        Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
+        sAssemblyVersion = Microsoft.VisualBasic.Right(sAssemblyVersion, 7)       'Cuts Version=3.4.0.2 down to just 3.4.0.2
+        If workingProfile.profilename.ToLower = "default" Then
+            Me.Text = "Media Companion - V" & sAssemblyVersion
+        Else
+            Me.Text = "Media Companion - V" & sAssemblyVersion & " - " & workingProfile.profilename
+        End If
+
     End Sub
     Sub mov_SplitContainerAutoPosition()
         'Set Movie Splitter Auto Position
@@ -26157,6 +26170,8 @@ MyExit:
             Call setuppreferences()
         End If
 
+        util_MainFormTitleUpdate()  'creates & shows new title to Form1, also includes current profile name
+
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
             Call mov_CacheRefresh(movieFolders)
         Else
@@ -32617,7 +32632,7 @@ MyExit:
         End Try
 
     End Sub
-    Private Sub FixSeasonEpisode() 'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
+    Private Sub util_FixSeasonEpisode() 'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
         Dim textstring As String = ""
         Dim correctionsfound As Integer = 0
         Dim correctionsfixed As Integer = 0
@@ -32658,7 +32673,7 @@ MyExit:
                                     textstring += vbCrLf & "**** exception created during nfo save **** - " & childNodeLevel3.Name
                                 End Try
                             End If
-                Next
+                        Next
 
                     End If
                 Next
@@ -32934,7 +32949,7 @@ MyExit:
 
 
     Private Sub Button2_Click_1(sender As System.Object, e As System.EventArgs) Handles Button2.Click
-        FixSeasonEpisode()
+        util_FixSeasonEpisode()
     End Sub
 
 

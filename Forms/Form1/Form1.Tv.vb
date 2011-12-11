@@ -3805,4 +3805,8 @@ Partial Public Class Form1
     '    lstTasks.ResetText()
 
     'End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class
