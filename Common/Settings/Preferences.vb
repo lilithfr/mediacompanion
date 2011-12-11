@@ -872,9 +872,12 @@ Public Class Preferences
         Preferences.moviesets.Clear()
         Preferences.moviesets.Add("-None-")
         Preferences.movieFolders.Clear()
+        Preferences.offlinefolders.Clear()
         Preferences.tvFolders.Clear()
         Preferences.tvRootFolders.Clear()
         Preferences.tableview.Clear()
+
+
         Dim tempstring As String = Preferences.workingProfile.config
         If Not IO.File.Exists(Preferences.workingProfile.config) Then
             Exit Sub

@@ -324,12 +324,12 @@ Public Class Form1
                 scrapeAndQuit = True
             End If
         Next
-        Dim loadinginfo As String
+
         If scrapeAndQuit = False Then
             frmSplash.Show()
 
-            loadinginfo = "Status :- Initialising Program"
-            frmSplash.Label3.Text = loadinginfo
+
+            frmSplash.Label3.Text = "Status :- Initialising Program"
             frmSplash.Label3.Refresh()
         End If
         Me.Visible = False
@@ -505,83 +505,8 @@ Public Class Form1
 
 
 
-        Select Case Preferences.moviedefaultlist
-            Case 0
-                RadioButton1.Checked = True
-            Case 1
-                RadioButton2.Checked = True
-            Case 2
-                RadioButton6.Checked = True
-        End Select
 
-        Select Case Preferences.moviesortorder
-            Case 0
-                RadioButton3.Checked = True
-            Case 1
-                RadioButton4.Checked = True
-            Case 2
-                RadioButtonSortModified.Checked = True
-            Case 3
-                RadioButton21.Checked = True
-            Case 4
-                RadioButton7.Checked = True
-            Case 5
-                RadioButton19.Checked = True
-            Case 6
-                RadioButtonSortCreate.Checked = True
-        End Select
-        '----------------------------------------------------------
-
-        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
-        '----------------------------------------------------------
-        If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            loadinginfo = "Status :- Building Movie Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call mov_CacheRefresh(movieFolders)
-
-        Else
-            loadinginfo = "Status :- Loading Movie Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call mov_CacheLoad()
-
-        End If
-
-        If IO.File.Exists(workingProfile.filters) Then
-            loadinginfo = "Status :- Loading Genrelist"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call util_GenreLoad()
-        End If
-
-        If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
-            loadinginfo = "Status :- Building TV Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call tv_CacheRefresh()
-        Else
-            loadinginfo = "Status :- Loading TV Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call tv_CacheLoad()
-        End If
-        If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
-            loadinginfo = "Status :- Building Actor Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call mov_ActorRebuild()
-        Else
-            loadinginfo = "Status :- Loading Actor Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Dim NovaThread3 = New Thread(New ThreadStart(AddressOf mov_ActorCacheLoad))
-            NovaThread3.SetApartmentState(ApartmentState.STA)
-            NovaThread3.Start()
-            'Call loadactorcache()
-        End If
-
-        Call mov_PreferencesDisplay()
+        
 
         If scrapeAndQuit = False Then
             Me.Visible = True
@@ -2379,6 +2304,7 @@ Public Class Form1
 
     Private Sub mov_FormPopulate()
         'MsgBox("mov_FormPopulate()")
+
         Try
             If Not IsNothing(workingMovieDetails) Then
                 If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -2405,55 +2331,10 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-        'PictureBox1.CancelAsync()
-        'PictureBox1.Image = Nothing
-        'PictureBox1.Refresh()
-        'ComboBox5.Text = ""
-
-        'Button27.Visible = False
-        'Button28.Visible = False
-        'thumbedItsMade = False
-        'posterThumbedItsMade = False
-        'CheckBox1.Visible = False
-        'Button15.Visible = False
-        'Button9.Visible = False
-        'Button10.Visible = False
-        'Label18.Visible = False
-        'titletxt.Text = ""
-        'TextBox3.Text = ""
-        'outlinetxt.Text = ""
-        'plottxt.Text = ""
-        'taglinetxt.Text = ""
-        'txtStars.Text = ""
-        'genretxt.Text = ""
-        'creditstxt.Text = ""
-        'directortxt.Text = ""
-        'studiotxt.Text = ""
-        'pathtxt.Text = ""
-        ''actorarray.Clear()
-
-        'ratingtxt.Text = ""
-        'runtimetxt.Text = ""
-        'votestxt.Text = ""
-        'certtxt.Text = ""
-        'PictureBox7.Image = Nothing
-        'PictureBox2.Image = Nothing
-        'moviethumb.Image = Nothing
-        'Label16.Text = ""
-        'Label17.Text = ""
-        'PictureBox3.Image = Nothing
-        'Label19.Text = ""
-        'TextBox34.Text = ""
-        'titletxt.Text = ""
-
-        'roletxt.Text = ""
-        'PictureBox1.Image = Nothing
-
-        'Me.Refresh()
-        'Application.DoEvents()
+        
 
         Try
-            If workingMovie.fullpathandfilename <> Nothing Then
+            If workingMovie.fullpathandfilename <> Nothing And MovieListComboBox.Items.Count > 0 Then
                 workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
                 If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
                 If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
@@ -2651,6 +2532,54 @@ Public Class Form1
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
+            Else
+                actorcb.Items.Clear()
+                PictureBox1.CancelAsync()
+                PictureBox1.Image = Nothing
+                PictureBox1.Refresh()
+                ComboBox5.Text = ""
+
+                Button27.Visible = False
+                Button28.Visible = False
+                thumbedItsMade = False
+                posterThumbedItsMade = False
+                CheckBox1.Visible = False
+                Button15.Visible = False
+                Button9.Visible = False
+                Button10.Visible = False
+                Label18.Visible = False
+                titletxt.Text = ""
+                TextBox3.Text = ""
+                outlinetxt.Text = ""
+                plottxt.Text = ""
+                taglinetxt.Text = ""
+                txtStars.Text = ""
+                genretxt.Text = ""
+                creditstxt.Text = ""
+                directortxt.Text = ""
+                studiotxt.Text = ""
+                pathtxt.Text = ""
+                'actorarray.Clear()
+
+                ratingtxt.Text = ""
+                runtimetxt.Text = ""
+                votestxt.Text = ""
+                certtxt.Text = ""
+                PictureBox7.Image = Nothing
+                PictureBox2.Image = Nothing
+                moviethumb.Image = Nothing
+                Label16.Text = ""
+                Label17.Text = ""
+                PictureBox3.Image = Nothing
+                Label19.Text = ""
+                TextBox34.Text = ""
+                titletxt.Text = ""
+
+                roletxt.Text = ""
+                PictureBox1.Image = Nothing
+
+                Me.Refresh()
+                Application.DoEvents()
             End If
             If ratingtxt.Text.IndexOf("/10") <> -1 Then
                 ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
@@ -32488,6 +32417,9 @@ MyExit:
    
     Public Sub util_ConfigLoad()
         Preferences.LoadConfig()
+        MovieListComboBox.Items.Clear()
+
+
         Me.GroupBox22.Visible = Not Preferences.tvshow_useXBMC_Scraper
         Me.GroupBox22.SendToBack()
         Me.GroupBox_TVDB_Scraper_Preferences.Visible = Preferences.tvshow_useXBMC_Scraper
@@ -32507,6 +32439,85 @@ MyExit:
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
         Read_XBMC_IMDB_Scraper_Config()
+
+        Select Case Preferences.moviedefaultlist
+            Case 0
+                RadioButton1.Checked = True
+            Case 1
+                RadioButton2.Checked = True
+            Case 2
+                RadioButton6.Checked = True
+        End Select
+
+        Select Case Preferences.moviesortorder
+            Case 0
+                RadioButton3.Checked = True
+            Case 1
+                RadioButton4.Checked = True
+            Case 2
+                RadioButtonSortModified.Checked = True
+            Case 3
+                RadioButton21.Checked = True
+            Case 4
+                RadioButton7.Checked = True
+            Case 5
+                RadioButton19.Checked = True
+            Case 6
+                RadioButtonSortCreate.Checked = True
+        End Select
+        '----------------------------------------------------------
+
+        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+        '----------------------------------------------------------
+        Dim loadinginfo As String = ""
+        If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
+            loadinginfo = "Status :- Building Movie Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call mov_CacheRefresh(movieFolders)
+
+        Else
+            loadinginfo = "Status :- Loading Movie Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call mov_CacheLoad()
+
+        End If
+
+        If IO.File.Exists(workingProfile.filters) Then
+            loadinginfo = "Status :- Loading Genrelist"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call util_GenreLoad()
+        End If
+
+        If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
+            loadinginfo = "Status :- Building TV Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call tv_CacheRefresh()
+        Else
+            loadinginfo = "Status :- Loading TV Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call tv_CacheLoad()
+        End If
+        If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
+            loadinginfo = "Status :- Building Actor Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call mov_ActorRebuild()
+        Else
+            loadinginfo = "Status :- Loading Actor Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Dim NovaThread3 = New Thread(New ThreadStart(AddressOf mov_ActorCacheLoad))
+            NovaThread3.SetApartmentState(ApartmentState.STA)
+            NovaThread3.Start()
+            'Call loadactorcache()
+        End If
+        Label39.Text = "Displaying " & filteredList.Count & " of  " & fullMovieList.Count & " movies"
+        Call mov_PreferencesDisplay()
     End Sub
 
     
