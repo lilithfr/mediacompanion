@@ -17288,33 +17288,41 @@ MyExit:
                     End If
                 End If
 
-                Dim FirstCount As Boolean = True
-                For Each items In listtorename
-                    Dim newname As String = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
+                Dim StillOk As Boolean = True   'first we test every file we are going to rename, if they all can be renamed we then rename
+                For Each ITEMS In listtorename
+                    Dim newname As String = ITEMS.Replace(IO.Path.GetFileName(ITEMS), newfilename) & IO.Path.GetExtension(ITEMS)
                     newname = newname.Replace("..", ".")
-                    done = newname.Replace(IO.Path.GetExtension(newname), ".nfo")
-                    Try
-                        Dim fi As New IO.FileInfo(items)
-                        If Not IO.File.Exists(newname) Then
+                    Dim fi As New IO.FileInfo(ITEMS)
+                    If IO.File.Exists(newname) Then
+                        StillOK = False
+                    End If
+                Next
+
+                If StillOk = True Then
+                    Dim FirstCount As Boolean = True
+                    For Each ITEMS In listtorename
+                        Dim newname As String = ITEMS.Replace(IO.Path.GetFileName(ITEMS), newfilename) & IO.Path.GetExtension(ITEMS)
+                        newname = newname.Replace("..", ".")
+                        done = newname.Replace(IO.Path.GetExtension(newname), ".nfo")
+                        Try
+                            Dim fi As New IO.FileInfo(ITEMS)
                             fi.MoveTo(newname)
-                            If FirstCount Then  'we only want to show the renamed mediafile in the brief view
+                            If FirstCount = True Then  'we only want to show the renamed mediafile in the brief view
                                 Preferences.tvScraperLog &= "!!! RENAMED TO: " & newname & vbCrLf
                                 FirstCount = False
                             Else
                                 Preferences.tvScraperLog &= "                " & newname & vbCrLf
                             End If
 
-                        End If
+                        Catch ex As Exception
+                            done = path
+                            Preferences.tvScraperLog &= "!!! Renamed FAILED for" & newname & vbCrLf
+                        End Try
 
-                        Exit For
-                    Catch ex As Exception
-                        done = path
-                        Preferences.tvScraperLog &= "!!! Renamed FAILED for" & newname & vbCrLf
-                    End Try
+                    Next
+                    returnpath = done
+                End If
 
-                Next
-                returnpath = done
-               
             End If
         Next
         Return returnpath
