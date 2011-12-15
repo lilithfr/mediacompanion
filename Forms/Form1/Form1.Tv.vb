@@ -87,7 +87,7 @@ Partial Public Class Form1
 
 
 
-        TextBox2.Text = ""
+        TextBox_Title.Text = ""
         TextBox10.Text = ""
         TextBox11.Text = ""
         TextBox9.Text = ""
@@ -141,8 +141,8 @@ Partial Public Class Form1
 
         'now we set the items that have variable text in the context menu using the 'show' text set above
         Tv_TreeViewContext_ShowTitle.BackColor = Color.Honeydew                'SK - same color as the refresh tv show splash - comments required to see if it works or not....
-        
-        
+
+
         'Tv_TreeViewContext_OpenFolder.Text = "Open """ & showtitle & """ Folder"
         'Tv_TreeViewContext_SearchNewEp.Text = "Search """ & showtitle & """ for new episodes"
         'Tv_TreeViewContext_FindMissArt.Text = "Download missing art for """ & showtitle & """"
@@ -384,7 +384,7 @@ Partial Public Class Form1
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
             TextBox19.Text = "Unable to find folder: " & Show.FolderPath
-            TextBox2.Text = "Unable to find folder: " & Show.FolderPath
+            TextBox_Title.Text = "Unable to find folder: " & Show.FolderPath
         Else
 
 
@@ -425,15 +425,15 @@ Partial Public Class Form1
 
             Panel9.Visible = False
 
-            TextBox2.BackColor = Color.White
+            TextBox_Title.BackColor = Color.White
             If Show.Title.Value <> Nothing Then
-                TextBox2.Text = Show.Title.Value
+                TextBox_Title.Text = Show.Title.Value
 
             End If
 
             ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits. Yellow is the same colour as the unverified Button
-            If Show.State = ShowState.Unverified Then TextBox2.BackColor = Color.Yellow
-            If Show.State = ShowState.Error Then TextBox2.BackColor = Color.Red
+            If Show.State = ShowState.Unverified Then TextBox_Title.BackColor = Color.Yellow
+            If Show.State = ShowState.Error Then TextBox_Title.BackColor = Color.Red
 
 
             If Show.Premiered.Value <> Nothing Then TextBox10.Text = Show.Premiered.Value
@@ -554,9 +554,9 @@ Partial Public Class Form1
             MsgBox("Show tag not set")
             Exit Sub
         End If
-        TextBox2.BackColor = Color.White
+        TextBox_Title.BackColor = Color.White
         If Show.Title.Value <> Nothing Then
-            TextBox2.Text = Show.Title.Value
+            TextBox_Title.Text = Show.Title.Value & " - " & SelectedSeason.SeasonNode.Text
 
         End If
 
@@ -644,12 +644,12 @@ Partial Public Class Form1
 
 
         Dim tempstring As String = ""
-        TextBox2.Text = ""
-        TextBox20.Text = ""
-        TextBox21.Text = ""
-        TextBox22.Text = ""
-        TextBox23.Text = ""
-        TextBox24.Text = ""
+        TextBox_Title.Text = ""
+        TextBox_Rating.Text = ""
+        TextBox_Plot.Text = ""
+        TextBox_Director.Text = ""
+        TextBox_Credits.Text = ""
+        TextBox_Aired.Text = ""
         TextBox25.Text = ""
         ComboBox5.Items.Clear()
         ComboBox5.Text = ""
@@ -659,20 +659,20 @@ Partial Public Class Form1
         TextBox29.Text = IO.Path.GetFileName(Episode.NfoFilePath)
         TextBox17.Text = Episode.FolderPath
         If Not IO.File.Exists(Episode.NfoFilePath) Then
-            TextBox2.Text = "Unable to find episode: " & Episode.NfoFilePath
-            TextBox21.Text = "Unable to find episode: " & Episode.NfoFilePath
+            TextBox_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
+            TextBox_Plot.Text = "Unable to find episode: " & Episode.NfoFilePath
             Panel9.Visible = True
             Episode.EpisodeNode.BackColor = Color.Red
             Exit Sub
         Else
             Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
         End If
-        TextBox2.Text = Episode.Title.Value
-        TextBox20.Text = Episode.Rating.Value
-        TextBox21.Text = Episode.Plot.Value
-        TextBox22.Text = Episode.Director.Value
-        TextBox23.Text = Episode.Credits.Value
-        TextBox24.Text = Episode.Aired.Value
+        TextBox_Title.Text = Episode.ShowObj.Title.Value & " - S" & Utilities.PadNumber(Episode.SeasonObj.SeasonNumber, 2) & "E" & Utilities.PadNumber(Episode.Episode.Value, 2) & " - '" & Episode.Title.Value & "'"
+        TextBox_Rating.Text = Episode.Rating.Value
+        TextBox_Plot.Text = Episode.Plot.Value
+        TextBox_Director.Text = Episode.Director.Value
+        TextBox_Credits.Text = Episode.Credits.Value
+        TextBox_Aired.Text = Episode.Aired.Value
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then

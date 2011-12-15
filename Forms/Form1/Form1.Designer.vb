@@ -520,14 +520,14 @@ Partial Class Form1
         Me.Label36 = New System.Windows.Forms.Label()
         Me.Label51 = New System.Windows.Forms.Label()
         Me.Label50 = New System.Windows.Forms.Label()
-        Me.TextBox24 = New System.Windows.Forms.TextBox()
-        Me.TextBox23 = New System.Windows.Forms.TextBox()
-        Me.TextBox22 = New System.Windows.Forms.TextBox()
-        Me.TextBox20 = New System.Windows.Forms.TextBox()
+        Me.TextBox_Aired = New System.Windows.Forms.TextBox()
+        Me.TextBox_Credits = New System.Windows.Forms.TextBox()
+        Me.TextBox_Director = New System.Windows.Forms.TextBox()
+        Me.TextBox_Rating = New System.Windows.Forms.TextBox()
         Me.Label49 = New System.Windows.Forms.Label()
         Me.Label48 = New System.Windows.Forms.Label()
         Me.Label47 = New System.Windows.Forms.Label()
-        Me.TextBox21 = New System.Windows.Forms.TextBox()
+        Me.TextBox_Plot = New System.Windows.Forms.TextBox()
         Me.Label46 = New System.Windows.Forms.Label()
         Me.Label45 = New System.Windows.Forms.Label()
         Me.Button48 = New System.Windows.Forms.Button()
@@ -554,7 +554,7 @@ Partial Class Form1
         Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
         Me.tv_PictureBoxLeft = New System.Windows.Forms.PictureBox()
         Me.tv_PictureBoxRight = New System.Windows.Forms.PictureBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.TextBox_Title = New System.Windows.Forms.TextBox()
         Me.Label44 = New System.Windows.Forms.Label()
         Me.Label42 = New System.Windows.Forms.Label()
         Me.Label35 = New System.Windows.Forms.Label()
@@ -6520,7 +6520,7 @@ Partial Class Form1
         Me.SplitContainer3.Panel2.Controls.Add(Me.TextBox10)
         Me.SplitContainer3.Panel2.Controls.Add(Me.TextBox9)
         Me.SplitContainer3.Panel2.Controls.Add(Me.SplitContainer4)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.TextBox2)
+        Me.SplitContainer3.Panel2.Controls.Add(Me.TextBox_Title)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label44)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label42)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label35)
@@ -6676,14 +6676,14 @@ Partial Class Form1
         Me.Panel9.Controls.Add(Me.Label36)
         Me.Panel9.Controls.Add(Me.Label51)
         Me.Panel9.Controls.Add(Me.Label50)
-        Me.Panel9.Controls.Add(Me.TextBox24)
-        Me.Panel9.Controls.Add(Me.TextBox23)
-        Me.Panel9.Controls.Add(Me.TextBox22)
-        Me.Panel9.Controls.Add(Me.TextBox20)
+        Me.Panel9.Controls.Add(Me.TextBox_Aired)
+        Me.Panel9.Controls.Add(Me.TextBox_Credits)
+        Me.Panel9.Controls.Add(Me.TextBox_Director)
+        Me.Panel9.Controls.Add(Me.TextBox_Rating)
         Me.Panel9.Controls.Add(Me.Label49)
         Me.Panel9.Controls.Add(Me.Label48)
         Me.Panel9.Controls.Add(Me.Label47)
-        Me.Panel9.Controls.Add(Me.TextBox21)
+        Me.Panel9.Controls.Add(Me.TextBox_Plot)
         Me.Panel9.Controls.Add(Me.Label46)
         Me.Panel9.Controls.Add(Me.Label45)
         Me.Panel9.Controls.Add(Me.Button48)
@@ -6814,49 +6814,49 @@ Partial Class Form1
         '
         'TextBox24
         '
-        Me.TextBox24.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.TextBox24.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox24.Location = New System.Drawing.Point(72, 206)
-        Me.TextBox24.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox24.Name = "TextBox24"
-        Me.TextBox24.Size = New System.Drawing.Size(193, 25)
-        Me.TextBox24.TabIndex = 10
+        Me.TextBox_Aired.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TextBox_Aired.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox_Aired.Location = New System.Drawing.Point(72, 206)
+        Me.TextBox_Aired.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_Aired.Name = "TextBox24"
+        Me.TextBox_Aired.Size = New System.Drawing.Size(193, 25)
+        Me.TextBox_Aired.TabIndex = 10
         '
         'TextBox23
         '
-        Me.TextBox23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+        Me.TextBox_Credits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox23.BackColor = System.Drawing.Color.White
-        Me.TextBox23.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox23.Location = New System.Drawing.Point(331, 40)
-        Me.TextBox23.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox23.Name = "TextBox23"
-        Me.TextBox23.ReadOnly = true
-        Me.TextBox23.Size = New System.Drawing.Size(385, 25)
-        Me.TextBox23.TabIndex = 9
+        Me.TextBox_Credits.BackColor = System.Drawing.Color.White
+        Me.TextBox_Credits.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox_Credits.Location = New System.Drawing.Point(331, 40)
+        Me.TextBox_Credits.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_Credits.Name = "TextBox23"
+        Me.TextBox_Credits.ReadOnly = true
+        Me.TextBox_Credits.Size = New System.Drawing.Size(385, 25)
+        Me.TextBox_Credits.TabIndex = 9
         '
         'TextBox22
         '
-        Me.TextBox22.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.TextBox22.BackColor = System.Drawing.Color.White
-        Me.TextBox22.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox22.Location = New System.Drawing.Point(72, 40)
-        Me.TextBox22.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox22.Name = "TextBox22"
-        Me.TextBox22.ReadOnly = true
-        Me.TextBox22.Size = New System.Drawing.Size(194, 25)
-        Me.TextBox22.TabIndex = 8
+        Me.TextBox_Director.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TextBox_Director.BackColor = System.Drawing.Color.White
+        Me.TextBox_Director.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox_Director.Location = New System.Drawing.Point(72, 40)
+        Me.TextBox_Director.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_Director.Name = "TextBox22"
+        Me.TextBox_Director.ReadOnly = true
+        Me.TextBox_Director.Size = New System.Drawing.Size(194, 25)
+        Me.TextBox_Director.TabIndex = 8
         '
         'TextBox20
         '
-        Me.TextBox20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+        Me.TextBox_Rating.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox20.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox20.Location = New System.Drawing.Point(330, 206)
-        Me.TextBox20.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox20.Name = "TextBox20"
-        Me.TextBox20.Size = New System.Drawing.Size(175, 25)
-        Me.TextBox20.TabIndex = 6
+        Me.TextBox_Rating.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox_Rating.Location = New System.Drawing.Point(330, 206)
+        Me.TextBox_Rating.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_Rating.Name = "TextBox20"
+        Me.TextBox_Rating.Size = New System.Drawing.Size(175, 25)
+        Me.TextBox_Rating.TabIndex = 6
         '
         'Label49
         '
@@ -6896,16 +6896,16 @@ Partial Class Form1
         '
         'TextBox21
         '
-        Me.TextBox21.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+        Me.TextBox_Plot.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox21.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox21.Location = New System.Drawing.Point(72, 74)
-        Me.TextBox21.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox21.Multiline = true
-        Me.TextBox21.Name = "TextBox21"
-        Me.TextBox21.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox21.Size = New System.Drawing.Size(433, 124)
-        Me.TextBox21.TabIndex = 7
+        Me.TextBox_Plot.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox_Plot.Location = New System.Drawing.Point(72, 74)
+        Me.TextBox_Plot.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_Plot.Multiline = true
+        Me.TextBox_Plot.Name = "TextBox21"
+        Me.TextBox_Plot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox_Plot.Size = New System.Drawing.Size(433, 124)
+        Me.TextBox_Plot.TabIndex = 7
         '
         'Label46
         '
@@ -7216,15 +7216,15 @@ Partial Class Form1
         '
         'TextBox2
         '
-        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+        Me.TextBox_Title.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.Font = New System.Drawing.Font("Times New Roman", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(4, 4)
-        Me.TextBox2.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(603, 38)
-        Me.TextBox2.TabIndex = 0
-        Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.TextBox_Title.Font = New System.Drawing.Font("Times New Roman", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox_Title.Location = New System.Drawing.Point(4, 4)
+        Me.TextBox_Title.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBox_Title.Name = "TextBox2"
+        Me.TextBox_Title.Size = New System.Drawing.Size(603, 38)
+        Me.TextBox_Title.TabIndex = 0
+        Me.TextBox_Title.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label44
         '
@@ -11671,7 +11671,7 @@ End Sub
     Friend WithEvents TextBox8 As System.Windows.Forms.TextBox
     Friend WithEvents WebBrowser2 As System.Windows.Forms.WebBrowser
     Friend WithEvents TvTreeview As System.Windows.Forms.TreeView
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_Title As System.Windows.Forms.TextBox
     Friend WithEvents SplitContainer4 As System.Windows.Forms.SplitContainer
     Friend WithEvents tv_PictureBoxLeft As System.Windows.Forms.PictureBox
     Friend WithEvents tv_PictureBoxRight As System.Windows.Forms.PictureBox
@@ -11699,11 +11699,11 @@ End Sub
     Friend WithEvents TextBox19 As System.Windows.Forms.TextBox
     Friend WithEvents Label44 As System.Windows.Forms.Label
     Friend WithEvents Panel9 As System.Windows.Forms.Panel
-    Friend WithEvents TextBox24 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox23 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox22 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox21 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox20 As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_Aired As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_Credits As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_Director As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_Plot As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox_Rating As System.Windows.Forms.TextBox
     Friend WithEvents Label49 As System.Windows.Forms.Label
     Friend WithEvents Label48 As System.Windows.Forms.Label
     Friend WithEvents Label47 As System.Windows.Forms.Label

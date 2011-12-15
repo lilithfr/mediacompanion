@@ -18183,20 +18183,20 @@ MyExit:
 
     End Sub
 
-    Private Sub TextBox2_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox2.Enter
+    Private Sub TextBox2_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Enter
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         If Panel9.Visible = False Then
-            TextBox2.Text = WorkingTvShow.Title.Value
-            If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 Then
-                TextBox2.Text = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
+            TextBox_Title.Text = WorkingTvShow.Title.Value
+            If TextBox_Title.Text.ToLower.IndexOf(", the") = TextBox_Title.Text.Length - 5 Then
+                TextBox_Title.Text = "The " & TextBox_Title.Text.Substring(0, TextBox_Title.Text.Length - 5)
             End If
         Else
-            TextBox2.Text = WorkingEpisode.Title.Value
+            TextBox_Title.Text = WorkingEpisode.Title.Value
         End If
     End Sub
 
-    Private Sub TextBox2_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox2.Leave
+    Private Sub TextBox2_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Leave
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
@@ -18204,18 +18204,18 @@ MyExit:
         If Panel9.Visible = False Then
             '-------------- Aqui
             If Preferences.ignorearticle = True Then
-                If TextBox2.Text.ToLower.IndexOf("the ") = 0 Then
-                    TextBox2.Text = TextBox2.Text.Substring(4, TextBox2.Text.Length - 4) & ", The"
+                If TextBox_Title.Text.ToLower.IndexOf("the ") = 0 Then
+                    TextBox_Title.Text = TextBox_Title.Text.Substring(4, TextBox_Title.Text.Length - 4) & ", The"
                 End If
             End If
-            WorkingTvShow.Title.Value = TextBox2.Text
+            WorkingTvShow.Title.Value = TextBox_Title.Text
         Else
-            WorkingEpisode.Title.Value = TextBox2.Text
+            WorkingEpisode.Title.Value = TextBox_Title.Text
             Dim trueseason As String = WorkingEpisode.Season.value
             Dim trueepisode As String = WorkingEpisode.Episode.Value
             If trueseason.Length = 1 Then trueseason = "0" & trueseason
             If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
-            TextBox2.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
+            TextBox_Title.Text = "S" & trueseason & "E" & trueepisode & " - " & WorkingEpisode.Title.Value
         End If
     End Sub
 
@@ -18269,10 +18269,10 @@ MyExit:
                 End If
                 'its a tvshow
 
-                If TextBox2.Text.ToLower.IndexOf(", the") = TextBox2.Text.Length - 5 And TextBox2.Text.Length > 5 Then
-                    Show.Title.Value = "The " & TextBox2.Text.Substring(0, TextBox2.Text.Length - 5)
+                If TextBox_Title.Text.ToLower.IndexOf(", the") = TextBox_Title.Text.Length - 5 And TextBox_Title.Text.Length > 5 Then
+                    Show.Title.Value = "The " & TextBox_Title.Text.Substring(0, TextBox_Title.Text.Length - 5)
                 Else
-                    Show.Title.Value = TextBox2.Text
+                    Show.Title.Value = TextBox_Title.Text
                 End If
                 Show.Plot.Value = TextBox19.Text
                 Show.Runtime.Value = TextBox15.Text
@@ -18318,10 +18318,10 @@ MyExit:
                 Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
                 Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
                 tempstring = "S" & trueseason & "E" & trueepisode & " - "
-                Episode.Title.Value = TextBox2.Text.Replace(tempstring, "")
-                Episode.Plot.Value = TextBox21.Text
-                Episode.Aired.Value = TextBox24.Text
-                Episode.Rating.Value = TextBox20.Text
+                Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")
+                Episode.Plot.Value = TextBox_Plot.Text
+                Episode.Aired.Value = TextBox_Aired.Text
+                Episode.Rating.Value = TextBox_Rating.Text
 
                 Episode.Save()
                 Episode.UpdateTreenode()
@@ -21571,7 +21571,7 @@ MyExit:
                     Case Media_Companion.ShowState.Error
                     Case Media_Companion.ShowState.Unverified
                         TempShow.State = Media_Companion.ShowState.Open
-                        TextBox2.BackColor = Color.White
+                        TextBox_Title.BackColor = Color.White
                 End Select
                 TempShow.UpdateTreenode()
 
@@ -27139,11 +27139,11 @@ MyExit:
                     ComboBox5.Font = newFont
                     TvTreeview.Font = newFont
                     TextBox25.Font = newFont
-                    TextBox22.Font = newFont
-                    TextBox23.Font = newFont
-                    TextBox21.Font = newFont
-                    TextBox24.Font = newFont
-                    TextBox20.Font = newFont
+                    TextBox_Director.Font = newFont
+                    TextBox_Credits.Font = newFont
+                    TextBox_Plot.Font = newFont
+                    TextBox_Aired.Font = newFont
+                    TextBox_Rating.Font = newFont
                     TextBox17.Font = newFont
                     TextBox29.Font = newFont
                     TextBox19.Font = newFont
