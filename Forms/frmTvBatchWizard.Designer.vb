@@ -22,40 +22,43 @@ Partial Class tv_batch_wizard
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
-        Me.CheckBox10 = New System.Windows.Forms.CheckBox
-        Me.CheckBox9 = New System.Windows.Forms.CheckBox
-        Me.CheckBox8 = New System.Windows.Forms.CheckBox
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox
-        Me.CheckBox6 = New System.Windows.Forms.CheckBox
-        Me.CheckBox5 = New System.Windows.Forms.CheckBox
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox
-        Me.CheckBox20 = New System.Windows.Forms.CheckBox
-        Me.CheckBox19 = New System.Windows.Forms.CheckBox
-        Me.CheckBox18 = New System.Windows.Forms.CheckBox
-        Me.CheckBox17 = New System.Windows.Forms.CheckBox
-        Me.CheckBox16 = New System.Windows.Forms.CheckBox
-        Me.CheckBox15 = New System.Windows.Forms.CheckBox
-        Me.CheckBox14 = New System.Windows.Forms.CheckBox
-        Me.CheckBox13 = New System.Windows.Forms.CheckBox
-        Me.CheckBox12 = New System.Windows.Forms.CheckBox
-        Me.CheckBox11 = New System.Windows.Forms.CheckBox
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer
-        Me.Button2 = New System.Windows.Forms.Button
-        Me.Button1 = New System.Windows.Forms.Button
-        Me.CheckBox21 = New System.Windows.Forms.CheckBox
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox9 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox13 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox12 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.CheckBox21 = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxRewiteAllNfo = New System.Windows.Forms.CheckBox()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
@@ -79,8 +82,8 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(408, 314)
-        Me.SplitContainer1.SplitterDistance = 151
+        Me.SplitContainer1.Size = New System.Drawing.Size(408, 336)
+        Me.SplitContainer1.SplitterDistance = 161
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -354,11 +357,12 @@ Partial Class tv_batch_wizard
         '
         'SplitContainer2.Panel2
         '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.CheckBoxRewiteAllNfo)
         Me.SplitContainer2.Panel2.Controls.Add(Me.Button2)
         Me.SplitContainer2.Panel2.Controls.Add(Me.Button1)
         Me.SplitContainer2.Panel2.Controls.Add(Me.CheckBox21)
-        Me.SplitContainer2.Size = New System.Drawing.Size(408, 362)
-        Me.SplitContainer2.SplitterDistance = 314
+        Me.SplitContainer2.Size = New System.Drawing.Size(408, 388)
+        Me.SplitContainer2.SplitterDistance = 336
         Me.SplitContainer2.TabIndex = 1
         '
         'Button2
@@ -382,22 +386,32 @@ Partial Class tv_batch_wizard
         'CheckBox21
         '
         Me.CheckBox21.AutoSize = True
-        Me.CheckBox21.Location = New System.Drawing.Point(18, 15)
+        Me.CheckBox21.Location = New System.Drawing.Point(18, 8)
         Me.CheckBox21.Name = "CheckBox21"
         Me.CheckBox21.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox21.TabIndex = 0
         Me.CheckBox21.Text = "Include locked shows"
         Me.CheckBox21.UseVisualStyleBackColor = True
         '
+        'CheckBoxRewiteAllNfo
+        '
+        Me.CheckBoxRewiteAllNfo.AutoSize = True
+        Me.CheckBoxRewiteAllNfo.Location = New System.Drawing.Point(18, 25)
+        Me.CheckBoxRewiteAllNfo.Name = "CheckBoxRewiteAllNfo"
+        Me.CheckBoxRewiteAllNfo.Size = New System.Drawing.Size(108, 17)
+        Me.CheckBoxRewiteAllNfo.TabIndex = 3
+        Me.CheckBoxRewiteAllNfo.Text = "Rewrite All NFO's"
+        Me.CheckBoxRewiteAllNfo.UseVisualStyleBackColor = True
+        '
         'tv_batch_wizard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(408, 362)
+        Me.ClientSize = New System.Drawing.Size(408, 388)
         Me.ControlBox = False
         Me.Controls.Add(Me.SplitContainer2)
-        Me.MaximumSize = New System.Drawing.Size(424, 400)
-        Me.MinimumSize = New System.Drawing.Size(424, 400)
+        Me.MaximumSize = New System.Drawing.Size(424, 424)
+        Me.MinimumSize = New System.Drawing.Size(424, 424)
         Me.Name = "tv_batch_wizard"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "TV Batch Wizard"
@@ -405,6 +419,7 @@ Partial Class tv_batch_wizard
         Me.SplitContainer1.Panel1.PerformLayout()
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel2.PerformLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
@@ -413,6 +428,7 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)
         Me.SplitContainer2.Panel2.PerformLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -446,4 +462,5 @@ Partial Class tv_batch_wizard
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBoxRewiteAllNfo As System.Windows.Forms.CheckBox
 End Class

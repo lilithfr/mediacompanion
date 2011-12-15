@@ -346,4 +346,8 @@
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+    Private Sub CheckBoxRewiteAllNfo_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxRewiteAllNfo.CheckedChanged
+
+    End Sub
 End Class
