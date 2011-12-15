@@ -21976,13 +21976,21 @@ MyExit:
                 Episode = TvTreeview.SelectedNode.Tag
                 ShowList.Add(Episode.ShowObj)
             End If
+            Dim OverrideLock As Boolean = False
+            If ShowList(0).State <> 0 Then  'i.e. it is either locked or unverified
+                If MsgBox("This show is either 'Locked' or 'Unverified'. Do you want to continue scan?", MsgBoxStyle.YesNo, "Question?") = MsgBoxResult.Yes Then
+                    OverrideLock = True
+                Else
+                    Exit Sub
+                End If
+            End If
 
             If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
                 'ToolStripButton10.Visible = True
                 TabPage15.Text = "Cancel Episode Search"
                 TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
 
-                bckgroundscanepisodes.RunWorkerAsync({ShowList, False})
+                bckgroundscanepisodes.RunWorkerAsync({ShowList, OverrideLock})
             ElseIf bckgroundscanepisodes.IsBusy Then
                 MsgBox("This Episode Scraper is already running")
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
