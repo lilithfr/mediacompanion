@@ -1,5 +1,6 @@
 
 Public Structure str_TvShowBatchWizard
+    Dim RewriteAllNFOs As Boolean
     Dim shYear As Boolean
     Dim shRating As Boolean
     Dim shPlot As Boolean
@@ -31,7 +32,11 @@ Public Structure str_TvShowBatchWizard
     Dim doEpisodeArt As Boolean
     Dim doEpisodeActors As Boolean
     Dim doEpisodeMediaTags As Boolean
+
+
+
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+        RewriteAllNFOs = False
         shYear = False
         shRating = False
         shPlot = False

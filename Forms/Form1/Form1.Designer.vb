@@ -76,7 +76,7 @@ Partial Class Form1
         Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.Button34 = New System.Windows.Forms.Button()
-        Me.Button43 = New System.Windows.Forms.Button()
+        Me.Button_Save_TvShow_Episode = New System.Windows.Forms.Button()
         Me.Button44 = New System.Windows.Forms.Button()
         Me.Button52 = New System.Windows.Forms.Button()
         Me.Button53 = New System.Windows.Forms.Button()
@@ -1481,17 +1481,17 @@ Partial Class Form1
         '
         'Button43
         '
-        Me.Button43.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button43.BackgroundImage = CType(resources.GetObject("Button43.BackgroundImage"),System.Drawing.Image)
-        Me.Button43.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button43.Location = New System.Drawing.Point(674, 4)
-        Me.Button43.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button43.Name = "Button43"
-        Me.Button43.Size = New System.Drawing.Size(49, 44)
-        Me.Button43.TabIndex = 20
-        Me.Button43.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ToolTip1.SetToolTip(Me.Button43, "Save any edits made below")
-        Me.Button43.UseVisualStyleBackColor = true
+        Me.Button_Save_TvShow_Episode.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Button_Save_TvShow_Episode.BackgroundImage = CType(resources.GetObject("Button43.BackgroundImage"),System.Drawing.Image)
+        Me.Button_Save_TvShow_Episode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Button_Save_TvShow_Episode.Location = New System.Drawing.Point(674, 4)
+        Me.Button_Save_TvShow_Episode.Margin = New System.Windows.Forms.Padding(4)
+        Me.Button_Save_TvShow_Episode.Name = "Button43"
+        Me.Button_Save_TvShow_Episode.Size = New System.Drawing.Size(49, 44)
+        Me.Button_Save_TvShow_Episode.TabIndex = 20
+        Me.Button_Save_TvShow_Episode.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ToolTip1.SetToolTip(Me.Button_Save_TvShow_Episode, "Save any edits made below")
+        Me.Button_Save_TvShow_Episode.UseVisualStyleBackColor = true
         '
         'Button44
         '
@@ -6501,7 +6501,7 @@ Partial Class Form1
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label66)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Button60)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Button44)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.Button43)
+        Me.SplitContainer3.Panel2.Controls.Add(Me.Button_Save_TvShow_Episode)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label8)
         Me.SplitContainer3.Panel2.Controls.Add(Me.TextBox19)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Button45)
@@ -11797,7 +11797,7 @@ End Sub
     Friend WithEvents TextBox17 As System.Windows.Forms.TextBox
     Friend WithEvents Label36 As System.Windows.Forms.Label
     Friend WithEvents Label40 As System.Windows.Forms.Label
-    Friend WithEvents Button43 As System.Windows.Forms.Button
+    Friend WithEvents Button_Save_TvShow_Episode As System.Windows.Forms.Button
     Friend WithEvents Button44 As System.Windows.Forms.Button
     Friend WithEvents Label67 As System.Windows.Forms.Label
     Friend WithEvents Label66 As System.Windows.Forms.Label

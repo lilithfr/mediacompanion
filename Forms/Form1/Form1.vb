@@ -18219,7 +18219,7 @@ MyExit:
         End If
     End Sub
 
-    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button43.Click 'save button
+    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click 'save button
         Try
             Dim Show As Media_Companion.TvShow = Nothing
             Dim Season As Media_Companion.TvSeason = Nothing
@@ -30775,6 +30775,11 @@ MyExit:
             For f = Cache.TvCache.Shows.Count - 1 To 0 Step -1
                 Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
                 showcounter += 1
+                If tvBatchList.RewriteAllNFOs Then
+                    Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                    Continue For
+                End If
+
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open Or Cache.TvCache.Shows(f).State = -1 Or tvBatchList.includeLocked = True Then
                     progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount
                     If done > 0 Then
@@ -31135,31 +31140,31 @@ MyExit:
                                         End If
                                         If Not IO.File.Exists(seasonpath) Then
                                             Utilities.DownloadFile(seasonposter, seasonpath)
-'                                            Try
-'                                                Dim buffer(4000000) As Byte
-'                                                Dim size As Integer = 0
-'                                                Dim bytesRead As Integer = 0
-'                                                Dim thumburl As String = seasonposter
-'                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                                Dim res As HttpWebResponse = req.GetResponse()
-'                                                Dim contents As Stream = res.GetResponseStream()
-'                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                                While bytesToRead > 0
-'                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                                    If size = 0 Then Exit While
-'                                                    bytesToRead -= size
-'                                                    bytesRead += size
-'                                                End While
-'                                                Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-'                                                fstrm.Write(buffer, 0, bytesRead)
-'                                                contents.Close()
-'                                                fstrm.Close()
-'                                            Catch ex As WebException
-'#If SilentErrorScream Then
-'                                            Throw ex
-'#End If
-'                                                'MsgBox("Error Downloading season poster from TVDB")
-'                                            End Try
+                                            '                                            Try
+                                            '                                                Dim buffer(4000000) As Byte
+                                            '                                                Dim size As Integer = 0
+                                            '                                                Dim bytesRead As Integer = 0
+                                            '                                                Dim thumburl As String = seasonposter
+                                            '                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                            '                                                Dim res As HttpWebResponse = req.GetResponse()
+                                            '                                                Dim contents As Stream = res.GetResponseStream()
+                                            '                                                Dim bytesToRead As Integer = CInt(buffer.Length)
+                                            '                                                While bytesToRead > 0
+                                            '                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
+                                            '                                                    If size = 0 Then Exit While
+                                            '                                                    bytesToRead -= size
+                                            '                                                    bytesRead += size
+                                            '                                                End While
+                                            '                                                Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                            '                                                fstrm.Write(buffer, 0, bytesRead)
+                                            '                                                contents.Close()
+                                            '                                                fstrm.Close()
+                                            '                                            Catch ex As WebException
+                                            '#If SilentErrorScream Then
+                                            '                                            Throw ex
+                                            '#End If
+                                            '                                                'MsgBox("Error Downloading season poster from TVDB")
+                                            '                                            End Try
                                         End If
                                     End If
                                 End If

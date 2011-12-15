@@ -33,7 +33,7 @@ Partial Public Class Form1
 
     Public Sub tv_ViewReset()
         'RenameTVShowsToolStripMenuItem.Enabled = False
-        Button43.Enabled = True
+        Button_Save_TvShow_Episode.Enabled = True
         'RenameTVShowsToolStripMenuItem.Visible = False
         Tv_TreeViewContext_RefreshShow.Enabled = False
         Tv_TreeViewContext_RefreshShow.Visible = False
