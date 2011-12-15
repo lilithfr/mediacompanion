@@ -30776,7 +30776,9 @@ MyExit:
                 Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
                 showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
-                    Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                    If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
+                        Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                    End If
                     Continue For
                 End If
 
