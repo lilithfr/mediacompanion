@@ -346,8 +346,24 @@
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
+    Private Sub CheckBox21_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox21.CheckedChanged
+        If CheckBox21.Checked = True Then
+            Form1.tvBatchList.includeLocked = True
+        Else
+            Form1.tvBatchList.includeLocked = False
+        End If
+    End Sub
     Private Sub CheckBoxRewiteAllNfo_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBoxRewiteAllNfo.CheckedChanged
-
+        If CheckBoxRewiteAllNfo.Checked = True Then
+            If MsgBox("Do you want to rewite all of your TVShow nfo's?" & vbCrLf & "MC will read in the current nfo & write back only the data it uses in order to clean the nfo.", MsgBoxStyle.OkCancel, "Question?") = MsgBoxResult.Ok Then
+                Form1.tvBatchList.RewriteAllNFOs = True
+                GroupBox1.Enabled = False
+                GroupBox2.Enabled = False
+            End If
+        Else
+            Form1.tvBatchList.RewriteAllNFOs = False
+            GroupBox1.Enabled = True
+            GroupBox2.Enabled = True
+        End If
     End Sub
 End Class

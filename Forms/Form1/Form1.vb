@@ -21056,9 +21056,6 @@ MyExit:
         Try
             'Dim item As Windows.Forms.ToolStripMenuItem = sender
             ''Dim picbox As PictureBox = item.SourceControl
-
-
-
             Dim tempstring As String = ClickedControl
             If tempstring = Nothing Then
                 Exit Sub
@@ -21976,13 +21973,21 @@ MyExit:
                 Episode = TvTreeview.SelectedNode.Tag
                 ShowList.Add(Episode.ShowObj)
             End If
+            Dim OverrideLock As Boolean = False
+            If ShowList(0).State <> 0 Then  'i.e. it is either locked or unverified
+                If MsgBox("This show is either 'Locked' or 'Unverified'. Do you want to continue scan?", MsgBoxStyle.YesNo, "Question?") = MsgBoxResult.Yes Then
+                    OverrideLock = True
+                Else
+                    Exit Sub
+                End If
+            End If
 
             If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
                 'ToolStripButton10.Visible = True
                 TabPage15.Text = "Cancel Episode Search"
                 TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
 
-                bckgroundscanepisodes.RunWorkerAsync({ShowList, False})
+                bckgroundscanepisodes.RunWorkerAsync({ShowList, OverrideLock})
             ElseIf bckgroundscanepisodes.IsBusy Then
                 MsgBox("This Episode Scraper is already running")
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
@@ -30776,7 +30781,9 @@ MyExit:
                 Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
                 showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
-                    Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                    If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
+                        Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
+                    End If
                     Continue For
                 End If
 
@@ -32649,7 +32656,7 @@ MyExit:
 
     End Sub
     Private Sub util_FixSeasonEpisode() 'atleast try...       if season or episode is -1, but title contains a regexable name to retreive season & episode
-        Dim textstring As String = ""
+        Dim textstring As String = "!!! Season Episode -1 fix..." & vbCrLf
         Dim correctionsfound As Integer = 0
         Dim correctionsfixed As Integer = 0
         Dim childNodeLevel1 As TreeNode
@@ -32664,7 +32671,7 @@ MyExit:
                     episode.Load(childNodeLevel3.Name)  'load the episode from the nfo using the path stored in the treeview
 
                     If episode.Season.Value = -1 Or episode.Episode.Value = -1 Then ' check if we have the issue
-                        textstring += vbCrLf & childNodeLevel1.Text & " - " & childNodeLevel3.Name      'add details to the log
+                        textstring += "!!! " & childNodeLevel1.Text & " - " & childNodeLevel3.Name      'add details to the log"
                         correctionsfound += 1   'increment the found issues counter
                         For Each regexp In tv_RegexScraper
 
@@ -32682,15 +32689,16 @@ MyExit:
                                     episode.Episode.Value = M.Groups(2).Value.ToString
                                     correctionsfixed += 1
                                     episode.Save(childNodeLevel3.Name)                  'save episode
-                                    textstring += " *** Corrected - S" & episode.Season.Value & "E" & episode.Episode.Value
+                                    textstring += " - Corrected - S" & episode.Season.Value & "E" & episode.Episode.Value
                                     Exit For
 
                                 Catch
                                     textstring += vbCrLf & "**** exception created during nfo save **** - " & childNodeLevel3.Name
                                 End Try
                             End If
-                        Next
 
+                        Next
+                        textstring += vbCrLf
                     End If
                 Next
             Next
@@ -32700,9 +32708,10 @@ MyExit:
         MyFormObject.TextBox1.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte)) 'constant width font
         MyFormObject.Button1.AutoSize = True                                                    'change button size to text will fit automatically
         MyFormObject.Button1.Text = "Save Details..."                                           'change the button text
+        MyFormObject.Font = New System.Drawing.Font("Courier New", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         MyFormObject.Text = "Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & " Fixed: " & correctionsfixed            'change the form title text
         MyFormObject.ShowDialog()                                                               'show the form
-        If MsgBox("Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & "Fixed: " & correctionsfixed & vbCrLf & vbCrLf & "Do you want to perform a refresh to relaod the corrected nfo's?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+        If MsgBox("Corrections" & vbCrLf & "Found: " & correctionsfound & vbCrLf & "Fixed: " & correctionsfixed & vbCrLf & vbCrLf & "Do you want to perform a refresh to reload the corrected nfo's?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
             tv_CacheRefresh()   'ask to do a refresh or not, user may want to try both methods before do a refresh.
         End If
 
@@ -32724,6 +32733,27 @@ MyExit:
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
         Try
             tv_Rescrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    Private Sub PlayEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
+        Try
+            Dim tempstring As String = DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
+
+            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Preferences.videomode = 3 Then
+                Preferences.videomode = 2
+                Call util_VideoMode2(tempstring)
+            End If
+            If Preferences.videomode >= 4 Then
+                If Preferences.selectedvideoplayer <> Nothing Then
+                    Call util_VideoMode4(tempstring)
+                Else
+                    Call util_VideoMode1(tempstring)
+                End If
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
