@@ -153,7 +153,7 @@ Partial Public Class Form1
         If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "'"
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
-
+            Tv_TreeViewContext_Play_Episode.Enabled = False
             Tv_TreeViewContext_ViewNfo.Text = "View TVShow .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape TVShow"
 
@@ -170,7 +170,7 @@ Partial Public Class Form1
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - " & tv_SeasonSelectedCurrently.SeasonLabel
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
-
+            Tv_TreeViewContext_Play_Episode.Enabled = False
             Tv_TreeViewContext_ViewNfo.Text = "View Season .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Season"
 
@@ -187,7 +187,7 @@ Partial Public Class Form1
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
             Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - S" & Utilities.PadNumber(ep_SelectedCurrently.Season.Value, 2) & "E" & Utilities.PadNumber(ep_SelectedCurrently.Episode.Value, 2) & " '" & ep_SelectedCurrently.Title.Value & "'"
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
-
+            Tv_TreeViewContext_Play_Episode.Enabled = True
             Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Episode"
 

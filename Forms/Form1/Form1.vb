@@ -21056,9 +21056,6 @@ MyExit:
         Try
             'Dim item As Windows.Forms.ToolStripMenuItem = sender
             ''Dim picbox As PictureBox = item.SourceControl
-
-
-
             Dim tempstring As String = ClickedControl
             If tempstring = Nothing Then
                 Exit Sub
@@ -32736,6 +32733,27 @@ MyExit:
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
         Try
             tv_Rescrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    Private Sub PlayEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
+        Try
+            Dim tempstring As String = DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
+
+            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Preferences.videomode = 3 Then
+                Preferences.videomode = 2
+                Call util_VideoMode2(tempstring)
+            End If
+            If Preferences.videomode >= 4 Then
+                If Preferences.selectedvideoplayer <> Nothing Then
+                    Call util_VideoMode4(tempstring)
+                Else
+                    Call util_VideoMode1(tempstring)
+                End If
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
