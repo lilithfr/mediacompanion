@@ -757,6 +757,7 @@ Partial Public Class Form1
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
             newtvshownfo.Load(True)
+            DirectCast(newtvshownfo.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = newtvshownfo.NfoFilePath
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
                     If newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
@@ -3565,24 +3566,13 @@ Partial Public Class Form1
 
     Public Sub tv_CacheLoad()
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
-
         Cache.TvCache.Load()
         TvTreeview.Nodes.Clear()              'clear the treeview of old data
         ''Dirty work around until TvShows is repalced with TvCache.Shows universally
         For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
-            '    'Dim NewShow As New TvShow
-            '    'NewShow.LoadXml(TvShow.Node)
-            '    'NewShow.NfoFilePath = TvShow.NfoFilePath
             TvShow.UpdateTreenode()
-            '    TvShows.Add(TvShow)
-
-            '    'For Each Episode As Nfo.TvEpisode In TvShow.Episodes
-            '    '    NewShow.AddEpisode(Episode)
-            '    'Next
-
             TvTreeview.Nodes.Add(TvShow.ShowNode)
         Next
-
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
         TvTreeview.Sort()
@@ -3591,17 +3581,6 @@ Partial Public Class Form1
     Public Function Tv_CacheSave() As Boolean
 
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
-        'Cache.TvCache.Clear()
-        'For Each TvShow In TvShows
-        '    Cache.TvCache.Add(TvShow)
-        '    'For Each Season As Nfo.TvSeason In TvShow.Seasons.Values
-        '    '    TvCache.Add(Season)
-        '    For Each Episode As Nfo.TvEpisode In TvShow.Episodes
-        '        Cache.TvCache.Add(Episode)
-        '    Next
-        '    'Next
-        'Next
-
         If Cache.TvCache.IsAltered Then
             'Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
             'If Result = MsgBoxResult.Yes Then

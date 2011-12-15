@@ -1,4 +1,6 @@
-﻿Public Class ProtoFile
+﻿Imports System.Xml
+
+Public Class ProtoFile
     Implements IProtoXFile
 
 
@@ -222,9 +224,8 @@
     Public Sub Save(ByVal Path As String) Implements IProtoXFile.Save
         'IsAltred shouldn't be set here, Save() isn't called the actual file referenced in NfoFilePath may not match what is in the current file
         Me.CleanDoc()
-
+        DirectCast(Doc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Remove() '   Value = "Removed - Now Not Used!"
         Doc.Save(Path)
-
         Me.IsCache = False
     End Sub
 

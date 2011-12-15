@@ -179,46 +179,9 @@ Public Class TvCache
         Dom = New XDocument(<tvcache ver="3.5"></tvcache>)
 
         For Each Item As ProtoFile In Items
-
-
-            'If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
-            '    Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
-            '    Item.Node.Add(NfoPath)
-            'Else
-            '    Item.Node.Attribute("NfoPath").Value = Item.NfoFilePath
-            'End If
             Dom.Root.Add(Item.CacheNode)
-
         Next
 
-        'Try
-        '    For Each Item As TvEpisode In Episodes
-        '        If Item IsNot Nothing Then
-        '            If Not Item.FailedLoad Then
-        '                If Not String.IsNullOrEmpty(Item.NfoFilePath) AndAlso Item.Node.Attribute("NfoPath") Is Nothing Then
-        '                    Dim NfoPath As New XAttribute("NfoPath", Item.NfoFilePath)
-        '                    Item.Node.Add(NfoPath)
-        '                Else
-        '                    Item.Node.Attribute("NfoPath").Value = Item.NfoFilePath
-        '                End If
-
-
-
-        '                If Item.ShowObj IsNot Nothing Then
-        '                    If String.IsNullOrEmpty(Item.ShowId.Value) And Not String.IsNullOrEmpty(Item.ShowObj.TvdbId.Value) Then
-        '                        Item.ShowId.Value = Item.ShowObj.TvdbId.Value
-        '                    End If
-
-        '                    Dom.Root.Add(Item.Node)
-        '                Else
-        '                    Dim Test As Boolean = True
-        '                End If
-        '            End If
-        '        End If
-        '    Next
-        'Catch
-        '    Dim Test As Boolean = True
-        'End Try
         Dom.Save(TvCachePath)
     End Sub
 
@@ -245,6 +208,8 @@ Public Class TvCache
                     NewShow.LoadXml(Node)
                     NewShow.IsAltered = False
                     NewShow.NfoFilePath = Node.Attribute("NfoPath")
+                    DirectCast(NewShow.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewShow.NfoFilePath
+
                     NewShow.IsCache = True
                     'NewShow.UpdateTreenode()
                     Shows.Add(NewShow)
