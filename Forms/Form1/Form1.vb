@@ -17397,7 +17397,7 @@ MyExit:
         Return False
     End Function
 
-    Private Sub mov_NewFind(ByVal path As String, ByVal pattern As String)
+    Private Sub tv_NewFind(ByVal path As String, ByVal pattern As String)
         Dim episode As New List(Of TvEpisode)
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
@@ -17408,22 +17408,22 @@ MyExit:
         Dim counter2 As Integer = 1
         For Each FilePath As String In fs_infos
 
-            Dim filename As String = IO.Path.Combine(path, IO.Path.GetFileName(FilePath))
-            Dim filename2 As String = filename.Replace(IO.Path.GetExtension(filename), ".nfo")
-            If IO.File.Exists(filename2) Then
-                If ep_NfoValidate(filename2) = False And Preferences.renamenfofiles = True Then
-                    Dim movefilename As String = filename2.Replace(IO.Path.GetExtension(filename2), ".info")
+            Dim filename_video As String = FilePath
+            Dim filename_nfo As String = filename_video.Replace(IO.Path.GetExtension(filename_video), ".nfo")
+            If IO.File.Exists(filename_nfo) Then
+                If ep_NfoValidate(filename_nfo) = False And Preferences.renamenfofiles = True Then
+                    Dim movefilename As String = filename_nfo.Replace(IO.Path.GetExtension(filename_nfo), ".info")
                     Try
-                        IO.File.Move(filename2, movefilename)
+                        IO.File.Move(filename_nfo, movefilename)
                     Catch ex As Exception
 
                     End Try
                 End If
             End If
-            If Not IO.File.Exists(filename2) Then
+            If Not IO.File.Exists(filename_nfo) Then
                 Dim add As Boolean = True
                 If pattern = "*.vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
-                    Dim name As String = filename2
+                    Dim name As String = filename_nfo
                     name = name.Replace(IO.Path.GetFileName(name), "VIDEO_TS.IFO")
                     If IO.File.Exists(name) Then
                         add = False
@@ -17502,8 +17502,9 @@ MyExit:
                 End If
                 If add = True Then
                     Dim newep As New TvEpisode
-                    newep.VideoFilePath = filename2
-                    newep.mediaextension = filename
+                    newep.NfoFilePath = filename_nfo
+                    newep.VideoFilePath = filename_video
+                    newep.MediaExtension = IO.Path.GetExtension(filename_video)
                     newEpisodeList.Add(newep)
                 End If
             End If
