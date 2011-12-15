@@ -556,10 +556,12 @@ Partial Public Class Form1
         End If
         TextBox_Title.BackColor = Color.White
         If Show.Title.Value <> Nothing Then
-            TextBox_Title.Text = Show.Title.Value & " - " & SelectedSeason.SeasonNode.Text
-
+            If SelectedSeason.SeasonNumber = 0 Then
+                TextBox_Title.Text = Show.Title.Value & " - Specials"
+            Else
+                TextBox_Title.Text = Show.Title.Value & " - " & SelectedSeason.SeasonNode.Text
+            End If
         End If
-
         If TabControl3.TabPages(1).Text = "Screenshot" Then
             TabControl3.TabPages.RemoveAt(1)
         End If
