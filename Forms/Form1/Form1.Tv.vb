@@ -1766,7 +1766,7 @@ Partial Public Class Form1
                 'moviepattern = f
                 dirpath = newtvfolders(g)
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                mov_NewFind(dirpath, f)
+                tv_NewFind(dirpath, f)
             Next f
             tempint = newEpisodeList.Count - mediacounter
 
@@ -1924,14 +1924,14 @@ Partial Public Class Form1
                 Dim actorsource As String = ""
                 Dim realshowpath As String = ""
 
-                savepath = episodearray(0).VideoFilePath
+                savepath = episodearray(0).NfoFilePath '.VideoFilePath
                 Dim EpisodeName As String = ""
                 For Each Shows In Cache.TvCache.Shows
                     If bckgroundscanepisodes.CancellationPending Then
                         Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
-                    If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
+                    If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
                         language = Shows.Language.Value
                         sortorder = Shows.SortOrder.Value
                         tvdbid = Shows.TvdbId.Value
@@ -2362,7 +2362,7 @@ Partial Public Class Form1
                 newnamepath = ep_add(episodearray, savepath, showtitle)
                 ''9999999                                                               'This was already commented out, it must be a note of some sort.
                 For Each ep In episodearray
-                    ep.VideoFilePath = newnamepath
+                    ep.NfoFilePath = newnamepath
                 Next
                 'End If
                 'bckgroundscanepisodes.ReportProgress(9999999, episodearray)
@@ -2371,7 +2371,7 @@ Partial Public Class Form1
                     Exit Sub
                 End If
                 For Each Shows In Cache.TvCache.Shows
-                    If episodearray(0).VideoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
+                    If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
                         'workingtvshow = nfoFunction.loadfulltnshownfo(Shows.fullpath)
                         For Each ept In episodearray
                             For j = Shows.MissingEpisodes.Count - 1 To 0 Step -1
@@ -2384,7 +2384,7 @@ Partial Public Class Form1
                         For Each ep In episodearray
                             Dim newwp As New TvEpisode
                             newwp = ep                      'added this kline becuase plot + others were not being dispolay after a new ep was found
-                            newwp.VideoFilePath = newnamepath 'left these as they were....
+                            newwp.NfoFilePath = newnamepath 'left these as they were....
                             newwp.PlayCount.Value = "0"         '
                             newwp.ShowObj = Shows               '
                             bckgroundscanepisodes.ReportProgress(1, newwp)
