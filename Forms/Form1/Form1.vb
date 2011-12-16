@@ -18349,7 +18349,7 @@ MyExit:
                 Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
                 Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
                 tempstring = "S" & trueseason & "E" & trueepisode & " - "
-                Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")
+                'Episode.Title.Value = TextBox_Title.Text.Replace(tempstring, "")           'title is the only thing we don't change - on Form1 the textbox cannot be edited anyway
                 Episode.Plot.Value = TextBox_Plot.Text
                 Episode.Aired.Value = TextBox_Aired.Text
                 Episode.Rating.Value = TextBox_Rating.Text
