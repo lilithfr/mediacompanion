@@ -6250,7 +6250,7 @@ Public Class Form1
                     End If
 
                 Case "ep_nfo"
-                    Dim TVEpisodeNFO As List(Of TvEpisode) = nfoFunction.ep_NfoLoadGeneric(tvEpisode.VideoFilePath)
+                    Dim TVEpisodeNFO As List(Of TvEpisode) = nfoFunction.ep_NfoLoadGeneric(tvEpisode.NfoFilePath)
                     Dim fullTVEpisodeDetails As TvEpisode = TVEpisodeNFO(0)
                     Try
                         Select Case tokenInstr(1)
@@ -15738,7 +15738,7 @@ MyExit:
                     TextBox25.Text = actor.actorrole
                     PictureBox8.ImageLocation = defaultActor
 
-                    Dim temppath As String = Episode.VideoFilePath.Replace(IO.Path.GetFileName(Episode.VideoFilePath), "")
+                    Dim temppath As String = Episode.NfoFilePath.Replace(IO.Path.GetFileName(Episode.NfoFilePath), "")
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
@@ -18798,7 +18798,30 @@ MyExit:
             If tvdbid.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
             Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language)
 
+            If tempepisode.Contains("ERROR") Then
 
+
+                Dim chunkSize As Integer = 40
+                Dim chunkSize2 As Integer = 1
+                Dim loops As Integer = Math.Round(tempepisode.Length / chunkSize)
+                Dim finalString As String = ""
+
+                For i = 0 To loops
+                    If i * chunkSize + chunkSize > tempepisode.Length Then
+                        chunkSize2 = tempepisode.Length - i * chunkSize
+                    Else
+                        chunkSize2 = chunkSize
+                    End If
+                    finalString += tempepisode.Substring(i * chunkSize, chunkSize2) & vbCrLf
+                Next
+
+
+
+
+                MsgBox("TVDB reported the following error" & vbCrLf & finalString, MsgBoxStyle.OkOnly, "ERROR!")
+                messbox.Close()
+                Exit Sub
+            End If
             Dim scrapedepisode As New XmlDocument
             Try
                 scrapedepisode.LoadXml(tempepisode)
@@ -18936,7 +18959,7 @@ MyExit:
                                                         Case "actorid"
                                                             If newactor.actorthumb <> Nothing Then
                                                                 If detail.InnerText <> "" And Preferences.actorseasy = True Then
-                                                                    Dim workingpath As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetFileName(WorkingEpisode.VideoFilePath), "")
+                                                                    Dim workingpath As String = WorkingEpisode.NfoFilePath.Replace(IO.Path.GetFileName(WorkingEpisode.NfoFilePath), "")
                                                                     workingpath = workingpath & ".actors\"
                                                                     Dim hg As New IO.DirectoryInfo(workingpath)
                                                                     Dim destsorted As Boolean = False
@@ -30786,6 +30809,7 @@ MyExit:
                         Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath), True)
                     End If
                     Continue For
+                    tvBatchList.RewriteAllNFOs = False
                 End If
 
                 If Cache.TvCache.Shows(f).State = Media_Companion.ShowState.Open Or Cache.TvCache.Shows(f).State = -1 Or tvBatchList.includeLocked = True Then
@@ -31344,7 +31368,7 @@ MyExit:
                         'progresstext = "Working on Episodes: " & basictvlist(f).title
                         'tvbckrescrapewizard.ReportProgress(999999, progresstext)
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
-                            progresstext = "Working on Show: " & showcounter.ToString & " of " & progcount & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value
+                            progresstext = "Working on Show: " & Cache.TvCache.Shows(f).Title.Value & " Episode: " & Cache.TvCache.Shows(f).Episodes.Count - g & " of " & Cache.TvCache.Shows(f).Episodes.Count & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                             'progresstext = "Working on " & basictvlist(f).title & ", Episode: " & basictvlist(f).allepisodes(g).Season.value & "x" & basictvlist(f).allepisodes(g).episodeno
                             If done > 0 Then
                                 progress = (100 / showprocesscount) * done
@@ -31355,7 +31379,7 @@ MyExit:
                             If tvBatchList.doEpisodeBody = True Or (tvBatchList.doEpisodeActors = True And Cache.TvCache.Shows(f).EpisodeActorSource.Value <> "") Or (tvBatchList.doEpisodeArt = True) Then
                                 Dim listofnewepisodes As New List(Of TvEpisode)
                                 listofnewepisodes.Clear()
-                                listofnewepisodes = nfoFunction.ep_NfoLoadGeneric(Cache.TvCache.Shows(f).Episodes(g).VideoFilePath)
+                                listofnewepisodes = nfoFunction.ep_NfoLoadGeneric(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
                                     If listofnewepisodes(h).Season.Value = Cache.TvCache.Shows(f).Episodes(g).Season.Value And listofnewepisodes(h).Episode.Value = Cache.TvCache.Shows(f).Episodes(g).Episode.Value Then
                                         Dim newactors As New List(Of str_MovieActors)
@@ -31375,6 +31399,26 @@ MyExit:
                                         If language = "" Then language = "en"
                                         If actorsource = "" Then actorsource = "tvdb"
                                         Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language)
+
+                                        If tempepisode.Contains("ERROR") Then
+                                            Dim chunkSize As Integer = 40
+                                            Dim chunkSize2 As Integer = 1
+                                            Dim loops As Integer = Math.Round(tempepisode.Length / chunkSize)
+                                            Dim finalString As String = ""
+                                            For i = 0 To loops
+                                                If i * chunkSize + chunkSize > tempepisode.Length Then
+                                                    chunkSize2 = tempepisode.Length - i * chunkSize
+                                                Else
+                                                    chunkSize2 = chunkSize
+                                                End If
+                                                finalString += tempepisode.Substring(i * chunkSize, chunkSize2) & vbCrLf
+                                            Next
+                                            MsgBox("tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value, MsgBoxStyle.OkOnly, "tvdb ERROR!")
+                                            'MsgBox("TVDB reported the following error" & vbCrLf & finalString, MsgBoxStyle.OkOnly, "ERROR!")
+
+                                            Continue For
+                                        End If
+
                                         Dim scrapedepisode As New XmlDocument
                                         Try
                                             scrapedepisode.LoadXml(tempepisode)
@@ -31517,7 +31561,7 @@ MyExit:
                             If tvBatchList.doEpisodeMediaTags = True Then
                                 Dim listofnewepisodes As New List(Of TvEpisode)
                                 listofnewepisodes.Clear()
-                                listofnewepisodes = nfoFunction.ep_NfoLoadGeneric(Cache.TvCache.Shows(f).Episodes(g).VideoFilePath)
+                                listofnewepisodes = nfoFunction.ep_NfoLoadGeneric(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
                                     'listofnewepisodes(h).Details = Preferences.Get_HdTags(Utilities.GetFileName(listofnewepisodes(h).VideoFilePath))
                                     listofnewepisodes(h).GetFileDetails()

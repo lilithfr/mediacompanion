@@ -1875,10 +1875,10 @@ Partial Public Class Form1
                 eps.Genre.Value = "Unknown Episode Season and/or Episode Number"
                 eps.GetFileDetails()
                 episodearray.Add(eps)
-                savepath = episodearray(0).VideoFilePath
+                savepath = episodearray(0).NfoFilePath
             Else
 
-                Dim temppath As String = eps.VideoFilePath
+                Dim temppath As String = eps.NfoFilePath
                 'check for multiepisode files
                 Dim M2 As Match
                 Dim epcount As Integer = 0
@@ -1924,7 +1924,7 @@ Partial Public Class Form1
                 Dim actorsource As String = ""
                 Dim realshowpath As String = ""
 
-                savepath = episodearray(0).NfoFilePath '.VideoFilePath
+                savepath = episodearray(0).NfoFilePath
                 Dim EpisodeName As String = ""
                 For Each Shows In Cache.TvCache.Shows
                     If bckgroundscanepisodes.CancellationPending Then
@@ -2163,7 +2163,7 @@ Partial Public Class Form1
                                                                     Case "actorid"
                                                                         If newactor.actorthumb <> Nothing Then
                                                                             If Preferences.actorseasy = True And detail.InnerText <> "" Then
-                                                                                Dim workingpath As String = episodearray(0).VideoFilePath.Replace(IO.Path.GetFileName(episodearray(0).VideoFilePath), "")
+                                                                                Dim workingpath As String = episodearray(0).NfoFilePath.Replace(IO.Path.GetFileName(episodearray(0).NfoFilePath), "")
                                                                                 workingpath = workingpath & ".actors\"
                                                                                 Dim hg As New IO.DirectoryInfo(workingpath)
                                                                                 Dim destsorted As Boolean = False
