@@ -291,14 +291,14 @@ Public Class WorkingWithNfoFiles
                 newtvshow.Title.Value = IO.Path.GetFileName(path)
                 'newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
                 newtvshow.ImdbId.Value = "xml error"
-                newtvshow.VideoFilePath = path
+                newtvshow.NfoFilePath = path
                 newtvshow.TvdbId.Value = ""
-                newtvshow.VideoFilePath = path
+
                 If newtvshow.Episode.Value = Nothing Or newtvshow.Episode.Value = Nothing Then
                     For Each regexp In Preferences.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newtvshow.VideoFilePath, regexp)
+                        M = Regex.Match(newtvshow.NfoFilePath, regexp)
                         If M.Success = True Then
                             Try
                                 newtvshow.Season.Value = M.Groups(1).Value.ToString
@@ -344,7 +344,7 @@ Public Class WorkingWithNfoFiles
                 Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
-                        newtvepisode.VideoFilePath = path
+                        newtvepisode.NfoFilePath = path
                         Select Case thisresult.Name
                             Case "title"
                                 newtvepisode.Title.Value = thisresult.InnerText
@@ -373,7 +373,7 @@ Public Class WorkingWithNfoFiles
                     For Each regexp In Preferences.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newtvepisode.VideoFilePath, regexp)
+                        M = Regex.Match(newtvepisode.NfoFilePath, regexp)
                         If M.Success = True Then
                             Try
                                 newtvepisode.Season.Value = M.Groups(1).Value.ToString
@@ -430,12 +430,12 @@ Public Class WorkingWithNfoFiles
                                 End Try
                             Next f
                             Try
-                                anotherepisode.VideoFilePath = path
+                                anotherepisode.NfoFilePath = path
                                 If anotherepisode.Episode.Value = Nothing Or anotherepisode.Episode.Value = Nothing Then
                                     For Each regexp In Preferences.tv_RegexScraper
 
                                         Dim M As Match
-                                        M = Regex.Match(anotherepisode.VideoFilePath, regexp)
+                                        M = Regex.Match(anotherepisode.NfoFilePath, regexp)
                                         If M.Success = True Then
                                             Try
                                                 anotherepisode.Season.Value = M.Groups(1).Value.ToString
@@ -869,135 +869,7 @@ Public Class WorkingWithNfoFiles
         Else
             newtvshow.NfoFilePath = path
             newtvshow.Load()
-            'Dim tvshow As New XmlDocument
-
-            'Try
-            '    tvshow.Load(path)
-            'Catch ex As Exception
-            '    'If Not validate_nfo(path) Then
-            '    '    Exit Function
-            '    'End If
-            '    newtvshow.title = Utilities.GetLastFolder(path)
-            '    newtvshow.year = newtvshow.title & " (0000)"
-            '    newtvshow.plot = "problem loading tvshow.nfo / xml error"
-            '    newtvshow.status = "xml error"
-            '    newtvshow.path = path
-            '    newtvshow.year = "0000"
-            '    newtvshow.tvdbid = ""
-            '    newtvshow.path = path
-            '    newtvshow.locked = 1
-            '    Return newtvshow
-
-
-
-
-            '    Exit Function
-            'End Try
-            'newtvshow.genre = ""
-            'newtvshow.status = "ok"
-            'newtvshow.locked = False
-            'Dim thisresult As XmlNode = Nothing
-            'Dim tempid As String = ""
-            'For Each thisresult In tvshow("tvshow")
-            '    Try
-            '        Select Case thisresult.Name
-            '            Case "title"
-            '                Dim tempstring As String = ""
-            '                tempstring = thisresult.InnerText
-            '                '-------------- Aqui
-            '                If Preferences.ignorearticle = True Then
-            '                    If tempstring.ToLower.IndexOf("the ") = 0 Then
-            '                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-            '                        tempstring = tempstring & ", The"
-            '                    End If
-            '                End If
-            '                newtvshow.title = tempstring
-            '            Case "episodeguide"
-            '                newtvshow.episodeguideurl = thisresult.InnerText
-            '            Case "plot"
-            '                newtvshow.plot = thisresult.InnerText
-            '            Case "year"
-            '                newtvshow.year = thisresult.InnerText
-            '            Case "genre"
-            '                If newtvshow.genre = "" Then
-            '                    newtvshow.genre = thisresult.InnerText
-            '                Else
-            '                    newtvshow.genre &= " / " & thisresult.InnerText
-            '                End If
-            '            Case "tvdbid"
-            '                newtvshow.tvdbid = thisresult.InnerText
-            '            Case "id"
-            '                newtvshow.imdbid = thisresult.InnerText
-            '            Case "rating"
-            '                newtvshow.rating = thisresult.InnerText
-            '                If newtvshow.rating.IndexOf("/10") <> -1 Then newtvshow.rating.Replace("/10", "")
-            '                If newtvshow.rating.IndexOf(" ") <> -1 Then newtvshow.rating.Replace(" ", "")
-            '            Case "mpaa"
-            '                newtvshow.mpaa = thisresult.InnerText
-            '            Case "runtime"
-            '                newtvshow.runtime = thisresult.InnerText
-            '            Case "genre"
-            '                newtvshow.genre = thisresult.InnerText
-            '            Case "premiered"
-            '                newtvshow.premiered = thisresult.InnerText
-            '            Case "studio"
-            '                newtvshow.studio = thisresult.InnerText
-            '            Case "language"
-            '                newtvshow.language = thisresult.InnerText
-            '            Case "sortorder"
-            '                newtvshow.sortorder = thisresult.InnerText
-            '            Case "episodeactorsource"
-            '                newtvshow.episodeactorsource = thisresult.InnerText
-            '            Case "tvshowactorsource"
-            '                newtvshow.tvshowactorsource = thisresult.InnerText
-            '            Case "actor"
-            '                Dim detail As XmlNode = Nothing
-            '                Dim newactor As New MovieActors
-            '                For Each detail In thisresult.ChildNodes
-            '                    Select Case detail.Name
-            '                        Case "name"
-            '                            newactor.actorname = detail.InnerText
-            '                        Case "role"
-            '                            newactor.actorrole = detail.InnerText
-            '                        Case "thumb"
-            '                            newactor.actorthumb = detail.InnerText
-            '                    End Select
-            '                Next
-            '                newtvshow.listactors.Add(newactor)
-            '            Case "locked"
-            '                If thisresult.InnerText = "false" Then
-            '                    newtvshow.locked = 0
-            '                ElseIf thisresult.InnerText = "true" Then
-            '                    newtvshow.locked = 1
-            '                ElseIf thisresult.InnerText = "2" Then
-            '                    newtvshow.locked = 2
-            '                Else
-            '                    If IsNumeric(thisresult.InnerText) Then
-            '                        newtvshow.locked = Convert.ToInt32(thisresult.InnerText)
-            '                    Else
-            '                        newtvshow.locked = 1
-            '                    End If
-            '                End If
-            '        End Select
-            '    Catch ex As Exception
-            '        MsgBox(ex.ToString)
-            '    End Try
-            'Next
-
-            'If newtvshow.tvdbid = Nothing Then
-            '    If tempid <> Nothing Then
-            '        Dim tempstring As String = tempid.Substring(tempid.LastIndexOf("series/") + 7, tempid.Length - (tempid.LastIndexOf("series/") + 7))
-            '        tempstring = tempstring.Substring(0, tempstring.IndexOf("/"))
-            '        If tempstring.Length = 5 Then
-            '            If IsNumeric(tempstring) Then
-            '                newtvshow.tvdbid = tempstring
-            '            End If
-            '        End If
-            '    End If
-            'End If
-            'If newtvshow.tvdbid = Nothing Then newtvshow.tvdbid = ""
-            'If newtvshow.genre = Nothing Then newtvshow.genre = ""
-            'If newtvshow.rating = Nothing Then newtvshow.rating = ""
+           
         End If
         Return newtvshow
 
@@ -2816,12 +2688,12 @@ Public Class WorkingWithNfoFiles
             newepisode.Title.Value = IO.Path.GetFileName(path)
             newepisode.Plot.Value = "missing file"
 
-            newepisode.VideoFilePath = path
+            newepisode.NfoFilePath = path
             If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
                 For Each regexp In Preferences.tv_RegexScraper
 
                     Dim M As Match
-                    M = Regex.Match(newepisode.VideoFilePath, regexp)
+                    M = Regex.Match(newepisode.NfoFilePath, regexp)
                     If M.Success = True Then
                         Try
                             newepisode.Season.Value = M.Groups(1).Value.ToString
@@ -2853,13 +2725,13 @@ Public Class WorkingWithNfoFiles
                 'End If
                 newepisode.Title.Value = IO.Path.GetFileName(path)
                 newepisode.Plot.Value = "problem / xml error"
-                newepisode.VideoFilePath = path
-                newepisode.VideoFilePath = path
+                newepisode.NfoFilePath = path
+                'newepisode.VideoFilePath = path
                 If newepisode.Episode.Value = Nothing Or newepisode.Episode.Value = Nothing Then
                     For Each regexp In Preferences.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newepisode.VideoFilePath, regexp)
+                        M = Regex.Match(newepisode.NfoFilePath, regexp)
                         If M.Success = True Then
                             Try
                                 newepisode.Season.Value = M.Groups(1).Value.ToString
@@ -2889,7 +2761,7 @@ Public Class WorkingWithNfoFiles
                 Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
-                        newtvepisode.VideoFilePath = path
+                        newtvepisode.NfoFilePath = path
                         Select Case thisresult.Name
                             Case "credits"
                                 newtvepisode.Credits.Value = thisresult.InnerText
@@ -3009,7 +2881,7 @@ Public Class WorkingWithNfoFiles
                     For Each regexp In Preferences.tv_RegexScraper
 
                         Dim M As Match
-                        M = Regex.Match(newtvepisode.VideoFilePath, regexp)
+                        M = Regex.Match(newtvepisode.NfoFilePath, regexp)
                         If M.Success = True Then
                             Try
                                 newtvepisode.Season.Value = M.Groups(1).Value.ToString
@@ -3039,7 +2911,7 @@ Public Class WorkingWithNfoFiles
                             Dim newepisodenfo As XmlNode = Nothing
                             Dim anotherepisode As New TvEpisode
 
-                            anotherepisode.VideoFilePath = Nothing
+                            anotherepisode.NfoFilePath = Nothing
                             anotherepisode.playcount = Nothing
                             anotherepisode.rating = Nothing
                             anotherepisode.Season.value = Nothing
@@ -3176,7 +3048,7 @@ Public Class WorkingWithNfoFiles
                                     MsgBox(ex.ToString)
                                 End Try
                             Next f
-                            anotherepisode.VideoFilePath = path
+                            anotherepisode.NfoFilePath = path
                             newepisodelist.Add(anotherepisode)
                     End Select
                 Next

@@ -401,7 +401,7 @@ Public Class TVDBScraper
             xmlfile = Utilities.DownloadTextFiles(episodeurl) 'this function has gzip detection in it 
 
 
-            If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
+            'If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
 
             Dim episode As New XmlDocument
 

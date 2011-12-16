@@ -33,8 +33,8 @@ Public Class TvEpisode
 
             Me.Thumbnail.Path = _PureName & ".tbn"
 
-            Me.EditAttribute("PureName", Me.PureName)
-            Me.EditAttribute("MediaExtension", Me.MediaExtension)
+            ' Me.EditAttribute("PureName", Me.PureName)
+            ' Me.EditAttribute("MediaExtension", Me.MediaExtension)
         End Set
     End Property
 

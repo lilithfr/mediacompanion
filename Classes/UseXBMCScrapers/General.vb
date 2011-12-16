@@ -1636,7 +1636,7 @@ Module General
         For n As Integer = 0 To EpisodeArray.Count - 1
             EpisodeArray(n).Season.Value = CInt(EpisodeArray(n).Season.Value)
             EpisodeArray(n).Episode.Value = CInt(EpisodeArray(n).Episode.Value)
-            TempXMLEpisode.VideoFilePath = EpisodeArray(n).MediaExtension.Substring(0, EpisodeArray(n).MediaExtension.LastIndexOf(".")) & ".nfo"
+            TempXMLEpisode.NfoFilePath = EpisodeArray(n).MediaExtension.Substring(0, EpisodeArray(n).MediaExtension.LastIndexOf(".")) & ".nfo"
             TempXMLEpisode.Episode.Value = EpisodeArray(n).Episode.Value
             TempXMLEpisode.Season.Value = EpisodeArray(n).Season.Value
             TempXMLEpisode.MediaExtension = EpisodeArray(n).MediaExtension
@@ -1675,7 +1675,7 @@ Module General
             Dim ImageFilename As String = EpisodeArray(0).MediaExtension.Substring(0, EpisodeArray(0).MediaExtension.LastIndexOf(".")) & ".tbn"
             myWebClient.DownloadFile(episodeInformation(0).Thumbnail.FileName, ImageFilename)
         End If
-        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.VideoFilePath, FinalScrapResult)
+        Dim DidItWork As Boolean = CreateMovieNfo(TempXMLEpisode.NfoFilePath, FinalScrapResult)
 
         Return episodeInformation
     End Function
