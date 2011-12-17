@@ -4361,7 +4361,7 @@ Public Class Form1
 
                             '******************************** MOVIE FILE RENAME SECTION *************************************
 
-                            If Preferences.MovieRenameEnable = True AndAlso Preferences.usefoldernames = False AndAlso newMovieList(f).nfopathandfilename.ToLower.Contains("video_ts") = False Then
+                            If Preferences.MovieRenameEnable = True AndAlso Preferences.usefoldernames = False AndAlso newMovieList(f).nfopathandfilename.ToLower.Contains("video_ts") = False AndAlso Preferences.basicsavemode = False Then
                                 'determine if any 'part' names are in the original title - if so we will tack them on to the final name before renaming
                                 Dim partnames As String() = {"cd", "dvd", "part", "disk", "pt"}
                                 Dim midnames As String() = {"", " ", ".", "_"}
@@ -5252,12 +5252,12 @@ Public Class Form1
                             End If
                             movietoadd.missingdata1 = completebyte1
                             fullMovieList.Add(movietoadd)
-                            End If
+                        End If
 
-                            scraperLog = scraperLog & "Movie added to list" & vbCrLf
-                            progress = 999999
-                            ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
-                            'BckWrkScnMovies.ReportProgress(progress, progresstext)
+                        scraperLog = scraperLog & "Movie added to list" & vbCrLf
+                        progress = 999999
+                        ' progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
+                        'BckWrkScnMovies.ReportProgress(progress, progresstext)
                     End If
 
 
@@ -31409,6 +31409,7 @@ MyExit:
 
                         'progresstext = "Working on Episodes: " & basictvlist(f).title
                         'tvbckrescrapewizard.ReportProgress(999999, progresstext)
+
                         For g = Cache.TvCache.Shows(f).Episodes.Count - 1 To 0 Step -1
                             progresstext = "Working on Show: " & Cache.TvCache.Shows(f).Title.Value & " Episode: " & Cache.TvCache.Shows(f).Episodes.Count - g & " of " & Cache.TvCache.Shows(f).Episodes.Count & ", Episode: " & Cache.TvCache.Shows(f).Episodes(g).Season.Value & "x" & Cache.TvCache.Shows(f).Episodes(g).Episode.Value & " - " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
                             'progresstext = "Working on " & basictvlist(f).title & ", Episode: " & basictvlist(f).allepisodes(g).Season.value & "x" & basictvlist(f).allepisodes(g).episodeno
