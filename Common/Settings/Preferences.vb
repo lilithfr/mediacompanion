@@ -1531,8 +1531,8 @@ Public Class Preferences
 
     Public Shared Function GetFanartPath(ByVal FullPath As String) As String
         Dim posterpath As String = ""
-        posterpath = FullPath.Substring(0, FullPath.Length - 4)
-        posterpath = posterpath & "-fanart.jpg"
+        'posterpath = FullPath.Substring(0, FullPath.Length - 4)
+        'posterpath = posterpath & "-fanart.jpg"
 
         '********************** disabled this section fanart should include stackname *******************
         'If Not IO.File.Exists(posterpath) Then

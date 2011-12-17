@@ -185,7 +185,7 @@ Public Class Form1
     End Sub
 #End If
 
-    
+
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         Try
@@ -295,9 +295,9 @@ Public Class Form1
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
 
-       
 
-        
+
+
 
         For Each Temp In InternalResourceNames
             Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
@@ -506,7 +506,7 @@ Public Class Form1
 
 
 
-        
+
 
         If scrapeAndQuit = False Then
             Me.Visible = True
@@ -666,7 +666,7 @@ Public Class Form1
 
     End Sub
 
-    
+
 
     Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
         Try
@@ -752,7 +752,7 @@ Public Class Form1
             mov_SplitContainerAutoPosition()
             tv_SplitContainerAutoPosition()
         Catch ex As Exception
-                ExceptionHandler.LogError(ex)
+            ExceptionHandler.LogError(ex)
         End Try
 
     End Sub
@@ -2331,7 +2331,7 @@ Public Class Form1
             Throw ex
 #End If
         End Try
-        
+
 
         Try
             If workingMovie.fullpathandfilename <> Nothing And MovieListComboBox.Items.Count > 0 Then
@@ -29054,61 +29054,9 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub PictureBox7_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.MouseEnter
+    Private Sub PictureBox7_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox7.MouseUp
         Try
-            RescrapePToolStripMenuItem.Visible = False
-            RescrapePosterFromTMDBToolStripMenuItem.Visible = False
-            RescraToolStripMenuItem.Visible = False
-            PeToolStripMenuItem.Visible = False
-            DownloadPosterToolStripMenuItem.Visible = False
-            DownloadPosterFromTMDBToolStripMenuItem.Visible = False
-            DownloadPosterFromMPDBToolStripMenuItem.Visible = False
-            DownloadPosterFromIMDBToolStripMenuItem.Visible = False
-            RescrapeFanartToolStripMenuItem.Visible = False
-            DownloadFanartToolStripMenuItem.Visible = False
-            Try
-                If IO.File.Exists(Preferences.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
-                    RescrapeFanartToolStripMenuItem.Visible = True
-                Else
-                    DownloadFanartToolStripMenuItem.Visible = True
-                End If
-            Catch
-                RescrapePToolStripMenuItem.Visible = False
-                RescrapeFanartToolStripMenuItem.Visible = False
-                DownloadFanartToolStripMenuItem.Visible = False
-                DownloadPosterToolStripMenuItem.Visible = False
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub moviethumb_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles moviethumb.MouseEnter
-        Try
-            RescrapePToolStripMenuItem.Visible = False
-            RescrapePosterFromTMDBToolStripMenuItem.Visible = False
-            RescraToolStripMenuItem.Visible = False
-            PeToolStripMenuItem.Visible = False
-            DownloadPosterToolStripMenuItem.Visible = False
-            DownloadPosterFromTMDBToolStripMenuItem.Visible = False
-            DownloadPosterFromMPDBToolStripMenuItem.Visible = False
-            DownloadPosterFromIMDBToolStripMenuItem.Visible = False
-            RescrapeFanartToolStripMenuItem.Visible = False
-            DownloadFanartToolStripMenuItem.Visible = False
-            Try
-                If IO.File.Exists(Preferences.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
-                    RescrapePToolStripMenuItem.Visible = True
-                    RescrapePosterFromTMDBToolStripMenuItem.Visible = True
-                    RescraToolStripMenuItem.Visible = True
-                    PeToolStripMenuItem.Visible = True
-                Else
-                    DownloadPosterToolStripMenuItem.Visible = True
-                    DownloadPosterFromTMDBToolStripMenuItem.Visible = True
-                    DownloadPosterFromMPDBToolStripMenuItem.Visible = True
-                    DownloadPosterFromIMDBToolStripMenuItem.Visible = True
-                End If
-            Catch
+            If e.Button = Windows.Forms.MouseButtons.Right Then
                 RescrapePToolStripMenuItem.Visible = False
                 RescrapePosterFromTMDBToolStripMenuItem.Visible = False
                 RescraToolStripMenuItem.Visible = False
@@ -29119,9 +29067,68 @@ MyExit:
                 DownloadPosterFromIMDBToolStripMenuItem.Visible = False
                 RescrapeFanartToolStripMenuItem.Visible = False
                 DownloadFanartToolStripMenuItem.Visible = False
-            End Try
+                Try
+                    If IO.File.Exists(Preferences.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
+                        RescrapeFanartToolStripMenuItem.Visible = True
+                    Else
+                        DownloadFanartToolStripMenuItem.Visible = True
+                    End If
+                Catch
+                    RescrapePToolStripMenuItem.Visible = False
+                    RescrapeFanartToolStripMenuItem.Visible = False
+                    DownloadFanartToolStripMenuItem.Visible = False
+                    DownloadPosterToolStripMenuItem.Visible = False
+
+                End Try
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub moviethumb_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles moviethumb.MouseUp
+        Try
+            If e.Button = Windows.Forms.MouseButtons.Right Then
+                RescrapePToolStripMenuItem.Visible = False
+                RescrapePosterFromTMDBToolStripMenuItem.Visible = False
+                RescraToolStripMenuItem.Visible = False
+                PeToolStripMenuItem.Visible = False
+                DownloadPosterToolStripMenuItem.Visible = False
+                DownloadPosterFromTMDBToolStripMenuItem.Visible = False
+                DownloadPosterFromMPDBToolStripMenuItem.Visible = False
+                DownloadPosterFromIMDBToolStripMenuItem.Visible = False
+                RescrapeFanartToolStripMenuItem.Visible = False
+                DownloadFanartToolStripMenuItem.Visible = False
+                Try
+                    If IO.File.Exists(Preferences.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
+                        RescrapePToolStripMenuItem.Visible = True
+                        RescrapePosterFromTMDBToolStripMenuItem.Visible = True
+                        RescraToolStripMenuItem.Visible = True
+                        PeToolStripMenuItem.Visible = True
+                    Else
+                        DownloadPosterToolStripMenuItem.Visible = True
+                        DownloadPosterFromTMDBToolStripMenuItem.Visible = True
+                        DownloadPosterFromMPDBToolStripMenuItem.Visible = True
+                        DownloadPosterFromIMDBToolStripMenuItem.Visible = True
+                    End If
+                Catch
+                    RescrapePToolStripMenuItem.Visible = False
+                    RescrapePosterFromTMDBToolStripMenuItem.Visible = False
+                    RescraToolStripMenuItem.Visible = False
+                    PeToolStripMenuItem.Visible = False
+                    DownloadPosterToolStripMenuItem.Visible = False
+                    DownloadPosterFromTMDBToolStripMenuItem.Visible = False
+                    DownloadPosterFromMPDBToolStripMenuItem.Visible = False
+                    DownloadPosterFromIMDBToolStripMenuItem.Visible = False
+                    RescrapeFanartToolStripMenuItem.Visible = False
+                    DownloadFanartToolStripMenuItem.Visible = False
+
+                End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+
         End Try
 
     End Sub
