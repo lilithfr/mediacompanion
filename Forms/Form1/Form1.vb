@@ -18819,6 +18819,11 @@ MyExit:
             Dim imdbid As String = WorkingTvShow.ImdbId.Value
             Dim seasonno As String = WorkingEpisode.Season.Value
             Dim episodeno As String = WorkingEpisode.Episode.Value
+
+            newepisode.NfoFilePath = WorkingEpisode.NfoFilePath
+            newepisode.Season.Value = WorkingEpisode.Season.Value
+            newepisode.Episode.Value = WorkingEpisode.Episode.Value
+
             'its an episode
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim episodescraper As New TVDBScraper
@@ -19121,59 +19126,67 @@ MyExit:
                     Next
                 End If
             End If
-            If newepisode.Title.Value <> "" Then
-                WorkingEpisode.Aired.Value = newepisode.Aired.Value
-                WorkingEpisode.Credits.Value = newepisode.Credits.Value
-                WorkingEpisode.Director.Value = newepisode.Director.Value
-                WorkingEpisode.Genre.Value = newepisode.Genre.Value
-                WorkingEpisode.Plot.Value = newepisode.Plot.Value
-                WorkingEpisode.Rating.Value = newepisode.Rating.Value
-                WorkingEpisode.Title.Value = newepisode.Title.Value
-                WorkingEpisode.ListActors.Clear()
-                For Each actor In newepisode.ListActors
-                    WorkingEpisode.ListActors.Add(actor)
-                Next
+            'If newepisode.Title.Value <> "" Then
+            '    WorkingEpisode.Aired.Value = newepisode.Aired.Value
+            '    WorkingEpisode.Credits.Value = newepisode.Credits.Value
+            '    WorkingEpisode.Director.Value = newepisode.Director.Value
+            '    WorkingEpisode.Genre.Value = newepisode.Genre.Value
+            '    WorkingEpisode.Plot.Value = newepisode.Plot.Value
+            '    WorkingEpisode.Rating.Value = newepisode.Rating.Value
+            '    WorkingEpisode.Title.Value = newepisode.Title.Value
+            '    WorkingEpisode.ListActors.Clear()
+            '    For Each actor In newepisode.ListActors
+            '        WorkingEpisode.ListActors.Add(actor)
+            '    Next
 
-                If Preferences.enablehdtags = True Then
-                    WorkingEpisode.Details.StreamDetails.Video = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath)).filedetails_video
-                    If WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
-                        Try
-                            '1h 24mn 48s 546ms
-                            Dim hours As Integer = 0
-                            Dim minutes As Integer = 0
-                            tempstring = WorkingEpisode.Details.StreamDetails.Video.DurationInSeconds.Value
-                            tempint = tempstring.IndexOf("h")
-                            If tempint <> -1 Then
-                                hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                tempstring = Trim(tempstring)
-                            End If
-                            tempint = tempstring.IndexOf("mn")
-                            If tempint <> -1 Then
-                                minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                            End If
-                            If hours <> 0 Then
-                                hours = hours * 60
-                            End If
+            If Preferences.enablehdtags = True Then
+                'newepisode.Details.  = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath)).filedetails_video
+                Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
+                newepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                For Each audioStream In fileStreamDetails.filedetails_audio
+                    newepisode.Details.StreamDetails.Audio.Add(audioStream)
+                Next
+                If newepisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
+                    Try
+                        '1h 24mn 48s 546ms
+                        Dim hours As Integer = 0
+                        Dim minutes As Integer = 0
+                        tempstring = newepisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                        tempint = tempstring.IndexOf("h")
+                        If tempint <> -1 Then
+                            hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                            tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                            tempstring = Trim(tempstring)
+                        End If
+                        tempint = tempstring.IndexOf("mn")
+                        If tempint <> -1 Then
+                            minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                        End If
+                        If hours <> 0 Then
+                            hours = hours * 60
                             minutes = minutes + hours
-                            WorkingEpisode.Runtime.Value = minutes.ToString & " min"
-                        Catch ex As Exception
+                        End If
+
+                        newepisode.Runtime.Value = minutes.ToString & " min"
+                    Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
 #End If
-                        End Try
-                    End If
+                    End Try
                 End If
-                'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).VideoFilePath)
-                'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
-                WorkingEpisode.Save()
-
-                'Call LoadTvEpisode(WorkingEpisode)
-                tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
-                messbox.Close()
-
             End If
+            'Call nfoFunction.saveepisodenfo(workingEpisode, workingEpisode(0).VideoFilePath)
+            'Call loadtvepisode(workingEpisode(workingEpisodeIndex).VideoFilePath, workingEpisode(workingEpisodeIndex).Season.value, workingEpisode(workingEpisodeIndex).episodeno)
+            'newepisode.Save()  'this function doesn't save the video/audio stream details, have to revert to the old method.
+            Dim eps As New List(Of Media_Companion.TvEpisode)
+            eps.Add(newepisode)
+            Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
+            '''''Call LoadTvEpisode(WorkingEpisode)
+            tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
+            messbox.Close()
+
         End If
+        'End If
         Tv_CacheSave()
         tv_CacheLoad()
 
@@ -31592,9 +31605,10 @@ MyExit:
 #End If
                                             'MsgBox("hekp")
                                         End Try
-                                        For Each Episode In listofnewepisodes
-                                            Episode.Save()
-                                        Next
+                                        nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        'For Each Episode In listofnewepisodes
+                                        '    Episode.Save()
+                                        'Next
                                         'Call nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).VideoFilePath, listofnewepisodes(h).Season.value, listofnewepisodes(h).episodeno, True )
                                         Exit For
                                     End If
@@ -31643,9 +31657,10 @@ MyExit:
                                         Throw ex
 #End If
                                         End Try
-                                        For Each Episode In listofnewepisodes
-                                            Episode.Save()
-                                        Next
+                                        nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        'For Each Episode In listofnewepisodes
+                                        '    Episode.Save()
+                                        'Next
                                     End If
                                 Next
                             End If

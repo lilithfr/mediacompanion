@@ -200,7 +200,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
-
+            TvTreeview.SelectedNode.ToolTipText = "does this work?"
         Else
             MsgBox("None")
         End If
@@ -3583,27 +3583,27 @@ Partial Public Class Form1
     Public Function Tv_CacheSave() As Boolean
 
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
-        If Cache.TvCache.IsAltered Then
-            'Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
-            'If Result = MsgBoxResult.Yes Then
-            For Each Item As ProtoXML.ProtoFile In Cache.TvCache.Items
+        'If Cache.TvCache.IsAltered Then
+        '    'Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
+        '    'If Result = MsgBoxResult.Yes Then
+        '  For Each Item As ProtoXML.ProtoFile In Cache.TvCache.Items
 
-                If Not Item.FailedLoad And Item.IsAltered Then
-                    Try
-                        Item.Save()
-                    Catch
-                        Dim Test As Boolean = True
-                    End Try
-                End If
+        '        If Not Item.FailedLoad And Item.IsAltered Then
+        '            Try
+        ' Item.Save()
+        '            Catch
+        '                Dim Test As Boolean = True
+        '            End Try
+        '        End If
 
-            Next
-            'ElseIf Result = MsgBoxResult.No Then
-            '    'Do Nothing
-            'Else         '  If Result = MsgBoxResult.Cancel Then            'assume cancel for any other answers (if possible...)
-            '    Return True         'return true to indicate to the call routine that 'cancel' has been choosen (used mainly to cancel MC close)
-            '    Exit Function
-            'End If
-        End If
+        '    Next
+        '    'ElseIf Result = MsgBoxResult.No Then
+        '    '    'Do Nothing
+        '    'Else         '  If Result = MsgBoxResult.Cancel Then            'assume cancel for any other answers (if possible...)
+        '    '    Return True         'return true to indicate to the call routine that 'cancel' has been choosen (used mainly to cancel MC close)
+        '    '    Exit Function
+        '    'End If
+        'End If
 
         Cache.TvCache.Save()
         Return False
