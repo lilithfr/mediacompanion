@@ -678,21 +678,20 @@ Partial Public Class Form1
         TextBox_Director.Text = Episode.Director.Value
         TextBox_Credits.Text = Episode.Credits.Value
         TextBox_Aired.Text = Episode.Aired.Value
-        Dim toolString As String = "Frame: " & Episode.Details.StreamDetails.Video.Width.Value & "x" & Episode.Details.StreamDetails.Video.Height.Value & vbCrLf
-        toolString += "Aspect Ratio: " & Episode.Details.StreamDetails.Video.Aspect.Value & vbCrLf
-        toolString += "Vid Codec: " & Episode.Details.StreamDetails.Video.Codec.Value & vbCrLf
-        toolString += "Vid Bitrate: " & Episode.Details.StreamDetails.Video.Bitrate.Value & vbCrLf
 
-        For number = 1 To Episode.Details.StreamDetails.Audio.Count
-            toolString += number & " Aud Codec: " & Episode.Details.StreamDetails.Audio(number - 1).Codec.Value & vbCrLf
-            toolString += number & " Aud Bitrate: " & Episode.Details.StreamDetails.Audio(number - 1).Bitrate.Value & vbCrLf
-            toolString += number & " Aud Channels: " & Episode.Details.StreamDetails.Audio(number - 1).Channels.Value & vbCrLf
-        Next
 
-        ToolTip1.SetToolTip(TextBox_Title, toolString)
-        ToolTip1.InitialDelay = 1000
-        ToolTip1.AutoPopDelay = 10000
-        ToolTip1.ReshowDelay = 0
+
+        TextBox_Ep_Details.Text = "Video: " & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
+        TextBox_Ep_Details.Text += " (" & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+        TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
+        TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
+
+        If Episode.Details.StreamDetails.Audio.Count > 0 Then
+            TextBox_Ep_Details.Text += "           Audio: " & Utilities.fixForNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+            TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+            TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
+        End If
+
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then

@@ -2497,6 +2497,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function cleanSpecChars(ByVal string2clean As String) As String
         Return HttpUtility.HtmlDecode(string2clean)
     End Function
+    Public Shared Function fixForNothing(ByVal text As String, ByVal replacetext As String) As String
+        If text Is Nothing Then
+            text = replacetext
+        End If
+        Return text
+    End Function
 
     Public Shared Function cleanFilenameIllegalChars(ByVal string2clean As String) As String
         Dim strIllegalChars As String = "\/:""*?<>|"
