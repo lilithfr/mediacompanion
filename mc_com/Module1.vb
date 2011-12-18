@@ -3385,46 +3385,18 @@ Module Module1
         End Try
     End Function
     Public Function getfanartpath(ByVal fullpath As String) As String
+        'fanart = fanart.jpg if basicsave mode on i.e. movie.nfo,movie.tbn,fanart.jpg OR
+        'fanart = movie filename - extension + "-fanart.jpg"
+        'NOTE parts need to be included in the name & not stripped off
+
+        'If you edit this, please also change getfanart() in preferences.vb in MediaCompanion
+
         Try
             Dim posterpath As String = ""
-            posterpath = fullpath.Substring(0, fullpath.Length - 4)
-            posterpath = posterpath & "-fanart.jpg"
-            If Not IO.File.Exists(posterpath) Then
-                Dim stackname As String = getstackname(IO.Path.GetFileName(fullpath), fullpath.Replace(IO.Path.GetFileName(fullpath), ""))
-
-                stackname = fullpath.Replace(IO.Path.GetFileName(fullpath), stackname)
-                stackname = stackname & "-fanart.jpg"
-                If stackname <> "na" And IO.File.Exists(stackname) Then
-                    posterpath = stackname
-                Else
-                    posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-                    posterpath = posterpath & "fanart.jpg"
-                    If Not IO.File.Exists(posterpath) Then
-                        posterpath = ""
-                    End If
-                End If
-                'Else
-                '    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-            End If
-            If posterpath = "" Then
-                If fullpath.IndexOf("movie.nfo") <> -1 Then
-                    posterpath = fullpath.Replace("movie.nfo", "fanart.jpg")
-                End If
-            End If
-            If posterpath = "" Then
-                If userprefs.fanartnotstacked = True Then
-                    posterpath = fullpath.Substring(0, fullpath.Length - 4) & "-fanart.jpg"
-                Else
-                    posterpath = getstackname(IO.Path.GetFileName(fullpath), fullpath) & "-fanart.jpg"
-                    If posterpath = "na-fanart.jpg" Then
-                        posterpath = fullpath.Substring(0, fullpath.Length - 4) & "-fanart.jpg"
-                    Else
-                        posterpath = fullpath.Replace(IO.Path.GetFileName(fullpath), posterpath)
-                    End If
-                End If
-                If userprefs.basicsavemode = True Then
-                    posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
-                End If
+            If fullpath.Contains("movie.nfo") = True Then   'equivalent to If preferences.basicsavemode = True Then but prefrences is not referenced here
+                posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
+            Else
+                posterpath = fullpath.Substring(0, fullpath.Length - 4) & "-fanart.jpg"
             End If
 
             Return posterpath
@@ -10081,6 +10053,10 @@ Public Class preferences
     Public actorseasy As Boolean
     Public tableview As New List(Of String)
     Public offlinefolders As New List(Of String)
+
+    Public Sub New()
+
+    End Sub
 End Class
 Public Structure listofposters
     Dim hdposter As String

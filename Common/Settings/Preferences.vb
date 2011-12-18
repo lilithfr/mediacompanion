@@ -1530,7 +1530,26 @@ Public Class Preferences
     End Function
 
     Public Shared Function GetFanartPath(ByVal FullPath As String) As String
-        Dim posterpath As String = ""
+        'fanart = fanart.jpg if basicsave mode on i.e. movie.nfo,movie.tbn,fanart.jpg OR
+        'fanart = movie filename - extension + "-fanart.jpg"
+        'NOTE parts need to be included in the name & not stripped off
+
+        'If you edit this, please also change getfanart() in Module1 (mc_com.exe)
+
+        Try
+            Dim posterpath As String = ""
+            If FullPath.Contains("movie.nfo") = True Then   'equivalent to If preferences.basicsavemode = True Then but prefrences is not referenced here
+                posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
+            Else
+                posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
+            End If
+
+            Return posterpath
+        Catch
+            Return ""
+        End Try
+
+        '''''''''''''''''''OLD CODE''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         'posterpath = FullPath.Substring(0, FullPath.Length - 4)
         'posterpath = posterpath & "-fanart.jpg"
 
@@ -1554,29 +1573,23 @@ Public Class Preferences
         'End If
         '***********************end disabled section **************************************
 
+        'If posterpath = "" Then
+        '    If Preferences.fanartnotstacked = True Then
+        '        posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
+        '    Else
+        '        posterpath = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath) & "-fanart.jpg"
+        '        If posterpath = "na-fanart.jpg" Then
+        '            posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
+        '        Else
+        '            posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
+        '        End If
+        '    End If
+        '    If Preferences.basicsavemode = True Then
+        '        posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
+        '    End If
+        'End If
 
-        If posterpath = "" Then
-            If FullPath.IndexOf("movie.nfo") <> -1 Then
-                posterpath = FullPath.Replace("movie.nfo", "fanart.jpg")
-            End If
-        End If
-        If posterpath = "" Then
-            If Preferences.fanartnotstacked = True Then
-                posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
-            Else
-                posterpath = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath) & "-fanart.jpg"
-                If posterpath = "na-fanart.jpg" Then
-                    posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
-                Else
-                    posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
-                End If
-            End If
-            If Preferences.basicsavemode = True Then
-                posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
-            End If
-        End If
 
-        Return posterpath
     End Function
 
     Public Shared Function GetActorThumbPath(Optional ByVal location As String = "")
