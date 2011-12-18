@@ -200,7 +200,7 @@ Partial Public Class Form1
             Tv_TreeViewContext_RenameEp.Enabled = True
             Tv_TreeViewContext_ShowMissEps.Enabled = True
             Tv_TreeViewContext_DispByAiredDate.Enabled = True
-            TvTreeview.SelectedNode.ToolTipText = "does this work?"
+
         Else
             MsgBox("None")
         End If
@@ -647,6 +647,9 @@ Partial Public Class Form1
 
         Dim tempstring As String = ""
         TextBox_Title.Text = ""
+        
+
+
         TextBox_Rating.Text = ""
         TextBox_Plot.Text = ""
         TextBox_Director.Text = ""
@@ -675,6 +678,21 @@ Partial Public Class Form1
         TextBox_Director.Text = Episode.Director.Value
         TextBox_Credits.Text = Episode.Credits.Value
         TextBox_Aired.Text = Episode.Aired.Value
+        Dim toolString As String = "Frame: " & Episode.Details.StreamDetails.Video.Width.Value & "x" & Episode.Details.StreamDetails.Video.Height.Value & vbCrLf
+        toolString += "Aspect Ratio: " & Episode.Details.StreamDetails.Video.Aspect.Value & vbCrLf
+        toolString += "Vid Codec: " & Episode.Details.StreamDetails.Video.Codec.Value & vbCrLf
+        toolString += "Vid Bitrate: " & Episode.Details.StreamDetails.Video.Bitrate.Value & vbCrLf
+
+        For number = 1 To Episode.Details.StreamDetails.Audio.Count
+            toolString += number & " Aud Codec: " & Episode.Details.StreamDetails.Audio(number - 1).Codec.Value & vbCrLf
+            toolString += number & " Aud Bitrate: " & Episode.Details.StreamDetails.Audio(number - 1).Bitrate.Value & vbCrLf
+            toolString += number & " Aud Channels: " & Episode.Details.StreamDetails.Audio(number - 1).Channels.Value & vbCrLf
+        Next
+
+        ToolTip1.SetToolTip(TextBox_Title, toolString)
+        ToolTip1.InitialDelay = 1000
+        ToolTip1.AutoPopDelay = 10000
+        ToolTip1.ReshowDelay = 0
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then
@@ -2300,47 +2318,49 @@ Partial Public Class Form1
                                     End If
                                 End If
 
-                            End If
 
-                            If Preferences.enablehdtags = True Then
-                                progresstext &= " HD Tags..."
-                                bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
-                                singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-                                For Each audioStream In fileStreamDetails.filedetails_audio
-                                    singleepisode.Details.StreamDetails.Audio.Add(audioStream)
-                                Next
 
-                                If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
-                                    '1h 24mn 48s 546ms
-                                    Dim hours As Integer = 0
-                                    Dim minutes As Integer = 0
-                                    tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
-                                    tempint = tempstring.IndexOf("h")
-                                    If tempint <> -1 Then
-                                        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                        tempstring = Trim(tempstring)
-                                    End If
-                                    tempint = tempstring.IndexOf("mn")
-                                    If tempint <> -1 Then
-                                        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                    End If
-                                    If hours <> 0 Then
-                                        minutes += hours * 60
-                                    End If
-                                    minutes = minutes + hours
-                                    singleepisode.Runtime.Value = minutes.ToString & " min"
-                                    progresstext &= " OK."
+                                If Preferences.enablehdtags = True Then
+                                    progresstext &= " HD Tags..."
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                End If
+                                    Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
+                                    singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                                    For Each audioStream In fileStreamDetails.filedetails_audio
+                                        singleepisode.Details.StreamDetails.Audio.Add(audioStream)
+                                    Next
 
+                                    If Not singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                                        '1h 24mn 48s 546ms
+                                        Dim hours As Integer = 0
+                                        Dim minutes As Integer = 0
+                                        tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                                        tempint = tempstring.IndexOf("h")
+                                        If tempint <> -1 Then
+                                            hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                            tempstring = Trim(tempstring)
+                                        End If
+                                        tempint = tempstring.IndexOf("mn")
+                                        If tempint <> -1 Then
+                                            minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                        End If
+                                        If hours <> 0 Then
+                                            minutes += hours * 60
+                                        End If
+                                        minutes = minutes + hours
+                                        singleepisode.Runtime.Value = minutes.ToString & " min"
+                                        progresstext &= " OK."
+                                        bckgroundscanepisodes.ReportProgress(progress, progresstext)
+                                    End If
+                                End If
                             End If
                         Else
                             Preferences.tvScraperLog &= "!!! WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                            scrapedok = False
                         End If
                     Else
                         Preferences.tvScraperLog &= "!!! WARNING: No TVDB ID is available for this show, please scrape the show using the ""TV Show Selector"" TAB" & vbCrLf
+                        scrapedok = False
                     End If
 
                 Next
