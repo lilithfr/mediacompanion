@@ -14876,17 +14876,17 @@ MyExit:
             ElseIf tab = "export" Then
                 Call frm_ExportTabSetup()
             ElseIf tab = "config.xml" Then
-                RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(applicationPath & "\settings\config.xml")
+                RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\settings\config.xml")
             ElseIf tab = "moviecache" Then
-                RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(applicationPath & "\settings\moviecache.xml")
+                RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml")
             ElseIf tab = "tvcache" Then
-                RichTextBoxTabTVCache.Text = Utilities.LoadFullText(applicationPath & "\settings\tvcache.xml")
+                RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml")
             ElseIf tab = "actorcache" Then
-                RichTextBoxTabActorCache.Text = Utilities.LoadFullText(applicationPath & "\settings\actorcache.xml")
+                RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml")
             ElseIf tab = "profile" Then
                 RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml")
             ElseIf tab = "regex" Then
-                RichTextBoxTabRegex.Text = Utilities.LoadFullText(applicationPath & "\settings\regex.xml")
+                RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml")
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
