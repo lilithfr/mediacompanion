@@ -20522,6 +20522,7 @@ MyExit:
             If sortorder = Nothing Then sortorder = "default"
             If sortorder = "" Then sortorder = "default"
 
+
             If id = Nothing Then
                 MsgBox("No ID is available for this show")
                 Exit Sub
@@ -30778,21 +30779,16 @@ MyExit:
     Private Sub TV_BatchRescrapeWizardToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TV_BatchRescrapeWizardToolStripMenuItem.Click
         Try
             If Not tvbckrescrapewizard.IsBusy Then
-
-
                 tvBatchList.epActor = False
                 tvBatchList.epAired = False
-
                 tvBatchList.epCredits = False
                 tvBatchList.epDirector = False
                 tvBatchList.epPlot = False
                 tvBatchList.epRating = False
                 tvBatchList.epRuntime = False
                 tvBatchList.epScreenshot = False
-
                 tvBatchList.epStreamDetails = False
                 tvBatchList.epCreateScreenshot = False
-
                 tvBatchList.shActor = False
                 tvBatchList.shFanart = False
                 tvBatchList.shGenre = False
@@ -30803,10 +30799,8 @@ MyExit:
                 tvBatchList.shRuntime = False
                 tvBatchList.shStudio = False
                 tvBatchList.shYear = False
-
                 tvBatchList.includeLocked = False
                 tvBatchList.activate = False
-
                 tvBatchList.doShows = False
                 tvBatchList.doEpisodes = False
                 tvBatchList.doShowArt = False
@@ -30816,6 +30810,7 @@ MyExit:
                 tvBatchList.doEpisodeActors = False
                 tvBatchList.doEpisodeBody = False
                 tvBatchList.doEpisodeMediaTags = False
+
                 ' doshowbody As Boolean
                 'Dim doshowart As Boolean
                 'Dim doshowactors As Boolean
@@ -30823,6 +30818,7 @@ MyExit:
                 'Dim doepisodeart As Boolean
                 'Dim doepisodeactors As Boolean
                 Dim displaywizard As New tv_batch_wizard
+
                 displaywizard.ShowDialog()
 
                 If tvBatchList.activate = True Then

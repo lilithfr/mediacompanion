@@ -80,6 +80,7 @@
                 Form1.tvBatchList.doEpisodes = True
                 Form1.tvBatchList.doEpisodeMediaTags = True
             End If
+
             Me.Close()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -365,5 +366,11 @@
             GroupBox1.Enabled = True
             GroupBox2.Enabled = True
         End If
+    End Sub
+
+    
+
+    Private Sub tv_batch_wizard_Load(sender As Object, e As System.EventArgs) Handles Me.Load
+        CheckBox20.Enabled = Preferences.enabletvhdtags
     End Sub
 End Class
