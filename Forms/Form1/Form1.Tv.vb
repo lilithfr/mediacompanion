@@ -436,15 +436,15 @@ Partial Public Class Form1
             If Show.State = ShowState.Error Then TextBox_Title.BackColor = Color.Red
 
 
-            If Show.Premiered.Value <> Nothing Then TextBox10.Text = Show.Premiered.Value
-            If Show.Genre.Value <> Nothing Then TextBox11.Text = Show.Genre.Value
-            If Show.TvdbId.Value <> Nothing Then TextBox9.Text = Show.TvdbId.Value
-            If Show.ImdbId.Value <> Nothing Then TextBox12.Text = Show.ImdbId.Value
-            If Show.Rating.Value <> Nothing Then TextBox13.Text = Show.Rating.Value
-            If Show.Mpaa.Value <> Nothing Then TextBox14.Text = Show.Mpaa.Value
-            If Show.Runtime.Value <> Nothing Then TextBox15.Text = Show.Runtime.Value
-            If Show.Studio.Value <> Nothing Then TextBox16.Text = Show.Studio.Value
-            If Show.Plot.Value <> Nothing Then TextBox19.Text = Show.Plot.Value
+            TextBox10.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
+            TextBox11.Text = Utilities.ReplaceNothing(Show.Genre.Value)
+            TextBox9.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
+            TextBox12.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
+            TextBox13.Text = Utilities.ReplaceNothing(Show.Rating.Value)
+            TextBox14.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
+            TextBox15.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
+            TextBox16.Text = Utilities.ReplaceNothing(Show.Studio.Value)
+            TextBox19.Text = Utilities.ReplaceNothing(Show.Plot.Value)
 
             If String.IsNullOrEmpty(Show.SortOrder.Value) Then Show.SortOrder.Value = Preferences.sortorder
             If Show.SortOrder.Value = "dvd" Then
@@ -557,14 +557,34 @@ Partial Public Class Form1
         TextBox_Title.BackColor = Color.White
         If Show.Title.Value <> Nothing Then
             If SelectedSeason.SeasonNumber = 0 Then
-                TextBox_Title.Text = Show.Title.Value & " - Specials"
+                TextBox_Title.Text = Utilities.ReplaceNothing(Show.Title.Value) & " - Specials"
             Else
-                TextBox_Title.Text = Show.Title.Value & " - " & SelectedSeason.SeasonNode.Text
+                TextBox_Title.Text = Utilities.ReplaceNothing(Show.Title.Value) & " - " & Utilities.ReplaceNothing(SelectedSeason.SeasonNode.Text)
             End If
         End If
         If TabControl3.TabPages(1).Text = "Screenshot" Then
             TabControl3.TabPages.RemoveAt(1)
         End If
+        TextBox_Title.BackColor = Color.White
+        If Show.Title.Value <> Nothing Then
+            TextBox_Title.Text = Show.Title.Value
+
+        End If
+
+        ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits. Yellow is the same colour as the unverified Button
+        If Show.State = ShowState.Unverified Then TextBox_Title.BackColor = Color.Yellow
+        If Show.State = ShowState.Error Then TextBox_Title.BackColor = Color.Red
+
+
+        TextBox10.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
+        TextBox11.Text = Utilities.ReplaceNothing(Show.Genre.Value)
+        TextBox9.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
+        TextBox12.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
+        TextBox13.Text = Utilities.ReplaceNothing(Show.Rating.Value)
+        TextBox14.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
+        TextBox15.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
+        TextBox16.Text = Utilities.ReplaceNothing(Show.Studio.Value)
+        TextBox19.Text = Utilities.ReplaceNothing(Show.Plot.Value)
         Panel9.Visible = False
         ExpandSelectedShowToolStripMenuItem.Enabled = True
         ExpandAllToolStripMenuItem.Enabled = True
@@ -573,8 +593,7 @@ Partial Public Class Form1
         Tv_TreeViewContext_RenameEp.Enabled = True
         Tv_TreeViewContext_RenameEp.Visible = True
 
-        tv_PictureBoxRight.Image = Nothing
-        tv_PictureBoxLeft.Image = Nothing
+       
         'MsgBox("Season")
         Dim season As String = SelectedSeason.SeasonLabel
         Dim trueseason As Integer = SelectedSeason.SeasonNumber
@@ -643,65 +662,59 @@ Partial Public Class Form1
         If Episode.IsCache Then
             Episode.Load()
         End If
-
-
         Dim tempstring As String = ""
-        TextBox_Title.Text = ""
-        
+        'TextBox_Title.Text = ""
+        'TextBox_Rating.Text = ""
+        'TextBox_Plot.Text = ""
+        'TextBox_Director.Text = ""
+        'TextBox_Credits.Text = ""
+        'TextBox_Aired.Text = ""
+        'TextBox25.Text = ""
+        'ComboBox5.Text = ""
+        'TextBox17.Text = ""
+        'TextBox29.Text = ""
 
-
-        TextBox_Rating.Text = ""
-        TextBox_Plot.Text = ""
-        TextBox_Director.Text = ""
-        TextBox_Credits.Text = ""
-        TextBox_Aired.Text = ""
-        TextBox25.Text = ""
         ComboBox5.Items.Clear()
-        ComboBox5.Text = ""
-
-        TextBox17.Text = ""
-        TextBox29.Text = ""
-        TextBox29.Text = IO.Path.GetFileName(Episode.NfoFilePath)
-        TextBox17.Text = Episode.FolderPath
+        TextBox29.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
+        TextBox17.Text = Utilities.ReplaceNothing(Episode.FolderPath)
         If Not IO.File.Exists(Episode.NfoFilePath) Then
             TextBox_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
-            TextBox_Plot.Text = "Unable to find episode: " & Episode.NfoFilePath
             Panel9.Visible = True
             Episode.EpisodeNode.BackColor = Color.Red
             Exit Sub
         Else
             Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
         End If
-        TextBox_Title.Text = Episode.ShowObj.Title.Value & " - S" & Utilities.PadNumber(Episode.SeasonObj.SeasonNumber, 2) & "E" & Utilities.PadNumber(Episode.Episode.Value, 2) & " - '" & Episode.Title.Value & "'"
-        TextBox_Rating.Text = Episode.Rating.Value
-        TextBox_Plot.Text = Episode.Plot.Value
-        TextBox_Director.Text = Episode.Director.Value
-        TextBox_Credits.Text = Episode.Credits.Value
-        TextBox_Aired.Text = Episode.Aired.Value
+        TextBox_Title.Text = Utilities.ReplaceNothing(Episode.ShowObj.Title.Value, "?") & " - S" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.SeasonObj.SeasonNumber), 2) & "E" & Utilities.PadNumber(Utilities.ReplaceNothing(Episode.Episode.Value), 2) & " - '" & Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
+        TextBox_Rating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
+        TextBox_Plot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
+        TextBox_Director.Text = Utilities.ReplaceNothing(Episode.Director.Value)
+        TextBox_Credits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
+        TextBox_Aired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
 
 
 
-        TextBox_Ep_Details.Text = "Video: " & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
-        TextBox_Ep_Details.Text += " (" & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
-        TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
-        TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
+        TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
+        TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+        TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
+        TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
 
         If Episode.Details.StreamDetails.Audio.Count > 0 Then
-            TextBox_Ep_Details.Text += "           Audio: " & Utilities.fixForNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
-            TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-            TextBox_Ep_Details.Text += " " & Utilities.fixForNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
+            TextBox_Ep_Details.Text += "           Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
+            TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
         End If
 
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then
-                ComboBox5.Items.Add(actor.actorname)
+                ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
             End If
         Next
         If ComboBox5.Items.Count = 0 Then
             For Each actor In Episode.ListActors
                 If actor.actorname <> Nothing Then
-                    ComboBox5.Items.Add(actor.actorname)
+                    ComboBox5.Items.Add(Utilities.ReplaceNothing(actor.actorname))
                 End If
             Next
         Else

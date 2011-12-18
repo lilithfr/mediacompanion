@@ -367,9 +367,6 @@
             GroupBox2.Enabled = True
         End If
     End Sub
-
-    
-
     Private Sub tv_batch_wizard_Load(sender As Object, e As System.EventArgs) Handles Me.Load
         CheckBox20.Enabled = Preferences.enabletvhdtags
     End Sub

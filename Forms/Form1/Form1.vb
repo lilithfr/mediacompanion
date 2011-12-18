@@ -31666,6 +31666,7 @@ MyExit:
                     done += 1
                 End If
             Next
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -31694,6 +31695,7 @@ MyExit:
         Try
             ToolStripStatusLabel8.Visible = False
             ToolStripProgressBar7.Visible = False
+            tv_CacheRefresh()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
