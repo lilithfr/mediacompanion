@@ -7217,10 +7217,11 @@ Partial Class Form1
         '
         'tv_PictureBoxRight
         '
+        Me.tv_PictureBoxRight.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tv_PictureBoxRight.Location = New System.Drawing.Point(0, 0)
         Me.tv_PictureBoxRight.Margin = New System.Windows.Forms.Padding(4)
         Me.tv_PictureBoxRight.Name = "tv_PictureBoxRight"
-        Me.tv_PictureBoxRight.Size = New System.Drawing.Size(415, 203)
+        Me.tv_PictureBoxRight.Size = New System.Drawing.Size(413, 203)
         Me.tv_PictureBoxRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.tv_PictureBoxRight.TabIndex = 0
         Me.tv_PictureBoxRight.TabStop = False
