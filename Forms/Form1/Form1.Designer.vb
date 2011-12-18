@@ -917,6 +917,8 @@ Partial Class Form1
         Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.ForegroundWorkTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.TextBox_Ep_Details = New System.Windows.Forms.TextBox()
+        Me.Label160 = New System.Windows.Forms.Label()
         CType(Me.PictureBox7,System.ComponentModel.ISupportInitialize).BeginInit
         Me.ContextMenuStrip4.SuspendLayout
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).BeginInit
@@ -6673,6 +6675,8 @@ Partial Class Form1
         Me.Panel9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel9.AutoScroll = true
+        Me.Panel9.Controls.Add(Me.Label160)
+        Me.Panel9.Controls.Add(Me.TextBox_Ep_Details)
         Me.Panel9.Controls.Add(Me.TextBox29)
         Me.Panel9.Controls.Add(Me.ComboBox5)
         Me.Panel9.Controls.Add(Me.TextBox25)
@@ -6739,7 +6743,7 @@ Partial Class Form1
         '
         'Button103
         '
-        Me.Button103.Location = New System.Drawing.Point(319, 298)
+        Me.Button103.Location = New System.Drawing.Point(511, 303)
         Me.Button103.Margin = New System.Windows.Forms.Padding(4)
         Me.Button103.Name = "Button103"
         Me.Button103.Size = New System.Drawing.Size(94, 29)
@@ -6943,12 +6947,13 @@ Partial Class Form1
         Me.Button48.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button48.BackColor = System.Drawing.Color.Red
         Me.Button48.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button48.Location = New System.Drawing.Point(72, 298)
+        Me.Button48.Location = New System.Drawing.Point(656, 302)
         Me.Button48.Margin = New System.Windows.Forms.Padding(4)
         Me.Button48.Name = "Button48"
-        Me.Button48.Size = New System.Drawing.Size(210, 29)
+        Me.Button48.Size = New System.Drawing.Size(58, 29)
         Me.Button48.TabIndex = 20
         Me.Button48.UseVisualStyleBackColor = false
+        Me.Button48.Visible = false
         '
         'Button46
         '
@@ -11240,6 +11245,27 @@ Partial Class Form1
         Me.ForegroundWorkTimer.Enabled = true
         Me.ForegroundWorkTimer.Interval = 500
         '
+        'TextBox_Ep_Details
+        '
+        Me.TextBox_Ep_Details.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.TextBox_Ep_Details.Location = New System.Drawing.Point(72, 301)
+        Me.TextBox_Ep_Details.Name = "TextBox_Ep_Details"
+        Me.TextBox_Ep_Details.Size = New System.Drawing.Size(431, 21)
+        Me.TextBox_Ep_Details.TabIndex = 22
+        '
+        'Label160
+        '
+        Me.Label160.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.Label160.AutoSize = true
+        Me.Label160.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label160.Location = New System.Drawing.Point(22, 304)
+        Me.Label160.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label160.Name = "Label160"
+        Me.Label160.Size = New System.Drawing.Size(51, 15)
+        Me.Label160.TabIndex = 23
+        Me.Label160.Text = "Details :"
+        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -12393,6 +12419,8 @@ End Sub
     Friend WithEvents RadioButtonFanart As System.Windows.Forms.RadioButton
     Friend WithEvents chkbx_MovieAllFolders As System.Windows.Forms.CheckBox
     Friend WithEvents Tv_TreeViewContext_Play_Episode As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Label160 As System.Windows.Forms.Label
+    Friend WithEvents TextBox_Ep_Details As System.Windows.Forms.TextBox
 
 
 
