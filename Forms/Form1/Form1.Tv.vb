@@ -565,11 +565,10 @@ Partial Public Class Form1
         If TabControl3.TabPages(1).Text = "Screenshot" Then
             TabControl3.TabPages.RemoveAt(1)
         End If
-        TextBox_Title.BackColor = Color.White
-        If Show.Title.Value <> Nothing Then
-            TextBox_Title.Text = Show.Title.Value
 
-        End If
+        
+
+
 
         ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits. Yellow is the same colour as the unverified Button
         If Show.State = ShowState.Unverified Then TextBox_Title.BackColor = Color.Yellow
