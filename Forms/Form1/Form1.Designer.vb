@@ -534,7 +534,7 @@ Partial Class Form1
         Me.Button48 = New System.Windows.Forms.Button()
         Me.Button46 = New System.Windows.Forms.Button()
         Me.Label66 = New System.Windows.Forms.Label()
-        Me.Button60 = New System.Windows.Forms.Button()
+        Me.Button_TV_State = New System.Windows.Forms.Button()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TextBox19 = New System.Windows.Forms.TextBox()
         Me.Button45 = New System.Windows.Forms.Button()
@@ -6508,7 +6508,7 @@ Partial Class Form1
         Me.SplitContainer3.Panel2.Controls.Add(Me.Panel9)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Button46)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label66)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.Button60)
+        Me.SplitContainer3.Panel2.Controls.Add(Me.Button_TV_State)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Button44)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Button_Save_TvShow_Episode)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label8)
@@ -6979,17 +6979,17 @@ Partial Class Form1
         '
         'Button60
         '
-        Me.Button60.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button60.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button60.ImageIndex = 0
-        Me.Button60.ImageList = Me.ImageList2
-        Me.Button60.Location = New System.Drawing.Point(50, 266)
-        Me.Button60.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button60.Name = "Button60"
-        Me.Button60.Size = New System.Drawing.Size(94, 29)
-        Me.Button60.TabIndex = 45
-        Me.Button60.Text = "Open"
-        Me.Button60.UseVisualStyleBackColor = True
+        Me.Button_TV_State.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button_TV_State.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Button_TV_State.ImageIndex = 0
+        Me.Button_TV_State.ImageList = Me.ImageList2
+        Me.Button_TV_State.Location = New System.Drawing.Point(50, 266)
+        Me.Button_TV_State.Margin = New System.Windows.Forms.Padding(4)
+        Me.Button_TV_State.Name = "Button60"
+        Me.Button_TV_State.Size = New System.Drawing.Size(94, 29)
+        Me.Button_TV_State.TabIndex = 45
+        Me.Button_TV_State.Text = "Open"
+        Me.Button_TV_State.UseVisualStyleBackColor = True
         '
         'Label8
         '
@@ -11901,7 +11901,7 @@ End Sub
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ReloadItemToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents Button60 As System.Windows.Forms.Button
+    Friend WithEvents Button_TV_State As System.Windows.Forms.Button
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Tv_TreeViewContext_SearchNewEp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImageList2 As System.Windows.Forms.ImageList

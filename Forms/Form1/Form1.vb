@@ -18261,8 +18261,9 @@ MyExit:
                 ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
                     Episode = TvTreeview.SelectedNode.Tag
                 ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-                    Season = TvTreeview.SelectedNode.Tag
-                    Show = Season.GetParentShow
+                    Exit Sub
+                    'Season = TvTreeview.SelectedNode.Tag
+                    'Show = Season.GetParentShow
                 Else
                     Exit Sub
                 End If
@@ -18274,10 +18275,10 @@ MyExit:
             Dim tempstring As String = ""
             If Show IsNot Nothing Then
                 Dim changed As Integer = 0
-                If Show.TvdbId.Value <> TextBox9.Text Then
+                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> TextBox9.Text Then
                     changed += 1
                 End If
-                If Show.ImdbId.Value.ToLower <> TextBox12.Text.ToLower Then
+                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> TextBox12.Text.ToLower Then
                     changed += 2
                 End If
                 If changed > 0 Then
@@ -18299,7 +18300,6 @@ MyExit:
                     End If
                 End If
                 'its a tvshow
-
                 If TextBox_Title.Text.ToLower.IndexOf(", the") = TextBox_Title.Text.Length - 5 And TextBox_Title.Text.Length > 5 Then
                     Show.Title.Value = "The " & TextBox_Title.Text.Substring(0, TextBox_Title.Text.Length - 5)
                 Else
@@ -18316,36 +18316,9 @@ MyExit:
 
                 Show.Save()
                 Show.UpdateTreenode()
-                'title(2)
-                'plot(19)
-                'Runtime(15)
-                'premiered(10)
-                'studio(16)
-                'rating(13)
-                'genre(11)
-                'IMDBID(12)
-                'TVDBID(9)
-                'Cert(14)
-                'Call nfofunction.savetvshownfo(workingtvshow.path, workingtvshow, True)
-                'Dim node As TreeNode = Nothing
-                'For Each node In TvTreeview.Nodes
-                '    If node.Name = workingTvShow.path Then
-                '        node.Text = TextBox2.Text
-                '        Exit For
-                '    End If
-                'Next
-                'reloadtvshow()
-                'Call savetvdata()
-                'On Error Resume Next
-                'TvTreeview.SelectedNode = TvTreeview.SelectedNode.PrevNode
-                'TvTreeview.SelectedNode = TvTreeview.SelectedNode.NextNode
-                'TvTreeview.SelectedNode = node
-                'On Error GoTo 0
-                ''rebuildselectedshow(Node.Name.ToString)
+               
             Else
                 'its an episode
-
-
                 Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
                 Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
                 tempstring = "S" & trueseason & "E" & trueepisode & " - "
@@ -18356,61 +18329,8 @@ MyExit:
 
                 Episode.Save()
                 Episode.UpdateTreenode()
-
-                'Dim TVShowEpisodeNFOContent As String = nfoFunction.ChangeAllFieldsEpisodeTVShow(tempWorkingEpisode)
-                'If TVShowEpisodeNFOContent <> "error" Then Dim DiditWork As Boolean = CreateMovieNfo(workingEpisode(0).VideoFilePath, TVShowEpisodeNFOContent)
-
-                'For Each node As TreeNode In TvTreeview.Nodes
-                '    For Each childnode As TreeNode In node.Nodes
-                '        Dim counter As Integer = -1
-                '        For Each epie In childnode.Nodes
-                '            If epie.Name = workingEpisode(0).VideoFilePath Then
-                '                counter += 1
-                '                If counter = workingEpisodeIndex Then
-                '                    Dim eps As String
-                '                    If workingEpisode(workingEpisodeIndex).episodeno < 10 Then
-                '                        eps = "0" & workingEpisode(workingEpisodeIndex).episodeno
-                '                    Else
-                '                        eps = workingEpisode(workingEpisodeIndex).episodeno.ToString
-                '                    End If
-                '                    eps = eps & " - " & workingEpisode(workingEpisodeIndex).title
-                '                    epie.Text = eps
-                '                End If
-                '            End If
-                '        Next
-                '    Next
-                'Next
-                'Dim showpath As String = TvTreeview.SelectedNode.Parent.Parent.Name
-                'Dim cancelloop As Boolean = False
-                'For Each item In TvShows
-                '    If item.fullpath = showpath Then
-                '        For f = 0 To item.allepisodes.Count - 1
-                '            If item.allepisodes(f).VideoFilePath = workingEpisode(0).VideoFilePath Then
-                '                item.allepisodes.RemoveAt(f)
-                '                For Each ep In workingEpisode
-                '                    If ep.Season.value = workingEpisode(workingEpisodeIndex).Season.value And ep.episodeno = workingEpisode(workingEpisodeIndex).episodeno Then
-                '                        Dim newwp As New TvEpisode
-                '                        newwp.episodeno = ep.episodeno
-                '                        newwp.VideoFilePath = ep.VideoFilePath
-                '                        newwp.playcount = "0"
-                '                        newwp.rating = ep.rating
-                '                        newwp.Season.value = ep.Season.value
-                '                        newwp.title = ep.title
-                '                        item.allepisodes.Add(newwp)
-                '                        Exit For
-                '                    End If
-                '                Next
-                '                cancelloop = True
-                '                Exit For
-                '            End If
-                '        Next
-                '    End If
-                '    If cancelloop = True Then Exit For
-                'Next
-                'Call savetvdata()
-                '            rebuildselectedshow(MainNode.Name.ToString)
             End If
-            tv_CacheRefresh()
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21623,7 +21543,7 @@ MyExit:
         Next
     End Sub
 
-    Private Sub Button60_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button60.Click
+    Private Sub Button_TV_State_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TV_State.Click
         Try
             Dim Btn As Button = sender
             If TypeOf Btn.Tag Is Media_Companion.TvShow Then
@@ -21638,22 +21558,25 @@ MyExit:
                         TempShow.State = Media_Companion.ShowState.Open
                         TextBox_Title.BackColor = Color.White
                 End Select
-                TempShow.UpdateTreenode()
+
 
                 If TempShow.State = Media_Companion.ShowState.Locked Then
-                    Button60.Text = "Locked"
-                    Button60.BackColor = Color.Red
+                    Button_TV_State.Text = "Locked"
+                    Button_TV_State.BackColor = Color.Red
                 ElseIf TempShow.State = Media_Companion.ShowState.Open Then
-                    Button60.Text = "Open"
-                    Button60.BackColor = Color.LawnGreen
+                    Button_TV_State.Text = "Open"
+                    Button_TV_State.BackColor = Color.LawnGreen
                 ElseIf TempShow.State = Media_Companion.ShowState.Unverified Then
-                    Button60.Text = "Un-Verified"
-                    Button60.BackColor = Color.Yellow
+                    Button_TV_State.Text = "Un-Verified"
+                    Button_TV_State.BackColor = Color.Yellow
                 Else
-                    Button60.Text = "Error"
-                    Button60.BackColor = Color.Gray
+                    Button_TV_State.Text = "Error"
+                    Button_TV_State.BackColor = Color.Gray
                 End If
+                TempShow.UpdateTreenode()   'update the treenode so we can see the state change
+                TempShow.Save()             'save the nfo immediately (you don't have to press save button)
             End If
+
             'Dim lockedstring As String = ""
             'If Button60.Text = "Open" Then
             '    workingTvShow.locked = 1
@@ -31159,6 +31082,9 @@ MyExit:
 #End If
                             End Try
                             Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, editshow, True)
+
+                            'editshow.IsCache = True          'this doesn't stick so I had to remove the test in show.load
+
                         End If
 
 
@@ -31695,7 +31621,7 @@ MyExit:
         Try
             ToolStripStatusLabel8.Visible = False
             ToolStripProgressBar7.Visible = False
-            tv_CacheRefresh()
+            TvTreeview_AfterSelect_Do()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

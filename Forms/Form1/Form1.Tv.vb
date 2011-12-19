@@ -110,6 +110,9 @@ Partial Public Class Form1
         Next
     End Sub
     Private Sub TvTreeview_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvTreeview.AfterSelect
+        TvTreeview_AfterSelect_Do() 'moved this to seperate sub so we can also call this from other locations.
+    End Sub
+    Private Sub TvTreeview_AfterSelect_Do()
         Try
             'chooses which sub is run to load the relavent tv data to the screen
             'note: context menu items are set during TvTreeView_MouseUp event because we only need to update if right click is done which we check in the mouseup sub
@@ -131,6 +134,7 @@ Partial Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
         '                                                  'called from tv_treeview mouseup event where we check for a right click
         If TvTreeview.SelectedNode Is Nothing Then Return
@@ -377,9 +381,9 @@ Partial Public Class Form1
 
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
-        If Show.IsCache Then
-            Show.Load()
-        End If
+        'If Show.IsCache Then    'disabled this test, iscache=true  would not stick when doing batch wizard......
+        Show.Load()
+        'End If
 
         Dim hg As New IO.DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
@@ -401,19 +405,19 @@ Partial Public Class Form1
             Dim todo As Boolean = False
 
             If Show.State = Media_Companion.ShowState.Locked Then
-                Button60.Text = "Locked"
-                Button60.BackColor = Color.Red
+                Button_TV_State.Text = "Locked"
+                Button_TV_State.BackColor = Color.Red
             ElseIf Show.State = Media_Companion.ShowState.Open Then
-                Button60.Text = "Open"
-                Button60.BackColor = Color.LawnGreen
+                Button_TV_State.Text = "Open"
+                Button_TV_State.BackColor = Color.LawnGreen
             ElseIf Show.State = Media_Companion.ShowState.Unverified Then
-                Button60.Text = "Un-Verified"
-                Button60.BackColor = Color.Yellow
+                Button_TV_State.Text = "Un-Verified"
+                Button_TV_State.BackColor = Color.Yellow
             Else
-                Button60.Text = "Error"
-                Button60.BackColor = Color.Gray
+                Button_TV_State.Text = "Error"
+                Button_TV_State.BackColor = Color.Gray
             End If
-            Button60.Tag = Show
+            Button_TV_State.Tag = Show
 
 
             If Preferences.postertype = "banner" Then
@@ -544,9 +548,9 @@ Partial Public Class Form1
     End Sub
 
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
-        If SelectedSeason.ShowObj.IsCache Then
-            SelectedSeason.ShowObj.Load()
-        End If
+        'If SelectedSeason.ShowObj.IsCache Then
+        SelectedSeason.ShowObj.Load()
+        'End If
         Dim Show As Media_Companion.TvShow
         If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
             Show = SelectedSeason.SeasonNode.Parent.Tag
@@ -566,7 +570,7 @@ Partial Public Class Form1
             TabControl3.TabPages.RemoveAt(1)
         End If
 
-        
+
 
 
 
@@ -592,7 +596,7 @@ Partial Public Class Form1
         Tv_TreeViewContext_RenameEp.Enabled = True
         Tv_TreeViewContext_RenameEp.Visible = True
 
-       
+
         'MsgBox("Season")
         Dim season As String = SelectedSeason.SeasonLabel
         Dim trueseason As Integer = SelectedSeason.SeasonNumber
@@ -658,9 +662,9 @@ Partial Public Class Form1
     End Sub
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
-        If Episode.IsCache Then
-            Episode.Load()
-        End If
+        'If Episode.IsCache Then
+        Episode.Load()
+        'End If
         Dim tempstring As String = ""
         'TextBox_Title.Text = ""
         'TextBox_Rating.Text = ""
