@@ -107,6 +107,18 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
     End Function
 
+    Public Shared Function FindMediaFile(ByVal nfopath As String) As String
+        Dim mediapath As String = ""
+        Dim testpath As String = ""
+        For Each ext In VideoExtensions
+            testpath = IO.Path.ChangeExtension(nfopath, ext)
+            If File.Exists(testpath) Then
+                mediapath = IO.Path.ChangeExtension(nfopath, ext)
+                Exit For
+            End If
+        Next
+        Return mediapath
+    End Function
     Public Shared Function PadNumber(ByVal input As String, ByVal Length As Integer) As String
         Do Until input.Length >= Length
             input = "0" & input

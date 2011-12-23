@@ -662,34 +662,36 @@ Partial Public Class Form1
     End Sub
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
+        'these items we save from the episode structure sent to us.....
+        'we readd them later becuase the nfo function doesn't add them itself.....
         Dim myseason As TvSeason = Episode.SeasonObj
         Dim myshow As TvShow = Episode.ShowObj
+
+        Dim myvideofilepath As String = ""
+        If Episode.VideoFilePath Is Nothing Then
+            myvideofilepath = Utilities.FindMediaFile(Episode.NfoFilePath)  'this function finds the actual media file given the nfo file
+        Else
+            myvideofilepath = Episode.VideoFilePath
+        End If
+
+        'this bit loads the nfo file. It can handle multiepisode files & does a test to match which one to display
         Dim episodes As New List(Of TvEpisode)
 
         episodes = nfoFunction.ep_NfoLoadGeneric(Episode.NfoFilePath)
 
         For Each myEpisode In episodes
-            If myEpisode.Episode.Value = Episode.Episode.Value Then
+            If myEpisode.Episode.Value = Episode.Episode.Value Then 'multiepisode match - the episode number sent to this function is matched from the list of returned episodes
                 Episode = myEpisode
                 Exit For
             End If
         Next
 
+        'we readd the data saved from the original episode structure sent to this function
         Episode.ShowObj = myshow
         Episode.SeasonObj = myseason
+        Episode.VideoFilePath = myvideofilepath
 
-        Dim tempstring As String = ""
-        'TextBox_Title.Text = ""
-        'TextBox_Rating.Text = ""
-        'TextBox_Plot.Text = ""
-        'TextBox_Director.Text = ""
-        'TextBox_Credits.Text = ""
-        'TextBox_Aired.Text = ""
-        'TextBox25.Text = ""
-        'ComboBox5.Text = ""
-        'TextBox17.Text = ""
-        'TextBox29.Text = ""
-
+        'we now show the information on the form
         ComboBox5.Items.Clear()
         TextBox29.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
         TextBox17.Text = Utilities.ReplaceNothing(Episode.FolderPath)
@@ -708,8 +710,6 @@ Partial Public Class Form1
         TextBox_Credits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
         TextBox_Aired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
 
-
-
         TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
         TextBox_Ep_Details.Text += " (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
         TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
@@ -720,7 +720,6 @@ Partial Public Class Form1
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
             TextBox_Ep_Details.Text += " " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " channels"
         End If
-
 
         For Each actor In Episode.ListActors
             If actor.actorname <> Nothing Then
@@ -739,10 +738,10 @@ Partial Public Class Form1
 
         'DISPLAY EPISODE ART - LEFT IS EPISODE SCREENSHOT RIGHT IS SEASON POSTER
         ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
-        ' It could have been why Billy has used two pictureboxes for each single one shown.....
-
+        ' It could have been why Billy has useing two pictureboxes for each single one shown.....
+        'this function loads the images to memory & then disposes the lock on the original file
         util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, defaultScreenShot)
-        util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Season.Poster.Image
+        util_ImageLoad(tv_PictureBoxRight, Episode.SeasonObj.Poster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Season.Poster.Image
 
         Panel9.Visible = True
 
