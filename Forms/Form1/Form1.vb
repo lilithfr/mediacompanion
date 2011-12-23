@@ -19169,7 +19169,7 @@ MyExit:
                 Button47.Text = "DVD"
             Else
                 WorkingTvShow.SortOrder.Value = "default"
-                Button47.Text = "deault"
+                Button47.Text = "Default"
             End If
             'Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
             'If DiditWork = True Then
