@@ -662,10 +662,22 @@ Partial Public Class Form1
     End Sub
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
-        'If Episode.IsCache Then
-        'Episode = nfoFunction.ep_NfoLoad(Episode.NfoFilePath)(0)
-        Episode.Load()
-        'End If
+        Dim myseason As TvSeason = Episode.SeasonObj
+        Dim myshow As TvShow = Episode.ShowObj
+        Dim episodes As New List(Of TvEpisode)
+
+        episodes = nfoFunction.ep_NfoLoadGeneric(Episode.NfoFilePath)
+
+        For Each myEpisode In episodes
+            If myEpisode.Episode.Value = Episode.Episode.Value Then
+                Episode = myEpisode
+                Exit For
+            End If
+        Next
+
+        Episode.ShowObj = myshow
+        Episode.SeasonObj = myseason
+
         Dim tempstring As String = ""
         'TextBox_Title.Text = ""
         'TextBox_Rating.Text = ""
@@ -808,7 +820,7 @@ Partial Public Class Form1
                     'Application.DoEvents()
                     If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
                         Dim NewEpisodes As New List(Of TvEpisode)
-                        NewEpisodes = nfoFunction.ep_NfoLoad(fs_info.FullName)
+                        NewEpisodes = nfoFunction.ep_NfoLoadGeneric(fs_info.FullName)
                         For Each episode In NewEpisodes
                             'NewEpisodes(0).NfoFilePath = fs_info.FullName
                             DirectCast(NewEpisodes(0).CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewEpisodes(0).NfoFilePath

@@ -273,204 +273,204 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Function ep_NfoLoad(ByVal path As String)
-        'Try
-        Dim episodelist As New List(Of TvEpisode)
+    'Public Function ep_NfoLoad(ByVal path As String)
+    '    'Try
+    '    Dim episodelist As New List(Of TvEpisode)
 
-        Dim newtvshow As New TvEpisode
-        If Not IO.File.Exists(path) Then
-            Return "Error"
-        Else
-            Dim tvshow As New XmlDocument
-            Try
-                tvshow.Load(path)
-            Catch ex As Exception
-                'If Not validate_nfo(path) Then
-                '    Exit Function
-                'End If
-                newtvshow.Title.Value = IO.Path.GetFileName(path)
-                'newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
-                newtvshow.ImdbId.Value = "xml error"
-                newtvshow.NfoFilePath = path
-                newtvshow.TvdbId.Value = ""
+    '    Dim newtvshow As New TvEpisode
+    '    If Not IO.File.Exists(path) Then
+    '        Return "Error"
+    '    Else
+    '        Dim tvshow As New XmlDocument
+    '        Try
+    '            tvshow.Load(path)
+    '        Catch ex As Exception
+    '            'If Not validate_nfo(path) Then
+    '            '    Exit Function
+    '            'End If
+    '            newtvshow.Title.Value = IO.Path.GetFileName(path)
+    '            'newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
+    '            newtvshow.ImdbId.Value = "xml error"
+    '            newtvshow.NfoFilePath = path
+    '            newtvshow.TvdbId.Value = ""
 
-                If newtvshow.Episode.Value = Nothing Or newtvshow.Episode.Value = Nothing Then
-                    For Each regexp In Preferences.tv_RegexScraper
+    '            If newtvshow.Episode.Value = Nothing Or newtvshow.Episode.Value = Nothing Then
+    '                For Each regexp In Preferences.tv_RegexScraper
 
-                        Dim M As Match
-                        M = Regex.Match(newtvshow.NfoFilePath, regexp)
-                        If M.Success = True Then
-                            Try
-                                newtvshow.Season.Value = M.Groups(1).Value.ToString
-                                newtvshow.Episode.Value = M.Groups(2).Value.ToString
-                                Exit For
-                            Catch
-                                newtvshow.Season.Value = "-1"
-                                newtvshow.Episode.Value = "-1"
-                            End Try
-                        End If
-                    Next
-                End If
-                If newtvshow.Episode.Value = Nothing Then
-                    newtvshow.Episode.Value = "-1"
-                End If
-                If newtvshow.Season.value = Nothing Then
-                    newtvshow.Season.value = "-1"
-                End If
-                If newtvshow.Season.value.IndexOf("0") = 0 Then
-                    newtvshow.Season.value = newtvshow.Season.value.Substring(1, 1)
-                End If
-                If newtvshow.Episode.Value.IndexOf("0") = 0 Then
-                    newtvshow.Episode.Value = newtvshow.Episode.Value.Substring(1, 1)
-                End If
+    '                    Dim M As Match
+    '                    M = Regex.Match(newtvshow.NfoFilePath, regexp)
+    '                    If M.Success = True Then
+    '                        Try
+    '                            newtvshow.Season.Value = M.Groups(1).Value.ToString
+    '                            newtvshow.Episode.Value = M.Groups(2).Value.ToString
+    '                            Exit For
+    '                        Catch
+    '                            newtvshow.Season.Value = "-1"
+    '                            newtvshow.Episode.Value = "-1"
+    '                        End Try
+    '                    End If
+    '                Next
+    '            End If
+    '            If newtvshow.Episode.Value = Nothing Then
+    '                newtvshow.Episode.Value = "-1"
+    '            End If
+    '            If newtvshow.Season.value = Nothing Then
+    '                newtvshow.Season.value = "-1"
+    '            End If
+    '            If newtvshow.Season.value.IndexOf("0") = 0 Then
+    '                newtvshow.Season.value = newtvshow.Season.value.Substring(1, 1)
+    '            End If
+    '            If newtvshow.Episode.Value.IndexOf("0") = 0 Then
+    '                newtvshow.Episode.Value = newtvshow.Episode.Value.Substring(1, 1)
+    '            End If
 
-                episodelist.Add(newtvshow)
-
-
-
-
-
-                Return episodelist
+    '            episodelist.Add(newtvshow)
 
 
 
 
-                Exit Function
-            End Try
 
-            Dim thisresult As XmlNode = Nothing
-            Dim tempid As String = ""
-            If tvshow.DocumentElement.Name = "episodedetails" Then
-                Dim newtvepisode As New TvEpisode
-                For Each thisresult In tvshow("episodedetails")
-                    Try
-                        newtvepisode.NfoFilePath = path
-                        Select Case thisresult.Name
-                            Case "title"
-                                newtvepisode.Title.Value = thisresult.InnerText
-                            Case "season"
-                                newtvepisode.Season.value = thisresult.InnerText
-                            Case "episode"
-                                newtvepisode.Episode.Value = thisresult.InnerText
-                            Case "tvdbid"
-                                newtvepisode.TvdbId.Value = thisresult.InnerText
-                            Case "rating"
-                                newtvepisode.Rating.Value = thisresult.InnerText
-                                If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
-                                If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
-                            Case "playcount"
-                                newtvepisode.PlayCount.Value = thisresult.InnerText
-                            Case "aired"
-                                newtvepisode.Aired.Value = thisresult.InnerText
-                        End Select
+    '            Return episodelist
 
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
-                    End Try
-                Next
 
-                If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
-                    For Each regexp In Preferences.tv_RegexScraper
 
-                        Dim M As Match
-                        M = Regex.Match(newtvepisode.NfoFilePath, regexp)
-                        If M.Success = True Then
-                            Try
-                                newtvepisode.Season.Value = M.Groups(1).Value.ToString
-                                newtvepisode.Episode.Value = M.Groups(2).Value.ToString
-                                Exit For
-                            Catch
-                                newtvepisode.Season.Value = "-1"
-                                newtvepisode.Season.Value = "-1"
-                            End Try
-                        End If
-                    Next
-                End If
-                If newtvepisode.Episode.Value = Nothing Then
-                    newtvepisode.Episode.Value = "-1"
-                End If
-                If newtvepisode.Season.value = Nothing Then
-                    newtvepisode.Season.value = "-1"
-                End If
-                If newtvepisode.TvdbId = Nothing Then newtvepisode.TvdbId.Value = ""
-                'If newtvepisode.status = Nothing Then newtvepisode.status = ""
-                If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
-                episodelist.Add(newtvepisode)
-            ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
-                Dim temp As String = tvshow.DocumentElement.Name
-                For Each thisresult In tvshow(temp)
-                    Select Case thisresult.Name
-                        Case "episodedetails"
-                            Dim newepisodenfo As XmlNode = Nothing
-                            Dim anotherepisode As New TvEpisode
 
-                            ' For Each newepisodenfo In thisresult.ChildNodes
-                            Dim tempint As Integer = thisresult.ChildNodes.Count - 1
-                            For f = 0 To tempint
-                                Try
-                                    Select Case thisresult.ChildNodes(f).Name
-                                        Case "title"
-                                            anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "season"
-                                            anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
-                                        Case "episode"
-                                            anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "tvdbid"
-                                            anotherepisode.TvdbId.Value = thisresult.ChildNodes(f).InnerText
-                                        Case "rating"
-                                            anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
-                                            If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
-                                            If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
-                                        Case "playcount"
-                                            anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
+    '            Exit Function
+    '        End Try
 
-                                    End Select
-                                Catch ex As Exception
-                                    MsgBox(ex.ToString)
-                                End Try
-                            Next f
-                            Try
-                                anotherepisode.NfoFilePath = path
-                                If anotherepisode.Episode.Value = Nothing Or anotherepisode.Episode.Value = Nothing Then
-                                    For Each regexp In Preferences.tv_RegexScraper
+    '        Dim thisresult As XmlNode = Nothing
+    '        Dim tempid As String = ""
+    '        If tvshow.DocumentElement.Name = "episodedetails" Then
+    '            Dim newtvepisode As New TvEpisode
+    '            For Each thisresult In tvshow("episodedetails")
+    '                Try
+    '                    newtvepisode.NfoFilePath = path
+    '                    Select Case thisresult.Name
+    '                        Case "title"
+    '                            newtvepisode.Title.Value = thisresult.InnerText
+    '                        Case "season"
+    '                            newtvepisode.Season.value = thisresult.InnerText
+    '                        Case "episode"
+    '                            newtvepisode.Episode.Value = thisresult.InnerText
+    '                        Case "tvdbid"
+    '                            newtvepisode.TvdbId.Value = thisresult.InnerText
+    '                        Case "rating"
+    '                            newtvepisode.Rating.Value = thisresult.InnerText
+    '                            If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
+    '                            If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
+    '                        Case "playcount"
+    '                            newtvepisode.PlayCount.Value = thisresult.InnerText
+    '                        Case "aired"
+    '                            newtvepisode.Aired.Value = thisresult.InnerText
+    '                    End Select
 
-                                        Dim M As Match
-                                        M = Regex.Match(anotherepisode.NfoFilePath, regexp)
-                                        If M.Success = True Then
-                                            Try
-                                                anotherepisode.Season.Value = M.Groups(1).Value.ToString
-                                                anotherepisode.Episode.Value = M.Groups(2).Value.ToString
-                                                Exit For
-                                            Catch
-                                                anotherepisode.Season.Value = "-1"
-                                                anotherepisode.Season.Value = "-1"
-                                            End Try
-                                        End If
-                                    Next
-                                End If
-                                If anotherepisode.Episode.Value = Nothing Then
-                                    anotherepisode.Episode.Value = "-1"
-                                End If
-                                If anotherepisode.Season.value = Nothing Then
-                                    anotherepisode.Season.value = "-1"
-                                End If
-                                If anotherepisode.TvdbId = Nothing Then anotherepisode.TvdbId.Value = ""
-                                'If anotherepisode.status = Nothing Then anotherepisode.status = ""
-                                If anotherepisode.Rating = Nothing Then anotherepisode.Rating.Value = ""
-                                episodelist.Add(anotherepisode)
-                            Catch ex As Exception
-                                MsgBox(ex.ToString)
-                            End Try
-                    End Select
-                Next
-            End If
+    '                Catch ex As Exception
+    '                    MsgBox(ex.ToString)
+    '                End Try
+    '            Next
 
-            Return episodelist
-        End If
+    '            If newtvepisode.Episode.Value = Nothing Or newtvepisode.Episode.Value = Nothing Then
+    '                For Each regexp In Preferences.tv_RegexScraper
 
-        'Catch
-        'End Try
-    End Function
+    '                    Dim M As Match
+    '                    M = Regex.Match(newtvepisode.NfoFilePath, regexp)
+    '                    If M.Success = True Then
+    '                        Try
+    '                            newtvepisode.Season.Value = M.Groups(1).Value.ToString
+    '                            newtvepisode.Episode.Value = M.Groups(2).Value.ToString
+    '                            Exit For
+    '                        Catch
+    '                            newtvepisode.Season.Value = "-1"
+    '                            newtvepisode.Season.Value = "-1"
+    '                        End Try
+    '                    End If
+    '                Next
+    '            End If
+    '            If newtvepisode.Episode.Value = Nothing Then
+    '                newtvepisode.Episode.Value = "-1"
+    '            End If
+    '            If newtvepisode.Season.value = Nothing Then
+    '                newtvepisode.Season.value = "-1"
+    '            End If
+    '            If newtvepisode.TvdbId = Nothing Then newtvepisode.TvdbId.Value = ""
+    '            'If newtvepisode.status = Nothing Then newtvepisode.status = ""
+    '            If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
+    '            episodelist.Add(newtvepisode)
+    '        ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
+    '            Dim temp As String = tvshow.DocumentElement.Name
+    '            For Each thisresult In tvshow(temp)
+    '                Select Case thisresult.Name
+    '                    Case "episodedetails"
+    '                        Dim newepisodenfo As XmlNode = Nothing
+    '                        Dim anotherepisode As New TvEpisode
+
+    '                        ' For Each newepisodenfo In thisresult.ChildNodes
+    '                        Dim tempint As Integer = thisresult.ChildNodes.Count - 1
+    '                        For f = 0 To tempint
+    '                            Try
+    '                                Select Case thisresult.ChildNodes(f).Name
+    '                                    Case "title"
+    '                                        anotherepisode.Title.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "season"
+    '                                        anotherepisode.Season.value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "episode"
+    '                                        anotherepisode.Episode.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "tvdbid"
+    '                                        anotherepisode.TvdbId.Value = thisresult.ChildNodes(f).InnerText
+    '                                    Case "rating"
+    '                                        anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
+    '                                        If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
+    '                                        If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
+    '                                    Case "playcount"
+    '                                        anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
+
+    '                                End Select
+    '                            Catch ex As Exception
+    '                                MsgBox(ex.ToString)
+    '                            End Try
+    '                        Next f
+    '                        Try
+    '                            anotherepisode.NfoFilePath = path
+    '                            If anotherepisode.Episode.Value = Nothing Or anotherepisode.Episode.Value = Nothing Then
+    '                                For Each regexp In Preferences.tv_RegexScraper
+
+    '                                    Dim M As Match
+    '                                    M = Regex.Match(anotherepisode.NfoFilePath, regexp)
+    '                                    If M.Success = True Then
+    '                                        Try
+    '                                            anotherepisode.Season.Value = M.Groups(1).Value.ToString
+    '                                            anotherepisode.Episode.Value = M.Groups(2).Value.ToString
+    '                                            Exit For
+    '                                        Catch
+    '                                            anotherepisode.Season.Value = "-1"
+    '                                            anotherepisode.Season.Value = "-1"
+    '                                        End Try
+    '                                    End If
+    '                                Next
+    '                            End If
+    '                            If anotherepisode.Episode.Value = Nothing Then
+    '                                anotherepisode.Episode.Value = "-1"
+    '                            End If
+    '                            If anotherepisode.Season.value = Nothing Then
+    '                                anotherepisode.Season.value = "-1"
+    '                            End If
+    '                            If anotherepisode.TvdbId = Nothing Then anotherepisode.TvdbId.Value = ""
+    '                            'If anotherepisode.status = Nothing Then anotherepisode.status = ""
+    '                            If anotherepisode.Rating = Nothing Then anotherepisode.Rating.Value = ""
+    '                            episodelist.Add(anotherepisode)
+    '                        Catch ex As Exception
+    '                            MsgBox(ex.ToString)
+    '                        End Try
+    '                End Select
+    '            Next
+    '        End If
+
+    '        Return episodelist
+    '    End If
+
+    '    'Catch
+    '    'End Try
+    'End Function
 
     'Public Function loadfullepisodenfo(ByVal path As String) ', ByVal season As String, ByVal episode As String)
 
@@ -2911,11 +2911,11 @@ Public Class WorkingWithNfoFiles
                             Dim newepisodenfo As XmlNode = Nothing
                             Dim anotherepisode As New TvEpisode
 
-                            anotherepisode.NfoFilePath = Nothing
-                            anotherepisode.playcount = Nothing
-                            anotherepisode.rating = Nothing
-                            anotherepisode.Season.value = Nothing
-                            anotherepisode.title = Nothing
+                            '                               'anotherepisode.NfoFilePath = Nothing
+                            '                               'anotherepisode.playcount = Nothing
+                            '                               'anotherepisode.rating = Nothing
+                            '                               'anotherepisode.Season.value = Nothing
+                            '                               'anotherepisode.title = Nothing
                             ' For Each newepisodenfo In thisresult.ChildNodes
                             Dim tempint As Integer = thisresult.ChildNodes.Count - 1
                             For f = 0 To tempint
