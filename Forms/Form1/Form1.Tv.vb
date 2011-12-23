@@ -663,6 +663,7 @@ Partial Public Class Form1
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode)
         'If Episode.IsCache Then
+        'Episode = nfoFunction.ep_NfoLoad(Episode.NfoFilePath)(0)
         Episode.Load()
         'End If
         Dim tempstring As String = ""
@@ -762,7 +763,10 @@ Partial Public Class Form1
         tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
         Tv_CleanFolderList()
         TextBox_TotTVShowCount.Text = ""
+
         TextBox_TotEpisodeCount.Text = ""
+
+
         Me.Enabled = False
 
         Dim prgCount As Integer = 0
@@ -791,7 +795,33 @@ Partial Public Class Form1
             Application.DoEvents()
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
-            newtvshownfo.Load(True)
+
+            'newtvshownfo.Load(True)    disable this line. It loads tvshow & then loads any found episodes - it can't handle multiepisodes however so we use the old method to do that
+            newtvshownfo.Load(False) 'loads tvshows
+            'the rest of this loads episodes
+            
+            For Each folder In FolderList
+                Dim dir_info As New System.IO.DirectoryInfo(folder)
+
+                Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
+                For Each fs_info As System.IO.FileInfo In fs_infos
+                    'Application.DoEvents()
+                    If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
+                        Dim NewEpisodes As New List(Of TvEpisode)
+                        NewEpisodes = nfoFunction.ep_NfoLoad(fs_info.FullName)
+                        For Each episode In NewEpisodes
+                            'NewEpisodes(0).NfoFilePath = fs_info.FullName
+                            DirectCast(NewEpisodes(0).CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewEpisodes(0).NfoFilePath
+                            newtvshownfo.AddEpisode(episode)
+
+                        Next
+                    End If
+
+                Next fs_info
+            Next
+
+
+
             DirectCast(newtvshownfo.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = newtvshownfo.NfoFilePath
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then

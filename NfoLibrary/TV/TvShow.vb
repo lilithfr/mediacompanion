@@ -67,6 +67,7 @@ Public Class TvShow
     Public Property TvShowActorSource As New ProtoProperty(Me, "tvshowactorsource")
     Public Property EpisodeActorSource As New ProtoProperty(Me, "episodeactorsource")
 
+
     Private Property _State As New ProtoProperty(Me, "state", CacheMode:=CacheMode.Both)
     Public Shadows Property State As Media_Companion.ShowState
         Get
