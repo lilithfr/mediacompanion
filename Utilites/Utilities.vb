@@ -9,6 +9,7 @@ Imports System.Web
 Imports System.Reflection
 Imports System.Drawing
 Imports System.Security.Cryptography
+Imports Microsoft.Win32
 
 
 
@@ -32,6 +33,32 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultFanartPath As String
 
     Private Shared _ApplicationPath As String
+
+    Public Shared Function GetFrameworkVersions() As List(Of String)
+        Dim installedFrameworks As New List(Of String)
+        'send key & value to test function - it will return true if it exists - installedFrameworks contains a list of all found NET versions
+        If (TestKey("Software\Microsoft\.NETFramework\Policy\v1.0", "3705")) Then installedFrameworks.Add("1.0")
+        If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v1.1.4322", "Install")) Then installedFrameworks.Add("1.1")
+        If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v2.0.50727", "Install")) Then installedFrameworks.Add("2.0")
+        If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v3.0\Setup", "InstallSuccess")) Then installedFrameworks.Add("3.0")
+        If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v3.5", "Install")) Then installedFrameworks.Add("3.5")
+        If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v4\Client", "Install")) Then installedFrameworks.Add("4.0 Client")
+        If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v4\Full", "Install")) Then installedFrameworks.Add("4.0 Full")
+        Return installedFrameworks
+    End Function
+
+    Public Shared Function TestKey(key As String, value As String)
+        Dim regKey As Microsoft.Win32.RegistryKey = Registry.LocalMachine.OpenSubKey(key, False)
+        If regKey Is Nothing Then 'Key Not Found
+            Return False
+        Else
+            If regKey.GetValue(value) Is Nothing Then
+                Return False  'Key Found, Value Not Found
+            End If
+            Return True 'Key & Value Found
+        End If
+    End Function
+
     Public Shared Property applicationPath As String
         Get
             Return _ApplicationPath
