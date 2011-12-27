@@ -2406,6 +2406,7 @@ Module Module1
             For Each episode In item.allepisodes
                 child = doc.CreateElement("episodedetails")
                 child.SetAttribute("NfoPath", episode.episodepath)
+
                 Dim extension As String = episode.episodepath
                 extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
                 Dim tempstring As String = episode.episodepath
