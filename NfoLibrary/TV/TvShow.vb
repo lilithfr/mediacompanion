@@ -245,7 +245,8 @@ Public Class TvShow
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
                     Dim NewEpisode As New TvEpisode
                     NewEpisode.NfoFilePath = fs_info.FullName
-                    NewEpisode.Load()
+                    'NewEpisode.Load()
+                    MyEpLoad(NewEpisode)
                     DirectCast(NewEpisode.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewEpisode.NfoFilePath
                     Me.AddEpisode(NewEpisode)
                 End If
@@ -253,7 +254,80 @@ Public Class TvShow
             Next fs_info
         Next
     End Sub
+    Public Sub MyEpLoad(ByRef Episode As TvEpisode)
+        Episode.IsAltered = True
+        'Episode.CleanDoc()
+        If IO.File.Exists(Episode.NfoFilePath) Then
+            Try
+                Episode.Doc = XDocument.Load(Episode.NfoFilePath)
+            Catch
+                FailedLoad = True
+                Exit Sub
+            End Try
+        Else
+            Exit Sub
+        End If
+        If Episode.Doc.Root Is Nothing Then Throw New Exception("Invalid NFO file")
+        'Me._node = Me.Doc.Root
+        Dim Root As XElement = Episode.Doc.Root
+        'Dim ChildProperty As IProtoXChild
+        Dim XElementList As New List(Of XElement)
+        Dim epcount As Integer = 0
+        Dim multiep As New TvEpisode
+        Dim ChildProperty As IProtoXChild
+        If Root.Name = "multiepisodenfo" Then
+            For Each episodeElement As XElement In Root.Nodes
+                epcount += 1
+                For Each Child As XElement In episodeElement.Nodes
+                    If epcount < 2 Then
+                        ChildProperty = Episode.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+                        ChildProperty.ProcessNode(Child)
+                    Else
+                        ChildProperty = multiep.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+                        ChildProperty.ProcessNode(Child)
+                    End If
+                Next
+                If epcount > 1 Then
+                    multiep.MakeSecondaryTo(Episode)
+                    multiep = Nothing
+                End If
+            Next
+        Else
+            For Each Child As XElement In Root.Nodes
+                If TypeOf Child Is XElement Then
+                    ChildProperty = Episode.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+                    ChildProperty.ProcessNode(Child)
+                End If
+            Next
+        End If
 
+        'For Each Child As XElement In XElementList
+        '    'If Episode.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
+        '    '    ChildProperty = Episode.ChildrenLookup.Item(Child.Name.ToString.ToLower)
+        '    '    ChildProperty.ProcessNode(Child)
+        '    '    'If Child.Name.ToString.ToLower <> Me.NodeName Then
+        '    '    '    Throw New InvalidExpressionException("Wrong element passed")
+        '    '    'End If
+        '    'Dim epcount As Integer = 0
+        '    'If Child.Name.ToString.ToLower = "title" Then
+        '    '    epcount += 1
+        '    'End If
+        '    If epcount < 2 Then
+        '        Episode.Node = Child
+        '        Episode.Node.Value = Child.Value
+        '        Dim ChanceToSeeChild As Boolean = True
+        '    Else
+        '        Dim multiep As New TvEpisode
+        '        multiep.Node = Child
+        '        multiep.Node.Value = Child.Value
+        '        multiep.MakeSecondaryTo(Episode)
+        '    End If
+        'Next
+        'Me.CleanDoc()
+        Episode.IsCache = False
+        Episode.IsAltered = False
+        UpdateTreenode()
+    End Sub
     Public Sub AddEpisode(ByRef Episode As TvEpisode)
         If Not Cache.TvCache.Contains(Episode) Then
             Cache.TvCache.Add(Episode)

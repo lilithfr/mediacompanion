@@ -21,7 +21,6 @@
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)
         If Parent Is Nothing Then
             Me.Orphan = True
-
             If Not String.IsNullOrEmpty(NodeName) Then
                 Me.NodeName = NodeName
             End If
@@ -29,7 +28,6 @@
             Me.ParentClass = Parent
             AddHandler Me.ValueChanged, AddressOf Me.ParentClass.HandleChildValueChanged
             Me.NodeName = NodeName
-
             If Not ParentClass.ChildrenLookup.ContainsKey(Me.NodeName) Then
                 ParentClass.ChildrenLookup.Add(Me.NodeName, Me)
             End If

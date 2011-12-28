@@ -12,7 +12,7 @@
             If Not (value = _HasSecondary) Then
                 If value Then
 
-                    MultiEpisodeNode = <multiepisode></multiepisode>
+                    MultiEpisodeNode = <multiepisodenfo></multiepisodenfo>
                     Me.Node.Remove()
                     MultiEpisodeNode.Add(Me.Node)
                     Me.Doc.Add(MultiEpisodeNode)

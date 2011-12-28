@@ -808,22 +808,22 @@ Partial Public Class Form1
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
 
             'newtvshownfo.Load(True)    disable this line. It loads tvshow & then loads any found episodes - it can't handle multiepisodes however so we use the old method to do that
-            newtvshownfo.Load(False) 'loads tvshows
+            newtvshownfo.Load(True) 'loads tvshows
             'the rest of this loads episodes in the original folder or any sub folders
-            Dim dir_info As New System.IO.DirectoryInfo(tvfolder)
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.AllDirectories)
-            For Each fs_info As System.IO.FileInfo In fs_infos
-                'Application.DoEvents()
-                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
-                    Dim NewEpisodes As New List(Of TvEpisode)
-                    NewEpisodes = nfoFunction.ep_NfoLoadGeneric(fs_info.FullName)
-                    For Each episode In NewEpisodes
-                        'NewEpisodes(0).NfoFilePath = fs_info.FullName
-                        DirectCast(NewEpisodes(0).CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewEpisodes(0).NfoFilePath
-                        newtvshownfo.AddEpisode(episode)
-                    Next
-                End If
-            Next fs_info
+            ''''''Dim dir_info As New System.IO.DirectoryInfo(tvfolder)
+            ''''''Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.AllDirectories)
+            ''''''For Each fs_info As System.IO.FileInfo In fs_infos
+            ''''''    'Application.DoEvents()
+            ''''''    If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
+            ''''''        Dim NewEpisodes As New List(Of TvEpisode)
+            ''''''        NewEpisodes = nfoFunction.ep_NfoLoadGeneric(fs_info.FullName)
+            ''''''        For Each episode In NewEpisodes
+            ''''''            'NewEpisodes(0).NfoFilePath = fs_info.FullName
+            ''''''            DirectCast(NewEpisodes(0).CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewEpisodes(0).NfoFilePath
+            ''''''            newtvshownfo.AddEpisode(episode)
+            ''''''        Next
+            ''''''    End If
+            ''''''Next fs_info
           
             DirectCast(newtvshownfo.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = newtvshownfo.NfoFilePath
             If newtvshownfo.Title.Value IsNot Nothing Then

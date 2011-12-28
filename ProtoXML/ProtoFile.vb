@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
 
+
 Public Class ProtoFile
     Implements IProtoXFile
 
@@ -50,7 +51,7 @@ Public Class ProtoFile
         Me.ChildrenLookup.Add(NewChild.NodeName, NewChild)
     End Sub
 
-    Friend Property ChildrenLookup As New System.Collections.Generic.Dictionary(Of String, IProtoXChild) Implements IProtoXBase.ChildrenLookup
+    Public Property ChildrenLookup As New System.Collections.Generic.Dictionary(Of String, IProtoXChild) Implements IProtoXBase.ChildrenLookup
 
 
     Public Property IsCache As Boolean
@@ -182,6 +183,7 @@ Public Class ProtoFile
 
         Dim ChildProperty As IProtoXChild
         Dim XElementList As New List(Of XElement)
+
         If Root.Name = "multiepisodenfo" Then
             For Each episode As XElement In Root.Nodes
                 For Each Child As XNode In episode.Nodes
@@ -206,7 +208,6 @@ Public Class ProtoFile
         For Each Child As XElement In XElementList
             If Me.ChildrenLookup.ContainsKey(Child.Name.ToString.ToLower) Then
                 ChildProperty = Me.ChildrenLookup.Item(Child.Name.ToString.ToLower)
-
                 ChildProperty.ProcessNode(Child)
                 Dim ChanceToSeeChild As Boolean = True
             End If

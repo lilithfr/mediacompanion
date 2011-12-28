@@ -8,9 +8,7 @@
 
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)
         MyBase.New(Parent, NodeName)
-
         If Parent Is Nothing Then Exit Sub
-
         Me.Node = New XElement(NodeName)
         Me.ParentClass.Node.Add(Me.Node)
     End Sub

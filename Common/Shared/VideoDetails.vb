@@ -25,6 +25,7 @@ Public Class VideoDetails
 
     Public Sub New(ByRef Parent As IProtoXBase, ByVal NodeName As String)
         MyBase.New(Parent, NodeName)
+
     End Sub
 
     Public Overrides Function CreateNew() As ProtoXML.IProtoXChild
