@@ -245,8 +245,8 @@ Public Class TvShow
                 If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
                     Dim NewEpisode As New TvEpisode
                     NewEpisode.NfoFilePath = fs_info.FullName
-                    'NewEpisode.Load()
-                    MyEpLoad(NewEpisode)
+                    NewEpisode.Load()
+                    'MyEpLoad(NewEpisode)
                     DirectCast(NewEpisode.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewEpisode.NfoFilePath
                     Me.AddEpisode(NewEpisode)
                 End If

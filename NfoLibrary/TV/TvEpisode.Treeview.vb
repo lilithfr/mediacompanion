@@ -66,9 +66,16 @@ Partial Public Class TvEpisode
 
         If Me.EpisodeNode.TreeView Is Nothing Then
             If Me.SeasonObj IsNot Nothing Then
+                Dim Keys = Me.SeasonObj.SeasonNode.Nodes.Find(Me.EpisodeNode.Name, True)
+                For Each key In Keys
+                    Me.SeasonObj.SeasonNode.Nodes.Remove(key)
+                Next
+
+
                 Me.SeasonObj.SeasonNode.Nodes.Add(Me.EpisodeNode)
             End If
         End If
+
     End Sub
     Public Overrides Sub Load()
         MyBase.Load()
