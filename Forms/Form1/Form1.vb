@@ -283,6 +283,13 @@ Public Class Form1
 
         Preferences.applicationPath = Application.StartupPath
         Utilities.applicationPath = Application.StartupPath
+        If Not Utilities.GetFrameworkVersions().Contains("4.0 Full") Then
+            Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
+            If MsgBox("MC Requires the FULL version of Net 4.0." & vbCrLf & "It can be accessed from the following url." & vbCrLf & RequiredNetURL & vbCrLf & vbCrLf & "Do you want to end MC & go to the URL for download?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                Process.Start(RequiredNetURL)
+                End
+            End If
+        End If
 
         'TasksList.DataSource = Common.Tasks
 
@@ -19169,7 +19176,7 @@ MyExit:
                 Button47.Text = "DVD"
             Else
                 WorkingTvShow.SortOrder.Value = "default"
-                Button47.Text = "deault"
+                Button47.Text = "default"
             End If
             'Dim DiditWork As Boolean = CreateMovieNfo(workingTvShow.path, TVShowNFOContent)
             'If DiditWork = True Then
