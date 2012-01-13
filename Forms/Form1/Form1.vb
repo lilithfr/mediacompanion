@@ -23257,7 +23257,7 @@ MyExit:
     '                                    TvShows.Add(newtvshownfo)
     '                                End If
     '                            End If
-    '                        End If
+   '                        End If
     '                        realTvPaths.Add(tvfolder)
     '                    Catch ex As Exception
     '#If SilentErrorScream Then

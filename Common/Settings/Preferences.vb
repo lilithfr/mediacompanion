@@ -153,8 +153,8 @@ Public Class Preferences
     Public Shared OfflineDVDTitle As String
     Public Shared MovieRenameEnable As Boolean
     Public Shared MovieRenameTemplate As String
-
     Public Shared moviePreferredTrailerResolution As String
+    Public Shared MovieImdbGenreRegEx As String
 
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
@@ -202,7 +202,7 @@ Public Class Preferences
         Preferences.moviePreferredTrailerResolution = "720"
         Preferences.MovieRenameEnable = False
         Preferences.MovieRenameTemplate = "%T (%Y)"
-
+        Preferences.MovieImdbGenreRegEx = "href=""/genre/(?<genre>\w+)"""
 
         'TV
         Preferences.tvshow_useXBMC_Scraper = False
@@ -850,6 +850,10 @@ Public Class Preferences
         child.InnerText = Preferences.moviePreferredTrailerResolution.ToString.ToLower
         root.AppendChild(child)
 
+        child = doc.CreateElement("MovieImdbGenreRegEx")
+        child.InnerText = Preferences.MovieImdbGenreRegEx.ToString
+        root.AppendChild(child)
+
 
         doc.AppendChild(root)
 
@@ -1451,6 +1455,10 @@ Public Class Preferences
 
                 Case "moviePreferredHDTrailerResolution"
                     If thisresult.InnerText <> "" Then Preferences.moviePreferredTrailerResolution = thisresult.InnerXml
+
+                Case "MovieImdbGenreRegEx"
+                    If thisresult.InnerText <> "" Then Preferences.MovieImdbGenreRegEx = decxmlchars( thisresult.InnerXml )
+
 
             End Select
             'Catch

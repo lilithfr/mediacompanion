@@ -605,6 +605,9 @@ Public Class Classimdb
                 tempstring = imdbmirror & "title/" & imdbid
                 webpage.Clear()
                 webpage = loadwebpage(tempstring, False)
+
+                Dim webPg As String = String.Join( "" , webpage.ToArray() )
+
                 For f = 0 To webpage.Count - 1
                     webcounter = f
                     If webcounter > webpage.Count - 10 Then Exit For
@@ -838,24 +841,30 @@ Public Class Classimdb
                     'genre
                     If f > 5 Then
                         If webpage(f).IndexOf("<h4 class=""inline"">Genre") <> -1 Then
+
                             Dim listofgenre As New List(Of String)
                             Try
-                                If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
-                                    Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
-                                        Try
-                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
-                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
-                                            webpage(f + 1) = tempstring
-                                        Catch ex As Exception
+'                               If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
+'                                  Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
+'                                        Try
+'                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
+'                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
+'                                            webpage(f + 1) = tempstring
+'                                        Catch ex As Exception
+'
+'                                        End Try
+'                                    Loop
+'                                    listofgenre.Add(webpage(f + 1))
+'                                    For g = 0 To listofgenre.Count - 1
+'                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
+'                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
+'
+'                                    Next
+'                                End If
 
-                                        End Try
-                                    Loop
-                                    listofgenre.Add(webpage(f + 1))
-                                    For g = 0 To listofgenre.Count - 1
-                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
-                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
-                                    Next
-                                End If
+                                listofgenre = GetGenres( webPg )
+
+
                                 For g = 0 To listofgenre.Count - 1
                                     If g = 0 Then
                                         movienfoarray = listofgenre(g)
@@ -1501,6 +1510,26 @@ Public Class Classimdb
         End Try
     End Function
 
+
+    Function GetGenres( ByVal webPage As String )
+
+        Dim genres As New List(Of String)
+        Dim genre As String
+
+        For Each m As Match In Regex.Matches( webPage, Preferences.MovieImdbGenreRegEx )
+
+            genre = m.Groups("genre").Value
+
+            If Not genres.Contains( genre ) then
+                genres.Add( genre )
+            End if
+
+        Next   
+         
+        Return genres
+    End Function
+
+  
 End Class
 
 
