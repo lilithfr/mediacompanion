@@ -756,7 +756,8 @@ Public Class Classimdb
                                 movienfoarray = ""
                                 Dim listofdirectors As New List(Of String)
                                 listofdirectors.Clear()
-                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director""\s?>(.+?)</a>")
+                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director"".*?>(.+?)</a>")
+
                                 Do While M.Success
                                     listofdirectors.Add(M.Groups(1).Value)
                                     M = M.NextMatch
@@ -1529,7 +1530,6 @@ Public Class Classimdb
         Return genres
     End Function
 
-  
 End Class
 
 

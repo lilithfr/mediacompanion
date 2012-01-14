@@ -8963,7 +8963,7 @@ Module Module1
                                 movienfoarray = ""
                                 Dim listofdirectors As New List(Of String)
                                 listofdirectors.Clear()
-                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director""\s?>(.+?)</a>")
+                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director"".*?>(.+?)</a>")
                                 Do While M.Success
                                     listofdirectors.Add(M.Groups(1).Value)
                                     M = M.NextMatch
@@ -9971,8 +9971,8 @@ Module Module1
 
         Dim genres As New List(Of String)
         Dim genre As String
-
-        For Each m As Match In Regex.Matches( webPage, "href=""/genre/(?<genre>.{2,20}?)""" )
+        
+        For Each m As Match In Regex.Matches( webPage, "/genre/.*?"">(?<genre>.*?)</a>" )         
 
             genre = m.Groups("genre").Value
 

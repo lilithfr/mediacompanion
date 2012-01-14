@@ -202,7 +202,9 @@ Public Class Preferences
         Preferences.moviePreferredTrailerResolution = "720"
         Preferences.MovieRenameEnable = False
         Preferences.MovieRenameTemplate = "%T (%Y)"
-        Preferences.MovieImdbGenreRegEx = "href=""/genre/(?<genre>.{2,20}?)"""
+
+        Preferences.MovieImdbGenreRegEx    = "/genre/.*?"">(?<genre>.*?)</a>"
+            
 
         'TV
         Preferences.tvshow_useXBMC_Scraper = False
@@ -854,7 +856,7 @@ Public Class Preferences
         child.InnerText = Preferences.MovieImdbGenreRegEx.ToString
         root.AppendChild(child)
 
-
+        
         doc.AppendChild(root)
 
         If String.IsNullOrEmpty(Preferences.workingProfile.config) Then
