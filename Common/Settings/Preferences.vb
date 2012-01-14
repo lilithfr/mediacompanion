@@ -202,7 +202,7 @@ Public Class Preferences
         Preferences.moviePreferredTrailerResolution = "720"
         Preferences.MovieRenameEnable = False
         Preferences.MovieRenameTemplate = "%T (%Y)"
-        Preferences.MovieImdbGenreRegEx = "href=""/genre/(?<genre>\w+)"""
+        Preferences.MovieImdbGenreRegEx = "href=""/genre/(?<genre>.{2,20}?)"""
 
         'TV
         Preferences.tvshow_useXBMC_Scraper = False

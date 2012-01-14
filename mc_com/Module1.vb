@@ -9972,7 +9972,7 @@ Module Module1
         Dim genres As New List(Of String)
         Dim genre As String
 
-        For Each m As Match In Regex.Matches( webPage, "href=""/genre/(?<genre>\w+)""" )
+        For Each m As Match In Regex.Matches( webPage, "href=""/genre/(?<genre>.{2,20}?)""" )
 
             genre = m.Groups("genre").Value
 
