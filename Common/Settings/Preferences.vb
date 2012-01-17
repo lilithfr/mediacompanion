@@ -203,7 +203,7 @@ Public Class Preferences
         Preferences.MovieRenameEnable = False
         Preferences.MovieRenameTemplate = "%T (%Y)"
 
-        Preferences.MovieImdbGenreRegEx    = "/genre/.*?"">(?<genre>.*?)</a>"
+        Preferences.MovieImdbGenreRegEx    = "/genre/.*?>(?<genre>.*?)</a>"
             
 
         'TV
