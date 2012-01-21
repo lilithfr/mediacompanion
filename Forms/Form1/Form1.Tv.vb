@@ -1683,7 +1683,8 @@ Partial Public Class Form1
                 'DownloadMissingArt(NewShow)
                 NewShow.Save()
                 NewShow.UpdateTreenode()
-                Cache.TvCache.Shows.Add(NewShow)
+                'Cache.TvCache.Shows.Add(NewShow)
+                Cache.TvCache.Add(NewShow)
                 NewShow.SearchForEpisodesInFolder()
                 If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
                     Preferences.tvFolders.Add(newTvFolders(0))

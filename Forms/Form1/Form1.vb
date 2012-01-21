@@ -25138,6 +25138,7 @@ MyExit:
 
     Private Sub bckgrnd_tvshowscraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bckgrnd_tvshowscraper.RunWorkerCompleted
         Try
+            Tv_CacheSave()
             ToolStripStatusLabel5.Visible = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
