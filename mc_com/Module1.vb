@@ -2331,25 +2331,27 @@ Module Module1
                 Case "episodedetails"
                     Dim newepisode As New episodeinfo
                     newepisode.episodepath = thisresult.Attributes(0).Value
-                    newepisode.pure = thisresult.Attributes(1).Value
-                    If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
-                    For Each episodenew In thisresult.ChildNodes
-                        Select Case episodenew.Name
-                            Case "title"
-                                newepisode.title = episodenew.InnerText
-                            Case "episodepath"
-                                newepisode.episodepath = episodenew.InnerText
-                            Case "season"
-                                newepisode.seasonno = episodenew.InnerText
-                            Case "episode"
-                                newepisode.episodeno = episodenew.InnerText
-                            Case "showid"
-                                newepisode.showid = episodenew.InnerText
-                            Case "missing"
-                                newepisode.missing = episodenew.innertext
-                        End Select
-                    Next
-                    unsortedepisodelist.Add(newepisode)
+                    If (thisresult.Attributes.Count > 1) Then
+                        newepisode.pure = thisresult.Attributes(1).Value
+                        If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
+                        For Each episodenew In thisresult.ChildNodes
+                            Select Case episodenew.Name
+                                Case "title"
+                                    newepisode.title = episodenew.InnerText
+                                Case "episodepath"
+                                    newepisode.episodepath = episodenew.InnerText
+                                Case "season"
+                                    newepisode.seasonno = episodenew.InnerText
+                                Case "episode"
+                                    newepisode.episodeno = episodenew.InnerText
+                                Case "showid"
+                                    newepisode.showid = episodenew.InnerText
+                                Case "missing"
+                                    newepisode.missing = episodenew.innertext
+                            End Select
+                        Next
+                        unsortedepisodelist.Add(newepisode)
+                    End If
             End Select
         Next
         For Each show In basictvlist
