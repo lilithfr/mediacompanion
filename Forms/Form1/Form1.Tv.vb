@@ -795,7 +795,7 @@ Partial Public Class Form1
             DirectCast(newtvshownfo.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = newtvshownfo.NfoFilePath
             If newtvshownfo.Title.Value IsNot Nothing Then
                 If newtvshownfo.Status.Value Is Nothing OrElse (newtvshownfo.Status.Value IsNot Nothing AndAlso Not newtvshownfo.Status.Value.Contains("skipthisfile")) Then
-                    If newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
+                    If newtvshownfo.TvdbId.Value IsNot Nothing AndAlso newtvshownfo.TvdbId.Value.IndexOf("tt").Equals(0) Then
                         tv_IMDbID_detected = True
                         If Preferences.fixnfoid Then 'test if ID value should be fixed - i.e. IMDB value should be replaced by TVDB value
                             newtvshownfo.ImdbId.Value = newtvshownfo.TvdbId.Value
