@@ -745,39 +745,38 @@ Public Class Classimdb
                     End If
 
                     'director
-                    If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Director") <> -1 Then
-                        tempstring = ""
-                        For g = 1 To 10
-                            tempstring = tempstring & webpage(f + g)
-                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                        Next
-                        If tempstring.IndexOf("itemprop=""director") <> -1 Then
-                            Try
-                                movienfoarray = ""
-                                Dim listofdirectors As New List(Of String)
-                                listofdirectors.Clear()
-                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director"".*?>(.+?)</a>")
-
-                                Do While M.Success
-                                    listofdirectors.Add(M.Groups(1).Value)
-                                    M = M.NextMatch
-                                Loop
-                                If listofdirectors.Count > 0 Then
-                                    For g = 0 To listofdirectors.Count - 1
-                                        If g = 0 Then
-                                            movienfoarray = listofdirectors(g)
-                                        Else
-                                            movienfoarray = movienfoarray & " / " & listofdirectors(g)
-                                        End If
-                                    Next
+                    If webpage(f).IndexOf("itemprop=""director""") <> -1 And webpage(f).IndexOf("</a>") = -1 Then
+                        movienfoarray = ""
+                        Dim listofdirectors As New List(Of String)
+                        listofdirectors.Clear()
+                        Dim count As Integer = f
+                        Try
+                            For t = 1 To 10
+                                If webpage(count + t).IndexOf("</div>") <> -1 Then
+                                    listofdirectors.Add(webpage(count + t))
+                                    Exit For
                                 End If
-                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
-                            End Try
-                        End If
+
+                                listofdirectors.Add(webpage(count + t))
+                            Next
+                            For g = 0 To listofdirectors.Count - 1
+                                listofdirectors(g) = listofdirectors(g).Substring(listofdirectors(g).IndexOf(">") + 1, listofdirectors(g).IndexOf("<") - 5)
+                            Next
+                            If listofdirectors.Count > 0 Then
+                                For g = 0 To listofdirectors.Count - 1
+                                    If g = 0 Then
+                                        movienfoarray = listofdirectors(g)
+                                    Else
+                                        movienfoarray = movienfoarray & " / " & listofdirectors(g)
+                                    End If
+                                Next
+                            End If
+                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                            movienfoarray = encodespecialchrs(movienfoarray)
+                            totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
+                        Catch
+                            totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
+                        End Try
                     End If
 
                     'credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
@@ -840,32 +839,18 @@ Public Class Classimdb
 
 
                     'genre
-                    If f > 5 Then
-                        If webpage(f).IndexOf("<h4 class=""inline"">Genre") <> -1 Then
-
+                     If f > 5 Then
+                        If webpage(f).IndexOf("itemprop=""genre""") <> -1 And webpage(f).IndexOf("<span>") = -1 Then
                             Dim listofgenre As New List(Of String)
+                            Dim count As Integer = f
                             Try
-'                               If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
-'                                  Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
-'                                        Try
-'                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
-'                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
-'                                            webpage(f + 1) = tempstring
-'                                        Catch ex As Exception
-'
-'                                        End Try
-'                                    Loop
-'                                    listofgenre.Add(webpage(f + 1))
-'                                    For g = 0 To listofgenre.Count - 1
-'                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
-'                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
-'
-'                                    Next
-'                                End If
-
-                                listofgenre = GetGenres( webPg )
-
-
+                                For t = 1 To 10
+                                    If webpage(count + t).IndexOf("</div>") <> -1 Then Exit For
+                                    listofgenre.Add(webpage(count + t))
+                                Next
+                                For g = 0 To listofgenre.Count - 1
+                                    listofgenre(g) = listofgenre(g).Substring(listofgenre(g).IndexOf(">") + 1, listofgenre(g).IndexOf("<") - 5)
+                                Next
                                 For g = 0 To listofgenre.Count - 1
                                     If g = 0 Then
                                         movienfoarray = listofgenre(g)
@@ -1029,10 +1014,9 @@ Public Class Classimdb
                         Try
                             movienfoarray = ""
                             For g = 1 To 5
-                                If webpage(f + g).IndexOf("<a  href=""/company/") <> -1 Then
-                                    webpage(f + g) = webpage(f + g).Replace("<a  href=""/company/", "")
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
-                                    movienfoarray = webpage(f + g)
+                                If webpage(f + g).IndexOf("<a") <> -1 Then
+                                    movienfoarray = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
+                                    Exit For
                                 End If
                             Next
                             movienfoarray = movienfoarray.Trim()

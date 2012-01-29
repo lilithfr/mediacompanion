@@ -8424,20 +8424,22 @@ Public Class Form1
                 End If
                 For Each item In MovieListComboBox.SelectedItems
                     Dim filepath As String = item.value
-                    Dim movie As New FullMovieDetails
-                    movie = nfoFunction.mov_NfoLoadFull(filepath)
-                    movie.fullmoviebody.playcount = watched
-                    nfoFunction.mov_NfoSave(filepath, movie, True)
-                    For f = 0 To fullMovieList.Count - 1
-                        If fullMovieList(f).fullpathandfilename = filepath Then
-                            Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
-                            newfullmovie = fullMovieList(f)
-                            newfullmovie.playcount = watched
-                            fullMovieList.RemoveAt(f)
-                            fullMovieList.Add(newfullmovie)
-                            Exit For
-                        End If
-                    Next
+                    If (IO.File.Exists(filepath)) Then
+                        Dim movie As New FullMovieDetails
+                        movie = nfoFunction.mov_NfoLoadFull(filepath)
+                        movie.fullmoviebody.playcount = watched
+                        nfoFunction.mov_NfoSave(filepath, movie, True)
+                        For f = 0 To fullMovieList.Count - 1
+                            If fullMovieList(f).fullpathandfilename = filepath Then
+                                Dim newfullmovie As New str_ComboList(SetDefaults) 'added new to initialise varibles in structure
+                                newfullmovie = fullMovieList(f)
+                                newfullmovie.playcount = watched
+                                fullMovieList.RemoveAt(f)
+                                fullMovieList.Add(newfullmovie)
+                                Exit For
+                            End If
+                        Next
+                    End If
                 Next
                 mess.Close()
             End If
@@ -25138,6 +25140,7 @@ MyExit:
 
     Private Sub bckgrnd_tvshowscraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bckgrnd_tvshowscraper.RunWorkerCompleted
         Try
+            Tv_CacheSave()
             ToolStripStatusLabel5.Visible = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -33129,30 +33132,4 @@ MyExit:
         tv_SplitContainerAutoPosition()
         'MsgBox("TabPageMainBrowser - tv")
     End Sub
-
-    Private Sub plottxt_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles plottxt.DoubleClick ,  certtxt.DoubleClick , votestxt.DoubleClick, txtStars.DoubleClick, 
-                                                                                              SplitContainer1.Panel2.DoubleClick, ratingtxt.DoubleClick, genretxt.DoubleClick, directortxt.DoubleClick
-         ShowBigMovieText()
-    End Sub
-
-
-    Private Sub ShowBigMovieText()
-
-        Dim frm as new frmBigMovieText
-
-        frm.ShowDialog( 
-                        titletxt   .Text ,   
-                        directortxt.Text ,   
-                        votestxt   .Text ,   
-                        ratingtxt  .Text ,   
-                        runtimetxt .Text ,   
-                        genretxt   .Text ,   
-                        txtStars   .Text ,   
-                        certtxt    .Text ,   
-                        plottxt    .Text  
-                        )    
-    End Sub
-
-
-
 End Class

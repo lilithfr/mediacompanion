@@ -35,7 +35,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>3.4.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -78,7 +78,7 @@
     <ManifestKeyFile>XBMC Media Companion_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -139,12 +139,6 @@
     <Compile Include="Classes\TVhtml.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Forms\Form1\Form1.Tv.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmBigMovieText.Designer.vb">
-      <DependentUpon>frmBigMovieText.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmBigMovieText.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmExceptions.Designer.vb">
@@ -307,9 +301,6 @@
     <EmbeddedResource Include="Forms\frmBatchScraper.resx">
       <DependentUpon>frmBatchScraper.vb</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmBigMovieText.resx">
-      <DependentUpon>frmBigMovieText.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCopyProgress.resx">
       <DependentUpon>frmCopyProgress.vb</DependentUpon>

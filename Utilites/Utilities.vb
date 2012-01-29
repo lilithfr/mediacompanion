@@ -192,7 +192,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function DownloadTextFiles(ByVal StartURL As String) As String
         Dim data As String = ""
-        Dim returnState As Boolean = DownloadCache.DownloadFileTo(StartURL, , , data)
+        Dim returnState As Boolean = DownloadCache.DownloadFileTo(StartURL, , , , data)
         Return data
         'Return DownloadCache.DownloadFileToString(StartURL)
     End Function
@@ -2444,9 +2444,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Sub
 
-    Public Shared Sub DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False)
+    Public Shared Sub DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False, Optional ByVal ImageResize As Boolean = False)
         Try
-            Dim returnState As Boolean = DownloadCache.DownloadFileTo(URL, Path, ForceDownload)
+            Dim returnState As Boolean = DownloadCache.DownloadFileTo(URL, Path, ForceDownload, ImageResize)
         Catch ex As Exception
 
         End Try

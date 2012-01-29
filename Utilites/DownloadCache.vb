@@ -112,7 +112,8 @@ Public Class DownloadCache
         Return html
     End Function
 
-    Public Shared Function DownloadFileTo(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False, Optional ByRef strValue As String = "") As Boolean
+    Public Shared Function DownloadFileTo(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False, _
+                                          Optional ByVal resize As Boolean = False, Optional ByRef strValue As String = "") As Boolean
         Dim CacheFileName As String = GetCacheFileName(URL)
         Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
         Dim NotModifiedData As Boolean = False
@@ -166,9 +167,21 @@ Public Class DownloadCache
 
                         Utilities.EnsureFolderExists(Path.ToString.Replace(IO.Path.GetFileName(Path.ToString), ""))
 
-                        Dim fstrm As New FileStream(Path, FileMode.OpenOrCreate, FileAccess.Write)
-                        fstrm.Write(buffer, 0, buffer.Length)
-                        fstrm.Close()
+                        If resize Then
+                            Dim bmp As New Drawing.Bitmap(responseStreamData)
+                            ' NOTE: HueyHQ 26-Jan-2012
+                            ' Currently there are still sometimes errors when scraping images, so the idea here is to get
+                            ' all web requests into this one function so that all errors are handled more gracefully. 
+                            ' The many independant image scraping calls vary to certain degrees, so I am trying to amalgamate
+                            ' them without breaking functionality.
+                            ' It could take some time.
+                            ' The call for this is centralised from Utilities.vb:DownloadImage but no code calls it as yet,
+                            ' so hopefully this delivery doesn't break anything.
+                        Else
+                            Dim fstrm As New FileStream(Path, FileMode.OpenOrCreate, FileAccess.Write)
+                            fstrm.Write(buffer, 0, buffer.Length)
+                            fstrm.Close()
+                        End If
 
                         Dim Cache As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.ReadWrite)
                         Cache.Write(buffer, 0, buffer.Length)
