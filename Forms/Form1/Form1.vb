@@ -33132,4 +33132,30 @@ MyExit:
         tv_SplitContainerAutoPosition()
         'MsgBox("TabPageMainBrowser - tv")
     End Sub
+
+    Private Sub plottxt_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles plottxt.DoubleClick ,  certtxt.DoubleClick , votestxt.DoubleClick, txtStars.DoubleClick, 
+                                                                                              SplitContainer1.Panel2.DoubleClick, ratingtxt.DoubleClick, genretxt.DoubleClick, directortxt.DoubleClick, runtimetxt.DoubleClick, Panel2.DoubleClick
+         ShowBigMovieText()
+    End Sub
+
+
+    Private Sub ShowBigMovieText()
+
+        Dim frm as new frmBigMovieText
+
+        frm.ShowDialog( 
+                        titletxt   .Text ,   
+                        directortxt.Text ,   
+                        votestxt   .Text ,   
+                        ratingtxt  .Text ,   
+                        runtimetxt .Text ,   
+                        genretxt   .Text ,   
+                        txtStars   .Text ,   
+                        certtxt    .Text ,   
+                        plottxt    .Text  
+                        )    
+    End Sub
+
+
+
 End Class
