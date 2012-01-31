@@ -19972,10 +19972,9 @@ MyExit:
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
-        util_ImageLoad(PictureBox13, sender.tag, defaultPoster)
-
-        messbox.Close()
+        PictureBox13.Image = sender.image
         Call util_ZoomImage(PictureBox13.Image)
+        messbox.Close()
     End Sub
 
     Private Sub Button52_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button52.Click
