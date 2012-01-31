@@ -72,6 +72,8 @@ Partial Class frmBigMovieText
         '
         'tbCert
         '
+        Me.tbCert.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tbCert.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
         Me.tbCert.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.tbCert.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
@@ -79,7 +81,7 @@ Partial Class frmBigMovieText
         Me.tbCert.Location = New System.Drawing.Point(969, 140)
         Me.tbCert.Name = "tbCert"
         Me.tbCert.ReadOnly = true
-        Me.tbCert.Size = New System.Drawing.Size(112, 31)
+        Me.tbCert.Size = New System.Drawing.Size(311, 31)
         Me.tbCert.TabIndex = 32
         Me.tbCert.Text = "18 XXX"
         '
