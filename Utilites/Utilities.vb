@@ -18,7 +18,7 @@ Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
-                                                 ".dvr-ms", ".img", ".strm", "VIDEO_TS.IFO"}
+                                                 ".dvr-ms", ".img", ".strm", "ssif", "VIDEO_TS.IFO"}
 
     Private Declare Function GetDiskFreeSpaceEx _
 Lib "kernel32" _

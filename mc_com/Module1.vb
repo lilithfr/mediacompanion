@@ -490,8 +490,9 @@ Module Module1
             extensions(23) = ".rar"
             extensions(24) = ".flv"
             extensions(25) = ".dvr-ms"
-            extensions(26) = "VIDEO_TS.IFO"
-            extensioncount = 26
+            extensions(26) = ".ssif"
+            extensions(27) = "VIDEO_TS.IFO"
+            extensioncount = 27
             Dim thumbpathandfilename As String = fullnfopath.Replace(IO.Path.GetExtension(fullnfopath), ".tbn")
             Dim skip As Boolean = False
             If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
@@ -805,7 +806,8 @@ Module Module1
         extensions(22) = ".m2ts"
         extensions(23) = ".flv"
         extensions(24) = ".dvr-ms"
-        extensioncount = 24
+        extensions(25) = ".ssif"
+        extensioncount = 25
         Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
         For f = 1 To extensioncount
             Dim actualname As String = medianame & extensions(f)
@@ -1023,8 +1025,9 @@ Module Module1
         extensions(25) = "VIDEO_TS.IFO"
         extensions(26) = ".dvr-ms"
         extensions(27) = ".strm"
+        extensions(28) = ".ssif"
 
-        extensioncount = 27
+        extensioncount = 28
 
         For Each tvshow In basictvlist
             If tvshow.locked = Nothing Then
@@ -3579,8 +3582,9 @@ Module Module1
             extensions(21) = ".vob"
             extensions(22) = ".m2ts"
             extensions(23) = ".rar"
+            extensions(24) = ".ssif"
 
-            extensioncount = 23
+            extensioncount = 24
 
             'Dim stackpaths(22) As String
 
@@ -3719,8 +3723,9 @@ Module Module1
             extensions(20) = ".ts"
             extensions(21) = ".vob"
             extensions(22) = ".m2ts"
-            'extensions(23) = ".rar"
-            extensioncount = 22
+            extensions(23) = ".ssif"
+            'extensions(24) = ".rar"
+            extensioncount = 23
 
             If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
                 actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
@@ -6311,7 +6316,8 @@ Module Module1
         extensions(23) = "*.rar"
         extensions(24) = "*.dvr-ms"
         extensions(25) = "VIDEO_TS.IFO"
-        extensioncount = 25
+        extensions(26) = "*.ssif"
+        extensioncount = 26
 
         For Each moviefolder In moviefolders
             Dim hg As New IO.DirectoryInfo(moviefolder)

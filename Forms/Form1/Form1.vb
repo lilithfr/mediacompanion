@@ -9959,6 +9959,8 @@ MyExit:
                         validfile = True
                     Case ".ifo"
                         validfile = True
+                    Case ".ssif"
+                        validfile = True
                     Case ".strm"
                         validfile = True
                 End Select
