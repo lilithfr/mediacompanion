@@ -27870,24 +27870,25 @@ MyExit:
 
     Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
         Try
+            Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 If DataGridView1.SelectedRows.Count < 2 Then
-                    Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
 
-                    'If hti.Type = DataGridViewHitTestType.Cell Then
+                    If hti.Type = DataGridViewHitTestType.Cell Then
 
-                    '    If Not DataGridView1.Rows(hti.RowIndex).Selected Then
+                        If Not DataGridView1.Rows(hti.RowIndex).Selected Then
 
-                    ' User right clicked a row that is not selected, so throw away all other selections and select this row
+                            ' User right clicked a row that is not selected, so throw away all other selections and select this row
 
-                    DataGridView1.ClearSelection()
+                            DataGridView1.ClearSelection()
 
-                    DataGridView1.Rows(hti.RowIndex).Selected = True
+                            DataGridView1.Rows(hti.RowIndex).Selected = True
+                        End If
+                    End If
+
                 End If
-                'End If
-
-                '    End If
-
+            ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
+                DataGridView1.Rows(hti.RowIndex).Selected = True
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
