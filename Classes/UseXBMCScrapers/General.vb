@@ -891,7 +891,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
+        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -997,7 +997,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
+        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1042,7 +1042,7 @@ Module General
             Next
         Catch
         End Try
-        m_xmld.Save(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.imdb.com\resources\settings.xml")
+        m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
     End Function
     Public Sub Read_XBMC_TMDB_Scraper_Config()
         Dim m_xmld As XmlDocument
@@ -1050,7 +1050,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
+        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1125,7 +1125,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
+        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1160,7 +1160,7 @@ Module General
             Next
         Catch
         End Try
-        m_xmld.Save(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.themoviedb.org\resources\settings.xml")
+        m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
     End Function
 
 #End Region
@@ -1496,7 +1496,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
+        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1559,7 +1559,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
+        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1597,7 +1597,7 @@ Module General
             Next
         Catch
         End Try
-        m_xmld.Save(Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\")) & "\assets\scrapers\metadata.tvdb.com\resources\settings.xml")
+        m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
     End Function
 #End Region
 

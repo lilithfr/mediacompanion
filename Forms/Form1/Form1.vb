@@ -160,7 +160,9 @@ Public Class Form1
             Try
                 Dim updatedmovie As New FullMovieDetails
                 updatedmovie = nfoFunction.mov_NfoLoadFull(fullMovieList(i).fullpathandfilename)
-                nfoFunction.mov_NfoSave(fullMovieList(i).fullpathandfilename, updatedmovie, True)
+                If Not IsNothing(updatedmovie) Then
+                    nfoFunction.mov_NfoSave(fullMovieList(i).fullpathandfilename, updatedmovie, True)
+                End If
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -281,6 +283,8 @@ Public Class Form1
             Common.Tasks.Add(New Tasks.BlankTask())
         Next
 
+        'Preferences.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
+        'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
         Preferences.applicationPath = Application.StartupPath
         Utilities.applicationPath = Application.StartupPath
         If Not Utilities.GetFrameworkVersions().Contains("4.0 Full") Then
@@ -1973,6 +1977,9 @@ Public Class Form1
             For Each movie In fullMovieList
                 Dim movieadd As New FullMovieDetails
                 movieadd = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
+                If IsNothing(movieadd) Then
+                    Continue For
+                End If
                 For Each actor In movieadd.listactors
                     Dim newactor As New str_ActorDatabase(SetDefaults)
                     newactor.actorname = actor.actorname
@@ -3639,42 +3646,43 @@ Public Class Form1
         nfoFilename &= ".nfo"
         Dim TempMovieToAdd As New FullMovieDetails
         TempMovieToAdd = nfoFunction.mov_NfoLoadFull(nfoFilename)
-        Dim movietoadd As New str_ComboList(SetDefaults)
+        If Not IsNothing(TempMovieToAdd) Then
+            Dim movietoadd As New str_ComboList(SetDefaults)
 
-        Dim filecreation As New IO.FileInfo(nfoFilename)
-        Dim myDate As Date = filecreation.LastWriteTime
-        Try
-            movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
-        Catch ex As Exception
+            Dim filecreation As New IO.FileInfo(nfoFilename)
+            Dim myDate As Date = filecreation.LastWriteTime
+            Try
+                movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
+            Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
 #End If
-        End Try
-        movietoadd.createdate = TempMovieToAdd.fileinfo.createdate
-        movietoadd.filename = TempMovieToAdd.fileinfo.filename
-        movietoadd.foldername = TempMovieToAdd.fileinfo.foldername
-        movietoadd.fullpathandfilename = TempMovieToAdd.fileinfo.fullpathandfilename
-        movietoadd.genre = TempMovieToAdd.fullmoviebody.genre
-        movietoadd.id = TempMovieToAdd.fullmoviebody.imdbid
-        movietoadd.missingdata1 = "0"
-        If TempMovieToAdd.fullmoviebody.movieset Is Nothing Then
-            movietoadd.movieset = ""
-        Else
-            movietoadd.movieset = TempMovieToAdd.fullmoviebody.movieset
+            End Try
+            movietoadd.createdate = TempMovieToAdd.fileinfo.createdate
+            movietoadd.filename = TempMovieToAdd.fileinfo.filename
+            movietoadd.foldername = TempMovieToAdd.fileinfo.foldername
+            movietoadd.fullpathandfilename = TempMovieToAdd.fileinfo.fullpathandfilename
+            movietoadd.genre = TempMovieToAdd.fullmoviebody.genre
+            movietoadd.id = TempMovieToAdd.fullmoviebody.imdbid
+            movietoadd.missingdata1 = "0"
+            If TempMovieToAdd.fullmoviebody.movieset Is Nothing Then
+                movietoadd.movieset = ""
+            Else
+                movietoadd.movieset = TempMovieToAdd.fullmoviebody.movieset
+            End If
+            movietoadd.outline = TempMovieToAdd.fullmoviebody.outline
+            movietoadd.plot = TempMovieToAdd.fullmoviebody.plot
+            movietoadd.playcount = TempMovieToAdd.fullmoviebody.playcount
+            movietoadd.rating = TempMovieToAdd.fullmoviebody.rating
+            movietoadd.runtime = TempMovieToAdd.fullmoviebody.runtime
+            movietoadd.sortorder = TempMovieToAdd.fullmoviebody.sortorder
+            movietoadd.title = TempMovieToAdd.fullmoviebody.title
+            movietoadd.originaltitle = TempMovieToAdd.fullmoviebody.title
+            movietoadd.titleandyear = TempMovieToAdd.fullmoviebody.title & " (" & TempMovieToAdd.fullmoviebody.year & ")"
+            movietoadd.top250 = TempMovieToAdd.fullmoviebody.top250
+            movietoadd.year = TempMovieToAdd.fullmoviebody.year
+            fullMovieList.Add(movietoadd)
         End If
-        movietoadd.outline = TempMovieToAdd.fullmoviebody.outline
-        movietoadd.plot = TempMovieToAdd.fullmoviebody.plot
-        movietoadd.playcount = TempMovieToAdd.fullmoviebody.playcount
-        movietoadd.rating = TempMovieToAdd.fullmoviebody.rating
-        movietoadd.runtime = TempMovieToAdd.fullmoviebody.runtime
-        movietoadd.sortorder = TempMovieToAdd.fullmoviebody.sortorder
-        movietoadd.title = TempMovieToAdd.fullmoviebody.title
-        movietoadd.originaltitle = TempMovieToAdd.fullmoviebody.title
-        movietoadd.titleandyear = TempMovieToAdd.fullmoviebody.title & " (" & TempMovieToAdd.fullmoviebody.year & ")"
-        movietoadd.top250 = TempMovieToAdd.fullmoviebody.top250
-        movietoadd.year = TempMovieToAdd.fullmoviebody.year
-        fullMovieList.Add(movietoadd)
-
     End Sub
 
 #End Region
@@ -5754,105 +5762,107 @@ Public Class Form1
                 Case "fullplot", "director", "stars", "writer", "moviegenre", "format", "releasedate", "nfo"
                     Dim newplotdetails As New FullMovieDetails
                     newplotdetails = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
-                    If tokenInstr(0) = "fullplot" Then
-                        strNFOprop = newplotdetails.fullmoviebody.plot
-                    End If
-                    If tokenInstr(0) = "director" Then
-                        strNFOprop = newplotdetails.fullmoviebody.director
-                    End If
-                    If tokenInstr(0) = "stars" Then
-                        strNFOprop = newplotdetails.fullmoviebody.stars
-                    End If
-                    If tokenInstr(0) = "writer" Then
-                        strNFOprop = newplotdetails.fullmoviebody.credits
-                    End If
-                    If tokenInstr(0) = "moviegenre" Then
-                        strNFOprop = newplotdetails.fullmoviebody.genre
-                    End If
-                    If tokenInstr(0) = "format" Then
-                        'strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Remove(0, 1)
-                    End If
-                    If tokenInstr(0) = "releasedate" Then
-                        strNFOprop = newplotdetails.fullmoviebody.premiered
-                    End If
-                    If tokenInstr(0) = "nfo" Then
-                        Try
-                            Select Case tokenInstr(1)
+                    If Not IsNothing(newplotdetails) Then
+                        If tokenInstr(0) = "fullplot" Then
+                            strNFOprop = newplotdetails.fullmoviebody.plot
+                        End If
+                        If tokenInstr(0) = "director" Then
+                            strNFOprop = newplotdetails.fullmoviebody.director
+                        End If
+                        If tokenInstr(0) = "stars" Then
+                            strNFOprop = newplotdetails.fullmoviebody.stars
+                        End If
+                        If tokenInstr(0) = "writer" Then
+                            strNFOprop = newplotdetails.fullmoviebody.credits
+                        End If
+                        If tokenInstr(0) = "moviegenre" Then
+                            strNFOprop = newplotdetails.fullmoviebody.genre
+                        End If
+                        If tokenInstr(0) = "format" Then
+                            'strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Remove(0, 1)
+                        End If
+                        If tokenInstr(0) = "releasedate" Then
+                            strNFOprop = newplotdetails.fullmoviebody.premiered
+                        End If
+                        If tokenInstr(0) = "nfo" Then
+                            Try
+                                Select Case tokenInstr(1)
 
-                                Case "file"
-                                    Select Case tokenInstr(2)
-                                        Case "video"
-                                            Select Case tokenInstr(3)
-                                                Case "width"
-                                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Width.Value
-                                                Case "height"
-                                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Height.Value
-                                                Case "aspect"
-                                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Aspect.Value
-                                                Case "codec"
-                                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Codec.Value
-                                                Case "duration"
-                                                    strNFOprop = newplotdetails.filedetails.filedetails_video.DurationInSeconds.Value
-                                                Case "container"
-                                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
-                                                Case Else
-                                                    strNFOprop = tokenInstr(3) & "not supported"
-                                            End Select
-                                            'strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
-                                        Case "audio"
-                                            Dim i As Integer = 1
-                                            For Each audioStream In newplotdetails.filedetails.filedetails_audio
+                                    Case "file"
+                                        Select Case tokenInstr(2)
+                                            Case "video"
                                                 Select Case tokenInstr(3)
-                                                    Case "language"
-                                                        strNFOprop &= audioStream.Language.Value
-                                                    Case "channels"
-                                                        strNFOprop &= audioStream.Channels.Value
-                                                    Case "bitrate"
-                                                        strNFOprop &= audioStream.Bitrate.Value
+                                                    Case "width"
+                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Width.Value
+                                                    Case "height"
+                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Height.Value
+                                                    Case "aspect"
+                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Aspect.Value
                                                     Case "codec"
-                                                        strNFOprop &= audioStream.Codec.Value
+                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Codec.Value
+                                                    Case "duration"
+                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.DurationInSeconds.Value
+                                                    Case "container"
+                                                        strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+                                                    Case Else
+                                                        strNFOprop = tokenInstr(3) & "not supported"
                                                 End Select
-                                                'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
-                                                If (newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count) Then
-                                                    strNFOprop = strNFOprop & " / "
-                                                End If
-                                                i += 1
-                                            Next
-                                        Case "subtitles"
-                                            Dim i As Integer = 1
-                                            For Each subLang In newplotdetails.filedetails.filedetails_subtitles
-                                                Select tokenInstr(3)
-                                                    Case "language"
-                                                        strNFOprop &= subLang.Language.Value
-                                                End Select
-                                                'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
-                                                If (newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count) Then
-                                                    strNFOprop = strNFOprop & " / "
-                                                End If
-                                                i += 1
-                                            Next
-                                    End Select
-                                Case "sorttitle"
-                                    strNFOprop = newplotdetails.fullmoviebody.sortorder
-                                Case "set"
-                                    strNFOprop = newplotdetails.fullmoviebody.movieset
-                                Case "actor"                                        ' No support for actor list
-                                    strNFOprop = "No support"
-                                Case "alternativetitle"                             ' No support for alternative titles
-                                    strNFOprop = "No support"
-                                Case Else
-                                    strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet)
-                            End Select
-                            If tokenInstr(1) <> "file" And tokenInstr.Length > 2 Then
-                                Dim intCharLimit = CInt(tokenInstr(2))
-                                If strNFOprop.Length > intCharLimit Then
-                                    strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
+                                                'strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
+                                            Case "audio"
+                                                Dim i As Integer = 1
+                                                For Each audioStream In newplotdetails.filedetails.filedetails_audio
+                                                    Select Case tokenInstr(3)
+                                                        Case "language"
+                                                            strNFOprop &= audioStream.Language.Value
+                                                        Case "channels"
+                                                            strNFOprop &= audioStream.Channels.Value
+                                                        Case "bitrate"
+                                                            strNFOprop &= audioStream.Bitrate.Value
+                                                        Case "codec"
+                                                            strNFOprop &= audioStream.Codec.Value
+                                                    End Select
+                                                    'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
+                                                    If (newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count) Then
+                                                        strNFOprop = strNFOprop & " / "
+                                                    End If
+                                                    i += 1
+                                                Next
+                                            Case "subtitles"
+                                                Dim i As Integer = 1
+                                                For Each subLang In newplotdetails.filedetails.filedetails_subtitles
+                                                    Select Case tokenInstr(3)
+                                                        Case "language"
+                                                            strNFOprop &= subLang.Language.Value
+                                                    End Select
+                                                    'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
+                                                    If (newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count) Then
+                                                        strNFOprop = strNFOprop & " / "
+                                                    End If
+                                                    i += 1
+                                                Next
+                                        End Select
+                                    Case "sorttitle"
+                                        strNFOprop = newplotdetails.fullmoviebody.sortorder
+                                    Case "set"
+                                        strNFOprop = newplotdetails.fullmoviebody.movieset
+                                    Case "actor"                                        ' No support for actor list
+                                        strNFOprop = "No support"
+                                    Case "alternativetitle"                             ' No support for alternative titles
+                                        strNFOprop = "No support"
+                                    Case Else
+                                        strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet)
+                                End Select
+                                If tokenInstr(1) <> "file" And tokenInstr.Length > 2 Then
+                                    Dim intCharLimit = CInt(tokenInstr(2))
+                                    If strNFOprop.Length > intCharLimit Then
+                                        strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
+                                    End If
                                 End If
-                            End If
 
-                        Catch
-                            strNFOprop = "Error in token"
-                        End Try
+                            Catch
+                                strNFOprop = "Error in token"
+                            End Try
+                        End If
                     End If
 
             End Select
@@ -8289,6 +8299,7 @@ Public Class Form1
                 Dim filepath As String = item.value
                 Dim movie As New FullMovieDetails
                 movie = nfoFunction.mov_NfoLoadFull(filepath)
+                If IsNothing(movie) Then Continue For
                 If directortxt.Text <> "" Then
                     movie.fullmoviebody.director = directortxt.Text
                 End If
@@ -8426,6 +8437,7 @@ Public Class Form1
                     Dim filepath As String = item.value
                     Dim movie As New FullMovieDetails
                     movie = nfoFunction.mov_NfoLoadFull(filepath)
+                    If IsNothing(movie) Then Continue For
                     movie.fullmoviebody.playcount = watched
                     nfoFunction.mov_NfoSave(filepath, movie, True)
                     For f = 0 To fullMovieList.Count - 1
@@ -8931,6 +8943,8 @@ Public Class Form1
 
 
                     movietoalter = nfoFunction.mov_NfoLoadFull(tempmovielist(f))
+                    If IsNothing(movietoalter) Then Continue For
+
                     If Not movietoalter Is Nothing Then
                         '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
                         Dim scraperfunction As New Classimdb
@@ -9070,31 +9084,31 @@ Public Class Form1
                                                                     filename = IO.Path.Combine(workingpath, filename)
                                                                     If Not IO.File.Exists(filename) Then
                                                                         Utilities.DownloadFile(newactor.actorthumb, filename)
-'                                                                        Try
-'                                                                            Dim buffer(4000000) As Byte
-'                                                                            Dim size As Integer = 0
-'                                                                            Dim bytesRead As Integer = 0
-'                                                                            Dim thumburl As String = newactor.actorthumb
-'                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                                                            Dim res As HttpWebResponse = req.GetResponse()
-'                                                                            Dim contents As Stream = res.GetResponseStream()
-'                                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                                                            While bytesToRead > 0
-'                                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                                                                If size = 0 Then Exit While
-'                                                                                bytesToRead -= size
-'                                                                                bytesRead += size
-'                                                                            End While
+                                                                        '                                                                        Try
+                                                                        '                                                                            Dim buffer(4000000) As Byte
+                                                                        '                                                                            Dim size As Integer = 0
+                                                                        '                                                                            Dim bytesRead As Integer = 0
+                                                                        '                                                                            Dim thumburl As String = newactor.actorthumb
+                                                                        '                                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                                        '                                                                            Dim res As HttpWebResponse = req.GetResponse()
+                                                                        '                                                                            Dim contents As Stream = res.GetResponseStream()
+                                                                        '                                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                                        '                                                                            While bytesToRead > 0
+                                                                        '                                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                                        '                                                                                If size = 0 Then Exit While
+                                                                        '                                                                                bytesToRead -= size
+                                                                        '                                                                                bytesRead += size
+                                                                        '                                                                            End While
 
-'                                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-'                                                                            fstrm.Write(buffer, 0, bytesRead)
-'                                                                            contents.Close()
-'                                                                            fstrm.Close()
-'                                                                        Catch ex As Exception
-'#If SilentErrorScream Then
-'                                                                        Throw ex
-'#End If
-'                                                                        End Try
+                                                                        '                                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
+                                                                        '                                                                            fstrm.Write(buffer, 0, bytesRead)
+                                                                        '                                                                            contents.Close()
+                                                                        '                                                                            fstrm.Close()
+                                                                        '                                                                        Catch ex As Exception
+                                                                        '#If SilentErrorScream Then
+                                                                        '                                                                        Throw ex
+                                                                        '#End If
+                                                                        '                                                                        End Try
                                                                     End If
                                                                 End If
                                                             End If
@@ -9158,24 +9172,24 @@ Public Class Form1
 
                         If trailerscraper = True Then
                             Try
-                                Dim trailer as String = ""
+                                Dim trailer As String = ""
 
-                                If Preferences.moviePreferredTrailerResolution <> "SD" then
+                                If Preferences.moviePreferredTrailerResolution <> "SD" Then
                                     Try
                                         Monitor.Enter(Me)
-                                        trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, movietoalter.fullmoviebody.title )
+                                        trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, movietoalter.fullmoviebody.title)
                                     Finally
                                         Monitor.Exit(Me)
                                     End Try
                                 End If
 
-                                If trailer = "" then
+                                If trailer = "" Then
                                     trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                End if
+                                End If
 
 
-'                                Dim trailer As String = String.Empty
-'                                trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
+                                '                                Dim trailer As String = String.Empty
+                                '                                trailer = scraperfunction.gettrailerurl(movietoalter.fullmoviebody.imdbid, Preferences.imdbmirror)
 
                                 If trailer <> String.Empty And trailer <> "Error" Then
                                     movietemplate.fullmoviebody.trailer = trailer
@@ -9466,7 +9480,7 @@ Public Class Form1
                         End If
 
                         If batchList.trailer = True Then
-                            If movietoalter.fullmoviebody.trailer = "Error" then
+                            If movietoalter.fullmoviebody.trailer = "Error" Then
                                 movietoalter.fullmoviebody.trailer = ""
                             End If
                             If movietemplate.fullmoviebody.trailer <> Nothing Then
@@ -27682,6 +27696,7 @@ MyExit:
                         Dim changedmoviedetails As New FullMovieDetails
                         Dim changedmovie As New str_ComboList(SetDefaults)
                         changedmoviedetails = nfoFunction.mov_NfoLoadFull(fullMovieList(f).fullpathandfilename)
+                        If IsNothing(changedmoviedetails) Then Continue For
                         If Not changedmoviedetails Is Nothing Then
                             changedmovie = fullMovieList(f)
                             Try
@@ -28412,6 +28427,7 @@ MyExit:
                         If IO.File.Exists(movie.fullpathandfilename) Then       'if nfo exists, & workingMovie contains wrong data, reload data from memory
                             If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
                                 workingMovieDetails = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
+                                If IsNothing(workingMovieDetails) Then Continue For
                                 'workingMovie.filedate = movie.filedate
                                 'workingMovie.filename = movie.foldername
                                 'workingMovie.foldername = movie.foldername

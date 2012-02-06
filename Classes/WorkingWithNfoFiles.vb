@@ -2058,7 +2058,7 @@ Public Class WorkingWithNfoFiles
         Finally
             Monitor.Exit(Me)
         End Try
-        Return "Error"
+        Return Nothing
     End Function
 
 
