@@ -3201,157 +3201,160 @@ Partial Public Class Form1
         If RadioButton53.Checked = True Then butt = "airedmissingeps"
 
 
-        If startup = True Then
-            If butt = "missingeps" Then
-                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                            If Not episode.IsMissing Then
-                                episode.Visible = False
+        'If startup = True Then, issue #275
+        If butt = "missingeps" Then
+            If Not startup Then
+                MessageBox.Show("Ensure that you have previously selected Display Missing Episodes from the TV Shows menu", "Missing Episodes", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If Not episode.IsMissing Then
+                            episode.Visible = False
+                        Else
+                            ' Phyonics - Fix for issue #208
+                            If String.IsNullOrEmpty(episode.Aired.Value) Then
+                                ' Change the colour to gray
+                                episode.EpisodeNode.ForeColor = Color.Gray
                             Else
-                                ' Phyonics - Fix for issue #208
-                                If String.IsNullOrEmpty(episode.Aired.Value) Then
-                                    ' Change the colour to gray
-                                    episode.EpisodeNode.ForeColor = Color.Gray
-                                Else
-                                    Try
-                                        ' Is the episode in the future?
-                                        If Convert.ToDateTime(episode.Aired.Value) > Now Then
-                                            '  Yes, so change its colour to gray
-                                            episode.EpisodeNode.ForeColor = Color.Gray
-                                        Else
-                                            episode.EpisodeNode.ForeColor = Drawing.Color.Blue
-                                        End If
-                                    Catch ex As Exception
-                                        ' Set the colour to the missing colour
+                                Try
+                                    ' Is the episode in the future?
+                                    If Convert.ToDateTime(episode.Aired.Value) > Now Then
+                                        '  Yes, so change its colour to gray
+                                        episode.EpisodeNode.ForeColor = Color.Gray
+                                    Else
                                         episode.EpisodeNode.ForeColor = Drawing.Color.Blue
-                                    End Try
-                                End If
-
-                                episode.Visible = True
-                                episode.EpisodeNode.EnsureVisible()
+                                    End If
+                                Catch ex As Exception
+                                    ' Set the colour to the missing colour
+                                    episode.EpisodeNode.ForeColor = Drawing.Color.Blue
+                                End Try
                             End If
-                        Next
-                        If Season.VisibleEpisodeCount = 0 Then
-                            Season.Visible = False
-                        Else
-                            Season.Visible = True
-                        End If
-                    Next
-                    If item.VisibleSeasonCount = 0 Then
-                        item.Visible = False
-                    Else
-                        item.Visible = True
-                    End If
-                Next
-            ElseIf butt = "airedmissingeps" Then
-                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                            If Not episode.IsMissing Then
-                                episode.Visible = False
-                            Else
-                                ' Phyonics - Fix for issue #208
-                                If String.IsNullOrEmpty(episode.Aired.Value) Then
-                                    episode.Visible = False
-                                Else
-                                    ' Has the episode been aired yet?
-                                    Try
-                                        If Convert.ToDateTime(episode.Aired.Value) <= Now Then
-                                            episode.Visible = True
-                                            episode.EpisodeNode.EnsureVisible()
-                                        Else
-                                            episode.Visible = False
-                                        End If
-                                    Catch ex As Exception
-                                        ' We failed to convert the aired date to a date, therefore don't show the episode
-                                        episode.Visible = False
-                                    End Try
-                                End If
-                            End If
-                        Next
-                        If Season.VisibleEpisodeCount = 0 Then
-                            Season.Visible = False
-                        Else
-                            Season.Visible = True
-                        End If
-                    Next
-                    If item.VisibleSeasonCount = 0 Then
-                        item.Visible = False
-                    Else
-                        item.Visible = True
-                    End If
-                Next
-            ElseIf butt = "screenshot" Then
-                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                            If String.IsNullOrEmpty(episode.Thumbnail.FileName) Then
-                                episode.Visible = False
-                                episode.EpisodeNode.EnsureVisible()
-                            Else
-                                episode.Visible = True
-                            End If
-                        Next
-                        If Season.VisibleEpisodeCount = 0 Then
-                            Season.Visible = False
-                        Else
-                            Season.Visible = True
-                        End If
-                    Next
-                    If item.VisibleSeasonCount = 0 Then
-                        item.Visible = False
-                    Else
-                        item.Visible = True
-                    End If
-                Next
-            ElseIf butt = "all" Then
-                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    item.Visible = True
-                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
 
                             episode.Visible = True
-
-                        Next
-                        Season.Visible = True
+                            episode.EpisodeNode.EnsureVisible()
+                        End If
                     Next
-                    item.Visible = True
-                Next
-            ElseIf butt = "fanart" Then
-                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-                    item.Visible = True
-                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                        For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                            episode.Visible = False
-                        Next
+                    If Season.VisibleEpisodeCount = 0 Then
                         Season.Visible = False
-                    Next
-                    If item.ImageFanart.Exists Then
-                        item.Visible = False
                     Else
-                        item.Visible = True
+                        Season.Visible = True
                     End If
                 Next
-            ElseIf butt = "posters" Then
-                For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-
-
-                    For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                        If Season.Poster.Exists Then
-                            Season.Visible = False
+                If item.VisibleSeasonCount = 0 Then
+                    item.Visible = False
+                Else
+                    item.Visible = True
+                End If
+            Next
+        ElseIf butt = "airedmissingeps" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If Not episode.IsMissing Then
+                            episode.Visible = False
                         Else
-                            Season.Visible = True
+                            ' Phyonics - Fix for issue #208
+                            If String.IsNullOrEmpty(episode.Aired.Value) Then
+                                episode.Visible = False
+                            Else
+                                ' Has the episode been aired yet?
+                                Try
+                                    If Convert.ToDateTime(episode.Aired.Value) <= Now Then
+                                        episode.Visible = True
+                                        episode.EpisodeNode.EnsureVisible()
+                                    Else
+                                        episode.Visible = False
+                                    End If
+                                Catch ex As Exception
+                                    ' We failed to convert the aired date to a date, therefore don't show the episode
+                                    episode.Visible = False
+                                End Try
+                            End If
                         End If
-                        For Each Episode As Media_Companion.TvEpisode In Season.Episodes
-                            Episode.Visible = False
-                        Next
                     Next
-                    item.Visible = Not item.ImagePoster.Exists
-
+                    If Season.VisibleEpisodeCount = 0 Then
+                        Season.Visible = False
+                    Else
+                        Season.Visible = True
+                    End If
                 Next
-            End If
+                If item.VisibleSeasonCount = 0 Then
+                    item.Visible = False
+                Else
+                    item.Visible = True
+                End If
+            Next
+        ElseIf butt = "screenshot" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If String.IsNullOrEmpty(episode.Thumbnail.FileName) Then
+                            episode.Visible = True
+                            episode.EpisodeNode.EnsureVisible()
+                        Else
+                            episode.Visible = False
+                        End If
+                    Next
+                    If Season.VisibleEpisodeCount = 0 Then
+                        Season.Visible = False
+                    Else
+                        Season.Visible = True
+                    End If
+                Next
+                If item.VisibleSeasonCount = 0 Then
+                    item.Visible = False
+                Else
+                    item.Visible = True
+                End If
+            Next
+        ElseIf butt = "all" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                item.Visible = True
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+
+                        episode.Visible = True
+
+                    Next
+                    Season.Visible = True
+                Next
+                item.Visible = True
+            Next
+        ElseIf butt = "fanart" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                item.Visible = True
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        episode.Visible = False
+                    Next
+                    Season.Visible = False
+                Next
+                If item.ImageFanart.Exists Then
+                    item.Visible = False
+                Else
+                    item.Visible = True
+                End If
+            Next
+        ElseIf butt = "posters" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+
+
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    If Season.Poster.Exists Then
+                        Season.Visible = False
+                    Else
+                        Season.Visible = True
+                    End If
+                    For Each Episode As Media_Companion.TvEpisode In Season.Episodes
+                        Episode.Visible = False
+                    Next
+                Next
+                item.Visible = Not item.ImagePoster.Exists
+
+            Next
         End If
+        ' End If
     End Sub
 
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork

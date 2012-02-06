@@ -871,7 +871,12 @@ Public Class WorkingWithNfoFiles
             newtvshow.Load()
            
         End If
-        Return newtvshow
+        For Each season As TvSeason In newtvshow.Seasons.Values
+            For Each episode In season.Episodes
+                episode.ShowId = newtvshow.TvdbId
+            Next
+        Next
+            Return newtvshow
 
 
 

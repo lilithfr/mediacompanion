@@ -124,7 +124,7 @@
 
     Public ReadOnly Property Exists As Boolean
         Get
-            Return IO.File.Exists(Me.FileName)
+            Return IO.File.Exists(IO.Path.Combine(Me.FolderPath, Me.FileName))
         End Get
     End Property
 
