@@ -979,7 +979,7 @@ Module Module1
         Dim tempstring As String = ""
         Dim tempint As Integer
         Dim errorcounter As Integer = 0
-       
+
         newepisodelist.Clear()
         Dim newtvfolders As New List(Of String)
         Dim progress As Integer
@@ -988,10 +988,10 @@ Module Module1
         Dim dirpath As String
         Dim moviepattern As String
 
-       
 
 
-      
+
+
 
 
         Console.WriteLine("Starting TV Folder Scan")
@@ -2082,7 +2082,7 @@ Module Module1
     End Sub
     Private Sub addepisode(ByVal alleps As List(Of episodeinfo), ByVal path As String)
 
-      
+
 
         Console.WriteLine("Saving episode")
 
@@ -2312,29 +2312,31 @@ Module Module1
             Select Case thisresult.Name
                 Case "tvshow"
                     Dim newtvshow As New basictvshownfo
-                    newtvshow.fullpath = thisresult.Attributes(0).Value
-                    Dim detail As XmlNode = Nothing
-                    For Each detail In thisresult.ChildNodes
-                        Select Case detail.Name
-                            Case "title"
-                                Dim tempstring As String = ""
-                                tempstring = detail.InnerText
-                                If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                    tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                    tempstring = tempstring & ", The"
-                                End If
-                                newtvshow.title = tempstring
-                            Case "fullpathandfilename"
-                                newtvshow.fullpath = detail.InnerText
-                            Case "id"
-                                newtvshow.id = detail.InnerText
-                        End Select
-                    Next
-                                basictvlist.Add(newtvshow)
+                    If (thisresult.Attributes.Count > 0) Then
+                        newtvshow.fullpath = thisresult.Attributes(0).Value
+                        Dim detail As XmlNode = Nothing
+                        For Each detail In thisresult.ChildNodes
+                            Select Case detail.Name
+                                Case "title"
+                                    Dim tempstring As String = ""
+                                    tempstring = detail.InnerText
+                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                        tempstring = tempstring & ", The"
+                                    End If
+                                    newtvshow.title = tempstring
+                                Case "fullpathandfilename"
+                                    newtvshow.fullpath = detail.InnerText
+                                Case "id"
+                                    newtvshow.id = detail.InnerText
+                            End Select
+                        Next
+                        basictvlist.Add(newtvshow)
+                    End If
                 Case "episodedetails"
                     Dim newepisode As New episodeinfo
-                    newepisode.episodepath = thisresult.Attributes(0).Value
                     If (thisresult.Attributes.Count > 1) Then
+                        newepisode.episodepath = thisresult.Attributes(0).Value
                         newepisode.pure = thisresult.Attributes(1).Value
                         If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
                         For Each episodenew In thisresult.ChildNodes
@@ -2542,7 +2544,7 @@ Module Module1
             End Select
         Next
 
-      
+
     End Sub
     Private Sub savemoviecache()
         Dim fullpath As String = workingprofile.moviecache
@@ -3803,7 +3805,7 @@ Module Module1
             Monitor.Exit(monitorobject)
         End Try
     End Function
-  
+
     Public Function EnumerateDirectory2(ByVal RootDirectory As String, Optional ByVal log As Boolean = False)
 
         Dim dli As New List(Of String)
@@ -3927,7 +3929,7 @@ Module Module1
             Dim t As String = ex.ToString
             Return (dli)
 
-        
+
         End Try
     End Function
     Public Function EnumerateDirectory3(ByVal RootDirectory As String)
@@ -6647,7 +6649,7 @@ Module Module1
                     If newmovie.fullmoviebody.title = "Unknown Title" Then
                         newmovie.fullmoviebody.genre = "Problem"
                     End If
-                  
+
                     Dim myDate2 As Date = System.DateTime.Now
                     Try
                         newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
@@ -6948,7 +6950,7 @@ Module Module1
                     End Try
                     stage = 4
                     'stage 4 = get movie thumblist(for nfo)
-                   
+
                     If userprefs.nfoposterscraper <> 0 Then
                         Dim thumbs As String = ""
                         If userprefs.nfoposterscraper = 1 Or userprefs.nfoposterscraper = 3 Or userprefs.nfoposterscraper = 5 Or userprefs.nfoposterscraper = 7 Or userprefs.nfoposterscraper = 9 Or userprefs.nfoposterscraper = 11 Or userprefs.nfoposterscraper = 13 Or userprefs.nfoposterscraper = 15 Then
