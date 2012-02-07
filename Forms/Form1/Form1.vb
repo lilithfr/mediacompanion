@@ -4497,7 +4497,7 @@ Public Class Form1
                                                     Case "role"
                                                         newactor.actorrole = detail.InnerText
                                                     Case "thumb"
-                                                        newactor.actorthumb = detail.InnerText
+                                                        newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                     Case "actorid"
                                                         If newactor.actorthumb <> Nothing Then
                                                             If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -4555,40 +4555,7 @@ Public Class Form1
                                                                 Dim workingpath As String = ""
                                                                 Dim networkpath As String = Preferences.actorsavepath
                                                                 Try
-                                                                    tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                                                                    Dim hg As New IO.DirectoryInfo(tempstring)
-                                                                    If Not hg.Exists Then
-                                                                        IO.Directory.CreateDirectory(tempstring)
-                                                                    End If
-                                                                    workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                    If Not IO.File.Exists(workingpath) Then
-                                                                        Utilities.DownloadFile(newactor.actorthumb, workingpath)
-                                                                        'Dim buffer(4000000) As Byte
-                                                                        'Dim size As Integer = 0
-                                                                        'Dim bytesRead As Integer = 0
-                                                                        'Dim thumburl As String = newactor.actorthumb
-                                                                        'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                        'Dim res As HttpWebResponse = req.GetResponse()
-                                                                        'Dim contents As Stream = res.GetResponseStream()
-                                                                        'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                        'While bytesToRead > 0
-                                                                        '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                        '    If size = 0 Then Exit While
-                                                                        '    bytesToRead -= size
-                                                                        '    bytesRead += size
-                                                                        'End While
-
-                                                                        'Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                        'fstrm.Write(buffer, 0, bytesRead)
-                                                                        'contents.Close()
-                                                                        'fstrm.Close()
-                                                                    End If
-                                                                    newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                                                                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                        newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-                                                                    Else
-                                                                        newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                    End If
+                                                                    newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                                 Catch ex As Exception
 #If SilentErrorScream Then
                                                                 Throw ex
@@ -7934,7 +7901,8 @@ Public Class Form1
                                             Case "role"
                                                 newactor.actorrole = detail.InnerText
                                             Case "thumb"
-                                                newactor.actorthumb = detail.InnerText
+    
+                                                newactor.actorthumb = GetActorThumb(detail.InnerText)
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
                                                     If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -7960,31 +7928,31 @@ Public Class Form1
                                                             filename = IO.Path.Combine(workingpath, filename)
                                                             If Not IO.File.Exists(filename) Then
                                                                 Utilities.DownloadFile(newactor.actorthumb, filename)
-'                                                                Try
-'                                                                    Dim buffer(4000000) As Byte
-'                                                                    Dim size As Integer = 0
-'                                                                    Dim bytesRead As Integer = 0
-'                                                                    Dim thumburl As String = newactor.actorthumb
-'                                                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                                                    Dim res As HttpWebResponse = req.GetResponse()
-'                                                                    Dim contents As Stream = res.GetResponseStream()
-'                                                                    Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                                                    While bytesToRead > 0
-'                                                                        size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                                                        If size = 0 Then Exit While
-'                                                                        bytesToRead -= size
-'                                                                        bytesRead += size
-'                                                                    End While
+                                                                '                                                                Try
+                                                                '                                                                    Dim buffer(4000000) As Byte
+                                                                '                                                                    Dim size As Integer = 0
+                                                                '                                                                    Dim bytesRead As Integer = 0
+                                                                '                                                                    Dim thumburl As String = newactor.actorthumb
+                                                                '                                                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                                '                                                                    Dim res As HttpWebResponse = req.GetResponse()
+                                                                '                                                                    Dim contents As Stream = res.GetResponseStream()
+                                                                '                                                                    Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                                '                                                                    While bytesToRead > 0
+                                                                '                                                                        size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                                '                                                                        If size = 0 Then Exit While
+                                                                '                                                                        bytesToRead -= size
+                                                                '                                                                        bytesRead += size
+                                                                '                                                                    End While
 
-'                                                                    Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-'                                                                    fstrm.Write(buffer, 0, bytesRead)
-'                                                                    contents.Close()
-'                                                                    fstrm.Close()
-'                                                                Catch ex As Exception
-'#If SilentErrorScream Then
-'                                                                    Throw ex
-'#End If
-'                                                                End Try
+                                                                '                                                                    Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
+                                                                '                                                                    fstrm.Write(buffer, 0, bytesRead)
+                                                                '                                                                    contents.Close()
+                                                                '                                                                    fstrm.Close()
+                                                                '                                                                Catch ex As Exception
+                                                                '#If SilentErrorScream Then
+                                                                '                                                                    Throw ex
+                                                                '#End If
+                                                                '                                                                End Try
                                                             End If
                                                         End If
                                                     End If
@@ -9059,7 +9027,7 @@ Public Class Form1
                                                         newactor.actorrole = detail.InnerText
                                                     Case "thumb"
 
-                                                        newactor.actorthumb = detail.InnerText
+                                                        newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                     Case "actorid"
                                                         If newactor.actorthumb <> Nothing Then
                                                             If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -10307,7 +10275,7 @@ MyExit:
                                                         Case "role"
                                                             newactor.actorrole = detail.InnerText
                                                         Case "thumb"
-                                                            newactor.actorthumb = detail.InnerText
+                                                            newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                         Case "actorid"
                                                             If newactor.actorthumb <> Nothing Then
                                                                 If Preferences.actorsave = True And detail.InnerText <> "" Then
@@ -14257,7 +14225,7 @@ MyExit:
                                         Case "role"
                                             newactor.actorrole = detail.InnerText
                                         Case "thumb"
-                                            newactor.actorthumb = detail.InnerText
+                                            newactor.actorthumb = GetActorThumb(detail.InnerText)
                                         Case "actorid"
                                             If newactor.actorthumb <> Nothing Then
                                                 If Preferences.actorsave = True And detail.InnerText <> "" Then
@@ -16635,7 +16603,7 @@ MyExit:
                                             Case "role"
                                                 newactor.actorrole = detail.InnerText
                                             Case "thumb"
-                                                newactor.actorthumb = detail.InnerText
+                                                newactor.actorthumb = GetActorThumb(detail.InnerText)
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
                                                     If Preferences.actorsave = True And detail.InnerText <> "" Then
@@ -18610,7 +18578,7 @@ MyExit:
                                             Case "role"
                                                 newactor.actorrole = detail.InnerText
                                             Case "thumb"
-                                                newactor.actorthumb = detail.InnerText
+                                                newactor.actorthumb = GetActorThumb(detail.InnerText)
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
                                                     If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -18935,7 +18903,7 @@ MyExit:
                                                         Case "role"
                                                             newactor.actorrole = detail.InnerText
                                                         Case "thumb"
-                                                            newactor.actorthumb = detail.InnerText
+                                                            newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                         Case "actorid"
                                                             If newactor.actorthumb <> Nothing Then
                                                                 If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -25424,7 +25392,7 @@ MyExit:
     '                                                    Case "role"
     '                                                        newactor.actorrole = detail.InnerText
     '                                                    Case "thumb"
-    '                                                        newactor.actorthumb = detail.InnerText
+    '                                                        newactor.actorthumb = GetActorThumb(detail.InnerText)
     '                                                    Case "actorid"
     '                                                        If newactor.actorthumb <> Nothing Then
     '                                                            If Preferences.actorsave = True And detail.InnerText <> "" And speedy = False Then
@@ -28701,7 +28669,7 @@ MyExit:
                                                     Case "role"
                                                         newactor.actorrole = detail.InnerText
                                                     Case "thumb"
-                                                        newactor.actorthumb = detail.InnerText
+                                                        newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                     Case "actorid"
                                                         If newactor.actorthumb <> Nothing Then
                                                             If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -30993,7 +30961,7 @@ MyExit:
                                                             Case "role"
                                                                 newactor.actorrole = detail.InnerText
                                                             Case "thumb"
-                                                                newactor.actorthumb = detail.InnerText
+                                                                newactor.actorthumb = GetActorThumb(detail.InnerText)
                                                             Case "actorid"
                                                                 If newactor.actorthumb <> Nothing Then
                                                                     If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -33175,5 +33143,30 @@ MyExit:
     End Sub
 
 
+    Private Function GetActorThumb(ByRef currentUri As String)
+        Dim actorthumb As String = currentUri
+        If Preferences.actorsave Then
+            Dim uri As Uri
+            uri = New Uri(actorthumb)
 
+            If Len(Preferences.actornetworkpath) > 0 AndAlso Len(Preferences.actorsavepath) > 0 Then
+                Dim actorThumbFileName As String
+                Dim localActorThumbFileName As String
+                actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
+                localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
+
+                Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
+                actorthumb = actorThumbFileName
+            End If
+        End If
+        Return actorthumb
+    End Function
+    Private Sub RescrapeAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeAllToolStripMenuItem.Click
+        Try
+            'rescrape all
+            Call mov_Rescrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 End Class

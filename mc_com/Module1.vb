@@ -1438,7 +1438,7 @@ Module Module1
                                                                                                 Dim size As Integer = 0
                                                                                                 Dim bytesRead As Integer = 0
                                                                                                 Dim thumburl As String = newactor.actorthumb
-                                                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -1471,7 +1471,7 @@ Module Module1
                                                                                                 Dim size As Integer = 0
                                                                                                 Dim bytesRead As Integer = 0
                                                                                                 Dim thumburl As String = newactor.actorthumb
-                                                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -2143,7 +2143,7 @@ Module Module1
             Else
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
                     Try
-                        Dim req As HttpWebRequest = req.Create(url)
+                        Dim req As HttpWebRequest = WebRequest.Create(url)
                         Dim res As HttpWebResponse = req.GetResponse()
                         Dim contents As Stream = res.GetResponseStream()
                         Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -6849,7 +6849,7 @@ Module Module1
                                                                     Dim size As Integer = 0
                                                                     Dim bytesRead As Integer = 0
                                                                     Dim thumburl As String = newactor.actorthumb
-                                                                    Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                     Dim res As HttpWebResponse = req.GetResponse()
                                                                     Dim contents As Stream = res.GetResponseStream()
                                                                     Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -6884,7 +6884,7 @@ Module Module1
                                                                 Dim size As Integer = 0
                                                                 Dim bytesRead As Integer = 0
                                                                 Dim thumburl As String = newactor.actorthumb
-                                                                Dim req As HttpWebRequest = req.Create(thumburl)
+                                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                                                 Dim res As HttpWebResponse = req.GetResponse()
                                                                 Dim contents As Stream = res.GetResponseStream()
                                                                 Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -7259,7 +7259,7 @@ Module Module1
                                     Dim size As Integer = 0
                                     Dim bytesRead As Integer = 0
                                     Dim thumburl As String = moviethumburl
-                                    Dim req As HttpWebRequest = req.Create(thumburl)
+                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                     Dim res As HttpWebResponse = req.GetResponse()
                                     Dim contents As Stream = res.GetResponseStream()
                                     Dim bytesToRead As Integer = CInt(buffer.Length)
@@ -7371,7 +7371,7 @@ Module Module1
                                             Dim bytesRead As Integer = 0
 
                                             Dim thumburl As String = moviethumburl
-                                            Dim req As HttpWebRequest = req.Create(thumburl)
+                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                             Dim res As HttpWebResponse = req.GetResponse()
                                             Dim contents As Stream = res.GetResponseStream()
                                             Dim bytesToRead As Integer = CInt(buffer.Length)

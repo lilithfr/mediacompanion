@@ -1620,6 +1620,13 @@ Module General
             doc.WriteTo(output)
             output.Close()
 
+            Dim nfoGenerator As WorkingWithNfoFiles
+            nfoGenerator = New WorkingWithNfoFiles
+            ' load nfo file to clean
+            Dim movie As FullMovieDetails = nfoGenerator.mov_NfoLoadFull(nfoFilename)
+            ' save to make sure additional features like saving actor thumbnails takes place
+            nfoGenerator.mov_NfoSave(nfoFilename, movie, True)
+
             Return True
         Catch
             Return False
@@ -1856,5 +1863,6 @@ Module General
 
     End Function
 
+ 
 
 End Module
