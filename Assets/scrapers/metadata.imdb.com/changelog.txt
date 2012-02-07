@@ -1,3 +1,51 @@
+[B]2.3.4[/B]
+- fixed: factored out genres to common
+
+[B]2.3.3[/B]
+- fixed: failed to fetch country and genre due to site changes
+
+[B]2.3.1/2.3.2[/B]
+- fixed: version bump in order to fix broken dependency
+
+[B]2.3.0[/B]
+- added: option to scrape trailer links directly from YouTube, credits to ZackDepp
+
+[B]2.2.6[/B]
+- fixed: Originaltitle some time contains 'IMDb - ' string
+
+[B]2.2.5[/B]
+- fixed: IMDb rating, MPAA rating and plot outline after site changes
+
+[B]2.2.4[/B]
+- fixed: missing imdb ID in search results due to site changes
+
+[B]2.2.3[/B]
+- fixed: IMDb rating
+
+[B]2.2.2[/B]
+- fixed: make sure imdb ID picked up correctly from international sites
+
+[B]2.2.1[/B]
+- fixed: wrong imdb ID detection other certain circumtances
+
+[B]2.2.0[/B]
+- Better USA/International title recognition + make NfoUrl imdb site independent
+
+[B]2.1.9[/B]
+- fixed: actor roles and remove scraping of imdb trailers
+
+[B]2.1.8[/B]
+- fixed: some movies won't scrape at all
+
+[B]2.1.7[/B]
+- fixed: actor images
+
+[B]2.1.6[/B]
+- fixed: real fix for hd-trailers.net
+
+[B]2.1.5[/B]
+- fixed: trailer scraping from hd-trailers.net
+
 [B]2.1.4[/B]
 - fixed: fixed artists due to IMDb changes
 
