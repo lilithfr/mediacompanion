@@ -27851,32 +27851,32 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
-        Try
-            Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
-            If e.Button = Windows.Forms.MouseButtons.Right Then
-                If DataGridView1.SelectedRows.Count < 2 Then
+    'Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
+    '    Try
+    '        Dim hti As DataGridView.HitTestInfo = sender.HitTest(e.X, e.Y)
+    '        If e.Button = Windows.Forms.MouseButtons.Right Then
+    '            If DataGridView1.SelectedRows.Count < 2 Then
 
-                    If hti.Type = DataGridViewHitTestType.Cell Then
+    '                If hti.Type = DataGridViewHitTestType.Cell Then
 
-                        If Not DataGridView1.Rows(hti.RowIndex).Selected Then
+    '                    If Not DataGridView1.Rows(hti.RowIndex).Selected Then
 
-                            ' User right clicked a row that is not selected, so throw away all other selections and select this row
+    '                        ' User right clicked a row that is not selected, so throw away all other selections and select this row
 
-                            DataGridView1.ClearSelection()
+    '                        DataGridView1.ClearSelection()
 
-                            DataGridView1.Rows(hti.RowIndex).Selected = True
-                        End If
-                    End If
+    '                        DataGridView1.Rows(hti.RowIndex).Selected = True
+    '                    End If
+    '                End If
 
-                End If
-            ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
-                DataGridView1.Rows(hti.RowIndex).Selected = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    '            End If
+    '        ElseIf e.Button = Windows.Forms.MouseButtons.Left Then
+    '            DataGridView1.Rows(hti.RowIndex).Selected = True
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
     Private Sub DataGridView1_RowHeadersWidthChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.RowHeadersWidthChanged
         Try
@@ -27888,40 +27888,7 @@ MyExit:
 
     Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.SelectionChanged
         Try
-            If DataGridView1.SelectedRows.Count > 1 Then
-                txt_tabletitle.Visible = True
-                txt_tabletop250.Visible = True
-                txt_tableyear.Visible = True
-                txt_tablesorttitle.Visible = True
-                txt_tableruntime.Visible = True
-                txt_tablerating.Visible = True
-                txt_tableoutline.Visible = True
-                txt_tableplot.Visible = True
-                txt_tablegenre.Visible = True
-                cmbobx_tablesets.Visible = True
-                Cmbobx_tablewatched.Visible = True
-                Button98.Visible = True
-                Button99.Visible = True
-                Button100.Visible = True
-                Label132.Visible = True
-                Call mov_TextBoxesSetup()
-            Else
-                Cmbobx_tablewatched.Visible = False
-                txt_tabletitle.Visible = False
-                txt_tabletop250.Visible = False
-                txt_tableyear.Visible = False
-                txt_tablesorttitle.Visible = False
-                txt_tableruntime.Visible = False
-                txt_tablerating.Visible = False
-                txt_tableoutline.Visible = False
-                txt_tableplot.Visible = False
-                txt_tablegenre.Visible = False
-                cmbobx_tablesets.Visible = False
-                Button98.Visible = False
-                Button99.Visible = False
-                Button100.Visible = False
-                Label132.Visible = False
-            End If
+            Call mov_TextBoxesSetup()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -27962,9 +27929,7 @@ MyExit:
     End Sub
 
     Private Sub mov_TextBoxesSetup()
-        If DataGridView1.SelectedRows.Count < 2 Then
-            Exit Sub
-        End If
+        Dim multirowControlsVisibility As Boolean = DataGridView1.SelectedRows.Count > 1
         txt_tabletitle.Visible = False
         txt_tabletop250.Visible = False
         txt_tableyear.Visible = False
@@ -27977,220 +27942,352 @@ MyExit:
         Cmbobx_tablewatched.Visible = False
         cmbobx_tablesets.Visible = False
 
+        If Not multirowControlsVisibility Then
+            Exit Sub
+        End If
+
         For Each column In DataGridView1.Columns
-            Select Case column.visible
-                Case True
-                    Select Case column.headertext.tolower
-                        Case "title"
-                            txt_tabletitle.Width = column.width - 4
-                            txt_tabletitle.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Title").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "title" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tabletitle.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "year"
-                            txt_tableyear.Width = column.width - 4
-                            txt_tableyear.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Year").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "year" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tableyear.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "top 250"
-                            txt_tabletop250.Width = column.width - 4
-                            txt_tabletop250.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("top250").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "top 250" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tabletop250.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "outline"
-                            txt_tableoutline.Width = column.width - 4
-                            txt_tableoutline.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Outline").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "outline" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tableoutline.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "plot"
-                            txt_tableplot.Width = column.width - 4
-                            txt_tableplot.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Plot").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "plot" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tableplot.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "rating"
-                            txt_tablerating.Width = column.width - 4
-                            txt_tablerating.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Rating").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "rating" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tablerating.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "sort title"
-                            txt_tablesorttitle.Width = column.width - 4
-                            txt_tablesorttitle.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("sorttitle").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "sort title" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tablesorttitle.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "genre"
-                            txt_tablegenre.Width = column.width - 4
-                            txt_tablegenre.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Genre").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "genre" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tablegenre.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "runtime"
-                            txt_tableruntime.Width = column.width - 4
-                            txt_tableruntime.Visible = True
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Runtime").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "runtime" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            txt_tableruntime.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "watched"
-                            Cmbobx_tablewatched.Visible = True
-                            Cmbobx_tablewatched.Width = column.width - 4
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("playcount").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            Cmbobx_tablewatched.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                        Case "sets"
-                            cmbobx_tablesets.Visible = True
-                            cmbobx_tablesets.Width = column.width - 4
-                            Dim locx As Integer = 0
-                            For Each col In DataGridView1.Columns
-                                Try
-                                    If col.displayindex < DataGridView1.Columns("Set").DisplayIndex And col.visible = True Then
-                                        locx = locx + col.width
-                                        'Else
-                                        '    If col.visible = True And col.headertext.tolower = "sets" Then Exit For
-                                    End If
-                                Catch ex As Exception
-#If SilentErrorScream Then
-                                    Throw ex
-#End If
-                                End Try
-                            Next
-                            locx = locx + DataGridView1.RowHeadersWidth
-                            cmbobx_tablesets.Location = New Point(locx + 2, DataGridView1.Height + 31)
-                    End Select
-            End Select
+            If column.visible Then
+                Select Case column.headertext.tolower
+                    Case "title"
+                        txt_tabletitle.Width = column.width - 4
+                        txt_tabletitle.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Title").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tabletitle.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "year"
+                        txt_tableyear.Width = column.width - 4
+                        txt_tableyear.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Year").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tableyear.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "top 250"
+                        txt_tabletop250.Width = column.width - 4
+                        txt_tabletop250.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("top250").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tabletop250.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "outline"
+                        txt_tableoutline.Width = column.width - 4
+                        txt_tableoutline.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Outline").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tableoutline.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "plot"
+                        txt_tableplot.Width = column.width - 4
+                        txt_tableplot.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Plot").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tableplot.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "rating"
+                        txt_tablerating.Width = column.width - 4
+                        txt_tablerating.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Rating").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tablerating.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "sort title"
+                        txt_tablesorttitle.Width = column.width - 4
+                        txt_tablesorttitle.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("sorttitle").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tablesorttitle.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "genre"
+                        txt_tablegenre.Width = column.width - 4
+                        txt_tablegenre.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Genre").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tablegenre.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "runtime"
+                        txt_tableruntime.Width = column.width - 4
+                        txt_tableruntime.Visible = True
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Runtime").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        txt_tableruntime.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "watched"
+                        Cmbobx_tablewatched.Visible = True
+                        Cmbobx_tablewatched.Width = column.width - 4
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("playcount").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        Cmbobx_tablewatched.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                    Case "sets"
+                        cmbobx_tablesets.Visible = True
+                        cmbobx_tablesets.Width = column.width - 4
+                        Dim locx As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("Set").DisplayIndex And col.visible = True Then
+                                locx = locx + col.width
+                            End If
+                        Next
+                        'locx = locx + DataGridView1.RowHeadersWidth
+                        cmbobx_tablesets.Location = New Point(locx + 2, DataGridView1.Height + 31)
+                End Select
+            End If
         Next
+
+        '        For Each column In DataGridView1.Columns
+        '            Select Case column.visible
+        '                Case True
+        '                    Select Case column.headertext.tolower
+        '                        Case "title"
+        '                            txt_tabletitle.Width = column.width - 4
+        '                            txt_tabletitle.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Title").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "title" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tabletitle.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "year"
+        '                            txt_tableyear.Width = column.width - 4
+        '                            txt_tableyear.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Year").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "year" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tableyear.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "top 250"
+        '                            txt_tabletop250.Width = column.width - 4
+        '                            txt_tabletop250.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("top250").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "top 250" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tabletop250.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "outline"
+        '                            txt_tableoutline.Width = column.width - 4
+        '                            txt_tableoutline.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Outline").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "outline" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tableoutline.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "plot"
+        '                            txt_tableplot.Width = column.width - 4
+        '                            txt_tableplot.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Plot").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "plot" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tableplot.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "rating"
+        '                            txt_tablerating.Width = column.width - 4
+        '                            txt_tablerating.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Rating").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "rating" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tablerating.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "sort title"
+        '                            txt_tablesorttitle.Width = column.width - 4
+        '                            txt_tablesorttitle.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("sorttitle").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "sort title" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tablesorttitle.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "genre"
+        '                            txt_tablegenre.Width = column.width - 4
+        '                            txt_tablegenre.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Genre").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "genre" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tablegenre.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "runtime"
+        '                            txt_tableruntime.Width = column.width - 4
+        '                            txt_tableruntime.Visible = True
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Runtime").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "runtime" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            txt_tableruntime.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "watched"
+        '                            Cmbobx_tablewatched.Visible = True
+        '                            Cmbobx_tablewatched.Width = column.width - 4
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("playcount").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            Cmbobx_tablewatched.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                        Case "sets"
+        '                            cmbobx_tablesets.Visible = True
+        '                            cmbobx_tablesets.Width = column.width - 4
+        '                            Dim locx As Integer = 0
+        '                            For Each col In DataGridView1.Columns
+        '                                Try
+        '                                    If col.displayindex < DataGridView1.Columns("Set").DisplayIndex And col.visible = True Then
+        '                                        locx = locx + col.width
+        '                                        'Else
+        '                                        '    If col.visible = True And col.headertext.tolower = "sets" Then Exit For
+        '                                    End If
+        '                                Catch ex As Exception
+        '#If SilentErrorScream Then
+        '                                    Throw ex
+        '#End If
+        '                                End Try
+        '                            Next
+        '                            locx = locx + DataGridView1.RowHeadersWidth
+        '                            cmbobx_tablesets.Location = New Point(locx + 2, DataGridView1.Height + 31)
+        '                    End Select
+        '            End Select
+        '        Next
     End Sub
 
     Private Sub GoToToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToToolStripMenuItem.Click
