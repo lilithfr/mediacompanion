@@ -1787,6 +1787,7 @@ Module General
 
             Dim Teste As Boolean = MoviePosterandFanartDownload(FinalScrapResult, Filename)
             FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+            If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
             FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
 
         End If
@@ -1819,6 +1820,7 @@ Module General
         ' 3st stage
         FinalScrapResult = DoScrape(Scraper, "GetDetails", ParametersForScraper, True)
         FinalScrapResult = ReplaceCharactersinXML(FinalScrapResult)
+        If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
         FinalScrapResult = InsertFileInformationTags(FinalScrapResult, Filename)
         Return FinalScrapResult
     End Function
