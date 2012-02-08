@@ -746,31 +746,24 @@ Public Class Classimdb
 
                     'director
                     If webpage(f).IndexOf("itemprop=""director""") <> -1 And webpage(f).IndexOf("</a>") = -1 Then
-                        movienfoarray = ""
-                        Dim listofdirectors As New List(Of String)
-                        listofdirectors.Clear()
-                        Dim count As Integer = f
                         Try
-                            For t = 1 To 10
-                                If webpage(count + t).IndexOf("</div>") <> -1 Then
-                                    listofdirectors.Add(webpage(count + t))
-                                    Exit For
+                            movienfoarray = ""
+                            Dim listofdirectors As New List(Of String)
+                            listofdirectors.Clear()
+                            For g = 1 To 10
+                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                                If M.Success = True And M.Groups(1).Length Then
+                                    listofdirectors.Add(M.Groups(1).Value)
                                 End If
-
-                                listofdirectors.Add(webpage(count + t))
+                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
                             Next
                             For g = 0 To listofdirectors.Count - 1
-                                listofdirectors(g) = listofdirectors(g).Substring(listofdirectors(g).IndexOf(">") + 1, listofdirectors(g).IndexOf("<") - 5)
+                                If g = 0 Then
+                                    movienfoarray = listofdirectors(g)
+                                Else
+                                    movienfoarray = movienfoarray & " / " & listofdirectors(g)
+                                End If
                             Next
-                            If listofdirectors.Count > 0 Then
-                                For g = 0 To listofdirectors.Count - 1
-                                    If g = 0 Then
-                                        movienfoarray = listofdirectors(g)
-                                    Else
-                                        movienfoarray = movienfoarray & " / " & listofdirectors(g)
-                                    End If
-                                Next
-                            End If
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
