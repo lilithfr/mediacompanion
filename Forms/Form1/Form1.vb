@@ -26557,9 +26557,9 @@ MyExit:
         DataGridView1.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        '        If Preferences.tableview.Count <> 14 Then
-        Call mov_TableViewSetup()
-        '        End If
+        If Preferences.tableview.Count <> 14 Then
+            Call mov_TableViewSetup()
+        End If
         cmbobx_tablesets.Items.Clear()
         Cmbobx_tablewatched.Items.Clear()
         tableSets.Clear()
