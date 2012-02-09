@@ -2825,9 +2825,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1258, 17</value>
-  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
@@ -2858,6 +2855,67 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>656, 95</value>
   </metadata>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>805, 17</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>Use this page to edit what movie sets are available.
+These sets can be used to group collections of movies together within XBMC,
+eg. If you were to add the movie set "Star Wars Collection", and make all Star Wars movies
+part of this set, then they would be added to the XBMC library as "Star Wars Collection",
+Selecting this in XBMC would list all the movies in this collection.</value>
+  </data>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Refresh" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
+  <data name="Label99.Text" xml:space="preserve">
+    <value>Media Companion can attempt to automatically download
+a Poster when a movie is first scraped, if this option is
+enabled, then the setting below allows you to prioritise the
+order that sources are checked for an available  poster</value>
+  </data>
+  <data name="Label109.Text" xml:space="preserve">
+    <value>Some people prefer to save their files as movie.nfo, movie.tbn
+and fanart.jpg to keep compatability with other media managers.
+
+This is not reccomended since it breaks MCs ability to see the 
+media file, used for playback and filedetails information.</value>
+  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>572, 56</value>
   </metadata>
@@ -3067,67 +3125,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         DwAB/wQAAX8B/AUAAXAPAAH/AwABAQH/Af4FAAHwDwAB/wHAAgABAQf/AfAPAAs=
 </value>
   </data>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>805, 17</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>Use this page to edit what movie sets are available.
-These sets can be used to group collections of movies together within XBMC,
-eg. If you were to add the movie set "Star Wars Collection", and make all Star Wars movies
-part of this set, then they would be added to the XBMC library as "Star Wars Collection",
-Selecting this in XBMC would list all the movies in this collection.</value>
-  </data>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Refresh" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
-  <data name="Label99.Text" xml:space="preserve">
-    <value>Media Companion can attempt to automatically download
-a Poster when a movie is first scraped, if this option is
-enabled, then the setting below allows you to prioritise the
-order that sources are checked for an available  poster</value>
-  </data>
-  <data name="Label109.Text" xml:space="preserve">
-    <value>Some people prefer to save their files as movie.nfo, movie.tbn
-and fanart.jpg to keep compatability with other media managers.
-
-This is not reccomended since it breaks MCs ability to see the 
-media file, used for playback and filedetails information.</value>
-  </data>
   <data name="Label56.Text" xml:space="preserve">
     <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
 If none of the above are correct, then alter the search term and search again.</value>
@@ -3248,9 +3245,6 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>560, 134</value>
-  </metadata>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>767, 134</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>896, 134</value>
