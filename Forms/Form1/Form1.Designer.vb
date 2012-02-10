@@ -3483,6 +3483,7 @@ Partial Class Form1
         Me.roletxt.ReadOnly = True
         Me.roletxt.Size = New System.Drawing.Size(115, 21)
         Me.roletxt.TabIndex = 145
+		Me.ToolTip1.SetToolTip(Me.roletxt, "Character name")
         '
         'creditstxt
         '
