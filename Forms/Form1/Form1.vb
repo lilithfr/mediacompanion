@@ -31303,6 +31303,8 @@ MyExit:
                                         Dim bytesRead As Integer = 0
 
                                         Dim thumburl As String = fanartposter
+                                        If (String.IsNullOrEmpty(thumburl)) Then Continue For
+
                                         Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                         Dim res As HttpWebResponse = req.GetResponse()
                                         Dim contents As Stream = res.GetResponseStream()
@@ -31406,6 +31408,7 @@ MyExit:
                                         Dim size As Integer = 0
                                         Dim bytesRead As Integer = 0
                                         Dim thumburl As String = posterurlpath
+                                        If (String.IsNullOrEmpty(thumburl)) Then Continue For
                                         Dim req As HttpWebRequest = WebRequest.Create(thumburl)
                                         Dim res As HttpWebResponse = req.GetResponse()
                                         Dim contents As Stream = res.GetResponseStream()
@@ -31544,6 +31547,7 @@ MyExit:
                                                                         Dim size As Integer = 0
                                                                         Dim bytesRead As Integer = 0
                                                                         Dim fanartthumburl As String = episodescreenurl
+                                                                        If (String.IsNullOrEmpty(fanartthumburl)) Then Continue For
                                                                         Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
                                                                         Dim res As HttpWebResponse = req.GetResponse()
                                                                         Dim contents As Stream = res.GetResponseStream()
