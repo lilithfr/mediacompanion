@@ -540,6 +540,7 @@ Public Class Form1
                 If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
                     Me.Width = Preferences.formwidth
                     Me.Height = Preferences.formheight
+                    Me.Location = New Point( Preferences.locx , Preferences.locy )
                 End If
             Else
                 Me.WindowState = FormWindowState.Maximized
