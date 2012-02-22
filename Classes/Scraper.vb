@@ -1257,6 +1257,10 @@ Public Class Classimdb
                     scrapertempint = 0
                     scrapertempstring = line
                     Do Until scrapertempstring.IndexOf("<tr class=""") = -1
+								
+                        '22Feb12 - AnotherPhil - Bug fix actor scraping
+                        scrapertempstring = Right( scrapertempstring, scrapertempstring.Length - scrapertempstring.IndexOf("<tr class=""") )							
+							
                         scrapertempint = scrapertempint + 1
                         actors(scrapertempint, 0) = scrapertempstring.Substring(0, scrapertempstring.IndexOf("</td></tr>") + 10)
                         scrapertempstring = scrapertempstring.Replace(actors(scrapertempint, 0), "")

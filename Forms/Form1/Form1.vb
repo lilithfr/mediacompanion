@@ -1974,6 +1974,9 @@ Public Class Form1
     End Sub
 
     Private Sub mov_ActorRebuild()
+
+        Call mov_FixUpCorruptActors()
+
         actorDB.Clear()
         Try
             For Each movie In fullMovieList
@@ -28474,7 +28477,18 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub mov_ScrapeSpecific(ByVal field As String)
+	Private Sub mov_ScrapeSpecific(ByVal field As String)
+
+		Dim list As New List(Of String)
+		For Each selected In MovieListComboBox.SelectedItems
+			list.Add(selected.value)
+		Next
+
+		mov_ScrapeSpecific_part2( field , list )
+	End Sub
+
+
+    Private Sub mov_ScrapeSpecific_part2(ByVal field As String, ByRef list As List(Of String))
 
         Try
             Dim frmProgSplash As New frmProgressScreen
@@ -28486,12 +28500,8 @@ MyExit:
             frmProgSplash.Show()
 
 
-
             Dim originalworking As String = workingMovieDetails.fileinfo.fullpathandfilename
-            Dim list As New List(Of String)
-            For Each selected In MovieListComboBox.SelectedItems
-                list.Add(selected.value)
-            Next
+
 
             'Dim mes As String = "Rescraping " & field & " for selected movies"
 
@@ -33294,4 +33304,79 @@ MyExit:
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+
+		'22Feb12 - AnotherPhil - Fix up corrupt actor scraping
+		Private Sub mov_FixUpCorruptActors()
+
+			Dim badNFOs As New List(Of str_ComboList) 
+		
+
+			For Each movie In fullMovieList
+
+				Dim movieadd As New FullMovieDetails
+
+				movieadd = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
+
+				If IsNothing(movieadd) Then
+					Continue For
+				End If
+
+				For Each actor In movieadd.listactors
+                    
+					If actor.actorname.IndexOf( "<tr" ) > -1 then
+						badNFOs.Add(movie)
+						Exit for
+					End if
+
+				Next
+			Next
+
+
+			If badNFOs.Count=0 then
+				Exit sub
+			End If
+
+
+            ToolStripStatusLabel1.Visible = True
+            ToolStripStatusLabel1.Text    = badNFOs.Count.ToString() + " NFO files found containing invalid actor data - Rescaping to fix problem..."
+
+            Application.DoEvents()
+
+
+
+			Dim SavedList As New List(Of str_ComboList)
+
+			For Each movie In filteredList
+				SavedList.Add(movie)
+			Next
+
+
+			Dim list As New List(Of String)
+
+			filteredList.Clear()
+
+			For Each movie In badNFOs
+				list.Add(movie.fullpathandfilename)
+			Next
+
+			For Each movie In fullMovieList
+				filteredList.Add(movie)
+			Next
+
+
+			Call mov_ScrapeSpecific_part2( "actors", list )
+
+
+			filteredList.Clear()
+
+			For Each movie In SavedList
+				filteredList.Add(movie)
+			Next
+
+             ToolStripStatusLabel1.Visible = False
+		End Sub
+
+
+
 End Class
