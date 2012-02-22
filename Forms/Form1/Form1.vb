@@ -22,6 +22,7 @@ Public Class Form1
     'Public Shared Preferences As New Structures
 
     Public Const SetDefaults = True
+    Public Const datePattern As String = "yyyyMMddHHmmss"
     Public movieRefreshNeeded As Boolean = True
     Public tvRefreshNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
@@ -3653,7 +3654,7 @@ Public Class Form1
             Dim filecreation As New IO.FileInfo(nfoFilename)
             Dim myDate As Date = filecreation.LastWriteTime
             Try
-                movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
+                movietoadd.filedate = Format(myDate, datePattern).ToString
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -4189,7 +4190,7 @@ Public Class Form1
                             End If
                             Dim myDate2 As Date = System.DateTime.Now
                             Try
-                                newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                newmovie.fileinfo.createdate = Format(myDate2, datePattern).ToString
                             Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -4217,7 +4218,7 @@ Public Class Form1
                             Dim filecreation As New IO.FileInfo(newMovieList(f).nfopathandfilename)
                             Dim myDate As Date = filecreation.LastWriteTime
                             Try
-                                movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
+                                movietoadd.filedate = Format(myDate, datePattern).ToString
                             Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -4225,7 +4226,7 @@ Public Class Form1
                             End Try
                             myDate2 = System.DateTime.Now
                             Try
-                                movietoadd.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                movietoadd.createdate = Format(myDate2, datePattern).ToString
                             Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -4836,7 +4837,7 @@ Public Class Form1
                             End If
                             Dim myDate2 As Date = System.DateTime.Now
                             Try
-                                newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                newmovie.fileinfo.createdate = Format(myDate2, datePattern).ToString
                             Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -4876,7 +4877,7 @@ Public Class Form1
                             Dim filecreation As New IO.FileInfo(newMovieList(f).nfopathandfilename)
                             Dim myDate As Date = filecreation.LastWriteTime
                             Try
-                                movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
+                                movietoadd.filedate = Format(myDate, datePattern).ToString
                             Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -4884,7 +4885,7 @@ Public Class Form1
                             End Try
                             myDate2 = System.DateTime.Now
                             Try
-                                movietoadd.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                movietoadd.createdate = Format(myDate2, datePattern).ToString
                             Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -5813,6 +5814,33 @@ Public Class Form1
                                         strNFOprop = newplotdetails.fullmoviebody.sortorder
                                     Case "set"
                                         strNFOprop = newplotdetails.fullmoviebody.movieset
+                                    Case "createdate"
+                                        Dim newDate As String = newplotdetails.fileinfo.createdate
+                                        Dim result As Date
+                                        If tokenInstr.Length > 2 Then
+                                            Try
+                                                result = DateTime.ParseExact(newDate, datePattern, Nothing)
+                                                strNFOprop = Format(result, tokenInstr(2)).ToString
+                                                If tokenInstr.Length > 3 Then
+                                                    Dim separator As String = "!"
+                                                    Select Case tokenInstr(3).ToLower
+                                                        Case "space"
+                                                            separator = " "
+                                                        Case "colon"
+                                                            separator = ":"
+                                                        Case "dash"
+                                                            separator = "-"
+                                                        Case "slash"
+                                                            separator = "/"
+                                                    End Select
+                                                    strNFOprop = strNFOprop.Replace("_", separator)
+                                                End If
+                                            Catch ex As Exception
+                                                strNFOprop = "Error in date format"
+                                            End Try
+                                        Else
+                                            strNFOprop = newDate
+                                        End If
                                     Case "actor"                                        ' No support for actor list
                                         strNFOprop = "No support"
                                     Case "alternativetitle"                             ' No support for alternative titles
@@ -5820,7 +5848,7 @@ Public Class Form1
                                     Case Else
                                         strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet)
                                 End Select
-                                If tokenInstr(1) <> "file" And tokenInstr.Length > 2 Then
+                                If tokenInstr(1) <> "file" And tokenInstr(1) <> "createdate" And tokenInstr.Length > 2 Then
                                     Dim intCharLimit = CInt(tokenInstr(2))
                                     If strNFOprop.Length > intCharLimit Then
                                         strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
@@ -7570,7 +7598,7 @@ Public Class Form1
                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
                 Try
-                    newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                    newfullmovie.filedate = Format(myDate2, datePattern).ToString
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -8094,7 +8122,7 @@ Public Class Form1
                         Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
-                            newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                            newfullmovie.filedate = Format(myDate2, datePattern).ToString
                         Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -8219,7 +8247,7 @@ Public Class Form1
                     Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                     Dim myDate2 As Date = filecreation2.LastWriteTime
                     Try
-                        newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                        newfullmovie.filedate = Format(myDate2, datePattern).ToString
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -8321,7 +8349,7 @@ Public Class Form1
                         Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
-                            newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                            newfullmovie.filedate = Format(myDate2, datePattern).ToString
                         Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -8538,7 +8566,7 @@ Public Class Form1
                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
                 Try
-                    newfullmovie2.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                    newfullmovie2.filedate = Format(myDate2, datePattern).ToString
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -9751,7 +9779,7 @@ MyExit:
                                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                                 Dim myDate2 As Date = filecreation2.LastWriteTime
                                 Try
-                                    newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                    newfullmovie.filedate = Format(myDate2, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -10108,7 +10136,7 @@ MyExit:
                                 End If
                                 Dim myDate2 As Date = System.DateTime.Now
                                 Try
-                                    newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                    newmovie.fileinfo.createdate = Format(myDate2, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -10139,7 +10167,7 @@ MyExit:
                                 Dim filecreation As New IO.FileInfo(newdetails.nfopathandfilename)
                                 Dim myDate As Date = filecreation.LastWriteTime
                                 Try
-                                    movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
+                                    movietoadd.filedate = Format(myDate, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -10237,7 +10265,7 @@ MyExit:
                                 If newmovie.fullmoviebody.top250 = Nothing Then newmovie.fullmoviebody.top250 = "0"
                                 Dim myDate2 As Date = System.DateTime.Now
                                 Try
-                                    newmovie.fileinfo.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                    newmovie.fileinfo.createdate = Format(myDate2, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -10578,8 +10606,8 @@ MyExit:
                                 Dim filecreation As New IO.FileInfo(newdetails.nfopathandfilename)
                                 Dim myDate As Date = filecreation.LastWriteTime
                                 Try
-                                    movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
-                                    movietoadd.createdate = Format(myDate, "yyyyMMddHHmmss").ToString
+                                    movietoadd.filedate = Format(myDate, datePattern).ToString
+                                    movietoadd.createdate = Format(myDate, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -14586,9 +14614,9 @@ MyExit:
                             Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                             Dim myDate2 As Date = filecreation2.LastWriteTime
 
-                            newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                            newfullmovie.filedate = Format(myDate2, datePattern).ToString
                             'Createdate becomes new because we have changed the movie (i.e. not a recrape of the same movie)
-                            newfullmovie.createdate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                            newfullmovie.createdate = Format(myDate2, datePattern).ToString
 
 
                         Catch ex As Exception
@@ -21720,7 +21748,7 @@ MyExit:
         Dim counter As Integer = 0
         With SaveFileDialog1
             .DefaultExt = "html"
-            .Filter = "Html Documents (*.htm)|*.html|XML Document (*.xml)|*.xml"
+            .Filter = "Html Documents (*.html)|*.html|XML Data (*.xml)|*.xml|CSV (Comma delimited) (*.csv)|*.csv"
             .Title = "Save HTML File"
             .OverwritePrompt = True
             .CheckPathExists = True
@@ -21834,7 +21862,7 @@ MyExit:
                     objWriter.Write(temphtml)
                     objWriter.Close()
                     frmhtmloutput.Close()
-                    Dim tempint As Integer = MessageBox.Show("Your HTML list is now complete" & vbCrLf & " Do You wish to view it now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    Dim tempint As Integer = MessageBox.Show("Your list is now complete" & vbCrLf & " Do You wish to view it now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
                         Process.Start(savepath)
                     End If
@@ -28901,7 +28929,7 @@ MyExit:
                                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                                 Dim myDate2 As Date = filecreation2.LastWriteTime
                                 Try
-                                    newfullmovie.filedate = Format(myDate2, "yyyyMMddHHmmss").ToString
+                                    newfullmovie.filedate = Format(myDate2, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
                                     Throw ex
