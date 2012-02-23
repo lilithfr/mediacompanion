@@ -1548,8 +1548,8 @@ Public Class Preferences
 
         Try
             Dim posterpath As String = ""
-            If FullPath.Contains("movie.nfo") = True Then   'equivalent to If preferences.basicsavemode = True Then but prefrences is not referenced here
-                posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
+            If FullPath.IndexOf("movie.nfo") <> -1 Then   'equivalent to If preferences.basicsavemode = True Then but prefrences is not referenced here
+                posterpath = FullPath.Replace("movie.nfo", "fanart.jpg")
             Else
                 posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
             End If

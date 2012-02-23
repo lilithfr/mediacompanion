@@ -4576,7 +4576,7 @@ Public Class Form1
                                 Next
                                 progresstext &= " - OK!"                                    'actors scraped OK
                                 BckWrkScnMovies.ReportProgress(progress, progresstext)
-                                scraperLog = scraperLog & "Actors scraped OK"
+                                scraperLog = scraperLog & "Actors scraped OK" & vbCrLf
                                 While newmovie.listactors.Count > Preferences.maxactors
                                     newmovie.listactors.RemoveAt(newmovie.listactors.Count - 1)
                                 End While
@@ -5030,7 +5030,7 @@ Public Class Form1
                                             Dim temppath As String = newmoviethumbpath.Replace(System.IO.Path.GetFileName(newmoviethumbpath), "folder.jpg")
                                             If Preferences.createfolderjpg = True Then
                                                 If Preferences.overwritethumbs = True Or System.IO.File.Exists(temppath) = False Then
-                                                    scraperLog = scraperLog & "Saving folder.jpg To Path :- " & temppath & vbCrLf
+                                                    'scraperLog = scraperLog & "Saving folder.jpg To Path :- " & temppath & vbCrLf
                                                     Dim fstrm2 As New FileStream(temppath, FileMode.OpenOrCreate, FileAccess.Write)
                                                     fstrm2.Write(buffer, 0, bytesRead)
                                                     contents.Close()
@@ -5070,13 +5070,8 @@ Public Class Form1
                                         progresstext &= " * Fanart"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
 
-                                        Dim moviefanartexists As Boolean
-                                        Dim fanarturlpath As String = Preferences.GetFanartPath(newMovieList(f).nfopathandfilename)
-
                                         moviethumburl = ""
-                                        moviefanartexists = System.IO.File.Exists(fanarturlpath)
-                                        If moviefanartexists = False Or Preferences.overwritethumbs = True Then
-
+                                        If Not System.IO.File.Exists(fanartpath) Or Preferences.overwritethumbs = True Then
                                             Dim temp As String = newmovie.fullmoviebody.imdbid
 
                                             Dim fanarturl As String = "http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/3f026194412846e530a208cf8a39e9cb/" & temp
@@ -5084,7 +5079,6 @@ Public Class Form1
                                             Dim fanartlinecount As Integer = 0
                                             Try
                                                 Dim wrGETURL As WebRequest
-
                                                 wrGETURL = WebRequest.Create(fanarturl)
                                                 Dim myProxy As New WebProxy("myproxy", 80)
                                                 myProxy.BypassProxyOnLocal = True
@@ -5108,15 +5102,7 @@ Public Class Form1
                                                         If apple2(g).IndexOf("size=""original""") <> -1 Then
                                                             Dim StartofURL As Integer = apple2(g).IndexOf("url=""") + 5
                                                             Dim EndofURL As Integer = apple2(g).IndexOf("size=""original""") - 2
-
-                                                            '                                                    apple2(g) = apple2(g).Replace("<image type=""backdrop""", "")
-                                                            '                                                    apple2(g) = apple2(g).Replace("</backdrop>", "")
-                                                            '                                                    apple2(g) = apple2(g).Replace("  ", "")
                                                             apple2(g) = apple2(g).Substring(StartofURL, (EndofURL - StartofURL))
-                                                            '                                                    Dim teste1 As String = apple2(g).Substring(posicaoinicial, 10)
-                                                            '                                                    Dim teste2 As String = apple2(g).Substring(posicaoinicial, posicaofinal)
-                                                            '                                                    Dim teste3 As String = apple2(g).Substring(posicaoinicial, ((posicaofinal - posicaoinicial) - 15))
-
                                                             apple2(g) = apple2(g).Trim
                                                             If apple2(g).ToLower.IndexOf("http") <> -1 And apple2(g).ToLower.IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Or apple2(g).IndexOf(".png") <> -1 Then
                                                                 moviethumburl = apple2(g)
@@ -5138,7 +5124,6 @@ Public Class Form1
                                                 progresstext &= " - OK!"
                                                 BckWrkScnMovies.ReportProgress(progress, progresstext)
                                                 'scraperlog = scraperlog & "Fanart URL is " & fanarturl & vbCrLf
-                                                scraperLog = scraperLog & "Saving Fanart As :- " & fanarturlpath & vbCrLf
 
                                                 'need to resize thumbs
 
@@ -5163,11 +5148,10 @@ Public Class Form1
                                                         bytesRead += size
                                                     End While
 
-
-
+                                                    Dim msgFanart As String = String.Empty
                                                     If Preferences.resizefanart = 1 Then
                                                         bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                        scraperLog = scraperLog & "Fanart not resized" & vbCrLf
+                                                        msgFanart = " - not resized"
                                                     ElseIf Preferences.resizefanart = 2 Then
                                                         If bmp.Width > 1280 Or bmp.Height > 720 Then
                                                             Dim bm_source As New Bitmap(bmp)
@@ -5175,11 +5159,11 @@ Public Class Form1
                                                             Dim gr As Graphics = Graphics.FromImage(bm_dest)
                                                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                                                             gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                                            bm_dest.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
-                                                            scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
+                                                            bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                                            msgFanart = " - resized to 1280x720"
                                                         Else
-                                                            scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                                            bmp.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
+                                                            msgFanart = " - not resized, already =< required size"
+                                                            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                                                         End If
                                                     ElseIf Preferences.resizefanart = 3 Then
                                                         If bmp.Width > 960 Or bmp.Height > 540 Then
@@ -5188,17 +5172,19 @@ Public Class Form1
                                                             Dim gr As Graphics = Graphics.FromImage(bm_dest)
                                                             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                                                             gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                                            bm_dest.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
-                                                            scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
+                                                            bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                                            msgFanart = " - resized to 960x540"
                                                         Else
-                                                            scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                                            bmp.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
+                                                            msgFanart = " - not resized, already =< required size"
+                                                            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
                                                         End If
 
                                                     End If
+                                                    scraperLog = scraperLog & "Fanart scraped OK" & msgFanart & vbCrLf
+
                                                 Catch ex As Exception
                                                     Try
-                                                        scraperLog = scraperLog & "!!! Fanart Not Saved to :- " & fanarturlpath & vbCrLf
+                                                        scraperLog = scraperLog & "!!! Fanart Not Saved to :- " & fanartpath & vbCrLf
                                                         scraperLog = scraperLog & "!!! Error received :- " & ex.ToString & vbCrLf & vbCrLf
                                                     Catch ex2 As Exception
 #If SilentErrorScream Then
