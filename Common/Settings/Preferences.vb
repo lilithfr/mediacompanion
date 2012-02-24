@@ -62,6 +62,7 @@ Public Class Preferences
     Public Shared font As String
     Public Shared moviethumbpriority() As String
     Public Shared certificatepriority() As String
+    Public Shared releaseformat() As String
     Public Shared actorsavepath As String
     Public Shared actornetworkpath As String
     Public Shared defaulttvthumb As String
@@ -291,7 +292,20 @@ Public Class Preferences
         Preferences.certificatepriority(32) = "Greece"
         Preferences.certificatepriority(33) = "Austria"
         Preferences.maximagecount = 10
-
+        ReDim Preferences.releaseformat(13)
+        Preferences.releaseformat(0) = "Cam"
+        Preferences.releaseformat(1) = "Telesync"
+        Preferences.releaseformat(2) = "Workprint"
+        Preferences.releaseformat(3) = "Telecine"
+        Preferences.releaseformat(4) = "Pay-Per-View Rip"
+        Preferences.releaseformat(5) = "Screener"
+        Preferences.releaseformat(6) = "R5"
+        Preferences.releaseformat(7) = "DVD-Rip"
+        Preferences.releaseformat(8) = "DVD-R"
+        Preferences.releaseformat(9) = "HDTV"
+        Preferences.releaseformat(10) = "VODRip"
+        Preferences.releaseformat(11) = "BRRip"
+        Preferences.releaseformat(12) = "BDRip"
 
         movieFolders.Clear()
         tvFolders.Clear()
@@ -666,6 +680,17 @@ Public Class Preferences
         root.AppendChild(child)
 
 
+        child = doc.CreateElement("releaseformat")
+        tempstring = ""
+        If Preferences.releaseformat IsNot Nothing Then
+            For f = 0 To Preferences.releaseformat.Length - 1
+                tempstring = tempstring & Preferences.releaseformat(f) & "|"
+            Next
+        End If
+        child.InnerText = tempstring.TrimEnd("|")
+        root.AppendChild(child)
+
+
         child = doc.CreateElement("tvdblanguage")
         tempstring = ""
         tempstring = Preferences.TvdbLanguageCode & "|" & Preferences.TvdbLanguage
@@ -681,7 +706,7 @@ Public Class Preferences
                 tempstring = tempstring & Preferences.certificatepriority(f) & "|"
             Next
         End If
-        child.InnerText = tempstring
+        child.InnerText = tempstring.TrimEnd("|")
         root.AppendChild(child)
 
         child = doc.CreateElement("splitcontainer1")
@@ -1164,6 +1189,18 @@ Public Class Preferences
                 Case "certificatepriority"
                     ReDim Preferences.certificatepriority(33)
                     If thisresult.InnerText <> "" Then Preferences.certificatepriority = thisresult.InnerXml.Split("|")
+
+                Case "releaseformat"
+                    If thisresult.InnerText <> "" Then
+                        Dim count As Integer = 0
+                        Dim index As Integer = 0
+                        Do Until index < 0
+                            count += 1
+                            index = thisresult.InnerText.IndexOf("|"c, index + 1)
+                        Loop
+                        ReDim Preferences.releaseformat(count)
+                        Preferences.releaseformat = thisresult.InnerXml.Split("|")
+                    End If
 
                 Case "backgroundcolour"
                     If thisresult.InnerText <> "" Then Preferences.backgroundcolour = thisresult.InnerXml

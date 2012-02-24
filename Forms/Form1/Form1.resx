@@ -627,30 +627,14 @@ Companion will use the first available certificate in the
 order you select below</value>
   </data>
   <data name="Label104.Text" xml:space="preserve">
-    <value>The settings for local actors can be tricky and if you dont know what you are doing it is
-reccomended that you leave this feature disabled. The only negative effects are a slightly slower
-browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you
-have enabled actor thumbs).
-
-If these are set incorrectly it could result in XBMC being unable to scrape actor thumbs.</value>
+    <value>The settings for local actors can be tricky and if you dont know what you are doing it is recommended that you leave this feature disabled. The only negative effects are a slightly slower browsing speed for Media Companion, and scraping by XBMC will also be a little slower (If you have enabled actor thumbs).</value>
   </data>
   <data name="Label103.Text" xml:space="preserve">
-    <value>The "XBMC path" needs to be to the same folder as above, but from where XBMC is installed.
-If XBMC is installed on the same machine as Media Companion then the paths will be the same,
-but if XBMC is located on a seperate network device then the path will need to be as it is from
-XBMC to the Actor folders. The folder will need to be shared, and have any user and password
-information included in the path. eg "smb://username:password@devicename/sharename/"</value>
+    <value>The "XBMC path" needs to be to the same folder as above, but from where XBMC is installed. If XBMC is installed on the same machine as Media Companion then the paths will be the same, but if XBMC is located on a seperate network device then the path will need to be as it is from XBMC to the Actor folders. The folder will need to be shared, and have any user and password information included in the path. eg "smb://username:password@devicename/sharename/"</value>
   </data>
   <data name="Label101.Text" xml:space="preserve">
-    <value>Under normal circumstances, Media Companion will include the internet location for each available
-actor thumbnail. There are a couple of problems with this, firstly, when XBMC scrapes each nfo, 
-if you enable actor thumbnails, XBMC needs to download these from the internet. Secondly, since
-MC also uses these urls to display actor thumbs, it can slow  down the Media Companion browser.
-These settings allow you to override this behaviour, saving the actor thumbs to a local folder, and
-adding the path to this into the nfo instead of a url.
-
-The "Local Path" below needs to be the path to where you want the actor thumbs saved,
-eg "C:\MovieStuff\ActorThumbs"</value>
+    <value>Under normal circumstances, Media Companion will include the internet location for each available actor thumbnail. There are a couple of problems with this, firstly, when XBMC scrapes each nfo, if you enable actor thumbnails, XBMC needs to download these from the internet. Secondly, since MC also uses these urls to display actor thumbs, it can slow  down the Media Companion browser.
+These settings allow you to override this behaviour, saving the actor thumbs to a local folder, and adding the path to this into the nfo instead of a url.</value>
   </data>
   <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1258, 17</value>
@@ -1733,6 +1717,9 @@ eg "C:\MovieStuff\ActorThumbs"</value>
   </data>
   <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>177, 17</value>
+  </metadata>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1258, 17</value>
   </metadata>
   <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>767, 134</value>
@@ -3117,13 +3104,6 @@ offline movie folder roots.</value>
 a Poster when a movie is first scraped, if this option is
 enabled, then the setting below allows you to prioritise the
 order that sources are checked for an available  poster</value>
-  </data>
-  <data name="Label109.Text" xml:space="preserve">
-    <value>Some people prefer to save their files as movie.nfo, movie.tbn
-and fanart.jpg to keep compatability with other media managers.
-
-This is not reccomended since it breaks MCs ability to see the 
-media file, used for playback and filedetails information.</value>
   </data>
   <data name="Label56.Text" xml:space="preserve">
     <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.

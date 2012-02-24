@@ -174,7 +174,7 @@ Public Class Form1
     End Sub
 
 #If Not Refocus Then
-    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Activated
+    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
         Try
             If messbox.Visible = True Then
                 messbox.Activate()
@@ -190,7 +190,7 @@ Public Class Form1
 
 
 
-    Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
+    Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
         Try
             Me.Dispose()
             Me.Finalize()
@@ -201,7 +201,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         Try
             Call mov_CacheSave()
             If Tv_CacheSave() Then
@@ -264,7 +264,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Form1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.GotFocus
+    Private Sub Form1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.GotFocus
         Try
             If messbox.Visible = True Then
                 messbox.Activate()
@@ -277,7 +277,7 @@ Public Class Form1
 
 
     'TODO: (Form1_Load) Need to refactor
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Load
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'Try
 
         For I = 0 To 20
@@ -541,7 +541,7 @@ Public Class Form1
                 If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
                     Me.Width = Preferences.formwidth
                     Me.Height = Preferences.formheight
-                    Me.Location = New Point( Preferences.locx , Preferences.locy )
+                    Me.Location = New Point(Preferences.locx, Preferences.locy)
                 End If
             Else
                 Me.WindowState = FormWindowState.Maximized
@@ -681,7 +681,7 @@ Public Class Form1
 
 
 
-    Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+    Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
         Try
             If Me.WindowState = FormWindowState.Maximized Then
                 mov_SplitContainerAutoPosition()
@@ -747,7 +747,7 @@ Public Class Form1
         SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
     End Sub
 
-    Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeEnd
+    Private Sub Form1_ResizeEnd(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.ResizeEnd
         Try
             If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
                 Preferences.formwidth = Me.Width
@@ -8424,7 +8424,7 @@ Public Class Form1
                     If (IO.File.Exists(filepath)) Then
                         Dim movie As New FullMovieDetails
                         movie = nfoFunction.mov_NfoLoadFull(filepath)
-                    If IsNothing(movie) Then Continue For
+                        If IsNothing(movie) Then Continue For
                         movie.fullmoviebody.playcount = watched
                         nfoFunction.mov_NfoSave(filepath, movie, True)
                         For f = 0 To fullMovieList.Count - 1
@@ -8467,7 +8467,7 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-        
+
     End Sub
 
     Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PosterBrowserToolStripMenuItem.Click
@@ -8860,18 +8860,18 @@ Public Class Form1
                     movietemplate.listthumbs.Clear()
                     movietemplate.filedetails.filedetails_audio.Clear()
                     movietemplate.filedetails.filedetails_subtitles.Clear()
-                    movietemplate.filedetails.filedetails_video.bitrate = Nothing
-                    movietemplate.filedetails.filedetails_video.bitratemax = Nothing
-                    movietemplate.filedetails.filedetails_video.bitratemode = Nothing
-                    movietemplate.filedetails.filedetails_video.codec = Nothing
-                    movietemplate.filedetails.filedetails_video.codecid = Nothing
-                    movietemplate.filedetails.filedetails_video.codecinfo = Nothing
-                    movietemplate.filedetails.filedetails_video.container = Nothing
+                    movietemplate.filedetails.filedetails_video.Bitrate = Nothing
+                    movietemplate.filedetails.filedetails_video.BitrateMax = Nothing
+                    movietemplate.filedetails.filedetails_video.BitrateMode = Nothing
+                    movietemplate.filedetails.filedetails_video.Codec = Nothing
+                    movietemplate.filedetails.filedetails_video.CodecId = Nothing
+                    movietemplate.filedetails.filedetails_video.CodecInfo = Nothing
+                    movietemplate.filedetails.filedetails_video.Container = Nothing
                     movietemplate.filedetails.filedetails_video.DurationInSeconds.Value = Nothing
-                    movietemplate.filedetails.filedetails_video.formatinfo = Nothing
-                    movietemplate.filedetails.filedetails_video.height = Nothing
-                    movietemplate.filedetails.filedetails_video.scantype = Nothing
-                    movietemplate.filedetails.filedetails_video.width = Nothing
+                    movietemplate.filedetails.filedetails_video.FormatInfo = Nothing
+                    movietemplate.filedetails.filedetails_video.Height = Nothing
+                    movietemplate.filedetails.filedetails_video.ScanType = Nothing
+                    movietemplate.filedetails.filedetails_video.Width = Nothing
 
                     movietemplate.fileinfo.fanartpath = Nothing
                     movietemplate.fileinfo.filename = Nothing
@@ -8908,18 +8908,18 @@ Public Class Form1
                     movietoalter.listthumbs.Clear()
                     movietoalter.filedetails.filedetails_audio.Clear()
                     movietoalter.filedetails.filedetails_subtitles.Clear()
-                    movietoalter.filedetails.filedetails_video.bitrate = Nothing
-                    movietoalter.filedetails.filedetails_video.bitratemax = Nothing
-                    movietoalter.filedetails.filedetails_video.bitratemode = Nothing
-                    movietoalter.filedetails.filedetails_video.codec = Nothing
-                    movietoalter.filedetails.filedetails_video.codecid = Nothing
-                    movietoalter.filedetails.filedetails_video.codecinfo = Nothing
-                    movietoalter.filedetails.filedetails_video.container = Nothing
+                    movietoalter.filedetails.filedetails_video.Bitrate = Nothing
+                    movietoalter.filedetails.filedetails_video.BitrateMax = Nothing
+                    movietoalter.filedetails.filedetails_video.BitrateMode = Nothing
+                    movietoalter.filedetails.filedetails_video.Codec = Nothing
+                    movietoalter.filedetails.filedetails_video.CodecId = Nothing
+                    movietoalter.filedetails.filedetails_video.CodecInfo = Nothing
+                    movietoalter.filedetails.filedetails_video.Container = Nothing
                     movietoalter.filedetails.filedetails_video.DurationInSeconds.Value = Nothing
-                    movietoalter.filedetails.filedetails_video.formatinfo = Nothing
-                    movietoalter.filedetails.filedetails_video.height = Nothing
-                    movietoalter.filedetails.filedetails_video.scantype = Nothing
-                    movietoalter.filedetails.filedetails_video.width = Nothing
+                    movietoalter.filedetails.filedetails_video.FormatInfo = Nothing
+                    movietoalter.filedetails.filedetails_video.Height = Nothing
+                    movietoalter.filedetails.filedetails_video.ScanType = Nothing
+                    movietoalter.filedetails.filedetails_video.Width = Nothing
 
                     movietoalter.fileinfo.fanartpath = Nothing
                     movietoalter.fileinfo.filename = Nothing
@@ -10366,13 +10366,13 @@ MyExit:
 
                                         trailer = ""
 
-                                        If Preferences.moviePreferredTrailerResolution <> "SD" then
-                                            trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+                                        If Preferences.moviePreferredTrailerResolution <> "SD" Then
+                                            trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title)
                                         End If
 
-                                        If trailer = "" then
+                                        If trailer = "" Then
                                             trailer = scraperfunction.gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                                        End if
+                                        End If
 
                                         If trailer <> String.Empty And trailer <> "Error" Then
                                             newmovie.fullmoviebody.trailer = trailer
@@ -14782,7 +14782,7 @@ MyExit:
 
     End Sub
 
-    Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick   'timer from movie poster crop - used for repeat crop if buttom held down
+    Private Sub Timer3_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer3.Tick    'timer from movie poster crop - used for repeat crop if buttom held down
         Try
             Timer3.Interval = 75 'if this timer fires, then from now on we want it to fire quicker for repeat function
             mov_PosterCrop()
@@ -16133,7 +16133,7 @@ MyExit:
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
                     util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), defaultScreenShot)
-                    
+
                 End If
                 If TextBox35.Text = "" Then
                     TextBox35.Text = "10"
@@ -16759,30 +16759,30 @@ MyExit:
                             End If
                             If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                                 Utilities.DownloadFile(seasonposter, seasonpath)
-'                                Try
-'                                    Dim buffer(4000000) As Byte
-'                                    Dim size As Integer = 0
-'                                    Dim bytesRead As Integer = 0
-'                                    Dim thumburl As String = seasonposter
-'                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                    Dim res As HttpWebResponse = req.GetResponse()
-'                                    Dim contents As Stream = res.GetResponseStream()
-'                                    Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                    While bytesToRead > 0
-'                                        size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                        If size = 0 Then Exit While
-'                                        bytesToRead -= size
-'                                        bytesRead += size
-'                                    End While
-'                                    Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-'                                    fstrm.Write(buffer, 0, bytesRead)
-'                                    contents.Close()
-'                                    fstrm.Close()
-'                                Catch ex As Exception
-'#If SilentErrorScream Then
-'                                Throw ex
-'#End If
-'                                End Try
+                                '                                Try
+                                '                                    Dim buffer(4000000) As Byte
+                                '                                    Dim size As Integer = 0
+                                '                                    Dim bytesRead As Integer = 0
+                                '                                    Dim thumburl As String = seasonposter
+                                '                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                '                                    Dim res As HttpWebResponse = req.GetResponse()
+                                '                                    Dim contents As Stream = res.GetResponseStream()
+                                '                                    Dim bytesToRead As Integer = CInt(buffer.Length)
+                                '                                    While bytesToRead > 0
+                                '                                        size = contents.Read(buffer, bytesRead, bytesToRead)
+                                '                                        If size = 0 Then Exit While
+                                '                                        bytesToRead -= size
+                                '                                        bytesRead += size
+                                '                                    End While
+                                '                                    Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                '                                    fstrm.Write(buffer, 0, bytesRead)
+                                '                                    contents.Close()
+                                '                                    fstrm.Close()
+                                '                                Catch ex As Exception
+                                '#If SilentErrorScream Then
+                                '                                Throw ex
+                                '#End If
+                                '                                End Try
                             End If
                         End If
                     Next
@@ -16953,30 +16953,30 @@ MyExit:
                         Dim seasonpath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "folder.jpg")
                         If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                             Utilities.DownloadFile(posterurlpath, seasonpath)
-'                            Try
-'                                Dim buffer(4000000) As Byte
-'                                Dim size As Integer = 0
-'                                Dim bytesRead As Integer = 0
-'                                Dim thumburl As String = posterurlpath
-'                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                Dim res As HttpWebResponse = req.GetResponse()
-'                                Dim contents As Stream = res.GetResponseStream()
-'                                Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                While bytesToRead > 0
-'                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                    If size = 0 Then Exit While
-'                                    bytesToRead -= size
-'                                    bytesRead += size
-'                                End While
-'                                Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-'                                fstrm.Write(buffer, 0, bytesRead)
-'                                contents.Close()
-'                                fstrm.Close()
-'                            Catch ex As Exception
-'#If SilentErrorScream Then
-'                            Throw ex
-'#End If
-'                            End Try
+                            '                            Try
+                            '                                Dim buffer(4000000) As Byte
+                            '                                Dim size As Integer = 0
+                            '                                Dim bytesRead As Integer = 0
+                            '                                Dim thumburl As String = posterurlpath
+                            '                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                            '                                Dim res As HttpWebResponse = req.GetResponse()
+                            '                                Dim contents As Stream = res.GetResponseStream()
+                            '                                Dim bytesToRead As Integer = CInt(buffer.Length)
+                            '                                While bytesToRead > 0
+                            '                                    size = contents.Read(buffer, bytesRead, bytesToRead)
+                            '                                    If size = 0 Then Exit While
+                            '                                    bytesToRead -= size
+                            '                                    bytesRead += size
+                            '                                End While
+                            '                                Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+                            '                                fstrm.Write(buffer, 0, bytesRead)
+                            '                                contents.Close()
+                            '                                fstrm.Close()
+                            '                            Catch ex As Exception
+                            '#If SilentErrorScream Then
+                            '                            Throw ex
+                            '#End If
+                            '                            End Try
                         End If
                     End If
                 End If
@@ -17048,60 +17048,60 @@ MyExit:
                         Dim seasonpath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season-all.tbn")
                         If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                             Utilities.DownloadFile(seasonallpath, seasonpath)
-'                            Try
-'                                Dim buffer(4000000) As Byte
-'                                Dim size As Integer = 0
-'                                Dim bytesRead As Integer = 0
-'                                Dim thumburl As String = seasonallpath
-'                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                                Dim res As HttpWebResponse = req.GetResponse()
-'                                Dim contents As Stream = res.GetResponseStream()
-'                                Dim bytesToRead As Integer = CInt(buffer.Length)
-'                                While bytesToRead > 0
-'                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                    If size = 0 Then Exit While
-'                                    bytesToRead -= size
-'                                    bytesRead += size
-'                                End While
-'                                Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-'                                fstrm.Write(buffer, 0, bytesRead)
-'                                contents.Close()
-'                                fstrm.Close()
-'                            Catch ex As Exception
-'#If SilentErrorScream Then
-'                            Throw ex
-'#End If
-'                            End Try
+                            '                            Try
+                            '                                Dim buffer(4000000) As Byte
+                            '                                Dim size As Integer = 0
+                            '                                Dim bytesRead As Integer = 0
+                            '                                Dim thumburl As String = seasonallpath
+                            '                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                            '                                Dim res As HttpWebResponse = req.GetResponse()
+                            '                                Dim contents As Stream = res.GetResponseStream()
+                            '                                Dim bytesToRead As Integer = CInt(buffer.Length)
+                            '                                While bytesToRead > 0
+                            '                                    size = contents.Read(buffer, bytesRead, bytesToRead)
+                            '                                    If size = 0 Then Exit While
+                            '                                    bytesToRead -= size
+                            '                                    bytesRead += size
+                            '                                End While
+                            '                                Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+                            '                                fstrm.Write(buffer, 0, bytesRead)
+                            '                                contents.Close()
+                            '                                fstrm.Close()
+                            '                            Catch ex As Exception
+                            '#If SilentErrorScream Then
+                            '                            Throw ex
+                            '#End If
+                            '                            End Try
                         End If
                     End If
                 ElseIf RadioButton18.Checked = False And seasonallpath <> "" Then
                     Dim seasonpath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "season-all.tbn")
                     If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                         Utilities.DownloadFile(seasonallpath, seasonpath)
-'                        Try
-'                            Dim buffer(4000000) As Byte
-'                            Dim size As Integer = 0
-'                            Dim bytesRead As Integer = 0
-'                            Dim thumburl As String = seasonallpath
-'                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-'                            Dim res As HttpWebResponse = req.GetResponse()
-'                            Dim contents As Stream = res.GetResponseStream()
-'                            Dim bytesToRead As Integer = CInt(buffer.Length)
-'                            While bytesToRead > 0
-'                                size = contents.Read(buffer, bytesRead, bytesToRead)
-'                                If size = 0 Then Exit While
-'                                bytesToRead -= size
-'                                bytesRead += size
-'                            End While
-'                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-'                            fstrm.Write(buffer, 0, bytesRead)
-'                            contents.Close()
-'                            fstrm.Close()
-'                        Catch ex As Exception
-'#If SilentErrorScream Then
-'                        Throw ex
-'#End If
-'                        End Try
+                        '                        Try
+                        '                            Dim buffer(4000000) As Byte
+                        '                            Dim size As Integer = 0
+                        '                            Dim bytesRead As Integer = 0
+                        '                            Dim thumburl As String = seasonallpath
+                        '                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                        '                            Dim res As HttpWebResponse = req.GetResponse()
+                        '                            Dim contents As Stream = res.GetResponseStream()
+                        '                            Dim bytesToRead As Integer = CInt(buffer.Length)
+                        '                            While bytesToRead > 0
+                        '                                size = contents.Read(buffer, bytesRead, bytesToRead)
+                        '                                If size = 0 Then Exit While
+                        '                                bytesToRead -= size
+                        '                                bytesRead += size
+                        '                            End While
+                        '                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
+                        '                            fstrm.Write(buffer, 0, bytesRead)
+                        '                            contents.Close()
+                        '                            fstrm.Close()
+                        '                        Catch ex As Exception
+                        '#If SilentErrorScream Then
+                        '                        Throw ex
+                        '#End If
+                        '                        End Try
                     End If
                 End If
 
@@ -18204,12 +18204,12 @@ MyExit:
                 If exists = True Then
 
                     util_ImageLoad(PictureBox10, savepath, defaultFanart)
-                    
+
                     If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
                         util_ImageLoad(tv_PictureBoxLeft, savepath, defaultFanart)
 
                     End If
-                    
+
                 End If
                 Label59.Text = PictureBox10.Image.Width
                 Label58.Text = PictureBox10.Image.Height
@@ -18253,7 +18253,7 @@ MyExit:
             WorkingTvShow.Title.Value = TextBox_Title.Text
         Else
             WorkingEpisode.Title.Value = TextBox_Title.Text
-            Dim trueseason As String = WorkingEpisode.Season.value
+            Dim trueseason As String = WorkingEpisode.Season.Value
             Dim trueepisode As String = WorkingEpisode.Episode.Value
             If trueseason.Length = 1 Then trueseason = "0" & trueseason
             If trueepisode.Length = 1 Then trueepisode = "0" & trueepisode
@@ -18261,7 +18261,7 @@ MyExit:
         End If
     End Sub
 
-    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click 'save button
+    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click  'save button
         Try
             Dim Show As Media_Companion.TvShow = Nothing
             Dim Season As Media_Companion.TvSeason = Nothing
@@ -18327,7 +18327,7 @@ MyExit:
 
                 Show.Save()
                 Show.UpdateTreenode()
-               
+
             Else
                 'its an episode
                 Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
@@ -19419,8 +19419,8 @@ MyExit:
         Try
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
             Try
-                If IsNumeric(workingepisode.playcount) Then
-                    If Convert.ToInt32(workingepisode.playcount) <= 0 Then
+                If IsNumeric(WorkingEpisode.PlayCount) Then
+                    If Convert.ToInt32(WorkingEpisode.PlayCount) <= 0 Then
                         WorkingEpisode.PlayCount.Value = "1"
                         Button48.Text = "Watched"
                         Button48.BackColor = Color.Green
@@ -20444,7 +20444,7 @@ MyExit:
             Dim episodescraper As New TVDBScraper
             Dim id As String = WorkingTvShow.TvdbId.Value
             Dim sortorder As String = WorkingTvShow.SortOrder.Value
-            Dim seasonno As String = WorkingEpisode.Season.value
+            Dim seasonno As String = WorkingEpisode.Season.Value
             Dim episodeno As String = WorkingEpisode.Episode.Value
             Dim language As String = WorkingTvShow.Language.Value
             If language = Nothing Then language = "en"
@@ -22898,7 +22898,7 @@ MyExit:
                     Next
                     If remove = True Then Preferences.offlinefolders.RemoveAt(f)
                 Next
-                Preferences.saveconfig()
+                Preferences.SaveConfig()
                 Call mov_CacheSave()
             End If
             frmSplash2.ProgressBar1.Visible = True
@@ -22922,7 +22922,7 @@ MyExit:
                         progressmode = True
                     End If
                     Call mov_NfoLoad(folderstoadd, progressmode)
-                    Preferences.saveconfig()
+                    Preferences.SaveConfig()
                 Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -23930,6 +23930,9 @@ MyExit:
         For f = 0 To 33
             ListBox11.Items.Add(Preferences.certificatepriority(f))
         Next
+        For Each item In Preferences.releaseformat
+            lbVideoSource.Items.Add(item)
+        Next
         If Preferences.basicsavemode = True Then
             chkbx_basicsave.CheckState = CheckState.Checked
         Else
@@ -24257,9 +24260,9 @@ MyExit:
 
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
 
-        Preferences.gettrailer               = CheckBox11.Checked
+        Preferences.gettrailer = CheckBox11.Checked
         cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
-        generalprefschanged                  = True
+        generalprefschanged = True
 
     End Sub
 
@@ -33240,9 +33243,8 @@ MyExit:
         'MsgBox("TabPageMainBrowser - tv")
     End Sub
 
-    Private Sub plottxt_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles plottxt.DoubleClick ,  certtxt.DoubleClick , votestxt.DoubleClick, txtStars.DoubleClick, 
-                                                                                              SplitContainer1.Panel2.DoubleClick, ratingtxt.DoubleClick, genretxt.DoubleClick, directortxt.DoubleClick, runtimetxt.DoubleClick, Panel2.DoubleClick
-         ShowBigMovieText()
+    Private Sub plottxt_DoubleClick(sender As System.Object, e As System.EventArgs) Handles plottxt.DoubleClick
+        ShowBigMovieText()
     End Sub
 
 
@@ -33363,6 +33365,19 @@ MyExit:
              ToolStripStatusLabel1.Visible = False
 		End Sub
 
+    Private Sub btnVideoSourceApply_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceApply.Click
+        'Dim count As Integer = lbVideoSource.Items.Count
+        'ReDim Preferences.releaseformat(count)
+        'For g = 0 To count - 1
+        '    Preferences.releaseformat(g) = lbVideoSource.Items(g)
+        'Next
+    End Sub
 
+    Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
 
+    End Sub
+
+    Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
+
+    End Sub
 End Class
