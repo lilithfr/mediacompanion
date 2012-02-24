@@ -292,7 +292,7 @@ Public Class Preferences
         Preferences.certificatepriority(32) = "Greece"
         Preferences.certificatepriority(33) = "Austria"
         Preferences.maximagecount = 10
-        ReDim Preferences.releaseformat(13)
+        ReDim Preferences.releaseformat(12)
         Preferences.releaseformat(0) = "Cam"
         Preferences.releaseformat(1) = "Telesync"
         Preferences.releaseformat(2) = "Workprint"

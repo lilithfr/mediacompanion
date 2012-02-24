@@ -23930,8 +23930,8 @@ MyExit:
         For f = 0 To 33
             ListBox11.Items.Add(Preferences.certificatepriority(f))
         Next
-        For Each item In Preferences.releaseformat
-            lbVideoSource.Items.Add(item)
+        For f = 0 To Preferences.releaseformat.Length - 1
+            lbVideoSource.Items.Add(Preferences.releaseformat(f))
         Next
         If Preferences.basicsavemode = True Then
             chkbx_basicsave.CheckState = CheckState.Checked
