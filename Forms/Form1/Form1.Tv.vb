@@ -1740,7 +1740,6 @@ Partial Public Class Form1
         progresstext = String.Concat("Scanning TV Folders For New Episodes")
         bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
-
         Preferences.tvScraperLog &= "Starting Folder Scan" & vbCrLf & vbCrLf
 
         Dim TvFolder As String
@@ -1750,12 +1749,12 @@ Partial Public Class Form1
             If TvShow.State <> Media_Companion.ShowState.Open Then
                 If manual = False Then
                     Add = False
-                    Continue For
+                    'Continue For
                 End If
             End If
 
             If Add = True Then
-                progresstext = String.Concat("Adding subfolders: " & TvFolder)
+                progresstext = String.Concat("Found Folders: " & newtvfolders.Count & " - Adding subfolders from: " & TvFolder)
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 If bckgroundscanepisodes.CancellationPending Then
                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
@@ -1790,7 +1789,7 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
             End If
-            progresstext = String.Concat("Searching for episodes in " & newtvfolders(g))
+            progresstext = String.Concat(g + 1 & " of " & newtvfolders.Count & " - Searching for episodes in " & newtvfolders(g))
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
             For Each f In Utilities.VideoExtensions
                 'If bckgroundscanepisodes.CancellationPending Then
@@ -1875,6 +1874,7 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= "Episode: " & eps.Episode.Value & vbCrLf
             Else
                 Preferences.tvScraperLog &= "!!! WARNING: Cant extract Season and Episode details from filename: " & vbCrLf
+                Continue For    'if we can't get season or episode then skip to next episode
             End If
 
             tempTVDBiD = ""

@@ -140,7 +140,7 @@ Public Class Form1
                             String.Format("  1. TV Preferences -> Fix NFO id during cache refresh{0}", vbCrLf) & _
                             String.Format("  2. TV Shows -> Refresh Shows{0}", vbCrLf) & _
                             String.Format("(This will only be reported once per session)", vbCrLf)
-
+    Dim TVSearchALL As Boolean = False
     Private ClickedControl As String
 
 
@@ -21957,11 +21957,11 @@ MyExit:
             TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
 
             For Each item In Cache.TvCache.Shows
-                If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And (item.State = Media_Companion.ShowState.Open) Then
+                If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And ((item.State = Media_Companion.ShowState.Open) Or TVSearchALL = True) Then
                     ShowList.Add(item)
                 End If
             Next
-            bckgroundscanepisodes.RunWorkerAsync({ShowList, False})
+            bckgroundscanepisodes.RunWorkerAsync({ShowList, TVSearchALL}) 'if searching all episodes (inc locked) TVSearchALL is true
         ElseIf bckgroundscanepisodes.IsBusy Then
             MsgBox("This Episode Scraper is already running")
         ElseIf Bckgrndfindmissingepisodes.IsBusy Then
@@ -28460,12 +28460,22 @@ MyExit:
             'Else
             '    MsgBox("This TV Scraper is already running")
             'End If
+            SearchForNewEpisodesToolStripMenuItem.Owner.Hide()
             Call ep_Search()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+    Private Sub SearchALLForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchALLForNewEpisodesToolStripMenuItem.Click
+        Try
 
+            TVSearchALL = True
+            Call ep_Search()
+            TVSearchALL = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 	Private Sub mov_ScrapeSpecific(ByVal field As String)
 
 		Dim list As New List(Of String)
