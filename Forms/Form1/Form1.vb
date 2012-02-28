@@ -6344,19 +6344,27 @@ Public Class Form1
         Dim isPoster As Boolean = Equals(picType, "poster")
         Dim filename As String = If(isPoster, "DefaultPoster", "DefaultBanner") & If(sizeLimit <> 0, "_" & sizeLimit.ToString, "") & ".jpg"
         Dim imgPoster As String = If(isPoster, defaultPoster, defaultBanner)
-        If IO.File.Exists(origImage) Then
-            Dim origBitmap As Image = Image.FromFile(origImage)
-            Dim origRatio As Single = 0
-            origRatio = origBitmap.Height / origBitmap.Width
-            If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
-                If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width)
-                filename = IO.File.GetLastWriteTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
-                imgPoster = origImage
+        Try
+            'First, check if source image is legitimate. If so, create the unique filename, otherwise the default image will be used.
+            If IO.File.Exists(origImage) Then
+                Dim origBitmap As Image = Image.FromFile(origImage)
+                Dim origRatio As Single = 0
+                origRatio = origBitmap.Height / origBitmap.Width
+                If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
+                    If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width) 'sizeLimit = 0 denotes keep original dimensions
+                    filename = IO.File.GetLastWriteTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
+                    imgPoster = origImage
+                End If
+                origBitmap.Dispose()
             End If
-            origBitmap.Dispose()
-        End If
-        If Not IO.File.Exists(IO.Path.Combine(target, filename)) Then
-            Try
+        Catch ex As Exception
+            'If the source is corrupt, alert the user and use the default image.
+            MsgBox(String.Format("There was an error processing image: {0}{1}Please check source image. Using default {2}.", origImage, vbCrLf, picType))
+        End Try
+
+        Try
+            'Second, if the target image already exists, don't bother creating it again.
+            If Not IO.File.Exists(IO.Path.Combine(target, filename)) Then
                 Dim srcBitmap As New Bitmap(imgPoster)
                 Dim height As Integer = srcBitmap.Height
                 Dim width As Integer = srcBitmap.Width
@@ -6373,9 +6381,11 @@ Public Class Form1
                 srcBitmap.Dispose()
                 dstBitmap = Utilities.ResizeImage(dstBitmap, width, height)
                 dstBitmap.Save(IO.Path.Combine(target, filename), System.Drawing.Imaging.ImageFormat.Jpeg)
-            Catch
-            End Try
-        End If
+                dstBitmap.Dispose()
+            End If
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
         Return filename
     End Function
     Private Sub mov_BckWrkScnMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkScnMovies.DoWork
