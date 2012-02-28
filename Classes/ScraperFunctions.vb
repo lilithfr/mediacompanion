@@ -474,7 +474,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
-        Return "Error"
+
     End Function
     Public Function imdbthumb(ByVal posterimdbid As String)
 
@@ -509,10 +509,11 @@ Public Class ScraperFunctions
 
             fanartlinecount -= 1
             For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<div class=""photo"">") <> -1 Then
-                    thumburl = apple2(f + 1)
+                If apple2(f).IndexOf("article title-overview") <> -1 Then
+                    thumburl = apple2(f + 11)
                     thumburl = thumburl.Substring(thumburl.IndexOf("http"), thumburl.IndexOf("._V1") - thumburl.IndexOf("http"))
                     thumburl = thumburl & "._V1._SX1500_SY1000_.jpg"
+                    Exit For
                 End If
             Next
 

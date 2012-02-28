@@ -15,6 +15,7 @@ Imports IMPA
 Imports System.Runtime.InteropServices
 Imports System.Drawing
 Imports System.IO.Compression
+Imports Media_Companion
 
 
 Module Module1
@@ -191,6 +192,7 @@ Module Module1
             End If
         End If
         If domovies = True Then
+            Call InitMediaFileExtensions()
             Call startnewmovies()
             Call savemoviecache()
             Call saveactorcache()
@@ -463,36 +465,7 @@ Module Module1
     Public Sub screenshot(ByVal fullnfopath As String, Optional ByVal overwrite As Boolean = False)
         Dim status As String = "working"
         Try
-            Dim extensions(100) As String
-            Dim extensioncount As Integer
-            extensions(1) = ".avi"
-            extensions(2) = ".xvid"
-            extensions(3) = ".divx"
-            extensions(4) = ".img"
-            extensions(5) = ".mpg"
-            extensions(6) = ".mpeg"
-            extensions(7) = ".mov"
-            extensions(8) = ".rm"
-            extensions(9) = ".3gp"
-            extensions(10) = ".m4v"
-            extensions(11) = ".wmv"
-            extensions(12) = ".asf"
-            extensions(13) = ".mp4"
-            extensions(14) = ".mkv"
-            extensions(15) = ".nrg"
-            extensions(16) = ".iso"
-            extensions(17) = ".rmvb"
-            extensions(18) = ".ogm"
-            extensions(19) = ".bin"
-            extensions(20) = ".ts"
-            extensions(21) = ".vob"
-            extensions(22) = ".m2ts"
-            extensions(23) = ".rar"
-            extensions(24) = ".flv"
-            extensions(25) = ".dvr-ms"
-            extensions(26) = ".ssif"
-            extensions(27) = "VIDEO_TS.IFO"
-            extensioncount = 27
+
             Dim thumbpathandfilename As String = fullnfopath.Replace(IO.Path.GetExtension(fullnfopath), ".tbn")
             Dim skip As Boolean = False
             If Not IO.File.Exists(thumbpathandfilename) Or overwrite = True Then
@@ -506,9 +479,9 @@ Module Module1
                 End If
                 If skip = False Then
                     Dim nfofilename As String = IO.Path.GetFileName(fullnfopath)
-                    For j = 1 To extensioncount
+                    For j = 0 To MediaFileExtensions.Count - 1
                         Dim tempfilename As String = nfofilename
-                        tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), extensions(j))
+                        tempfilename = nfofilename.Replace(IO.Path.GetExtension(nfofilename), MediaFileExtensions(j))
                         Dim tempstring2 As String = fullnfopath.Replace(IO.Path.GetFileName(fullnfopath), tempfilename)
                         If IO.File.Exists(tempstring2) Then
                             Try
@@ -780,37 +753,10 @@ Module Module1
     End Sub
     Private Function renameepisode(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
         Dim returnpath As String = "false"
-        Dim extensioncount As Integer
-        Dim extensions(100)
-        extensions(1) = ".avi"
-        extensions(2) = ".xvid"
-        extensions(3) = ".divx"
-        extensions(4) = ".img"
-        extensions(5) = ".mpg"
-        extensions(6) = ".mpeg"
-        extensions(7) = ".mov"
-        extensions(8) = ".rm"
-        extensions(9) = ".3gp"
-        extensions(10) = ".m4v"
-        extensions(11) = ".wmv"
-        extensions(12) = ".asf"
-        extensions(13) = ".mp4"
-        extensions(14) = ".mkv"
-        extensions(15) = ".nrg"
-        extensions(16) = ".iso"
-        extensions(17) = ".rmvb"
-        extensions(18) = ".ogm"
-        extensions(19) = ".bin"
-        extensions(20) = ".ts"
-        extensions(21) = ".vob"
-        extensions(22) = ".m2ts"
-        extensions(23) = ".flv"
-        extensions(24) = ".dvr-ms"
-        extensions(25) = ".ssif"
-        extensioncount = 25
+
         Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
-        For f = 1 To extensioncount
-            Dim actualname As String = medianame & extensions(f)
+        For f = 0 To MediaFileExtensions.Count - 1
+            Dim actualname As String = medianame & MediaFileExtensions(f)
             If IO.File.Exists(actualname) Then
                 Dim newfilename As String
                 newfilename = ""
@@ -986,48 +932,9 @@ Module Module1
         progress = 0
 
         Dim dirpath As String
-        Dim moviepattern As String
-
-
-
-
-
-
 
         Console.WriteLine("Starting TV Folder Scan")
 
-        Dim extensions(100) As String
-        Dim extensioncount As Integer
-        extensions(1) = "*.avi"
-        extensions(2) = "*.xvid"
-        extensions(3) = "*.divx"
-        extensions(4) = "*.img"
-        extensions(5) = "*.mpg"
-        extensions(6) = "*.mpeg"
-        extensions(7) = "*.mov"
-        extensions(8) = "*.rm"
-        extensions(9) = "*.3gp"
-        extensions(10) = "*.m4v"
-        extensions(11) = "*.wmv"
-        extensions(12) = "*.asf"
-        extensions(13) = "*.mp4"
-        extensions(14) = "*.mkv"
-        extensions(15) = "*.nrg"
-        extensions(16) = "*.iso"
-        extensions(17) = "*.rmvb"
-        extensions(18) = "*.ogm"
-        extensions(19) = "*.bin"
-        extensions(20) = "*.ts"
-        extensions(21) = "*.vob"
-        extensions(22) = "*.m2ts"
-        extensions(23) = "*.rar"
-        extensions(24) = "*.flv"
-        extensions(25) = "VIDEO_TS.IFO"
-        extensions(26) = ".dvr-ms"
-        extensions(27) = ".strm"
-        extensions(28) = ".ssif"
-
-        extensioncount = 28
 
         For Each tvshow In basictvlist
             If tvshow.locked = Nothing Then
@@ -1093,12 +1000,13 @@ Module Module1
         Next
         Dim mediacounter As Integer = newepisodelist.Count
         For g = 0 To newtvfolders.Count - 1
-            For f = 1 To extensioncount
-                moviepattern = extensions(f)
-                dirpath = newtvfolders(g)
-                Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                findnewepisodes(dirpath, moviepattern)
-            Next f
+            'For f = 0 To MediaFileExtensions.Count - 1
+            'moviepattern = MediaFileExtensions(f)
+            dirpath = newtvfolders(g)
+            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+            If (dir_info.FullName.EndsWith(".actors")) Then Continue For
+            findnewepisodes(dirpath)
+            'Next f
             tempint = newepisodelist.Count - mediacounter
             If tempint > 0 Then
                 Console.WriteLine(tempint.ToString & " New episodes found in directory:- " & dirpath)
@@ -1144,7 +1052,9 @@ Module Module1
                         newepisode.seasonno = M.Groups(1).Value.ToString
                         newepisode.episodeno = M.Groups(2).Value.ToString
                         If newepisode.seasonno <> "-1" And newepisode.episodeno <> "-1" Then
-                            Console.WriteLine("Season and Episode information found for : " & newepisode.episodepath & newepisode.seasonno & "x" & newepisode.episodeno)
+                            Dim file As String = newepisode.episodepath
+                            Dim fileName As String = System.IO.Path.GetFileNameWithoutExtension(file)
+                            Console.WriteLine("Season and Episode information found for : " & fileName)
                         Else
                             Console.WriteLine("Cant extract Season and Episode deatails from filename: " & newepisode.seasonno & "x" & newepisode.episodeno)
                         End If
@@ -1234,6 +1144,7 @@ Module Module1
                         imdbid = Shows.imdbid
                         realshowpath = Shows.fullpath
                         actorsource = Shows.episodeactorsource
+                        Exit For
                     End If
                 Next
                 If episodearray.Count > 1 Then
@@ -2190,28 +2101,30 @@ Module Module1
                 web_response.Close()
         End Try
     End Function
-    Private Sub findnewepisodes(ByVal path As String, ByVal pattern As String)
+    Private Sub findnewepisodes(ByVal path As String)
         Dim episode As New List(Of episodeinfo)
         Dim propfile As Boolean = False
         Dim allok As Boolean = False
         Dim dir_info As New System.IO.DirectoryInfo(path)
-        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern, SearchOption.TopDirectoryOnly)
+        Dim fs_infos As List(Of System.IO.FileInfo) = dir_info.GetFiles().ToList
         Dim counter As Integer = 1
         Dim counter2 As Integer = 1
-        For Each fs_info As System.IO.FileInfo In fs_infos
+        Dim filteredFiles As List(Of FileInfo) = fs_infos.Where(AddressOf IsMediaExtension).ToList
+        For Each fs_info As System.IO.FileInfo In filteredFiles
             Try
                 Dim filename As String = IO.Path.Combine(path, fs_info.Name)
                 Dim filename2 As String = filename.Replace(IO.Path.GetExtension(filename), ".nfo")
+
                 If Not IO.File.Exists(filename2) Then
                     Dim add As Boolean = True
-                    If pattern = "*.vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
+                    If fs_info.Extension = ".vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
                         Dim name As String = filename2
                         name = name.Replace(IO.Path.GetFileName(name), "VIDEO_TS.IFO")
                         If IO.File.Exists(name) Then
                             add = False
                         End If
                     End If
-                    If pattern = "*.rar" Then
+                    If fs_info.Extension = ".rar" Then
                         Dim tempmovie As String
                         Dim tempint2 As Integer
                         Dim tempmovie2 As String = fs_info.FullName
@@ -3559,37 +3472,6 @@ Module Module1
                 tempboolean = True
                 workingstring = "pt.1"
             End If
-            Dim extensions(23) As String
-            Dim extensioncount As Integer
-            extensions(1) = ".avi"
-            extensions(2) = ".xvid"
-            extensions(3) = ".divx"
-            extensions(4) = ".img"
-            extensions(5) = ".mpg"
-            extensions(6) = ".mpeg"
-            extensions(7) = ".mov"
-            extensions(8) = ".rm"
-            extensions(9) = ".3gp"
-            extensions(10) = ".m4v"
-            extensions(11) = ".wmv"
-            extensions(12) = ".asf"
-            extensions(13) = ".mp4"
-            extensions(14) = ".mkv"
-            extensions(15) = ".nrg"
-            extensions(16) = ".iso"
-            extensions(17) = ".rmvb"
-            extensions(18) = ".ogm"
-            extensions(19) = ".bin"
-            extensions(20) = ".ts"
-            extensions(21) = ".vob"
-            extensions(22) = ".m2ts"
-            extensions(23) = ".rar"
-            extensions(24) = ".ssif"
-
-            extensioncount = 24
-
-            'Dim stackpaths(22) As String
-
 
             Dim extension As String = System.IO.Path.GetExtension(filename)
             Dim filenameex As String
@@ -3599,8 +3481,8 @@ Module Module1
             If filenameex.Substring(filenameex.Length - 1).ToLower = "a" Then
                 Dim exists As Boolean = False
                 Dim tempname As String
-                For f = 1 To extensioncount
-                    tempname = filepath & filename.Substring(0, filename.Length - (1 + extension.Length)) & "b" & extensions(f)
+                For f = 0 To MediaFileExtensions.Count - 1
+                    tempname = filepath & filename.Substring(0, filename.Length - (1 + extension.Length)) & "b" & MediaFileExtensions(f)
                     exists = System.IO.File.Exists(tempname)
                     If exists = True Then
                         workingstring = "a"
@@ -3642,8 +3524,8 @@ Module Module1
                     Dim temp2 As String
                     If temp.Substring(temp.Length - 1, 1) = "a" Then
                         temp = temp.Substring(0, temp.Length - 1)
-                        For f = 1 To extensioncount
-                            temp2 = filepath & temp & "b" & extensions(f)
+                        For f = 0 To MediaFileExtensions.Count - 1
+                            temp2 = filepath & temp & "b" & MediaFileExtensions(f)
                             If System.IO.File.Exists(temp2) = True Then
                                 filename = filenames.Substring(0, filename.Length - 1)
                                 Exit For
@@ -3701,41 +3583,14 @@ Module Module1
             Dim tempstring As String
             Dim tempfilename As String = path
             Dim actualpathandfilename As String = ""
-            Dim extensions(22) As String
-            Dim extensioncount As Integer
-            extensions(1) = ".avi"
-            extensions(2) = ".xvid"
-            extensions(3) = ".divx"
-            extensions(4) = ".img"
-            extensions(5) = ".mpg"
-            extensions(6) = ".mpeg"
-            extensions(7) = ".mov"
-            extensions(8) = ".rm"
-            extensions(9) = ".3gp"
-            extensions(10) = ".m4v"
-            extensions(11) = ".wmv"
-            extensions(12) = ".asf"
-            extensions(13) = ".mp4"
-            extensions(14) = ".mkv"
-            extensions(15) = ".nrg"
-            extensions(16) = ".iso"
-            extensions(17) = ".rmvb"
-            extensions(18) = ".ogm"
-            extensions(19) = ".bin"
-            extensions(20) = ".ts"
-            extensions(21) = ".vob"
-            extensions(22) = ".m2ts"
-            extensions(23) = ".ssif"
-            'extensions(24) = ".rar"
-            extensioncount = 23
 
             If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
                 actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
             End If
 
             If actualpathandfilename = "" Then
-                For f = 1 To 22
-                    tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), extensions(f))
+                For f = 0 To MediaFileExtensions.Count
+                    tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), MediaFileExtensions(f))
                     If IO.File.Exists(tempfilename) Then
                         actualpathandfilename = tempfilename
                         Exit For
@@ -3750,7 +3605,7 @@ Module Module1
                     For f = 1 To 23
                         Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
                         Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                        Dim pattern As String = "*" & extensions(f)
+                        Dim pattern As String = "*" & MediaFileExtensions(f)
                         Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
                         For Each fs_info As System.IO.FileInfo In fs_infos
                             If IO.File.Exists(fs_info.FullName) Then
@@ -3805,125 +3660,146 @@ Module Module1
             Monitor.Exit(monitorobject)
         End Try
     End Function
+    Public Sub EnumerateDirectories(ByRef directoryList As List(Of String), ByVal root As String)
 
+
+        If (File.GetAttributes(root) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            'ignore 
+        Else
+            If validmoviedir(root) Then
+
+                If Not (directoryList.Contains(root)) Then
+                    directoryList.Add(root)
+                    For Each s As String In Directory.GetDirectories(root)
+                        EnumerateDirectories(directoryList, s)
+                    Next
+                End If
+            End If
+        End If
+    End Sub
     Public Function EnumerateDirectory2(ByVal RootDirectory As String, Optional ByVal log As Boolean = False)
 
         Dim dli As New List(Of String)
         Try
+            EnumerateDirectories(dli, RootDirectory)
+
+            ' ridiculous!!
+
             'dli.Add(RootDirectory)
 
-            For Each s As String In Directory.GetDirectories(RootDirectory)
-                If (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                Else
-                    If Not validmoviedir(s) Then
-                    Else
-                        Dim exists As Boolean = False
-                        For Each item In dli
-                            If item = s Then exists = True
-                        Next
-                        If exists = True Then
-                        Else
-                            dli.Add(s)
-                            For Each t As String In Directory.GetDirectories(s)
-                                If (File.GetAttributes(t) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                Else
-                                    If Not validmoviedir(t) Then
-                                    Else
-                                        Dim existst As Boolean = False
-                                        For Each item In dli
-                                            If item = t Then existst = True
-                                        Next
-                                        If exists = True Then
-                                        Else
-                                            dli.Add(t)
-                                            For Each u As String In Directory.GetDirectories(t)
-                                                If (File.GetAttributes(u) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                Else
-                                                    If Not validmoviedir(u) Then
-                                                    Else
-                                                        Dim existsu As Boolean = False
-                                                        For Each item In dli
-                                                            If item = s Then existsu = True
-                                                        Next
-                                                        If exists = True Then
-                                                        Else
-                                                            dli.Add(u)
-                                                            For Each v As String In Directory.GetDirectories(u)
-                                                                If (File.GetAttributes(v) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                Else
-                                                                    If Not validmoviedir(v) Then
-                                                                    Else
-                                                                        Dim existsv As Boolean = False
-                                                                        For Each item In dli
-                                                                            If item = v Then existsv = True
-                                                                        Next
-                                                                        If existsv = True Then
-                                                                        Else
-                                                                            dli.Add(v)
-                                                                            For Each w As String In Directory.GetDirectories(v)
-                                                                                If (File.GetAttributes(w) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                                Else
-                                                                                    If Not validmoviedir(w) Then
-                                                                                    Else
-                                                                                        Dim existsw As Boolean = False
-                                                                                        For Each item In dli
-                                                                                            If item = w Then existsw = True
-                                                                                        Next
-                                                                                        If existsw = True Then
-                                                                                        Else
-                                                                                            dli.Add(w)
-                                                                                            For Each x As String In Directory.GetDirectories(w)
-                                                                                                If (File.GetAttributes(x) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                                                Else
-                                                                                                    If Not validmoviedir(x) Then
-                                                                                                    Else
-                                                                                                        Dim existsx As Boolean = False
-                                                                                                        For Each item In dli
-                                                                                                            If item = x Then existsx = True
-                                                                                                        Next
-                                                                                                        If existsx = True Then
-                                                                                                        Else
-                                                                                                            dli.Add(x)
-                                                                                                            For Each y As String In Directory.GetDirectories(x)
-                                                                                                                If (File.GetAttributes(y) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
-                                                                                                                Else
-                                                                                                                    If Not validmoviedir(y) Then
-                                                                                                                    Else
-                                                                                                                        Dim existsy As Boolean = False
-                                                                                                                        For Each item In dli
-                                                                                                                            If item = y Then existsy = True
-                                                                                                                        Next
-                                                                                                                        If existsy = True Then
-                                                                                                                        Else
-                                                                                                                            dli.Add(y)
-                                                                                                                        End If
-                                                                                                                    End If
-                                                                                                                End If
-                                                                                                            Next
-                                                                                                        End If
-                                                                                                    End If
-                                                                                                End If
-                                                                                            Next
-                                                                                        End If
-                                                                                    End If
-                                                                                End If
-                                                                            Next
-                                                                        End If
-                                                                    End If
-                                                                End If
-                                                            Next
-                                                        End If
-                                                    End If
-                                                End If
-                                            Next
-                                        End If
-                                    End If
-                                End If
-                            Next
-                        End If
-                    End If
-                End If
-            Next
+            'For Each s As String In Directory.GetDirectories(RootDirectory)
+            '    If (File.GetAttributes(s) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '    Else
+            '        If Not validmoviedir(s) Then
+            '        Else
+            '            Dim exists As Boolean = False
+            '            If Not (dli.Contains(s)) Then
+            '                'For Each item In dli
+            '                '    If item = s Then exists = True
+            '                'Next
+            '                'If exists = True Then
+            '                'Else
+            '                dli.Add(s)
+            '                For Each t As String In Directory.GetDirectories(s)
+            '                    If (File.GetAttributes(t) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '                    Else
+            '                        If Not validmoviedir(t) Then
+            '                        Else
+            '                            Dim existst As Boolean = False
+            '                            For Each item In dli
+            '                                If item = t Then existst = True
+            '                            Next
+            '                            If exists = True Then
+            '                            Else
+            '                                dli.Add(t)
+            '                                For Each u As String In Directory.GetDirectories(t)
+            '                                    If (File.GetAttributes(u) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '                                    Else
+            '                                        If Not validmoviedir(u) Then
+            '                                        Else
+            '                                            Dim existsu As Boolean = False
+            '                                            For Each item In dli
+            '                                                If item = s Then existsu = True
+            '                                            Next
+            '                                            If exists = True Then
+            '                                            Else
+            '                                                dli.Add(u)
+            '                                                For Each v As String In Directory.GetDirectories(u)
+            '                                                    If (File.GetAttributes(v) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '                                                    Else
+            '                                                        If Not validmoviedir(v) Then
+            '                                                        Else
+            '                                                            Dim existsv As Boolean = False
+            '                                                            For Each item In dli
+            '                                                                If item = v Then existsv = True
+            '                                                            Next
+            '                                                            If existsv = True Then
+            '                                                            Else
+            '                                                                dli.Add(v)
+            '                                                                For Each w As String In Directory.GetDirectories(v)
+            '                                                                    If (File.GetAttributes(w) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '                                                                    Else
+            '                                                                        If Not validmoviedir(w) Then
+            '                                                                        Else
+            '                                                                            Dim existsw As Boolean = False
+            '                                                                            For Each item In dli
+            '                                                                                If item = w Then existsw = True
+            '                                                                            Next
+            '                                                                            If existsw = True Then
+            '                                                                            Else
+            '                                                                                dli.Add(w)
+            '                                                                                For Each x As String In Directory.GetDirectories(w)
+            '                                                                                    If (File.GetAttributes(x) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '                                                                                    Else
+            '                                                                                        If Not validmoviedir(x) Then
+            '                                                                                        Else
+            '                                                                                            Dim existsx As Boolean = False
+            '                                                                                            For Each item In dli
+            '                                                                                                If item = x Then existsx = True
+            '                                                                                            Next
+            '                                                                                            If existsx = True Then
+            '                                                                                            Else
+            '                                                                                                dli.Add(x)
+            '                                                                                                For Each y As String In Directory.GetDirectories(x)
+            '                                                                                                    If (File.GetAttributes(y) And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+            '                                                                                                    Else
+            '                                                                                                        If Not validmoviedir(y) Then
+            '                                                                                                        Else
+            '                                                                                                            Dim existsy As Boolean = False
+            '                                                                                                            For Each item In dli
+            '                                                                                                                If item = y Then existsy = True
+            '                                                                                                            Next
+            '                                                                                                            If existsy = True Then
+            '                                                                                                            Else
+            '                                                                                                                dli.Add(y)
+            '                                                                                                            End If
+            '                                                                                                        End If
+            '                                                                                                    End If
+            '                                                                                                Next
+            '                                                                                            End If
+            '                                                                                        End If
+            '                                                                                    End If
+            '                                                                                Next
+            '                                                                            End If
+            '                                                                        End If
+            '                                                                    End If
+            '                                                                Next
+            '                                                            End If
+            '                                                        End If
+            '                                                    End If
+            '                                                Next
+            '                                            End If
+            '                                        End If
+            '                                    End If
+            '                                Next
+            '                            End If
+            '                        End If
+            '                    End If
+            '                Next
+            '            End If
+            '        End If
+            'End If
+            'Next
             Return (dli)
         Catch ex As Exception
             Dim t As String = ex.ToString
@@ -3980,6 +3856,10 @@ Module Module1
                 Case s.ToLower.Contains("system volume information")
                     passed = False
                 Case s.Contains("MSOCache")
+                    passed = False
+                Case s.EndsWith("Thumbnails")
+                    passed = False
+                Case s.EndsWith(".actors")
                     passed = False
             End Select
         Catch ex As Exception
@@ -5719,17 +5599,50 @@ Module Module1
         End Try
 
     End Function
+    Dim MediaFileExtensions As List(Of String) = New List(Of String)
+    Private Sub InitMediaFileExtensions()
+        MediaFileExtensions.Add(".avi")
+        MediaFileExtensions.Add(".xvid")
+        MediaFileExtensions.Add(".divx")
+        MediaFileExtensions.Add(".img")
+        MediaFileExtensions.Add(".mpg")
+        MediaFileExtensions.Add(".mpeg")
+        MediaFileExtensions.Add(".mov")
+        MediaFileExtensions.Add(".rm")
+        MediaFileExtensions.Add(".3gp")
+        MediaFileExtensions.Add(".m4v")
+        MediaFileExtensions.Add(".wmv")
+        MediaFileExtensions.Add(".asf")
+        MediaFileExtensions.Add(".mp4")
+        MediaFileExtensions.Add(".mkv")
+        MediaFileExtensions.Add(".nrg")
+        MediaFileExtensions.Add(".iso")
+        MediaFileExtensions.Add(".rmvb")
+        MediaFileExtensions.Add(".ogm")
+        MediaFileExtensions.Add(".bin")
+        MediaFileExtensions.Add(".ts")
+        MediaFileExtensions.Add(".vob")
+        MediaFileExtensions.Add(".m2ts")
+        MediaFileExtensions.Add(".rar")
+        MediaFileExtensions.Add(".dvr-ms")
+        MediaFileExtensions.Add(".ifo")
+        MediaFileExtensions.Add(".ssif")
+    End Sub
 
-    Private Sub Listmoviefiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
-        Dim moviepattern As String = pattern
+    Private Function IsMediaExtension(ByVal fileinfo As System.IO.FileInfo) As Boolean
+        Dim extension As String = fileinfo.Extension
+        Return MediaFileExtensions.Contains(extension.ToLower)
+    End Function
+    Private Sub Listmoviefiles(ByVal lst As String, ByVal dir_info As System.IO.DirectoryInfo)
+
         Dim tempint2 As Integer
         Dim tempstring As String
         Try
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(moviepattern)
+            Dim fs_infos As List(Of FileInfo) = dir_info.GetFiles().ToList()
             Dim tempmovie As String
             Dim dofilter As Boolean = False
             Dim dvdfiles As Boolean
-            For Each fs_info As System.IO.FileInfo In fs_infos
+            For Each fs_info As System.IO.FileInfo In fs_infos.Where(AddressOf IsMediaExtension)
 
                 Dim newmoviedetails As newmovie
                 Dim title As String
@@ -5767,7 +5680,7 @@ Module Module1
                     End If
                 End If
 
-                If moviepattern = "*.vob" Then
+                If fs_info.Extension = ".vob" Then
                     Dim lonevobfile As String = tempmovie.Replace(System.IO.Path.GetFileName(tempmovie), "VIDEO_TS.IFO")
                     dvdfiles = System.IO.File.Exists(lonevobfile)
                 End If
@@ -5808,204 +5721,211 @@ Module Module1
                         If title <> Nothing Then
                             Dim searchboolean As Boolean = False
                             Dim filename2 As String = System.IO.Path.GetFileName(title).ToLower
-                            If filename2.IndexOf("cd2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd.2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd.3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd.4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd.5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd_9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd5") <> -1 Then
-                                Dim tempfile As String = title.Replace("dvd5", "dvd1")
-                                If IO.File.Exists(tempfile) Then
-                                    searchboolean = True
-                                End If
-                            End If
-                            If filename2.IndexOf("dvd6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd9") <> -1 Then
-                                Dim tempfile As String = title.Replace("dvd9", "dvd1")
-                                If IO.File.Exists(tempfile) Then
-                                    searchboolean = True
-                                End If
-                            End If
-                            If filename2.IndexOf("dvd.2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd.3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd.4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd.5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd_9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part.2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part.3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part.4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part.5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part_9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk.9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk_9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd 9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("cd-9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd 9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("dvd-9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part-9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("part 9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk 9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("disk-9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt 9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt-9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt_9") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.2") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.3") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.4") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.5") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.6") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.7") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.8") <> -1 Then searchboolean = True
-                            If filename2.IndexOf("pt.9") <> -1 Then searchboolean = True
+                            Dim filename2extension = System.IO.Path.GetExtension(title).ToLower
+                            If filename2extension Like "cd*" Then searchboolean = True
+                            'If (filename2.EndsWith("cd?")) Then searchboolean = True
+                            'If filename2.IndexOf("cd2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd.2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd.3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd.4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd.5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd_9") <> -1 Then searchboolean = True
+                            If filename2extension Like "dvd*" Then searchboolean = True
+                            'If filename2.IndexOf("dvd2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd5") <> -1 Then
+                            '    Dim tempfile As String = title.Replace("dvd5", "dvd1")
+                            '    If IO.File.Exists(tempfile) Then
+                            '        searchboolean = True
+                            '    End If
+                            'End If
+                            'If filename2.IndexOf("dvd6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd9") <> -1 Then
+                            '    Dim tempfile As String = title.Replace("dvd9", "dvd1")
+                            '    If IO.File.Exists(tempfile) Then
+                            '        searchboolean = True
+                            '    End If
+                            'End If
+                            'If filename2.IndexOf("dvd.2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd.3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd.4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd.5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd_9") <> -1 Then searchboolean = True
+                            If filename2extension Like "part*" Then searchboolean = True
+                            'If filename2.IndexOf("part2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part.2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part.3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part.4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part.5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part_9") <> -1 Then searchboolean = True
+                            If filename2extension Like "disk*" Then searchboolean = True
+                            'If filename2.IndexOf("disk2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk.9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk_9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd 9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("cd-9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd 9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("dvd-9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part-9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("part 9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk 9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("disk-9") <> -1 Then searchboolean = True
+                            If filename2extension Like "pt*" Then searchboolean = True
+                            'If filename2.IndexOf("pt 2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt 9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt-9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt_9") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.2") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.3") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.4") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.5") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.6") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.7") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.8") <> -1 Then searchboolean = True
+                            'If filename2.IndexOf("pt.9") <> -1 Then searchboolean = True
                             If filename2.IndexOf("-trailer") <> -1 Then searchboolean = True
                             If filename2.IndexOf(".trailer") <> -1 Then searchboolean = True
                             If filename2.IndexOf("_trailer") <> -1 Then searchboolean = True
@@ -6291,48 +6211,17 @@ Module Module1
 
         Dim extension As String
         Dim filename2 As String
-        Dim extensions(100) As String
-        Dim extensioncount As Integer
-        extensions(1) = "*.avi"
-        extensions(2) = "*.xvid"
-        extensions(3) = "*.divx"
-        extensions(4) = "*.img"
-        extensions(5) = "*.mpg"
-        extensions(6) = "*.mpeg"
-        extensions(7) = "*.mov"
-        extensions(8) = "*.rm"
-        extensions(9) = "*.3gp"
-        extensions(10) = "*.m4v"
-        extensions(11) = "*.wmv"
-        extensions(12) = "*.asf"
-        extensions(13) = "*.mp4"
-        extensions(14) = "*.mkv"
-        extensions(15) = "*.nrg"
-        extensions(16) = "*.iso"
-        extensions(17) = "*.rmvb"
-        extensions(18) = "*.ogm"
-        extensions(19) = "*.bin"
-        extensions(20) = "*.ts"
-        extensions(21) = "*.vob"
-        extensions(22) = "*.m2ts"
-        extensions(23) = "*.rar"
-        extensions(24) = "*.dvr-ms"
-        extensions(25) = "VIDEO_TS.IFO"
-        extensions(26) = "*.ssif"
-        extensioncount = 26
+
 
         For Each moviefolder In moviefolders
             Dim hg As New IO.DirectoryInfo(moviefolder)
             If hg.Exists Then
-                Console.WriteLine("found" & hg.FullName.ToString)
-                newmoviefolders.Add(moviefolder)
+                Console.WriteLine("found " & hg.FullName.ToString)
                 Console.WriteLine("Checking for subfolders")
-                Dim newlist As List(Of String)
                 Try
-                    newlist = EnumerateDirectory2(moviefolder)
-                    For Each subfolder In newlist
+                    EnumerateDirectories(newmoviefolders, moviefolder)
+                    For Each subfolder In newmoviefolders
                         Console.WriteLine("Subfolder added :- " & subfolder.ToString)
-                        newmoviefolders.Add(subfolder)
                     Next
                 Catch
                 End Try
@@ -6374,17 +6263,17 @@ Module Module1
             End If
         Next
         Dim mediacounter As Integer = newmovielist.Count
+
         For g = 0 To newmoviefolders.Count - 1
             Try
-                For f = 1 To extensioncount
-                    moviepattern = extensions(f)
-                    dirpath = newmoviefolders(g)
-                    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                    Listmoviefiles(dirinfo, moviepattern, dir_info)
-                Next f
+                ' For f = 1 To extensioncount
+                'moviepattern = extensions(f)
+                dirpath = newmoviefolders(g)
+                Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                Listmoviefiles(dirinfo, dir_info)
+                'Next f
                 tempint = newmovielist.Count - mediacounter
-
-                Console.WriteLine(tempint.ToString & " New movies found in directory:- " & dirpath)
+                If (tempint > 0) Then Console.WriteLine(tempint.ToString & " New movies found in directory:- " & newmoviefolders(g))
                 mediacounter = newmovielist.Count
             Catch ex As Exception
 
@@ -7202,7 +7091,7 @@ Module Module1
                             moviethumburl = "na"
                         End Try
                         Try
-                            If moviethumburl = "na" Then
+                            If moviethumburl = "na" Or moviethumburl = "Error" Then
                                 Select Case userprefs.moviethumbpriority(1)
                                     Case "Internet Movie Poster Awards"
                                         moviethumburl = impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -7219,7 +7108,7 @@ Module Module1
                         End Try
                         Try
 
-                            If moviethumburl = "na" Then
+                            If moviethumburl = "na" Or moviethumburl = "Error" Then
                                 Select Case userprefs.moviethumbpriority(2)
                                     Case "Internet Movie Poster Awards"
                                         moviethumburl = impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -7235,7 +7124,7 @@ Module Module1
                             moviethumburl = "na"
                         End Try
                         Try
-                            If moviethumburl = "na" Then
+                            If moviethumburl = "na" Or moviethumburl = "Error" Then
                                 Select Case userprefs.moviethumbpriority(3)
                                     Case "Internet Movie Poster Awards"
                                         moviethumburl = impathumb(newmovie.fullmoviebody.title, newmovie.fullmoviebody.year)
@@ -7252,7 +7141,7 @@ Module Module1
                         End Try
                         Try
 
-                            If moviethumburl <> "" And moviethumburl <> "na" Then
+                            If moviethumburl <> "" And moviethumburl <> "na" And moviethumburl <> "Error" Then
                                 Dim newmoviethumbpath As String = getposterpath(newmovielist(f).nfopathandfilename)
                                 Try
                                     Dim buffer(4000000) As Byte
@@ -7661,6 +7550,7 @@ Module Module1
     Dim tvfblinecount As Integer
     Dim tvdbwebsource(3000) As String
     Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999)
+        
         Dim webpage As New List(Of String)
         Dim actors(5000, 3)
         Dim tempstring As String
@@ -7784,7 +7674,6 @@ Module Module1
         Return "Error"
     End Function
     Private Function loadwebpage(ByVal url As String, ByVal method As Boolean)
-
         Dim webpage As New List(Of String)
 
         Try
@@ -7829,374 +7718,384 @@ Module Module1
     End Function
 
     Public Function tmdbthumb(ByVal posterimdbid As String)
-        Try
-            Dim newobject2 As New tmdb_posters.Class1
-            Dim thumburl As String
-            Dim xmllist As String
-            Dim ok As Boolean = False
-            Try
-                xmllist = newobject2.gettmdbposters_newapi(posterimdbid)
-                Dim bannerslist As New XmlDocument
-                bannerslist.LoadXml(xmllist)
-                For Each item In bannerslist("tmdb_posterlist")
-                    Select Case item.name
-                        Case "poster"
-                            For Each img In item
-                                If img.childnodes(0).innertext = "original" Then
-                                    thumburl = img.childnodes(1).innertext
-                                    ok = True
-                                    Exit For
-                                End If
-                            Next
-                            If ok = True Then Exit For
-                    End Select
-                Next
-                Return thumburl
-            Catch ex As Exception
-                Thread.Sleep(1)
-            End Try
+        Dim Scraper As ScraperFunctions = New ScraperFunctions()
+        Return Scraper.tmdbthumb(posterimdbid)
+
+        'Try
+        '    Dim newobject2 As New tmdb_posters.Class1
+        '    Dim thumburl As String
+        '    Dim xmllist As String
+        '    Dim ok As Boolean = False
+        '    Try
+        '        xmllist = newobject2.gettmdbposters_newapi(posterimdbid)
+        '        Dim bannerslist As New XmlDocument
+        '        bannerslist.LoadXml(xmllist)
+        '        For Each item In bannerslist("tmdb_posterlist")
+        '            Select Case item.name
+        '                Case "poster"
+        '                    For Each img In item
+        '                        If img.childnodes(0).innertext = "original" Then
+        '                            thumburl = img.childnodes(1).innertext
+        '                            ok = True
+        '                            Exit For
+        '                        End If
+        '                    Next
+        '                    If ok = True Then Exit For
+        '            End Select
+        '        Next
+        '        Return thumburl
+        '    Catch ex As Exception
+        '        Thread.Sleep(1)
+        '    End Try
 
 
-        Catch ex As Exception
-        End Try
+        'Catch ex As Exception
+        'End Try
     End Function
     Public Function mpdbthumb(ByVal posterimdbid As String)
-        Try
-            Dim first As String
-            Dim last As String
+        Dim scraper As ScraperFunctions = New ScraperFunctions()
+        Return scraper.mpdbthumb(posterimdbid)
+        'Try
+        '    Dim first As String
+        '    Dim last As String
 
-            Dim allok As Boolean = False
-            Dim thumburl As String = "na"
-            Dim temp As String = posterimdbid
-            temp = temp.Replace("tt", "")
-            Dim fanarturl As String = "http://www.movieposterdb.com/movie/" & temp
-
-
-            Dim apple2(2000) As String
-            Dim fanartlinecount As Integer = 0
-            'Try
-            Dim wrGETURL As WebRequest
-
-            wrGETURL = WebRequest.Create(fanarturl)
-
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
-            fanartlinecount = 0
-
-            Do While Not sLine Is Nothing
-                fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
-            Loop
-
-            fanartlinecount -= 1
+        '    Dim allok As Boolean = False
+        '    Dim thumburl As String = "na"
+        '    Dim temp As String = posterimdbid
+        '    temp = temp.Replace("tt", "")
+        '    Dim fanarturl As String = "http://www.movieposterdb.com/movie/" & temp
 
 
-            For f = 2 To fanartlinecount
-                If apple2(f).IndexOf("<title>") <> -1 Then
-                    If apple2(f).IndexOf("<title>MoviePosterDB.com - Internet Movie Poster DataBase</title>") <> -1 Then
-                        allok = False
-                        Exit For
-                    Else
-                        allok = True
-                        Exit For
-                    End If
-                End If
-            Next
+        '    Dim apple2(2000) As String
+        '    Dim fanartlinecount As Integer = 0
+        '    'Try
+        '    Dim wrGETURL As WebRequest
+
+        '    wrGETURL = WebRequest.Create(fanarturl)
+
+        '    Dim myProxy As New WebProxy("myproxy", 80)
+        '    myProxy.BypassProxyOnLocal = True
+        '    Dim objStream As Stream
+        '    objStream = wrGETURL.GetResponse.GetResponseStream()
+        '    Dim objReader As New StreamReader(objStream)
+        '    Dim sLine As String = ""
+        '    fanartlinecount = 0
+
+        '    Do While Not sLine Is Nothing
+        '        fanartlinecount += 1
+        '        sLine = objReader.ReadLine
+        '        apple2(fanartlinecount) = sLine
+        '    Loop
+
+        '    fanartlinecount -= 1
 
 
-            If allok = True Then
-                allok = False
-                For f = 2 To fanartlinecount
-                    If apple2(f).IndexOf("<img src=""http://www.movieposterdb.com/posters/") <> -1 Then
-                        first = apple2(f).IndexOf("http")
-                        last = apple2(f).IndexOf("jpg")
-                        thumburl = apple2(f).Substring(first, (last + 3) - first)
-                        If thumburl.IndexOf("t_") <> -1 Then
-                            thumburl = thumburl.Replace("t_", "l_")
-                            Exit For
-                        End If
-                        If thumburl.IndexOf("s_") <> -1 Then
-                            thumburl = thumburl.Replace("s_", "l_")
-                            Exit For
-                        End If
-                    End If
-                Next
-            End If
-
-            If thumburl.IndexOf("http") = 0 And thumburl.IndexOf(".jpg") = thumburl.Length - 4 Then
-                allok = True
-            Else
-                thumburl = "na"
-            End If
+        '    For f = 2 To fanartlinecount
+        '        If apple2(f).IndexOf("<title>") <> -1 Then
+        '            If apple2(f).IndexOf("<title>MoviePosterDB.com - Internet Movie Poster DataBase</title>") <> -1 Then
+        '                allok = False
+        '                Exit For
+        '            Else
+        '                allok = True
+        '                Exit For
+        '            End If
+        '        End If
+        '    Next
 
 
+        '    If allok = True Then
+        '        allok = False
+        '        For f = 2 To fanartlinecount
+        '            If apple2(f).IndexOf("<img src=""http://www.movieposterdb.com/posters/") <> -1 Then
+        '                first = apple2(f).IndexOf("http")
+        '                last = apple2(f).IndexOf("jpg")
+        '                thumburl = apple2(f).Substring(first, (last + 3) - first)
+        '                If thumburl.IndexOf("t_") <> -1 Then
+        '                    thumburl = thumburl.Replace("t_", "l_")
+        '                    Exit For
+        '                End If
+        '                If thumburl.IndexOf("s_") <> -1 Then
+        '                    thumburl = thumburl.Replace("s_", "l_")
+        '                    Exit For
+        '                End If
+        '            End If
+        '        Next
+        '    End If
 
-            'Catch
-            'End Try
-            Return thumburl
-        Catch
-        End Try
+        '    If thumburl.IndexOf("http") = 0 And thumburl.IndexOf(".jpg") = thumburl.Length - 4 Then
+        '        allok = True
+        '    Else
+        '        thumburl = "na"
+        '    End If
+
+
+
+        '    'Catch
+        '    'End Try
+        '    Return thumburl
+        'Catch
+        'End Try
     End Function
     Public Function impathumb(ByVal title As String, ByVal year As String)
-        Try
-            Dim tempstring As String
-            Dim tempint As Integer
-            year = year.Replace("<year>", "")
-            year = year.Replace("</year>", "")
-            year = year.Replace("    ", "")
-            Dim allok As Boolean = False
-            Dim thumburl As String = "na"
-            Dim temp As String = title
+        'Try
+        Dim scraper As ScraperFunctions = New ScraperFunctions()
+        Return scraper.impathumb(title, year)
+        '    Dim tempstring As String
+        '    Dim tempint As Integer
+        '    year = year.Replace("<year>", "")
+        '    year = year.Replace("</year>", "")
+        '    year = year.Replace("    ", "")
+        '    Dim allok As Boolean = False
+        '    Dim thumburl As String = "na"
+        '    Dim temp As String = title
 
-            Dim fanarturl As String = "http://www.google.com/custom?hl=en&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
+        '    Dim fanarturl As String = "http://www.google.com/custom?hl=en&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
 
-            temp = temp.ToLower
-            temp = temp.Replace(" ", "+")
-            temp = temp.Replace("&", "%26")
-            temp = temp.Replace("À", "%c0")
-            temp = temp.Replace("Á", "%c1")
-            temp = temp.Replace("Â", "%c2")
-            temp = temp.Replace("Ã", "%c3")
-            temp = temp.Replace("Ä", "%c4")
-            temp = temp.Replace("Å", "%c5")
-            temp = temp.Replace("Æ", "%c6")
-            temp = temp.Replace("Ç", "%c7")
-            temp = temp.Replace("È", "%c8")
-            temp = temp.Replace("É", "%c9")
-            temp = temp.Replace("Ê", "%ca")
-            temp = temp.Replace("Ë", "%cb")
-            temp = temp.Replace("Ì", "%cc")
-            temp = temp.Replace("Í", "%cd")
-            temp = temp.Replace("Î", "%ce")
-            temp = temp.Replace("Ï", "%cf")
-            temp = temp.Replace("Ð", "%d0")
-            temp = temp.Replace("Ñ", "%d1")
-            temp = temp.Replace("Ò", "%d2")
-            temp = temp.Replace("Ó", "%d3")
-            temp = temp.Replace("Ô", "%d4")
-            temp = temp.Replace("Õ", "%d5")
-            temp = temp.Replace("Ö", "%d6")
-            temp = temp.Replace("Ø", "%d8")
-            temp = temp.Replace("Ù", "%d9")
-            temp = temp.Replace("Ú", "%da")
-            temp = temp.Replace("Û", "%db")
-            temp = temp.Replace("Ü", "%dc")
-            temp = temp.Replace("Ý", "%dd")
-            temp = temp.Replace("Þ", "%de")
-            temp = temp.Replace("ß", "%df")
-            temp = temp.Replace("à", "%e0")
-            temp = temp.Replace("á", "%e1")
-            temp = temp.Replace("â", "%e2")
-            temp = temp.Replace("ã", "%e3")
-            temp = temp.Replace("ä", "%e4")
-            temp = temp.Replace("å", "%e5")
-            temp = temp.Replace("æ", "%e6")
-            temp = temp.Replace("ç", "%e7")
-            temp = temp.Replace("è", "%e8")
-            temp = temp.Replace("é", "%e9")
-            temp = temp.Replace("ê", "%ea")
-            temp = temp.Replace("ë", "%eb")
-            temp = temp.Replace("ì", "%ec")
-            temp = temp.Replace("í", "%ed")
-            temp = temp.Replace("î", "%ee")
-            temp = temp.Replace("ï", "%ef")
-            temp = temp.Replace("ð", "%f0")
-            temp = temp.Replace("ñ", "%f1")
-            temp = temp.Replace("ò", "%f2")
-            temp = temp.Replace("ó", "%f3")
-            temp = temp.Replace("ô", "%f4")
-            temp = temp.Replace("õ", "%f5")
-            temp = temp.Replace("ö", "%f6")
-            temp = temp.Replace("÷", "%f7")
-            temp = temp.Replace("ø", "%f8")
-            temp = temp.Replace("ù", "%f9")
-            temp = temp.Replace("ú", "%fa")
-            temp = temp.Replace("û", "%fb")
-            temp = temp.Replace("ü", "%fc")
-            temp = temp.Replace("ý", "%fd")
-            temp = temp.Replace("þ", "%fe")
-            temp = temp.Replace("ÿ", "%ff")
-            temp = temp.Replace(" ", "+")
-            temp = temp.Replace("&", "%26")
-            fanarturl = fanarturl & temp & "+" & year
-            fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-            'Try
-            Dim apple2(2000) As String
-            Dim fanartlinecount As Integer = 0
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
+        '    temp = temp.ToLower
+        '    temp = temp.Replace(" ", "+")
+        '    temp = temp.Replace("&", "%26")
+        '    temp = temp.Replace("À", "%c0")
+        '    temp = temp.Replace("Á", "%c1")
+        '    temp = temp.Replace("Â", "%c2")
+        '    temp = temp.Replace("Ã", "%c3")
+        '    temp = temp.Replace("Ä", "%c4")
+        '    temp = temp.Replace("Å", "%c5")
+        '    temp = temp.Replace("Æ", "%c6")
+        '    temp = temp.Replace("Ç", "%c7")
+        '    temp = temp.Replace("È", "%c8")
+        '    temp = temp.Replace("É", "%c9")
+        '    temp = temp.Replace("Ê", "%ca")
+        '    temp = temp.Replace("Ë", "%cb")
+        '    temp = temp.Replace("Ì", "%cc")
+        '    temp = temp.Replace("Í", "%cd")
+        '    temp = temp.Replace("Î", "%ce")
+        '    temp = temp.Replace("Ï", "%cf")
+        '    temp = temp.Replace("Ð", "%d0")
+        '    temp = temp.Replace("Ñ", "%d1")
+        '    temp = temp.Replace("Ò", "%d2")
+        '    temp = temp.Replace("Ó", "%d3")
+        '    temp = temp.Replace("Ô", "%d4")
+        '    temp = temp.Replace("Õ", "%d5")
+        '    temp = temp.Replace("Ö", "%d6")
+        '    temp = temp.Replace("Ø", "%d8")
+        '    temp = temp.Replace("Ù", "%d9")
+        '    temp = temp.Replace("Ú", "%da")
+        '    temp = temp.Replace("Û", "%db")
+        '    temp = temp.Replace("Ü", "%dc")
+        '    temp = temp.Replace("Ý", "%dd")
+        '    temp = temp.Replace("Þ", "%de")
+        '    temp = temp.Replace("ß", "%df")
+        '    temp = temp.Replace("à", "%e0")
+        '    temp = temp.Replace("á", "%e1")
+        '    temp = temp.Replace("â", "%e2")
+        '    temp = temp.Replace("ã", "%e3")
+        '    temp = temp.Replace("ä", "%e4")
+        '    temp = temp.Replace("å", "%e5")
+        '    temp = temp.Replace("æ", "%e6")
+        '    temp = temp.Replace("ç", "%e7")
+        '    temp = temp.Replace("è", "%e8")
+        '    temp = temp.Replace("é", "%e9")
+        '    temp = temp.Replace("ê", "%ea")
+        '    temp = temp.Replace("ë", "%eb")
+        '    temp = temp.Replace("ì", "%ec")
+        '    temp = temp.Replace("í", "%ed")
+        '    temp = temp.Replace("î", "%ee")
+        '    temp = temp.Replace("ï", "%ef")
+        '    temp = temp.Replace("ð", "%f0")
+        '    temp = temp.Replace("ñ", "%f1")
+        '    temp = temp.Replace("ò", "%f2")
+        '    temp = temp.Replace("ó", "%f3")
+        '    temp = temp.Replace("ô", "%f4")
+        '    temp = temp.Replace("õ", "%f5")
+        '    temp = temp.Replace("ö", "%f6")
+        '    temp = temp.Replace("÷", "%f7")
+        '    temp = temp.Replace("ø", "%f8")
+        '    temp = temp.Replace("ù", "%f9")
+        '    temp = temp.Replace("ú", "%fa")
+        '    temp = temp.Replace("û", "%fb")
+        '    temp = temp.Replace("ü", "%fc")
+        '    temp = temp.Replace("ý", "%fd")
+        '    temp = temp.Replace("þ", "%fe")
+        '    temp = temp.Replace("ÿ", "%ff")
+        '    temp = temp.Replace(" ", "+")
+        '    temp = temp.Replace("&", "%26")
+        '    fanarturl = fanarturl & temp & "+" & year
+        '    fanarturl = fanarturl & "&sitesearch=www.impawards.com"
+        '    'Try
+        '    Dim apple2(2000) As String
+        '    Dim fanartlinecount As Integer = 0
+        '    Dim wrGETURL2 As WebRequest
+        '    wrGETURL2 = WebRequest.Create(fanarturl)
+        '    Dim myProxy2 As New WebProxy("myproxy", 80)
+        '    myProxy2.BypassProxyOnLocal = True
+        '    Dim objStream2 As Stream
+        '    objStream2 = wrGETURL2.GetResponse.GetResponseStream()
+        '    Dim objReader2 As New StreamReader(objStream2)
+        '    Dim sLine2 As String = ""
+        '    fanartlinecount = 0
 
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
+        '    Do While Not sLine2 Is Nothing
+        '        fanartlinecount += 1
+        '        sLine2 = objReader2.ReadLine
+        '        apple2(fanartlinecount) = sLine2
+        '    Loop
 
-            fanartlinecount -= 1
-            Dim xtralge As Boolean = False
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("http://www.impawards.com/") <> -1 Then
-                    Dim first As Integer = apple2(f).IndexOf("http://www.impawards.com/")
-                    apple2(f) = apple2(f).Substring(first, apple2(f).Length - first)
-                    fanarturl = apple2(f).Substring(0, apple2(f).IndexOf("html") + 4)
-                    tempstring = fanarturl
-                    tempstring = tempstring.Replace("http://", "")
-                    tempint = tempstring.LastIndexOf("/")
-                    If tempint - 5 = tempstring.IndexOf("/") Then
-                        allok = True
-                    Else
+        '    fanartlinecount -= 1
+        '    Dim xtralge As Boolean = False
+        '    For f = 1 To fanartlinecount
+        '        If apple2(f).IndexOf("http://www.impawards.com/") <> -1 Then
+        '            Dim first As Integer = apple2(f).IndexOf("http://www.impawards.com/")
+        '            apple2(f) = apple2(f).Substring(first, apple2(f).Length - first)
+        '            fanarturl = apple2(f).Substring(0, apple2(f).IndexOf("html") + 4)
+        '            tempstring = fanarturl
+        '            tempstring = tempstring.Replace("http://", "")
+        '            tempint = tempstring.LastIndexOf("/")
+        '            If tempint - 5 = tempstring.IndexOf("/") Then
+        '                allok = True
+        '            Else
 
-                        fanarturl = "http://www.google.com/custom?hl=en&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
-                        fanarturl = fanarturl & temp
-                        fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-                        ReDim apple2(2000)
-                        fanartlinecount = 0
-                        Dim wrGETURL4 As WebRequest
-                        wrGETURL4 = WebRequest.Create(fanarturl)
-                        Dim myProxy4 As New WebProxy("myproxy", 80)
-                        myProxy4.BypassProxyOnLocal = True
-                        Dim objStream4 As Stream
-                        objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-                        Dim objReader4 As New StreamReader(objStream4)
-                        Dim sLine4 As String = ""
-                        fanartlinecount = 0
+        '                fanarturl = "http://www.google.com/custom?hl=en&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
+        '                fanarturl = fanarturl & temp
+        '                fanarturl = fanarturl & "&sitesearch=www.impawards.com"
+        '                ReDim apple2(2000)
+        '                fanartlinecount = 0
+        '                Dim wrGETURL4 As WebRequest
+        '                wrGETURL4 = WebRequest.Create(fanarturl)
+        '                Dim myProxy4 As New WebProxy("myproxy", 80)
+        '                myProxy4.BypassProxyOnLocal = True
+        '                Dim objStream4 As Stream
+        '                objStream4 = wrGETURL4.GetResponse.GetResponseStream()
+        '                Dim objReader4 As New StreamReader(objStream4)
+        '                Dim sLine4 As String = ""
+        '                fanartlinecount = 0
 
-                        Do While Not sLine4 Is Nothing
-                            fanartlinecount += 1
-                            sLine4 = objReader4.ReadLine
-                            apple2(fanartlinecount) = sLine4
-                        Loop
-                        fanartlinecount -= 1
-                        xtralge = False
-                        For g = 1 To fanartlinecount
-                            If apple2(f).IndexOf("http://www.impawards.com/") <> -1 Then
-                                first = apple2(f).IndexOf("http://www.impawards.com/")
-                                apple2(f) = apple2(f).Substring(first, apple2(f).Length - first)
-                                fanarturl = apple2(f).Substring(0, apple2(f).IndexOf("html") + 4)
-                                tempstring = fanarturl
-                                tempstring = tempstring.Replace("http://", "")
-                                tempint = tempstring.LastIndexOf("/")
-                                If tempint - 5 = tempstring.IndexOf("/") Then
-                                    allok = True
-                                Else
-                                    allok = False
-                                End If
-                            End If
-                        Next
+        '                Do While Not sLine4 Is Nothing
+        '                    fanartlinecount += 1
+        '                    sLine4 = objReader4.ReadLine
+        '                    apple2(fanartlinecount) = sLine4
+        '                Loop
+        '                fanartlinecount -= 1
+        '                xtralge = False
+        '                For g = 1 To fanartlinecount
+        '                    If apple2(f).IndexOf("http://www.impawards.com/") <> -1 Then
+        '                        first = apple2(f).IndexOf("http://www.impawards.com/")
+        '                        apple2(f) = apple2(f).Substring(first, apple2(f).Length - first)
+        '                        fanarturl = apple2(f).Substring(0, apple2(f).IndexOf("html") + 4)
+        '                        tempstring = fanarturl
+        '                        tempstring = tempstring.Replace("http://", "")
+        '                        tempint = tempstring.LastIndexOf("/")
+        '                        If tempint - 5 = tempstring.IndexOf("/") Then
+        '                            allok = True
+        '                        Else
+        '                            allok = False
+        '                        End If
+        '                    End If
+        '                Next
 
-                    End If
-                    Exit For
-                End If
-                If apple2(f).IndexOf("xlg.html") <> -1 Then xtralge = True
-            Next
+        '            End If
+        '            Exit For
+        '        End If
+        '        If apple2(f).IndexOf("xlg.html") <> -1 Then xtralge = True
+        '    Next
 
-            ReDim apple2(2000)
-            fanartlinecount = 0
-            Dim wrGETURL3 As WebRequest
+        '    ReDim apple2(2000)
+        '    fanartlinecount = 0
+        '    Dim wrGETURL3 As WebRequest
 
-            wrGETURL3 = WebRequest.Create(fanarturl)
-            Dim myProxy3 As New WebProxy("myproxy", 80)
-            myProxy3.BypassProxyOnLocal = True
-            Dim objStream3 As Stream
-            objStream3 = wrGETURL3.GetResponse.GetResponseStream()
-            Dim objReader3 As New StreamReader(objStream3)
-            Dim sLine3 As String = ""
+        '    wrGETURL3 = WebRequest.Create(fanarturl)
+        '    Dim myProxy3 As New WebProxy("myproxy", 80)
+        '    myProxy3.BypassProxyOnLocal = True
+        '    Dim objStream3 As Stream
+        '    objStream3 = wrGETURL3.GetResponse.GetResponseStream()
+        '    Dim objReader3 As New StreamReader(objStream3)
+        '    Dim sLine3 As String = ""
 
-            Do While Not sLine3 Is Nothing
-                fanartlinecount += 1
-                sLine3 = objReader3.ReadLine
-                apple2(fanartlinecount) = sLine3
-            Loop
-            fanartlinecount -= 1
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("xlg.html") <> -1 Then
-                    xtralge = True
-                    Exit For
-                End If
-            Next
-
-
-            If allok = True Then
-                Dim tempstring3 As String
-                Dim tempstring4 As String
-                tempstring3 = fanarturl.Substring(0, fanarturl.LastIndexOf("/") + 1)
-                tempstring4 = fanarturl.Substring(fanarturl.LastIndexOf("/") + 1, fanarturl.Length - fanarturl.LastIndexOf("/") - 1)
-                fanarturl = tempstring3 & "posters/" & tempstring4
-                If xtralge = False Then
-                    thumburl = fanarturl.Replace(".html", ".jpg")
-                ElseIf xtralge = True Then
-                    thumburl = fanarturl.Replace(".html", "_xlg.jpg")
-                End If
-            Else
-                thumburl = "na"
-            End If
-            If thumburl.IndexOf("art_machine.jpg") <> -1 Then thumburl = "na"
+        '    Do While Not sLine3 Is Nothing
+        '        fanartlinecount += 1
+        '        sLine3 = objReader3.ReadLine
+        '        apple2(fanartlinecount) = sLine3
+        '    Loop
+        '    fanartlinecount -= 1
+        '    For f = 1 To fanartlinecount
+        '        If apple2(f).IndexOf("xlg.html") <> -1 Then
+        '            xtralge = True
+        '            Exit For
+        '        End If
+        '    Next
 
 
-            'Catch
-            '    thumburl = "na"
-            'End Try
+        '    If allok = True Then
+        '        Dim tempstring3 As String
+        '        Dim tempstring4 As String
+        '        tempstring3 = fanarturl.Substring(0, fanarturl.LastIndexOf("/") + 1)
+        '        tempstring4 = fanarturl.Substring(fanarturl.LastIndexOf("/") + 1, fanarturl.Length - fanarturl.LastIndexOf("/") - 1)
+        '        fanarturl = tempstring3 & "posters/" & tempstring4
+        '        If xtralge = False Then
+        '            thumburl = fanarturl.Replace(".html", ".jpg")
+        '        ElseIf xtralge = True Then
+        '            thumburl = fanarturl.Replace(".html", "_xlg.jpg")
+        '        End If
+        '    Else
+        '        thumburl = "na"
+        '    End If
+        '    If thumburl.IndexOf("art_machine.jpg") <> -1 Then thumburl = "na"
 
-            Return thumburl
-        Catch
-        End Try
+
+        '    'Catch
+        '    '    thumburl = "na"
+        '    'End Try
+
+        '    Return thumburl
+        'Catch
+        'End Try
     End Function
     Public Function imdbthumb(ByVal posterimdbid As String)
-        Dim thumburl As String = "na"
-        Try
-            Dim allok As Boolean = False
+        Dim Scraper As ScraperFunctions = New ScraperFunctions()
+        Return Scraper.imdbthumb(posterimdbid)
+
+        'Dim thumburl As String = "na"
+        'Try
+        '    Dim allok As Boolean = False
 
 
-            Dim temp As String = posterimdbid
-            Dim fanarturl As String = "http://www.imdb.com/title/" & temp
+        '    Dim temp As String = posterimdbid
+        '    Dim fanarturl As String = "http://www.imdb.com/title/" & temp
 
-            Dim apple2(2000) As String
-            Dim fanartlinecount As Integer = 0
+        '    Dim apple2(2000) As String
+        '    Dim fanartlinecount As Integer = 0
 
-            Dim wrGETURL As WebRequest
+        '    Dim wrGETURL As WebRequest
 
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
-            fanartlinecount = 0
+        '    wrGETURL = WebRequest.Create(fanarturl)
+        '    Dim myProxy As New WebProxy("myproxy", 80)
+        '    myProxy.BypassProxyOnLocal = True
+        '    Dim objStream As Stream
+        '    objStream = wrGETURL.GetResponse.GetResponseStream()
+        '    Dim objReader As New StreamReader(objStream)
+        '    Dim sLine As String = ""
+        '    fanartlinecount = 0
 
-            Do While Not sLine Is Nothing
-                fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
-            Loop
+        '    Do While Not sLine Is Nothing
+        '        fanartlinecount += 1
+        '        sLine = objReader.ReadLine
+        '        apple2(fanartlinecount) = sLine
+        '    Loop
 
-            fanartlinecount -= 1
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<div class=""photo"">") <> -1 Then
-                    thumburl = apple2(f + 1)
-                    thumburl = thumburl.Substring(thumburl.IndexOf("http"), thumburl.IndexOf("._V1") - thumburl.IndexOf("http"))
-                    thumburl = thumburl & "._V1._SX1500_SY1000_.jpg"
-                End If
-            Next
+        '    fanartlinecount -= 1
+        '    For f = 1 To fanartlinecount
+        '        If apple2(f).IndexOf("<div class=""photo"">") <> -1 Then
+        '            thumburl = apple2(f + 1)
+        '            thumburl = thumburl.Substring(thumburl.IndexOf("http"), thumburl.IndexOf("._V1") - thumburl.IndexOf("http"))
+        '            thumburl = thumburl & "._V1._SX1500_SY1000_.jpg"
+        '        End If
+        '    Next
 
-            If thumburl.IndexOf("http") = -1 Or thumburl.IndexOf(".jpg") = -1 Then thumburl = "na"
+        '    If thumburl.IndexOf("http") = -1 Or thumburl.IndexOf(".jpg") = -1 Then thumburl = "na"
 
-            Return thumburl
-        Catch
-            thumburl = "na"
-        End Try
+        '    Return thumburl
+        'Catch
+        '    thumburl = "na"
+        'End Try
 
     End Function
 
@@ -8823,7 +8722,7 @@ Module Module1
                 webpage.Clear()
                 webpage = loadwebpage(tempstring, False)
 
-                Dim webPg As String = String.Join( "" , webpage.ToArray() )
+                Dim webPg As String = String.Join("", webpage.ToArray())
 
                 For f = 0 To webpage.Count - 1
                     webcounter = f
@@ -9060,25 +8959,25 @@ Module Module1
                         If webpage(f).IndexOf("<h4 class=""inline"">Genre") <> -1 Then
                             Dim listofgenre As New List(Of String)
                             Try
-'                                If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
-'                                    Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
-'                                        Try
-'                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
-'                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
-'                                            webpage(f + 1) = tempstring
-'                                        Catch ex As Exception
-'
-'                                        End Try
-'                                    Loop
-'                                    listofgenre.Add(webpage(f + 1))
-'                                    For g = 0 To listofgenre.Count - 1
-'                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
-'                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
-'                                    Next
-'                                End If
+                                '                                If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
+                                '                                    Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
+                                '                                        Try
+                                '                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
+                                '                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
+                                '                                            webpage(f + 1) = tempstring
+                                '                                        Catch ex As Exception
+                                '
+                                '                                        End Try
+                                '                                    Loop
+                                '                                    listofgenre.Add(webpage(f + 1))
+                                '                                    For g = 0 To listofgenre.Count - 1
+                                '                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
+                                '                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
+                                '                                    Next
+                                '                                End If
 
-                                
-                                listofgenre = GetGenres( webPg )
+
+                                listofgenre = GetGenres(webPg)
 
                                 For g = 0 To listofgenre.Count - 1
                                     If g = 0 Then
@@ -9390,8 +9289,8 @@ Module Module1
                                         mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
                                         mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
                                     Catch
-                    mpaaresults(g, 1) = "error"
-                End Try
+                                        mpaaresults(g, 1) = "error"
+                                    End Try
                                 End If
                             Next
                         End If
@@ -9977,21 +9876,21 @@ Module Module1
     End Function
 
 
-    Function GetGenres( ByVal webPage As String )
+    Function GetGenres(ByVal webPage As String)
 
         Dim genres As New List(Of String)
         Dim genre As String
 
-        For Each m As Match In Regex.Matches( webPage, "/genre/.*?>(?<genre>.*?)</a>" )         
+        For Each m As Match In Regex.Matches(webPage, "/genre/.*?>(?<genre>.*?)</a>")
 
             genre = m.Groups("genre").Value
 
-            If Not genres.Contains( genre ) then
-                genres.Add( genre )
-            End if
+            If Not genres.Contains(genre) Then
+                genres.Add(genre)
+            End If
 
-        Next   
-         
+        Next
+
         Return genres
     End Function
 

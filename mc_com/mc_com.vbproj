@@ -181,6 +181,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XBMC Media Companion.vbproj">
+      <Project>{4A891BFA-D799-4F3A-AFBA-A53C4824F33C}</Project>
+      <Name>XBMC Media Companion</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
