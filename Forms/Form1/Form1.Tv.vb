@@ -694,7 +694,7 @@ Partial Public Class Form1
         TextBox_Director.Text = Utilities.ReplaceNothing(Episode.Director.Value)
         TextBox_Credits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
         TextBox_Aired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
-
+        util_EpisodeSetWatched(Episode.PlayCount.Value)
 
 
         TextBox_Ep_Details.Text = "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
@@ -748,6 +748,20 @@ Partial Public Class Form1
         End Try
         Return True
     End Function
+    Public Shared Sub util_EpisodeSetWatched(ByRef playcount As String, Optional ByVal toggle As Boolean = False)
+        Dim watched As Boolean = False
+        If IsNumeric(playcount) Then
+            watched = Convert.ToInt32(playcount) > 0
+            If toggle Then
+                watched = Not watched
+                playcount = If(watched, "1", "0")
+            End If
+        End If
+        With Form1.Button48
+            .Text = If(watched, "Watched", "Unwatched")
+            .BackColor = If(watched, Color.LawnGreen, Color.Red)
+        End With
+    End Sub
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."

@@ -19428,28 +19428,8 @@ MyExit:
     Private Sub Button48_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button48.Click
         Try
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-            Try
-                If IsNumeric(WorkingEpisode.PlayCount) Then
-                    If Convert.ToInt32(WorkingEpisode.PlayCount) <= 0 Then
-                        WorkingEpisode.PlayCount.Value = "1"
-                        Button48.Text = "Watched"
-                        Button48.BackColor = Color.Green
-                    Else
-                        WorkingEpisode.PlayCount.Value = "0"
-                        Button48.Text = "UnWatched"
-                        Button48.BackColor = Color.Red
-                    End If
-                Else
-                    WorkingEpisode.PlayCount.Value = "0"
-                    Button48.Text = "UnWatched"
-                    Button48.BackColor = Color.Red
-                End If
-                WorkingEpisode.Save()
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
+            util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
+            WorkingEpisode.Save()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
