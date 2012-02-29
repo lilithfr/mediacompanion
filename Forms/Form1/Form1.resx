@@ -137,7 +137,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABY
-        DAAAAk1TRnQBSQFMAgEBBgEAAagBLgGoAS4BEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DAAAAk1TRnQBSQFMAgEBBgEAAdgBLgHYAS4BEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -2809,6 +2809,9 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1258, 17</value>
+  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
@@ -2839,6 +2842,9 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>656, 95</value>
   </metadata>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>805, 17</value>
+  </metadata>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>572, 56</value>
   </metadata>
@@ -2847,7 +2853,7 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        LgAAAk1TRnQBSQFMAgEBBAEAAaQBNgGkATYBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        LgAAAk1TRnQBSQFMAgEBBAEAAdQBNgHUATYBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABHgMAAQEBAAEYBQABUAFG/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
         /wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8AAwABOAG5AdIBOAG5AdIBOAG4AdEBOAG4AdEBOAG3
         AdEBNwG2AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAc0BNgGy
@@ -3048,9 +3054,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
         DwAB/wQAAX8B/AUAAXAPAAH/AwABAQH/Af4FAAHwDwAB/wHAAgABAQf/AfAPAAs=
 </value>
   </data>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>805, 17</value>
-  </metadata>
   <data name="Label68.Text" xml:space="preserve">
     <value>Use this page to edit what movie sets are available.
 These sets can be used to group collections of movies together within XBMC,

@@ -643,6 +643,7 @@ Public Class Form1
                 Throw ex
 #End If
             End Try
+            mov_VideoSourcePopulate()
             Call util_FontSetup()
 
             Call util_HtmlTemplatesAdd()
@@ -834,6 +835,15 @@ Public Class Form1
             childchild = doc.CreateElement("fullpathandfilename")
             childchild.InnerText = movie.fullpathandfilename
             child.AppendChild(childchild)
+            If movie.source <> Nothing And movie.source <> "" Then
+                childchild = doc.CreateElement("source")
+                childchild.InnerText = movie.source
+                child.AppendChild(childchild)
+            Else
+                childchild = doc.CreateElement("source")
+                childchild.InnerText = ""
+                child.AppendChild(childchild)
+            End If
             If movie.movieset <> Nothing Then
                 If movie.movieset <> "" Or movie.movieset <> "-None-" Then
                     childchild = doc.CreateElement("set")
@@ -1492,6 +1502,8 @@ Public Class Form1
                             'workingmovie.missingdata1
                             Case "missingdata1"
                                 newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
+                            Case "source"
+                                newmovie.source = detail.InnerText
                             Case "set"
                                 newmovie.movieset = detail.InnerText
                             Case "sortorder"
@@ -1569,6 +1581,9 @@ Public Class Form1
                                 newmovie.runtime = detail.InnerText
                         End Select
                     Next
+                    If newmovie.source = Nothing Then
+                        newmovie.source = ""
+                    End If
                     If newmovie.movieset = Nothing Then
                         newmovie.movieset = "-None-"
                     End If
@@ -2377,6 +2392,7 @@ Public Class Form1
                 If workingMovieDetails.fullmoviebody.trailer = Nothing Then workingMovieDetails.fullmoviebody.trailer = ""
                 If workingMovieDetails.fullmoviebody.votes = Nothing Then workingMovieDetails.fullmoviebody.votes = ""
                 If workingMovieDetails.fullmoviebody.year = Nothing Then workingMovieDetails.fullmoviebody.year = ""
+                If workingMovieDetails.fullmoviebody.source = Nothing Then workingMovieDetails.fullmoviebody.source = ""
 
                 titletxt.Items.Clear()
 
@@ -2551,6 +2567,12 @@ Public Class Form1
                     End If
                     ComboBox3.SelectedIndex = 0
                 End If
+
+                For f = 0 To cb_movFormatSource.Items.Count - 1
+                    If cb_movFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
+                        cb_movFormatSource.SelectedIndex = f
+                    End If
+                Next
             Else
                 actorcb.Items.Clear()
                 PictureBox1.CancelAsync()
@@ -3675,6 +3697,7 @@ Public Class Form1
             Else
                 movietoadd.movieset = TempMovieToAdd.fullmoviebody.movieset
             End If
+            movietoadd.source = If(TempMovieToAdd.fullmoviebody.source Is Nothing, "", TempMovieToAdd.fullmoviebody.source)
             movietoadd.outline = TempMovieToAdd.fullmoviebody.outline
             movietoadd.plot = TempMovieToAdd.fullmoviebody.plot
             movietoadd.playcount = TempMovieToAdd.fullmoviebody.playcount
@@ -5352,6 +5375,8 @@ Public Class Form1
                                 'End If
                             Case "set"
                                 newmovie.movieset = detail.InnerText
+                            Case "source"
+                                newmovie.source = detail.InnerText
                             Case "sortorder"
                                 newmovie.sortorder = detail.InnerText
                         End Select
@@ -7270,6 +7295,7 @@ Public Class Form1
                     movietoadd.title = comboarray2(f).title
                     movietoadd.originaltitle = comboarray2(f).originaltitle
                     movietoadd.movieset = comboarray2(f).movieset
+                    movietoadd.source = comboarray2(f).source
                     movietoadd.filedate = comboarray2(f).filedate
 
                     filteredList.Add(movietoadd)
@@ -7306,6 +7332,7 @@ Public Class Form1
                     Else
                         movietoadd.sortorder = comboarray2(f).sortorder
                     End If
+                    movietoadd.source = comboarray2(f).source
                     movietoadd.movieset = comboarray2(f).movieset
                     movietoadd.filedate = comboarray2(f).filedate
                     filteredList.Add(movietoadd)
@@ -8212,6 +8239,7 @@ Public Class Form1
             Else
                 workingMovieDetails.fullmoviebody.movieset = Nothing
             End If
+            workingMovieDetails.fullmoviebody.source = If(cb_movFormatSource.SelectedIndex = 0, Nothing, cb_movFormatSource.Items(cb_movFormatSource.SelectedIndex))
             nfoFunction.mov_NfoSave(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
 
             'Dim newmovietitle As String = workingmoviedetails.fullmoviebody.title & " (" & workingmoviedetails.fullmoviebody.year & ")"
@@ -8266,7 +8294,9 @@ Public Class Form1
                     newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
                     newfullmovie.plot = workingMovieDetails.fullmoviebody.plot
                     newfullmovie.movieset = workingMovieDetails.fullmoviebody.movieset
+                    newfullmovie.source = workingMovieDetails.fullmoviebody.source
                     newfullmovie.year = workingMovieDetails.fullmoviebody.year
+                    If newfullmovie.source = Nothing Then newfullmovie.source = ""
                     If newfullmovie.movieset = Nothing Then
                         newfullmovie.movieset = "-None-"
                     End If
@@ -8339,6 +8369,7 @@ Public Class Form1
                 Else
                     movie.fullmoviebody.movieset = Nothing
                 End If
+                movie.fullmoviebody.source = If(cb_movFormatSource.SelectedIndex = 0, Nothing, cb_movFormatSource.Items(cb_movFormatSource.SelectedIndex))
                 nfoFunction.mov_NfoSave(filepath, movie, True)
 
                 For f = 0 To fullMovieList.Count - 1
@@ -8373,6 +8404,10 @@ Public Class Form1
                         End If
                         If newfullmovie.movieset = "" Then
                             newfullmovie.movieset = "-None-"
+                        End If
+                        newfullmovie.source = movie.fullmoviebody.source
+                        If newfullmovie.source = Nothing Then
+                            newfullmovie.source = ""
                         End If
                         '              newfullmovie.year = movie.fullmoviebody.year
                         fullMovieList.RemoveAt(f)
@@ -10178,6 +10213,7 @@ MyExit:
                                 movietoadd.top250 = newmovie.fullmoviebody.top250
                                 movietoadd.genre = newmovie.fullmoviebody.genre
                                 movietoadd.playcount = newmovie.fullmoviebody.playcount
+                                movietoadd.source = newmovie.fullmoviebody.source
                                 movietoadd.missingdata1 = 3
                                 added = False
                                 For Each path In movieFolders
@@ -10619,6 +10655,7 @@ MyExit:
                                 movietoadd.genre = newmovie.fullmoviebody.genre
                                 movietoadd.playcount = newmovie.fullmoviebody.playcount
                                 movietoadd.sortorder = newmovie.fullmoviebody.title
+                                movietoadd.source = newmovie.fullmoviebody.source
                                 movietoadd.playcount = "0"
                                 Dim completebyte1 As Byte = 0
                                 Dim fanartexists As Boolean = IO.File.Exists(Preferences.GetFanartPath(movietoadd.fullpathandfilename))
@@ -23914,15 +23951,24 @@ MyExit:
                 ComboBox6.SelectedItem = "10"
         End Select
 
-        For f = 0 To 3
-            ListBox10.Items.Add(Preferences.moviethumbpriority(f))
-        Next
-        For f = 0 To 33
-            ListBox11.Items.Add(Preferences.certificatepriority(f))
-        Next
-        For f = 0 To Preferences.releaseformat.Length - 1
-            lbVideoSource.Items.Add(Preferences.releaseformat(f))
-        Next
+        If ListBox10.Items.Count <> Preferences.moviethumbpriority.Length Then
+            ListBox10.Items.Clear()
+            For f = 0 To 3
+                ListBox10.Items.Add(Preferences.moviethumbpriority(f))
+            Next
+        End If
+        If ListBox11.Items.Count <> Preferences.certificatepriority.Length Then
+            ListBox11.Items.Clear()
+            For f = 0 To 33
+                ListBox11.Items.Add(Preferences.certificatepriority(f))
+            Next
+        End If
+        If lbVideoSource.Items.Count <> Preferences.releaseformat.Length Then
+            lbVideoSource.Items.Clear()
+            For f = 0 To Preferences.releaseformat.Length - 1
+                lbVideoSource.Items.Add(Preferences.releaseformat(f))
+            Next
+        End If
         If Preferences.basicsavemode = True Then
             chkbx_basicsave.CheckState = CheckState.Checked
         Else
@@ -26216,6 +26262,7 @@ MyExit:
             Throw ex
 #End If
         End Try
+        mov_VideoSourcePopulate()
         Try
             TabControl2.SelectedIndex = 0
             currentTabIndex = 0
@@ -26550,29 +26597,31 @@ MyExit:
         Preferences.tableview.Clear()
         Preferences.tableview.Add("title|150|0|true")
         Preferences.tableview.Add("year|40|1|true")
-        Preferences.tableview.Add("sorttitle|100|2|false")
-        Preferences.tableview.Add("genre|160|3|true")
-        Preferences.tableview.Add("rating|50|4|true")
-        Preferences.tableview.Add("runtime|60|5|true")
-        Preferences.tableview.Add("top250|60|6|false")
+        Preferences.tableview.Add("genre|160|2|true")
+        Preferences.tableview.Add("rating|50|3|true")
+        Preferences.tableview.Add("runtime|60|4|true")
+        Preferences.tableview.Add("top250|60|5|false")
+        Preferences.tableview.Add("source|150|6|false")
         Preferences.tableview.Add("playcount|62|7|true")
         Preferences.tableview.Add("set|150|8|true")
-        Preferences.tableview.Add("outline|200|9|false")
-        Preferences.tableview.Add("plot|200|10|false")
-        Preferences.tableview.Add("id|75|11|false")
-        Preferences.tableview.Add("missingdata1|115|12|false")
-        Preferences.tableview.Add("fullpathandfilename|300|13|false")
+        Preferences.tableview.Add("sorttitle|100|9|false")
+        Preferences.tableview.Add("outline|200|10|false")
+        Preferences.tableview.Add("plot|200|11|false")
+        Preferences.tableview.Add("id|75|12|false")
+        Preferences.tableview.Add("missingdata1|115|13|false")
+        Preferences.tableview.Add("fullpathandfilename|300|14|false")
     End Sub
 
     Private Sub mov_TableSetup()
         DataGridView1.Columns.Clear()
         If Preferences.tablesortorder = Nothing Then Preferences.tablesortorder = "Title|Ascending"
         If Preferences.tablesortorder = "" Then Preferences.tablesortorder = "Title|Ascending"
-        If Preferences.tableview.Count <> 14 Then
+        If Preferences.tableview.Count <> 15 Then
             Call mov_TableViewSetup()
         End If
         cmbobx_tablesets.Items.Clear()
         Cmbobx_tablewatched.Items.Clear()
+        cmbobx_tablesource.Items.Clear()
         tableSets.Clear()
         For Each item In Preferences.tableview
             Dim tempdata() As String
@@ -26634,6 +26683,15 @@ MyExit:
             Else
                 childchild = doc.CreateElement("set")
                 childchild.InnerText = "-None-"
+                child.AppendChild(childchild)
+            End If
+            If movie.source <> Nothing And movie.source <> "" Then
+                childchild = doc.CreateElement("source")
+                childchild.InnerText = movie.source
+                child.AppendChild(childchild)
+            Else
+                childchild = doc.CreateElement("source")
+                childchild.InnerText = ""
                 child.AppendChild(childchild)
             End If
             childchild = doc.CreateElement("genre")
@@ -26900,6 +26958,21 @@ MyExit:
             .SortMode = DataGridViewColumnSortMode.Automatic
         End With
 
+        Dim sourcecolumn As New DataGridViewComboBoxColumn()
+        cmbobx_tablesource.Items.Add("UnChanged")
+        For Each src In Preferences.releaseformat
+            sourcecolumn.Items.Add(src)
+            cmbobx_tablesource.Items.Add(src)
+        Next
+        cmbobx_tablesource.SelectedItem = "UnChanged"
+        With sourcecolumn
+            .HeaderText = "Source"
+            .Name = "source"
+            .DataPropertyName = "source"
+            .SortMode = DataGridViewColumnSortMode.Automatic
+            .DefaultCellStyle.NullValue = ""
+        End With
+
         Dim setscolumn As New DataGridViewComboBoxColumn
         cmbobx_tablesets.Items.Add("UnChanged")
         For Each sets In Preferences.moviesets
@@ -26926,7 +26999,7 @@ MyExit:
             .ReadOnly = True
         End With
 
-        For f = 0 To 13
+        For f = 0 To 14
             For Each col In tableSets
                 If col.index = f Then
                     Select Case col.title
@@ -26997,6 +27070,16 @@ MyExit:
                                 top250column.Visible = False
                             End If
                             DataGridView1.Columns.Insert(f, top250column)
+                            Exit For
+                        Case "source"
+                            sourcecolumn.Width = col.width
+                            If col.visible = True Then
+                                sourcecolumn.Visible = True
+                                CheckBox37.CheckState = CheckState.Checked
+                            Else
+                                sourcecolumn.Visible = False
+                            End If
+                            DataGridView1.Columns.Insert(f, sourcecolumn)
                             Exit For
                         Case "playcount"
                             watchedcolumn.Width = col.width
@@ -27303,6 +27386,20 @@ MyExit:
                                     changed = True
                                 End If
                             End If
+
+                            If mov.source <> gridrow.Cells("source").Value Then
+                                If mov.source = "" And gridrow.Cells("source").Value = Nothing Then
+                                Else
+                                    If mov.source = Nothing Then
+                                        If gridrow.Cells("source").Value <> "" Then
+                                            changed = True
+                                        End If
+                                    Else
+                                        changed = True
+                                    End If
+                                End If
+                            End If
+
                             If mov.movieset <> gridrow.Cells("set").Value Then
                                 If mov.movieset = "-None-" And gridrow.Cells("set").Value = Nothing Then
                                 Else
@@ -27537,6 +27634,26 @@ MyExit:
         End Try
     End Sub
 
+    Private Sub CheckBox37_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox37.CheckedChanged
+        Try
+            Try
+                If CheckBox37.CheckState = CheckState.Checked Then
+                    Me.DataGridView1.Columns("source").Visible = True
+                    Call mov_TextBoxesSetup()
+                Else
+                    Me.DataGridView1.Columns("source").Visible = False
+                    Call mov_TextBoxesSetup()
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub mov_TableChangesSave()
         'Dim mess As New frmMessageBox("Saving Changes", "", "Please Wait")
         'mess.Show()
@@ -27665,6 +27782,15 @@ MyExit:
 #End If
                         End Try
                         Try
+                            If fullMovieList(f).source <> gridrow.Cells("source").Value Then
+                                changed = True
+                            End If
+                        Catch ex As Exception
+#If SilentErrorScream Then
+                            Throw ex
+#End If
+                        End Try
+                        Try
                             If fullMovieList(f).movieset <> gridrow.Cells("set").Value Then
                                 changed = True
                             End If
@@ -27732,6 +27858,14 @@ MyExit:
                             '#End If
                             '                            End Try
                             Try
+                                changedmovie.source = gridrow.Cells("source").Value
+                            Catch ex As Exception
+#If SilentErrorScream Then
+                                Throw ex
+#End If
+                            End Try
+
+                            Try
                                 changedmovie.movieset = gridrow.Cells("set").Value
                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -27793,6 +27927,7 @@ MyExit:
                             changedmoviedetails.fullmoviebody.outline = changedmovie.outline
                             'changedmoviedetails.fullmoviebody.plot = changedmovie.plot
                             changedmoviedetails.fullmoviebody.rating = changedmovie.rating
+                            changedmoviedetails.fullmoviebody.source = changedmovie.source
                             changedmoviedetails.fullmoviebody.movieset = changedmovie.movieset
                             changedmoviedetails.fullmoviebody.sortorder = changedmovie.sortorder
                             changedmoviedetails.fullmoviebody.top250 = changedmovie.top250
@@ -27954,6 +28089,7 @@ MyExit:
         txt_tablegenre.Visible = False
         Cmbobx_tablewatched.Visible = False
         cmbobx_tablesets.Visible = False
+        cmbobx_tablesource.Visible = False
         btn_movTableApply.Visible = False
         lbl_movTableMultirow.Visible = False
 
@@ -28036,6 +28172,16 @@ MyExit:
                             End If
                         Next
                         txt_tabletop250.Location = New Point(textBoxLocX + 2, textBoxLocY)
+                    Case "source"
+                        cmbobx_tablesource.Visible = True
+                        cmbobx_tablesource.Width = column.width - 4
+                        Dim textBoxLocX As Integer = 0
+                        For Each col In DataGridView1.Columns
+                            If col.displayindex < DataGridView1.Columns("source").DisplayIndex And col.visible = True Then
+                                textBoxLocX = textBoxLocX + col.width
+                            End If
+                        Next
+                        cmbobx_tablesource.Location = New Point(textBoxLocX + 2, textBoxLocY)
                     Case "watched"
                         Cmbobx_tablewatched.Visible = True
                         Cmbobx_tablewatched.Width = column.width - 4
@@ -28363,6 +28509,9 @@ MyExit:
                 row.cells("genre").value = txt_tablegenre.Text
             End If
 
+            If cmbobx_tablesource.SelectedItem <> "UnChanged" And cmbobx_tablesource.Visible = True Then
+                row.cells("source").value = cmbobx_tablesource.SelectedItem
+            End If
             If Cmbobx_tablewatched.SelectedIndex <> 0 And Cmbobx_tablewatched.Visible = True Then
                 If Cmbobx_tablewatched.SelectedIndex = 1 Then
                     row.cells("playcount").value = True
@@ -33364,20 +33513,53 @@ MyExit:
 
              ToolStripStatusLabel1.Visible = False
 		End Sub
-
+    Private Sub mov_VideoSourcePopulate()
+        Try
+            cb_movFormatSource.Items.Clear()
+            cb_movFormatSource.Items.Add("")
+            For Each mset In Preferences.releaseformat
+                cb_movFormatSource.Items.Add(mset)
+            Next
+            If workingMovieDetails.fullmoviebody.source <> "" Then
+                For te = 0 To cb_movFormatSource.Items.Count - 1
+                    If cb_movFormatSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
+                        cb_movFormatSource.SelectedIndex = te
+                        Exit For
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+        End Try
+    End Sub
     Private Sub btnVideoSourceApply_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceApply.Click
-        'Dim count As Integer = lbVideoSource.Items.Count
-        'ReDim Preferences.releaseformat(count)
-        'For g = 0 To count - 1
-        '    Preferences.releaseformat(g) = lbVideoSource.Items(g)
-        'Next
+        Dim count As Integer = lbVideoSource.Items.Count - 1
+        ReDim Preferences.releaseformat(count)
+        For g = 0 To count
+            Preferences.releaseformat(g) = lbVideoSource.Items(g)
+        Next
+        mov_VideoSourcePopulate()
     End Sub
 
     Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
-
+        lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
     End Sub
 
     Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
+        Dim strSelected = lbVideoSource.SelectedItem
+        Dim idxSelected = lbVideoSource.SelectedIndex
+
+        Try
+            If cb_movFormatSource.Text = strSelected Then cb_movFormatSource.SelectedIndex = 0
+            lbVideoSource.Items.RemoveAt(idxSelected)
+            mov_VideoSourcePopulate()
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
 
     End Sub
 End Class

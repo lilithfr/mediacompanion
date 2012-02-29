@@ -1711,6 +1711,7 @@ Public Class WorkingWithNfoFiles
                         newmovie.id = ""
                         newmovie.missingdata1 = 0
                         newmovie.movieset = ""
+                        newmovie.source = ""
                         newmovie.originaltitle = newmovie.title
                         newmovie.outline = ""
                         newmovie.playcount = "0"
@@ -1747,6 +1748,8 @@ Public Class WorkingWithNfoFiles
                                     newmovie.originaltitle = thisresult.InnerText
                                 Case "set"
                                     newmovie.movieset = thisresult.InnerText
+                                Case "source"
+                                    newmovie.source = thisresult.InnerText
                                 Case "year"
                                     newmovie.year = thisresult.InnerText
                                 Case "outline"
@@ -1804,6 +1807,7 @@ Public Class WorkingWithNfoFiles
                     If newmovie.genre = Nothing Then newmovie.genre = ""
                     If newmovie.id = Nothing Then newmovie.id = ""
                     If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
+                    If newmovie.source = Nothing Then newmovie.source = ""
                     If newmovie.movieset = "" Or newmovie.movieset = Nothing Then newmovie.movieset = "-None-"
                     'if there is no entry for originaltitle, then use the current title. this should only come into use
                     'for old movies since new ones will have the originaltitle created when scraped
@@ -1884,6 +1888,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
                             newmovie.fullmoviebody.movieset = thisresult.InnerText
+                        Case "videosource"
+                            newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
                             newmovie.fullmoviebody.sortorder = thisresult.InnerText
                         Case "sorttitle"
@@ -2396,6 +2402,7 @@ Public Class WorkingWithNfoFiles
                 Catch ex As Exception
 
                 End Try
+
                 Try
                     If movietosave.fullmoviebody.sortorder = Nothing Then
                         movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title
@@ -2593,6 +2600,17 @@ Public Class WorkingWithNfoFiles
 
                     End If
                 Catch
+                End Try
+                Try
+                    If movietosave.fullmoviebody.source <> Nothing Then
+                        If movietosave.fullmoviebody.source <> "" Then
+                            child = doc.CreateElement("videosource")
+                            child.InnerText = movietosave.fullmoviebody.source
+                            root.AppendChild(child)
+                        End If
+                    End If
+                Catch ex As Exception
+
                 End Try
                 Try
                     child = doc.CreateElement("createdate")

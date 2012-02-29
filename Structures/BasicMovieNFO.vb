@@ -4,6 +4,7 @@ Public Structure str_BasicMovieNFO
     Dim originaltitle As String
     Dim sortorder As String
     Dim movieset As String
+    Dim source As String
     Dim year As String
     Dim rating As String
     Dim votes As String
@@ -31,6 +32,7 @@ Public Structure str_BasicMovieNFO
         originaltitle = ""
         sortorder = ""
         movieset = ""
+        source = ""
         year = ""
         rating = ""
         votes = ""

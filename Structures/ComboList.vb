@@ -20,6 +20,7 @@ Public Structure str_ComboList
     Dim createdate As String
     Dim missingdata1 As Byte
     Dim plot As String
+    Dim source As String
 
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         fullpathandfilename = ""
@@ -42,6 +43,7 @@ Public Structure str_ComboList
         createdate = ""
         missingdata1 = 0
         plot = ""
+        source = ""
     End Sub
 
 End Structure
