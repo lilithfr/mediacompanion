@@ -5762,7 +5762,47 @@ Public Class Form1
                             strNFOprop = newplotdetails.fullmoviebody.genre
                         End If
                         If tokenInstr(0) = "format" Then
-                            'strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Remove(0, 1)
+                            Dim idxEndParam As Integer = tokenInstr.Length - 1
+                            If idxEndParam > 0 Then
+                                Dim arrlstFormat As New ArrayList
+                                Dim separator As String = " "
+                                For i = 0 To idxEndParam - 1
+                                    Select Case tokenInstr(i + 1).ToLower
+                                        Case "container"
+                                            Dim container As String = newplotdetails.filedetails.filedetails_video.Container.Value
+                                            If container <> Nothing And container <> "" Then
+                                                If tokenInstr(i + 1).ToLower <> tokenInstr(i + 1) Then container = container.ToUpper
+                                                arrlstFormat.Add(container.TrimStart("."))
+                                            End If
+                                        Case "source"
+                                            Dim source As String = newplotdetails.fullmoviebody.source
+                                            If source <> Nothing And source <> "" Then
+                                                arrlstFormat.Add(source)
+                                            End If
+                                        Case "resolution"
+                                            Dim width, height As Integer
+                                            width = newplotdetails.filedetails.filedetails_video.Width.Value
+                                            height = newplotdetails.filedetails.filedetails_video.Height.Value
+                                            If width AndAlso height Then
+                                                If (width <= 720 And height <= 480) Then
+                                                    arrlstFormat.Add("480")
+                                                ElseIf (width <= 768 And height <= 576) Then
+                                                    arrlstFormat.Add("576")
+                                                ElseIf (width <= 960 And height <= 544) Then
+                                                    arrlstFormat.Add("540")
+                                                ElseIf (width <= 1280 And height <= 720) Then
+                                                    arrlstFormat.Add("720")
+                                                Else
+                                                    arrlstFormat.Add("1080")
+                                                End If
+                                            End If
+                                    End Select
+                                Next
+                                Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
+                                strNFOprop = String.Join(separator, arrFormat)
+                            Else
+                                strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+                            End If
                         End If
                         If tokenInstr(0) = "releasedate" Then
                             strNFOprop = newplotdetails.fullmoviebody.premiered
