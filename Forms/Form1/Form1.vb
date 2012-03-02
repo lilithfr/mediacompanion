@@ -23,6 +23,7 @@ Public Class Form1
 
     Public Const SetDefaults = True
     Public Const datePattern As String = "yyyyMMddHHmmss"
+    Public Const nfoDatePattern As String = "yyyy-MM-dd"
     Public movieRefreshNeeded As Boolean = True
     Public tvRefreshNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
@@ -5702,7 +5703,8 @@ Public Class Form1
                     If thumbpath <> "" Then
                         Dim origImage = Preferences.GetPosterPath(movie.fullpathandfilename)
                         Try
-                            strNFOprop = "images/" & util_ImageCreate(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
+                            If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "images/"
+                            strNFOprop &= util_ImageCreate(origImage, If(tokenInstr(0) = "createimage" And tokenInstr.Length > 1, Val(tokenInstr(1)), 200), thumbpath)
                         Catch ex As Exception
                             MsgBox(ex.ToString)
                         End Try
@@ -5868,12 +5870,19 @@ Public Class Form1
                                         strNFOprop = newplotdetails.fullmoviebody.sortorder
                                     Case "set"
                                         strNFOprop = newplotdetails.fullmoviebody.movieset
-                                    Case "createdate"
-                                        Dim newDate As String = newplotdetails.fileinfo.createdate
-                                        Dim result As Date
-                                        If tokenInstr.Length > 2 Then
-                                            Try
-                                                result = DateTime.ParseExact(newDate, datePattern, Nothing)
+                                    Case "createdate", "premiered"
+                                        Dim newDate, localDatePattern As String
+                                        If tokenInstr(1) = "createdate" Then
+                                            newDate = newplotdetails.fileinfo.createdate
+                                            localDatePattern = datePattern
+                                        Else
+                                            newDate = newplotdetails.fullmoviebody.premiered
+                                            localDatePattern = nfoDatePattern
+                                        End If
+                                        Try
+                                            Dim result As Date
+                                            result = DateTime.ParseExact(newDate, localDatePattern, Nothing)
+                                            If tokenInstr.Length > 2 Then
                                                 strNFOprop = Format(result, tokenInstr(2)).ToString
                                                 If tokenInstr.Length > 3 Then
                                                     Dim separator As String = "!"
@@ -5889,20 +5898,20 @@ Public Class Form1
                                                     End Select
                                                     strNFOprop = strNFOprop.Replace("_", separator)
                                                 End If
-                                            Catch ex As Exception
-                                                strNFOprop = "Error in date format"
-                                            End Try
-                                        Else
-                                            strNFOprop = newDate
-                                        End If
+                                            Else
+                                                strNFOprop = Format(result, datePattern).ToString
+                                            End If
+                                        Catch ex As Exception
+                                            strNFOprop = "Error in date format"
+                                        End Try
                                     Case "actor"                                        ' No support for actor list
                                         strNFOprop = "No support"
                                     Case "alternativetitle"                             ' No support for alternative titles
                                         strNFOprop = "No support"
                                     Case Else
-                                        strNFOprop = CallByName(newplotdetails.fullmoviebody, tokenInstr(1), vbGet)
+                                        strNFOprop = "No support"
                                 End Select
-                                If tokenInstr(1) <> "file" And tokenInstr(1) <> "createdate" And tokenInstr.Length > 2 Then
+                                If tokenInstr(1) <> "file" And tokenInstr(1) <> "createdate" And tokenInstr(1) <> "premiered" And tokenInstr.Length > 2 Then
                                     Dim intCharLimit = CInt(tokenInstr(2))
                                     If strNFOprop.Length > intCharLimit Then
                                         strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
@@ -6109,7 +6118,8 @@ Public Class Form1
                             End If
                         End If
 
-                        strNFOprop = "tvimages/" & util_ImageCreate(origImage, tokenInstr(1), imagepath, imageType)
+                        If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
+                        strNFOprop &= util_ImageCreate(origImage, tokenInstr(1), imagepath, imageType)
                     End If
 
                 Case "show_title"
@@ -6241,7 +6251,8 @@ Public Class Form1
                         If currSeason = 0 Then imageName = "season-specials.tbn"
                         origImage = origImage.Replace(IO.Path.GetFileName(origImage), imageName)
 
-                        strNFOprop = "tvimages/" & util_ImageCreate(origImage, tokenInstr(1), imagepath)
+                        If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
+                        strNFOprop &= util_ImageCreate(origImage, tokenInstr(1), imagepath)
                     End If
 
                 Case "show_counter"
@@ -6321,7 +6332,7 @@ Public Class Form1
                     strNFOprop = If(tvEpisode.Episode.Value.Length = 1 And padNumber, "0", "") & tvEpisode.Episode.Value
 
                 Case "ep_rating"
-                    strNFOprop = If(tvEpisode.Rating <> Nothing, tvEpisode.Rating.Value & If(tvEpisode.Rating.Value.IndexOf(".") <> -1, "", ".0"), "")
+                    strNFOprop = If(tvEpisode.Rating.Value <> Nothing, tvEpisode.Rating.Value & If(tvEpisode.Rating.Value.IndexOf(".") <> -1, "", ".0"), "")
 
                 Case "ep_playcount"
                     strNFOprop = tvEpisode.PlayCount.Value
@@ -6330,7 +6341,7 @@ Public Class Form1
                     strNFOprop = tvEpisode.ImdbId.Value
 
                 Case "ep_imdburl"
-                    strNFOprop = If(tvEpisode.ImdbId <> Nothing, Preferences.imdbmirror & "title/" & tvEpisode.ImdbId.Value & "/", Preferences.imdbmirror)
+                    strNFOprop = If(tvEpisode.ImdbId.Value <> Nothing, Preferences.imdbmirror & "title/" & tvEpisode.ImdbId.Value & "/", Preferences.imdbmirror)
 
                 Case "ep_tvdbid"
                     strNFOprop = tvEpisode.TvdbId.Value
@@ -6354,11 +6365,37 @@ Public Class Form1
                             Case "file"
                                 Select Case tokenInstr(2)
                                     Case "video"
-                                        strNFOprop = CallByName(fullTVEpisodeDetails.Details.StreamDetails.Video, tokenInstr(3), vbGet)
+                                        Select Case tokenInstr(3)
+                                            Case "width"
+                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Width.Value
+                                            Case "height"
+                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Height.Value
+                                            Case "aspect"
+                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Aspect.Value
+                                            Case "codec"
+                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Codec.Value
+                                            Case "duration"
+                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.DurationInSeconds.Value
+                                            Case "container"
+                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Container.Value
+                                            Case Else
+                                                strNFOprop = tokenInstr(3) & "not supported"
+                                        End Select
+                                        'strNFOprop = CallByName(fullTVEpisodeDetails.Details.StreamDetails.Video, tokenInstr(3), vbGet)
                                     Case "audio"
                                         Dim i As Integer = 1
                                         For Each audioStream In fullTVEpisodeDetails.Details.StreamDetails.Audio
-                                            strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
+                                            Select Case tokenInstr(3)
+                                                Case "language"
+                                                    strNFOprop &= audioStream.Language.Value
+                                                Case "channels"
+                                                    strNFOprop &= audioStream.Channels.Value
+                                                Case "bitrate"
+                                                    strNFOprop &= audioStream.Bitrate.Value
+                                                Case "codec"
+                                                    strNFOprop &= audioStream.Codec.Value
+                                            End Select
+                                            'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
                                             If (fullTVEpisodeDetails.Details.StreamDetails.Audio.Count > 1 And i <> fullTVEpisodeDetails.Details.StreamDetails.Audio.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
@@ -6367,13 +6404,65 @@ Public Class Form1
                                     Case "subtitles"
                                         Dim i As Integer = 1
                                         For Each subLang In fullTVEpisodeDetails.Details.StreamDetails.Subtitles
-                                            strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
+                                            Select Case tokenInstr(3)
+                                                Case "language"
+                                                    strNFOprop &= subLang.Language.Value
+                                            End Select
+                                            'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
                                             If (fullTVEpisodeDetails.Details.StreamDetails.Subtitles.Count > 1 And i <> fullTVEpisodeDetails.Details.StreamDetails.Subtitles.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
                                             i += 1
                                         Next
                                 End Select
+                            Case "title"
+                                strNFOprop = fullTVEpisodeDetails.Title.Value
+                            Case "season"
+                                strNFOprop = fullTVEpisodeDetails.Season.Value
+                            Case "episode"
+                                strNFOprop = fullTVEpisodeDetails.Episode.Value
+                            Case "aired"
+                                Dim newDate As String = fullTVEpisodeDetails.Aired.Value
+                                If tokenInstr.Length > 2 Then
+                                    Try
+                                        Dim result As Date
+                                        result = DateTime.ParseExact(newDate, nfoDatePattern, Nothing)
+                                        strNFOprop = Format(result, tokenInstr(2)).ToString
+                                        If tokenInstr.Length > 3 Then
+                                            Dim separator As String = "!"
+                                            Select Case tokenInstr(3).ToLower
+                                                Case "space"
+                                                    separator = " "
+                                                Case "colon"
+                                                    separator = ":"
+                                                Case "dash"
+                                                    separator = "-"
+                                                Case "slash"
+                                                    separator = "/"
+                                            End Select
+                                            strNFOprop = strNFOprop.Replace("_", separator)
+                                        End If
+                                    Catch ex As Exception
+                                        strNFOprop = "Error in date format"
+                                    End Try
+                                Else
+                                    strNFOprop = newDate
+                                End If
+                                'strNFOprop = fullTVEpisodeDetails.Aired.Value
+                            Case "plot"
+                                strNFOprop = fullTVEpisodeDetails.Plot.Value
+                            Case "playcount"
+                                strNFOprop = fullTVEpisodeDetails.PlayCount.Value
+                            Case "director"
+                                strNFOprop = fullTVEpisodeDetails.Director.Value
+                            Case "credits"
+                                strNFOprop = fullTVEpisodeDetails.Credits.Value
+                            Case "rating"
+                                strNFOprop = fullTVEpisodeDetails.Rating.Value
+                            Case "runtime"
+                                strNFOprop = fullTVEpisodeDetails.Runtime.Value
+                            Case "showid"
+                                strNFOprop = fullTVEpisodeDetails.Id.Value
                             Case "actor"                                        ' No support for actor list
                                 strNFOprop = "No support"
                             Case "thumb"                                        ' No support for thumbnail list
@@ -6381,9 +6470,9 @@ Public Class Form1
                             Case "fanart"                                       ' No support for fanart list
                                 strNFOprop = "No support"
                             Case Else
-                                strNFOprop = CallByName(fullTVEpisodeDetails, tokenInstr(1), vbGet)
+                                strNFOprop = "No support"
                         End Select
-                        If tokenInstr.Length > 2 Then
+                        If tokenInstr.Length > 2 And tokenInstr(1) <> "file" And tokenInstr(1) <> "aired" Then
                             Dim intCharLimit = CInt(tokenInstr(2))
                             If strNFOprop.Length > intCharLimit Then
                                 strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
