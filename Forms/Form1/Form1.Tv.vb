@@ -505,7 +505,7 @@ Partial Public Class Form1
             End If
             ComboBox4.Items.Clear()
             For Each actor In Show.ListActors
-                If Not ComboBox4.Items.Contains(actor.actorname) Then
+                If actor.actorname <> Nothing AndAlso Not ComboBox4.Items.Contains(actor.actorname) Then
                     ComboBox4.Items.Add(actor.actorname)
                 End If
             Next
