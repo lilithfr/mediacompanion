@@ -8514,7 +8514,7 @@ Public Class Form1
                             Throw ex
 #End If
                         End Try
-                        
+
                         'Commented out items are not saved when multiple movies are selected
                         '              newfullmovie.title = movie.fullmoviebody.title
                         '              newfullmovie.titleandyear = newfullmovie.title & " (" & movie.fullmoviebody.year & ")"
@@ -33649,6 +33649,7 @@ MyExit:
             For Each mset In Preferences.releaseformat
                 cb_movFormatSource.Items.Add(mset)
             Next
+            cb_movFormatSource.SelectedIndex = 0
             If workingMovieDetails.fullmoviebody.source <> "" Then
                 For te = 0 To cb_movFormatSource.Items.Count - 1
                     If cb_movFormatSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
