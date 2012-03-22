@@ -1751,7 +1751,7 @@ Partial Public Class Form1
             Preferences.tvScraperLog &= "---Using MC TVDB Scraper---" & vbCrLf
         End If
 
-        progresstext = String.Concat("Scanning TV Folders For New Episodes")
+        progresstext = String.Concat("Scanning TV Folders For New Episodes...")
         bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
         Preferences.tvScraperLog &= "Starting Folder Scan" & vbCrLf & vbCrLf
@@ -1768,7 +1768,7 @@ Partial Public Class Form1
             End If
 
             If Add = True Then
-                progresstext = String.Concat("Found Folders: " & newtvfolders.Count & " - Adding subfolders from: " & TvFolder)
+                progresstext = String.Concat("Stage 1 of 3 : Creating List of Folders From Roots : Found - " & newtvfolders.Count & " : Searching - " & TvFolder)
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 If bckgroundscanepisodes.CancellationPending Then
                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
@@ -1803,7 +1803,7 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
             End If
-            progresstext = String.Concat(g + 1 & " of " & newtvfolders.Count & " - Searching for episodes in " & newtvfolders(g))
+            progresstext = String.Concat("Stage 2 of 3 : Search for Episodes in Folder " & g + 1 & " of " & newtvfolders.Count & " : Searching for episodes in " & newtvfolders(g))
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
             For Each f In Utilities.VideoExtensions
                 'If bckgroundscanepisodes.CancellationPending Then
@@ -1907,12 +1907,12 @@ Partial Public Class Form1
 
             Dim WhichScraper As String = ""
             If Preferences.tvshow_useXBMC_Scraper = True Then
-                WhichScraper = " XBMC TVDB Scraper - "
+                WhichScraper = "XBMC TVDB"
             Else
-                WhichScraper = " MC TVDB Scraper - "
+                WhichScraper = "MC TVDB"
             End If
 
-            progresstext = String.Concat(WhichScraper & "Scraping " & epscount & " of " & newEpisodeList.Count & " - " & IO.Path.GetFileName(eps.VideoFilePath))
+            progresstext = String.Concat("Stage 3 of 3 : Scraping Found Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
             Dim removal As String = ""
@@ -2119,7 +2119,7 @@ Partial Public Class Form1
                                 Next
                                 singleepisode.PlayCount.Value = "0"
 
-                                progresstext &= " " & singleepisode.Title.Value
+                                progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
                                 If actorsource = "imdb" Then
@@ -2351,7 +2351,7 @@ Partial Public Class Form1
 
 
                                 If Preferences.enablehdtags = True Then
-                                    progresstext &= " HD Tags..."
+                                    progresstext &= " : HD Tags..."
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                     Dim fileStreamDetails As FullFileDetails = Preferences.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
                                     singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
