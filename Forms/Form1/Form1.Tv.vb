@@ -1768,7 +1768,7 @@ Partial Public Class Form1
             End If
 
             If Add = True Then
-                progresstext = String.Concat("Stage 1 of 3 : Creating List of Folders From Roots : Found - " & newtvfolders.Count & " : Searching - '" & TvFolder & "'")
+                progresstext = String.Concat("Stage 1 of 3 : Found " & newtvfolders.Count & " : Creating List of Folders From Roots : Searching - '" & TvFolder & "'")
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 If bckgroundscanepisodes.CancellationPending Then
                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
@@ -1803,7 +1803,7 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
             End If
-            progresstext = String.Concat("Stage 2 of 3 : Search for New Episodes in Folder " & g + 1 & " of " & newtvfolders.Count & " - '" & newtvfolders(g) & "' : Found " & newEpisodeList.Count)
+            progresstext = String.Concat("Stage 2 of 3 : Found " & newEpisodeList.Count & " : Searching for New Episodes in Folders " & g + 1 & " of " & newtvfolders.Count & " - '" & newtvfolders(g) & "' )
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
             For Each f In Utilities.VideoExtensions
                 'If bckgroundscanepisodes.CancellationPending Then
