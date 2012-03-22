@@ -1768,7 +1768,7 @@ Partial Public Class Form1
             End If
 
             If Add = True Then
-                progresstext = String.Concat("Stage 1 of 3 : Creating List of Folders From Roots : Found - " & newtvfolders.Count & " : Searching - " & TvFolder)
+                progresstext = String.Concat("Stage 1 of 3 : Creating List of Folders From Roots : Found - " & newtvfolders.Count & " : Searching - '" & TvFolder & "'")
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 If bckgroundscanepisodes.CancellationPending Then
                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
@@ -1803,7 +1803,7 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
                 Exit Sub
             End If
-            progresstext = String.Concat("Stage 2 of 3 : Search for Episodes in Folder " & g + 1 & " of " & newtvfolders.Count & " : Searching for episodes in " & newtvfolders(g))
+            progresstext = String.Concat("Stage 2 of 3 : Search for New Episodes in Folder " & g + 1 & " of " & newtvfolders.Count & " - '" & newtvfolders(g) & "' : Found " & newEpisodeList.Count)
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
             For Each f In Utilities.VideoExtensions
                 'If bckgroundscanepisodes.CancellationPending Then
@@ -1912,7 +1912,7 @@ Partial Public Class Form1
                 WhichScraper = "MC TVDB"
             End If
 
-            progresstext = String.Concat("Stage 3 of 3 : Scraping Found Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
+            progresstext = String.Concat("Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
             bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
             Dim removal As String = ""
@@ -2073,7 +2073,7 @@ Partial Public Class Form1
                                 Preferences.tvScraperLog &= "!!! WARNING: This episode could not be found on TVDB" & vbCrLf
                             End If
                             If scrapedok = True Then
-                                progresstext &= " OK."
+                                progresstext &= "OK."
                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                 Dim scrapedepisode As New XmlDocument
 
@@ -2124,7 +2124,7 @@ Partial Public Class Form1
 
                                 If actorsource = "imdb" Then
                                     Preferences.tvScraperLog &= "Scraping actors from IMDB" & vbCrLf
-                                    progresstext &= " Actors..."
+                                    progresstext &= " : Actors..."
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                     Dim url As String
                                     url = "http://www.imdb.com/title/" & imdbid & "/episodes"
@@ -2320,7 +2320,7 @@ Partial Public Class Form1
 
                                                 If tempactorlist.Count > 0 Then
                                                     Preferences.tvScraperLog &= "Actors scraped from IMDB OK" & vbCrLf
-                                                    progresstext &= " OK."
+                                                    progresstext &= "OK."
                                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                                     While tempactorlist.Count > Preferences.maxactors
                                                         tempactorlist.RemoveAt(tempactorlist.Count - 1)
@@ -2379,7 +2379,7 @@ Partial Public Class Form1
                                         End If
                                         minutes = minutes + hours
                                         singleepisode.Runtime.Value = minutes.ToString & " min"
-                                        progresstext &= " OK."
+                                        progresstext &= "OK."
                                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                     End If
                                 End If
