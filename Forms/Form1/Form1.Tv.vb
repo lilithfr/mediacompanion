@@ -774,7 +774,6 @@ Partial Public Class Form1
 
 
         tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
-        Tv_CleanFolderList()
         TextBox_TotTVShowCount.Text = ""
         TextBox_TotEpisodeCount.Text = ""
         Me.Enabled = False
@@ -829,7 +828,6 @@ Partial Public Class Form1
 
         frmSplash2.Label2.Visible = False
 
-        Tv_CleanFolderList()
         frmSplash2.Label1.Text = "Saving Cache..."
         Windows.Forms.Application.DoEvents()
         Tv_CacheSave()    'save the cache file
@@ -1015,91 +1013,7 @@ Partial Public Class Form1
             realTvPaths.Add(NewShow.FolderPath)
             TvTreeview.Nodes.Add(NewShow.ShowNode)
             NewShow.UpdateTreenode()
-            'For Each Episode As TvEpisode In NewShow.Episodes
-            '    Episode.UpdateTreenode()
-            'Next
-            'CleanFolderList()
-            ''For Each item In TvShows
-            ''    If item.FolderPath = NewShow.FolderPath Then
-            ''        Dim cnode As TreeNode = Nothing
-            ''        Dim tempstring As String = String.Empty
-            ''        Dim tempint As Integer
-
-            ''        totalTvShowCount += 1
-            ''        Dim shownode As Integer = -1
-
-            ''        If item.status IsNot Nothing AndAlso item.status.ToLower.IndexOf("xml error") <> -1 Then
-            '            Call TV_AddTvshowToTreeview(item.fullpath, item.title, True, item.locked)
-            ''        Else
-            '            Call TV_AddTvshowToTreeview(item.fullpath, item.title, False, item.locked)
-            ''        End If
-
-            ''        For Each episode In item.allepisodes
-            ''            totalEpisodeCount += 1
-
-            ''            Dim seasonno As Integer = -10
-            ''            seasonno = Convert.ToInt32(episode.Season.value)
-
-            ''            For g = 0 To TvTreeview.Nodes.Count - 1
-            ''                If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
-            ''                    cnode = TvTreeview.Nodes(g)
-            ''                    shownode = g
-            ''                    Exit For
-            ''                End If
-            ''            Next
-
-            ''            Dim seasonstring As String = Nothing
-
-            ''            If seasonno <> 0 And seasonno <> -1 Then
-            ''                If seasonno < 10 Then
-            ''                    tempstring = "Season 0" & seasonno.ToString
-            ''                Else
-            ''                    tempstring = "Season " & seasonno.ToString
-            ''                End If
-            ''            ElseIf seasonno = 0 Then
-            ''                tempstring = "Specials"
-            ''                'ElseIf seasonno = -1 Then
-            ''                '    tempstring = "Unknown"
-            ''            End If
-            ''            Dim node As TreeNode
-            ''            Dim alreadyexists As Boolean = False
-            ''            For Each node In cnode.Nodes
-            ''                If node.Text = tempstring Then
-            ''                    alreadyexists = True
-            ''                    Exit For
-            ''                End If
-            ''            Next
-            ''            If alreadyexists = False Then cnode.Nodes.Add(tempstring)
-
-            ''            For Each node In cnode.Nodes
-            ''                If node.Text = tempstring Then
-            ''                    tempint = node.Index
-
-            ''                    Exit For
-            ''                End If
-            ''            Next
-
-            ''            Dim eps As String
-            ''            If episode.episodeno < 10 Then
-            ''                eps = "0" & episode.episodeno.ToString
-            ''            Else
-            ''                eps = episode.episodeno.ToString
-            ''            End If
-            ''            eps = eps & " - " & episode.title
-            ''            If episode.imdbid = Nothing Then
-            ''                episode.imdbid = ""
-            ''            End If
-
-            ''            If episode.imdbid.ToLower.IndexOf("xml error") <> -1 Then
-            '                Call TV_AddEpisodeToTreeview(shownode, tempint, episode.VideoFilePath, eps, True)
-            ''            Else
-            '                Call TV_AddEpisodeToTreeview(shownode, tempint, episode.VideoFilePath, eps, False)
-            ''            End If
-
-
-            '        Next
-            '    End If
-            'Next
+            
             TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
             TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
             Me.BringToFront()
@@ -1707,25 +1621,10 @@ Partial Public Class Form1
                 newTvFolders.RemoveAt(0)
             Loop
 
-            Tv_CleanFolderList()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
 
-    End Sub
-
-    Public Sub Tv_CleanFolderList()   'not sure of the purpose of this......returnlist is never used.....
-        'Dim TempList As List(Of String)
-        'TempList = Preferences.tvFolders
-        'Dim ReturnList As New List(Of String)
-
-        'For Each item In newTvFolders
-        '    If Not ReturnList.Contains(item) Then
-        '        ReturnList.Add(item)
-        '    End If
-        'Next
-
-        'Preferences.tvFolders = TempList
     End Sub
 
     Private Sub TV_EpisodeScraper(ByVal ListOfShows As List(Of TvShow), ByVal manual As Boolean)
@@ -3201,7 +3100,6 @@ Partial Public Class Form1
         Call tv_ShowLoad(BrokenShow)
         messbox.Close()
 
-        Tv_CleanFolderList()
     End Sub
 
     Private Sub tv_Filter() 'ByVal butt As String)
@@ -3636,28 +3534,6 @@ Partial Public Class Form1
     Public Function Tv_CacheSave() As Boolean
 
         Cache.TvCache.TvCachePath = Preferences.workingProfile.tvcache
-        'If Cache.TvCache.IsAltered Then
-        '    'Dim Result = MsgBox("Nfo files have been altered but not saved, would you like to save all changes?", MsgBoxStyle.YesNoCancel)
-        '    'If Result = MsgBoxResult.Yes Then
-        '  For Each Item As ProtoXML.ProtoFile In Cache.TvCache.Items
-
-        '        If Not Item.FailedLoad And Item.IsAltered Then
-        '            Try
-        ' Item.Save()
-        '            Catch
-        '                Dim Test As Boolean = True
-        '            End Try
-        '        End If
-
-        '    Next
-        '    'ElseIf Result = MsgBoxResult.No Then
-        '    '    'Do Nothing
-        '    'Else         '  If Result = MsgBoxResult.Cancel Then            'assume cancel for any other answers (if possible...)
-        '    '    Return True         'return true to indicate to the call routine that 'cancel' has been choosen (used mainly to cancel MC close)
-        '    '    Exit Function
-        '    'End If
-        'End If
-
         Cache.TvCache.Save()
         Return False
     End Function
