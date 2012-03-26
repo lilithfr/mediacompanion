@@ -11742,7 +11742,7 @@ MyExit:
     Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
         Try
             Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
-            If e.Button = MouseButtons.Right AndAlso ptIndex > 0 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
+            If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
                 Dim newSelection As Boolean = True
                 'If more than one movie is selected, check if right-click is on the selection.
                 If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
