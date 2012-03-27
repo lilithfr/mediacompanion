@@ -128,6 +128,7 @@ Public Class Preferences
     Public Shared scrapefullcert As Boolean
     Public Shared showsortdate As Boolean
     Public Shared fixnfoid As Boolean
+    Public Shared displayMissingEpisodes As Boolean = False
 
     Public Shared moviesortorder As Byte
     Public Shared moviedefaultlist As Byte
@@ -229,6 +230,7 @@ Public Class Preferences
         Preferences.OfflineDVDTitle = "Please Load '%T' Media To Play..."
         Preferences.fixnfoid = False
         Preferences.logview = "0"  'first entry in combobox is 'Full' (log view)
+        Preferences.displayMissingEpisodes = False
 
         'Unknown - need to be sorted/named better
         Preferences.eprenamelowercase = False
@@ -429,6 +431,10 @@ Public Class Preferences
 
         child = doc.CreateElement("copytvactorthumbs")
         child.InnerText = Preferences.copytvactorthumbs.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("displayMissingEpisodes")
+        child.InnerText = Preferences.displayMissingEpisodes.ToString.ToLower
         root.AppendChild(child)
 
         child = doc.CreateElement("fanartnotstacked")
@@ -1156,6 +1162,13 @@ Public Class Preferences
                         Preferences.copytvactorthumbs = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.copytvactorthumbs = False
+                    End If
+
+                Case "displayMissingEpisodes"
+                    If thisresult.InnerXml = "true" Then
+                        Preferences.displayMissingEpisodes = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Preferences.displayMissingEpisodes = False
                     End If
 
                 Case "actorsavepath"

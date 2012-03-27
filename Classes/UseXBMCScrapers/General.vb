@@ -906,7 +906,7 @@ Module General
             For Each m_node In m_nodelist
                 For Each NodeChild In m_node.ChildNodes
                     If (NodeChild.Name.ToLower = "setting") Then
-                        If NodeChild.Attributes.Count > 0 Then
+                        If NodeChild.Attributes.Count > 0 AndAlso NodeChild.Attributes.ItemOf("id") IsNot Nothing Then
                             Try
                                 Select Case NodeChild.Attributes("id").Value.ToLower
                                     Case "tmdbthumbs"
@@ -1011,7 +1011,7 @@ Module General
                     If (NodeChild.Name.ToLower = "setting") Then
                         If NodeChild.Attributes.Count > 0 Then
                             Try
-                                If KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
+                                If NodeChild.Attributes.ItemOf("id") IsNot Nothing AndAlso KeyToBeChanged.ToLower = NodeChild.Attributes("id").Value.ToLower Then
                                     Select Case KeyToBeChanged
                                         Case "tmdbthumbs"
                                             NodeChild.Attributes("default").Value = ChangeValue

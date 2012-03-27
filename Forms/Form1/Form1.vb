@@ -734,12 +734,18 @@ Public Class Form1
         Dim pic3ratio As Decimal
         Dim pic4ratio As Decimal
         Try
-            Dim pic3ImSzW = tv_PictureBoxLeft.Image.Size.Width
-            Dim pic3ImszH = tv_PictureBoxLeft.Image.Size.Height
-            Dim pic4ImSzW = tv_PictureBoxRight.Image.Size.Width
-            Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
-            pic3ratio = pic3ImSzW / pic3ImszH
-            pic4ratio = pic4ImSzW / pic4ImszH
+            If (tv_PictureBoxLeft.Image IsNot Nothing AndAlso tv_PictureBoxRight.Image IsNot Nothing) Then
+                Dim pic3ImSzW = tv_PictureBoxLeft.Image.Size.Width
+                Dim pic3ImszH = tv_PictureBoxLeft.Image.Size.Height
+                Dim pic4ImSzW = tv_PictureBoxRight.Image.Size.Width
+                Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
+                pic3ratio = pic3ImSzW / pic3ImszH
+                pic4ratio = pic4ImSzW / pic4ImszH
+            Else
+                pic3ratio = 2
+                pic4ratio = 1
+
+            End If
             'MsgBox(from & " = " & SplitContainer4.SplitterDistance & " - " & pic3ImSzW & "x" & pic3ImszH & " " & pic4ImszH & "x" & pic4ImSzW)
         Catch ex As Exception
             pic3ratio = 2
@@ -902,9 +908,9 @@ Public Class Form1
             '---- aqui....
             Try
                 If movie.titleandyear.Length >= 5 Then
-                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 12 Then
-                        Dim Temp As String = movie.titleandyear.Substring(movie.titleandyear.Length - 7, 7)
-                        movie.titleandyear = "The " & movie.titleandyear.Substring(0, movie.titleandyear.Length - 12) & Temp
+                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 5 Then
+                        Dim Temp As String = movie.titleandyear.Replace(", the", String.Empty)
+                        movie.titleandyear = "The " & Temp
                     End If
                 End If
             Catch ex As Exception
@@ -5052,8 +5058,8 @@ Public Class Form1
                 Case "fullpathandfilename"
                     strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
 
-                    ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
-                Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "format", "filename", "nfo"
+                    ' These tokens (except 'nfo') are included for backwards compatibility
+                Case "fullplot", "director", "stars", "writer", "moviegenre", "format", "releasedate", "nfo"
                     Dim newplotdetails As New FullMovieDetails
                     newplotdetails = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
@@ -5071,9 +5077,6 @@ Public Class Form1
                         End If
                         If tokenInstr(0) = "moviegenre" Then
                             strNFOprop = newplotdetails.fullmoviebody.genre
-                        End If
-                        If tokenInstr(0) = "releasedate" Then
-                            strNFOprop = newplotdetails.fullmoviebody.premiered
                         End If
                         If tokenInstr(0) = "format" Then
                             Dim idxEndParam As Integer = tokenInstr.Length - 1
@@ -5118,31 +5121,8 @@ Public Class Form1
                                 strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
                             End If
                         End If
-                        If tokenInstr(0) = "filename" Then
-                            Dim tempFileAndPath As String = Utilities.GetFileName(movie.fullpathandfilename)
-                            Dim idxEndParam As Integer = tokenInstr.Length - 1
-                            If idxEndParam > 0 Then
-                                Dim arrlstFormat As New ArrayList
-                                Dim separator As String = ""
-                                Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
-                                Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
-                                For i = 0 To idxEndParam - 1
-                                    Select Case tokenInstr(i + 1).ToLower
-                                        Case "root"
-                                            arrlstFormat.Add(tempRoot)
-                                        Case "path"
-                                            arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
-                                        Case "file"
-                                            arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
-                                        Case "ext"
-                                            arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
-                                    End Select
-                                Next
-                                Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
-                                strNFOprop = String.Join(separator, arrFormat)
-                            Else
-                                strNFOprop = tempFileAndPath
-                            End If
+                        If tokenInstr(0) = "releasedate" Then
+                            strNFOprop = newplotdetails.fullmoviebody.premiered
                         End If
                         If tokenInstr(0) = "nfo" Then
                             Try
@@ -5201,14 +5181,8 @@ Public Class Form1
                                                     i += 1
                                                 Next
                                         End Select
-                                    Case "title"
-                                        strNFOprop = newplotdetails.fullmoviebody.title
-                                    Case "originaltitle"
-                                        strNFOprop = newplotdetails.fullmoviebody.originaltitle
                                     Case "sorttitle"
                                         strNFOprop = newplotdetails.fullmoviebody.sortorder
-                                    Case "year"
-                                        strNFOprop = newplotdetails.fullmoviebody.year
                                     Case "set"
                                         strNFOprop = newplotdetails.fullmoviebody.movieset
                                     Case "createdate", "premiered"
@@ -5245,57 +5219,19 @@ Public Class Form1
                                         Catch ex As Exception
                                             strNFOprop = "Error in date format"
                                         End Try
-                                    Case "rating"
-                                        strNFOprop = newplotdetails.fullmoviebody.rating
-                                    Case "votes"
-                                        strNFOprop = newplotdetails.fullmoviebody.votes
-                                    Case "top250"
-                                        strNFOprop = newplotdetails.fullmoviebody.top250
-                                    Case "outline"
-                                        strNFOprop = newplotdetails.fullmoviebody.outline
-                                    Case "plot"
-                                        strNFOprop = newplotdetails.fullmoviebody.plot
-                                    Case "tagline"
-                                        strNFOprop = newplotdetails.fullmoviebody.tagline
-                                    Case "country"
-                                        strNFOprop = newplotdetails.fullmoviebody.country
-                                    Case "runtime"
-                                        strNFOprop = newplotdetails.fullmoviebody.runtime
-                                    Case "mpaa"
-                                        strNFOprop = newplotdetails.fullmoviebody.mpaa
-                                    Case "genre"
-                                        strNFOprop = newplotdetails.fullmoviebody.genre
-                                    Case "credits"
-                                        strNFOprop = newplotdetails.fullmoviebody.credits
-                                    Case "director"
-                                        strNFOprop = newplotdetails.fullmoviebody.director
-                                    Case "studio"
-                                        strNFOprop = newplotdetails.fullmoviebody.studio
-                                    Case "trailer"
-                                        strNFOprop = newplotdetails.fullmoviebody.trailer
-                                    Case "playcount"
-                                        strNFOprop = newplotdetails.fullmoviebody.playcount
-                                    Case "id"
-                                        strNFOprop = newplotdetails.fullmoviebody.imdbid
-                                    Case "stars"
-                                        strNFOprop = newplotdetails.fullmoviebody.stars
-                                    Case "source"
-                                        strNFOprop = newplotdetails.fullmoviebody.source
+                                    Case "actor"                                        ' No support for actor list
+                                        strNFOprop = "No support"
+                                    Case "alternativetitle"                             ' No support for alternative titles
+                                        strNFOprop = "No support"
                                     Case Else
-                                        strNFOprop = "No support for" & tokenInstr(1)
+                                        strNFOprop = "No support"
                                 End Select
-
-                                Select Case tokenInstr(1)
-                                    Case "file", "createdate", "premiered", "filename"
-                                        'Do nothing
-                                    Case Else
-                                        If tokenInstr.Length > 2 Then
-                                            Dim intCharLimit = CInt(tokenInstr(2))
-                                            If strNFOprop.Length > intCharLimit Then
-                                                strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
-                                            End If
-                                        End If
-                                End Select
+                                If tokenInstr(1) <> "file" And tokenInstr(1) <> "createdate" And tokenInstr(1) <> "premiered" And tokenInstr.Length > 2 Then
+                                    Dim intCharLimit = CInt(tokenInstr(2))
+                                    If strNFOprop.Length > intCharLimit Then
+                                        strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
+                                    End If
+                                End If
 
                             Catch
                                 strNFOprop = "Error in token"
@@ -5335,7 +5271,7 @@ Public Class Form1
             Dim inclSeason As Boolean = False
             Dim inclEpisode As Boolean = False
             Dim inclMissingSeason As Boolean = False
-            Dim inclMissingEpisode As Boolean = False
+            Dim inclMissingEpisode As Boolean = Preferences.displayMissingEpisodes
             If text.IndexOf("<<season>>") <> -1 Or text.IndexOf("<<season:all>>") <> -1 Or text.IndexOf("<<episode>>") <> -1 Or text.IndexOf("<<episode:all>>") <> -1 Then
                 If text.IndexOf("<<season") <> -1 Then inclSeason = True
                 If text.IndexOf("<<episode") <> -1 Then inclEpisode = True
@@ -6408,7 +6344,9 @@ Public Class Form1
         Dim tempint As Integer = MovieListComboBox.SelectedIndex
         Dim oldmovie As String = ""
         Try
-            oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).value
+            If (MovieListComboBox.SelectedItem IsNot Nothing) Then
+                oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
+            End If
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -29226,6 +29164,13 @@ MyExit:
     Private Sub SearchForMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForMissingEpisodesToolStripMenuItem.Click
         Try
             If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
+                Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
+                Preferences.SaveConfig()
+                If Preferences.displayMissingEpisodes = False OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                    tv_CacheLoad()
+                    tv_Filter()
+                    Return
+                End If
                 Dim ShowList As New List(Of TvShow)
                 For Each shows In Cache.TvCache.Shows
                     shows.MissingEpisodes.Clear()
@@ -29252,6 +29197,7 @@ MyExit:
             Else
                 MsgBox("Missing episode search cannot be performed" & vbCrLf & "    when the episode scraper is running")
             End If
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -31347,6 +31293,7 @@ MyExit:
         Me.MovieRenameCheckBox.Checked = Preferences.MovieRenameEnable
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
         Me.MovieRenameTemplateTextBox.Text = Preferences.MovieRenameTemplate
+        Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
@@ -31414,6 +31361,7 @@ MyExit:
             frmSplash.Label3.Refresh()
             Call tv_CacheLoad()
         End If
+        Call tv_Filter()
         If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building Actor Database"
             frmSplash.Label3.Text = loadinginfo

@@ -18,13 +18,15 @@ Public Class TvEpisode
             _PureName = value
             MyBase.NfoFilePath = value & ".nfo"
             If String.IsNullOrEmpty(Me.MediaExtension) Then
-                For Each Item As String In Utilities.VideoExtensions
-                    If IO.File.Exists(_PureName & Item) Then
-                        _VideoFilePath = _PureName & Item
-                        Me.MediaExtension = Item
-                        Exit For
-                    End If
-                Next
+                If Not IsMissing Then
+                    For Each Item As String In Utilities.VideoExtensions
+                        If IO.File.Exists(_PureName & Item) Then
+                            _VideoFilePath = _PureName & Item
+                            Me.MediaExtension = Item
+                            Exit For
+                        End If
+                    Next
+                End If
             Else
                 'If IO.File.Exists(_PureName & Me.MediaExtension) Then
                 _VideoFilePath = _PureName & Me.MediaExtension
@@ -95,7 +97,6 @@ Public Class TvEpisode
 
     Public Property ImdbId As New ProtoProperty(Me, "imdbid")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
-
     Public Property ShowId As New ProtoProperty(Me, "ShowId", CacheMode:=CacheMode.Both)
 
     'TODO: Should be a list, used for multiple episodes per file
@@ -107,11 +108,24 @@ Public Class TvEpisode
     Public Property ListActors As New ActorList(Me, "actor")
 
     Public Property SeasonObj As TvSeason
+    Private Property _showObj As TvShow
     Public Property ShowObj As TvShow
+        Get
+            Return _showObj
+        End Get
+        Set(ByVal value As TvShow)
+            _showObj = value
+            ShowId.Value = value.TvdbId.Value
+            TvdbId.Value = value.TvdbId.Value
+            ImdbId.Value = value.ImdbId.Value
+        End Set
+    End Property
 
     Public Property Thumbnail As New ProtoImage(Me, "thumbnail", Utilities.DefaultFanartPath)
 
     Public Sub AbsorbTvdbEpisode(ByRef TvdbEpisode As Tvdb.Episode)
+        Me.TvdbId.Value = TvdbEpisode.Id.Value
+        Me.ImdbId.Value = TvdbEpisode.ImdbId.Value
         Me.Title.Value = TvdbEpisode.EpisodeName.Value
         Me.Rating.Value = TvdbEpisode.Rating.Value
         Me.Plot.Value = TvdbEpisode.Overview.Value

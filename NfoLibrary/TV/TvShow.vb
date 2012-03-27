@@ -111,14 +111,7 @@ Public Class TvShow
 
     Public ReadOnly Property MissingEpisodes As List(Of TvEpisode)
         Get
-            Dim TempList As New List(Of TvEpisode)
-
-            For Each Ep As TvEpisode In Me.Episodes
-                If Ep.IsMissing Then
-                    TempList.Add(Ep)
-                End If
-            Next
-            Return TempList
+            Return (From e In Me.Episodes Where e.IsMissing).ToList()
         End Get
     End Property
 
@@ -369,8 +362,9 @@ Public Class TvShow
 
     Public Function GetEpisode(ByVal Season As Long, ByVal Episode As Long) As TvEpisode
         For Each Item As TvSeason In Me.Seasons.Values.ToList
+            Dim list = Item.Episodes.ToList
             If Item.SeasonNumber = Season Then
-                For Each Ep As TvEpisode In Item.Episodes.ToList
+                For Each Ep As TvEpisode In list
                     If Ep.Episode.Value = Episode Then
                         Return Ep
                     End If

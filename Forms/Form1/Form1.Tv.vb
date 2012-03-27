@@ -728,19 +728,26 @@ Partial Public Class Form1
         ' We need to do the following since we cannot rename the tbn whilst it is still showing in the picturebox
         ' It could have been why Billy has used two pictureboxes for each single one shown.....
 
-        util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, defaultScreenShot)
-        util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Season.Poster.Image
-
+        If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
+            util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, defaultScreenShot)
+        End If
+        If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
+            util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, defaultPoster) 'tv_PictureBoxRight.Image = Season.Poster.Image
+        End If
         Panel9.Visible = True
 
     End Sub
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
     Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
         Try
-            Dim fs As System.IO.FileStream
-            fs = New System.IO.FileStream(ImagePath, IO.FileMode.Open, IO.FileAccess.Read)
-            PicBox.Image = System.Drawing.Image.FromStream(fs)
-            fs.Close()
+            If System.IO.File.Exists(ImagePath) Then
+                Dim fs As System.IO.FileStream
+                fs = New System.IO.FileStream(ImagePath, IO.FileMode.Open, IO.FileAccess.Read)
+                PicBox.Image = System.Drawing.Image.FromStream(fs)
+                fs.Close()
+            Else
+                PicBox.ImageLocation = DefaultPic
+            End If
         Catch ex As Exception
             'possibly no file to load or file is corrupt
             PicBox.ImageLocation = DefaultPic
@@ -2323,9 +2330,11 @@ Partial Public Class Form1
                     If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
                         'workingtvshow = nfoFunction.loadfulltnshownfo(Shows.fullpath)
                         For Each ept In episodearray
-                            For j = Shows.MissingEpisodes.Count - 1 To 0 Step -1
-                                If Shows.MissingEpisodes(j).Title = ept.Title Then
-                                    Shows.MissingEpisodes.RemoveAt(j)
+                            Dim list = Shows.MissingEpisodes
+                            For j = list.Count - 1 To 0 Step -1
+                                If list(j).Title = ept.Title Then
+                                    'not sure this has a point.  missingepisodes is a linq list
+                                    list.RemoveAt(j)
                                     Exit For
                                 End If
                             Next
@@ -3223,15 +3232,21 @@ Partial Public Class Form1
         ElseIf butt = "all" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 item.Visible = True
+                Dim containsVisibleSeason As Boolean = False
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    Dim containsVisibleEpisode As Boolean = False
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
-
-                        episode.Visible = True
-
+                        If (episode.IsMissing AndAlso Not Preferences.displayMissingEpisodes) Then
+                            episode.Visible = False
+                        Else
+                            episode.Visible = True
+                            containsVisibleEpisode = True
+                        End If
                     Next
-                    Season.Visible = True
+                    Season.Visible = containsVisibleEpisode
+                    If containsVisibleEpisode Then containsVisibleSeason = True
                 Next
-                item.Visible = True
+                item.Visible = containsVisibleSeason
             Next
         ElseIf butt = "fanart" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -3387,10 +3402,10 @@ Partial Public Class Form1
         Try
             ToolStripStatusLabel2.Visible = False
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
-
             TvTreeview.Sort()
-            Call tv_Filter()
-
+            Tv_CacheSave()
+            tv_CacheLoad()
+            tv_Filter()
             MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -3440,78 +3455,17 @@ Partial Public Class Form1
                             MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
                             MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
                             MissingEpisode.IsMissing = True
+                            MissingEpisode.IsCache = True
                             MissingEpisode.ShowObj = item
                             MissingEpisode.Save()
+                            item.AddEpisode(MissingEpisode)
                             Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
+                        Else
+                            Episode.ShowObj = item
+                            Episode.Save()
                         End If
                     Next
-                    'Try
-                    '    Dim ShowList As New XmlDocument
-                    '    ShowList.LoadXml(xmlfile)
-                    '    Dim thisresult As XmlNode = Nothing
-                    '    For Each thisresult In ShowList("Data")
-                    '        Select Case thisresult.Name
-                    '            Case "Episode"
-                    '                Dim newshow As New TvEpisode
-                    '                Dim premdate As String = String.Empty
-                    '                Dim aired As Boolean = True
-                    '                Dim mirrorselection As XmlNode = Nothing
-                    '                For Each mirrorselection In thisresult.ChildNodes
-                    '                    Select Case mirrorselection.Name
-                    '                        Case "DVD_episodenumber"
-                    '                            If sortorder = "dvd" Then
-                    '                                If mirrorselection.InnerText <> "" Then
-                    '                                    Dim temp As String = mirrorselection.InnerText
-                    '                                    If temp.IndexOf(".") <> -1 Then
-                    '                                        temp = temp.Substring(0, temp.IndexOf("."))
-                    '                                    End If
-                    '                                    newshow.episodeno = Convert.ToInt32(temp).ToString
-                    '                                Else
-                    '                                    sortorder = "default"
-                    '                                End If
-                    '                            End If
-                    '                        Case "EpisodeNumber"
-                    '                            If sortorder = "default" Then
-                    '                                newshow.episodeno = mirrorselection.InnerText
-                    '                            End If
-                    '                        Case "SeasonNumber"
-                    '                            newshow.Season.value = mirrorselection.InnerText
-                    '                        Case "EpisodeName"
-                    '                            newshow.title = mirrorselection.InnerText
-                    '                        Case "FirstAired"
-                    '                            premdate = mirrorselection.InnerText
-                    '                    End Select
-                    '                Next
-                    '                If premdate = "" Then
-                    '                    aired = False
-                    '                Else
-                    '                    If premdate <> "0000-00-00" Then
-                    '                        Try
-                    '                            Dim myDate2 As Date = System.DateTime.Now
-                    '                            Dim epdate As Date = CDate(premdate)
-                    '                            newshow.playcount = premdate
-                    '                            Dim strepdate As String
-                    '                            strepdate = Format(epdate, "yyyyMMdd")
-                    '                            Dim strcurrentdate As String
-                    '                            strcurrentdate = Format(myDate2, "yyyyMMdd")
-                    '                            Dim oldint As Integer = Convert.ToInt32(strepdate)
-                    '                            Dim newint As Integer = Convert.ToInt32(strcurrentdate)
-                    '                            If oldint > newint Then
-                    '                                aired = False
-                    '                            End If
-                    '                        Catch ex2 As Exception
-                    '                        End Try
-                    '                    Else
-                    '                        'MsgBox("boo")
-                    '                    End If
-                    '                End If
-
-                    '                If aired = True Then newshow.tvdbid = "true"
-                    '                If aired = False Then newshow.tvdbid = "false"
-                    '                newshow.VideoFilePath = item.fullpath
-                    '                Bckgrndfindmissingepisodes.ReportProgress(1, newshow)
-                    '        End Select
-                    '    Next
+                 
                 End If
             End If
         Next
@@ -3542,7 +3496,6 @@ Partial Public Class Form1
 
         ' This call is required by the designer.
         InitializeComponent()
-
         ' Add any initialization after the InitializeComponent() call.
 
     End Sub
