@@ -15847,12 +15847,14 @@ MyExit:
                 End If
 
                 Dim StillOk As Boolean = True   'first we test every file we are going to rename, if they all can be renamed we then rename
+                Dim RenameFailedFile As String = ""
                 For Each ITEMS In listtorename
                     Dim newname As String = ITEMS.Replace(IO.Path.GetFileName(ITEMS), newfilename) & IO.Path.GetExtension(ITEMS)
                     newname = newname.Replace("..", ".")
                     Dim fi As New IO.FileInfo(ITEMS)
                     If IO.File.Exists(newname) Then
-                        StillOK = False
+                        RenameFailedFile = newname
+                        StillOk = False
                     End If
                 Next
 
@@ -15866,7 +15868,7 @@ MyExit:
                             Dim fi As New IO.FileInfo(ITEMS)
                             fi.MoveTo(newname)
                             If FirstCount = True Then  'we only want to show the renamed mediafile in the brief view
-                                Preferences.tvScraperLog &= "!!! RENAMED TO: " & newname & vbCrLf
+                                Preferences.tvScraperLog &= "!!! Renamed to: " & newname & vbCrLf
                                 FirstCount = False
                             Else
                                 Preferences.tvScraperLog &= "                " & newname & vbCrLf
@@ -15879,6 +15881,8 @@ MyExit:
 
                     Next
                     returnpath = done
+                Else
+                    Preferences.tvScraperLog &= "!!! RENAME ATTEMPT FAILED. File already exists : " & RenameFailedFile & vbCrLf
                 End If
 
             End If

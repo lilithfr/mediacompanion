@@ -1788,12 +1788,15 @@ Partial Public Class Form1
         For Each eps In newEpisodeList
             epscount += 1
 
-            Preferences.tvScraperLog &= "!!! WORKING ON: " & eps.VideoFilePath & vbCrLf
+
+            Preferences.tvScraperLog &= "!!! With File : " & eps.VideoFilePath & vbCrLf
+            Preferences.tvScraperLog &= "!!! Detected  : Season : " & eps.Season.Value & " Episode : " & eps.Episode.Value & vbCrLf
+
             If eps.Season.Value <> "-1" And eps.Episode.Value <> "-1" Then
                 Preferences.tvScraperLog &= "Season : " & eps.Season.Value & vbCrLf
                 Preferences.tvScraperLog &= "Episode: " & eps.Episode.Value & vbCrLf
             Else
-                Preferences.tvScraperLog &= "!!! WARNING: Cant extract Season and Episode details from filename: " & vbCrLf
+                Preferences.tvScraperLog &= "!!! WARNING: Can't extract Season and Episode details from filename: " & vbCrLf
                 Continue For    'if we can't get season or episode then skip to next episode
             End If
 
@@ -1945,7 +1948,7 @@ Partial Public Class Form1
                             If sortorder.ToLower = "dvd" Then
                                 tempsortorder = "default"
                                 Preferences.tvScraperLog &= "!!! WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
-                                Preferences.tvScraperLog &= "Attempting to find using default sort order" & vbCrLf
+                                Preferences.tvScraperLog &= "!!! Attempting to find using default sort order" & vbCrLf
                                 episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/default/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
                                 Preferences.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
                             End If
