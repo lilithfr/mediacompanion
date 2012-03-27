@@ -776,7 +776,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             removal(53) = "-r5"
             removal(54) = "_r5"
             removal(55) = ".r5"
-            removal(56) = "bluray"
+            removal(56) = "576"
             removal(57) = "720"
             removal(58) = "1024"
             removal(59) = "fullscreen"
