@@ -3110,9 +3110,12 @@ Partial Public Class Form1
         messbox.Close()
 
     End Sub
-
-    Private Sub tv_Filter() 'ByVal butt As String)
+    Private Sub tv_Filter()
+        tv_Filter(Nothing)
+    End Sub
+    Private Sub tv_Filter(ByVal overrideShowIsMissing As String) 'ByVal butt As String)
         Dim butt As String = ""
+        Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
 
         If RadioButton29.Checked = True Then butt = "all"
         If RadioButton30.Checked = True Then butt = "fanart"
@@ -3236,7 +3239,7 @@ Partial Public Class Form1
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     Dim containsVisibleEpisode As Boolean = False
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                        If (episode.IsMissing AndAlso Not Preferences.displayMissingEpisodes) Then
+                        If (episode.IsMissing AndAlso Not (Preferences.displayMissingEpisodes Or (overrideIsMissing AndAlso episode.ShowObj.ToString = overrideShowIsMissing))) Then
                             episode.Visible = False
                         Else
                             episode.Visible = True
@@ -3287,6 +3290,7 @@ Partial Public Class Form1
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
         Try
             Call tv_EpisodesMissingFind(e.Argument)
+            e.Result = e.Argument
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -3300,95 +3304,6 @@ Partial Public Class Form1
 
                     MissingEpisode.ShowObj.AddEpisode(MissingEpisode)
                 End If
-
-                'Dim newshow As New Nfo.TvEpisode
-                'newshow = e.UserState
-                'For Each item In TvShows
-                '    If item.fullpath = newshow.Episode.Then Then
-                '        If Convert.ToInt32(newshow.Season.value) > 0 And newshow.Title <> "" And newshow.TvdbId = "true" Then
-                '            Dim exists As Boolean = False
-                '            For Each ep In item.allepisodes
-                '                If ep.episodeno = newshow.episodeno And ep.Season.value = newshow.Season.value Then
-                '                    exists = True
-                '                    Exit For
-                '                End If
-                '            Next
-                '            If exists = False Then
-                '                Dim cnode As TreeNode = Nothing
-                '                Dim shownode As Integer = -1
-                '                For g = 0 To TvTreeview.Nodes.Count - 1
-                '                    If TvTreeview.Nodes(g).Name.ToString = item.fullpath Then
-                '                        cnode = TvTreeview.Nodes(g)
-                '                        shownode = g
-                '                        Exit For
-                '                    End If
-                '                Next
-
-                '                Dim seasonstring As String = Nothing
-                '                Dim seasonno As Integer = Convert.ToInt32(newshow.Season.value)
-                '                Dim tempstring As String = String.Empty
-                '                If seasonno <> 0 And seasonno <> -1 Then
-                '                    If seasonno < 10 Then
-                '                        tempstring = "Season 0" & seasonno.ToString
-                '                    Else
-                '                        tempstring = "Season " & seasonno.ToString
-                '                    End If
-                '                ElseIf seasonno = 0 Then
-                '                    tempstring = "Specials"
-                '                End If
-                '                Dim node As TreeNode
-                '                Dim alreadyexists As Boolean = False
-                '                For Each node In cnode.Nodes
-                '                    If node.Text = tempstring Then
-                '                        alreadyexists = True
-                '                        Exit For
-                '                    End If
-                '                Next
-                '                If alreadyexists = False Then cnode.Nodes.Add(tempstring)
-                '                Dim tempint As Integer
-                '                For Each node In cnode.Nodes
-                '                    If node.Text = tempstring Then
-                '                        tempint = node.Index
-                '                        Exit For
-                '                    End If
-                '                Next
-
-                '                Dim eps As String
-                '                Dim episodeno As Integer = Convert.ToInt32(newshow.episodeno)
-                '                If episodeno < 10 Then
-                '                    eps = "0" & episodeno.ToString
-                '                Else
-                '                    eps = episodeno.ToString
-                '                End If
-                '                eps = eps & " - " & newshow.Title
-                '                Dim ccnode As TreeNode
-                '                ccnode = TvTreeview.Nodes(shownode).Nodes(tempint)
-                '                Dim tempstring2 As String = "Missing: " & eps
-                '                alreadyexists = False
-                '                For Each node In ccnode.Nodes
-                '                    If node.Text = eps Then
-                '                        alreadyexists = True
-                '                        Exit For
-                '                    End If
-                '                Next
-                '                If alreadyexists = False Then
-                '                    ccnode.Nodes.Add(tempstring2, eps)
-                '                    For Each no As TreeNode In ccnode.Nodes
-                '                        If no.Name = tempstring2 Then
-                '                            no.ForeColor = Color.Blue
-                '                            no.Parent.ForeColor = Color.Blue
-                '                            no.Parent.Parent.ForeColor = Color.Blue
-                '                            Exit For
-                '                        End If
-                '                    Next
-                '                    newshow.VideoFilePath = tempstring2
-                '                    item.missingepisodes.Add(newshow)
-                '                    ToolStripStatusLabel2.Text = "Adding: " & eps
-                '                End If
-                '            End If
-                '        End If
-                '    End If
-                'Next
             Else
                 ToolStripStatusLabel2.Text = e.UserState
             End If
@@ -3400,12 +3315,17 @@ Partial Public Class Form1
 
     Private Sub Bckgrndfindmissingepisodes_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles Bckgrndfindmissingepisodes.RunWorkerCompleted
         Try
+            Dim ShowList As List(Of TvShow) = e.Result
             ToolStripStatusLabel2.Visible = False
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
+            Application.DoEvents()
             TvTreeview.Sort()
-            Tv_CacheSave()
-            tv_CacheLoad()
-            tv_Filter()
+            Dim showToRefresh = Nothing
+            If (ShowList.Count = 1) Then
+                ' ignore missing episodes checked entry for this forced node refresh
+                showToRefresh = ShowList(0).ToString()
+            End If
+            tv_Filter(showToRefresh)
             MsgBox("Missing Episode Download Complete!", MsgBoxStyle.OkOnly, "Missing Episode Download.")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -3465,10 +3385,12 @@ Partial Public Class Form1
                             Episode.Save()
                         End If
                     Next
-                 
+
                 End If
             End If
         Next
+        Tv_CacheSave()
+
     End Sub
 
     Public Sub tv_CacheLoad()

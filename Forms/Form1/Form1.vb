@@ -29167,7 +29167,6 @@ MyExit:
                 Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
                 Preferences.SaveConfig()
                 If Preferences.displayMissingEpisodes = False OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
-                    tv_CacheLoad()
                     tv_Filter()
                     Return
                 End If
