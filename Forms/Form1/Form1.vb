@@ -5155,8 +5155,8 @@ Public Class Form1
                 Case "fullpathandfilename"
                     strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
 
-                    ' These tokens (except 'nfo') are included for backwards compatibility
-                Case "fullplot", "director", "stars", "writer", "moviegenre", "format", "releasedate", "nfo"
+                    ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
+                Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "format", "filename", "nfo"
                     Dim newplotdetails As New FullMovieDetails
                     newplotdetails = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
@@ -5174,6 +5174,9 @@ Public Class Form1
                         End If
                         If tokenInstr(0) = "moviegenre" Then
                             strNFOprop = newplotdetails.fullmoviebody.genre
+                        End If
+                        If tokenInstr(0) = "releasedate" Then
+                            strNFOprop = newplotdetails.fullmoviebody.premiered
                         End If
                         If tokenInstr(0) = "format" Then
                             Dim idxEndParam As Integer = tokenInstr.Length - 1
@@ -5218,8 +5221,31 @@ Public Class Form1
                                 strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
                             End If
                         End If
-                        If tokenInstr(0) = "releasedate" Then
-                            strNFOprop = newplotdetails.fullmoviebody.premiered
+                        If tokenInstr(0) = "filename" Then
+                            Dim tempFileAndPath As String = Utilities.GetFileName(movie.fullpathandfilename)
+                            Dim idxEndParam As Integer = tokenInstr.Length - 1
+                            If idxEndParam > 0 Then
+                                Dim arrlstFormat As New ArrayList
+                                Dim separator As String = ""
+                                Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
+                                Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
+                                For i = 0 To idxEndParam - 1
+                                    Select Case tokenInstr(i + 1).ToLower
+                                        Case "root"
+                                            arrlstFormat.Add(tempRoot)
+                                        Case "path"
+                                            arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
+                                        Case "file"
+                                            arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
+                                        Case "ext"
+                                            arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
+                                    End Select
+                                Next
+                                Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
+                                strNFOprop = String.Join(separator, arrFormat)
+                            Else
+                                strNFOprop = tempFileAndPath
+                            End If
                         End If
                         If tokenInstr(0) = "nfo" Then
                             Try
@@ -5278,8 +5304,14 @@ Public Class Form1
                                                     i += 1
                                                 Next
                                         End Select
+                                    Case "title"
+                                        strNFOprop = newplotdetails.fullmoviebody.title
+                                    Case "originaltitle"
+                                        strNFOprop = newplotdetails.fullmoviebody.originaltitle
                                     Case "sorttitle"
                                         strNFOprop = newplotdetails.fullmoviebody.sortorder
+                                    Case "year"
+                                        strNFOprop = newplotdetails.fullmoviebody.year
                                     Case "set"
                                         strNFOprop = newplotdetails.fullmoviebody.movieset
                                     Case "createdate", "premiered"
@@ -5316,19 +5348,57 @@ Public Class Form1
                                         Catch ex As Exception
                                             strNFOprop = "Error in date format"
                                         End Try
-                                    Case "actor"                                        ' No support for actor list
-                                        strNFOprop = "No support"
-                                    Case "alternativetitle"                             ' No support for alternative titles
-                                        strNFOprop = "No support"
+                                    Case "rating"
+                                        strNFOprop = newplotdetails.fullmoviebody.rating
+                                    Case "votes"
+                                        strNFOprop = newplotdetails.fullmoviebody.votes
+                                    Case "top250"
+                                        strNFOprop = newplotdetails.fullmoviebody.top250
+                                    Case "outline"
+                                        strNFOprop = newplotdetails.fullmoviebody.outline
+                                    Case "plot"
+                                        strNFOprop = newplotdetails.fullmoviebody.plot
+                                    Case "tagline"
+                                        strNFOprop = newplotdetails.fullmoviebody.tagline
+                                    Case "country"
+                                        strNFOprop = newplotdetails.fullmoviebody.country
+                                    Case "runtime"
+                                        strNFOprop = newplotdetails.fullmoviebody.runtime
+                                    Case "mpaa"
+                                        strNFOprop = newplotdetails.fullmoviebody.mpaa
+                                    Case "genre"
+                                        strNFOprop = newplotdetails.fullmoviebody.genre
+                                    Case "credits"
+                                        strNFOprop = newplotdetails.fullmoviebody.credits
+                                    Case "director"
+                                        strNFOprop = newplotdetails.fullmoviebody.director
+                                    Case "studio"
+                                        strNFOprop = newplotdetails.fullmoviebody.studio
+                                    Case "trailer"
+                                        strNFOprop = newplotdetails.fullmoviebody.trailer
+                                    Case "playcount"
+                                        strNFOprop = newplotdetails.fullmoviebody.playcount
+                                    Case "id"
+                                        strNFOprop = newplotdetails.fullmoviebody.imdbid
+                                    Case "stars"
+                                        strNFOprop = newplotdetails.fullmoviebody.stars
+                                    Case "source"
+                                        strNFOprop = newplotdetails.fullmoviebody.source
                                     Case Else
-                                        strNFOprop = "No support"
+                                        strNFOprop = "No support for" & tokenInstr(1)
                                 End Select
-                                If tokenInstr(1) <> "file" And tokenInstr(1) <> "createdate" And tokenInstr(1) <> "premiered" And tokenInstr.Length > 2 Then
-                                    Dim intCharLimit = CInt(tokenInstr(2))
-                                    If strNFOprop.Length > intCharLimit Then
-                                        strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
-                                    End If
-                                End If
+
+                                Select Case tokenInstr(1)
+                                    Case "file", "createdate", "premiered", "filename"
+                                        'Do nothing
+                                    Case Else
+                                        If tokenInstr.Length > 2 Then
+                                            Dim intCharLimit = CInt(tokenInstr(2))
+                                            If strNFOprop.Length > intCharLimit Then
+                                                strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
+                                            End If
+                                        End If
+                                End Select
 
                             Catch
                                 strNFOprop = "Error in token"
