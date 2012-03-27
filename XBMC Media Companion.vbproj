@@ -1,0 +1,786 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4A891BFA-D799-4F3A-AFBA-A53C4824F33C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Media_Companion.My.MyApplication</StartupObject>
+    <RootNamespace>Media_Companion</RootNamespace>
+    <AssemblyName>Media Companion</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Media Companion icon5.ico</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <PublishUrl>C:\_test publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>3.4.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>Full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>1179C7EB15DCB2E8C80EA8E148233A34D2BC75F9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>XBMC Media Companion_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="class_mpdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\class_mpdb_thumbs.dll</HintPath>
+    </Reference>
+    <Reference Include="crclib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\crclib.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="imdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\imdb_thumbs\imdb_thumbs\bin\Release\imdb_thumbs.dll</HintPath>
+    </Reference>
+    <Reference Include="IMPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IMPA\IMPA\bin\Release\IMPA.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="tmdb_posters">
+      <HintPath>Assets\tmdb_posters.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Basics\TaskingSupport.vb" />
+    <Compile Include="Classes\ExceptionHandler.vb" />
+    <Compile Include="Classes\Renamer.vb" />
+    <Compile Include="Classes\Profiles.vb" />
+    <Compile Include="Classes\Shared\Actor.vb" />
+    <Compile Include="Classes\TvdbScraper.vb" />
+    <Compile Include="Classes\TVhtml.vb" />
+    <Compile Include="Classes\ValueDescriptionPair.vb" />
+    <Compile Include="Forms\Form1\Form1.Tv.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmBigMovieText.designer.vb">
+      <DependentUpon>frmBigMovieText.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmBigMovieText.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmExceptions.Designer.vb">
+      <DependentUpon>frmExceptions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmExceptions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmProgressScreen.Designer.vb">
+      <DependentUpon>frmProgressScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmProgressScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Structures\FanartList.vb" />
+    <Compile Include="Structures\PossibleShowList.vb" />
+    <Compile Include="Structures\RelativeFileList.vb" />
+    <Compile Include="Structures\TableItems.vb" />
+    <Compile Include="Structures\HTMLTemplate.vb" />
+    <Compile Include="Structures\BatchWizard.vb" />
+    <Compile Include="Classes\MediaInfoDLLComplete.vb" />
+    <Compile Include="Structures\RunningThreads.vb" />
+    <Compile Include="Structures\ComboList.vb" />
+    <Compile Include="Structures\NewMovie.vb" />
+    <Compile Include="Structures\FileDetails.vb" />
+    <Compile Include="Classes\FullMovieDetails.vb" />
+    <Compile Include="Structures\MovieActors.vb" />
+    <Compile Include="Structures\BasicMovieNFO.vb" />
+    <Compile Include="Structures\ActorDatabase.vb" />
+    <Compile Include="Classes\Actors.vb" />
+    <Compile Include="Forms\frmBatchScraper.Designer.vb">
+      <DependentUpon>frmBatchScraper.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmBatchScraper.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmCopyProgress.Designer.vb">
+      <DependentUpon>frmCopyProgress.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCopyProgress.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmCoverArt.Designer.vb">
+      <DependentUpon>frmCoverArt.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCoverArt.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmDialog1.Designer.vb">
+      <DependentUpon>frmDialog1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmDialog1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Structures\ListOfPosters.vb" />
+    <Compile Include="Forms\frmMessageBox.Designer.vb">
+      <DependentUpon>frmMessageBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMessageBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMovieFanart.Designer.vb">
+      <DependentUpon>frmMovieFanart.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMovieFanart.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Classes\Scraper.vb" />
+    <Compile Include="Classes\ScraperFunctions.vb" />
+    <Compile Include="Forms\Form1\Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form1\Form1.Designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form2.Designer.vb">
+      <DependentUpon>Form2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmOutputLog.Designer.vb">
+      <DependentUpon>frmOutputLog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmOutputLog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Forms\frmOptions.Designer.vb">
+      <DependentUpon>frmOptions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmOptions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSplashscreen.Designer.vb">
+      <DependentUpon>frmSplashscreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSplashscreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmTvBatchWizard.Designer.vb">
+      <DependentUpon>frmTvBatchWizard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTvBatchWizard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmTvFanart.Designer.vb">
+      <DependentUpon>frmTvFanart.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTvFanart.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmTvPosters.Designer.vb">
+      <DependentUpon>frmTvPosters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTvPosters.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmTVShowBrowser.Designer.vb">
+      <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTVShowBrowser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Structures\TempMovieActors.vb" />
+    <Compile Include="Classes\TvBanners.vb" />
+    <Compile Include="Structures\TvPosterType.vb" />
+    <Compile Include="Structures\TvPosterSeason.vb" />
+    <Compile Include="Classes\TvArt.vb" />
+    <Compile Include="Structures\TvShowBatchWizard.vb" />
+    <Compile Include="Classes\WebFileDownloader.vb" />
+    <Compile Include="Classes\WorkingWithNfoFiles.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\CacheManager.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\Exceptions.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\General.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\Scraper.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\ScraperManager.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
+    <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
+    <Compile Include="Structures\TvShowLanguages.vb" />
+    <Compile Include="Classes\TvWrap\TvEpisode.vb" />
+    <Compile Include="Classes\TvWrap\TvShow.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\frmBatchScraper.resx">
+      <DependentUpon>frmBatchScraper.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmBigMovieText.resx">
+      <DependentUpon>frmBigMovieText.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCopyProgress.resx">
+      <DependentUpon>frmCopyProgress.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmCoverArt.resx">
+      <DependentUpon>frmCoverArt.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmDialog1.resx">
+      <DependentUpon>frmDialog1.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form1\Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form2.resx">
+      <DependentUpon>Form2.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmExceptions.resx">
+      <DependentUpon>frmExceptions.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmOutputLog.resx">
+      <DependentUpon>frmOutputLog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMessageBox.resx">
+      <DependentUpon>frmMessageBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMovieFanart.resx">
+      <DependentUpon>frmMovieFanart.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmProgressScreen.resx">
+      <DependentUpon>frmProgressScreen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmOptions.resx">
+      <DependentUpon>frmOptions.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSplashscreen.resx">
+      <DependentUpon>frmSplashscreen.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmTvBatchWizard.resx">
+      <DependentUpon>frmTvBatchWizard.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmTvFanart.resx">
+      <DependentUpon>frmTvFanart.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmTvPosters.resx">
+      <DependentUpon>frmTvPosters.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmTVShowBrowser.resx">
+      <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Assets\scrapers\xbmc.metadata\scraper.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="ClassDiagram3.cd" />
+    <None Include="ClassDiagram4.cd" />
+    <None Include="media_companion.chm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TvShow.cd" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\DataSources\basicmovienfo.datasource" />
+    <None Include="My Project\DataSources\basicmovienfo1.datasource" />
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\class_mpdb_thumbs.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\crclib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\ICSharpCode.SharpZipLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\imdb.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\imdb_thumbs.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\IMPA.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Media Companion icon5.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.mc.hdtrailers.net\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.mc.hdtrailers.net\hdtrailers.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\CSVoutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\XMLoutput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MediaInfo.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\pthreadGC2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.hdtrailers.net\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.hdtrailers.net\hdtrailers.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.imdb.com\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.imdb.com\changelog.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.imdb.com\imdb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.impa.com\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.impa.com\impa.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.movieposterdb.com\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.movieposterdb.com\movieposterdb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.themoviedb.org\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.common.themoviedb.org\tmdb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\changelog.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\imdb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\Dutch\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\English\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\Hungarian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\Korean\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\Polish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\language\Portuguese\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.imdb.com\resources\settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.mtv.com\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.mtv.com\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.mtv.com\mtv.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\changelog.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Bulgarian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Chinese %28Simple%29\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Dutch\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\English\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\French\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\German\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Hungarian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Korean\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Polish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Portuguese\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Romanian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Russian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Spanish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Swedish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.themoviedb.org\tmdb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\changelog.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Chinese %28Simple%29\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Dutch\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\English\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Finnish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\French\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\German\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Hungarian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Korean\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Polish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Portuguese\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Romanian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Russian\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Spanish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\language\Swedish\strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\resources\settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\metadata.tvdb.com\tvdb.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\xbmc.core\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\scrapers\xbmc.metadata\addon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\tmdb_posters.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\TVDB.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\_imdb.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Classes\UseXBMCScrapers\readme.txt" />
+    <Content Include="html_templates\another template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\html_template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\INFO_HTMLoutputTags.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\Movie Card 2up Filter.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\Movie Card 2up.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\Movie Card.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\new template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\Table List.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\tv_adv_template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\tv_basic_template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\tv_missing_episode_list.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\blank.png" />
+    <Content Include="Resources\default_actor.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\default_banner.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\default_fanart.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\default_offline.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\default_poster.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\edit.png" />
+    <Content Include="Resources\qmark.png" />
+    <None Include="Resources\Sad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Common\Common.vbproj">
+      <Project>{A3624371-E7E4-4E55-8E64-4460E758D39E}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="NfoLibrary\NfoLibrary.vbproj">
+      <Project>{5433F636-07CC-4E16-A29C-A705F4E98A7F}</Project>
+      <Name>NfoLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="ProtoXML\ProtoXML.vbproj">
+      <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
+      <Name>ProtoXML</Name>
+    </ProjectReference>
+    <ProjectReference Include="Tasks\Tasks.vbproj">
+      <Project>{34E2C884-046F-4E79-9FCD-D67DC9592489}</Project>
+      <Name>Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="TvdbScrapper\TvdbScrapper.vbproj">
+      <Project>{5B3BD48A-7DEE-4FF3-B7E8-8D41B83E25D3}</Project>
+      <Name>TvdbScrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="Utilites\Utilites.vbproj">
+      <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
+      <Name>Utilites</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
