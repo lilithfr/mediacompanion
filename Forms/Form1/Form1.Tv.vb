@@ -1796,7 +1796,7 @@ Partial Public Class Form1
                 Preferences.tvScraperLog &= "Season : " & eps.Season.Value & vbCrLf
                 Preferences.tvScraperLog &= "Episode: " & eps.Episode.Value & vbCrLf
             Else
-                Preferences.tvScraperLog &= "!!! WARNING: Can't extract Season and Episode details from filename: " & vbCrLf
+                Preferences.tvScraperLog &= "!!! WARNING: Can't extract Season and Episode details from filename: " & vbCrLf & vbCrLf
                 Continue For    'if we can't get season or episode then skip to next episode
             End If
 
