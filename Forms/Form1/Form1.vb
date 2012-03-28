@@ -11071,16 +11071,21 @@ MyExit:
                 If newSelection Then
                     MovieListComboBox.SelectedItems.Clear()
                     MovieListComboBox.SelectedIndex = ptIndex
-
+                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
                     mov_ToolStripMovieName.BackColor = Color.Honeydew
                     mov_ToolStripMovieName.Text = "'" & MovieListComboBox.Text & "'"
                     mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                    mov_ToolStripPlayTrailer.Visible = True
+                    If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
+                        mov_ToolStripPlayTrailer.Visible = True 'if an actual trailer video exists, then show the 'Play Trailer' context menu item.
+                    Else
+                        mov_ToolStripPlayTrailer.Visible = False 'else hide it
+                    End If
+
                 Else
                     mov_ToolStripMovieName.BackColor = Color.Orange
-                    mov_ToolStripMovieName.Text = "'Multisave Mode'"
+                    mov_ToolStripMovieName.Text = "Multisave Mode"
                     mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                    mov_ToolStripPlayTrailer.Visible = False
+                    mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
                 End If
             End If
         Catch ex As Exception
