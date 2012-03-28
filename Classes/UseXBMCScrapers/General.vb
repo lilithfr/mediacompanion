@@ -169,141 +169,7 @@ Module General
         End Try
         Return "Error"
     End Function
-    Public Function cleanfilename(ByVal filename As String, Optional ByVal withextension As Boolean = True)
-        Dim cleanname As String = filename
-        Try
-            If withextension = True Then
-                Try
-                    cleanname = filename.Replace(IO.Path.GetExtension(cleanname), "")
-                Catch
-                End Try
-            End If
-            Dim movieyear As String
-            Dim S As String = cleanname
-            Dim M As Match
-            M = Regex.Match(S, "(\([\d]{4}\))")
-            If M.Success = True Then
-                movieyear = M.Value
-            Else
-                movieyear = Nothing
-            End If
-            If movieyear = Nothing Then
-                M = Regex.Match(S, "(\[[\d]{4}\])")
-                If M.Success = True Then
-                    movieyear = M.Value
-                Else
-                    movieyear = Nothing
-                End If
-            End If
-            filename = cleanname
-            Dim removal(75) As String
-            removal(1) = "cd1"
-            removal(2) = "cd.1"
-            removal(3) = "cd_1"
-            removal(4) = "cd 1"
-            removal(5) = "cd-1"
-            removal(6) = "dvd1"
-            removal(7) = "dvd.1"
-            removal(8) = "dvd_1"
-            removal(9) = "dvd 1"
-            removal(10) = "dvd-1"
-            removal(11) = "part1"
-            removal(12) = "part.1"
-            removal(13) = "part_1"
-            removal(14) = "part 1"
-            removal(15) = "part-1"
-            removal(16) = "disk1"
-            removal(17) = "disk.1"
-            removal(18) = "disk_1"
-            removal(19) = "disk 1"
-            removal(20) = "disk-1"
-            removal(21) = "pt1"
-            removal(22) = "pt.1"
-            removal(23) = "pt_1"
-            removal(24) = "pt 1"
-            removal(25) = "pt-1"
-            removal(26) = "ac3"
-            removal(27) = "divx"
-            removal(28) = "xvid"
-            removal(29) = "dvdrip"
-            removal(30) = "directors cut"
-            removal(31) = "special edition"
-            removal(32) = "screener"
-            removal(33) = "telesync"
-            removal(34) = "telecine"
-            removal(35) = "director's cut"
-            removal(36) = " r5"
-            removal(37) = " scr"
-            removal(38) = ".scr"
-            removal(39) = "_scr"
-            removal(40) = "-scr"
-            removal(41) = " ts"
-            removal(42) = "_ts"
-            removal(43) = ".ts"
-            removal(44) = "-ts"
-            removal(45) = " fs"
-            removal(46) = ".fs"
-            removal(47) = "_fs"
-            removal(48) = "-fs"
-            removal(49) = " ws"
-            removal(50) = ".ws"
-            removal(51) = "_ws"
-            removal(52) = "-ws"
-            removal(53) = "-r5"
-            removal(54) = "_r5"
-            removal(55) = ".r5"
-            removal(56) = "576"
-            removal(57) = "720"
-            removal(58) = "1024"
-            removal(59) = "fullscreen"
-            removal(60) = "widescreen"
-            removal(61) = "dvdscr"
-            removal(62) = "part01"
-            removal(63) = "dvd5"
-            removal(64) = "dvd9"
-            removal(65) = "dvd 5"
-            removal(66) = "dvd 9"
-            removal(67) = "dvd-5"
-            removal(68) = "dvd-9"
-            removal(69) = "dvd_5"
-            removal(70) = "dvd_9"
-            removal(71) = "dvd.5"
-            removal(72) = "dvd.9"
-            removal(73) = "x264"
-            removal(74) = "dts"
-            removal(75) = "bluray"
-            Dim currentposition As Integer = filename.Length
-            Dim newposition As Integer = filename.Length
-            For f = 1 To 75
-                If filename.ToLower.IndexOf(removal(f)) <> -1 Then
-                    newposition = filename.ToLower.IndexOf(removal(f))
-                    If newposition < currentposition Then currentposition = newposition
-                End If
-            Next
-            If movieyear <> Nothing Then
-                If filename.IndexOf(movieyear) <> -1 Then
-                    newposition = filename.IndexOf(movieyear)
-                    If newposition < currentposition Then currentposition = newposition
-                End If
-            End If
-            If currentposition < filename.Length And currentposition > 0 Then
-                filename = filename.Substring(0, currentposition)
-                If filename.Substring(filename.Length - 1, 1) = "-" Or filename.Substring(filename.Length - 1, 1) = "_" Or filename.Substring(filename.Length - 1, 1) = "." Or filename.Substring(filename.Length - 1, 1) = " " Then
-                    filename = filename.Substring(0, filename.Length - 1)
-                End If
-            End If
 
-            If filename <> "" Then
-                cleanname = filename
-            End If
-            cleanname = Trim(cleanname)
-            Return cleanname
-        Catch ex As Exception
-            cleanname = "error"
-            Return cleanname
-        Finally
-        End Try
-    End Function
     Public Function ReplaceCharactersinXML(ByVal Entrada As String) As String
         Dim StringOriginaltoXML As New XmlDocument
         Dim InicialTrailerPosition As Integer
@@ -1740,7 +1606,7 @@ Module General
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
-            ParametersForScraper(0) = cleanfilename(MovieName, False)
+            ParametersForScraper(0) = Utilities.CleanFileName(MovieName, False)
             ParametersForScraper(1) = GetYearByFilename(MovieName, False)
             FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
