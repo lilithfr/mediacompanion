@@ -16177,6 +16177,7 @@ MyExit:
             ToolStripStatusLabel6.Visible = False
             TabPage15.Text = "Search for new Episodes"
             TabPage15.ToolTipText = "Searches folders for new episodes"
+
             If Preferences.disabletvlogs = False Then
                 Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
                 Try
@@ -20506,6 +20507,8 @@ MyExit:
                     TempEpisode.ShowObj.AddEpisode(TempEpisode)
                     TempEpisode.SeasonObj.UpdateTreenode()
                     TempEpisode.UpdateTreenode()
+                    'This bit updates the Epsiode Count on the fly when the progress is updated. It has to be done here to avoid thread issues. (GUI wouldn't update properly) 
+                    TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
                 End If
             End If
         Catch ex As Exception
