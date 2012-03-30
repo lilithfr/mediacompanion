@@ -11,14 +11,12 @@ Public Class Preferences
     Public Shared tv_RegexScraper As New List(Of String)
     Public Shared tv_RegexRename As New List(Of String)
 
-
     Public Shared Property applicationPath As String
         Get
             Return Utilities.applicationPath
         End Get
         Set(ByVal value As String)
             Utilities.applicationPath = value
-
         End Set
     End Property
     Public Shared Property tvScraperLog As String
@@ -27,6 +25,22 @@ Public Class Preferences
         End Get
         Set(ByVal value As String)
             Utilities.tvScraperLog = value
+        End Set
+    End Property
+    Public Shared Property movieignorepart As Boolean
+        Get
+            Return Utilities.ignoreParts
+        End Get
+        Set(value As Boolean)
+            Utilities.ignoreParts = value
+        End Set
+    End Property
+    Public Shared Property moviecleanTags As String
+        Get
+            Return Utilities.userCleanTags
+        End Get
+        Set(value As String)
+            Utilities.userCleanTags = value
         End Set
     End Property
 
@@ -157,7 +171,6 @@ Public Class Preferences
     Public Shared MovieRenameTemplate As String
     Public Shared moviePreferredTrailerResolution As String
     Public Shared MovieImdbGenreRegEx As String
-    Public Shared movieignorepart As Boolean
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
     Public Shared Sub SetUpPreferences()
@@ -204,8 +217,7 @@ Public Class Preferences
         Preferences.moviePreferredTrailerResolution = "720"
         Preferences.MovieRenameEnable = False
         Preferences.MovieRenameTemplate = "%T (%Y)"
-        Preferences.movieignorepart = False
-        Preferences.MovieImdbGenreRegEx    = "/genre/.*?>(?<genre>.*?)</a>"
+        Preferences.MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
             
 
         'TV
@@ -674,6 +686,14 @@ Public Class Preferences
 
         child = doc.CreateElement("externalbrowser")
         child.InnerText = Preferences.externalbrowser.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("ignoreparts")
+        child.InnerText = Preferences.movieignorepart.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("cleantags")
+        child.InnerText = Preferences.moviecleanTags
         root.AppendChild(child)
 
 
@@ -1215,6 +1235,16 @@ Public Class Preferences
                         Preferences.releaseformat = thisresult.InnerXml.Split("|")
                     End If
 
+                Case "cleantags"
+                    If thisresult.InnerText <> "" Then Preferences.moviecleanTags = thisresult.InnerXml
+
+                Case "ignoreparts"
+                    If thisresult.InnerXml = "true" Then
+                        Preferences.movieignorepart = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Preferences.movieignorepart = False
+                    End If
+
                 Case "backgroundcolour"
                     If thisresult.InnerText <> "" Then Preferences.backgroundcolour = thisresult.InnerXml
 
@@ -1509,7 +1539,7 @@ Public Class Preferences
                     If thisresult.InnerText <> "" Then Preferences.moviePreferredTrailerResolution = thisresult.InnerXml
 
                 Case "MovieImdbGenreRegEx"
-                    If thisresult.InnerText <> "" Then Preferences.MovieImdbGenreRegEx = decxmlchars( thisresult.InnerXml )
+                    If thisresult.InnerText <> "" Then Preferences.MovieImdbGenreRegEx = decxmlchars(thisresult.InnerXml)
 
 
             End Select

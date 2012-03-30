@@ -21300,6 +21300,11 @@ MyExit:
         For Each item In Preferences.offlinefolders
             ListBox15.Items.Add(item)
         Next
+        lbCleanFilename.Items.Clear()
+        Dim cleanTagsList() As String = Preferences.moviecleanTags.Split("|")
+        For Each item In cleanTagsList
+            lbCleanFilename.Items.Add(item)
+        Next
     End Sub
 
 
@@ -31319,6 +31324,7 @@ MyExit:
         Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
+        Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
         Read_XBMC_IMDB_Scraper_Config()
 
@@ -32132,4 +32138,33 @@ MyExit:
         End Try
 
     End Sub
+
+    Private Sub cbxCleanFilenameIgnorePart_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxCleanFilenameIgnorePart.CheckedChanged
+        Try
+            If cbxCleanFilenameIgnorePart.Checked = True Then
+                Preferences.movieignorepart = True
+            Else
+                Preferences.movieignorepart = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCleanFilenameApply_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameApply.Click
+        Dim strTemp As String = ""
+        For i = 0 To lbCleanFilename.Items.Count - 1
+            strTemp &= lbCleanFilename.Items(i) & "|"
+        Next
+        Preferences.moviecleanTags = strTemp.TrimEnd("|")
+    End Sub
+
+    Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameAdd.Click
+        lbCleanFilename.Items.Add(txtCleanFilenameAdd.Text)
+    End Sub
+
+    Private Sub btnCleanFilenameRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameRemove.Click
+        lbCleanFilename.Items.RemoveAt(lbCleanFilename.SelectedIndex)
+    End Sub
+
 End Class
