@@ -739,9 +739,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End If
 
             '5: check user tags
-            M = Regex.Match(filename, "([" & cleanSeparators & "]?(" & userCleanTags & "))")
-            If M.Success = True Then
-                If M.Index < currentposition Then currentposition = M.Index
+            If userCleanTags <> "" Then
+                M = Regex.Match(filename, "([" & cleanSeparators & "]?(" & userCleanTags & "))")
+                If M.Success = True Then
+                    If M.Index < currentposition Then currentposition = M.Index
+                End If
             End If
 
             '6: remove year from filename, don't panic tho' - MC will still scrape with the year
