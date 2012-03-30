@@ -48,6 +48,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultBannerPath As String
     Public Shared Property DefaultFanartPath As String
 
+    Public Shared Property ignoreParts As Boolean = False
+    Public Shared Property userCleanTags As String = "UNRATED|LIMITED"
+
     Private Shared _ApplicationPath As String
     Public Shared Function GetFrameworkVersions() As List(Of String)
         Dim installedFrameworks As New List(Of String)
@@ -698,9 +701,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "error"
     End Function
 
-    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal ignorePart As Boolean = False)
+    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withExtension As Boolean = False)
         Try 'to remove extension first if filename has one
-            filename = filename.Replace(IO.Path.GetExtension(filename), "")
+            'filename = filename.Replace(IO.Path.GetExtension(filename), "")
+            filename = Regex.Replace(filename, "(" & String.Join("|", VideoExtensions) & ")+$", "")
         Catch
         End Try
 
@@ -709,7 +713,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             '1: check for multipart tags
             Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)1)")
             If M.Success = True Then
-                If ignorePart AndAlso M.Value.IndexOf("p") <> -1 Then   ' "p" identifies a "part" or "pt" tag
+                If ignoreParts AndAlso M.Value.IndexOf("p") <> -1 Then   ' "p" identifies a "part" or "pt" tag
                     'skip this shift
                 Else
                     If M.Index < currentposition Then currentposition = M.Index
@@ -734,11 +738,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 If M.Index < currentposition Then currentposition = M.Index
             End If
 
-            '5: check user tags - STILL TO BE IMPLEMENTED
-            'M = Regex.Match(filename.ToLower, "([" & cleanSeparators & "]?(" & Preferences.cleanUserTags & "))")
-            'If M.Success = True Then
-            '    If M.Index < currentposition Then currentposition = M.Index
-            'End If
+            '5: check user tags
+            M = Regex.Match(filename, "([" & cleanSeparators & "]?(" & userCleanTags & "))")
+            If M.Success = True Then
+                If M.Index < currentposition Then currentposition = M.Index
+            End If
 
             '6: remove year from filename, don't panic tho' - MC will still scrape with the year
             Dim movieyear As String = GetYearByFilename(filename, False)
