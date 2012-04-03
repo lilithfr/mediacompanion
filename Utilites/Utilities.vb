@@ -21,19 +21,19 @@ Public Class Utilities
                                                  ".dvr-ms", ".img", ".strm", "ssif", "VIDEO_TS.IFO"}
 
     'common separators in filenames ie. dash, underscore, fullstop, and space
-    Private Shared ReadOnly cleanSeparators As String = "-_. "
+    Public Shared ReadOnly cleanSeparators As String = "-_. "
 
     'keywords commonly used to indicate stacked files
-    Private Shared ReadOnly cleanMultipart() As String = {"part", "pt", "cd", "dvd", "disk", "disc"}
+    Public Shared ReadOnly cleanMultipart() As String = {"part", "pt", "cd", "dvd", "disk", "disc"}
 
     'keywords that are commonly cleaned from filenames
-    Private Shared ReadOnly cleanTagsList() As String = {"ac3", "dts", "divx", "xvid", "x264", "dvdrip", "bluray", "dvdscr",
+    Public Shared ReadOnly cleanTagsList() As String = {"ac3", "dts", "divx", "xvid", "x264", "dvdrip", "bluray", "dvdscr",
                                                 "special edition", "screener", "fullscreen", "widescreen", "telesync", "telecine",
                                                 "directors cut", "dir cut", "director's cut",
                                                 "480", "576", "720", "1024", "1080"}
 
     'must have a separator character prefix so they do not get confused with standard text
-    Private Shared ReadOnly cleanTagsList_SepPrefix() As String = {"scr", "ts", "fs", "ws", "r5"}
+    Public Shared ReadOnly cleanTagsList_SepPrefix() As String = {"scr", "ts", "fs", "ws", "r5"}
 
     Private Declare Function GetDiskFreeSpaceEx _
 Lib "kernel32" _
