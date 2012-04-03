@@ -31512,16 +31512,16 @@ MyExit:
             Next
 
             If Not Abort Then   'i.e. we have episodes in this show.... 
-                Dim textstring As String = WorkingTvShow.Title.Value & "  Seasons: " & WorkingTvShow.Seasons.Count & "  Episodes: " & WorkingTvShow.Episodes.Count & vbCrLf 'start our text with the show title
-                textstring += StrDup(textstring.Length - 2, "-") & vbCrLf              'add an underline of the same length    
+                Dim textstring As String = "!!! " & WorkingTvShow.Title.Value & "  Seasons: " & WorkingTvShow.Seasons.Count & "  Episodes: " & WorkingTvShow.Episodes.Count & vbCrLf 'start our text with the show title
+                textstring += "!!! " & StrDup(textstring.Length - 2, "-") & vbCrLf              'add an underline of the same length    
                 Dim prevkey As String = mySortedList.GetKey(0).Substring(0, 4)                      'load with first year value first four digits of aired date
                 For Line = 0 To mySortedList.Count - 1  'read the data from the sorted list
-                    If mySortedList.GetKey(Line).Substring(0, 4) <> prevkey Then textstring = textstring & "----------" & vbCrLf 'line break between years...
+                    If mySortedList.GetKey(Line).Substring(0, 4) <> prevkey Then textstring += "!!! ----------" & vbCrLf 'line break between years...
                     prevkey = mySortedList.GetKey(Line).Substring(0, 4)                             'set so that we can compare with next iteration
-                    textstring += mySortedList.GetByIndex(Line) & vbCrLf
+                    textstring += "!!! " & mySortedList.GetByIndex(Line) & vbCrLf ' "!!! " allows this to be shown in either brief or Full log modes
                 Next
 
-                textstring += vbCrLf & "9999 episodes have no valid aired date stored" & vbCrLf
+                textstring += "!!! " & vbCrLf & "!!! 9999 episodes have no valid aired date stored" & vbCrLf
 
                 '                                                   'Show Final Listing Screen
                 Dim MyFormObject As New frmoutputlog(textstring, True)                                   'create the log form & modify it to suit our needs   
