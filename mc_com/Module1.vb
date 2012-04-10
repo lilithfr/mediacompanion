@@ -6,7 +6,7 @@ Imports System.Text
 Imports System.Threading
 Imports System.Management
 Imports System.Xml
-Imports imdb.Classimdbscraper
+'Imports imdb.Classimdbscraper - No longer exists HueyHQ
 Imports System.Reflection
 Imports System.ComponentModel
 Imports System
@@ -244,7 +244,7 @@ Module Module1
     Public Function loadfullmovienfo(ByVal path As String)
         Try
             Dim newmovie As New fullmoviedetails
-            Dim thumbstring As String
+            Dim thumbstring As String = Nothing
             If Not IO.File.Exists(path) Then
             Else
                 Dim movie As New XmlDocument
@@ -452,6 +452,7 @@ Module Module1
         Catch ex As Exception
 
         End Try
+        Return Nothing
     End Function
     Public Function resizeimage(ByVal bmp As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_source As New Bitmap(bmp)
@@ -931,7 +932,7 @@ Module Module1
         Dim progress As Integer
         progress = 0
 
-        Dim dirpath As String
+        Dim dirpath As String = String.Empty
 
         Console.WriteLine("Starting TV Folder Scan")
 
@@ -967,7 +968,6 @@ Module Module1
                 If hg.Exists Then
                     Console.WriteLine("found " & hg.FullName.ToString)
                     newtvfolders.Add(tvfolder)
-                    Dim newlist As List(Of String)
 
                     Try
                         For Each strfolder As String In My.Computer.FileSystem.GetDirectories(tvfolder)
@@ -2125,7 +2125,7 @@ Module Module1
                         End If
                     End If
                     If fs_info.Extension = ".rar" Then
-                        Dim tempmovie As String
+                        Dim tempmovie As String = String.Empty
                         Dim tempint2 As Integer
                         Dim tempmovie2 As String = fs_info.FullName
                         If IO.Path.GetExtension(tempmovie2).ToLower = ".rar" Then
@@ -3584,6 +3584,8 @@ Module Module1
             Dim tempfilename As String = path
             Dim actualpathandfilename As String = ""
 
+            If String.IsNullOrEmpty(path) Then Return Nothing
+
             If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
                 actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
             End If
@@ -3659,6 +3661,7 @@ Module Module1
         Finally
             Monitor.Exit(monitorobject)
         End Try
+        Return "Error"
     End Function
     Public Sub EnumerateDirectories(ByRef directoryList As List(Of String), ByVal root As String)
 
@@ -4017,7 +4020,7 @@ Module Module1
             playlist = getmedialist(tempstring)
 
             If Not IO.File.Exists(filename) Then
-                Exit Function
+                Return Nothing
             End If
             Dim workingfiledetails As New fullfiledetails
             Dim MI As New mediainfo
@@ -4190,6 +4193,7 @@ Module Module1
         Catch ex As Exception
 
         End Try
+        Return Nothing
     End Function
     Public Function getlangcode(ByVal strLang As String) As String
         Dim monitorobject As New Object
@@ -5180,6 +5184,7 @@ Module Module1
         Finally
             Monitor.Exit(monitorobject)
         End Try
+        Return "Error"
     End Function
     Public Function getactorthumbpath(Optional ByVal location As String = "")
         Dim actualpath As String = ""
@@ -5597,7 +5602,7 @@ Module Module1
         Catch
 
         End Try
-
+        Return "0"
     End Function
     Dim MediaFileExtensions As List(Of String) = New List(Of String)
     Private Sub InitMediaFileExtensions()
@@ -5645,7 +5650,7 @@ Module Module1
             For Each fs_info As System.IO.FileInfo In fs_infos.Where(AddressOf IsMediaExtension)
 
                 Dim newmoviedetails As newmovie
-                Dim title As String
+                Dim title As String = Nothing
                 Dim remove As Boolean = False
                 dvdfiles = False
                 dofilter = False
@@ -6072,14 +6077,13 @@ Module Module1
                             newmoviedetails.mediapathandfilename = title
                             newmoviedetails.nfopathandfilename = newmoviedetails.mediapathandfilename.Replace(extension, ".nfo")
                             If IO.File.Exists(newmoviedetails.nfopathandfilename) = False Then
-                                Dim paths() As String
+                                Dim paths() As String = Nothing
                                 If newmoviedetails.nfopathandfilename.IndexOf("\") <> -1 Then
                                     paths = newmoviedetails.nfopathandfilename.Split("\")
                                 ElseIf newmoviedetails.nfopathandfilename.IndexOf("/") <> -1 Then
                                     paths = newmoviedetails.nfopathandfilename.Split("/")
                                 End If
-                                Dim depthecount As Integer
-                                depthecount = paths.GetUpperBound(0)
+                                Dim depthecount As Integer = paths.GetUpperBound(0)
                                 newmoviedetails.title = Nothing
 
                                 For h = depthecount To 0 Step -1
@@ -6193,13 +6197,12 @@ Module Module1
     End Sub
     Private Sub startnewmovies()
         Dim dft As New List(Of String)
-        Dim moviepattern As String
         Dim tempint As Integer
         Dim tempstring As String
         Dim errorcounter As Integer = 0
         Dim trailer As String
         Dim newmoviecount As Integer
-        Dim dirinfo As String
+        Dim dirinfo As String = String.Empty
         newmovielist.Clear()
         Dim newmoviefolders As New List(Of String)
         Dim progress As Integer
@@ -6343,7 +6346,7 @@ Module Module1
 
 
 
-        Dim movieyear As String
+        Dim movieyear As String = ""
         newmoviecount = newmovielist.Count.ToString
         Console.WriteLine("Starting Main Scraper Process")
         For f = 0 To newmovielist.Count - 1
@@ -8113,12 +8116,12 @@ Module Module1
 
                 xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
                 doc.AppendChild(xmlproc)
-                Dim root As XmlElement
-                Dim child As XmlElement
-                Dim actorchild As XmlElement
-                Dim filedetailschild As XmlElement
-                Dim filedetailschildchild As XmlElement
-                Dim anotherchild As XmlElement
+                Dim root As XmlElement = Nothing
+                Dim child As XmlElement = Nothing
+                Dim actorchild As XmlElement = Nothing
+                Dim filedetailschild As XmlElement = Nothing
+                Dim filedetailschildchild As XmlElement = Nothing
+                Dim anotherchild As XmlElement = Nothing
 
                 root = doc.CreateElement("movie")
                 stage = 3
@@ -10655,7 +10658,6 @@ Public Class tvdbscraper
             'http://thetvdb.com/api/6E82FED600783400/series/70726/default/1/1/en.xml
 
             Dim xmlfile As String
-            Dim wrGETURL As WebRequest
             If language.ToLower.IndexOf(".xml") = -1 Then
                 language = language & ".xml"
             End If

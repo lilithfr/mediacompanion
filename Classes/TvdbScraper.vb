@@ -392,7 +392,6 @@ Public Class TVDBScraper
             'http://thetvdb.com/api/6E82FED600783400/series/70726/default/1/1/en.xml
 
             Dim xmlfile As String
-            Dim wrGETURL As WebRequest
             If language.ToLower.IndexOf(".xml") = -1 Then
                 language = language & ".xml"
             End If

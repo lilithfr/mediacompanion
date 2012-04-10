@@ -474,7 +474,7 @@ Public Class ScraperFunctions
         Finally
             Monitor.Exit(Me)
         End Try
-
+        Return Nothing
     End Function
     Public Function imdbthumb(ByVal posterimdbid As String)
 
