@@ -35,7 +35,7 @@ Public Class Renamer
 
     Shared rename As New str_renameTemplate(SetDefaults)
 
-    Public Shared Function setRenamePref(ByVal strRenamePref As String) As Boolean
+    Public Shared Function setRenamePref(ByVal strRenamePref As String, ByRef tvRegexScraper As List(Of String)) As Boolean
         If String.Equals(strRenamePref, rename.previous) Then Return True
         Dim strRenameWorking As String = strRenamePref.ToLower
         Dim posShow As Integer = strRenameWorking.IndexOf("show")
@@ -54,7 +54,7 @@ Public Class Renamer
 
         Dim M As Match = Nothing        'm.success is readonly so cannot be set to false in advance....
 
-        For Each regexp In Form1.tv_RegexScraper
+        For Each regexp In tvRegexScraper
             M = Regex.Match(strRenameWorking, regexp)           'm.sucess is true or false now....
             If M.Success = True Then
                 DoWeReturn = False 'added result change

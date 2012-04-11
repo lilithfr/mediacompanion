@@ -40,7 +40,8 @@ Module Module1
     Dim actordb As New List(Of actordatabase)
     Dim showstoscrapelist As New List(Of String)
     Dim newepisodelist As New List(Of episodeinfo)
-    Dim tvregex As New List(Of String)
+    Dim tv_RegexScraper As New List(Of String)
+    Dim tv_RegexRename As New List(Of String)
     Dim defaultposter As String = ""
     Sub Main()
         Dim domovies As Boolean = False
@@ -153,6 +154,7 @@ Module Module1
         defaultposter = IO.Path.Combine(applicationpath, "Resources\default_poster.jpg")
         Console.WriteLine("Loading Config")
         Call setuppreferences()
+        Call InitMediaFileExtensions()
         If IO.File.Exists(applicationpath & "\settings\profile.xml") = True Then
             Call loadprofiles()
             If profile = "default" Then
@@ -192,7 +194,6 @@ Module Module1
             End If
         End If
         If domovies = True Then
-            Call InitMediaFileExtensions()
             Call startnewmovies()
             Call savemoviecache()
             Call saveactorcache()
@@ -206,12 +207,20 @@ Module Module1
                 Call loadtvcache()
             End If
             If IO.File.Exists(workingprofile.regexlist) Then
-                Call loadregex()
+                Call util_RegexLoad()
             End If
-            If tvregex.Count = 0 Then
-                tvregex.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
-                tvregex.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
-                tvregex.Add("([0-9]+)([0-9][0-9])")
+            If tv_RegexScraper.Count = 0 Then
+                tv_RegexScraper.Add("[Ss]([\d]{1,4}).?[Ee]([\d]{1,4})")
+                tv_RegexScraper.Add("([\d]{1,4}) ?[xX] ?([\d]{1,4})")
+                tv_RegexScraper.Add("([0-9]+)([0-9][0-9])")
+            End If
+            If tv_RegexRename.Count = 0 Then
+                tv_RegexRename.Add("Show Title - S01E01 - Episode Title.ext")
+                tv_RegexRename.Add("S01E01 - Episode Title.ext")
+                tv_RegexRename.Add("Show Title - 1x01 - Episode Title.ext")
+                tv_RegexRename.Add("1x01 - Episode Title.ext")
+                tv_RegexRename.Add("Show Title - 101 - Episode Title.ext")
+                tv_RegexRename.Add("101 - Episode Title.ext")
             End If
             For Each item In basictvlist
                 If item.fullpath.ToLower.IndexOf("tvshow.nfo") <> -1 Then
@@ -219,6 +228,7 @@ Module Module1
                 End If
             Next
             If showstoscrapelist.Count > 0 Then
+                Renamer.setRenamePref(tv_RegexRename.Item(userprefs.tvrename), tv_RegexScraper)
                 Call episodescraper(showstoscrapelist, False)
                 Call savetvcache()
             End If
@@ -769,94 +779,9 @@ Module Module1
                         episodeno(g) = "0" & episodeno(g)
                     End If
                 Next
-                Select Case userprefs.tvrename
-                    Case 0
-                        'Show Title - S01E01 - Episode Title.ext
-                        newfilename = showtitle & " - S" & seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & "E" & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 1
-                        'S01E01 - Episode Title.ext
-                        newfilename = "S" & seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & "E" & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 2
-                        'Show Title - 1x01 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = showtitle & " - " & seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & "x" & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 3
-                        '1x01 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = seasonno
-                        For Each ep In episodeno
-                            newfilename = newfilename & "x" & ep
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 4
-                        'Show Title - 101 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = showtitle & " - " & seasonno
-                        For g = 0 To episodeno.Count - 1
-                            If g = 0 Then
-                                newfilename = newfilename & episodeno(g)
-                            Else
-                                newfilename = newfilename & "x" & episodeno(g)
-                            End If
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                    Case 5
-                        '101 - Episode Title.ext
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        If seasonno.Length > 1 And seasonno.Substring(0, 1) = "0" Then
-                            seasonno = seasonno.Substring(1, seasonno.Length - 1)
-                        End If
-                        newfilename = seasonno
-                        For g = 0 To episodeno.Count - 1
-                            If g = 0 Then
-                                newfilename = newfilename & episodeno(g)
-                            Else
-                                newfilename = newfilename & "x" & episodeno(g)
-                            End If
-                        Next
-                        newfilename = newfilename & " - " & episodetitle
-                End Select
+
+                newfilename = Renamer.setTVFilename(showtitle, episodetitle, episodeno, seasonno)
+
                 newfilename = newfilename.Replace("?", "")
                 newfilename = newfilename.Replace("/", "")
                 newfilename = newfilename.Replace("\", "")
@@ -1015,7 +940,7 @@ Module Module1
         Next g
 
         If newepisodelist.Count <= 0 Then
-            Console.WriteLine(tempint.ToString & "No new episodes found, exiting scraper" & dirpath)
+            Console.WriteLine("No new episodes found, exiting scraper" & dirpath)
             Exit Sub
         End If
 
@@ -1033,7 +958,7 @@ Module Module1
 
             Dim episode As New episodeinfo
 
-            For Each Regexs In tvregex
+            For Each Regexs In tv_RegexScraper
                 S = newepisode.episodepath '.ToLower
                 S = S.Replace("x264", "")
                 S = S.Replace("720p", "")
@@ -2027,16 +1952,17 @@ Module Module1
                     newwp.title = ep.title
                     newwp.missing = "False"
                     newwp.showid = Shows.id
-                    Dim extension As String = ep.mediaextension
-                    extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
-                    Dim tempstring As String = ep.episodepath
-                    tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
-                    If Not IsNothing(tempstring) Then
-                        newwp.pure = tempstring
-                    End If
-                    If Not IsNothing(extension) Then
-                        newwp.extension = extension
-                    End If
+                    '<episodedetails> attributes 'pure' and 'extension' no longer used? - HueyHQ
+                    'Dim extension As String = ep.mediaextension
+                    'extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
+                    'Dim tempstring As String = ep.episodepath
+                    'tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
+                    'If Not IsNothing(tempstring) Then
+                    '    newwp.pure = tempstring
+                    'End If
+                    'If Not IsNothing(extension) Then
+                    '    newwp.extension = extension
+                    'End If
                     Shows.allepisodes.Add(newwp)
 
                 Next
@@ -2227,31 +2153,36 @@ Module Module1
                     Dim newtvshow As New basictvshownfo
                     If (thisresult.Attributes.Count > 0) Then
                         newtvshow.fullpath = thisresult.Attributes(0).Value
-                        Dim detail As XmlNode = Nothing
-                        For Each detail In thisresult.ChildNodes
-                            Select Case detail.Name
-                                Case "title"
-                                    Dim tempstring As String = ""
-                                    tempstring = detail.InnerText
-                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                        tempstring = tempstring & ", The"
-                                    End If
-                                    newtvshow.title = tempstring
-                                Case "fullpathandfilename"
-                                    newtvshow.fullpath = detail.InnerText
-                                Case "id"
-                                    newtvshow.id = detail.InnerText
-                            End Select
-                        Next
-                        basictvlist.Add(newtvshow)
+                        If IO.File.Exists(newtvshow.fullpath) Then
+                            Dim detail As XmlNode = Nothing
+                            For Each detail In thisresult.ChildNodes
+                                Select Case detail.Name
+                                    Case "title"
+                                        Dim tempstring As String = ""
+                                        tempstring = detail.InnerText
+                                        If userprefs.ignorearticle = True Then
+                                            If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                                tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                                tempstring = tempstring & ", The"
+                                            End If
+                                        End If
+                                        newtvshow.title = tempstring
+                                    Case "fullpathandfilename"
+                                        newtvshow.fullpath = detail.InnerText
+                                    Case "id"
+                                        newtvshow.id = detail.InnerText
+                                End Select
+                            Next
+                            basictvlist.Add(newtvshow)
+                        End If
                     End If
                 Case "episodedetails"
                     Dim newepisode As New episodeinfo
-                    If (thisresult.Attributes.Count > 1) Then
+                    If (thisresult.Attributes.Count > 0) Then
                         newepisode.episodepath = thisresult.Attributes(0).Value
-                        newepisode.pure = thisresult.Attributes(1).Value
-                        If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
+                        'It seems that multiple <episodedetails> attributes are no longer used in tvcache, NfoPath is the only one - HueyHQ
+                        'newepisode.pure = thisresult.Attributes(1).Value
+                        'If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
                         For Each episodenew In thisresult.ChildNodes
                             Select Case episodenew.Name
                                 Case "title"
@@ -2290,23 +2221,28 @@ Module Module1
                         show.locked = thisresult.InnerText
                 End Select
             Next
-        Next
-        For Each ep In unsortedepisodelist
-            For Each show In basictvlist
+            For Each ep In unsortedepisodelist
                 If ep.showid = show.id Then
                     show.allepisodes.Add(ep)
                 End If
             Next
         Next
+        'For Each ep In unsortedepisodelist
+        '    For Each show In basictvlist
+        '        If ep.showid = show.id Then
+        '            show.allepisodes.Add(ep)
+        '        End If
+        '    Next
+        'Next
     End Sub
     Private Sub savetvcache()
         Dim fullpath As String = workingprofile.tvcache
-        Dim neweplist As New List(Of episodeinfo)
-        For Each show In basictvlist
-            For Each ep In show.allepisodes
-                neweplist.Add(ep)
-            Next
-        Next
+        'Dim neweplist As New List(Of episodeinfo)
+        'For Each show In basictvlist
+        '    For Each ep In show.allepisodes
+        '        neweplist.Add(ep)
+        '    Next
+        'Next
         If IO.File.Exists(fullpath) Then
             IO.File.Delete(fullpath)
         End If
@@ -2326,16 +2262,17 @@ Module Module1
             For Each episode In item.allepisodes
                 child = doc.CreateElement("episodedetails")
                 child.SetAttribute("NfoPath", episode.episodepath)
-                Dim extension As String = episode.episodepath
-                extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
-                Dim tempstring As String = episode.episodepath
-                tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
-                If Not IsNothing(episode.pure) Then
-                    child.SetAttribute("PureName", episode.pure)
-                End If
-                If Not IsNothing(episode.extension) Then
-                    child.SetAttribute("MediaExtension", episode.extension)
-                End If
+                '<episodedetails> attributes 'pure' and 'extension' no longer used? - HueyHQ
+                'Dim extension As String = episode.episodepath
+                'extension = extension.Substring(extension.LastIndexOf("."), extension.Length - extension.LastIndexOf("."))
+                'Dim tempstring As String = episode.episodepath
+                'tempstring = tempstring.Substring(0, tempstring.LastIndexOf("."))
+                'If Not IsNothing(episode.pure) Then
+                '    child.SetAttribute("PureName", episode.pure)
+                'End If
+                'If Not IsNothing(episode.extension) Then
+                '    child.SetAttribute("MediaExtension", episode.extension)
+                'End If
                 'child.SetAttribute("MultiEpCount", "1")
                 childchild = doc.CreateElement("title")
                 childchild.InnerText = episode.title
@@ -2371,20 +2308,25 @@ Module Module1
         output.Close()
 
     End Sub
-    Private Sub loadregex()
+    Private Sub util_RegexLoad()
         Dim tempstring As String
         tempstring = workingprofile.regexlist
-        tvregex.Clear()
+        tv_RegexScraper.Clear()
+        tv_RegexRename.Clear()
         Dim path As String = tempstring
         If IO.File.Exists(path) Then
             Try
                 Dim regexlist As New XmlDocument
                 regexlist.Load(path)
                 If regexlist.DocumentElement.Name = "regexlist" Then
-                    For Each thisresult In regexlist("regexlist")
-                        Select Case thisresult.Name
-                            Case "tvregex"
-                                tvregex.Add(thisresult.innertext)
+                    For Each result In regexlist("regexlist")
+                        Select Case result.Name
+                            Case "tvregex"                              'This is the old tag before custom renamer was introduced,
+                                tv_RegexScraper.Add(result.InnerText)   'so add it to the scraper regex list in case there are custom regexs.
+                            Case "tvregexscrape"
+                                tv_RegexScraper.Add(result.InnerText)
+                            Case "tvregexrename"
+                                tv_RegexRename.Add(result.InnerText)
                         End Select
                     Next
                 End If
@@ -3125,6 +3067,7 @@ Module Module1
     Public Sub setuppreferences()
         userprefs.autoepisodescreenshot = True
         userprefs.autorenameepisodes = False
+        userprefs.ignorearticle = False
         userprefs.tvshowautoquick = False
         userprefs.actorseasy = True
         userprefs.copytvactorthumbs = True
@@ -9905,6 +9848,7 @@ End Module
 Public Class preferences
     Public autorenameepisodes As Boolean
     Public autoepisodescreenshot As Boolean
+    Public ignorearticle As Boolean
     Public tvshowautoquick As Boolean
     Public font As String
     Public moviesortorder As Byte

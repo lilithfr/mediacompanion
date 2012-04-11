@@ -6,7 +6,6 @@ Imports System.Text
 Imports System.Threading
 Imports Media_Companion.ScraperFunctions
 Imports Media_Companion.Preferences
-Imports Media_Companion.Renamer
 Imports System.Xml
 Imports System.Reflection
 Imports System.Windows.Forms
@@ -25026,7 +25025,7 @@ MyExit:
 
     Private Sub ComboBox_tv_EpisodeRename_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_tv_EpisodeRename.SelectedIndexChanged
         Try
-            If Renamer.setRenamePref(tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex)) Then
+            If Renamer.setRenamePref(tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), tv_RegexScraper) Then
                 Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
                 generalprefschanged = True
             Else
@@ -31332,7 +31331,7 @@ MyExit:
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
-        Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename))
+        Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename), tv_RegexScraper)
         Read_XBMC_IMDB_Scraper_Config()
 
         Select Case Preferences.moviedefaultlist
