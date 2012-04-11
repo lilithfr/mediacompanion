@@ -182,6 +182,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.vbproj">
+      <Project>{A3624371-E7E4-4E55-8E64-4460E758D39E}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilites\Utilites.vbproj">
+      <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
+      <Name>Utilites</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XBMC Media Companion.vbproj">
       <Project>{4A891BFA-D799-4F3A-AFBA-A53C4824F33C}</Project>
       <Name>XBMC Media Companion</Name>
