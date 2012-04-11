@@ -3217,11 +3217,11 @@ Partial Public Class Form1
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                        If String.IsNullOrEmpty(episode.Thumbnail.FileName) Then
+                        If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) AndAlso IO.File.Exists(episode.Thumbnail.Path) Then
+                            episode.Visible = False
+                        Else
                             episode.Visible = True
                             episode.EpisodeNode.EnsureVisible()
-                        Else
-                            episode.Visible = False
                         End If
                     Next
                     If Season.VisibleEpisodeCount = 0 Then
@@ -3272,8 +3272,6 @@ Partial Public Class Form1
             Next
         ElseIf butt = "posters" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
-
-
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     If Season.Poster.Exists Then
                         Season.Visible = False
@@ -3285,7 +3283,6 @@ Partial Public Class Form1
                     Next
                 Next
                 item.Visible = Not item.ImagePoster.Exists
-
             Next
         End If
         ' End If
