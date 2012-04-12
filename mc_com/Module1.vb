@@ -18,22 +18,21 @@ Imports Media_Companion
 
 
 Module Module1
+    Public Const SetDefaults = True
     Dim arguments As New List(Of String)
     Dim htmlfileoutput As String = ""
-    Dim profile_structure As New profiles
+    Dim profileStruct As New Profiles
     Dim listofargs As New List(Of arguments)
     Dim profile As String = "default"
-    Dim fullmovielist As New List(Of combolist)
-    Dim totalepisodecount As Integer = 0
-    Dim totaltvshowcount As Integer = 0
+    Dim fullMovieList As New List(Of str_ComboList)
     Dim basictvlist As New List(Of basictvshownfo)
-    Dim newmovielist As New List(Of newmovie)
-    Dim imdbcounter As Integer = 0
-    Dim defaultofflineart As String = ""
-    Dim actordb As New List(Of actordatabase)
+    Dim newMovieList As New List(Of str_NewMovie)
+    Dim imdbCounter As Integer = 0
+    Dim defaultOfflineArt As String = ""
+    Dim actorDB As New List(Of str_ActorDatabase)
     Dim showstoscrapelist As New List(Of String)
-    Dim newepisodelist As New List(Of episodeinfo)
-    Dim defaultposter As String = ""
+    Dim newEpisodeList As New List(Of episodeinfo)
+    Dim defaultPoster As String = ""
 
     Sub Main()
         Dim domovies As Boolean = False
@@ -143,17 +142,17 @@ Module Module1
             End If
         Next
         Dim done As Boolean = False
-        Preferences.applicationPath = IO.Path.GetDirectoryName(arguments(0))
-        defaultposter = IO.Path.Combine(Preferences.applicationPath, "Resources\default_poster.jpg")
+        Preferences.applicationPath = System.AppDomain.CurrentDomain.BaseDirectory
+        defaultPoster = IO.Path.Combine(Preferences.applicationPath, "Resources\default_poster.jpg")
         Console.WriteLine("Loading Config")
         Preferences.SetUpPreferences()
         Call InitMediaFileExtensions()
         If IO.File.Exists(Preferences.applicationPath & "\settings\profile.xml") = True Then
             Call loadprofiles()
             If profile = "default" Then
-                profile = profile_structure.defaultprofile
+                profile = profileStruct.defaultprofile
             End If
-            For Each prof In profile_structure.profilelist
+            For Each prof In profileStruct.profilelist
                 If prof.profilename = profile Then
                     Preferences.workingProfile.actorcache = prof.actorcache
                     Preferences.workingProfile.config = prof.config
@@ -177,7 +176,7 @@ Module Module1
             Console.WriteLine("****************************************************")
             System.Environment.Exit(1)
         End If
-        defaultofflineart = IO.Path.Combine(Preferences.applicationPath, "Resources\default_offline.jpg")
+        defaultOfflineArt = IO.Path.Combine(Preferences.applicationPath, "Resources\default_offline.jpg")
         Preferences.LoadConfig()
         If domovies = True Or dohtmploutput = True Then
             If IO.File.Exists(Preferences.workingProfile.moviecache) Then
@@ -342,7 +341,7 @@ Module Module1
                         Case "createdate"
                             newmovie.fileinfo.createdate = thisresult.InnerText
                         Case "actor"
-                            Dim newactor As New movieactors
+                            Dim newactor As New str_MovieActors
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
@@ -519,7 +518,7 @@ Module Module1
         Return (oCRC.GetCrc32(New System.IO.MemoryStream(oEnc.GetBytes(sFileName))))
     End Function
 
-    Private Function getmovietags(ByVal text As String, ByVal movie As combolist, ByVal counter As Integer, Optional ByVal thumbpath As String = "")
+    Private Function getmovietags(ByVal text As String, ByVal movie As str_ComboList, ByVal counter As Integer, Optional ByVal thumbpath As String = "")
         If text.IndexOf("<<smallimage>>") And thumbpath <> "" Then
             Dim filename As String = GetCRC32(movie.fullpathandfilename)
             If IO.File.Exists(IO.Path.Combine(Preferences.applicationPath, "settings\postercache\" & filename & ".jpg")) Then
@@ -545,7 +544,7 @@ Module Module1
                     End Try
                 Else
                     Try
-                        Dim bitmap As New Bitmap(defaultposter)
+                        Dim bitmap As New Bitmap(defaultPoster)
                         Dim bitmap2 As New Bitmap(bitmap)
                         bitmap.Dispose()
                         bitmap2 = resizeimage(bitmap2, 150, 200)
@@ -661,7 +660,6 @@ Module Module1
         Dim cssbody As String
         Dim csspath As String
         Dim counter As Integer = 0
-        savepath = htmlfileoutput
         If fullhtmlstring.IndexOf("<<css>>") <> -1 And fullhtmlstring.IndexOf("<</css>>") <> -1 Then
             tempstring = fullhtmlstring.Substring(fullhtmlstring.IndexOf("<<css>>") + 9, fullhtmlstring.IndexOf("<</css>>") - fullhtmlstring.IndexOf("<<css>>") - 9)
             If tempstring.IndexOf("<filename>") <> -1 And tempstring.IndexOf("</filename>") <> -1 Then
@@ -698,8 +696,8 @@ Module Module1
             End If
         End If
         Dim overallcancel As Boolean = False
-        For Each movie In fullmovielist
-            Dim tempint As Integer = fullmovielist.Count - (counter + 1)
+        For Each movie In fullMovieList
+            Dim tempint As Integer = fullMovieList.Count - (counter + 1)
             Console.SetCursorPosition(0, Console.CursorTop)
             Console.Write(tempint.ToString & " Movies Remaining         ")
             Try
@@ -855,7 +853,7 @@ Module Module1
         Dim tempint As Integer
         Dim errorcounter As Integer = 0
 
-        newepisodelist.Clear()
+        newEpisodeList.Clear()
         Dim newtvfolders As New List(Of String)
         Dim progress As Integer
         progress = 0
@@ -926,7 +924,7 @@ Module Module1
                 Console.WriteLine(vbCrLf & "Show Locked, Ignoring: " & tvfolder)
             End If
         Next
-        Dim mediacounter As Integer = newepisodelist.Count
+        Dim mediacounter As Integer = newEpisodeList.Count
         For g = 0 To newtvfolders.Count - 1
             'For f = 0 To MediaFileExtensions.Count - 1
             'moviepattern = MediaFileExtensions(f)
@@ -935,20 +933,20 @@ Module Module1
             If (dir_info.FullName.EndsWith(".actors")) Then Continue For
             findnewepisodes(dirpath)
             'Next f
-            tempint = newepisodelist.Count - mediacounter
+            tempint = newEpisodeList.Count - mediacounter
             If tempint > 0 Then
                 Console.WriteLine(tempint.ToString & " New episodes found in directory:- " & dirpath)
             End If
-            mediacounter = newepisodelist.Count
+            mediacounter = newEpisodeList.Count
         Next g
 
-        If newepisodelist.Count <= 0 Then
+        If newEpisodeList.Count <= 0 Then
             Console.WriteLine("No new episodes found, exiting scraper" & dirpath)
             Exit Sub
         End If
 
         Dim S As String = ""
-        For Each newepisode In newepisodelist
+        For Each newepisode In newEpisodeList
             S = ""
             newepisodetoadd.episodeno = ""
             newepisodetoadd.episodepath = ""
@@ -1002,7 +1000,7 @@ Module Module1
         Next
         Dim savepath As String = ""
         Dim scrapedok As Boolean
-        For Each eps In newepisodelist
+        For Each eps In newEpisodeList
 
             Dim episodearray As New List(Of episodeinfo)
             episodearray.Clear()
@@ -1098,6 +1096,7 @@ Module Module1
                             Loop
                         End If
                     End If
+                    singleepisode.showid = tvdbid
                     Dim episodescraper As New tvdbscraper
                     If sortorder = "" Then sortorder = "default"
                     Dim tempsortorder As String = sortorder
@@ -1160,7 +1159,7 @@ Module Module1
                                                 For Each actorl In thisresult.ChildNodes
                                                     Select Case actorl.name
                                                         Case "name"
-                                                            Dim newactor As New movieactors
+                                                            Dim newactor As New str_MovieActors
                                                             newactor.actorname = actorl.innertext
                                                             singleepisode.listactors.Add(newactor)
                                                     End Select
@@ -1212,9 +1211,10 @@ Module Module1
                                                 tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
                                                 If tvtempint <> -1 Then
                                                     tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
+                                                    Dim scraperfunction As New Classimdb
                                                     Dim actorlist As String = ""
-                                                    actorlist = getimdbactors(Preferences.imdbmirror, tvtempstring)
-                                                    Dim tempactorlist As New List(Of movieactors)
+                                                    actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, tvtempstring)
+                                                    Dim tempactorlist As New List(Of str_MovieActors)
                                                     Dim thumbstring As New XmlDocument
                                                     Dim thisresult As XmlNode = Nothing
                                                     Try
@@ -1228,7 +1228,7 @@ Module Module1
                                                                         Exit For
                                                                     End If
                                                                     countactors += 1
-                                                                    Dim newactor As New movieactors
+                                                                    Dim newactor As New str_MovieActors
                                                                     Dim detail As XmlNode = Nothing
                                                                     For Each detail In thisresult.ChildNodes
                                                                         Select Case detail.Name
@@ -1648,6 +1648,10 @@ Module Module1
             child.InnerText = listofepisodes(0).runtime
             root.AppendChild(child)
 
+            child = doc.CreateElement("showid")
+            child.InnerText = listofepisodes(0).showid
+            root.AppendChild(child)
+
             Dim actorstosave As Integer = listofepisodes(0).listactors.Count
             If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
             For f = 0 To actorstosave - 1
@@ -1879,6 +1883,10 @@ Module Module1
                 childchild = document.CreateElement("runtime")
                 childchild.InnerText = ep.runtime
                 child.AppendChild(childchild)
+
+                child = document.CreateElement("showid")
+                child.InnerText = listofepisodes(0).showid
+                root.AppendChild(child)
 
                 For Each actor In ep.listactors
                     Try
@@ -2114,7 +2122,7 @@ Module Module1
                         Dim newep As New episodeinfo
                         newep.episodepath = filename2
                         newep.mediaextension = filename
-                        newepisodelist.Add(newep)
+                        newEpisodeList.Add(newep)
                     End If
                 End If
             Catch ex As Exception
@@ -2127,8 +2135,6 @@ Module Module1
     End Sub
 
     Private Sub loadtvcache()
-        totalepisodecount = 0
-        totaltvshowcount = 0
         Dim unsortedepisodelist As New List(Of episodeinfo)
         unsortedepisodelist.Clear()
         basictvlist.Clear()
@@ -2320,7 +2326,7 @@ Module Module1
     End Sub
 
     Private Sub loadmoviecache()
-        fullmovielist.Clear()
+        fullMovieList.Clear()
         Dim movielist As New XmlDocument
         Dim objReader As New System.IO.StreamReader(Preferences.workingProfile.moviecache)
         Dim tempstring As String = objReader.ReadToEnd
@@ -2331,7 +2337,7 @@ Module Module1
         For Each thisresult In movielist("movie_cache")
             Select Case thisresult.Name
                 Case "movie"
-                    Dim newmovie As New combolist
+                    Dim newmovie As New str_ComboList
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
@@ -2410,7 +2416,7 @@ Module Module1
         root = doc.CreateElement("movie_cache")
 
         Dim childchild As XmlElement
-        For Each movie In fullmovielist
+        For Each movie In fullMovieList
             child = doc.CreateElement("movie")
             childchild = doc.CreateElement("filedate")
             childchild.InnerText = movie.filedate
@@ -2508,7 +2514,7 @@ Module Module1
     End Function
 
     Private Sub loadprofiles()
-        profile_structure.profilelist.Clear()
+        profileStruct.profilelist.Clear()
         Dim profilepath As String = IO.Path.Combine(Preferences.applicationPath, "settings")
         profilepath = IO.Path.Combine(profilepath, "profile.xml")
 
@@ -2521,11 +2527,11 @@ Module Module1
                     For Each thisresult In profilelist("profile")
                         Select Case thisresult.Name
                             Case "default"
-                                profile_structure.defaultprofile = thisresult.innertext
+                                profileStruct.defaultprofile = thisresult.innertext
                             Case "startup"
-                                profile_structure.startupprofile = thisresult.innertext
+                                profileStruct.startupprofile = thisresult.innertext
                             Case "profiledetails"
-                                Dim currentprofile As New listofprofiles
+                                Dim currentprofile As New str_ListOfProfiles(SetDefaults)
                                 For Each result In thisresult.childnodes
                                     Select Case result.name
                                         Case "actorcache"
@@ -2544,7 +2550,7 @@ Module Module1
                                             currentprofile.tvcache = result.innertext
                                     End Select
                                 Next
-                                profile_structure.profilelist.Add(currentprofile)
+                                profileStruct.profilelist.Add(currentprofile)
                         End Select
                     Next
                 End If
@@ -4849,7 +4855,7 @@ Module Module1
             Dim dvdfiles As Boolean
             For Each fs_info As System.IO.FileInfo In fs_infos.Where(AddressOf IsMediaExtension)
 
-                Dim newmoviedetails As newmovie
+                Dim newmoviedetails As New str_NewMovie(SetDefaults)
                 Dim title As String = Nothing
                 Dim remove As Boolean = False
                 dvdfiles = False
@@ -5317,7 +5323,7 @@ Module Module1
                             End If
                         End If
                         Dim alreadyadded As Boolean = False
-                        For Each newmovie In newmovielist
+                        For Each newmovie In newMovieList
                             If newmovie.nfopathandfilename = newmoviedetails.nfopathandfilename Then
                                 alreadyadded = True
                                 Exit For
@@ -5337,7 +5343,7 @@ Module Module1
     End Sub
 
     Private Sub loadactorcache()
-        actordb.Clear()
+        actorDB.Clear()
         Dim loadpath As String = Preferences.workingProfile.actorcache
         Dim actorlist As New XmlDocument
         actorlist.Load(loadpath)
@@ -5345,7 +5351,7 @@ Module Module1
         For Each thisresult In actorlist("actor_cache")
             Select Case thisresult.Name
                 Case "actor"
-                    Dim newactor As New actordatabase
+                    Dim newactor As New str_ActorDatabase
                     newactor.actorname = ""
                     newactor.movieid = ""
                     Dim detail As XmlNode = Nothing
@@ -5378,7 +5384,7 @@ Module Module1
         root = doc.CreateElement("actor_cache")
 
         Dim childchild As XmlElement
-        For Each actor In actordb
+        For Each actor In actorDB
             child = doc.CreateElement("actor")
             childchild = doc.CreateElement("name")
             childchild.InnerText = actor.actorname
@@ -5403,7 +5409,7 @@ Module Module1
         Dim trailer As String
         Dim newmoviecount As Integer
         Dim dirinfo As String = String.Empty
-        newmovielist.Clear()
+        newMovieList.Clear()
         Dim newmoviefolders As New List(Of String)
         Dim progress As Integer
         progress = 0
@@ -5465,7 +5471,7 @@ Module Module1
                 End Try
             End If
         Next
-        Dim mediacounter As Integer = newmovielist.Count
+        Dim mediacounter As Integer = newMovieList.Count
 
         For g = 0 To newmoviefolders.Count - 1
             Try
@@ -5475,20 +5481,20 @@ Module Module1
                 Dim dir_info As New System.IO.DirectoryInfo(dirpath)
                 Listmoviefiles(dirinfo, dir_info)
                 'Next f
-                tempint = newmovielist.Count - mediacounter
+                tempint = newMovieList.Count - mediacounter
                 If (tempint > 0) Then Console.WriteLine(tempint.ToString & " New movies found in directory:- " & newmoviefolders(g))
-                mediacounter = newmovielist.Count
+                mediacounter = newMovieList.Count
             Catch ex As Exception
 
             End Try
 
         Next g
-        Console.WriteLine(newmovielist.Count & " Movies found in all folders")
+        Console.WriteLine(newMovieList.Count & " Movies found in all folders")
 
 
 
         Console.WriteLine("Obtaining Title for each movie found, from path and filename")
-        For Each movie In newmovielist
+        For Each movie In newMovieList
             Try
                 extension = System.IO.Path.GetExtension(movie.nfopathandfilename)
                 filename2 = System.IO.Path.GetFileName(movie.nfopathandfilename)
@@ -5547,9 +5553,9 @@ Module Module1
 
 
         Dim movieyear As String = ""
-        newmoviecount = newmovielist.Count.ToString
+        newmoviecount = newMovieList.Count.ToString
         Console.WriteLine("Starting Main Scraper Process")
-        For f = 0 To newmovielist.Count - 1
+        For f = 0 To newMovieList.Count - 1
             Dim stage As Integer = 0
             Dim bodyok As Boolean = True
             'stage 0 = starting scraper
@@ -5562,16 +5568,16 @@ Module Module1
             Dim thumbstring As New XmlDocument
             progress = ((100 / newmoviecount) * (f + 1) * 10)
             progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
-            If newmovielist(f).title = Nothing Then
-                Console.WriteLine("No Filename found for" & newmovielist(f).nfopathandfilename)
+            If newMovieList(f).title = Nothing Then
+                Console.WriteLine("No Filename found for" & newMovieList(f).nfopathandfilename)
             End If
             Dim extrapossibleID As String = Nothing
-            If newmovielist(f).title <> Nothing Then
-                title = newmovielist(f).title
-                Console.WriteLine("Scraping Title:- " & newmovielist(f).title)
-                nfopath = newmovielist(f).nfopathandfilename
+            If newMovieList(f).title <> Nothing Then
+                title = newMovieList(f).title
+                Console.WriteLine("Scraping Title:- " & newMovieList(f).title)
+                nfopath = newMovieList(f).nfopathandfilename
                 If Preferences.basicsavemode = True Then
-                    nfopath = newmovielist(f).nfopathandfilename.Replace(IO.Path.GetFileName(newmovielist(f).nfopathandfilename), "movie.nfo")
+                    nfopath = newMovieList(f).nfopathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).nfopathandfilename), "movie.nfo")
                 End If
                 Console.WriteLine("Output filename:- " & nfopath)
                 posterpath = getposterpath(nfopath)
@@ -5644,7 +5650,7 @@ Module Module1
                 If extrapossibleID = Nothing Then
                     Console.WriteLine("Checking filename for IMDB ID")
                     mat = Nothing
-                    T = newmovielist(f).nfopathandfilename
+                    T = newMovieList(f).nfopathandfilename
                     mat = Regex.Match(T, "(tt\d{7})")
                     If mat.Success = True Then
                         Console.WriteLine("IMDB ID found in filename:- " & mat.Value)
@@ -5659,14 +5665,14 @@ Module Module1
                     Console.WriteLine("Checking for Movie year in filename")
                     If extrapossibleID = Nothing Then
                         Dim M As Match
-                        M = Regex.Match(newmovielist(f).nfopathandfilename, "(\([\d]{4}\))")
+                        M = Regex.Match(newMovieList(f).nfopathandfilename, "(\([\d]{4}\))")
                         If M.Success = True Then
                             movieyear = M.Value
                         Else
                             movieyear = Nothing
                         End If
                         If movieyear = Nothing Then
-                            M = Regex.Match(newmovielist(f).nfopathandfilename, "(\[[\d]{4}\])")
+                            M = Regex.Match(newMovieList(f).nfopathandfilename, "(\[[\d]{4}\])")
                             If M.Success = True Then
                                 movieyear = M.Value
                             Else
@@ -5694,15 +5700,15 @@ Module Module1
                 stage = 1
                 'stage 1 = get movie body
 
-                imdbcounter += 1
+                imdbCounter += 1
 
-                'Dim newscraper As New Classimdb
+                Dim scraperfunction As New Classimdb
                 'body = newscraper.getimdbbody(title, movieyear, extrapossibleID, Preferences.imdbmirror, imdbcounter)
-                body = getimdbbody(title, movieyear, extrapossibleID, Preferences.imdbmirror, imdbcounter)
+                body = scraperfunction.getimdbbody(title, movieyear, extrapossibleID, Preferences.imdbmirror, imdbCounter)
                 Dim thisresult As XmlNode = Nothing
                 If body = "MIC" Then
                     Console.WriteLine("Unable to scrape body with refs """ & title & """, """ & movieyear & """, """ & extrapossibleID & """, """ & Preferences.imdbmirror & """")
-                    If imdbcounter < 50 Then
+                    If imdbCounter < 50 Then
                         Console.WriteLine("Searching using Google")
                     Else
                         Console.WriteLine("Google session limit reached, Searching using IMDB")
@@ -5749,7 +5755,7 @@ Module Module1
                     End Try
                     savemovienfo(nfopath, newmovie, True)
 
-                    Dim movietoadd As New combolist
+                    Dim movietoadd As New str_ComboList
                     movietoadd.fullpathandfilename = nfopath
                     movietoadd.filename = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
                     movietoadd.foldername = getlastfolder(newmovielist(f).nfopathandfilename)
@@ -5766,7 +5772,7 @@ Module Module1
 
                     movietoadd.year = newmovie.fullmoviebody.year
 
-                    Dim filecreation As New IO.FileInfo(newmovielist(f).nfopathandfilename)
+                    Dim filecreation As New IO.FileInfo(newMovieList(f).nfopathandfilename)
                     Dim myDate As Date = filecreation.LastWriteTime
                     Try
                         movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
@@ -5799,18 +5805,24 @@ Module Module1
                                         newmovie.fullmoviebody.title = thisresult.InnerText
                                     Else
                                         If Preferences.usefoldernames = False Then
-                                            tempstring = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
+                                            tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                                             newmovie.fullmoviebody.title = cleanfilename(tempstring, False)
                                         Else
-                                            newmovie.fullmoviebody.title = cleanfilename(getlastfolder(newmovielist(f).nfopathandfilename), False)
+                                            newmovie.fullmoviebody.title = cleanfilename(getlastfolder(newMovieList(f).nfopathandfilename), False)
                                         End If
                                     End If
+                                Case "originaltitle"
+                                    newmovie.fullmoviebody.originaltitle = thisresult.InnerText
                                 Case "alternativetitle"
                                     newmovie.alternativetitles.Add(thisresult.InnerText)
+                                Case "country"
+                                    newmovie.fullmoviebody.country = thisresult.InnerText
                                 Case "credits"
                                     newmovie.fullmoviebody.credits = thisresult.InnerText
                                 Case "director"
                                     newmovie.fullmoviebody.director = thisresult.InnerText
+                                Case "stars"
+                                    newmovie.fullmoviebody.stars = thisresult.InnerText
                                 Case "genre"
                                     Dim strarr() As String
                                     strarr = thisresult.InnerText.Split("/")
@@ -5840,6 +5852,9 @@ Module Module1
                                     newmovie.fullmoviebody.rating = thisresult.InnerText
                                 Case "runtime"
                                     newmovie.fullmoviebody.runtime = thisresult.InnerText
+                                    If newmovie.fullmoviebody.runtime.IndexOf(":") <> -1 Then
+                                        newmovie.fullmoviebody.runtime = newmovie.fullmoviebody.runtime.Substring(newmovie.fullmoviebody.runtime.IndexOf(":") + 1, newmovie.fullmoviebody.runtime.Length - newmovie.fullmoviebody.runtime.IndexOf(":") - 1)
+                                    End If
                                 Case "studio"
                                     newmovie.fullmoviebody.studio = thisresult.InnerText
                                 Case "tagline"
@@ -5857,15 +5872,15 @@ Module Module1
                             End Select
                         Next
                     Catch ex As Exception
-                        Console.WriteLine("Error with " & newmovielist(f).nfopathandfilename)
+                        Console.WriteLine("Error with " & newMovieList(f).nfopathandfilename)
                         Console.WriteLine("An error was encountered at stage 1, Downloading Movie Body")
                         Console.WriteLine(ex.Message.ToString)
                         errorcounter += 1
                         If Preferences.usefoldernames = False Then
-                            tempstring = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
+                            tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                             newmovie.fullmoviebody.title = cleanfilename(tempstring, False)
                         Else
-                            newmovie.fullmoviebody.title = cleanfilename(getlastfolder(newmovielist(f).nfopathandfilename), False)
+                            newmovie.fullmoviebody.title = cleanfilename(getlastfolder(newMovieList(f).nfopathandfilename), False)
                         End If
                     End Try
                     If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
@@ -5884,15 +5899,111 @@ Module Module1
                     Next
                     If Preferences.keepfoldername = True Then
                         If Preferences.usefoldernames = False Then
-                            tempstring = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
+                            tempstring = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                             newmovie.fullmoviebody.title = cleanfilename(tempstring)
                         Else
-                            newmovie.fullmoviebody.title = cleanfilename(getlastfolder(newmovielist(f).nfopathandfilename))
+                            newmovie.fullmoviebody.title = cleanfilename(getlastfolder(newMovieList(f).nfopathandfilename))
                         End If
                     End If
+
+
+                    '******************************** MOVIE FILE RENAME SECTION *************************************
+
+                    If Preferences.MovieRenameEnable = True AndAlso Preferences.usefoldernames = False AndAlso newMovieList(f).nfopathandfilename.ToLower.Contains("video_ts") = False AndAlso Preferences.basicsavemode = False Then
+                        'determine if any 'part' names are in the original title - if so we will tack them on to the final name before renaming
+                        Dim partnames As String() = {"cd", "dvd", "part", "disk", "pt"}
+                        Dim midnames As String() = {"", " ", ".", "_"}
+                        Dim searchtext As String = ""
+                        Dim partfound As Boolean = False
+
+                        For Each part In partnames  'we step through the part strings to create the test strings for each possible part type 
+                            For Each Md In midnames
+                                For count As Integer = 1 To 9
+                                    searchtext = part & Md & count
+                                    If newMovieList(f).title.IndexOf(searchtext, StringComparison.OrdinalIgnoreCase) <> -1 Then 'we test here if this particular part string exists in the original title of the movie
+                                        partfound = True    'if found we set the partfound
+                                        Exit For ' and we exit this for next loop
+                                    End If
+                                Next
+                                If partfound Then Exit For '& this one
+                            Next
+                            If partfound Then Exit For '& this one - we only want to find one part string so once 1 is found we quit
+                        Next
+
+                        'create new filename (hopefully removing invalid chars first else move (rename) will fail)
+                        Dim newpath As String = newMovieList(f).nfopath                                                     'media & nfo path (not new, path doesn't change during rename)
+                        Dim newfilename As String = Preferences.MovieRenameTemplate.Replace("%T", newmovie.fullmoviebody.title)  'replaces %T with movie title
+                        newfilename = newfilename.Replace("%Y", newmovie.fullmoviebody.year)                                     'replaces %Y with year   
+                        newfilename = newfilename.Replace("%I", newmovie.fullmoviebody.imdbid)                                   'replaces %I with imdid 
+                        newfilename = newfilename.Replace("%P", newmovie.fullmoviebody.premiered)                                'replaces %P with premiered date 
+                        newfilename = newfilename.Replace("%R", newmovie.fullmoviebody.rating)                                   'replaces %R with rating 
+                        newfilename = newfilename.Replace("%L", newmovie.fullmoviebody.runtime)                                  'replaces %L with runtime (length)
+
+                        If partfound Then newfilename &= " -" & searchtext ' we readd the found 'part' e.g. part1,cd.1,dvd_3 with ' -' as spacer 
+
+                        newfilename = Utilities.cleanFilenameIllegalChars(newfilename)          'removes chars that can't be in a filename
+
+                        Dim newextension As String = System.IO.Path.GetExtension(newMovieList(f).mediapathandfilename)
+                        Dim newmoviepathandfilename As String = newMovieList(f).nfopath & newfilename & newextension
+
+                        'test the new filenames do not already exist
+                        Dim AFileExists As Boolean = False
+                        If System.IO.File.Exists(newmoviepathandfilename) Then AFileExists = True
+
+                        For Each item As String In {".nfo", ".tbn", "-fanart.jpg", ".sub", ".srt", ".smi", ".idx"} 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
+                            If System.IO.File.Exists(newpath & newfilename & item) = True Then
+                                AFileExists = True
+                                Exit For
+                            End If
+                            'msgbox(item)       'uncomment this if you want to see each iteration of the for each loop, without it you will only see the first iteration
+                        Next
+
+                        If AFileExists = False Then 'if none of the possible renamed files already exist then we rename
+
+                            'rename found media files
+
+                            System.IO.File.Move(newMovieList(f).mediapathandfilename, newmoviepathandfilename) ' movie file
+                            Console.WriteLine("!!! Renamed Movie File to " & newmoviepathandfilename & vbCrLf)
+
+                            For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
+                                If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle)) Then
+                                    System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle), newmoviepathandfilename.Replace(newextension, subtitle)) ' subtitles file with .sub extension
+                                    Console.WriteLine("Renamed '" & subtitle & "' subtitle File" & vbCrLf)
+                                End If
+                            Next
+
+                            'retrieve data already stored into a new array
+                            Dim tempmovdetails As New str_NewMovie(SetDefaults)
+                            tempmovdetails.mediapathandfilename = newmovielist(f).mediapathandfilename
+                            tempmovdetails.nfopath = newmovielist(f).nfopath
+                            tempmovdetails.nfopathandfilename = newmovielist(f).nfopathandfilename
+                            tempmovdetails.title = newmovielist(f).title
+
+
+                            'update the new temp array with the new data
+                            tempmovdetails.mediapathandfilename = newmoviepathandfilename       'this is the new full path & filname to the rename media file
+                            tempmovdetails.nfopathandfilename = newpath & newfilename & ".nfo"  'this is the new nfo path (yet to be created)
+                            tempmovdetails.title = newfilename                                  'new title
+
+                            'remove old record
+                            newMovieList.RemoveAt(f)
+
+                            'reinsert
+                            newmovielist.Insert(f, tempmovdetails)
+
+                            'correct nfopath variables
+                            nfopath = tempmovdetails.nfopathandfilename
+                            posterpath = Preferences.GetPosterPath(nfopath)
+                            fanartpath = Preferences.GetFanartPath(nfopath)
+                        End If
+                    End If
+                    '******************************** END MOVIE FILE RENAME SECTION *************************************
+
+
+
                     stage = 2
                     'stage 2 = get movie actors
-                    actorlist = getimdbactors(Preferences.imdbmirror, newmovie.fullmoviebody.imdbid)
+                    actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, newmovie.fullmoviebody.imdbid)
                     Try
                         thumbstring.LoadXml(actorlist)
                         thisresult = Nothing
@@ -5904,7 +6015,7 @@ Module Module1
                                         Exit For
                                     End If
                                     actorcount += 1
-                                    Dim newactor As New movieactors
+                                    Dim newactor As New str_MovieActors
                                     Dim detail As XmlNode = Nothing
                                     For Each detail In thisresult.ChildNodes
                                         Select Case detail.Name
@@ -5917,7 +6028,7 @@ Module Module1
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
                                                     If detail.InnerText <> "" And Preferences.actorseasy = True Then
-                                                        Dim workingpath As String = newmovielist(f).nfopathandfilename.Replace(IO.Path.GetFileName(newmovielist(f).nfopathandfilename), "")
+                                                        Dim workingpath As String = newMovieList(f).nfopathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).nfopathandfilename), "")
                                                         workingpath = workingpath & ".actors\"
                                                         Dim hg As New IO.DirectoryInfo(workingpath)
                                                         Dim destsorted As Boolean = False
@@ -6014,13 +6125,13 @@ Module Module1
                             newmovie.listactors.RemoveAt(newmovie.listactors.Count - 1)
                         End While
                         For Each actor In newmovie.listactors
-                            Dim actornew As New actordatabase
+                            Dim actornew As New str_ActorDatabase
                             actornew.actorname = actor.actorname
                             actornew.movieid = newmovie.fullmoviebody.imdbid
                             actordb.Add(actornew)
                         Next
                     Catch ex As Exception
-                        Console.WriteLine("Error with " & newmovielist(f).nfopathandfilename)
+                        Console.WriteLine("Error with " & newMovieList(f).nfopathandfilename)
                         Console.WriteLine("An error was encountered at stage 2, Downloading Actors")
                         Console.WriteLine(ex.Message.ToString)
                         errorcounter += 1
@@ -6131,7 +6242,7 @@ Module Module1
                             Next
                             Console.WriteLine("Poster URLs Scraped OK")
                         Catch ex As Exception
-                            Console.WriteLine("Error with " & newmovielist(f).nfopathandfilename)
+                            Console.WriteLine("Error with " & newMovieList(f).nfopathandfilename)
                             Console.WriteLine("An error was encountered at stage 4, Downloading poster list for nfo file")
                             Console.WriteLine(ex.Message.ToString)
                             errorcounter += 1
@@ -6141,12 +6252,12 @@ Module Module1
                     stage = 5
                     'stage 5 = get hd tags
                     Try
-                        Dim tempsa As String = IO.Path.GetFileName(newmovielist(f).mediapathandfilename)
-                        Dim tempsb As String = newmovielist(f).mediapathandfilename.Replace(IO.Path.GetFileName(newmovielist(f).mediapathandfilename), "")
+                        Dim tempsa As String = IO.Path.GetFileName(newMovieList(f).mediapathandfilename)
+                        Dim tempsb As String = newMovieList(f).mediapathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).mediapathandfilename), "")
                         tempsb = IO.Path.Combine(tempsb, "tempoffline.ttt")
                         If Not IO.File.Exists(tempsb) Then
 
-                            newmovie.filedetails = get_hdtags(newmovielist(f).mediapathandfilename)
+                            newmovie.filedetails = get_hdtags(newMovieList(f).mediapathandfilename)
                             If newmovie.filedetails.filedetails_video.duration <> Nothing Then
                                 Try
                                     '1h 24mn 48s 546ms
@@ -6229,7 +6340,7 @@ Module Module1
 
 
 
-                    Dim movietoadd As New combolist
+                    Dim movietoadd As New str_ComboList
                     movietoadd.fullpathandfilename = nfopath
                     movietoadd.filename = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
                     movietoadd.foldername = getlastfolder(newmovielist(f).nfopathandfilename)
@@ -6251,7 +6362,7 @@ Module Module1
 
 
 
-                    Dim filecreation As New IO.FileInfo(newmovielist(f).nfopathandfilename)
+                    Dim filecreation As New IO.FileInfo(newMovieList(f).nfopathandfilename)
                     Dim myDate As Date = filecreation.LastWriteTime
                     Try
                         movietoadd.filedate = Format(myDate, "yyyyMMddHHmmss").ToString
@@ -6278,7 +6389,7 @@ Module Module1
                     stage = 6
                     'stage 6 = download movieposter
                     Dim moviethumburl As String = ""
-                    If Preferences.scrapemovieposters = True And Preferences.overwritethumbs = True Or IO.File.Exists(getposterpath(newmovielist(f).nfopathandfilename)) = False Then
+                    If Preferences.scrapemovieposters = True And Preferences.overwritethumbs = True Or IO.File.Exists(getposterpath(newMovieList(f).nfopathandfilename)) = False Then
                         Try
                             Select Case Preferences.moviethumbpriority(0)
                                 Case "Internet Movie Poster Awards"
@@ -6345,7 +6456,7 @@ Module Module1
                         Try
 
                             If moviethumburl <> "" And moviethumburl <> "na" And moviethumburl <> "Error" Then
-                                Dim newmoviethumbpath As String = getposterpath(newmovielist(f).nfopathandfilename)
+                                Dim newmoviethumbpath As String = getposterpath(newMovieList(f).nfopathandfilename)
                                 Try
                                     Dim buffer(4000000) As Byte
                                     Dim size As Integer = 0
@@ -6397,14 +6508,14 @@ Module Module1
 
                     stage = 7
                     'stage 7 = download fanart
-                    If Preferences.overwritethumbs = True Or Preferences.overwritethumbs = False And IO.File.Exists(getfanartpath(newmovielist(f).nfopathandfilename)) = False Then
+                    If Preferences.overwritethumbs = True Or Preferences.overwritethumbs = False And IO.File.Exists(getfanartpath(newMovieList(f).nfopathandfilename)) = False Then
                         If Preferences.savefanart = False Then
                             'Console.writeline("Fanart Not Downloaded - Disabled in preferences, use browser to find and add Fanart")
                         Else
                             Try
 
                                 Dim moviefanartexists As Boolean
-                                Dim fanarturlpath As String = getfanartpath(newmovielist(f).nfopathandfilename)
+                                Dim fanarturlpath As String = getfanartpath(newMovieList(f).nfopathandfilename)
 
                                 moviethumburl = ""
                                 moviefanartexists = System.IO.File.Exists(fanarturlpath)
@@ -6648,7 +6759,7 @@ Module Module1
             If IO.File.Exists(getfanartpath(nfopath)) Then
                 fanartpath = getfanartpath(nfopath)
             Else
-                fanartpath = defaultofflineart
+                fanartpath = defaultOfflineArt
             End If
             Dim curImage As Image = Image.FromFile(fanartpath)
             Dim tempstring As String = "Please Insert '" & title & "' DVD"
@@ -6751,124 +6862,124 @@ Module Module1
     Dim tvfblinecount As Integer
     Dim tvdbwebsource(3000) As String
 
-    Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999)
-        Dim webpage As New List(Of String)
-        Dim actors(5000, 3)
-        Dim tempstring As String
-        Dim filterstring As String
-        Dim actorcount As Integer
-        Dim totalinfo As String = "<actorlist>"
+    'Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999)
+    '    Dim webpage As New List(Of String)
+    '    Dim actors(5000, 3)
+    '    Dim tempstring As String
+    '    Dim filterstring As String
+    '    Dim actorcount As Integer
+    '    Dim totalinfo As String = "<actorlist>"
 
-        Try
-            tempstring = imdbmirror & "title/" & imdbid & "/fullcredits#cast"
-            webpage.Clear()
-            webpage = loadwebpage(tempstring, False)
+    '    Try
+    '        tempstring = imdbmirror & "title/" & imdbid & "/fullcredits#cast"
+    '        webpage.Clear()
+    '        webpage = loadwebpage(tempstring, False)
 
-            Dim scrapertempint As Integer
-            Dim scrapertempstring As String
+    '        Dim scrapertempint As Integer
+    '        Dim scrapertempstring As String
 
-            For Each line In webpage
-                If line.IndexOf("Cast</a>") <> -1 Then
-                    line = line.Substring(line.IndexOf("Cast</a>"), line.Length - line.IndexOf("Cast</a>"))
-                    If line.IndexOf("<tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>") <> -1 Then
-                        line = line.Replace("</td></tr> <tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>", "</td></tr><tr class")
-                    End If
-                    line = line.Substring(0, line.IndexOf("</table>"))
-                    scrapertempint = 0
-                    scrapertempstring = line
-                    Do Until scrapertempstring.IndexOf("<tr class=""") = -1
-                        scrapertempint = scrapertempint + 1
-                        actors(scrapertempint, 0) = scrapertempstring.Substring(0, scrapertempstring.IndexOf("</td></tr>") + 10)
-                        scrapertempstring = scrapertempstring.Replace(actors(scrapertempint, 0), "")
-                        filterstring = actors(scrapertempint, 0)
-                        If filterstring <> actors(scrapertempint, 0) Then actors(scrapertempint, 0) = filterstring
-                        If actors(scrapertempint, 0).IndexOf("other cast") <> -1 Then
-                            actors(scrapertempint, 0) = Nothing
-                            scrapertempint -= 1
-                        End If
-                    Loop
-                    If scrapertempstring <> "" Then
-                        scrapertempint = scrapertempint + 1
-                        actors(scrapertempint, 0) = scrapertempstring
-                    End If
-                    actorcount = scrapertempint
-                    If actorcount > maxactors Then
-                        actorcount = maxactors
-                    End If
-                    For g = 1 To actorcount
-                        Try
-                            actors(g, 3) = actors(g, 0).substring(actors(g, 0).indexof("<a href=""/name/nm") + 15, 9)
-                            If actors(g, 0).IndexOf("http://resume.imdb.com") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://resume.imdb.com", "")
-                            If actors(g, 0).IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
-                            If actors(g, 0).indexof("http://ia.media-imdb.com/images/") <> -1 Then
-                                Dim tempint6 As Integer
-                                Dim tempint7 As Integer
-                                tempint6 = actors(g, 0).indexof("http://ia.media-imdb.com/images/")
-                                tempint7 = actors(g, 0).indexof("._V1._")
-                                actors(g, 2) = actors(g, 0).substring(tempint6, tempint7 - tempint6 + 3)
-                                actors(g, 2) = actors(g, 2) & "._V1._SY400_SX300_.jpg"
-                            End If
+    '        For Each line In webpage
+    '            If line.IndexOf("Cast</a>") <> -1 Then
+    '                line = line.Substring(line.IndexOf("Cast</a>"), line.Length - line.IndexOf("Cast</a>"))
+    '                If line.IndexOf("<tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>") <> -1 Then
+    '                    line = line.Replace("</td></tr> <tr><td align=""center"" colspan=""4""><small>rest of cast listed alphabetically:</small></td></tr>", "</td></tr><tr class")
+    '                End If
+    '                line = line.Substring(0, line.IndexOf("</table>"))
+    '                scrapertempint = 0
+    '                scrapertempstring = line
+    '                Do Until scrapertempstring.IndexOf("<tr class=""") = -1
+    '                    scrapertempint = scrapertempint + 1
+    '                    actors(scrapertempint, 0) = scrapertempstring.Substring(0, scrapertempstring.IndexOf("</td></tr>") + 10)
+    '                    scrapertempstring = scrapertempstring.Replace(actors(scrapertempint, 0), "")
+    '                    filterstring = actors(scrapertempint, 0)
+    '                    If filterstring <> actors(scrapertempint, 0) Then actors(scrapertempint, 0) = filterstring
+    '                    If actors(scrapertempint, 0).IndexOf("other cast") <> -1 Then
+    '                        actors(scrapertempint, 0) = Nothing
+    '                        scrapertempint -= 1
+    '                    End If
+    '                Loop
+    '                If scrapertempstring <> "" Then
+    '                    scrapertempint = scrapertempint + 1
+    '                    actors(scrapertempint, 0) = scrapertempstring
+    '                End If
+    '                actorcount = scrapertempint
+    '                If actorcount > maxactors Then
+    '                    actorcount = maxactors
+    '                End If
+    '                For g = 1 To actorcount
+    '                    Try
+    '                        actors(g, 3) = actors(g, 0).substring(actors(g, 0).indexof("<a href=""/name/nm") + 15, 9)
+    '                        If actors(g, 0).IndexOf("http://resume.imdb.com") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://resume.imdb.com", "")
+    '                        If actors(g, 0).IndexOf("http://i.media-imdb.com/images/tn15/addtiny.gif") <> -1 Then actors(g, 0) = actors(g, 0).Replace("http://i.media-imdb.com/images/tn15/addtiny.gif", "")
+    '                        If actors(g, 0).indexof("http://ia.media-imdb.com/images/") <> -1 Then
+    '                            Dim tempint6 As Integer
+    '                            Dim tempint7 As Integer
+    '                            tempint6 = actors(g, 0).indexof("http://ia.media-imdb.com/images/")
+    '                            tempint7 = actors(g, 0).indexof("._V1._")
+    '                            actors(g, 2) = actors(g, 0).substring(tempint6, tempint7 - tempint6 + 3)
+    '                            actors(g, 2) = actors(g, 2) & "._V1._SY400_SX300_.jpg"
+    '                        End If
 
-                            If actors(g, 0).IndexOf("</td></tr></table>") <> -1 Then
-                                scrapertempint = actors(g, 0).IndexOf("</td></tr></table>")
-                                scrapertempstring = actors(g, 0).Substring(scrapertempint, actors(g, 0).Length - scrapertempint)
-                                actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "</td></tr><tr class")
-                            End If
+    '                        If actors(g, 0).IndexOf("</td></tr></table>") <> -1 Then
+    '                            scrapertempint = actors(g, 0).IndexOf("</td></tr></table>")
+    '                            scrapertempstring = actors(g, 0).Substring(scrapertempint, actors(g, 0).Length - scrapertempint)
+    '                            actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "</td></tr><tr class")
+    '                        End If
 
-                            If actors(g, 0).IndexOf("a href=""/character") <> -1 Then
-                                actors(g, 1) = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character") + 19, actors(g, 0).lastIndexOf("</td></tr>") - actors(g, 0).IndexOf("a href=""/character") - 19)
-                                If actors(g, 1).IndexOf("</a>") <> -1 Then
-                                    actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).IndexOf("</a>") - 12)
-                                ElseIf actors(g, 1).IndexOf("</a>") = -1 Then
-                                    actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).Length - 12)
-                                End If
-                                scrapertempstring = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character"), actors(g, 0).Length - actors(g, 0).IndexOf("a href=""/character"))
-                                actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "")
-                                actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
-                                actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
-                            ElseIf actors(g, 0).IndexOf("a href=""/character") = -1 Then
-                                actors(g, 0) = actors(g, 0).substring(0, actors(g, 0).length - 10)
-                                actors(g, 1) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
-                                actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
-                                actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
-                            End If
-                        Catch
-                            Exit For
-                        End Try
-                    Next
-                End If
+    '                        If actors(g, 0).IndexOf("a href=""/character") <> -1 Then
+    '                            actors(g, 1) = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character") + 19, actors(g, 0).lastIndexOf("</td></tr>") - actors(g, 0).IndexOf("a href=""/character") - 19)
+    '                            If actors(g, 1).IndexOf("</a>") <> -1 Then
+    '                                actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).IndexOf("</a>") - 12)
+    '                            ElseIf actors(g, 1).IndexOf("</a>") = -1 Then
+    '                                actors(g, 1) = actors(g, 1).Substring(12, actors(g, 1).Length - 12)
+    '                            End If
+    '                            scrapertempstring = actors(g, 0).Substring(actors(g, 0).IndexOf("a href=""/character"), actors(g, 0).Length - actors(g, 0).IndexOf("a href=""/character"))
+    '                            actors(g, 0) = actors(g, 0).Replace(scrapertempstring, "")
+    '                            actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
+    '                            actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
+    '                        ElseIf actors(g, 0).IndexOf("a href=""/character") = -1 Then
+    '                            actors(g, 0) = actors(g, 0).substring(0, actors(g, 0).length - 10)
+    '                            actors(g, 1) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
+    '                            actors(g, 0) = actors(g, 0).Substring(0, actors(g, 0).lastindexof("</a>"))
+    '                            actors(g, 0) = actors(g, 0).substring(actors(g, 0).lastindexof(">") + 1, actors(g, 0).length - actors(g, 0).lastindexof(">") - 1)
+    '                        End If
+    '                    Catch
+    '                        Exit For
+    '                    End Try
+    '                Next
+    '            End If
 
-            Next
-            For f = 1 To actorcount
-                If actors(f, 0) <> Nothing Then
-                    totalinfo = totalinfo & "<actor>" & vbCrLf
-                    actors(f, 0) = cleanSpecChars(actors(f, 0))
-                    actors(f, 0) = encodespecialchrs(actors(f, 0))
-                    totalinfo = totalinfo & "<name>" & actors(f, 0) & "</name>" & vbCrLf
-                    If actors(f, 1) <> Nothing Then
-                        actors(f, 1) = cleanSpecChars(actors(f, 1))
-                        actors(f, 1) = encodespecialchrs(actors(f, 1))
-                        totalinfo = totalinfo & "<role>" & actors(f, 1) & "</role>" & vbCrLf
-                    End If
-                    If actors(f, 2) <> Nothing Then
-                        actors(f, 2) = encodespecialchrs(actors(f, 2))
-                        totalinfo = totalinfo & "<thumb>" & actors(f, 2) & "</thumb>" & vbCrLf
-                    End If
-                    If actors(f, 3) <> Nothing Then
-                        totalinfo = totalinfo & "<actorid>" & actors(f, 3) & "</actorid>" & vbCrLf
-                    End If
-                    totalinfo = totalinfo & "</actor>" & vbCrLf
-                End If
-            Next
-            totalinfo = totalinfo & "</actorlist>"
-            Return totalinfo
-        Catch ex As Exception
+    '        Next
+    '        For f = 1 To actorcount
+    '            If actors(f, 0) <> Nothing Then
+    '                totalinfo = totalinfo & "<actor>" & vbCrLf
+    '                actors(f, 0) = cleanSpecChars(actors(f, 0))
+    '                actors(f, 0) = encodespecialchrs(actors(f, 0))
+    '                totalinfo = totalinfo & "<name>" & actors(f, 0) & "</name>" & vbCrLf
+    '                If actors(f, 1) <> Nothing Then
+    '                    actors(f, 1) = cleanSpecChars(actors(f, 1))
+    '                    actors(f, 1) = encodespecialchrs(actors(f, 1))
+    '                    totalinfo = totalinfo & "<role>" & actors(f, 1) & "</role>" & vbCrLf
+    '                End If
+    '                If actors(f, 2) <> Nothing Then
+    '                    actors(f, 2) = encodespecialchrs(actors(f, 2))
+    '                    totalinfo = totalinfo & "<thumb>" & actors(f, 2) & "</thumb>" & vbCrLf
+    '                End If
+    '                If actors(f, 3) <> Nothing Then
+    '                    totalinfo = totalinfo & "<actorid>" & actors(f, 3) & "</actorid>" & vbCrLf
+    '                End If
+    '                totalinfo = totalinfo & "</actor>" & vbCrLf
+    '            End If
+    '        Next
+    '        totalinfo = totalinfo & "</actorlist>"
+    '        Return totalinfo
+    '    Catch ex As Exception
 
-        Finally
-        End Try
+    '    Finally
+    '    End Try
 
-        Return "Error"
-    End Function
+    '    Return "Error"
+    'End Function
 
     Private Function loadwebpage(ByVal url As String, ByVal method As Boolean)
         Dim webpage As New List(Of String)
@@ -7211,6 +7322,16 @@ Module Module1
                     root.AppendChild(child)
                 Catch
                 End Try
+
+                child = doc.CreateElement("originaltitle")
+                If movietosave.fullmoviebody.originaltitle = Nothing Or movietosave.fullmoviebody.originaltitle = "" Then
+                    child.InnerText = movietosave.fullmoviebody.title
+                Else
+                    child.InnerText = movietosave.fullmoviebody.originaltitle
+                End If
+
+                root.AppendChild(child)
+
                 If movietosave.alternativetitles.Count > 0 Then
                     Try
                         For Each title In movietosave.alternativetitles
@@ -7230,7 +7351,7 @@ Module Module1
 
                 Try
                     If movietosave.fullmoviebody.movieset <> Nothing Then
-                        If movietosave.fullmoviebody.movieset <> "None" Then
+                        If movietosave.fullmoviebody.movieset <> "-none-" Then
                             child = doc.CreateElement("set")
                             child.InnerText = movietosave.fullmoviebody.movieset
                             root.AppendChild(child)
@@ -7259,6 +7380,12 @@ Module Module1
                 Catch
                 End Try
                 stage = 20
+                Try
+                    child = doc.CreateElement("premiered")
+                    child.InnerText = movietosave.fullmoviebody.premiered
+                    root.AppendChild(child)
+                Catch
+                End Try
                 Try
                     child = doc.CreateElement("rating")
                     child.InnerText = movietosave.fullmoviebody.rating
@@ -7293,6 +7420,12 @@ Module Module1
                 Try
                     child = doc.CreateElement("tagline")
                     child.InnerText = movietosave.fullmoviebody.tagline
+                    root.AppendChild(child)
+                Catch
+                End Try
+                Try
+                    child = doc.CreateElement("country")
+                    child.InnerText = movietosave.fullmoviebody.country
                     root.AppendChild(child)
                 Catch
                 End Try
@@ -7357,9 +7490,16 @@ Module Module1
                 End Try
                 stage = 26
                 Try
-                    child = doc.CreateElement("genre")
-                    child.InnerText = movietosave.fullmoviebody.genre
-                    root.AppendChild(child)
+                    If movietosave.fullmoviebody.genre <> "" Then
+                        Dim strArr() As String
+                        strArr = movietosave.fullmoviebody.genre.Split("/")
+                        For count = 0 To strArr.Length - 1
+                            child = doc.CreateElement("genre")
+                            strArr(count) = strArr(count).Trim
+                            child.InnerText = strArr(count)
+                            root.AppendChild(child)
+                        Next
+                    End If
                 Catch
                 End Try
                 stage = 27
@@ -7399,10 +7539,29 @@ Module Module1
                 End Try
                 stage = 32
                 Try
-                    child = doc.CreateElement("id")
-                    child.InnerText = movietosave.fullmoviebody.imdbid
-                    root.AppendChild(child)
+                    If movietosave.fullmoviebody.imdbid <> Nothing Then
+                        If movietosave.fullmoviebody.imdbid <> "" Then
+                            child = doc.CreateElement("id")
+                            child.InnerText = movietosave.fullmoviebody.imdbid
+                            root.AppendChild(child)
+                        Else
+
+                        End If
+                    Else
+
+                    End If
                 Catch
+                End Try
+                Try
+                    If movietosave.fullmoviebody.source <> Nothing Then
+                        If movietosave.fullmoviebody.source <> "" Then
+                            child = doc.CreateElement("videosource")
+                            child.InnerText = movietosave.fullmoviebody.source
+                            root.AppendChild(child)
+                        End If
+                    End If
+                Catch ex As Exception
+
                 End Try
                 Try
                     child = doc.CreateElement("createdate")
@@ -7426,6 +7585,12 @@ Module Module1
                 End Try
                 stage = 33
                 Try
+                    child = doc.CreateElement("stars")
+                    child.InnerText = movietosave.fullmoviebody.stars
+                    root.AppendChild(child)
+                Catch
+                End Try
+                Try
                     Dim actorstosave As Integer = movietosave.listactors.Count
                     If actorstosave > Preferences.maxactors Then actorstosave = Preferences.maxactors
                     For f = 0 To actorstosave - 1
@@ -7438,8 +7603,23 @@ Module Module1
                         child.AppendChild(actorchild)
                         If movietosave.listactors(f).actorthumb <> Nothing Then
                             If movietosave.listactors(f).actorthumb <> "" Then
+                                Dim actorthumb As String = movietosave.listactors(f).actorthumb
                                 actorchild = doc.CreateElement("thumb")
-                                actorchild.InnerText = movietosave.listactors(f).actorthumb
+                                If Preferences.actorsave Then
+                                    Dim uri As Uri
+                                    uri = New Uri(actorthumb)
+
+                                    If Len(Preferences.actornetworkpath) > 0 AndAlso Len(Preferences.actorsavepath) > 0 Then
+                                        Dim actorThumbFileName As String
+                                        Dim localActorThumbFileName As String
+                                        actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
+                                        localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
+
+                                        Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
+                                        actorthumb = actorThumbFileName
+                                    End If
+                                End If
+                                actorchild.InnerText = actorthumb
                                 child.AppendChild(actorchild)
                             End If
                         End If
@@ -7469,1197 +7649,1197 @@ Module Module1
         End Try
     End Sub
 
-    Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
-        Dim totalinfo As String = ""
-        Dim webcounter As Integer
-
-        Try
-            Dim first As Integer
-            Dim tempstring As String
-            Dim actors(10000, 3)
-            Dim actorcount As Integer = 0
-            Dim filterstring As String
-            Dim last As Integer
-            Dim length As Integer
-            Dim tempint As Integer
-            Dim mpaacount As Integer = -1
-            Dim webpage As New List(Of String)
-            Dim mpaaresults(33, 1) As String
-            Dim OriginalTitle As Boolean = False
-            Dim FoundTitle As Boolean = False
-            mpaaresults(0, 0) = "MPAA"
-            mpaaresults(1, 0) = "UK"
-            mpaaresults(2, 0) = "USA"
-            mpaaresults(3, 0) = "Ireland"
-            mpaaresults(4, 0) = "Australia"
-            mpaaresults(5, 0) = "New Zealand"
-            mpaaresults(6, 0) = "Norway"
-            mpaaresults(7, 0) = "Singapore"
-            mpaaresults(8, 0) = "South Korea"
-            mpaaresults(9, 0) = "Philippines"
-            mpaaresults(10, 0) = "Brazil"
-            mpaaresults(11, 0) = "Netherlands"
-            mpaaresults(12, 0) = "Malaysia"
-            mpaaresults(13, 0) = "Argentina"
-            mpaaresults(14, 0) = "Iceland"
-            mpaaresults(15, 0) = "Quebec"
-            mpaaresults(16, 0) = "British Columbia"
-            mpaaresults(17, 0) = "Nova Scotia"
-            mpaaresults(18, 0) = "Peru"
-            mpaaresults(19, 0) = "Sweden"
-            mpaaresults(20, 0) = "Portugal"
-            mpaaresults(21, 0) = "South Africa"
-            mpaaresults(22, 0) = "Denmark"
-            mpaaresults(23, 0) = "Hong Kong"
-            mpaaresults(24, 0) = "Finland"
-            mpaaresults(25, 0) = "India"
-            mpaaresults(26, 0) = "Mexico"
-            mpaaresults(27, 0) = "France"
-            mpaaresults(28, 0) = "Italy"
-            mpaaresults(29, 0) = "canton of Vaud"
-            mpaaresults(30, 0) = "canton of Geneva"
-            mpaaresults(31, 0) = "Germany"
-            mpaaresults(32, 0) = "Greece"
-            mpaaresults(33, 0) = "Austria"
-
-            Dim movienfoarray As String = String.Empty
-
-            Dim genre(20)
-            Dim thumbs(500)
-
-            Dim allok As Boolean = False
-            If imdbid <> Nothing Then
-                If imdbid.Length = 9 And imdbid.IndexOf("tt") <> -1 Then
-                    allok = True
-                End If
-            End If
-            totalinfo = "<movie>" & vbCrLf
-            If allok = False Then
-                If imdbcounter < 50 Then
-                    imdbid = getimdbID(title, year)
-                Else
-                    imdbid = getimdbID_fromimdb(title, imdbmirror, year)
-                End If
-                If imdbid <> "" And imdbid.IndexOf("tt") = 0 And imdbid.Length = 9 Then
-                    allok = True
-                End If
-            End If
-            If allok = False Then
-                Return "MIC"
-                Exit Function
-            End If
-            If allok = True Then
-                tempstring = imdbmirror & "title/" & imdbid
-                webpage.Clear()
-                webpage = loadwebpage(tempstring, False)
-
-                Dim webPg As String = String.Join("", webpage.ToArray())
-
-                For f = 0 To webpage.Count - 1
-                    webcounter = f
-                    If webcounter > webpage.Count - 10 Then Exit For
-                    If (webpage(f).IndexOf("<title>") <> -1) And (OriginalTitle = False) Then
-                        Try
-                            Dim movieyear As String = ""
-                            movienfoarray = webpage(f)
-                            filterstring = movienfoarray
-                            movienfoarray = movienfoarray.Replace("<title>", "")
-                            movienfoarray = movienfoarray.Replace("</title>", "")
-                            If movienfoarray.IndexOf("(TV)") <> -1 Then
-                                movienfoarray = movienfoarray.Replace("(TV)", "")
-
-                            End If
-                            If movienfoarray.IndexOf("(VG)") <> -1 Then
-                                movienfoarray = movienfoarray.Replace("(VG)", "")
-                            End If
-
-                            If movienfoarray.IndexOf("IMDb - ") <> -1 Then
-                                movienfoarray = movienfoarray.Replace("IMDb - ", "")
-                            End If
-
-                            first = movienfoarray.LastIndexOf("(")
-                            If first <> -1 Then
-                                If movienfoarray.Substring(first + 2, 1) = ")" Then
-                                    tempstring = movienfoarray.Substring(first, 3)
-                                    movienfoarray = movienfoarray.Replace(tempstring, "")
-                                    first = movienfoarray.LastIndexOf(")")
-                                End If
-                                If first <> -1 Then
-                                    first = movienfoarray.LastIndexOf(")")
-                                    movieyear = movienfoarray.Substring(first - 4, 4)
-                                    first = movienfoarray.LastIndexOf("(")
-                                    movienfoarray = movienfoarray.Substring(0, first)
-                                    movienfoarray = movienfoarray.Trim()
-                                End If
-                            End If
-
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            movieyear = encodespecialchrs(movieyear)
-                            totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
-                            totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
-                            movienfoarray = ""
-                            FoundTitle = True
-                        Catch
-                            totalinfo = totalinfo & "<title>scraper error</title>" & vbCrLf
-                            totalinfo = totalinfo & "<year>scraper error</year>" & vbCrLf
-                        End Try
-                    End If
-
-
-                    ' Original Title
-
-                    If (webpage(f).IndexOf("title-extra") <> -1) Then
-                        Try
-                            Dim movieyear As String = ""
-                            movienfoarray = webpage(f + 1)
-                            filterstring = movienfoarray
-                            movienfoarray = movienfoarray.Replace("<title>", "")
-                            movienfoarray = movienfoarray.Replace("</title>", "")
-                            If movienfoarray.IndexOf("(TV)") <> -1 Then
-                                movienfoarray = movienfoarray.Replace("(TV)", "")
-
-                            End If
-                            If movienfoarray.IndexOf("(VG)") <> -1 Then
-                                movienfoarray = movienfoarray.Replace("(VG)", "")
-                            End If
-
-                            first = movienfoarray.LastIndexOf("(")
-                            If first <> -1 Then
-                                If movienfoarray.Substring(first + 2, 1) = ")" Then
-                                    tempstring = movienfoarray.Substring(first, 3)
-                                    movienfoarray = movienfoarray.Replace(tempstring, "")
-                                    first = movienfoarray.LastIndexOf(")")
-                                End If
-                                If first <> -1 Then
-                                    first = movienfoarray.LastIndexOf(")")
-                                    movieyear = movienfoarray.Substring(first - 4, 4)
-                                    first = movienfoarray.LastIndexOf("(")
-                                    movienfoarray = movienfoarray.Substring(0, first)
-                                    movienfoarray = movienfoarray.Trim()
-                                End If
-                            End If
-
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            movieyear = encodespecialchrs(movieyear)
-                            If FoundTitle = False Then
-                                totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
-                                totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
-                            Else
-                                Dim FirstOcurrence As Integer = totalinfo.IndexOf("<title>")
-                                Dim SecondOcurrence As Integer = totalinfo.IndexOf("</title>")
-                                Dim OldTitle As String = totalinfo.Substring(FirstOcurrence, (SecondOcurrence + 8) - FirstOcurrence)
-                                totalinfo = totalinfo.Replace(OldTitle, "<title>" & movienfoarray & "</title>")
-                            End If
-                            OriginalTitle = True
-                            movienfoarray = ""
-                        Catch
-                            totalinfo = totalinfo & "<title>scraper error</title>" & vbCrLf
-                            totalinfo = totalinfo & "<year>scraper error</year>" & vbCrLf
-                        End Try
-                    End If
-
-
-
-
-                    'rating
-                    If webpage(f).IndexOf("itemprop=""ratingValue") <> -1 Then
-                        Try
-                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<rating>" & movienfoarray & "</rating>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
-                        End Try
-                    End If
-
-                    If webpage(f).IndexOf("<strong>Top 250 #") <> -1 Then
-                        Try
-                            first = webpage(f).IndexOf("Top 250 #")
-                            last = webpage(f).IndexOf("</strong></a>")
-                            length = last - first
-                            movienfoarray = webpage(f).Substring(first + 9, webpage(f).LastIndexOf("</strong>") - (first + 9))
-                            totalinfo = totalinfo & "<top250>" & movienfoarray & "</top250>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<top250>scraper error</top250>" & vbCrLf
-                        End Try
-                    End If
-
-                    'director
-                    If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Director") <> -1 Then
-                        tempstring = ""
-                        For g = 1 To 10
-                            tempstring = tempstring & webpage(f + g)
-                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                        Next
-                        If tempstring.IndexOf("itemprop=""director") <> -1 Then
-                            Try
-                                movienfoarray = ""
-                                Dim listofdirectors As New List(Of String)
-                                listofdirectors.Clear()
-                                Dim M As Match = Regex.Match(tempstring, "itemprop=""director"".*?>(.+?)</a>")
-                                Do While M.Success
-                                    listofdirectors.Add(M.Groups(1).Value)
-                                    M = M.NextMatch
-                                Loop
-                                If listofdirectors.Count > 0 Then
-                                    For g = 0 To listofdirectors.Count - 1
-                                        If g = 0 Then
-                                            movienfoarray = listofdirectors(g)
-                                        Else
-                                            movienfoarray = movienfoarray & " / " & listofdirectors(g)
-                                        End If
-                                    Next
-                                End If
-                                movienfoarray = cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
-                            End Try
-                        End If
-                    End If
-
-                    'credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
-                    'If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
-                    If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 And webpage(f + 1).IndexOf("href=""/keyword") < 0 Then
-                        '                                                                                           ^^^^^^^^^ Dirty hack to prevent this! ^^^^^^^^^^^
-                        Try
-                            movienfoarray = ""
-                            Dim listofwriters As New List(Of String)
-                            listofwriters.Clear()
-                            For g = 1 To 10
-                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
-                                If M.Success = True And M.Groups(1).Length Then
-                                    listofwriters.Add(M.Groups(1).Value)
-                                End If
-                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                            Next
-                            For g = 0 To listofwriters.Count - 1
-                                If g = 0 Then
-                                    movienfoarray = listofwriters(g)
-                                Else
-                                    movienfoarray = movienfoarray & " / " & listofwriters(g)
-                                End If
-                            Next
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<credits>scraper error</credits>" & vbCrLf
-                        End Try
-                    End If
-
-                    'Stars
-                    If webpage(f).IndexOf("<h4 class=""inline"">Stars") <> -1 Then
-                        Try
-                            movienfoarray = ""
-                            Dim listofstars As New List(Of String)
-                            listofstars.Clear()
-                            For g = 1 To 10
-                                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
-                                If M.Success = True And M.Groups(1).Length Then
-                                    listofstars.Add(M.Groups(1).Value)
-                                End If
-                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                            Next
-                            For g = 0 To listofstars.Count - 1
-                                If g = 0 Then
-                                    movienfoarray = listofstars(g)
-                                Else
-                                    movienfoarray = movienfoarray & ", " & listofstars(g)
-                                End If
-                            Next
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<stars>scraper error</stars>" & vbCrLf
-                        End Try
-                    End If
-
-
-                    'genre
-                    If f > 5 Then
-                        If webpage(f).IndexOf("<h4 class=""inline"">Genre") <> -1 Then
-                            Dim listofgenre As New List(Of String)
-                            Try
-                                '                                If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
-                                '                                    Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
-                                '                                        Try
-                                '                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
-                                '                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
-                                '                                            webpage(f + 1) = tempstring
-                                '                                        Catch ex As Exception
-                                '
-                                '                                        End Try
-                                '                                    Loop
-                                '                                    listofgenre.Add(webpage(f + 1))
-                                '                                    For g = 0 To listofgenre.Count - 1
-                                '                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
-                                '                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
-                                '                                    Next
-                                '                                End If
-
-
-                                listofgenre = GetGenres(webPg)
-
-                                For g = 0 To listofgenre.Count - 1
-                                    If g = 0 Then
-                                        movienfoarray = listofgenre(g)
-                                    Else
-                                        movienfoarray = movienfoarray & " / " & listofgenre(g)
-                                    End If
-                                Next
-                                movienfoarray = cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<genre>scraper error</genre>" & vbCrLf
-                            End Try
-                        End If
-                    End If
-
-
-                    'tagline
-                    If webpage(f).IndexOf("<h4 class=""inline"">Tagline") <> -1 Then
-                        Try
-                            movienfoarray = webpage(f + 1)
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            movienfoarray = movienfoarray.Trim()
-                            totalinfo = totalinfo & "<tagline>" & movienfoarray & "</tagline>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<tagline>scraper error</tagline>" & vbCrLf
-                        End Try
-                    End If
-
-                    'runtime
-                    If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
-                        movienfoarray = ""
-                        Try
-                            Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
-                            'movienfoarray = movienfoarray.Substring(movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1, webpage(f + g).IndexOf("min") - movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1)
-                            'movienfoarray = movienfoarray.Replace("min", "")
-                            'movienfoarray = movienfoarray.Trim(" ")
-                            'If Not IsNumeric(movienfoarray) Then
-                            '    For h = 0 To movienfoarray.Length - 1
-                            '        If IsNumeric(movienfoarray.Substring(h, 1)) Then
-                            '            movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
-                            '            Exit For
-                            '        End If
-                            '    Next
-                            'End If
-                            'If movienfoarray <> "" Then
-                            '    movienfoarray = movienfoarray & " min"
-                            'End If
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<runtime>scraper error</runtime>" & vbCrLf
-                        End Try
-                    End If
-                    If webpage(f).IndexOf("<div class=""infobar"">") <> -1 Then
-                        Try
-                            If webpage(f + 1).IndexOf("<img width=") <> 0 Then
-                                movienfoarray = webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("min") + 3)
-                                movienfoarray = movienfoarray.Replace("min", "")
-                                movienfoarray = movienfoarray.Trim(" ")
-                                If Not IsNumeric(movienfoarray) Then
-                                    For h = 0 To movienfoarray.Length - 1
-                                        If IsNumeric(movienfoarray.Substring(h, 1)) Then
-                                            movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If movienfoarray <> "" Then
-                                    movienfoarray = movienfoarray & " min"
-                                End If
-                                movienfoarray = cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
-                            End If
-                        Catch
-                        End Try
-                    End If
-
-                    'votes
-                    If webpage(f).IndexOf("itemprop=""ratingCount""") <> -1 Then
-                        Try
-                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},?]*[0-9]?)</span>")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<votes>" & movienfoarray & "</votes>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<votes>scraper error</votes>" & vbCrLf
-                        End Try
-                    End If
-
-                    'outline
-                    ''If webpage(f).IndexOf("<p>") <> -1 Then
-                    If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
-                        Try
-                            'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
-                            'movienfoarray = webpage(f + 1)
-                            movienfoarray = ""
-                            Dim endofoutline = f
-                            For endofoutline = (f) To webpage.Count - 2
-                                movienfoarray = movienfoarray & webpage(endofoutline)
-                                If webpage(endofoutline).IndexOf("</p>") <> -1 Then
-                                    Exit For
-                                End If
-                            Next
-                            If movienfoarray.Length > 0 Then
-                                'movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
-                                '' Some outlines are a partial listing and link to the plot summary
-                                'Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
-                                'If erasepos <> -1 Then
-                                '    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
-                                'End If
-                                Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
-                                If M.Success = True Then
-                                    movienfoarray = M.Groups(1).Value
-                                Else
-                                    movienfoarray = "scraper error"
-                                End If
-                                movienfoarray = cleanSpecChars(movienfoarray.Trim())
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
-                            Else
-                                totalinfo = totalinfo & "<outline>scaper error: possible format change</outline><plot></plot>" & vbCrLf
-                            End If
-                        Catch
-                            'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
-                            totalinfo = totalinfo & "<outline>scraper error</outline><plot></plot>" & vbCrLf
-                        End Try
-                    End If
-
-                    'premiered
-                    If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
-                        Try
-                            Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
-                        End Try
-                    End If
-
-
-                    'studio
-                    If webpage(f).IndexOf("<h4 class=""inline"">Production") <> -1 Then
-                        Try
-                            movienfoarray = ""
-                            For g = 1 To 5
-                                If webpage(f + g).IndexOf("<a  href=""/company/") <> -1 Then
-                                    webpage(f + g) = webpage(f + g).Replace("<a  href=""/company/", "")
-                                    webpage(f + g) = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
-                                    movienfoarray = webpage(f + g)
-                                End If
-                            Next
-                            movienfoarray = movienfoarray.Trim()
-                            movienfoarray = cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<studio>" & movienfoarray & "</studio>" & vbCrLf
-                            'Exit For
-                        Catch
-                            totalinfo = totalinfo & "<studio>scraper error</studio>" & vbCrLf
-                        End Try
-                    End If
-                    '<div class="txt-block">
-                    '<h4 class="inline">Country:</h4> 
-
-                    '<a href="/country/us">USA</a>
-
-                    '</div>
-                    'country
-                    If webpage(f).IndexOf("class=""inline"">Countr") <> -1 Then
-                        'Try
-                        '    For g = 1 To 5
-                        '        If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                        '        If webpage(f + g).IndexOf("</a>") <> -1 Then
-                        '            movienfoarray = webpage(f + g)
-                        '            movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1, movienfoarray.LastIndexOf("<") - movienfoarray.IndexOf(">") - 1)
-                        '            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                        '            movienfoarray = encodespecialchrs(movienfoarray)
-                        '            totalinfo = totalinfo & "<country>" & movienfoarray & "</country>" & vbCrLf
-                        '            Exit For
-                        '        End If
-                        '    Next
-                        'Catch
-                        'End Try
-                        Try
-                            tempstring = ""
-                            For g = 1 To 5
-                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                                Dim M As Match = Regex.Match(webpage(f + g), ">(.+)</a>")
-                                If M.Success = True Then
-                                    movienfoarray = M.Groups(1).Value
-                                    movienfoarray = cleanSpecChars(movienfoarray)
-                                    movienfoarray = encodespecialchrs(movienfoarray)
-                                    tempstring = tempstring & "<country>" & movienfoarray & "</country>" & vbCrLf
-                                    Exit For
-                                End If
-                            Next
-                            totalinfo = totalinfo & tempstring
-                        Catch
-                            totalinfo = totalinfo & "<country>scraper error</country>" & vbCrLf
-                        End Try
-                    End If
-                Next
-
-                totalinfo = totalinfo & "<id>" & imdbid & "</id>" & vbCrLf
-                'insert imdbid 
-
-                For f = 0 To 33
-                    If mpaaresults(f, 1) <> Nothing Then
-                        Try
-                            mpaaresults(f, 0) = encodespecialchrs(mpaaresults(f, 0))
-                            mpaaresults(f, 1) = encodespecialchrs(mpaaresults(f, 1))
-                            totalinfo = totalinfo & "<cert>" & mpaaresults(f, 0) & "|" & mpaaresults(f, 1) & "</cert>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<cert>scraper error|scraper error</cert>"
-                        End Try
-                    End If
-                Next
-                'If imdbmirror <> "http://www.imdb.de/" Then
-                Try
-                    tempstring = imdbmirror & "title/" & imdbid & "/plotsummary"
-                    Dim plots(20) As String
-                    webpage.Clear()
-                    webpage = loadwebpage(tempstring, False)
-                    tempint = 0
-                    Dim doo As Boolean = False
-                    For Each line In webpage
-                        If doo = True Then
-                            plots(tempint) = line
-                            doo = False
-                        End If
-                        If line.IndexOf("plotpar") <> -1 Then
-                            tempint = tempint + 1
-                            doo = True
-                        End If
-                    Next
-                    Dim sizes(tempint) As Integer
-                    Dim biggest As Integer = 1
-                    For f = 1 To tempint
-                        If plots(f).Length > plots(biggest).Length Then
-                            biggest = f
-                        End If
-                    Next
-                    If plots(biggest) <> Nothing Then
-                        movienfoarray = plots(biggest)
-                        If movienfoarray.IndexOf("<a href=") <> -1 Then
-                            Do Until movienfoarray.IndexOf("<a href=") = -1
-                                first = movienfoarray.LastIndexOf("<a href=")
-                                last = movienfoarray.LastIndexOf("/"">")
-                                tempstring = movienfoarray.Substring(first, last - first + 3)
-                                movienfoarray = movienfoarray.Replace(tempstring, "")
-                            Loop
-                            movienfoarray = movienfoarray.Replace("</a>", "")
-                        End If
-                        movienfoarray = cleanSpecChars(movienfoarray)
-                        movienfoarray = encodespecialchrs(movienfoarray)
-                        totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
-                    End If
-                Catch
-                    totalinfo = totalinfo & "<plot>scraper error</plot>"
-                End Try
-                'End If
-
-                'certs & mpaa
-                Try
-                    tempstring = imdbmirror & "title/" & imdbid & "/parentalguide#certification"
-                    webpage.Clear()
-                    webpage = loadwebpage(tempstring, False)
-                    For f = 0 To webpage.Count - 1
-                        'mpaa
-                        If webpage(f).IndexOf("<a href=""/mpaa"">MPAA") <> -1 Then
-                            tempstring = webpage(f + 2)
-                            If tempstring.IndexOf("<") = -1 Then
-                                For g = 0 To 33
-                                    If mpaaresults(g, 0) = "MPAA" Then
-                                        mpaaresults(g, 1) = tempstring
-                                        Exit For
-                                    End If
-                                Next
-                            End If
-                        End If
-                        'cert
-                        If f > 1 Then
-                            For g = 0 To 33
-                                tempstring = """>" & mpaaresults(g, 0) & ":"
-                                If webpage(f).IndexOf("certificates=") <> -1 And webpage(f).IndexOf(tempstring) <> -1 Then
-                                    tempstring = webpage(f).Substring(webpage(f).IndexOf(tempstring), webpage(f).Length - webpage(f).IndexOf(tempstring))
-                                    tempstring = tempstring.Substring(tempstring.IndexOf(">") + 1, tempstring.IndexOf("</a>") - tempstring.IndexOf(">") - 1)
-                                    mpaaresults(g, 1) = tempstring
-                                    Try
-                                        'line below determines if cert is full or short as e.g. UK:15 becomes 15
-                                        mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
-                                        mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
-                                    Catch
-                                        mpaaresults(g, 1) = "error"
-                                    End Try
-                                End If
-                            Next
-                        End If
-                    Next
-                Catch
-                End Try
-
-
-                Try
-                    'releaseinfo#akas
-                    tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
-                    webpage.Clear()
-                    webpage = loadwebpage(tempstring, False)
-                    For f = 0 To webpage.Count - 1
-                        If webpage(f).IndexOf("<h5><a name=""akas"">Also Known As") <> -1 Then
-                            Dim loc As Integer = f
-                            Dim ignore As Boolean = False
-                            For g = loc To loc + 500
-                                If webpage(g).IndexOf("</table>") <> -1 Then
-                                    Exit For
-                                End If
-                                Dim skip As Boolean = ignore
-                                If webpage(g).IndexOf("<td>") <> -1 And ignore = True Then
-                                    ignore = False
-                                End If
-                                If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
-                                    If webpage(g + 2).IndexOf("Greece") = -1 And webpage(g + 2).IndexOf("Russia") = -1 Then
-                                        tempstring = webpage(g)
-                                        tempstring = tempstring.Replace("<td>", "")
-                                        tempstring = tempstring.Replace("</td>", "")
-                                        tempstring = cleanSpecChars(tempstring)
-                                        tempstring = encodespecialchrs(tempstring)
-                                        totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
-                                    End If
-                                    ignore = True
-                                End If
-                            Next
-                        End If
-                    Next
-                Catch ex As Exception
-
-                End Try
-
-
-            End If
-            For f = 0 To 33
-                If mpaaresults(f, 1) <> Nothing Then
-                    Try
-                        mpaaresults(f, 0) = cleanSpecChars(mpaaresults(f, 0))
-                        mpaaresults(f, 1) = cleanSpecChars(mpaaresults(f, 1))
-                        mpaaresults(f, 0) = encodespecialchrs(mpaaresults(f, 0))
-                        mpaaresults(f, 1) = encodespecialchrs(mpaaresults(f, 1))
-                        totalinfo = totalinfo & "<cert>" & mpaaresults(f, 0) & "|" & mpaaresults(f, 1) & "</cert>" & vbCrLf
-                    Catch
-                        totalinfo = totalinfo & "<cert>scraper error|scraper error</cert>"
-                    End Try
-                End If
-            Next
-            totalinfo = totalinfo & "</movie>" & vbCrLf
-            Return totalinfo
-        Catch ex As Exception
-            totalinfo = totalinfo & "</movie>" & vbCrLf
-            Return totalinfo
-            'MsgBox(ex.ToString & vbCrLf & vbCrLf & "error 354")
-        Finally
-
-        End Try
-    End Function
-
-    Public Function getimdbID(ByVal title As String, Optional ByVal year As String = "", Optional ByVal imdbmirror As String = "")
-        If imdbmirror = "" Then
-            imdbmirror = "http://www.imdb.com/"
-        End If
-        Try
-            Dim newimdbid As String = ""
-            Dim allok As Boolean = False
-            Dim goodyear As Boolean = False
-            If IsNumeric(year) Then
-                If year.Length = 4 Then
-                    goodyear = True
-                End If
-            End If
-
-            Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
-            Dim titlesearch As String = title
-            titlesearch = titlesearch.Replace(".", "+")
-            titlesearch = titlesearch.Replace(" ", "+")
-            titlesearch = titlesearch.Replace("_", "+")
-            titlesearch = titlesearch.Replace("·", "%C2%B7")
-            titlesearch = titlesearch.Replace("À", "%c0")
-            titlesearch = titlesearch.Replace("Á", "%c1")
-            titlesearch = titlesearch.Replace("Â", "%c2")
-            titlesearch = titlesearch.Replace("Ã", "%c3")
-            titlesearch = titlesearch.Replace("Ä", "%c4")
-            titlesearch = titlesearch.Replace("Å", "%c5")
-            titlesearch = titlesearch.Replace("Æ", "%c6")
-            titlesearch = titlesearch.Replace("Ç", "%c7")
-            titlesearch = titlesearch.Replace("È", "%c8")
-            titlesearch = titlesearch.Replace("É", "%c9")
-            titlesearch = titlesearch.Replace("Ê", "%ca")
-            titlesearch = titlesearch.Replace("Ë", "%cb")
-            titlesearch = titlesearch.Replace("Ì", "%cc")
-            titlesearch = titlesearch.Replace("Í", "%cd")
-            titlesearch = titlesearch.Replace("Î", "%ce")
-            titlesearch = titlesearch.Replace("Ï", "%cf")
-            titlesearch = titlesearch.Replace("Ð", "%d0")
-            titlesearch = titlesearch.Replace("Ñ", "%d1")
-            titlesearch = titlesearch.Replace("Ò", "%d2")
-            titlesearch = titlesearch.Replace("Ó", "%d3")
-            titlesearch = titlesearch.Replace("Ô", "%d4")
-            titlesearch = titlesearch.Replace("Õ", "%d5")
-            titlesearch = titlesearch.Replace("Ö", "%d6")
-            titlesearch = titlesearch.Replace("Ø", "%d8")
-            titlesearch = titlesearch.Replace("Ù", "%d9")
-            titlesearch = titlesearch.Replace("Ú", "%da")
-            titlesearch = titlesearch.Replace("Û", "%db")
-            titlesearch = titlesearch.Replace("Ü", "%dc")
-            titlesearch = titlesearch.Replace("Ý", "%dd")
-            titlesearch = titlesearch.Replace("Þ", "%de")
-            titlesearch = titlesearch.Replace("ß", "%df")
-            titlesearch = titlesearch.Replace("à", "%e0")
-            titlesearch = titlesearch.Replace("á", "%e1")
-            titlesearch = titlesearch.Replace("â", "%e2")
-            titlesearch = titlesearch.Replace("ã", "%e3")
-            titlesearch = titlesearch.Replace("ä", "%e4")
-            titlesearch = titlesearch.Replace("å", "%e5")
-            titlesearch = titlesearch.Replace("æ", "%e6")
-            titlesearch = titlesearch.Replace("ç", "%e7")
-            titlesearch = titlesearch.Replace("è", "%e8")
-            titlesearch = titlesearch.Replace("é", "%e9")
-            titlesearch = titlesearch.Replace("ê", "%ea")
-            titlesearch = titlesearch.Replace("ë", "%eb")
-            titlesearch = titlesearch.Replace("ì", "%ec")
-            titlesearch = titlesearch.Replace("í", "%ed")
-            titlesearch = titlesearch.Replace("î", "%ee")
-            titlesearch = titlesearch.Replace("ï", "%ef")
-            titlesearch = titlesearch.Replace("ð", "%f0")
-            titlesearch = titlesearch.Replace("ñ", "%f1")
-            titlesearch = titlesearch.Replace("ò", "%f2")
-            titlesearch = titlesearch.Replace("ó", "%f3")
-            titlesearch = titlesearch.Replace("ô", "%f4")
-            titlesearch = titlesearch.Replace("õ", "%f5")
-            titlesearch = titlesearch.Replace("ö", "%f6")
-            titlesearch = titlesearch.Replace("÷", "%f7")
-            titlesearch = titlesearch.Replace("ø", "%f8")
-            titlesearch = titlesearch.Replace("ù", "%f9")
-            titlesearch = titlesearch.Replace("ú", "%fa")
-            titlesearch = titlesearch.Replace("û", "%fb")
-            titlesearch = titlesearch.Replace("ü", "%fc")
-            titlesearch = titlesearch.Replace("ý", "%fd")
-            titlesearch = titlesearch.Replace("þ", "%fe")
-            titlesearch = titlesearch.Replace("ÿ", "%ff")
-            titlesearch = titlesearch.Replace("&", "%26")
-            titlesearch = titlesearch.Replace("++", "+")
-            If goodyear = True Then
-                titlesearch = titlesearch & "+" & year
-            End If
-            url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
-
-            Dim webpage As String = loadwebpage(url, True)
-
-
-            'www.imdb.com/title/tt0402022
-            If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then
-                newimdbid = webpage.Substring(webpage.IndexOf("www.imdb.com/title/tt") + 19, 9)
-            End If
-
-            If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
-                allok = True
-            Else
-                newimdbid = getimdbID_fromimdb(title, imdbmirror, year)
-                If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
-                    allok = True
-                End If
-            End If
-
-            If allok = True Then
-                Return newimdbid
-            Else
-                Return "NA"
-            End If
-        Catch
-            Return "Error"
-        Finally
-
-        End Try
-    End Function
-
-    Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
-        Try
-            Dim popularreturn As String = ""
-            Dim exactreturn As String = ""
-            Dim M As Match
-            title = title.Replace(".", "+")
-            title = title.Replace(" ", "+")
-            title = title.Replace("&", "%26")
-            title = title.Replace("À", "%c0")
-            title = title.Replace("Á", "%c1")
-            title = title.Replace("Â", "%c2")
-            title = title.Replace("Ã", "%c3")
-            title = title.Replace("Ä", "%c4")
-            title = title.Replace("Å", "%c5")
-            title = title.Replace("Æ", "%c6")
-            title = title.Replace("Ç", "%c7")
-            title = title.Replace("È", "%c8")
-            title = title.Replace("É", "%c9")
-            title = title.Replace("Ê", "%ca")
-            title = title.Replace("Ë", "%cb")
-            title = title.Replace("Ì", "%cc")
-            title = title.Replace("Í", "%cd")
-            title = title.Replace("Î", "%ce")
-            title = title.Replace("Ï", "%cf")
-            title = title.Replace("Ð", "%d0")
-            title = title.Replace("Ñ", "%d1")
-            title = title.Replace("Ò", "%d2")
-            title = title.Replace("Ó", "%d3")
-            title = title.Replace("Ô", "%d4")
-            title = title.Replace("Õ", "%d5")
-            title = title.Replace("Ö", "%d6")
-            title = title.Replace("Ø", "%d8")
-            title = title.Replace("Ù", "%d9")
-            title = title.Replace("Ú", "%da")
-            title = title.Replace("Û", "%db")
-            title = title.Replace("Ü", "%dc")
-            title = title.Replace("Ý", "%dd")
-            title = title.Replace("Þ", "%de")
-            title = title.Replace("ß", "%df")
-            title = title.Replace("à", "%e0")
-            title = title.Replace("á", "%e1")
-            title = title.Replace("â", "%e2")
-            title = title.Replace("ã", "%e3")
-            title = title.Replace("ä", "%e4")
-            title = title.Replace("å", "%e5")
-            title = title.Replace("æ", "%e6")
-            title = title.Replace("ç", "%e7")
-            title = title.Replace("è", "%e8")
-            title = title.Replace("é", "%e9")
-            title = title.Replace("ê", "%ea")
-            title = title.Replace("ë", "%eb")
-            title = title.Replace("ì", "%ec")
-            title = title.Replace("í", "%ed")
-            title = title.Replace("î", "%ee")
-            title = title.Replace("ï", "%ef")
-            title = title.Replace("ð", "%f0")
-            title = title.Replace("ñ", "%f1")
-            title = title.Replace("ò", "%f2")
-            title = title.Replace("ó", "%f3")
-            title = title.Replace("ô", "%f4")
-            title = title.Replace("õ", "%f5")
-            title = title.Replace("ö", "%f6")
-            title = title.Replace("÷", "%f7")
-            title = title.Replace("ø", "%f8")
-            title = title.Replace("ù", "%f9")
-            title = title.Replace("ú", "%fa")
-            title = title.Replace("û", "%fb")
-            title = title.Replace("ü", "%fc")
-            title = title.Replace("ý", "%fd")
-            title = title.Replace("þ", "%fe")
-            title = title.Replace("ÿ", "%ff")
-
-            title = title.Replace("&", "%26")
-            title = title.Replace(",", "")
-            title = title.Replace("++", "+")
-            title = imdbmirror & "find?s=tt&q=" & title
-            Dim urllinecount As Integer
-            Dim GOT_IMDBID As String
-            Dim allok As Boolean = False
-            Dim websource(3000)
-            For f = 1 To 10
-                Try
-                    Dim wrGETURL As WebRequest
-                    wrGETURL = WebRequest.Create(title)
-                    Dim myProxy As New WebProxy("myproxy", 80)
-                    myProxy.BypassProxyOnLocal = True
-                    Dim objStream As Stream
-                    objStream = wrGETURL.GetResponse.GetResponseStream()
-                    Dim objReader As New StreamReader(objStream)
-                    Dim sLine As String = ""
-                    urllinecount = 0
-                    Do While Not sLine Is Nothing
-                        urllinecount += 1
-                        sLine = objReader.ReadLine
-                        If Not sLine Is Nothing Then
-                            websource(urllinecount) = sLine
-                        End If
-                    Loop
-                    urllinecount -= 1
-                    allok = True
-                    Exit For
-                Catch
-                End Try
-            Next
-            GOT_IMDBID = ""
-            Dim popular(1000) As String
-            Dim atpopular As Boolean = False
-            Dim popularcount As Integer = 0
-            Dim exact(1000) As String
-            Dim atexact As Boolean = False
-            Dim exactcount As Integer = 0
-
-            Dim yearcounter As Integer = 0
-            Dim year(1000) As Integer
-            Dim backup As String = ""
-
-
-            For f = 1 To urllinecount
-                If backup = "" And websource(f).IndexOf("href=""/title/tt") <> -1 Then
-                    If websource(f).IndexOf("&#34;") = -1 Then
-                        Dim first As Integer
-                        Dim length As Integer
-                        first = websource(f).LastIndexOf("href=""/title/tt") + 13
-                        length = 9
-                        backup = websource(f).Substring(first, length)
-                    End If
-                End If
-                If movieyear <> "" Then
-                    If websource(f).IndexOf("Media from") <> -1 Then
-                        If websource(f).IndexOf("&#34;") = -1 Then
-                            If websource(f).IndexOf(movieyear) <> -1 Then
-                                Dim first As Integer
-                                Dim length As Integer
-                                first = websource(f).LastIndexOf("href=""/title/tt") + 13
-                                length = 9
-                                GOT_IMDBID = websource(f).Substring(first, length)
-                                Exit For
-                            End If
-                        End If
-                    End If
-                    If websource(f).IndexOf(movieyear) <> -1 Then
-                        yearcounter += 1
-                        year(yearcounter) = f
-                    End If
-                End If
-            Next
-            If movieyear <> Nothing Then
-                If yearcounter = 1 And GOT_IMDBID = "" Then
-                    Dim onlyid As String = websource(year(yearcounter)).Substring(0, websource(year(yearcounter)).IndexOf(movieyear) + 6)
-                    Dim first As Integer
-                    Dim length As Integer
-                    first = onlyid.LastIndexOf("href=""/title/tt") + 13
-                    length = 9
-                    GOT_IMDBID = onlyid.Substring(first, length)
-                End If
-                Dim populartotal As String = ""
-                Dim exacttotal As String = ""
-                If GOT_IMDBID = "" Then
-                    For f = 1 To urllinecount
-                        If websource(f).IndexOf("Popular Titles") <> -1 Or websource(f).IndexOf("Exact Matches") <> -1 Then
-
-                            If websource(f).IndexOf("Popular Titles") <> -1 And websource(f).IndexOf("Exact Matches") <> -1 Then
-                                populartotal = websource(f).Substring(0, websource(f).IndexOf("Exact Matches") - 13)
-                                exacttotal = websource(f).Replace(populartotal, "")
-                                Exit For
-                            ElseIf websource(f).IndexOf("Popular Titles") <> -1 And websource(f).IndexOf("Exact Matches") = -1 Then
-                                populartotal = websource(f)
-                                exacttotal = ""
-                                Exit For
-                            ElseIf websource(f).IndexOf("Popular Titles") = -1 And websource(f).IndexOf("Exact Matches") <> -1 Then
-                                populartotal = ""
-                                exacttotal = websource(f)
-                                Exit For
-                            End If
-                        End If
-                    Next
-                    Dim temps As String
-                    If GOT_IMDBID = "" And exacttotal <> "" Then
-                        If exacttotal.IndexOf(movieyear) <> -1 Then
-                            If CharCount(exacttotal, movieyear) = 1 Then
-                                temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                                Dim calc As String
-                                calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                                Dim regMatch As New Regex("tt(\d){6,8}")
-                                GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
-                            End If
-                        End If
-                        'temps = exacttotal
-                        'If temps.IndexOf(movieyear) <> -1 Then
-                        '    Dim count As Integer
-                        '    count = CharCount(temps, movieyear)
-                        '    If count = 1 Then
-                        '        temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
-                        '        Dim first As Integer
-                        '        Dim length As Integer
-                        '        Dim calc As String
-                        '        calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                        '        If temps.IndexOf("&#34;") = -1 Then
-                        '            first = temps.LastIndexOf("href=""/title/tt") + 13
-                        '            length = 9
-                        '            GOT_IMDBID = temps.Substring(first, length)
-                        '        End If
-                        '    End If
-                        'End If
-
-                        If GOT_IMDBID = "" And populartotal <> "" Then
-                            If populartotal.IndexOf(movieyear) <> -1 Then
-                                If CharCount(populartotal, movieyear) = 1 Then
-                                    temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
-                                    Dim calc As String
-                                    calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                                    Dim regMatch As New Regex("tt(\d){6,8}")
-                                    GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
-                                End If
-                            End If
-                        End If
-                        'If GOT_IMDBID = "" And populartotal <> "" Then
-                        '    temps = populartotal
-                        '    If temps.IndexOf(movieyear) <> -1 Then
-                        '        Dim count As Integer
-                        '        count = CharCount(temps, movieyear)
-                        '        If count = 1 Then
-                        '            temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
-                        '            Dim first As Integer
-                        '            Dim length As Integer
-                        '            Dim calc As String
-                        '            calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
-                        '            If temps.IndexOf("&#34;") = -1 Then
-                        '                first = temps.LastIndexOf("href=""/title/tt") + 13
-                        '                length = 9
-                        '                GOT_IMDBID = temps.Substring(first, length)
-                        '            End If
-                        '        End If
-                        '    End If
-                        'End If
-                    End If
-                End If
-            ElseIf movieyear = Nothing Then
-                Dim exactmatch As Boolean = False
-                Dim popularmatch As Boolean = False
-
-                For f = 1 To urllinecount
-                    If websource(f).IndexOf("Titles (Exact Matches)") <> -1 Then
-                        exactmatch = True
-                    End If
-                    If websource(f).IndexOf("Popular Titles") <> -1 Then
-                        popularmatch = True
-                    End If
-                Next
-                If popularmatch = True Then
-                    popularreturn = ""
-                    For f = 1 To urllinecount
-                        If websource(f).IndexOf("Popular Titles") <> -1 Then
-                            Dim type As String
-                            type = websource(f).Substring(websource(f).IndexOf("Popular Titles"), websource(f).Length - websource(f).IndexOf("Popular Titles"))
-                            If type.IndexOf("Exact Matches") <> -1 Then
-                                type = type.Substring(0, type.IndexOf("Exact Matches"))
-                            End If
-                            If type.IndexOf("Partial Matches") <> -1 Then
-                                type = type.Substring(0, type.IndexOf("Partial Matches"))
-                            End If
-                            If type.IndexOf("Approx Matches") <> -1 Then
-                                type = type.Substring(0, type.IndexOf("Approx Matches"))
-                            End If
-                            Do Until type.IndexOf("</td></tr>") = -1
-                                Dim pyte As String = ""
-                                If type.IndexOf("</td></tr>") <> -1 Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
-                                If pyte <> "" Then
-                                    If pyte.IndexOf("&#34;") = -1 And pyte.IndexOf("<small>(TV") = -1 And pyte.IndexOf("(VG)") = -1 Then
-                                        type = pyte
-                                        Exit Do
-                                    Else
-                                        type = type.Replace(pyte, "")
-                                    End If
-                                Else
-                                    If type.Length = 0 Then
-                                        Exit Do
-                                    Else
-                                        type = type.Substring(5, type.Length - 5)
-                                    End If
-                                End If
-                            Loop
-                            M = Regex.Match(type, "(tt\d{7})")
-                            If M.Success = True Then
-                                popularreturn = M.Value
-                            End If
-                        End If
-                    Next
-                End If
-                If exactmatch = True Then
-                    exactreturn = ""
-                    For f = 1 To urllinecount
-                        If websource(f).IndexOf("Titles (Exact Matches)") <> -1 Then
-                            Dim type As String
-                            type = websource(f).Substring(websource(f).IndexOf("Titles (Exact Matches)"), websource(f).Length - websource(f).IndexOf("Titles (Exact Matches)"))
-                            Do Until type.IndexOf("</td></tr>") = -1
-                                Dim pyte As String = ""
-                                If type.IndexOf("</td></tr>") <> -1 Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
-                                If type.IndexOf("Partial Matches") <> -1 Then
-                                    type = type.Substring(0, type.IndexOf("Partial Matches"))
-                                End If
-                                If type.IndexOf("Approx Matches") <> -1 Then
-                                    type = type.Substring(0, type.IndexOf("Approx Matches"))
-                                End If
-                                If pyte <> "" Then
-                                    If pyte.IndexOf("&#34;") = -1 And pyte.IndexOf("<small>(TV") = -1 And pyte.IndexOf("(VG)") = -1 Then
-                                        type = pyte
-                                        Exit Do
-                                    Else
-                                        type = type.Replace(pyte, "")
-                                    End If
-                                Else
-                                    If type.Length = 0 Then
-                                        Exit Do
-                                    Else
-                                        type = type.Substring(5, type.Length - 5)
-                                    End If
-                                End If
-                            Loop
-                            M = Regex.Match(type, "(tt\d{7})")
-                            If M.Success = True Then
-                                exactreturn = M.Value
-                            End If
-                        End If
-                    Next
-                End If
-                If popularreturn <> "" Then GOT_IMDBID = popularreturn
-                If exactreturn <> "" And popularreturn = "" Then GOT_IMDBID = exactreturn
-                If exactreturn = "" And popularreturn = "" And backup <> "" Then GOT_IMDBID = backup
-            End If
-
-            ' If GOT_IMDBID = "" And backup <> "" Then GOT_IMDBID = backup
-            If GOT_IMDBID = "" Then
-                Dim matc As Match
-
-                For f = 1 To urllinecount
-                    matc = Regex.Match(websource(f), "tt\d{7}")
-                    If matc.Success Then
-                        GOT_IMDBID = matc.Value
-                        Exit For
-                    End If
-                Next
-            End If
-            Return GOT_IMDBID
-
-        Catch
-            Return "Error"
-        Finally
-        End Try
-    End Function
+    'Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
+    '    Dim totalinfo As String = ""
+    '    Dim webcounter As Integer
+
+    '    Try
+    '        Dim first As Integer
+    '        Dim tempstring As String
+    '        Dim actors(10000, 3)
+    '        Dim actorcount As Integer = 0
+    '        Dim filterstring As String
+    '        Dim last As Integer
+    '        Dim length As Integer
+    '        Dim tempint As Integer
+    '        Dim mpaacount As Integer = -1
+    '        Dim webpage As New List(Of String)
+    '        Dim mpaaresults(33, 1) As String
+    '        Dim OriginalTitle As Boolean = False
+    '        Dim FoundTitle As Boolean = False
+    '        mpaaresults(0, 0) = "MPAA"
+    '        mpaaresults(1, 0) = "UK"
+    '        mpaaresults(2, 0) = "USA"
+    '        mpaaresults(3, 0) = "Ireland"
+    '        mpaaresults(4, 0) = "Australia"
+    '        mpaaresults(5, 0) = "New Zealand"
+    '        mpaaresults(6, 0) = "Norway"
+    '        mpaaresults(7, 0) = "Singapore"
+    '        mpaaresults(8, 0) = "South Korea"
+    '        mpaaresults(9, 0) = "Philippines"
+    '        mpaaresults(10, 0) = "Brazil"
+    '        mpaaresults(11, 0) = "Netherlands"
+    '        mpaaresults(12, 0) = "Malaysia"
+    '        mpaaresults(13, 0) = "Argentina"
+    '        mpaaresults(14, 0) = "Iceland"
+    '        mpaaresults(15, 0) = "Quebec"
+    '        mpaaresults(16, 0) = "British Columbia"
+    '        mpaaresults(17, 0) = "Nova Scotia"
+    '        mpaaresults(18, 0) = "Peru"
+    '        mpaaresults(19, 0) = "Sweden"
+    '        mpaaresults(20, 0) = "Portugal"
+    '        mpaaresults(21, 0) = "South Africa"
+    '        mpaaresults(22, 0) = "Denmark"
+    '        mpaaresults(23, 0) = "Hong Kong"
+    '        mpaaresults(24, 0) = "Finland"
+    '        mpaaresults(25, 0) = "India"
+    '        mpaaresults(26, 0) = "Mexico"
+    '        mpaaresults(27, 0) = "France"
+    '        mpaaresults(28, 0) = "Italy"
+    '        mpaaresults(29, 0) = "canton of Vaud"
+    '        mpaaresults(30, 0) = "canton of Geneva"
+    '        mpaaresults(31, 0) = "Germany"
+    '        mpaaresults(32, 0) = "Greece"
+    '        mpaaresults(33, 0) = "Austria"
+
+    '        Dim movienfoarray As String = String.Empty
+
+    '        Dim genre(20)
+    '        Dim thumbs(500)
+
+    '        Dim allok As Boolean = False
+    '        If imdbid <> Nothing Then
+    '            If imdbid.Length = 9 And imdbid.IndexOf("tt") <> -1 Then
+    '                allok = True
+    '            End If
+    '        End If
+    '        totalinfo = "<movie>" & vbCrLf
+    '        If allok = False Then
+    '            If imdbcounter < 50 Then
+    '                imdbid = getimdbID(title, year)
+    '            Else
+    '                imdbid = getimdbID_fromimdb(title, imdbmirror, year)
+    '            End If
+    '            If imdbid <> "" And imdbid.IndexOf("tt") = 0 And imdbid.Length = 9 Then
+    '                allok = True
+    '            End If
+    '        End If
+    '        If allok = False Then
+    '            Return "MIC"
+    '            Exit Function
+    '        End If
+    '        If allok = True Then
+    '            tempstring = imdbmirror & "title/" & imdbid
+    '            webpage.Clear()
+    '            webpage = loadwebpage(tempstring, False)
+
+    '            Dim webPg As String = String.Join("", webpage.ToArray())
+
+    '            For f = 0 To webpage.Count - 1
+    '                webcounter = f
+    '                If webcounter > webpage.Count - 10 Then Exit For
+    '                If (webpage(f).IndexOf("<title>") <> -1) And (OriginalTitle = False) Then
+    '                    Try
+    '                        Dim movieyear As String = ""
+    '                        movienfoarray = webpage(f)
+    '                        filterstring = movienfoarray
+    '                        movienfoarray = movienfoarray.Replace("<title>", "")
+    '                        movienfoarray = movienfoarray.Replace("</title>", "")
+    '                        If movienfoarray.IndexOf("(TV)") <> -1 Then
+    '                            movienfoarray = movienfoarray.Replace("(TV)", "")
+
+    '                        End If
+    '                        If movienfoarray.IndexOf("(VG)") <> -1 Then
+    '                            movienfoarray = movienfoarray.Replace("(VG)", "")
+    '                        End If
+
+    '                        If movienfoarray.IndexOf("IMDb - ") <> -1 Then
+    '                            movienfoarray = movienfoarray.Replace("IMDb - ", "")
+    '                        End If
+
+    '                        first = movienfoarray.LastIndexOf("(")
+    '                        If first <> -1 Then
+    '                            If movienfoarray.Substring(first + 2, 1) = ")" Then
+    '                                tempstring = movienfoarray.Substring(first, 3)
+    '                                movienfoarray = movienfoarray.Replace(tempstring, "")
+    '                                first = movienfoarray.LastIndexOf(")")
+    '                            End If
+    '                            If first <> -1 Then
+    '                                first = movienfoarray.LastIndexOf(")")
+    '                                movieyear = movienfoarray.Substring(first - 4, 4)
+    '                                first = movienfoarray.LastIndexOf("(")
+    '                                movienfoarray = movienfoarray.Substring(0, first)
+    '                                movienfoarray = movienfoarray.Trim()
+    '                            End If
+    '                        End If
+
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        movieyear = encodespecialchrs(movieyear)
+    '                        totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
+    '                        totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
+    '                        movienfoarray = ""
+    '                        FoundTitle = True
+    '                    Catch
+    '                        totalinfo = totalinfo & "<title>scraper error</title>" & vbCrLf
+    '                        totalinfo = totalinfo & "<year>scraper error</year>" & vbCrLf
+    '                    End Try
+    '                End If
+
+
+    '                ' Original Title
+
+    '                If (webpage(f).IndexOf("title-extra") <> -1) Then
+    '                    Try
+    '                        Dim movieyear As String = ""
+    '                        movienfoarray = webpage(f + 1)
+    '                        filterstring = movienfoarray
+    '                        movienfoarray = movienfoarray.Replace("<title>", "")
+    '                        movienfoarray = movienfoarray.Replace("</title>", "")
+    '                        If movienfoarray.IndexOf("(TV)") <> -1 Then
+    '                            movienfoarray = movienfoarray.Replace("(TV)", "")
+
+    '                        End If
+    '                        If movienfoarray.IndexOf("(VG)") <> -1 Then
+    '                            movienfoarray = movienfoarray.Replace("(VG)", "")
+    '                        End If
+
+    '                        first = movienfoarray.LastIndexOf("(")
+    '                        If first <> -1 Then
+    '                            If movienfoarray.Substring(first + 2, 1) = ")" Then
+    '                                tempstring = movienfoarray.Substring(first, 3)
+    '                                movienfoarray = movienfoarray.Replace(tempstring, "")
+    '                                first = movienfoarray.LastIndexOf(")")
+    '                            End If
+    '                            If first <> -1 Then
+    '                                first = movienfoarray.LastIndexOf(")")
+    '                                movieyear = movienfoarray.Substring(first - 4, 4)
+    '                                first = movienfoarray.LastIndexOf("(")
+    '                                movienfoarray = movienfoarray.Substring(0, first)
+    '                                movienfoarray = movienfoarray.Trim()
+    '                            End If
+    '                        End If
+
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        movieyear = encodespecialchrs(movieyear)
+    '                        If FoundTitle = False Then
+    '                            totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
+    '                            totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
+    '                        Else
+    '                            Dim FirstOcurrence As Integer = totalinfo.IndexOf("<title>")
+    '                            Dim SecondOcurrence As Integer = totalinfo.IndexOf("</title>")
+    '                            Dim OldTitle As String = totalinfo.Substring(FirstOcurrence, (SecondOcurrence + 8) - FirstOcurrence)
+    '                            totalinfo = totalinfo.Replace(OldTitle, "<title>" & movienfoarray & "</title>")
+    '                        End If
+    '                        OriginalTitle = True
+    '                        movienfoarray = ""
+    '                    Catch
+    '                        totalinfo = totalinfo & "<title>scraper error</title>" & vbCrLf
+    '                        totalinfo = totalinfo & "<year>scraper error</year>" & vbCrLf
+    '                    End Try
+    '                End If
+
+
+
+
+    '                'rating
+    '                If webpage(f).IndexOf("itemprop=""ratingValue") <> -1 Then
+    '                    Try
+    '                        Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
+    '                        If M.Success = True Then
+    '                            movienfoarray = M.Groups(1).Value
+    '                        Else
+    '                            movienfoarray = "scraper error"
+    '                        End If
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<rating>" & movienfoarray & "</rating>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
+    '                    End Try
+    '                End If
+
+    '                If webpage(f).IndexOf("<strong>Top 250 #") <> -1 Then
+    '                    Try
+    '                        first = webpage(f).IndexOf("Top 250 #")
+    '                        last = webpage(f).IndexOf("</strong></a>")
+    '                        length = last - first
+    '                        movienfoarray = webpage(f).Substring(first + 9, webpage(f).LastIndexOf("</strong>") - (first + 9))
+    '                        totalinfo = totalinfo & "<top250>" & movienfoarray & "</top250>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<top250>scraper error</top250>" & vbCrLf
+    '                    End Try
+    '                End If
+
+    '                'director
+    '                If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Director") <> -1 Then
+    '                    tempstring = ""
+    '                    For g = 1 To 10
+    '                        tempstring = tempstring & webpage(f + g)
+    '                        If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+    '                    Next
+    '                    If tempstring.IndexOf("itemprop=""director") <> -1 Then
+    '                        Try
+    '                            movienfoarray = ""
+    '                            Dim listofdirectors As New List(Of String)
+    '                            listofdirectors.Clear()
+    '                            Dim M As Match = Regex.Match(tempstring, "itemprop=""director"".*?>(.+?)</a>")
+    '                            Do While M.Success
+    '                                listofdirectors.Add(M.Groups(1).Value)
+    '                                M = M.NextMatch
+    '                            Loop
+    '                            If listofdirectors.Count > 0 Then
+    '                                For g = 0 To listofdirectors.Count - 1
+    '                                    If g = 0 Then
+    '                                        movienfoarray = listofdirectors(g)
+    '                                    Else
+    '                                        movienfoarray = movienfoarray & " / " & listofdirectors(g)
+    '                                    End If
+    '                                Next
+    '                            End If
+    '                            movienfoarray = cleanSpecChars(movienfoarray)
+    '                            movienfoarray = encodespecialchrs(movienfoarray)
+    '                            totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
+    '                        Catch
+    '                            totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
+    '                        End Try
+    '                    End If
+    '                End If
+
+    '                'credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
+    '                'If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
+    '                If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 And webpage(f + 1).IndexOf("href=""/keyword") < 0 Then
+    '                    '                                                                                           ^^^^^^^^^ Dirty hack to prevent this! ^^^^^^^^^^^
+    '                    Try
+    '                        movienfoarray = ""
+    '                        Dim listofwriters As New List(Of String)
+    '                        listofwriters.Clear()
+    '                        For g = 1 To 10
+    '                            Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+    '                            If M.Success = True And M.Groups(1).Length Then
+    '                                listofwriters.Add(M.Groups(1).Value)
+    '                            End If
+    '                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+    '                        Next
+    '                        For g = 0 To listofwriters.Count - 1
+    '                            If g = 0 Then
+    '                                movienfoarray = listofwriters(g)
+    '                            Else
+    '                                movienfoarray = movienfoarray & " / " & listofwriters(g)
+    '                            End If
+    '                        Next
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<credits>scraper error</credits>" & vbCrLf
+    '                    End Try
+    '                End If
+
+    '                'Stars
+    '                If webpage(f).IndexOf("<h4 class=""inline"">Stars") <> -1 Then
+    '                    Try
+    '                        movienfoarray = ""
+    '                        Dim listofstars As New List(Of String)
+    '                        listofstars.Clear()
+    '                        For g = 1 To 10
+    '                            Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+    '                            If M.Success = True And M.Groups(1).Length Then
+    '                                listofstars.Add(M.Groups(1).Value)
+    '                            End If
+    '                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+    '                        Next
+    '                        For g = 0 To listofstars.Count - 1
+    '                            If g = 0 Then
+    '                                movienfoarray = listofstars(g)
+    '                            Else
+    '                                movienfoarray = movienfoarray & ", " & listofstars(g)
+    '                            End If
+    '                        Next
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<stars>scraper error</stars>" & vbCrLf
+    '                    End Try
+    '                End If
+
+
+    '                'genre
+    '                If f > 5 Then
+    '                    If webpage(f).IndexOf("<h4 class=""inline"">Genre") <> -1 Then
+    '                        Dim listofgenre As New List(Of String)
+    '                        Try
+    '                            '                                If webpage(f + 1).IndexOf("<a href=""/genre/") <> -1 Then
+    '                            '                                    Do While webpage(f + 1).IndexOf("<a href=""/genre/") <> webpage(f + 1).LastIndexOf("<a href=""/genre/")
+    '                            '                                        Try
+    '                            '                                            tempstring = webpage(f + 1).Replace(webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("</a>") + 4), "")
+    '                            '                                            listofgenre.Add(webpage(f + 1).Replace(tempstring, ""))
+    '                            '                                            webpage(f + 1) = tempstring
+    '                            '                                        Catch ex As Exception
+    '                            '
+    '                            '                                        End Try
+    '                            '                                    Loop
+    '                            '                                    listofgenre.Add(webpage(f + 1))
+    '                            '                                    For g = 0 To listofgenre.Count - 1
+    '                            '                                        listofgenre(g) = listofgenre(g).Replace("</a>", "")
+    '                            '                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).LastIndexOf(">") + 1, listofgenre(g).Length - listofgenre(g).LastIndexOf(">") - 1)
+    '                            '                                    Next
+    '                            '                                End If
+
+
+    '                            listofgenre = GetGenres(webPg)
+
+    '                            For g = 0 To listofgenre.Count - 1
+    '                                If g = 0 Then
+    '                                    movienfoarray = listofgenre(g)
+    '                                Else
+    '                                    movienfoarray = movienfoarray & " / " & listofgenre(g)
+    '                                End If
+    '                            Next
+    '                            movienfoarray = cleanSpecChars(movienfoarray)
+    '                            movienfoarray = encodespecialchrs(movienfoarray)
+    '                            totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
+    '                        Catch
+    '                            totalinfo = totalinfo & "<genre>scraper error</genre>" & vbCrLf
+    '                        End Try
+    '                    End If
+    '                End If
+
+
+    '                'tagline
+    '                If webpage(f).IndexOf("<h4 class=""inline"">Tagline") <> -1 Then
+    '                    Try
+    '                        movienfoarray = webpage(f + 1)
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        movienfoarray = movienfoarray.Trim()
+    '                        totalinfo = totalinfo & "<tagline>" & movienfoarray & "</tagline>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<tagline>scraper error</tagline>" & vbCrLf
+    '                    End Try
+    '                End If
+
+    '                'runtime
+    '                If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
+    '                    movienfoarray = ""
+    '                    Try
+    '                        Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
+    '                        If M.Success = True Then
+    '                            movienfoarray = M.Groups(1).Value
+    '                        Else
+    '                            movienfoarray = "scraper error"
+    '                        End If
+    '                        'movienfoarray = movienfoarray.Substring(movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1, webpage(f + g).IndexOf("min") - movienfoarray.LastIndexOf(">", webpage(f + g).IndexOf("min")) + 1)
+    '                        'movienfoarray = movienfoarray.Replace("min", "")
+    '                        'movienfoarray = movienfoarray.Trim(" ")
+    '                        'If Not IsNumeric(movienfoarray) Then
+    '                        '    For h = 0 To movienfoarray.Length - 1
+    '                        '        If IsNumeric(movienfoarray.Substring(h, 1)) Then
+    '                        '            movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
+    '                        '            Exit For
+    '                        '        End If
+    '                        '    Next
+    '                        'End If
+    '                        'If movienfoarray <> "" Then
+    '                        '    movienfoarray = movienfoarray & " min"
+    '                        'End If
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<runtime>scraper error</runtime>" & vbCrLf
+    '                    End Try
+    '                End If
+    '                If webpage(f).IndexOf("<div class=""infobar"">") <> -1 Then
+    '                    Try
+    '                        If webpage(f + 1).IndexOf("<img width=") <> 0 Then
+    '                            movienfoarray = webpage(f + 1).Substring(0, webpage(f + 1).IndexOf("min") + 3)
+    '                            movienfoarray = movienfoarray.Replace("min", "")
+    '                            movienfoarray = movienfoarray.Trim(" ")
+    '                            If Not IsNumeric(movienfoarray) Then
+    '                                For h = 0 To movienfoarray.Length - 1
+    '                                    If IsNumeric(movienfoarray.Substring(h, 1)) Then
+    '                                        movienfoarray = movienfoarray.Substring(h, movienfoarray.Length - h)
+    '                                        Exit For
+    '                                    End If
+    '                                Next
+    '                            End If
+    '                            If movienfoarray <> "" Then
+    '                                movienfoarray = movienfoarray & " min"
+    '                            End If
+    '                            movienfoarray = cleanSpecChars(movienfoarray)
+    '                            movienfoarray = encodespecialchrs(movienfoarray)
+    '                            totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
+    '                        End If
+    '                    Catch
+    '                    End Try
+    '                End If
+
+    '                'votes
+    '                If webpage(f).IndexOf("itemprop=""ratingCount""") <> -1 Then
+    '                    Try
+    '                        Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingCount"">([\d{1,3},?]*[0-9]?)</span>")
+    '                        If M.Success = True Then
+    '                            movienfoarray = M.Groups(1).Value
+    '                        Else
+    '                            movienfoarray = "scraper error"
+    '                        End If
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<votes>" & movienfoarray & "</votes>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<votes>scraper error</votes>" & vbCrLf
+    '                    End Try
+    '                End If
+
+    '                'outline
+    '                ''If webpage(f).IndexOf("<p>") <> -1 Then
+    '                If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
+    '                    Try
+    '                        'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
+    '                        'movienfoarray = webpage(f + 1)
+    '                        movienfoarray = ""
+    '                        Dim endofoutline = f
+    '                        For endofoutline = (f) To webpage.Count - 2
+    '                            movienfoarray = movienfoarray & webpage(endofoutline)
+    '                            If webpage(endofoutline).IndexOf("</p>") <> -1 Then
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                        If movienfoarray.Length > 0 Then
+    '                            'movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
+    '                            '' Some outlines are a partial listing and link to the plot summary
+    '                            'Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
+    '                            'If erasepos <> -1 Then
+    '                            '    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
+    '                            'End If
+    '                            Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+    '                            If M.Success = True Then
+    '                                movienfoarray = M.Groups(1).Value
+    '                            Else
+    '                                movienfoarray = "scraper error"
+    '                            End If
+    '                            movienfoarray = cleanSpecChars(movienfoarray.Trim())
+    '                            movienfoarray = encodespecialchrs(movienfoarray)
+    '                            totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
+    '                        Else
+    '                            totalinfo = totalinfo & "<outline>scaper error: possible format change</outline><plot></plot>" & vbCrLf
+    '                        End If
+    '                    Catch
+    '                        'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+    '                        totalinfo = totalinfo & "<outline>scraper error</outline><plot></plot>" & vbCrLf
+    '                    End Try
+    '                End If
+
+    '                'premiered
+    '                If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
+    '                    Try
+    '                        Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
+    '                        If M.Success = True Then
+    '                            movienfoarray = M.Groups(1).Value
+    '                        Else
+    '                            movienfoarray = "scraper error"
+    '                        End If
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
+    '                    End Try
+    '                End If
+
+
+    '                'studio
+    '                If webpage(f).IndexOf("<h4 class=""inline"">Production") <> -1 Then
+    '                    Try
+    '                        movienfoarray = ""
+    '                        For g = 1 To 5
+    '                            If webpage(f + g).IndexOf("<a  href=""/company/") <> -1 Then
+    '                                webpage(f + g) = webpage(f + g).Replace("<a  href=""/company/", "")
+    '                                webpage(f + g) = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
+    '                                movienfoarray = webpage(f + g)
+    '                            End If
+    '                        Next
+    '                        movienfoarray = movienfoarray.Trim()
+    '                        movienfoarray = cleanSpecChars(movienfoarray)
+    '                        movienfoarray = encodespecialchrs(movienfoarray)
+    '                        totalinfo = totalinfo & "<studio>" & movienfoarray & "</studio>" & vbCrLf
+    '                        'Exit For
+    '                    Catch
+    '                        totalinfo = totalinfo & "<studio>scraper error</studio>" & vbCrLf
+    '                    End Try
+    '                End If
+    '                '<div class="txt-block">
+    '                '<h4 class="inline">Country:</h4> 
+
+    '                '<a href="/country/us">USA</a>
+
+    '                '</div>
+    '                'country
+    '                If webpage(f).IndexOf("class=""inline"">Countr") <> -1 Then
+    '                    'Try
+    '                    '    For g = 1 To 5
+    '                    '        If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+    '                    '        If webpage(f + g).IndexOf("</a>") <> -1 Then
+    '                    '            movienfoarray = webpage(f + g)
+    '                    '            movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1, movienfoarray.LastIndexOf("<") - movienfoarray.IndexOf(">") - 1)
+    '                    '            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+    '                    '            movienfoarray = encodespecialchrs(movienfoarray)
+    '                    '            totalinfo = totalinfo & "<country>" & movienfoarray & "</country>" & vbCrLf
+    '                    '            Exit For
+    '                    '        End If
+    '                    '    Next
+    '                    'Catch
+    '                    'End Try
+    '                    Try
+    '                        tempstring = ""
+    '                        For g = 1 To 5
+    '                            If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+    '                            Dim M As Match = Regex.Match(webpage(f + g), ">(.+)</a>")
+    '                            If M.Success = True Then
+    '                                movienfoarray = M.Groups(1).Value
+    '                                movienfoarray = cleanSpecChars(movienfoarray)
+    '                                movienfoarray = encodespecialchrs(movienfoarray)
+    '                                tempstring = tempstring & "<country>" & movienfoarray & "</country>" & vbCrLf
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                        totalinfo = totalinfo & tempstring
+    '                    Catch
+    '                        totalinfo = totalinfo & "<country>scraper error</country>" & vbCrLf
+    '                    End Try
+    '                End If
+    '            Next
+
+    '            totalinfo = totalinfo & "<id>" & imdbid & "</id>" & vbCrLf
+    '            'insert imdbid 
+
+    '            For f = 0 To 33
+    '                If mpaaresults(f, 1) <> Nothing Then
+    '                    Try
+    '                        mpaaresults(f, 0) = encodespecialchrs(mpaaresults(f, 0))
+    '                        mpaaresults(f, 1) = encodespecialchrs(mpaaresults(f, 1))
+    '                        totalinfo = totalinfo & "<cert>" & mpaaresults(f, 0) & "|" & mpaaresults(f, 1) & "</cert>" & vbCrLf
+    '                    Catch
+    '                        totalinfo = totalinfo & "<cert>scraper error|scraper error</cert>"
+    '                    End Try
+    '                End If
+    '            Next
+    '            'If imdbmirror <> "http://www.imdb.de/" Then
+    '            Try
+    '                tempstring = imdbmirror & "title/" & imdbid & "/plotsummary"
+    '                Dim plots(20) As String
+    '                webpage.Clear()
+    '                webpage = loadwebpage(tempstring, False)
+    '                tempint = 0
+    '                Dim doo As Boolean = False
+    '                For Each line In webpage
+    '                    If doo = True Then
+    '                        plots(tempint) = line
+    '                        doo = False
+    '                    End If
+    '                    If line.IndexOf("plotpar") <> -1 Then
+    '                        tempint = tempint + 1
+    '                        doo = True
+    '                    End If
+    '                Next
+    '                Dim sizes(tempint) As Integer
+    '                Dim biggest As Integer = 1
+    '                For f = 1 To tempint
+    '                    If plots(f).Length > plots(biggest).Length Then
+    '                        biggest = f
+    '                    End If
+    '                Next
+    '                If plots(biggest) <> Nothing Then
+    '                    movienfoarray = plots(biggest)
+    '                    If movienfoarray.IndexOf("<a href=") <> -1 Then
+    '                        Do Until movienfoarray.IndexOf("<a href=") = -1
+    '                            first = movienfoarray.LastIndexOf("<a href=")
+    '                            last = movienfoarray.LastIndexOf("/"">")
+    '                            tempstring = movienfoarray.Substring(first, last - first + 3)
+    '                            movienfoarray = movienfoarray.Replace(tempstring, "")
+    '                        Loop
+    '                        movienfoarray = movienfoarray.Replace("</a>", "")
+    '                    End If
+    '                    movienfoarray = cleanSpecChars(movienfoarray)
+    '                    movienfoarray = encodespecialchrs(movienfoarray)
+    '                    totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
+    '                End If
+    '            Catch
+    '                totalinfo = totalinfo & "<plot>scraper error</plot>"
+    '            End Try
+    '            'End If
+
+    '            'certs & mpaa
+    '            Try
+    '                tempstring = imdbmirror & "title/" & imdbid & "/parentalguide#certification"
+    '                webpage.Clear()
+    '                webpage = loadwebpage(tempstring, False)
+    '                For f = 0 To webpage.Count - 1
+    '                    'mpaa
+    '                    If webpage(f).IndexOf("<a href=""/mpaa"">MPAA") <> -1 Then
+    '                        tempstring = webpage(f + 2)
+    '                        If tempstring.IndexOf("<") = -1 Then
+    '                            For g = 0 To 33
+    '                                If mpaaresults(g, 0) = "MPAA" Then
+    '                                    mpaaresults(g, 1) = tempstring
+    '                                    Exit For
+    '                                End If
+    '                            Next
+    '                        End If
+    '                    End If
+    '                    'cert
+    '                    If f > 1 Then
+    '                        For g = 0 To 33
+    '                            tempstring = """>" & mpaaresults(g, 0) & ":"
+    '                            If webpage(f).IndexOf("certificates=") <> -1 And webpage(f).IndexOf(tempstring) <> -1 Then
+    '                                tempstring = webpage(f).Substring(webpage(f).IndexOf(tempstring), webpage(f).Length - webpage(f).IndexOf(tempstring))
+    '                                tempstring = tempstring.Substring(tempstring.IndexOf(">") + 1, tempstring.IndexOf("</a>") - tempstring.IndexOf(">") - 1)
+    '                                mpaaresults(g, 1) = tempstring
+    '                                Try
+    '                                    'line below determines if cert is full or short as e.g. UK:15 becomes 15
+    '                                    mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
+    '                                    mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
+    '                                Catch
+    '                                    mpaaresults(g, 1) = "error"
+    '                                End Try
+    '                            End If
+    '                        Next
+    '                    End If
+    '                Next
+    '            Catch
+    '            End Try
+
+
+    '            Try
+    '                'releaseinfo#akas
+    '                tempstring = imdbmirror & "title/" & imdbid & "/releaseinfo#akas"
+    '                webpage.Clear()
+    '                webpage = loadwebpage(tempstring, False)
+    '                For f = 0 To webpage.Count - 1
+    '                    If webpage(f).IndexOf("<h5><a name=""akas"">Also Known As") <> -1 Then
+    '                        Dim loc As Integer = f
+    '                        Dim ignore As Boolean = False
+    '                        For g = loc To loc + 500
+    '                            If webpage(g).IndexOf("</table>") <> -1 Then
+    '                                Exit For
+    '                            End If
+    '                            Dim skip As Boolean = ignore
+    '                            If webpage(g).IndexOf("<td>") <> -1 And ignore = True Then
+    '                                ignore = False
+    '                            End If
+    '                            If webpage(g).IndexOf("<td>") <> -1 And skip = False Then
+    '                                If webpage(g + 2).IndexOf("Greece") = -1 And webpage(g + 2).IndexOf("Russia") = -1 Then
+    '                                    tempstring = webpage(g)
+    '                                    tempstring = tempstring.Replace("<td>", "")
+    '                                    tempstring = tempstring.Replace("</td>", "")
+    '                                    tempstring = cleanSpecChars(tempstring)
+    '                                    tempstring = encodespecialchrs(tempstring)
+    '                                    totalinfo = totalinfo & "<alternativetitle>" & tempstring & "</alternativetitle>" & vbCrLf
+    '                                End If
+    '                                ignore = True
+    '                            End If
+    '                        Next
+    '                    End If
+    '                Next
+    '            Catch ex As Exception
+
+    '            End Try
+
+
+    '        End If
+    '        For f = 0 To 33
+    '            If mpaaresults(f, 1) <> Nothing Then
+    '                Try
+    '                    mpaaresults(f, 0) = cleanSpecChars(mpaaresults(f, 0))
+    '                    mpaaresults(f, 1) = cleanSpecChars(mpaaresults(f, 1))
+    '                    mpaaresults(f, 0) = encodespecialchrs(mpaaresults(f, 0))
+    '                    mpaaresults(f, 1) = encodespecialchrs(mpaaresults(f, 1))
+    '                    totalinfo = totalinfo & "<cert>" & mpaaresults(f, 0) & "|" & mpaaresults(f, 1) & "</cert>" & vbCrLf
+    '                Catch
+    '                    totalinfo = totalinfo & "<cert>scraper error|scraper error</cert>"
+    '                End Try
+    '            End If
+    '        Next
+    '        totalinfo = totalinfo & "</movie>" & vbCrLf
+    '        Return totalinfo
+    '    Catch ex As Exception
+    '        totalinfo = totalinfo & "</movie>" & vbCrLf
+    '        Return totalinfo
+    '        'MsgBox(ex.ToString & vbCrLf & vbCrLf & "error 354")
+    '    Finally
+
+    '    End Try
+    'End Function
+
+    'Public Function getimdbID(ByVal title As String, Optional ByVal year As String = "", Optional ByVal imdbmirror As String = "")
+    '    If imdbmirror = "" Then
+    '        imdbmirror = "http://www.imdb.com/"
+    '    End If
+    '    Try
+    '        Dim newimdbid As String = ""
+    '        Dim allok As Boolean = False
+    '        Dim goodyear As Boolean = False
+    '        If IsNumeric(year) Then
+    '            If year.Length = 4 Then
+    '                goodyear = True
+    '            End If
+    '        End If
+
+    '        Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
+    '        Dim titlesearch As String = title
+    '        titlesearch = titlesearch.Replace(".", "+")
+    '        titlesearch = titlesearch.Replace(" ", "+")
+    '        titlesearch = titlesearch.Replace("_", "+")
+    '        titlesearch = titlesearch.Replace("·", "%C2%B7")
+    '        titlesearch = titlesearch.Replace("À", "%c0")
+    '        titlesearch = titlesearch.Replace("Á", "%c1")
+    '        titlesearch = titlesearch.Replace("Â", "%c2")
+    '        titlesearch = titlesearch.Replace("Ã", "%c3")
+    '        titlesearch = titlesearch.Replace("Ä", "%c4")
+    '        titlesearch = titlesearch.Replace("Å", "%c5")
+    '        titlesearch = titlesearch.Replace("Æ", "%c6")
+    '        titlesearch = titlesearch.Replace("Ç", "%c7")
+    '        titlesearch = titlesearch.Replace("È", "%c8")
+    '        titlesearch = titlesearch.Replace("É", "%c9")
+    '        titlesearch = titlesearch.Replace("Ê", "%ca")
+    '        titlesearch = titlesearch.Replace("Ë", "%cb")
+    '        titlesearch = titlesearch.Replace("Ì", "%cc")
+    '        titlesearch = titlesearch.Replace("Í", "%cd")
+    '        titlesearch = titlesearch.Replace("Î", "%ce")
+    '        titlesearch = titlesearch.Replace("Ï", "%cf")
+    '        titlesearch = titlesearch.Replace("Ð", "%d0")
+    '        titlesearch = titlesearch.Replace("Ñ", "%d1")
+    '        titlesearch = titlesearch.Replace("Ò", "%d2")
+    '        titlesearch = titlesearch.Replace("Ó", "%d3")
+    '        titlesearch = titlesearch.Replace("Ô", "%d4")
+    '        titlesearch = titlesearch.Replace("Õ", "%d5")
+    '        titlesearch = titlesearch.Replace("Ö", "%d6")
+    '        titlesearch = titlesearch.Replace("Ø", "%d8")
+    '        titlesearch = titlesearch.Replace("Ù", "%d9")
+    '        titlesearch = titlesearch.Replace("Ú", "%da")
+    '        titlesearch = titlesearch.Replace("Û", "%db")
+    '        titlesearch = titlesearch.Replace("Ü", "%dc")
+    '        titlesearch = titlesearch.Replace("Ý", "%dd")
+    '        titlesearch = titlesearch.Replace("Þ", "%de")
+    '        titlesearch = titlesearch.Replace("ß", "%df")
+    '        titlesearch = titlesearch.Replace("à", "%e0")
+    '        titlesearch = titlesearch.Replace("á", "%e1")
+    '        titlesearch = titlesearch.Replace("â", "%e2")
+    '        titlesearch = titlesearch.Replace("ã", "%e3")
+    '        titlesearch = titlesearch.Replace("ä", "%e4")
+    '        titlesearch = titlesearch.Replace("å", "%e5")
+    '        titlesearch = titlesearch.Replace("æ", "%e6")
+    '        titlesearch = titlesearch.Replace("ç", "%e7")
+    '        titlesearch = titlesearch.Replace("è", "%e8")
+    '        titlesearch = titlesearch.Replace("é", "%e9")
+    '        titlesearch = titlesearch.Replace("ê", "%ea")
+    '        titlesearch = titlesearch.Replace("ë", "%eb")
+    '        titlesearch = titlesearch.Replace("ì", "%ec")
+    '        titlesearch = titlesearch.Replace("í", "%ed")
+    '        titlesearch = titlesearch.Replace("î", "%ee")
+    '        titlesearch = titlesearch.Replace("ï", "%ef")
+    '        titlesearch = titlesearch.Replace("ð", "%f0")
+    '        titlesearch = titlesearch.Replace("ñ", "%f1")
+    '        titlesearch = titlesearch.Replace("ò", "%f2")
+    '        titlesearch = titlesearch.Replace("ó", "%f3")
+    '        titlesearch = titlesearch.Replace("ô", "%f4")
+    '        titlesearch = titlesearch.Replace("õ", "%f5")
+    '        titlesearch = titlesearch.Replace("ö", "%f6")
+    '        titlesearch = titlesearch.Replace("÷", "%f7")
+    '        titlesearch = titlesearch.Replace("ø", "%f8")
+    '        titlesearch = titlesearch.Replace("ù", "%f9")
+    '        titlesearch = titlesearch.Replace("ú", "%fa")
+    '        titlesearch = titlesearch.Replace("û", "%fb")
+    '        titlesearch = titlesearch.Replace("ü", "%fc")
+    '        titlesearch = titlesearch.Replace("ý", "%fd")
+    '        titlesearch = titlesearch.Replace("þ", "%fe")
+    '        titlesearch = titlesearch.Replace("ÿ", "%ff")
+    '        titlesearch = titlesearch.Replace("&", "%26")
+    '        titlesearch = titlesearch.Replace("++", "+")
+    '        If goodyear = True Then
+    '            titlesearch = titlesearch & "+" & year
+    '        End If
+    '        url = url & titlesearch & "%3E+site%3Aimdb.com&meta="
+
+    '        Dim webpage As String = loadwebpage(url, True)
+
+
+    '        'www.imdb.com/title/tt0402022
+    '        If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then
+    '            newimdbid = webpage.Substring(webpage.IndexOf("www.imdb.com/title/tt") + 19, 9)
+    '        End If
+
+    '        If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
+    '            allok = True
+    '        Else
+    '            newimdbid = getimdbID_fromimdb(title, imdbmirror, year)
+    '            If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
+    '                allok = True
+    '            End If
+    '        End If
+
+    '        If allok = True Then
+    '            Return newimdbid
+    '        Else
+    '            Return "NA"
+    '        End If
+    '    Catch
+    '        Return "Error"
+    '    Finally
+
+    '    End Try
+    'End Function
+
+    'Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
+    '    Try
+    '        Dim popularreturn As String = ""
+    '        Dim exactreturn As String = ""
+    '        Dim M As Match
+    '        title = title.Replace(".", "+")
+    '        title = title.Replace(" ", "+")
+    '        title = title.Replace("&", "%26")
+    '        title = title.Replace("À", "%c0")
+    '        title = title.Replace("Á", "%c1")
+    '        title = title.Replace("Â", "%c2")
+    '        title = title.Replace("Ã", "%c3")
+    '        title = title.Replace("Ä", "%c4")
+    '        title = title.Replace("Å", "%c5")
+    '        title = title.Replace("Æ", "%c6")
+    '        title = title.Replace("Ç", "%c7")
+    '        title = title.Replace("È", "%c8")
+    '        title = title.Replace("É", "%c9")
+    '        title = title.Replace("Ê", "%ca")
+    '        title = title.Replace("Ë", "%cb")
+    '        title = title.Replace("Ì", "%cc")
+    '        title = title.Replace("Í", "%cd")
+    '        title = title.Replace("Î", "%ce")
+    '        title = title.Replace("Ï", "%cf")
+    '        title = title.Replace("Ð", "%d0")
+    '        title = title.Replace("Ñ", "%d1")
+    '        title = title.Replace("Ò", "%d2")
+    '        title = title.Replace("Ó", "%d3")
+    '        title = title.Replace("Ô", "%d4")
+    '        title = title.Replace("Õ", "%d5")
+    '        title = title.Replace("Ö", "%d6")
+    '        title = title.Replace("Ø", "%d8")
+    '        title = title.Replace("Ù", "%d9")
+    '        title = title.Replace("Ú", "%da")
+    '        title = title.Replace("Û", "%db")
+    '        title = title.Replace("Ü", "%dc")
+    '        title = title.Replace("Ý", "%dd")
+    '        title = title.Replace("Þ", "%de")
+    '        title = title.Replace("ß", "%df")
+    '        title = title.Replace("à", "%e0")
+    '        title = title.Replace("á", "%e1")
+    '        title = title.Replace("â", "%e2")
+    '        title = title.Replace("ã", "%e3")
+    '        title = title.Replace("ä", "%e4")
+    '        title = title.Replace("å", "%e5")
+    '        title = title.Replace("æ", "%e6")
+    '        title = title.Replace("ç", "%e7")
+    '        title = title.Replace("è", "%e8")
+    '        title = title.Replace("é", "%e9")
+    '        title = title.Replace("ê", "%ea")
+    '        title = title.Replace("ë", "%eb")
+    '        title = title.Replace("ì", "%ec")
+    '        title = title.Replace("í", "%ed")
+    '        title = title.Replace("î", "%ee")
+    '        title = title.Replace("ï", "%ef")
+    '        title = title.Replace("ð", "%f0")
+    '        title = title.Replace("ñ", "%f1")
+    '        title = title.Replace("ò", "%f2")
+    '        title = title.Replace("ó", "%f3")
+    '        title = title.Replace("ô", "%f4")
+    '        title = title.Replace("õ", "%f5")
+    '        title = title.Replace("ö", "%f6")
+    '        title = title.Replace("÷", "%f7")
+    '        title = title.Replace("ø", "%f8")
+    '        title = title.Replace("ù", "%f9")
+    '        title = title.Replace("ú", "%fa")
+    '        title = title.Replace("û", "%fb")
+    '        title = title.Replace("ü", "%fc")
+    '        title = title.Replace("ý", "%fd")
+    '        title = title.Replace("þ", "%fe")
+    '        title = title.Replace("ÿ", "%ff")
+
+    '        title = title.Replace("&", "%26")
+    '        title = title.Replace(",", "")
+    '        title = title.Replace("++", "+")
+    '        title = imdbmirror & "find?s=tt&q=" & title
+    '        Dim urllinecount As Integer
+    '        Dim GOT_IMDBID As String
+    '        Dim allok As Boolean = False
+    '        Dim websource(3000)
+    '        For f = 1 To 10
+    '            Try
+    '                Dim wrGETURL As WebRequest
+    '                wrGETURL = WebRequest.Create(title)
+    '                Dim myProxy As New WebProxy("myproxy", 80)
+    '                myProxy.BypassProxyOnLocal = True
+    '                Dim objStream As Stream
+    '                objStream = wrGETURL.GetResponse.GetResponseStream()
+    '                Dim objReader As New StreamReader(objStream)
+    '                Dim sLine As String = ""
+    '                urllinecount = 0
+    '                Do While Not sLine Is Nothing
+    '                    urllinecount += 1
+    '                    sLine = objReader.ReadLine
+    '                    If Not sLine Is Nothing Then
+    '                        websource(urllinecount) = sLine
+    '                    End If
+    '                Loop
+    '                urllinecount -= 1
+    '                allok = True
+    '                Exit For
+    '            Catch
+    '            End Try
+    '        Next
+    '        GOT_IMDBID = ""
+    '        Dim popular(1000) As String
+    '        Dim atpopular As Boolean = False
+    '        Dim popularcount As Integer = 0
+    '        Dim exact(1000) As String
+    '        Dim atexact As Boolean = False
+    '        Dim exactcount As Integer = 0
+
+    '        Dim yearcounter As Integer = 0
+    '        Dim year(1000) As Integer
+    '        Dim backup As String = ""
+
+
+    '        For f = 1 To urllinecount
+    '            If backup = "" And websource(f).IndexOf("href=""/title/tt") <> -1 Then
+    '                If websource(f).IndexOf("&#34;") = -1 Then
+    '                    Dim first As Integer
+    '                    Dim length As Integer
+    '                    first = websource(f).LastIndexOf("href=""/title/tt") + 13
+    '                    length = 9
+    '                    backup = websource(f).Substring(first, length)
+    '                End If
+    '            End If
+    '            If movieyear <> "" Then
+    '                If websource(f).IndexOf("Media from") <> -1 Then
+    '                    If websource(f).IndexOf("&#34;") = -1 Then
+    '                        If websource(f).IndexOf(movieyear) <> -1 Then
+    '                            Dim first As Integer
+    '                            Dim length As Integer
+    '                            first = websource(f).LastIndexOf("href=""/title/tt") + 13
+    '                            length = 9
+    '                            GOT_IMDBID = websource(f).Substring(first, length)
+    '                            Exit For
+    '                        End If
+    '                    End If
+    '                End If
+    '                If websource(f).IndexOf(movieyear) <> -1 Then
+    '                    yearcounter += 1
+    '                    year(yearcounter) = f
+    '                End If
+    '            End If
+    '        Next
+    '        If movieyear <> Nothing Then
+    '            If yearcounter = 1 And GOT_IMDBID = "" Then
+    '                Dim onlyid As String = websource(year(yearcounter)).Substring(0, websource(year(yearcounter)).IndexOf(movieyear) + 6)
+    '                Dim first As Integer
+    '                Dim length As Integer
+    '                first = onlyid.LastIndexOf("href=""/title/tt") + 13
+    '                length = 9
+    '                GOT_IMDBID = onlyid.Substring(first, length)
+    '            End If
+    '            Dim populartotal As String = ""
+    '            Dim exacttotal As String = ""
+    '            If GOT_IMDBID = "" Then
+    '                For f = 1 To urllinecount
+    '                    If websource(f).IndexOf("Popular Titles") <> -1 Or websource(f).IndexOf("Exact Matches") <> -1 Then
+
+    '                        If websource(f).IndexOf("Popular Titles") <> -1 And websource(f).IndexOf("Exact Matches") <> -1 Then
+    '                            populartotal = websource(f).Substring(0, websource(f).IndexOf("Exact Matches") - 13)
+    '                            exacttotal = websource(f).Replace(populartotal, "")
+    '                            Exit For
+    '                        ElseIf websource(f).IndexOf("Popular Titles") <> -1 And websource(f).IndexOf("Exact Matches") = -1 Then
+    '                            populartotal = websource(f)
+    '                            exacttotal = ""
+    '                            Exit For
+    '                        ElseIf websource(f).IndexOf("Popular Titles") = -1 And websource(f).IndexOf("Exact Matches") <> -1 Then
+    '                            populartotal = ""
+    '                            exacttotal = websource(f)
+    '                            Exit For
+    '                        End If
+    '                    End If
+    '                Next
+    '                Dim temps As String
+    '                If GOT_IMDBID = "" And exacttotal <> "" Then
+    '                    If exacttotal.IndexOf(movieyear) <> -1 Then
+    '                        If CharCount(exacttotal, movieyear) = 1 Then
+    '                            temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
+    '                            Dim calc As String
+    '                            calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+    '                            Dim regMatch As New Regex("tt(\d){6,8}")
+    '                            GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
+    '                        End If
+    '                    End If
+    '                    'temps = exacttotal
+    '                    'If temps.IndexOf(movieyear) <> -1 Then
+    '                    '    Dim count As Integer
+    '                    '    count = CharCount(temps, movieyear)
+    '                    '    If count = 1 Then
+    '                    '        temps = exacttotal.Substring(0, exacttotal.IndexOf(movieyear) + 6)
+    '                    '        Dim first As Integer
+    '                    '        Dim length As Integer
+    '                    '        Dim calc As String
+    '                    '        calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+    '                    '        If temps.IndexOf("&#34;") = -1 Then
+    '                    '            first = temps.LastIndexOf("href=""/title/tt") + 13
+    '                    '            length = 9
+    '                    '            GOT_IMDBID = temps.Substring(first, length)
+    '                    '        End If
+    '                    '    End If
+    '                    'End If
+
+    '                    If GOT_IMDBID = "" And populartotal <> "" Then
+    '                        If populartotal.IndexOf(movieyear) <> -1 Then
+    '                            If CharCount(populartotal, movieyear) = 1 Then
+    '                                temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
+    '                                Dim calc As String
+    '                                calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+    '                                Dim regMatch As New Regex("tt(\d){6,8}")
+    '                                GOT_IMDBID = regMatch.Matches(calc).Item(0).Value
+    '                            End If
+    '                        End If
+    '                    End If
+    '                    'If GOT_IMDBID = "" And populartotal <> "" Then
+    '                    '    temps = populartotal
+    '                    '    If temps.IndexOf(movieyear) <> -1 Then
+    '                    '        Dim count As Integer
+    '                    '        count = CharCount(temps, movieyear)
+    '                    '        If count = 1 Then
+    '                    '            temps = populartotal.Substring(0, populartotal.IndexOf(movieyear) + 6)
+    '                    '            Dim first As Integer
+    '                    '            Dim length As Integer
+    '                    '            Dim calc As String
+    '                    '            calc = temps.Substring(temps.LastIndexOf("href=""/title/tt"), temps.Length - temps.LastIndexOf("href=""/title/tt"))
+    '                    '            If temps.IndexOf("&#34;") = -1 Then
+    '                    '                first = temps.LastIndexOf("href=""/title/tt") + 13
+    '                    '                length = 9
+    '                    '                GOT_IMDBID = temps.Substring(first, length)
+    '                    '            End If
+    '                    '        End If
+    '                    '    End If
+    '                    'End If
+    '                End If
+    '            End If
+    '        ElseIf movieyear = Nothing Then
+    '            Dim exactmatch As Boolean = False
+    '            Dim popularmatch As Boolean = False
+
+    '            For f = 1 To urllinecount
+    '                If websource(f).IndexOf("Titles (Exact Matches)") <> -1 Then
+    '                    exactmatch = True
+    '                End If
+    '                If websource(f).IndexOf("Popular Titles") <> -1 Then
+    '                    popularmatch = True
+    '                End If
+    '            Next
+    '            If popularmatch = True Then
+    '                popularreturn = ""
+    '                For f = 1 To urllinecount
+    '                    If websource(f).IndexOf("Popular Titles") <> -1 Then
+    '                        Dim type As String
+    '                        type = websource(f).Substring(websource(f).IndexOf("Popular Titles"), websource(f).Length - websource(f).IndexOf("Popular Titles"))
+    '                        If type.IndexOf("Exact Matches") <> -1 Then
+    '                            type = type.Substring(0, type.IndexOf("Exact Matches"))
+    '                        End If
+    '                        If type.IndexOf("Partial Matches") <> -1 Then
+    '                            type = type.Substring(0, type.IndexOf("Partial Matches"))
+    '                        End If
+    '                        If type.IndexOf("Approx Matches") <> -1 Then
+    '                            type = type.Substring(0, type.IndexOf("Approx Matches"))
+    '                        End If
+    '                        Do Until type.IndexOf("</td></tr>") = -1
+    '                            Dim pyte As String = ""
+    '                            If type.IndexOf("</td></tr>") <> -1 Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
+    '                            If pyte <> "" Then
+    '                                If pyte.IndexOf("&#34;") = -1 And pyte.IndexOf("<small>(TV") = -1 And pyte.IndexOf("(VG)") = -1 Then
+    '                                    type = pyte
+    '                                    Exit Do
+    '                                Else
+    '                                    type = type.Replace(pyte, "")
+    '                                End If
+    '                            Else
+    '                                If type.Length = 0 Then
+    '                                    Exit Do
+    '                                Else
+    '                                    type = type.Substring(5, type.Length - 5)
+    '                                End If
+    '                            End If
+    '                        Loop
+    '                        M = Regex.Match(type, "(tt\d{7})")
+    '                        If M.Success = True Then
+    '                            popularreturn = M.Value
+    '                        End If
+    '                    End If
+    '                Next
+    '            End If
+    '            If exactmatch = True Then
+    '                exactreturn = ""
+    '                For f = 1 To urllinecount
+    '                    If websource(f).IndexOf("Titles (Exact Matches)") <> -1 Then
+    '                        Dim type As String
+    '                        type = websource(f).Substring(websource(f).IndexOf("Titles (Exact Matches)"), websource(f).Length - websource(f).IndexOf("Titles (Exact Matches)"))
+    '                        Do Until type.IndexOf("</td></tr>") = -1
+    '                            Dim pyte As String = ""
+    '                            If type.IndexOf("</td></tr>") <> -1 Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
+    '                            If type.IndexOf("Partial Matches") <> -1 Then
+    '                                type = type.Substring(0, type.IndexOf("Partial Matches"))
+    '                            End If
+    '                            If type.IndexOf("Approx Matches") <> -1 Then
+    '                                type = type.Substring(0, type.IndexOf("Approx Matches"))
+    '                            End If
+    '                            If pyte <> "" Then
+    '                                If pyte.IndexOf("&#34;") = -1 And pyte.IndexOf("<small>(TV") = -1 And pyte.IndexOf("(VG)") = -1 Then
+    '                                    type = pyte
+    '                                    Exit Do
+    '                                Else
+    '                                    type = type.Replace(pyte, "")
+    '                                End If
+    '                            Else
+    '                                If type.Length = 0 Then
+    '                                    Exit Do
+    '                                Else
+    '                                    type = type.Substring(5, type.Length - 5)
+    '                                End If
+    '                            End If
+    '                        Loop
+    '                        M = Regex.Match(type, "(tt\d{7})")
+    '                        If M.Success = True Then
+    '                            exactreturn = M.Value
+    '                        End If
+    '                    End If
+    '                Next
+    '            End If
+    '            If popularreturn <> "" Then GOT_IMDBID = popularreturn
+    '            If exactreturn <> "" And popularreturn = "" Then GOT_IMDBID = exactreturn
+    '            If exactreturn = "" And popularreturn = "" And backup <> "" Then GOT_IMDBID = backup
+    '        End If
+
+    '        ' If GOT_IMDBID = "" And backup <> "" Then GOT_IMDBID = backup
+    '        If GOT_IMDBID = "" Then
+    '            Dim matc As Match
+
+    '            For f = 1 To urllinecount
+    '                matc = Regex.Match(websource(f), "tt\d{7}")
+    '                If matc.Success Then
+    '                    GOT_IMDBID = matc.Value
+    '                    Exit For
+    '                End If
+    '            Next
+    '        End If
+    '        Return GOT_IMDBID
+
+    '    Catch
+    '        Return "Error"
+    '    Finally
+    '    End Try
+    'End Function
 
     Public Function cleanSpecChars(ByVal string2clean As String) As String
         Return WebUtility.HtmlDecode(string2clean)
@@ -8748,36 +8928,40 @@ Public Class tvart
     Dim tvposters As List(Of String)
 End Class
 
-Public Structure actordatabase
-    Dim actorname As String
-    Dim movieid As String
-End Structure
+'Public Structure actordatabase
+'    Dim actorname As String
+'    Dim movieid As String
+'End Structure
 
-Public Structure basicmovienfo
-    Dim title As String
-    Dim sortorder As String
-    Dim movieset As String
-    Dim year As String
-    Dim rating As String
-    Dim votes As String
-    Dim outline As String
-    Dim plot As String
-    Dim tagline As String
-    Dim runtime As String
-    Dim mpaa As String
-    Dim genre As String
-    Dim credits As String
-    Dim director As String
-    Dim premiered As String
-    Dim studio As String
-    Dim trailer As String
-    Dim playcount As String
-    Dim imdbid As String
-    Dim top250 As String
-    Dim filename As String
-    Dim thumbnails As String
-    Dim fanart As String
-End Structure
+'Public Structure basicmovienfo
+'    Dim title As String
+'    Dim originaltitle As String
+'    Dim sortorder As String
+'    Dim movieset As String
+'    Dim source As String
+'    Dim year As String
+'    Dim rating As String
+'    Dim votes As String
+'    Dim outline As String
+'    Dim plot As String
+'    Dim tagline As String
+'    Dim runtime As String
+'    Dim mpaa As String
+'    Dim genre As String
+'    Dim credits As String
+'    Dim director As String
+'    Dim stars As String
+'    Dim premiered As String
+'    Dim studio As String
+'    Dim trailer As String
+'    Dim playcount As String
+'    Dim imdbid As String
+'    Dim top250 As String
+'    Dim filename As String
+'    Dim thumbnails As String
+'    Dim fanart As String
+'    Dim country As String
+'End Structure
 
 Public Class basictvshownfo
     Public fullpath As String
@@ -8811,21 +8995,21 @@ Public Class episodeinfo
     Public missing As String
     Public extension As String
     Public pure As String
-    Public listactors As New List(Of movieactors)
+    Public listactors As New List(Of str_MovieActors)
     Public filedetails As New fullfiledetails
 End Class
 
-Public Structure movieactors
-    Dim actorname As String
-    Dim actorrole As String
-    Dim actorthumb As String
-End Structure
+'Public Structure movieactors
+'    Dim actorname As String
+'    Dim actorrole As String
+'    Dim actorthumb As String
+'End Structure
 
 Public Class fullmoviedetails
-    Public fileinfo As New filedetails
-    Public fullmoviebody As New basicmovienfo
+    Public fileinfo As New str_FileDetails
+    Public fullmoviebody As New str_BasicMovieNFO
     Public alternativetitles As New List(Of String)
-    Public listactors As New List(Of movieactors)
+    Public listactors As New List(Of str_MovieActors)
     Public listthumbs As New List(Of String)
     Public filedetails As New fullfiledetails
 End Class
@@ -8836,44 +9020,44 @@ Public Class fullfiledetails
     Public filedetails_subtitles As New List(Of medianfo_subtitles)
 End Class
 
-Public Structure filedetails
-    Dim fullpathandfilename As String
-    Dim path As String
-    Dim filename As String
-    Dim foldername As String
-    Dim fanartpath As String
-    Dim posterpath As String
-    Dim trailerpath As String
-    Dim createdate As String
-End Structure
+'Public Structure filedetails
+'    Dim fullpathandfilename As String
+'    Dim path As String
+'    Dim filename As String
+'    Dim foldername As String
+'    Dim fanartpath As String
+'    Dim posterpath As String
+'    Dim trailerpath As String
+'    Dim createdate As String
+'End Structure
 
-Public Structure newmovie
-    Dim nfopathandfilename As String
-    Dim nfopath As String
-    Dim title As String
-    Dim mediapathandfilename As String
-End Structure
+'Public Structure newmovie
+'    Dim nfopathandfilename As String
+'    Dim nfopath As String
+'    Dim title As String
+'    Dim mediapathandfilename As String
+'End Structure
 
-Public Structure combolist
-    Dim fullpathandfilename As String
-    Dim movieset As String
-    Dim filename As String
-    Dim foldername As String
-    Dim title As String
-    Dim titleandyear As String
-    Dim year As String
-    Dim filedate As String
-    Dim id As String
-    Dim rating As String
-    Dim top250 As String
-    Dim genre As String
-    Dim playcount As String
-    Dim sortorder As String
-    Dim outline As String
-    Dim runtime As String
-    Dim createdate As String
-    Dim missingdata1 As Byte
-End Structure
+'Public Structure combolist
+'    Dim fullpathandfilename As String
+'    Dim movieset As String
+'    Dim filename As String
+'    Dim foldername As String
+'    Dim title As String
+'    Dim titleandyear As String
+'    Dim year As String
+'    Dim filedate As String
+'    Dim id As String
+'    Dim rating As String
+'    Dim top250 As String
+'    Dim genre As String
+'    Dim playcount As String
+'    Dim sortorder As String
+'    Dim outline As String
+'    Dim runtime As String
+'    Dim createdate As String
+'    Dim missingdata1 As Byte
+'End Structure
 
 Public Structure runningthreads
     Dim thread1 As Boolean
@@ -8946,22 +9130,22 @@ Public Structure batchwizard
     Dim activate As Boolean
 End Structure
 
-Public Structure listofprofiles
-    Dim moviecache As String
-    Dim tvcache As String
-    Dim actorcache As String
-    Dim profilename As String
-    Dim regexlist As String
-    Dim filters As String
-    Dim config As String
-End Structure
+'Public Structure listofprofiles
+'    Dim moviecache As String
+'    Dim tvcache As String
+'    Dim actorcache As String
+'    Dim profilename As String
+'    Dim regexlist As String
+'    Dim filters As String
+'    Dim config As String
+'End Structure
 
-Public Class profiles
-    Public startupprofile As String
-    Public defaultprofile As String
-    Public workingprofilename As String
-    Public profilelist As New List(Of listofprofiles)
-End Class
+'Public Class profiles
+'    Public startupprofile As String
+'    Public defaultprofile As String
+'    Public workingprofilename As String
+'    Public profilelist As New List(Of listofprofiles)
+'End Class
 
 Public Enum StreamKind As UInteger
     General
