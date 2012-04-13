@@ -6300,46 +6300,13 @@ Module Module1
                     stage = 5
                     'stage 5 = get hd tags
                     Try
-                        Dim tempsa As String = IO.Path.GetFileName(newMovieList(f).mediapathandfilename)
                         Dim tempsb As String = newMovieList(f).mediapathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).mediapathandfilename), "")
                         tempsb = IO.Path.Combine(tempsb, "tempoffline.ttt")
                         If Not IO.File.Exists(tempsb) Then
-
                             newmovie.filedetails = get_hdtags(newMovieList(f).mediapathandfilename)
-                            If newmovie.filedetails.filedetails_video.duration <> Nothing Then
-                                Try
-                                    '1h 24mn 48s 546ms
-                                    Dim hours As Integer
-                                    Dim minutes As Integer
-                                    tempstring = newmovie.filedetails.filedetails_video.duration
-                                    tempint = tempstring.IndexOf("h")
-                                    If tempint <> -1 Then
-                                        hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                        tempstring = Trim(tempstring)
-                                    End If
-                                    tempint = tempstring.IndexOf("mn")
-                                    If tempint <> -1 Then
-                                        minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                    End If
-                                    If hours <> 0 Then
-                                        hours = hours * 60
-                                    End If
-                                    minutes = minutes + hours
-                                    If minutes = 0 Then
-                                        If tempstring.IndexOf("min") <> -1 Then
-                                            tempstring = tempstring.Replace("min", "")
-                                            tempstring = tempstring.Replace(" ", "")
-                                            If IsNumeric(tempstring) Then
-                                                minutes = Convert.ToInt32(tempstring)
-                                            End If
-                                        End If
-                                    End If
-                                    newmovie.fullmoviebody.runtime = minutes.ToString & " min"
-                                    Console.WriteLine("HD Tags Added OK")
-                                Catch ex As Exception
-                                    Console.WriteLine("Error getting HD Tags:- " & ex.Message.ToString)
-                                End Try
+                            If newmovie.filedetails.filedetails_video.duration <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
+                                newmovie.fullmoviebody.runtime = Utilities.cleanruntime(newmovie.filedetails.filedetails_video.duration) & " min"
+                                Console.WriteLine("HD Tags Added OK")
                             End If
                         End If
                     Catch ex As Exception
@@ -7507,17 +7474,17 @@ Module Module1
                         minutes = minutes.Replace("mins", "")
                         minutes = minutes.Replace("min", "")
                         minutes = minutes.Replace(" ", "")
-
                         Try
-                            Do While minutes.IndexOf("0") = 0
+                            Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                                 minutes = minutes.Substring(1, minutes.Length - 1)
                             Loop
                             If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
-                                minutes = "0" & minutes & " min"
+                                minutes = "0" & minutes
                             ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
-                                minutes = "00" & minutes & " min"
-                            Else
-                                minutes = movietosave.fullmoviebody.runtime
+                                minutes = "00" & minutes
+                            End If
+                            If Preferences.intruntime = False And IsNumeric(minutes) Then
+                                minutes = minutes & " min"
                             End If
                         Catch ex As Exception
                             minutes = movietosave.fullmoviebody.runtime
