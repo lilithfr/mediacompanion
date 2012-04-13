@@ -2463,7 +2463,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function cleanSpecChars(ByVal string2clean As String) As String
-        Return HttpUtility.HtmlDecode(string2clean)
+        Return WebUtility.HtmlDecode(string2clean)
     End Function
     Public Shared Function ReplaceNothing(ByVal text As String, Optional ByVal replacetext As String = "") As String
         If text Is Nothing Then

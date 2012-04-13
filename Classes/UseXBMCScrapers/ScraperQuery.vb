@@ -284,7 +284,7 @@ Public Class ScraperQuery
    ''' <returns>URL encoded string.</returns>
    Private Function UrlEncode(ByVal s As String) As String
       ' See CUtil::URLEncode()
-      Return HttpUtility.UrlEncode(s)
+        Return Uri.EscapeUriString(s)
    End Function
 
    ''' <summary>
@@ -423,7 +423,7 @@ Public Class ScraperQuery
             'Trace.WriteLine(e.ToString())
             'Trace.WriteLine("=================================================================" + vbCrLf)
 
-            Dim matches As MatchCollection = Regex.Matches(input, HttpUtility.HtmlDecode(expression), RegexOptions.Singleline)
+            Dim matches As MatchCollection = Regex.Matches(input, WebUtility.HtmlDecode(expression), RegexOptions.Singleline)
 
             If ((matches.Count = 0) And (Not clear)) Then
                 Continue For
