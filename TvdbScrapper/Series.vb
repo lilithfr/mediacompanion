@@ -156,7 +156,8 @@ Namespace Tvdb
             FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
 
             For Each Item In ThisList
-                Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
+                'Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
+                Item.Similarity = Tvdb.CompareString(Item.SeriesName.Value, FolderName)
             Next
 
             Dim Search = From Ser As Tvdb.Series In ThisList Order By Ser.Similarity Descending ', Ser.FirstAired Descending

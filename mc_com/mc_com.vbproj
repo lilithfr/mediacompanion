@@ -63,9 +63,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="class_mpdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\class_mpdb_thumbs.dll</HintPath>
+    <Reference Include="class_mpdb_thumbs">
+      <HintPath>..\Assets\class_mpdb_thumbs.dll</HintPath>
     </Reference>
     <Reference Include="crclib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
