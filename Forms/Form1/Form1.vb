@@ -43,6 +43,8 @@ Public Class Form1
     Public batchList As New str_BatchWizard(SetDefaults)
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
+    Public Shared scraperLog As String = ""
+    Public Shared newMovieList As New List(Of str_NewMovie)
 
 
     Public noFanart As Boolean
@@ -76,11 +78,9 @@ Public Class Form1
     Dim defaultOfflineArt As String
     Dim defaultScreenShot As String
     Dim actorDB As New List(Of str_ActorDatabase)
-    Dim scraperLog As String = ""
 
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
-    Dim newMovieList As New List(Of str_NewMovie)
 
 
     Dim bigPanel As Panel
@@ -2342,7 +2342,7 @@ Public Class Form1
                     remove = True
                     scraperLog &= " - 'movie.nfo' found - scrape skipped!"
                 End If
-                basicmoviename = Utilities.GetStackName(IO.Path.GetFileName(fs_info.FullName), fs_info.FullName)
+                basicmoviename = Utilities.GetStackName(fs_info.FullName)
                 Dim otherformat As String = tempmovie.Replace(IO.Path.GetFileName(tempmovie), basicmoviename & ".nfo")
                 If IO.File.Exists(otherformat) Then
                     Dim allok2 As Boolean = False
@@ -3251,6 +3251,7 @@ Public Class Form1
 
                         dirpath = newmoviefolders(g)
                         Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                        'Movies.listMovieFiles(dirinfo, moviepattern, dir_info)         'titlename is logged in here
                         mov_ListFiles2(dirinfo, moviepattern, dir_info)         'titlename is logged in here
                     Next
 
@@ -3425,7 +3426,7 @@ Public Class Form1
                                 scraperLog = scraperLog & "Current nfo file will be overwritten" & vbCrLf
                             End If
                         Else
-                            Dim stackname As String = Utilities.GetStackName(nfopath, nfopath.Replace(IO.Path.GetFileName(nfopath), ""))
+                            Dim stackname As String = Utilities.GetStackName(nfopath)
                             Dim path As String = stackname & ".nfo"
                             If IO.File.Exists(path) Then
                                 scraperLog = scraperLog & "nfo file exists, checking for IMDB ID" & vbCrLf
@@ -3779,7 +3780,7 @@ Public Class Form1
                                     Dim newextension As String = System.IO.Path.GetExtension(newMovieList(f).mediapathandfilename)
 
                                     'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
-                                    Dim M As Match = Regex.Match(newMovieList(f).title.ToLower, "((" & Join(Utilities.cleanMultipart, "|") & ")([" & Utilities.cleanSeparators & "0]?)([0-9]+))")
+                                    Dim M As Match = Regex.Match(newMovieList(f).title.ToLower, "((" & Join(Utilities.cleanMultipart, "|") & ")([" & Utilities.cleanSeparators & "]?)([0-9]+))")
                                     If M.Success = True Then
                                         stackdesignator = "-" & M.Groups(2).Value   'use the existing 'part'-type
                                         If Preferences.movieignorepart And (stackdesignator = "-part" Or stackdesignator = "-pt") Then

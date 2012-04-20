@@ -243,250 +243,34 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return ""
     End Function
 
-    Public Shared Function GetStackName(ByVal filenames As String, ByVal filepath As String) As String
-        Dim tempboolean As Boolean = False
-        Dim truerar As Boolean = False
-        Dim filename As String = filenames
-        If IO.Path.GetExtension(filename).ToLower = ".rar" Then
-            truerar = True
-        End If
-        filenames = filenames.Replace(System.IO.Path.GetExtension(filenames), "")
-        filename = filename.ToLower
-        Dim stackname As String = ""
-        Dim workingstring As String = "na"
-
-
-        If filename.IndexOf("cd1") <> -1 Then
-            tempboolean = True
-            workingstring = "cd1"
-        End If
-
-        If filename.IndexOf("cd.1") <> -1 Then
-            tempboolean = True
-            workingstring = "cd.1"
-        End If
-
-
-        If filename.IndexOf("cd_1") <> -1 Then
-            tempboolean = True
-            workingstring = "cd_1"
-        End If
-
-
-        If filename.IndexOf("cd 1") <> -1 Then
-            tempboolean = True
-            workingstring = "cd 1"
-        End If
-
-
-        If filename.IndexOf("cd-1") <> -1 Then
-            tempboolean = True
-            workingstring = "cd-1"
-        End If
-
-
-        If filename.IndexOf("dvd1") <> -1 Then
-            tempboolean = True
-            workingstring = "dvd1"
-        End If
-
-
-        If filename.IndexOf("dvd.1") <> -1 Then
-            tempboolean = True
-            workingstring = "dvd.1"
-        End If
-
-
-        If filename.IndexOf("dvd_1") <> -1 Then
-            tempboolean = True
-            workingstring = "dvd_1"
-        End If
-
-
-        If filename.IndexOf("dvd 1") <> -1 Then
-            tempboolean = True
-            workingstring = "dvd 1"
-        End If
-
-
-        If filename.IndexOf("dvd-1") <> -1 Then
-            tempboolean = True
-            workingstring = "dvd-1"
-        End If
-
-
-        If filename.IndexOf("part1") <> -1 Then
-            tempboolean = True
-            workingstring = "part1"
-        End If
-
-
-        If filename.IndexOf("part.1") <> -1 Then
-            tempboolean = True
-            workingstring = "part.1"
-        End If
-
-        If filename.IndexOf("part_1") <> -1 Then
-            tempboolean = True
-            workingstring = "part_1"
-        End If
-
-        If filename.IndexOf("part-1") <> -1 Then
-            tempboolean = True
-            workingstring = "part-1"
-        End If
-
-        If filename.IndexOf("part 1") <> -1 Then
-            tempboolean = True
-            workingstring = "part 1"
-        End If
-
-        If filename.IndexOf("disk1") <> -1 Then
-            tempboolean = True
-            workingstring = "disk1"
-        End If
-
-        If filename.IndexOf("disk.1") <> -1 Then
-            tempboolean = True
-            workingstring = "disk.1"
-        End If
-
-        If filename.IndexOf("disk_1") <> -1 Then
-            tempboolean = True
-            workingstring = "disk_1"
-        End If
-
-        If filename.IndexOf("disk 1") <> -1 Then
-            tempboolean = True
-            workingstring = "disk 1"
-        End If
-
-        If filename.IndexOf("disk-1") <> -1 Then
-            tempboolean = True
-            workingstring = "disk-1"
-        End If
-
-        If filename.IndexOf("pt 1") <> -1 Then
-            tempboolean = True
-            workingstring = "pt 1"
-        End If
-
-        If filename.IndexOf("pt-1") <> -1 Then
-            tempboolean = True
-            workingstring = "pt-1"
-        End If
-
-        If filename.IndexOf("pt1") <> -1 Then
-            tempboolean = True
-            workingstring = "pt1"
-        End If
-
-        If filename.IndexOf("pt_1") <> -1 Then
-            tempboolean = True
-            workingstring = "pt_1"
-        End If
-
-        If filename.IndexOf("pt.1") <> -1 Then
-            tempboolean = True
-            workingstring = "pt.1"
-        End If
-
-
-        Dim extension As String = System.IO.Path.GetExtension(filename)
-        Dim filenameex As String
-
-        filenameex = filename.Replace(System.IO.Path.GetExtension(filename), "")
-
-        If filenameex.Substring(filenameex.Length - 1).ToLower = "a" Then
-            Dim exists As Boolean = False
-            Dim tempname As String
-            For f = 0 To VideoExtensions.Length - 1
-                tempname = filepath & filename.Substring(0, filename.Length - (1 + extension.Length)) & "b" & VideoExtensions(f)
-                exists = System.IO.File.Exists(tempname)
-                If exists = True Then
-                    workingstring = "a"
-                    tempboolean = True
-                    Exit For
-                End If
-            Next
-        End If
-
-        If tempboolean = True Then
-            Dim tbool As Boolean = False
-            If workingstring <> "na" Then
-
-                filename = filename.Replace(System.IO.Path.GetExtension(filename), "")
-
-                Dim a() As String = {".", " ", "-", "_"}
-                Dim multipartidentify As String
-                For f = 0 To 3
-                    multipartidentify = a(f) & workingstring
-                    'filename = filename.Replace(System.IO.Path.GetExtension(filename), "")
-                    If filename.IndexOf(multipartidentify) <> -1 Then
-                        If multipartidentify.IndexOf(".") <> -1 Then
-                            multipartidentify = multipartidentify.Replace(".", "\.")
-                        End If
-                        'filename = filename.Replace(multipartidentify, "")
-                        filename = Regex.Replace(filenames, multipartidentify, "", RegexOptions.IgnoreCase)
-                        tbool = True
-                        Exit For
-                    End If
-                Next
+    Public Shared Function GetStackName(ByVal fullFileName As String) As String
+        Dim stackName As String = IO.Path.GetFileNameWithoutExtension(fullFileName).ToLower
+        Dim M As Match
+        If IO.Path.GetExtension(fullFileName).ToLower = ".rar" Then
+            'process RAR stack that could be anything containing ".part1" to ".part000001"
+            M = Regex.Match(stackName, "\.part[0]{0,5}1$")
+            If M.Success = True Then
+                stackName = stackName.Substring(0, M.Index)
+            Else
+                stackName = "na"
             End If
-
-            If workingstring = "a" And tbool = False Then
-                Dim temp As String = filename
-                Dim temp2 As String
-                If temp.Substring(temp.Length - 1, 1) = "a" Then
-                    temp = temp.Substring(0, temp.Length - 1)
-                    For f = 0 To VideoExtensions.Length
-                        temp2 = filepath & temp & "b" & VideoExtensions(f)
-                        If System.IO.File.Exists(temp2) = True Then
-                            filename = filenames.Substring(0, filename.Length - 1)
-                            Exit For
-                        End If
-                    Next
-                End If
+        Else
+            'process a typical multi-part, ending in '1' or 'a'
+            M = Regex.Match(stackName, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)([1a])$)")
+            If M.Success = True Then
+                stackName = stackName.Substring(0, M.Index)
+            ElseIf stackName.EndsWith("a") AndAlso IO.File.Exists(Mid(fullFileName, IO.Path.GetDirectoryName(fullFileName).Length + stackName.Length + 1) = "b") Then
+                'if filename ends in ONLY an 'a', check if there is a matching 'b' filename to determine if multi-part
+                stackName = stackName.Substring(0, stackName.Length - 1)
+            Else
+                stackName = "na"
             End If
         End If
-
-        If truerar = True Then
-            If IO.Path.GetExtension(filename).ToLower = ".rar" Then
-                filename = filename.Replace(IO.Path.GetExtension(filename), "")
-            End If
-            If filename.ToLower.IndexOf(".part1") <> -1 Then
-                filename = filename.Replace(".part1", "")
-                tempboolean = True
-            End If
-            If filename.ToLower.IndexOf(".part01") <> -1 Then
-                filename = filename.Replace(".part01", "")
-                tempboolean = True
-            End If
-            If filename.ToLower.IndexOf(".part001") <> -1 Then
-                filename = filename.Replace(".part001", "")
-                tempboolean = True
-            End If
-            If filename.ToLower.IndexOf(".part0001") <> -1 Then
-                filename = filename.Replace(".part0001", "")
-                tempboolean = True
-            End If
-        End If
-
-        If tempboolean = False Then filename = "na"
-        Dim prefix(3)
-        prefix(0) = " "
-        prefix(1) = "_"
-        prefix(2) = "-"
-        prefix(3) = "."
-        filename = RTrim(filename)
-        If filename.IndexOf("_") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
-        If filename.IndexOf("-") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
-        If filename.IndexOf(".") = filename.Length - 1 Then filename = filename.Substring(0, filename.Length - 1)
-        filename = RTrim(filename)
-
-        Return filename
-
+        'remove any trailing separator characters
+        stackName = Regex.Replace(stackName, "[" & cleanSeparators & "]+$", "")
+        Return stackName.ToLower
     End Function
+
     Public Shared Function GetTrailerName(ByVal path As String)
         Dim ext As String = IO.Path.GetExtension(path)
         Dim length As Integer = Strings.Len(path)
@@ -494,6 +278,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim TrailerPath As String = Strings.Left(path, length - lengthext) & "-trailer.flv"
         Return TrailerPath
     End Function
+
     Public Shared Function GetFileName(ByVal path As String)
         Dim tempstring As String
         Dim tempfilename As String = path
@@ -711,7 +496,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim currentposition As Integer = filename.Length
         Try
             '1: check for multipart tags
-            Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)1)")
+            Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)[1a])")
             If M.Success = True Then
                 If ignoreParts AndAlso M.Value.IndexOf("p") <> -1 Then   ' "p" identifies a "part" or "pt" tag
                     'skip this shift

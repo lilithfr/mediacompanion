@@ -1599,7 +1599,7 @@ Public Class Preferences
             If Preferences.posternotstacked = True Then
                 posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
             Else
-                posterpath = Utilities.GetStackName(IO.Path.GetFileName(FullPath), posterpath.Replace(IO.Path.GetFileName(FullPath), "")) & ".tbn"
+                posterpath = Utilities.GetStackName(FullPath) & ".tbn"
                 If posterpath = "na.tbn" Then
                     posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
                 Else

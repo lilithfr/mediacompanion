@@ -723,7 +723,7 @@ Module General
                 extrapossibleID = Nothing
             End If
         Else
-            Dim stackname As String = Utilities.GetStackName(Filename, Filename.Replace(IO.Path.GetFileName(Filename), ""))
+            Dim stackname As String = Utilities.GetStackName(Filename)
             Dim path As String = stackname & ".nfo"
             If IO.File.Exists(path) Then
                 '                scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
