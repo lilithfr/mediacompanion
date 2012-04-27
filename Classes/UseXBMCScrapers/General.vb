@@ -685,71 +685,6 @@ Module General
         Return True
 
     End Function
-    Public Function SearchExtraIDinNFO(ByVal Filename As String) As String
-        Dim extrapossibleID As String = Nothing
-        Filename = Filename.Remove(Filename.Length - 3, 3) & "nfo"
-        If Not IO.File.Exists(Filename) Then
-            Filename = Filename.Remove(Filename.LastIndexOf("\"), (Filename.Length - Filename.LastIndexOf("\"))) & "\movie.nfo"
-        End If
-        extrapossibleID = Nothing
-        Dim T As String
-        Dim mat As Match
-
-        If IO.File.Exists(Filename) Then
-            '            scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
-            Dim tempinfo As String = ""
-            Dim objReader As New System.IO.StreamReader(Filename)
-            tempinfo = objReader.ReadToEnd
-            objReader.Close()
-            extrapossibleID = Nothing
-            T = tempinfo
-            mat = Nothing
-            mat = Regex.Match(T, "(tt\d{7})")
-            If mat.Success = True Then
-                '                scraperlog = scraperlog & "IMDB ID found in nfo file:- " & mat.Value & vbCrLf
-                extrapossibleID = mat.Value
-                Try
-                    If Not IO.File.Exists(Filename.Replace(".nfo", ".info")) Then
-                        IO.File.Move(Filename, Filename.Replace(".nfo", ".info"))
-                        '                    scraperlog = scraperlog & "renaming nfo file to:- " & Filename.Replace(".nfo", ".info") & vbCrLf
-                    Else
-                        '                    scraperlog = scraperlog & "Unable to rename file, """ & Filename & """ already exists" & vbCrLf
-                    End If
-                Catch
-                    '                scraperlog = scraperlog & "Unable to rename file, """ & Filename & """ already exists" & vbCrLf
-                End Try
-            Else
-                '                scraperlog = scraperlog & "No IMDB ID found" & vbCrLf
-                extrapossibleID = Nothing
-            End If
-        Else
-            Dim stackname As String = Utilities.GetStackName(Filename)
-            Dim path As String = stackname & ".nfo"
-            If IO.File.Exists(path) Then
-                '                scraperlog = scraperlog & "nfo file exists, checking for IMDB ID" & vbCrLf
-                Dim tempinfo As String = ""
-                Dim objReader As New System.IO.StreamReader(path)
-                tempinfo = objReader.ReadToEnd
-                objReader.Close()
-                extrapossibleID = Nothing
-                T = tempinfo
-                mat = Nothing
-                mat = Regex.Match(T, "(tt\d{7})")
-                If mat.Success = True Then
-                    '                    scraperlog = scraperlog & "IMDB ID found in nfo file:- " & mat.Value & vbCrLf
-                    extrapossibleID = mat.Value
-                Else
-                    '                    scraperlog = scraperlog & "No IMDB ID found" & vbCrLf
-                    extrapossibleID = Nothing
-                End If
-            Else
-                '                scraperlog = scraperlog & "NFO does not exist" & vbCrLf
-                extrapossibleID = Nothing
-            End If
-
-        End If
-        Return extrapossibleID
-    End Function
 
     Public Sub Read_XBMC_IMDB_Scraper_Config()
         Dim m_xmld As XmlDocument
@@ -1602,7 +1537,7 @@ Module General
 
     Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
         ' 1st stage
-        Dim ExtraID As String = SearchExtraIDinNFO(Filename)
+        Dim ExtraID As String = Movies.getExtraIdFromNFO(Filename)
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"

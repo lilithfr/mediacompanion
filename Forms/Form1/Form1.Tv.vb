@@ -1362,59 +1362,6 @@ Partial Public Class Form1
                                 Dim seasonpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "fanart.jpg")
                                 If Not IO.File.Exists(seasonpath) Then
                                     Utilities.DownloadFile(fanartposter, seasonpath)
-                                    'Dim buffer(4000000) As Byte
-                                    'Dim size As Integer = 0
-                                    'Dim bytesRead As Integer = 0
-
-                                    'Dim thumburl As String = fanartposter
-                                    'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                    'Dim res As HttpWebResponse = req.GetResponse()
-                                    'Dim contents As Stream = res.GetResponseStream()
-                                    'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                    'Dim bmp As New Bitmap(contents)
-
-
-
-                                    'While bytesToRead > 0
-                                    '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                    '    If size = 0 Then Exit While
-                                    '    bytesToRead -= size
-                                    '    bytesRead += size
-                                    'End While
-
-
-
-                                    'If Preferences.resizefanart = 1 Then
-                                    '    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    '    scraperLog = scraperLog & "Fanart not resized" & vbCrLf
-                                    'ElseIf Preferences.resizefanart = 2 Then
-                                    '    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                                    '        Dim bm_source As New Bitmap(bmp)
-                                    '        Dim bm_dest As New Bitmap(1280, 720)
-                                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                    '        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                    '        bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    '        scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
-                                    '    Else
-                                    '        scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                    '        bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    '    End If
-                                    'ElseIf Preferences.resizefanart = 3 Then
-                                    '    If bmp.Width > 960 Or bmp.Height > 540 Then
-                                    '        Dim bm_source As New Bitmap(bmp)
-                                    '        Dim bm_dest As New Bitmap(960, 540)
-                                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                    '        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                    '        bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    '        scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
-                                    '    Else
-                                    '        scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                    '        bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    '    End If
-
-                                    'End If
                                 End If
                             End If
                         End If
@@ -2040,42 +1987,6 @@ Partial Public Class Form1
                                     Dim tvdbsLine As String = ""
                                     tvdbsLine = Utilities.DownloadTextFiles(url)
 
-                                    'Dim tvfblinecount As Integer = 0
-                                    'Dim tvdbwebsource(10000)
-                                    'tvfblinecount = 0
-                                    'If bckgroundscanepisodes.CancellationPending Then
-                                    '    Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
-                                    '    Exit Sub
-                                    'End If
-
-                                    'Dim wrGETURL As WebRequest
-                                    'wrGETURL = WebRequest.Create(url)
-                                    'Dim myProxy As New WebProxy("myproxy", 80)
-                                    'myProxy.BypassProxyOnLocal = True
-                                    'Dim objStream As Stream
-                                    'objStream = wrGETURL.GetResponse.GetResponseStream()
-                                    'Dim objReader As New StreamReader(objStream)
-                                    'tvfblinecount = 0
-
-                                    'Do While Not tvdbsLine = ""   'is Nothing Changed by SK 18/5/2011     to avoid System.NullReferenceException was with new install & 1 new tvshow scraped & tried to serach for new episodes with 1 in the folder
-                                    '    tvfblinecount += 1
-                                    '    tvdbsLine = objReader.ReadLine
-                                    '    If Not tvdbsLine = "" Then   '   Is Nothing Then Changed by SK 18/5/2011
-                                    '        tvdbwebsource(tvfblinecount) = tvdbsLine
-                                    '    End If
-                                    '    If bckgroundscanepisodes.CancellationPending Then
-                                    '        Preferences.tvScraperLog &= vbCrLf & "Operation Cancelled by user" & vbCrLf
-                                    '        Exit Sub
-                                    '    End If
-                                    'Loop
-                                    'objReader.Close()
-                                    'objStream.Close()
-                                    'tvfblinecount -= 1
-
-
-
-
-
                                     If tvdbsLine <> "" Then
                                         Dim tvtempstring As String
                                         tvtempstring = "Season " & singleepisode.Season.Value & ", Episode " & singleepisode.Episode.Value & ":"
@@ -2147,25 +2058,6 @@ Partial Public Class Form1
                                                                                     End If
                                                                                     If Not IO.File.Exists(filename) Then
                                                                                         Utilities.DownloadFile(newactor.actorthumb, filename)
-                                                                                        '    Dim buffer(4000000) As Byte
-                                                                                        '    Dim size As Integer = 0
-                                                                                        '    Dim bytesRead As Integer = 0
-                                                                                        '    Dim thumburl As String = newactor.actorthumb
-                                                                                        '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                                        '    Dim res As HttpWebResponse = req.GetResponse()
-                                                                                        '    Dim contents As Stream = res.GetResponseStream()
-                                                                                        '    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                                        '    While bytesToRead > 0
-                                                                                        '        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                                        '        If size = 0 Then Exit While
-                                                                                        '        bytesToRead -= size
-                                                                                        '        bytesRead += size
-                                                                                        '    End While
-
-                                                                                        '    Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                                        '    fstrm.Write(buffer, 0, bytesRead)
-                                                                                        '    contents.Close()
-                                                                                        '    fstrm.Close()
                                                                                     End If
                                                                                 End If
                                                                             End If
@@ -2181,24 +2073,6 @@ Partial Public Class Form1
                                                                                 workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                                                 If Not IO.File.Exists(workingpath) Then
                                                                                     Utilities.DownloadFile(newactor.actorthumb, workingpath)
-                                                                                    '    Dim buffer(4000000) As Byte
-                                                                                    '    Dim size As Integer = 0
-                                                                                    '    Dim bytesRead As Integer = 0
-                                                                                    '    Dim thumburl As String = newactor.actorthumb
-                                                                                    '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                                                    '    Dim res As HttpWebResponse = req.GetResponse()
-                                                                                    '    Dim contents As Stream = res.GetResponseStream()
-                                                                                    '    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                                                    '    While bytesToRead > 0
-                                                                                    '        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                                                    '        If size = 0 Then Exit While
-                                                                                    '        bytesToRead -= size
-                                                                                    '        bytesRead += size
-                                                                                    '    End While
-                                                                                    '    Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                                                    '    fstrm.Write(buffer, 0, bytesRead)
-                                                                                    '    contents.Close()
-                                                                                    '    fstrm.Close()
                                                                                 End If
                                                                                 newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                                                 If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
@@ -2969,31 +2843,6 @@ Partial Public Class Form1
                 Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "folder.jpg")
                 If Not IO.File.Exists(seasonpath) Then
                     Utilities.DownloadFile(posterurlpath, seasonpath)
-                    '                    Try
-                    '                        Dim buffer(4000000) As Byte
-                    '                        Dim size As Integer = 0
-                    '                        Dim bytesRead As Integer = 0
-                    '                        Dim thumburl As String = posterurlpath
-                    '                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                    '                        Dim res As HttpWebResponse = req.GetResponse()
-                    '                        Dim contents As Stream = res.GetResponseStream()
-                    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                    '                        While bytesToRead > 0
-                    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '                            If size = 0 Then Exit While
-                    '                            bytesToRead -= size
-                    '                            bytesRead += size
-                    '                        End While
-                    '                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                    '                        fstrm.Write(buffer, 0, bytesRead)
-                    '                        contents.Close()
-                    '                        fstrm.Close()
-                    '                    Catch ex As WebException
-                    '#If SilentErrorScream Then
-                    '                                                            Throw ex
-                    '#End If
-                    '                        'MsgBox("Error Downloading main poster from TVDB")
-                    '                    End Try
                 End If
             End If
 
@@ -3053,59 +2902,12 @@ Partial Public Class Form1
                     Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "season-all.tbn")
                     If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
                         Utilities.DownloadFile(seasonallpath, seasonpath)
-                        '                        Try
-                        '                            Dim buffer(4000000) As Byte
-                        '                            Dim size As Integer = 0
-                        '                            Dim bytesRead As Integer = 0
-                        '                            Dim thumburl As String = seasonallpath
-                        '                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                        '                            Dim res As HttpWebResponse = req.GetResponse()
-                        '                            Dim contents As Stream = res.GetResponseStream()
-                        '                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                        '                            While bytesToRead > 0
-                        '                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                        '                                If size = 0 Then Exit While
-                        '                                bytesToRead -= size
-                        '                                bytesRead += size
-                        '                            End While
-                        '                            Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                        '                            fstrm.Write(buffer, 0, bytesRead)
-                        '                            contents.Close()
-                        '                            fstrm.Close()
-                        '                        Catch ex As WebException
-                        '#If SilentErrorScream Then
-                        '                            Throw ex
-                        '#End If
-                        '                            'MsgBox("Error Downloading main poster from TVDB")
-                        '                        End Try
                     End If
                 End If
             ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
                 Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "season-all.tbn")
                 If Not IO.File.Exists(seasonpath) Then
                     Utilities.DownloadFile(seasonallpath, seasonpath)
-                    'Try
-                    '    Dim buffer(4000000) As Byte
-                    '    Dim size As Integer = 0
-                    '    Dim bytesRead As Integer = 0
-                    '    Dim thumburl As String = seasonallpath
-                    '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                    '    Dim res As HttpWebResponse = req.GetResponse()
-                    '    Dim contents As Stream = res.GetResponseStream()
-                    '    Dim bytesToRead As Integer = CInt(buffer.Length)
-                    '    While bytesToRead > 0
-                    '        size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '        If size = 0 Then Exit While
-                    '        bytesToRead -= size
-                    '        bytesRead += size
-                    '    End While
-                    '    Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                    '    fstrm.Write(buffer, 0, bytesRead)
-                    '    contents.Close()
-                    '    fstrm.Close()
-                    'Catch ex As WebException
-                    '    'MsgBox("Error Downloading main poster from TVDB")
-                    'End Try
                 End If
             End If
         Catch

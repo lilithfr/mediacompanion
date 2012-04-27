@@ -50,6 +50,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED"
+    Public Shared Property RARsize As Integer
 
     Private Shared _ApplicationPath As String
     Public Shared Function GetFrameworkVersions() As List(Of String)
@@ -243,32 +244,59 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return ""
     End Function
 
-    Public Shared Function GetStackName(ByVal fullFileName As String) As String
-        Dim stackName As String = IO.Path.GetFileNameWithoutExtension(fullFileName).ToLower
+    Public Shared Function isMultiPartMedia(ByRef fullFileName As String, Optional ByRef isFirstPart As Boolean = True) As Boolean
+        Dim pathOnly As String = IO.Path.GetDirectoryName(fullFileName) & "\"
+        Dim filename As String = IO.Path.GetFileNameWithoutExtension(fullFileName)
+        Dim stackName As String = filename.ToLower
+        Dim extension As String = IO.Path.GetExtension(fullFileName).ToLower
+        Dim returnCode As Boolean = False
         Dim M As Match
-        If IO.Path.GetExtension(fullFileName).ToLower = ".rar" Then
-            'process RAR stack that could be anything containing ".part1" to ".part000001"
-            M = Regex.Match(stackName, "\.part[0]{0,5}1$")
-            If M.Success = True Then
-                stackName = stackName.Substring(0, M.Index)
-            Else
-                stackName = "na"
-            End If
+        If extension = ".rar" AndAlso FileLen(fullFileName) > (RARsize * 1048576) Then
+            'process RAR stack that contains digits in the style of ".part1" to ".part0001"
+            M = Regex.Match(stackName, "\.part[0]{0,3}([0-9]+)$")
         Else
-            'process a typical multi-part, ending in '1' or 'a'
-            M = Regex.Match(stackName, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)([1a])$)")
-            If M.Success = True Then
-                stackName = stackName.Substring(0, M.Index)
-            ElseIf stackName.EndsWith("a") AndAlso IO.File.Exists(Mid(fullFileName, IO.Path.GetDirectoryName(fullFileName).Length + stackName.Length + 1) = "b") Then
-                'if filename ends in ONLY an 'a', check if there is a matching 'b' filename to determine if multi-part
-                stackName = stackName.Substring(0, stackName.Length - 1)
+            'process a typical multi‑part, ending in digits or a single letter
+            M = Regex.Match(stackName, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)([0-9a-z]+)$)")
+            If M.Success = False Then
+                'finally, process a multi‑part that may be designated by a single letter
+                M = Regex.Match(stackName, "([a-z])$")
+            End If
+        End If
+        If M.Success = True Then
+            'if there is a possible stack, confirm by testing for another part,
+            '   ‑ either the first part '1' or 'a', or the next sequential part.
+            Dim first As Boolean = False
+            Dim grpPartNo As Group = M.Groups(M.Groups.Count - 1)   'get the number or letter
+            Dim partNo As String = grpPartNo.Value
+            If partNo = "1" Or partNo = "a" Then
+                first = True
+                partNo = Chr(Asc(partNo) + 1)                       'if it's the first in the stack, incremement by one
             Else
-                stackName = "na"
+                Dim i As Integer
+                If Integer.TryParse(partNo, i) Then
+                    'otherwise, set it to the first in the stack
+                    partNo = "1".PadLeft(grpPartNo.Length, "0")
+                Else
+                    partNo = "a"
+                End If
+            End If
+            Mid(fullFileName, pathOnly.Length + grpPartNo.Index + 1, grpPartNo.Length) = partNo
+            If IO.File.Exists(fullFileName) Then
+                returnCode = True
+                filename = filename.Substring(0, M.Index)
+                isFirstPart = first
             End If
         End If
         'remove any trailing separator characters
-        stackName = Regex.Replace(stackName, "[" & cleanSeparators & "]+$", "")
-        Return stackName.ToLower
+        filename = Regex.Replace(filename, "[" & cleanSeparators & "]+$", "")
+        fullFileName = filename
+        Return returnCode
+    End Function
+
+    Public Shared Function GetStackName(ByVal fullFileName As String) As String
+        Dim stackName As String = fullFileName
+        Dim isStack As Boolean = isMultiPartMedia(stackName)
+        Return stackName
     End Function
 
     Public Shared Function GetTrailerName(ByVal path As String)
@@ -277,6 +305,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim lengthext As Integer = Strings.Len(ext)
         Dim TrailerPath As String = Strings.Left(path, length - lengthext) & "-trailer.flv"
         Return TrailerPath
+    End Function
+
+    Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String) As Boolean
+        Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"
+        Dim returnCode As Boolean = False
+        Dim typeOfFile(2) As String
+        typeOfFile(0) = pathOnly & GetStackName(fullPath) & fileType                            'multi-part string removed
+        typeOfFile(1) = pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType     'match filename sans extension
+        typeOfFile(2) = pathOnly & Regex.Replace("movie" & fileType, "movie-", "")              'special case where using folder-per-movie
+        For Each file As String In typeOfFile
+            If IO.File.Exists(file) Then
+                returnCode = True
+                fullPath = file
+                Exit For
+            End If
+        Next
+        Return returnCode
     End Function
 
     Public Shared Function GetFileName(ByVal path As String)
