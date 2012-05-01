@@ -162,4 +162,81 @@ Public Class Movies
         Return extrapossibleID
     End Function
 
+    Public Shared Function fileRename(ByVal movieDetails As FullMovieDetails, ByRef movieFileInfo As str_NewMovie) As String
+        Dim log As String = ""
+        Dim newpath As String = movieFileInfo.nfopath
+        Dim mediaFile As String = movieFileInfo.mediapathandfilename
+        Dim movieStackList As New List(Of String)(New String() {mediaFile})
+        Dim stackName As String = mediaFile
+        Dim isStack As Boolean = False
+        Dim isFirstPart As Boolean = True
+        Dim nextStackPart As String = ""
+        Dim stackdesignator As String = ""
+        Dim newextension As String = IO.Path.GetExtension(mediaFile)
+        Dim newfilename As String = Preferences.MovieRenameTemplate
+        Dim targetMovieFile As String = ""
+        Dim targetNfoFile As String = ""
+        Dim aFileExists As Boolean = False
+        Try
+            'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
+            newfilename = newfilename.Replace("%T", movieDetails.fullmoviebody.title)       'replaces %T with movie title
+            newfilename = newfilename.Replace("%Y", movieDetails.fullmoviebody.year)        'replaces %Y with year   
+            newfilename = newfilename.Replace("%I", movieDetails.fullmoviebody.imdbid)      'replaces %I with imdid 
+            newfilename = newfilename.Replace("%P", movieDetails.fullmoviebody.premiered)   'replaces %P with premiered date 
+            newfilename = newfilename.Replace("%R", movieDetails.fullmoviebody.rating)      'replaces %R with rating 
+            newfilename = newfilename.Replace("%L", movieDetails.fullmoviebody.runtime)     'replaces %L with runtime (length)
+            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)                  'removes chars that can't be in a filename
+
+            'designate the new main movie file (without extension) and test the new filenames do not already exist
+            targetMovieFile = newpath & newfilename
+            targetNfoFile = targetMovieFile
+            If Utilities.testForFileByName(targetMovieFile, newextension) Then aFileExists = True
+
+            'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
+            Do While Utilities.isMultiPartMedia(stackName, isFirstPart, stackdesignator, nextStackPart)
+                If isFirstPart Then
+                    isStack = True
+                    Dim i As Integer                'sacrificial variable to appease the TryParseosaurus Checks
+                    targetMovieFile = newpath & stackName & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                    If Utilities.testForFileByName(targetMovieFile, newextension) Then
+                        aFileExists = True
+                        Exit Do
+                    End If
+                    If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                Else
+                    movieStackList.Add(mediaFile)
+                End If
+                stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
+                mediaFile = stackName
+            Loop
+
+            If aFileExists = False Then         'if none of the possible renamed files already exist then we rename found media files
+                Dim logRename As String = ""    'used to build up a string of the renamed files for the log
+                movieStackList.Sort()           'we're sure hoping the originals were labelled correctly, ie only incremental numbers changing!
+                For i = 0 To movieStackList.Count - 1
+                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
+                    IO.File.Move(movieStackList(i), newpath & changename)
+                    logRename &= If(i, " and ", "") & changename
+                Next
+                log &= "Renamed Movie File to " & logRename & vbCrLf
+
+                For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
+                    If System.IO.File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, subtitle)) Then
+                        System.IO.File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, subtitle), targetMovieFile & subtitle) ' subtitles file with .sub extension
+                        log &= "Renamed '" & subtitle & "' subtitle File" & vbCrLf
+                    End If
+                Next
+
+                'update the new movie structure with the new data
+                movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
+                movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
+                movieFileInfo.title = newfilename                                   'new title
+            Else
+                log &= String.Format("A file exists with the target filename of '{0}' - RENAME SKIPPED{1}", newfilename, vbCrLf)
+            End If
+        Catch ex As Exception
+            log &= "!!!Rename Movie File FAILED !!!" & vbCrLf
+        End Try
+        Return log
+    End Function
 End Class

@@ -244,19 +244,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return ""
     End Function
 
-    Public Shared Function isMultiPartMedia(ByRef fullFileName As String, Optional ByRef isFirstPart As Boolean = True) As Boolean
-        Dim pathOnly As String = IO.Path.GetDirectoryName(fullFileName) & "\"
-        Dim filename As String = IO.Path.GetFileNameWithoutExtension(fullFileName)
-        Dim stackName As String = filename.ToLower
-        Dim extension As String = IO.Path.GetExtension(fullFileName).ToLower
+    Public Shared Function isMultiPartMedia(ByRef workingFileName As String, Optional ByRef isFirstPart As Boolean = True, _
+                                            Optional ByRef stackType As String = "", Optional ByRef nextPart As String = "") _
+                                        As Boolean
         Dim returnCode As Boolean = False
+        If IO.File.Exists(workingFileName) Then
+            Dim pathOnly As String = IO.Path.GetDirectoryName(workingFileName) & "\"
+            Dim filename As String = IO.Path.GetFileNameWithoutExtension(workingFileName)
+        Dim stackName As String = filename.ToLower
+            Dim extension As String = IO.Path.GetExtension(workingFileName).ToLower
         Dim M As Match
-        If extension = ".rar" AndAlso FileLen(fullFileName) > (RARsize * 1048576) Then
+            If extension = ".rar" AndAlso FileLen(workingFileName) > (RARsize * 1048576) Then
             'process RAR stack that contains digits in the style of ".part1" to ".part0001"
-            M = Regex.Match(stackName, "\.part[0]{0,3}([0-9]+)$")
+            M = Regex.Match(stackName, "\.part([0]{0,3}[0-9]+)$")
         Else
             'process a typical multi‑part, ending in digits or a single letter
-            M = Regex.Match(stackName, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)([0-9a-z]+)$)")
+            M = Regex.Match(stackName, "(" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "]?)([0-9a-z]+)$")
             If M.Success = False Then
                 'finally, process a multi‑part that may be designated by a single letter
                 M = Regex.Match(stackName, "([a-z])$")
@@ -265,31 +268,43 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If M.Success = True Then
             'if there is a possible stack, confirm by testing for another part,
             '   ‑ either the first part '1' or 'a', or the next sequential part.
-            Dim first As Boolean = False
-            Dim grpPartNo As Group = M.Groups(M.Groups.Count - 1)   'get the number or letter
-            Dim partNo As String = grpPartNo.Value
-            If partNo = "1" Or partNo = "a" Then
-                first = True
-                partNo = Chr(Asc(partNo) + 1)                       'if it's the first in the stack, incremement by one
+            If ignoreParts AndAlso (M.Groups(1).Value = "part" Or M.Groups(1).Value = "pt") Then
+                'don't modify stack name
             Else
+                Dim first As Boolean = False
+                Dim grpPartNo As Group = M.Groups(M.Groups.Count - 1)   'get the number or letter at the end of filename
+                Dim partNo As String = grpPartNo.Value
                 Dim i As Integer
                 If Integer.TryParse(partNo, i) Then
-                    'otherwise, set it to the first in the stack
-                    partNo = "1".PadLeft(grpPartNo.Length, "0")
+                    nextPart = (i + 1).ToString.PadLeft(grpPartNo.Length, "0")
+                    If i = 1 Then
+                        first = True
+                        partNo = nextPart
+                    Else
+                        partNo = "1".PadLeft(grpPartNo.Length, "0")
+                    End If
                 Else
-                    partNo = "a"
+                    Right(partNo, 1)
+                    nextPart = Chr(Asc(partNo) + 1)
+                    If partNo = "a" Then
+                        first = True
+                        partNo = nextPart
+                    Else
+                        partNo = "a"
+                    End If
+                End If
+                    Mid(workingFileName, pathOnly.Length + grpPartNo.Index + 1, grpPartNo.Length) = partNo
+                    If IO.File.Exists(workingFileName) Then
+                    returnCode = True
+                        stackName = filename.Substring(0, M.Index)
+                    isFirstPart = first
+                        filename = Regex.Replace(stackName, "[" & cleanSeparators & "]+$", "")
+                        stackType = stackName.Substring(filename.Length) & M.Value.Replace(grpPartNo.Value, "")
+                    End If
                 End If
             End If
-            Mid(fullFileName, pathOnly.Length + grpPartNo.Index + 1, grpPartNo.Length) = partNo
-            If IO.File.Exists(fullFileName) Then
-                returnCode = True
-                filename = filename.Substring(0, M.Index)
-                isFirstPart = first
-            End If
+            workingFileName = filename
         End If
-        'remove any trailing separator characters
-        filename = Regex.Replace(filename, "[" & cleanSeparators & "]+$", "")
-        fullFileName = filename
         Return returnCode
     End Function
 
@@ -322,6 +337,17 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End If
         Next
         Return returnCode
+    End Function
+
+    Public Shared Function testForFileByName(ByVal targetMovieFile As String, ByVal fileType As String) As Boolean
+        Dim aFileExists As Boolean = False
+        For Each item As String In {fileType, ".nfo", ".tbn", "-fanart.jpg", ".sub", ".srt", ".smi", ".idx"} 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
+            If System.IO.File.Exists(targetMovieFile & item) Then
+                aFileExists = True
+                Exit For
+            End If
+        Next
+        Return aFileExists
     End Function
 
     Public Shared Function GetFileName(ByVal path As String)
@@ -534,14 +560,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withExtension As Boolean = False)
         Try 'to remove extension first if filename has one
             'filename = filename.Replace(IO.Path.GetExtension(filename), "")
-            filename = Regex.Replace(filename, "(" & String.Join("|", VideoExtensions) & ")+$", "")
+            filename = Regex.Replace(filename, "(" & Join(VideoExtensions, "|") & ")+$", "")
         Catch
         End Try
 
         Dim currentposition As Integer = filename.Length
         Try
             '1: check for multipart tags
-            Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)[1a])")
+            Dim M As Match = Regex.Match(filename.ToLower, "((" & Join(cleanMultipart, "|") & ")([" & cleanSeparators & "0]?)[1a]$)")
             If M.Success = True Then
                 If ignoreParts AndAlso M.Value.IndexOf("p") <> -1 Then   ' "p" identifies a "part" or "pt" tag
                     'skip this shift
