@@ -1495,7 +1495,7 @@ Public Class WorkingWithNfoFiles
 
                 Try
                     If movietosave.fullmoviebody.movieset <> Nothing Then
-                        If movietosave.fullmoviebody.movieset <> "-none-" Then
+                        If movietosave.fullmoviebody.movieset <> "-None-" Then
                             child = doc.CreateElement("set")
                             child.InnerText = movietosave.fullmoviebody.movieset
                             root.AppendChild(child)
