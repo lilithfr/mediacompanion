@@ -11,6 +11,7 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
 Imports Media_Companion
+Imports Media_Companion.Movies
 
 #Const SilentErrorScream = False
 #Const NoRefocus = True
@@ -44,7 +45,6 @@ Public Class Form1
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
     Public Shared scraperLog As String = ""
-    Public Shared newMovieList As New List(Of str_NewMovie)
 
 
     Public noFanart As Boolean

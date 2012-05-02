@@ -15,6 +15,7 @@ Imports System.Runtime.InteropServices
 Imports System.Drawing
 Imports System.IO.Compression
 Imports Media_Companion
+Imports Media_Companion.Movies
 
 
 Module Module1
@@ -26,7 +27,6 @@ Module Module1
     Dim profile As String = "default"
     Dim fullMovieList As New List(Of str_ComboList)
     Dim basictvlist As New List(Of basictvshownfo)
-    Dim newMovieList As New List(Of str_NewMovie)
     Dim imdbCounter As Integer = 0
     Dim defaultOfflineArt As String = ""
     Dim actorDB As New List(Of str_ActorDatabase)
