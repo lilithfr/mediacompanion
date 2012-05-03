@@ -210,7 +210,11 @@ Public Class TVDBScraper
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
         Dim showlist As New Tvdb.ShowData
         'Try
-        showlist.LoadXml(xmlfile)
+        If String.IsNullOrEmpty(xmlfile) Then
+            showlist.FailedLoad = True
+        Else
+            showlist.LoadXml(xmlfile)
+        End If
 
         Return showlist
 

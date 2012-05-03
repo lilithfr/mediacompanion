@@ -1082,8 +1082,9 @@ Partial Public Class Form1
                 Dim tvshowid As String
                 If NewShow.PossibleShowList IsNot Nothing Then
                     If NewShow.PossibleShowList.Count = 0 Then
+                        NewShow.FailedLoad = True
                         NewShow.State = Media_Companion.ShowState.Unverified
-
+                        NewShow.Title.Value = FolderName
                         tvshowid = "none"
                         NewShow.State = ShowState.Error
                     ElseIf NewShow.PossibleShowList.Count = 1 Then
@@ -1122,7 +1123,12 @@ Partial Public Class Form1
                     If templanguage = Nothing Then templanguage = "en"
                     If templanguage = "" Then templanguage = "en"
                     Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(tvshowid, templanguage, True)
-
+                    If SeriesInfo.FailedLoad Then
+                        MsgBox("Please adjust the TV Show title and try again", MsgBoxStyle.OkOnly, String.Format("'{0}' - No Show Returned", FolderName))
+                        bckgrnd_tvshowscraper.ReportProgress(0, NewShow)
+                        newTvFolders.RemoveAt(0)
+                        Continue Do
+                    End If
                     NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
 
 
