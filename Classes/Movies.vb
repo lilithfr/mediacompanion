@@ -6,7 +6,6 @@ Public Class Movies
     Public Shared newMovieList As New List(Of str_NewMovie)
 
     Public Shared Sub listMovieFiles(ByVal dir_info As IO.DirectoryInfo, ByVal moviePattern As String)
-        'scraperLog &= lst & " " & pattern & " " & dir_info.ToString & vbCrLf
         Try
             Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(moviePattern)
             For Each fs_info As IO.FileInfo In fs_infos
