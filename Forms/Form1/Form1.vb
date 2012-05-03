@@ -288,9 +288,13 @@ Public Class Form1
         'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
         Preferences.applicationPath = Application.StartupPath
         Utilities.applicationPath = Application.StartupPath
-        If Not Utilities.GetFrameworkVersions().Contains("4.0 Full") Then
+        If Not Utilities.GetFrameworkVersions().Contains("4.0") Then
             Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
-            If MsgBox("MC Requires the FULL version of Net 4.0." & vbCrLf & "It can be accessed from the following url." & vbCrLf & RequiredNetURL & vbCrLf & vbCrLf & "Do you want to end MC & go to the URL for download?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
+                      "The Full version, while not required, is available from:" & vbCrLf & _
+                      RequiredNetURL & vbCrLf & vbCrLf & _
+                      "Do you wish to download the Full version?", _
+                      MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
                 Process.Start(RequiredNetURL)
                 End
             End If
