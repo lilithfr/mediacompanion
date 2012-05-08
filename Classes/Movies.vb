@@ -73,15 +73,18 @@ Public Class Movies
                 Else
                     Dim movieStackName As String = titleFull
                     Dim firstPart As Boolean
-                    If Utilities.isMultiPartMedia(movieStackName, firstPart) Then
+                    If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
                         If Not firstPart Then doNotAdd = True
                         If Preferences.namemode <> "1" Then titleFull = titleDir & movieStackName & titleExt
                     End If
 
                     'ignore trailers
                     Dim M As Match
-                    M = Regex.Match(titleFull, "[.-_]trailer")
-                    If M.Success Then doNotAdd = True
+                    M = Regex.Match(titleFull, "[-_.]trailer")
+                    If M.Success Then
+                        scraperLog &= " - ignore trailer"
+                        doNotAdd = True
+                    End If
 
                     'ignore whatever this is meant to be!
                     If titleFull.ToLower.IndexOf("sample") <> -1 And titleFull.ToLower.IndexOf("people") = -1 Then doNotAdd = True
@@ -194,7 +197,7 @@ Public Class Movies
             If Utilities.testForFileByName(targetMovieFile, newextension) Then aFileExists = True
 
             'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
-            Do While Utilities.isMultiPartMedia(stackName, isFirstPart, stackdesignator, nextStackPart)
+            Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
                 If isFirstPart Then
                     isStack = True
                     Dim i As Integer                'sacrificial variable to appease the TryParseosaurus Checks
