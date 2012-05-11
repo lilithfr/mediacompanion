@@ -1089,7 +1089,6 @@ Partial Public Class Form1
                         NewShow.State = ShowState.Error
                     ElseIf NewShow.PossibleShowList.Count = 1 Then
                         NewShow.State = Media_Companion.ShowState.Open
-
                         tvshowid = NewShow.PossibleShowList.Item(0).Id.Value
                     Else
                         Dim TempSeries As Tvdb.Series = Tvdb.FindBestPossibleShow(NewShow.PossibleShowList, FolderName, Preferences.TvdbLanguageCode)
@@ -1111,7 +1110,7 @@ Partial Public Class Form1
 
                 If IsNumeric(tvshowid) Then
                     'tvshow found
-                    Dim newtvshow As New TvShow
+                    Dim newtvshow As New TvShow         'why is this created when NewShow should do? I mean, IMDbID will always be Nothing below.
                     newtvshow.TvdbId.Value = tvshowid
                     newtvshow.NfoFilePath = IO.Path.Combine(newTvFolders(0), "tvshow.nfo")
 
@@ -1129,8 +1128,9 @@ Partial Public Class Form1
                         newTvFolders.RemoveAt(0)
                         Continue Do
                     End If
-                    NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
 
+                    NewShow.Title.Value = FolderName    'set default in case title is returned blank, it still shows up in tree
+                    NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
 
                     Dim TvdbActors As Tvdb.Actors = tvdbstuff.GetActors(tvshowid, templanguage)
                     For Each Act As Tvdb.Actor In TvdbActors.Items

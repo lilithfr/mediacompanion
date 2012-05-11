@@ -14027,9 +14027,11 @@ MyExit:
         Next
 
         ListBox12.Items.Clear()
+        ListBox1.Items.Clear()
 
         For Each lan In languageList
             ListBox12.Items.Add(lan.Language.Value)
+            ListBox1.Items.Add(lan.Language.Value)
         Next
     End Sub
 
