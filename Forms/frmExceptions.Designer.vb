@@ -30,6 +30,7 @@ Partial Class frmExceptions
         Me.btnQuit = New System.Windows.Forms.Button()
         Me.lnkCodeplex = New System.Windows.Forms.LinkLabel()
         Me.lblMessageEnd = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         CType(Me.pictSadFace, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -47,10 +48,10 @@ Partial Class frmExceptions
         Me.lblMessage.Font = New System.Drawing.Font("Lucida Console", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblMessage.Location = New System.Drawing.Point(23, 282)
         Me.lblMessage.Name = "lblMessage"
-        Me.lblMessage.Size = New System.Drawing.Size(728, 48)
+        Me.lblMessage.Size = New System.Drawing.Size(728, 24)
         Me.lblMessage.TabIndex = 1
         Me.lblMessage.Text = "Something went wrong and application needs to close. Why not file a bug to help u" & _
-            "s improve? Create a new issue at "
+    "s improve? Create a new issue at "
         '
         'txtExceptionTrace
         '
@@ -110,6 +111,16 @@ Partial Class frmExceptions
         Me.lblMessageEnd.TabIndex = 5
         Me.lblMessageEnd.Text = "and paste the exception trace below."
         '
+        'Label1
+        '
+        Me.Label1.Font = New System.Drawing.Font("Lucida Console", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(23, 308)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(728, 24)
+        Me.Label1.TabIndex = 6
+        Me.Label1.Text = "Please add a brief description of the circumstances under which the exception occ" & _
+    "urred, particularly the movie or show that may have contributed. Thanks!"
+        '
         'frmExceptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -117,6 +128,7 @@ Partial Class frmExceptions
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(776, 521)
         Me.ControlBox = False
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.lblMessageEnd)
         Me.Controls.Add(Me.lnkCodeplex)
         Me.Controls.Add(Me.btnQuit)
@@ -144,4 +156,5 @@ Partial Class frmExceptions
     Friend WithEvents btnQuit As System.Windows.Forms.Button
     Friend WithEvents lnkCodeplex As System.Windows.Forms.LinkLabel
     Friend WithEvents lblMessageEnd As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class
