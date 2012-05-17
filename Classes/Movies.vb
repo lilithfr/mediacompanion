@@ -194,25 +194,27 @@ Public Class Movies
             'designate the new main movie file (without extension) and test the new filenames do not already exist
             targetMovieFile = newpath & newfilename
             targetNfoFile = targetMovieFile
-            If Utilities.testForFileByName(targetMovieFile, newextension) Then aFileExists = True
-
-            'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
-            Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
-                If isFirstPart Then
-                    isStack = True
-                    Dim i As Integer                'sacrificial variable to appease the TryParseosaurus Checks
-                    targetMovieFile = newpath & stackName & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
-                    If Utilities.testForFileByName(targetMovieFile, newextension) Then
-                        aFileExists = True
-                        Exit Do
+            If Utilities.testForFileByName(targetMovieFile, newextension) Then
+                aFileExists = True
+            Else
+                'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
+                Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
+                    If isFirstPart Then
+                        isStack = True                    'this media file has already been added to the list, but check for existing file with new name
+                        Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                        targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                        If Utilities.testForFileByName(targetMovieFile, newextension) Then
+                            aFileExists = True
+                            Exit Do
+                        End If
+                        If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                    Else
+                        movieStackList.Add(mediaFile)
                     End If
-                    If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
-                Else
-                    movieStackList.Add(mediaFile)
-                End If
-                stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
-                mediaFile = stackName
-            Loop
+                    stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
+                    mediaFile = stackName
+                Loop
+            End If
 
             If aFileExists = False Then         'if none of the possible renamed files already exist then we rename found media files
                 Dim logRename As String = ""    'used to build up a string of the renamed files for the log
