@@ -762,89 +762,89 @@ Module Module1
         Next
     End Sub
 
-    Private Function renameepisode(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
-        Dim returnpath As String = "false"
+    'Private Function renameepisode(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String)
+    '    Dim returnpath As String = "false"
 
-        Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
-        For f = 0 To MediaFileExtensions.Count - 1
-            Dim actualname As String = medianame & MediaFileExtensions(f)
-            If IO.File.Exists(actualname) Then
-                Dim newfilename As String
-                newfilename = ""
-                If seasonno.Length = 1 Then
-                    seasonno = "0" & seasonno
-                End If
-                For g = 0 To episodeno.Count - 1
-                    If episodeno(g).Length = 1 Then
-                        episodeno(g) = "0" & episodeno(g)
-                    End If
-                Next
+    '    Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
+    '    For f = 0 To MediaFileExtensions.Count - 1
+    '        Dim actualname As String = medianame & MediaFileExtensions(f)
+    '        If IO.File.Exists(actualname) Then
+    '            Dim newfilename As String
+    '            newfilename = ""
+    '            If seasonno.Length = 1 Then
+    '                seasonno = "0" & seasonno
+    '            End If
+    '            For g = 0 To episodeno.Count - 1
+    '                If episodeno(g).Length = 1 Then
+    '                    episodeno(g) = "0" & episodeno(g)
+    '                End If
+    '            Next
 
-                newfilename = Renamer.setTVFilename(showtitle, episodetitle, episodeno, seasonno)
+    '            newfilename = Renamer.setTVFilename(showtitle, episodetitle, episodeno, seasonno)
 
-                newfilename = newfilename.Replace("?", "")
-                newfilename = newfilename.Replace("/", "")
-                newfilename = newfilename.Replace("\", "")
-                newfilename = newfilename.Replace("<", "")
-                newfilename = newfilename.Replace(">", "")
-                newfilename = newfilename.Replace(":", "")
-                newfilename = newfilename.Replace("""", "")
-                newfilename = newfilename.Replace("*", "")
-                Dim listtorename As New List(Of String)
-                listtorename.Clear()
-                Dim done As String = ""
-                Dim temppath As String = path
+    '            newfilename = newfilename.Replace("?", "")
+    '            newfilename = newfilename.Replace("/", "")
+    '            newfilename = newfilename.Replace("\", "")
+    '            newfilename = newfilename.Replace("<", "")
+    '            newfilename = newfilename.Replace(">", "")
+    '            newfilename = newfilename.Replace(":", "")
+    '            newfilename = newfilename.Replace("""", "")
+    '            newfilename = newfilename.Replace("*", "")
+    '            Dim listtorename As New List(Of String)
+    '            listtorename.Clear()
+    '            Dim done As String = ""
+    '            Dim temppath As String = path
 
-                listtorename.Add(actualname)
+    '            listtorename.Add(actualname)
 
-                Dim di As DirectoryInfo = New DirectoryInfo(path.Replace(IO.Path.GetFileName(path), ""))
-                Dim filenama As String = IO.Path.GetFileNameWithoutExtension(path)
-                Dim fils As IO.FileInfo() = di.GetFiles(filenama & ".*")
-                For Each fiNext In fils
-                    If Not listtorename.Contains(fiNext.FullName) Then
-                        listtorename.Add(fiNext.FullName)
-                    End If
-                Next
+    '            Dim di As DirectoryInfo = New DirectoryInfo(path.Replace(IO.Path.GetFileName(path), ""))
+    '            Dim filenama As String = IO.Path.GetFileNameWithoutExtension(path)
+    '            Dim fils As IO.FileInfo() = di.GetFiles(filenama & ".*")
+    '            For Each fiNext In fils
+    '                If Not listtorename.Contains(fiNext.FullName) Then
+    '                    listtorename.Add(fiNext.FullName)
+    '                End If
+    '            Next
 
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".nfo")
-                If IO.File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
-                If IO.File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
-                If IO.File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
+    '            temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".nfo")
+    '            If IO.File.Exists(temppath) Then
+    '                If Not listtorename.Contains(temppath) Then
+    '                    listtorename.Add(temppath)
+    '                End If
+    '            End If
+    '            temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
+    '            If IO.File.Exists(temppath) Then
+    '                If Not listtorename.Contains(temppath) Then
+    '                    listtorename.Add(temppath)
+    '                End If
+    '            End If
+    '            temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
+    '            If IO.File.Exists(temppath) Then
+    '                If Not listtorename.Contains(temppath) Then
+    '                    listtorename.Add(temppath)
+    '                End If
+    '            End If
 
 
-                For Each items In listtorename
-                    Dim newname As String = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
-                    newname = newname.Replace("..", ".")
-                    done = newname.Replace(IO.Path.GetExtension(newname), ".nfo")
-                    Try
-                        Dim fi As New IO.FileInfo(items)
-                        If Not IO.File.Exists(newname) Then
-                            fi.MoveTo(newname)
-                        End If
-                    Catch ex As Exception
-                        done = path
-                    End Try
-                Next
-                returnpath = done
-                Exit For
-            End If
-        Next
-        Return returnpath
-    End Function
+    '            For Each items In listtorename
+    '                Dim newname As String = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
+    '                newname = newname.Replace("..", ".")
+    '                done = newname.Replace(IO.Path.GetExtension(newname), ".nfo")
+    '                Try
+    '                    Dim fi As New IO.FileInfo(items)
+    '                    If Not IO.File.Exists(newname) Then
+    '                        fi.MoveTo(newname)
+    '                    End If
+    '                Catch ex As Exception
+    '                    done = path
+    '                End Try
+    '            Next
+    '            returnpath = done
+    '            Exit For
+    '        End If
+    '    Next
+    '    Return returnpath
+    'End Function
 
     Dim newepisodetoadd As New episodeinfo
 
@@ -1929,7 +1929,9 @@ Module Module1
                     For Each ep In alleps
                         eps.Add(ep.episodeno)
                     Next
-                    Dim tempspath As String = renameepisode(path, alleps(0).seasonno, eps, show.title, alleps(0).title)
+                    Preferences.tvScraperLog = String.Empty
+                    Dim tempspath As String = TVShows.episodeRename(path, alleps(0).seasonno, eps, show.title, alleps(0).title)
+                    Console.Write(Preferences.tvScraperLog.Replace("!!! ", ""))
                     If tempspath <> "false" Then
                         path = tempspath
                     End If
