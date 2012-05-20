@@ -14274,7 +14274,7 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub Button29_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button29.Click
+    Private Sub btnTvShowSelectorScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShowSelectorScrape.Click
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
@@ -15410,7 +15410,7 @@ MyExit:
         Else
             util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), defaultFanart)
             util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), defaultFanart)
-            
+
         End If
         Try
             Label58.Text = PictureBox10.Image.Height.ToString
@@ -20221,7 +20221,7 @@ MyExit:
         Next
     End Sub
 
-    Private Sub Button69_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button69.Click
+    Private Sub btn_TvFoldersRootRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootRemove.Click
         Try
             While ListBox5.SelectedItems.Count > 0
                 ListBox5.Items.Remove(ListBox5.SelectedItems(0))
@@ -20231,7 +20231,7 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub Button71_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button71.Click
+    Private Sub btn_TvFoldersRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRemove.Click
         Try
             Dim Folder As String
             While ListBox6.SelectedItems.Count > 0
@@ -20251,7 +20251,7 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub Button68_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button68.Click
+    Private Sub btn_TvFoldersRootBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootBrowse.Click
         Try
             'browse for root tv folder
             Dim allok As Boolean = True
@@ -20322,7 +20322,7 @@ MyExit:
     End Sub
 
 
-    Private Sub Button85_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button85.Click
+    Private Sub btn_TvFoldersUndo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersUndo.Click
         Try
             'newTvFolders.Clear()
             'Call setuptvfolders()
@@ -20525,7 +20525,7 @@ MyExit:
 
     End Sub
 
-    Private Sub Button83_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button83.Click
+    Private Sub btn_TvFoldersSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersSave.Click
         Try
             tv_ShowScrape()
         Catch ex As Exception
@@ -20533,7 +20533,7 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub Button84_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button84.Click
+    Private Sub btn_TvFoldersAddFromRoot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAddFromRoot.Click
         Try
             tv_ShowFind()
         Catch ex As Exception
@@ -20588,7 +20588,7 @@ MyExit:
         'Me.Focus()
     End Sub
 
-    Private Sub Button70_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button70.Click
+    Private Sub btn_TvFoldersBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersBrowse.Click
         Try
             Dim allok As Boolean = True
             Dim theFolderBrowser As New FolderBrowserDialog
@@ -20615,7 +20615,7 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub Button72_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button72.Click
+    Private Sub btn_TvFoldersAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersAdd.Click
         Try
             If TextBox40.Text = Nothing Then
                 Exit Sub
@@ -20660,7 +20660,7 @@ MyExit:
 
     End Sub
 
-    Private Sub Button67_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button67.Click
+    Private Sub btn_TvFoldersRootAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvFoldersRootAdd.Click
         Try
             If TextBox39.Text = Nothing Then
                 Exit Sub
