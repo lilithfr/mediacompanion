@@ -48,7 +48,8 @@ Public Class TvShow
     Public Property Trailer As New ProtoProperty(Me, "trailer") 'Also possible hold over from movies
     Public Property Artist As New ProtoProperty(Me, "Artist") 'Possible hold over from Music?
 
-    Public Property EpisodeGuideUrl As New ProtoProperty(Me, "episodeguideurl")
+    Public Property EpisodeGuideUrl As New ProtoProperty(Me, "episodeguide")
+    Public Property Url As New ProtoProperty(EpisodeGuideUrl, "url")
 
     Public Property ListActors As New ActorList(Me, "actor")
 
@@ -214,6 +215,10 @@ Public Class TvShow
         Me.Rating.Value = Series.Rating.Value
         Me.Premiered.Value = Series.FirstAired.Value
         Me.Studio.Value = Series.Network.Value
+
+        Me.EpisodeGuideUrl.Value = ""
+        Me.Url.Value = URLs.EpisodeGuide(Series.Id.Value, Series.Language.Value)
+        Me.Url.Node.SetAttributeValue("cache", Series.Id.Value)
 
     End Sub
 

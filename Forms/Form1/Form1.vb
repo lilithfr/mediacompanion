@@ -14380,8 +14380,10 @@ MyExit:
                         Case "poster"
                             posterurl = thisresult.InnerText
                         Case "episodeguideurl"
-                            WorkingTvShow.EpisodeGuideUrl.Value = thisresult.InnerText
-
+                            WorkingTvShow.EpisodeGuideUrl.Value = ""
+                            WorkingTvShow.Url.Value = thisresult.InnerText
+                            WorkingTvShow.Url.Node.SetAttributeValue("cache", WorkingTvShow.TvdbId.Value)
+                            WorkingTvShow.Url.AttachToParentNode(WorkingTvShow.EpisodeGuideUrl.Node)
                         Case "actor"
                             If RadioButton13.Checked = True Or WorkingTvShow.ImdbId = Nothing Then
                                 Dim id As String = ""
@@ -16159,7 +16161,10 @@ MyExit:
                         Case "runtime"
                             WorkingTvShow.Runtime.Value = thisresult.InnerText
                         Case "episodeguideurl"
-                            WorkingTvShow.EpisodeGuideUrl.Value = thisresult.InnerText
+                            WorkingTvShow.EpisodeGuideUrl.Value = ""
+                            WorkingTvShow.Url.Value = thisresult.InnerText
+                            WorkingTvShow.Url.Node.SetAttributeValue("cache", WorkingTvShow.TvdbId.Value)
+                            WorkingTvShow.Url.AttachToParentNode(WorkingTvShow.EpisodeGuideUrl.Node)
                         Case "actor"
                             If maxcount >= Preferences.maxactors Then
                                 Exit For

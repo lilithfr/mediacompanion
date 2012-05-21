@@ -49,6 +49,11 @@ Public NotInheritable Class URLs
         End Get
     End Property
 
+    Public Shared ReadOnly Property EpisodeGuide(ByVal sSeriesName As String, ByVal sLanguageCode As String)
+        Get
+            Return (String.Format("http://thetvdb.com/api/6E82FED600783400/series/{0}/all/{1}.zip", sSeriesName, sLanguageCode))
+        End Get
+    End Property
 
     Public Shared ReadOnly Property MoviePosterDBMovie()
         Get

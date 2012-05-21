@@ -1110,10 +1110,6 @@ Partial Public Class Form1
 
                 If IsNumeric(tvshowid) Then
                     'tvshow found
-                    Dim newtvshow As New TvShow         'why is this created when NewShow should do? I mean, IMDbID will always be Nothing below.
-                    newtvshow.TvdbId.Value = tvshowid
-                    newtvshow.NfoFilePath = IO.Path.Combine(newTvFolders(0), "tvshow.nfo")
-
                     Dim tvdbstuff As New TVDBScraper
 
                     Dim posterurl As String = ""
@@ -1144,7 +1140,7 @@ Partial Public Class Form1
                         NewAct.actorrole = Act.Role.Value
                         NewAct.actorthumb = Act.Image.Value
 
-                        If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or newtvshow.ImdbId = Nothing Then
+                        If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId = Nothing Then
                             Dim id As String = ""
                             'Dim acts As New MovieActors
                             Dim results As XmlNode = Nothing
@@ -1154,7 +1150,7 @@ Partial Public Class Form1
                             If Not String.IsNullOrEmpty(NewAct.actorthumb) Then
                                 If NewAct.actorthumb <> "" And Preferences.actorseasy = True And speedy = False Then
                                     If NewShow.TvShowActorSource.Value <> "imdb" Or NewShow.ImdbId = Nothing Then
-                                        Dim workingpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "")
+                                        Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
                                         workingpath = workingpath & ".actors\"
 
                                         Utilities.EnsureFolderExists(workingpath)
@@ -1220,11 +1216,11 @@ Partial Public Class Form1
 
                     Next
 
-                    If Preferences.TvdbActorScrape = 1 Or Preferences.TvdbActorScrape = 2 And newtvshow.ImdbId <> Nothing Then
+                    If Preferences.TvdbActorScrape = 1 Or Preferences.TvdbActorScrape = 2 And NewShow.ImdbId <> Nothing Then
                         Dim imdbscraper As New Classimdb
                         Dim actorlist As String
                         Dim actorstring As New XmlDocument
-                        actorlist = imdbscraper.getimdbactors(Preferences.imdbmirror, newtvshow.ImdbId.Value)
+                        actorlist = imdbscraper.getimdbactors(Preferences.imdbmirror, NewShow.ImdbId.Value)
 
                         actorstring.LoadXml(actorlist)
 
@@ -1267,11 +1263,11 @@ Partial Public Class Form1
                                                 End If
                                         End Select
                                     Next
-                                    newtvshow.ListActors.Add(newactor)
+                                    NewShow.ListActors.Add(newactor)
                             End Select
                         Next
-                        While newtvshow.ListActors.Count > Preferences.maxactors
-                            newtvshow.ListActors.RemoveAt(newtvshow.ListActors.Count - 1)
+                        While NewShow.ListActors.Count > Preferences.maxactors
+                            NewShow.ListActors.RemoveAt(NewShow.ListActors.Count - 1)
                         End While
 
                     End If
@@ -1290,7 +1286,7 @@ Partial Public Class Form1
                     '        ArtList.Add(NewItem)
                     '    Next
                     'End If
-                    Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(newtvshow.TvdbId.Value, True)
+                    Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(NewShow.TvdbId.Value, True)
                     If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
                         If Preferences.downloadtvseasonthumbs = True Then
                             For f = 0 To ArtList.Items.SeasonMax
@@ -1323,9 +1319,9 @@ Partial Public Class Form1
                                     Else
                                         tempstring = f.ToString
                                     End If
-                                    Dim seasonpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "season" & tempstring & ".tbn")
+                                    Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season" & tempstring & ".tbn")
                                     If tempstring = "00" Then
-                                        seasonpath = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "season-specials.tbn")
+                                        seasonpath = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season-specials.tbn")
                                     End If
                                     If Not IO.File.Exists(seasonpath) Then
 
@@ -1365,7 +1361,7 @@ Partial Public Class Form1
                             End If
                             If fanartposter <> "" Then
 
-                                Dim seasonpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "fanart.jpg")
+                                Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "fanart.jpg")
                                 If Not IO.File.Exists(seasonpath) Then
                                     Utilities.DownloadFile(fanartposter, seasonpath)
                                 End If
@@ -1433,7 +1429,7 @@ Partial Public Class Form1
 
                             If posterurlpath <> "" And speedy = False Then
 
-                                Dim seasonpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "folder.jpg")
+                                Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "folder.jpg")
                                 If Not IO.File.Exists(seasonpath) Then
 
                                     Utilities.DownloadFile(posterurlpath, seasonpath)
@@ -1493,7 +1489,7 @@ Partial Public Class Form1
 
                             If seasonallpath <> "" Then
 
-                                Dim seasonpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "season-all.tbn")
+                                Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season-all.tbn")
                                 If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
 
                                     Utilities.DownloadFile(seasonallpath, seasonallpath)
@@ -1501,7 +1497,7 @@ Partial Public Class Form1
                                 End If
                             End If
                         ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
-                            Dim seasonpath As String = newtvshow.NfoFilePath.Replace(IO.Path.GetFileName(newtvshow.NfoFilePath), "season-all.tbn")
+                            Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season-all.tbn")
                             If Not IO.File.Exists(seasonpath) Then
                                 Utilities.DownloadFile(seasonallpath, seasonpath)
                             End If
@@ -1539,31 +1535,31 @@ Partial Public Class Form1
 
                     For Each url In ArtList.Items
                         If url.Type = Tvdb.ArtType.Fanart Then
-                            newtvshow.posters.Add(url.Url)
+                            NewShow.posters.Add(url.Url)
                         Else
-                            newtvshow.fanart.Add(url.Url)
+                            NewShow.fanart.Add(url.Url)
                         End If
                     Next
 
                     'newtvshow.language = Preferences.tvdblanguagecode
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
-                        newtvshow.EpisodeActorSource.Value = "tvdb"
+                        NewShow.EpisodeActorSource.Value = "tvdb"
                     Else
-                        newtvshow.EpisodeActorSource.Value = "imdb"
+                        NewShow.EpisodeActorSource.Value = "imdb"
                     End If
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Then
-                        newtvshow.TvShowActorSource.Value = "tvdb"
+                        NewShow.TvShowActorSource.Value = "tvdb"
                     Else
-                        newtvshow.TvShowActorSource.Value = "imdb"
+                        NewShow.TvShowActorSource.Value = "imdb"
                     End If
 
                     If tempstring = "0" Or tempstring = "2" Then
-                        newtvshow.EpisodeActorSource.Value = "tvdb"
+                        NewShow.EpisodeActorSource.Value = "tvdb"
                     Else
-                        newtvshow.EpisodeActorSource.Value = "imdb"
+                        NewShow.EpisodeActorSource.Value = "imdb"
                     End If
 
-                    newtvshow.SortOrder.Value = Preferences.sortorder
+                    NewShow.SortOrder.Value = Preferences.sortorder
 
                     'nfoFunction.savetvshownfo(newtvshow.path, newtvshow, True)
 
