@@ -5339,11 +5339,46 @@ Module Module1
                     'stage 3 = get movie trailer
                     Try
                         If Preferences.gettrailer = True Then
-                            trailer = gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
-                            If trailer <> Nothing Then
-                                newmovie.fullmoviebody.trailer = trailer
-                                Console.WriteLine("Trailer URL Scraped OK")
-                            End If
+
+
+									trailer = ""
+
+									If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" then
+										 trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+
+										 If trailer = "" then
+											Console.WriteLine("No HD Trailer URL found")
+										 Else
+											Console.WriteLine("HD Trailer URL found")
+										 End if
+									End If
+
+									If trailer = "" then
+										 trailer = gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+
+										 If trailer = "Error" then
+											Console.WriteLine("No SD Trailer URL found")
+										 Else
+											Console.WriteLine("SD Trailer URL found")
+										 End if
+									End if
+
+									If UrlIsValid(trailer) Then
+										 newmovie.fullmoviebody.trailer = trailer
+
+
+										If Preferences.DownloadTrailerDuringScrape then
+											Console.WriteLine("Downloading Trailer...")
+
+											newmovie.fileinfo.trailerpath = GetTrailerPath(nfopath)
+
+											DownloadTrailer( newmovie.fileinfo.trailerpath, newmovie.fullmoviebody.trailer )
+										End If
+
+									Else
+										 newmovie.fullmoviebody.trailer = ""
+										 Console.WriteLine("Failed to find Trailer URL")
+                           End If
                         End If
                     Catch
                     End Try
@@ -5831,6 +5866,126 @@ Module Module1
 
         Next
     End Sub
+
+	 Private Function GetTrailerPath( s As String )
+		return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+	End Function
+
+	 Private Sub DownloadTrailer( trailerPath As String, trailerUrl As string )
+
+		'Check for and delete zero length trailer - created when Url is invalid
+		DeleteZeroLengthFile(trailerPath)
+
+      If Not IO.File.Exists(trailerPath) Then
+         If UrlIsValid(trailerUrl) Then
+            
+'            Dim wc As New Net.WebClient()
+
+            Try
+						Dim FileToBeDownloaded as WebFileDownloader
+                  FileToBeDownloaded = New WebFileDownloader
+                  FileToBeDownloaded.DownloadFileWithProgress(trailerurl, trailerPath)
+            Catch
+            End Try
+         End If
+		End If
+	End Sub
+
+
+	Private sub DeleteZeroLengthFile( fileName )
+
+		If IO.File.Exists(fileName) then
+			If (New IO.FileInfo(fileName)).Length = 0 then
+				IO.File.Delete(fileName)
+			End If
+		End If
+
+	End sub
+
+
+	Private Function UrlIsValid(ByVal url As String) As Boolean
+		 Dim is_valid As Boolean = False
+		 If url.ToLower().StartsWith("www.") Then url = _
+			  "http://" & url
+
+		 Dim web_response As HttpWebResponse = Nothing
+		 Try
+			  Dim web_request As HttpWebRequest = _
+					HttpWebRequest.Create(url)
+			  web_response = _
+					DirectCast(web_request.GetResponse(), _
+					HttpWebResponse)
+			  Return True
+		 Catch ex As Exception
+			  Return False
+		 Finally
+			  If Not (web_response Is Nothing) Then _
+					web_response.Close()
+		 End Try
+	End Function
+
+
+
+
+
+    'Date  : Nov11 
+    'By    : AnotherPhil 
+    'Blurb : This uses a revised hdtrailers.xml copied from metadata.common.hdtrailers.net
+    '        Main changes
+    '           - Scraping from http://www.hd-trailers.net/movie/movie-name instead of http://www.hd-trailers.net/blog/?s=&quot;movie-name_(Theatrical_Trailer)
+    '           - Adds RegExs for the following sources:
+    '               - http://videos.hd-trailers.net
+    '               - http://pdl.stream
+    '           - Fixed RegExs for:
+    '               - http://playlist.yahoo.com (working versions copied from here: http://code.google.com/p/xbmchuscraper/source/browse/trunk/HDTrailersForEMM/hdtrailers.xml?spec=svn53&r=53) 
+    '
+    Public Function MC_Scraper_Get_HD_Trailer_URL( ByVal Resolution As String, ByVal MovieTitle As String ) As String
+
+        Dim theScraper    As Scraper = ChooseScraper("metadata.mc.hdtrailers.net")
+        Dim funcName      As String  = "GetHDTrailersnet" & Resolution.ToUpper() & "p"
+        Dim funcParams(0) As String  
+
+        'Prep movie title for HD-Trailers.net
+        MovieTitle = Regex.Replace( MovieTitle, "[ ,']"    , "-"   )
+        MovieTitle = Regex.Replace( MovieTitle, "[?!.;:@]" , ""    )
+        MovieTitle = Regex.Replace( MovieTitle, "[&]"      , "and" )
+        MovieTitle = Regex.Replace( MovieTitle, "-{2,}"    , "-"   )
+
+        funcParams(0) = MovieTitle
+
+        Dim url As String = ScraperQuery.ExecuteQuery(theScraper, funcName, funcParams)
+
+        Dim match As Match = Regex.Match(url, "<trailer>(.*?)</trailer>")
+
+        If match.Groups.Count = 2 Then
+	        url = match.Groups(1).Value
+            url = Replace( url, "&amp;", "&" )
+        Else
+            url = ""
+        End If
+
+        Return url
+
+    End Function
+
+
+    Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
+		  Dim mScraperManager As ScraperManager
+
+		  mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+
+        Dim TempScraper As Scraper = Nothing
+        For Each c In mScraperManager.Scrapers
+            If c.ID = ScraperIdentification Then
+                TempScraper = c
+                Exit For
+            End If
+        Next
+        Return TempScraper
+    End Function
+
+
+
 
     Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String)
         Dim allok As Boolean = False
