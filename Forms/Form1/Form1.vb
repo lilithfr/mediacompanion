@@ -2437,17 +2437,11 @@ Public Class Form1
                 ' workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), tempstring & "-trailer.flv")
                 '*******
 
-                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), System.IO.Path.GetFileNameWithoutExtension(workingMovieDetails.fileinfo.path) & "-trailer.flv")
-                Button3.Visible = False
-                If IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
-                    Button3.Visible = True
-                    Button3.Text = "Play Trailer"
-                Else
-                    If workingMovieDetails.fullmoviebody.trailer <> "" Then
-                        Button3.Text = "Download Trailer"
-                        Button3.Visible = True
-                    End If
-                End If
+'                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), System.IO.Path.GetFileNameWithoutExtension(workingMovieDetails.fileinfo.path) & "-trailer.flv")
+
+                workingMovieDetails.fileinfo.trailerpath = GetTrailerPath(workingMovieDetails.fileinfo.path)
+
+					 HandleTrailerBtn( workingMovieDetails )
 
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Try
@@ -2606,6 +2600,34 @@ Public Class Form1
 
         mov_SplitContainerAutoPosition()
     End Sub
+
+
+	Private Sub HandleTrailerBtn( fmd As FullMovieDetails )
+
+		DeleteZeroLengthFile(fmd.fileinfo.trailerpath)
+					 
+		Button3.Enabled = False
+
+      If IO.File.Exists(fmd.fileinfo.trailerpath) Then
+         Button3.Text    = "Play Trailer"
+			Button3.Enabled = true
+      Else
+			If Not UrlIsValid(fmd.fullmoviebody.trailer) then
+
+				If fmd.fullmoviebody.trailer <> "" then
+					fmd.fullmoviebody.trailer = ""
+					nfoFunction.mov_NfoSave(fmd.fileinfo.fullpathandfilename, fmd, True)
+				End if
+
+				Button3.Text = "No trailer found"
+			Else
+            Button3.Text    = "Download Trailer"
+				Button3.Enabled = true
+         End If
+      End If
+	End Sub
+
+
 
     Private Function mov_FileCheckValid(ByVal fullpathandfilename As String) As Boolean
         Dim validfile As Boolean = True
@@ -3090,7 +3112,7 @@ Public Class Form1
         Dim tempint As Integer = 0
         Dim tempstring As String
         Dim errorcounter As Integer = 0
-        Dim trailer As String
+        Dim trailer As String = ""
         Dim newmoviecount As Integer = 0
         Dim dirinfo As String = String.Empty
         newMovieList.Clear()
@@ -3893,7 +3915,7 @@ Public Class Form1
 
                                     trailer = ""
 
-                                    If Preferences.moviePreferredTrailerResolution <> "SD" Then
+                                    If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
                                         trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title)
                                     End If
 
@@ -4106,6 +4128,9 @@ Public Class Form1
                             nfoFunction.mov_NfoSave(nfopath, newmovie, True)
 
 
+									 If Preferences.DownloadTrailerDuringScrape then
+										DownloadTrailer( GetTrailerPath(nfopath), trailer )
+									 End If
 
                             Dim movietoadd As New str_ComboList(SetDefaults)
                             movietoadd.fullpathandfilename = nfopath
@@ -4500,6 +4525,65 @@ Public Class Form1
         scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
     End Sub
 
+	 Private Sub DownloadTrailer( trailerPath As String, trailerUrl As string )
+
+		'Check for and delete zero length trailer - created when Url is invalid
+		DeleteZeroLengthFile(trailerPath)
+
+      If Not IO.File.Exists(trailerPath) Then
+
+         If UrlIsValid(trailerUrl) Then
+            
+            Dim wc As New Net.WebClient()
+
+            Try
+                  trailerdownloadpanel.Visible = True
+                  FileToBeDownloaded = New WebFileDownloader
+                  FileToBeDownloaded.DownloadFileWithProgress(trailerurl, trailerPath)
+            Catch ex As Exception
+#If SilentErrorScream Then
+                  Throw ex
+#End If
+            End Try
+         End If
+		End If
+	End Sub
+
+
+	Private sub DeleteZeroLengthFile( fileName )
+
+		If IO.File.Exists(fileName) then
+			If (New IO.FileInfo(fileName)).Length = 0 then
+				IO.File.Delete(fileName)
+			End If
+		End If
+
+	End sub
+
+
+
+	Private Function UrlIsValid(ByVal url As String) As Boolean
+		 Dim is_valid As Boolean = False
+		 If url.ToLower().StartsWith("www.") Then url = _
+			  "http://" & url
+
+		 Dim web_response As HttpWebResponse = Nothing
+		 Try
+			  Dim web_request As HttpWebRequest = _
+					HttpWebRequest.Create(url)
+			  web_response = _
+					DirectCast(web_request.GetResponse(), _
+					HttpWebResponse)
+			  Return True
+		 Catch ex As Exception
+			  Return False
+		 Finally
+			  If Not (web_response Is Nothing) Then _
+					web_response.Close()
+		 End Try
+	End Function
+
+
 
     Private Sub ReloadMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadMovieCacheToolStripMenuItem.Click
         Call mov_CacheReload()
@@ -4765,7 +4849,7 @@ Public Class Form1
             ' message_box.Show("File Download Complete")
             trailerdownloadpanel.Visible = False
             lblProgress.Text = " Please Wait, attempting to connect....."
-            Button3.Text = "Play Trailer"
+				HandleTrailerBtn( workingMovieDetails )
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5928,10 +6012,6 @@ Public Class Form1
             If bckgroundscanepisodes.IsBusy Then
                 busy = True
                 bckgroundscanepisodes.CancelAsync()
-            End If
-            If bckgrounddroppedfiles.IsBusy Then
-                busy = True
-                bckgrounddroppedfiles.CancelAsync()
             End If
             If bckrescrapewizard.IsBusy Then
                 busy = True
@@ -7228,7 +7308,7 @@ Public Class Form1
                             messbox.TextBox1.Text = "Get Trailer"
                             trailer = ""
 
-                            If Preferences.moviePreferredTrailerResolution <> "SD" then
+                            If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" then
                                 trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title )
                             End If
 
@@ -7238,7 +7318,11 @@ Public Class Form1
 
 
                             If trailer <> String.Empty And trailer <> "Error" Then
-                                workingMovieDetails.fullmoviebody.trailer = trailer
+                               workingMovieDetails.fullmoviebody.trailer = trailer
+
+										 If Preferences.DownloadTrailerDuringScrape then
+											DownloadTrailer( workingMovieDetails.fileinfo.trailerpath, trailer )
+										 End If
                             End If
                         End If
                     Catch ex As Exception
@@ -7939,24 +8023,57 @@ Public Class Form1
     End Sub
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
+		DeleteZeroLengthFile(workingMovieDetails.fileinfo.trailerpath)
+
+		If Not UrlIsValid(workingMovieDetails.fullmoviebody.trailer) then
+			
+			Dim trailer = ""
+
+         If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
+               trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title)
+         End If
+
+         If trailer = "" Then
+               trailer = (New Classimdb).gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+         End If
+
+			If UrlIsValid(trailer) Then
+				workingMovieDetails.fullmoviebody.trailer = trailer
+         Else
+				workingMovieDetails.fullmoviebody.trailer = ""
+         End If
+
+         nfoFunction.mov_NfoSave(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
+
+			HandleTrailerBtn( workingMovieDetails )
+
+			If Not Button3.Enabled then
+				exit sub
+			End If
+		End If
+
         Try
             Try
-                If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
+               If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
 
-                    If workingMovieDetails.fullmoviebody.trailer <> "" Then
-                        Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
-                        Dim wc As New Net.WebClient()
+						DownloadTrailer( workingMovieDetails.fileinfo.trailerpath, workingMovieDetails.fullmoviebody.trailer )
 
-                        Try
-                            trailerdownloadpanel.Visible = True
-                            FileToBeDownloaded = New WebFileDownloader
-                            FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                    End If
+'                   If workingMovieDetails.fullmoviebody.trailer <> "" Then
+'                        Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
+'                        Dim wc As New Net.WebClient()
+'
+'                        Try
+'                            trailerdownloadpanel.Visible = True
+'                            FileToBeDownloaded = New WebFileDownloader
+'                            FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                    End If
+
                 Else
                     Try
                         Dim tempstring As String
@@ -8172,7 +8289,7 @@ Public Class Form1
                     Dim movietemplate As New FullMovieDetails
                     Dim movietoalter As New FullMovieDetails
                     Dim counter As Integer = moviecount
-                    Dim progresstext As String = "Batch Scraping Movies, " & (counter - f) + 1 & " item(s) remaining     "
+                    Dim progresstext As String = "Batch Scraping Movies, " & (counter - f) + 1 & " item(s) remaining - Press ESC to cancel    "
                     bckrescrapewizard.ReportProgress(999999, progresstext)
                     movietemplate.fullmoviebody.credits = Nothing
                     movietemplate.fullmoviebody.director = Nothing
@@ -8459,7 +8576,7 @@ Public Class Form1
                             Try
                                 Dim trailer As String = ""
 
-                                If Preferences.moviePreferredTrailerResolution <> "SD" Then
+                                If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
                                     Try
                                         Monitor.Enter(Me)
                                         trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, movietoalter.fullmoviebody.title)
@@ -8478,6 +8595,13 @@ Public Class Form1
 
                                 If trailer <> String.Empty And trailer <> "Error" Then
                                     movietemplate.fullmoviebody.trailer = trailer
+
+											   If Preferences.DownloadTrailerDuringScrape then
+												   DownloadTrailer( GetTrailerPath(movietoalter.fileinfo.fullpathandfilename), trailer )
+											   End If
+
+											Else
+												movietoalter.fullmoviebody.trailer = ""
                                 End If
                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -9101,6 +9225,7 @@ MyExit:
                 Throw ex
 #End If
                 End Try
+					 If bckrescrapewizard.CancellationPending Then Exit For
             Next
             Call mov_FilteredToFullMovieList()
             Call mov_MovieComboListSort()
@@ -9110,6 +9235,12 @@ MyExit:
 
 
     End Sub
+
+	 Private Function GetTrailerPath( s As String )
+		return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+	End Function
+
+
     Private Sub mov_FilteredToFullMovieList()
         Dim FullCount As Integer = fullMovieList.Count - 1
         Dim FilterCount As Integer = filteredList.Count - 1
@@ -9464,9 +9595,11 @@ MyExit:
                                                     End If
                                                 End If
                                                 Try
-                                                    If newmovie.fullmoviebody.title.ToLower.IndexOf("the ") <> -1 Then
+                                                    If newmovie.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
                                                         newmovie.fullmoviebody.title = newmovie.fullmoviebody.title.Substring(4, newmovie.fullmoviebody.title.Length - 4) & " , The"
                                                     End If
+																	 
+
                                                 Catch ex As Exception
 #If SilentErrorScream Then
                                                 Throw ex
@@ -9606,15 +9739,15 @@ MyExit:
                                     newmovie.listactors.Clear()
                                 End Try
 
+										  Dim trailer As String = ""
+
                                 Try
-                                    Dim trailer As String = String.Empty
+                                    
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                     bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                     If Preferences.gettrailer = True Then
 
-                                        trailer = ""
-
-                                        If Preferences.moviePreferredTrailerResolution <> "SD" Then
+                                        If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
                                             trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title)
                                         End If
 
@@ -9783,6 +9916,13 @@ MyExit:
                                     newmovie.fullmoviebody.runtime = "0"
                                 End If
                                 nfoFunction.mov_NfoSave(newdetails.nfopathandfilename, newmovie, True)
+
+
+											If Preferences.DownloadTrailerDuringScrape then
+												DownloadTrailer( GetTrailerPath(newdetails.nfopathandfilename) , trailer )
+											End If
+
+
                                 If bckgrounddroppedfiles.CancellationPending Then Exit Sub
                                 progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                 bckgrounddroppedfiles.ReportProgress(999999, progresstext)
@@ -21026,6 +21166,12 @@ MyExit:
         End If
         cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
 
+        If Preferences.DownloadTrailerDuringScrape = True Then
+            cbDlTrailerDuringScrape.CheckState = CheckState.Checked
+        Else
+            cbDlTrailerDuringScrape.CheckState = CheckState.Unchecked
+        End If
+
         Select Case Preferences.maxactors
             Case 9999
                 ComboBox7.SelectedItem = "All Available"
@@ -21226,7 +21372,7 @@ MyExit:
         End If
 
 
-        cbPreferredTrailerResolution.Text = Preferences.moviePreferredTrailerResolution
+        cbPreferredTrailerResolution.Text = Preferences.moviePreferredTrailerResolution.ToUpper()
 
 
         generalprefschanged = False
@@ -21442,6 +21588,17 @@ MyExit:
         generalprefschanged = True
 
     End Sub
+
+
+
+	Private Sub cbDlTrailerDuringScrape_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTrailerDuringScrape.CheckedChanged
+
+		Preferences.DownloadTrailerDuringScrape = cbDlTrailerDuringScrape.Checked
+		generalprefschanged = True
+
+	End Sub
+
+
 
     Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
         Try
@@ -24973,7 +25130,32 @@ MyExit:
                     frmProgSplash.Label1.Text &= " - Scraping..."
                     frmProgSplash.Label1.Refresh()
 
-                    If field <> "hdtags" And field <> "poster" And field <> "backdrop" And field <> "runtime_file" And field <> "actors" Then
+						If field = "trailer" then
+							Dim trailer = ""
+
+                     If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
+                           trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title)
+                     End If
+
+                     If trailer = "" Then
+                           trailer = (New Classimdb).gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
+                     End If
+
+							If trailer <> String.Empty And trailer <> "Error" Then
+								workingMovieDetails.fullmoviebody.trailer = trailer
+
+								If Preferences.DownloadTrailerDuringScrape then
+									DownloadTrailer( workingMovieDetails.fileinfo.trailerpath, trailer )
+								End If
+                     Else
+								workingMovieDetails.fullmoviebody.trailer = ""
+                     End If
+
+                     nfoFunction.mov_NfoSave(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
+                     newnfo = True
+						End If
+
+                    If field <> "hdtags" And field <> "poster" And field <> "backdrop" And field <> "runtime_file" And field <> "actors" And field <> "trailer" Then
                         '                    Dim scraper As New imdb.Classimdbscraper
                         Dim scraper As New Classimdb
 
@@ -28759,7 +28941,7 @@ MyExit:
 
 
     Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
-        Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text
+        Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
         generalprefschanged = True
     End Sub
 
@@ -29051,5 +29233,20 @@ MyExit:
     Private Sub btnCleanFilenameRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameRemove.Click
         lbCleanFilename.Items.RemoveAt(lbCleanFilename.SelectedIndex)
     End Sub
+
+Private Sub ToolStripMenuItem1_Click_1( sender As System.Object,  e As System.EventArgs) Handles ToolStripMenuItem1.Click
+	Try
+		Call mov_ScrapeSpecific("trailer")
+	Catch ex As Exception
+		ExceptionHandler.LogError(ex)
+	End Try
+End Sub
+
+Private Sub Form1_KeyDown( sender As System.Object,  e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown 
+    If e.KeyCode = Keys.Escape and bckrescrapewizard.IsBusy Then
+		ToolStripStatusLabel7.Text = "Batch Scraping Movies - Cancelling... Waiting for current scrape to complete..."
+		bckrescrapewizard.CancelAsync()
+	 End If
+End Sub
 
 End Class

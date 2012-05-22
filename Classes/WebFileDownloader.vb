@@ -41,7 +41,7 @@ Public Class WebFileDownloader
             mCurrentFile = GetFileName(URL)
             Dim wRemote As WebRequest
             Dim bBuffer As Byte()
-            ReDim bBuffer(300)
+            ReDim bBuffer( 2*1024*1024 )
             Dim iBytesRead As Integer
             Dim iTotalBytesRead As Integer
             Dim iRetries    as Integer = 0
@@ -55,7 +55,7 @@ Public Class WebFileDownloader
             Dim sChunks As Stream = myWebResponse.GetResponseStream
 
             Do
-                iBytesRead = sChunks.Read(bBuffer, 0, 256)
+                iBytesRead = sChunks.Read(bBuffer, 0, bBuffer.Length-10)
                 FS.Write(bBuffer, 0, iBytesRead)
                 iTotalBytesRead += iBytesRead
                 If fSize < iTotalBytesRead Then

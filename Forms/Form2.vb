@@ -394,7 +394,7 @@ Public Class Form2
 
                         trailer = ""
 
-                        If Preferences.moviePreferredTrailerResolution <> "SD" then
+                        If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" then
                             trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, alternatemovie.fullmoviebody.title )
                         End If
 
