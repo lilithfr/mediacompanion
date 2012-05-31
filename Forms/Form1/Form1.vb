@@ -26826,7 +26826,6 @@ MyExit:
             Dim showsdone As Integer = 0
             Dim showcounter As Integer = 0
             For f = Cache.TvCache.Shows.Count - 1 To 0 Step -1
-                Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
                 showcounter += 1
                 If tvBatchList.RewriteAllNFOs Then
                     If Cache.TvCache.Shows(f).State = 0 Or tvBatchList.includeLocked = True Then
@@ -26901,7 +26900,10 @@ MyExit:
                                                 editshow.Runtime.Value = thisresult.InnerText
                                             End If
                                         Case "episodeguideurl"
-
+                                            editshow.EpisodeGuideUrl.Value = ""
+                                            editshow.Url.Value = thisresult.InnerText
+                                            editshow.Url.Node.SetAttributeValue("cache", editshow.TvdbId.Value)
+                                            editshow.Url.AttachToParentNode(editshow.EpisodeGuideUrl.Node)
                                         Case "actor"
                                             If editshow.TvShowActorSource.Value = "tvdb" And tvBatchList.doShowActors = True Then
                                                 If maxcount >= Preferences.maxactors Then
@@ -27138,7 +27140,7 @@ MyExit:
                                     If tvBatchList.shPosters = True Then
                                         Dim seasonpath As String = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "season" & tempstring & ".tbn")
                                         If tempstring = "00" Then
-                                            seasonpath = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "season-specials.tbn")
+                                            seasonpath = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "season-specials.tbn")
                                         End If
                                         If Not IO.File.Exists(seasonpath) Then
                                             Utilities.DownloadFile(seasonposter, seasonpath)
