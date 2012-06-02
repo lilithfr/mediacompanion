@@ -180,6 +180,8 @@ Public Class Preferences
     Public Shared moviePreferredTrailerResolution As String
     Public Shared MovieImdbGenreRegEx As String
 
+	 Public Shared DownloadTrailerDuringScrape As Boolean
+
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
     Public Shared Sub SetUpPreferences()
         'General
@@ -278,6 +280,7 @@ Public Class Preferences
         Preferences.namemode = "1"
         Preferences.maximumthumbs = 10
         Preferences.gettrailer = False
+		  Preferences.DownloadTrailerDuringScrape = False
         ReDim Preferences.certificatepriority(33)
         Preferences.certificatepriority(0) = "MPAA"
         Preferences.certificatepriority(1) = "UK"
@@ -376,6 +379,10 @@ Public Class Preferences
             End If
         Next
 
+
+        child = doc.CreateElement("DownloadTrailerDuringScrape")
+        child.InnerText = Preferences.DownloadTrailerDuringScrape.ToString.ToLower
+        root.AppendChild(child)
 
         child = doc.CreateElement("gettrailer")
         child.InnerText = Preferences.gettrailer.ToString.ToLower
@@ -908,7 +915,7 @@ Public Class Preferences
 
 
         child = doc.CreateElement("moviePreferredHDTrailerResolution")
-        child.InnerText = Preferences.moviePreferredTrailerResolution.ToString.ToLower
+        child.InnerText = Preferences.moviePreferredTrailerResolution.ToUpper()
         root.AppendChild(child)
 
         child = doc.CreateElement("MovieImdbGenreRegEx")
@@ -1031,6 +1038,12 @@ Public Class Preferences
                         Preferences.gettrailer = True
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.gettrailer = False
+                    End If
+                Case "DownloadTrailerDuringScrape"
+                    If thisresult.InnerXml = "true" Then
+                        Preferences.DownloadTrailerDuringScrape = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        Preferences.DownloadTrailerDuringScrape = False
                     End If
                 Case "tvshowautoquick"
                     If thisresult.InnerXml = "true" Then
@@ -1544,7 +1557,7 @@ Public Class Preferences
                     End If
 
                 Case "moviePreferredHDTrailerResolution"
-                    If thisresult.InnerText <> "" Then Preferences.moviePreferredTrailerResolution = thisresult.InnerXml
+                    If thisresult.InnerText <> "" Then Preferences.moviePreferredTrailerResolution = thisresult.InnerXml.ToUpper()
 
                 Case "MovieImdbGenreRegEx"
                     If thisresult.InnerText <> "" Then Preferences.MovieImdbGenreRegEx = decxmlchars(thisresult.InnerXml)
