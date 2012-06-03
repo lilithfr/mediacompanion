@@ -2604,6 +2604,10 @@ Public Class Form1
 
 	Private Sub HandleTrailerBtn( fmd As FullMovieDetails )
 
+		If IsNothing(fmd) then
+			Return
+		end if
+
 		DeleteZeroLengthFile(fmd.fileinfo.trailerpath)
 					 
 		Button3.Enabled = False
