@@ -20435,7 +20435,7 @@ MyExit:
                         End If
                     Next
                     If hasseason = True Then
-                        tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders" & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, Each in it's own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                        tempint = MessageBox.Show(strfolder & " Appears to Contain Season Folders." & vbCrLf & "Are you sure this folder contains multiple" & vbCrLf & "TV Shows, each in its own folder?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                         If tempint = DialogResult.Yes Then
                             ListBox5.Items.Add(strfolder)
                         ElseIf tempint = DialogResult.No Then
