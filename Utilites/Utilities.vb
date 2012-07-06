@@ -223,17 +223,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetLastFolder(ByVal FullPath As String) As String
-        If FullPath.Contains("/") AndAlso Not FullPath.Contains("\") Then
-            FullPath = FullPath.Replace("/", "\")
-        End If
-
-        If Right(FullPath, 1) <> "\" Then
+        
+        If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
             FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
         End If
 
         Dim foldername As String = ""
         Dim paths() As String
-        paths = FullPath.Split("\")
+        paths = FullPath.Split(Path.DirectorySeparatorChar)
         For g = UBound(paths) To 0 Step -1
             If paths(g).ToLower.IndexOf("video_ts") = -1 And paths(g) <> "" Then
                 foldername = paths(g)
