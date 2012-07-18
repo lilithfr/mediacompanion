@@ -5,20 +5,20 @@ Imports System.Text.RegularExpressions
 Public Class Movies
     Public Shared newMovieList As New List(Of str_NewMovie)
 
-    Public Shared Sub listMovieFiles(ByVal dir_info As IO.DirectoryInfo, ByVal moviePattern As String)
+    Public Shared Sub listMovieFiles(ByVal dir_info As IO.DirectoryInfo, ByVal moviePattern As String, Optional ByRef scraperLog As String = "")
         Try
             Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(moviePattern)
             For Each fs_info As IO.FileInfo In fs_infos
                 Dim titleFull As String = fs_info.FullName
-                Dim titleDir As String = IO.Path.GetDirectoryName(fs_info.FullName) & "\"
-                Dim titleExt As String = IO.Path.GetExtension(fs_info.FullName)
+                Dim titleDir As String = fs_info.Directory.ToString & IO.Path.DirectorySeparatorChar
+                Dim titleExt As String = fs_info.Extension
                 Dim doNotAdd As Boolean = False
                 Dim newmoviedetails As New str_NewMovie(SetDefaults)
 
                 If Preferences.usefoldernames = True Then
-                    scraperLog &= ": '" & fs_info.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
+                    scraperLog &= "  '" & fs_info.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
                 Else
-                    scraperLog &= ": '" & fs_info.ToString & "'"                    'log title name
+                    scraperLog &= "  '" & fs_info.ToString & "'"                    'log title name
                 End If
 
                 Dim movieNfoFile As String = titleFull
@@ -31,7 +31,7 @@ Public Class Movies
                             If tempstring = Nothing Then Exit Do
                             If tempstring.IndexOf("<movie>") <> -1 Then
                                 doNotAdd = True
-                                scraperLog &= " - valid MC .nfo found ('" & movieNfoFile & "') - scrape skipped!"
+                                scraperLog &= " - valid MC .nfo found - scrape skipped!"
                                 Exit Do
                             End If
                         Loop Until filechck.EndOfStream
@@ -43,33 +43,14 @@ Public Class Movies
                     End Try
                 End If
 
-                If moviePattern = "*.vob" AndAlso IO.File.Exists(titleDir & "video_ts.ifo") Then
-                    scraperLog &= "VOB Pattern Found! -" & titleDir & "VIDEO_TS.IFO - DVD File Structure Found!"
-                    newmoviedetails.mediapathandfilename = titleFull
-                    newmoviedetails.nfopathandfilename = newmoviedetails.mediapathandfilename.Replace(titleExt, ".nfo")
-                    If IO.File.Exists(newmoviedetails.nfopathandfilename) = False Then
-                        Dim paths() As String = Nothing
-                        If newmoviedetails.nfopathandfilename.IndexOf("\") <> -1 Then
-                            paths = newmoviedetails.nfopathandfilename.Split("\")
-                        ElseIf newmoviedetails.nfopathandfilename.IndexOf("/") <> -1 Then
-                            paths = newmoviedetails.nfopathandfilename.Split("/")
-                        End If
-                        Dim depthecount As Integer = paths.GetUpperBound(0)
-                        newmoviedetails.title = Nothing
-
-                        For h = depthecount To 0 Step -1
-                            Dim temppath As String
-                            temppath = paths(h)
-                            paths(h) = paths(h).ToLower
-                            If paths(h).IndexOf("video_ts") = -1 Then
-                                newmoviedetails.title = temppath
-                            End If
-                            If newmoviedetails.title <> Nothing Then Exit For
-                        Next
+                If moviePattern = "*.vob" Then
+                    If IO.File.Exists(titleDir & "video_ts.ifo") Then
+                        scraperLog &= " VOB Pattern Found! DVD File Structure Found!"
                     Else
-                        newmoviedetails.nfopathandfilename = Nothing
-                        newmoviedetails.title = Nothing
+                        scraperLog &= " WARNING: No DVD File Structure Found - (VIDEO_TS.IFO missing)"
                     End If
+                    scraperLog &= vbCrLf
+                    Exit For
                 Else
                     Dim movieStackName As String = titleFull
                     Dim firstPart As Boolean
@@ -92,17 +73,12 @@ Public Class Movies
                     If Not doNotAdd And titleExt <> "ttt" Then
                         newmoviedetails.mediapathandfilename = fs_info.FullName
                         newmoviedetails.nfopath = titleDir
-                        newmoviedetails.title = IO.Path.GetFileNameWithoutExtension(titleFull) '<--- could be movieStackName?
                         newmoviedetails.nfopathandfilename = titleFull.Replace(titleExt, ".nfo")
 
-                        If Preferences.usefoldernames = True And newmoviedetails.title <> Nothing Then
-                            Dim tempstring4 As String
-                            tempstring4 = newmoviedetails.nfopathandfilename.ToLower
-                            If tempstring4.IndexOf("video_ts") = -1 Then
-                                newmoviedetails.title = newmoviedetails.nfopath.Substring(0, newmoviedetails.nfopath.Length - 1)
-                                newmoviedetails.title = newmoviedetails.title.Substring(newmoviedetails.title.LastIndexOf("\") + 1, newmoviedetails.title.Length - newmoviedetails.title.LastIndexOf("\") - 1)
-                                newmoviedetails.title = Utilities.GetLastFolder(newmoviedetails.nfopathandfilename)
-                            End If
+                        If Preferences.usefoldernames = True Or titleExt.ToLower = ".ifo" Then
+                            newmoviedetails.title = Utilities.GetLastFolder(newmoviedetails.nfopathandfilename)
+                        Else
+                            newmoviedetails.title = IO.Path.GetFileNameWithoutExtension(titleFull) '<--- could be movieStackName?
                         End If
                         Dim alreadyadded As Boolean = False
                         For Each newmovie In newMovieList
@@ -134,7 +110,7 @@ Public Class Movies
         End Try
     End Sub
 
-    Public Shared Function getExtraIdFromNFO(ByVal fullPath As String) As String
+    Public Shared Function getExtraIdFromNFO(ByVal fullPath As String, Optional ByRef scraperLog As String = "") As String
         Dim extrapossibleID As String = Nothing
         Dim fileNFO As String = fullPath
         If Utilities.findFileOfType(fileNFO, ".nfo") Then
@@ -166,7 +142,7 @@ Public Class Movies
         Return extrapossibleID
     End Function
 
-    Public Shared Function fileRename(ByVal movieDetails As FullMovieDetails, ByRef movieFileInfo As str_NewMovie) As String
+    Public Shared Function fileRename(ByVal movieDetails As str_BasicMovieNFO, ByRef movieFileInfo As str_NewMovie) As String
         Dim log As String = ""
         Dim newpath As String = movieFileInfo.nfopath
         Dim mediaFile As String = movieFileInfo.mediapathandfilename
@@ -183,12 +159,12 @@ Public Class Movies
         Dim aFileExists As Boolean = False
         Try
             'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-            newfilename = newfilename.Replace("%T", movieDetails.fullmoviebody.title)       'replaces %T with movie title
-            newfilename = newfilename.Replace("%Y", movieDetails.fullmoviebody.year)        'replaces %Y with year   
-            newfilename = newfilename.Replace("%I", movieDetails.fullmoviebody.imdbid)      'replaces %I with imdid 
-            newfilename = newfilename.Replace("%P", movieDetails.fullmoviebody.premiered)   'replaces %P with premiered date 
-            newfilename = newfilename.Replace("%R", movieDetails.fullmoviebody.rating)      'replaces %R with rating 
-            newfilename = newfilename.Replace("%L", movieDetails.fullmoviebody.runtime)     'replaces %L with runtime (length)
+            newfilename = newfilename.Replace("%T", movieDetails.title)       'replaces %T with movie title
+            newfilename = newfilename.Replace("%Y", movieDetails.year)        'replaces %Y with year   
+            newfilename = newfilename.Replace("%I", movieDetails.imdbid)      'replaces %I with imdid 
+            newfilename = newfilename.Replace("%P", movieDetails.premiered)   'replaces %P with premiered date 
+            newfilename = newfilename.Replace("%R", movieDetails.rating)      'replaces %R with rating 
+            newfilename = newfilename.Replace("%L", movieDetails.runtime)     'replaces %L with runtime (length)
             newfilename = Utilities.cleanFilenameIllegalChars(newfilename)                  'removes chars that can't be in a filename
 
             'designate the new main movie file (without extension) and test the new filenames do not already exist

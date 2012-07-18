@@ -4601,22 +4601,23 @@ Module Module1
         progress = 0
         Dim progresstext As String
         Dim dirpath As String
+        Dim log As String = ""  'log added as a precursor to amalgamating similar functions of Form1 and Module1
 
-        Console.WriteLine("Starting Folder Scan")
+        Console.WriteLine("*** Starting Folder Scan ***")
 
-        Dim extension As String
-        Dim filename2 As String
+        'Dim extension As String
+        'Dim filename2 As String
 
 
         For Each moviefolder In Preferences.movieFolders
             Dim hg As New IO.DirectoryInfo(moviefolder)
             If hg.Exists Then
-                Console.WriteLine("found " & hg.FullName.ToString)
+                Console.WriteLine("Found " & hg.FullName.ToString)
                 Console.WriteLine("Checking for subfolders")
                 Try
                     EnumerateDirectories(newmoviefolders, moviefolder)
                     For Each subfolder In newmoviefolders
-                        Console.WriteLine("Subfolder added :- " & subfolder.ToString)
+                        Console.WriteLine("  Subfolder added:- " & subfolder.ToString)
                     Next
                 Catch
                 End Try
@@ -4625,7 +4626,7 @@ Module Module1
         For Each moviefolder In Preferences.offlinefolders
             Dim hg As New IO.DirectoryInfo(moviefolder)
             If hg.Exists Then
-                Console.WriteLine("found" & hg.FullName.ToString)
+                Console.WriteLine("Found" & hg.FullName.ToString)
                 'newmoviefolders.Add(moviefolder)
                 Console.WriteLine("Checking for subfolders")
                 Dim newlist As List(Of String)
@@ -4633,7 +4634,7 @@ Module Module1
                     newlist = EnumerateDirectory3(moviefolder)
                     For Each subfolder In newlist
                         'If subfolder.IndexOf(".actors") = -1 Then
-                        Console.WriteLine("Subfolder added :- " & subfolder.ToString)
+                        Console.WriteLine("  Subfolder added:- " & subfolder.ToString)
                         Dim temge22 As String = getlastfolder(subfolder & "\whatever") & ".avi"
                         Dim sTempFileName22 As String = IO.Path.Combine(subfolder, temge22)
                         Dim newtemp1 As String = sTempFileName22.Replace(IO.Path.GetExtension(sTempFileName22), ".nfo")
@@ -4658,90 +4659,87 @@ Module Module1
             End If
         Next
         Dim mediacounter As Integer = newMovieList.Count
-
+        Console.WriteLine()
         For g = 0 To newmoviefolders.Count - 1
+            log = ""
             Try
                 For Each ext In Utilities.VideoExtensions
                     Dim moviepattern As String = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)  'this bit adds the * for the extension search in mov_ListFiles2 if its not the string VIDEO_TS.IFO 
                     dirpath = newmoviefolders(g)
                     Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                    Movies.listMovieFiles(dir_info, moviepattern)         'titlename is logged in here
-                    'Form1.mov_ListFiles2(dirinfo, moviepattern, dir_info)
+                    Movies.listMovieFiles(dir_info, moviepattern, log)         'titlename is logged in here
                 Next
                 tempint = newMovieList.Count - mediacounter
-                If (tempint > 0) Then Console.WriteLine(tempint.ToString & " New movies found in directory:- " & newmoviefolders(g))
+                Console.WriteLine(String.Format("{0} NEW movie{1} found in directory:- {2}", tempint, If(tempint = 1, "", "s"), newmoviefolders(g)))
+                Console.WriteLine(log)
                 mediacounter = newMovieList.Count
             Catch ex As Exception
 
             End Try
-
         Next g
-        Console.WriteLine(newMovieList.Count & " Movies found in all folders")
+        Console.WriteLine(String.Format("{0} Movie{1} found in all folders", newMovieList.Count, If(newMovieList.Count = 1, "", "s")))
+
+        ' REMOVED THIS SECTION - redundant code, in line with changes made to Form1.mov_StartNew. HueyHQ 18 July 2012
+        'Console.WriteLine("Obtaining Title for each movie found, from path and filename")
+        'For Each movie In newMovieList
+        '    Try
+        '        extension = System.IO.Path.GetExtension(movie.nfopathandfilename)
+        '        filename2 = System.IO.Path.GetFileName(movie.nfopathandfilename)
+        '        Console.WriteLine("")
+        '        movie.nfopath = movie.nfopathandfilename.Replace(filename2, "")
+        '        movie.title = filename2.Replace(extension, "")
+        '        If extension.ToLower <> ".ifo" Then
+        '            Try
+        '                movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
+        '            Catch
+        '                Console.WriteLine("Unable to get movie title, stage1")
+        '                Console.WriteLine("Path is: " & movie.nfopathandfilename)
+        '            End Try
+        '        End If
+
+        '        'If dvdfolder = True Then
+        '        If extension.ToLower = ".ifo" Or Preferences.usefoldernames = True Then
+        '            Try
+        '                movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
+        '                movie.title = getlastfolder(movie.nfopathandfilename)
+        '            Catch
+        '                Console.WriteLine("Unable to get movie title, stage2")
+        '                Console.WriteLine("Path is: " & movie.nfopathandfilename)
+        '            End Try
+        '        End If
 
 
-
-        Console.WriteLine("Obtaining Title for each movie found, from path and filename")
-        For Each movie In newMovieList
-            Try
-                extension = System.IO.Path.GetExtension(movie.nfopathandfilename)
-                filename2 = System.IO.Path.GetFileName(movie.nfopathandfilename)
-                Console.WriteLine("")
-                movie.nfopath = movie.nfopathandfilename.Replace(filename2, "")
-                movie.title = filename2.Replace(extension, "")
-                If extension.ToLower <> ".ifo" Then
-                    Try
-                        movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
-                    Catch
-                        Console.WriteLine("Unable to get movie title, stage1")
-                        Console.WriteLine("Path is: " & movie.nfopathandfilename)
-                    End Try
-                End If
-
-                'If dvdfolder = True Then
-                If extension.ToLower = ".ifo" Or Preferences.usefoldernames = True Then
-                    Try
-                        movie.nfopathandfilename = movie.nfopathandfilename.Replace(extension, ".nfo")
-                        movie.title = getlastfolder(movie.nfopathandfilename)
-                    Catch
-                        Console.WriteLine("Unable to get movie title, stage2")
-                        Console.WriteLine("Path is: " & movie.nfopathandfilename)
-                    End Try
-                End If
+        '        If movie.title <> Nothing Then
+        '            If movie.title <> "" Then
+        '                tempstring = Utilities.CleanFileName(movie.title, False)
+        '                If tempstring <> Nothing Then
+        '                    If tempstring <> "" Then
+        '                        If tempstring <> "error" Then
+        '                            movie.title = tempstring
+        '                        Else
+        '                            Console.WriteLine("Unable to clean title: " & movie.title)
+        '                        End If
+        '                    Else
+        '                        Console.WriteLine("Cleaning title returns blank: " & movie.title)
+        '                    End If
+        '                Else
+        '                    Console.WriteLine("Cleaning title returns nothing: " & movie.title)
+        '                End If
+        '            End If
+        '        End If
 
 
-                If movie.title <> Nothing Then
-                    If movie.title <> "" Then
-                        tempstring = Utilities.CleanFileName(movie.title, False)
-                        If tempstring <> Nothing Then
-                            If tempstring <> "" Then
-                                If tempstring <> "error" Then
-                                    movie.title = tempstring
-                                Else
-                                    Console.WriteLine("Unable to clean title: " & movie.title)
-                                End If
-                            Else
-                                Console.WriteLine("Cleaning title returns blank: " & movie.title)
-                            End If
-                        Else
-                            Console.WriteLine("Cleaning title returns nothing: " & movie.title)
-                        End If
-                    End If
-                End If
+        '        Console.WriteLine("Filename is: " & movie.mediapathandfilename)
+        '        Console.WriteLine("Title according to settings is: """ & movie.title & """")
+        '    Catch
 
+        '    End Try
 
-                Console.WriteLine("Filename is: " & movie.mediapathandfilename)
-                Console.WriteLine("Title according to settings is: """ & movie.title & """")
-            Catch
+        'Next
 
-            End Try
-
-        Next
-
-
-
-        Dim movieyear As String = ""
+        Console.WriteLine()
         newmoviecount = newMovieList.Count.ToString
-        Console.WriteLine("Starting Main Scraper Process")
+        Console.WriteLine("*** Starting Main Scraper Process ***")
         For f = 0 To newMovieList.Count - 1
             Dim stage As Integer = 0
             Dim bodyok As Boolean = True
@@ -4749,137 +4747,61 @@ Module Module1
             'Try
             Dim title As String = ""
             Dim nfopath As String = ""
+            Dim movieyear As String = String.Empty
             Dim fanartpath As String = ""
             Dim posterpath As String = ""
             Dim year As String = ""
             Dim thumbstring As New XmlDocument
+            log = ""
             progress = ((100 / newmoviecount) * (f + 1) * 10)
             progresstext = String.Concat("Scraping Movie " & f + 1 & " of " & newmoviecount)
             If newMovieList(f).title = Nothing Then
                 Console.WriteLine("No Filename found for" & newMovieList(f).nfopathandfilename)
             End If
-            Dim extrapossibleID As String = Nothing
             If newMovieList(f).title <> Nothing Then
-                title = newMovieList(f).title
-                Console.WriteLine("Scraping Title:- " & newMovieList(f).title)
+                title = Utilities.CleanFileName(newMovieList(f).title, False)
+                log = log & "Scraping Title:- " & newMovieList(f).title & vbCrLf
+                log = log & "     (cleaned):- " & title & vbCrLf
+                progresstext &= " - " & newMovieList(f).title
                 nfopath = newMovieList(f).nfopathandfilename
                 If Preferences.basicsavemode = True Then
                     nfopath = newMovieList(f).nfopathandfilename.Replace(IO.Path.GetFileName(newMovieList(f).nfopathandfilename), "movie.nfo")
                 End If
-                Console.WriteLine("Output filename:- " & nfopath)
+
                 posterpath = Preferences.GetPosterPath(nfopath)
                 fanartpath = Preferences.GetFanartPath(nfopath)
-                Console.WriteLine("Poster Path:- " & posterpath)
-                Console.WriteLine("Fanart Path:- " & fanartpath)
 
-                extrapossibleID = Nothing
-                Dim T As String
-                Dim mat As Match
-
-                If IO.File.Exists(nfopath) Then
-                    Console.WriteLine("nfo file exists, checking for IMDB ID")
-                    Dim tempinfo As String = ""
-                    Dim objReader As New System.IO.StreamReader(nfopath)
-                    tempinfo = objReader.ReadToEnd
-                    objReader.Close()
-                    extrapossibleID = Nothing
-                    T = tempinfo
-                    mat = Nothing
-                    mat = Regex.Match(T, "(tt\d{7})")
-                    If mat.Success = True Then
-                        Console.WriteLine("IMDB ID found in nfo file:- " & mat.Value)
-                        extrapossibleID = mat.Value
-                    Else
-                        Console.WriteLine("No IMDB ID found")
-                        extrapossibleID = Nothing
-                    End If
-                    'If Preferences.renamenfofiles = True Then
-                    Try
-                        If Not IO.File.Exists(nfopath.Replace(".nfo", ".info")) Then
-                            IO.File.Move(nfopath, nfopath.Replace(".nfo", ".info"))
-                            Console.WriteLine("renaming nfo file to:- " & nfopath.Replace(".nfo", ".info"))
-                        Else
-                            Console.WriteLine("Unable to rename file, """ & nfopath & """ already exists")
-                        End If
-                    Catch
-                        Console.WriteLine("Unable to rename file, """ & nfopath & """ already exists")
-                    End Try
-                    'Else
-                    '    Console.writeline("Current nfo file will be overwritten")
-                    'End If
+                Dim extrapossibleID As String = Movies.getExtraIdFromNFO(nfopath, log)
+                If extrapossibleID IsNot Nothing Then
+                    progresstext &= " - " & extrapossibleID
                 Else
-                    Dim stackname As String = Utilities.GetStackName(nfopath)
-                    Dim path As String = stackname & ".nfo"
-                    If IO.File.Exists(path) Then
-                        Console.WriteLine("nfo file exists, checking for IMDB ID")
-                        Dim tempinfo As String = ""
-                        Dim objReader As New System.IO.StreamReader(path)
-                        tempinfo = objReader.ReadToEnd
-                        objReader.Close()
-                        extrapossibleID = Nothing
-                        T = tempinfo
-                        mat = Nothing
-                        mat = Regex.Match(T, "(tt\d{7})")
-                        If mat.Success = True Then
-                            Console.WriteLine("IMDB ID found in nfo file:- " & mat.Value)
-                            extrapossibleID = mat.Value
-                        Else
-                            Console.WriteLine("No IMDB ID found")
-                            extrapossibleID = Nothing
-                        End If
-                    Else
-                        Console.WriteLine("NFO does not exist")
-                    End If
-
-                End If
-
-
-                If extrapossibleID = Nothing Then
-                    Console.WriteLine("Checking filename for IMDB ID")
-                    mat = Nothing
-                    T = newMovieList(f).nfopathandfilename
+                    log &= "  Checking filename for:" & vbCrLf
+                    log &= "    IMDB ID - "
+                    Dim mat As Match = Nothing
+                    Dim T As String = newMovieList(f).nfopathandfilename
                     mat = Regex.Match(T, "(tt\d{7})")
                     If mat.Success = True Then
-                        Console.WriteLine("IMDB ID found in filename:- " & mat.Value)
+                        log &= mat.Value
+                        progresstext &= " - " & mat.Value
                         extrapossibleID = mat.Value
                     Else
-                        extrapossibleID = Nothing
-                        Console.WriteLine("No IMDB ID found")
-                    End If
-                End If
+                        log &= "None" & vbCrLf
 
-                If extrapossibleID = Nothing Then
-                    Console.WriteLine("Checking for Movie year in filename")
-                    If extrapossibleID = Nothing Then
+                        log &= "    Movie Year - "
                         Dim M As Match
-                        M = Regex.Match(newMovieList(f).nfopathandfilename, "(\([\d]{4}\))")
+                        M = Regex.Match(newMovieList(f).nfopathandfilename, "[\(\[]([\d]{4})[\)\]]")
                         If M.Success = True Then
-                            movieyear = M.Value
+                            movieyear = M.Groups(1).Value
+                            log &= movieyear
                         Else
-                            movieyear = Nothing
-                        End If
-                        If movieyear = Nothing Then
-                            M = Regex.Match(newMovieList(f).nfopathandfilename, "(\[[\d]{4}\])")
-                            If M.Success = True Then
-                                movieyear = M.Value
-                            Else
-                                movieyear = Nothing
-                            End If
+                            log &= "None"
                         End If
                     End If
-
-                    If movieyear = Nothing Then
-                        Console.WriteLine("No year found in filename")
-                    Else
-                        movieyear = movieyear.Replace("(", "")
-                        movieyear = movieyear.Replace(")", "")
-                        movieyear = movieyear.Replace("[", "")
-                        movieyear = movieyear.Replace("]", "")
-                        Console.WriteLine("Year found for movie:- " & movieyear.ToString)
-                    End If
+                    log &= vbCrLf
                 End If
-                title = Utilities.CleanFileName(title, False)
-                Console.WriteLine("Cleaned Title for search :- " & title)
+                progresstext &= String.Format(" - using '{0}{1}'", title, If(String.IsNullOrEmpty(movieyear), "", " " & movieyear))
+                Console.WriteLine(log)
+
                 Dim newmovie As New fullmoviedetails
                 Dim body As String
                 Dim actorlist As String
@@ -4944,8 +4866,8 @@ Module Module1
 
                     Dim movietoadd As New str_ComboList
                     movietoadd.fullpathandfilename = nfopath
-                    movietoadd.filename = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
-                    movietoadd.foldername = getlastfolder(newmovielist(f).nfopathandfilename)
+                    movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
+                    movietoadd.foldername = getlastfolder(newMovieList(f).nfopathandfilename)
                     movietoadd.title = newmovie.fullmoviebody.title
                     If newmovie.fullmoviebody.title <> Nothing Then
                         If newmovie.fullmoviebody.year <> Nothing Then
@@ -4980,10 +4902,10 @@ Module Module1
                     movietoadd.playcount = newmovie.fullmoviebody.playcount
                     movietoadd.missingdata1 = 3
                     movietoadd.runtime = "0"
-                    fullmovielist.Add(movietoadd)
+                    fullMovieList.Add(movietoadd)
                 Else
                     Try
-                        Console.WriteLine("Movie Body Scraped OK")
+                        Console.WriteLine("  Movie Body Scraped OK")
                         thumbstring.LoadXml(body)
                         For Each thisresult In thumbstring("movie")
                             Select Case thisresult.Name
@@ -5093,109 +5015,18 @@ Module Module1
                         End If
                     End If
 
-
                     '******************************** MOVIE FILE RENAME SECTION *************************************
-
                     If Preferences.MovieRenameEnable = True AndAlso Preferences.usefoldernames = False AndAlso newMovieList(f).nfopathandfilename.ToLower.Contains("video_ts") = False AndAlso Preferences.basicsavemode = False Then
-                        Try
-                            'media & nfo path (not really new as path doesn't change during rename)
-                            Dim newpath As String = newMovieList(f).nfopath
-                            Dim moviestack As New List(Of String)(New String() {newMovieList(f).mediapathandfilename})
-                            Dim stackdesignator As String = ""
-                            Dim newextension As String = System.IO.Path.GetExtension(newMovieList(f).mediapathandfilename)
-
-                            'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
-                            Dim M As Match = Regex.Match(newMovieList(f).title.ToLower, "((" & Join(Utilities.cleanMultipart, "|") & ")([" & Utilities.cleanSeparators & "0]?)([0-9]+))")
-                            If M.Success = True Then
-                                stackdesignator = "-" & M.Groups(2).Value   'use the existing 'part'-type
-                                If Preferences.movieignorepart And (stackdesignator = "-part" Or stackdesignator = "-pt") Then
-                                    'Skip this procedure
-                                Else
-                                    Dim partNumber As Integer = Integer.Parse(M.Groups(4).Value)    'if not integer, will catch at end of rename
-                                    partNumber += 1                                                 'skip the first part file as it was added in the declaration
-                                    Do While IO.File.Exists(newpath & _
-                                                            newMovieList(f).title.Substring(0, M.Groups(4).Index) & _
-                                                            partNumber.ToString.PadLeft(M.Groups(4).Length, "0") & _
-                                                            newextension)
-                                        moviestack.Add(newpath & _
-                                                       newMovieList(f).title.Substring(0, M.Groups(4).Index) & _
-                                                       partNumber.ToString.PadLeft(M.Groups(4).Length, "0") & _
-                                                       newextension)
-                                        partNumber += 1
-                                    Loop
-                                End If
-                            End If
-
-                            'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-                            Dim newfilename As String = Preferences.MovieRenameTemplate.Replace("%T", newmovie.fullmoviebody.title)  'replaces %T with movie title
-                            newfilename = newfilename.Replace("%Y", newmovie.fullmoviebody.year)                                     'replaces %Y with year   
-                            newfilename = newfilename.Replace("%I", newmovie.fullmoviebody.imdbid)                                   'replaces %I with imdid 
-                            newfilename = newfilename.Replace("%P", newmovie.fullmoviebody.premiered)                                'replaces %P with premiered date 
-                            newfilename = newfilename.Replace("%R", newmovie.fullmoviebody.rating)                                   'replaces %R with rating 
-                            newfilename = newfilename.Replace("%L", newmovie.fullmoviebody.runtime)                                  'replaces %L with runtime (length)
-                            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)          'removes chars that can't be in a filename
-
-                            'designate the new main movie file (without extension) - particularly important if stacked, always starts at 1.
-                            Dim targetMovieFile As String = newpath & newfilename & stackdesignator & If(M.Success, "1", "")
-
-                            'test the new filenames do not already exist
-                            Dim AFileExists As Boolean = False
-                            For Each item As String In {newextension, ".nfo", ".tbn", "-fanart.jpg", ".sub", ".srt", ".smi", ".idx"} 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
-                                If System.IO.File.Exists(targetMovieFile & item) = True Then
-                                    AFileExists = True
-                                    Exit For
-                                End If
-                                'msgbox(item)       'uncomment this if you want to see each iteration of the for each loop, without it you will only see the first iteration
-                            Next
-
-                            If AFileExists = False Then 'if none of the possible renamed files already exist then we rename found media files
-                                Dim logRename As String = ""    'used to build up a string of the renamed files for the log
-                                moviestack.Sort()   'fairly sure we're hoping the originals were labelled correctly, ie only incremental numbers changing!
-                                For i = 0 To moviestack.Count - 1
-                                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(M.Success, i + 1, ""), newextension)
-                                    IO.File.Move(moviestack(i), newpath & changename)
-                                    logRename &= If(i, " and ", "") & changename
-                                Next
-                                Console.WriteLine("Renamed Movie File to " & logRename & vbCrLf)
-
-                                For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
-                                    If System.IO.File.Exists(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle)) Then
-                                        System.IO.File.Move(newMovieList(f).mediapathandfilename.Replace(newextension, subtitle), targetMovieFile & subtitle) ' subtitles file with .sub extension
-                                        Console.WriteLine("Renamed '" & subtitle & "' subtitle File" & vbCrLf)
-                                    End If
-                                Next
-
-                                'retrieve data already stored into a new array
-                                Dim tempmovdetails As New str_NewMovie(SetDefaults)
-                                tempmovdetails.mediapathandfilename = newMovieList(f).mediapathandfilename
-                                tempmovdetails.nfopath = newMovieList(f).nfopath
-                                tempmovdetails.nfopathandfilename = newMovieList(f).nfopathandfilename
-                                tempmovdetails.title = newMovieList(f).title
-
-
-                                'update the new temp array with the new data
-                                tempmovdetails.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
-                                tempmovdetails.nfopathandfilename = newpath & newfilename & ".nfo"   'this is the new nfo path (yet to be created)
-                                tempmovdetails.title = newfilename                                   'new title
-
-                                'remove old record
-                                newMovieList.RemoveAt(f)
-
-                                'reinsert
-                                newMovieList.Insert(f, tempmovdetails)
-
-                                'correct nfopath variables
-                                nfopath = tempmovdetails.nfopathandfilename
-                                posterpath = Preferences.GetPosterPath(nfopath)
-                                fanartpath = Preferences.GetFanartPath(nfopath)
-                            End If
-                        Catch ex As Exception
-                            Console.WriteLine("Rename Movie File FAILED" & vbCrLf)
-                        End Try
+                        Dim movieFileDetails As str_NewMovie = newMovieList(f)
+                        log = Movies.fileRename(newmovie.fullmoviebody, movieFileDetails)
+                        newMovieList.RemoveAt(f)                        'remove old record
+                        newMovieList.Insert(f, movieFileDetails)        'reinsert
+                        nfopath = movieFileDetails.nfopathandfilename   'adjust nfopath variables
+                        posterpath = Preferences.GetPosterPath(nfopath)
+                        fanartpath = Preferences.GetFanartPath(nfopath)
                     End If
+                    Console.Write("  " & log)
                     '******************************** END MOVIE FILE RENAME SECTION *************************************
-
-
 
                     stage = 2
                     'stage 2 = get movie actors
@@ -5316,7 +5147,7 @@ Module Module1
                             End Select
                         Next
 
-                        Console.WriteLine("Actors scraped OK")
+                        Console.WriteLine("  Actors scraped OK")
                         While newmovie.listactors.Count > Preferences.maxactors
                             newmovie.listactors.RemoveAt(newmovie.listactors.Count - 1)
                         End While
@@ -5324,7 +5155,7 @@ Module Module1
                             Dim actornew As New str_ActorDatabase
                             actornew.actorname = actor.actorname
                             actornew.movieid = newmovie.fullmoviebody.imdbid
-                            actordb.Add(actornew)
+                            actorDB.Add(actornew)
                         Next
                     Catch ex As Exception
                         Console.WriteLine("Error with " & newMovieList(f).nfopathandfilename)
@@ -5341,44 +5172,44 @@ Module Module1
                         If Preferences.gettrailer = True Then
 
 
-									trailer = ""
+                            trailer = ""
 
-									If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" then
-										 trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title )
+                            If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
+                                trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, newmovie.fullmoviebody.title)
 
-										 If trailer = "" then
-											Console.WriteLine("No HD Trailer URL found")
-										 Else
-											Console.WriteLine("HD Trailer URL found")
-										 End if
-									End If
+                                If trailer = "" Then
+                                    Console.WriteLine("No HD Trailer URL found")
+                                Else
+                                    Console.WriteLine("HD Trailer URL found")
+                                End If
+                            End If
 
-									If trailer = "" then
-										 trailer = gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
+                            If trailer = "" Then
+                                trailer = gettrailerurl(newmovie.fullmoviebody.imdbid, Preferences.imdbmirror)
 
-										 If trailer = "Error" then
-											Console.WriteLine("No SD Trailer URL found")
-										 Else
-											Console.WriteLine("SD Trailer URL found")
-										 End if
-									End if
+                                If trailer = "Error" Then
+                                    Console.WriteLine("No SD Trailer URL found")
+                                Else
+                                    Console.WriteLine("SD Trailer URL found")
+                                End If
+                            End If
 
-									If UrlIsValid(trailer) Then
-										 newmovie.fullmoviebody.trailer = trailer
+                            If UrlIsValid(trailer) Then
+                                newmovie.fullmoviebody.trailer = trailer
 
 
-										If Preferences.DownloadTrailerDuringScrape then
-											Console.WriteLine("Downloading Trailer...")
+                                If Preferences.DownloadTrailerDuringScrape Then
+                                    Console.WriteLine("  Downloading Trailer...")
 
-											newmovie.fileinfo.trailerpath = GetTrailerPath(nfopath)
+                                    newmovie.fileinfo.trailerpath = GetTrailerPath(nfopath)
 
-											DownloadTrailer( newmovie.fileinfo.trailerpath, newmovie.fullmoviebody.trailer )
-										End If
+                                    DownloadTrailer(newmovie.fileinfo.trailerpath, newmovie.fullmoviebody.trailer)
+                                End If
 
-									Else
-										 newmovie.fullmoviebody.trailer = ""
-										 Console.WriteLine("Failed to find Trailer URL")
-                           End If
+                            Else
+                                newmovie.fullmoviebody.trailer = ""
+                                Console.WriteLine("Failed to find Trailer URL")
+                            End If
                         End If
                     Catch
                     End Try
@@ -5471,7 +5302,7 @@ Module Module1
                                         newmovie.listthumbs.Add(thisresult.InnerText)
                                 End Select
                             Next
-                            Console.WriteLine("Poster URLs Scraped OK")
+                            Console.WriteLine("  Poster URLs Scraped OK")
                         Catch ex As Exception
                             Console.WriteLine("Error with " & newMovieList(f).nfopathandfilename)
                             Console.WriteLine("An error was encountered at stage 4, Downloading poster list for nfo file")
@@ -5489,7 +5320,7 @@ Module Module1
                             newmovie.filedetails = get_hdtags(newMovieList(f).mediapathandfilename)
                             If newmovie.filedetails.filedetails_video.duration <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
                                 newmovie.fullmoviebody.runtime = Utilities.cleanruntime(newmovie.filedetails.filedetails_video.duration) & " min"
-                                Console.WriteLine("HD Tags Added OK")
+                                Console.WriteLine("  HD Tags Added OK")
                             End If
                         End If
                     Catch ex As Exception
@@ -5540,8 +5371,8 @@ Module Module1
 
                     Dim movietoadd As New str_ComboList
                     movietoadd.fullpathandfilename = nfopath
-                    movietoadd.filename = IO.Path.GetFileName(newmovielist(f).nfopathandfilename)
-                    movietoadd.foldername = getlastfolder(newmovielist(f).nfopathandfilename)
+                    movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
+                    movietoadd.foldername = getlastfolder(newMovieList(f).nfopathandfilename)
                     movietoadd.title = newmovie.fullmoviebody.title
                     movietoadd.sortorder = newmovie.fullmoviebody.sortorder
                     movietoadd.runtime = newmovie.fullmoviebody.runtime
@@ -5677,17 +5508,17 @@ Module Module1
                                     fstrm.Write(buffer, 0, bytesRead)
                                     contents.Close()
                                     fstrm.Close()
-                                    Console.WriteLine("Poster scraped and saved OK")
+                                    Console.WriteLine("  Poster scraped and saved OK")
 
                                     Dim temppath As String = newmoviethumbpath.Replace(System.IO.Path.GetFileName(newmoviethumbpath), "folder.jpg")
                                     If Preferences.createfolderjpg = True Then
                                         If Preferences.overwritethumbs = True Or System.IO.File.Exists(temppath) = False Then
-                                            Console.WriteLine("Saving folder.jpg To Path :- " & temppath)
+                                            Console.WriteLine("  Saving folder.jpg To Path :- " & temppath)
                                             Dim fstrm2 As New FileStream(temppath, FileMode.OpenOrCreate, FileAccess.Write)
                                             fstrm2.Write(buffer, 0, bytesRead)
                                             contents.Close()
                                             fstrm2.Close()
-                                            Console.WriteLine("Poster also saved as ""folder.jpg"" OK")
+                                            Console.WriteLine("  Poster also saved as ""folder.jpg"" OK")
                                         Else
                                             Console.WriteLine("folder.jpg Not Saved to :- " & temppath & ", file already exists")
                                         End If
@@ -5762,7 +5593,7 @@ Module Module1
 
                                     If moviethumburl <> "" Then
                                         'Console.writeline("Fanart URL is " & fanarturl)
-                                        Console.WriteLine("Saving Fanart As :- " & fanarturlpath)
+                                        Console.WriteLine("  Saving Fanart As :- " & fanarturlpath)
 
                                         'need to resize thumbs
 
@@ -5790,7 +5621,7 @@ Module Module1
 
                                             If Preferences.resizefanart = 1 Then
                                                 bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                Console.WriteLine("Fanart not resized")
+                                                Console.WriteLine("  Fanart not resized")
                                             ElseIf Preferences.resizefanart = 2 Then
                                                 If bmp.Width > 1280 Or bmp.Height > 720 Then
                                                     Dim bm_source As New Bitmap(bmp)
@@ -5799,9 +5630,9 @@ Module Module1
                                                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                                                     gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
                                                     bm_dest.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
-                                                    Console.WriteLine("Farart Resized to 1280x720")
+                                                    Console.WriteLine("  Farart Resized to 1280x720")
                                                 Else
-                                                    Console.WriteLine("Fanart not resized, already =< required size")
+                                                    Console.WriteLine("  Fanart not resized, already =< required size")
                                                     bmp.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
                                                 End If
                                             ElseIf Preferences.resizefanart = 3 Then
@@ -5812,9 +5643,9 @@ Module Module1
                                                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                                                     gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
                                                     bm_dest.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
-                                                    Console.WriteLine("Farart Resized to 960x540")
+                                                    Console.WriteLine("  Farart Resized to 960x540")
                                                 Else
-                                                    Console.WriteLine("Fanart not resized, already =< required size")
+                                                    Console.WriteLine("  Fanart not resized, already =< required size")
                                                     bmp.Save(fanarturlpath, Imaging.ImageFormat.Jpeg)
                                                 End If
 
@@ -5856,14 +5687,12 @@ Module Module1
                         completebyte1 += 2
                     End If
                     movietoadd.missingdata1 = completebyte1
-                    fullmovielist.Add(movietoadd)
+                    fullMovieList.Add(movietoadd)
                 End If
                 Console.WriteLine("Movie added to list")
             End If
             Console.WriteLine()
             Console.WriteLine()
-            Console.WriteLine()
-
         Next
     End Sub
 
