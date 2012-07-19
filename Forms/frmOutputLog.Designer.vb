@@ -22,6 +22,7 @@ Partial Class frmoutputlog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmoutputlog))
         Me.Button1 = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -31,10 +32,9 @@ Partial Class frmoutputlog
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(1003, 634)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Button1.Location = New System.Drawing.Point(752, 515)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(119, 28)
+        Me.Button1.Size = New System.Drawing.Size(89, 23)
         Me.Button1.TabIndex = 1
         Me.Button1.Text = "Save Log"
         Me.Button1.UseVisualStyleBackColor = True
@@ -47,32 +47,30 @@ Partial Class frmoutputlog
         Me.TextBox1.BackColor = System.Drawing.Color.White
         Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox1.Location = New System.Drawing.Point(0, -1)
-        Me.TextBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(1139, 627)
+        Me.TextBox1.Size = New System.Drawing.Size(855, 510)
         Me.TextBox1.TabIndex = 0
         '
         'ComboBoxLogViewType
         '
         Me.ComboBoxLogViewType.FormattingEnabled = True
-        Me.ComboBoxLogViewType.Location = New System.Drawing.Point(773, 634)
-        Me.ComboBoxLogViewType.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ComboBoxLogViewType.Location = New System.Drawing.Point(580, 515)
         Me.ComboBoxLogViewType.Name = "ComboBoxLogViewType"
-        Me.ComboBoxLogViewType.Size = New System.Drawing.Size(160, 24)
+        Me.ComboBoxLogViewType.Size = New System.Drawing.Size(121, 21)
         Me.ComboBoxLogViewType.TabIndex = 2
         '
         'frmoutputlog
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1137, 672)
+        Me.ClientSize = New System.Drawing.Size(853, 546)
         Me.Controls.Add(Me.ComboBoxLogViewType)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TextBox1)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmoutputlog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.Text = "Media Companion Output Log"

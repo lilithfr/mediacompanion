@@ -18,8 +18,7 @@ Public Class frmSplashscreen
             CheckForIllegalCrossThreadCalls = False
 
             Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
-            Label2.Text = sAssemblyVersion
-
+            Label2.Text = String.Format("Version {0}", Microsoft.VisualBasic.Right(sAssemblyVersion, 7))
 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

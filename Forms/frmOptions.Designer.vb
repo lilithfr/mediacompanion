@@ -22,169 +22,170 @@ Partial Class frmOptions
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
-        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
-        Me.ColorDialog = New System.Windows.Forms.ColorDialog
-        Me.FontDialog = New System.Windows.Forms.FontDialog
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOptions))
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.ColorDialog = New System.Windows.Forms.ColorDialog()
+        Me.FontDialog = New System.Windows.Forms.FontDialog()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.GroupBox10 = New System.Windows.Forms.GroupBox
-        Me.Button11 = New System.Windows.Forms.Button
-        Me.Button12 = New System.Windows.Forms.Button
-        Me.Label25 = New System.Windows.Forms.Label
-        Me.ListBox5 = New System.Windows.Forms.ListBox
-        Me.GroupBox12 = New System.Windows.Forms.GroupBox
-        Me.Label26 = New System.Windows.Forms.Label
-        Me.Button1 = New System.Windows.Forms.Button
-        Me.xbmcactorpath = New System.Windows.Forms.TextBox
-        Me.Label19 = New System.Windows.Forms.Label
-        Me.localactorpath = New System.Windows.Forms.TextBox
-        Me.saveactorchkbx = New System.Windows.Forms.CheckBox
-        Me.RadioButton5 = New System.Windows.Forms.RadioButton
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox
-        Me.FontDialog1 = New System.Windows.Forms.FontDialog
-        Me.Profiles = New System.Windows.Forms.TabPage
-        Me.GroupBox15 = New System.Windows.Forms.GroupBox
-        Me.ListBox6 = New System.Windows.Forms.ListBox
-        Me.Label18 = New System.Windows.Forms.Label
-        Me.Label5 = New System.Windows.Forms.Label
-        Me.btndefaultprofile = New System.Windows.Forms.Button
-        Me.TextBox1 = New System.Windows.Forms.TextBox
-        Me.Label17 = New System.Windows.Forms.Label
-        Me.brnaddprofile = New System.Windows.Forms.Button
-        Me.Label16 = New System.Windows.Forms.Label
-        Me.btndeleteprofile = New System.Windows.Forms.Button
-        Me.GroupBox13 = New System.Windows.Forms.GroupBox
-        Me.Button13 = New System.Windows.Forms.Button
-        Me.Button8 = New System.Windows.Forms.Button
-        Me.TextBox6 = New System.Windows.Forms.TextBox
-        Me.Label31 = New System.Windows.Forms.Label
-        Me.GroupBox14 = New System.Windows.Forms.GroupBox
-        Me.TextBox5 = New System.Windows.Forms.TextBox
-        Me.Button7 = New System.Windows.Forms.Button
-        Me.TextBox4 = New System.Windows.Forms.TextBox
-        Me.Label30 = New System.Windows.Forms.Label
-        Me.Button6 = New System.Windows.Forms.Button
-        Me.Button3 = New System.Windows.Forms.Button
-        Me.Label29 = New System.Windows.Forms.Label
-        Me.TextBox3 = New System.Windows.Forms.TextBox
-        Me.ListBox7 = New System.Windows.Forms.ListBox
-        Me.TabPage3 = New System.Windows.Forms.TabPage
-        Me.TabControl2 = New System.Windows.Forms.TabControl
-        Me.TabPage4 = New System.Windows.Forms.TabPage
-        Me.CheckBox6 = New System.Windows.Forms.CheckBox
-        Me.CheckBox10 = New System.Windows.Forms.CheckBox
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox
-        Me.CheckBox15 = New System.Windows.Forms.CheckBox
-        Me.GroupBox7 = New System.Windows.Forms.GroupBox
-        Me.RadioButton19 = New System.Windows.Forms.RadioButton
-        Me.RadioButton18 = New System.Windows.Forms.RadioButton
-        Me.RadioButton17 = New System.Windows.Forms.RadioButton
-        Me.Label23 = New System.Windows.Forms.Label
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox
-        Me.TabPage5 = New System.Windows.Forms.TabPage
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox
-        Me.GroupBox16 = New System.Windows.Forms.GroupBox
-        Me.Label34 = New System.Windows.Forms.Label
-        Me.imdb_chk = New System.Windows.Forms.CheckBox
-        Me.mpdb_chk = New System.Windows.Forms.CheckBox
-        Me.tmdb_chk = New System.Windows.Forms.CheckBox
-        Me.IMPA_chk = New System.Windows.Forms.CheckBox
-        Me.Label33 = New System.Windows.Forms.Label
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox
-        Me.GroupBox9 = New System.Windows.Forms.GroupBox
-        Me.Label22 = New System.Windows.Forms.Label
-        Me.Label21 = New System.Windows.Forms.Label
-        Me.ListBox4 = New System.Windows.Forms.ListBox
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox
-        Me.CheckBox23 = New System.Windows.Forms.CheckBox
-        Me.GroupBox8 = New System.Windows.Forms.GroupBox
-        Me.Label20 = New System.Windows.Forms.Label
-        Me.Button10 = New System.Windows.Forms.Button
-        Me.Button9 = New System.Windows.Forms.Button
-        Me.ListBox3 = New System.Windows.Forms.ListBox
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox
-        Me.CheckBox18 = New System.Windows.Forms.CheckBox
-        Me.CheckBox22 = New System.Windows.Forms.CheckBox
-        Me.TabPage6 = New System.Windows.Forms.TabPage
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox
-        Me.GroupBox18 = New System.Windows.Forms.GroupBox
-        Me.RadioButton10 = New System.Windows.Forms.RadioButton
-        Me.RadioButton9 = New System.Windows.Forms.RadioButton
-        Me.RadioButton6 = New System.Windows.Forms.RadioButton
-        Me.ListBox8 = New System.Windows.Forms.ListBox
-        Me.CheckBox9 = New System.Windows.Forms.CheckBox
-        Me.CheckBox8 = New System.Windows.Forms.CheckBox
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox
-        Me.Panel2 = New System.Windows.Forms.Panel
-        Me.Label15 = New System.Windows.Forms.Label
-        Me.banner = New System.Windows.Forms.RadioButton
-        Me.poster = New System.Windows.Forms.RadioButton
-        Me.Label8 = New System.Windows.Forms.Label
-        Me.ComboBox5 = New System.Windows.Forms.ComboBox
-        Me.Label7 = New System.Windows.Forms.Label
-        Me.Label6 = New System.Windows.Forms.Label
-        Me.RadioButton8 = New System.Windows.Forms.RadioButton
-        Me.RadioButton7 = New System.Windows.Forms.RadioButton
-        Me.Button4 = New System.Windows.Forms.Button
-        Me.TabPage2 = New System.Windows.Forms.TabPage
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
-        Me.ListBox2 = New System.Windows.Forms.ListBox
-        Me.btn_addmoviefolderdialogue = New System.Windows.Forms.Button
-        Me.btn_removemoviefolder = New System.Windows.Forms.Button
-        Me.GroupBox5 = New System.Windows.Forms.GroupBox
-        Me.ListBox1 = New System.Windows.Forms.ListBox
-        Me.Button5 = New System.Windows.Forms.Button
-        Me.btn_addtvfolderdialogue = New System.Windows.Forms.Button
-        Me.btn_removetvfolder = New System.Windows.Forms.Button
-        Me.TabPage1 = New System.Windows.Forms.TabPage
-        Me.CheckBox11 = New System.Windows.Forms.CheckBox
-        Me.GroupBox17 = New System.Windows.Forms.GroupBox
-        Me.ComboBox3 = New System.Windows.Forms.ComboBox
-        Me.CheckBox5 = New System.Windows.Forms.CheckBox
-        Me.chkbx_disablecache = New System.Windows.Forms.CheckBox
-        Me.txtbox_maxposters = New System.Windows.Forms.TextBox
-        Me.Label32 = New System.Windows.Forms.Label
-        Me.Button2 = New System.Windows.Forms.Button
-        Me.Label27 = New System.Windows.Forms.Label
-        Me.txtbx_minrarsize = New System.Windows.Forms.TextBox
-        Me.chkbx_basicsave = New System.Windows.Forms.CheckBox
-        Me.chkbx_ignoretrailers = New System.Windows.Forms.CheckBox
-        Me.chkbx_usefoldernames = New System.Windows.Forms.CheckBox
-        Me.GroupBox11 = New System.Windows.Forms.GroupBox
-        Me.chkbx_unstackfanartnames = New System.Windows.Forms.CheckBox
-        Me.Label28 = New System.Windows.Forms.Label
-        Me.chkbx_unstackposternames = New System.Windows.Forms.CheckBox
-        Me.Label14 = New System.Windows.Forms.Label
-        Me.chkbx_notactorthumbs = New System.Windows.Forms.CheckBox
-        Me.Label24 = New System.Windows.Forms.Label
-        Me.chkbx_renamnfofiles = New System.Windows.Forms.CheckBox
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox
-        Me.Chkbx_fanartnoposter = New System.Windows.Forms.CheckBox
-        Me.Label13 = New System.Windows.Forms.Label
-        Me.Label12 = New System.Windows.Forms.Label
-        Me.Label11 = New System.Windows.Forms.Label
-        Me.Label10 = New System.Windows.Forms.Label
-        Me.Label9 = New System.Windows.Forms.Label
-        Me.chkbxusealpha = New System.Windows.Forms.CheckBox
-        Me.chkbxfanart = New System.Windows.Forms.CheckBox
-        Me.chk_rememberformsize = New System.Windows.Forms.CheckBox
-        Me.btn_setforcolour = New System.Windows.Forms.Button
-        Me.btn_setbackcolour = New System.Windows.Forms.Button
-        Me.TrackBar1 = New System.Windows.Forms.TrackBar
-        Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.btn_custommediaplayer = New System.Windows.Forms.Button
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton
-        Me.TabControl1 = New System.Windows.Forms.TabControl
+        Me.GroupBox10 = New System.Windows.Forms.GroupBox()
+        Me.Button11 = New System.Windows.Forms.Button()
+        Me.Button12 = New System.Windows.Forms.Button()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.ListBox5 = New System.Windows.Forms.ListBox()
+        Me.GroupBox12 = New System.Windows.Forms.GroupBox()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.xbmcactorpath = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.localactorpath = New System.Windows.Forms.TextBox()
+        Me.saveactorchkbx = New System.Windows.Forms.CheckBox()
+        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.FontDialog1 = New System.Windows.Forms.FontDialog()
+        Me.Profiles = New System.Windows.Forms.TabPage()
+        Me.GroupBox15 = New System.Windows.Forms.GroupBox()
+        Me.ListBox6 = New System.Windows.Forms.ListBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.btndefaultprofile = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.brnaddprofile = New System.Windows.Forms.Button()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.btndeleteprofile = New System.Windows.Forms.Button()
+        Me.GroupBox13 = New System.Windows.Forms.GroupBox()
+        Me.Button13 = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.GroupBox14 = New System.Windows.Forms.GroupBox()
+        Me.TextBox5 = New System.Windows.Forms.TextBox()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Button6 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.ListBox7 = New System.Windows.Forms.ListBox()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.TabControl2 = New System.Windows.Forms.TabControl()
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.RadioButton19 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton18 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton17 = New System.Windows.Forms.RadioButton()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox16 = New System.Windows.Forms.GroupBox()
+        Me.Label34 = New System.Windows.Forms.Label()
+        Me.imdb_chk = New System.Windows.Forms.CheckBox()
+        Me.mpdb_chk = New System.Windows.Forms.CheckBox()
+        Me.tmdb_chk = New System.Windows.Forms.CheckBox()
+        Me.IMPA_chk = New System.Windows.Forms.CheckBox()
+        Me.Label33 = New System.Windows.Forms.Label()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox9 = New System.Windows.Forms.GroupBox()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.ListBox4 = New System.Windows.Forms.ListBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox8 = New System.Windows.Forms.GroupBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
+        Me.ListBox3 = New System.Windows.Forms.ListBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox22 = New System.Windows.Forms.CheckBox()
+        Me.TabPage6 = New System.Windows.Forms.TabPage()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox18 = New System.Windows.Forms.GroupBox()
+        Me.RadioButton10 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton9 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton6 = New System.Windows.Forms.RadioButton()
+        Me.ListBox8 = New System.Windows.Forms.ListBox()
+        Me.CheckBox9 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox8 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.banner = New System.Windows.Forms.RadioButton()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.poster = New System.Windows.Forms.RadioButton()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.ComboBox5 = New System.Windows.Forms.ComboBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.RadioButton8 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton7 = New System.Windows.Forms.RadioButton()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.ListBox2 = New System.Windows.Forms.ListBox()
+        Me.btn_addmoviefolderdialogue = New System.Windows.Forms.Button()
+        Me.btn_removemoviefolder = New System.Windows.Forms.Button()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.btn_addtvfolderdialogue = New System.Windows.Forms.Button()
+        Me.btn_removetvfolder = New System.Windows.Forms.Button()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.CheckBox11 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox17 = New System.Windows.Forms.GroupBox()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
+        Me.txtbox_maxposters = New System.Windows.Forms.TextBox()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.txtbx_minrarsize = New System.Windows.Forms.TextBox()
+        Me.chkbx_basicsave = New System.Windows.Forms.CheckBox()
+        Me.chkbx_ignoretrailers = New System.Windows.Forms.CheckBox()
+        Me.chkbx_usefoldernames = New System.Windows.Forms.CheckBox()
+        Me.GroupBox11 = New System.Windows.Forms.GroupBox()
+        Me.chkbx_unstackfanartnames = New System.Windows.Forms.CheckBox()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.chkbx_unstackposternames = New System.Windows.Forms.CheckBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.chkbx_notactorthumbs = New System.Windows.Forms.CheckBox()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.chkbx_renamnfofiles = New System.Windows.Forms.CheckBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Chkbx_fanartnoposter = New System.Windows.Forms.CheckBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.chkbxusealpha = New System.Windows.Forms.CheckBox()
+        Me.chkbxfanart = New System.Windows.Forms.CheckBox()
+        Me.chk_rememberformsize = New System.Windows.Forms.CheckBox()
+        Me.btn_setforcolour = New System.Windows.Forms.Button()
+        Me.btn_setbackcolour = New System.Windows.Forms.Button()
+        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
+        Me.chkbx_createfolderjpg = New System.Windows.Forms.CheckBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.btn_custommediaplayer = New System.Windows.Forms.Button()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.GroupBox10.SuspendLayout()
         Me.GroupBox12.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -234,8 +235,8 @@ Partial Class frmOptions
         Me.GroupBox10.TabStop = False
         Me.GroupBox10.Text = "Select IMDB Certification Priorities"
         Me.ToolTip1.SetToolTip(Me.GroupBox10, "You can select a specific locations certification to replace the MPAA entry on IM" & _
-                "DB if you wish," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "The Rating will be scraped by the first available from the abov" & _
-                "e list.")
+        "DB if you wish," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "The Rating will be scraped by the first available from the abov" & _
+        "e list.")
         '
         'Button11
         '
@@ -379,7 +380,7 @@ Partial Class frmOptions
         Me.CheckBox2.TabIndex = 2
         Me.CheckBox2.Text = "Use IMDB to get Movie ID for TMDB"
         Me.ToolTip1.SetToolTip(Me.CheckBox2, "Finding the correct movie is much more" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "likely using IMDB, this ID can then be us" & _
-                "ed" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to scrape the correct details from TMDB")
+        "ed" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to scrape the correct details from TMDB")
         Me.CheckBox2.UseVisualStyleBackColor = True
         Me.CheckBox2.Visible = False
         '
@@ -475,7 +476,7 @@ Partial Class frmOptions
         Me.Label17.Size = New System.Drawing.Size(299, 26)
         Me.Label17.TabIndex = 7
         Me.Label17.Text = "The Default Profile can't be deleted, it is used as a template to" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "create new pro" & _
-            "files. You can set any created profile to default."
+    "files. You can set any created profile to default."
         '
         'brnaddprofile
         '
@@ -843,7 +844,7 @@ Partial Class frmOptions
         Me.Label34.Size = New System.Drawing.Size(290, 39)
         Me.Label34.TabIndex = 5
         Me.Label34.Text = "Urls added to the nfo file can be browsed frow within XBMC." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Each option added wi" & _
-            "ll slow down the scrape and rescrape" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "functions." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+    "ll slow down the scrape and rescrape" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "functions." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'imdb_chk
         '
@@ -893,7 +894,7 @@ Partial Class frmOptions
         Me.Label33.Size = New System.Drawing.Size(298, 26)
         Me.Label33.TabIndex = 0
         Me.Label33.Text = "During autoscrape and rescrape, add poster urls to the nfo file" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "from the followi" & _
-            "ng sources:"
+    "ng sources:"
         '
         'GroupBox4
         '
@@ -927,7 +928,7 @@ Partial Class frmOptions
         Me.Label22.Size = New System.Drawing.Size(298, 26)
         Me.Label22.TabIndex = 2
         Me.Label22.Text = "Using ""www.imdb.de"" will result in an incomplete nfo file since" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "this mirror does" & _
-            "n't contain plot, tagline, or trailer information"
+    "n't contain plot, tagline, or trailer information"
         '
         'Label21
         '
@@ -1182,15 +1183,6 @@ Partial Class frmOptions
         Me.Panel2.Size = New System.Drawing.Size(165, 53)
         Me.Panel2.TabIndex = 7
         '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(-4, 0)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(145, 13)
-        Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Default TV Show Thumbnails"
-        '
         'banner
         '
         Me.banner.AutoSize = True
@@ -1200,6 +1192,15 @@ Partial Class frmOptions
         Me.banner.TabIndex = 2
         Me.banner.Text = "Banner"
         Me.banner.UseVisualStyleBackColor = True
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(-4, 0)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(145, 13)
+        Me.Label15.TabIndex = 0
+        Me.Label15.Text = "Default TV Show Thumbnails"
         '
         'poster
         '
@@ -1220,8 +1221,8 @@ Partial Class frmOptions
         Me.Label8.Size = New System.Drawing.Size(315, 52)
         Me.Label8.TabIndex = 6
         Me.Label8.Text = "Use the Selection Box Below to choose where to get tv actor nfo" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "from." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only use " & _
-            "IMDB if the show series order is identical to thetvdb.com" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or wrong actors will " & _
-            "be obtained"
+    "IMDB if the show series order is identical to thetvdb.com" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or wrong actors will " & _
+    "be obtained"
         '
         'ComboBox5
         '
@@ -1420,7 +1421,7 @@ Partial Class frmOptions
         Me.CheckBox11.AutoSize = True
         Me.CheckBox11.Location = New System.Drawing.Point(709, 62)
         Me.CheckBox11.Name = "CheckBox11"
-        Me.CheckBox11.Size = New System.Drawing.Size(147, 17)
+        Me.CheckBox11.Size = New System.Drawing.Size(148, 17)
         Me.CheckBox11.TabIndex = 31
         Me.CheckBox11.Text = "Enable tvshow refresh log"
         Me.CheckBox11.UseVisualStyleBackColor = True
@@ -1568,7 +1569,7 @@ Partial Class frmOptions
         Me.Label28.Size = New System.Drawing.Size(366, 26)
         Me.Label28.TabIndex = 2
         Me.Label28.Text = "If you are having an issue with your version of XBMC seeing your fanart then" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "sel" & _
-            "ect the option below"
+    "ect the option below"
         '
         'chkbx_unstackposternames
         '
@@ -1588,7 +1589,7 @@ Partial Class frmOptions
         Me.Label14.Size = New System.Drawing.Size(394, 26)
         Me.Label14.TabIndex = 0
         Me.Label14.Text = "If you are having an issue with your version of XBMC seeing your .tbn posters the" & _
-            "n" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "select the option below"
+    "n" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "select the option below"
         '
         'chkbx_notactorthumbs
         '
@@ -1608,7 +1609,7 @@ Partial Class frmOptions
         Me.Label24.Size = New System.Drawing.Size(469, 13)
         Me.Label24.TabIndex = 17
         Me.Label24.Text = "The default behaviour is for MC to overwrite none complient nfo files, you can ch" & _
-            "ange this below :-"
+    "ange this below :-"
         '
         'chkbx_renamnfofiles
         '
@@ -1865,17 +1866,18 @@ Partial Class frmOptions
         Me.TabControl1.Size = New System.Drawing.Size(1008, 574)
         Me.TabControl1.TabIndex = 15
         '
-        'options
+        'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 574)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.PictureBox1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(861, 580)
-        Me.Name = "options"
+        Me.Name = "frmOptions"
         Me.Text = "Media Companion Preferences"
         Me.GroupBox10.ResumeLayout(False)
         Me.GroupBox10.PerformLayout()
