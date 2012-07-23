@@ -132,12 +132,12 @@
   <ItemGroup>
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ExceptionHandler.vb" />
+    <Compile Include="Classes\MediaInfoExport.vb" />
     <Compile Include="Classes\Movies.vb" />
     <Compile Include="Classes\Renamer.vb" />
     <Compile Include="Classes\Profiles.vb" />
     <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />
-    <Compile Include="Classes\TVhtml.vb" />
     <Compile Include="Classes\TVShows.vb" />
     <Compile Include="Classes\ValueDescriptionPair.vb" />
     <Compile Include="Forms\Form1\Form1.Tv.vb">
