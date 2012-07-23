@@ -803,7 +803,7 @@ Public Class WorkingWithNfoFiles
                         Dim filecreation2 As New IO.FileInfo(path)
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
-                            newmovie.filedate = Format(myDate2, Form1.datePattern).ToString
+                            newmovie.filedate = Format(myDate2, Preferences.datePattern).ToString
                         Catch ex2 As Exception
                         End Try
                         newmovie.filename = IO.Path.GetFileName(path)
@@ -899,7 +899,7 @@ Public Class WorkingWithNfoFiles
                     If newmovie.title = Nothing Then newmovie.title = "ERR - This Movie Has No TITLE!"
                     If newmovie.createdate = "" Or newmovie.createdate = Nothing Then newmovie.createdate = "18000101000000"
                     Try
-                        newmovie.filedate = Format(myDate, Form1.datePattern)
+                        newmovie.filedate = Format(myDate, Preferences.datePattern)
                     Catch ex As Exception
                         MsgBox(ex.ToString)
                     End Try
@@ -1719,13 +1719,13 @@ Public Class WorkingWithNfoFiles
                     If movietosave.fileinfo.createdate = Nothing Then
                         Dim myDate2 As Date = System.DateTime.Now
                         Try
-                            child.InnerText = Format(myDate2, Form1.datePattern).ToString
+                            child.InnerText = Format(myDate2, Preferences.datePattern).ToString
                         Catch ex2 As Exception
                         End Try
                     ElseIf movietosave.fileinfo.createdate = "" Then
                         Dim myDate2 As Date = System.DateTime.Now
                         Try
-                            child.InnerText = Format(myDate2, Form1.datePattern).ToString
+                            child.InnerText = Format(myDate2, Preferences.datePattern).ToString
                         Catch ex2 As Exception
                         End Try
                     Else

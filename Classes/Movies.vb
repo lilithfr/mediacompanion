@@ -13,7 +13,7 @@ Public Class Movies
                 Dim titleDir As String = fs_info.Directory.ToString & IO.Path.DirectorySeparatorChar
                 Dim titleExt As String = fs_info.Extension
                 Dim doNotAdd As Boolean = False
-                Dim newmoviedetails As New str_NewMovie(SetDefaults)
+                Dim newmoviedetails As New str_NewMovie(Preferences.SetDefaults)
 
                 If Preferences.usefoldernames = True Then
                     scraperLog &= "  '" & fs_info.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES

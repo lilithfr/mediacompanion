@@ -611,7 +611,7 @@ Module General
             FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
         End If
         FileInfoString &= "<playcount>0</playcount>" & vbLf
-        FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Form1.datePattern).ToString & "</createdate>" & vbLf
+        FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Preferences.datePattern).ToString & "</createdate>" & vbLf
         Dim TempString As String = Entrada.Remove(0, Entrada.IndexOf("<id>"))
         TempString = FileInfoString & TempString
         TempString = TempString.Remove(TempString.LastIndexOf("</details>"), 10)
@@ -1195,7 +1195,7 @@ Module General
                 End If
             End If
             FileInfoString &= "</streamdetails>" & vbLf & "</fileinfo>" & vbLf
-            FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Form1.datePattern).ToString & "</createdate>" & vbLf
+            FileInfoString &= "<createdate>" & Format(System.DateTime.Now, Preferences.datePattern).ToString & "</createdate>" & vbLf
             TempString = ""
             TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))
             TempString = TempString.Replace("<details>", "")

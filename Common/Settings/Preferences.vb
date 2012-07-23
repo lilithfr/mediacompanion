@@ -5,7 +5,9 @@ Imports System.Threading
 
 
 Public Class Preferences
-    Const SetDefaults = True
+    Public Shared SetDefaults = True
+    Public Const datePattern As String = "yyyyMMddHHmmss"
+    Public Const nfoDatePattern As String = "yyyy-MM-dd"
     'Not saved items
 
     Public Shared tv_RegexScraper As New List(Of String)
@@ -183,6 +185,7 @@ Public Class Preferences
 	 Public Shared DownloadTrailerDuringScrape As Boolean
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
+
     Public Shared Sub SetUpPreferences()
         'General
         Preferences.ignorearticle = False

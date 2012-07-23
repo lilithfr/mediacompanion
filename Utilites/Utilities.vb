@@ -47,12 +47,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultPosterPath As String
     Public Shared Property DefaultBannerPath As String
     Public Shared Property DefaultFanartPath As String
+    Public Shared Property DefaultOfflineArtPath As String
+    Public Shared Property DefaultActorPath As String
+    Public Shared Property DefaultScreenShotPath As String
 
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED"
     Public Shared Property RARsize As Integer
 
     Private Shared _ApplicationPath As String
+
     Public Shared Function GetFrameworkVersions() As List(Of String)
         Dim installedFrameworks As New List(Of String)
         'send key & value to test function - it will return true if it exists - installedFrameworks contains a list of all found NET versions
@@ -89,6 +93,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             DefaultPosterPath = IO.Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
             DefaultBannerPath = IO.Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
             DefaultFanartPath = IO.Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
+            DefaultOfflineArtPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
+            DefaultActorPath = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
+            DefaultScreenShotPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
         End Set
     End Property
     Public Shared tvScraperLog As String = ""
@@ -2190,6 +2197,55 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
+    Public Shared Function createImage(ByVal origImage As String, ByVal sizeLimit As Integer, ByVal target As String, Optional ByVal picType As String = "poster")
+
+        Dim isPoster As Boolean = Equals(picType, "poster")
+        Dim filename As String = If(isPoster, "DefaultPoster", "DefaultBanner") & If(sizeLimit <> 0, "_" & sizeLimit.ToString, "") & ".jpg"
+        Dim imgPoster As String = If(isPoster, Utilities.DefaultPosterPath, Utilities.DefaultBannerPath)
+        Try
+            'First, check if source image is legitimate. If so, create the unique filename, otherwise the default image will be used.
+            If IO.File.Exists(origImage) Then
+                Dim origBitmap As Image = Image.FromFile(origImage)
+                Dim origRatio As Single = 0
+                origRatio = origBitmap.Height / origBitmap.Width
+                If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
+                    If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width) 'sizeLimit = 0 denotes keep original dimensions
+                    filename = IO.File.GetLastWriteTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
+                    imgPoster = origImage
+                End If
+                origBitmap.Dispose()
+            End If
+        Catch ex As Exception
+            'If the source is corrupt, alert the user and use the default image.
+            MsgBox(String.Format("There was an error processing image: {0}{1}Please check source image. Using default {2}.", origImage, vbCrLf, picType))
+        End Try
+
+        Try
+            'Second, if the target image already exists, don't bother creating it again.
+            If Not IO.File.Exists(IO.Path.Combine(target, filename)) Then
+                Dim srcBitmap As New Bitmap(imgPoster)
+                Dim height As Integer = srcBitmap.Height
+                Dim width As Integer = srcBitmap.Width
+                Dim dstBitmap As New Bitmap(srcBitmap)
+                If sizeLimit <> 0 Then
+                    If isPoster Then
+                        height = sizeLimit
+                        width = Math.Truncate(height * (srcBitmap.Width / srcBitmap.Height))
+                    Else
+                        width = sizeLimit
+                        height = Math.Truncate(width * (srcBitmap.Height / srcBitmap.Width))
+                    End If
+                End If
+                srcBitmap.Dispose()
+                dstBitmap = Utilities.ResizeImage(dstBitmap, width, height)
+                dstBitmap.Save(IO.Path.Combine(target, filename), System.Drawing.Imaging.ImageFormat.Jpeg)
+                dstBitmap.Dispose()
+            End If
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
+        Return filename
+    End Function
     Public Shared Function SaveImage(ByVal image As Bitmap, ByVal path As String) As Boolean
 
         Try
