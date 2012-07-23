@@ -5,7 +5,7 @@ Imports System.Threading
 
 
 Public Class Preferences
-    Public Shared SetDefaults = True
+    Public Const SetDefaults = True
     Public Const datePattern As String = "yyyyMMddHHmmss"
     Public Const nfoDatePattern As String = "yyyy-MM-dd"
     'Not saved items
