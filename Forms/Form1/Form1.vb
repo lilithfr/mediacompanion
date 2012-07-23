@@ -25596,7 +25596,7 @@ MyExit:
     End Sub
 
     Private Sub mov_FanartGet()
-        Dim messbox As New frmMessageBox("      Pleas Wait,", "", "Attempting to download Fanart")
+        Dim messbox As New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
         messbox.Show()
         messbox.Refresh()
         Application.DoEvents()
@@ -25817,7 +25817,7 @@ MyExit:
 
     Private Sub mov_PosterGet(ByVal source As String)
         Try
-            Dim messbox As New frmMessageBox("          Pleas Wait,", "", "Attempting to download Poster from " & source.ToUpper)
+            Dim messbox As New frmMessageBox("          Please Wait,", "", "Attempting to download Poster from " & source.ToUpper)
             messbox.Show()
             messbox.Refresh()
             Application.DoEvents()
