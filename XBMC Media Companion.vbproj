@@ -165,7 +165,6 @@
     <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
     <Compile Include="Structures\TableItems.vb" />
-    <Compile Include="Structures\HTMLTemplate.vb" />
     <Compile Include="Structures\BatchWizard.vb" />
     <Compile Include="Classes\MediaInfoDLLComplete.vb" />
     <Compile Include="Structures\RunningThreads.vb" />

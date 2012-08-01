@@ -22,11 +22,11 @@ Partial Class frmDialog1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Cancel_Button = New System.Windows.Forms.Button
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label4 = New System.Windows.Forms.Label
+        Me.Cancel_Button = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Cancel_Button
@@ -44,10 +44,10 @@ Partial Class frmDialog1
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(8, 9)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(418, 13)
+        Me.Label1.Size = New System.Drawing.Size(407, 13)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Media Companion is creating the HTML document according to your selected template" & _
-            "."
+        Me.Label1.Text = "Media Companion is exporting media information according to your selected templat" & _
+    "e."
         '
         'Label2
         '
@@ -76,7 +76,7 @@ Partial Class frmDialog1
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Label4"
         '
-        'Dialog1
+        'frmDialog1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -90,7 +90,7 @@ Partial Class frmDialog1
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Dialog1"
+        Me.Name = "frmDialog1"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Information"

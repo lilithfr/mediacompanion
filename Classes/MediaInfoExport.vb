@@ -4,186 +4,184 @@ Imports System.Text.RegularExpressions
 
 Public Class MediaInfoExport
 
-    Dim templateList As New List(Of str_HTMLTemplate)
-    Dim fullhtmlstring As String
-    Dim htmlNfoFunction As New WorkingWithNfoFiles
+    Private Structure mediaInfoExportTemplate
+        Dim title As String
+        Dim path As String
+        Dim body As String
+        Dim type As String
+        Dim css As String
+        Dim cssfile As String
+        Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
+            title = ""
+            path = ""
+            body = ""
+            type = ""
+            css = ""
+            cssfile = ""
+        End Sub
+    End Structure
 
-    Public Sub addTemplates()
-        templateList.Clear()
-        Dim folder As String = Path.Combine(Preferences.applicationPath, "html_templates\")
-        Dim dir_info As New DirectoryInfo(folder)
+    Public Const strMovie As String = "Movie"
+    Public Const strTV As String = "TV"
+    Dim workingTemplate As mediaInfoExportTemplate
+    Dim templateList As New List(Of mediaInfoExportTemplate)
+    Dim fullTemplateString As String = Nothing
+    Dim mediaExportNfoFunction As New WorkingWithNfoFiles
+    Dim templateFolder As String = Path.Combine(Application.StartupPath, "html_templates\")
+    'RegexOptions.IgnoreCase to make the regex case insensitive, and RegexOptions.Singleline causes the dot to match newlines
+    Dim regexBlockOption As RegexOptions = RegexOptions.IgnoreCase Or RegexOptions.Singleline
+
+    Private Delegate Function getTagsDelegate(ByVal text As String, ByVal mediaCollection As Object, ByVal showCounter As Integer, ByVal imagepath As String, ByVal moviecount As Integer) As String
+
+    Public Sub addTemplates(Optional ByRef mediaDropdown As SortedList(Of String, String) = Nothing)
+        Dim dir_info As New DirectoryInfo(templateFolder)
         Dim fs_infos() As IO.FileInfo = dir_info.GetFiles("*.txt", SearchOption.TopDirectoryOnly)
+        templateList.Clear()
         For Each info In fs_infos
             Try
-                Dim fullstring As String
-                Dim htmlType As String = ""
-                Dim cfg2 As IO.StreamReader = File.OpenText(info.FullName)
-                fullstring = cfg2.ReadToEnd
-                If fullstring.ToLower.IndexOf("<<mc html page>>") <> -1 And fullstring.ToLower.IndexOf("<</mc html page>>") <> -1 Then
-                    htmlType = "movie"
-                ElseIf fullstring.ToLower.IndexOf("<<mc tv html page>>") <> -1 And fullstring.ToLower.IndexOf("<</mc tv html page>>") <> -1 Then
-                    htmlType = "tv"
-                Else
-                    Continue For
-                End If
-                Dim tempstring As String = fullstring.Substring(fullstring.IndexOf("<title>") + 7, fullstring.IndexOf("</title>") - 7)
-                Dim template As New str_HTMLTemplate(True)
-                Dim add As Boolean = True
-                For Each temp In templateList
-                    If temp.title = tempstring Then
-                        add = False
-                        Exit For
-                    End If
-                Next
-                If add = True Then
-                    template.title = tempstring
+                Dim fileTemplateString As String
+                Dim fileStream As IO.StreamReader = File.OpenText(info.FullName)
+                fileTemplateString = fileStream.ReadToEnd
+                Dim M As Match = Regex.Match(fileTemplateString, "<title>(?<title>.*?)</title>.*?<<(mc(?<type> tv)? html page)>>(?<body>.*?)<</\1>>", regexBlockOption)
+                If M.Success Then
+                    Dim template As New mediaInfoExportTemplate(True)
+                    template.title = M.Groups("title").Value.Trim
                     template.path = info.FullName
-                    template.body = fullstring
-                    If htmlType = "movie" Then
-                        Form1.OutputMovieListAsHTMLToolStripMenuItem.DropDownItems.Add(template.title)
-                    Else
-                        Form1.OutputTVShowsAsHTMLToolStripMenuItem.DropDownItems.Add(template.title)
+                    template.body = M.Groups("body").Value.Trim
+                    template.type = If(M.Groups("type").Value Is String.Empty, strMovie, strTV)
+                    Dim css As Match = Regex.Match(fileTemplateString, "<<(css)>>.*?<filename>(?<cssfile>.*?)</filename>(?<cssbody>.*?)<</\1>>", regexBlockOption)
+                    If css.Success Then
+                        template.css = css.Groups("cssbody").Value.Trim
+                        template.cssfile = css.Groups("cssfile").Value
                     End If
+                    If mediaDropdown IsNot Nothing Then mediaDropdown.Add(template.title, template.type) 'title used as key to avoid duplicate titles
                     templateList.Add(template)
                 End If
             Catch ex As Exception
-                Dim t As Integer = 0
+
             End Try
         Next
     End Sub
 
-    Private Sub createDocument(ByVal htmlType As String, ByVal savePath As String, ByVal mediaCollection As Object)
-        Dim frmhtmloutput As New frmDialog1
-        frmhtmloutput.Label3.Text = "Exporting Media Info"
-        frmhtmloutput.Label4.Text = ""
-        frmhtmloutput.Label3.Refresh()
-        frmhtmloutput.Label4.Refresh()
-        Application.DoEvents()
-        frmhtmloutput.Show()
-        Dim tempstring As String = ""
-        Dim cssbody As String
-        Dim csspath As String
-        Dim counter As Integer = 0
-
-        If fullhtmlstring.IndexOf("<<css>>") <> -1 And fullhtmlstring.IndexOf("<</css>>") <> -1 Then
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.IndexOf("<<css>>") + 9, fullhtmlstring.IndexOf("<</css>>") - fullhtmlstring.IndexOf("<<css>>") - 9)
-            If tempstring.IndexOf("<filename>") <> -1 And tempstring.IndexOf("</filename>") <> -1 Then
-                Dim tempstring2 As String
-                tempstring2 = tempstring.Substring(tempstring.IndexOf("<filename>") + 10, tempstring.IndexOf("</filename>") - tempstring.IndexOf("<filename>") - 10)
-                csspath = savePath.Replace(IO.Path.GetFileName(savePath), tempstring2)
-                cssbody = tempstring.Substring(tempstring.IndexOf("</filename>") + 13, tempstring.Length - tempstring.IndexOf("</filename>") - 13)
-                Try
-                    Dim objWriter2 As New System.IO.StreamWriter(csspath, False, Encoding.UTF8)
-                    objWriter2.Write(cssbody)
-                    objWriter2.Close()
-                Catch ex As Exception
-
-                Finally
-
-                End Try
-            End If
-
+    Public Sub createDocument(ByVal savePath As String, ByVal media As Object)
+        Dim templateBody As String = workingTemplate.body
+        Dim isMovies As Boolean = String.Equals(workingTemplate.type, strMovie)
+        Dim getTags As getTagsDelegate
+        Dim mediaCollection
+        If isMovies Then
+            getTags = AddressOf getTagsMovies
+            mediaCollection = TryCast(CObj(media), List(Of str_ComboList))
+        Else
+            getTags = AddressOf getTagsTV
+            mediaCollection = TryCast(CObj(media), NotifyingList(Of TvShow))
         End If
-        Dim temphtml As String = ""
+
+        Dim tempstring As String = ""
+        Dim counter As Integer = 0
+        Dim tempDoc As String = ""
         Dim headerTagPresent As Boolean = False
         Dim tempBody As String = ""
         Dim bodyTagPresent As Boolean = False
         Dim mediaTagpresent As Boolean = False
-        Dim overallcancel As Boolean = False
         Dim pathstring As String = ""
-        Dim imageFolder As String = If(htmlType = "Movies", "images\", "tvimages\")
-
-        If fullhtmlstring.ToLower.IndexOf("<<header>>") <> -1 And fullhtmlstring.ToLower.IndexOf("<</header>>") <> -1 Then
-            headerTagPresent = True
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.IndexOf("<<header>>") + 12, (fullhtmlstring.IndexOf("<</header>>") - fullhtmlstring.IndexOf("<<header>>")) - 12)
-            If htmlType = "Movies" Then
-                tempstring = getTagsMovies(tempstring, mediaCollection(0), counter)
-            Else
-                tempstring = getTagsTV(tempstring, Cache.TvCache.Shows(0), counter, "!HEADER!")
-            End If
-
-            temphtml = "<html><head>" & tempstring & "</head>"
+        Dim displayLineTitle As String = "Exporting Media Info"
+        Dim displayLineRemaining As String = ""
+        Dim callingApp As String = My.Application.Info.AssemblyName
+        Dim isConsole As Boolean = Equals(callingApp, "mc_com")
+        Dim padConsoleLine As Integer = 0
+        Dim frmMediaInfoExport As New frmDialog1    'frmMediaInfoExport could run in a different thread?
+        If isConsole Then
+            Console.WriteLine(displayLineTitle & "...")
+        Else
+            frmMediaInfoExport.Label3.Text = displayLineTitle
+            frmMediaInfoExport.Label4.Text = displayLineRemaining
+            frmMediaInfoExport.Label3.Refresh()
+            frmMediaInfoExport.Label4.Refresh()
+            Application.DoEvents()
+            frmMediaInfoExport.Show()
         End If
 
-        If fullhtmlstring.IndexOf("<<smallimage>>") <> -1 Or fullhtmlstring.IndexOf("<<createimage") <> -1 Then
-            pathstring = savePath.Replace(IO.Path.GetFileName(savePath), "")
-            pathstring = pathstring & imageFolder
+        Dim M As Match = Regex.Match(workingTemplate.body, "<<header>>(?<header>.*?)<</header>>", regexBlockOption)
+        If M.Success Then
+            headerTagPresent = True
+            tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count)
+            tempDoc = String.Format("<html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
+        End If
+
+        If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
+            pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
             Dim fso As New IO.DirectoryInfo(pathstring)
             If fso.Exists = False Then
                 IO.Directory.CreateDirectory(pathstring)
             End If
         End If
 
-        If fullhtmlstring.ToLower.IndexOf("<<body>>") <> -1 And fullhtmlstring.ToLower.IndexOf("<</body>>") <> -1 Then
+        M = Regex.Match(workingTemplate.body, "<<body>>(?<body>.*?)<</body>>", regexBlockOption)
+        If M.Success Then
             bodyTagPresent = True
-            temphtml = temphtml & "<body>"
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.ToLower.IndexOf("<<body>>") + 8, fullhtmlstring.ToLower.IndexOf("<</body>>") - (fullhtmlstring.ToLower.IndexOf("<<body>>") + 8))
+            tempDoc &= "<body>"
+            tempstring = M.Groups("body").Value
         Else
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.ToLower.IndexOf("<<mc html page>>") + 17, fullhtmlstring.ToLower.IndexOf("<</mc html page>>") - (fullhtmlstring.ToLower.IndexOf("<<mc html page>>") + 17))
+            tempstring = workingTemplate.body
         End If
 
-        If fullhtmlstring.ToLower.IndexOf("<<media_item>>") <> -1 And fullhtmlstring.ToLower.IndexOf("<</media_item>>") <> -1 Then
+        M = Regex.Match(tempstring, "<<media_item>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
+        If M.Success Then
             mediaTagpresent = True
-            temphtml = temphtml & tempstring.Substring(0, tempstring.ToLower.IndexOf("<<media_item>>")).Trim
-            tempBody = tempstring.Substring(tempstring.ToLower.IndexOf("<</media_item>>") + 15, tempstring.Length - (tempstring.ToLower.IndexOf("<</media_item>>") + 15))
-            tempstring = fullhtmlstring.Substring(fullhtmlstring.ToLower.IndexOf("<<media_item>>") + 14, fullhtmlstring.ToLower.IndexOf("<</media_item>>") - (fullhtmlstring.ToLower.IndexOf("<<media_item>>") + 14)).TrimEnd
+            tempDoc &= tempstring.Substring(0, M.Index).Trim
+            tempBody = tempstring.Substring(M.Index + M.Length)
+            tempstring = M.Groups("mediaitem").Value
         End If
 
         For Each mediaItem In mediaCollection
-            If frmhtmloutput.IsDisposed Then
-                MsgBox("Operation Canceled")
-                overallcancel = True
-                Exit For
+            If frmMediaInfoExport.IsDisposed Then Exit For
+            displayLineTitle = String.Format("Processing: {0}", If(isMovies, mediaItem.title, mediaItem.title.Value))
+            displayLineRemaining = String.Format("{0} {1}{2} Remaining", mediaCollection.Count - (counter + 1), If(isMovies, "Movie", "TV Show"), If((mediaCollection.Count - (counter + 1)) > 1, "s", ""))
+            If isConsole Then
+                Console.Write(String.Format("{0} - {1}", displayLineRemaining, displayLineTitle.PadRight(padConsoleLine)))
+                Console.SetCursorPosition(0, Console.CursorTop)
+                padConsoleLine = displayLineTitle.Length + 2    'an extra char to account for decreasing Count length
+            Else
+                frmMediaInfoExport.Label3.Text = displayLineTitle
+                frmMediaInfoExport.Label4.Text = displayLineRemaining
+                frmMediaInfoExport.Label3.Refresh()
+                frmMediaInfoExport.Label4.Refresh()
+                Application.DoEvents()
             End If
-            frmhtmloutput.Label3.Text = "Processing: " & If(htmlType = "Movies", mediaItem.title, mediaItem.title.Value)
-            Dim tempint As Integer = mediaCollection.Count - (counter + 1)
-            frmhtmloutput.Label4.Text = tempint.ToString & " " & htmlType & " Remaining"
-            frmhtmloutput.Label3.Refresh()
-            frmhtmloutput.Label4.Refresh()
-            Application.DoEvents()
-            Try
-                If htmlType = "Movies" Then
-                    temphtml = temphtml & getTagsMovies(tempstring, mediaItem, counter, pathstring)
-                Else
-                    temphtml = temphtml & getTagsTV(tempstring, mediaItem, counter, pathstring)
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-            End Try
+            tempDoc &= getTags(tempstring, mediaItem, counter, pathstring, mediaCollection.Count)
             counter += 1
         Next
-        If overallcancel = False Then
-            If mediaTagpresent Then
-                temphtml = temphtml & tempBody
-            End If
-            If bodyTagPresent Then
-                temphtml = temphtml & "</body>"
-            End If
-            If headerTagPresent Then
-                temphtml = temphtml & "</html>"
-            End If
 
+        If frmMediaInfoExport.IsDisposed Then
+            MsgBox("Operation Canceled")
+        Else
+            If mediaTagpresent Then tempDoc &= tempBody
+            If bodyTagPresent Then tempDoc &= "</body>"
+            If headerTagPresent Then tempDoc &= "</html>"
             Try
-                Dim objWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
-                objWriter.Write(temphtml)
-                objWriter.Close()
-                frmhtmloutput.Close()
-                Dim tempint As Integer = MessageBox.Show("Your list is now complete" & vbCrLf & " Do You wish to view it now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If tempint = DialogResult.Yes Then
-                    Process.Start(savePath)
+                If workingTemplate.css IsNot String.Empty Then
+                    Dim cssWriter As New System.IO.StreamWriter(IO.Path.GetDirectoryName(savePath) & Path.DirectorySeparatorChar & workingTemplate.cssfile, False, Encoding.UTF8)
+                    cssWriter.Write(workingTemplate.css)
+                    cssWriter.Dispose()
+                End If
+                Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
+                docWriter.Write(tempDoc)
+                docWriter.Close()
+                If isConsole Then
+                    Console.WriteLine(" ".PadRight(padConsoleLine + 20))
+                Else
+                    Dim tempint As Integer = MessageBox.Show("Your list is now complete" & vbCrLf & " Do You wish to view it now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then Process.Start(savePath)
                 End If
             Catch ex As Exception
-                frmhtmloutput.Close()
                 MsgBox(ex.ToString)
             Finally
-
+                frmMediaInfoExport.Close()
             End Try
         End If
     End Sub
 
-    Private Function getTagsMovies(ByVal text As String, ByVal movie As str_ComboList, ByVal counter As Integer, Optional ByVal moviecount As Integer = 0, Optional ByVal thumbpath As String = "")
+    Private Function getTagsMovies(ByVal text As String, ByVal movie As str_ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer)
         Dim tokenCollection As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCollection = tokenRegExp.Matches(text)
@@ -195,7 +193,7 @@ Public Class MediaInfoExport
             Dim tokenInstr() As String = valToken.Split(":")
             Select Case tokenInstr(0)
                 Case "smallimage", "createimage"
-                    If thumbpath <> "" Then
+                    If thumbpath IsNot String.Empty AndAlso Not thumbpath.Equals("!HEADER!") Then
                         Dim origImage = Preferences.GetPosterPath(movie.fullpathandfilename)
                         Try
                             If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "images/"
@@ -241,7 +239,7 @@ Public Class MediaInfoExport
                     ' The tokens "fullplot", "director", "stars", "writer", "moviegenre" and "releasedate" are included for backwards compatibility
                 Case "fullplot", "director", "stars", "writer", "moviegenre", "releasedate", "format", "filename", "nfo"
                     Dim newplotdetails As New FullMovieDetails
-                    newplotdetails = htmlNfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
+                    newplotdetails = mediaExportNfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
                         If tokenInstr(0) = "fullplot" Then
                             strNFOprop = newplotdetails.fullmoviebody.plot
@@ -501,7 +499,7 @@ Public Class MediaInfoExport
         Return text
     End Function
 
-    Private Function getTagsTV(ByVal text As String, ByVal tvShow As Media_Companion.TvShow, ByVal showCounter As Integer, Optional ByVal imagepath As String = "")
+    Private Function getTagsTV(ByVal text As String, ByVal tvShow As Media_Companion.TvShow, ByVal showCounter As Integer, ByVal imagepath As String, ByVal showcount As Integer)
         Dim inclShow As Boolean = False
         If imagepath.Equals("!HEADER!") Then    'A hack to process the header
             inclShow = True
@@ -511,7 +509,7 @@ Public Class MediaInfoExport
         Dim blockShow As String = text
         Dim blockSeason As String = ""
         Dim blockEpisode As String = ""
-        Dim strHTML As String = ""
+        Dim strMediaDoc As String = ""
         Dim counterSeason = 0
         If text.IndexOf("<<season") <> -1 And text.IndexOf("<</season>>") <> -1 Or text.IndexOf("<<episode") <> -1 And text.IndexOf("<</episode>>") <> -1 Then
             Dim setTVshows = New SortedList(Of String, TvEpisode)(New SeasonEpisodeComparer)
@@ -580,10 +578,10 @@ Public Class MediaInfoExport
                 If blockSeason <> "" Then
                     blockSeason = blockSeason.Substring(blockSeason.IndexOf(">>") + 2, blockSeason.IndexOf("<</season>>") - blockSeason.IndexOf(">>") - 2)
                 End If
-                Dim strHTMLseason As String = ""
-                Dim strHTMLepisode As String = ""
+                Dim strMediaDocSeason As String = ""
+                Dim strMediaDocEpisode As String = ""
                 Dim strTempEpisode As String = ""
-                Dim strHTMLseasonSpecials As String = ""
+                Dim strMediaDocSeasonSpecials As String = ""
                 Dim currSeason As Integer = firstSeason
                 Dim counterSeasonEpisodes = 0
                 Dim counterSeasonMissingEpisodes = 0
@@ -597,7 +595,7 @@ Public Class MediaInfoExport
                     End If
                     If setTVshows.IndexOfKey(episode.Key) = setTVshows.Count - 1 Then   'This is the last episode
                         If strTempEpisode <> "" Then
-                            strHTMLepisode = strHTMLepisode & strTempEpisode
+                            strMediaDocEpisode = strMediaDocEpisode & strTempEpisode
                             counterSeasonTotalEpisodes += 1
                             If episode.Value.IsMissing Then
                                 counterSeasonMissingEpisodes += 1
@@ -607,24 +605,24 @@ Public Class MediaInfoExport
                         End If
                         lastEpisode = True
                     End If
-                    ' If season changes or reach end of sorted list, aggregate season and episode HTML
+                    ' If season changes or reach end of sorted list, aggregate season and episode document
                     If lastEpisode Or episode.Value.Season.Value > currSeason Then
                         If inclSeason Or inclMissingSeason Then
-                            strHTMLseason = getTagsTVSeason(blockSeason, tvShow, showCounter, currSeason, counterSeasonEpisodes, counterSeasonMissingEpisodes, _
+                            strMediaDocSeason = getTagsTVSeason(blockSeason, tvShow, showCounter, currSeason, counterSeasonEpisodes, counterSeasonMissingEpisodes, _
                                                             counterSeasonTotalEpisodes, arrSeasonPresent(currSeason), imagepath)
-                            strHTMLseason = strHTMLseason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode, _
-                                                                                "", strHTMLepisode))
+                            strMediaDocSeason = strMediaDocSeason.Replace(separator, If(inclMissingSeason And Not inclMissingEpisode Or inclSeason And Not inclEpisode, _
+                                                                                "", strMediaDocEpisode))
                             inclShow = True
                         Else
-                            strHTMLseason = strHTMLepisode
+                            strMediaDocSeason = strMediaDocEpisode
                         End If
                         If currSeason = 0 Then
-                            strHTMLseasonSpecials = strHTMLseason
+                            strMediaDocSeasonSpecials = strMediaDocSeason
                         Else
-                            strHTML = strHTML & strHTMLseason
+                            strMediaDoc = strMediaDoc & strMediaDocSeason
                         End If
-                        strHTMLseason = ""
-                        strHTMLepisode = ""
+                        strMediaDocSeason = ""
+                        strMediaDocEpisode = ""
                         currSeason = episode.Value.Season.Value
                         counterSeason += 1
                         counterSeasonEpisodes = 0
@@ -637,10 +635,10 @@ Public Class MediaInfoExport
                         counterSeasonEpisodes += 1
                     End If
                     counterSeasonTotalEpisodes += 1
-                    strHTMLepisode = strHTMLepisode & strTempEpisode
+                    strMediaDocEpisode = strMediaDocEpisode & strTempEpisode
                 Next
-                strHTML = strHTML & strHTMLseasonSpecials
-                blockShow = blockShow.Replace(separator, strHTML)
+                strMediaDoc = strMediaDoc & strMediaDocSeasonSpecials
+                blockShow = blockShow.Replace(separator, strMediaDoc)
             End If
 
         End If
@@ -672,7 +670,7 @@ Public Class MediaInfoExport
                         origImage = origImage.Replace(IO.Path.GetFileName(origImage), "folder.jpg")
                         Dim imageType As String = "poster"
                         Dim imgTest As Image = Image.FromFile(origImage)
-                        If tokenInstr.Length > 2 And tokenInstr(2) = "banner" Then
+                        If tokenInstr.Length > 2 AndAlso tokenInstr(2) = "banner" Then
                             imageType = "banner"
                             If imgTest.Height / imgTest.Width > 1 Then
                                 origImage = origImage.Replace(IO.Path.GetFileName(origImage), "season-all.tbn")
@@ -923,7 +921,7 @@ Public Class MediaInfoExport
                     End If
 
                 Case "ep_nfo"
-                    Dim TVEpisodeNFO As List(Of TvEpisode) = htmlNfoFunction.ep_NfoLoadGeneric(tvEpisode.NfoFilePath)
+                    Dim TVEpisodeNFO As List(Of TvEpisode) = mediaExportNfoFunction.ep_NfoLoadGeneric(tvEpisode.NfoFilePath)
                     Dim fullTVEpisodeDetails As TvEpisode = TVEpisodeNFO(0)
                     Try
                         Select Case tokenInstr(1)
@@ -1037,7 +1035,7 @@ Public Class MediaInfoExport
                             Case Else
                                 strNFOprop = "No support"
                         End Select
-                        If tokenInstr.Length > 2 And tokenInstr(1) <> "file" And tokenInstr(1) <> "aired" Then
+                        If tokenInstr.Length > 2 AndAlso tokenInstr(1) <> "file" AndAlso tokenInstr(1) <> "aired" Then
                             Dim intCharLimit = CInt(tokenInstr(2))
                             If strNFOprop.Length > intCharLimit Then
                                 strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
@@ -1057,6 +1055,16 @@ Public Class MediaInfoExport
             End Try
         Next
         Return text
+    End Function
+
+    Public Function setTemplate(ByVal selectedTemplate As String, Optional ByRef type As String = "") As Boolean
+        Dim returnCode As Boolean = False
+        workingTemplate = templateList.Find(Function(item As mediaInfoExportTemplate) item.title = selectedTemplate)
+        If workingTemplate.type.Length > 0 Then
+            type = workingTemplate.type
+            returnCode = True
+        End If
+        Return returnCode
     End Function
 
 End Class
