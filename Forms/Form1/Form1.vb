@@ -634,9 +634,9 @@ Public Class Form1
             Dim mediaDropdown As New SortedList(Of String, String)
             mediaInfoExp.addTemplates(mediaDropdown)
             For Each item In mediaDropdown
-                If item.Value = MediaInfoExport.strMovie Then
+                If item.Value = MediaInfoExport.mediaType.Movie Then
                     ExportMovieListInfoToolStripMenuItem.DropDownItems.Add(item.Key)
-                ElseIf item.Value = MediaInfoExport.strTV Then
+                ElseIf item.Value = MediaInfoExport.mediaType.TV Then
                     ExportTVShowInfoToolStripMenuItem.DropDownItems.Add(item.Key)
                 End If
             Next
@@ -18193,8 +18193,9 @@ MyExit:
         End Try
     End Function
 
-    Dim exportMovieInfo As Boolean = False
-    Dim exportTVInfo As Boolean = False
+#Region "Media Info Export"
+    Dim exportMovieInfo As Boolean = False  'these are used to allow only a single execution of media export functions
+    Dim exportTVInfo As Boolean = False     'when there may be mulitple drop-down events. (Found that out the hard way!)
 
     Private Sub ExportMovieListInfoToolStripMenuItem_DropDownItemClicked(ByVal sender As Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles ExportMovieListInfoToolStripMenuItem.DropDownItemClicked
         If Not exportMovieInfo Then exportMovieInfo = mediaInfoExp.setTemplate(e.ClickedItem.Text)
@@ -18207,14 +18208,14 @@ MyExit:
     Private Sub ExportMovieListInfoToolStripMenuItem_DropDownClosed(ByVal sender As Object, ByVal e As System.EventArgs) Handles ExportMovieListInfoToolStripMenuItem.DropDownClosed
         If exportMovieInfo Then
             exportMovieInfo = False
-            Call util_ExportMediaListInfo(MediaInfoExport.strMovie)
+            Call util_ExportMediaListInfo(MediaInfoExport.mediaType.Movie)
         End If
     End Sub
 
     Private Sub ExportTVShowInfoToolStripMenuItem_DropDownClosed(sender As Object, e As System.EventArgs) Handles ExportTVShowInfoToolStripMenuItem.DropDownClosed
         If exportTVInfo = True Then
             exportTVInfo = False
-            Call util_ExportMediaListInfo(MediaInfoExport.strTV)
+            Call util_ExportMediaListInfo(MediaInfoExport.mediaType.TV)
         End If
     End Sub
 
@@ -18229,10 +18230,12 @@ MyExit:
         End With
         If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             savepath = SaveFileDialog1.FileName
-            Dim mediaCollection As Object = If(mediaType = MediaInfoExport.strMovie, filteredList, Cache.TvCache.Shows)
+            Dim mediaCollection As Object = If(mediaType = MediaInfoExport.mediaType.Movie, filteredList, Cache.TvCache.Shows)
             mediaInfoExp.createDocument(savepath, mediaCollection)
         End If
     End Sub
+
+#End Region
 
     Dim showstoscrapelist As New List(Of String)
     Private Sub bckgroundscanepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bckgroundscanepisodes.ProgressChanged

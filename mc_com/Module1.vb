@@ -231,12 +231,12 @@ Module Module1
                     Dim mediaInfoExp As New MediaInfoExport
                     Dim mediaCollection As Object = fullMovieList
                     Call mediaInfoExp.addTemplates()
-                    Dim templateType As String = ""
-                    Call mediaInfoExp.setTemplate(arg.argu, templateType)
-                    If templateType = MediaInfoExport.strMovie Then
+                    Dim templateType As MediaInfoExport.mediaType
+                    If mediaInfoExp.setTemplate(arg.argu, templateType) AndAlso templateType = MediaInfoExport.mediaType.Movie Then
                         Call mediaInfoExp.createDocument(mediaexportfile, mediaCollection)
                     Else
-                        Console.WriteLine("  Export aborted - only Movies are supported currently")
+                        Console.WriteLine("  Export aborted - template name provided is invalid")
+                        Console.WriteLine("  (and only Movies are supported currently)")
                         Console.WriteLine()
                     End If
                     Console.WriteLine("Media Info Export complete")

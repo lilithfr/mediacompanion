@@ -4,25 +4,27 @@ Imports System.Text.RegularExpressions
 
 Public Class MediaInfoExport
 
+    Public Enum mediaType
+        None
+        Movie
+        TV
+    End Enum
     Private Structure mediaInfoExportTemplate
         Dim title As String
         Dim path As String
         Dim body As String
-        Dim type As String
+        Dim type As mediaType
         Dim css As String
         Dim cssfile As String
         Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
             title = ""
             path = ""
             body = ""
-            type = ""
+            type = mediaType.None
             css = ""
             cssfile = ""
         End Sub
     End Structure
-
-    Public Const strMovie As String = "Movie"
-    Public Const strTV As String = "TV"
     Dim workingTemplate As mediaInfoExportTemplate
     Dim templateList As New List(Of mediaInfoExportTemplate)
     Dim fullTemplateString As String = Nothing
@@ -48,7 +50,7 @@ Public Class MediaInfoExport
                     template.title = M.Groups("title").Value.Trim
                     template.path = info.FullName
                     template.body = M.Groups("body").Value.Trim
-                    template.type = If(M.Groups("type").Value Is String.Empty, strMovie, strTV)
+                    template.type = If(M.Groups("type").Value Is String.Empty, mediaType.Movie, mediaType.TV)
                     Dim css As Match = Regex.Match(fileTemplateString, "<<(css)>>.*?<filename>(?<cssfile>.*?)</filename>(?<cssbody>.*?)<</\1>>", regexBlockOption)
                     If css.Success Then
                         template.css = css.Groups("cssbody").Value.Trim
@@ -65,7 +67,7 @@ Public Class MediaInfoExport
 
     Public Sub createDocument(ByVal savePath As String, ByVal media As Object)
         Dim templateBody As String = workingTemplate.body
-        Dim isMovies As Boolean = String.Equals(workingTemplate.type, strMovie)
+        Dim isMovies As Boolean = [Enum].Equals(workingTemplate.type, mediaType.Movie)
         Dim getTags As getTagsDelegate
         Dim mediaCollection
         If isMovies Then
@@ -1057,10 +1059,10 @@ Public Class MediaInfoExport
         Return text
     End Function
 
-    Public Function setTemplate(ByVal selectedTemplate As String, Optional ByRef type As String = "") As Boolean
+    Public Function setTemplate(ByVal selectedTemplate As String, Optional ByRef type As Integer = mediaType.None) As Boolean
         Dim returnCode As Boolean = False
         workingTemplate = templateList.Find(Function(item As mediaInfoExportTemplate) item.title = selectedTemplate)
-        If workingTemplate.type.Length > 0 Then
+        If workingTemplate.type > mediaType.None Then   'if mediaType has been set, then we assume the template is valid!
             type = workingTemplate.type
             returnCode = True
         End If
