@@ -11,7 +11,7 @@ Public Class MediaInfoExport
     End Enum
     Private Structure mediaInfoExportTemplate
         Dim title As String
-        Dim path As String
+        Dim path As String  'not used anymore as the template is stored when adding
         Dim body As String
         Dim type As mediaType
         Dim css As String
@@ -47,7 +47,7 @@ Public Class MediaInfoExport
                 Dim M As Match = Regex.Match(fileTemplateString, "<title>(?<title>.*?)</title>.*?<<(mc(?<type> tv)? html page)>>(?<body>.*?)<</\1>>", regexBlockOption)
                 If M.Success Then
                     Dim template As New mediaInfoExportTemplate(True)
-                    template.title = M.Groups("title").Value.Trim
+                    template.title = M.Groups("title").Value.Trim.ToLower
                     template.path = info.FullName
                     template.body = M.Groups("body").Value.Trim
                     template.type = If(M.Groups("type").Value Is String.Empty, mediaType.Movie, mediaType.TV)
@@ -56,7 +56,7 @@ Public Class MediaInfoExport
                         template.css = css.Groups("cssbody").Value.Trim
                         template.cssfile = css.Groups("cssfile").Value
                     End If
-                    If mediaDropdown IsNot Nothing Then mediaDropdown.Add(template.title, template.type) 'title used as key to avoid duplicate titles
+                    If mediaDropdown IsNot Nothing Then mediaDropdown.Add(M.Groups("title").Value.Trim, template.type) 'title used as key to avoid duplicate titles
                     templateList.Add(template)
                 End If
             Catch ex As Exception
@@ -1061,7 +1061,7 @@ Public Class MediaInfoExport
 
     Public Function setTemplate(ByVal selectedTemplate As String, Optional ByRef type As Integer = mediaType.None) As Boolean
         Dim returnCode As Boolean = False
-        workingTemplate = templateList.Find(Function(item As mediaInfoExportTemplate) item.title = selectedTemplate)
+        workingTemplate = templateList.Find(Function(item As mediaInfoExportTemplate) item.title = selectedTemplate.ToLower)
         If workingTemplate.type > mediaType.None Then   'if mediaType has been set, then we assume the template is valid!
             type = workingTemplate.type
             returnCode = True
