@@ -28,7 +28,7 @@ Public Class ScraperManager
    Private mBaseDirectory As String
    Private mScraperSettingsDirectory As String
 
-   Private mAllowMissingRequirements As Boolean = False
+    Private mAllowMissingRequirements As Boolean = True
    Private mLazyLoadRequirements As Boolean = False
 #End Region
 

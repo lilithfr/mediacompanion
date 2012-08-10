@@ -118,8 +118,23 @@ Public Class CacheManager
          ' The file doesn't exist in the cache so we will download it
          Trace.WriteLine("Cache manager (" + filename + "), downloading: " + url)
 
-         Dim w As WebClient = New WebClient()
-         Dim contents As String = w.DownloadString(url)
+            Dim contents As String
+            Try
+                Dim TMDBRequest As HttpWebRequest = WebRequest.Create(url)
+                TMDBRequest.Accept = "application/json"
+                TMDBRequest.ContentType = "application/json"
+                TMDBRequest.Credentials = CredentialCache.DefaultCredentials
+                Dim TMDBResponse As HttpWebResponse = CType(TMDBRequest.GetResponse(), HttpWebResponse)
+                Dim dataStream As Stream = TMDBResponse.GetResponseStream()
+                Dim reader As New StreamReader(dataStream)
+                contents = reader.ReadToEnd()
+                reader.Close()
+                dataStream.Close()
+                TMDBResponse.Close()
+            Catch ex As Exception
+                MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + url, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return "ERROR" 'SK: added 
+            End Try
 
          ' We will also save the file to the cache if requested
          If ((saveToCache) And (mCacheEnabled)) Then

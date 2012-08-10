@@ -73,16 +73,35 @@ Module General
 #Region "XBMC Scraper Internal Routines"
 
     Private Function RetrieveUrls(ByVal URLAddress As String) As String
-        Dim Saida As String = ""
-        Try
+        'Dim Saida As String = ""
+        'Try
 
-            Saida = New WebClient().DownloadString(URLAddress)
-            Return Saida
-        Catch ex As WebException
+        '    Saida = New WebClient().DownloadString(URLAddress)
+        '    Return Saida
+        'Catch ex As WebException
+        '    MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + URLAddress, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '    Return "ERROR" 'SK: added 
+        '    'Throw ex   'SK : this was originally uncommented 
+        'End Try
+        Dim TMDBResponse As HttpWebResponse
+        Dim responseFromServer As String = ""
+        Try
+            Dim TMDBRequest As HttpWebRequest = WebRequest.Create(URLAddress)
+            TMDBRequest.Accept = "application/json"
+            TMDBRequest.ContentType = "application/json"
+            TMDBRequest.Credentials = CredentialCache.DefaultCredentials
+            TMDBResponse = CType(TMDBRequest.GetResponse(), HttpWebResponse)
+            Dim dataStream As Stream = TMDBResponse.GetResponseStream()
+            Dim reader As New StreamReader(dataStream)
+            responseFromServer = reader.ReadToEnd()
+            reader.Close()
+            dataStream.Close()
+            TMDBResponse.Close()
+        Catch ex As Exception
             MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + URLAddress, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return "ERROR" 'SK: added 
-            'Throw ex   'SK : this was originally uncommented 
         End Try
+        Return responseFromServer
     End Function
     Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
         Dim TempScraper As Scraper = Nothing
@@ -94,7 +113,7 @@ Module General
         Next
         Return TempScraper
     End Function
-    Private Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal InputBuffer As Integer = 1)
+    Private Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal convertAmps As Boolean = True, Optional ByVal InputBuffer As Integer = 1)
         Dim ChoosedScraper As Scraper
         InputBuffer -= 1
         'Dim ScraperFunctions As List(Of System.Xml.Linq.XElement)
@@ -118,7 +137,7 @@ Module General
 
 
         mLastQuery = New ScraperQuery(ChoosedScraper)
-        Dim ScrapeResult As String = mLastQuery.Execute(ScraperFunctiontoExecute.Name.LocalName, InputParameters)
+        Dim ScrapeResult As String = mLastQuery.Execute(ScraperFunctiontoExecute.Name.LocalName, InputParameters, convertAmps)
         If ScrapeResult.Length = 0 Then
             Return "Error"
             Exit Function
@@ -1520,7 +1539,7 @@ Module General
             Parameters(2) = "http://www.thetvdb.com/api/1D62F2F90030C444/series/" & TVShowid & "/actors.xml"
             For n As Integer = 0 To 2
                 ParametersForScraper(4) = Parameters(n)
-                Parameters(n) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, 5)
+                Parameters(n) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, True, 5)
             Next
             Parameters(0) = Parameters(0).Substring(0, Parameters(0).LastIndexOf("<fanart url="))
             Parameters(1) = Parameters(1).Substring(Parameters(1).IndexOf("<thumb>"), (Parameters(1).LastIndexOf("</details>") - Parameters(1).IndexOf("<thumb>")))
@@ -1543,13 +1562,14 @@ Module General
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
             ParametersForScraper(0) = Utilities.CleanFileName(MovieName, False)
             ParametersForScraper(1) = GetYearByFilename(MovieName, False)
-            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False)
+            FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
             FinalScrapResult = FinalScrapResult.Replace("</url>", "")
             FinalScrapResult = FinalScrapResult.Replace(" ", "%20")
             ' 2st stage
             ParametersForScraper(0) = FinalScrapResult
             FinalScrapResult = DoScrape(Scraper, "GetSearchResults", ParametersForScraper, True)
+            If FinalScrapResult.ToLower = "error" Then Return FinalScrapResult
             Dim m_xmld As XmlDocument
             Dim m_nodelist As XmlNodeList
             Dim m_node As XmlNode

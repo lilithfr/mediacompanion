@@ -144,13 +144,14 @@ Public Class ScraperQuery
         If functionResult Is Nothing Then
             Return ""
         End If
-        If (convertAmpersands) Then
-            outputElement = XElement.Parse(Regex.Replace(functionResult, AmpersandRegExReplace, "&amp;"))
-        Else
-            outputElement = XElement.Parse(functionResult)
-        End If
+        outputElement = XElement.Parse(Regex.Replace(functionResult, AmpersandRegExReplace, "&amp;"))
+        'If (convertAmpersands) Then
+        'Else
+        '    outputElement = XElement.Parse(functionResult)
+        'End If
         ' Finally, process any chain and url elements and return the final result
         mLastFunctionResult = ProcessChainAndUrlElements(outputElement).ToString()
+        If (Not convertAmpersands) Then mLastFunctionResult = Regex.Replace(mLastFunctionResult, "&amp;", "&")
         Return mLastFunctionResult
     End Function
 
