@@ -3625,7 +3625,7 @@ Public Class Form1
                         'stage 2 = get movie actors
                         progresstext &= " * Actors"
                         BckWrkScnMovies.ReportProgress(progress, progresstext)
-                        actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, newmovie.fullmoviebody.imdbid, newmovie.fullmoviebody.title, Preferences.maxactors)
+                        actorlist = scraperfunction.getimdbactors(Preferences.imdbmirror, newmovie.fullmoviebody.imdbid)
                         Try
                             thumbstring.LoadXml(actorlist)
                             thisresult = Nothing
@@ -3637,7 +3637,7 @@ Public Class Form1
                                             Exit For
                                         End If
                                         actorcount += 1
-                                        Dim newactor As New str_MovieActors(SetDefaults)
+                                        Dim newactor As New str_MovieActors
                                         Dim detail As XmlNode = Nothing
                                         For Each detail In thisresult.ChildNodes
                                             Select Case detail.Name
@@ -3646,7 +3646,7 @@ Public Class Form1
                                                 Case "role"
                                                     newactor.actorrole = detail.InnerText
                                                 Case "thumb"
-                                                    newactor.actorthumb = GetActorThumb(detail.InnerText)
+                                                    newactor.actorthumb = detail.InnerText
                                                 Case "actorid"
                                                     If newactor.actorthumb <> Nothing Then
                                                         If detail.InnerText <> "" And Preferences.actorseasy = True Then
@@ -3671,7 +3671,28 @@ Public Class Form1
                                                                 filename = filename & ".tbn"
                                                                 filename = IO.Path.Combine(workingpath, filename)
                                                                 If Not IO.File.Exists(filename) Then
-                                                                    Utilities.DownloadFile(newactor.actorthumb, filename)
+                                                                    Try
+                                                                        Dim buffer(4000000) As Byte
+                                                                        Dim size As Integer = 0
+                                                                        Dim bytesRead As Integer = 0
+                                                                        Dim thumburl As String = newactor.actorthumb
+                                                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                                        Dim res As HttpWebResponse = req.GetResponse()
+                                                                        Dim contents As Stream = res.GetResponseStream()
+                                                                        Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                                        While bytesToRead > 0
+                                                                            size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                                            If size = 0 Then Exit While
+                                                                            bytesToRead -= size
+                                                                            bytesRead += size
+                                                                        End While
+
+                                                                        Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
+                                                                        fstrm.Write(buffer, 0, bytesRead)
+                                                                        contents.Close()
+                                                                        fstrm.Close()
+                                                                    Catch
+                                                                    End Try
                                                                 End If
                                                             End If
                                                         End If
@@ -3679,11 +3700,40 @@ Public Class Form1
                                                             Dim workingpath As String = ""
                                                             Dim networkpath As String = Preferences.actorsavepath
                                                             Try
-                                                                newactor.actorthumb = GetActorThumb(detail.InnerText)
-                                                            Catch ex As Exception
-#If SilentErrorScream Then
-                                                                Throw ex
-#End If
+                                                                tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+                                                                Dim hg As New IO.DirectoryInfo(tempstring)
+                                                                If Not hg.Exists Then
+                                                                    IO.Directory.CreateDirectory(tempstring)
+                                                                End If
+                                                                workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                If Not IO.File.Exists(workingpath) Then
+                                                                    Dim buffer(4000000) As Byte
+                                                                    Dim size As Integer = 0
+                                                                    Dim bytesRead As Integer = 0
+                                                                    Dim thumburl As String = newactor.actorthumb
+                                                                    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                                                    Dim res As HttpWebResponse = req.GetResponse()
+                                                                    Dim contents As Stream = res.GetResponseStream()
+                                                                    Dim bytesToRead As Integer = CInt(buffer.Length)
+                                                                    While bytesToRead > 0
+                                                                        size = contents.Read(buffer, bytesRead, bytesToRead)
+                                                                        If size = 0 Then Exit While
+                                                                        bytesToRead -= size
+                                                                        bytesRead += size
+                                                                    End While
+
+                                                                    Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                                                    fstrm.Write(buffer, 0, bytesRead)
+                                                                    contents.Close()
+                                                                    fstrm.Close()
+                                                                End If
+                                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                                                                If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                Else
+                                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                End If
+                                                            Catch
                                                             End Try
                                                         End If
                                                     End If
