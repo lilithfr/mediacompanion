@@ -224,7 +224,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetCRC32(ByVal sFileName As String) As String
-        Dim oCRC As Vbaccelerator.Components.Algorithms.CRC32 = New Vbaccelerator.Components.Algorithms.CRC32()
+        Dim oCRC As New CRC32
         Dim oEnc As System.Text.UTF7Encoding = New System.Text.UTF7Encoding()
         Return (oCRC.GetCrc32(New System.IO.MemoryStream(oEnc.GetBytes(sFileName))))
     End Function
