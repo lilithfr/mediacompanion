@@ -1630,7 +1630,8 @@ Module General
         ElseIf Scraper.ToLower = "tmdb" Then
             Scraper = "metadata.themoviedb.org"
             If MovieID.Substring(0, 2) <> "tt" Then
-                ParametersForScraper(0) = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & MovieID
+                'ParametersForScraper(0) = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & MovieID
+                ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", MovieID, Preferences.TvdbLanguageCode)
                 ParametersForScraper(1) = MovieID
             Else
                 MsgBox("Can't rescrape this movie because it was scraped with a scraper different from TheMovieDB" & vbCrLf & "Delete the nfo file from the movie folder, refresh movie database, and try again", MsgBoxStyle.OkOnly, "Error")
