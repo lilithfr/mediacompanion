@@ -422,6 +422,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Assets\MediaCompanion.ico" />
+    <Content Include="Assets\pthreadGC2.dll" />
     <Content Include="Assets\scrapers\metadata.mc.hdtrailers.net\addon.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
