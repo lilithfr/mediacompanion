@@ -68,11 +68,11 @@
     </Reference>
     <Reference Include="imdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\imdb_thumbs.dll</HintPath>
+      <HintPath>..\Assets\imdb_thumbs.dll</HintPath>
     </Reference>
     <Reference Include="IMPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\IMPA.dll</HintPath>
+      <HintPath>..\Assets\IMPA.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -90,7 +90,7 @@
     </Reference>
     <Reference Include="tmdb_posters, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\XBMC Media Companion new version\XBMC Media Companion\bin\Debug\tmdb_posters.dll</HintPath>
+      <HintPath>..\Assets\tmdb_posters.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
