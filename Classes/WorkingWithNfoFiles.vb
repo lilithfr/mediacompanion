@@ -849,7 +849,11 @@ Public Class WorkingWithNfoFiles
                                 Case "originaltitle"
                                     newmovie.originaltitle = thisresult.InnerText
                                 Case "set"
-                                    newmovie.movieset = thisresult.InnerText
+                                    If newmovie.movieset = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                        newmovie.movieset = thisresult.InnerText
+                                    Else
+                                        newmovie.movieset = newmovie.movieset & " / " & thisresult.InnerText
+                                    End If
                                 Case "source"
                                     newmovie.source = thisresult.InnerText
                                 Case "year"
@@ -989,7 +993,11 @@ Public Class WorkingWithNfoFiles
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
-                            newmovie.fullmoviebody.movieset = thisresult.InnerText
+                            If newmovie.fullmoviebody.movieset = "" Then
+                                newmovie.fullmoviebody.movieset = thisresult.InnerText
+                            Else
+                                newmovie.fullmoviebody.movieset = newmovie.fullmoviebody.movieset & " / " & thisresult.InnerText
+                            End If
                         Case "videosource"
                             newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
@@ -1493,17 +1501,44 @@ Public Class WorkingWithNfoFiles
                     End Try
                 End If
 
-                Try
-                    If movietosave.fullmoviebody.movieset <> Nothing Then
-                        If movietosave.fullmoviebody.movieset <> "-None-" Then
-                            child = doc.CreateElement("set")
-                            child.InnerText = movietosave.fullmoviebody.movieset
-                            root.AppendChild(child)
-                        End If
-                    End If
-                Catch ex As Exception
+                'Try
+                '    If movietosave.fullmoviebody.movieset <> Nothing Then
+                '        If movietosave.fullmoviebody.movieset <> "-None-" Then
+                '            child = doc.CreateElement("set")
+                '            child.InnerText = movietosave.fullmoviebody.movieset
+                '            root.AppendChild(child)
+                '        End If
+                '    End If
+                'Catch ex As Exception
 
+                'End Try
+
+                Try
+                    If movietosave.fullmoviebody.movieset <> "-None-" Then
+                        Dim strArr() As String
+                        strArr = movietosave.fullmoviebody.movieset.Split("/")
+                        For count = 0 To strArr.Length - 1
+                            child = doc.CreateElement("set")
+                            strArr(count) = strArr(count).Trim
+                            child.InnerText = strArr(count)
+                            root.AppendChild(child)
+                        Next
+                    End If
+                Catch
                 End Try
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 Try
                     If movietosave.fullmoviebody.sortorder = Nothing Then
