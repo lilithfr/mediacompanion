@@ -889,6 +889,8 @@ Public Class WorkingWithNfoFiles
                                     End If
                                 Case "createdate"
                                     newmovie.createdate = thisresult.InnerText
+                                Case "votes"
+                                    newmovie.votes = thisresult.InnerText
                             End Select
                         Catch ex As Exception
                             MsgBox(ex.ToString)
