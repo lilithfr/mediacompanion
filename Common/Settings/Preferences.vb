@@ -105,6 +105,7 @@ Public Class Preferences
     Public Shared seasonall As String
     Public Shared tablesortorder As String
     Public Shared movieRuntimeDisplay As String
+    Public Shared selectedBrowser As String
 
     Public Shared intruntime As Boolean
     Public Shared autorenameepisodes As Boolean
@@ -190,6 +191,7 @@ Public Class Preferences
         'General
         Preferences.ignorearticle = False
         Preferences.externalbrowser = False
+        Preferences.selectedBrowser = ""
         Preferences.videoplaybackmode = "1"
         Preferences.backgroundcolour = "Silver"
         Preferences.forgroundcolour = "#D3D9DC"
@@ -704,6 +706,10 @@ Public Class Preferences
 
         child = doc.CreateElement("externalbrowser")
         child.InnerText = Preferences.externalbrowser.ToString.ToLower
+        root.AppendChild(child)
+
+        child = doc.CreateElement("selectedBrowser")
+        child.InnerText = Preferences.selectedBrowser
         root.AppendChild(child)
 
         child = doc.CreateElement("ignoreparts")
@@ -1502,6 +1508,10 @@ Public Class Preferences
                     ElseIf thisresult.InnerXml = "false" Then
                         Preferences.externalbrowser = False
                     End If
+
+                Case "selectedBrowser"
+                    Preferences.selectedBrowser = thisresult.InnerXml
+
                 Case "tvrename"
                     If thisresult.InnerText <> "" Then Preferences.tvrename = Convert.ToInt32(thisresult.InnerText)
                 Case "tvshowrefreshlog"

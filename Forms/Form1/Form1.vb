@@ -284,7 +284,8 @@ Public Class Form1
                       RequiredNetURL & vbCrLf & vbCrLf & _
                       "Do you wish to download the Full version?", _
                       MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
-                Process.Start(RequiredNetURL)
+                'Process.Start(RequiredNetURL)
+                OpenUrl( RequiredNetURL )
                 End
             End If
         End If
@@ -7015,7 +7016,8 @@ Public Class Form1
     Private Sub MediaCompanionForumToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionForumToolStripMenuItem.Click
         Try
             Dim webAddress As String = "http://billyad2000.darkbb.com/forum.htm"
-            Process.Start(webAddress)
+            'Process.Start(webAddress)
+            OpenUrl(webAddress)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -7024,7 +7026,8 @@ Public Class Form1
     Private Sub XBMCMCThreadToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles XBMCMCThreadToolStripMenuItem.Click
         Try
             Dim webAddress As String = "http://forum.xbmc.org/showthread.php?t=53640"
-            Process.Start(webAddress)
+            'Process.Start(webAddress)
+            OpenUrl(webAddress)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -10030,7 +10033,9 @@ MyExit:
                     If Preferences.externalbrowser = True Then
                         Me.TabControl2.SelectedIndex = currentTabIndex
                         tempstring = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
-                        Process.Start(tempstring)
+
+                        'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
+                        OpenUrl(tempstring)
                     Else
 
                         Dim url As String
@@ -12825,7 +12830,8 @@ MyExit:
             ElseIf tab = "" Then
                 TabLevel1.SelectedIndex = tab1
                 Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
-                Process.Start(webAddress)
+                'Process.Start(webAddress)
+                OpenUrl(webAddress)
             ElseIf tab = "general preferences" Then
                 tab1 = TabLevel1.SelectedIndex
                 Call util_GeneralPreferencesSetup()
@@ -13097,7 +13103,8 @@ MyExit:
                         If Preferences.externalbrowser = True Then
                             Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                             tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
-                            Process.Start(tempstring)
+                            'Process.Start(tempstring)
+                            OpenUrl(tempstring)
                         Else
                             tvCurrentTabIndex = TabControl3.SelectedIndex
                             Dim url As String
@@ -13131,7 +13138,8 @@ MyExit:
                     If Preferences.externalbrowser = True Then
                         Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                         tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
-                        Process.Start(tempstring)
+                        'Process.Start(tempstring)
+                        OpenUrl(tempstring)
                     Else
                         tvCurrentTabIndex = TabControl3.SelectedIndex
                         Dim url As String
@@ -19728,11 +19736,13 @@ MyExit:
         End If
         txtbx_minrarsize.Text = Preferences.rarsize.ToString
 
-        If Preferences.externalbrowser = True Then
-            CheckBox12.Checked = True
-        Else
-            CheckBox12.Checked = False
-        End If
+        'If Preferences.externalbrowser = True Then
+        '    CheckBox12.Checked = True
+        'Else
+        '    CheckBox12.Checked = False
+        'End If
+        CheckBox12.Checked     = Preferences.externalbrowser
+        btnFindBrowser.Enabled = CheckBox12.Checked
 
         If Preferences.startupCache = True Then
             chkbx_disablecache.Checked = False
@@ -19888,11 +19898,14 @@ MyExit:
 
     Private Sub CheckBox12_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox12.CheckedChanged
         Try
-            If CheckBox12.Checked = True Then
-                Preferences.externalbrowser = True
-            Else
-                Preferences.externalbrowser = False
-            End If
+            'If CheckBox12.Checked = True Then
+            '    Preferences.externalbrowser = True
+            'Else
+            '    Preferences.externalbrowser = False
+            'End If
+            Preferences.externalbrowser = CheckBox12.Checked
+            btnFindBrowser.Enabled      = CheckBox12.Checked
+
             If prefsload = False Then generalprefschanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -27124,7 +27137,8 @@ MyExit:
     Private Sub MediaCompanionCodeplexSiteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionCodeplexSiteToolStripMenuItem.Click
         Try
             Dim webAddress As String = "http://mediacompanion.codeplex.com/"
-            Process.Start(webAddress)
+            'Process.Start(webAddress)
+            OpenUrl(webAddress)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -28475,4 +28489,37 @@ End Sub
 
     End Function
 
+    Private Sub btnFindBrowser_Click( sender As System.Object,  e As System.EventArgs) Handles btnFindBrowser.Click
+         Try
+            Dim filebrowser As New OpenFileDialog
+            Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+            filebrowser.InitialDirectory = mstrProgramFilesPath
+            filebrowser.Filter = "Executable Files|*.exe"
+            filebrowser.Title = "Find Executable Of Preferred Browser"
+            If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                Preferences.selectedBrowser = filebrowser.FileName
+            End If
+            If prefsload = False Then generalprefschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
+    Private Sub OpenUrl( url As String )
+       Try
+            If Preferences.selectedBrowser <> "" then
+                Process.Start(Preferences.selectedBrowser,url)
+            Else
+                Try
+                    Process.Start(url)
+                Catch ex As Exception
+                    MessageBox.Show( "An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
+                End Try
+            End If 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
 End Class
