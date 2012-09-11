@@ -3,11 +3,12 @@
 Public Class frmoutputlog
     Public output As String = ""
     Private Sub frmoutputlog_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Try
-            ShowLog() 'call the subroutine to actually show the log when the form is created.
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'Commented out by AnotherPhil as already done [after search for new movies] and if left causes endless processing...
+        'Try
+        '    ShowLog() 'call the subroutine to actually show the log when the form is created.
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
     End Sub
 
     Public Sub New(ByVal displaystring As String, Optional ByVal forceoverride As Boolean = False)
