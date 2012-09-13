@@ -28600,7 +28600,16 @@ End Sub
 
         Me.ControlBox = False
         MenuStrip1.Enabled = False
-        util_ZoomImage( New Bitmap(pictureBox.ImageLocation) )
+
+        Try
+            util_ZoomImage(New Bitmap(pictureBox.ImageLocation))
+        Catch
+            Dim wc As New WebClient()
+            Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.ImageLocation)
+            Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+
+            util_ZoomImage(New Bitmap(ImageStream))
+        End Try
 
     End Sub
 End Class
