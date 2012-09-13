@@ -742,6 +742,7 @@ Partial Public Class Form1
     Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
         Try
             If System.IO.File.Exists(ImagePath) Then
+                PicBox.ImageLocation = ImagePath
                 Dim fs As System.IO.FileStream
                 fs = New System.IO.FileStream(ImagePath, IO.FileMode.Open, IO.FileAccess.Read)
                 PicBox.Image = System.Drawing.Image.FromStream(fs)

@@ -28582,4 +28582,25 @@ End Sub
                         TextBox_Plot    .Text  
                         )    
     End Sub
+
+ 
+    Private Sub PictureBox1_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles PictureBox1.DoubleClick
+        ZoomActorPictureBox( PictureBox1 )
+    End Sub
+
+    Private Sub PictureBox6_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles PictureBox6.DoubleClick
+        ZoomActorPictureBox( PictureBox6 )
+    End Sub
+
+    Private Sub ZoomActorPictureBox( pictureBox As PictureBox )
+
+        If pictureBox.ImageLocation = Utilities.DefaultActorPath then
+            Exit Sub
+        End If
+
+        Me.ControlBox = False
+        MenuStrip1.Enabled = False
+        util_ZoomImage( New Bitmap(pictureBox.ImageLocation) )
+
+    End Sub
 End Class
