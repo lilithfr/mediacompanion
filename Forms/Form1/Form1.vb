@@ -28563,4 +28563,23 @@ End Sub
         generalprefschanged = True
     End Sub
 
+    Private Sub TextBox_Plot_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles TextBox_Plot.DoubleClick
+        ShowBigTvEpisodeText()
+    End Sub
+
+    Private Sub ShowBigTvEpisodeText()
+
+        Dim frm as new frmBigTvEpisodeText
+
+        frm.ShowDialog( 
+                        TextBox_Title   .Text ,   
+                        TextBox_Director.Text ,   
+                        TextBox_Aired   .Text ,   
+                        TextBox_Rating  .Text ,   
+                        TextBox15       .Text ,   
+                        TextBox11       .Text ,   
+                        TextBox14       .Text ,   
+                        TextBox_Plot    .Text  
+                        )    
+    End Sub
 End Class
