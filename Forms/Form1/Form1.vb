@@ -3984,7 +3984,8 @@ Public Class Form1
                             If Not IO.File.Exists(tempsb) Then
 
                                 newmovie.filedetails = Preferences.Get_HdTags(newMovieList(f).mediapathandfilename)
-                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
+
+                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and newmovie.fullmoviebody.runtime = "")) Then
                                     Try
                                         progresstext &= " - HD tags"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
@@ -6502,7 +6503,8 @@ Public Class Form1
                     Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
                     If tempname <> Nothing Then workingMovieDetails.filedetails = Preferences.Get_HdTags(tempname)
                     messbox.TextBox1.Text = "Video Duration"
-                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
+
+                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and workingMovieDetails.fullmoviebody.runtime = nothing)) Then
                         workingMovieDetails.fullmoviebody.runtime = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
                     End If
                 Catch ex As Exception
@@ -7723,7 +7725,7 @@ Public Class Form1
 
 
 
-                        If mediatags = True Or (batchList.runtime = True And Preferences.movieRuntimeDisplay = "file") Then
+                        If mediatags = True Or (batchList.runtime = True And Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and movietemplate.fullmoviebody.runtime = Nothing) Then
                             Try
                                 Dim mediapath As String = Utilities.GetFileName(movietoalter.fileinfo.fullpathandfilename)
                                 Dim tempFileDetails As FullFileDetails = Preferences.Get_HdTags(mediapath)
@@ -20211,6 +20213,8 @@ MyExit:
 
         cbPreferredTrailerResolution.Text = Preferences.moviePreferredTrailerResolution.ToUpper()
 
+        cbMovieRuntimeFallbackToFile.Enabled = (Preferences.movieRuntimeDisplay = "scraper")
+        cbMovieRuntimeFallbackToFile.Checked = Preferences.movieRuntimeFallbackToFile
 
         generalprefschanged = False
     End Sub
@@ -21823,6 +21827,9 @@ MyExit:
                 Preferences.movieRuntimeDisplay = "file"
                 displayRuntimeScraper = False
             End If
+
+            cbMovieRuntimeFallbackToFile.Enabled = rbRuntimeScraper.Checked
+
             'Call mov_SwitchRuntime() 'Damn it - this call prevents MC starting, and I have no idea why! HueyHQ
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -23990,6 +23997,8 @@ MyExit:
                      newnfo = True
 						End If
 
+                    Dim runTimeRescraped As Boolean = False
+
                     If field <> "hdtags" And field <> "poster" And field <> "backdrop" And field <> "runtime_file" And field <> "actors" And field <> "trailer" Then
                         '                    Dim scraper As New imdb.Classimdbscraper
                         Dim scraper As New Classimdb
@@ -24079,6 +24088,7 @@ MyExit:
                                     Case "runtime"
                                         If field = "runtime_imdb" Then
                                             workingMovieDetails.fullmoviebody.runtime = thisresult.InnerText
+                                            runTimeRescraped = true
                                         End If
                                     Case "studio"
                                         If field = "studio" Then
@@ -24123,10 +24133,36 @@ MyExit:
                                     If done = True Then Exit For
                                 Next
                             End If
+
+                            If field = "runtime_imdb" and Preferences.movieRuntimeFallbackToFile and Not runTimeRescraped Then
+                                Try
+                                    Dim tempint As Integer = 0
+                                    Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                                    Dim newfiledetails As New FullFileDetails
+
+                                    If tempname <> Nothing Then newfiledetails = Preferences.Get_HdTags(tempname)
+
+                                    If newfiledetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                                        Try
+                                            workingMovieDetails.fullmoviebody.runtime = Utilities.cleanruntime(newfiledetails.filedetails_video.DurationInSeconds.Value)
+                                        Catch ex As Exception
+    #If SilentErrorScream Then
+                                            Throw ex
+    #End If
+                                        End Try
+                                    End If
+                                Catch ex As Exception
+    #If SilentErrorScream Then
+                                    Throw ex
+    #End If
+                                End Try
+                            End If
+
                         End If
                         nfoFunction.mov_NfoSave(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails, True)
                         newnfo = True
                         'Call loadinfofile()
+
                     ElseIf field = "hdtags" Or field = "runtime_file" Then
                         Try
                             frmProgSplash.Label1.Text &= " - Scraping..."
@@ -28522,4 +28558,9 @@ End Sub
         End Try
     End Sub
     
+    Private Sub cbMovieRuntimeFallbackToFile_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieRuntimeFallbackToFile.CheckedChanged
+        Preferences.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
+        generalprefschanged = True
+    End Sub
+
 End Class

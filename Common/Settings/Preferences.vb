@@ -154,6 +154,7 @@ Public Class Preferences
     Public Shared showsortdate As Boolean
     Public Shared fixnfoid As Boolean
     Public Shared displayMissingEpisodes As Boolean = False
+    Public Shared movieRuntimeFallbackToFile As Boolean = False
 
     Public Shared moviesortorder As Byte
     Public Shared moviedefaultlist As Byte
@@ -285,7 +286,7 @@ Public Class Preferences
         Preferences.namemode = "1"
         Preferences.maximumthumbs = 10
         Preferences.gettrailer = False
-		  Preferences.DownloadTrailerDuringScrape = False
+        Preferences.DownloadTrailerDuringScrape = False
         ReDim Preferences.certificatepriority(33)
         Preferences.certificatepriority(0) = "MPAA"
         Preferences.certificatepriority(1) = "UK"
@@ -439,6 +440,9 @@ Public Class Preferences
         child.InnerText = Preferences.movieRuntimeDisplay
         root.AppendChild(child)
 
+        child = doc.CreateElement("movieRuntimeFallbackToFile")
+        child.InnerText = Preferences.movieRuntimeFallbackToFile.ToString.ToLower
+        root.AppendChild(child)
 
         child = doc.CreateElement("renamenfofiles")
         child.InnerText = Preferences.renamenfofiles.ToString.ToLower
@@ -1116,6 +1120,9 @@ Public Class Preferences
 
                 Case "movieruntimedisplay"
                     If thisresult.InnerText <> "" Then Preferences.movieRuntimeDisplay = thisresult.InnerXml
+
+                Case "movieRuntimeFallbackToFile"
+                    Preferences.movieRuntimeFallbackToFile = thisresult.InnerXml
 
                 Case "hdtvtags"
                     If thisresult.InnerXml = "true" Then

@@ -4993,7 +4993,8 @@ Module Module1
                         tempsb = IO.Path.Combine(tempsb, "tempoffline.ttt")
                         If Not IO.File.Exists(tempsb) Then
                             newmovie.filedetails = get_hdtags(newMovieList(f).mediapathandfilename)
-                            If newmovie.filedetails.filedetails_video.duration <> Nothing And Preferences.movieRuntimeDisplay = "file" Then
+
+                            If newmovie.filedetails.filedetails_video.duration <> Nothing And ((Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and newmovie.fullmoviebody.runtime = Nothing)) Then
                                 newmovie.fullmoviebody.runtime = Utilities.cleanruntime(newmovie.filedetails.filedetails_video.duration) & " min"
                                 Console.WriteLine("  HD Tags Added OK")
                             End If
