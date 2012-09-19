@@ -4606,7 +4606,7 @@ Module Module1
                                 Case "director"
                                     newmovie.fullmoviebody.director = thisresult.InnerText
                                 Case "stars"
-                                    newmovie.fullmoviebody.stars = thisresult.InnerText
+                                    newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
                                 Case "genre"
                                     Dim strarr() As String
                                     strarr = thisresult.InnerText.Split("/")
