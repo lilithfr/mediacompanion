@@ -1838,6 +1838,8 @@ Public Class WorkingWithNfoFiles
             Monitor.Exit(Me)
         End Try
     End Sub
+
+
     Public Function util_CharsConvert(ByVal line As String)
         Monitor.Enter(Me)
         Try

@@ -3984,7 +3984,7 @@ Public Class Form1
                             If Not IO.File.Exists(tempsb) Then
 
                                 newmovie.filedetails = Preferences.Get_HdTags(newMovieList(f).mediapathandfilename)
-
+                                
                                 If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and newmovie.fullmoviebody.runtime = "")) Then
                                     Try
                                         progresstext &= " - HD tags"

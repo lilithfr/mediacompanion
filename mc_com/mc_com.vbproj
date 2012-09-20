@@ -181,6 +181,10 @@
       <Project>{A3624371-E7E4-4E55-8E64-4460E758D39E}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ProtoXML\ProtoXML.vbproj">
+      <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
+      <Name>ProtoXML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilites\Utilites.vbproj">
       <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
       <Name>Utilites</Name>
