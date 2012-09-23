@@ -128,6 +128,8 @@
   <ItemGroup>
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ExceptionHandler.vb" />
+    <Compile Include="Classes\HomeMovieDetails.vb" />
+    <Compile Include="Classes\HomeMovies.vb" />
     <Compile Include="Classes\MediaInfoExport.vb" />
     <Compile Include="Classes\Movies.vb" />
     <Compile Include="Classes\Renamer.vb" />
@@ -163,7 +165,9 @@
     <Compile Include="Forms\frmProgressScreen.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Structures\BasicHomeMovie.vb" />
     <Compile Include="Structures\FanartList.vb" />
+    <Compile Include="Structures\HomeMovieNFO.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
     <Compile Include="Structures\TableItems.vb" />

@@ -36,7 +36,8 @@ Public Class Form1
     Public fullMovieList As New List(Of str_ComboList)
     Public filteredList As New List(Of str_ComboList)
     Public workingMovieDetails As FullMovieDetails
-
+    Public homemovielist As New List(Of str_BasicHomeMovie)
+    Public WorkingHomeMovie As New HomeMovieDetails
 
     Public workingMovie As New str_ComboList(SetDefaults)
     Public batchList As New str_BatchWizard(SetDefaults)
@@ -197,7 +198,7 @@ Public Class Form1
                 e.Cancel = True
                 Exit Sub
             End If
-
+            Call HomeMovieCacheSave()
             'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
 
             'Todo: Code a better way to serialize the data
@@ -443,7 +444,7 @@ Public Class Form1
                 End If
             Next
         End If
-
+        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
         'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
         util_MainFormTitleUpdate()
 
@@ -9323,7 +9324,11 @@ MyExit:
                 playlist = Utilities.GetMediaList(tempstring)
             Case "Trailer"
                 Dim TrailerPath As String = Utilities.GetTrailerName(tempstring)
-                If System.IO.File.Exists(trailerpath) Then playlist.Add(Trailerpath)
+                If System.IO.File.Exists(TrailerPath) Then playlist.Add(TrailerPath)
+            Case "HomeMovie"
+                tempstring = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
+                tempstring = Utilities.GetFileName(tempstring)
+                playlist = Utilities.GetMediaList(tempstring)
         End Select
         frmSplash2.Text = "Playing Movie..."
         frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
@@ -12829,6 +12834,9 @@ MyExit:
                 TvTreeview.Focus()
                 tab1 = 1
                 Preferences.startuptab = 1
+            ElseIf tab = "home movies" Then
+                tab1 = TabLevel1.SelectedIndex
+                Call SetupHomeMovies()
             ElseIf tab = "" Then
                 TabLevel1.SelectedIndex = tab1
                 Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
@@ -27350,6 +27358,13 @@ MyExit:
             Call util_GenreLoad()
         End If
 
+        If IO.File.Exists(workingProfile.homemoviecache) Then
+            loadinginfo = "Status :- Loading Home Movie Database"
+            frmSplash.Label3.Text = loadinginfo
+            frmSplash.Label3.Refresh()
+            Call homemovieCacheLoad()
+        End If
+
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
@@ -28168,31 +28183,31 @@ End Sub
         End If
     End Sub
 
-    Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
-        If ListBox14.SelectedItem <> "-None-" Then
-            ListBox14.Items.Remove(ListBox14.SelectedItem)
-            If ListBox14.Items.Count = 0 Then
-                ListBox14.Items.Add("-None-")
-            End If
-            workingMovieDetails.fullmoviebody.movieset = ""
-            Dim tempsets As String = ""
-            For f = 0 To ListBox14.Items.Count - 1
-                If f = 0 Then
-                    tempsets = ListBox14.Items(f)
-                Else
-                    tempsets = tempsets & " / " & ListBox14.Items(f)
-                End If
-            Next
-            'workingMovieDetails.fullmoviebody.movieset = tempsets
-            setsTxt.Text = tempsets
+    'Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
+    '    If ListBox14.SelectedItem <> "-None-" Then
+    '        ListBox14.Items.Remove(ListBox14.SelectedItem)
+    '        If ListBox14.Items.Count = 0 Then
+    '            ListBox14.Items.Add("-None-")
+    '        End If
+    '        workingMovieDetails.fullmoviebody.movieset = ""
+    '        Dim tempsets As String = ""
+    '        For f = 0 To ListBox14.Items.Count - 1
+    '            If f = 0 Then
+    '                tempsets = ListBox14.Items(f)
+    '            Else
+    '                tempsets = tempsets & " / " & ListBox14.Items(f)
+    '            End If
+    '        Next
+    '        'workingMovieDetails.fullmoviebody.movieset = tempsets
+    '        setsTxt.Text = tempsets
 
-            Call mov_SaveQuick()
-        Else
-            MsgBox("Can only remove Added Sets")
-        End If
-       
+    '        Call mov_SaveQuick()
+    '    Else
+    '        MsgBox("Can only remove Added Sets")
+    '    End If
 
-    End Sub
+
+    'End Sub
 
 
     Private Sub cbSort_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbSort.SelectedIndexChanged 
@@ -28612,4 +28627,463 @@ End Sub
         End Try
 
     End Sub
+
+    'Private Sub MovieAddSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieAddSetBtn.Click
+    '    If ListBox4.SelectedItem <> Nothing Then
+    '        If ListBox4.SelectedItem <> "" Then
+    '            Dim exists As Boolean = False
+    '            For Each item In ListBox14.Items
+    '                If item = ListBox4.SelectedItem Then
+    '                    exists = True
+    '                    Exit For
+    '                End If
+    '            Next
+    '            If exists = False Then
+    '                For f = ListBox14.Items.Count - 1 To 0 Step -1
+    '                    If ListBox14.Items(f) = "-None-" Then
+    '                        ListBox14.Items.RemoveAt(f)
+    '                    End If
+    '                Next
+    '                ListBox14.Items.Add(ListBox4.SelectedItem)
+    '            End If
+    '            workingMovieDetails.fullmoviebody.movieset = ""
+    '            Dim tempsets As String = ""
+    '            For f = 0 To ListBox14.Items.Count - 1
+
+    '                If f = 0 Then
+    '                    tempsets = ListBox14.Items(f)
+    '                Else
+    '                    tempsets = tempsets & " / " & ListBox14.Items(f)
+    '                End If
+    '            Next
+    '            'workingMovieDetails.fullmoviebody.movieset = tempsets
+    '            setsTxt.Text = tempsets
+
+    '            Call mov_SaveQuick()
+
+    '        End If
+    '    End If
+    'End Sub
+
+    Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
+        If ListBox14.SelectedItem <> "-None-" Then
+            ListBox14.Items.Remove(ListBox14.SelectedItem)
+            If ListBox14.Items.Count = 0 Then
+                ListBox14.Items.Add("-None-")
+            End If
+            workingMovieDetails.fullmoviebody.movieset = ""
+            Dim tempsets As String = ""
+            For f = 0 To ListBox14.Items.Count - 1
+                If f = 0 Then
+                    tempsets = ListBox14.Items(f)
+                Else
+                    tempsets = tempsets & " / " & ListBox14.Items(f)
+                End If
+            Next
+            'workingMovieDetails.fullmoviebody.movieset = tempsets
+            setsTxt.Text = tempsets
+
+            Call mov_SaveQuick()
+        Else
+            MsgBox("Can only remove Added Sets")
+        End If
+
+
+    End Sub
+
+    Private Sub SetupHomeMovies()
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
+            MsgBox("Please add A Folder containing Home Movies")
+            Try
+                TabControl1.SelectedIndex = 1
+            Catch
+            End Try
+        Else
+            If homemovielist.Count > 0 Then
+                Call loadhomemovielist()
+            End If
+            If homemoviefolders.Count > 0 Then
+                ListBox19.Items.Clear()
+                For Each folder In homemoviefolders
+                    ListBox19.Items.Add(folder)
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Sub TabControl1_SelectedIndexChanged1(ByVal sender As Object, ByVal e As System.EventArgs)
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
+            MsgBox("Please add A Folder containing Home Movies")
+            Try
+                TabControl1.SelectedIndex = 1
+            Catch
+            End Try
+        End If
+    End Sub
+
+    'Private Sub listhomemovies()
+    '    ListBox18.Items.Clear()
+    '    For Each mov In homemovielist
+    '        ListBox18.Items.Add(New ValueDescriptionPair(mov.Title, mov.FullPathAndFilename))
+    '    Next
+    'End Sub
+
+    Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
+        'Search for new Home Movies
+        Dim dft As New List(Of String)
+        Dim moviepattern As String
+        Dim tempint As Integer = 0
+        Dim errorcounter As Integer = 0
+        Dim trailer As String = ""
+        Dim newmoviecount As Integer = 0
+        Dim dirinfo As String = String.Empty
+        newMovieList.Clear()
+        Dim newhomemoviefolders As New List(Of String)
+        Dim progress As Integer = 0
+        progress = 0
+        scraperLog = ""
+        Dim dirpath As String = String.Empty
+
+        scraperLog &= "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
+
+
+        ToolStripProgressBar8.Value = 0
+        ToolStripProgressBar8.ProgressBar.Refresh()
+        ToolStripStatusLabel9.Text = "Scanning for Home Movies"
+        ToolStripProgressBar8.Visible = True
+        ToolStripStatusLabel9.Visible = True
+
+        Dim newHomeMovieList As New List(Of str_BasicHomeMovie)
+
+
+
+
+        For Each folder In homemoviefolders
+            Dim totalfolders As New List(Of String)
+            totalfolders.Clear()
+
+            For Each moviefolder In homemoviefolders
+                Dim hg As New IO.DirectoryInfo(folder)
+                If hg.Exists Then
+                    scraperLog &= "Found Movie Folder: " & hg.FullName.ToString & vbCrLf
+                    totalfolders.Add(moviefolder)
+                    scraperLog &= "Checking for subfolders" & vbCrLf
+                    Dim newlist As List(Of String)
+                    Try
+                        newlist = Utilities.EnumerateFolders(moviefolder, 6)
+                        For Each subfolder In newlist
+                            scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
+                            totalfolders.Add(subfolder)
+                        Next
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                    End Try
+                End If
+            Next
+
+
+            For Each homemoviefolder In totalfolders
+                For Each ext In Utilities.VideoExtensions
+                    Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
+                    moviepattern = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)  'this bit adds the * for the extension search in mov_ListFiles2 if its not the string VIDEO_TS.IFO 
+
+                    dirpath = homemoviefolder
+                    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                    returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, moviepattern, scraperLog)         'titlename is logged in here
+                    If returnedhomemovielist.Count > 0 Then
+                        For Each newhomemovie In returnedhomemovielist
+                            newHomeMovieList.Add(newhomemovie)
+                        Next
+                    End If
+                Next
+            Next
+        Next
+
+        ToolStripStatusLabel9.Text = newHomeMovieList.Count.ToString & " New Home Movies Found"
+        Dim counter As Integer = 1
+        For Each item In newHomeMovieList
+            ToolStripStatusLabel9.Text = "Adding Home Movie " & counter & " of " & newHomeMovieList.Count
+            Me.Refresh()
+            Application.DoEvents()
+            If item.FullPathAndFilename <> "" Then
+                Dim newhomemovie As New str_BasicHomeMovie
+                newhomemovie.FullPathAndFilename = item.FullPathAndFilename
+                newhomemovie.Title = item.Title
+
+                Dim fulldetails As New HomeMovieDetails
+                fulldetails.fullmoviebody.title = newhomemovie.Title
+
+                'Get year for home movie using modified time since more accurate (Creation date is reset if a file is copied)
+                Dim fileCreatedDate As DateTime = File.GetLastWriteTime(item.FullPathAndFilename)
+                Dim format As String = "yyyy"
+                Dim yearstring As String = fileCreatedDate.ToString(format)
+                fulldetails.fullmoviebody.year = yearstring
+
+                'create fanart for home movie if it does not exist
+                Dim thumbpathandfilename As String = Preferences.GetFanartPath(item.FullPathAndFilename)
+                If Not IO.File.Exists(thumbpathandfilename) Then
+                    Try
+                        Dim seconds As Integer = 10
+                        Dim myProcess As Process = New Process
+                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                        myProcess.StartInfo.CreateNoWindow = False
+                        myProcess.StartInfo.FileName = Preferences.applicationPath & "\ffmpeg.exe"
+                        Dim proc_arguments As String = "-y -i """ & item.FullPathAndFilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                        myProcess.StartInfo.Arguments = proc_arguments
+                        myProcess.Start()
+                        myProcess.WaitForExit()
+
+                    Catch ex As Exception
+
+                    End Try
+
+
+
+                End If
+
+                Dim nfofilename As String = ""
+                Dim extension As String = ""
+                fulldetails.fullmoviebody.movieset = "Home Movie"
+                fulldetails.fileinfo.fullpathandfilename = newhomemovie.FullPathAndFilename
+                fulldetails.filedetails = Preferences.Get_HdTags(fulldetails.fileinfo.fullpathandfilename)
+                Dim pathOnly As String = IO.Path.GetDirectoryName(fulldetails.fileinfo.fullpathandfilename) & "\"
+                Dim nfopath As String = pathOnly & IO.Path.GetFileNameWithoutExtension(fulldetails.fileinfo.fullpathandfilename) & ".nfo"
+                newhomemovie.FullPathAndFilename = nfopath
+                nfoFunction.nfoSaveHomeMovie(nfopath, fulldetails)
+                homemovielist.Add(newhomemovie)
+                ListBox18.Items.Add(New ValueDescriptionPair(newhomemovie.FullPathAndFilename, newhomemovie.Title))
+            End If
+            counter += 1
+            progress = ((100 / newHomeMovieList.Count) * (counter))
+            If progress > 100 Then progress = 100
+            ToolStripProgressBar8.Value = progress
+        Next
+        ToolStripProgressBar8.Visible = False
+        ToolStripStatusLabel9.Visible = False
+    End Sub
+
+    Private Sub HomeMovieCacheSave()
+        Dim fullpath As String = workingProfile.homemoviecache
+        If homemovielist.Count > 0 Then
+
+            If IO.File.Exists(fullpath) Then
+                Dim don As Boolean = False
+                Dim count As Integer = 0
+                Do
+                    Try
+                        If IO.File.Exists(fullpath) Then
+                            IO.File.Delete(fullpath)
+                            don = True
+                        Else
+                            don = True
+                        End If
+                    Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                    Finally
+                        count += 1
+                    End Try
+                Loop Until don = True
+
+            End If
+
+            frmSplash2.Label1.Text = "Creating Home Movie Cache xml....."
+            frmSplash2.Label2.Visible = False
+            frmSplash2.ProgressBar1.Visible = False
+
+            Dim doc As New XmlDocument
+
+            Dim thispref As XmlNode = Nothing
+            Dim xmlproc As XmlDeclaration
+
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+            doc.AppendChild(xmlproc)
+            Dim root As XmlElement
+            Dim child As XmlElement
+            root = doc.CreateElement("homemovie_cache")
+            Dim childchild As XmlElement
+
+            Dim count2 As Integer = 0
+            frmSplash2.Label2.Text = "Creating cache xml...."
+            For Each movie In homemovielist
+
+                child = doc.CreateElement("movie")
+                childchild = doc.CreateElement("fullpathandfilename")
+                childchild.InnerText = movie.FullPathAndFilename
+                child.AppendChild(childchild)
+
+                childchild = doc.CreateElement("title")
+                childchild.InnerText = movie.Title
+                child.AppendChild(childchild)
+                root.AppendChild(child)
+            Next
+
+            doc.AppendChild(root)
+            For f = 1 To 100
+                Try
+                    frmSplash2.Label2.Text = "Saving cache xml...." & f
+                    Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
+                    output.Formatting = Formatting.Indented
+                    doc.WriteTo(output)
+                    output.Close()
+                    Exit For
+                Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+                End Try
+            Next
+
+        End If
+    End Sub
+
+    Private Sub homemovieCacheLoad()
+        homemovielist.Clear()
+
+        Dim movielist As New XmlDocument
+        Dim objReader As New System.IO.StreamReader(workingProfile.homemoviecache)
+        Dim tempstring As String = objReader.ReadToEnd
+        objReader.Close()
+
+
+
+        movielist.LoadXml(tempstring)
+        Dim thisresult As XmlNode = Nothing
+        For Each thisresult In movielist("homemovie_cache")
+            Select Case thisresult.Name
+                Case "movie"
+                    Dim newmovie As New str_BasicHomeMovie(SetDefaults)
+                    Dim detail As XmlNode = Nothing
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+                            'workingmovie.missingdata1
+
+                            Case "fullpathandfilename"
+                                newmovie.FullPathAndFilename = detail.InnerText
+                            Case "title"
+                                newmovie.Title = detail.InnerText
+                        End Select
+                    Next
+                    homemovielist.Add(newmovie)
+            End Select
+        Next
+
+        Call loadhomemovielist()
+        Try
+            ListBox18.SelectedIndex = 0
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+    End Sub
+
+    Private Sub loadhomemovielist()
+        ListBox18.Items.Clear()
+        For Each item In homemovielist
+            ListBox18.Items.Add(New ValueDescriptionPair(item.FullPathAndFilename, item.Title))
+        Next
+    End Sub
+
+    Private Sub ListBox18_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.DoubleClick
+        mov_Play("HomeMovie")
+    End Sub
+
+
+    Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
+        For Each homemovie In homemovielist
+            If homemovie.FullPathAndFilename Is CType(ListBox18.SelectedItem, ValueDescriptionPair).Value Then
+                WorkingHomeMovie.fileinfo.fullpathandfilename = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
+                Call loadhomemoviedetails()
+            End If
+        Next
+    End Sub
+
+    Private Sub loadhomemoviedetails()
+        TextBox2.Text = ""
+        TextBox6.Text = ""
+        TextBox20.Text = ""
+        TextBox22.Text = ""
+        TextBox23.Text = ""
+        PictureBox4.Image = Nothing
+        WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
+        WorkingHomeMovie.fileinfo.fanartpath = Preferences.GetFanartPath(WorkingHomeMovie.fileinfo.fullpathandfilename)
+        TextBox2.Text = WorkingHomeMovie.fullmoviebody.title
+        TextBox6.Text = WorkingHomeMovie.fullmoviebody.sortorder
+        TextBox22.Text = WorkingHomeMovie.fullmoviebody.plot
+        TextBox23.Text = WorkingHomeMovie.fullmoviebody.stars
+        TextBox20.Text = WorkingHomeMovie.fullmoviebody.year
+        If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
+            util_ImageLoad(PictureBox4, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+        End If
+    End Sub
+
+
+    Private Sub btnSaveHomeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveHomeMovie.Click
+        If TextBox2.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.title = TextBox2.Text
+        End If
+        If TextBox6.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.sortorder = TextBox6.Text
+        End If
+        WorkingHomeMovie.fullmoviebody.year = TextBox20.Text
+        WorkingHomeMovie.fullmoviebody.plot = TextBox22.Text
+        WorkingHomeMovie.fullmoviebody.stars = TextBox23.Text
+        nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
+    End Sub
+
+
+  
+    Private Sub AddHomeFolderBtn_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddHomeFolderBtn.Click
+        Try
+            Dim allok As Boolean = True
+            Dim theFolderBrowser As New FolderBrowserDialog
+            Dim thefoldernames As String
+            theFolderBrowser.Description = "Please Select Folder to Add to DB (Subfolders will also be added)"
+            theFolderBrowser.ShowNewFolderButton = True
+            theFolderBrowser.RootFolder = System.Environment.SpecialFolder.Desktop
+            theFolderBrowser.SelectedPath = Preferences.lastpath
+            If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (theFolderBrowser.SelectedPath)
+                Preferences.lastpath = thefoldernames
+                For Each item As Object In ListBox19.Items
+                    If thefoldernames.ToString = item.ToString Then allok = False
+                Next
+
+                If allok = True Then
+                    ListBox19.Items.Add(thefoldernames)
+                    ListBox19.Refresh()
+                    Preferences.homemoviefolders.Clear()
+                    For Each item In ListBox19.Items
+                        Preferences.homemoviefolders.Add(item)
+                    Next
+                    Call SaveConfig()
+                Else
+                    MsgBox("        Folder Already Exists")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub RemoveHomeFoldersBtn_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveHomeFoldersBtn.Click
+        Try
+            While ListBox19.SelectedItems.Count > 0
+                ListBox19.Items.Remove(ListBox7.SelectedItems(0))
+            End While
+            Preferences.homemoviefolders.Clear()
+            For Each item In ListBox19.Items
+                Preferences.homemoviefolders.Add(item)
+            Next
+            Call SaveConfig()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+
 End Class

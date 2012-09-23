@@ -7,6 +7,7 @@ Public Structure str_ListOfProfiles
     Dim regexlist As String
     Dim filters As String
     Dim config As String
+    Dim homemoviecache As String
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         moviecache = ""
         tvcache = ""

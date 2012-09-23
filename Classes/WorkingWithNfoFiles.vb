@@ -7,7 +7,7 @@ Imports Media_Companion
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
 
-    Public Function util_NfoValidate(ByVal nfopath As String)
+    Public Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
         Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
@@ -2502,7 +2502,509 @@ Public Class WorkingWithNfoFiles
         End Try
 
     End Sub
+    Public Function nfoLoadHomeMovie(ByVal filenameandpath As String)
+        Try
+            Dim newmovie As New HomeMovieDetails
+            newmovie.fileinfo.fullpathandfilename = filenameandpath
+            If Not IO.File.Exists(filenameandpath) Then
+                Return "Error"
+                Exit Function
+            Else
 
+                Dim movie As New XmlDocument
+
+                Try
+                    movie.Load(filenameandpath)
+                Catch ex As Exception
+                    If Not util_NfoValidate(filenameandpath, True) Then
+                        newmovie.fullmoviebody.title = "ERROR"
+                        Return "ERROR"
+                        Exit Function
+                    End If
+
+
+
+                    Return (newmovie)
+                    Exit Function
+                End Try
+
+                Dim thisresult As XmlNode = Nothing
+
+                For Each thisresult In movie("movie")
+                    Try
+                        Select Case thisresult.Name
+                            Case "title"
+                                Dim tempstring As String = ""
+                                tempstring = thisresult.InnerText
+                                '-------------- Aqui
+                                If Preferences.ignorearticle = True Then
+                                    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                        tempstring = tempstring & ", The"
+                                    End If
+                                End If
+                                newmovie.fullmoviebody.title = tempstring
+                            Case "set"
+                                newmovie.fullmoviebody.movieset = thisresult.InnerText
+                            Case "stars"
+                                newmovie.fullmoviebody.stars = thisresult.InnerText
+                            Case "year"
+                                newmovie.fullmoviebody.year = thisresult.InnerText
+                            Case "plot"
+                                newmovie.fullmoviebody.plot = thisresult.InnerText
+                            Case "playcount"
+                                newmovie.fullmoviebody.playcount = thisresult.InnerText
+                            Case "sortorder"
+                                newmovie.fullmoviebody.sortorder = thisresult.InnerText
+                            Case "runtime"
+                                newmovie.fullmoviebody.runtime = thisresult.InnerText
+                                If IsNumeric(newmovie.fullmoviebody.runtime) Then
+                                    newmovie.fullmoviebody.runtime = newmovie.fullmoviebody.runtime & " min"
+                                End If
+                            Case "fileinfo"
+                                Dim what As XmlNode = Nothing
+                                For Each res In thisresult.ChildNodes
+                                    Select Case res.name
+                                        Case "streamdetails"
+                                            Dim newfilenfo As New FullFileDetails
+                                            Dim detail As XmlNode = Nothing
+                                            For Each detail In res.ChildNodes
+                                                Select Case detail.Name
+                                                    Case "video"
+                                                        Dim videodetails As XmlNode = Nothing
+                                                        For Each videodetails In detail.ChildNodes
+                                                            Select Case videodetails.Name
+                                                                Case "width"
+                                                                    newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
+                                                                Case "height"
+                                                                    newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
+                                                                Case "aspect"
+                                                                    newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
+                                                                Case "codec"
+                                                                    newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
+                                                                Case "formatinfo"
+                                                                    newfilenfo.filedetails_video.FormatInfo.Value = videodetails.InnerText
+                                                                Case "duration"
+                                                                    newfilenfo.filedetails_video.DurationInSeconds.Value = videodetails.InnerText
+                                                                Case "bitrate"
+                                                                    newfilenfo.filedetails_video.Bitrate.Value = videodetails.InnerText
+                                                                Case "bitratemode"
+                                                                    newfilenfo.filedetails_video.BitrateMode.Value = videodetails.InnerText
+                                                                Case "bitratemax"
+                                                                    newfilenfo.filedetails_video.BitrateMax.Value = videodetails.InnerText
+                                                                Case "container"
+                                                                    newfilenfo.filedetails_video.Container.Value = videodetails.InnerText
+                                                                Case "codecid"
+                                                                    newfilenfo.filedetails_video.CodecId.Value = videodetails.InnerText
+                                                                Case "codecidinfo"
+                                                                    newfilenfo.filedetails_video.CodecInfo.Value = videodetails.InnerText
+                                                                Case "scantype"
+                                                                    newfilenfo.filedetails_video.ScanType.Value = videodetails.InnerText
+                                                            End Select
+                                                        Next
+                                                    Case "audio"
+                                                        Dim audiodetails As XmlNode = Nothing
+                                                        Dim audio As New AudioDetails
+                                                        For Each audiodetails In detail.ChildNodes
+
+                                                            Select Case audiodetails.Name
+                                                                Case "language"
+                                                                    audio.Language.Value = audiodetails.InnerText
+                                                                Case "codec"
+                                                                    audio.Codec.Value = audiodetails.InnerText
+                                                                Case "channels"
+                                                                    audio.Channels.Value = audiodetails.InnerText
+                                                                Case "bitrate"
+                                                                    audio.Bitrate.Value = audiodetails.InnerText
+                                                            End Select
+                                                        Next
+                                                        newfilenfo.filedetails_audio.Add(audio)
+                                                    Case "subtitle"
+                                                        Dim subsdetails As XmlNode = Nothing
+                                                        For Each subsdetails In detail.ChildNodes
+                                                            Select Case subsdetails.Name
+                                                                Case "language"
+                                                                    Dim sublang As New SubtitleDetails
+                                                                    sublang.Language.Value = subsdetails.InnerText
+                                                                    newfilenfo.filedetails_subtitles.Add(sublang)
+                                                            End Select
+                                                        Next
+                                                End Select
+                                            Next
+                                            newmovie.filedetails = newfilenfo
+                                    End Select
+                                Next
+                        End Select
+                    Catch ex As Exception
+                        MsgBox(ex.ToString)
+                    End Try
+                Next
+
+                'Now we need to make sure no varibles are still set to NOTHING before returning....
+
+                If newmovie.fullmoviebody.title = Nothing Then newmovie.fullmoviebody.title = "ERR - This Movie Has No TITLE!"
+                newmovie.fullmoviebody.filename = IO.Path.GetFileName(filenameandpath)
+                If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
+                If newmovie.fullmoviebody.plot = Nothing Then newmovie.fullmoviebody.plot = ""
+                If newmovie.fullmoviebody.runtime = Nothing Then newmovie.fullmoviebody.runtime = ""
+                If newmovie.fullmoviebody.sortorder = Nothing Or newmovie.fullmoviebody.sortorder = "" Then newmovie.fullmoviebody.sortorder = newmovie.fullmoviebody.title
+
+                If newmovie.fullmoviebody.year = Nothing Then newmovie.fullmoviebody.year = "0001"
+
+                'MsgBox(Format(myDate, "yyyy"))
+                'MsgBox(myDate.ToString("MMddyy"))
+
+
+                Return newmovie
+            End If
+
+        Catch
+        End Try
+        Return "Error"
+
+    End Function
+
+    Public Function nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
+
+        If homemovietosave Is Nothing Then Exit Function
+        If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
+            'Try
+            Dim doc As New XmlDocument
+
+
+            Dim thispref As XmlNode = Nothing
+            Dim xmlproc As XmlDeclaration
+
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+            doc.AppendChild(xmlproc)
+            Dim root As XmlElement = Nothing
+            Dim child As XmlElement = Nothing
+            Dim actorchild As XmlElement = Nothing
+            Dim filedetailschild As XmlElement = Nothing
+            Dim filedetailschildchild As XmlElement = Nothing
+            Dim anotherchild As XmlElement = Nothing
+
+            root = doc.CreateElement("movie")
+
+            If Preferences.enablehdtags = True Then
+
+                child = doc.CreateElement("fileinfo")
+
+                anotherchild = doc.CreateElement("streamdetails")
+
+                filedetailschild = doc.CreateElement("video")
+
+                If homemovietosave.filedetails.filedetails_video.Width.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.Width.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("width")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.Width.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.Height.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.Height.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("height")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.Height.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.Aspect.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.Aspect.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("aspect")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.Aspect.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.Codec.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.Codec.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("codec")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.Codec.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.FormatInfo.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.FormatInfo.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("format")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.FormatInfo.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("duration")
+                        Dim temptemp As String = homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value
+                        If Preferences.intruntime = True Then
+                            temptemp = Utilities.cleanruntime(homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value)
+                            If IsNumeric(temptemp) Then
+                                filedetailschildchild.InnerText = temptemp
+                                filedetailschild.AppendChild(filedetailschildchild)
+                            Else
+                                filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value
+                                filedetailschild.AppendChild(filedetailschildchild)
+                            End If
+                        Else
+                            filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.DurationInSeconds.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                        End If
+
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.Bitrate.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.Bitrate.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("bitrate")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.Bitrate.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.BitrateMode.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.BitrateMode.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("bitratemode")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.BitrateMode.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.BitrateMax.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.BitrateMax.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("bitratemax")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.BitrateMax.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.Container.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.Container.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("container")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.Container.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.CodecId.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.CodecId.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("codecid")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.CodecId.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.CodecInfo.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.CodecInfo.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("codecidinfo")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.CodecInfo.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+                If homemovietosave.filedetails.filedetails_video.ScanType.Value <> Nothing Then
+                    If homemovietosave.filedetails.filedetails_video.ScanType.Value <> "" Then
+                        filedetailschildchild = doc.CreateElement("scantype")
+                        filedetailschildchild.InnerText = homemovietosave.filedetails.filedetails_video.ScanType.Value
+                        filedetailschild.AppendChild(filedetailschildchild)
+                    End If
+                End If
+
+
+
+                anotherchild.AppendChild(filedetailschild)
+
+
+
+
+                For Each item In homemovietosave.filedetails.filedetails_audio
+
+                    filedetailschild = doc.CreateElement("audio")
+
+                    If item.Language.Value <> Nothing Then
+                        If item.Language.Value <> "" Then
+                            filedetailschildchild = doc.CreateElement("language")
+                            filedetailschildchild.InnerText = item.Language.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                        End If
+                    End If
+
+                    If item.Codec.Value <> Nothing Then
+                        If item.Codec.Value <> "" Then
+                            filedetailschildchild = doc.CreateElement("codec")
+                            filedetailschildchild.InnerText = item.Codec.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                        End If
+                    End If
+
+                    If item.Channels.Value <> Nothing Then
+                        If item.Channels.Value <> "" Then
+                            filedetailschildchild = doc.CreateElement("channels")
+                            filedetailschildchild.InnerText = item.Channels.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                        End If
+                    End If
+
+                    If item.Bitrate.Value <> Nothing Then
+                        If item.Bitrate.Value <> "" Then
+                            filedetailschildchild = doc.CreateElement("bitrate")
+                            filedetailschildchild.InnerText = item.Bitrate.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                        End If
+                    End If
+
+                    anotherchild.AppendChild(filedetailschild)
+                Next
+
+
+                filedetailschild = doc.CreateElement("subtitle")
+
+                Dim tempint As Integer = 0
+                For Each entry In homemovietosave.filedetails.filedetails_subtitles
+
+                    If entry.Language <> Nothing Then
+                        If entry.Language.Value <> "" Then
+                            tempint += 1
+                            filedetailschildchild = doc.CreateElement("language")
+                            filedetailschildchild.InnerText = entry.Language.Value
+                            filedetailschild.AppendChild(filedetailschildchild)
+                        End If
+                    End If
+
+                Next
+
+
+                If tempint > 0 Then
+                    anotherchild.AppendChild(filedetailschild)
+                End If
+
+                child.AppendChild(anotherchild)
+
+                root.AppendChild(child)
+
+            End If
+
+
+
+
+            child = doc.CreateElement("title")
+            child.InnerText = homemovietosave.fullmoviebody.title
+            root.AppendChild(child)
+
+
+
+
+            If homemovietosave.fullmoviebody.movieset <> "-None-" Then
+                Dim strArr() As String
+                strArr = homemovietosave.fullmoviebody.movieset.Split("/")
+                For count = 0 To strArr.Length - 1
+                    child = doc.CreateElement("set")
+                    strArr(count) = strArr(count).Trim
+                    child.InnerText = strArr(count)
+                    root.AppendChild(child)
+                Next
+            End If
+
+
+            If homemovietosave.fullmoviebody.sortorder = Nothing Then
+                homemovietosave.fullmoviebody.sortorder = homemovietosave.fullmoviebody.title
+            End If
+            If homemovietosave.fullmoviebody.sortorder = "" Then
+                homemovietosave.fullmoviebody.sortorder = homemovietosave.fullmoviebody.title
+            End If
+            child = doc.CreateElement("sorttitle")
+            child.InnerText = homemovietosave.fullmoviebody.sortorder
+            root.AppendChild(child)
+
+
+
+            child = doc.CreateElement("year")
+            child.InnerText = homemovietosave.fullmoviebody.year
+            root.AppendChild(child)
+
+
+
+            child = doc.CreateElement("plot")
+            child.InnerText = homemovietosave.fullmoviebody.plot
+            root.AppendChild(child)
+
+            child = doc.CreateElement("runtime")
+            If homemovietosave.fullmoviebody.runtime <> Nothing Then
+                Dim minutes As String = homemovietosave.fullmoviebody.runtime
+                minutes = minutes.Replace("minutes", "")
+                minutes = minutes.Replace("mins", "")
+                minutes = minutes.Replace("min", "")
+                minutes = minutes.Replace(" ", "")
+                'If Preferences.intruntime = True And Not IsNumeric(minutes) Then
+                '    Dim tempstring As String = Form1.filefunction.cleanruntime(minutes)
+                '    If IsNumeric(tempstring) Then
+                '        minutes = tempstring
+                '    End If
+                'End If
+
+                Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+                    minutes = minutes.Substring(1, minutes.Length - 1)
+                Loop
+                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Preferences.roundminutes = True Then
+                    minutes = "0" & minutes
+                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Preferences.roundminutes = True Then
+                    minutes = "00" & minutes
+                End If
+                If Preferences.intruntime = False And IsNumeric(minutes) Then
+                    minutes = minutes & " min"
+                End If
+
+                minutes = homemovietosave.fullmoviebody.runtime
+
+                child.InnerText = minutes
+            Else
+                child.InnerText = homemovietosave.fullmoviebody.runtime
+            End If
+            root.AppendChild(child)
+
+
+
+            child = doc.CreateElement("playcount")
+            child.InnerText = homemovietosave.fullmoviebody.playcount
+            root.AppendChild(child)
+
+            child = doc.CreateElement("createdate")
+            If homemovietosave.fileinfo.createdate = Nothing Then
+                Dim myDate2 As Date = System.DateTime.Now
+                Try
+                    child.InnerText = Format(myDate2, Preferences.datePattern).ToString
+                Catch ex2 As Exception
+                End Try
+            ElseIf homemovietosave.fileinfo.createdate = "" Then
+                Dim myDate2 As Date = System.DateTime.Now
+                Try
+                    child.InnerText = Format(myDate2, Preferences.datePattern).ToString
+                Catch ex2 As Exception
+                End Try
+            Else
+                child.InnerText = homemovietosave.fileinfo.createdate
+            End If
+            root.AppendChild(child)
+
+
+            child = doc.CreateElement("stars")
+            child.InnerText = homemovietosave.fullmoviebody.stars
+            root.AppendChild(child)
+
+            doc.AppendChild(root)
+
+            Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
+            output.Formatting = Formatting.Indented
+            doc.WriteTo(output)
+            output.Close()
+
+        Else
+            MsgBox("File already exists")
+        End If
+
+
+    End Function
 End Class
 
 

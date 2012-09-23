@@ -183,7 +183,7 @@ Public Class Preferences
     Public Shared MovieRenameTemplate As String
     Public Shared moviePreferredTrailerResolution As String
     Public Shared MovieImdbGenreRegEx As String
-
+    Public Shared homemoviefolders As New List(Of String)
 	 Public Shared DownloadTrailerDuringScrape As Boolean
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
@@ -385,6 +385,12 @@ Public Class Preferences
             End If
         Next
 
+        For Each Path In Preferences.homemoviefolders
+            child = doc.CreateElement("homemoviefolder")
+            child.InnerText = Path
+            root.AppendChild(child)
+            list.Add(Path)
+        Next
 
         child = doc.CreateElement("DownloadTrailerDuringScrape")
         child.InnerText = Preferences.DownloadTrailerDuringScrape.ToString.ToLower
@@ -1046,6 +1052,9 @@ Public Class Preferences
                 Case "tvrootfolder"
                     Dim decodestring As String = decxmlchars(thisresult.InnerText)
                     Preferences.tvRootFolders.Add(decodestring)
+                Case ("homemoviefolder")
+                    Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                    Preferences.homemoviefolders.Add(decodestring)
                 Case "gettrailer"
                     If thisresult.InnerXml = "true" Then
                         Preferences.gettrailer = True
