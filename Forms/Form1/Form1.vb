@@ -29073,7 +29073,7 @@ End Sub
     Private Sub RemoveHomeFoldersBtn_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveHomeFoldersBtn.Click
         Try
             While ListBox19.SelectedItems.Count > 0
-                ListBox19.Items.Remove(ListBox7.SelectedItems(0))
+                ListBox19.Items.Remove(ListBox19.SelectedItems(0))
             End While
             Preferences.homemoviefolders.Clear()
             For Each item In ListBox19.Items
