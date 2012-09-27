@@ -133,14 +133,14 @@
     <value>334, 17</value>
   </metadata>
   <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>682, 56</value>
+    <value>874, 56</value>
   </metadata>
   <data name="ImageList2.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABY
-        DAAAAk1TRnQBSQFMAgEBBgEAAZABLwGQAS8BEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DAAAAk1TRnQBSQFMAgEBBgEAAbABLwGwAS8BEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -621,9 +621,6 @@
         HPQ/lWZY/B9D+VABg+h/KgBQjMcBST9KALsdqBGN33u9AH//2Q==
 </value>
   </data>
-  <metadata name="ListBox11.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="Label95.Text" xml:space="preserve">
     <value>This panel allows you to customise your preference with
 regards to the MPAA movie rating or Cert.
@@ -650,9 +647,6 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
   </metadata>
   <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1258, 17</value>
-  </metadata>
-  <metadata name="ListBox9.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
   </metadata>
   <metadata name="ListBox9.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -1740,7 +1734,7 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
     <value>True</value>
   </metadata>
   <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>767, 134</value>
+    <value>1034, 134</value>
   </metadata>
   <data name="Label128.Text" xml:space="preserve">
     <value>Using multisave mode it is possible to edit multiple movies at the same time,
@@ -2833,38 +2827,452 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1258, 17</value>
-  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 56</value>
+    <value>209, 56</value>
   </metadata>
   <metadata name="StatusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>154, 56</value>
+    <value>346, 56</value>
   </metadata>
   <metadata name="BckWrkScnMovies.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>271, 56</value>
+    <value>463, 56</value>
   </metadata>
   <metadata name="bckgroundversion.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>422, 56</value>
+    <value>614, 56</value>
   </metadata>
   <metadata name="bckgroundscanepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>792, 56</value>
+    <value>984, 56</value>
   </metadata>
   <metadata name="bckgroundfanart.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1112, 56</value>
-  </metadata>
-  <metadata name="bckgrounddroppedfiles.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 95</value>
   </metadata>
+  <metadata name="bckgrounddroppedfiles.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>160, 95</value>
+  </metadata>
   <metadata name="bckgroundexit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>196, 95</value>
+    <value>339, 95</value>
   </metadata>
   <metadata name="bckepisodethumb.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>506, 95</value>
+    <value>649, 95</value>
   </metadata>
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>656, 95</value>
+    <value>799, 95</value>
+  </metadata>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>805, 17</value>
+  </metadata>
+  <metadata name="Button65.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TextBox38.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Button14.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Label79.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Label68.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>Use this page to edit what movie sets are available.
+These sets can be used to group collections of movies together within XBMC,
+eg. If you were to add the movie set "Star Wars Collection", and make all
+Star Wars movies part of this set, then they would be added to the XBMC library
+as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
+  </data>
+  <metadata name="ListBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox7.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox15.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Refresh" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
+  <data name="Label99.Text" xml:space="preserve">
+    <value>Media Companion can attempt to automatically download a Poster when a movie is first scraped, if this option is enabled, then the setting below allows you to prioritise the order that sources are checked for an available poster.</value>
+  </data>
+  <metadata name="ListBox10.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="lbCleanFilename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="lbVideoSource.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>764, 56</value>
+  </metadata>
+  <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
+        LgAAAk1TRnQBSQFMAgEBBAEAAawBNwGsATcBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        AwABHgMAAQEBAAEYBQABUAFG/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
+        /wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8AAwABOAG5AdIBOAG5AdIBOAG4AdEBOAG4AdEBOAG3
+        AdEBNwG2AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAc0BNgGy
+        AcwBNgGxAcwBNgGxAcsBNgGwAcsBNgGwAcsBNgGvAcoBNgGvAcoBNgGuAckBNQGuAckBNQGtAcgBNQGt
+        AcgBNQGsAccBNQGsAccBNQGrAccBNQGrAcYBNQGqAcYBNAGpAcUBNAGpAcUBNAGoAcQBNAGoAcQBNAGo
+        AcQBNAGnAcMBNAGnAcMBNAGmAcIBMwGlAcIBMwGlAcEBMwGkAcEMAAP9A/4D0wnOA9oDzQPPA9cDzQPJ
+        A84DwgPQBtED1APWA9UD2AbSA84D4APhA5IDlQOPA5IGlAOVA5QGlgOTA5EDjwOQA40DjAOOA40DkAOO
+        A4wDiwPjA/0BfAHbAf8BfQHhAf8BeAHfAf8BeAHcAf8BfgHZAf4BfAHaAf4BfQHaAf8BfAHZAf8BhgHY
+        Af8BiAHYAf8BgwHZAf8BfgHdAf8BgQHXAf8BggHhAfUBgAHgAfgBegHVAf8BdAHbAfsBdwHYAfkBeAHO
+        Ae4BlwHcAfgBfwHZAfIBeAHUAfgBfwHaAf8BegHVAfwBewHeAfYBeAHeAfoBeQHYAf8BdgHbAf8BfAHa
+        Af8BhAHbAf8BdwHeAf8BdAHbAf8BggHaAf8BiQHbAf4BdQHgAfwBfAHdAf8BdgHVAf0BgwHbAf8BiwHe
+        AfkBewHeAfwBggHeAf0BgQHZAfkBgAHaAfkBdQHaAf8BfwHdAf8BgQHeAf8BeAHdAf8BegHcAf4BfAHX
+        Af4BgwHWAfwMAAFmAaABrwHHAeAB5AHuAfEB8gFmAaIBsAHAAdUB2gMAAeAB6QHrAwABfwG2AcIBTgGN
+        AZ4BxgHZAd4BrQHWAd8BhgG9AcgBiwGzAb0B7QHxAfIB7gLyAwABiQG/AckBWQGWAaYB1wHiAeUBVAGS
+        AaIBfAGzAb8BYQGcAaoB1AHkAekBcAGoAbQBwQHVAdoDAAHwAfMB9AGzAdAB1wH0AfYB9wHkAesB7QGx
+        AdoB4AGhAcQBzAGRAccB0AHKAdgB3QP8AeYB7QHuAXoBsgG/AbcB1AHaAdgB5AHnHgABRwHBAdcBOQG8
+        AdUBOQG8AdUBPwHVAeoBOwHGAd0BOwHGAd0BOwHGAdwBOwHFAdwBOwHDAdwBOwHDAdwBOwHDAdoBOwHD
+        AdoBOwHCAdkBOgHBAdkBOgHAAdkBOQHAAdkBOQHAAdcBOQG/AdcBOQG+AdYBOQG9AdYBOQG9AdYBOQG9
+        AdUBOAG8AdQBOAG7AdQBOAG6AdMBOAG6AdMBOAG6AdMBOAG5AdIBOAG4AdIBOAG3AdABOAG3AdABOAG2
+        AdABOAG2AdABOAG1Ac8BOAG0Ac8BNwG0Ac0BNgGzAc0BNgGzAc0BNgGyAc0BPQHNAeMBNAGoAcQBNAGo
+        AcQBQgGqAcQJAAP4A/wD+wnkA+IDugPeA90D4AOcA8kD4QNyA8EG4wPcA90D4gPhA98D7gPYA9oDnAOP
+        A4YGhQmIA4EDggODA4QDggN/A4QDhQOEA4EDeQN+A3wDigPWA/0BhgHcAf8BegHeAfcBdAHhAfYBegHd
+        Af0BfgHTAf0BggHYAf0BgQHeAfwBdwHfAfgBnQHPAfsBkwHTAf4BewHUAf0BbAHbAf8BiQHVAf4BjQHf
+        AfwBhgHZAfgBhQHUAf4BiAHqAf4BlQHTAesBEAEqAS0BTQEtASMBGAFJASgBmAH1AfYBiwHYAfwBgwHO
+        Af0BbgHiAfABdQHlAfsBcwHTAf0BgAHbAfoBggHeAfsBeAHcAfsBZQHaAfoBbgHdAfoBfAHgAfIBhQHh
+        Ae4BfgHgAfIBdwHhAf8BeAHgAf8BfgHZAfkBkAHXAfQBewHiAegBhAHeAfABiAHbAfsBgwHaAf8BaAHb
+        Af0BdwHeAfcBfAHhAfcBdAHiAf0BdwHZAfoBfgHWAf4BhAHVAfsMAAFmAaABrwHHAeAB5AHbAeUB5wHu
+        AfIB8wHuAvMDAAH2AvgB3AHlAecBdAGtAboB6gHyAfMB9QH2AfcB4wHrAe0B4wHrAe0B7ALyAdwB5QHo
+        Ac8B4QHkA/sBiAG+AckB+QL6AVkBlQGlAekB8AHxAfMB9QH2AwAB5wHvAfAD/QHnAu8DAAHwAfMB9AGs
+        AcoB0gHbAeQB5wHGAdoB3wP9AeEB6QHrAZABxgHQAfYC+AHbAeQB5wMAAd8B6AHqAeEB6gHsGwABOgHB
+        AdkBOgHBAdkBOgHAAdgBOgHBAdgBQQHfAfIBOQG+AdYBOQG9AdUBOQG8AdUBOQG8AdUBOQG7AdQBOAG6
+        AdMBOAG6AdMBOAG5AdIBOAG5AdIBOAG4AdEBOAG3AdEBOAG3AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0
+        Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAcwBNgGxAcwBNgGxAcsBNgGwAcsBNgGvAcoBNgGvAcoBNgGu
+        AckBNQGtAckBNQGtAcgBNQGsAcgBNQGsAccBNQGrAccBNQGrAcYBNAGqAcUBNAGpAcUBNAGpAcUBNAGo
+        AcQBNAGnAcMBPAHJAd8BNQGrAcYBNQGqAcYBNAGqAcUBNAGpAcUDAAP9Bv4D+wP6A/0DvAP3A/oDsgP4
+        A9ED5QP9A+EDpgPTA+wD8gPBA/YD/AP9A+0D1QPZA6gDYgM5A0QDQwPOA8wDkgOKBjQDIAN8A4UDmQPD
+        A84DTANBA0MDTQOaA9gD/AGQAd0B/QF4AdcB6gF6AeUB8QGCAeMB/AGCAdMB/wGIAdsB/gGGAeYB+QF6
+        AesB8QFyAeUB5gF6AeYB7AFzAd8B7wF0AeMB+QF0AdIB9gFxAc4B+gFvAc8B9wF+AeEB/wFlAdgB3gFx
+        AcQB2gGGAbgBzwE5ARsBLQElASkBFwFaAVsBawGhAdgB/AFyAdgB+QF8AeYB8AGEAeAB+AGLAc8B/gGG
+        AdkB7wF4Ad0B6wGDAdsB9wGcAdUB/wGVAdgB/wGQAd0B+AGXAd0B9QGpAdQB/wG2AdMB9QGcAdIB9gGO
+        Ad0B/wGGAdwB+gF5AccB/wGHAc0B/wGDAdEB/QF2AdYB9wGCAeIB/wGMAd0B8QGKAdkB6gF+AdoB8AGC
+        Ad0B/gGFAdwB/wGDAdYB/JwAATsBxAHcATsBxAHbAUAB3QHwAToBwwHaAToBwgHaAToBwQHZAToBwQHZ
+        CQADwwE5Ab4B1gkAATkBuwHUBgABOAG5AdMJAAE4AbcB0QPDEgADhQE2AbEBzANpEgAD9QE1AawBxwE1
+        AasBxwE1AasBxgE1AaoBxgE7AcQB2wE1Aa0ByAE1AawByAMAA/0G/gPkA7kD8gP+A/kDwAOLA8gDqQPu
+        A/wD9wPcA7UD3wPrA/kD/AOjA+gD8QPWA9wDtQNSAyED0wP1A+oD4AOeAyQDLgN0A4UDlgMYA5ID1QPj
+        A/QD5QMnA00DoQPZA/4BYwHCAdEBowLfAZMB2QHVAXwB5wH6AW4B3AH8AWoB2wH7AYUB2gH/AYUB1QH9
+        AYAB4gH6AXkB8AHzAVUBsQGjAUABhwF1AWgByAGwAYMB6QHjAX4BzwHcAZkBzgHIAbIB6QHqAYMB7gH6
+        AY4ByQHmAU0BcgFzAVsBRwEjAUUBOgEdAYMBlAGhAXEB5wH1AYQB2wH3AZMB1wH8AZMB0gHyAY8B1wHR
+        AZQB3wHMAZEB3wHpAYIB5wH9AYQB5AH6AY8B3wH+AY0B1QH9AX8B2QH8AXcB6wH/AW8B2QHbAUYBqwGk
+        ATkBxQGrAXkB3QH0AXcB4wH/AWwB1AHOAY8B5wH1AYcB1gH/AWsBxQHsAZQB5gHnAXkBxwHTAa4B2wH1
+        AZMB2AH5AXwB3gH/GwAB0gH3AfgBNQG4AdIBMwG2AdABNAG3AdEBMwG2AdABMwG2AdABOQG1Ac4BLwGy
+        AcwBMAGyAcwBNwGxAcoBNwGxAcoBNwGxAcoBNwGxAcoBNwGuAc0BNQGvAcgBNQGvAcgBNAGuAccBMgGt
+        AcYBMgGsAccBMQGqAcgBMQGqAcgBMQGqAcgBMAGpAcgBLwGoAccBLQGmAcQBLQGmAcQBLgGmAcQBNgGm
+        AcQBNgGmAcQBvAHtAe8nAAE7AccB3gE7AccB3gFAAdkB7QE7AcYB3QE7AcYB3QE7AcUB3AE7AcUB3AkA
+        A8MBOgHCAdkJAAHGAewB8wYAAfcB/AH9CQABOAG7AdQDwwkAAwIJAAF1AcwB3gNpCQABwgHoAfAJAAE2
+        AbABygE2Aa8BygE2Aa8ByQE1Aa4ByQE6AcEB2QE2AbABywE2AbABywMABv4D/AP+A/0D+AP0A+gDvQOK
+        A/YD+Qb/A/gD+gOQA8gD0wN1A/oD/gP/A/ED1wPdA7sDhgO4A9QDdwP1A0ADdQNdA2sDlAOhA5YDmAMa
+        AzUD9QNeA90DvgN/A7AD3AP9AWcBcgF6AVoBJwElAV0BLwEsAaEBvAHLAZEB3gH/AZUB1wH8AacB2QH/
+        AYcB0wH5AZUB4QH7AUcBbgFwAU4BMQEgAWABKwEVAVABKAEZATIBGgEbAWEBNQFBAU0BPAEiAT4BKAEj
+        AaUB7wH+AYkB0wH0AY0B0gHXATwBLQEFAUkBQQEKATIBOwEtAZUB1QHbAYgB1QHuAXgB1gH8AZwB2gH0
+        AV4BYQFRAWwBYwE+AUsBcgFrAWgB6QH7AXIB4wH8AW0B4gH/AXAB2wH/AYoB0gH6AZMB0AHjAWwBXQFL
+        AbkBZgE0AakBaAEuAYEBVgEzAX0BaQFGAZcBdwEUAcMBfAEmAa0BrgGcAXcBggF+AX8BdAEtAVQCUQHH
+        Ad0B6QGQAdUB7AFwAd4B+xgAATsBvgHXATsBvQHYATkBwwHbATgBvAHWATYBuQHTATUBuAHSATQBtwHR
+        ATMBtgHQATMBtgHQATQBtgHQATMBtgHQATcBsgHLATcBsQHKATcBsQHKATcBsQHKATcBsQHKATUBrwHJ
+        ATUBrwHIATIBrQHGATIBrQHGATEBqgHIATEBqgHIATEBqgHIATEBqgHIAS4BpwHFAS0BpgHEATQBpgHE
+        ATQBpgHEATgBvQHWAS8BqAHHAS4BpwHFAU0BswHKAeoB8gHzIQABPAHLAeEBPAHKAeEBPwHVAeoBPAHK
+        AeEBPAHKAeABPAHJAeABPAHJAd8JAAPDATsBxQHdCQADERIAATkBvgHXA8MJAAE5AbwB1AkAAbkB5gHv
+        A2kJAAGJAdQB4wkAATcBtAHOATcBswHNATYBsgHNATYBsgHMATkBvQHVATcBtAHOATcBswHNAwAD/gP9
+        A/8D4QPiA7IDkgPIA+cDvAP9A8kDsAO0A8AD+QP2A7QDlQPRA/UD2wPRA+gD1wPfA8IDjANzA6ADfANG
+        AzkDcgN+A4wDZgOeA6kDnwONAzYDPgNyA60DaQOEA60D3AP9AbUCzQFUASwBIAFUATABGwFPAXYBbAF5
+        Ae0B9wF6AeoB9QGDAeQB8wF0AeUB8gGpAfoB9wFkAVwBTgFuASUBDQFaATEBEgG5AdwBzAG1AesB6gFl
+        AX8BgQF6ATgBHgFKARgBAwGhAdsB5QGlAesB/QFKAY0BiwFXATwBFAFOATUBBQE7ATUBIQFMAVABSAHD
+        AfIB/QF9Ad4B+gGVAd0B7gGHAXIBXwGRAWsBOQFdAV8BRAGvAc8B4AGjAd4B9AGDAeMB9wFsAeQB9wGD
+        AegB9wHDAdcBuAGBAWEBMQGUAWgBHgGlAasBhwG1AeAB9QGXAdYB2wFzAYABNgG7AWwBKAF1AYEBWgGT
+        Ab4BngGjAXABIgGOAV8BNgK9AbUBowHhAe8BeAHmAf8YAAE1AcIB1wE6AdAB5gE1AcEB2AE7AcAB1AFp
+        AZkBpAEeAR8BIwEeAR8BIwFBAbgB0QEeAR8BIwEfASABJAF4AasBtwEfASABJAFGAbYBywEeAR8BIwEe
+        AR8BIwFMAbwB1AEeAR8BIwEfASABJAEeAR8BIwEeAR8BIwFjAXIBeAE2AbAByQEeAR8BIwEeAR8BIwFo
+        AX8BhAEeAR8BIwFEAUYBSQExAasBxwEwAakBxwEvAagBxgE2AbUBzwEyAawBxwHqAvIhAAE9Ac4B5AE9
+        Ac0B4wE+AdIB5wE9Ac4B5AE9Ac4B4wE9Ac0B4wE9AcwB4gkAA8MBPAHJAeAeAAE6AcIB2gPDCQABOgG/
+        AdcJAAG5AegB8ANpCQABigHWAeUJAAE4AbcB0QE4AbcB0AE3AbYB0AE3AbUBzwE4AbkB0gE4AbcB0AE3
+        AbYB0AMABv4D/QP2A8QDtwO7A9oD3QOxA/8D4gPlA8sDuQP8A/gD1AOWA70D/QOQA/wD6wPXA+ADxwNj
+        AwkDYQNZAz0DOwOZA7EDqAOsA20DhgOLA4IDZANnA3QDTwMOA0sDuQPfA/wB1AHyAfcBQAErARsBRwE4
+        AhgBPAEjAXEBzwHKAXIB3QHXAZIC5QGvAfQB9wGZAesB5AF2AbUBpQEeASgBGAFKATcBMQFfAX4BaQGR
+        AfYB6wFuAfkB4wFsATEBBQFaATEBEwFXAZIBkwGpAeIB9wEiAVABRQFbATMBCwFfATABGAE5ASUBGQFN
+        ATABHgFuAYMBfwGTAecB/AGQAeIB7gGTAY8BfgGsAWcBPAGTAVgBPQGeAbwBvgGHAckBygGHAd0B3wGK
+        AfEB8wGVAfQB8AHHAfQB1QFpAWgBPgGVAX8BOQFlAV8BWgGfAcYB1gGqAesB/AGTAZsBdgHAAVcBTQF9
+        AUsBWgG5AdkB3AGnAVIBRgGhAWEBLgGcAZIBfwGwAecB8gGBAeYB/gG1AeYB5wG1AeYB5wG1AeYB5wG1
+        AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wE7AccB3gE6AdAB5gE3AcQB2gE3AcQB2gFrAZsBpgEe
+        AR8BIwEeAR8BIwE8Ab0B0AEeAR8BIwEeAR8BIwE7AU0BVAEfASABJAFyAa4BvQEfASABJAEeAR8BIwFM
+        Ab8B1wEeAR8BIwEeAR8BIwFXAaIBsAEeAR8BIwEeAR8BIwFUAbQByAEeAR8BIwEeAR8BIwGCAcgB1wEf
+        ASABJAEeAR8BIwFAAbEByAE0Aa8ByAE0Aa4BxwE2AbQBzgE2AbAByQGzAeEB4gG1AeYB5wG1AeYB5wG1
+        AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wYAAT4B0QHnAT4B0QHmAT0BzgHk
+        AT4B0gHnAT4B0QHnAT4B0QHmAT0B0AHlCQADwwE9Ac0B4x4AATsBxgHdA8MJAAE6AcMB2wkAAbkB6QHy
+        A2kJAAGLAdkB5wkAATkBuwHUATgBugHTATgBugHTATgBuQHTATcBtQHPATgBugHTATgBuQHTAwAD/wb+
+        A/0DrQOlA/ADygPMA9gD+QP7A/ED/AP7A/gDkgP2A7UDrAPKA3YD7gPmA9YD4gPNA2YDbwNgA6IDKQMo
+        A8YDzwPQA9EDyQObA4wDPgNAAyUDkgNiA28DTgO8A98D/AHZAdoB7gFtAS8BKQFsASgBBwFZASwBEAFF
+        ASgBIAFbATYBOgFWATABJQExASMBMAE8AWMBYgHJAfIB9wGsAccB0gFVAUABTwFYARcBDgFcASABDQEl
+        ASMBAgFHATIBCQEtATMBDQE7ATQBMQGJAfMB4wEOAS0BGgFHATIBBQFjAToBNgGNAZcBnAEpATgBEwE4
+        AUUBIAGEAcQBwAGHAdoB8AO+AZIBYQE4AYgBaQE5AYEBYAFIAZIBWAFXAaoBWwFTAXkBUgE3AUEBYAFC
+        AbAB1wHLAbEB6gHVAaEBpQGbAYUBXgE/AZUBTQEqAWEBbwEyAVYBbAEhAbgBYwElAYwBaAE9AZcB2QGz
+        AWABdgFcAZ8BYAEgAWwBcAFHAaoB5wHcAZUB4QHyAboB6gHsAb4B7wHwAc0B/gH/Ac0B/gH/Ac0B/gH/
+        Ac0B/gH/AccB+AH6AboB6gHsATcBygHiATkBzwHmATkBygHhAT0ByQHgAW0BngGlAR4BHwEjAR4BHwEj
+        AUABwAHVAR4BHwEjAR4BHwEjAi0BMAEeAR8BIwFgAV4BXQEeAR8BIwEeAR8BIwFMAcIB2QEeAR8BIwEe
+        AR8BIwE/Ab4B2QEeAR8BIwEeAR8BIwFZAbgBzAEeAR8BIwEeAR8BIwGIAdEB4gEfASABJAEfASABJAE7
+        AbIBywE0AbIBywE3AbEBygEyAbUBzwExAbIBzAHIAfkB+wHNAf4B/wHNAf4B/wHNAf4B/wHNAf4B/wG6
+        AeoB7AHLAfwB/gHNAf4B/wHNAf4B/wHNAf4B/wYAAT8B1QHpAT4B1AHpATwBygHhAT8B1gHqAT8B1QHq
+        AT8B1QHpAT4B1AHpCQADwwE+AdEB5h4AATwBygHhA8MJAAE7AccB3gkAAbQB6QHyA2kJAAM8CQABOQG/
+        AdcBOQG+AdcBOQG+AdYBOQG9AdYBNgGyAcwBOQG9AdYBOQG9AdUDAAb+BvwDnQO4A9UD8APrA9EDwwPA
+        A8kDxwP8A+oDxgP+A6kD/AOvA8cD+APpA9QD4wPRA2gDMgPfA9cD5wPlA3gDQwOSA9AD1wO/AzIDSAM9
+        A2YDsgOuA0MDVgO/A+AD/gGHAe4B8QFdAYgBdQFFAUIBGQI1AQ4BoQGWAW0BkgGeAYwBZwFkAU0BTAE4
+        AQwBXgErAR4BRwE0ATEBmwHhAd4BbQHuAecBpwH0AfsBvQHlAeoB3QHwAegBXgFLATwBRQEnAQUBRQEq
+        ASMBvQHyAekBKgEtAREBPQEyAQ4BXwFaAVYBtALnATQBUwE1AU8BMAEKATsBOgEwAbIB7gH5AbQB3AHe
+        AXoBawFRAYcBbAE2AXoBbwFEAecB0QGNAcsBsAFvAZIBdAFFAZwBbgFMAVYBWAFWAYIBqQGtAZ4B6AH9
+        AYYB3gHlAf4B6gH4AcsB7AHjAaYByQGtAZYBYQFMAZsBYAE7AaUBsAGVAYABkQF1AacBeAEsAW4BZgE6
+        AbsB5gHXAZkB3wHwAbwB7AHuAbwB7AHuAcQB9QH3AccB+AH5AccB+AH5AccB+AH5AbwB7AHuAbwB7AHu
+        ATkBzwHmATkBzwHmAToB0AHnATkBzwHmAWoBoAGoAR4BHwEjAR4BHwEjAUMBwwHYAR4BHwEjAR4BHwEj
+        AR4BHwEjAR4BHwEjAR8BIAEkAR8BIAEkAR4BHwEjAU4ByAHeAR4BHwEjAR4BHwEjATkBwwHYAR4BHwEj
+        AR4BHwEjAV8BuwHPAR4BHwEjAR8BIAEkAYwB1AHlAR4BHwEjAR4BHwEjAUABuAHQATUBuAHSATMBtgHQ
+        ATMBtgHQATUBuAHSAb4B7gHwAccB+AH5AccB+AH5AccB+AH5AbwB7AHuAbwB7AHuAbwB7AHuAccB+AH5
+        AccB+AH5AccB+AH5BgABPwHYAewBPwHXAesBOwHHAd4BQAHaAe0BQAHZAe0BPwHYAe0BPwHYAewJAAPD
+        AT8B1QHpDAADZgOLDAABPQHOAeQDwwkAAdkB9QH5CQABbQHWAecDaQkAA5oGAAFAAcYB3AE6AcMB2gEG
+        ARQBFgE6AcIB2QE6AcEB2QE2Aa4ByQE6AcAB2AE6AcAB2AMAA/8D/QP7A/4D9QO8A8ADzwPfA/oD3APz
+        A/UD6APIA5wD+gO8A/oDjgPEA+wD/wPnA9YD5QPVA3gDegNvA9kD9wPXA08DWwNqA2cDagPcA3gDXgPT
+        A9EDwwNtA2gDcQPJA+AD/gGNAekB9gGzAd4B1AFXASsBEgFmASsBDgFeAXMBeAGeAdsB9QG0AdsB+wGj
+        AakBowFNATYBIgFjAS0BIQGqAYwBfAI9ASEBAAErAQIBDQE8AREBKwEvAQQBYgE4AQABSwEwASIBKAEi
+        ASMBzQG5AbUBTwFBASgBNgE0AR0BegGIAY0BqwHkAesBpAHVAdoBLAEkAR4BUQErASMBdAFmAWkBzQH1
+        AekBawFxAV8BkwFpAUIBZQFbAUwB1wHnAfUBfgHUAeYBoAH0AesBYgFPASgBswFhARcBhgFtATABgAG1
+        AZABOQFqATgBRgFxAS4BbwFwATQBbgFiAS8BfQFqAUIBdwFTATsBoQGtAaUBngHNAbkBnAFrASQBoAFp
+        AT8BwAHIAbIBnwHpAe4B5AHmAuQB5gLkAeYC5AHmAuQB5gLkAeYC5AHmAuQB5gHkAT0B0wHqATgBzgHl
+        AT4B1gHnAT8B1gHnAW0BogGrAR4BHwEjAR4BHwEjAT8ByAHeAR4BHwEjAR4BHwEjAR4BHwEjAZ0BuAHA
+        AR4BHwEjAR4BHwEjAR8BIAEkAVMBzQHhAR4BHwEjAR4BHwEjAT8ByAHdAR4BHwEjAR8BIAEkAVwBwAHQ
+        AR4BHwEjAR4BHwEjAWYBZQFkAR8BIAEkAR4BHwEjAUUBvAHVATsBvQHYATsBvQHYATYBuAHSATsBvQHY
+        Ad8B5AHgAeQB5gLkAeYC5AHmAuQB5gLkAeYC5AHmAuQB5gLkAeYC5AHmAeQGAAFAAdsB7wFAAdoB7gE6
+        AcMB2wFBAd4B8QFAAd0B8AFAAdwB8AFAAdwB7wkAA8MBPwHYAe0MAAGEAeUB8QGIAeUB8QwAAT4B0gHn
+        A8MSAAPAAT0BzAHiA2kJAAE8AckB4AE8AckB3wE8AcgB3wE7AccB3gE7AccB3gEyAakBvQE7AcUB3QE7
+        AcUB3AE1AasBxgE7AcQB2wE6AcMB2wMAA/oD/gP8A9QD+gP7A9IDvAPIA/4D8wPKBqwDrwP7A/4DwgO7
+        A6ID2wP4A/ID7gPWA+MD2QOEA38DfQOGA3UD+gPvA/ADwAOQA5ID3QPYA9YD2gN/A4cGfQNyA8ED4AP8
+        AaYB3gH3AckB7QHuAUYBJgEUAU8BOQIdAVUBNAGUAfcB4AGqAfYB+gGDAbcBmwEoAT0BGQE3AS0BHQFO
+        AU8BSwGjAa8BrgFMAWMBVgFeATEBNwFqATEBLgEwATgBGQGTAYsBkAHSAewB/AFnAa4BqAGDAZgBhQF6
+        AZEBhgGoAdIB3gGZAd4B7QGjAeYB9gGSAbsBsAF+AYoBgAF8AZgBpAGVAdIB0AGQAZUBjAGbAWcBMwFm
+        AWkBOgGrAd0B5wGrAewB/wHSAdwB6QGNAVkBPQGhAU8BLQGCAWMBTwHPAd0B4wHLAYsBigG1AWgBYgGg
+        AWYBVQGCAWwBUgGuAZMBewG9AcEBswHHAfMB9wGZAegB3QGkAWgBLAGYAWMBNgGMAYYBaAGxAeoB4xgA
+        ATkB2QHrAToBzgHlATwB2wHuATwB2wHuAXABpQGuAR4BHwEjAR8BIAEkAUYB0AHgAR8BIAEkAR4BHwEj
+        AR8BIAEkAVABxAHYAR4BHwEjAR8BIAEkAR4BHwEjAVAB0wHnAR4BHwEjAR4BHwEjAR4BHwEjAR4BHwEj
+        AR4BHwEjAVIBywHfAR4BHwEjAR4BHwEjAYQB1QHmAWoBpwGwAVkBxgHbATUBwgHXATUBwQHYATUBwgHX
+        ATYBugHRATsBwAHUA/IhAAFBAd4B8QFBAd4B8QFBAd0B8AFAAdwB8AE5Ab4B1wFBAeAB8wFBAd8B8gFB
+        Ad8B8gFBAd4B8QFBAd4B8QFBAd0B8AFAAdwB8AFAAdwB7wFAAdsB7wFAAdsB7gFAAdoB7gFAAdkB7QFA
+        AdkB7QE/AdgB7AE/AdcB7AE/AdcB6wE/AdYB6wE/AdYB6gE/AdUB6gE/AdUB6QE+AdQB6QE+AdMB6AE+
+        AdMB6AE+AdIB5wE+AdEB5wE+AdEB5gE9AdAB5QE9Ac8B5QE9Ac8B5QE9Ac4B5AE9Ac4B4wE9Ac0B4wE9
+        AcwB4gE8AcwB4gE8AcsB4QE8AcoB4QE8AcoB4AE0AagBxAE8AcgB3wE7AccB3gE7AccB3gE7AcYB3QMA
+        A/sD/wP7A6sD9wP5A6sD9wOpA8kD5wO0A+wDtwPEA7QD7AO/A/AD9wPCA/sD4APtA9YD4wPcA4sDlAOS
+        A5sDfgOWA80DwAPVA9YDzAPGA7YD1gOLA4UDnAOKA5UDfAPEA+AD/AGdAfEB/wG2AeAB7AFZATQBMwFx
+        ASwBIwI2ARgBNwE5ASABPQEgAQsBUgEpAQ8BaQEwARwBTgEnAR4BfQKFAcAB8AH2AYoB4wHtAZIB5gH8
+        AZgB3wHvAb0B9AH1AZwB4QH1AZYB4QH7AZ4B5gH4AaoB6QHuAaoB6wH0AZEB5gH5AZEB4AH7AaEB4AH7
+        AagB5AH1AZ0B6wHuAYkB6gHtAZoB9QHwAbYBzwG7AbcBaQFDAb0BWwEXAZ8BagE9AYABXQFAAZQBdwFc
+        AZMBZwE8AaQBagE6AX4BZgFNAcIC6wFxAdgB3AGHAeoB7gGLAe0B8AGaAewB7wGqAeYB6wG0AecB+AGV
+        AeQB9QGaAfAB+QGeAXsBRQGbAVgBPAGAAVgBRAHNAe8B5BgAAT0B3AHvATkBxQHaATwB1wHsAT8B3gHx
+        AXIB0wHgAXEBsAG6AXEBsAG6AUIB2QHrAXEBsAG6AXEBrwG5AXEBrwG5AT0B2AHrAXEBrwG5AW4BrAG2
+        AW4BrAG2AUgB1wHpAW4BrAG2AW4BrAG2AU0BpQGyAVwBuQHHATcBzQHkATUBygHiAWsBqQGyAWsBqQGy
+        AWQB1AHoAT0ByQHgATwByAHfATwByAHfAToBxwHdATIBswHPATcBuwHSATcBxAHaA/InAAFMAd8B8gFB
+        AeAB8wFBAd8B8gE7AcQB2wE9Ac0B5AE9Ac0B4gE9AcsB4gE9AcsB4QE8AcsB4AE7AcoB4AE7AcoB4AE7
+        AckB3wE7AckB3gE7AcgB3gE7AccB3gE7AcYB3QE7AcYB3QE7AcUB3QE7AcQB3AE7AcQB2wE7AcQB2wE7
+        AcIB2wE6AcIB2gE6AcIB2QE5AcEB2QE5AcAB2QE5AcAB2AE5Ab8B1wE5Ab4B1wE5Ab4B1wE5Ab0B1gE5
+        AbwB1QE5AbwB1QE5AbwB1QE5AbwB1AE5AboB0wE4AboB0wE4AboB0gE3AbgB0QEzAaUBwQE8AcwB4gE8
+        AcsB4QH7AvwJAAP8A/8D/AOQA/cD9gOOA/wD3wO7A/oDvwOzA/cDpwPmA/YDsAP1A/YDtAP6A+ED7wPV
+        A+gD3gN3A1gDWgNdA1YDXgZbA10DWANZA1MDWwNdA1cDWgNbBlYDYgPMA+AD/AGgAe4B/wGiAdQB5wGW
+        AYwBmwFbATsBRQFHATsBLwFHATMBKAFpAUABOAFUAT8BMAFnAWYBXgHIAdUB1wGxAdsB6QGlAekB+wGU
+        Ae4B/wGhAeYB/wGgAeUB/QGaAesB+gGcAe4B/gGGAd0B9wGVAecB/QGkAfEB/QGeAecB+QGSAegB/gGP
+        AeYB/gGVAegB/gGYAegB+QGWAewB+AGNAe4B/QGBAeYB6QGwAe0B4AGAAW4BUwGgAXMBQgGOAWkBLwGu
+        AX0BUQGXAWYBQAGYAX4BSwG8AawBmAHXAfIB6wGcAdwB5wGdAeEB8wGOAesB/wGHAe4B/wGGAfAB/gGN
+        Ae0B/AGgAegB/QGXAecB/gGLAeMB9gGHAZYBfgF3AVABSQFsAVIBSgHFAd4B1RgAA/wBRgHiAfUBQgHh
+        AfQBPQHcAe8BPAHkAfkBPQHjAfgBQAHiAfYBQgHhAfQBQQHgAfMBPwHeAfEBPQHcAe8BPQHcAe8BPQHc
+        Ae8BPAHbAe4BOQHZAewBOQHZAewBOAHYAeoBPQHXAegBPwHVAegBPwHWAecBPwHVAegBPQHSAeoBPQHS
+        AekBOwHQAecBOwHQAecBOAHOAeUBNQHKAeIBNQHKAeIBNgGxAcsBPQHJAeABnwHfAegwAAFCAeMB9QFC
+        AeMB9QFCAeIB9QFCAeIB9AFBAeEB9AFBAeAB8wFBAeAB8wFBAd8B8gFBAd8B8gFBAd4B8QFBAd4B8QFB
+        Ad0B8QFAAd0B8AFAAdwB8AFAAdwB7wFAAdsB7wFAAdsB7gFAAdoB7gFAAdoB7gFAAdkB7QFAAdkB7QE/
+        AdgB7AE/AdgB7AE/AdcB6wE/AdcB6wE/AdYB6wE/AdYB6gE/AdUB6gE/AdUB6QE+AdQB6QE+AdMB6AE+
+        AdMB6AE+AdIB5wE+AdIB5wE+AdEB5wE+AdEB5gE+AdEB5gE9AdAB5QE9Ac8B5QE9Ac8B5QE9Ac4B5AwA
+        A/0D+gP5A/UD+gP+A/YD9wP/Bv0D8QP9A/4D/QP8A/8D/AP+A/8D+wP9A/8D9APSA+sD4QPgA+oD6APn
+        BusD6QbqA+YD4APjA+ED3QPcA9sD3APVA9AD1wPUA+MD/gGrAesB/QGqAesB/wG0AeQB/QGzAe4B/wGZ
+        Ae0B8wGhAfUB9wGsAesB7QGsAfIB9QGlAe8B+AGeAekB9wGfAeoB9wGgAewB/wGcAeYB/QGpAeUB+wGv
+        AegB/gGpAeYB/wGRAd8B9gGeAewB/wGaAeYB/AGbAeQB/AGgAecB/AGfAekB/gGWAe0B+gGSAe8B9wGY
+        AewB+QGbAegB+wGZAeYB/wGZAeYB/gGVAeUB9QGsAewB8wGgAeUB4wGZAfEB9gGkAegB9gGvAeEB9QGs
+        AeQB8wHBAfMB/gGlAeUB/QGhAd8B/gG0AdwB/gHCAd0B/wGwAeEB/gGkAeUB/gGjAecB/gGjAekB/wGf
+        AeIB/gGbAe0B/gGdAecC7AH4Af4B3wHpAfABvgHsAe8eAAE8AeQB+QE8AeQB+QFFAeMB9gFCAeEB9AFC
+        AeEB9AFCAeEB9AFBAeAB8wE9AdwB7wE9AdwB7wE9AdwB7wE9AdwB7wE9AdwB7wE8AdsB7gE5AdkB7AE4
+        AdgB6gE5AdkB6wE4AdgB6gE8AdYB6AE/AdYB5wE/AdYB5wE/AdYB5wE9AdIB6gE8AdEB6QE7AdAB6AE7
+        AdAB5wE5Ac8B5gE5Ac8B5gE5Ac8B5gHyAfMB8rcAA/8D+wP1A/wD/wP7A/MD/AP+A/kG/gP8A/kD9gP4
+        A/8D+gP7A/4D/AP/A/wG/QP8A/sD/QP/A/wD/gn/Bv0S/wP+A/0D/wP8A/kG/wP7AZ4B7wH0AZQB5QH2
+        AakB5QH/AaYB4wH/AY4B5AH/AYIB6gH9AaUB8AH/AawB3wH8AbIB4wH/AaMB5gH+AZYB7gH+AYcB6gH4
+        AYEB7wH5AYIC8gGQAfQB+wGZAekB/QGoAesB/wGmAeUB+QGtAekB/wGoAeYB/wGrAekB/wGrAekB+wGh
+        Ae8B9QGXAfEB7wGhAe4B9wGrAecB/QGsAeIB/gGlAekB/gGPAe4B+wGNAe8B/wF7AeIB+AGQAegB/wGO
+        AeUB/wGPAesB/wGKAewB/gGbAfIB/AGEAeAB8wGJAe8B/wF8AesB9gF5AfAB/wF6Ae8B/AGJAe0B+gGe
+        AeoB+wGsAecB/AGyAeYB/gGbAecB9gGGAe8B/gG0AekB9wG7AecB9gGlAe0B+wFCAU0BPgcAAT4DAAEo
+        AwAByAMAAR4DAAEBAQABAQUAAUgBAxYAA///AKYABv8B/gUAAfAPAAHwAVABCAECAQABDwH8BQABcA8A
+        AfABQAEAASIBAAGfAfAFAAEQDwAG/wHwBQABEA8AAf8BgAIAAQEB/wHwBQABEA8AAf8EAAF/AfAFAAEQ
+        DwAB/wQAAX8B8AUAARAVAAEwBQABEBUAATAFAAEQFQABMAUAARAVAAEwBQABEA8AAf8EAAF/AfAFAAEQ
+        DwAB/wQAAX8B/AUAAXAPAAH/AwABAQH/Af4FAAHwDwAB/wHAAgABAQf/AfAPAAs=
+</value>
+  </data>
+  <metadata name="TextBox_Plot.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label56.Text" xml:space="preserve">
+    <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
+If none of the above are correct, then alter the search term and search again.</value>
+  </data>
+  <metadata name="ListBox3.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btn_TvFoldersRootRemove.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btn_TvFoldersRootBrowse.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Label82.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox5.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btn_TvFoldersRootAdd.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label81.Text" xml:space="preserve">
+    <value>Root Folders are folders that contain
+multiple TV Shows
+
+For example :-
+D:/Root/TV Show 1
+D:/Root/TV Show 2 
+You would add the path:
+D:/Root
+
+Folders added to this list can be
+checked for new TV Show folders
+and can be added to the Seperate
+Folders List automatically on startup.
+
+To check for new TV Folders when
+the program is running, use the 
+"Check Roots for New TV Shows"
+menu item, located in the
+"TV Shows" drop down menu.</value>
+  </data>
+  <metadata name="TextBox39.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btn_TvFoldersAdd.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TextBox40.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Label85.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btn_TvFoldersRemove.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label84.Text" xml:space="preserve">
+    <value>Seperate folders are those that
+contain only a single TV Show
+
+For Example :-
+D:/Root/TV Show 1
+You would add the path:
+D:/Root/TV Show 1
+
+Adding shows using this method
+means that all shows must be
+added manually.</value>
+  </data>
+  <metadata name="btn_TvFoldersBrowse.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox6.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label138.Text" xml:space="preserve">
+    <value>If you have enabled the option to 'Save Actor
+Thumbs to the '.Actors' Folder' located in the
+general preferences then this gives you this
+additional option.
+When Scraping episodes from TVDB, the only
+actor thumbnails avaialble are those at IMDB,
+but compared to TVDB, these actor thumbs
+are low quality.
+
+This preference gives you the option to copy an
+actors thumb, if available, to the episodes actor
+folder, allowing the higher quality TVDB actor
+thumb to be used for the episode.</value>
+  </data>
+  <data name="Label139.Text" xml:space="preserve">
+    <value>Enabling the 'Quick Add' option will speed up the
+scraping of TV Shows by not downloading available
+Art. All show art can be scraped at any time by using
+the TV context menu item to 'Download missing art'</value>
+  </data>
+  <data name="Label140.Text" xml:space="preserve">
+    <value>Media Companion now offers the option to
+automatically rename episodes during
+scraping.
+Only use this option if you are sure that the
+media file is named according to supported
+MC naming conventions.</value>
+  </data>
+  <metadata name="ListBox12.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox_tv_RegexRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListBox_tv_RegexScrape.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TextBox_tv_RegexScrape_TestResult.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
   </metadata>
   <metadata name="TextBox20.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -4936,497 +5344,8 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="ListBox18.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="RemoveHomeFoldersBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="AddHomeFolderBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox19.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label166.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label170.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="homeMovieScreenShotTimeTxtBx.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="homeMovie_ScreenShotBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="PictureBox5.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox45.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>572, 56</value>
-  </metadata>
-  <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        LgAAAk1TRnQBSQFMAgEBBAEAAYwBNwGMATcBMgEAAQ8BAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
-        AwABHgMAAQEBAAEYBQABUAFG/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
-        /wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8AAwABOAG5AdIBOAG5AdIBOAG4AdEBOAG4AdEBOAG3
-        AdEBNwG2AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAc0BNgGy
-        AcwBNgGxAcwBNgGxAcsBNgGwAcsBNgGwAcsBNgGvAcoBNgGvAcoBNgGuAckBNQGuAckBNQGtAcgBNQGt
-        AcgBNQGsAccBNQGsAccBNQGrAccBNQGrAcYBNQGqAcYBNAGpAcUBNAGpAcUBNAGoAcQBNAGoAcQBNAGo
-        AcQBNAGnAcMBNAGnAcMBNAGmAcIBMwGlAcIBMwGlAcEBMwGkAcEMAAP9A/4D0wnOA9oDzQPPA9cDzQPJ
-        A84DwgPQBtED1APWA9UD2AbSA84D4APhA5IDlQOPA5IGlAOVA5QGlgOTA5EDjwOQA40DjAOOA40DkAOO
-        A4wDiwPjA/0BfAHbAf8BfQHhAf8BeAHfAf8BeAHcAf8BfgHZAf4BfAHaAf4BfQHaAf8BfAHZAf8BhgHY
-        Af8BiAHYAf8BgwHZAf8BfgHdAf8BgQHXAf8BggHhAfUBgAHgAfgBegHVAf8BdAHbAfsBdwHYAfkBeAHO
-        Ae4BlwHcAfgBfwHZAfIBeAHUAfgBfwHaAf8BegHVAfwBewHeAfYBeAHeAfoBeQHYAf8BdgHbAf8BfAHa
-        Af8BhAHbAf8BdwHeAf8BdAHbAf8BggHaAf8BiQHbAf4BdQHgAfwBfAHdAf8BdgHVAf0BgwHbAf8BiwHe
-        AfkBewHeAfwBggHeAf0BgQHZAfkBgAHaAfkBdQHaAf8BfwHdAf8BgQHeAf8BeAHdAf8BegHcAf4BfAHX
-        Af4BgwHWAfwMAAFmAaABrwHHAeAB5AHuAfEB8gFmAaIBsAHAAdUB2gMAAeAB6QHrAwABfwG2AcIBTgGN
-        AZ4BxgHZAd4BrQHWAd8BhgG9AcgBiwGzAb0B7QHxAfIB7gLyAwABiQG/AckBWQGWAaYB1wHiAeUBVAGS
-        AaIBfAGzAb8BYQGcAaoB1AHkAekBcAGoAbQBwQHVAdoDAAHwAfMB9AGzAdAB1wH0AfYB9wHkAesB7QGx
-        AdoB4AGhAcQBzAGRAccB0AHKAdgB3QP8AeYB7QHuAXoBsgG/AbcB1AHaAdgB5AHnHgABRwHBAdcBOQG8
-        AdUBOQG8AdUBPwHVAeoBOwHGAd0BOwHGAd0BOwHGAdwBOwHFAdwBOwHDAdwBOwHDAdwBOwHDAdoBOwHD
-        AdoBOwHCAdkBOgHBAdkBOgHAAdkBOQHAAdkBOQHAAdcBOQG/AdcBOQG+AdYBOQG9AdYBOQG9AdYBOQG9
-        AdUBOAG8AdQBOAG7AdQBOAG6AdMBOAG6AdMBOAG6AdMBOAG5AdIBOAG4AdIBOAG3AdABOAG3AdABOAG2
-        AdABOAG2AdABOAG1Ac8BOAG0Ac8BNwG0Ac0BNgGzAc0BNgGzAc0BNgGyAc0BPQHNAeMBNAGoAcQBNAGo
-        AcQBQgGqAcQJAAP4A/wD+wnkA+IDugPeA90D4AOcA8kD4QNyA8EG4wPcA90D4gPhA98D7gPYA9oDnAOP
-        A4YGhQmIA4EDggODA4QDggN/A4QDhQOEA4EDeQN+A3wDigPWA/0BhgHcAf8BegHeAfcBdAHhAfYBegHd
-        Af0BfgHTAf0BggHYAf0BgQHeAfwBdwHfAfgBnQHPAfsBkwHTAf4BewHUAf0BbAHbAf8BiQHVAf4BjQHf
-        AfwBhgHZAfgBhQHUAf4BiAHqAf4BlQHTAesBEAEqAS0BTQEtASMBGAFJASgBmAH1AfYBiwHYAfwBgwHO
-        Af0BbgHiAfABdQHlAfsBcwHTAf0BgAHbAfoBggHeAfsBeAHcAfsBZQHaAfoBbgHdAfoBfAHgAfIBhQHh
-        Ae4BfgHgAfIBdwHhAf8BeAHgAf8BfgHZAfkBkAHXAfQBewHiAegBhAHeAfABiAHbAfsBgwHaAf8BaAHb
-        Af0BdwHeAfcBfAHhAfcBdAHiAf0BdwHZAfoBfgHWAf4BhAHVAfsMAAFmAaABrwHHAeAB5AHbAeUB5wHu
-        AfIB8wHuAvMDAAH2AvgB3AHlAecBdAGtAboB6gHyAfMB9QH2AfcB4wHrAe0B4wHrAe0B7ALyAdwB5QHo
-        Ac8B4QHkA/sBiAG+AckB+QL6AVkBlQGlAekB8AHxAfMB9QH2AwAB5wHvAfAD/QHnAu8DAAHwAfMB9AGs
-        AcoB0gHbAeQB5wHGAdoB3wP9AeEB6QHrAZABxgHQAfYC+AHbAeQB5wMAAd8B6AHqAeEB6gHsGwABOgHB
-        AdkBOgHBAdkBOgHAAdgBOgHBAdgBQQHfAfIBOQG+AdYBOQG9AdUBOQG8AdUBOQG8AdUBOQG7AdQBOAG6
-        AdMBOAG6AdMBOAG5AdIBOAG5AdIBOAG4AdEBOAG3AdEBOAG3AdABNwG2AdABNwG1Ac8BNwG1Ac8BNwG0
-        Ac4BNwG0Ac4BNwGzAc0BNwGzAc0BNgGyAcwBNgGxAcwBNgGxAcsBNgGwAcsBNgGvAcoBNgGvAcoBNgGu
-        AckBNQGtAckBNQGtAcgBNQGsAcgBNQGsAccBNQGrAccBNQGrAcYBNAGqAcUBNAGpAcUBNAGpAcUBNAGo
-        AcQBNAGnAcMBPAHJAd8BNQGrAcYBNQGqAcYBNAGqAcUBNAGpAcUDAAP9Bv4D+wP6A/0DvAP3A/oDsgP4
-        A9ED5QP9A+EDpgPTA+wD8gPBA/YD/AP9A+0D1QPZA6gDYgM5A0QDQwPOA8wDkgOKBjQDIAN8A4UDmQPD
-        A84DTANBA0MDTQOaA9gD/AGQAd0B/QF4AdcB6gF6AeUB8QGCAeMB/AGCAdMB/wGIAdsB/gGGAeYB+QF6
-        AesB8QFyAeUB5gF6AeYB7AFzAd8B7wF0AeMB+QF0AdIB9gFxAc4B+gFvAc8B9wF+AeEB/wFlAdgB3gFx
-        AcQB2gGGAbgBzwE5ARsBLQElASkBFwFaAVsBawGhAdgB/AFyAdgB+QF8AeYB8AGEAeAB+AGLAc8B/gGG
-        AdkB7wF4Ad0B6wGDAdsB9wGcAdUB/wGVAdgB/wGQAd0B+AGXAd0B9QGpAdQB/wG2AdMB9QGcAdIB9gGO
-        Ad0B/wGGAdwB+gF5AccB/wGHAc0B/wGDAdEB/QF2AdYB9wGCAeIB/wGMAd0B8QGKAdkB6gF+AdoB8AGC
-        Ad0B/gGFAdwB/wGDAdYB/JwAATsBxAHcATsBxAHbAUAB3QHwAToBwwHaAToBwgHaAToBwQHZAToBwQHZ
-        CQADwwE5Ab4B1gkAATkBuwHUBgABOAG5AdMJAAE4AbcB0QPDEgADhQE2AbEBzANpEgAD9QE1AawBxwE1
-        AasBxwE1AasBxgE1AaoBxgE7AcQB2wE1Aa0ByAE1AawByAMAA/0G/gPkA7kD8gP+A/kDwAOLA8gDqQPu
-        A/wD9wPcA7UD3wPrA/kD/AOjA+gD8QPWA9wDtQNSAyED0wP1A+oD4AOeAyQDLgN0A4UDlgMYA5ID1QPj
-        A/QD5QMnA00DoQPZA/4BYwHCAdEBowLfAZMB2QHVAXwB5wH6AW4B3AH8AWoB2wH7AYUB2gH/AYUB1QH9
-        AYAB4gH6AXkB8AHzAVUBsQGjAUABhwF1AWgByAGwAYMB6QHjAX4BzwHcAZkBzgHIAbIB6QHqAYMB7gH6
-        AY4ByQHmAU0BcgFzAVsBRwEjAUUBOgEdAYMBlAGhAXEB5wH1AYQB2wH3AZMB1wH8AZMB0gHyAY8B1wHR
-        AZQB3wHMAZEB3wHpAYIB5wH9AYQB5AH6AY8B3wH+AY0B1QH9AX8B2QH8AXcB6wH/AW8B2QHbAUYBqwGk
-        ATkBxQGrAXkB3QH0AXcB4wH/AWwB1AHOAY8B5wH1AYcB1gH/AWsBxQHsAZQB5gHnAXkBxwHTAa4B2wH1
-        AZMB2AH5AXwB3gH/GwAB0gH3AfgBNQG4AdIBMwG2AdABNAG3AdEBMwG2AdABMwG2AdABOQG1Ac4BLwGy
-        AcwBMAGyAcwBNwGxAcoBNwGxAcoBNwGxAcoBNwGxAcoBNwGuAc0BNQGvAcgBNQGvAcgBNAGuAccBMgGt
-        AcYBMgGsAccBMQGqAcgBMQGqAcgBMQGqAcgBMAGpAcgBLwGoAccBLQGmAcQBLQGmAcQBLgGmAcQBNgGm
-        AcQBNgGmAcQBvAHtAe8nAAE7AccB3gE7AccB3gFAAdkB7QE7AcYB3QE7AcYB3QE7AcUB3AE7AcUB3AkA
-        A8MBOgHCAdkJAAHGAewB8wYAAfcB/AH9CQABOAG7AdQDwwkAAwIJAAF1AcwB3gNpCQABwgHoAfAJAAE2
-        AbABygE2Aa8BygE2Aa8ByQE1Aa4ByQE6AcEB2QE2AbABywE2AbABywMABv4D/AP+A/0D+AP0A+gDvQOK
-        A/YD+Qb/A/gD+gOQA8gD0wN1A/oD/gP/A/ED1wPdA7sDhgO4A9QDdwP1A0ADdQNdA2sDlAOhA5YDmAMa
-        AzUD9QNeA90DvgN/A7AD3AP9AWcBcgF6AVoBJwElAV0BLwEsAaEBvAHLAZEB3gH/AZUB1wH8AacB2QH/
-        AYcB0wH5AZUB4QH7AUcBbgFwAU4BMQEgAWABKwEVAVABKAEZATIBGgEbAWEBNQFBAU0BPAEiAT4BKAEj
-        AaUB7wH+AYkB0wH0AY0B0gHXATwBLQEFAUkBQQEKATIBOwEtAZUB1QHbAYgB1QHuAXgB1gH8AZwB2gH0
-        AV4BYQFRAWwBYwE+AUsBcgFrAWgB6QH7AXIB4wH8AW0B4gH/AXAB2wH/AYoB0gH6AZMB0AHjAWwBXQFL
-        AbkBZgE0AakBaAEuAYEBVgEzAX0BaQFGAZcBdwEUAcMBfAEmAa0BrgGcAXcBggF+AX8BdAEtAVQCUQHH
-        Ad0B6QGQAdUB7AFwAd4B+xgAATsBvgHXATsBvQHYATkBwwHbATgBvAHWATYBuQHTATUBuAHSATQBtwHR
-        ATMBtgHQATMBtgHQATQBtgHQATMBtgHQATcBsgHLATcBsQHKATcBsQHKATcBsQHKATcBsQHKATUBrwHJ
-        ATUBrwHIATIBrQHGATIBrQHGATEBqgHIATEBqgHIATEBqgHIATEBqgHIAS4BpwHFAS0BpgHEATQBpgHE
-        ATQBpgHEATgBvQHWAS8BqAHHAS4BpwHFAU0BswHKAeoB8gHzIQABPAHLAeEBPAHKAeEBPwHVAeoBPAHK
-        AeEBPAHKAeABPAHJAeABPAHJAd8JAAPDATsBxQHdCQADERIAATkBvgHXA8MJAAE5AbwB1AkAAbkB5gHv
-        A2kJAAGJAdQB4wkAATcBtAHOATcBswHNATYBsgHNATYBsgHMATkBvQHVATcBtAHOATcBswHNAwAD/gP9
-        A/8D4QPiA7IDkgPIA+cDvAP9A8kDsAO0A8AD+QP2A7QDlQPRA/UD2wPRA+gD1wPfA8IDjANzA6ADfANG
-        AzkDcgN+A4wDZgOeA6kDnwONAzYDPgNyA60DaQOEA60D3AP9AbUCzQFUASwBIAFUATABGwFPAXYBbAF5
-        Ae0B9wF6AeoB9QGDAeQB8wF0AeUB8gGpAfoB9wFkAVwBTgFuASUBDQFaATEBEgG5AdwBzAG1AesB6gFl
-        AX8BgQF6ATgBHgFKARgBAwGhAdsB5QGlAesB/QFKAY0BiwFXATwBFAFOATUBBQE7ATUBIQFMAVABSAHD
-        AfIB/QF9Ad4B+gGVAd0B7gGHAXIBXwGRAWsBOQFdAV8BRAGvAc8B4AGjAd4B9AGDAeMB9wFsAeQB9wGD
-        AegB9wHDAdcBuAGBAWEBMQGUAWgBHgGlAasBhwG1AeAB9QGXAdYB2wFzAYABNgG7AWwBKAF1AYEBWgGT
-        Ab4BngGjAXABIgGOAV8BNgK9AbUBowHhAe8BeAHmAf8YAAE1AcIB1wE6AdAB5gE1AcEB2AE7AcAB1AFp
-        AZkBpAEeAR8BIwEeAR8BIwFBAbgB0QEeAR8BIwEfASABJAF4AasBtwEfASABJAFGAbYBywEeAR8BIwEe
-        AR8BIwFMAbwB1AEeAR8BIwEfASABJAEeAR8BIwEeAR8BIwFjAXIBeAE2AbAByQEeAR8BIwEeAR8BIwFo
-        AX8BhAEeAR8BIwFEAUYBSQExAasBxwEwAakBxwEvAagBxgE2AbUBzwEyAawBxwHqAvIhAAE9Ac4B5AE9
-        Ac0B4wE+AdIB5wE9Ac4B5AE9Ac4B4wE9Ac0B4wE9AcwB4gkAA8MBPAHJAeAeAAE6AcIB2gPDCQABOgG/
-        AdcJAAG5AegB8ANpCQABigHWAeUJAAE4AbcB0QE4AbcB0AE3AbYB0AE3AbUBzwE4AbkB0gE4AbcB0AE3
-        AbYB0AMABv4D/QP2A8QDtwO7A9oD3QOxA/8D4gPlA8sDuQP8A/gD1AOWA70D/QOQA/wD6wPXA+ADxwNj
-        AwkDYQNZAz0DOwOZA7EDqAOsA20DhgOLA4IDZANnA3QDTwMOA0sDuQPfA/wB1AHyAfcBQAErARsBRwE4
-        AhgBPAEjAXEBzwHKAXIB3QHXAZIC5QGvAfQB9wGZAesB5AF2AbUBpQEeASgBGAFKATcBMQFfAX4BaQGR
-        AfYB6wFuAfkB4wFsATEBBQFaATEBEwFXAZIBkwGpAeIB9wEiAVABRQFbATMBCwFfATABGAE5ASUBGQFN
-        ATABHgFuAYMBfwGTAecB/AGQAeIB7gGTAY8BfgGsAWcBPAGTAVgBPQGeAbwBvgGHAckBygGHAd0B3wGK
-        AfEB8wGVAfQB8AHHAfQB1QFpAWgBPgGVAX8BOQFlAV8BWgGfAcYB1gGqAesB/AGTAZsBdgHAAVcBTQF9
-        AUsBWgG5AdkB3AGnAVIBRgGhAWEBLgGcAZIBfwGwAecB8gGBAeYB/gG1AeYB5wG1AeYB5wG1AeYB5wG1
-        AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wE7AccB3gE6AdAB5gE3AcQB2gE3AcQB2gFrAZsBpgEe
-        AR8BIwEeAR8BIwE8Ab0B0AEeAR8BIwEeAR8BIwE7AU0BVAEfASABJAFyAa4BvQEfASABJAEeAR8BIwFM
-        Ab8B1wEeAR8BIwEeAR8BIwFXAaIBsAEeAR8BIwEeAR8BIwFUAbQByAEeAR8BIwEeAR8BIwGCAcgB1wEf
-        ASABJAEeAR8BIwFAAbEByAE0Aa8ByAE0Aa4BxwE2AbQBzgE2AbAByQGzAeEB4gG1AeYB5wG1AeYB5wG1
-        AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wG1AeYB5wYAAT4B0QHnAT4B0QHmAT0BzgHk
-        AT4B0gHnAT4B0QHnAT4B0QHmAT0B0AHlCQADwwE9Ac0B4x4AATsBxgHdA8MJAAE6AcMB2wkAAbkB6QHy
-        A2kJAAGLAdkB5wkAATkBuwHUATgBugHTATgBugHTATgBuQHTATcBtQHPATgBugHTATgBuQHTAwAD/wb+
-        A/0DrQOlA/ADygPMA9gD+QP7A/ED/AP7A/gDkgP2A7UDrAPKA3YD7gPmA9YD4gPNA2YDbwNgA6IDKQMo
-        A8YDzwPQA9EDyQObA4wDPgNAAyUDkgNiA28DTgO8A98D/AHZAdoB7gFtAS8BKQFsASgBBwFZASwBEAFF
-        ASgBIAFbATYBOgFWATABJQExASMBMAE8AWMBYgHJAfIB9wGsAccB0gFVAUABTwFYARcBDgFcASABDQEl
-        ASMBAgFHATIBCQEtATMBDQE7ATQBMQGJAfMB4wEOAS0BGgFHATIBBQFjAToBNgGNAZcBnAEpATgBEwE4
-        AUUBIAGEAcQBwAGHAdoB8AO+AZIBYQE4AYgBaQE5AYEBYAFIAZIBWAFXAaoBWwFTAXkBUgE3AUEBYAFC
-        AbAB1wHLAbEB6gHVAaEBpQGbAYUBXgE/AZUBTQEqAWEBbwEyAVYBbAEhAbgBYwElAYwBaAE9AZcB2QGz
-        AWABdgFcAZ8BYAEgAWwBcAFHAaoB5wHcAZUB4QHyAboB6gHsAb4B7wHwAc0B/gH/Ac0B/gH/Ac0B/gH/
-        Ac0B/gH/AccB+AH6AboB6gHsATcBygHiATkBzwHmATkBygHhAT0ByQHgAW0BngGlAR4BHwEjAR4BHwEj
-        AUABwAHVAR4BHwEjAR4BHwEjAi0BMAEeAR8BIwFgAV4BXQEeAR8BIwEeAR8BIwFMAcIB2QEeAR8BIwEe
-        AR8BIwE/Ab4B2QEeAR8BIwEeAR8BIwFZAbgBzAEeAR8BIwEeAR8BIwGIAdEB4gEfASABJAEfASABJAE7
-        AbIBywE0AbIBywE3AbEBygEyAbUBzwExAbIBzAHIAfkB+wHNAf4B/wHNAf4B/wHNAf4B/wHNAf4B/wG6
-        AeoB7AHLAfwB/gHNAf4B/wHNAf4B/wHNAf4B/wYAAT8B1QHpAT4B1AHpATwBygHhAT8B1gHqAT8B1QHq
-        AT8B1QHpAT4B1AHpCQADwwE+AdEB5h4AATwBygHhA8MJAAE7AccB3gkAAbQB6QHyA2kJAAM8CQABOQG/
-        AdcBOQG+AdcBOQG+AdYBOQG9AdYBNgGyAcwBOQG9AdYBOQG9AdUDAAb+BvwDnQO4A9UD8APrA9EDwwPA
-        A8kDxwP8A+oDxgP+A6kD/AOvA8cD+APpA9QD4wPRA2gDMgPfA9cD5wPlA3gDQwOSA9AD1wO/AzIDSAM9
-        A2YDsgOuA0MDVgO/A+AD/gGHAe4B8QFdAYgBdQFFAUIBGQI1AQ4BoQGWAW0BkgGeAYwBZwFkAU0BTAE4
-        AQwBXgErAR4BRwE0ATEBmwHhAd4BbQHuAecBpwH0AfsBvQHlAeoB3QHwAegBXgFLATwBRQEnAQUBRQEq
-        ASMBvQHyAekBKgEtAREBPQEyAQ4BXwFaAVYBtALnATQBUwE1AU8BMAEKATsBOgEwAbIB7gH5AbQB3AHe
-        AXoBawFRAYcBbAE2AXoBbwFEAecB0QGNAcsBsAFvAZIBdAFFAZwBbgFMAVYBWAFWAYIBqQGtAZ4B6AH9
-        AYYB3gHlAf4B6gH4AcsB7AHjAaYByQGtAZYBYQFMAZsBYAE7AaUBsAGVAYABkQF1AacBeAEsAW4BZgE6
-        AbsB5gHXAZkB3wHwAbwB7AHuAbwB7AHuAcQB9QH3AccB+AH5AccB+AH5AccB+AH5AbwB7AHuAbwB7AHu
-        ATkBzwHmATkBzwHmAToB0AHnATkBzwHmAWoBoAGoAR4BHwEjAR4BHwEjAUMBwwHYAR4BHwEjAR4BHwEj
-        AR4BHwEjAR4BHwEjAR8BIAEkAR8BIAEkAR4BHwEjAU4ByAHeAR4BHwEjAR4BHwEjATkBwwHYAR4BHwEj
-        AR4BHwEjAV8BuwHPAR4BHwEjAR8BIAEkAYwB1AHlAR4BHwEjAR4BHwEjAUABuAHQATUBuAHSATMBtgHQ
-        ATMBtgHQATUBuAHSAb4B7gHwAccB+AH5AccB+AH5AccB+AH5AbwB7AHuAbwB7AHuAbwB7AHuAccB+AH5
-        AccB+AH5AccB+AH5BgABPwHYAewBPwHXAesBOwHHAd4BQAHaAe0BQAHZAe0BPwHYAe0BPwHYAewJAAPD
-        AT8B1QHpDAADZgOLDAABPQHOAeQDwwkAAdkB9QH5CQABbQHWAecDaQkAA5oGAAFAAcYB3AE6AcMB2gEG
-        ARQBFgE6AcIB2QE6AcEB2QE2Aa4ByQE6AcAB2AE6AcAB2AMAA/8D/QP7A/4D9QO8A8ADzwPfA/oD3APz
-        A/UD6APIA5wD+gO8A/oDjgPEA+wD/wPnA9YD5QPVA3gDegNvA9kD9wPXA08DWwNqA2cDagPcA3gDXgPT
-        A9EDwwNtA2gDcQPJA+AD/gGNAekB9gGzAd4B1AFXASsBEgFmASsBDgFeAXMBeAGeAdsB9QG0AdsB+wGj
-        AakBowFNATYBIgFjAS0BIQGqAYwBfAI9ASEBAAErAQIBDQE8AREBKwEvAQQBYgE4AQABSwEwASIBKAEi
-        ASMBzQG5AbUBTwFBASgBNgE0AR0BegGIAY0BqwHkAesBpAHVAdoBLAEkAR4BUQErASMBdAFmAWkBzQH1
-        AekBawFxAV8BkwFpAUIBZQFbAUwB1wHnAfUBfgHUAeYBoAH0AesBYgFPASgBswFhARcBhgFtATABgAG1
-        AZABOQFqATgBRgFxAS4BbwFwATQBbgFiAS8BfQFqAUIBdwFTATsBoQGtAaUBngHNAbkBnAFrASQBoAFp
-        AT8BwAHIAbIBnwHpAe4B5AHmAuQB5gLkAeYC5AHmAuQB5gLkAeYC5AHmAuQB5gHkAT0B0wHqATgBzgHl
-        AT4B1gHnAT8B1gHnAW0BogGrAR4BHwEjAR4BHwEjAT8ByAHeAR4BHwEjAR4BHwEjAR4BHwEjAZ0BuAHA
-        AR4BHwEjAR4BHwEjAR8BIAEkAVMBzQHhAR4BHwEjAR4BHwEjAT8ByAHdAR4BHwEjAR8BIAEkAVwBwAHQ
-        AR4BHwEjAR4BHwEjAWYBZQFkAR8BIAEkAR4BHwEjAUUBvAHVATsBvQHYATsBvQHYATYBuAHSATsBvQHY
-        Ad8B5AHgAeQB5gLkAeYC5AHmAuQB5gLkAeYC5AHmAuQB5gLkAeYC5AHmAeQGAAFAAdsB7wFAAdoB7gE6
-        AcMB2wFBAd4B8QFAAd0B8AFAAdwB8AFAAdwB7wkAA8MBPwHYAe0MAAGEAeUB8QGIAeUB8QwAAT4B0gHn
-        A8MSAAPAAT0BzAHiA2kJAAE8AckB4AE8AckB3wE8AcgB3wE7AccB3gE7AccB3gEyAakBvQE7AcUB3QE7
-        AcUB3AE1AasBxgE7AcQB2wE6AcMB2wMAA/oD/gP8A9QD+gP7A9IDvAPIA/4D8wPKBqwDrwP7A/4DwgO7
-        A6ID2wP4A/ID7gPWA+MD2QOEA38DfQOGA3UD+gPvA/ADwAOQA5ID3QPYA9YD2gN/A4cGfQNyA8ED4AP8
-        AaYB3gH3AckB7QHuAUYBJgEUAU8BOQIdAVUBNAGUAfcB4AGqAfYB+gGDAbcBmwEoAT0BGQE3AS0BHQFO
-        AU8BSwGjAa8BrgFMAWMBVgFeATEBNwFqATEBLgEwATgBGQGTAYsBkAHSAewB/AFnAa4BqAGDAZgBhQF6
-        AZEBhgGoAdIB3gGZAd4B7QGjAeYB9gGSAbsBsAF+AYoBgAF8AZgBpAGVAdIB0AGQAZUBjAGbAWcBMwFm
-        AWkBOgGrAd0B5wGrAewB/wHSAdwB6QGNAVkBPQGhAU8BLQGCAWMBTwHPAd0B4wHLAYsBigG1AWgBYgGg
-        AWYBVQGCAWwBUgGuAZMBewG9AcEBswHHAfMB9wGZAegB3QGkAWgBLAGYAWMBNgGMAYYBaAGxAeoB4xgA
-        ATkB2QHrAToBzgHlATwB2wHuATwB2wHuAXABpQGuAR4BHwEjAR8BIAEkAUYB0AHgAR8BIAEkAR4BHwEj
-        AR8BIAEkAVABxAHYAR4BHwEjAR8BIAEkAR4BHwEjAVAB0wHnAR4BHwEjAR4BHwEjAR4BHwEjAR4BHwEj
-        AR4BHwEjAVIBywHfAR4BHwEjAR4BHwEjAYQB1QHmAWoBpwGwAVkBxgHbATUBwgHXATUBwQHYATUBwgHX
-        ATYBugHRATsBwAHUA/IhAAFBAd4B8QFBAd4B8QFBAd0B8AFAAdwB8AE5Ab4B1wFBAeAB8wFBAd8B8gFB
-        Ad8B8gFBAd4B8QFBAd4B8QFBAd0B8AFAAdwB8AFAAdwB7wFAAdsB7wFAAdsB7gFAAdoB7gFAAdkB7QFA
-        AdkB7QE/AdgB7AE/AdcB7AE/AdcB6wE/AdYB6wE/AdYB6gE/AdUB6gE/AdUB6QE+AdQB6QE+AdMB6AE+
-        AdMB6AE+AdIB5wE+AdEB5wE+AdEB5gE9AdAB5QE9Ac8B5QE9Ac8B5QE9Ac4B5AE9Ac4B4wE9Ac0B4wE9
-        AcwB4gE8AcwB4gE8AcsB4QE8AcoB4QE8AcoB4AE0AagBxAE8AcgB3wE7AccB3gE7AccB3gE7AcYB3QMA
-        A/sD/wP7A6sD9wP5A6sD9wOpA8kD5wO0A+wDtwPEA7QD7AO/A/AD9wPCA/sD4APtA9YD4wPcA4sDlAOS
-        A5sDfgOWA80DwAPVA9YDzAPGA7YD1gOLA4UDnAOKA5UDfAPEA+AD/AGdAfEB/wG2AeAB7AFZATQBMwFx
-        ASwBIwI2ARgBNwE5ASABPQEgAQsBUgEpAQ8BaQEwARwBTgEnAR4BfQKFAcAB8AH2AYoB4wHtAZIB5gH8
-        AZgB3wHvAb0B9AH1AZwB4QH1AZYB4QH7AZ4B5gH4AaoB6QHuAaoB6wH0AZEB5gH5AZEB4AH7AaEB4AH7
-        AagB5AH1AZ0B6wHuAYkB6gHtAZoB9QHwAbYBzwG7AbcBaQFDAb0BWwEXAZ8BagE9AYABXQFAAZQBdwFc
-        AZMBZwE8AaQBagE6AX4BZgFNAcIC6wFxAdgB3AGHAeoB7gGLAe0B8AGaAewB7wGqAeYB6wG0AecB+AGV
-        AeQB9QGaAfAB+QGeAXsBRQGbAVgBPAGAAVgBRAHNAe8B5BgAAT0B3AHvATkBxQHaATwB1wHsAT8B3gHx
-        AXIB0wHgAXEBsAG6AXEBsAG6AUIB2QHrAXEBsAG6AXEBrwG5AXEBrwG5AT0B2AHrAXEBrwG5AW4BrAG2
-        AW4BrAG2AUgB1wHpAW4BrAG2AW4BrAG2AU0BpQGyAVwBuQHHATcBzQHkATUBygHiAWsBqQGyAWsBqQGy
-        AWQB1AHoAT0ByQHgATwByAHfATwByAHfAToBxwHdATIBswHPATcBuwHSATcBxAHaA/InAAFMAd8B8gFB
-        AeAB8wFBAd8B8gE7AcQB2wE9Ac0B5AE9Ac0B4gE9AcsB4gE9AcsB4QE8AcsB4AE7AcoB4AE7AcoB4AE7
-        AckB3wE7AckB3gE7AcgB3gE7AccB3gE7AcYB3QE7AcYB3QE7AcUB3QE7AcQB3AE7AcQB2wE7AcQB2wE7
-        AcIB2wE6AcIB2gE6AcIB2QE5AcEB2QE5AcAB2QE5AcAB2AE5Ab8B1wE5Ab4B1wE5Ab4B1wE5Ab0B1gE5
-        AbwB1QE5AbwB1QE5AbwB1QE5AbwB1AE5AboB0wE4AboB0wE4AboB0gE3AbgB0QEzAaUBwQE8AcwB4gE8
-        AcsB4QH7AvwJAAP8A/8D/AOQA/cD9gOOA/wD3wO7A/oDvwOzA/cDpwPmA/YDsAP1A/YDtAP6A+ED7wPV
-        A+gD3gN3A1gDWgNdA1YDXgZbA10DWANZA1MDWwNdA1cDWgNbBlYDYgPMA+AD/AGgAe4B/wGiAdQB5wGW
-        AYwBmwFbATsBRQFHATsBLwFHATMBKAFpAUABOAFUAT8BMAFnAWYBXgHIAdUB1wGxAdsB6QGlAekB+wGU
-        Ae4B/wGhAeYB/wGgAeUB/QGaAesB+gGcAe4B/gGGAd0B9wGVAecB/QGkAfEB/QGeAecB+QGSAegB/gGP
-        AeYB/gGVAegB/gGYAegB+QGWAewB+AGNAe4B/QGBAeYB6QGwAe0B4AGAAW4BUwGgAXMBQgGOAWkBLwGu
-        AX0BUQGXAWYBQAGYAX4BSwG8AawBmAHXAfIB6wGcAdwB5wGdAeEB8wGOAesB/wGHAe4B/wGGAfAB/gGN
-        Ae0B/AGgAegB/QGXAecB/gGLAeMB9gGHAZYBfgF3AVABSQFsAVIBSgHFAd4B1RgAA/wBRgHiAfUBQgHh
-        AfQBPQHcAe8BPAHkAfkBPQHjAfgBQAHiAfYBQgHhAfQBQQHgAfMBPwHeAfEBPQHcAe8BPQHcAe8BPQHc
-        Ae8BPAHbAe4BOQHZAewBOQHZAewBOAHYAeoBPQHXAegBPwHVAegBPwHWAecBPwHVAegBPQHSAeoBPQHS
-        AekBOwHQAecBOwHQAecBOAHOAeUBNQHKAeIBNQHKAeIBNgGxAcsBPQHJAeABnwHfAegwAAFCAeMB9QFC
-        AeMB9QFCAeIB9QFCAeIB9AFBAeEB9AFBAeAB8wFBAeAB8wFBAd8B8gFBAd8B8gFBAd4B8QFBAd4B8QFB
-        Ad0B8QFAAd0B8AFAAdwB8AFAAdwB7wFAAdsB7wFAAdsB7gFAAdoB7gFAAdoB7gFAAdkB7QFAAdkB7QE/
-        AdgB7AE/AdgB7AE/AdcB6wE/AdcB6wE/AdYB6wE/AdYB6gE/AdUB6gE/AdUB6QE+AdQB6QE+AdMB6AE+
-        AdMB6AE+AdIB5wE+AdIB5wE+AdEB5wE+AdEB5gE+AdEB5gE9AdAB5QE9Ac8B5QE9Ac8B5QE9Ac4B5AwA
-        A/0D+gP5A/UD+gP+A/YD9wP/Bv0D8QP9A/4D/QP8A/8D/AP+A/8D+wP9A/8D9APSA+sD4QPgA+oD6APn
-        BusD6QbqA+YD4APjA+ED3QPcA9sD3APVA9AD1wPUA+MD/gGrAesB/QGqAesB/wG0AeQB/QGzAe4B/wGZ
-        Ae0B8wGhAfUB9wGsAesB7QGsAfIB9QGlAe8B+AGeAekB9wGfAeoB9wGgAewB/wGcAeYB/QGpAeUB+wGv
-        AegB/gGpAeYB/wGRAd8B9gGeAewB/wGaAeYB/AGbAeQB/AGgAecB/AGfAekB/gGWAe0B+gGSAe8B9wGY
-        AewB+QGbAegB+wGZAeYB/wGZAeYB/gGVAeUB9QGsAewB8wGgAeUB4wGZAfEB9gGkAegB9gGvAeEB9QGs
-        AeQB8wHBAfMB/gGlAeUB/QGhAd8B/gG0AdwB/gHCAd0B/wGwAeEB/gGkAeUB/gGjAecB/gGjAekB/wGf
-        AeIB/gGbAe0B/gGdAecC7AH4Af4B3wHpAfABvgHsAe8eAAE8AeQB+QE8AeQB+QFFAeMB9gFCAeEB9AFC
-        AeEB9AFCAeEB9AFBAeAB8wE9AdwB7wE9AdwB7wE9AdwB7wE9AdwB7wE9AdwB7wE8AdsB7gE5AdkB7AE4
-        AdgB6gE5AdkB6wE4AdgB6gE8AdYB6AE/AdYB5wE/AdYB5wE/AdYB5wE9AdIB6gE8AdEB6QE7AdAB6AE7
-        AdAB5wE5Ac8B5gE5Ac8B5gE5Ac8B5gHyAfMB8rcAA/8D+wP1A/wD/wP7A/MD/AP+A/kG/gP8A/kD9gP4
-        A/8D+gP7A/4D/AP/A/wG/QP8A/sD/QP/A/wD/gn/Bv0S/wP+A/0D/wP8A/kG/wP7AZ4B7wH0AZQB5QH2
-        AakB5QH/AaYB4wH/AY4B5AH/AYIB6gH9AaUB8AH/AawB3wH8AbIB4wH/AaMB5gH+AZYB7gH+AYcB6gH4
-        AYEB7wH5AYIC8gGQAfQB+wGZAekB/QGoAesB/wGmAeUB+QGtAekB/wGoAeYB/wGrAekB/wGrAekB+wGh
-        Ae8B9QGXAfEB7wGhAe4B9wGrAecB/QGsAeIB/gGlAekB/gGPAe4B+wGNAe8B/wF7AeIB+AGQAegB/wGO
-        AeUB/wGPAesB/wGKAewB/gGbAfIB/AGEAeAB8wGJAe8B/wF8AesB9gF5AfAB/wF6Ae8B/AGJAe0B+gGe
-        AeoB+wGsAecB/AGyAeYB/gGbAecB9gGGAe8B/gG0AekB9wG7AecB9gGlAe0B+wFCAU0BPgcAAT4DAAEo
-        AwAByAMAAR4DAAEBAQABAQUAAUgBAxYAA///AKYABv8B/gUAAfAPAAHwAVABCAECAQABDwH8BQABcA8A
-        AfABQAEAASIBAAGfAfAFAAEQDwAG/wHwBQABEA8AAf8BgAIAAQEB/wHwBQABEA8AAf8EAAF/AfAFAAEQ
-        DwAB/wQAAX8B8AUAARAVAAEwBQABEBUAATAFAAEQFQABMAUAARAVAAEwBQABEA8AAf8EAAF/AfAFAAEQ
-        DwAB/wQAAX8B/AUAAXAPAAH/AwABAQH/Af4FAAHwDwAB/wHAAgABAQf/AfAPAAs=
-</value>
-  </data>
-  <metadata name="Button65.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox38.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Button14.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label79.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label68.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>805, 17</value>
-  </metadata>
-  <metadata name="Button65.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox38.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Button14.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label79.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label68.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>Use this page to edit what movie sets are available.
-These sets can be used to group collections of movies together within XBMC,
-eg. If you were to add the movie set "Star Wars Collection", and make all
-Star Wars movies part of this set, then they would be added to the XBMC library
-as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
-  </data>
-  <metadata name="ListBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox7.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox15.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Refresh" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
-  <metadata name="ListBox10.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label99.Text" xml:space="preserve">
-    <value>Media Companion can attempt to automatically download a Poster when a movie is first scraped, if this option is enabled, then the setting below allows you to prioritise the order that sources are checked for an available poster.</value>
-  </data>
-  <metadata name="ListBox10.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="lbCleanFilename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="lbCleanFilename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="lbVideoSource.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="lbVideoSource.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox3.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox_Plot.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox_Plot.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label56.Text" xml:space="preserve">
-    <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
-If none of the above are correct, then alter the search term and search again.</value>
-  </data>
-  <metadata name="ListBox3.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="btn_TvFoldersRootRemove.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="btn_TvFoldersRootBrowse.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label82.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox5.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="btn_TvFoldersRootAdd.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label81.Text" xml:space="preserve">
-    <value>Root Folders are folders that contain
-multiple TV Shows
-
-For example :-
-D:/Root/TV Show 1
-D:/Root/TV Show 2 
-You would add the path:
-D:/Root
-
-Folders added to this list can be
-checked for new TV Show folders
-and can be added to the Seperate
-Folders List automatically on startup.
-
-To check for new TV Folders when
-the program is running, use the 
-"Check Roots for New TV Shows"
-menu item, located in the
-"TV Shows" drop down menu.</value>
-  </data>
-  <metadata name="TextBox39.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="btn_TvFoldersAdd.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox40.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label85.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="btn_TvFoldersRemove.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label84.Text" xml:space="preserve">
-    <value>Seperate folders are those that
-contain only a single TV Show
-
-For Example :-
-D:/Root/TV Show 1
-You would add the path:
-D:/Root/TV Show 1
-
-Adding shows using this method
-means that all shows must be
-added manually.</value>
-  </data>
-  <metadata name="btn_TvFoldersBrowse.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox6.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox12.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label138.Text" xml:space="preserve">
-    <value>If you have enabled the option to 'Save Actor
-Thumbs to the '.Actors' Folder' located in the
-general preferences then this gives you this
-additional option.
-When Scraping episodes from TVDB, the only
-actor thumbnails avaialble are those at IMDB,
-but compared to TVDB, these actor thumbs
-are low quality.
-
-This preference gives you the option to copy an
-actors thumb, if available, to the episodes actor
-folder, allowing the higher quality TVDB actor
-thumb to be used for the episode.</value>
-  </data>
-  <data name="Label139.Text" xml:space="preserve">
-    <value>Enabling the 'Quick Add' option will speed up the
-scraping of TV Shows by not downloading available
-Art. All show art can be scraped at any time by using
-the TV context menu item to 'Download missing art'</value>
-  </data>
-  <data name="Label140.Text" xml:space="preserve">
-    <value>Media Companion now offers the option to
-automatically rename episodes during
-scraping.
-Only use this option if you are sure that the
-media file is named according to supported
-MC naming conventions.</value>
-  </data>
-  <metadata name="ListBox12.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox_tv_RegexRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox_tv_RegexRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox_tv_RegexScrape.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox_tv_RegexScrape.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox_tv_RegexScrape_TestResult.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox_tv_RegexScrape_TestResult.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
+  <metadata name="HomeMovieContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 56</value>
   </metadata>
   <metadata name="RemoveHomeFoldersBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -5470,20 +5389,11 @@ not add those files.</value>
   <metadata name="ListBox13.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="ListBox13.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="Label115.Text" xml:space="preserve">
     <value>Media Companion can be used to playback media files, Use the options below to select
 what program you want to use for playback. To allow playback of multi-part media files,
 Media Companion creates a m3u playlist.</value>
   </data>
-  <metadata name="ListBox17.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox16.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="ListBox17.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -5508,49 +5418,46 @@ You can use this tab to export the entire MC database into an xml file that can 
 method is much faster than using XBMC scrapers to read the nfo files, and secondly, additional information, such as watched status will be included.</value>
   </data>
   <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>808, 95</value>
+    <value>951, 95</value>
   </metadata>
   <metadata name="openFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>923, 95</value>
+    <value>1066, 95</value>
   </metadata>
   <metadata name="Timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1106, 95</value>
+    <value>17, 134</value>
   </metadata>
   <metadata name="Timer3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1195, 95</value>
+    <value>106, 134</value>
   </metadata>
   <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1017, 95</value>
+    <value>1160, 95</value>
   </metadata>
   <metadata name="Timer4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1284, 95</value>
+    <value>195, 134</value>
   </metadata>
   <metadata name="ContextMenuStrip3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>491, 17</value>
   </metadata>
   <metadata name="bckgrnd_tvshowscraper.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>326, 95</value>
+    <value>469, 95</value>
   </metadata>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>442, 134</value>
+    <value>709, 134</value>
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>560, 134</value>
-  </metadata>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>767, 134</value>
+    <value>827, 134</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>896, 134</value>
+    <value>1163, 134</value>
   </metadata>
   <metadata name="BindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>975, 56</value>
+    <value>1167, 56</value>
   </metadata>
   <metadata name="BasicmovienfoBindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>226, 134</value>
+    <value>493, 134</value>
   </metadata>
   <metadata name="BasicmovienfoBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 134</value>
+    <value>284, 134</value>
   </metadata>
   <metadata name="ForegroundWorkTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1058, 0</value>

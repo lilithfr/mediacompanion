@@ -588,14 +588,23 @@ Public Class Form1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
                 TabLevel1.SelectedIndex = 0
-            Else
+            ElseIf Preferences.startuptab = 1 Then
                 SplitContainer1.SplitterDistance = Preferences.splt1
                 SplitContainer2.SplitterDistance = Preferences.splt2
                 SplitContainer5.SplitterDistance = Preferences.splt5
                 TabLevel1.SelectedIndex = 1
                 SplitContainer3.SplitterDistance = Preferences.splt3
                 SplitContainer4.SplitterDistance = Preferences.splt4
+            ElseIf Preferences.startuptab = 2 Then
+                SplitContainer1.SplitterDistance = Preferences.splt1
+                SplitContainer2.SplitterDistance = Preferences.splt2
+                SplitContainer5.SplitterDistance = Preferences.splt5
+                SplitContainer3.SplitterDistance = Preferences.splt3
+                SplitContainer4.SplitterDistance = Preferences.splt4
+                TabLevel1.SelectedIndex = 2
             End If
+
+
             SplitContainer1.IsSplitterFixed = False
             SplitContainer2.IsSplitterFixed = False
             SplitContainer3.IsSplitterFixed = False
@@ -5846,6 +5855,7 @@ Public Class Form1
     End Sub
 
     Private Sub PictureBox7_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.DoubleClick
+
         Try
             Try
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -24514,7 +24524,7 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub PictureBox7_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox7.MouseUp
+    Private Sub PictureBox7_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox7.MouseUp, PictureBox7.Click
         Try
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 RescrapePToolStripMenuItem.Visible = False
@@ -29076,6 +29086,36 @@ End Sub
         mov_Play("HomeMovie")
     End Sub
 
+    Private Sub ListBox18_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox18.MouseDown
+
+    End Sub
+
+    Private Sub ListBox18_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListBox18.MouseUp
+        Try
+            Dim ptIndex As Integer = ListBox18.IndexFromPoint(e.X, e.Y)
+            If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso ListBox18.SelectedItems.Count > 0 Then
+                Dim newSelection As Boolean = True
+                'If more than one movie is selected, check if right-click is on the selection.
+                If ListBox18.SelectedItems.Count > 1 And ListBox18.GetSelected(ptIndex) Then
+                    newSelection = False
+                End If
+                'Otherwise, bring up the context menu for a single movie
+
+
+                If newSelection Then
+                    'ListBox18.SelectedItems.Clear()
+                    ListBox18.SelectedIndex = ptIndex
+                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
+                    PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
+                    PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = "'" & ListBox18.Text & "'"
+                    PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
 
     Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
         For Each homemovie In homemovielist
@@ -29100,6 +29140,9 @@ End Sub
         TextBox22.Text = WorkingHomeMovie.fullmoviebody.plot
         TextBox23.Text = WorkingHomeMovie.fullmoviebody.stars
         TextBox20.Text = WorkingHomeMovie.fullmoviebody.year
+        PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = WorkingHomeMovie.fullmoviebody.title
+        PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
+        PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
         If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
             util_ImageLoad(PictureBox4, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
         End If
@@ -29298,4 +29341,53 @@ End Sub
 
     End Sub
 
+    Private Sub PlayHomeMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayHomeMovieToolStripMenuItem.Click
+        mov_Play("HomeMovie")
+    End Sub
+
+    Private Sub OpenFolderToolStripMenuItem_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem.Click
+        Try
+            'Try
+            If Not WorkingHomeMovie.fileinfo.fullpathandfilename Is Nothing Then
+                Call util_OpenFolder(WorkingHomeMovie.fileinfo.fullpathandfilename)
+            Else
+                MsgBox("There is no Movie selected to open")
+            End If
+            'Catch
+            'End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub OpenFileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFileToolStripMenuItem.Click
+        Try
+            Utilities.NfoNotepadDisplay(WorkingHomeMovie.fileinfo.fullpathandfilename)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+   
+    Private Sub PictureBox4_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.DoubleClick
+        Try
+            Try
+                If WorkingHomeMovie.fileinfo.fanartpath <> Nothing Then
+                    If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
+                        Me.ControlBox = False
+                        MenuStrip1.Enabled = False
+                        Using newimage As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
+                            util_ZoomImage(newimage)
+                        End Using
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 End Class
