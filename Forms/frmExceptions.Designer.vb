@@ -31,6 +31,8 @@ Partial Class frmExceptions
         Me.lnkCodeplex = New System.Windows.Forms.LinkLabel()
         Me.lblMessageEnd = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.pictSadFace, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -50,8 +52,8 @@ Partial Class frmExceptions
         Me.lblMessage.Name = "lblMessage"
         Me.lblMessage.Size = New System.Drawing.Size(728, 24)
         Me.lblMessage.TabIndex = 1
-        Me.lblMessage.Text = "Something went wrong and application needs to close. Why not file a bug to help u" & _
-    "s improve? Create a new issue at "
+        Me.lblMessage.Text = "Oops, something went wrong. Why not file a bug to help us improve? Create a new i" & _
+            "ssue at "
         '
         'txtExceptionTrace
         '
@@ -83,7 +85,7 @@ Partial Class frmExceptions
         '
         'btnQuit
         '
-        Me.btnQuit.Location = New System.Drawing.Point(631, 486)
+        Me.btnQuit.Location = New System.Drawing.Point(347, 453)
         Me.btnQuit.Name = "btnQuit"
         Me.btnQuit.Size = New System.Drawing.Size(97, 23)
         Me.btnQuit.TabIndex = 4
@@ -94,7 +96,7 @@ Partial Class frmExceptions
         '
         Me.lnkCodeplex.AutoSize = True
         Me.lnkCodeplex.Font = New System.Drawing.Font("Lucida Console", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lnkCodeplex.Location = New System.Drawing.Point(119, 294)
+        Me.lnkCodeplex.Location = New System.Drawing.Point(23, 294)
         Me.lnkCodeplex.Name = "lnkCodeplex"
         Me.lnkCodeplex.Size = New System.Drawing.Size(355, 12)
         Me.lnkCodeplex.TabIndex = 1
@@ -105,7 +107,7 @@ Partial Class frmExceptions
         '
         Me.lblMessageEnd.AutoSize = True
         Me.lblMessageEnd.Font = New System.Drawing.Font("Lucida Console", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblMessageEnd.Location = New System.Drawing.Point(480, 294)
+        Me.lblMessageEnd.Location = New System.Drawing.Point(384, 294)
         Me.lblMessageEnd.Name = "lblMessageEnd"
         Me.lblMessageEnd.Size = New System.Drawing.Size(257, 12)
         Me.lblMessageEnd.TabIndex = 5
@@ -119,7 +121,26 @@ Partial Class frmExceptions
         Me.Label1.Size = New System.Drawing.Size(728, 24)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Please add a brief description of the circumstances under which the exception occ" & _
-    "urred, particularly the movie or show that may have contributed. Thanks!"
+            "urred, particularly the movie or show that may have contributed. Thanks!"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(78, 483)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(263, 26)
+        Me.Label2.TabIndex = 7
+        Me.Label2.Text = "Media Companion should be able to recover from most" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "exceptions, select continue " & _
+            "to attempt this process."
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(347, 486)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(97, 23)
+        Me.Button1.TabIndex = 8
+        Me.Button1.Text = "Continue"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'frmExceptions
         '
@@ -128,6 +149,8 @@ Partial Class frmExceptions
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(776, 521)
         Me.ControlBox = False
+        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.lblMessageEnd)
         Me.Controls.Add(Me.lnkCodeplex)
@@ -157,4 +180,6 @@ Partial Class frmExceptions
     Friend WithEvents lnkCodeplex As System.Windows.Forms.LinkLabel
     Friend WithEvents lblMessageEnd As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 End Class

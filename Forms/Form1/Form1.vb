@@ -29206,6 +29206,20 @@ End Sub
         If tab = "search for new home movies" Then
             TabControl1.SelectedIndex = homeTabIndex
             Call homeMovieScan()
+        ElseIf tab = "screenshot" Then
+            If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
+                Try
+                    Dim bitmap2 As New Bitmap(WorkingHomeMovie.fileinfo.fanartpath)
+                    Dim bitmap3 As New Bitmap(bitmap2)
+                    bitmap2.Dispose()
+                    PictureBox5.Image = bitmap3
+                Catch
+                    PictureBox5.Image = Nothing
+                End Try
+            Else
+                PictureBox5.Image = Nothing
+            End If
+            homeTabIndex = TabControl1.SelectedIndex
         Else
             homeTabIndex = TabControl1.SelectedIndex
         End If
@@ -29218,4 +29232,70 @@ End Sub
     Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
         Call rebuildHomeMovies()
     End Sub
+
+    Private Sub homeMovie_ScreenShotBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles homeMovie_ScreenShotBtn.Click
+        Try
+
+            If IsNumeric(homeMovieScreenShotTimeTxtBx.Text) Then
+                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(WorkingHomeMovie.fileinfo.fullpathandfilename), "-fanart.jpg")
+                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(WorkingHomeMovie.fileinfo.fullpathandfilename), "")
+                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                Dim exists As Boolean = False
+                For Each ext In Utilities.VideoExtensions
+                    Dim tempstring2 As String
+                    tempstring2 = pathandfilename & ext
+                    If IO.File.Exists(tempstring2) Then
+                        Dim seconds As Integer = 10
+                        If Convert.ToInt32(homeMovieScreenShotTimeTxtBx.Text) > 0 Then
+                            seconds = Convert.ToInt32(homeMovieScreenShotTimeTxtBx.Text)
+                        End If
+
+                        If IO.File.Exists(thumbpathandfilename) Then
+                            PictureBox5.Image = Nothing
+                            PictureBox4.Image = Nothing
+                            IO.File.Delete(thumbpathandfilename)
+                        End If
+
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        messbox.Show()
+                        messbox.Refresh()
+                        Application.DoEvents()
+
+
+                        Dim myProcess As Process = New Process
+                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                        myProcess.StartInfo.CreateNoWindow = False
+                        myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
+                        Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                        myProcess.StartInfo.Arguments = proc_arguments
+                        myProcess.Start()
+                        myProcess.WaitForExit()
+
+
+                        If System.IO.File.Exists(thumbpathandfilename) Then
+                            Try
+                                Dim bitmap2 As New Bitmap(thumbpathandfilename)
+                                Dim bitmap3 As New Bitmap(bitmap2)
+                                bitmap2.Dispose()
+                                PictureBox5.Image = bitmap3
+                                PictureBox4.Image = bitmap3
+                            Catch
+                                messbox.Close()
+                            End Try
+                            End If
+                        Exit For
+                    End If
+                Next
+                messbox.Close()
+            Else
+                MsgBox("Please enter a numerical value into the textbox")
+                homeMovieScreenShotTimeTxtBx.Focus()
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
 End Class

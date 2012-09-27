@@ -1,7 +1,7 @@
 ﻿Imports System.Threading
 
 Public Class frmExceptions
-
+    Dim continueMC As Boolean = False
     Private Sub btnQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnQuit.Click
         For Each frmOpen As Form In My.Application.OpenForms
             frmOpen.Close() 'Close form instead of existing application so background threads are properly terminated.
@@ -32,12 +32,19 @@ Public Class frmExceptions
     End Sub
 
     Private Sub frmExceptions_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        If (e.CloseReason = CloseReason.UserClosing) Then
-            e.Cancel = True
+        If continueMC = False Then
+            If (e.CloseReason = CloseReason.UserClosing) Then
+                e.Cancel = True
+            End If
         End If
     End Sub
 
     Private Sub CopyText()
         Clipboard.SetText(Me.txtExceptionTrace.Text)
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        continueMC = True
+        Me.Close()
     End Sub
 End Class
