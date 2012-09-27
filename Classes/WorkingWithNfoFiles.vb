@@ -2664,9 +2664,9 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Function nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
+    Public Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
 
-        If homemovietosave Is Nothing Then Exit Function
+        If homemovietosave Is Nothing Then Exit Sub
         If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
             'Try
             Dim doc As New XmlDocument
@@ -3004,7 +3004,7 @@ Public Class WorkingWithNfoFiles
         End If
 
 
-    End Function
+    End Sub
 End Class
 
 

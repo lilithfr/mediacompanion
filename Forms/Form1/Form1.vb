@@ -29086,4 +29086,22 @@ End Sub
     End Sub
 
 
+    Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
+        Try
+            Dim tempstring As String
+            tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
+
+            For f = fullMovieList.Count - 1 To 0 Step -1
+                If fullMovieList(f).fullpathandfilename = tempstring Then
+                    fullMovieList.RemoveAt(f)
+                    Exit For
+                End If
+            Next
+
+            MovieListComboBox.Items.Remove(MovieListComboBox.SelectedItems(0))
+
+            Call mov_CacheSave()
+        Catch
+        End Try
+    End Sub
 End Class
