@@ -137,6 +137,7 @@ Public Class Form1
     Private WithEvents FileToBeDownloaded As WebFileDownloader
     Private tvCurrentTabIndex As Integer = 0
     Private currentTabIndex As Integer = 0
+    Private homeTabIndex As Integer = 0
 
 
 
@@ -12824,47 +12825,47 @@ MyExit:
         End Try
     End Sub
 
-    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
-        Try
-            Dim tab As String = TabLevel1.SelectedTab.Text.ToLower
-            If tab = "movies" Then
-                tab1 = 0
-                Preferences.startuptab = 0
-            ElseIf tab = "tv shows" Then
-                TvTreeview.Focus()
-                tab1 = 1
-                Preferences.startuptab = 1
-            ElseIf tab = "home movies" Then
-                tab1 = TabLevel1.SelectedIndex
-                Call SetupHomeMovies()
-            ElseIf tab = "" Then
-                TabLevel1.SelectedIndex = tab1
-                Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
-                'Process.Start(webAddress)
-                OpenUrl(webAddress)
-            ElseIf tab = "general preferences" Then
-                tab1 = TabLevel1.SelectedIndex
-                Call util_GeneralPreferencesSetup()
-            ElseIf tab = "export" Then
-                Call frm_ExportTabSetup()
-            ElseIf tab = "config.xml" Then
-                RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\settings\config.xml")
-            ElseIf tab = "moviecache" Then
-                RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml")
-            ElseIf tab = "tvcache" Then
-                RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml")
-            ElseIf tab = "actorcache" Then
-                RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml")
-            ElseIf tab = "profile" Then
-                RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml")
-            ElseIf tab = "regex" Then
-                RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    'Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
+    '    Try
+    '        Dim tab As String = TabLevel1.SelectedTab.Text.ToLower
+    '        If tab = "movies" Then
+    '            tab1 = 0
+    '            Preferences.startuptab = 0
+    '        ElseIf tab = "tv shows" Then
+    '            TvTreeview.Focus()
+    '            tab1 = 1
+    '            Preferences.startuptab = 1
+    '        ElseIf tab = "home movies" Then
+    '            tab1 = TabLevel1.SelectedIndex
+    '            Call SetupHomeMovies()
+    '        ElseIf tab = "" Then
+    '            TabLevel1.SelectedIndex = tab1
+    '            Dim webAddress As String = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4696771"
+    '            'Process.Start(webAddress)
+    '            OpenUrl(webAddress)
+    '        ElseIf tab = "general preferences" Then
+    '            tab1 = TabLevel1.SelectedIndex
+    '            Call util_GeneralPreferencesSetup()
+    '        ElseIf tab = "export" Then
+    '            Call frm_ExportTabSetup()
+    '        ElseIf tab = "config.xml" Then
+    '            RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\settings\config.xml")
+    '        ElseIf tab = "moviecache" Then
+    '            RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml")
+    '        ElseIf tab = "tvcache" Then
+    '            RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml")
+    '        ElseIf tab = "actorcache" Then
+    '            RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml")
+    '        ElseIf tab = "profile" Then
+    '            RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml")
+    '        ElseIf tab = "regex" Then
+    '            RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml")
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
 
-    End Sub
+    'End Sub
 
     
     Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -28711,15 +28712,7 @@ End Sub
         End If
     End Sub
 
-    Private Sub TabControl1_SelectedIndexChanged1(ByVal sender As Object, ByVal e As System.EventArgs)
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
-            MsgBox("Please add A Folder containing Home Movies")
-            Try
-                TabControl1.SelectedIndex = 1
-            Catch
-            End Try
-        End If
-    End Sub
+   
 
     'Private Sub listhomemovies()
     '    ListBox18.Items.Clear()
@@ -28729,15 +28722,88 @@ End Sub
     'End Sub
 
     Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
+        Call homeMovieScan()
+    End Sub
+
+    Private Sub rebuildHomeMovies()
+
+        homemovielist.Clear()
+        ListBox18.Items.Clear()
+
+        Dim newhomemoviefolders As New List(Of String)
+        Dim progress As Integer = 0
+        progress = 0
+        scraperLog = ""
+        Dim dirpath As String = String.Empty
+
+        Dim newHomeMovieList As New List(Of str_BasicHomeMovie)
+
+        Dim totalfolders As New List(Of String)
+        totalfolders.Clear()
+
+        For Each moviefolder In homemoviefolders
+            Dim hg As New IO.DirectoryInfo(moviefolder)
+            If hg.Exists Then
+                scraperLog &= "Found Movie Folder: " & hg.FullName.ToString & vbCrLf
+                totalfolders.Add(moviefolder)
+                scraperLog &= "Checking for subfolders" & vbCrLf
+                Dim newlist As List(Of String)
+                Try
+                    newlist = Utilities.EnumerateFolders(moviefolder, 6)
+                    For Each subfolder In newlist
+                        scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
+                        totalfolders.Add(subfolder)
+                    Next
+                Catch ex As Exception
+#If SilentErrorScream Then
+                        Throw ex
+#End If
+                End Try
+            End If
+        Next
+
+        For Each homemoviefolder In totalfolders
+            Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
+
+            dirpath = homemoviefolder
+            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+            returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, "*.nfo", scraperLog)         'titlename is logged in here
+            If returnedhomemovielist.Count > 0 Then
+                For Each newhomemovie In returnedhomemovielist
+                    Dim existsincache As Boolean = False
+                    Dim pathOnly As String = IO.Path.GetDirectoryName(newhomemovie.FullPathAndFilename) & "\"
+                    Dim nfopath As String = pathOnly & IO.Path.GetFileNameWithoutExtension(newhomemovie.FullPathAndFilename) & ".nfo"
+                    If IO.File.Exists(nfopath) Then
+                        Try
+                            Dim newexistingmovie As New HomeMovieDetails
+                            newexistingmovie = nfoFunction.nfoLoadHomeMovie(nfopath)
+                            Dim newexistingbasichomemovie As New str_BasicHomeMovie
+                            newexistingbasichomemovie.FullPathAndFilename = newexistingmovie.fileinfo.fullpathandfilename
+                            newexistingbasichomemovie.Title = newexistingmovie.fullmoviebody.title
+
+                            homemovielist.Add(newexistingbasichomemovie)
+                            ListBox18.Items.Add(New ValueDescriptionPair(newexistingbasichomemovie.FullPathAndFilename, newexistingbasichomemovie.Title))
+                        Catch ex As Exception
+
+                        End Try
+                    Else
+                        newHomeMovieList.Add(newhomemovie)
+                    End If
+
+                Next
+            End If
+        Next
+
+        Call HomeMovieCacheSave()
+
+    End Sub
+
+    Private Sub homeMovieScan()
         'Search for new Home Movies
-        Dim dft As New List(Of String)
+
         Dim moviepattern As String
-        Dim tempint As Integer = 0
-        Dim errorcounter As Integer = 0
-        Dim trailer As String = ""
-        Dim newmoviecount As Integer = 0
-        Dim dirinfo As String = String.Empty
-        newMovieList.Clear()
+     
+
         Dim newhomemoviefolders As New List(Of String)
         Dim progress As Integer = 0
         progress = 0
@@ -28758,46 +28824,64 @@ End Sub
 
 
 
-        For Each folder In homemoviefolders
-            Dim totalfolders As New List(Of String)
-            totalfolders.Clear()
+        'For Each folder In homemoviefolders
+        Dim totalfolders As New List(Of String)
+        totalfolders.Clear()
 
-            For Each moviefolder In homemoviefolders
-                Dim hg As New IO.DirectoryInfo(folder)
-                If hg.Exists Then
-                    scraperLog &= "Found Movie Folder: " & hg.FullName.ToString & vbCrLf
-                    totalfolders.Add(moviefolder)
-                    scraperLog &= "Checking for subfolders" & vbCrLf
-                    Dim newlist As List(Of String)
-                    Try
-                        newlist = Utilities.EnumerateFolders(moviefolder, 6)
-                        For Each subfolder In newlist
-                            scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
-                            totalfolders.Add(subfolder)
-                        Next
-                    Catch ex As Exception
+        For Each moviefolder In homemoviefolders
+            Dim hg As New IO.DirectoryInfo(moviefolder)
+            If hg.Exists Then
+                scraperLog &= "Found Movie Folder: " & hg.FullName.ToString & vbCrLf
+                totalfolders.Add(moviefolder)
+                scraperLog &= "Checking for subfolders" & vbCrLf
+                Dim newlist As List(Of String)
+                Try
+                    newlist = Utilities.EnumerateFolders(moviefolder, 6)
+                    For Each subfolder In newlist
+                        scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
+                        totalfolders.Add(subfolder)
+                    Next
+                Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
 #End If
-                    End Try
-                End If
-            Next
+                End Try
+            End If
+        Next
 
 
-            For Each homemoviefolder In totalfolders
-                For Each ext In Utilities.VideoExtensions
-                    Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
-                    moviepattern = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)  'this bit adds the * for the extension search in mov_ListFiles2 if its not the string VIDEO_TS.IFO 
+        For Each homemoviefolder In totalfolders
+            For Each ext In Utilities.VideoExtensions
+                Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
+                moviepattern = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)  'this bit adds the * for the extension search in mov_ListFiles2 if its not the string VIDEO_TS.IFO 
 
-                    dirpath = homemoviefolder
-                    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
-                    returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, moviepattern, scraperLog)         'titlename is logged in here
-                    If returnedhomemovielist.Count > 0 Then
-                        For Each newhomemovie In returnedhomemovielist
+                dirpath = homemoviefolder
+                Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, moviepattern, scraperLog)         'titlename is logged in here
+                If returnedhomemovielist.Count > 0 Then
+                    For Each newhomemovie In returnedhomemovielist
+                        Dim existsincache As Boolean = False
+                        Dim pathOnly As String = IO.Path.GetDirectoryName(newhomemovie.FullPathAndFilename) & "\"
+                        Dim nfopath As String = pathOnly & IO.Path.GetFileNameWithoutExtension(newhomemovie.FullPathAndFilename) & ".nfo"
+                        If IO.File.Exists(nfopath) Then
+                            Try
+                                Dim newexistingmovie As New HomeMovieDetails
+                                newexistingmovie = nfoFunction.nfoLoadHomeMovie(nfopath)
+                                Dim newexistingbasichomemovie As New str_BasicHomeMovie
+                                newexistingbasichomemovie.FullPathAndFilename = newexistingmovie.fileinfo.fullpathandfilename
+                                newexistingbasichomemovie.Title = newexistingmovie.fullmoviebody.title
+
+                                homemovielist.Add(newexistingbasichomemovie)
+                                ListBox18.Items.Add(New ValueDescriptionPair(newexistingbasichomemovie.FullPathAndFilename, newexistingbasichomemovie.Title))
+                            Catch ex As Exception
+
+                            End Try
+                        Else
                             newHomeMovieList.Add(newhomemovie)
-                        Next
-                    End If
-                Next
+                        End If
+
+                    Next
+                End If
             Next
         Next
 
@@ -29103,5 +29187,35 @@ End Sub
             Call mov_CacheSave()
         Catch
         End Try
+    End Sub
+
+    Public homemovietabindex As Integer = 0
+    Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
+
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
+            MsgBox("Please add A Folder containing Home Movies")
+            Try
+                TabControl1.SelectedIndex = 1
+            Catch
+            End Try
+            homeTabIndex = 1
+            Exit Sub
+        End If
+
+        Dim tab As String = TabControl1.SelectedTab.Text.ToLower
+        If tab = "search for new home movies" Then
+            TabControl1.SelectedIndex = homeTabIndex
+            Call homeMovieScan()
+        Else
+            homeTabIndex = TabControl1.SelectedIndex
+        End If
+
+
+
+
+    End Sub
+
+    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
+        Call rebuildHomeMovies()
     End Sub
 End Class

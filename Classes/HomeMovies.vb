@@ -21,20 +21,44 @@ Public Class HomeMovies
                 End If
 
                 Dim movieNfoFile As String = titleFull
+
+                Dim needtorename As Boolean = False
+
                 If Utilities.findFileOfType(movieNfoFile, ".nfo") Then
                     Try
                         Dim filechck As IO.StreamReader = IO.File.OpenText(movieNfoFile)
                         Dim tempstring As String
                         Do
-                            tempstring = filechck.ReadLine
+                            tempstring = filechck.ReadToEnd
                             If tempstring = Nothing Then Exit Do
                             If tempstring.IndexOf("<movie>") <> -1 Then
-                                doNotAdd = True
-                                scraperLog &= " - valid MC .nfo found - scrape skipped!"
+                                Dim existsincache As Boolean = False
+                                For Each item In Form1.homemovielist
+                                    If item.FullPathAndFilename = movieNfoFile Then
+                                        existsincache = True
+                                        needtorename = False
+                                        Exit For
+                                    End If
+                                Next
+                                If existsincache = True Then
+                                    doNotAdd = True
+                                    scraperLog &= " - valid MC .nfo found - scrape skipped!"
+                                    Exit Do
+                                End If
+                            Else
+                                'not a valid nfo file
+                                needtorename = True
                                 Exit Do
+
                             End If
                         Loop Until filechck.EndOfStream
                         filechck.Close()
+                        If needtorename = True Then
+                            scraperLog &= " - invalid MC .nfo found - Renaming to .info"
+                            Dim fi As New IO.FileInfo(movieNfoFile)
+                            Dim newname As String = movieNfoFile.Replace(".nfo", ".info")
+                            fi.MoveTo(newname)
+                        End If
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -65,13 +89,15 @@ Public Class HomeMovies
                         End If
                     Next
                     If alreadyadded = False Then
-                        scraperLog &= " - NEW!"
-                        newHomeMovieList.Add(newHomeMovieDetails)
+                        If newHomeMovieDetails.FullPathAndFilename <> "" And newHomeMovieDetails.Title <> "" Then
+                            scraperLog &= " - NEW!"
+                            newHomeMovieList.Add(newHomeMovieDetails)
+                        End If
                     Else
                         alreadyadded = False
                     End If
                     'End If
-                End If
+                    End If
                 Application.DoEvents()
                 scraperLog &= vbCrLf
             Next fs_info
