@@ -5338,13 +5338,9 @@ Public Class Form1
                                     If movie.fullpathandfilename = filteredList(g).fullpathandfilename Then exists = True
                                 Next
                                 If exists = True Then
-                                    dupelist.Add(filteredList(f))
-                                    'dupelist.Add(filteredList(g))          'SK : Not required since duplicates will be found twice - imagine just two movies with the same ID.
-                                    '                                       'We check if 1=1 & skip that because g <> f
-                                    '                                       'We check if 1=2 & it is true so we add movie f i.e. '1' to our list
-                                    '                                       'We check if 2=1 & it is also true so we just add movie f i.e. '2' to our list
-                                    '                                       'We check if 2=2 & skip due to g <> f
-                                    '                                       'We end up with the two movies in our list '1' & '2'
+                                    If Not dupelist.contains(filteredList(f)) then 
+                                        dupelist.Add(filteredList(f))
+                                    End if
                                 End If
                             End If
                         End If
