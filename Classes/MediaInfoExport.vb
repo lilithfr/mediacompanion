@@ -528,7 +528,7 @@ Public Class MediaInfoExport
                 For Each episode In tvShow.Episodes
                     If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
                         keySE = episode.Season.Value & "-" & episode.Episode.Value
-                        episode.IsMissing = False
+                        'episode.IsMissing = False
                         If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                         If episode.Season.Value > UBound(arrSeasonPresent) Then
                             ReDim Preserve arrSeasonPresent(episode.Season.Value)
@@ -548,7 +548,7 @@ Public Class MediaInfoExport
                     For Each episode In tvShow.MissingEpisodes
                         If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
                             keySE = episode.Season.Value & "-" & episode.Episode.Value
-                            episode.IsMissing = True
+                            'episode.IsMissing = True
                             If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                             If episode.Season.Value > UBound(arrSeasonPresent) Then
                                 ReDim Preserve arrSeasonPresent(episode.Season.Value)
