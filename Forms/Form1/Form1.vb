@@ -2468,6 +2468,7 @@ Public Class Form1
                         util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                         util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                         Label19.Text = "Current Loaded Poster - " & PictureBox3.Width.ToString & " x " & PictureBox3.Height.ToString
+                        Label18.Visible = False
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -10089,6 +10090,9 @@ MyExit:
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
             ElseIf tab.ToLower = "Posters" Then
+                'HueyHQ - "Posters" <> tab.ToLower... ever! This is a bug that falls thru so that
+                '         currentTabIndex = TabControl2.SelectedIndex in the else statement below.
+                '         It works, so leave it be! (For now.)
                 Me.TabControl2.SelectedIndex = currentTabIndex
             ElseIf tab.ToLower = "rescrape movie" Then
                 Me.TabControl2.SelectedIndex = currentTabIndex

@@ -159,13 +159,14 @@ Public Class Movies
         Dim aFileExists As Boolean = False
         Try
             'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-            newfilename = newfilename.Replace("%T", movieDetails.title)       'replaces %T with movie title
-            newfilename = newfilename.Replace("%Y", movieDetails.year)        'replaces %Y with year   
-            newfilename = newfilename.Replace("%I", movieDetails.imdbid)      'replaces %I with imdid 
-            newfilename = newfilename.Replace("%P", movieDetails.premiered)   'replaces %P with premiered date 
-            newfilename = newfilename.Replace("%R", movieDetails.rating)      'replaces %R with rating 
-            newfilename = newfilename.Replace("%L", movieDetails.runtime)     'replaces %L with runtime (length)
-            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)                  'removes chars that can't be in a filename
+            newfilename = newfilename.Replace("%T", movieDetails.title)         'replaces %T with movie title
+            newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
+            newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
+            newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
+            newfilename = newfilename.Replace("%R", movieDetails.rating)        'replaces %R with rating 
+            newfilename = newfilename.Replace("%L", movieDetails.runtime)       'replaces %L with runtime (length)
+            newfilename = newfilename.Replace("%S", movieDetails.source)        'replaces %S with movie source
+            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)      'removes chars that can't be in a filename
 
             'designate the new main movie file (without extension) and test the new filenames do not already exist
             targetMovieFile = newpath & newfilename
