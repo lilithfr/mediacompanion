@@ -3575,7 +3575,7 @@ Public Class Form1
                                     Case "director"
                                         newmovie.fullmoviebody.director = thisresult.InnerText
                                     Case "stars"
-                                        newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                        newmovie.fullmoviebody.stars = thisresult.InnerText
                                     Case "genre"
                                         Dim strarr() As String
                                         strarr = thisresult.InnerText.Split("/")
@@ -6256,7 +6256,7 @@ Public Class Form1
                             Case "director"
                                 workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                             Case "stars"
-                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText
                             Case "genre"
                                 Dim strarr() As String
                                 strarr = thisresult.InnerText.Split("/")
@@ -6630,7 +6630,7 @@ Public Class Form1
             workingMovieDetails.fullmoviebody.outline = outlinetxt.Text
             workingMovieDetails.fullmoviebody.plot = plottxt.Text
             workingMovieDetails.fullmoviebody.tagline = taglinetxt.Text
-            workingMovieDetails.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew","")
+            workingMovieDetails.fullmoviebody.stars = txtStars.Text
             workingMovieDetails.fullmoviebody.mpaa = certtxt.Text
             workingMovieDetails.fullmoviebody.sortorder = TextBox34.Text
             If setsTxt.Text = "" Then setsTxt.Text = "-None-"
@@ -6754,7 +6754,7 @@ Public Class Form1
                     movie.fullmoviebody.tagline = taglinetxt.Text
                 End If
                 If txtStars.Text <> "" Then
-                    movie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew","")
+                    movie.fullmoviebody.stars = txtStars.Text
                 End If
                 If ratingtxt.Text <> "" Then
                     movie.fullmoviebody.rating = ratingtxt.Text
@@ -7434,7 +7434,7 @@ Public Class Form1
                                             Case "director"
                                                 movietemplate.fullmoviebody.director = thisresult.InnerText
                                             Case "stars"
-                                                movietemplate.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                                movietemplate.fullmoviebody.stars = thisresult.InnerText
                                             Case "country"
                                                 movietemplate.fullmoviebody.country = thisresult.InnerText
                                             Case "genre"
@@ -7778,7 +7778,7 @@ Public Class Form1
                         If batchList.stars = True Then
                             If movietemplate.fullmoviebody.stars <> Nothing Then
                                 If movietemplate.fullmoviebody.stars <> "" Then
-                                    movietoalter.fullmoviebody.stars = movietemplate.fullmoviebody.stars.ToString.Replace(", See full cast and crew","")
+                                    movietoalter.fullmoviebody.stars = movietemplate.fullmoviebody.stars
                                 End If
                             End If
                         End If
@@ -8634,7 +8634,7 @@ MyExit:
                                             Case "director"
                                                 newmovie.fullmoviebody.director = thisresult.InnerText
                                             Case "stars"
-                                                newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                                newmovie.fullmoviebody.stars = thisresult.InnerText
                                             Case "genre"
                                                 newmovie.fullmoviebody.genre = thisresult.InnerText
                                             Case "mpaa"
@@ -12098,7 +12098,7 @@ MyExit:
                                 workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                             Case "stars"
                                 stage = stage & "Adding stars: " & thisresult.InnerText & vbCrLf
-                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText
                             Case "genre"
                                 stage = stage & "Adding genre: " & thisresult.InnerText & vbCrLf
                                 workingMovieDetails.fullmoviebody.genre = thisresult.InnerText
@@ -24067,7 +24067,7 @@ MyExit:
                                         End If
                                     Case "stars"
                                         If field = "stars" Then
-                                            workingMovieDetails.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                            workingMovieDetails.fullmoviebody.stars = thisresult.InnerText
                                         End If
                                     Case "genre"
                                         If field = "genre" Then

@@ -813,7 +813,7 @@ Public Class Classimdb
                                 If M.Success = True And M.Groups(1).Length Then
                                     listofstars.Add(M.Groups(1).Value)
                                 End If
-                                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                                If webpage(f + g).IndexOf("</div>") Or webpage(f + g).IndexOf("</span>") <> -1 Then Exit For
                             Next
                             For g = 0 To listofstars.Count - 1
                                 If g = 0 Then
