@@ -741,7 +741,7 @@ Partial Public Class Form1
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
     Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
 
-        Dim fs As System.IO.FileStream
+        Dim fs As System.IO.FileStream = Nothing
         Try
             If System.IO.File.Exists(ImagePath) Then
                 PicBox.ImageLocation = ImagePath
@@ -755,10 +755,14 @@ Partial Public Class Form1
         Catch ex As Exception
             'possibly no file to load or file is corrupt
             PicBox.ImageLocation = DefaultPic
-            Try
-                fs.Close()
-            Catch
-            End Try
+
+            If Not (fs Is Nothing) Then
+                Try
+                    fs.Close()
+                Catch
+                End Try
+            End If
+
             Return False
         End Try
         Return True
