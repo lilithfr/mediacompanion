@@ -11794,19 +11794,16 @@ MyExit:
                 End If
 
 
-                Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
-                Dim bitmap2 As New Bitmap(bitmap3)
-                bitmap3.Dispose()
-                Dim bm_source As New Bitmap(bitmap2)
+                Dim bm_source As New Bitmap(workingMovieDetails.fileinfo.posterpath)
                 Dim bm_dest As New Bitmap(150, 200)
                 Dim gr As Graphics = Graphics.FromImage(bm_dest)
                 gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                 gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
-                Dim tempbitmap As Bitmap = bm_dest
+                bm_source.Dispose()
                 Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
-                tempbitmap.Dispose()
+                bm_dest.Save(path, Imaging.ImageFormat.Jpeg)
+                bm_dest.Dispose()
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -17629,31 +17626,48 @@ MyExit:
                 .Height = 200
                 .SizeMode = PictureBoxSizeMode.StretchImage
                 '.Image = sender.image
-                Dim filename As String = Utilities.GetCRC32(movie.fullpathandfilename)
-                If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
-                    Try
-                        .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
-                    Catch ex As Exception
-                        .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
-                    End Try
-                ElseIf IO.File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
-                    Try
+                Try
+                    Dim filename As String = Utilities.GetCRC32(movie.fullpathandfilename)
+                    Dim posterCache As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                    If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
                         Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(movie.fullpathandfilename))
                         bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
-                        If Utilities.SaveImage(bitmap2, IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
-                            .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
-                        Else
-                            .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
-                        End If
-                    Catch ex As Exception
-                        .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
-                    End Try
-                Else
-                    Dim bitmap2 As New Bitmap(Utilities.DefaultPosterPath)
-                    Dim bitmap3 As New Bitmap(bitmap2)
-                    bitmap2.Dispose()
-                    .Image = bitmap3
-                End If
+                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
+                        bitmap2.Dispose()
+                    End If
+                    If File.Exists(posterCache) Then
+                        .Image = Utilities.LoadImage(posterCache)
+                    Else
+                        .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
+                    End If
+                Catch ex As Exception
+                    .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
+                End Try
+
+                'If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
+                '    Try
+                '        .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
+                '    Catch ex As Exception
+                '        .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
+                '    End Try
+                'ElseIf IO.File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
+                '    Try
+                '        Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(movie.fullpathandfilename))
+                '        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                '        If Utilities.SaveImage(bitmap2, IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
+                '            .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
+                '        Else
+                '            .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
+                '        End If
+                '    Catch ex As Exception
+                '        .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
+                '    End Try
+                'Else
+                '    Dim bitmap2 As New Bitmap(Utilities.DefaultPosterPath)
+                '    Dim bitmap3 As New Bitmap(bitmap2)
+                '    bitmap2.Dispose()
+                '    .Image = bitmap3
+                'End If
                 .Tag = movie.fullpathandfilename
                 Dim toolTip1 As ToolTip = New ToolTip(Me.components)
 

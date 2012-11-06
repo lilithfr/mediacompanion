@@ -2271,16 +2271,26 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return tempbitmap
     End Function
 
-    Public Shared Function LoadBitmap(ByVal path As String) As Bitmap
+    Public Shared Function LoadImage(ByVal path As String) As Bitmap
 
         Try
-            Dim bmp As New Bitmap(path)
-            Return bmp
+            Return Utilities.GetImage(path)
         Catch
             Return Nothing
         Finally
 
         End Try
+    End Function
+
+    Private Shared Function GetImage(ByVal path As String) As Bitmap
+        Dim output As Drawing.Bitmap = Nothing
+        Using img As Drawing.Bitmap = New Drawing.Bitmap(path)
+            output = New Drawing.Bitmap(img.Width, img.Height)
+            Using g As Drawing.Graphics = Drawing.Graphics.FromImage(output)
+                g.DrawImage(img, New Drawing.Rectangle(0, 0, output.Width, output.Height), 0, 0, img.Width, img.Height, Drawing.GraphicsUnit.Pixel)
+            End Using
+        End Using
+        Return output
     End Function
 
     Public Shared Sub DownloadFile(ByVal URL As String, ByVal Path As String)
