@@ -11807,7 +11807,7 @@ MyExit:
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                        poster.ImageLocation = path
                         poster.Load()
                         Exit For
                     End If
@@ -11892,7 +11892,7 @@ MyExit:
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                        poster.ImageLocation = path
                         poster.Load()
                         Exit For
                     End If
@@ -12733,7 +12733,7 @@ MyExit:
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                        poster.ImageLocation = path
                         poster.Load()
                         Exit For
                     End If
@@ -18302,29 +18302,6 @@ MyExit:
             ExceptionHandler.LogError(ex)
         End Try
 
-    End Sub
-
-    Private Sub mov_WallPosterAdd(ByVal posterpath As String, ByVal fullnfopath As String, ByVal imdbid As String)
-        Dim bitmap3 As New Bitmap(posterpath)
-        Dim bitmap2 As New Bitmap(bitmap3)
-        bitmap3.Dispose()
-        Dim bm_source As New Bitmap(bitmap2)
-        Dim bm_dest As New Bitmap(150, 200)
-        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-        gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
-        Dim tempbitmap As Bitmap = bm_dest
-        Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & imdbid & ".jpg")
-        tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
-        tempbitmap.Dispose()
-
-        For Each poster As PictureBox In TabPage22.Controls
-            If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & imdbid & ".jpg")
-                poster.Load()
-                Exit For
-            End If
-        Next
     End Sub
 
     Private Sub Button_TV_State_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TV_State.Click
@@ -24944,13 +24921,14 @@ MyExit:
                     gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
                     gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
                     Dim tempbitmap As Bitmap = bm_dest
-                    Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & workingMovieDetails.fullmoviebody.imdbid & ".jpg")
+                    Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
+                    Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
                     tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
                     tempbitmap.Dispose()
 
                     For Each poster As PictureBox In TabPage22.Controls
                         If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                            poster.ImageLocation = IO.Path.Combine(applicationPath, "settings\postercache\" & workingMovieDetails.fullmoviebody.imdbid & ".jpg")
+                            poster.ImageLocation = path
                             poster.Load()
                             Exit For
                         End If
