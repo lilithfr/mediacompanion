@@ -29112,12 +29112,19 @@ End Sub
 
 
     Private Sub ListBox18_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ListBox18.SelectedValueChanged
-        For Each homemovie In homemovielist
-            If homemovie.FullPathAndFilename Is CType(ListBox18.SelectedItem, ValueDescriptionPair).Value Then
-                WorkingHomeMovie.fileinfo.fullpathandfilename = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
-                Call loadhomemoviedetails()
-            End If
-        Next
+        Try
+            For Each homemovie In homemovielist
+                If homemovie.FullPathAndFilename Is CType(ListBox18.SelectedItem, ValueDescriptionPair).Value Then
+                    WorkingHomeMovie.fileinfo.fullpathandfilename = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
+                    Call loadhomemoviedetails()
+                End If
+            Next
+        Catch
+            'Catch  : Invalid NFO path
+            'Action : Tell user to rebuild the home movie cache
+            MessageBox.Show("Select 'Home Movies - Rebuild Home Movies Cache' to update cached folder names & remove invalid entries.", "Home movie folder\sub-folder changed?", MessageBoxButtons.OK, MessageBoxIcon.Error) 
+        End Try
+
     End Sub
 
     Private Sub loadhomemoviedetails()
