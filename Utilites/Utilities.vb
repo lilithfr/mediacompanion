@@ -43,7 +43,6 @@ ByRef lpFreeBytesAvailableToCaller As Long, _
 ByRef lpTotalNumberOfBytes As Long, _
 ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
-
     Public Shared Property DefaultPosterPath As String
     Public Shared Property DefaultBannerPath As String
     Public Shared Property DefaultFanartPath As String
@@ -82,8 +81,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
     End Function
 
-
-
     Public Shared Property applicationPath As String
         Get
             Return _ApplicationPath
@@ -96,9 +93,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             DefaultOfflineArtPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
             DefaultActorPath = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
             DefaultScreenShotPath = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
+            DownloadCache.CacheFolder = IO.Path.Combine(_ApplicationPath, "cache\")
         End Set
     End Property
+
     Public Shared tvScraperLog As String = ""
+
     Public Shared Sub NfoNotepadDisplay(ByVal nfopath As String)
         Try
             Dim thePSI As New System.Diagnostics.ProcessStartInfo("notepad")
@@ -216,9 +216,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "failure"
     End Function
 
-    Public Shared Function DownloadTextFiles(ByVal StartURL As String) As String
+    Public Shared Function DownloadTextFiles(ByVal StartURL As String, Optional ByVal ForceDownload As Boolean = False) As String
         Dim data As String = ""
-        Dim returnState As Boolean = DownloadCache.DownloadFileTo(StartURL, strValue:=data)
+        Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(StartURL, "", ForceDownload, strValue:=data)
         Return data
         'Return DownloadCache.DownloadFileToString(StartURL)
     End Function
@@ -230,7 +230,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetLastFolder(ByVal FullPath As String) As String
-        
+
         If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
             FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
         End If
@@ -2037,6 +2037,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         Return "0"
     End Function
+
     Public Shared Function FindAllFolders(ByVal SourcePaths As List(Of String)) As List(Of String)
         Dim intCounter As Integer = 0
         Dim lstStringFolders As New List(Of String)
@@ -2246,69 +2247,93 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         Return filename
     End Function
+
     Public Shared Function SaveImage(ByVal image As Bitmap, ByVal path As String) As Boolean
 
         Try
-            If Not Directory.Exists(IO.Path.GetDirectoryName(path)) Then
-                Directory.CreateDirectory(IO.Path.GetDirectoryName(path))
+            If (File.Exists(path)) Then
+                File.Delete(path)
+            Else
+                Utilities.EnsureFolderExists(path)
             End If
-            image.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg)
-            Return True
+            image.Save(path, Imaging.ImageFormat.Jpeg)
+            SaveImage = True
         Catch ex As Exception
-            Return False
+            SaveImage = False
         Finally
-
+            image.Dispose()
         End Try
     End Function
 
-    Public Shared Function ResizeImage(ByVal bmp As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
-        Dim bm_source As New Bitmap(bmp)
+    Public Shared Function ResizeImage(ByVal bm_source As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_dest As New Bitmap(width, height)
-        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-        gr.DrawImage(bm_source, 0, 0, width, height)
-        Dim tempbitmap As Bitmap = bm_dest
-        Return tempbitmap
+        Using gr As Graphics = Graphics.FromImage(bm_dest)
+            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+            gr.DrawImage(bm_source, New Rectangle(0, 0, bm_dest.Width, bm_dest.Height), 0, 0, width, height, GraphicsUnit.Pixel)
+        End Using
+        Return bm_dest
     End Function
 
     Public Shared Function LoadImage(ByVal path As String) As Bitmap
-
         Try
-            Return Utilities.GetImage(path)
+            Using img As Bitmap = New Bitmap(path)
+                Return Utilities.ResizeImage(img, img.Width, img.Height)
+            End Using
         Catch
             Return Nothing
-        Finally
-
         End Try
     End Function
 
-    Private Shared Function GetImage(ByVal path As String) As Bitmap
-        Dim output As Drawing.Bitmap = Nothing
-        Using img As Drawing.Bitmap = New Drawing.Bitmap(path)
-            output = New Drawing.Bitmap(img.Width, img.Height)
-            Using g As Drawing.Graphics = Drawing.Graphics.FromImage(output)
-                g.DrawImage(img, New Drawing.Rectangle(0, 0, output.Width, output.Height), 0, 0, img.Width, img.Height, Drawing.GraphicsUnit.Pixel)
+    Public Shared Function LoadImage(ByVal path As String, ByVal width As Integer, ByVal height As Integer) As Bitmap
+        Try
+            Using img As Bitmap = New Bitmap(path)
+                Return Utilities.ResizeImage(img, width, height)
             End Using
-        End Using
-        Return output
+        Catch
+            Return Nothing
+        End Try
     End Function
+
+    Public Shared Sub copyImage(ByVal src As String, ByVal dest As String, Optional ByVal resizeFanart As Integer = 0)
+        Try
+            Dim img As Bitmap = New Bitmap(src)
+            Dim width As Integer = img.Width
+            Dim height As Integer = img.Height
+
+            Select Case resizeFanart
+                Case 2
+                    width = 1280
+                    height = 720
+                Case 3
+                    width = 960
+                    height = 540
+            End Select
+
+            img = Utilities.ResizeImage(img, width, height)
+            Utilities.SaveImage(img, dest)
+        Catch
+        End Try
+    End Sub
 
     Public Shared Sub DownloadFile(ByVal URL As String, ByVal Path As String)
         Try
-            Dim returnState As Boolean = DownloadCache.DownloadFileTo(URL, Path, True)
+            Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, True)
             'DownloadCache.DownloadFileToDisk(URL, Path, True)
         Catch ex As Exception
 
         End Try
     End Sub
 
-    Public Shared Sub DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False, Optional ByVal ImageResize As Boolean = False)
+    Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False, Optional ByVal ImageResize As Integer = 0) As Boolean
         Try
-            Dim returnState As Boolean = DownloadCache.DownloadFileTo(URL, Path, ForceDownload, ImageResize)
+            DownloadImage = DownloadCache.DownloadFileAndCache(URL, Path, ForceDownload, ImageResize)
+            If Not System.IO.File.Exists(Path) Then
+                DownloadImage = False
+            End If
         Catch ex As Exception
-
+            DownloadImage = False
         End Try
-    End Sub
+    End Function
 
     Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
         Dim asm As Assembly = Assembly.GetExecutingAssembly
@@ -2316,33 +2341,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function EnsureFolderExists(ByVal Path As String) As Boolean
-        Dim Parts As String()
-
-        Parts = Split(Path, "\")
+        Dim Parts As String() = Split(IO.Path.GetDirectoryName(Path), "\")
+        Dim currentPath As String = Parts(0)
+        Dim addStart As Integer = 1
 
         If Left(Path, 2) = "\\" Then 'Network path
-            Dim Drive As String = Parts(0) & "\" & Parts(1) & "\" & Parts(2) & "\" & Parts(3)
-
-            Dim CurrentPath As String = Drive
-            For I = 4 To Parts.GetUpperBound(0)
-                CurrentPath = IO.Path.Combine(CurrentPath & "\", Parts(I))
-
-                If Not IO.Directory.Exists(CurrentPath) Then
-                    IO.Directory.CreateDirectory(CurrentPath)
-                End If
-            Next
-        Else 'Local
-            Dim Drive As String = Parts(0)
-
-            Dim CurrentPath As String = Drive
-            For I = 1 To Parts.GetUpperBound(0)
-                CurrentPath = IO.Path.Combine(CurrentPath & "\", Parts(I))
-
-                If Not IO.Directory.Exists(CurrentPath) Then
-                    IO.Directory.CreateDirectory(CurrentPath)
-                End If
-            Next
+            currentPath &= "\" & Parts(1) & "\" & Parts(2) & "\" & Parts(3)
+            addStart = 4
         End If
+
+        For I = addStart To Parts.GetUpperBound(0)
+            currentPath = IO.Path.Combine(currentPath & "\", Parts(I))
+
+            If Not IO.Directory.Exists(currentPath) Then
+                IO.Directory.CreateDirectory(currentPath)
+            End If
+        Next
 
         Return True
     End Function

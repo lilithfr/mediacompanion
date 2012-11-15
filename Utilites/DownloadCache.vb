@@ -112,97 +112,63 @@ Public Class DownloadCache
         Return html
     End Function
 
-    Public Shared Function DownloadFileTo(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False, _
-                                          Optional ByVal resize As Boolean = False, Optional ByRef strValue As String = "") As Boolean
-        Dim CacheFileName As String = GetCacheFileName(URL)
-        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
-        Dim NotModifiedData As Boolean = False
+    Public Shared Function DownloadFileAndCache(ByVal URL As String, Optional ByVal Path As String = "", _
+                                          Optional ByVal ForceDownload As Boolean = False, _
+                                          Optional ByVal resizeFanart As Integer = 0, _
+                                          Optional ByRef strValue As String = "") As Boolean
 
         Utilities.EnsureFolderExists(CacheFolder)
+        Dim returnCode As Boolean = True
+        Dim CacheFileName As String = GetCacheFileName(URL)
+        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
 
-        Try
-            Dim webReq As HttpWebRequest = WebRequest.Create(URL)
-            webReq.IfModifiedSince = IO.File.GetCreationTimeUtc(CachePath)
-            webReq.AllowAutoRedirect = True
+        If Not File.Exists(CachePath) OrElse ForceDownload Then
+            Try
+                Dim webReq As HttpWebRequest = WebRequest.Create(URL)
+                webReq.AllowAutoRedirect = True
+                webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
 
-            Using webResp As HttpWebResponse = webReq.GetResponse()
-                If IO.File.Exists(CachePath) AndAlso Not ForceDownload AndAlso webResp.StatusCode = HttpStatusCode.NotModified Then
-                    NotModifiedData = True
-                End If
-                Dim responseStreamData As Stream = webResp.GetResponseStream()
-                If Path = "" Then
-                    'DownloadFileToString
-                    If NotModifiedData Then
-                        strValue = IO.File.ReadAllText(CachePath)
-                    Else
-                        'MsgBox("Encoding was: " & webResp.ContentEncoding.ToLower())   'uncomment this line to show encoding found....empty string means text format
-                        If (webResp.ContentEncoding.ToLower().Contains("gzip")) Then
-                            responseStreamData = New GZipStream(responseStreamData, CompressionMode.Decompress)
-                            Utilities.tvScraperLog &= "**** TVDB Returned GZIP Encoded *****" & vbCrLf
-                        ElseIf (webResp.ContentEncoding.ToLower().Contains("deflate")) Then
-                            responseStreamData = New DeflateStream(responseStreamData, CompressionMode.Decompress)
-                            Utilities.tvScraperLog &= "**** TVDB Returned DEFLATE Encoded *****" & vbCrLf
+                Using webResp As HttpWebResponse = webReq.GetResponse()
+                    Using responseStreamData As Stream = webResp.GetResponseStream()
+                        'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
+                        If String.IsNullOrEmpty(Path) Then
+                            IO.File.WriteAllText(CachePath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
                         Else
-                            Utilities.tvScraperLog &= "**** TVDB Returned TEXT Stream *****" & vbCrLf
+                            If (File.Exists(CachePath)) Then
+                                File.Delete(CachePath)
+                            End If
+                            Using fileStream As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.Write)
+                                Dim buffer(webResp.ContentLength) As Byte
+                                Dim bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
+                                While bytesRead > 0
+                                    fileStream.Write(buffer, 0, bytesRead)
+                                    bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
+                                End While
+                            End Using
                         End If
-                        Dim html As String = New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd()
-                        IO.File.WriteAllText(CachePath, html)
-                        strValue = html
-                    End If
-                Else
-                    'DownloadFileToDisk
-                    If NotModifiedData Then
-                        IO.File.Copy(CachePath, Path)
-                    Else
-                        Dim size As Integer = 0
-                        Dim bytesRead As Integer = 0
-                        Dim buffer(webResp.ContentLength) As Byte
-                        Dim bytesToRead As Integer = CInt(buffer.Length - 1)
-                        While bytesToRead > 0
-                            size = responseStreamData.Read(buffer, bytesRead, bytesToRead)
-                            If size = 0 Then Exit While
-                            bytesToRead -= size
-                            bytesRead += size
-                        End While
-
-                        Utilities.EnsureFolderExists(Path.ToString.Replace(IO.Path.GetFileName(Path.ToString), ""))
-
-                        If resize Then
-                            Dim bmp As New Drawing.Bitmap(responseStreamData)
-                            ' NOTE: HueyHQ 26-Jan-2012
-                            ' Currently there are still sometimes errors when scraping images, so the idea here is to get
-                            ' all web requests into this one function so that all errors are handled more gracefully. 
-                            ' The many independant image scraping calls vary to certain degrees, so I am trying to amalgamate
-                            ' them without breaking functionality.
-                            ' It could take some time.
-                            ' The call for this is centralised from Utilities.vb:DownloadImage but no code calls it as yet,
-                            ' so hopefully this delivery doesn't break anything.
-                        Else
-                            Dim fstrm As New FileStream(Path, FileMode.OpenOrCreate, FileAccess.Write)
-                            fstrm.Write(buffer, 0, buffer.Length)
-                            fstrm.Close()
-                        End If
-
-                        Dim Cache As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.ReadWrite)
-                        Cache.Write(buffer, 0, buffer.Length)
-                        Cache.Close()
-                    End If
-                End If
-                responseStreamData.Close()
-            End Using
-
-        Catch ex As WebException
-            Using webResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
-                Utilities.tvScraperLog &= "**** Scraper Error code: " & webResp.StatusCode & " *****" & vbCrLf
-                Using responseStreamData As Stream = webResp.GetResponseStream()
-                    Dim text As String = New StreamReader(responseStreamData).ReadToEnd()
-                    Utilities.tvScraperLog &= text & vbCrLf
+                    End Using
                 End Using
-            End Using
-            Return False
-        End Try
 
-        Return True
+            Catch ex As WebException
+                Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
+                    Using errorRespStream As Stream = errorResp.GetResponseStream()
+                        Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
+                        Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", _
+                                                                errorResp.StatusCode, errorText, vbCrLf)
+                    End Using
+                End Using
+                returnCode = False
+            End Try
+
+        End If
+
+        If String.IsNullOrEmpty(Path) Then
+            strValue = IO.File.ReadAllText(CachePath)
+        Else
+            Utilities.copyImage(CachePath, Path, resizeFanart)
+        End If
+
+        DownloadFileAndCache = returnCode
     End Function
 
 End Class

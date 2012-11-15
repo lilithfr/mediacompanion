@@ -290,74 +290,75 @@ Public Class frmMovieFanart
                 Try
                     Panel1.Controls.Remove(Label1)
 
-                    Dim buffer(4000000) As Byte
-                    Dim size As Integer = 0
-                    Dim bytesRead As Integer = 0
+                    'Dim buffer(4000000) As Byte
+                    'Dim size As Integer = 0
+                    'Dim bytesRead As Integer = 0
 
-                    Dim fanartthumburl As String = tempstring2
-                    Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
-                    Dim res As HttpWebResponse = req.GetResponse()
-                    Dim contents As Stream = res.GetResponseStream()
-                    Dim bmp As New Bitmap(contents)
+                    'Dim fanartthumburl As String = tempstring2
+                    'Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
+                    'Dim res As HttpWebResponse = req.GetResponse()
+                    'Dim contents As Stream = res.GetResponseStream()
+                    'Dim bmp As New Bitmap(contents)
 
 
-                    Dim bytesToRead As Integer = CInt(buffer.Length)
+                    'Dim bytesToRead As Integer = CInt(buffer.Length)
 
-                    While bytesToRead > 0
-                        size = contents.Read(buffer, bytesRead, bytesToRead)
-                        If size = 0 Then Exit While
-                        bytesToRead -= size
-                        bytesRead += size
-                    End While
-                    If Preferences.resizefanart = 1 Then
-                        Try
-                            Dim tempbitmap As Bitmap = bmp
-                            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                        Catch ex As Exception
-                            tempstring = ex.Message.ToString
-                        End Try
-                    ElseIf Preferences.resizefanart = 2 Then
-                        If bmp.Width > 1280 Or bmp.Height > 720 Then
-                            Dim bm_source As New Bitmap(bmp)
-                            Dim bm_dest As New Bitmap(1280, 720)
-                            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                            Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                        Else
-                            Threading.Thread.Sleep(30)
-                            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                        End If
-                    ElseIf Preferences.resizefanart = 3 Then
-                        If bmp.Width > 960 Or bmp.Height > 540 Then
-                            Dim bm_source As New Bitmap(bmp)
-                            Dim bm_dest As New Bitmap(960, 540)
-                            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                            Dim tempbitmap As Bitmap = bm_dest
-                            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                        Else
-                            Threading.Thread.Sleep(30)
-                            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                        End If
-                    End If
-                    Dim exists As Boolean = System.IO.File.Exists(fanartpath)
-                    If exists = True Then
+                    'While bytesToRead > 0
+                    '    size = contents.Read(buffer, bytesRead, bytesToRead)
+                    '    If size = 0 Then Exit While
+                    '    bytesToRead -= size
+                    '    bytesRead += size
+                    'End While
+                    'If Preferences.resizefanart = 1 Then
+                    '    Try
+                    '        Dim tempbitmap As Bitmap = bmp
+                    '        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                    '    Catch ex As Exception
+                    '        tempstring = ex.Message.ToString
+                    '    End Try
+                    'ElseIf Preferences.resizefanart = 2 Then
+                    '    If bmp.Width > 1280 Or bmp.Height > 720 Then
+                    '        Dim bm_source As New Bitmap(bmp)
+                    '        Dim bm_dest As New Bitmap(1280, 720)
+                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                    '        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
+                    '        Dim tempbitmap As Bitmap = bm_dest
+                    '        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                    '    Else
+                    '        Threading.Thread.Sleep(30)
+                    '        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                    '    End If
+                    'ElseIf Preferences.resizefanart = 3 Then
+                    '    If bmp.Width > 960 Or bmp.Height > 540 Then
+                    '        Dim bm_source As New Bitmap(bmp)
+                    '        Dim bm_dest As New Bitmap(960, 540)
+                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                    '        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
+                    '        Dim tempbitmap As Bitmap = bm_dest
+                    '        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                    '    Else
+                    '        Threading.Thread.Sleep(30)
+                    '        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                    '    End If
+                    'End If
+                    'Dim exists As Boolean = System.IO.File.Exists(fanartpath)
+                    'If exists = True Then
 
+                    If Utilities.DownloadImage(tempstring2, fanartpath, True, Preferences.resizefanart) Then
 
                         'mainfanart = New PictureBox
-                        Dim OriginalImage As New Bitmap(fanartpath)
-                        Dim Image2 As New Bitmap(OriginalImage)
-                        OriginalImage.Dispose()
+                        'Dim OriginalImage As New Bitmap(fanartpath)
+                        'Dim Image2 As New Bitmap(OriginalImage)
+                        'OriginalImage.Dispose()
                         With mainfanart
                             .Visible = True
                             .Location = New Point(0, 0)
                             .Width = 423
                             .Height = 240
                             .SizeMode = PictureBoxSizeMode.Zoom
-                            .Image = Image2
+                            .Image = Utilities.LoadImage(fanartpath)
                             .Visible = True
                             .BorderStyle = BorderStyle.Fixed3D
                             .BringToFront()

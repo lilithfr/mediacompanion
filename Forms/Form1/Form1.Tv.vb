@@ -1907,7 +1907,7 @@ Partial Public Class Form1
                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
                         Dim episodeurl As String = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
                         'Preferences.tvScraperLog &= "Trying Episode URL: " & episodeurl & vbCrLf
-                        If Not util_UrlIsValid(episodeurl) Then
+                        If Not Utilities.UrlIsValid(episodeurl) Then
                             If sortorder.ToLower = "dvd" Then
                                 tempsortorder = "default"
                                 Preferences.tvScraperLog &= "!!! WARNING: This episode could not be found on TVDB using DVD sort order" & vbCrLf
@@ -1917,9 +1917,7 @@ Partial Public Class Form1
                             End If
                         End If
 
-                        If util_UrlIsValid(episodeurl) Then
-
-
+                        If Utilities.UrlIsValid(episodeurl) Then
                             If Preferences.tvshow_useXBMC_Scraper = True Then
                                 Dim FinalResult As String = ""
                                 episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
@@ -2428,67 +2426,68 @@ Partial Public Class Form1
 
                 Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "fanart.jpg")
                 If Not IO.File.Exists(seasonpath) Then
-                    Try
-                        Dim buffer(4000000) As Byte
-                        Dim size As Integer = 0
-                        Dim bytesRead As Integer = 0
+                    Utilities.DownloadImage(fanartposter, seasonpath, True, Preferences.resizefanart)
+                    '                    Try
+                    '                        Dim buffer(4000000) As Byte
+                    '                        Dim size As Integer = 0
+                    '                        Dim bytesRead As Integer = 0
 
-                        Dim thumburl As String = fanartposter
-                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                        Dim res As HttpWebResponse = req.GetResponse()
-                        Dim contents As Stream = res.GetResponseStream()
-                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                        Dim bmp As New Bitmap(contents)
-
-
-
-                        While bytesToRead > 0
-                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                            If size = 0 Then Exit While
-                            bytesToRead -= size
-                            bytesRead += size
-                        End While
+                    '                        Dim thumburl As String = fanartposter
+                    '                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                    '                        Dim res As HttpWebResponse = req.GetResponse()
+                    '                        Dim contents As Stream = res.GetResponseStream()
+                    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
+                    '                        Dim bmp As New Bitmap(contents)
 
 
-                        Try
-                            If Preferences.resizefanart = 1 Then
-                                bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                scraperLog = scraperLog & "Fanart not resized" & vbCrLf
-                            ElseIf Preferences.resizefanart = 2 Then
-                                If bmp.Width > 1280 Or bmp.Height > 720 Then
-                                    Dim bm_source As New Bitmap(bmp)
-                                    Dim bm_dest As New Bitmap(1280, 720)
-                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
-                                Else
-                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                End If
-                            ElseIf Preferences.resizefanart = 3 Then
-                                If bmp.Width > 960 Or bmp.Height > 540 Then
-                                    Dim bm_source As New Bitmap(bmp)
-                                    Dim bm_dest As New Bitmap(960, 540)
-                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
-                                Else
-                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                End If
 
-                            End If
-                        Catch
-                        End Try
-                    Catch ex As WebException
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
+                    '                        While bytesToRead > 0
+                    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
+                    '                            If size = 0 Then Exit While
+                    '                            bytesToRead -= size
+                    '                            bytesRead += size
+                    '                        End While
+
+
+                    '                        Try
+                    '                            If Preferences.resizefanart = 1 Then
+                    '                                bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+                    '                                scraperLog = scraperLog & "Fanart not resized" & vbCrLf
+                    '                            ElseIf Preferences.resizefanart = 2 Then
+                    '                                If bmp.Width > 1280 Or bmp.Height > 720 Then
+                    '                                    Dim bm_source As New Bitmap(bmp)
+                    '                                    Dim bm_dest As New Bitmap(1280, 720)
+                    '                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                    '                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                    '                                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
+                    '                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+                    '                                    scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
+                    '                                Else
+                    '                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
+                    '                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+                    '                                End If
+                    '                            ElseIf Preferences.resizefanart = 3 Then
+                    '                                If bmp.Width > 960 Or bmp.Height > 540 Then
+                    '                                    Dim bm_source As New Bitmap(bmp)
+                    '                                    Dim bm_dest As New Bitmap(960, 540)
+                    '                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                    '                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                    '                                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
+                    '                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+                    '                                    scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
+                    '                                Else
+                    '                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
+                    '                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
+                    '                                End If
+
+                    '                            End If
+                    '                        Catch
+                    '                        End Try
+                    '                    Catch ex As WebException
+                    '#If SilentErrorScream Then
+                    '                        Throw ex
+                    '#End If
+                    '                    End Try
                 End If
             End If
 

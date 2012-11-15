@@ -182,7 +182,11 @@ Public Class TvShow
         SearchTitle = SearchTitle.Replace(".", " ")  'Replace periods in foldernames with spaces (linux OS support)
 
         mirrorsurl = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & SearchTitle & "&language=all"
-        xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
+        xmlfile = Utilities.DownloadTextFiles(mirrorsurl, True)
+
+        If String.IsNullOrEmpty(xmlfile) Then
+            Exit Sub
+        End If
 
         Dim ReturnData As New Tvdb.ShowData
 

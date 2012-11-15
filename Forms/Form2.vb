@@ -565,36 +565,39 @@ Public Class Form2
                                     End Try
                                     Try
                                         If moviethumburl <> "" And moviethumburl <> "na" Then
-                                            Try
-                                                'Utilities.DownloadFile(moviethumburl, posterpath)
-                                                Dim buffer(4000000) As Byte
-                                                Dim size As Integer = 0
-                                                Dim bytesRead As Integer = 0
-                                                Dim thumburl As String = moviethumburl
-                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                Dim res As HttpWebResponse = req.GetResponse()
-                                                Dim contents As Stream = res.GetResponseStream()
-                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                While bytesToRead > 0
-                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                    If size = 0 Then Exit While
-                                                    bytesToRead -= size
-                                                    bytesRead += size
-                                                End While
+                                            Utilities.DownloadFile(moviethumburl, posterpath)
+                                            If Preferences.createfolderjpg = True Then
+                                                Utilities.DownloadFile(moviethumburl, jpegpath)
+                                            End If
+                                            'Try
+                                            '    Dim buffer(4000000) As Byte
+                                            '    Dim size As Integer = 0
+                                            '    Dim bytesRead As Integer = 0
+                                            '    Dim thumburl As String = moviethumburl
+                                            '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                            '    Dim res As HttpWebResponse = req.GetResponse()
+                                            '    Dim contents As Stream = res.GetResponseStream()
+                                            '    Dim bytesToRead As Integer = CInt(buffer.Length)
+                                            '    While bytesToRead > 0
+                                            '        size = contents.Read(buffer, bytesRead, bytesToRead)
+                                            '        If size = 0 Then Exit While
+                                            '        bytesToRead -= size
+                                            '        bytesRead += size
+                                            '    End While
 
-                                                Dim fstrm As New FileStream(posterpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                fstrm.Write(buffer, 0, bytesRead)
-                                                contents.Close()
-                                                fstrm.Close()
+                                            '    Dim fstrm As New FileStream(posterpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                            '    fstrm.Write(buffer, 0, bytesRead)
+                                            '    contents.Close()
+                                            '    fstrm.Close()
 
-                                                If Preferences.createfolderjpg = True Then
-                                                    Dim fstrm2 As New FileStream(jpegpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                    fstrm2.Write(buffer, 0, bytesRead)
-                                                    contents.Close()
-                                                    fstrm2.Close()
-                                                End If
-                                            Catch ex As Exception
-                                            End Try
+                                            '    If Preferences.createfolderjpg = True Then
+                                            '        Dim fstrm2 As New FileStream(jpegpath, FileMode.OpenOrCreate, FileAccess.Write)
+                                            '        fstrm2.Write(buffer, 0, bytesRead)
+                                            '        contents.Close()
+                                            '        fstrm2.Close()
+                                            '    End If
+                                            'Catch ex As Exception
+                                            'End Try
                                         End If
                                     Catch
                                     End Try
@@ -659,62 +662,62 @@ Public Class Form2
                                         End Try
 
                                         If moviethumburl <> "" Then
+                                            Utilities.DownloadImage(moviethumburl, fanartpath, True, Preferences.resizefanart)
 
 
                                             'need to resize thumbs
-                                            'Utilities.DownloadImage(moviethumburl, fanartpath)
 
-                                            Try
-                                                Dim buffer(4000000) As Byte
-                                                Dim size As Integer = 0
-                                                Dim bytesRead As Integer = 0
+                                            'Try
+                                            '    Dim buffer(4000000) As Byte
+                                            '    Dim size As Integer = 0
+                                            '    Dim bytesRead As Integer = 0
 
-                                                Dim thumburl As String = moviethumburl
-                                                Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                                Dim res As HttpWebResponse = req.GetResponse()
-                                                Dim contents As Stream = res.GetResponseStream()
-                                                Dim bytesToRead As Integer = CInt(buffer.Length)
-                                                Dim bmp As New Bitmap(contents)
-
-
-
-                                                While bytesToRead > 0
-                                                    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                                    If size = 0 Then Exit While
-                                                    bytesToRead -= size
-                                                    bytesRead += size
-                                                End While
+                                            '    Dim thumburl As String = moviethumburl
+                                            '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
+                                            '    Dim res As HttpWebResponse = req.GetResponse()
+                                            '    Dim contents As Stream = res.GetResponseStream()
+                                            '    Dim bytesToRead As Integer = CInt(buffer.Length)
+                                            '    Dim bmp As New Bitmap(contents)
 
 
 
-                                                If Preferences.resizefanart = 1 Then
-                                                    bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                ElseIf Preferences.resizefanart = 2 Then
-                                                    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                                                        Dim bm_source As New Bitmap(bmp)
-                                                        Dim bm_dest As New Bitmap(1280, 720)
-                                                        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                                        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                                        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                                        bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                    Else
-                                                        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                    End If
-                                                ElseIf Preferences.resizefanart = 3 Then
-                                                    If bmp.Width > 960 Or bmp.Height > 540 Then
-                                                        Dim bm_source As New Bitmap(bmp)
-                                                        Dim bm_dest As New Bitmap(960, 540)
-                                                        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                                        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                                        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                                        bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                    Else
-                                                        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                                    End If
+                                            '    While bytesToRead > 0
+                                            '        size = contents.Read(buffer, bytesRead, bytesToRead)
+                                            '        If size = 0 Then Exit While
+                                            '        bytesToRead -= size
+                                            '        bytesRead += size
+                                            '    End While
 
-                                                End If
-                                            Catch ex As Exception
-                                            End Try
+
+
+                                            '    If Preferences.resizefanart = 1 Then
+                                            '        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                            '    ElseIf Preferences.resizefanart = 2 Then
+                                            '        If bmp.Width > 1280 Or bmp.Height > 720 Then
+                                            '            Dim bm_source As New Bitmap(bmp)
+                                            '            Dim bm_dest As New Bitmap(1280, 720)
+                                            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                                            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                                            '            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
+                                            '            bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                            '        Else
+                                            '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                            '        End If
+                                            '    ElseIf Preferences.resizefanart = 3 Then
+                                            '        If bmp.Width > 960 Or bmp.Height > 540 Then
+                                            '            Dim bm_source As New Bitmap(bmp)
+                                            '            Dim bm_dest As New Bitmap(960, 540)
+                                            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                                            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                                            '            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
+                                            '            bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                            '        Else
+                                            '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+                                            '        End If
+
+                                            '    End If
+                                            'Catch ex As Exception
+                                            'End Try
                                         End If
                                     End If
                                 Catch
