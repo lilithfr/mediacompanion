@@ -662,7 +662,7 @@ Public Class Classimdb
 
                     ' Original Title
 
-                    If (webpage(f).IndexOf("title-extra") <> -1) Then
+                    If (webpage(f).IndexOf("title-extra") <> -1) and (webpage(f+1).IndexOf("<title>") > -1) Then
                         Try
                             Dim movieyear As String = ""
                             movienfoarray = webpage(f + 1)
