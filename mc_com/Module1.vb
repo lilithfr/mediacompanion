@@ -180,12 +180,24 @@ Module Module1
         Preferences.LoadConfig()
         If domovies = True Or domediaexport = True Then
             If IO.File.Exists(Preferences.workingProfile.moviecache) Then
-                Call loadmoviecache()
+                'Call loadmoviecache()
+                Call mov_CacheLoad()
             End If
         End If
+
+
+        Try
+            Console.WriteLine("Loading Actor Database cache")
+		    loadactorcache()
+        Catch
+            Console.WriteLine("Failed to load Actor Database cache - Please rebuild from main MC application")
+        End Try
+
+
         If domovies = True Then
             Call startnewmovies()
-            Call savemoviecache()
+            'Call savemoviecache()
+            Call mov_CacheSave()
             Call saveactorcache()
             Console.WriteLine()
             Console.WriteLine("Movies search completed")
@@ -2004,8 +2016,74 @@ Module Module1
         End If
     End Sub
 
-    Private Sub loadmoviecache()
+    'Private Sub loadmoviecache()
+    '    fullMovieList.Clear()
+    '    Dim movielist As New XmlDocument
+    '    Dim objReader As New System.IO.StreamReader(Preferences.workingProfile.moviecache)
+    '    Dim tempstring As String = objReader.ReadToEnd
+    '    objReader.Close()
+
+    '    movielist.LoadXml(tempstring)
+    '    Dim thisresult As XmlNode = Nothing
+    '    For Each thisresult In movielist("movie_cache")
+    '        Select Case thisresult.Name
+    '            Case "movie"
+    '                Dim newmovie As New str_ComboList
+    '                Dim detail As XmlNode = Nothing
+    '                For Each detail In thisresult.ChildNodes
+    '                    Select Case detail.Name
+    '                        'workingmovie.missingdata1
+    '                        Case "missingdata1"
+    '                            newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
+    '                        Case "set"
+    '                            newmovie.movieset = detail.InnerText
+    '                        Case "sortorder"
+    '                            newmovie.sortorder = detail.InnerText
+    '                        Case "filedate"
+    '                            newmovie.filedate = detail.InnerText
+    '                        Case "filename"
+    '                            newmovie.filename = detail.InnerText
+    '                        Case "foldername"
+    '                            newmovie.foldername = detail.InnerText
+    '                        Case "fullpathandfilename"
+    '                            newmovie.fullpathandfilename = detail.InnerText
+    '                        Case "genre"
+    '                            newmovie.genre = detail.InnerText
+    '                        Case "id"
+    '                            newmovie.id = detail.InnerText
+    '                        Case "playcount"
+    '                            newmovie.playcount = detail.InnerText
+    '                        Case "rating"
+    '                            newmovie.rating = detail.InnerText
+    '                        Case "title"
+    '                            newmovie.title = detail.InnerText
+    '                        Case "titleandyear"
+    '                            newmovie.titleandyear = detail.InnerText
+    '                        Case "top250"
+    '                            newmovie.top250 = detail.InnerText
+    '                        Case "year"
+    '                            newmovie.year = detail.InnerText
+    '                        Case "outline"
+    '                            newmovie.outline = detail.InnerText
+    '                        Case "runtime"
+    '                            newmovie.runtime = detail.InnerText
+    '                    End Select
+    '                Next
+    '                If newmovie.movieset = Nothing Then
+    '                    newmovie.movieset = "None"
+    '                End If
+    '                If newmovie.movieset = "" Then
+    '                    newmovie.movieset = "None"
+    '                End If
+    '                fullmovielist.Add(newmovie)
+    '        End Select
+    '    Next
+    'End Sub
+
+
+    Private Sub mov_CacheLoad()
         fullMovieList.Clear()
+
         Dim movielist As New XmlDocument
         Dim objReader As New System.IO.StreamReader(Preferences.workingProfile.moviecache)
         Dim tempstring As String = objReader.ReadToEnd
@@ -2016,19 +2094,32 @@ Module Module1
         For Each thisresult In movielist("movie_cache")
             Select Case thisresult.Name
                 Case "movie"
-                    Dim newmovie As New str_ComboList
+                    Dim newmovie As New str_ComboList(SetDefaults)
                     Dim detail As XmlNode = Nothing
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
                             'workingmovie.missingdata1
                             Case "missingdata1"
                                 newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
+                            Case "source"
+                                newmovie.source = detail.InnerText
                             Case "set"
                                 newmovie.movieset = detail.InnerText
                             Case "sortorder"
                                 newmovie.sortorder = detail.InnerText
                             Case "filedate"
-                                newmovie.filedate = detail.InnerText
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.filedate = "19000101000000" '01/01/1900 00:00:00
+                                Else
+                                    newmovie.filedate = detail.InnerText
+                                End If
+                            Case "createdate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.createdate = "19000101000000" '01/01/1900 00:00:00
+                                Else
+                                    newmovie.createdate = detail.InnerText
+                                End If
+
                             Case "filename"
                                 newmovie.filename = detail.InnerText
                             Case "foldername"
@@ -2036,7 +2127,7 @@ Module Module1
                             Case "fullpathandfilename"
                                 newmovie.fullpathandfilename = detail.InnerText
                             Case "genre"
-                                newmovie.genre = detail.InnerText
+                                newmovie.genre = detail.InnerText & newmovie.genre
                             Case "id"
                                 newmovie.id = detail.InnerText
                             Case "playcount"
@@ -2045,44 +2136,237 @@ Module Module1
                                 newmovie.rating = detail.InnerText
                             Case "title"
                                 newmovie.title = detail.InnerText
+                            Case "originaltitle"
+                                newmovie.originaltitle = detail.InnerText
                             Case "titleandyear"
-                                newmovie.titleandyear = detail.InnerText
+                                '--------- aqui
+                                Dim TempString2 As String = detail.InnerText
+                                If Preferences.ignorearticle = True Then
+                                    If TempString2.ToLower.IndexOf("the ") = 0 Then
+                                        Dim Temp As String = TempString2.Substring(TempString2.Length - 7, 7)
+                                        TempString2 = TempString2.Substring(4, TempString2.Length - 11)
+                                        TempString2 = TempString2 & ", The" & Temp
+                                    End If
+                                End If
+
+                                newmovie.titleandyear = TempString2
                             Case "top250"
                                 newmovie.top250 = detail.InnerText
                             Case "year"
                                 newmovie.year = detail.InnerText
                             Case "outline"
                                 newmovie.outline = detail.InnerText
+                            Case "plot"
+                                newmovie.plot = detail.InnerText
                             Case "runtime"
                                 newmovie.runtime = detail.InnerText
+                            Case "votes"
+                                newmovie.votes = detail.InnerText
                         End Select
                     Next
+                    If newmovie.source = Nothing Then
+                        newmovie.source = ""
+                    End If
                     If newmovie.movieset = Nothing Then
-                        newmovie.movieset = "None"
+                        newmovie.movieset = "-None-"
                     End If
                     If newmovie.movieset = "" Then
-                        newmovie.movieset = "None"
+                        newmovie.movieset = "-None-"
                     End If
-                    fullmovielist.Add(newmovie)
+                    fullMovieList.Add(newmovie)
             End Select
         Next
     End Sub
 
-    Private Sub savemoviecache()
+
+
+
+    'Private Sub savemoviecache()
+    '    Dim fullpath As String = Preferences.workingProfile.moviecache
+    '    If IO.File.Exists(fullpath) Then
+    '        Dim don As Boolean = False
+    '        Dim count As Integer = 0
+    '        Do
+    '            Try
+    '                IO.File.Delete(fullpath)
+    '                don = True
+    '            Catch ex As Exception
+    '            Finally
+    '                count += 1
+    '            End Try
+    '        Loop Until don = True
+    '    End If
+    '    Dim doc As New XmlDocument
+
+    '    Dim thispref As XmlNode = Nothing
+    '    Dim xmlproc As XmlDeclaration
+
+    '    xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+    '    doc.AppendChild(xmlproc)
+    '    Dim root As XmlElement
+    '    Dim child As XmlElement
+    '    root = doc.CreateElement("movie_cache")
+
+    '    Dim childchild As XmlElement
+    '    For Each movie In fullMovieList
+
+    '        child = doc.CreateElement("movie")
+    '        childchild = doc.CreateElement("filedate")
+    '        childchild.InnerText = movie.filedate
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("createdate")
+    '        childchild.InnerText = movie.createdate
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("missingdata1")
+    '        childchild.InnerText = movie.missingdata1.ToString
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("filename")
+    '        childchild.InnerText = movie.filename
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("foldername")
+    '        childchild.InnerText = movie.foldername
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("fullpathandfilename")
+    '        childchild.InnerText = movie.fullpathandfilename
+    '        child.AppendChild(childchild)
+    '        If movie.source <> Nothing And movie.source <> "" Then
+    '            childchild = doc.CreateElement("source")
+    '            childchild.InnerText = movie.source
+    '            child.AppendChild(childchild)
+    '        Else
+    '            childchild = doc.CreateElement("source")
+    '            childchild.InnerText = ""
+    '            child.AppendChild(childchild)
+    '        End If
+    '        If movie.movieset <> Nothing Then
+    '            If movie.movieset <> "" Or movie.movieset <> "-None-" Then
+    '                childchild = doc.CreateElement("set")
+    '                childchild.InnerText = movie.movieset
+    '                child.AppendChild(childchild)
+    '            Else
+    '                childchild = doc.CreateElement("set")
+    '                childchild.InnerText = ""
+    '                child.AppendChild(childchild)
+    '            End If
+    '        Else
+    '            childchild = doc.CreateElement("set")
+    '            childchild.InnerText = ""
+    '            child.AppendChild(childchild)
+    '        End If
+    '        childchild = doc.CreateElement("genre")
+    '        childchild.InnerText = movie.genre
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("id")
+    '        childchild.InnerText = movie.id
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("playcount")
+    '        childchild.InnerText = movie.playcount
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("rating")
+    '        childchild.InnerText = movie.rating
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("title")
+    '        childchild.InnerText = movie.title
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("originaltitle")
+    '        childchild.InnerText = movie.originaltitle
+    '        child.AppendChild(childchild)
+    '        If movie.sortorder = Nothing Then
+    '            movie.sortorder = movie.title
+    '        End If
+    '        If movie.sortorder = "" Then
+    '            movie.sortorder = movie.title
+    '        End If
+    '        childchild = doc.CreateElement("outline")
+    '        childchild.InnerText = movie.outline
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("plot")
+    '        If movie.plot = Nothing then
+    '            movie.plot = movie.outline
+    '        End If
+    '        If movie.plot.Length() > 100 Then
+    '            childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
+    '        Else
+    '            childchild.InnerText = movie.plot
+    '        End If
+
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("sortorder")
+    '        childchild.InnerText = movie.sortorder
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("titleandyear")
+    '        '---- aqui....
+    '        Try
+    '            If movie.titleandyear.Length >= 5 Then
+    '                If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 5 Then
+    '                    Dim Temp As String = movie.titleandyear.Replace(", the", String.Empty)
+    '                    movie.titleandyear = "The " & Temp
+    '                End If
+    '            End If
+    '        Catch ex As Exception
+    '        End Try
+    '        childchild.InnerText = movie.titleandyear
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("runtime")
+    '        childchild.InnerText = movie.runtime
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("top250")
+    '        childchild.InnerText = movie.top250
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("year")
+    '        childchild.InnerText = movie.year
+    '        child.AppendChild(childchild)
+
+    '        If movie.votes <> Nothing And movie.votes <> "" Then
+    '            childchild = doc.CreateElement("votes")
+    '            childchild.InnerText = movie.votes
+    '            child.AppendChild(childchild)
+    '        Else
+    '            childchild = doc.CreateElement("votes")
+    '            childchild.InnerText = ""
+    '            child.AppendChild(childchild)
+    '        End If
+
+    '        root.AppendChild(child)
+    '    Next
+
+    '    doc.AppendChild(root)
+    '    For f = 1 To 100
+    '        Try
+    '            Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
+    '            output.Formatting = Formatting.Indented
+    '            doc.WriteTo(output)
+    '            output.Close()
+    '            Exit For
+    '        Catch
+    '        End Try
+    '    Next
+    'End Sub
+
+
+    Private Sub mov_CacheSave()   'save memory data to cache
         Dim fullpath As String = Preferences.workingProfile.moviecache
         If IO.File.Exists(fullpath) Then
             Dim don As Boolean = False
             Dim count As Integer = 0
             Do
                 Try
-                    IO.File.Delete(fullpath)
-                    don = True
-                Catch ex As Exception
+                    If IO.File.Exists(fullpath) Then
+                        IO.File.Delete(fullpath)
+                        don = True
+                    Else
+                        don = True
+                    End If
+                Catch
                 Finally
                     count += 1
                 End Try
             Loop Until don = True
+
+
         End If
+
+
         Dim doc As New XmlDocument
 
         Dim thispref As XmlNode = Nothing
@@ -2093,8 +2377,10 @@ Module Module1
         Dim root As XmlElement
         Dim child As XmlElement
         root = doc.CreateElement("movie_cache")
-
         Dim childchild As XmlElement
+
+        Dim count2 As Integer = 0
+
         For Each movie In fullMovieList
 
             child = doc.CreateElement("movie")
@@ -2168,9 +2454,6 @@ Module Module1
             childchild.InnerText = movie.outline
             child.AppendChild(childchild)
             childchild = doc.CreateElement("plot")
-            If movie.plot = Nothing then
-                movie.plot = movie.outline
-            End If
             If movie.plot.Length() > 100 Then
                 childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
             Else
@@ -2190,7 +2473,7 @@ Module Module1
                         movie.titleandyear = "The " & Temp
                     End If
                 End If
-            Catch ex As Exception
+            Catch
             End Try
             childchild.InnerText = movie.titleandyear
             child.AppendChild(childchild)
@@ -2220,6 +2503,7 @@ Module Module1
         doc.AppendChild(root)
         For f = 1 To 100
             Try
+               
                 Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
                 output.Formatting = Formatting.Indented
                 doc.WriteTo(output)
@@ -2228,7 +2512,12 @@ Module Module1
             Catch
             End Try
         Next
+
+
     End Sub
+
+
+
 
     Public Function decxmlchars(ByVal line As String)
         line = line.Replace("&amp;", "&")
@@ -4280,6 +4569,8 @@ Module Module1
             End Select
         Next
     End Sub
+
+
 
     Private Sub saveactorcache()
         Dim savepath As String = Preferences.workingProfile.actorcache
