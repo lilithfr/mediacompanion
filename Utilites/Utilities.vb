@@ -2269,7 +2269,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim bm_dest As New Bitmap(width, height)
         Using gr As Graphics = Graphics.FromImage(bm_dest)
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-            gr.DrawImage(bm_source, New Rectangle(0, 0, bm_dest.Width, bm_dest.Height), 0, 0, width, height, GraphicsUnit.Pixel)
+ '           gr.DrawImage(bm_source, New Rectangle(0, 0, bm_dest.Width, bm_dest.Height), 0, 0, width, height, GraphicsUnit.Pixel)
+            gr.DrawImage(bm_source, 0, 0, width, height)
         End Using
         Return bm_dest
     End Function
