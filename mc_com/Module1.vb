@@ -5404,9 +5404,16 @@ Module Module1
                     movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                     movietoadd.foldername = getlastfolder(newMovieList(f).nfopathandfilename)
                     movietoadd.title = newmovie.fullmoviebody.title
-                        movietoadd.originaltitle = newmovie.fullmoviebody.originaltitle
+                    movietoadd.originaltitle = newmovie.fullmoviebody.originaltitle
+
+                    If movietoadd.originaltitle = "" then
+                        movietoadd.originaltitle = movietoadd.title
+                    End If
                     movietoadd.sortorder = newmovie.fullmoviebody.sortorder
                     movietoadd.runtime = newmovie.fullmoviebody.runtime
+                    movietoadd.votes = newmovie.fullmoviebody.votes
+                    movietoadd.movieset = "-None-"
+
                     If newmovie.fullmoviebody.title <> Nothing Then
                         If newmovie.fullmoviebody.year <> Nothing Then
                                 If newmovie.fullmoviebody.title.ToLower.IndexOf("the") = 0 Then
