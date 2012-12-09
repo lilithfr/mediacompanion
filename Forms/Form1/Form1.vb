@@ -29228,4 +29228,13 @@ End Sub
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+Private Sub TabLevel1_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
+    
+    Select TabLevel1.SelectedTab.Text.ToLower
+        Case "general preferences" 
+            Call util_GeneralPreferencesSetup()
+    End Select
+
+End Sub
 End Class
