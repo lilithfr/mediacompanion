@@ -10482,11 +10482,14 @@ Public Class Form1
                     'Dim exists As Boolean = System.IO.File.Exists(mov_FanartORExtrathumbPath())
                     If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
 
+                        ' PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
+                        ' PictureBox2.Load()
+                        util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
 
-                        PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
-                        PictureBox2.Load()
-                        PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                        PictureBox7.Load()
+                        ' PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                        ' PictureBox7.Load()
+                        util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
                             If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
@@ -10497,8 +10500,9 @@ Public Class Form1
                             End If
                         Next
                     Else
-                        PictureBox2.ImageLocation = Utilities.DefaultFanartPath
-                        PictureBox2.Load()
+                        ' PictureBox2.ImageLocation = Utilities.DefaultFanartPath
+                        ' PictureBox2.Load()
+                        util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
@@ -11653,6 +11657,8 @@ Public Class Form1
                     End If
                 End If
 
+                util_ImageLoad(PictureBox3, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
+
                 i1.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
 
                 If Preferences.createfolderjpg = True Then
@@ -11670,25 +11676,38 @@ Public Class Form1
                 bm_source.Dispose()
                 Dim filename As String = Utilities.GetCRC32(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+
+                Try
+                    File.Delete(path)
+                Catch ex As Exception
+                    ExceptionHandler.LogError(ex)
+                End Try
+
                 bm_dest.Save(path, Imaging.ImageFormat.Jpeg)
                 bm_dest.Dispose()
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        poster.ImageLocation = path
-                        poster.Load()
+                        'poster.ImageLocation = path
+                        'poster.Load()
+                        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
                         Exit For
                     End If
                 Next
 
-                PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
-                PictureBox3.Load()
-                moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
-                moviethumb.Load()
+                'PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
+                'PictureBox3.Load()
+                util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+
+                'moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
+                'moviethumb.Load()
+                util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+
                 tempstring = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
                 Label19.Text = tempstring
                 Label19.Refresh()
             Catch ex As Exception
+                ExceptionHandler.LogError(ex)
 #If SilentErrorScream Then
             Throw ex
 #End If
@@ -25110,6 +25129,8 @@ Public Class Form1
                                 Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
                             End If
                         Next
+                    Else
+                        util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height

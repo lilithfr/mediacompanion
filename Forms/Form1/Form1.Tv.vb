@@ -739,34 +739,52 @@ Partial Public Class Form1
 
     End Sub
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
+    'Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
+
+    '    Dim fs As System.IO.FileStream = Nothing
+    '    Try
+    '        If System.IO.File.Exists(ImagePath) Then
+    '            PicBox.ImageLocation = ImagePath
+
+    '            fs = New System.IO.FileStream(ImagePath, IO.FileMode.Open, IO.FileAccess.Read)
+    '            PicBox.Image = System.Drawing.Image.FromStream(fs)
+    '            fs.Close()
+    '        Else
+    '            PicBox.ImageLocation = DefaultPic
+    '        End If
+    '    Catch ex As Exception
+    '        'possibly no file to load or file is corrupt
+    '        PicBox.ImageLocation = DefaultPic
+
+    '        If Not (fs Is Nothing) Then
+    '            Try
+    '                fs.Close()
+    '            Catch
+    '            End Try
+    '        End If
+
+    '        Return False
+    '    End Try
+    '    Return True
+    'End Function
+
     Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
 
-        Dim fs As System.IO.FileStream = Nothing
-        Try
-            If System.IO.File.Exists(ImagePath) Then
-                PicBox.ImageLocation = ImagePath
+        Dim PathToUse As String = DefaultPic
+        If System.IO.File.Exists(ImagePath) Then
+            PathToUse = ImagePath
+        End If
 
-                fs = New System.IO.FileStream(ImagePath, IO.FileMode.Open, IO.FileAccess.Read)
-                PicBox.Image = System.Drawing.Image.FromStream(fs)
-                fs.Close()
-            Else
-                PicBox.ImageLocation = DefaultPic
-            End If
-        Catch ex As Exception
-            'possibly no file to load or file is corrupt
-            PicBox.ImageLocation = DefaultPic
+        Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+            fs.CopyTo(ms)
+            ms.Seek(0, System.IO.SeekOrigin.Begin)
+            PicBox.Image = Image.FromStream(ms)
+        End Using
 
-            If Not (fs Is Nothing) Then
-                Try
-                    fs.Close()
-                Catch
-                End Try
-            End If
-
-            Return False
-        End Try
         Return True
     End Function
+
+
     Public Shared Sub util_EpisodeSetWatched(ByRef playcount As String, Optional ByVal toggle As Boolean = False)
         Dim watched As Boolean = False
         If IsNumeric(playcount) Then
@@ -1032,7 +1050,7 @@ Partial Public Class Form1
             realTvPaths.Add(NewShow.FolderPath)
             TvTreeview.Nodes.Add(NewShow.ShowNode)
             NewShow.UpdateTreenode()
-            
+
             TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
             TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
             Me.BringToFront()
