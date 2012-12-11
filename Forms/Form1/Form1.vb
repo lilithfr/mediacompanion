@@ -2460,7 +2460,7 @@ Public Class Form1
                     Try
                         util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                         util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
-                        Label19.Text = "Current Loaded Poster - " & PictureBox3.Width.ToString & " x " & PictureBox3.Height.ToString
+                        Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
                         Label18.Visible = False
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -11619,7 +11619,8 @@ Public Class Form1
                                         backup = posterArray(tempint).ldposter
                                     End If
                                 Else
-                                    tempstring2 = posterArray(tempint).ldposter
+'                                    tempstring2 = posterArray(tempint).ldposter
+                                    tempstring2 = posterArray(tempint).hdposter
                                 End If
                                 allok = True
                                 Exit For
