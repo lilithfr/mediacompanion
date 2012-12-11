@@ -447,6 +447,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 passed = False
             ElseIf Strings.Right(s, 7) = ".actors" Then
                 passed = False
+            ElseIf Strings.Right(s, ".appledouble".Length) = ".appledouble" Then
+                passed = False
             ElseIf Strings.Right(s, 8) = "(noscan)" Then
                 passed = False
             ElseIf Strings.Right(s, 6) = "sample" Then
