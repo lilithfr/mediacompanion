@@ -4140,27 +4140,6 @@ Public Class Form1
                                     Dim newmoviethumbpath As String = Preferences.GetPosterPath(newMovieList(f).nfopathandfilename)
                                     Try
                                         Utilities.DownloadImage(moviethumburl, posterpath)
-                                        'Dim buffer(4000000) As Byte
-                                        'Dim size As Integer = 0
-                                        'Dim bytesRead As Integer = 0
-                                        'Dim thumburl As String = moviethumburl
-                                        'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                        'Dim res As HttpWebResponse = req.GetResponse()
-                                        'Dim contents As Stream = res.GetResponseStream()
-                                        'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                        'While bytesToRead > 0
-                                        '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                        '    If size = 0 Then Exit While
-                                        '    bytesToRead -= size
-                                        '    bytesRead += size
-                                        'End While
-                                        ''scraperlog = scraperlog & "Downloading Movie Thumbnail at URL :- " & newmoviethumbpath & vbCrLf
-                                        ''scraperlog = scraperlog & "Unable to Download Thumb" & vbCrLf
-                                        ''scraperlog = scraperlog & "Saving Thumbnail To Path :- " & newmoviethumbpath & vbCrLf
-                                        'Dim fstrm As New FileStream(posterpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                        'fstrm.Write(buffer, 0, bytesRead)
-                                        'contents.Close()
-                                        'fstrm.Close()
 
                                         progresstext &= " - OK"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
@@ -4171,11 +4150,6 @@ Public Class Form1
                                         If Preferences.createfolderjpg = True Then
                                             If Preferences.overwritethumbs = True Or System.IO.File.Exists(temppath) = False Then
                                                 Utilities.DownloadImage(moviethumburl, temppath)
-                                                'scraperLog = scraperLog & "Saving folder.jpg To Path :- " & temppath & vbCrLf
-                                                'Dim fstrm2 As New FileStream(temppath, FileMode.OpenOrCreate, FileAccess.Write)
-                                                'fstrm2.Write(buffer, 0, bytesRead)
-                                                'contents.Close()
-                                                'fstrm2.Close()
                                                 scraperLog = scraperLog & "Poster also saved as ""folder.jpg"" OK" & vbCrLf
                                             Else
                                                 scraperLog = scraperLog & "!!! folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
@@ -8962,43 +8936,6 @@ Public Class Form1
                                                     scraperLog = scraperLog & "folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
                                                 End If
                                             End If
-                                            'Try
-                                            '    Dim buffer(4000000) As Byte
-                                            '    Dim size As Integer = 0
-                                            '    Dim bytesRead As Integer = 0
-                                            '    Dim thumburl As String = moviethumburl
-                                            '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                            '    Dim res As HttpWebResponse = req.GetResponse()
-                                            '    Dim contents As Stream = res.GetResponseStream()
-                                            '    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                            '    While bytesToRead > 0
-                                            '        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                            '        If size = 0 Then Exit While
-                                            '        bytesToRead -= size
-                                            '        bytesRead += size
-                                            '    End While
-                                            '    Dim fstrm As New FileStream(newmoviethumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                            '    fstrm.Write(buffer, 0, bytesRead)
-                                            '    contents.Close()
-                                            '    fstrm.Close()
-
-
-                                            '    Dim temppath As String = newmoviethumbpath.Replace(System.IO.Path.GetFileName(newmoviethumbpath), "folder.jpg")
-                                            '    If Preferences.createfolderjpg = True Then
-                                            '        If Preferences.overwritethumbs = True Or System.IO.File.Exists(temppath) = False Then
-                                            '            scraperLog = scraperLog & "Saving folder.jpg To Path :- " & temppath & vbCrLf
-                                            '            Dim fstrm2 As New FileStream(temppath, FileMode.OpenOrCreate, FileAccess.Write)
-                                            '            fstrm2.Write(buffer, 0, bytesRead)
-                                            '            contents.Close()
-                                            '            fstrm2.Close()
-                                            '        Else
-                                            '            scraperLog = scraperLog & "folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
-                                            '        End If
-                                            '    End If
-                                            'Catch ex As Exception
-                                            '    scraperLog = scraperLog & "Problem Saving Thumbnail" & vbCrLf
-                                            '    scraperLog = scraperLog & "Error Returned :- " & ex.ToString & vbCrLf & vbCrLf
-                                            'End Try
                                         End If
                                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -12264,45 +12201,6 @@ Public Class Form1
                                         stage = stage & "folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
                                     End If
                                 End If
-
-                                'Try
-                                '    Dim buffer(4000000) As Byte
-                                '    Dim size As Integer = 0
-                                '    Dim bytesRead As Integer = 0
-                                '    Dim thumburl As String = moviethumburl
-                                '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                '    Dim res As HttpWebResponse = req.GetResponse()
-                                '    Dim contents As Stream = res.GetResponseStream()
-                                '    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                '    While bytesToRead > 0
-                                '        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                '        If size = 0 Then Exit While
-                                '        bytesToRead -= size
-                                '        bytesRead += size
-                                '    End While
-
-                                '    Dim fstrm As New FileStream(newmoviethumbpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                '    fstrm.Write(buffer, 0, bytesRead)
-                                '    contents.Close()
-                                '    fstrm.Close()
-                                '    stage = stage & "Saving poster to: " & newmoviethumbpath & vbCrLf
-
-                                '    Dim temppath As String = newmoviethumbpath.Replace(System.IO.Path.GetFileName(newmoviethumbpath), "folder.jpg")
-                                '    If Preferences.createfolderjpg = True Then
-                                '        If Preferences.overwritethumbs = True Or System.IO.File.Exists(temppath) = False Then
-                                '            stage = stage & "Saving folder.jpg To Path :- " & temppath & vbCrLf
-                                '            Dim fstrm2 As New FileStream(temppath, FileMode.OpenOrCreate, FileAccess.Write)
-                                '            fstrm2.Write(buffer, 0, bytesRead)
-                                '            contents.Close()
-                                '            fstrm2.Close()
-                                '        Else
-                                '            stage = stage & "folder.jpg Not Saved to :- " & temppath & ", file already exists" & vbCrLf
-                                '        End If
-                                '    End If
-                                'Catch ex As Exception
-                                '    stage = stage & "Problem Saving poster" & vbCrLf
-                                '    stage = stage & "Error Returned :- " & ex.ToString & vbCrLf & vbCrLf
-                                'End Try
                             Else
                                 stage = stage & "No Poster Found" & vbCrLf
                             End If
@@ -19617,6 +19515,15 @@ Public Class Form1
         ElseIf Preferences.videomode = 4 Then
             RadioButton36.Checked = True
         End If
+
+        If Preferences.XBMC_version = 0 Then
+            rbXBMCv_pre.Checked = True
+        ElseIf Preferences.XBMC_version = 1 Then
+            rbXBMCv_both.Checked = True
+        ElseIf Preferences.XBMC_version = 2 Then
+            rbXBMCv_post.Checked = True
+        End If
+
         If Preferences.videomode = 4 Then
             Label121.Text = Preferences.selectedvideoplayer
             Label121.Visible = True
@@ -19627,12 +19534,7 @@ Public Class Form1
         End If
         txtbx_minrarsize.Text = Preferences.rarsize.ToString
 
-        'If Preferences.externalbrowser = True Then
-        '    CheckBox12.Checked = True
-        'Else
-        '    CheckBox12.Checked = False
-        'End If
-        CheckBox12.Checked     = Preferences.externalbrowser
+        CheckBox12.Checked = Preferences.externalbrowser
         btnFindBrowser.Enabled = CheckBox12.Checked
 
         If Preferences.startupCache = True Then
@@ -21723,6 +21625,24 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub rbXBMCv_pre_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_pre.CheckedChanged
+        If rbXBMCv_pre.Checked Then
+            Preferences.XBMC_version = 0
+        End If
+    End Sub
+
+    Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
+        If rbXBMCv_post.Checked Then
+            Preferences.XBMC_version = 2
+        End If
+    End Sub
+
+    Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
+        If rbXBMCv_both.Checked Then
+            Preferences.XBMC_version = 1
+        End If
     End Sub
 
     Private Sub mov_SwitchRuntime()

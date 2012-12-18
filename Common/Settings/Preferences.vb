@@ -184,7 +184,8 @@ Public Class Preferences
     Public Shared moviePreferredTrailerResolution As String
     Public Shared MovieImdbGenreRegEx As String
     Public Shared homemoviefolders As New List(Of String)
-	 Public Shared DownloadTrailerDuringScrape As Boolean
+    Public Shared DownloadTrailerDuringScrape As Boolean
+    Public Shared XBMC_version As Byte
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
@@ -215,6 +216,7 @@ Public Class Preferences
         Preferences.formwidth = 1060
         Preferences.splt5 = 0
         Preferences.showsortdate = False
+        Preferences.XBMC_version = 0
 
         'Movies
         Preferences.movies_useXBMC_Scraper = False
@@ -941,7 +943,11 @@ Public Class Preferences
         child.InnerText = Preferences.MovieImdbGenreRegEx.ToString
         root.AppendChild(child)
 
-        
+        child = doc.CreateElement("xbmcartwork")
+        child.InnerText = Preferences.XBMC_version.ToString
+        root.AppendChild(child)
+
+
         doc.AppendChild(root)
 
         If String.IsNullOrEmpty(Preferences.workingProfile.config) Then
@@ -1591,6 +1597,8 @@ Public Class Preferences
                 Case "MovieImdbGenreRegEx"
                     If thisresult.InnerText <> "" Then Preferences.MovieImdbGenreRegEx = decxmlchars(thisresult.InnerXml)
 
+                Case "xbmcartwork"
+                    If thisresult.InnerText <> "" Then Preferences.XBMC_version = Convert.ToByte(thisresult.InnerText)
 
             End Select
             'Catch
@@ -1627,54 +1635,6 @@ Public Class Preferences
         End If
         Return posterpath
 
-        'posterpath = FullPath.Substring(0, FullPath.Length - 4)
-        'posterpath = posterpath & ".tbn"
-        ''If Not IO.File.Exists(posterpath) Then
-
-        ''********************** disabled this section poster should include stackname *******************
-        ''Dim stackname As String = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
-        ''stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
-        ''stackname = stackname & ".tbn"
-        ''If stackname <> "na" And IO.File.Exists(stackname) Then
-        ''    posterpath = stackname
-        ''Else
-        ''    posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-        ''    posterpath = posterpath & "movie.tbn"
-        ''    If Not IO.File.Exists(posterpath) Then
-        ''        posterpath = ""
-        ''    End If
-        ''End If
-        ''***********************end disabled section **************************************
-
-        ''    Else
-        ''posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-        ''End If
-        'If posterpath = "" Then
-        '    If FullPath.IndexOf("movie.nfo") <> -1 Then
-        '        posterpath = FullPath.Replace("movie.nfo", "movie.tbn")
-        '    End If
-        'End If
-        'If posterpath = "" Then
-        '    If Preferences.posternotstacked = True Then
-        '        posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
-        '    Else
-        '        posterpath = Utilities.GetStackName(FullPath) & ".tbn"
-        '        If posterpath = "na.tbn" Then
-        '            posterpath = FullPath.Substring(0, FullPath.Length - 4) & ".tbn"
-        '        Else
-        '            posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
-        '        End If
-        '    End If
-        '    If Preferences.basicsavemode = True Then
-        '        posterpath = posterpath.Replace(IO.Path.GetFileName(FullPath), "movie.tbn")
-        '    End If
-        'End If
-        'If posterpath = "na" Then
-        '    If IO.File.Exists(FullPath.Replace(IO.Path.GetFileName(FullPath), "folder.jpg")) Then
-        '        posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), "folder.jpg")
-        '    End If
-        'End If
-
     End Function
 
     Public Shared Function GetFanartPath(ByVal FullPath As String) As String
@@ -1683,64 +1643,6 @@ Public Class Preferences
             fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
         End If
         Return fanartPath
-
-        'fanart = fanart.jpg if basicsave mode on i.e. movie.nfo,movie.tbn,fanart.jpg OR
-        'fanart = movie filename - extension + "-fanart.jpg"
-        'NOTE parts need to be included in the name & not stripped off
-
-        'Try
-        '    Dim posterpath As String = ""
-        '    If FullPath.IndexOf("movie.nfo") <> -1 Then   'equivalent to If preferences.basicsavemode = True Then but prefrences is not referenced here
-        '        posterpath = FullPath.Replace("movie.nfo", "fanart.jpg")
-        '    Else
-        '        posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
-        '    End If
-
-        '    Return posterpath
-        'Catch
-        '    Return ""
-        'End Try
-
-        '''''''''''''''''''OLD CODE''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        'posterpath = FullPath.Substring(0, FullPath.Length - 4)
-        'posterpath = posterpath & "-fanart.jpg"
-
-        '********************** disabled this section fanart should include stackname *******************
-        'If Not IO.File.Exists(posterpath) Then
-        '    Dim stackname As String = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath.Replace(IO.Path.GetFileName(FullPath), ""))
-
-        '    stackname = FullPath.Replace(IO.Path.GetFileName(FullPath), stackname)
-        '    stackname = stackname & "-fanart.jpg"
-        '    If stackname <> "na" And IO.File.Exists(stackname) Then
-        '        posterpath = stackname
-        '    Else
-        '        posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "")
-        '        posterpath = posterpath & "fanart.jpg"
-        '        If Not IO.File.Exists(posterpath) Then
-        '            posterpath = ""
-        '        End If
-        '    End If
-        '    'Else
-        '    '    posterpath = fullpath.Replace("movie.nfo", "movie.tbn")
-        'End If
-        '***********************end disabled section **************************************
-
-        'If posterpath = "" Then
-        '    If Preferences.fanartnotstacked = True Then
-        '        posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
-        '    Else
-        '        posterpath = Utilities.GetStackName(IO.Path.GetFileName(FullPath), FullPath) & "-fanart.jpg"
-        '        If posterpath = "na-fanart.jpg" Then
-        '            posterpath = FullPath.Substring(0, FullPath.Length - 4) & "-fanart.jpg"
-        '        Else
-        '            posterpath = FullPath.Replace(IO.Path.GetFileName(FullPath), posterpath)
-        '        End If
-        '    End If
-        '    If Preferences.basicsavemode = True Then
-        '        posterpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "fanart.jpg")
-        '    End If
-        'End If
-
 
     End Function
 
