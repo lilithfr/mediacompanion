@@ -32,7 +32,7 @@ Public Class Utilities
                                                 "directors cut", "dir cut", "director's cut",
                                                 "480", "576", "720", "1024", "1080"}
 
-    'must have a separator character prefix so they do not get confused with standard text
+    'must have a separator character prefix so they do not get confused with standard text.
     Public Shared ReadOnly cleanTagsList_SepPrefix() As String = {"scr", "ts", "fs", "ws", "r5"}
 
     Private Declare Function GetDiskFreeSpaceEx _
