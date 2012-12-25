@@ -1,4 +1,6 @@
 ﻿
+Option Explicit On
+
 Imports System.Net
 Imports System.IO
 Imports System.Text.RegularExpressions
@@ -139,7 +141,12 @@ Public Class Form1
     Private currentTabIndex As Integer = 0
     Private homeTabIndex As Integer = 0
 
-
+    Public totalfilesize As Long = 0
+    Public listoffilestomove As New List(Of String)
+    Dim showstoscrapelist As New List(Of String)
+    Dim processnow As Boolean = True
+    Dim currenttitle As String
+    Public homemovietabindex As Integer = 0
 
     Private Sub util_BatchUpdate()
         messbox = New frmMessageBox("Please wait,", "", "refreshing Movie nfo files")
@@ -269,348 +276,348 @@ Public Class Form1
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        'Try
-
-        For I = 0 To 20
-            Common.Tasks.Add(New Tasks.BlankTask())
-        Next
-
-        'Preferences.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
-        'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
-        Preferences.applicationPath = Application.StartupPath
-        Utilities.applicationPath = Application.StartupPath
-        If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
-            Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
-            If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
-                      "The Full version, while not required, is available from:" & vbCrLf & _
-                      RequiredNetURL & vbCrLf & vbCrLf & _
-                      "Do you wish to download the Full version?", _
-                      MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
-                'Process.Start(RequiredNetURL)
-                OpenUrl( RequiredNetURL )
-                End
-            End If
-        End If
-
-        'TasksList.DataSource = Common.Tasks
-
-        ForegroundWorkTimer.Interval = 500
-        AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
-
-        Dim asm As Assembly = Assembly.GetExecutingAssembly
-        Dim InternalResourceNames() As String = asm.GetManifestResourceNames
-
-        For Each Temp In InternalResourceNames
-            Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
-        Next
-        ComboBox11.SelectedIndex = 0
-        RadioButton45.Checked = True
-        'Try
-        '    Dim scraperfunction As New imdb.Classimdbscraper
-        '    Dim temp As String = scraperfunction.getversion
-        '    If Convert.ToInt32(temp) < 5 Then
-        '        MsgBox("             Out of date IMDB scraper file detected" & vbCrLf & "Please replace your 'imdb.dll' file with the one from the downloaded archive")
-        '        End
-        '    End If
-        'Catch
-
-        'End Try
-        'Panel4.Location = New Point(149, 23)              'Disabled this direct positioning on Panel 4 so that we can position in GUI....SK
-        TvTreeview.Sort()
-
-        For Each arg As String In Environment.GetCommandLineArgs()
-            Console.WriteLine(arg)
-            If arg = "sq" Then
-                Me.WindowState = FormWindowState.Minimized
-                scrapeAndQuit = True
-            End If
-        Next
-
-        If scrapeAndQuit = False Then
-            frmSplash.Show()
-
-
-            frmSplash.Label3.Text = "Status :- Initialising Program"
-            frmSplash.Label3.Refresh()
-        End If
-        Me.Visible = False
-
-        ComboBox10.SelectedIndex = 0
-
-        Me.Refresh()
-        Application.DoEvents()
-        Dim tempstring As String
-        tempstring = applicationPath & "\enablemultiple.set"
-        If Not File.Exists(tempstring) Then
-            Dim tej As Integer = 0
-            Dim processes() As Process
-            Dim instance As Process
-            Dim process As New Process()
-            processes = process.GetProcesses
-            For Each instance In processes
-                If instance.ProcessName = "Media Companion" Then                            'If instance.ProcessName.IndexOf("Media Companion - V") <> -1 Then          This should limit the match to only Median Companion running not Visual Studio 2010
-                    tej = tej + 1
-                    If tej >= 2 Then
-                        MsgBox("XBMC Media Companion is already running")
-
-                        End                         'Close MC since another version of the program is running.
-                    End If
-                End If
-            Next
-        End If
-        CheckForIllegalCrossThreadCalls = False
-        'messbox.Show()
-        'messbox.Visible = False
-
-
-
-        Preferences.maximised = False
-        Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
-        generalprefschanged = False
-
-        tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
-        Dim hg As New IO.DirectoryInfo(tempstring)
-        If hg.Exists Then
-            ' applicationdatapath = tempstring
-            Preferences.configpath = tempstring & "config.xml"
-            If Not IO.File.Exists(Preferences.configpath) Then
-
-                Preferences.SaveConfig()
-            End If
-        Else
-            IO.Directory.CreateDirectory(tempstring)
-            workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
-            Preferences.SaveConfig()
-        End If
-
-
-
-        If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
-            Call util_ProfilesLoad()
-            For Each prof In profileStruct.profilelist
-                If prof.profilename = profileStruct.startupprofile Then
-                    workingProfile.actorcache = prof.actorcache
-                    workingProfile.config = prof.config
-                    workingProfile.moviecache = prof.moviecache
-                    workingProfile.profilename = prof.profilename
-                    workingProfile.regexlist = prof.regexlist
-                    workingProfile.filters = prof.filters
-                    workingProfile.tvcache = prof.tvcache
-                    workingProfile.profilename = prof.profilename
-                    For Each item In ProfilesToolStripMenuItem.DropDownItems
-                        If item.text = workingProfile.profilename Then
-                            With item
-                                item.checked = True
-                            End With
-                        Else
-                            item.checked = False
-                        End If
-                    Next
-                End If
-            Next
-        Else
-            profileStruct.workingprofilename = "Default"
-            profileStruct.defaultprofile = "Default"
-            profileStruct.startupprofile = "Default"
-            Dim currentprofile As New str_ListOfProfiles(SetDefaults)
-            tempstring = applicationPath & "\Settings\"
-            currentprofile.actorcache = tempstring & "actorcache.xml"
-            currentprofile.config = tempstring & "config.xml"
-            currentprofile.regexlist = tempstring & "regex.xml"
-            currentprofile.tvcache = tempstring & "tvcache.xml"
-            currentprofile.filters = tempstring & "filters.txt"
-            currentprofile.moviecache = tempstring & "moviecache.xml"
-            currentprofile.profilename = "Default"
-            profileStruct.profilelist.Add(currentprofile)
-            profileStruct.workingprofilename = "Default"
-            Call util_ProfileSave()
-            Call util_ProfilesLoad()
-            For Each prof In profileStruct.profilelist
-                If prof.profilename = profileStruct.startupprofile Then
-                    workingProfile.actorcache = prof.actorcache
-                    workingProfile.config = prof.config
-                    workingProfile.moviecache = prof.moviecache
-                    workingProfile.profilename = prof.profilename
-                    workingProfile.regexlist = prof.regexlist
-                    workingProfile.filters = prof.filters
-                    workingProfile.tvcache = prof.tvcache
-                    workingProfile.profilename = prof.profilename
-                End If
-            Next
-        End If
-        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
-        'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
-        util_MainFormTitleUpdate()
-
-
-
-        'Application data folder
-
-        'Dim f As New IO.DirectoryInfo(applicationdatapath)
-        'If Not f.Exists Then
-        '    Try
-        '        Directory.CreateDirectory(applicationdatapath)
-        '    Catch ex As Exception
-        '        MsgBox(ex.Message.ToString)
-        '        End
-        '    End Try
-        'End If
-
-        Dim g As New IO.DirectoryInfo(IO.Path.Combine(applicationPath, "settings\postercache\"))
-        If Not g.Exists Then
-            Try
-                Directory.CreateDirectory(IO.Path.Combine(applicationPath, "settings\postercache\"))
-            Catch ex As Exception
-                MsgBox(ex.Message.ToString)
-                End
-            End Try
-        End If
-
-        CheckForIllegalCrossThreadCalls = False
-
-        'These lines fixed the associated panel so that they don't automove when the Form1 is resized
-        SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
-        SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
-        SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
-
         Try
-            If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
 
-        tempstring = applicationDatapath & "error.log"
-        If IO.File.Exists(tempstring) = True Then
-            IO.File.Delete(tempstring)
-        End If
+            For I = 0 To 20
+                Common.Tasks.Add(New Tasks.BlankTask())
+            Next
+
+            'Preferences.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
+            'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
+            Preferences.applicationPath = Application.StartupPath
+            Utilities.applicationPath = Application.StartupPath
+            If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
+                Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
+                If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
+                          "The Full version, while not required, is available from:" & vbCrLf & _
+                          RequiredNetURL & vbCrLf & vbCrLf & _
+                          "Do you wish to download the Full version?", _
+                          MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
+                    'Process.Start(RequiredNetURL)
+                    OpenUrl(RequiredNetURL)
+                    End
+                End If
+            End If
+
+            'TasksList.DataSource = Common.Tasks
+
+            ForegroundWorkTimer.Interval = 500
+            AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
+
+            Dim asm As Assembly = Assembly.GetExecutingAssembly
+            Dim InternalResourceNames() As String = asm.GetManifestResourceNames
+
+            For Each Temp In InternalResourceNames
+                Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
+            Next
+            ComboBox11.SelectedIndex = 0
+            RadioButton45.Checked = True
+            'Try
+            '    Dim scraperfunction As New imdb.Classimdbscraper
+            '    Dim temp As String = scraperfunction.getversion
+            '    If Convert.ToInt32(temp) < 5 Then
+            '        MsgBox("             Out of date IMDB scraper file detected" & vbCrLf & "Please replace your 'imdb.dll' file with the one from the downloaded archive")
+            '        End
+            '    End If
+            'Catch
+
+            'End Try
+            'Panel4.Location = New Point(149, 23)              'Disabled this direct positioning on Panel 4 so that we can position in GUI....SK
+            TvTreeview.Sort()
+
+            For Each arg As String In Environment.GetCommandLineArgs()
+                Console.WriteLine(arg)
+                If arg = "sq" Then
+                    Me.WindowState = FormWindowState.Minimized
+                    scrapeAndQuit = True
+                End If
+            Next
+
+            If scrapeAndQuit = False Then
+                frmSplash.Show()
 
 
-        'ToolStrip1.Enabled = False
+                frmSplash.Label3.Text = "Status :- Initialising Program"
+                frmSplash.Label3.Refresh()
+            End If
+            Me.Visible = False
 
-        Call util_RegexLoad()
+            ComboBox10.SelectedIndex = 0
 
-        Call util_PrefsLoad()
+            Me.Refresh()
+            Application.DoEvents()
+            Dim tempstring As String
+            tempstring = applicationPath & "\enablemultiple.set"
+            If Not File.Exists(tempstring) Then
+                Dim tej As Integer = 0
+                Dim processes() As Process
+                Dim instance As Process
+                Dim process As New Process()
+                processes = process.GetProcesses
+                For Each instance In processes
+                    If instance.ProcessName = "Media Companion" Then                            'If instance.ProcessName.IndexOf("Media Companion - V") <> -1 Then          This should limit the match to only Median Companion running not Visual Studio 2010
+                        tej = tej + 1
+                        If tej >= 2 Then
+                            MsgBox("XBMC Media Companion is already running")
 
-        'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
-        'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
+                            End                         'Close MC since another version of the program is running.
+                        End If
+                    End If
+                Next
+            End If
+            CheckForIllegalCrossThreadCalls = False
+            'messbox.Show()
+            'messbox.Visible = False
 
 
 
+            Preferences.maximised = False
+            Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
+            generalprefschanged = False
 
+            tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
+            Dim hg As New IO.DirectoryInfo(tempstring)
+            If hg.Exists Then
+                ' applicationdatapath = tempstring
+                Preferences.configpath = tempstring & "config.xml"
+                If Not IO.File.Exists(Preferences.configpath) Then
 
-
-        If scrapeAndQuit = False Then
-            Me.Visible = True
-
-
-            Dim intX As Integer = Screen.PrimaryScreen.Bounds.Width
-            Dim intY As Integer = Screen.PrimaryScreen.Bounds.Height
-            SplitContainer1.IsSplitterFixed = True
-            SplitContainer2.IsSplitterFixed = True
-            SplitContainer3.IsSplitterFixed = True
-            SplitContainer4.IsSplitterFixed = True
-            SplitContainer5.IsSplitterFixed = True
-            If Preferences.maximised = False Then
-                If Preferences.locx < 0 Then Preferences.locx = 0
-                If Preferences.locy < 0 Then Preferences.locy = 0
-                If Preferences.formheight > intY Then Preferences.formheight = intY
-                If Preferences.formwidth > intX Then Preferences.formwidth = intX
-                If Preferences.locx >= intX Then Preferences.locx = intX - Preferences.formwidth
-                If Preferences.locy >= intY Then Preferences.locy = intY - Preferences.formheight
-                If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
-                    Me.Width = Preferences.formwidth
-                    Me.Height = Preferences.formheight
-                    Me.Location = New Point(Preferences.locx, Preferences.locy)
+                    Preferences.SaveConfig()
                 End If
             Else
-                Me.WindowState = FormWindowState.Maximized
+                IO.Directory.CreateDirectory(tempstring)
+                workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
+                Preferences.SaveConfig()
             End If
 
-            Dim dpi As Graphics = Me.CreateGraphics
 
-            'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
-            '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            DebugSytemDPITextBox.Text = dpi.DpiX
+            If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
+                Call util_ProfilesLoad()
+                For Each prof In profileStruct.profilelist
+                    If prof.profilename = profileStruct.startupprofile Then
+                        workingProfile.actorcache = prof.actorcache
+                        workingProfile.config = prof.config
+                        workingProfile.moviecache = prof.moviecache
+                        workingProfile.profilename = prof.profilename
+                        workingProfile.regexlist = prof.regexlist
+                        workingProfile.filters = prof.filters
+                        workingProfile.tvcache = prof.tvcache
+                        workingProfile.profilename = prof.profilename
+                        For Each item In ProfilesToolStripMenuItem.DropDownItems
+                            If item.text = workingProfile.profilename Then
+                                With item
+                                    item.checked = True
+                                End With
+                            Else
+                                item.checked = False
+                            End If
+                        Next
+                    End If
+                Next
+            Else
+                profileStruct.workingprofilename = "Default"
+                profileStruct.defaultprofile = "Default"
+                profileStruct.startupprofile = "Default"
+                Dim currentprofile As New str_ListOfProfiles(SetDefaults)
+                tempstring = applicationPath & "\Settings\"
+                currentprofile.actorcache = tempstring & "actorcache.xml"
+                currentprofile.config = tempstring & "config.xml"
+                currentprofile.regexlist = tempstring & "regex.xml"
+                currentprofile.tvcache = tempstring & "tvcache.xml"
+                currentprofile.filters = tempstring & "filters.txt"
+                currentprofile.moviecache = tempstring & "moviecache.xml"
+                currentprofile.profilename = "Default"
+                profileStruct.profilelist.Add(currentprofile)
+                profileStruct.workingprofilename = "Default"
+                Call util_ProfileSave()
+                Call util_ProfilesLoad()
+                For Each prof In profileStruct.profilelist
+                    If prof.profilename = profileStruct.startupprofile Then
+                        workingProfile.actorcache = prof.actorcache
+                        workingProfile.config = prof.config
+                        workingProfile.moviecache = prof.moviecache
+                        workingProfile.profilename = prof.profilename
+                        workingProfile.regexlist = prof.regexlist
+                        workingProfile.filters = prof.filters
+                        workingProfile.tvcache = prof.tvcache
+                        workingProfile.profilename = prof.profilename
+                    End If
+                Next
+            End If
+            If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
+            'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
+            util_MainFormTitleUpdate()
 
-            'If Preferences.maximised = True Then
-            '    Me.WindowState = FormWindowState.Maximized
-            'Else
-            '    If Preferences.locx <> 0 Then
-            '        Me.Location = New Point(Preferences.locx, Preferences.locy)
-            '    End If
-            '    If Preferences.locy <> 0 Then
-            '        Me.Location = New Point(Preferences.locx, Preferences.locy)
-            '    End If
-            '    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
-            '        Me.Width = Preferences.formwidth
-            '        Me.Height = Preferences.formheight
-            '    End If
+
+
+            'Application data folder
+
+            'Dim f As New IO.DirectoryInfo(applicationdatapath)
+            'If Not f.Exists Then
+            '    Try
+            '        Directory.CreateDirectory(applicationdatapath)
+            '    Catch ex As Exception
+            '        MsgBox(ex.Message.ToString)
+            '        End
+            '    End Try
             'End If
 
-            Me.Refresh()
-            Application.DoEvents()
-
-            Me.Refresh()
-            Application.DoEvents()
-
-            Application.DoEvents()
-
-            screenshotTab = TabControl3.TabPages(1)
-
-            TabControl3.TabPages.RemoveAt(1)
-
-            If Preferences.splt5 = 0 Then
-                Dim tempint As Integer = SplitContainer1.Height
-                tempint = tempint / 4
-                tempint = tempint * 3
-                If tempint > 275 Then
-                    Preferences.splt5 = tempint
-                Else
-                    Preferences.splt5 = 275
-                End If
+            Dim g As New IO.DirectoryInfo(IO.Path.Combine(applicationPath, "settings\postercache\"))
+            If Not g.Exists Then
+                Try
+                    Directory.CreateDirectory(IO.Path.Combine(applicationPath, "settings\postercache\"))
+                Catch ex As Exception
+                    MsgBox(ex.Message.ToString)
+                    End
+                End Try
             End If
 
-            If Preferences.startuptab = 0 Then
-                SplitContainer1.SplitterDistance = Preferences.splt1
-                SplitContainer2.SplitterDistance = Preferences.splt2
-                SplitContainer5.SplitterDistance = Preferences.splt5
-                TabLevel1.SelectedIndex = 1
-                SplitContainer3.SplitterDistance = Preferences.splt3
-                SplitContainer4.SplitterDistance = Preferences.splt4
-                TabLevel1.SelectedIndex = 0
-            ElseIf Preferences.startuptab = 1 Then
-                SplitContainer1.SplitterDistance = Preferences.splt1
-                SplitContainer2.SplitterDistance = Preferences.splt2
-                SplitContainer5.SplitterDistance = Preferences.splt5
-                TabLevel1.SelectedIndex = 1
-                SplitContainer3.SplitterDistance = Preferences.splt3
-                SplitContainer4.SplitterDistance = Preferences.splt4
-            ElseIf Preferences.startuptab = 2 Then
-                SplitContainer1.SplitterDistance = Preferences.splt1
-                SplitContainer2.SplitterDistance = Preferences.splt2
-                SplitContainer5.SplitterDistance = Preferences.splt5
-                SplitContainer3.SplitterDistance = Preferences.splt3
-                SplitContainer4.SplitterDistance = Preferences.splt4
-                TabLevel1.SelectedIndex = 2
-            End If
+            CheckForIllegalCrossThreadCalls = False
 
+            'These lines fixed the associated panel so that they don't automove when the Form1 is resized
+            SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
+            SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
+            SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
-            SplitContainer1.IsSplitterFixed = False
-            SplitContainer2.IsSplitterFixed = False
-            SplitContainer3.IsSplitterFixed = False
-            SplitContainer4.IsSplitterFixed = False
-            SplitContainer5.IsSplitterFixed = False
-        End If
-
-        'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
-
-        If scrapeAndQuit = True Then
-            Call util_AutoRun()
-        Else
             Try
+                If IO.File.Exists(IO.Path.Combine(applicationPath, "\error.log")) Then IO.File.Delete(IO.Path.Combine(applicationPath, "\error.log"))
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+
+            tempstring = applicationDatapath & "error.log"
+            If IO.File.Exists(tempstring) = True Then
+                IO.File.Delete(tempstring)
+            End If
+
+
+            'ToolStrip1.Enabled = False
+
+            Call util_RegexLoad()
+
+            Call util_PrefsLoad()
+
+            'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
+            'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
+
+
+
+
+
+
+            If scrapeAndQuit = False Then
+                Me.Visible = True
+
+
+                Dim intX As Integer = Screen.PrimaryScreen.Bounds.Width
+                Dim intY As Integer = Screen.PrimaryScreen.Bounds.Height
+                SplitContainer1.IsSplitterFixed = True
+                SplitContainer2.IsSplitterFixed = True
+                SplitContainer3.IsSplitterFixed = True
+                SplitContainer4.IsSplitterFixed = True
+                SplitContainer5.IsSplitterFixed = True
+                If Preferences.maximised = False Then
+                    If Preferences.locx < 0 Then Preferences.locx = 0
+                    If Preferences.locy < 0 Then Preferences.locy = 0
+                    If Preferences.formheight > intY Then Preferences.formheight = intY
+                    If Preferences.formwidth > intX Then Preferences.formwidth = intX
+                    If Preferences.locx >= intX Then Preferences.locx = intX - Preferences.formwidth
+                    If Preferences.locy >= intY Then Preferences.locy = intY - Preferences.formheight
+                    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
+                        Me.Width = Preferences.formwidth
+                        Me.Height = Preferences.formheight
+                        Me.Location = New Point(Preferences.locx, Preferences.locy)
+                    End If
+                Else
+                    Me.WindowState = FormWindowState.Maximized
+                End If
+
+                Dim dpi As Graphics = Me.CreateGraphics
+
+                'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
+                '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                DebugSytemDPITextBox.Text = dpi.DpiX
+
+                'If Preferences.maximised = True Then
+                '    Me.WindowState = FormWindowState.Maximized
+                'Else
+                '    If Preferences.locx <> 0 Then
+                '        Me.Location = New Point(Preferences.locx, Preferences.locy)
+                '    End If
+                '    If Preferences.locy <> 0 Then
+                '        Me.Location = New Point(Preferences.locx, Preferences.locy)
+                '    End If
+                '    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
+                '        Me.Width = Preferences.formwidth
+                '        Me.Height = Preferences.formheight
+                '    End If
+                'End If
+
+                Me.Refresh()
+                Application.DoEvents()
+
+                Me.Refresh()
+                Application.DoEvents()
+
+                Application.DoEvents()
+
+                screenshotTab = TabControl3.TabPages(1)
+
+                TabControl3.TabPages.RemoveAt(1)
+
+                If Preferences.splt5 = 0 Then
+                    Dim tempint As Integer = SplitContainer1.Height
+                    tempint = tempint / 4
+                    tempint = tempint * 3
+                    If tempint > 275 Then
+                        Preferences.splt5 = tempint
+                    Else
+                        Preferences.splt5 = 275
+                    End If
+                End If
+
+                If Preferences.startuptab = 0 Then
+                    SplitContainer1.SplitterDistance = Preferences.splt1
+                    SplitContainer2.SplitterDistance = Preferences.splt2
+                    SplitContainer5.SplitterDistance = Preferences.splt5
+                    TabLevel1.SelectedIndex = 1
+                    SplitContainer3.SplitterDistance = Preferences.splt3
+                    SplitContainer4.SplitterDistance = Preferences.splt4
+                    TabLevel1.SelectedIndex = 0
+                ElseIf Preferences.startuptab = 1 Then
+                    SplitContainer1.SplitterDistance = Preferences.splt1
+                    SplitContainer2.SplitterDistance = Preferences.splt2
+                    SplitContainer5.SplitterDistance = Preferences.splt5
+                    TabLevel1.SelectedIndex = 1
+                    SplitContainer3.SplitterDistance = Preferences.splt3
+                    SplitContainer4.SplitterDistance = Preferences.splt4
+                ElseIf Preferences.startuptab = 2 Then
+                    SplitContainer1.SplitterDistance = Preferences.splt1
+                    SplitContainer2.SplitterDistance = Preferences.splt2
+                    SplitContainer5.SplitterDistance = Preferences.splt5
+                    SplitContainer3.SplitterDistance = Preferences.splt3
+                    SplitContainer4.SplitterDistance = Preferences.splt4
+                    TabLevel1.SelectedIndex = 2
+                End If
+
+
+                SplitContainer1.IsSplitterFixed = False
+                SplitContainer2.IsSplitterFixed = False
+                SplitContainer3.IsSplitterFixed = False
+                SplitContainer4.IsSplitterFixed = False
+                SplitContainer5.IsSplitterFixed = False
+            End If
+
+            'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
+
+            If scrapeAndQuit = True Then
+                Call util_AutoRun()
+            Else
+                'Try
                 'If ComboBox3.Items.Count <> Preferences.moviesets.Count Then
                 '    ComboBox3.Items.Clear()
                 '    For Each mset In Preferences.moviesets
@@ -627,60 +634,61 @@ Public Class Form1
                 '        Exit For
                 '    End If
                 'Next
-                setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
-                If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-            mov_VideoSourcePopulate()
-            Call util_FontSetup()
-
-            Dim mediaDropdown As New SortedList(Of String, String)
-            mediaInfoExp.addTemplates(mediaDropdown)
-            For Each item In mediaDropdown
-                If item.Value = MediaInfoExport.mediaType.Movie Then
-                    ExportMovieListInfoToolStripMenuItem.DropDownItems.Add(item.Key)
-                ElseIf item.Value = MediaInfoExport.mediaType.TV Then
-                    ExportTVShowInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+                If Not IsNothing(workingMovieDetails) Then
+                    setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
                 End If
-            Next
 
-            Call util_CommandListLoad()
-            startup = False
-            frmSplash.Close()
+                If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+                'Catch ex As Exception
+                '#If SilentErrorScream Then
+                'Throw ex
+                '#End If
+                '           End Try
+                mov_VideoSourcePopulate()
+                Call util_FontSetup()
 
-            'hide debug xml view tabs - unhiden (i.e. added) via debug tab
-            TabLevel1.TabPages.Remove(Me.TabConfigXML)
-            TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
-            TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
-            TabLevel1.TabPages.Remove(Me.TabProfile)
-            TabLevel1.TabPages.Remove(Me.TabActorCache)
-            TabLevel1.TabPages.Remove(Me.TabRegex)
+                Dim mediaDropdown As New SortedList(Of String, String)
+                mediaInfoExp.addTemplates(mediaDropdown)
+                For Each item In mediaDropdown
+                    If item.Value = MediaInfoExport.mediaType.Movie Then
+                        ExportMovieListInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+                    ElseIf item.Value = MediaInfoExport.mediaType.TV Then
+                        ExportTVShowInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+                    End If
+                Next
 
-            'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
-            GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
-            GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+                Call util_CommandListLoad()
+                startup = False
+                frmSplash.Close()
 
-            'ToolStrip1.Enabled = True
+                'hide debug xml view tabs - unhiden (i.e. added) via debug tab
+                TabLevel1.TabPages.Remove(Me.TabConfigXML)
+                TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
+                TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
+                TabLevel1.TabPages.Remove(Me.TabProfile)
+                TabLevel1.TabPages.Remove(Me.TabActorCache)
+                TabLevel1.TabPages.Remove(Me.TabRegex)
 
-            'Below shows the current screensize on initial start
-            DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
-            mov_SplitContainerAutoPosition()
-            tv_ShowSelectedCurrently()
-            tv_SplitContainerAutoPosition()
-        End If
+                'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
+                GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+                GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
 
-        Common.Tasks.StartTaskEngine()
-        ForegroundWorkTimer.Start()
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
+                'ToolStrip1.Enabled = True
+
+                'Below shows the current screensize on initial start
+                DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
+                mov_SplitContainerAutoPosition()
+                tv_ShowSelectedCurrently()
+                tv_SplitContainerAutoPosition()
+            End If
+
+            Common.Tasks.StartTaskEngine()
+            ForegroundWorkTimer.Start()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
     End Sub
-
-
 
     Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
         Try
@@ -697,6 +705,7 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
     Sub util_MainFormTitleUpdate()
         'Update Main Form Window Title to show Currrent Version
         Dim sAssemblyVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1))
@@ -708,6 +717,7 @@ Public Class Form1
         End If
 
     End Sub
+
     Sub mov_SplitContainerAutoPosition()
         'Set Movie Splitter Auto Position
         Dim pic1ratio As Decimal
@@ -728,6 +738,7 @@ Public Class Form1
         End Try
         SplitContainer2.SplitterDistance = (SplitContainer2.Size.Width - 8) * (pic1ratio / (pic1ratio + pic2ratio))
     End Sub
+
     Sub tv_SplitContainerAutoPosition()
         'Set TVShow Splitter Auto Position
         Dim pic3ratio As Decimal
@@ -960,7 +971,6 @@ Public Class Form1
 
 
     End Sub
-  
 
     Private Sub mov_CacheLoad()
         fullMovieList.Clear()
@@ -1522,18 +1532,6 @@ Public Class Form1
         Call mov_ScanForNew()
 
     End Sub
-    Public Class clsCompareFileInfo
-        Implements IComparer
-        Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
-            Dim File1 As System.IO.FileInfo
-            Dim File2 As System.IO.FileInfo
-
-            File1 = DirectCast(x, System.IO.FileInfo)
-            File2 = DirectCast(y, System.IO.FileInfo)
-
-            Compare = String.Compare(File1.FullName, File2.FullName)
-        End Function
-    End Class
 
     Private Sub mov_ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
 
@@ -1563,13 +1561,6 @@ Public Class Form1
                     Continue For    ' if we call an exception due to an nfo issue, try the next one
                 End Try
                 If workingMovie.title <> "ERROR" Then
-
-
-
-
-
-
-
 
                     If workingMovie.movieset <> Nothing Then
                         If workingMovie.movieset.IndexOf(" / ") = -1 Then
@@ -2411,6 +2402,8 @@ Public Class Form1
                 studiotxt.Text = workingMovieDetails.fullmoviebody.studio
                 pathtxt.Text = workingMovie.fullpathandfilename
                 ratingtxt.Text = workingMovieDetails.fullmoviebody.rating
+                Rating1.Rating(workingMovieDetails.fullmoviebody.rating)
+
                 'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
@@ -2492,13 +2485,18 @@ Public Class Form1
                 For Each actor In workingMovieDetails.listactors
                     If actor.actorname <> Nothing Then actorcb.Items.Add(actor.actorname)
                 Next
-                Try
-                    actorcb.SelectedIndex = 0
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
+
+                'This test generate an exception when there is no actor in the movie !
+                ' Why ?
+
+                'Try
+                '                    actorcb.SelectedIndex = 0
+                '                Catch ex As Exception
+                '#If SilentErrorScream Then
+                '                    Throw ex
+                '#End If
+                'End Try
+
                 If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
                     If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
                         Dim add As Boolean = True
@@ -9385,204 +9383,204 @@ Public Class Form1
 
         If MovieListComboBox.SelectedItems.Count = 0 Then Exit Sub 'this sub is called when we clear the selection, in that case we don't want to do anything
 
-        Try
-            Dim myBool As Boolean = True
-            If MovieListComboBox.SelectedItems.Count > 1 Then
-                myBool = False
+        'Try
+        Dim myBool As Boolean = True
+        If MovieListComboBox.SelectedItems.Count > 1 Then
+            myBool = False
+        End If
+
+        mov_ToolStripPlayMovie.Visible = myBool
+
+        mov_ToolStripOpenFolder.Visible = myBool
+        mov_ToolStripViewNfo.Visible = myBool
+        ToolStripSeparator17.Visible = myBool
+        ToolStripSeparator5.Visible = myBool
+        ToolStripSeparator4.Visible = myBool
+        mov_ToolStripFanartBrowserAlt.Visible = myBool
+        mov_ToolStripPosterBrowserAlt.Visible = myBool
+        mov_ToolStripEditMovieAlt.Visible = myBool
+        mov_ToolStripReloadFromCache.Visible = myBool
+
+
+
+
+
+        ' Try
+        Dim needtoload As Boolean = False
+        If MovieListComboBox.SelectedItems.Count = 1 Then
+            If titletxt.Visible = False Then
+                needtoload = True
             End If
+            titletxt.Visible = True
+            Label127.Visible = False
+            SplitContainer2.Visible = True
+            Label128.Visible = False
+            Label75.Visible = True
+            TextBox34.Visible = True
+            Dim done As Boolean = False
+            For Each movie In filteredList
+                If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value Then
+                    If IO.File.Exists(movie.fullpathandfilename) Then
 
-            mov_ToolStripPlayMovie.Visible = myBool
-
-            mov_ToolStripOpenFolder.Visible = myBool
-            mov_ToolStripViewNfo.Visible = myBool
-            ToolStripSeparator17.Visible = myBool
-            ToolStripSeparator5.Visible = myBool
-            ToolStripSeparator4.Visible = myBool
-            mov_ToolStripFanartBrowserAlt.Visible = myBool
-            mov_ToolStripPosterBrowserAlt.Visible = myBool
-            mov_ToolStripEditMovieAlt.Visible = myBool
-            mov_ToolStripReloadFromCache.Visible = myBool
-
-
-
-
-
-            Try
-                Dim needtoload As Boolean = False
-                If MovieListComboBox.SelectedItems.Count = 1 Then
-                    If titletxt.Visible = False Then
-                        needtoload = True
-                    End If
-                    titletxt.Visible = True
-                    Label127.Visible = False
-                    SplitContainer2.Visible = True
-                    Label128.Visible = False
-                    Label75.Visible = True
-                    TextBox34.Visible = True
-                    Dim done As Boolean = False
-                    For Each movie In filteredList
-                        If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value Then
-                            If IO.File.Exists(movie.fullpathandfilename) Then
-
-                                If System.IO.File.Exists(Utilities.GetTrailerName(movie.fullpathandfilename)) And myBool Then
-                                    mov_ToolStripPlayTrailer.Visible = True
-                                Else
-                                    mov_ToolStripPlayTrailer.Visible = False
-                                End If
-
-
-
-                                If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
-                                    workingMovie.filedate = movie.filedate
-                                    workingMovie.filename = movie.foldername
-                                    workingMovie.foldername = movie.foldername
-                                    workingMovie.fullpathandfilename = movie.fullpathandfilename
-                                    workingMovie.genre = movie.genre
-                                    workingMovie.id = movie.id
-                                    workingMovie.playcount = movie.playcount
-                                    workingMovie.rating = movie.rating
-                                    workingMovie.title = movie.title
-                                    workingMovie.titleandyear = movie.titleandyear
-                                    workingMovie.top250 = movie.top250
-                                    workingMovie.year = movie.year
-                                    Call mov_FormPopulate()
-                                Else
-                                    If needtoload = True Then Call mov_FormPopulate()
-                                End If
-                                done = True
-                                Exit For
-                            Else
-                                workingMovie.filedate = Nothing
-                                workingMovie.filename = Nothing
-                                workingMovie.foldername = Nothing
-                                workingMovie.fullpathandfilename = Nothing
-                                workingMovie.genre = Nothing
-                                workingMovie.id = Nothing
-                                workingMovie.playcount = Nothing
-                                workingMovie.rating = Nothing
-                                workingMovie.title = Nothing
-                                workingMovie.titleandyear = Nothing
-                                workingMovie.top250 = Nothing
-                                workingMovie.year = Nothing
-                                workingMovie.movieset = Nothing
-                                setsTxt.Text = ""
-                                titletxt.Text = ""
-                                TextBox3.Text = ""
-                                outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
-                                plottxt.Text = ""
-                                taglinetxt.Text = ""
-                                txtStars.Text = ""
-                                genretxt.Text = ""
-                                creditstxt.Text = ""
-                                directortxt.Text = ""
-                                studiotxt.Text = ""
-                                pathtxt.Text = ""
-                                actorcb.Items.Clear()
-                                ratingtxt.Text = ""
-                                runtimetxt.Text = ""
-                                votestxt.Text = ""
-                                certtxt.Text = ""
-                                PictureBox7.Image = Nothing
-                                moviethumb.Image = Nothing
-                                roletxt.Text = ""
-                                PictureBox1.Image = Nothing
-                            End If
-                        End If
-                    Next
-                ElseIf MovieListComboBox.SelectedItems.Count = 0 Then
-                    setsTxt.Text = ""
-                    titletxt.Text = ""
-                    TextBox3.Text = ""
-                    outlinetxt.Text = ""
-                    plottxt.Text = ""
-                    taglinetxt.Text = ""
-                    txtStars.Text = ""
-                    genretxt.Text = ""
-                    creditstxt.Text = ""
-                    directortxt.Text = ""
-                    studiotxt.Text = ""
-                    pathtxt.Text = ""
-                    actorcb.Items.Clear()
-                    ratingtxt.Text = ""
-                    runtimetxt.Text = ""
-                    votestxt.Text = ""
-                    certtxt.Text = ""
-                    PictureBox7.Image = Nothing
-                    moviethumb.Image = Nothing
-                    roletxt.Text = ""
-                    PictureBox1.Image = Nothing
-                Else
-                    titletxt.Text = ""
-                    TextBox3.Text = ""
-                    outlinetxt.Text = ""
-                    plottxt.Text = ""
-                    taglinetxt.Text = ""
-                    txtStars.Text = ""
-                    genretxt.Text = ""
-                    creditstxt.Text = ""
-                    directortxt.Text = ""
-                    setsTxt.Text = ""
-                    studiotxt.Text = ""
-                    pathtxt.Text = ""
-                    actorcb.Items.Clear()
-                    ratingtxt.Text = ""
-                    runtimetxt.Text = ""
-                    votestxt.Text = ""
-                    certtxt.Text = ""
-                    PictureBox7.Image = Nothing
-                    moviethumb.Image = Nothing
-                    roletxt.Text = ""
-                    PictureBox1.Image = Nothing
-                    SplitContainer2.Visible = False
-                    titletxt.Visible = False
-                    Label75.Visible = False
-                    TextBox34.Visible = False
-                    Label127.Visible = True
-                    Label128.Visible = True
-                    'ComboBox3.SelectedIndex = -1
-                    Dim add As Boolean = True
-                    Dim watched As String = ""
-                    For Each mov In MovieListComboBox.SelectedItems
-                        Dim old As String = watched
-                        For Each item In fullMovieList
-                            If item.fullpathandfilename = mov.value Then
-                                If watched = "" Then
-                                    watched = item.playcount
-                                    old = watched
-                                Else
-                                    watched = item.playcount
-                                End If
-                                If watched <> old Then
-                                    add = False
-                                End If
-                                Exit For
-                            End If
-                        Next
-                    Next
-                    If add = False Then
-                        Button13.Text = ""
-                        Button13.BackColor = Color.Gray
-                    Else
-                        If watched = "1" Then
-                            Button13.Text = "&Watched"
-                            Button13.BackColor = Color.LawnGreen
-                            Button13.Refresh()
+                        If System.IO.File.Exists(Utilities.GetTrailerName(movie.fullpathandfilename)) And myBool Then
+                            mov_ToolStripPlayTrailer.Visible = True
                         Else
-                            Button13.Text = "Un&watched"
-                            Button13.BackColor = Color.Red
-                            Button13.Refresh()
+                            mov_ToolStripPlayTrailer.Visible = False
                         End If
+
+
+
+                        If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
+                            workingMovie.filedate = movie.filedate
+                            workingMovie.filename = movie.foldername
+                            workingMovie.foldername = movie.foldername
+                            workingMovie.fullpathandfilename = movie.fullpathandfilename
+                            workingMovie.genre = movie.genre
+                            workingMovie.id = movie.id
+                            workingMovie.playcount = movie.playcount
+                            workingMovie.rating = movie.rating
+                            workingMovie.title = movie.title
+                            workingMovie.titleandyear = movie.titleandyear
+                            workingMovie.top250 = movie.top250
+                            workingMovie.year = movie.year
+                            Call mov_FormPopulate()
+                        Else
+                            If needtoload = True Then Call mov_FormPopulate()
+                        End If
+                        done = True
+                        Exit For
+                    Else
+                        workingMovie.filedate = Nothing
+                        workingMovie.filename = Nothing
+                        workingMovie.foldername = Nothing
+                        workingMovie.fullpathandfilename = Nothing
+                        workingMovie.genre = Nothing
+                        workingMovie.id = Nothing
+                        workingMovie.playcount = Nothing
+                        workingMovie.rating = Nothing
+                        workingMovie.title = Nothing
+                        workingMovie.titleandyear = Nothing
+                        workingMovie.top250 = Nothing
+                        workingMovie.year = Nothing
+                        workingMovie.movieset = Nothing
+                        setsTxt.Text = ""
+                        titletxt.Text = ""
+                        TextBox3.Text = ""
+                        outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
+                        plottxt.Text = ""
+                        taglinetxt.Text = ""
+                        txtStars.Text = ""
+                        genretxt.Text = ""
+                        creditstxt.Text = ""
+                        directortxt.Text = ""
+                        studiotxt.Text = ""
+                        pathtxt.Text = ""
+                        actorcb.Items.Clear()
+                        ratingtxt.Text = ""
+                        runtimetxt.Text = ""
+                        votestxt.Text = ""
+                        certtxt.Text = ""
+                        PictureBox7.Image = Nothing
+                        moviethumb.Image = Nothing
+                        roletxt.Text = ""
+                        PictureBox1.Image = Nothing
                     End If
                 End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
-            'mov_SplitContainerAutoPosition("Selected Movie Changed")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+            Next
+        ElseIf MovieListComboBox.SelectedItems.Count = 0 Then
+            setsTxt.Text = ""
+            titletxt.Text = ""
+            TextBox3.Text = ""
+            outlinetxt.Text = ""
+            plottxt.Text = ""
+            taglinetxt.Text = ""
+            txtStars.Text = ""
+            genretxt.Text = ""
+            creditstxt.Text = ""
+            directortxt.Text = ""
+            studiotxt.Text = ""
+            pathtxt.Text = ""
+            actorcb.Items.Clear()
+            ratingtxt.Text = ""
+            runtimetxt.Text = ""
+            votestxt.Text = ""
+            certtxt.Text = ""
+            PictureBox7.Image = Nothing
+            moviethumb.Image = Nothing
+            roletxt.Text = ""
+            PictureBox1.Image = Nothing
+        Else
+            titletxt.Text = ""
+            TextBox3.Text = ""
+            outlinetxt.Text = ""
+            plottxt.Text = ""
+            taglinetxt.Text = ""
+            txtStars.Text = ""
+            genretxt.Text = ""
+            creditstxt.Text = ""
+            directortxt.Text = ""
+            setsTxt.Text = ""
+            studiotxt.Text = ""
+            pathtxt.Text = ""
+            actorcb.Items.Clear()
+            ratingtxt.Text = ""
+            runtimetxt.Text = ""
+            votestxt.Text = ""
+            certtxt.Text = ""
+            PictureBox7.Image = Nothing
+            moviethumb.Image = Nothing
+            roletxt.Text = ""
+            PictureBox1.Image = Nothing
+            SplitContainer2.Visible = False
+            titletxt.Visible = False
+            Label75.Visible = False
+            TextBox34.Visible = False
+            Label127.Visible = True
+            Label128.Visible = True
+            'ComboBox3.SelectedIndex = -1
+            Dim add As Boolean = True
+            Dim watched As String = ""
+            For Each mov In MovieListComboBox.SelectedItems
+                Dim old As String = watched
+                For Each item In fullMovieList
+                    If item.fullpathandfilename = mov.value Then
+                        If watched = "" Then
+                            watched = item.playcount
+                            old = watched
+                        Else
+                            watched = item.playcount
+                        End If
+                        If watched <> old Then
+                            add = False
+                        End If
+                        Exit For
+                    End If
+                Next
+            Next
+            If add = False Then
+                Button13.Text = ""
+                Button13.BackColor = Color.Gray
+            Else
+                If watched = "1" Then
+                    Button13.Text = "&Watched"
+                    Button13.BackColor = Color.LawnGreen
+                    Button13.Refresh()
+                Else
+                    Button13.Text = "Un&watched"
+                    Button13.BackColor = Color.Red
+                    Button13.Refresh()
+                End If
+            End If
+        End If
+        '   Catch ex As Exception
+        '#If SilentErrorScream Then
+        '        Throw ex
+        '#End If
+        '        End Try
+        'mov_SplitContainerAutoPosition("Selected Movie Changed")
+        '       Catch ex As Exception
+        '      ExceptionHandler.LogError(ex)
+        '       End Try
 
     End Sub
 
@@ -12829,8 +12827,6 @@ Public Class Form1
 
     End Sub
 
-
-
     Private Sub ReloadItemToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ReloadFromCache.Click
         Try
             Call tv_ShowReload(True)
@@ -13030,7 +13026,6 @@ Public Class Form1
         Next
     End Sub
 
-
     Private Sub tv_ShowChangedRePopulate()
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'messbox = New message_box("Please wait,", "", "Getting possible TV Shows from TVDB")
@@ -13140,8 +13135,6 @@ Public Class Form1
 
         'messbox.Close()
     End Sub
-
-
 
     Private Sub Button30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button30.Click
         Try
@@ -18183,7 +18176,7 @@ Public Class Form1
 
 #End Region
 
-    Dim showstoscrapelist As New List(Of String)
+
     Private Sub bckgroundscanepisodes_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bckgroundscanepisodes.ProgressChanged
         Try
             If e.ProgressPercentage = 0 Then
@@ -18539,9 +18532,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-    Dim processnow As Boolean = True
-    Dim currenttitle As String
 
     Private Sub titletxt_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles titletxt.Enter
         Try
@@ -26275,8 +26265,7 @@ Public Class Form1
     End Function
 
 
-    Public totalfilesize As Long = 0
-    Public listoffilestomove As New List(Of String)
+
     Private Sub ExportmoviesMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripExportMovies.Click
         Try
             listoffilestomove.Clear()
@@ -27843,17 +27832,19 @@ Public Class Form1
                 cb_movFormatSource.Items.Add(mset)
             Next
             cb_movFormatSource.SelectedIndex = 0
-            If workingMovieDetails.fullmoviebody.source <> "" Then
-                For te = 0 To cb_movFormatSource.Items.Count - 1
-                    If cb_movFormatSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
-                        cb_movFormatSource.SelectedIndex = te
-                        Exit For
-                    End If
-                Next
+            If IsNothing(workingMovieDetails) = False Then
+                If workingMovieDetails.fullmoviebody.source <> "" Then
+                    For te = 0 To cb_movFormatSource.Items.Count - 1
+                        If cb_movFormatSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
+                            cb_movFormatSource.SelectedIndex = te
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
-                Throw ex
+            Throw ex
 #End If
         End Try
     End Sub
@@ -29012,7 +29003,6 @@ End Sub
         End Try
     End Sub
 
-    Public homemovietabindex As Integer = 0
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
         If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
@@ -29179,4 +29169,5 @@ Private Sub TabLevel1_SelectedIndexChanged( sender As System.Object,  e As Syste
     End Select
 
 End Sub
+
 End Class

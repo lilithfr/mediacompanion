@@ -130,6 +130,7 @@
     <Compile Include="Classes\ExceptionHandler.vb" />
     <Compile Include="Classes\HomeMovieDetails.vb" />
     <Compile Include="Classes\HomeMovies.vb" />
+    <Compile Include="Classes\MainForm\clsCompareFileInfo.vb" />
     <Compile Include="Classes\MediaInfoExport.vb" />
     <Compile Include="Classes\Movies.vb" />
     <Compile Include="Classes\Renamer.vb" />
@@ -309,6 +310,12 @@
     <Compile Include="Structures\TvShowLanguages.vb" />
     <Compile Include="Classes\TvWrap\TvEpisode.vb" />
     <Compile Include="Classes\TvWrap\TvShow.vb" />
+    <Compile Include="UserControls\Rating.Designer.vb">
+      <DependentUpon>Rating.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Rating.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBigTvEpisodeText.resx">
@@ -389,6 +396,9 @@
       <DependentUpon>frmTVShowBrowser.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Rating.resx">
+      <DependentUpon>Rating.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -434,6 +444,7 @@
     <Content Include="Assets\IMPA.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Untitled-1.png" />
     <Resource Include="Assets\MediaCompanion.ico" />
     <Content Include="Assets\pthreadGC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
