@@ -7,34 +7,48 @@
         PictureBoxWidth = PictureBoxRating.Width
     End Sub
 
-    Public Sub Rating(ByVal value As String)
-        ValueRating = Convert.ToSingle(value.Replace(".", ","))
-        PictureBoxRating.Width = (ValueRating * 10) * (PictureBoxWidth / 100)
-        Me.Width = (ValueRating * 10) * (PictureBoxWidth / 100)
+    Public Function BitmapRating(ByVal BitmapIN As Bitmap, ByVal PictureBoxWidth As Integer, ByVal PictureBoxHeight As Integer, ByVal Value As String) As Bitmap
+        Dim Ratingwidth As Integer
+        Dim Graph As New Bitmap(120, 40)
+        Dim Brush As New SolidBrush(Color.Black)
+        Dim BrushCircle As New SolidBrush(Color.Chocolate)
+        Dim pen As New System.Drawing.Pen(Color.DarkOrange, 30)
+        Dim drawFont As New Font("Segoe UI", 13, FontStyle.Bold)
 
-        PictureBoxRating.Refresh()
-    End Sub
-
-    Private Sub PictureBoxRating_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles PictureBoxRating.Paint
-        Dim drawString As [String] = ValueRating.ToString
-        Dim drawFont As New Font("Segoe UI", 14, FontStyle.Bold)
-        Dim drawBrush As New SolidBrush(Color.Black)
-        Dim x As Single
-        Dim y As Single = 5
-
-        If Convert.ToInt16(ValueRating) Mod ValueRating > 0 Then
-            x = 0
-        Else
-            x = 7
+        If Value = "" Then
+            Return BitmapIN
         End If
 
-        Dim width As Single = 200.0F
-        Dim height As Single = 50.0F
-        Dim drawRect As New RectangleF(x, y, width, height)
-        Dim blackPen As New Pen(Color.Transparent)
-        e.Graphics.DrawRectangle(blackPen, x, y, width, height)
-        e.Graphics.DrawString(drawString, drawFont, drawBrush, drawRect)
-    End Sub
+        'Resize source Image
+        Dim bm_source As New Bitmap(BitmapIN)
+        Dim bm_dest As New Bitmap(PictureBoxWidth, PictureBoxHeight)
+        Dim gr_dest As Graphics = Graphics.FromImage(bm_dest)
+        gr_dest.DrawImage(bm_source, 0, 0, PictureBoxWidth, PictureBoxHeight)
+
+        ValueRating = Convert.ToSingle(Value.Replace(".", ","))
+
+        Ratingwidth = Convert.ToInt16((ValueRating * 10) * (PictureBoxRating.Width / 100))
+
+        'Copy Stars 
+        Using gr As Graphics = Graphics.FromImage(bm_dest)
+            Dim src_rect As New Rectangle(0, 0, Ratingwidth, PictureBoxRating.Height)
+            Dim dst_rect As New Rectangle(35, 0, Ratingwidth, PictureBoxRating.Height)
+            gr.DrawImage(PictureBoxRating.Image, dst_rect, src_rect, GraphicsUnit.Pixel)
+        End Using
+
+        'write text
+        Dim Graphic As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bm_dest)
+        Graphic.FillEllipse(BrushCircle, 0, 3, 30, 30)
+
+        'If Convert.ToInt16(ValueRating) Mod ValueRating > 0 Then
+        If ValueRating.ToString.Length > 1 Or Value = "0.000000" Then
+            Graphic.DrawString(Value.ToString.Substring(0, 3), drawFont, Brush, 0, 5)
+        Else
+            Graphic.DrawString(Value.ToString, drawFont, Brush, 7, 5)
+        End If
+
+        Return bm_dest
+    End Function
 
 
 End Class

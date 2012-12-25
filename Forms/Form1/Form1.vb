@@ -2402,7 +2402,8 @@ Public Class Form1
                 studiotxt.Text = workingMovieDetails.fullmoviebody.studio
                 pathtxt.Text = workingMovie.fullpathandfilename
                 ratingtxt.Text = workingMovieDetails.fullmoviebody.rating
-                Rating1.Rating(workingMovieDetails.fullmoviebody.rating)
+                'PictureBox16.Image = PictureBox7.Image
+                'Rating1.BitmapRating(PictureBox7.Image, workingMovieDetails.fullmoviebody.rating)
 
                 'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
@@ -2464,6 +2465,7 @@ Public Class Form1
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Try
                         util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        PictureBox7.Image = Rating1.BitmapRating(PictureBox7.Image, PictureBox7.Width, PictureBox7.Height, workingMovieDetails.fullmoviebody.rating)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
