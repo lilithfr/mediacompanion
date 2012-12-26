@@ -444,6 +444,8 @@
     <Content Include="Assets\IMPA.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\stars2.png" />
+    <None Include="Resources\Save.png" />
     <None Include="Resources\Untitled-1.png" />
     <Resource Include="Assets\MediaCompanion.ico" />
     <Content Include="Assets\pthreadGC2.dll">
@@ -716,6 +718,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\edit.png" />
+    <None Include="Resources\imdb.png" />
     <Content Include="Resources\qmark.png" />
     <None Include="Resources\Sad.png" />
   </ItemGroup>

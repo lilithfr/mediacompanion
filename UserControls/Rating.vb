@@ -27,24 +27,25 @@
 
         ValueRating = Convert.ToSingle(Value.Replace(".", ","))
 
-        Ratingwidth = Convert.ToInt16((ValueRating * 10) * (PictureBoxRating.Width / 100))
+        'Ratingwidth = Convert.ToInt16((ValueRating * 10) * (PictureBoxRating.Width / 100)) 
+        Ratingwidth = 39 + (Convert.ToInt16((ValueRating * 10) * ((PictureBoxRating.Width - 39) / 100)))
 
         'Copy Stars 
         Using gr As Graphics = Graphics.FromImage(bm_dest)
             Dim src_rect As New Rectangle(0, 0, Ratingwidth, PictureBoxRating.Height)
-            Dim dst_rect As New Rectangle(35, 0, Ratingwidth, PictureBoxRating.Height)
+            Dim dst_rect As New Rectangle(0, 0, Ratingwidth, PictureBoxRating.Height)
             gr.DrawImage(PictureBoxRating.Image, dst_rect, src_rect, GraphicsUnit.Pixel)
         End Using
 
         'write text
         Dim Graphic As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bm_dest)
-        Graphic.FillEllipse(BrushCircle, 0, 3, 30, 30)
+        'Graphic.FillEllipse(BrushCircle, 0, 3, 30, 30)
 
         'If Convert.ToInt16(ValueRating) Mod ValueRating > 0 Then
-        If ValueRating.ToString.Length > 1 Or Value = "0.000000" Then
-            Graphic.DrawString(Value.ToString.Substring(0, 3), drawFont, Brush, 0, 5)
+        If Value.Length > 2 Then
+            Graphic.DrawString(Value.ToString.Substring(0, 3), drawFont, Brush, 0, 3)
         Else
-            Graphic.DrawString(Value.ToString, drawFont, Brush, 7, 5)
+            Graphic.DrawString(Value.ToString, drawFont, Brush, 8, 3)
         End If
 
         Return bm_dest

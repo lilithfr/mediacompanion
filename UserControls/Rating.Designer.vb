@@ -22,6 +22,7 @@ Partial Class Rating
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Rating))
         Me.PictureBoxRating = New System.Windows.Forms.PictureBox()
         CType(Me.PictureBoxRating, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -29,10 +30,10 @@ Partial Class Rating
         'PictureBoxRating
         '
         Me.PictureBoxRating.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBoxRating.Image = Global.Media_Companion.My.Resources.Resources.Stars
+        Me.PictureBoxRating.Image = CType(resources.GetObject("PictureBoxRating.Image"), System.Drawing.Image)
         Me.PictureBoxRating.Location = New System.Drawing.Point(0, 0)
         Me.PictureBoxRating.Name = "PictureBoxRating"
-        Me.PictureBoxRating.Size = New System.Drawing.Size(162, 32)
+        Me.PictureBoxRating.Size = New System.Drawing.Size(199, 32)
         Me.PictureBoxRating.TabIndex = 1
         Me.PictureBoxRating.TabStop = False
         '
@@ -43,7 +44,7 @@ Partial Class Rating
         Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.PictureBoxRating)
         Me.Name = "Rating"
-        Me.Size = New System.Drawing.Size(162, 32)
+        Me.Size = New System.Drawing.Size(199, 32)
         CType(Me.PictureBoxRating, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 

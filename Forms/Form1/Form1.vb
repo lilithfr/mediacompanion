@@ -23,6 +23,7 @@ Public Class Form1
 
     'Public Shared Preferences As New Structures
 
+    Public MainFormLoadedStatus As Boolean = False
     Public movieRefreshNeeded As Boolean = True
     Public tvRefreshNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
@@ -647,6 +648,8 @@ Public Class Form1
                 mov_VideoSourcePopulate()
                 Call util_FontSetup()
 
+
+
                 Dim mediaDropdown As New SortedList(Of String, String)
                 mediaInfoExp.addTemplates(mediaDropdown)
                 For Each item In mediaDropdown
@@ -681,6 +684,9 @@ Public Class Form1
                 tv_ShowSelectedCurrently()
                 tv_SplitContainerAutoPosition()
             End If
+
+            MainFormLoadedStatus = True
+            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
 
             Common.Tasks.StartTaskEngine()
             ForegroundWorkTimer.Start()
@@ -723,8 +729,8 @@ Public Class Form1
         Dim pic1ratio As Decimal
         Dim pic2ratio As Decimal
         Try
-            Dim pic1ImSzW = PictureBox7.Image.Size.Width        'original picture sizes
-            Dim pic1ImszH = PictureBox7.Image.Size.Height
+            Dim pic1ImSzW = PictureBoxFanArt.Image.Size.Width        'original picture sizes
+            Dim pic1ImszH = PictureBoxFanArt.Image.Size.Height
             Dim pic2ImSzW = moviethumb.Image.Size.Width
             Dim pic2ImszH = moviethumb.Image.Size.Height
             pic1ratio = pic1ImSzW / pic1ImszH
@@ -2428,11 +2434,11 @@ Public Class Form1
                 ' workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), tempstring & "-trailer.flv")
                 '*******
 
-'                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), System.IO.Path.GetFileNameWithoutExtension(workingMovieDetails.fileinfo.path) & "-trailer.flv")
+                '                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), System.IO.Path.GetFileNameWithoutExtension(workingMovieDetails.fileinfo.path) & "-trailer.flv")
 
                 workingMovieDetails.fileinfo.trailerpath = GetTrailerPath(workingMovieDetails.fileinfo.path)
 
-					 HandleTrailerBtn( workingMovieDetails )
+                HandleTrailerBtn(workingMovieDetails)
 
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Try
@@ -2462,8 +2468,7 @@ Public Class Form1
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Try
-                        util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        PictureBox7.Image = Rating1.BitmapRating(PictureBox7.Image, PictureBox7.Width, PictureBox7.Height, workingMovieDetails.fullmoviebody.rating)
+                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -2486,16 +2491,12 @@ Public Class Form1
                     If actor.actorname <> Nothing Then actorcb.Items.Add(actor.actorname)
                 Next
 
-                'This test generate an exception when there is no actor in the movie !
-                ' Why ?
-
-                'Try
-                '                    actorcb.SelectedIndex = 0
-                '                Catch ex As Exception
-                '#If SilentErrorScream Then
-                '                    Throw ex
-                '#End If
-                'End Try
+                If actorcb.Items.Count > 0 Then
+                    actorcb.SelectedIndex = 0
+                Else
+                    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                    PictureBoxActor.Load()
+                End If
 
                 If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
                     If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
@@ -2544,9 +2545,9 @@ Public Class Form1
                 Next
             Else
                 actorcb.Items.Clear()
-                PictureBox1.CancelAsync()
-                PictureBox1.Image = Nothing
-                PictureBox1.Refresh()
+                PictureBoxActor.CancelAsync()
+                PictureBoxActor.Image = Nothing
+                PictureBoxActor.Refresh()
                 ComboBox5.Text = ""
 
                 Button27.Visible = False
@@ -2575,7 +2576,7 @@ Public Class Form1
                 runtimetxt.Text = ""
                 votestxt.Text = ""
                 certtxt.Text = ""
-                PictureBox7.Image = Nothing
+                PictureBoxFanArt.Image = Nothing
                 PictureBox2.Image = Nothing
                 moviethumb.Image = Nothing
                 Label16.Text = ""
@@ -2586,7 +2587,7 @@ Public Class Form1
                 titletxt.Text = ""
 
                 roletxt.Text = ""
-                PictureBox1.Image = Nothing
+                PictureBoxActor.Image = Nothing
 
                 Me.Refresh()
                 Application.DoEvents()
@@ -2595,6 +2596,16 @@ Public Class Form1
                 ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
                 workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
             End If
+
+            If ratingtxt.Text.Length > 3 Then
+                ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
+            End If
+
+            If MainFormLoadedStatus = True Then
+                PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+            End If
+
+
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -4959,32 +4970,32 @@ Public Class Form1
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
-                        PictureBox1.ImageLocation = temppath
-                        PictureBox1.Load()
+                        PictureBoxActor.ImageLocation = temppath
+                        PictureBoxActor.Load()
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
                             If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
-                                PictureBox1.ImageLocation = actorthumbpath
-                                PictureBox1.Load()
+                                PictureBoxActor.ImageLocation = actorthumbpath
+                                PictureBoxActor.Load()
                             Else
-                                PictureBox1.ImageLocation = Utilities.DefaultActorPath
-                                PictureBox1.Load()
+                                PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                                PictureBoxActor.Load()
                             End If
                         Else
-                            PictureBox1.ImageLocation = Utilities.DefaultActorPath
-                            PictureBox1.Load()
+                            PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                            PictureBoxActor.Load()
                         End If
                     Else
-                        PictureBox1.ImageLocation = Utilities.DefaultActorPath
-                        PictureBox1.Load()
+                        PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                        PictureBoxActor.Load()
                     End If
                     Exit For
                 Else
-                    PictureBox1.ImageLocation = Utilities.DefaultActorPath
-                    PictureBox1.Load()
+                    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                    PictureBoxActor.Load()
                 End If
             Next
         Catch ex As Exception
@@ -5727,7 +5738,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub PictureBox7_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.DoubleClick
+    Private Sub PictureBoxFanArt_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBoxFanArt.DoubleClick
 
         Try
             Try
@@ -6806,11 +6817,11 @@ Public Class Form1
             t.ShowDialog()
             Try
                 If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-                    PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                    PictureBox7.Load()
+                    PictureBoxFanArt.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                    PictureBoxFanArt.Load()
 
                 Else
-                    PictureBox7.Image = Nothing
+                    PictureBoxFanArt.Image = Nothing
                 End If
 
             Catch ex As Exception
@@ -9185,7 +9196,7 @@ Public Class Form1
 
         frmSplash2.Hide()
     End Sub
-    Private Sub ComboBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
+    Private Sub MovieListComboBox_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
         Try
             mov_Play("Movie")
         Catch ex As Exception
@@ -9193,7 +9204,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ComboBox1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragDrop
+    Private Sub MovieListComboBox_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragDrop
         Try
             Dim files() As String
             files = e.Data.GetData(DataFormats.FileDrop)
@@ -9272,7 +9283,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ComboBox1_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragEnter
+    Private Sub MovieListComboBox_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragEnter
         Try
             e.Effect = DragDropEffects.Copy
         Catch ex As Exception
@@ -9280,7 +9291,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ComboBox1_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.MouseEnter
+    Private Sub MovieListComboBox_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.MouseEnter
         Try
             MovieListComboBox.Focus()
         Catch ex As Exception
@@ -9288,7 +9299,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ComboBox1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseMove
+    Private Sub MovieListComboBox_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseMove
         Try
             ToolTip1.IsBalloon = False
             'Dim tootip5 As New ToolTip
@@ -9334,7 +9345,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ComboBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
+    Private Sub MovieListComboBox_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
         Try
             Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
             If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
@@ -9379,7 +9390,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ComboBox1_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
+    Private Sub MovieListComboBox_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
 
         If MovieListComboBox.SelectedItems.Count = 0 Then Exit Sub 'this sub is called when we clear the selection, in that case we don't want to do anything
 
@@ -9412,7 +9423,7 @@ Public Class Form1
                 needtoload = True
             End If
             titletxt.Visible = True
-            Label127.Visible = False
+            TextBoxMutisave.Visible = False
             SplitContainer2.Visible = True
             Label128.Visible = False
             Label75.Visible = True
@@ -9480,10 +9491,10 @@ Public Class Form1
                         runtimetxt.Text = ""
                         votestxt.Text = ""
                         certtxt.Text = ""
-                        PictureBox7.Image = Nothing
+                        PictureBoxFanArt.Image = Nothing
                         moviethumb.Image = Nothing
                         roletxt.Text = ""
-                        PictureBox1.Image = Nothing
+                        PictureBoxActor.Image = Nothing
                     End If
                 End If
             Next
@@ -9505,10 +9516,10 @@ Public Class Form1
             runtimetxt.Text = ""
             votestxt.Text = ""
             certtxt.Text = ""
-            PictureBox7.Image = Nothing
+            PictureBoxFanArt.Image = Nothing
             moviethumb.Image = Nothing
             roletxt.Text = ""
-            PictureBox1.Image = Nothing
+            PictureBoxActor.Image = Nothing
         Else
             titletxt.Text = ""
             TextBox3.Text = ""
@@ -9527,15 +9538,15 @@ Public Class Form1
             runtimetxt.Text = ""
             votestxt.Text = ""
             certtxt.Text = ""
-            PictureBox7.Image = Nothing
+            PictureBoxFanArt.Image = Nothing
             moviethumb.Image = Nothing
             roletxt.Text = ""
-            PictureBox1.Image = Nothing
+            PictureBoxActor.Image = Nothing
             SplitContainer2.Visible = False
             titletxt.Visible = False
             Label75.Visible = False
             TextBox34.Visible = False
-            Label127.Visible = True
+            TextBoxMutisave.Visible = True
             Label128.Visible = True
             'ComboBox3.SelectedIndex = -1
             Dim add As Boolean = True
@@ -10423,7 +10434,7 @@ Public Class Form1
 
                         ' PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         ' PictureBox7.Load()
-                        util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -10612,7 +10623,7 @@ Public Class Form1
                     util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
                     'PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
                     'PictureBox2.Load()
-                    util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                     'PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                     'PictureBox7.Load()
                     mov_SplitContainerAutoPosition()
@@ -10814,7 +10825,7 @@ Public Class Form1
                 Label16.Text = PictureBox2.Image.Width
                 Label17.Text = PictureBox2.Image.Height
                 If RadioButtonFanart.Checked Then ' i.e. this is a fanart task rather than an extrathumb task
-                    PictureBox7.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
+                    PictureBoxFanArt.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
                     For Each paths In Preferences.offlinefolders
                         If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                             Dim mediapath As String
@@ -16898,7 +16909,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button62_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button62.Click
+    Private Sub ButtonSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSave.Click
         Try
             Call mov_SaveQuick()
         Catch ex As Exception
@@ -24304,7 +24315,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub PictureBox7_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox7.MouseUp, PictureBox7.Click
+    Private Sub PictureBoxFanArt_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBoxFanArt.MouseUp, PictureBoxFanArt.Click
         Try
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 RescrapePToolStripMenuItem.Visible = False
@@ -24529,7 +24540,7 @@ Public Class Form1
                             Dim bitmap3 As New Bitmap(backpath)
                             Dim bmp4 As New Bitmap(bitmap3)
                             bitmap3.Dispose()
-                            PictureBox7.Image = bmp4
+                            PictureBoxFanArt.Image = bmp4
                             PictureBox2.Image = bmp4
                         End If
                     Catch ex As Exception
@@ -25030,7 +25041,7 @@ Public Class Form1
                     'Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
                     If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
-                        util_ImageLoad(PictureBox7, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -28374,8 +28385,8 @@ End Sub
     End Sub
 
  
-    Private Sub PictureBox1_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles PictureBox1.DoubleClick
-        ZoomActorPictureBox( PictureBox1 )
+    Private Sub PictureBoxActor_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxActor.DoubleClick
+        ZoomActorPictureBox(PictureBoxActor)
     End Sub
 
     Private Sub PictureBox6_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles PictureBox6.DoubleClick
@@ -29170,4 +29181,7 @@ Private Sub TabLevel1_SelectedIndexChanged( sender As System.Object,  e As Syste
 
 End Sub
 
+    Private Sub PictureBoxFanArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
 End Class
