@@ -707,6 +707,10 @@ Public Class Form1
                 Preferences.locy = Me.Location.Y
                 'Preferences.SaveConfig()              'this is run when we close MC, no need to run it each time we resize MC
             End If
+
+            If MainFormLoadedStatus = True Then
+                PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -788,6 +792,8 @@ Public Class Form1
             End If
             mov_SplitContainerAutoPosition()
             tv_SplitContainerAutoPosition()
+
+            
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -2469,6 +2475,7 @@ Public Class Form1
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
                     Try
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        Rating1.PictureInit = PictureBoxFanArt.Image
                     Catch ex As Exception
 #If SilentErrorScream Then
                         Throw ex
@@ -6819,6 +6826,9 @@ Public Class Form1
                 If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
                     PictureBoxFanArt.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                     PictureBoxFanArt.Load()
+                    Rating1.PictureInit = PictureBoxFanArt.Image
+
+
 
                 Else
                     PictureBoxFanArt.Image = Nothing
@@ -10435,6 +10445,8 @@ Public Class Form1
                         ' PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         ' PictureBox7.Load()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        Rating1.PictureInit = PictureBoxFanArt.Image
+
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -10624,6 +10636,7 @@ Public Class Form1
                     'PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
                     'PictureBox2.Load()
                     util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                    Rating1.PictureInit = PictureBoxFanArt.Image
                     'PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                     'PictureBox7.Load()
                     mov_SplitContainerAutoPosition()
@@ -10826,6 +10839,7 @@ Public Class Form1
                 Label17.Text = PictureBox2.Image.Height
                 If RadioButtonFanart.Checked Then ' i.e. this is a fanart task rather than an extrathumb task
                     PictureBoxFanArt.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
+                    Rating1.PictureInit = PictureBoxFanArt.Image
                     For Each paths In Preferences.offlinefolders
                         If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                             Dim mediapath As String
@@ -24542,6 +24556,7 @@ Public Class Form1
                             bitmap3.Dispose()
                             PictureBoxFanArt.Image = bmp4
                             PictureBox2.Image = bmp4
+                            Rating1.PictureInit = bmp4
                         End If
                     Catch ex As Exception
 #If SilentErrorScream Then
@@ -25042,6 +25057,7 @@ Public Class Form1
                     If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        Rating1.PictureInit = PictureBoxFanArt.Image
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -29181,7 +29197,5 @@ Private Sub TabLevel1_SelectedIndexChanged( sender As System.Object,  e As Syste
 
 End Sub
 
-    Private Sub PictureBoxFanArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-    End Sub
 End Class

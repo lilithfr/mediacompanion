@@ -2,28 +2,38 @@
 
     Dim ValueRating As Single
     Dim PictureBoxWidth As Integer
+    Public PictureInit As Image
 
     Private Sub Rating_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'PictureInit = PictureBoxRating.Image
         PictureBoxWidth = PictureBoxRating.Width
     End Sub
 
-    Public Function BitmapRating(ByVal BitmapIN As Bitmap, ByVal PictureBoxWidth As Integer, ByVal PictureBoxHeight As Integer, ByVal Value As String) As Bitmap
+    Public Function BitmapRating(ByVal PictureBoxInit As Image, ByVal PictureBoxWidth As Integer, ByVal PictureBoxHeight As Integer, ByVal Value As String) As Bitmap
         Dim Ratingwidth As Integer
         Dim Graph As New Bitmap(120, 40)
         Dim Brush As New SolidBrush(Color.Black)
         Dim BrushCircle As New SolidBrush(Color.Chocolate)
         Dim pen As New System.Drawing.Pen(Color.DarkOrange, 30)
         Dim drawFont As New Font("Segoe UI", 13, FontStyle.Bold)
+        Dim Ratio As Single
+
+        'If IsNothing(PictureInit) = True Then
+        '    Return
+        'End If
 
         If Value = "" Then
-            Return BitmapIN
+            Return PictureInit
         End If
 
+        Ratio = PictureInit.Width / PictureInit.Height
+
         'Resize source Image
-        Dim bm_source As New Bitmap(BitmapIN)
+        Dim bm_source As New Bitmap(PictureInit)
         Dim bm_dest As New Bitmap(PictureBoxWidth, PictureBoxHeight)
         Dim gr_dest As Graphics = Graphics.FromImage(bm_dest)
-        gr_dest.DrawImage(bm_source, 0, 0, PictureBoxWidth, PictureBoxHeight)
+        'gr_dest.DrawImage(bm_source, 0, 0, PictureBoxWidth, PictureBoxHeight)
+        gr_dest.DrawImage(bm_source, 0, 0, PictureBoxWidth, PictureBoxWidth / Ratio)
 
         ValueRating = Convert.ToSingle(Value.Replace(".", ","))
 
