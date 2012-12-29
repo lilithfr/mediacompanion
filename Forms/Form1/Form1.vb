@@ -37,7 +37,15 @@ Public Class Form1
     Public nfoFunction As New WorkingWithNfoFiles
     Public mediaInfoExp As New MediaInfoExport
     Public fullMovieList As New List(Of str_ComboList)
+
+    'Replace the list of structure by a list of objects
     Public filteredList As New List(Of str_ComboList)
+
+    Public Data_GridViewMovie As Data_GridViewMovie
+    Public filteredListObj As New List(Of Data_GridViewMovie)
+    Public clsGridViewMovie As New clsGridViewMovie
+
+
     Public workingMovieDetails As FullMovieDetails
     Public homemovielist As New List(Of str_BasicHomeMovie)
     Public WorkingHomeMovie As New HomeMovieDetails
@@ -148,131 +156,6 @@ Public Class Form1
     Dim processnow As Boolean = True
     Dim currenttitle As String
     Public homemovietabindex As Integer = 0
-
-    Private Sub util_BatchUpdate()
-        messbox = New frmMessageBox("Please wait,", "", "refreshing Movie nfo files")
-        Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        messbox.Show()
-        Me.Refresh()
-        messbox.Refresh()
-        Dim tempint As Integer = fullMovieList.Count - 1
-        For i = 0 To tempint
-            Try
-                Dim updatedmovie As New FullMovieDetails
-                updatedmovie = nfoFunction.mov_NfoLoadFull(fullMovieList(i).fullpathandfilename)
-                If Not IsNothing(updatedmovie) Then
-                    nfoFunction.mov_NfoSave(fullMovieList(i).fullpathandfilename, updatedmovie, True)
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-        Next
-        messbox.Close()
-    End Sub
-
-#If Not Refocus Then
-    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
-        Try
-            If messbox.Visible = True Then
-                messbox.Activate()
-                messbox.BringToFront()
-                messbox.Focus()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-#End If
-
-
-
-    Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
-        Try
-            Me.Dispose()
-            Me.Finalize()
-            End
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
-        Try
-            Call mov_CacheSave()
-            If Tv_CacheSave() Then
-                e.Cancel = True
-                Exit Sub
-            End If
-            Call HomeMovieCacheSave()
-            'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
-
-            'Todo: Code a better way to serialize the data
-
-            'Me.LoadConfig()
-
-            Preferences.splt1 = SplitContainer1.SplitterDistance
-            Preferences.splt2 = SplitContainer2.SplitterDistance
-            Preferences.splt3 = SplitContainer3.SplitterDistance
-            Preferences.splt4 = SplitContainer4.SplitterDistance
-            Preferences.splt5 = SplitContainer5.SplitterDistance
-
-
-            If Me.WindowState = FormWindowState.Minimized Then
-                Me.WindowState = FormWindowState.Normal
-                Preferences.formwidth = Me.Width
-                Preferences.formheight = Me.Height
-                Preferences.locx = Me.Location.X
-                Preferences.locy = Me.Location.Y
-                Preferences.maximised = False
-            End If
-
-            If Me.WindowState = FormWindowState.Normal Then
-                Preferences.formwidth = Me.Width
-                Preferences.formheight = Me.Height
-                Preferences.locx = Me.Location.X
-                Preferences.locy = Me.Location.Y
-                Preferences.maximised = False
-            End If
-
-            If Me.WindowState = FormWindowState.Maximized Then
-                Me.WindowState = FormWindowState.Normal
-                Preferences.maximised = True
-            End If
-
-            If DataGridView1.Columns.Count > 0 Then
-                Preferences.tableview.Clear()
-                For Each column In DataGridView1.Columns
-                    Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
-                    Preferences.tableview.Add(tempstring)
-                Next
-            End If
-
-            Preferences.startuptab = TabLevel1.SelectedIndex
-
-            Preferences.SaveConfig()
-            Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Exception")
-            Environment.Exit(1)
-            'ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub Form1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.GotFocus
-        Try
-            If messbox.Visible = True Then
-                messbox.Activate()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
 
 
     'TODO: (Form1_Load) Need to refactor
@@ -687,6 +570,10 @@ Public Class Form1
 
             MainFormLoadedStatus = True
             PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+            clsGridViewMovie.GridviewMovieDesign()
+            TooltipGridViewMovies1.Initialisation()
+
+
 
             Common.Tasks.StartTaskEngine()
             ForegroundWorkTimer.Start()
@@ -695,6 +582,135 @@ Public Class Form1
         End Try
 
     End Sub
+
+
+    Private Sub util_BatchUpdate()
+
+
+        messbox = New frmMessageBox("Please wait,", "", "refreshing Movie nfo files")
+        Windows.Forms.Cursor.Current = Cursors.WaitCursor
+        messbox.Show()
+        Me.Refresh()
+        messbox.Refresh()
+        Dim tempint As Integer = fullMovieList.Count - 1
+        For i = 0 To tempint
+            Try
+                Dim updatedmovie As New FullMovieDetails
+                updatedmovie = nfoFunction.mov_NfoLoadFull(fullMovieList(i).fullpathandfilename)
+                If Not IsNothing(updatedmovie) Then
+                    nfoFunction.mov_NfoSave(fullMovieList(i).fullpathandfilename, updatedmovie, True)
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+        Next
+        messbox.Close()
+    End Sub
+
+#If Not Refocus Then
+    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
+        Try
+            If messbox.Visible = True Then
+                messbox.Activate()
+                messbox.BringToFront()
+                messbox.Focus()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+#End If
+
+
+
+    Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
+        Try
+            Me.Dispose()
+            Me.Finalize()
+            End
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+        Try
+            Call mov_CacheSave()
+            If Tv_CacheSave() Then
+                e.Cancel = True
+                Exit Sub
+            End If
+            Call HomeMovieCacheSave()
+            'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
+
+            'Todo: Code a better way to serialize the data
+
+            'Me.LoadConfig()
+
+            Preferences.splt1 = SplitContainer1.SplitterDistance
+            Preferences.splt2 = SplitContainer2.SplitterDistance
+            Preferences.splt3 = SplitContainer3.SplitterDistance
+            Preferences.splt4 = SplitContainer4.SplitterDistance
+            Preferences.splt5 = SplitContainer5.SplitterDistance
+
+
+            If Me.WindowState = FormWindowState.Minimized Then
+                Me.WindowState = FormWindowState.Normal
+                Preferences.formwidth = Me.Width
+                Preferences.formheight = Me.Height
+                Preferences.locx = Me.Location.X
+                Preferences.locy = Me.Location.Y
+                Preferences.maximised = False
+            End If
+
+            If Me.WindowState = FormWindowState.Normal Then
+                Preferences.formwidth = Me.Width
+                Preferences.formheight = Me.Height
+                Preferences.locx = Me.Location.X
+                Preferences.locy = Me.Location.Y
+                Preferences.maximised = False
+            End If
+
+            If Me.WindowState = FormWindowState.Maximized Then
+                Me.WindowState = FormWindowState.Normal
+                Preferences.maximised = True
+            End If
+
+            If DataGridView1.Columns.Count > 0 Then
+                Preferences.tableview.Clear()
+                For Each column In DataGridView1.Columns
+                    Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
+                    Preferences.tableview.Add(tempstring)
+                Next
+            End If
+
+            Preferences.startuptab = TabLevel1.SelectedIndex
+
+            Preferences.SaveConfig()
+            Dim errpath As String = IO.Path.Combine(applicationPath, "tvrefresh.log")
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Exception")
+            Environment.Exit(1)
+            'ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub Form1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.GotFocus
+        Try
+            If messbox.Visible = True Then
+                messbox.Activate()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
 
     Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
         Try
@@ -1109,17 +1125,43 @@ Public Class Form1
         End If
 
         filteredList.Clear()
+
+
+
         For Each movie In fullMovieList
             filteredList.Add(movie)
+
+            Data_GridViewMovie = New Data_GridViewMovie()
+            Data_GridViewMovie.fullpathandfilename = movie.fullpathandfilename
+            Data_GridViewMovie.movieset = movie.movieset
+            Data_GridViewMovie.filename = movie.filename
+            Data_GridViewMovie.foldername = movie.foldername
+            Data_GridViewMovie.title = movie.title
+            Data_GridViewMovie.originaltitle = movie.originaltitle
+            Data_GridViewMovie.titleandyear = movie.titleandyear
+            Data_GridViewMovie.year = movie.year
+            Data_GridViewMovie.filedate = movie.filedate
+            Data_GridViewMovie.id = movie.id
+            Data_GridViewMovie.rating = movie.rating
+            Data_GridViewMovie.top250 = movie.top250
+            Data_GridViewMovie.genre = movie.genre
+            Data_GridViewMovie.playcount = movie.playcount
+            Data_GridViewMovie.sortorder = movie.sortorder
+            Data_GridViewMovie.outline = movie.outline
+            Data_GridViewMovie.runtime = movie.runtime
+            Data_GridViewMovie.createdate = movie.createdate
+            Data_GridViewMovie.missingdata1 = movie.missingdata1
+            Data_GridViewMovie.plot = movie.plot
+            Data_GridViewMovie.source = movie.source
+            Data_GridViewMovie.votes = movie.votes
+            filteredListObj.Add(Data_GridViewMovie)
         Next
+        DataGridViewMovies.DataSource = filteredListObj
+
         Call mov_MovieComboListSort()
         Call mov_MovieComboLoad()
         Try
-            'ignore = False
-            MovieListComboBox.SelectedIndex = 0
-            If MovieListComboBox.SelectedItem.value <> "" Then
-                'loadinfofile()
-            End If
+            DataGridViewMovies.Rows(0).Selected = True
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -2335,8 +2377,6 @@ Public Class Form1
     End Sub
 
     Private Sub mov_FormPopulate()
-        'MsgBox("mov_FormPopulate()")
-
         Try
             If Not IsNothing(workingMovieDetails) Then
                 If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -2484,13 +2524,13 @@ Public Class Form1
                 End If
 
                 If Convert.ToInt32(workingMovieDetails.fullmoviebody.playcount) > 0 Then
-                    Button13.Text = "&Watched"
-                    Button13.BackColor = Color.LawnGreen
-                    Button13.Refresh()
+                    ButtonWatched.Text = "&Watched"
+                    ButtonWatched.BackColor = Color.LawnGreen
+                    ButtonWatched.Refresh()
                 Else
-                    Button13.Text = "Un&watched"
-                    Button13.BackColor = Color.Red
-                    Button13.Refresh()
+                    ButtonWatched.Text = "Un&watched"
+                    ButtonWatched.BackColor = Color.Red
+                    ButtonWatched.Refresh()
                 End If
 
                 actorcb.Items.Clear()
@@ -2623,20 +2663,20 @@ Public Class Form1
     End Sub
 
 
-	Private Sub HandleTrailerBtn( fmd As FullMovieDetails )
+    Private Sub HandleTrailerBtn(ByVal fmd As FullMovieDetails)
 
-		If IsNothing(fmd) then
-			Return
-		end if
+        If IsNothing(fmd) Then
+            Return
+        End If
 
-		DeleteZeroLengthFile(fmd.fileinfo.trailerpath)
-					 
-		Button3.Enabled = False
+        DeleteZeroLengthFile(fmd.fileinfo.trailerpath)
 
-      If IO.File.Exists(fmd.fileinfo.trailerpath) Then
-         Button3.Text    = "Play Trailer"
-			Button3.Enabled = true
-      Else
+        Button3.Enabled = False
+
+        If IO.File.Exists(fmd.fileinfo.trailerpath) Then
+            Button3.Text = "Play Trailer"
+            Button3.Enabled = True
+        Else
             If Not Utilities.UrlIsValid(fmd.fullmoviebody.trailer) Then
 
                 If fmd.fullmoviebody.trailer <> "" Then
@@ -2649,8 +2689,8 @@ Public Class Form1
                 Button3.Text = "Download Trailer"
                 Button3.Enabled = True
             End If
-      End If
-	End Sub
+        End If
+    End Sub
 
 
 
@@ -2979,7 +3019,7 @@ Public Class Form1
                     Next
                 Catch ex As Exception
 #If SilentErrorScream Then
-                    Throw ex
+    Throw ex
 #End If
                 End Try
             End If
@@ -3030,7 +3070,7 @@ Public Class Form1
                     End While
                 Catch ex As Exception
 #If SilentErrorScream Then
-                Throw ex
+                                Throw ex
 #End If
                 End Try
                 newMovieFoundTitle = newMovieList(f).title.ToString
@@ -3055,7 +3095,7 @@ Public Class Form1
                 End While
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                        Throw ex
 #End If
             End Try
             ToolStripProgressBar1.Visible = False
@@ -3514,7 +3554,7 @@ Public Class Form1
                                     Case "director"
                                         newmovie.fullmoviebody.director = thisresult.InnerText
                                     Case "stars"
-                                        newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                        newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew", "")
                                     Case "genre"
                                         Dim strarr() As String
                                         strarr = thisresult.InnerText.Split("/")
@@ -3937,8 +3977,8 @@ Public Class Form1
                             If Not IO.File.Exists(tempsb) Then
 
                                 newmovie.filedetails = Preferences.Get_HdTags(newMovieList(f).mediapathandfilename)
-                                
-                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and newmovie.fullmoviebody.runtime = "")) Then
+
+                                If newmovie.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") Or (Preferences.movieRuntimeFallbackToFile And newmovie.fullmoviebody.runtime = "")) Then
                                     Try
                                         progresstext &= " - HD tags"
                                         BckWrkScnMovies.ReportProgress(progress, progresstext)
@@ -4012,7 +4052,7 @@ Public Class Form1
                         movietoadd.originaltitle = newmovie.fullmoviebody.originaltitle
                         movietoadd.sortorder = newmovie.fullmoviebody.sortorder
                         movietoadd.runtime = newmovie.fullmoviebody.runtime
-                        movietoadd.votes=newmovie.fullmoviebody.votes
+                        movietoadd.votes = newmovie.fullmoviebody.votes
 
                         If newmovie.fullmoviebody.title <> Nothing Then
                             If newmovie.fullmoviebody.year <> Nothing Then
@@ -4374,12 +4414,12 @@ Public Class Form1
         scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
     End Sub
 
-	 Private Sub DownloadTrailer( trailerPath As String, trailerUrl As string )
+    Private Sub DownloadTrailer(ByVal trailerPath As String, ByVal trailerUrl As String)
 
-		'Check for and delete zero length trailer - created when Url is invalid
-		DeleteZeroLengthFile(trailerPath)
+        'Check for and delete zero length trailer - created when Url is invalid
+        DeleteZeroLengthFile(trailerPath)
 
-      If Not IO.File.Exists(trailerPath) Then
+        If Not IO.File.Exists(trailerPath) Then
 
             If Utilities.UrlIsValid(trailerUrl) Then
 
@@ -4395,19 +4435,19 @@ Public Class Form1
 #End If
                 End Try
             End If
-		End If
-	End Sub
+        End If
+    End Sub
 
 
-	Private sub DeleteZeroLengthFile( fileName )
+    Private Sub DeleteZeroLengthFile(ByVal fileName)
 
-		If IO.File.Exists(fileName) then
-			If (New IO.FileInfo(fileName)).Length = 0 then
-				IO.File.Delete(fileName)
-			End If
-		End If
+        If IO.File.Exists(fileName) Then
+            If (New IO.FileInfo(fileName)).Length = 0 Then
+                IO.File.Delete(fileName)
+            End If
+        End If
 
-	End sub
+    End Sub
 
     Private Sub ReloadMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadMovieCacheToolStripMenuItem.Click
         Call mov_CacheReload()
@@ -4486,11 +4526,7 @@ Public Class Form1
         Call mov_MovieComboListSort()
         Call mov_MovieComboLoad()
         Try
-            'ignore = False
-            MovieListComboBox.SelectedIndex = 0
-            If MovieListComboBox.SelectedItem.value <> "" Then
-                'loadinfofile()
-            End If
+            DataGridViewMovies.Rows(0).Selected = True
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -4557,9 +4593,9 @@ Public Class Form1
         frmSplash2.Label2.Text = "Reload Main Page..."
         Call mov_FormPopulate()
         Try
-            MovieListComboBox.SelectionMode = SelectionMode.One         'if we just select index 0 (the top one) & we already had selected another other than 0 before callingthis function then both will be selected
-            MovieListComboBox.SelectedIndex = 0
-            MovieListComboBox.SelectionMode = SelectionMode.MultiExtended
+            'MovieListComboBox.SelectionMode = SelectionMode.One         'if we just select index 0 (the top one) & we already had selected another other than 0 before callingthis function then both will be selected
+            DataGridViewMovies.Rows(0).Selected = True
+            'MovieListComboBox.SelectionMode = SelectionMode.MultiExtended
 
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -4673,7 +4709,7 @@ Public Class Form1
             ' message_box.Show("File Download Complete")
             trailerdownloadpanel.Visible = False
             lblProgress.Text = " Please Wait, attempting to connect....."
-				HandleTrailerBtn( workingMovieDetails )
+            HandleTrailerBtn(workingMovieDetails)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5046,7 +5082,6 @@ Public Class Form1
             'End If
 
 
-
             For f = 0 To tempint
                 dupes2 = False
                 offline = False
@@ -5233,9 +5268,9 @@ Public Class Form1
                                     If movie.fullpathandfilename = filteredList(g).fullpathandfilename Then exists = True
                                 Next
                                 If exists = True Then
-                                    If Not dupelist.contains(filteredList(f)) then 
+                                    If Not dupelist.contains(filteredList(f)) Then
                                         dupelist.Add(filteredList(f))
-                                    End if
+                                    End If
                                 End If
                             End If
                         End If
@@ -5254,21 +5289,30 @@ Public Class Form1
 
     'create list to browse
     Private Sub mov_MovieComboLoad()
-        Dim tempint As Integer = MovieListComboBox.SelectedIndex
+        '#Replaced by datagrid     
+        'Dim tempint As Integer = MovieListComboBox.SelectedIndex
+        Dim tempint As Integer = 0
+
         Dim oldmovie As String = ""
-        Try
-            If (MovieListComboBox.SelectedItem IsNot Nothing) Then
-                oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
-            End If
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-        MovieListComboBox.Items.Clear()
+        '#Replaced by datagrid     
+        '
+        '        Try
+        '            If (MovieListComboBox.SelectedItem IsNot Nothing) Then
+        '                oldmovie = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
+        '            End If
+        '        Catch ex As Exception
+        '#If SilentErrorScream Then
+        '            Throw ex
+        '#End If
+        '        End Try
+        '        MovieListComboBox.Items.Clear()
+
+
+
+
 
         For Each movie In filteredList
-            If cbSort.Text <> "Votes" and cbSort.SelectedIndex <> 3 And cbSort.SelectedIndex <> 4 And cbSort.SelectedIndex <> 1 And cbSort.SelectedIndex <> 6 And cbSort.SelectedIndex <> 2 Then
+            If cbSort.Text <> "Votes" And cbSort.SelectedIndex <> 3 And cbSort.SelectedIndex <> 4 And cbSort.SelectedIndex <> 1 And cbSort.SelectedIndex <> 6 And cbSort.SelectedIndex <> 2 Then
                 If RadioButton1.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, movie.titleandyear))
                 ElseIf RadioButton2.Checked = True Then
@@ -5401,7 +5445,7 @@ Public Class Form1
             ElseIf cbSort.Text = "Votes" Then
 
                 Dim tempstring As String = GetVotes(movie.votes) & " - "
-               
+
 
                 If RadioButton1.Checked = True Then
                     MovieListComboBox.Items.Add(New ValueDescriptionPair(movie.fullpathandfilename, tempstring & movie.title))
@@ -6110,7 +6154,7 @@ Public Class Form1
                 messbox.TextBox1.Text = "Get IMDB Body"
                 body = scraper.getimdbbody(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year, workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
 
-                
+
                 'Dim actors As String
                 messbox.TextBox1.Text = "Get Actors"
                 'actors = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title)
@@ -6150,7 +6194,7 @@ Public Class Form1
                             Case "director"
                                 workingMovieDetails.fullmoviebody.director = thisresult.InnerText
                             Case "stars"
-                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                workingMovieDetails.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew", "")
                             Case "genre"
                                 Dim strarr() As String
                                 strarr = thisresult.InnerText.Split("/")
@@ -6218,21 +6262,21 @@ Public Class Form1
                             messbox.TextBox1.Text = "Get Trailer"
                             trailer = ""
 
-                            If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" then
-                                trailer = MC_Scraper_Get_HD_Trailer_URL( Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title )
+                            If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
+                                trailer = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, workingMovieDetails.fullmoviebody.title)
                             End If
 
-                            If trailer = "" then
+                            If trailer = "" Then
                                 trailer = scraper.gettrailerurl(workingMovieDetails.fullmoviebody.imdbid, Preferences.imdbmirror)
-                            End if
+                            End If
 
 
                             If trailer <> String.Empty And trailer <> "Error" Then
-                               workingMovieDetails.fullmoviebody.trailer = trailer
+                                workingMovieDetails.fullmoviebody.trailer = trailer
 
-										 If Preferences.DownloadTrailerDuringScrape then
-											DownloadTrailer( workingMovieDetails.fileinfo.trailerpath, trailer )
-										 End If
+                                If Preferences.DownloadTrailerDuringScrape Then
+                                    DownloadTrailer(workingMovieDetails.fileinfo.trailerpath, trailer)
+                                End If
                             End If
                         End If
                     Catch ex As Exception
@@ -6335,7 +6379,7 @@ Public Class Form1
                                             Case "role"
                                                 newactor.actorrole = detail.InnerText
                                             Case "thumb"
-    
+
                                                 newactor.actorthumb = GetActorThumb(detail.InnerText)
                                             Case "actorid"
                                                 If newactor.actorthumb <> Nothing Then
@@ -6407,7 +6451,7 @@ Public Class Form1
                     If tempname <> Nothing Then workingMovieDetails.filedetails = Preferences.Get_HdTags(tempname)
                     messbox.TextBox1.Text = "Video Duration"
 
-                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and workingMovieDetails.fullmoviebody.runtime = nothing)) Then
+                    If workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value <> Nothing And ((Preferences.movieRuntimeDisplay = "file") Or (Preferences.movieRuntimeFallbackToFile And workingMovieDetails.fullmoviebody.runtime = Nothing)) Then
                         workingMovieDetails.fullmoviebody.runtime = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
                     End If
                 Catch ex As Exception
@@ -6524,7 +6568,7 @@ Public Class Form1
             workingMovieDetails.fullmoviebody.outline = outlinetxt.Text
             workingMovieDetails.fullmoviebody.plot = plottxt.Text
             workingMovieDetails.fullmoviebody.tagline = taglinetxt.Text
-            workingMovieDetails.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew","")
+            workingMovieDetails.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
             workingMovieDetails.fullmoviebody.mpaa = certtxt.Text
             workingMovieDetails.fullmoviebody.sortorder = TextBox34.Text
             If setsTxt.Text = "" Then setsTxt.Text = "-None-"
@@ -6648,7 +6692,7 @@ Public Class Form1
                     movie.fullmoviebody.tagline = taglinetxt.Text
                 End If
                 If txtStars.Text <> "" Then
-                    movie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew","")
+                    movie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
                 End If
                 If ratingtxt.Text <> "" Then
                     movie.fullmoviebody.rating = ratingtxt.Text
@@ -6722,18 +6766,18 @@ Public Class Form1
     End Sub
 
     'change watched status
-    Private Sub Button13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button13.Click
+    Private Sub ButtonWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonWatched.Click
         Try
             If MovieListComboBox.SelectedItems.Count = 1 Then
-                If Button13.Text = "&Watched" Then
-                    Button13.Text = "Un&watched"
-                    Button13.BackColor = Color.Red
-                    Button13.Refresh()
+                If ButtonWatched.Text = "&Watched" Then
+                    ButtonWatched.Text = "Un&watched"
+                    ButtonWatched.BackColor = Color.Red
+                    ButtonWatched.Refresh()
                     workingMovieDetails.fullmoviebody.playcount = "0"
                 Else
-                    Button13.Text = "&Watched"
-                    Button13.BackColor = Color.LawnGreen
-                    Button13.Refresh()
+                    ButtonWatched.Text = "&Watched"
+                    ButtonWatched.BackColor = Color.LawnGreen
+                    ButtonWatched.Refresh()
                     workingMovieDetails.fullmoviebody.playcount = "1"
                 End If
                 Call mov_SaveQuick()
@@ -6742,20 +6786,20 @@ Public Class Form1
                 mess.Show()
                 mess.Refresh()
                 Dim watched As String = ""
-                If Button13.Text = "&Watched" Then
-                    Button13.Text = "Un&watched"
-                    Button13.BackColor = Color.Red
-                    Button13.Refresh()
+                If ButtonWatched.Text = "&Watched" Then
+                    ButtonWatched.Text = "Un&watched"
+                    ButtonWatched.BackColor = Color.Red
+                    ButtonWatched.Refresh()
                     watched = "0"
-                ElseIf Button13.Text = "Un&watched" Then
-                    Button13.Text = "&Watched"
-                    Button13.BackColor = Color.LawnGreen
-                    Button13.Refresh()
+                ElseIf ButtonWatched.Text = "Un&watched" Then
+                    ButtonWatched.Text = "&Watched"
+                    ButtonWatched.BackColor = Color.LawnGreen
+                    ButtonWatched.Refresh()
                     watched = "1"
-                ElseIf Button13.Text = "" Then
-                    Button13.Text = "&Watched"
-                    Button13.BackColor = Color.LawnGreen
-                    Button13.Refresh()
+                ElseIf ButtonWatched.Text = "" Then
+                    ButtonWatched.Text = "&Watched"
+                    ButtonWatched.BackColor = Color.LawnGreen
+                    ButtonWatched.Refresh()
                     watched = "1"
                 End If
                 For Each item In MovieListComboBox.SelectedItems
@@ -6914,6 +6958,7 @@ Public Class Form1
                 newfullmovie2.year = workingMovieDetails.fullmoviebody.year
 
                 filteredList.Add(newfullmovie2)
+
                 Exit For
             End If
         Next
@@ -6943,7 +6988,7 @@ Public Class Form1
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
 
-		DeleteZeroLengthFile(workingMovieDetails.fileinfo.trailerpath)
+        DeleteZeroLengthFile(workingMovieDetails.fileinfo.trailerpath)
 
         If Not Utilities.UrlIsValid(workingMovieDetails.fullmoviebody.trailer) Then
 
@@ -6974,24 +7019,24 @@ Public Class Form1
 
         Try
             Try
-               If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
+                If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
 
-						DownloadTrailer( workingMovieDetails.fileinfo.trailerpath, workingMovieDetails.fullmoviebody.trailer )
+                    DownloadTrailer(workingMovieDetails.fileinfo.trailerpath, workingMovieDetails.fullmoviebody.trailer)
 
-'                   If workingMovieDetails.fullmoviebody.trailer <> "" Then
-'                        Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
-'                        Dim wc As New Net.WebClient()
-'
-'                        Try
-'                            trailerdownloadpanel.Visible = True
-'                            FileToBeDownloaded = New WebFileDownloader
-'                            FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
-'                        Catch ex As Exception
-'#If SilentErrorScream Then
-'                            Throw ex
-'#End If
-'                        End Try
-'                    End If
+                    '                   If workingMovieDetails.fullmoviebody.trailer <> "" Then
+                    '                        Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
+                    '                        Dim wc As New Net.WebClient()
+                    '
+                    '                        Try
+                    '                            trailerdownloadpanel.Visible = True
+                    '                            FileToBeDownloaded = New WebFileDownloader
+                    '                            FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
+                    '                        Catch ex As Exception
+                    '#If SilentErrorScream Then
+                    '                            Throw ex
+                    '#End If
+                    '                        End Try
+                    '                    End If
 
                 Else
                     Try
@@ -7331,7 +7376,7 @@ Public Class Form1
                                             Case "director"
                                                 movietemplate.fullmoviebody.director = thisresult.InnerText
                                             Case "stars"
-                                                movietemplate.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                                movietemplate.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew", "")
                                             Case "country"
                                                 movietemplate.fullmoviebody.country = thisresult.InnerText
                                             Case "genre"
@@ -7515,12 +7560,12 @@ Public Class Form1
                                 If trailer <> String.Empty And trailer <> "Error" Then
                                     movietemplate.fullmoviebody.trailer = trailer
 
-											   If Preferences.DownloadTrailerDuringScrape then
-												   DownloadTrailer( GetTrailerPath(movietoalter.fileinfo.fullpathandfilename), trailer )
-											   End If
+                                    If Preferences.DownloadTrailerDuringScrape Then
+                                        DownloadTrailer(GetTrailerPath(movietoalter.fileinfo.fullpathandfilename), trailer)
+                                    End If
 
-											Else
-												movietoalter.fullmoviebody.trailer = ""
+                                Else
+                                    movietoalter.fullmoviebody.trailer = ""
                                 End If
                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -7631,7 +7676,7 @@ Public Class Form1
 
 
 
-                        If mediatags = True Or (batchList.runtime = True And Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and movietemplate.fullmoviebody.runtime = Nothing) Then
+                        If mediatags = True Or (batchList.runtime = True And Preferences.movieRuntimeDisplay = "file") Or (Preferences.movieRuntimeFallbackToFile And movietemplate.fullmoviebody.runtime = Nothing) Then
                             Try
                                 Dim mediapath As String = Utilities.GetFileName(movietoalter.fileinfo.fullpathandfilename)
                                 Dim tempFileDetails As FullFileDetails = Preferences.Get_HdTags(mediapath)
@@ -7675,7 +7720,7 @@ Public Class Form1
                         If batchList.stars = True Then
                             If movietemplate.fullmoviebody.stars <> Nothing Then
                                 If movietemplate.fullmoviebody.stars <> "" Then
-                                    movietoalter.fullmoviebody.stars = movietemplate.fullmoviebody.stars.ToString.Replace(", See full cast and crew","")
+                                    movietoalter.fullmoviebody.stars = movietemplate.fullmoviebody.stars.ToString.Replace(", See full cast and crew", "")
                                 End If
                             End If
                         End If
@@ -8103,7 +8148,7 @@ Public Class Form1
                 Throw ex
 #End If
                 End Try
-					 If bckrescrapewizard.CancellationPending Then Exit For
+                If bckrescrapewizard.CancellationPending Then Exit For
             Next
             Call mov_FilteredToFullMovieList()
             Call mov_MovieComboListSort()
@@ -8114,9 +8159,9 @@ Public Class Form1
 
     End Sub
 
-	 Private Function GetTrailerPath( s As String )
-		return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
-	End Function
+    Private Function GetTrailerPath(ByVal s As String)
+        Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+    End Function
 
 
     Private Sub mov_FilteredToFullMovieList()
@@ -8476,7 +8521,7 @@ Public Class Form1
                                                     If newmovie.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
                                                         newmovie.fullmoviebody.title = newmovie.fullmoviebody.title.Substring(4, newmovie.fullmoviebody.title.Length - 4) & " , The"
                                                     End If
-																	 
+
 
                                                 Catch ex As Exception
 #If SilentErrorScream Then
@@ -8488,7 +8533,7 @@ Public Class Form1
                                             Case "director"
                                                 newmovie.fullmoviebody.director = thisresult.InnerText
                                             Case "stars"
-                                                newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew","")
+                                                newmovie.fullmoviebody.stars = thisresult.InnerText.ToString.Replace(", See full cast and crew", "")
                                             Case "genre"
                                                 newmovie.fullmoviebody.genre = thisresult.InnerText
                                             Case "mpaa"
@@ -8617,10 +8662,10 @@ Public Class Form1
                                     newmovie.listactors.Clear()
                                 End Try
 
-										  Dim trailer As String = ""
+                                Dim trailer As String = ""
 
                                 Try
-                                    
+
                                     progresstext = "Adding Dropped file(s), " & droppedItems.Count.ToString & " items remaining"
                                     bckgrounddroppedfiles.ReportProgress(999999, progresstext)
                                     If Preferences.gettrailer = True Then
@@ -8796,9 +8841,9 @@ Public Class Form1
                                 nfoFunction.mov_NfoSave(newdetails.nfopathandfilename, newmovie, True)
 
 
-											If Preferences.DownloadTrailerDuringScrape then
-												DownloadTrailer( GetTrailerPath(newdetails.nfopathandfilename) , trailer )
-											End If
+                                If Preferences.DownloadTrailerDuringScrape Then
+                                    DownloadTrailer(GetTrailerPath(newdetails.nfopathandfilename), trailer)
+                                End If
 
 
                                 If bckgrounddroppedfiles.CancellationPending Then Exit Sub
@@ -9147,10 +9192,10 @@ Public Class Form1
         End Try
 
     End Sub
-    Private Sub mov_Play(type As String)
-        If MovieListComboBox.SelectedItems.Count = 0 Then Return
+    Private Sub mov_Play(ByVal type As String)
+        If DataGridViewMovies.SelectedRows.Count = 1 Then Return
         Dim tempstring As String
-        tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
+        tempstring = DataGridViewMovies.SelectedCells(0).Value.ToString
         Dim playlist As New List(Of String)
         Select Case type
             Case "Movie"
@@ -9177,9 +9222,7 @@ Public Class Form1
             Exit Sub
         End If
 
-
         tempstring = applicationPath & "\settings\temp.m3u"
-
 
         Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
 
@@ -9206,7 +9249,8 @@ Public Class Form1
 
         frmSplash2.Hide()
     End Sub
-    Private Sub MovieListComboBox_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.DoubleClick
+
+    Private Sub DataGridViewMovies_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.DoubleClick
         Try
             mov_Play("Movie")
         Catch ex As Exception
@@ -9214,7 +9258,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub MovieListComboBox_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragDrop
+    Private Sub DataGridViewMovies_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragDrop
         Try
             Dim files() As String
             files = e.Data.GetData(DataFormats.FileDrop)
@@ -9293,7 +9337,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub MovieListComboBox_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles MovieListComboBox.DragEnter
+    Private Sub DataGridViewMovies_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragEnter
         Try
             e.Effect = DragDropEffects.Copy
         Catch ex As Exception
@@ -9309,88 +9353,9 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub MovieListComboBox_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseMove
-        Try
-            ToolTip1.IsBalloon = False
-            'Dim tootip5 As New ToolTip
-            'tootip4.Active = False
-            'tootip4.Active = True
-            'tootip5.SetToolTip(Me.ComboBox1, "")
-            Dim MousePositionInClientCoords As Point = New Point(e.X, e.Y)
-            Dim indexunderthemouse As Integer = Me.MovieListComboBox.IndexFromPoint(MousePositionInClientCoords)
-            If indexunderthemouse > -1 Then
-                Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
-                Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).Value
-                If overItem <> tempstring Then
-                    overItem = tempstring
-                    For Each movie In fullMovieList
-                        If movie.fullpathandfilename = tempstring Then
-                            s = s & movie.title & " (" & movie.year & ")" & vbCrLf & "IMDB# " & movie.id & vbCrLf & vbCrLf
-                            Dim tempstring2 As String
-                            Try
-                                tempstring2 = movie.runtime.Substring(0, movie.runtime.IndexOf("min") + 3)
-                            Catch
-                                tempstring2 = movie.runtime
-                            End Try
-                            s = s & "Rating: " & movie.rating & "     Runtime: " & tempstring2 & vbCrLf & vbCrLf
-                            Dim newoutline As List(Of String) = util_TextWrap(movie.outline, 50)
-                            For Each line In newoutline
-                                s = s & line & vbCrLf
-                            Next
-                            Exit For
-                        End If
-                    Next
-
-                    With tootip5
-                        .AutomaticDelay = 1000
-                        .AutoPopDelay = 3000
-                    End With
-                    tootip5.SetToolTip(Me.MovieListComboBox, s)
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+   
 
 
-    End Sub
-
-    Private Sub MovieListComboBox_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MovieListComboBox.MouseUp
-        Try
-            Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
-            If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
-                Dim newSelection As Boolean = True
-                'If more than one movie is selected, check if right-click is on the selection.
-                If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
-                    newSelection = False
-                End If
-                'Otherwise, bring up the context menu for a single movie
-
-
-                If newSelection Then
-                    MovieListComboBox.SelectedItems.Clear()
-                    MovieListComboBox.SelectedIndex = ptIndex
-                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
-                    mov_ToolStripMovieName.BackColor = Color.Honeydew
-                    mov_ToolStripMovieName.Text = "'" & MovieListComboBox.Text & "'"
-                    mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                    If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
-                        mov_ToolStripPlayTrailer.Visible = True 'if an actual trailer video exists, then show the 'Play Trailer' context menu item.
-                    Else
-                        mov_ToolStripPlayTrailer.Visible = False 'else hide it
-                    End If
-
-                Else
-                    mov_ToolStripMovieName.BackColor = Color.Orange
-                    mov_ToolStripMovieName.Text = "Multisave Mode"
-                    mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                    mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
     Private Sub ComboBox11_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox11.SelectedValueChanged
         Try
@@ -9400,18 +9365,19 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub MovieListComboBox_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MovieListComboBox.SelectedValueChanged
-
-        If MovieListComboBox.SelectedItems.Count = 0 Then Exit Sub 'this sub is called when we clear the selection, in that case we don't want to do anything
+    Private Sub DataGridViewMovies_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewMovies.CellClick
+        If DataGridViewMovies.SelectedRows.Count = 0 Then Exit Sub
 
         'Try
         Dim myBool As Boolean = True
-        If MovieListComboBox.SelectedItems.Count > 1 Then
+        Dim needtoload As Boolean = False
+        Dim done As Boolean = False
+
+        If DataGridViewMovies.SelectedRows.Count > 1 Then
             myBool = False
         End If
 
         mov_ToolStripPlayMovie.Visible = myBool
-
         mov_ToolStripOpenFolder.Visible = myBool
         mov_ToolStripViewNfo.Visible = myBool
         ToolStripSeparator17.Visible = myBool
@@ -9422,13 +9388,9 @@ Public Class Form1
         mov_ToolStripEditMovieAlt.Visible = myBool
         mov_ToolStripReloadFromCache.Visible = myBool
 
-
-
-
-
         ' Try
-        Dim needtoload As Boolean = False
-        If MovieListComboBox.SelectedItems.Count = 1 Then
+
+        If DataGridViewMovies.SelectedRows.Count = 1 Then
             If titletxt.Visible = False Then
                 needtoload = True
             End If
@@ -9438,32 +9400,29 @@ Public Class Form1
             Label128.Visible = False
             Label75.Visible = True
             TextBox34.Visible = True
-            Dim done As Boolean = False
-            For Each movie In filteredList
-                If movie.fullpathandfilename Is CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value Then
-                    If IO.File.Exists(movie.fullpathandfilename) Then
 
-                        If System.IO.File.Exists(Utilities.GetTrailerName(movie.fullpathandfilename)) And myBool Then
+            For Each Me.Data_GridViewMovie In filteredListObj
+                If Data_GridViewMovie.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then
+                    If IO.File.Exists(Data_GridViewMovie.fullpathandfilename) Then
+                        If System.IO.File.Exists(Utilities.GetTrailerName(Data_GridViewMovie.fullpathandfilename)) And myBool Then
                             mov_ToolStripPlayTrailer.Visible = True
                         Else
                             mov_ToolStripPlayTrailer.Visible = False
                         End If
 
-
-
-                        If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
-                            workingMovie.filedate = movie.filedate
-                            workingMovie.filename = movie.foldername
-                            workingMovie.foldername = movie.foldername
-                            workingMovie.fullpathandfilename = movie.fullpathandfilename
-                            workingMovie.genre = movie.genre
-                            workingMovie.id = movie.id
-                            workingMovie.playcount = movie.playcount
-                            workingMovie.rating = movie.rating
-                            workingMovie.title = movie.title
-                            workingMovie.titleandyear = movie.titleandyear
-                            workingMovie.top250 = movie.top250
-                            workingMovie.year = movie.year
+                        If workingMovie.fullpathandfilename <> Data_GridViewMovie.fullpathandfilename Then
+                            workingMovie.filedate = Data_GridViewMovie.filedate
+                            workingMovie.filename = Data_GridViewMovie.foldername
+                            workingMovie.foldername = Data_GridViewMovie.foldername
+                            workingMovie.fullpathandfilename = Data_GridViewMovie.fullpathandfilename
+                            workingMovie.genre = Data_GridViewMovie.genre
+                            workingMovie.id = Data_GridViewMovie.id
+                            workingMovie.playcount = Data_GridViewMovie.playcount
+                            workingMovie.rating = Data_GridViewMovie.rating
+                            workingMovie.title = Data_GridViewMovie.title
+                            workingMovie.titleandyear = Data_GridViewMovie.titleandyear
+                            workingMovie.top250 = Data_GridViewMovie.top250
+                            workingMovie.year = Data_GridViewMovie.year
                             Call mov_FormPopulate()
                         Else
                             If needtoload = True Then Call mov_FormPopulate()
@@ -9508,7 +9467,7 @@ Public Class Form1
                     End If
                 End If
             Next
-        ElseIf MovieListComboBox.SelectedItems.Count = 0 Then
+        ElseIf DataGridViewMovies.SelectedRows.Count = 0 Then
             setsTxt.Text = ""
             titletxt.Text = ""
             TextBox3.Text = ""
@@ -9561,10 +9520,11 @@ Public Class Form1
             'ComboBox3.SelectedIndex = -1
             Dim add As Boolean = True
             Dim watched As String = ""
-            For Each mov In MovieListComboBox.SelectedItems
+            For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
                 Dim old As String = watched
                 For Each item In fullMovieList
-                    If item.fullpathandfilename = mov.value Then
+                    If item.fullpathandfilename = sRow.Cells(0).Value.ToString Then
+
                         If watched = "" Then
                             watched = item.playcount
                             old = watched
@@ -9579,17 +9539,17 @@ Public Class Form1
                 Next
             Next
             If add = False Then
-                Button13.Text = ""
-                Button13.BackColor = Color.Gray
+                ButtonWatched.Text = ""
+                ButtonWatched.BackColor = Color.Gray
             Else
                 If watched = "1" Then
-                    Button13.Text = "&Watched"
-                    Button13.BackColor = Color.LawnGreen
-                    Button13.Refresh()
+                    ButtonWatched.Text = "&Watched"
+                    ButtonWatched.BackColor = Color.LawnGreen
+                    ButtonWatched.Refresh()
                 Else
-                    Button13.Text = "Un&watched"
-                    Button13.BackColor = Color.Red
-                    Button13.Refresh()
+                    ButtonWatched.Text = "Un&watched"
+                    ButtonWatched.BackColor = Color.Red
+                    ButtonWatched.Refresh()
                 End If
             End If
         End If
@@ -9602,8 +9562,9 @@ Public Class Form1
         '       Catch ex As Exception
         '      ExceptionHandler.LogError(ex)
         '       End Try
-
     End Sub
+
+
 
     Private Sub TextBox1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox1.KeyUp
         Try
@@ -26297,13 +26258,16 @@ Public Class Form1
         Try
             listoffilestomove.Clear()
 
-            If MovieListComboBox.SelectedItems.Count > 0 Then
+            If DataGridViewMovies.SelectedRows.Count > 0 Then
 
-                For Each movie In MovieListComboBox.SelectedItems
-                    Dim tempstring As String
-                    tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
+                'For Each movie In MovieListComboBox.SelectedItems
+                For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    'Dim tempstring As String = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
                     Dim playlist As New List(Of String)
-                    tempstring = Utilities.GetFileName(tempstring)
+                    'tempstring = Utilities.GetFileName(tempstring)
+
+                    Dim tempstring As String = Utilities.GetFileName(DataGridViewMovies.SelectedCells(0).Value.ToString)
+
                     playlist = Utilities.GetMediaList(tempstring)
                     If playlist.Count > 0 Then
                         For Each File In playlist
@@ -26311,22 +26275,25 @@ Public Class Form1
                                 listoffilestomove.Add(File)
                             End If
                         Next
-                        listoffilestomove.Add(movie.value)
-                        If IO.File.Exists(Preferences.GetFanartPath(movie.value)) Then
-                            listoffilestomove.Add(Preferences.GetFanartPath(movie.value))
+
+                        Dim fullpathandfilename As String = filteredListObj.Item(sRow.Index).fullpathandfilename
+
+                        listoffilestomove.Add(fullpathandfilename)
+                        If IO.File.Exists(Preferences.GetFanartPath(fullpathandfilename)) Then
+                            listoffilestomove.Add(Preferences.GetFanartPath(fullpathandfilename))
                         End If
-                        If IO.File.Exists(Preferences.GetPosterPath(movie.value)) Then
-                            listoffilestomove.Add(Preferences.GetPosterPath(movie.value))
+                        If IO.File.Exists(Preferences.GetPosterPath(fullpathandfilename)) Then
+                            listoffilestomove.Add(Preferences.GetPosterPath(fullpathandfilename))
                         End If
-                        Dim di As DirectoryInfo = New DirectoryInfo(movie.value.Replace(IO.Path.GetFileName(movie.value), ""))
-                        Dim filenama As String = IO.Path.GetFileNameWithoutExtension(movie.value)
+                        Dim di As DirectoryInfo = New DirectoryInfo(fullpathandfilename.Replace(IO.Path.GetFileName(fullpathandfilename), ""))
+                        Dim filenama As String = IO.Path.GetFileNameWithoutExtension(fullpathandfilename)
                         Dim fils As IO.FileInfo() = di.GetFiles(filenama & ".*")
                         For Each fiNext In fils
                             If Not listoffilestomove.Contains(fiNext.FullName) Then
                                 listoffilestomove.Add(fiNext.FullName)
                             End If
                         Next
-                        Dim trailerpath As String = movie.value.Replace(IO.Path.GetExtension(movie.value), "-trailer.flv")
+                        Dim trailerpath As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-trailer.flv")
                         Dim filenama2 As String = IO.Path.GetFileNameWithoutExtension(trailerpath)
                         Dim fils2 As IO.FileInfo() = di.GetFiles(filenama2 & ".*")
                         For Each fiNext In fils2
@@ -29198,4 +29165,108 @@ Private Sub TabLevel1_SelectedIndexChanged( sender As System.Object,  e As Syste
 End Sub
 
 
+    Private Sub PictureBoxFanArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
+        Try
+            ToolTip1.IsBalloon = False
+            Dim hit As DataGridView.HitTestInfo = DataGridViewMovies.HitTest(e.X, e.Y)
+
+
+            Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
+            Dim objHitTestInfo As DataGridView.HitTestInfo
+            objHitTestInfo = DataGridViewMovies.HitTest(objMousePosition.X, objMousePosition.Y)
+            Dim indexunderthemouse As Integer = objHitTestInfo.RowIndex
+
+            If indexunderthemouse > -1 Then
+                Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
+                'Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).Value
+                Dim tempstring As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(0).Value.ToString
+                If overItem <> tempstring Then
+                    overItem = tempstring
+                    For Each movie In fullMovieList
+                        If movie.fullpathandfilename = tempstring Then
+                            s = s & movie.title & " (" & movie.year & ")" & vbCrLf & "IMDB# " & movie.id & vbCrLf & vbCrLf
+                            Dim tempstring2 As String
+                            Try
+                                tempstring2 = movie.runtime.Substring(0, movie.runtime.IndexOf("min") + 3)
+                            Catch
+                                tempstring2 = movie.runtime
+                            End Try
+                            s = s & "Rating: " & movie.rating & "     Runtime: " & tempstring2 & vbCrLf & vbCrLf
+                            Dim newoutline As List(Of String) = util_TextWrap(movie.outline, 50)
+                            For Each line In newoutline
+                                s = s & line & vbCrLf
+                            Next
+                            Exit For
+                        End If
+                    Next
+
+                    With tootip5
+                        .AutomaticDelay = 1000
+                        .AutoPopDelay = 3000
+                    End With
+                    'tootip5.SetToolTip(Me.MovieListComboBox, s)
+
+                    TooltipGridViewMovies1.Visible = True
+                    TooltipGridViewMovies1.Top = objHitTestInfo.RowY - (TooltipGridViewMovies1.Top / 2)
+                    'TooltipGridViewMovies1.Left = e.X - 120
+                    TooltipGridViewMovies1.Left = 25
+                    If objHitTestInfo.RowY > -1 Then
+                        TooltipGridViewMovies1.TextBoxMovie.Text = s 'DataGridViewMovies.Rows(objHitTestInfo.RowIndex).Cells(4).Value.ToString
+                    End If
+
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseLeave
+        TooltipGridViewMovies1.Visible = False
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
+        'Try
+        Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
+        If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
+            Dim newSelection As Boolean = True
+            'If more than one movie is selected, check if right-click is on the selection.
+            If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
+                newSelection = False
+            End If
+            'Otherwise, bring up the context menu for a single movie
+
+
+            If newSelection Then
+                MovieListComboBox.SelectedItems.Clear()
+                MovieListComboBox.SelectedIndex = ptIndex
+                'update context menu with movie name & also if we show the 'Play Trailer' menu item
+                mov_ToolStripMovieName.BackColor = Color.Honeydew
+                mov_ToolStripMovieName.Text = "'" & MovieListComboBox.Text & "'"
+                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
+                    mov_ToolStripPlayTrailer.Visible = True 'if an actual trailer video exists, then show the 'Play Trailer' context menu item.
+                Else
+                    mov_ToolStripPlayTrailer.Visible = False 'else hide it
+                End If
+
+            Else
+                mov_ToolStripMovieName.BackColor = Color.Orange
+                mov_ToolStripMovieName.Text = "Multisave Mode"
+                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
+            End If
+        End If
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
+    End Sub
+
+    Private Sub DataGridViewMovies_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseEnter
+        DataGridViewMovies.Focus()
+    End Sub
 End Class

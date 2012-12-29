@@ -189,13 +189,13 @@ Partial Class frmTvFanart
         Me.Label5.Size = New System.Drawing.Size(419, 13)
         Me.Label5.TabIndex = 153
         Me.Label5.Text = "Once you have selected a poster then use the button below to save your fanart cho" & _
-    "ice." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+            "ice." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Location = New System.Drawing.Point(6, 256)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(248, 233)
@@ -301,6 +301,7 @@ Partial Class frmTvFanart
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(795, 524)
         Me.Name = "frmTvFanart"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "tvfanart"
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()

@@ -127,6 +127,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basics\TaskingSupport.vb" />
+    <Compile Include="Classes\MainForm\clsGridViewMovie.vb" />
+    <Compile Include="Classes\MainForm\Data_GridViewMovie.vb" />
     <Compile Include="Classes\ExceptionHandler.vb" />
     <Compile Include="Classes\HomeMovieDetails.vb" />
     <Compile Include="Classes\HomeMovies.vb" />
@@ -316,6 +318,12 @@
     <Compile Include="UserControls\Rating.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\TooltipGridViewMovies.Designer.vb">
+      <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TooltipGridViewMovies.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBigTvEpisodeText.resx">
@@ -398,6 +406,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Rating.resx">
       <DependentUpon>Rating.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TooltipGridViewMovies.resx">
+      <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -701,6 +712,8 @@
     <Content Include="html_templates\tv_missing_episode_list.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\1356729777_video.png" />
+    <None Include="Resources\1356729911_page_white_text.png" />
     <Content Include="Resources\blank.png" />
     <Content Include="Resources\default_actor.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -717,6 +730,7 @@
     <Content Include="Resources\default_poster.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\dot_gray.png" />
     <Content Include="Resources\edit.png" />
     <None Include="Resources\imdb.png" />
     <Content Include="Resources\qmark.png" />

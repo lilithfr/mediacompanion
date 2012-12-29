@@ -83,7 +83,7 @@ Partial Class tv_batch_wizard
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
         Me.SplitContainer1.Size = New System.Drawing.Size(408, 333)
-        Me.SplitContainer1.SplitterDistance = 159
+        Me.SplitContainer1.SplitterDistance = 158
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -414,6 +414,7 @@ Partial Class tv_batch_wizard
         Me.MinimumSize = New System.Drawing.Size(424, 424)
         Me.Name = "tv_batch_wizard"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "TV Batch Wizard"
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.PerformLayout()

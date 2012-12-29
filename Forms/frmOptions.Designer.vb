@@ -218,6 +218,10 @@ Partial Class frmOptions
         Me.TabControl1.SuspendLayout()
         Me.SuspendLayout()
         '
+        'FontDialog
+        '
+        Me.FontDialog.Color = System.Drawing.SystemColors.ControlText
+        '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
@@ -235,8 +239,8 @@ Partial Class frmOptions
         Me.GroupBox10.TabStop = False
         Me.GroupBox10.Text = "Select IMDB Certification Priorities"
         Me.ToolTip1.SetToolTip(Me.GroupBox10, "You can select a specific locations certification to replace the MPAA entry on IM" & _
-        "DB if you wish," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "The Rating will be scraped by the first available from the abov" & _
-        "e list.")
+                "DB if you wish," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "The Rating will be scraped by the first available from the abov" & _
+                "e list.")
         '
         'Button11
         '
@@ -380,7 +384,7 @@ Partial Class frmOptions
         Me.CheckBox2.TabIndex = 2
         Me.CheckBox2.Text = "Use IMDB to get Movie ID for TMDB"
         Me.ToolTip1.SetToolTip(Me.CheckBox2, "Finding the correct movie is much more" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "likely using IMDB, this ID can then be us" & _
-        "ed" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to scrape the correct details from TMDB")
+                "ed" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "to scrape the correct details from TMDB")
         Me.CheckBox2.UseVisualStyleBackColor = True
         Me.CheckBox2.Visible = False
         '
@@ -392,6 +396,10 @@ Partial Class frmOptions
         Me.PictureBox1.TabIndex = 12
         Me.PictureBox1.TabStop = False
         Me.PictureBox1.Visible = False
+        '
+        'FontDialog1
+        '
+        Me.FontDialog1.Color = System.Drawing.SystemColors.ControlText
         '
         'Profiles
         '
@@ -476,7 +484,7 @@ Partial Class frmOptions
         Me.Label17.Size = New System.Drawing.Size(299, 26)
         Me.Label17.TabIndex = 7
         Me.Label17.Text = "The Default Profile can't be deleted, it is used as a template to" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "create new pro" & _
-    "files. You can set any created profile to default."
+            "files. You can set any created profile to default."
         '
         'brnaddprofile
         '
@@ -844,7 +852,7 @@ Partial Class frmOptions
         Me.Label34.Size = New System.Drawing.Size(290, 39)
         Me.Label34.TabIndex = 5
         Me.Label34.Text = "Urls added to the nfo file can be browsed frow within XBMC." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Each option added wi" & _
-    "ll slow down the scrape and rescrape" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "functions." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+            "ll slow down the scrape and rescrape" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "functions." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'imdb_chk
         '
@@ -894,7 +902,7 @@ Partial Class frmOptions
         Me.Label33.Size = New System.Drawing.Size(298, 26)
         Me.Label33.TabIndex = 0
         Me.Label33.Text = "During autoscrape and rescrape, add poster urls to the nfo file" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "from the followi" & _
-    "ng sources:"
+            "ng sources:"
         '
         'GroupBox4
         '
@@ -928,7 +936,7 @@ Partial Class frmOptions
         Me.Label22.Size = New System.Drawing.Size(298, 26)
         Me.Label22.TabIndex = 2
         Me.Label22.Text = "Using ""www.imdb.de"" will result in an incomplete nfo file since" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "this mirror does" & _
-    "n't contain plot, tagline, or trailer information"
+            "n't contain plot, tagline, or trailer information"
         '
         'Label21
         '
@@ -1221,8 +1229,8 @@ Partial Class frmOptions
         Me.Label8.Size = New System.Drawing.Size(315, 52)
         Me.Label8.TabIndex = 6
         Me.Label8.Text = "Use the Selection Box Below to choose where to get tv actor nfo" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "from." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only use " & _
-    "IMDB if the show series order is identical to thetvdb.com" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or wrong actors will " & _
-    "be obtained"
+            "IMDB if the show series order is identical to thetvdb.com" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or wrong actors will " & _
+            "be obtained"
         '
         'ComboBox5
         '
@@ -1569,7 +1577,7 @@ Partial Class frmOptions
         Me.Label28.Size = New System.Drawing.Size(366, 26)
         Me.Label28.TabIndex = 2
         Me.Label28.Text = "If you are having an issue with your version of XBMC seeing your fanart then" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "sel" & _
-    "ect the option below"
+            "ect the option below"
         '
         'chkbx_unstackposternames
         '
@@ -1589,7 +1597,7 @@ Partial Class frmOptions
         Me.Label14.Size = New System.Drawing.Size(394, 26)
         Me.Label14.TabIndex = 0
         Me.Label14.Text = "If you are having an issue with your version of XBMC seeing your .tbn posters the" & _
-    "n" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "select the option below"
+            "n" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "select the option below"
         '
         'chkbx_notactorthumbs
         '
@@ -1609,7 +1617,7 @@ Partial Class frmOptions
         Me.Label24.Size = New System.Drawing.Size(469, 13)
         Me.Label24.TabIndex = 17
         Me.Label24.Text = "The default behaviour is for MC to overwrite none complient nfo files, you can ch" & _
-    "ange this below :-"
+            "ange this below :-"
         '
         'chkbx_renamnfofiles
         '
@@ -1878,6 +1886,7 @@ Partial Class frmOptions
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(861, 580)
         Me.Name = "frmOptions"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Media Companion Preferences"
         Me.GroupBox10.ResumeLayout(False)
         Me.GroupBox10.PerformLayout()
