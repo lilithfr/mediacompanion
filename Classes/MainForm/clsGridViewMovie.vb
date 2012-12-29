@@ -63,7 +63,7 @@
         Form1.DataGridViewMovies.RowHeadersVisible = False
 
 
-        Form1.DataGridViewMovies.Columns(6).Width = 290
+        Form1.DataGridViewMovies.Columns(6).Width = 276
         Form1.DataGridViewMovies.Columns(6).Resizable = DataGridViewTriState.True
         Form1.DataGridViewMovies.Columns(6).ReadOnly = True
         Form1.DataGridViewMovies.Columns(6).SortMode = DataGridViewColumnSortMode.Automatic
