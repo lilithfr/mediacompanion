@@ -182,8 +182,6 @@ Public Class Form1
             Monitor.Exit(Me)
         End If
 
-
-
         Dim b = From f In filteredListObj Where f.title Like "*" & txt_titlesearch.Text & "*"
 
         b = From f In b Order By f.filename Ascending
@@ -219,13 +217,19 @@ Public Class Form1
                 b = From f In b Order By f.votes Ascending
         End Select
 
+        'Convert query to list
+        'Dim Clist As List(Of Data_GridViewMovie) = b.ToList()
+        'filteredListObj = Clist
 
-
-
+        DataGridViewMovies.Columns.Clear()
         DataGridViewBindingSource.DataSource = b
-
+        clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
 
         LabelCountFilter.Text = "Displaying " & b.Count.ToString & " of  " & fullMovieList.Count & " movies"
+
+        Return
+
+
 
         ' Added this section because ApplyFilter is often called as ApplyFilter() & doesn't take into account that a filter choice may have been set.... 
         'If RadioButton46.Checked = True Then Filter = "watched"
@@ -1170,7 +1174,7 @@ Public Class Form1
 
             MainFormLoadedStatus = True
             PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-            clsGridViewMovie.GridviewMovieDesign()
+            clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
             TooltipGridViewMovies1.Initialisation()
 
 
@@ -9556,7 +9560,7 @@ Public Class Form1
 
     End Sub
     Private Sub mov_Play(ByVal type As String)
-        If DataGridViewMovies.SelectedRows.Count = 1 Then Return
+        If DataGridViewMovies.SelectedRows.Count < 1 Then Return
         Dim tempstring As String
         tempstring = DataGridViewMovies.SelectedCells(0).Value.ToString
         Dim playlist As New List(Of String)
@@ -29245,34 +29249,44 @@ End Sub
 
     Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
         'Try
-        Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
-        If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
-            Dim newSelection As Boolean = True
+        'Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
+        'If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
+        If e.Button = MouseButtons.Right Then
+
+
+
+
+
+            Dim multistelect As Boolean = False
             'If more than one movie is selected, check if right-click is on the selection.
-            If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
-                newSelection = False
+            'If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
+            If DataGridViewMovies.SelectedRows.Count > 1 Then
+                multistelect = True
             End If
             'Otherwise, bring up the context menu for a single movie
 
 
-            If newSelection Then
-                MovieListComboBox.SelectedItems.Clear()
-                MovieListComboBox.SelectedIndex = ptIndex
-                'update context menu with movie name & also if we show the 'Play Trailer' menu item
-                mov_ToolStripMovieName.BackColor = Color.Honeydew
-                mov_ToolStripMovieName.Text = "'" & MovieListComboBox.Text & "'"
-                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
-                    mov_ToolStripPlayTrailer.Visible = True 'if an actual trailer video exists, then show the 'Play Trailer' context menu item.
-                Else
-                    mov_ToolStripPlayTrailer.Visible = False 'else hide it
-                End If
-
-            Else
+            If multistelect = True Then
                 mov_ToolStripMovieName.BackColor = Color.Orange
                 mov_ToolStripMovieName.Text = "Multisave Mode"
                 mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
                 mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
+            Else
+
+
+                'MovieListComboBox.SelectedItems.Clear()
+                'MovieListComboBox.SelectedIndex = ptIndex
+                'update context menu with movie name & also if we show the 'Play Trailer' menu item
+                mov_ToolStripMovieName.BackColor = Color.Honeydew
+                mov_ToolStripMovieName.Text = "'" & MovieListComboBox.Text & "'"
+                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
+                'If System.IO.File.Exists(Utilities.GetTrailerName(filteredListObj.Item(e.RowIndex).fullpathandfilename)) Then
+                If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) Then
+                    mov_ToolStripPlayTrailer.Visible = True 'if an actual trailer video exists, then show the 'Play Trailer' context menu item.
+                Else
+                    mov_ToolStripPlayTrailer.Visible = False 'else hide it
+                End If
             End If
         End If
         'Catch ex As Exception
