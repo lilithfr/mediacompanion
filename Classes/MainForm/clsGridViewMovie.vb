@@ -67,10 +67,14 @@
         DataGridViewMovies.Columns(6).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(6).ReadOnly = True
         DataGridViewMovies.Columns(6).SortMode = DataGridViewColumnSortMode.Automatic
-        DataGridViewMovies.Columns(6).ToolTipText = "Texte tooltip"
-        DataGridViewMovies.Columns(6).HeaderText = "ColomnName"
+        DataGridViewMovies.Columns(6).ToolTipText = "Movies titles"
+        DataGridViewMovies.Columns(6).HeaderText = "Movies"
         DataGridViewMovies.Columns(22).Width = 20
+        DataGridViewMovies.Columns(22).ToolTipText = "Watched Status"
+        DataGridViewMovies.Columns(22).HeaderText = "W"
         DataGridViewMovies.Columns(23).Width = 20
+        DataGridViewMovies.Columns(23).ToolTipText = "Plot"
+        DataGridViewMovies.Columns(23).HeaderText = "P"
 
 
 
