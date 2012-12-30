@@ -9732,205 +9732,177 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub MovieFormInit()
+        workingMovie.filedate = Nothing
+        workingMovie.filename = Nothing
+        workingMovie.foldername = Nothing
+        workingMovie.fullpathandfilename = Nothing
+        workingMovie.genre = Nothing
+        workingMovie.id = Nothing
+        workingMovie.playcount = Nothing
+        workingMovie.rating = Nothing
+        workingMovie.title = Nothing
+        workingMovie.titleandyear = Nothing
+        workingMovie.top250 = Nothing
+        workingMovie.year = Nothing
+        workingMovie.movieset = Nothing
+        setsTxt.Text = ""
+        titletxt.Text = ""
+        TextBox3.Text = ""
+        'outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
+        outlinetxt.Text = ""
+        plottxt.Text = ""
+        taglinetxt.Text = ""
+        txtStars.Text = ""
+        genretxt.Text = ""
+        creditstxt.Text = ""
+        directortxt.Text = ""
+        studiotxt.Text = ""
+        pathtxt.Text = ""
+        actorcb.Items.Clear()
+        ratingtxt.Text = ""
+        runtimetxt.Text = ""
+        votestxt.Text = ""
+        certtxt.Text = ""
+        PictureBoxFanArt.Image = Nothing
+        moviethumb.Image = Nothing
+        roletxt.Text = ""
+        PictureBoxActor.Image = Nothing
+    End Sub
+
+
     Private Sub DataGridViewMovies_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewMovies.CellClick
         If DataGridViewMovies.SelectedRows.Count = 0 Then Exit Sub
 
-        'Try
-        Dim myBool As Boolean = True
-        Dim needtoload As Boolean = False
-        Dim done As Boolean = False
+        Try
+            Dim MultipleMoviesSelected As Boolean = True
+            Dim needtoload As Boolean = False
+            Dim done As Boolean = False
 
-        TooltipGridViewMovies1.Visible = False
 
-        If DataGridViewMovies.SelectedRows.Count > 1 Then
-            myBool = False
-        End If
+            'Clear all fields of the movie
+            MovieFormInit()
 
-        mov_ToolStripPlayMovie.Visible = myBool
-        mov_ToolStripOpenFolder.Visible = myBool
-        mov_ToolStripViewNfo.Visible = myBool
-        ToolStripSeparator17.Visible = myBool
-        ToolStripSeparator5.Visible = myBool
-        ToolStripSeparator4.Visible = myBool
-        mov_ToolStripFanartBrowserAlt.Visible = myBool
-        mov_ToolStripPosterBrowserAlt.Visible = myBool
-        mov_ToolStripEditMovieAlt.Visible = myBool
-        mov_ToolStripReloadFromCache.Visible = myBool
+            'Hide toolTip when select the movie
+            TooltipGridViewMovies1.Visible = False
 
-        ' Try
-
-        If DataGridViewMovies.SelectedRows.Count = 1 Then
-            If titletxt.Visible = False Then
-                needtoload = True
+            If DataGridViewMovies.SelectedRows.Count > 1 Then
+                MultipleMoviesSelected = True
             End If
-            titletxt.Visible = True
-            TextBoxMutisave.Visible = False
-            SplitContainer2.Visible = True
-            Label128.Visible = False
-            Label75.Visible = True
-            TextBox34.Visible = True
 
-            For Each Me.Data_GridViewMovie In filteredListObj
-                If Data_GridViewMovie.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then
-                    If IO.File.Exists(Data_GridViewMovie.fullpathandfilename) Then
-                        If System.IO.File.Exists(Utilities.GetTrailerName(Data_GridViewMovie.fullpathandfilename)) And myBool Then
-                            mov_ToolStripPlayTrailer.Visible = True
-                        Else
-                            mov_ToolStripPlayTrailer.Visible = False
-                        End If
+            If DataGridViewMovies.SelectedRows.Count > 1 Then
+                mov_ToolStripPlayMovie.Visible = False
+                mov_ToolStripOpenFolder.Visible = False
+                mov_ToolStripViewNfo.Visible = False
+                ToolStripSeparator17.Visible = False
+                ToolStripSeparator5.Visible = False
+                ToolStripSeparator4.Visible = False
+                mov_ToolStripFanartBrowserAlt.Visible = False
+                mov_ToolStripPosterBrowserAlt.Visible = False
+                mov_ToolStripEditMovieAlt.Visible = False
+                mov_ToolStripReloadFromCache.Visible = False
+            End If
 
-                        If workingMovie.fullpathandfilename <> Data_GridViewMovie.fullpathandfilename Then
-                            workingMovie.filedate = Data_GridViewMovie.filedate
-                            workingMovie.filename = Data_GridViewMovie.foldername
-                            workingMovie.foldername = Data_GridViewMovie.foldername
-                            workingMovie.fullpathandfilename = Data_GridViewMovie.fullpathandfilename
-                            workingMovie.genre = Data_GridViewMovie.genre
-                            workingMovie.id = Data_GridViewMovie.id
-                            workingMovie.playcount = Data_GridViewMovie.playcount
-                            workingMovie.rating = Data_GridViewMovie.rating
-                            workingMovie.title = Data_GridViewMovie.title
-                            workingMovie.titleandyear = Data_GridViewMovie.titleandyear
-                            workingMovie.top250 = Data_GridViewMovie.top250
-                            workingMovie.year = Data_GridViewMovie.year
-                            Call mov_FormPopulate()
-                        Else
-                            If needtoload = True Then Call mov_FormPopulate()
-                        End If
-                        done = True
-                        Exit For
+            If DataGridViewMovies.SelectedRows.Count = 1 Then
+                If titletxt.Visible = False Then
+                    needtoload = True
+                End If
+                titletxt.Visible = True
+                TextBoxMutisave.Visible = False
+                SplitContainer2.Visible = True
+                Label128.Visible = False
+                Label75.Visible = True
+                TextBox34.Visible = True
+
+                'Check if the file trailer exist
+                If IO.File.Exists(DataGridViewMovies.SelectedCells(0).Value.ToString) = True Then
+                    If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) = True And MultipleMoviesSelected = False Then
+                        mov_ToolStripPlayTrailer.Visible = True
                     Else
-                        workingMovie.filedate = Nothing
-                        workingMovie.filename = Nothing
-                        workingMovie.foldername = Nothing
-                        workingMovie.fullpathandfilename = Nothing
-                        workingMovie.genre = Nothing
-                        workingMovie.id = Nothing
-                        workingMovie.playcount = Nothing
-                        workingMovie.rating = Nothing
-                        workingMovie.title = Nothing
-                        workingMovie.titleandyear = Nothing
-                        workingMovie.top250 = Nothing
-                        workingMovie.year = Nothing
-                        workingMovie.movieset = Nothing
-                        setsTxt.Text = ""
-                        titletxt.Text = ""
-                        TextBox3.Text = ""
-                        outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
-                        plottxt.Text = ""
-                        taglinetxt.Text = ""
-                        txtStars.Text = ""
-                        genretxt.Text = ""
-                        creditstxt.Text = ""
-                        directortxt.Text = ""
-                        studiotxt.Text = ""
-                        pathtxt.Text = ""
-                        actorcb.Items.Clear()
-                        ratingtxt.Text = ""
-                        runtimetxt.Text = ""
-                        votestxt.Text = ""
-                        certtxt.Text = ""
-                        PictureBoxFanArt.Image = Nothing
-                        moviethumb.Image = Nothing
-                        roletxt.Text = ""
-                        PictureBoxActor.Image = Nothing
+                        mov_ToolStripPlayTrailer.Visible = False
                     End If
                 End If
-            Next
-        ElseIf DataGridViewMovies.SelectedRows.Count = 0 Then
-            setsTxt.Text = ""
-            titletxt.Text = ""
-            TextBox3.Text = ""
-            outlinetxt.Text = ""
-            plottxt.Text = ""
-            taglinetxt.Text = ""
-            txtStars.Text = ""
-            genretxt.Text = ""
-            creditstxt.Text = ""
-            directortxt.Text = ""
-            studiotxt.Text = ""
-            pathtxt.Text = ""
-            actorcb.Items.Clear()
-            ratingtxt.Text = ""
-            runtimetxt.Text = ""
-            votestxt.Text = ""
-            certtxt.Text = ""
-            PictureBoxFanArt.Image = Nothing
-            moviethumb.Image = Nothing
-            roletxt.Text = ""
-            PictureBoxActor.Image = Nothing
-        Else
-            titletxt.Text = ""
-            TextBox3.Text = ""
-            outlinetxt.Text = ""
-            plottxt.Text = ""
-            taglinetxt.Text = ""
-            txtStars.Text = ""
-            genretxt.Text = ""
-            creditstxt.Text = ""
-            directortxt.Text = ""
-            setsTxt.Text = ""
-            studiotxt.Text = ""
-            pathtxt.Text = ""
-            actorcb.Items.Clear()
-            ratingtxt.Text = ""
-            runtimetxt.Text = ""
-            votestxt.Text = ""
-            certtxt.Text = ""
-            PictureBoxFanArt.Image = Nothing
-            moviethumb.Image = Nothing
-            roletxt.Text = ""
-            PictureBoxActor.Image = Nothing
-            SplitContainer2.Visible = False
-            titletxt.Visible = False
-            Label75.Visible = False
-            TextBox34.Visible = False
-            TextBoxMutisave.Visible = True
-            Label128.Visible = True
-            'ComboBox3.SelectedIndex = -1
-            Dim add As Boolean = True
-            Dim watched As String = ""
-            For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
-                Dim old As String = watched
-                For Each item In fullMovieList
-                    If item.fullpathandfilename = sRow.Cells(0).Value.ToString Then
 
-                        If watched = "" Then
-                            watched = item.playcount
-                            old = watched
-                        Else
-                            watched = item.playcount
-                        End If
-                        If watched <> old Then
-                            add = False
-                        End If
-                        Exit For
-                    End If
-                Next
-            Next
-            If add = False Then
-                ButtonWatched.Text = ""
-                ButtonWatched.BackColor = Color.Gray
-            Else
-                If watched = "1" Then
-                    ButtonWatched.Text = "&Watched"
-                    ButtonWatched.BackColor = Color.LawnGreen
-                    ButtonWatched.Refresh()
+                Dim query = From f In filteredListObj Where f.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString
+                Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
+
+                If queryList.Count > 0 Then
+                    workingMovie.filedate = queryList(0).filedate
+                    workingMovie.filename = queryList(0).filename
+                    workingMovie.foldername = queryList(0).foldername
+                    workingMovie.fullpathandfilename = queryList(0).fullpathandfilename
+                    workingMovie.genre = queryList(0).genre
+                    workingMovie.id = queryList(0).id
+                    workingMovie.playcount = queryList(0).playcount
+                    workingMovie.rating = queryList(0).rating
+                    workingMovie.title = queryList(0).title
+                    workingMovie.titleandyear = queryList(0).titleandyear
+                    workingMovie.top250 = queryList(0).top250
+                    workingMovie.year = queryList(0).year
+                    Call mov_FormPopulate()
                 Else
-                    ButtonWatched.Text = "Un&watched"
-                    ButtonWatched.BackColor = Color.Red
-                    ButtonWatched.Refresh()
+                    If needtoload = True Then Call mov_FormPopulate()
+                End If
+                done = True
+            Else
+                outlinetxt.Text = ""
+                setsTxt.Text = ""
+                PictureBoxFanArt.Image = Nothing
+                moviethumb.Image = Nothing
+                roletxt.Text = ""
+                PictureBoxActor.Image = Nothing
+                SplitContainer2.Visible = False
+                titletxt.Visible = False
+                Label75.Visible = False
+                TextBox34.Visible = False
+                TextBoxMutisave.Visible = True
+                Label128.Visible = True
+                'ComboBox3.SelectedIndex = -1
+                Dim add As Boolean = True
+                Dim watched As String = ""
+                For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    Dim old As String = watched
+                    For Each item In fullMovieList
+                        If item.fullpathandfilename = sRow.Cells(0).Value.ToString Then
+
+                            If watched = "" Then
+                                watched = item.playcount
+                                old = watched
+                            Else
+                                watched = item.playcount
+                            End If
+                            If watched <> old Then
+                                add = False
+                            End If
+                            Exit For
+                        End If
+                    Next
+                Next
+                If add = False Then
+                    ButtonWatched.Text = ""
+                    ButtonWatched.BackColor = Color.Gray
+                Else
+                    If watched = "1" Then
+                        ButtonWatched.Text = "&Watched"
+                        ButtonWatched.BackColor = Color.LawnGreen
+                        ButtonWatched.Refresh()
+                    Else
+                        ButtonWatched.Text = "Un&watched"
+                        ButtonWatched.BackColor = Color.Red
+                        ButtonWatched.Refresh()
+                    End If
                 End If
             End If
-        End If
-        '   Catch ex As Exception
-        '#If SilentErrorScream Then
-        '        Throw ex
-        '#End If
-        '        End Try
-        'mov_SplitContainerAutoPosition("Selected Movie Changed")
-        '       Catch ex As Exception
-        '      ExceptionHandler.LogError(ex)
-        '       End Try
+
+        Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            'End Try
+            'mov_SplitContainerAutoPosition("Selected Movie Changed")
+            'Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 
@@ -29182,10 +29154,6 @@ Private Sub TabLevel1_SelectedIndexChanged( sender As System.Object,  e As Syste
 
 End Sub
 
-
-    Private Sub PictureBoxFanArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
 
     Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
         Try
