@@ -10,4 +10,16 @@
         TextBoxMovie.Text = text
     End Sub
 
+    Public Sub TextMovieName(ByVal text As String)
+        LabelMovieName.Text = text
+    End Sub
+
+    Public Sub TextLabelMovieYear(ByVal text As String)
+        LabelMovieYear.Text = text
+    End Sub
+
+    Public Sub TextLabelRatingRuntime(ByVal text As String)
+        LabelRatingRuntime.Text = text
+    End Sub
+
 End Class

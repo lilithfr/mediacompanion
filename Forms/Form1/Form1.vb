@@ -29191,29 +29191,26 @@ End Sub
         Try
             ToolTip1.IsBalloon = False
             Dim hit As DataGridView.HitTestInfo = DataGridViewMovies.HitTest(e.X, e.Y)
-
-
             Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
             Dim objHitTestInfo As DataGridView.HitTestInfo
             objHitTestInfo = DataGridViewMovies.HitTest(objMousePosition.X, objMousePosition.Y)
             Dim indexunderthemouse As Integer = objHitTestInfo.RowIndex
 
+            Dim movietitle As String = ""
+            Dim movieYear As String = ""
+            Dim RatingRuntime As String = ""
+
             If indexunderthemouse > -1 Then
-                Dim s As String = "Double Click item to Play" & vbCrLf & vbCrLf
-                'Dim tempstring As String = CType(MovieListComboBox.Items(indexunderthemouse), ValueDescriptionPair).Value
+                Dim s As String
                 Dim tempstring As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(0).Value.ToString
                 If overItem <> tempstring Then
                     overItem = tempstring
                     For Each movie In fullMovieList
                         If movie.fullpathandfilename = tempstring Then
-                            s = s & movie.title & " (" & movie.year & ")" & vbCrLf & "IMDB# " & movie.id & vbCrLf & vbCrLf
-                            Dim tempstring2 As String
-                            Try
-                                tempstring2 = movie.runtime.Substring(0, movie.runtime.IndexOf("min") + 3)
-                            Catch
-                                tempstring2 = movie.runtime
-                            End Try
-                            s = s & "Rating: " & movie.rating & "     Runtime: " & tempstring2 & vbCrLf & vbCrLf
+                            movietitle = movie.title
+                            movieYear = movie.year
+                            RatingRuntime = "Rating: " & movie.rating & "     Runtime: " & movie.runtime.Substring(0, movie.runtime.IndexOf("min") + 3) & vbCrLf & vbCrLf
+                            s = s & "IMDB: " & movie.id & vbCrLf & vbCrLf
                             Dim newoutline As List(Of String) = util_TextWrap(movie.outline, 50)
                             For Each line In newoutline
                                 s = s & line & vbCrLf
@@ -29226,14 +29223,15 @@ End Sub
                         .AutomaticDelay = 1000
                         .AutoPopDelay = 3000
                     End With
-                    'tootip5.SetToolTip(Me.MovieListComboBox, s)
 
                     TooltipGridViewMovies1.Visible = True
                     TooltipGridViewMovies1.Top = objHitTestInfo.RowY - (TooltipGridViewMovies1.Top / 2)
                     'TooltipGridViewMovies1.Left = e.X - 120
                     TooltipGridViewMovies1.Left = 25
                     If objHitTestInfo.RowY > -1 Then
-                        TooltipGridViewMovies1.TextBoxMovie.Text = s 'DataGridViewMovies.Rows(objHitTestInfo.RowIndex).Cells(4).Value.ToString
+                        TooltipGridViewMovies1.Textinfo(s)
+                        TooltipGridViewMovies1.TextMovieName(movietitle)
+                        TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
                     End If
 
                 End If
