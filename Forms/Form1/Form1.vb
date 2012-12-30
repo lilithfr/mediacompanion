@@ -160,299 +160,10 @@ Public Class Form1
     Public homemovietabindex As Integer = 0
 
 
+    
 
 
-    Private Sub mov_FiltersAndSortApply()
-
-
-        Monitor.Enter(Me)
-        'Try
-        'Dim tempint2 As Integer = filteredList.Count - 1
-        'For f = tempint2 To 0 Step -1
-        '    filteredList.RemoveAt(f)
-        'Next
-        Dim dupes2 As Boolean = False
-        Dim top250 As Boolean = False
-        Dim offline As Boolean = False
-        Dim watched As Boolean = False
-        Dim unwatched As Boolean = False
-        Dim missposters As Boolean = False
-        Dim missfanart As Boolean = False
-        Dim oktoadd As Boolean = True
-        Dim tempint As Integer = fullMovieList.Count - 1
-
-        If tempint < 0 Then
-            Exit Sub
-            Monitor.Exit(Me)
-        End If
-
-        Dim b = From f In filteredListObj Where f.title Like "*" & txt_titlesearch.Text & "*"
-
-        b = From f In b Order By f.filename Ascending
-
-
-        If RadioButtonAll.Checked = True Then
-            b = From f In b
-        End If
-
-        If RadioButtonWatched.Checked = True Then
-            b = From f In b Where f.playcount = "1"
-        Else
-            b = From f In b Where f.playcount = "0"
-        End If
-
-
-        Select Case cbSort.Text
-            Case "a(-Z)"
-                b = From f In b Order By f.filename Ascending
-            Case "Movie(Year)"
-                b = From f In b Order By f.year Ascending
-            Case "Modified"
-                b = From f In b Order By f.createdate Ascending
-            Case "Runtime"
-                b = From f In b Order By f.runtime Ascending
-            Case "Rating"
-                b = From f In b Order By f.rating Ascending
-            Case "Sort(Order)"
-                b = From f In b Order By f.createdate Ascending
-            Case "Date Added"
-                b = From f In b Order By f.createdate Ascending
-            Case "Votes"
-                b = From f In b Order By f.votes Ascending
-        End Select
-
-        'Convert query to list
-        'Dim Clist As List(Of Data_GridViewMovie) = b.ToList()
-        'filteredListObj = Clist
-
-        DataGridViewMovies.Columns.Clear()
-        DataGridViewBindingSource.DataSource = b
-        clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
-
-        LabelCountFilter.Text = "Displaying " & b.Count.ToString & " of  " & fullMovieList.Count & " movies"
-
-        Return
-
-
-
-        ' Added this section because ApplyFilter is often called as ApplyFilter() & doesn't take into account that a filter choice may have been set.... 
-        'If RadioButton46.Checked = True Then Filter = "watched"
-        'If RadioButton47.Checked = True Then Filter = "unwatched"
-        'If RadioButton48.Checked = True Then Filter = "duplicates"
-        'If RadioButton49.Checked = True Then Filter = "missing posters"
-        'If RadioButtonMissingFanart.Checked = True Then Filter = "missing fanart"
-
-
-        'If Filter = "blabla" Then           'i.e. applyFilters() {NONE}
-        'RadioButton45.Checked = True    'reset filter radio buttons indcation to ALL
-        'ComboBox11.SelectedIndex = 0    'reset filename video type filter to ALL       
-        'End If
-
-
-        'For f = 0 To tempint
-        '    dupes2 = False
-        '    offline = False
-        '    top250 = False
-        '    watched = False
-        '    unwatched = False
-        '    missposters = False
-        '    missfanart = False
-        '    oktoadd = True
-        '    'If Filter.ToLower = "duplicates" Then dupes2 = True
-        '    'If Filter.ToLower = "offline movies" Then offline = True
-        '    'If Filter.ToLower = "watched" Then watched = True
-        '    'If Filter.ToLower = "unwatched" Then unwatched = True
-        '    'If Filter.ToLower = "missing posters" Then missposters = True
-        '    'If Filter.ToLower = "missing fanart" Then missfanart = True
-        '    If oktoadd = True And top250 = True Then
-        '        If fullMovieList(f).top250 = "0" Then
-        '            oktoadd = False
-        '        End If
-        '    End If
-        '    If oktoadd = True And missposters = True Then
-        '        If fullMovieList(f).missingdata1 <> 2 And fullMovieList(f).missingdata1 <> 3 Then
-        '            oktoadd = False
-        '        End If
-        '    End If
-        '    If oktoadd = True And missfanart = True Then
-        '        If fullMovieList(f).missingdata1 <> 1 And fullMovieList(f).missingdata1 <> 3 Then
-        '            oktoadd = False
-        '        End If
-        '    End If
-        '    If oktoadd = True And watched = True Then
-        '        If fullMovieList(f).playcount <> Nothing Then
-        '            If Convert.ToInt32(fullMovieList(f).playcount) = 0 Then
-        '                oktoadd = False
-        '            End If
-        '        Else
-        '            oktoadd = False
-        '        End If
-        '    Else
-        '    End If
-        '    If oktoadd = True And unwatched = True Then
-        '        If fullMovieList(f).playcount <> Nothing Then
-        '            If Convert.ToInt32(fullMovieList(f).playcount) <> 0 Then
-        '                oktoadd = False
-        '            End If
-        '        End If
-        '    End If
-        '    If oktoadd = True And offline = True Then
-        '        For Each paths In Preferences.offlinefolders
-        '            If fullMovieList(f).fullpathandfilename.IndexOf(paths) = -1 Then
-        '                oktoadd = False
-        '                Exit For
-        '            End If
-        '        Next
-        '    End If
-        '    If oktoadd = True Then
-        '        filteredList.Add(fullMovieList(f))
-        '    End If
-        'Next
-        'Dim add As Boolean = False
-        'Dim newlist As New List(Of str_ComboList)
-        'For Each movie In filteredList
-        '    Dim tempstring As String = String.Empty
-        '    If RadioButton1.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.titleandyear.ToLower
-        '    If RadioButton2.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.filename.ToLower
-        '    If RadioButton6.Checked = True And ComboBox10.SelectedItem = "List" Then tempstring = movie.foldername.ToLower
-        '    If cbSort.SelectedIndex = 5 And ComboBox10.SelectedItem = "List" Then tempstring = movie.sortorder.ToLower
-        '    If ComboBox10.SelectedItem = "Outline" Then tempstring = movie.outline
-        '    If ComboBox10.SelectedItem = "Year" Then tempstring = movie.year
-        '    If ComboBox10.SelectedItem = "IMDB ID" Then tempstring = movie.id
-        '    If ComboBox10.SelectedItem = "Filename" Then tempstring = movie.filename
-        '    If ComboBox10.SelectedItem = "Foldername" Then tempstring = movie.foldername
-        '    If ComboBox10.SelectedItem = "Genre" Then tempstring = movie.genre
-        '    If ComboBox10.SelectedItem = "Rating" Then tempstring = movie.rating
-        '    If ComboBox10.SelectedItem = "Runtime" Then tempstring = movie.runtime
-        '    If TextBox1.Text = "" And txt_titlesearch.Text = "" Then
-        '        add = True
-        '    ElseIf TextBox1.Text <> "" And txt_titlesearch.Text = "" Then
-        '        If tempstring.ToLower.IndexOf(TextBox1.Text.ToLower) = 0 Then
-        '            add = True
-        '        End If
-        '    ElseIf TextBox1.Text = "" And txt_titlesearch.Text <> "" Then
-        '        If tempstring.ToLower.IndexOf(txt_titlesearch.Text.ToLower) <> -1 Then
-        '            add = True
-        '        End If
-        '    ElseIf TextBox1.Text <> "" And txt_titlesearch.Text <> "" Then
-        '        If tempstring.ToLower.IndexOf(TextBox1.Text.ToLower) = 0 And tempstring.ToLower.IndexOf(txt_titlesearch.Text.ToLower) <> -1 Then
-        '            add = True
-        '        End If
-        '    End If
-        '    If add = True Then
-        '        add = False
-        '        newlist.Add(movie)
-        '    End If
-        'Next
-        'filteredList = newlist
-        ''----------------------------------------------------------------------------------------------------
-        'Dim ValuetoSearch As String = ComboBox11.SelectedItem.ToString.ToLower
-        'Dim newlist1 As New List(Of str_ComboList)
-        'For Each movie In filteredList
-        '    Select Case ValuetoSearch.ToLower
-        '        Case "all"
-        '            TextBox_GenreFilter.Enabled = True
-        '            newlist1.Add(movie)
-        '        Case "dvdrip"
-        '            If movie.filename.ToLower.IndexOf("dvdrip") <> -1 Then
-        '                newlist1.Add(movie)
-        '            End If
-        '        Case "dvdr5"
-        '            If (movie.filename.ToLower.IndexOf("dvdr5") <> -1) Or (movie.filename.ToLower.IndexOf(".r5") <> -1) Then
-        '                newlist1.Add(movie)
-        '            End If
-        '        Case "dvdscreener"
-        '            If (movie.filename.ToLower.IndexOf("dvdscreener") <> -1) Or (movie.filename.ToLower.IndexOf("dvdscr") <> -1) Or _
-        '            (movie.filename.ToLower.IndexOf("screener") <> -1) Then
-        '                newlist1.Add(movie)
-        '            End If
-        '        Case "bluray"
-        '            If (movie.filename.ToLower.IndexOf("bluray") <> -1) Or (movie.filename.ToLower.IndexOf("brrip") <> -1) Or _
-        '            (movie.filename.ToLower.IndexOf("bdrip") <> -1) Then
-        '                newlist1.Add(movie)
-        '            End If
-        '        Case "telesync"
-        '            If (movie.filename.ToLower.IndexOf("telesync") <> -1) Or (movie.filename.ToLower.IndexOf(".ts") <> -1) Then
-        '                newlist1.Add(movie)
-        '            End If
-        '        Case "cam"
-        '            If (movie.filename.ToLower.IndexOf("cam") <> -1) Then
-        '                newlist1.Add(movie)
-        '            End If
-        '        Case "pdtv"
-        '            If (movie.filename.ToLower.IndexOf("pdtv") <> -1) Or (movie.filename.ToLower.IndexOf("ppvrip") <> -1) Then
-        '                newlist1.Add(movie)
-        '            End If
-        '    End Select
-        'Next
-        'filteredList = newlist1
-
-        ''----------------------------------------------------------------------------------------------------
-
-
-        'Dim genres As New List(Of String)
-        'Dim newlist2 As New List(Of str_ComboList)
-        'TextBox_GenreFilter.Text = ""
-        'For Each CheckBox In CheckedListBox1.CheckedItems
-        '    genres.Add(CheckBox.ToString.ToLower)
-        '    If Len(TextBox_GenreFilter.Text) = 0 Then
-        '        TextBox_GenreFilter.Text = CheckBox.ToString
-        '    Else
-        '        TextBox_GenreFilter.Text = TextBox_GenreFilter.Text & ", " & CheckBox.ToString
-        '    End If
-        '    If CheckBox.ToString.ToLower = "duplicates" Then dupes2 = True
-        'Next
-        'If genres.Count = 0 Then TextBox_GenreFilter.Text = "Genre Filter (AND)"
-        'oktoadd = True
-        'tempint = filteredList.Count - 1
-        'For f = 0 To tempint
-        '    top250 = False
-        '    watched = False
-        '    unwatched = False
-        '    oktoadd = True
-        '    For Each gen In genres
-        '        If gen <> Nothing Then
-        '            If filteredList(f).genre.ToLower.IndexOf(gen) = -1 Then
-        '                oktoadd = False
-        '            End If
-        '        End If
-        '    Next
-        '    If oktoadd = True Then
-        '        newlist2.Add(filteredList(f))
-        '    End If
-        'Next
-        'filteredList = newlist2
-        ''----------------------------------------------------------------------------------------------------
-        'If dupes2 = True Then
-        '    Dim dupelist As New List(Of str_ComboList)
-        '    For f = 0 To filteredList.Count - 1
-        '        For g = 0 To filteredList.Count - 1
-        '            If g <> f Then
-        '                If filteredList(f).id = filteredList(g).id And filteredList(g).id <> "" Then
-        '                    Dim exists As Boolean = False
-        '                    For Each movie In filteredList
-        '                        If movie.fullpathandfilename = filteredList(f).fullpathandfilename Then exists = True
-        '                        If movie.fullpathandfilename = filteredList(g).fullpathandfilename Then exists = True
-        '                    Next
-        '                    If exists = True Then
-        '                        If Not dupelist.Contains(filteredList(f)) Then
-        '                            dupelist.Add(filteredList(f))
-        '                        End If
-        '                    End If
-        '                End If
-        '            End If
-        '        Next
-        '    Next
-        '    filteredList = dupelist
-        'End If
-        ''Call applyotherfilters()
-        'Call mov_FiltersAndSortApply()
-        'Catch ex As Exception
-        '    MsgBox(ex.ToString)
-        'Finally
-        '    Monitor.Exit(Me)
-        'End Try
-    End Sub
+    
 
     
 
@@ -867,12 +578,15 @@ Public Class Form1
                 tv_SplitContainerAutoPosition()
             End If
 
-            MainFormLoadedStatus = True
+
             PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+            clsGridViewMovie.GridFieldToDisplay = "TiteAndYear"
+            clsGridViewMovie.GridSort = "Asc"
             clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
             TooltipGridViewMovies1.Initialisation()
-
             DisplayMovie()
+
+            MainFormLoadedStatus = True
 
             Common.Tasks.StartTaskEngine()
             ForegroundWorkTimer.Start()
@@ -1460,7 +1174,7 @@ Public Class Form1
         DataGridViewMovies.DataSource = DataGridViewBindingSource
 
 
-        Call mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
         'Call mov_MovieComboLoad()
         Try
             DataGridViewMovies.Rows(0).Selected = True
@@ -3416,7 +3130,7 @@ Public Class Form1
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
-            mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             If messbox.Visible = True Then messbox.Close()
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
         Else
@@ -4825,7 +4539,7 @@ Public Class Form1
             Exit Sub
         End If
 
-        Call mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
         'Call mov_MovieComboLoad()
         Call mov_CacheLoad()
         Try
@@ -4892,7 +4606,7 @@ Public Class Form1
 
         'Call sortorder()    ApplyFilters calls sortorder()
         frmSplash2.Label2.Text = "Apply Filters..."
-        Call mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
         frmSplash2.Label2.Text = "Reload Main Page..."
         Call mov_FormPopulate()
         Try
@@ -5136,7 +4850,7 @@ Public Class Form1
                     ToolStripProgressBar1.ProgressBar.PerformStep()
                     ToolStripStatusLabel1.Text = e.UserState
                 Else
-                    Call mov_FiltersAndSortApply()
+                    Call clsGridViewMovie.mov_FiltersAndSortApply()
                 End If
             End If
         Catch ex As Exception
@@ -5179,7 +4893,7 @@ Public Class Form1
 
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6023,7 +5737,7 @@ Public Class Form1
             Next
             RadioButtonAll.Checked = True     'set movie filters indication back to all
             ComboBox11.SelectedIndex = 0   'set filename filetype filter back to all
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6142,7 +5856,7 @@ Public Class Form1
             End If
         Next
 
-        Call mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
         If messbox.Visible = True Then messbox.Close()
 
         If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
@@ -6585,7 +6299,7 @@ Public Class Form1
                     End If
                 Next
 
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -6716,7 +6430,7 @@ Public Class Form1
             Call mov_CacheSave()
             If LabelCountFilter.Text.ToLower.IndexOf(" of ") <> -1 Then
 
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
                 Call mov_FormPopulate()
             End If
         Else
@@ -6829,7 +6543,7 @@ Public Class Form1
 
 
 
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
             mess.Close()
@@ -7034,7 +6748,7 @@ Public Class Form1
             End If
         Next
         Call mov_FormPopulate()
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub MediaCompanionForumToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionForumToolStripMenuItem.Click
@@ -8225,7 +7939,7 @@ Public Class Form1
                 If bckrescrapewizard.CancellationPending Then Exit For
             Next
             Call mov_FilteredToFullMovieList()
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -8279,7 +7993,7 @@ Public Class Form1
             ToolStripStatusLabel7.Visible = False
 
             Call util_ThreadsRunningCheck()
-            mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             'Mov_RebuildMoviesFromNfoToXML(movieFolders)      'we do this because the wizard writes to the nfo's & not the cache - this reloads the cache from the nfo's & reloads
             ' movie list with the new data (required if year updated)
 
@@ -9244,7 +8958,7 @@ Public Class Form1
             If e.ProgressPercentage = 999999 Then
                 ToolStripStatusLabel4.Text = e.UserState
             ElseIf e.ProgressPercentage = 999998 Then
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
                 ToolStripStatusLabel4.Text = e.UserState
             End If
             'ToolStrip1.Refresh()
@@ -9421,7 +9135,7 @@ Public Class Form1
 
     Private Sub ComboBox11_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox11.SelectedValueChanged
         Try
-            mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9612,7 +9326,7 @@ Public Class Form1
                     TextBox1.BackColor = Color.White
                 End If
                 TextBox1.Refresh()
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -9628,7 +9342,7 @@ Public Class Form1
                     txt_titlesearch.BackColor = Color.White
                 End If
                 txt_titlesearch.Refresh()
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -9707,53 +9421,19 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub CheckedListBox1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CheckedListBox1.SelectedIndexChanged
+
+
+
+
+
+
+    Private Sub RadioButton6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Try
-            If filterOverride = False Then
-                CheckedListBox1.Enabled = False
-                '            Call applyfilters()
-                mov_FiltersAndSortApply()
-                CheckedListBox1.Enabled = True
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
-        Try
-            If RadioButton1.Checked = True Then
-                Preferences.moviedefaultlist = 0
-
-                'Preferences.SaveConfig()   'we don't need to save this till MC Closes
-                'Call applyfilters()
-                Call mov_FiltersAndSortApply()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton2_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
-        Try
-            If RadioButton2.Checked = True Then
-                Preferences.moviedefaultlist = 1
-
-                'Preferences.SaveConfig()'we don't need to save this till MC Closes
-                Call mov_FiltersAndSortApply()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub RadioButton6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton6.CheckedChanged
-        Try
-            If RadioButton6.Checked = True Then
+            If RadioButtonFolder.Checked = True Then
                 Preferences.moviedefaultlist = 2
 
                 'Preferences.SaveConfig()'we don't need to save this till MC Closes
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -9815,14 +9495,13 @@ Public Class Form1
 
     'reverse order
     Private Sub btnreverse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnreverse.CheckedChanged 
-        Try
-            'If btnreverse.Checked = True Then
-            '    Preferences.moviesortorder = 7
-            'End If
-            Call mov_FiltersAndSortApply()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If clsGridViewMovie.GridSort = "Asc" Then
+            clsGridViewMovie.GridSort = "Desc"
+        Else
+            clsGridViewMovie.GridSort = "Asc"
+        End If
+
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     
@@ -10469,7 +10148,7 @@ Public Class Form1
                             ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
-                            Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
+                            Call clsGridViewMovie.mov_FiltersAndSortApply()
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required as we no longer move back to main page
@@ -10537,7 +10216,7 @@ Public Class Form1
         Next
 
         If replace = True Then
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
             'currentTabIndex = TabControl2.SelectedIndex
@@ -12415,7 +12094,7 @@ Public Class Form1
                 Next
                 stage = stage & vbCrLf
                 stage = stage & "applying filters" & vbCrLf
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
                 stage = stage & vbCrLf
                 stage = stage & "Finalising" & vbCrLf
                 messbox.Close()
@@ -16891,18 +16570,6 @@ Public Class Form1
         End Try
     End Sub
 
-    'Private Sub RadioButton19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Try
-    '        If RadioButton19.Checked = True Then
-    '            Preferences.moviesortorder = 5
-    '            Call mov_MovieComboListSort()
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-
-    'End Sub
-
     Private Sub TextBox26_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox26.KeyDown
         Try
             If e.KeyCode = Keys.Enter Then
@@ -17133,7 +16800,7 @@ Public Class Form1
                     filteredList.Add(movie)
                 End If
             Next
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             LabelCountFilter.Text = "Displaying " & filteredList.Count & " " & topactorname & " movies"
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -17285,41 +16952,6 @@ Public Class Form1
 			   cbSortHidden.SelectedIndex = cbSort.SelectedIndex
 				 check = False
 		  End If
-
-        'If RadioButton3.Checked <> RadioButton28.Checked Then
-        '    RadioButton28.Checked = RadioButton3.Checked
-        '    check = False
-        'End If
-
-        'If RadioButton4.Checked <> RadioButton27.Checked Then
-        '    RadioButton27.Checked = RadioButton4.Checked
-        '    check = False
-        'End If
-
-        'If RadioButtonSortModified.Checked <> RadioButton26.Checked Then
-        '    RadioButton26.Checked = RadioButtonSortModified.Checked
-        '    check = False
-        'End If
-
-        'If RadioButton21.Checked <> RadioButton22.Checked Then
-        '    RadioButton22.Checked = RadioButton21.Checked
-        '    check = False
-        'End If
-
-        'If RadioButton7.Checked <> RadioButton25.Checked Then
-        '    RadioButton25.Checked = RadioButton7.Checked
-        '    check = False
-        'End If
-
-        'If RadioButton19.Checked <> RadioButton24.Checked Then
-        '    RadioButton24.Checked = RadioButton19.Checked
-        '    check = False
-        'End If
-
-        'If RadioButtonSortCreate.Checked <> RadioButton23.Checked Then
-        '    RadioButton23.Checked = RadioButtonSortCreate.Checked
-        '    check = False
-        'End If
 
         If btnreverse.CheckState <> CheckBox9.CheckState Then
             CheckBox9.CheckState = btnreverse.CheckState
@@ -17603,33 +17235,6 @@ Public Class Form1
         Return ReturnValue
 
     End Function
-
-    'Private Sub RadioButton21_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Try
-    '        If RadioButton21.Checked = True Then
-    '            Preferences.moviesortorder = 3
-
-    '            Preferences.SaveConfig()
-    '            Call mov_MovieComboListSort()
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
-    'Private Sub RadioButton20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Try
-    '        If RadioButtonSortCreate.Checked = True Then
-    '            Preferences.moviesortorder = 6
-
-    '            Preferences.SaveConfig()
-    '            Call mov_MovieComboListSort()
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
 
     Private Shadows Sub util_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Try
@@ -18517,7 +18122,7 @@ Public Class Form1
                     End If
                 Next
             End If
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18890,9 +18495,9 @@ Public Class Form1
             End Try
             Call mov_CacheSave()
             'filteredlist = fullmovielist
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             'Call loadmovielist()
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             frmSplash2.Hide()
         Catch ex As Exception
@@ -19683,20 +19288,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Button81_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button81.Click
-        Try
-            Preferences.SaveConfig()
-            ToolsToolStripMenuItem.DropDownItems.Clear()
-            For Each com In Preferences.commandlist
-                ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-            Next
-            MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
-            generalprefschanged = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
 
-    End Sub
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         Try
@@ -21901,7 +21493,7 @@ Public Class Form1
 
     Private Sub ComboBox10_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox10.SelectedIndexChanged
         Try
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21916,7 +21508,7 @@ Public Class Form1
                     txt_titlesearch.BackColor = Color.White
                 End If
                 txt_titlesearch.Refresh()
-                Call mov_FiltersAndSortApply()
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -23260,7 +22852,7 @@ Public Class Form1
 
         Call mov_CacheSave()
         Call mov_FormPopulate()
-        Call mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
         frmSplash2.Hide()
         'mess.Close()
         Application.DoEvents()
@@ -24183,7 +23775,7 @@ Public Class Form1
                     End If
                 End If
             Next
-            mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
             DisplayMovie()
@@ -25084,7 +24676,7 @@ Public Class Form1
                             ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
-                            Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
+                            Call clsGridViewMovie.mov_FiltersAndSortApply()
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
@@ -26540,27 +26132,27 @@ Public Class Form1
     End Sub
 
     Private Sub RadioButtonAll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonAll.CheckedChanged
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub RadioButtonWatched_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonWatched.CheckedChanged
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub RadioButtonUnWatched_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonUnWatched.CheckedChanged
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub RadioButtonDuplicates_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonDuplicates.CheckedChanged
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub RadioButtonMissingPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingPosters.CheckedChanged
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub RadioButtonMissingFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingFanart.CheckedChanged
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_TVDB_Scraper.CheckedChanged
@@ -26982,7 +26574,7 @@ Public Class Form1
     Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles ButtonNextFanart.Click
         Try
             If noFanart = False Then
-                Call mov_FiltersAndSortApply() 'Apply Filters to movielist combobox
+                Call clsGridViewMovie.mov_FiltersAndSortApply()
                 Call mov_FanartLoad()   'refresh fanart for the current movie
                 'If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
                 If DataGridViewMovies.Rows.Count = 0 Then
@@ -27080,32 +26672,15 @@ Public Class Form1
 
         Select Case Preferences.moviedefaultlist
             Case 0
-                RadioButton1.Checked = True
+                RadioButtonTitleAndYear.Checked = True
             Case 1
-                RadioButton2.Checked = True
+                RadioButtonFileName.Checked = True
             Case 2
-                RadioButton6.Checked = True
+                RadioButtonFolder.Checked = True
         End Select
 
-
-'        Select Case Preferences.moviesortorder
-'            Case 0
-'                RadioButton3.Checked = True
-'            Case 1
-'                RadioButton4.Checked = True
-'            Case 2
-'                RadioButtonSortModified.Checked = True
-'            Case 3
-'                RadioButton21.Checked = True
-'            Case 4
-'                RadioButton7.Checked = True
-'            Case 5
-'                RadioButton19.Checked = True
-'            Case 6
-'                RadioButtonSortCreate.Checked = True
-'        End Select
-
-		  cbSort.SelectedIndex = Preferences.moviesortorder
+        'cbSort.SelectedIndex = Preferences.moviesortorder
+        cbSort.SelectedIndex = 0
 
         '----------------------------------------------------------
 
@@ -27187,7 +26762,7 @@ Public Class Form1
             Else
                 Preferences.showsortdate = False
             End If
-            Call mov_FiltersAndSortApply()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -28000,7 +27575,7 @@ End Sub
 
 
     Private Sub cbSort_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbSort.SelectedIndexChanged 
-        mov_FiltersAndSortApply()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
 
@@ -28965,4 +28540,38 @@ End Sub
         DataGridViewMovies.Focus()
     End Sub
 
+    Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
+        If MainFormLoadedStatus = True Then
+            clsGridViewMovie.GridFieldToDisplay = "FileName"
+            clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+        End If
+    End Sub
+
+    Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
+        If MainFormLoadedStatus = True Then
+            clsGridViewMovie.GridFieldToDisplay = "TiteAndYear"
+            clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+        End If
+    End Sub
+
+    Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
+        If MainFormLoadedStatus = True Then
+            clsGridViewMovie.GridFieldToDisplay = "Folder"
+            clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+        End If
+    End Sub
+
+    Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSaveChangesMoviePreference.Click
+        Try
+            Preferences.SaveConfig()
+            ToolsToolStripMenuItem.DropDownItems.Clear()
+            For Each com In Preferences.commandlist
+                ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+            Next
+            MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
+            generalprefschanged = False
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 End Class
