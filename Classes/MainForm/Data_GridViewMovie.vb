@@ -21,6 +21,7 @@
     Dim _plot As String
     Dim _source As String
     Dim _votes As String
+    Dim _TitleUcase As String
 
 
     Public Property fullpathandfilename
@@ -219,6 +220,15 @@
         End Get
         Set(ByVal value)
             _votes = value
+        End Set
+    End Property
+
+    Public Property TitleUcase
+        Get
+            Return _TitleUcase
+        End Get
+        Set(ByVal value)
+            _TitleUcase = value
         End Set
     End Property
 End Class
