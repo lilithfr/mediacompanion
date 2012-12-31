@@ -23154,6 +23154,7 @@ Public Class Form1
             For Each ite In list
                 progcount += 1
 
+                frmProgSplash.Label3.Text = "In progress :" & progcount & "/" & list.Count
                 frmProgSplash.ProgressBar1.Value = progcount
                 frmProgSplash.ProgressBar1.Invalidate()
 
