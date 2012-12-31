@@ -28404,4 +28404,8 @@ End Sub
         Call clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
+
+    Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
+        DisplayMovie()
+    End Sub
 End Class
