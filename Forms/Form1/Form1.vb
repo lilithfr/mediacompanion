@@ -160,14 +160,6 @@ Public Class Form1
     Public homemovietabindex As Integer = 0
 
 
-    
-
-
-    
-
-    
-
-
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
@@ -510,23 +502,7 @@ Public Class Form1
             If scrapeAndQuit = True Then
                 Call util_AutoRun()
             Else
-                'Try
-                'If ComboBox3.Items.Count <> Preferences.moviesets.Count Then
-                '    ComboBox3.Items.Clear()
-                '    For Each mset In Preferences.moviesets
-                '        ComboBox3.Items.Add(mset)
-                '    Next
-                'End If
 
-                'For Each mset In Preferences.moviesets
-                '    ComboBox3.Items.Add(mset)
-                'Next
-                'For te = 0 To ComboBox3.Items.Count - 1
-                '    If ComboBox3.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
-                '        ComboBox3.SelectedIndex = te
-                '        Exit For
-                '    End If
-                'Next
                 If Not IsNothing(workingMovieDetails) Then
                     setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
                 End If
