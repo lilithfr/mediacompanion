@@ -260,55 +260,6 @@ Public Class Form1
                 Call util_AutoRun()
             Else
                 InitWindow()
-
-                If Not IsNothing(workingMovieDetails) Then
-                    setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
-                End If
-
-                If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-                'Catch ex As Exception
-                '#If SilentErrorScream Then
-                'Throw ex
-                '#End If
-                '           End Try
-                mov_VideoSourcePopulate()
-                Call util_FontSetup()
-
-
-
-                Dim mediaDropdown As New SortedList(Of String, String)
-                mediaInfoExp.addTemplates(mediaDropdown)
-                For Each item In mediaDropdown
-                    If item.Value = MediaInfoExport.mediaType.Movie Then
-                        ExportMovieListInfoToolStripMenuItem.DropDownItems.Add(item.Key)
-                    ElseIf item.Value = MediaInfoExport.mediaType.TV Then
-                        ExportTVShowInfoToolStripMenuItem.DropDownItems.Add(item.Key)
-                    End If
-                Next
-
-                Call util_CommandListLoad()
-                startup = False
-                frmSplash.Close()
-
-                'hide debug xml view tabs - unhiden (i.e. added) via debug tab
-                TabLevel1.TabPages.Remove(Me.TabConfigXML)
-                TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
-                TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
-                TabLevel1.TabPages.Remove(Me.TabProfile)
-                TabLevel1.TabPages.Remove(Me.TabActorCache)
-                TabLevel1.TabPages.Remove(Me.TabRegex)
-
-                'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
-                GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
-                GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
-
-                'ToolStrip1.Enabled = True
-
-                'Below shows the current screensize on initial start
-                DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
-                mov_SplitContainerAutoPosition()
-                tv_ShowSelectedCurrently()
-                tv_SplitContainerAutoPosition()
             End If
 
 
@@ -329,6 +280,46 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+    End Sub
+
+    Private Sub AlignGroupBoxes()
+
+        'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
+        GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+        GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+    End Sub
+
+    Private Sub HideDebugPages()
+
+        'hide debug xml view tabs - unhiden (i.e. added) via debug tab
+        TabLevel1.TabPages.Remove(Me.TabConfigXML)
+        TabLevel1.TabPages.Remove(Me.TabMovieCacheXML)
+        TabLevel1.TabPages.Remove(Me.TabTVCacheXML)
+        TabLevel1.TabPages.Remove(Me.TabProfile)
+        TabLevel1.TabPages.Remove(Me.TabActorCache)
+        TabLevel1.TabPages.Remove(Me.TabRegex)
+    End Sub
+
+    Private Sub InitSetsTxt()
+
+        If Not IsNothing(workingMovieDetails) Then
+            setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
+        Else
+            setsTxt.Text = "-None-"
+        End If
+    End Sub
+
+    Private Sub InitExportDropDowns()
+
+        Dim mediaDropdown As New SortedList(Of String, String)
+        mediaInfoExp.addTemplates(mediaDropdown)
+        For Each item In mediaDropdown
+            If item.Value = MediaInfoExport.mediaType.Movie Then
+                ExportMovieListInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+            ElseIf item.Value = MediaInfoExport.mediaType.TV Then
+                ExportTVShowInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+            End If
+        Next
     End Sub
 
     Private Sub InitWindow()
@@ -434,6 +425,32 @@ Public Class Form1
         SplitContainer3.IsSplitterFixed = False
         SplitContainer4.IsSplitterFixed = False
         SplitContainer5.IsSplitterFixed = False
+
+        InitSetsTxt()
+
+        'Catch ex As Exception
+        '#If SilentErrorScream Then
+        'Throw ex
+        '#End If
+        '           End Try
+        mov_VideoSourcePopulate()
+        Call util_FontSetup()
+        InitExportDropDowns()
+
+
+        Call util_CommandListLoad()
+        startup = False
+        frmSplash.Close()
+        HideDebugPages()
+        AlignGroupBoxes()
+
+        'ToolStrip1.Enabled = True
+
+        'Below shows the current screensize on initial start
+        DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
+        mov_SplitContainerAutoPosition()
+        tv_ShowSelectedCurrently()
+        tv_SplitContainerAutoPosition()
     End Sub
 
     Private Sub ClearLogFile()
