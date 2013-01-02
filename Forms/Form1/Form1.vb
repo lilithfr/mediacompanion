@@ -18402,6 +18402,10 @@ Public Class Form1
             'Call loadmovielist()
             Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
+
+            'Reload the list of movies in the grid
+            Call mov_CacheLoad()
+
             frmSplash2.Hide()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

@@ -66,9 +66,9 @@ Partial Class frmProgressScreen
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(20, 128)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(40, 13)
+        Me.Label3.Size = New System.Drawing.Size(57, 13)
         Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Label3"
+        Me.Label3.Text = "Progress :"
         '
         'frmProgressScreen
         '
