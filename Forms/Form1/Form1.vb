@@ -164,13 +164,13 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
 
-            AddBlankTasks()
+            util_AddBlankTasks()
 
             'Preferences.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
             'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
-            FrameworkVerify("4.0 Full")
+            util_FrameworkVerify("4.0 Full")
 
             'TasksList.DataSource = Common.Tasks
 
@@ -198,25 +198,25 @@ Public Class Form1
             'End Try
             'Panel4.Location = New Point(149, 23)              'Disabled this direct positioning on Panel 4 so that we can position in GUI....SK
             TvTreeview.Sort()
-            CheckScrapeAndQuit()
+            util_CheckScrapeAndQuit()
 
             Me.Visible = False
 
             Me.Refresh()
             Application.DoEvents()
-            CheckForRunningInstances()
+            util_CheckForRunningInstances()
             CheckForIllegalCrossThreadCalls = False
             'messbox.Show()
             'messbox.Visible = False
 
 
 
-            ConfigInit()
-            LoadSettings()
+            util_ConfigInit()
+            util_LoadSettings()
 
             'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
             util_MainFormTitleUpdate()
-            InitPosterCache()
+            util_InitPosterCache()
 
 
             'Dim f As New IO.DirectoryInfo(applicationdatapath)
@@ -243,7 +243,7 @@ Public Class Form1
                 Throw ex
 #End If
             End Try
-            ClearLogFile()
+            util_ClearLogFile()
 
             'ToolStrip1.Enabled = False
 
@@ -259,7 +259,7 @@ Public Class Form1
             If scrapeAndQuit = True Then
                 Call util_AutoRun()
             Else
-                InitWindow()
+                util_InitWindow()
             End If
 
 
@@ -282,14 +282,14 @@ Public Class Form1
 
     End Sub
 
-    Private Sub AlignGroupBoxes()
+    Private Sub util_AlignGroupBoxes()
 
         'the following code aligns the 3 groupboxes ontop of each other which cannot be done in the GUI
         GroupBox_IMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
         GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
     End Sub
 
-    Private Sub HideDebugPages()
+    Private Sub util_HideDebugPages()
 
         'hide debug xml view tabs - unhiden (i.e. added) via debug tab
         TabLevel1.TabPages.Remove(Me.TabConfigXML)
@@ -300,7 +300,7 @@ Public Class Form1
         TabLevel1.TabPages.Remove(Me.TabRegex)
     End Sub
 
-    Private Sub InitSetsTxt()
+    Private Sub util_InitSetsTxt()
 
         If Not IsNothing(workingMovieDetails) Then
             setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
@@ -309,7 +309,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub InitExportDropDowns()
+    Private Sub util_InitExportDropDowns()
 
         Dim mediaDropdown As New SortedList(Of String, String)
         mediaInfoExp.addTemplates(mediaDropdown)
@@ -322,7 +322,7 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub InitWindow()
+    Private Sub util_InitWindow()
 
         Me.Visible = True
 
@@ -426,7 +426,7 @@ Public Class Form1
         SplitContainer4.IsSplitterFixed = False
         SplitContainer5.IsSplitterFixed = False
 
-        InitSetsTxt()
+        util_InitSetsTxt()
 
         'Catch ex As Exception
         '#If SilentErrorScream Then
@@ -435,14 +435,14 @@ Public Class Form1
         '           End Try
         mov_VideoSourcePopulate()
         Call util_FontSetup()
-        InitExportDropDowns()
+        util_InitExportDropDowns()
 
 
         Call util_CommandListLoad()
         startup = False
         frmSplash.Close()
-        HideDebugPages()
-        AlignGroupBoxes()
+        util_HideDebugPages()
+        util_AlignGroupBoxes()
 
         'ToolStrip1.Enabled = True
 
@@ -453,15 +453,15 @@ Public Class Form1
         tv_SplitContainerAutoPosition()
     End Sub
 
-    Private Sub ClearLogFile()
+    Private Sub util_ClearLogFile()
         Dim tempString As String
         tempString = applicationDatapath & "error.log"
-        If IO.File.Exists(tempstring) = True Then
-            IO.File.Delete(tempstring)
+        If IO.File.Exists(tempString) = True Then
+            IO.File.Delete(tempString)
         End If
     End Sub
 
-    Private Sub InitPosterCache()
+    Private Sub util_InitPosterCache()
 
         Dim g As New IO.DirectoryInfo(IO.Path.Combine(applicationPath, "settings\postercache\"))
         If Not g.Exists Then
@@ -474,7 +474,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub LoadSettings()
+    Private Sub util_LoadSettings()
 
         Dim tempString As String = applicationPath & "\Settings\"
 
@@ -506,13 +506,13 @@ Public Class Form1
             profileStruct.defaultprofile = "Default"
             profileStruct.startupprofile = "Default"
             Dim currentprofile As New str_ListOfProfiles(SetDefaults)
-            tempstring = applicationPath & "\Settings\"
-            currentprofile.actorcache = tempstring & "actorcache.xml"
-            currentprofile.config = tempstring & "config.xml"
-            currentprofile.regexlist = tempstring & "regex.xml"
-            currentprofile.tvcache = tempstring & "tvcache.xml"
-            currentprofile.filters = tempstring & "filters.txt"
-            currentprofile.moviecache = tempstring & "moviecache.xml"
+            tempString = applicationPath & "\Settings\"
+            currentprofile.actorcache = tempString & "actorcache.xml"
+            currentprofile.config = tempString & "config.xml"
+            currentprofile.regexlist = tempString & "regex.xml"
+            currentprofile.tvcache = tempString & "tvcache.xml"
+            currentprofile.filters = tempString & "filters.txt"
+            currentprofile.moviecache = tempString & "moviecache.xml"
             currentprofile.profilename = "Default"
             profileStruct.profilelist.Add(currentprofile)
             profileStruct.workingprofilename = "Default"
@@ -531,10 +531,10 @@ Public Class Form1
                 End If
             Next
         End If
-        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
+        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempString & "homemoviecache.xml"
     End Sub
 
-    Private Sub ConfigInit()
+    Private Sub util_ConfigInit()
         Preferences.maximised = False
         Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
         generalprefschanged = False
@@ -556,7 +556,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub CheckForRunningInstances()
+    Private Sub util_CheckForRunningInstances()
 
         Dim tempstring As String
         tempstring = applicationPath & "\enablemultiple.set"
@@ -579,20 +579,20 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub AddBlankTasks()
+    Private Sub util_AddBlankTasks()
 
         For I = 0 To 20
             Common.Tasks.Add(New Tasks.BlankTask())
         Next
     End Sub
 
-    Private Sub FrameworkVerify(ByVal version As String)
+    Private Sub util_FrameworkVerify(ByVal version As String)
         If Utilities.GetFrameworkVersions.IndexOf(version) = -1 Then
-            FrameworkNotify()
+            util_FrameworkNotify()
         End If
     End Sub
 
-    Private Sub CheckScrapeAndQuit()
+    Private Sub util_CheckScrapeAndQuit()
 
         For Each arg As String In Environment.GetCommandLineArgs()
             Console.WriteLine(arg)
@@ -611,7 +611,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub FrameworkNotify()
+    Private Sub util_FrameworkNotify()
 
         Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
         If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
