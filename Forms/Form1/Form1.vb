@@ -164,26 +164,13 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Try
 
-            For I = 0 To 20
-                Common.Tasks.Add(New Tasks.BlankTask())
-            Next
+            AddBlankTasks()
 
             'Preferences.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
             'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
             Preferences.applicationPath = Application.StartupPath
             Utilities.applicationPath = Application.StartupPath
-            If Not Utilities.GetFrameworkVersions().IndexOf("4.0") Then
-                Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
-                If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
-                          "The Full version, while not required, is available from:" & vbCrLf & _
-                          RequiredNetURL & vbCrLf & vbCrLf & _
-                          "Do you wish to download the Full version?", _
-                          MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
-                    'Process.Start(RequiredNetURL)
-                    OpenUrl(RequiredNetURL)
-                    End
-                End If
-            End If
+            FrameworkVerify("4.0 Full")
 
             'TasksList.DataSource = Common.Tasks
 
@@ -211,132 +198,26 @@ Public Class Form1
             'End Try
             'Panel4.Location = New Point(149, 23)              'Disabled this direct positioning on Panel 4 so that we can position in GUI....SK
             TvTreeview.Sort()
+            CheckScrapeAndQuit()
 
-            For Each arg As String In Environment.GetCommandLineArgs()
-                Console.WriteLine(arg)
-                If arg = "sq" Then
-                    Me.WindowState = FormWindowState.Minimized
-                    scrapeAndQuit = True
-                End If
-            Next
-
-            If scrapeAndQuit = False Then
-                frmSplash.Show()
-
-
-                frmSplash.Label3.Text = "Status :- Initialising Program"
-                frmSplash.Label3.Refresh()
-            End If
             Me.Visible = False
 
             Me.Refresh()
             Application.DoEvents()
-            Dim tempstring As String
-            tempstring = applicationPath & "\enablemultiple.set"
-            If Not File.Exists(tempstring) Then
-                Dim tej As Integer = 0
-                Dim processes() As Process
-                Dim instance As Process
-                Dim process As New Process()
-                processes = process.GetProcesses
-                For Each instance In processes
-                    If instance.ProcessName = "Media Companion" Then                            'If instance.ProcessName.IndexOf("Media Companion - V") <> -1 Then          This should limit the match to only Median Companion running not Visual Studio 2010
-                        tej = tej + 1
-                        If tej >= 2 Then
-                            MsgBox("XBMC Media Companion is already running")
-
-                            End                         'Close MC since another version of the program is running.
-                        End If
-                    End If
-                Next
-            End If
+            CheckForRunningInstances()
             CheckForIllegalCrossThreadCalls = False
             'messbox.Show()
             'messbox.Visible = False
 
 
 
-            Preferences.maximised = False
-            Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
-            generalprefschanged = False
+            ConfigInit()
+            LoadSettings()
 
-            tempstring = applicationPath & "\Settings\" 'read in the config.xml to set the stored preferences (if it exists)
-            Dim hg As New IO.DirectoryInfo(tempstring)
-            If hg.Exists Then
-                ' applicationdatapath = tempstring
-                Preferences.configpath = tempstring & "config.xml"
-                If Not IO.File.Exists(Preferences.configpath) Then
-
-                    Preferences.SaveConfig()
-                End If
-            Else
-                IO.Directory.CreateDirectory(tempstring)
-                workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
-                Preferences.SaveConfig()
-            End If
-
-
-
-            If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
-                Call util_ProfilesLoad()
-                For Each prof In profileStruct.profilelist
-                    If prof.profilename = profileStruct.startupprofile Then
-                        workingProfile.actorcache = prof.actorcache
-                        workingProfile.config = prof.config
-                        workingProfile.moviecache = prof.moviecache
-                        workingProfile.profilename = prof.profilename
-                        workingProfile.regexlist = prof.regexlist
-                        workingProfile.filters = prof.filters
-                        workingProfile.tvcache = prof.tvcache
-                        workingProfile.profilename = prof.profilename
-                        For Each item In ProfilesToolStripMenuItem.DropDownItems
-                            If item.text = workingProfile.profilename Then
-                                With item
-                                    item.checked = True
-                                End With
-                            Else
-                                item.checked = False
-                            End If
-                        Next
-                    End If
-                Next
-            Else
-                profileStruct.workingprofilename = "Default"
-                profileStruct.defaultprofile = "Default"
-                profileStruct.startupprofile = "Default"
-                Dim currentprofile As New str_ListOfProfiles(SetDefaults)
-                tempstring = applicationPath & "\Settings\"
-                currentprofile.actorcache = tempstring & "actorcache.xml"
-                currentprofile.config = tempstring & "config.xml"
-                currentprofile.regexlist = tempstring & "regex.xml"
-                currentprofile.tvcache = tempstring & "tvcache.xml"
-                currentprofile.filters = tempstring & "filters.txt"
-                currentprofile.moviecache = tempstring & "moviecache.xml"
-                currentprofile.profilename = "Default"
-                profileStruct.profilelist.Add(currentprofile)
-                profileStruct.workingprofilename = "Default"
-                Call util_ProfileSave()
-                Call util_ProfilesLoad()
-                For Each prof In profileStruct.profilelist
-                    If prof.profilename = profileStruct.startupprofile Then
-                        workingProfile.actorcache = prof.actorcache
-                        workingProfile.config = prof.config
-                        workingProfile.moviecache = prof.moviecache
-                        workingProfile.profilename = prof.profilename
-                        workingProfile.regexlist = prof.regexlist
-                        workingProfile.filters = prof.filters
-                        workingProfile.tvcache = prof.tvcache
-                        workingProfile.profilename = prof.profilename
-                    End If
-                Next
-            End If
-            If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
             'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
             util_MainFormTitleUpdate()
+            InitPosterCache()
 
-
-
-            'Application data folder
 
             'Dim f As New IO.DirectoryInfo(applicationdatapath)
             'If Not f.Exists Then
@@ -347,16 +228,6 @@ Public Class Form1
             '        End
             '    End Try
             'End If
-
-            Dim g As New IO.DirectoryInfo(IO.Path.Combine(applicationPath, "settings\postercache\"))
-            If Not g.Exists Then
-                Try
-                    Directory.CreateDirectory(IO.Path.Combine(applicationPath, "settings\postercache\"))
-                Catch ex As Exception
-                    MsgBox(ex.Message.ToString)
-                    End
-                End Try
-            End If
 
             CheckForIllegalCrossThreadCalls = False
 
@@ -372,12 +243,7 @@ Public Class Form1
                 Throw ex
 #End If
             End Try
-
-            tempstring = applicationDatapath & "error.log"
-            If IO.File.Exists(tempstring) = True Then
-                IO.File.Delete(tempstring)
-            End If
-
+            ClearLogFile()
 
             'ToolStrip1.Enabled = False
 
@@ -388,120 +254,12 @@ Public Class Form1
             'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
             'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
 
-
-
-
-
-
-            If scrapeAndQuit = False Then
-                Me.Visible = True
-
-
-                Dim intX As Integer = Screen.PrimaryScreen.Bounds.Width
-                Dim intY As Integer = Screen.PrimaryScreen.Bounds.Height
-                SplitContainer1.IsSplitterFixed = True
-                SplitContainer2.IsSplitterFixed = True
-                SplitContainer3.IsSplitterFixed = True
-                SplitContainer4.IsSplitterFixed = True
-                SplitContainer5.IsSplitterFixed = True
-                If Preferences.maximised = False Then
-                    If Preferences.locx < 0 Then Preferences.locx = 0
-                    If Preferences.locy < 0 Then Preferences.locy = 0
-                    If Preferences.formheight > intY Then Preferences.formheight = intY
-                    If Preferences.formwidth > intX Then Preferences.formwidth = intX
-                    If Preferences.locx >= intX Then Preferences.locx = intX - Preferences.formwidth
-                    If Preferences.locy >= intY Then Preferences.locy = intY - Preferences.formheight
-                    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
-                        Me.Width = Preferences.formwidth
-                        Me.Height = Preferences.formheight
-                        Me.Location = New Point(Preferences.locx, Preferences.locy)
-                    End If
-                Else
-                    Me.WindowState = FormWindowState.Maximized
-                End If
-
-                Dim dpi As Graphics = Me.CreateGraphics
-
-                'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
-                '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                DebugSytemDPITextBox.Text = dpi.DpiX
-
-                'If Preferences.maximised = True Then
-                '    Me.WindowState = FormWindowState.Maximized
-                'Else
-                '    If Preferences.locx <> 0 Then
-                '        Me.Location = New Point(Preferences.locx, Preferences.locy)
-                '    End If
-                '    If Preferences.locy <> 0 Then
-                '        Me.Location = New Point(Preferences.locx, Preferences.locy)
-                '    End If
-                '    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
-                '        Me.Width = Preferences.formwidth
-                '        Me.Height = Preferences.formheight
-                '    End If
-                'End If
-
-                Me.Refresh()
-                Application.DoEvents()
-
-                Me.Refresh()
-                Application.DoEvents()
-
-                Application.DoEvents()
-
-                screenshotTab = TabControl3.TabPages(1)
-
-                TabControl3.TabPages.RemoveAt(1)
-
-                If Preferences.splt5 = 0 Then
-                    Dim tempint As Integer = SplitContainer1.Height
-                    tempint = tempint / 4
-                    tempint = tempint * 3
-                    If tempint > 275 Then
-                        Preferences.splt5 = tempint
-                    Else
-                        Preferences.splt5 = 275
-                    End If
-                End If
-
-                If Preferences.startuptab = 0 Then
-                    SplitContainer1.SplitterDistance = Preferences.splt1
-                    SplitContainer2.SplitterDistance = Preferences.splt2
-                    SplitContainer5.SplitterDistance = Preferences.splt5
-                    TabLevel1.SelectedIndex = 1
-                    SplitContainer3.SplitterDistance = Preferences.splt3
-                    SplitContainer4.SplitterDistance = Preferences.splt4
-                    TabLevel1.SelectedIndex = 0
-                ElseIf Preferences.startuptab = 1 Then
-                    SplitContainer1.SplitterDistance = Preferences.splt1
-                    SplitContainer2.SplitterDistance = Preferences.splt2
-                    SplitContainer5.SplitterDistance = Preferences.splt5
-                    TabLevel1.SelectedIndex = 1
-                    SplitContainer3.SplitterDistance = Preferences.splt3
-                    SplitContainer4.SplitterDistance = Preferences.splt4
-                ElseIf Preferences.startuptab = 2 Then
-                    SplitContainer1.SplitterDistance = Preferences.splt1
-                    SplitContainer2.SplitterDistance = Preferences.splt2
-                    SplitContainer5.SplitterDistance = Preferences.splt5
-                    SplitContainer3.SplitterDistance = Preferences.splt3
-                    SplitContainer4.SplitterDistance = Preferences.splt4
-                    TabLevel1.SelectedIndex = 2
-                End If
-
-
-                SplitContainer1.IsSplitterFixed = False
-                SplitContainer2.IsSplitterFixed = False
-                SplitContainer3.IsSplitterFixed = False
-                SplitContainer4.IsSplitterFixed = False
-                SplitContainer5.IsSplitterFixed = False
-            End If
-
             'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
             If scrapeAndQuit = True Then
                 Call util_AutoRun()
             Else
+                InitWindow()
 
                 If Not IsNothing(workingMovieDetails) Then
                     setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
@@ -571,6 +329,283 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+    End Sub
+
+    Private Sub InitWindow()
+
+        Me.Visible = True
+
+
+        Dim intX As Integer = Screen.PrimaryScreen.Bounds.Width
+        Dim intY As Integer = Screen.PrimaryScreen.Bounds.Height
+        SplitContainer1.IsSplitterFixed = True
+        SplitContainer2.IsSplitterFixed = True
+        SplitContainer3.IsSplitterFixed = True
+        SplitContainer4.IsSplitterFixed = True
+        SplitContainer5.IsSplitterFixed = True
+        If Preferences.maximised = False Then
+            If Preferences.locx < 0 Then Preferences.locx = 0
+            If Preferences.locy < 0 Then Preferences.locy = 0
+            If Preferences.formheight > intY Then Preferences.formheight = intY
+            If Preferences.formwidth > intX Then Preferences.formwidth = intX
+            If Preferences.locx >= intX Then Preferences.locx = intX - Preferences.formwidth
+            If Preferences.locy >= intY Then Preferences.locy = intY - Preferences.formheight
+            If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
+                Me.Width = Preferences.formwidth
+                Me.Height = Preferences.formheight
+                Me.Location = New Point(Preferences.locx, Preferences.locy)
+            End If
+        Else
+            Me.WindowState = FormWindowState.Maximized
+        End If
+
+        Dim dpi As Graphics = Me.CreateGraphics
+
+        'MessageBox.Show(String.Format("X={0}, Y={1}", dpi.DpiX, dpi.DpiY),
+        '"DPI Settings", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        DebugSytemDPITextBox.Text = dpi.DpiX
+
+        'If Preferences.maximised = True Then
+        '    Me.WindowState = FormWindowState.Maximized
+        'Else
+        '    If Preferences.locx <> 0 Then
+        '        Me.Location = New Point(Preferences.locx, Preferences.locy)
+        '    End If
+        '    If Preferences.locy <> 0 Then
+        '        Me.Location = New Point(Preferences.locx, Preferences.locy)
+        '    End If
+        '    If Preferences.formheight <> 0 And Preferences.formwidth <> 0 Then
+        '        Me.Width = Preferences.formwidth
+        '        Me.Height = Preferences.formheight
+        '    End If
+        'End If
+
+        Me.Refresh()
+        Application.DoEvents()
+
+        Me.Refresh()
+        Application.DoEvents()
+
+        Application.DoEvents()
+
+        screenshotTab = TabControl3.TabPages(1)
+
+        TabControl3.TabPages.RemoveAt(1)
+
+        If Preferences.splt5 = 0 Then
+            Dim tempint As Integer = SplitContainer1.Height
+            tempint = tempint / 4
+            tempint = tempint * 3
+            If tempint > 275 Then
+                Preferences.splt5 = tempint
+            Else
+                Preferences.splt5 = 275
+            End If
+        End If
+
+        If Preferences.startuptab = 0 Then
+            SplitContainer1.SplitterDistance = Preferences.splt1
+            SplitContainer2.SplitterDistance = Preferences.splt2
+            SplitContainer5.SplitterDistance = Preferences.splt5
+            TabLevel1.SelectedIndex = 1
+            SplitContainer3.SplitterDistance = Preferences.splt3
+            SplitContainer4.SplitterDistance = Preferences.splt4
+            TabLevel1.SelectedIndex = 0
+        ElseIf Preferences.startuptab = 1 Then
+            SplitContainer1.SplitterDistance = Preferences.splt1
+            SplitContainer2.SplitterDistance = Preferences.splt2
+            SplitContainer5.SplitterDistance = Preferences.splt5
+            TabLevel1.SelectedIndex = 1
+            SplitContainer3.SplitterDistance = Preferences.splt3
+            SplitContainer4.SplitterDistance = Preferences.splt4
+        ElseIf Preferences.startuptab = 2 Then
+            SplitContainer1.SplitterDistance = Preferences.splt1
+            SplitContainer2.SplitterDistance = Preferences.splt2
+            SplitContainer5.SplitterDistance = Preferences.splt5
+            SplitContainer3.SplitterDistance = Preferences.splt3
+            SplitContainer4.SplitterDistance = Preferences.splt4
+            TabLevel1.SelectedIndex = 2
+        End If
+
+
+        SplitContainer1.IsSplitterFixed = False
+        SplitContainer2.IsSplitterFixed = False
+        SplitContainer3.IsSplitterFixed = False
+        SplitContainer4.IsSplitterFixed = False
+        SplitContainer5.IsSplitterFixed = False
+    End Sub
+
+    Private Sub ClearLogFile()
+        Dim tempString As String
+        tempString = applicationDatapath & "error.log"
+        If IO.File.Exists(tempstring) = True Then
+            IO.File.Delete(tempstring)
+        End If
+    End Sub
+
+    Private Sub InitPosterCache()
+
+        Dim g As New IO.DirectoryInfo(IO.Path.Combine(applicationPath, "settings\postercache\"))
+        If Not g.Exists Then
+            Try
+                Directory.CreateDirectory(IO.Path.Combine(applicationPath, "settings\postercache\"))
+            Catch ex As Exception
+                MsgBox(ex.Message.ToString)
+                End
+            End Try
+        End If
+    End Sub
+
+    Private Sub LoadSettings()
+
+        Dim tempString As String = applicationPath & "\Settings\"
+
+        If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
+            Call util_ProfilesLoad()
+            For Each prof In profileStruct.profilelist
+                If prof.profilename = profileStruct.startupprofile Then
+                    workingProfile.actorcache = prof.actorcache
+                    workingProfile.config = prof.config
+                    workingProfile.moviecache = prof.moviecache
+                    workingProfile.profilename = prof.profilename
+                    workingProfile.regexlist = prof.regexlist
+                    workingProfile.filters = prof.filters
+                    workingProfile.tvcache = prof.tvcache
+                    workingProfile.profilename = prof.profilename
+                    For Each item In ProfilesToolStripMenuItem.DropDownItems
+                        If item.text = workingProfile.profilename Then
+                            With item
+                                item.checked = True
+                            End With
+                        Else
+                            item.checked = False
+                        End If
+                    Next
+                End If
+            Next
+        Else
+            profileStruct.workingprofilename = "Default"
+            profileStruct.defaultprofile = "Default"
+            profileStruct.startupprofile = "Default"
+            Dim currentprofile As New str_ListOfProfiles(SetDefaults)
+            tempstring = applicationPath & "\Settings\"
+            currentprofile.actorcache = tempstring & "actorcache.xml"
+            currentprofile.config = tempstring & "config.xml"
+            currentprofile.regexlist = tempstring & "regex.xml"
+            currentprofile.tvcache = tempstring & "tvcache.xml"
+            currentprofile.filters = tempstring & "filters.txt"
+            currentprofile.moviecache = tempstring & "moviecache.xml"
+            currentprofile.profilename = "Default"
+            profileStruct.profilelist.Add(currentprofile)
+            profileStruct.workingprofilename = "Default"
+            Call util_ProfileSave()
+            Call util_ProfilesLoad()
+            For Each prof In profileStruct.profilelist
+                If prof.profilename = profileStruct.startupprofile Then
+                    workingProfile.actorcache = prof.actorcache
+                    workingProfile.config = prof.config
+                    workingProfile.moviecache = prof.moviecache
+                    workingProfile.profilename = prof.profilename
+                    workingProfile.regexlist = prof.regexlist
+                    workingProfile.filters = prof.filters
+                    workingProfile.tvcache = prof.tvcache
+                    workingProfile.profilename = prof.profilename
+                End If
+            Next
+        End If
+        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
+    End Sub
+
+    Private Sub ConfigInit()
+        Preferences.maximised = False
+        Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
+        generalprefschanged = False
+        Dim tempstring As String
+        tempstring = applicationPath & "\Settings\"
+
+        Dim hg As New IO.DirectoryInfo(tempstring)
+        If hg.Exists Then
+            ' applicationdatapath = tempstring
+            Preferences.configpath = tempstring & "config.xml"
+            If Not IO.File.Exists(Preferences.configpath) Then
+
+                Preferences.SaveConfig()
+            End If
+        Else
+            IO.Directory.CreateDirectory(tempstring)
+            workingProfile.config = tempstring = applicationPath & "\Settings\config.xml"
+            Preferences.SaveConfig()
+        End If
+    End Sub
+
+    Private Sub CheckForRunningInstances()
+
+        Dim tempstring As String
+        tempstring = applicationPath & "\enablemultiple.set"
+        If Not File.Exists(tempstring) Then
+            Dim tej As Integer = 0
+            Dim processes() As Process
+            Dim instance As Process
+            Dim process As New Process()
+            processes = process.GetProcesses
+            For Each instance In processes
+                If instance.ProcessName = "Media Companion" Then                            'If instance.ProcessName.IndexOf("Media Companion - V") <> -1 Then          This should limit the match to only Median Companion running not Visual Studio 2010
+                    tej = tej + 1
+                    If tej >= 2 Then
+                        MsgBox("XBMC Media Companion is already running")
+
+                        End                         'Close MC since another version of the program is running.
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub AddBlankTasks()
+
+        For I = 0 To 20
+            Common.Tasks.Add(New Tasks.BlankTask())
+        Next
+    End Sub
+
+    Private Sub FrameworkVerify(ByVal version As String)
+        If Utilities.GetFrameworkVersions.IndexOf(version) = -1 Then
+            FrameworkNotify()
+        End If
+    End Sub
+
+    Private Sub CheckScrapeAndQuit()
+
+        For Each arg As String In Environment.GetCommandLineArgs()
+            Console.WriteLine(arg)
+            If arg = "sq" Then
+                Me.WindowState = FormWindowState.Minimized
+                scrapeAndQuit = True
+            End If
+        Next
+
+        If scrapeAndQuit = False Then
+            frmSplash.Show()
+
+
+            frmSplash.Label3.Text = "Status :- Initialising Program"
+            frmSplash.Label3.Refresh()
+        End If
+    End Sub
+
+    Private Sub FrameworkNotify()
+
+        Dim RequiredNetURL As String = "http://www.microsoft.com/download/en/details.aspx?id=17718"
+        If MsgBox("The Client version is available through Windows Updates." & vbCrLf & _
+                  "The Full version, while not required, is available from:" & vbCrLf & _
+                  RequiredNetURL & vbCrLf & vbCrLf & _
+                  "Do you wish to download the Full version?", _
+                  MsgBoxStyle.YesNo, "MC Requires .Net 4.0.") = MsgBoxResult.Yes Then
+            'Process.Start(RequiredNetURL)
+            OpenUrl(RequiredNetURL)
+            End
+        End If
     End Sub
 
 
