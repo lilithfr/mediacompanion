@@ -479,7 +479,7 @@ Public Class Form1
 
     Private Sub util_LoadSettings()
 
-        Dim tempString As String = util_SettingsPath()
+        Dim settingsPath As String = util_SettingsPath()
 
         If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
             Call util_ProfilesLoad()
@@ -509,12 +509,12 @@ Public Class Form1
             profileStruct.defaultprofile = "Default"
             profileStruct.startupprofile = "Default"
             Dim currentprofile As New str_ListOfProfiles(SetDefaults)
-            currentprofile.actorcache = tempString & "actorcache.xml"
-            currentprofile.config = tempString & "config.xml"
-            currentprofile.regexlist = tempString & "regex.xml"
-            currentprofile.tvcache = tempString & "tvcache.xml"
-            currentprofile.filters = tempString & "filters.txt"
-            currentprofile.moviecache = tempString & "moviecache.xml"
+            currentprofile.actorcache = settingsPath & "actorcache.xml"
+            currentprofile.config = settingsPath & "config.xml"
+            currentprofile.regexlist = settingsPath & "regex.xml"
+            currentprofile.tvcache = settingsPath & "tvcache.xml"
+            currentprofile.filters = settingsPath & "filters.txt"
+            currentprofile.moviecache = settingsPath & "moviecache.xml"
             currentprofile.profilename = "Default"
             profileStruct.profilelist.Add(currentprofile)
             profileStruct.workingprofilename = "Default"
@@ -533,7 +533,7 @@ Public Class Form1
                 End If
             Next
         End If
-        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempString & "homemoviecache.xml"
+        If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = settingsPath & "homemoviecache.xml"
     End Sub
 
     Private Function util_SettingsPath()
@@ -803,8 +803,6 @@ Public Class Form1
             Dim pic2ImszH = moviethumb.Image.Size.Height
             pic1ratio = pic1ImSzW / pic1ImszH
             pic2ratio = pic2ImSzW / pic2ImszH
-            Dim width As Integer = SplitContainer2.Size.Width
-            ' MsgBox(from & " = " & width & ":" & Int(SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio))) - 5 & " - " & pic1ImSzW & "x" & pic1ImszH & " " & pic2ImszH & "x" & pic2ImSzW)
         Catch ex As Exception
             pic1ratio = 2
             pic2ratio = 1
@@ -1693,15 +1691,6 @@ Public Class Form1
                             Next
                         End If
                     End If
-
-
-
-
-
-
-
-
-
 
                     If workingMovie.title <> Nothing Then
 
