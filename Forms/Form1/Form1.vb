@@ -165,11 +165,8 @@ Public Class Form1
         Try
 
             util_AddBlankTasks()
+            util_SetApplicationPaths()
 
-            'Preferences.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
-            'Utilities.applicationPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\"))
-            Preferences.applicationPath = Application.StartupPath
-            Utilities.applicationPath = Application.StartupPath
             util_FrameworkVerify("4.0 Full")
 
             'TasksList.DataSource = Common.Tasks
@@ -280,6 +277,12 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
 
+    End Sub
+
+    Private Sub util_SetApplicationPaths()
+
+        Preferences.applicationPath = Application.StartupPath
+        Utilities.applicationPath = Application.StartupPath
     End Sub
 
     Private Sub util_AlignGroupBoxes()
@@ -476,7 +479,7 @@ Public Class Form1
 
     Private Sub util_LoadSettings()
 
-        Dim tempString As String = applicationPath & "\Settings\"
+        Dim tempString As String = util_SettingsPath()
 
         If IO.File.Exists(applicationPath & "\settings\profile.xml") = True Then
             Call util_ProfilesLoad()
@@ -506,7 +509,6 @@ Public Class Form1
             profileStruct.defaultprofile = "Default"
             profileStruct.startupprofile = "Default"
             Dim currentprofile As New str_ListOfProfiles(SetDefaults)
-            tempString = applicationPath & "\Settings\"
             currentprofile.actorcache = tempString & "actorcache.xml"
             currentprofile.config = tempString & "config.xml"
             currentprofile.regexlist = tempString & "regex.xml"
@@ -534,12 +536,16 @@ Public Class Form1
         If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempString & "homemoviecache.xml"
     End Sub
 
+    Private Function util_SettingsPath()
+        Return applicationPath & "\Settings\"
+    End Function
+
     Private Sub util_ConfigInit()
         Preferences.maximised = False
         Preferences.SetUpPreferences()                     'Set defaults to all userpreferences. We then load the preferences from config.xml this way any missing ones have a default already set
         generalprefschanged = False
         Dim tempstring As String
-        tempstring = applicationPath & "\Settings\"
+        tempstring = util_SettingsPath()
 
         Dim hg As New IO.DirectoryInfo(tempstring)
         If hg.Exists Then
@@ -20755,7 +20761,7 @@ Public Class Form1
             Dim done As Boolean = False
             Dim tempint As Integer = 0
             For f = 1 To 1000
-                Dim tempstring2 As String = applicationPath & "\Settings\"
+                Dim tempstring2 As String = util_SettingsPath()
                 Dim configpath As String = tempstring2 & "config" & f.ToString & ".xml"
                 Dim actorcachepath As String = tempstring2 & "actorcache" & f.ToString & ".xml"
                 Dim filterspath As String = tempstring2 & "filters" & f.ToString & ".xml"
@@ -20787,7 +20793,7 @@ Public Class Form1
                 End If
             Next
             'new profilename
-            Dim tempstring As String = applicationPath & "\Settings\"
+            Dim tempstring As String = util_SettingsPath()
             Dim moviecachetocopy As String = String.Empty
             Dim actorcachetocopy As String = String.Empty
             Dim tvcachetocopy As String = String.Empty
