@@ -1115,6 +1115,7 @@ Public Class Form1
         End If
 
         filteredList.Clear()
+        filteredListObj.Clear()
 
 
 
@@ -4400,6 +4401,7 @@ Public Class Form1
 
         End If
         scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
+
     End Sub
 
     Private Sub DownloadTrailer(ByVal trailerPath As String, ByVal trailerUrl As String)
@@ -4865,7 +4867,9 @@ Public Class Form1
 
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
+            Call mov_CacheLoad()
             Call clsGridViewMovie.mov_FiltersAndSortApply()
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9519,8 +9523,6 @@ Public Class Form1
             ElseIf tab.ToLower = "search for new movies" Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 If Not BckWrkScnMovies.IsBusy Then
-                    'ToolStripButton10.Visible = True
-                    'ToolStripProgressBar4.Visible = True
                     ToolStripStatusLabel1.Visible = True
                     ToolStripProgressBar1.Visible = True
                     TabPage14.Text = "Cancel Movie Search"
@@ -9529,6 +9531,14 @@ Public Class Form1
                 Else
                     MsgBox("This task is already running")
                 End If
+                'ProgressAndStatus1.Visible = True
+                'ProgressAndStatus1.Height = 199
+                'ProgressAndStatus1.Width = 511
+                'ProgressAndStatus1.Left = (Me.Width - ProgressAndStatus1.Width) / 2
+                'ProgressAndStatus1.Top = (Me.Height - ProgressAndStatus1.Height) / 2
+                'Call mov_StartNew()
+                'mov_CacheLoad()
+                'ProgressAndStatus1.Visible = False
             ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
                 TabPage14.Text = "...Cancelling..."
                 Me.TabControl2.SelectedIndex = currentTabIndex
@@ -9556,7 +9566,7 @@ Public Class Form1
                         ListBox14.Items.Add(workingMovieDetails.fullmoviebody.movieset)
                     End If
                 End If
-                
+
             ElseIf tab.ToLower = "movie preferences" Then
                 Call mov_PreferencesSetup()
             ElseIf tab.ToLower = "table" Then
@@ -9565,6 +9575,10 @@ Public Class Form1
             Else
                 currentTabIndex = TabControl2.SelectedIndex
             End If
+
+            'Reload the list of movies in the grid
+            Call mov_CacheLoad()
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18398,13 +18412,12 @@ Public Class Form1
             End Try
             Call mov_CacheSave()
             'filteredlist = fullmovielist
-            Call clsGridViewMovie.mov_FiltersAndSortApply()
+            'Call clsGridViewMovie.mov_FiltersAndSortApply()
             'Call loadmovielist()
             Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
-            'Reload the list of movies in the grid
-            Call mov_CacheLoad()
+
 
             frmSplash2.Hide()
         Catch ex As Exception
