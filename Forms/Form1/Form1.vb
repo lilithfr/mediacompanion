@@ -5843,15 +5843,12 @@ Public Class Form1
 
     Private Sub mov_Rescrape()
         Dim tempstring As String = ""
-        Dim tempint As Integer = 0
+
         If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
             MsgBox("MC cannot find this file, either the file no longer exists, or MC cannot access the file path")
             Exit Sub
         End If
-        tempint = MessageBox.Show("Rescraping the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-        If tempint = DialogResult.No Then
-            Exit Sub
-        End If
+
         messbox = New frmMessageBox("", "", "The Selected Movie is being Rescraped....")
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         messbox.Show()
@@ -9515,6 +9512,10 @@ Public Class Form1
                 '         It works, so leave it be! (For now.)
                 Me.TabControl2.SelectedIndex = currentTabIndex
             ElseIf tab.ToLower = "rescrape movie" Then
+                Dim tempint As Integer = 0
+                tempint = MessageBox.Show("Rescraping the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                If tempint = DialogResult.No Then Return
+
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 Call mov_Rescrape()
             ElseIf tab.ToLower = "change movie" Then
@@ -27191,7 +27192,23 @@ Public Class Form1
     Private Sub RescrapeAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripRescrapeAll.Click
         Try
             'rescrape all
-            Call mov_Rescrape()
+            If DataGridViewMovies.SelectedRows.Count > 1 Then
+                Dim list As New List(Of Integer)
+
+                For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    list.Add(sRow.Index)
+                Next
+
+                For Each a In list
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(a).Selected = True
+                    DisplayMovie()
+                    Call mov_Rescrape()
+                Next
+                Return
+            Else
+                Call mov_Rescrape()
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -28425,4 +28442,6 @@ End Sub
     Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
         DisplayMovie()
     End Sub
+
+
 End Class
