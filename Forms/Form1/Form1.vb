@@ -560,6 +560,7 @@ Public Class Form1
             clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
             clsGridViewMovie.GridSort = "Asc"
             clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+            clsGridViewMovie.mov_FiltersAndSortApply()
             TooltipGridViewMovies1.Initialisation()
             DisplayMovie()
 
@@ -1154,7 +1155,7 @@ Public Class Form1
 
 
         Call clsGridViewMovie.mov_FiltersAndSortApply()
-        'Call mov_MovieComboLoad()
+
         Try
             DataGridViewMovies.Rows(0).Selected = True
         Catch ex As Exception
@@ -4513,9 +4514,9 @@ Public Class Form1
             Exit Sub
         End If
 
-        Call clsGridViewMovie.mov_FiltersAndSortApply()
-        'Call mov_MovieComboLoad()
         Call mov_CacheLoad()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
+
         Try
             DataGridViewMovies.Rows(0).Selected = True
         Catch ex As Exception
@@ -6516,9 +6517,9 @@ Public Class Form1
             workingMovie.fullpathandfilename = Startfullpathandfilename
 
 
-
-            Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
+
 
             mess.Close()
         End If
@@ -16519,6 +16520,7 @@ Public Class Form1
     Private Sub ButtonSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSave.Click
         Try
             Call mov_SaveQuick()
+        
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -28388,9 +28390,6 @@ End Sub
         'End Try
     End Sub
 
-    Private Sub DataGridViewMovies_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseEnter
-        DataGridViewMovies.Focus()
-    End Sub
 
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
         If MainFormLoadedStatus = True Then
