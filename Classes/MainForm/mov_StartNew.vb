@@ -6,8 +6,9 @@ Imports System.Threading
 Imports System.Net
 Imports System.IO
 
-Module mov_StartNew
-    Public Sub mov_StartNew(ByVal scraperLog As String)
+
+Public Class mov_StartNew
+    Public Sub ex(ByVal scraperLog As String)
         Dim dft As New List(Of String)
         Dim moviepattern As String
         Dim tempint As Integer = 0
@@ -1298,6 +1299,4 @@ Module mov_StartNew
         Call Form1.clsGridViewMovie.mov_FiltersAndSortApply()
 
     End Sub
-
-
-End Module
+End Class

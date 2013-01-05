@@ -46,6 +46,7 @@ Public Class Form1
     Public filteredListObj As New List(Of Data_GridViewMovie)
     Public clsGridViewMovie As New clsGridViewMovie
     Public DataGridViewBindingSource As New BindingSource
+    Public mov_StartNew As New mov_StartNew
 
 
     Public workingMovieDetails As FullMovieDetails
@@ -2943,7 +2944,7 @@ Public Class Form1
     End Function
 
     Private Sub mov_ScanForNew()
-        mov_StartNew.mov_StartNew(scraperLog)
+        mov_StartNew.ex(scraperLog)
     End Sub
 
 #Region "Auxiliary Procedures for Multithreading of Rescraping Movies Procedure Below"
@@ -3560,7 +3561,7 @@ Public Class Form1
         Try
             'ToolStripButton10.Visible = True
             globalThreadCounter += 1
-            Call mov_StartNew.mov_StartNew(scraperLog)
+            Call mov_StartNew.ex(scraperLog)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20028,7 +20029,7 @@ Public Class Form1
 
     Private Sub SearchForNewMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewMoviesToolStripMenuItem.Click
         ProgressAndStatus1.Display()
-        Call mov_StartNew.mov_StartNew(scraperLog)
+        Call mov_StartNew.ex(scraperLog)
         ProgressAndStatus1.Visible = False
     End Sub
 
@@ -27149,8 +27150,9 @@ End Sub
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
         ProgressAndStatus1.Display()
-        Call mov_StartNew.mov_StartNew(scraperLog)
+        Call mov_StartNew.ex(scraperLog)
         ProgressAndStatus1.Visible = False
+        DisplayMovie()
 
     End Sub
 

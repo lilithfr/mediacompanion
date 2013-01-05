@@ -565,8 +565,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withExtension As Boolean = False)
         Try 'to remove extension first if filename has one
-            'filename = filename.Replace(IO.Path.GetExtension(filename), "")
-            filename = Regex.Replace(filename, "(" & Join(VideoExtensions, "|") & ")+$", "")
+            filename = filename.Replace(IO.Path.GetExtension(filename), "")
+            'filename = Regex.Replace(filename, "(" & Join(VideoExtensions, "|") & ")+$", "")
         Catch
         End Try
 
