@@ -4387,6 +4387,34 @@ Public Class Form1
                         End If
                         movietoadd.missingdata1 = completebyte1
                         fullMovieList.Add(movietoadd)
+
+                        'Add the new movie in filteredListObj
+                        Data_GridViewMovie = New Data_GridViewMovie()
+                        Data_GridViewMovie.fullpathandfilename = movietoadd.fullpathandfilename
+                        Data_GridViewMovie.movieset = movietoadd.movieset
+                        Data_GridViewMovie.filename = movietoadd.filename
+                        Data_GridViewMovie.foldername = movietoadd.foldername
+                        Data_GridViewMovie.title = movietoadd.title
+                        Data_GridViewMovie.originaltitle = movietoadd.originaltitle
+                        Data_GridViewMovie.titleandyear = movietoadd.titleandyear
+                        Data_GridViewMovie.year = movietoadd.year
+                        Data_GridViewMovie.filedate = movietoadd.filedate
+                        Data_GridViewMovie.id = movietoadd.id
+                        Data_GridViewMovie.rating = movietoadd.rating
+                        Data_GridViewMovie.top250 = movietoadd.top250
+                        Data_GridViewMovie.genre = movietoadd.genre
+                        Data_GridViewMovie.playcount = movietoadd.playcount
+                        Data_GridViewMovie.sortorder = movietoadd.sortorder
+                        Data_GridViewMovie.outline = movietoadd.outline
+                        Data_GridViewMovie.runtime = movietoadd.runtime
+                        Data_GridViewMovie.createdate = movietoadd.createdate
+                        Data_GridViewMovie.missingdata1 = movietoadd.missingdata1
+                        Data_GridViewMovie.plot = movietoadd.plot
+                        Data_GridViewMovie.source = movietoadd.source
+                        Data_GridViewMovie.votes = movietoadd.votes
+                        Data_GridViewMovie.TitleUcase = movietoadd.title.ToUpper
+                        filteredListObj.Add(Data_GridViewMovie)
+
                     End If
 
                     scraperLog = scraperLog & "Movie added to list" & vbCrLf
@@ -4396,6 +4424,9 @@ Public Class Form1
                 End If
 
 
+                'Repopulate the grid
+                DataGridViewBindingSource.DataSource = filteredListObj
+                DataGridViewMovies.DataSource = DataGridViewBindingSource
                 scraperLog = scraperLog & vbCrLf & vbCrLf & vbCrLf
 
             Next
@@ -4868,7 +4899,7 @@ Public Class Form1
 
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
-            Call mov_CacheLoad()
+            'Call mov_CacheLoad()
             Call clsGridViewMovie.mov_FiltersAndSortApply()
 
         Catch ex As Exception
