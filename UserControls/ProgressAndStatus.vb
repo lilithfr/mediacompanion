@@ -12,6 +12,14 @@
         Me.Visible = True
     End Sub
 
+    Public Sub Counter(ByVal value As Integer, ByVal Maximum As Integer)
+        LabelCounter.Text = value.ToString & "/" & Maximum.ToString
+    End Sub
+
+    Public Sub Status(ByVal value As String)
+        TextBoxStatus.Text = value
+    End Sub
+
     Public Sub ReportProgress(ByVal progress As Integer, ByVal progresstext As String)
         ProgressBar1.Value = progress
         TextBoxProgresstext.Text = progresstext

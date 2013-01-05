@@ -2347,22 +2347,30 @@ Public Class Form1
             Next
 
 
-            If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
-            frmSplash2.Label2.Visible = True
-            frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
-            frmSplash2.ProgressBar1.Visible = True
+            'If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
+            'frmSplash2.Label2.Visible = True
+            'frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
+            'frmSplash2.ProgressBar1.Visible = True
 
             For f = 0 To realMoviePaths.Count - 1
 
-                frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
 
-                If mode = False Then frmSplash2.ProgressBar1.Value = f
+                ProgressAndStatus1.ReportProgress((f / realMoviePaths.Count) * 1000, "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString())
+                Application.DoEvents()
+
+                If ProgressAndStatus1.cancel = True Then
+                    ProgressAndStatus1.Visible = False
+                    Return
+                End If
+
+                'frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
+                'If mode = False Then frmSplash2.ProgressBar1.Value = f
 
                 Dim subdirs As New System.IO.DirectoryInfo(realMoviePaths(f))
 
                 mov_ListFiles(dirinfo, pattern, subdirs)
             Next
-            frmSplash2.Label2.Visible = False
+            'frmSplash2.Label2.Visible = False
 
         End If
     End Sub
@@ -17010,13 +17018,15 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button110_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button110.Click
+    Private Sub ButtonSaveAndQuickRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSaveAndQuickRefresh.Click
         Try
-            frmSplash2.Text = "Save & Quick Refresh Movies..."
-            frmSplash2.Label1.Text = "Searching for Movie Folders....."
-            frmSplash2.Label2.Visible = False
-            frmSplash2.ProgressBar1.Visible = False
-            frmSplash2.Show()
+            'frmSplash2.Text = "Save & Quick Refresh Movies..."
+            'frmSplash2.Label1.Text = "Searching for Movie Folders....."
+            'frmSplash2.Label2.Visible = False
+            'frmSplash2.ProgressBar1.Visible = False
+            'frmSplash2.Show()
+
+            ProgressAndStatus1.Display()
             Application.DoEvents()
 
             Dim folderstoadd As New List(Of String)
@@ -17087,12 +17097,14 @@ Public Class Form1
                 Preferences.SaveConfig()
                 Call mov_CacheSave()
             End If
-            frmSplash2.ProgressBar1.Visible = True
+            'frmSplash2.ProgressBar1.Visible = True
             If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
                 'messbox = New frmMessageBox("New Movie Folders Found", "Adding to DB", "Please Wait")
                 'remove old
                 'messbox.Show()
                 ' messbox.Refresh()
+
+
                 Application.DoEvents()
                 Try
                     For Each folder In folderstoadd
@@ -17124,6 +17136,7 @@ Public Class Form1
                 If DataGridViewMovies.SelectedCells(0).Value.ToString <> "" Then
                     'loadinfofile()
                 End If
+
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -17136,9 +17149,9 @@ Public Class Form1
             Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
+            ProgressAndStatus1.Visible = False
 
 
-            frmSplash2.Hide()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21864,33 +21877,28 @@ Public Class Form1
     Private Sub mov_ScrapeSpecific_part2(ByVal field As String, ByRef list As List(Of String))
 
         Try
-            Dim frmProgSplash As New frmProgressScreen
-            frmProgSplash.Text = "ReScraping Specific Field : " & field
-            frmProgSplash.Label1.Text = ""
-            frmProgSplash.Label1.Visible = True
-            frmProgSplash.Label2.Visible = False
-            frmProgSplash.ProgressBar1.Visible = True
-            frmProgSplash.Show()
+            ProgressAndStatus1.Display()
+            ProgressAndStatus1.ReportProgress(0, "ReScraping Specific Field : " & field)
 
             Dim originalworking As String = workingMovieDetails.fileinfo.fullpathandfilename
 
-            frmProgSplash.ProgressBar1.Maximum = list.Count            'for user feedback - when only 1 movie, max is 2, we show prog @50% effect diminishes as count goes up
+            ProgressAndStatus1.Counter(0, list.Count)
 
             Dim progcount As Integer = 0
             For Each ite In list
                 progcount += 1
 
-                frmProgSplash.Label3.Text = "In progress :" & progcount & "/" & list.Count
-                frmProgSplash.ProgressBar1.Value = progcount
-                frmProgSplash.ProgressBar1.Invalidate()
+                ProgressAndStatus1.Status("In progress...")
+                'ProgressAndStatus1.ReportProgress((progcount / 1000) * list.Count, "In progress...")
+                ProgressAndStatus1.Counter(progcount, list.Count)
 
                 Application.DoEvents()
 
                 Dim process As Boolean = True
                 For Each movie In filteredList                              'find matching movie to selected movie & load current values
                     If movie.fullpathandfilename = ite Then
-                        frmProgSplash.Label1.Text = movie.title
-                        frmProgSplash.Label1.Refresh()
+                        ProgressAndStatus1.ReportProgress((progcount / 1000) * list.Count, movie.title)
+                        
                         If IO.File.Exists(movie.fullpathandfilename) Then       'if nfo exists, & workingMovie contains wrong data, reload data from memory
                             If workingMovie.fullpathandfilename <> movie.fullpathandfilename Then
                                 workingMovieDetails = nfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
@@ -21923,11 +21931,10 @@ Public Class Form1
                         End If
                     End If
                 Next
-                frmProgSplash.Activate()
+
                 If process = True Then
                     Dim newnfo As Boolean = False
-                    frmProgSplash.Label1.Text &= " - Scraping..."
-                    frmProgSplash.Label1.Refresh()
+                    ProgressAndStatus1.Status(" - Scraping...")
 
 						If field = "trailer" then
 							Dim trailer = ""
@@ -21966,7 +21973,8 @@ Public Class Form1
                         'Dim newscraper As New Classimdb
                         'body = newscraper.getimdbbody(workingmoviedetails.fullmoviebody.title, workingmoviedetails.fullmoviebody.year, workingmoviedetails.fullmoviebody.imdbid, Preferences.imdbmirror)
                         If body <> "MIC" Then
-                            frmProgSplash.Label1.Text &= "OK!"
+
+                            ProgressAndStatus1.Status("OK!")
                             If field = "title" Then
                                 workingMovieDetails.alternativetitles.Clear()
                             End If
@@ -22122,7 +22130,7 @@ Public Class Form1
 
                     ElseIf field = "hdtags" Or field = "runtime_file" Then
                         Try
-                            frmProgSplash.Label1.Text &= " - Scraping..."
+                            ProgressAndStatus1.Status(" - Scraping...")
                             'Dim tempstring As String
                             Dim tempint As Integer = 0
                             Dim tempname As String = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -22152,14 +22160,14 @@ Public Class Form1
                         newnfo = True
                         'Call loadinfofile()
                     ElseIf field = "actors" Then
-                        frmProgSplash.Label1.Text &= " - Scraping..."
+                        ProgressAndStatus1.Status(" - Scraping...")
                         Dim actorlist As String
                         '                    Dim scraper As New imdb.Classimdbscraper
                         Dim scraper As New Classimdb
                         actorlist = scraper.getimdbactors(Preferences.imdbmirror, workingMovieDetails.fullmoviebody.imdbid, workingMovieDetails.fullmoviebody.title, Preferences.maxactors)
                         workingMovieDetails.listactors.Clear()
                         If actorlist <> Nothing Then
-                            frmProgSplash.Label1.Text &= "OK!"
+                            ProgressAndStatus1.Status("OK!")
 
                             Dim tempstring As String
                             Dim thumbstring As New XmlDocument
@@ -22315,7 +22323,7 @@ Public Class Form1
 
             DisplayMovie()
 
-            frmProgSplash.Close()
+            ProgressAndStatus1.Visible = False
 
         Catch ex As Exception
 #If SilentErrorScream Then
