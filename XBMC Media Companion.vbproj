@@ -168,6 +168,7 @@
     <Compile Include="Forms\frmProgressScreen.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\mov_StartNew.vb" />
     <Compile Include="Structures\BasicHomeMovie.vb" />
     <Compile Include="Structures\FanartList.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
