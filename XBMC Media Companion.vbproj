@@ -464,6 +464,7 @@
     <Content Include="Assets\IMPA.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Untitled-1.gif" />
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Untitled-1.png" />
@@ -725,6 +726,7 @@
     <None Include="Resources\1356729911_page_white_text.png" />
     <Content Include="Resources\blank.png" />
     <None Include="Resources\clock-icon.png" />
+    <None Include="Resources\Clap.png" />
     <Content Include="Resources\default_actor.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -744,6 +746,7 @@
     <Content Include="Resources\edit.png" />
     <None Include="Resources\imdb.png" />
     <None Include="Resources\folder_closed.png" />
+    <None Include="Resources\new.png" />
     <Content Include="Resources\qmark.png" />
     <None Include="Resources\Sad.png" />
   </ItemGroup>

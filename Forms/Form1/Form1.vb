@@ -4853,8 +4853,8 @@ Public Class Form1
             ToolStripProgressBar1.Visible = False
             ToolStripStatusLabel1.Text = "Movie Scan Progress"
             ToolStripStatusLabel1.Visible = False
-            TabPage14.Text = "Search for new movies"
-            TabPage14.ToolTipText = "Scan movie folders for new media files"
+            'TabPage14.Text = "Search for new movies"
+            'TabPage14.ToolTipText = "Scan movie folders for new media files"
             If Preferences.disablelogfiles = False Then
                 Dim MyFormObject As New frmoutputlog(scraperLog, True)
                 Try
@@ -9513,38 +9513,10 @@ Public Class Form1
                 '         It works, so leave it be! (For now.)
                 Me.TabControl2.SelectedIndex = currentTabIndex
             ElseIf tab.ToLower = "rescrape movie" Then
-                Dim tempint As Integer = 0
-                tempint = MessageBox.Show("Rescraping the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-                If tempint = DialogResult.No Then Return
-
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                Call mov_Rescrape()
+               
             ElseIf tab.ToLower = "change movie" Then
                 Call mov_ChangeMovieSetup()
                 currentTabIndex = TabControl2.SelectedIndex
-            ElseIf tab.ToLower = "search for new movies" Then
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                If Not BckWrkScnMovies.IsBusy Then
-                    ToolStripStatusLabel1.Visible = True
-                    ToolStripProgressBar1.Visible = True
-                    TabPage14.Text = "Cancel Movie Search"
-                    TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
-                    BckWrkScnMovies.RunWorkerAsync()
-                Else
-                    MsgBox("This task is already running")
-                End If
-                'ProgressAndStatus1.Visible = True
-                'ProgressAndStatus1.Height = 199
-                'ProgressAndStatus1.Width = 511
-                'ProgressAndStatus1.Left = (Me.Width - ProgressAndStatus1.Width) / 2
-                'ProgressAndStatus1.Top = (Me.Height - ProgressAndStatus1.Height) / 2
-                'Call mov_StartNew()
-                'mov_CacheLoad()
-                'ProgressAndStatus1.Visible = False
-            ElseIf (tab.ToLower = "cancel movie search" Or tab.ToLower = "...cancelling...") Then   'remember the to.lower - added OR incase user clicks cancelling button   use ... to pad button as it sizes to text size
-                TabPage14.Text = "...Cancelling..."
-                Me.TabControl2.SelectedIndex = currentTabIndex
-                BckWrkScnMovies.CancelAsync()
             ElseIf tab.ToLower = "wall" Then
                 Call mov_WallSetup()
             ElseIf tab.ToLower = "movie sets" Then
@@ -21316,8 +21288,8 @@ Public Class Form1
             If Not BckWrkScnMovies.IsBusy Then
                 ToolStripStatusLabel1.Visible = True
                 ToolStripProgressBar1.Visible = True
-                TabPage14.Text = "Cancel Movie Search"
-                TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
+                'TabPage14.Text = "Cancel Movie Search"
+                'TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
                 BckWrkScnMovies.RunWorkerAsync()
             Else
                 MsgBox("This task is already running")
@@ -28442,4 +28414,38 @@ End Sub
     End Sub
 
 
+    Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
+        Me.TabControl2.SelectedIndex = currentTabIndex
+        If Not BckWrkScnMovies.IsBusy Then
+            ToolStripStatusLabel1.Visible = True
+            ToolStripProgressBar1.Visible = True
+            'TabPage14.Text = "Cancel Movie Search"
+            'TabPage14.ToolTipText = "This cancels the movie search" & vbCrLf & "and Movie scraper thread"
+            BckWrkScnMovies.RunWorkerAsync()
+        Else
+            MsgBox("This task is already running")
+        End If
+        'ProgressAndStatus1.Visible = True
+        'ProgressAndStatus1.Height = 199
+        'ProgressAndStatus1.Width = 511
+        'ProgressAndStatus1.Left = (Me.Width - ProgressAndStatus1.Width) / 2
+        'ProgressAndStatus1.Top = (Me.Height - ProgressAndStatus1.Height) / 2
+        'Call mov_StartNew()
+        'mov_CacheLoad()
+        'ProgressAndStatus1.Visible = False
+
+        'Cancel movie search
+        'TabPage14.Text = "...Cancelling..."
+        'Me.TabControl2.SelectedIndex = currentTabIndex
+        'BckWrkScnMovies.CancelAsync()
+    End Sub
+
+    Private Sub ButtonRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRescrapeMovie.Click
+        Dim tempint As Integer = 0
+        tempint = MessageBox.Show("Rescraping the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+        If tempint = DialogResult.No Then Return
+
+        Me.TabControl2.SelectedIndex = currentTabIndex
+        Call mov_Rescrape()
+    End Sub
 End Class
