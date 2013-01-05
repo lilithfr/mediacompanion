@@ -26514,8 +26514,7 @@ Public Class Form1
                 RadioButtonFolder.Checked = True
         End Select
 
-        'cbSort.SelectedIndex = Preferences.moviesortorder
-        cbSort.SelectedIndex = 0
+        cbSort.SelectedIndex = Preferences.moviesortorder
 
         '----------------------------------------------------------
 
