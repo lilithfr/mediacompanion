@@ -27038,8 +27038,8 @@ End Sub
 
                 If objHitTestInfo.RowY > -1 Then
                     TooltipGridViewMovies1.Visible = True
-                    TooltipGridViewMovies1.Top = objHitTestInfo.RowY + 60
-                    TooltipGridViewMovies1.Left = e.X + 160
+                    TooltipGridViewMovies1.Top = objHitTestInfo.RowY + 80
+                    TooltipGridViewMovies1.Left = e.X - TooltipGridViewMovies1.Width
                     TooltipGridViewMovies1.Textinfo(Plot)
                     TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
                     TooltipGridViewMovies1.TextMovieName(movietitle)

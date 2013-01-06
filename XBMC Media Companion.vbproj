@@ -126,6 +126,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\MainForm\clsGridViewMovie.vb" />
     <Compile Include="Classes\MainForm\Data_GridViewMovie.vb" />
