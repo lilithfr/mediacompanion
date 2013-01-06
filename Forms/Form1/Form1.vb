@@ -996,6 +996,7 @@ Public Class Form1
     Private Sub mov_CacheLoad()
         fullMovieList.Clear()
         filteredList.Clear()
+        filteredListObj.Clear()
         dList.Clear()
         Dim movielist As New XmlDocument
         Dim objReader As New System.IO.StreamReader(workingProfile.moviecache)
@@ -1114,7 +1115,7 @@ Public Class Form1
 
         If fullMovieList.Count = 0 Then
             Call mov_CacheRefresh(movieFolders)
-            Exit Sub
+            Return
         End If
 
         filteredList.Clear()
@@ -17024,12 +17025,6 @@ Public Class Form1
 
     Private Sub ButtonSaveAndQuickRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSaveAndQuickRefresh.Click
         Try
-            'frmSplash2.Text = "Save & Quick Refresh Movies..."
-            'frmSplash2.Label1.Text = "Searching for Movie Folders....."
-            'frmSplash2.Label2.Visible = False
-            'frmSplash2.ProgressBar1.Visible = False
-            'frmSplash2.Show()
-
             ProgressAndStatus1.Display()
             Application.DoEvents()
 
@@ -17101,14 +17096,7 @@ Public Class Form1
                 Preferences.SaveConfig()
                 Call mov_CacheSave()
             End If
-            'frmSplash2.ProgressBar1.Visible = True
             If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
-                'messbox = New frmMessageBox("New Movie Folders Found", "Adding to DB", "Please Wait")
-                'remove old
-                'messbox.Show()
-                ' messbox.Refresh()
-
-
                 Application.DoEvents()
                 Try
                     For Each folder In folderstoadd
@@ -17136,7 +17124,6 @@ Public Class Form1
                 'ignore = False
                 DataGridViewMovies.ClearSelection()
                 DataGridViewMovies.Rows(0).Selected = True
-                'If MovieListComboBox.SelectedItem.value <> "" Then
                 If DataGridViewMovies.SelectedCells(0).Value.ToString <> "" Then
                     'loadinfofile()
                 End If
@@ -17150,10 +17137,20 @@ Public Class Form1
             'filteredlist = fullmovielist
             'Call clsGridViewMovie.mov_FiltersAndSortApply()
             'Call loadmovielist()
-            Call clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
+            Call mov_CacheLoad()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
+
+            If DataGridViewMovies.Rows.Count > 0 Then
+                DataGridViewMovies.Rows(0).Selected = True
+                DisplayMovie()
+            End If
+
+
             ProgressAndStatus1.Visible = False
+
+
 
 
         Catch ex As Exception
