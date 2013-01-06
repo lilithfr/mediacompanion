@@ -2434,6 +2434,7 @@ Public Class Form1
                 studiotxt.Text = workingMovieDetails.fullmoviebody.studio
                 pathtxt.Text = workingMovie.fullpathandfilename
                 ratingtxt.Text = workingMovieDetails.fullmoviebody.rating
+                imdbtxt.Text = workingMovieDetails.fullmoviebody.imdbid
 
                 'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
                 votestxt.Text = workingMovieDetails.fullmoviebody.votes
@@ -2597,6 +2598,7 @@ Public Class Form1
                 directortxt.Text = ""
                 studiotxt.Text = ""
                 pathtxt.Text = ""
+                imdbtxt.Text = ""
                 'actorarray.Clear()
 
                 ratingtxt.Text = ""
