@@ -216,6 +216,7 @@ Public Class clsGridViewMovie
         If Form1.RadioButtonUnWatched.Checked = True Then b = From f In b Where f.playcount = "0"
         If Form1.RadioButtonMissingPosters.Checked = True Then b = From f In b Where f.missingdata1 = "2" Or f.missingdata1 = "3"
         If Form1.RadioButtonMissingFanart.Checked = True Then b = From f In b Where f.missingdata1 = "1" Or f.missingdata1 = "3"
+        If Form1.RadioButtonMissingPlot.Checked = True Then b = From f In b Where f.plot.ToString.Trim = ""
         If Form1.RadioButtonDuplicates.Checked = True Then
             Dim sort = b.GroupBy(Function(f) f.title)
             b = sort.Where(Function(x) x.Count > 1).SelectMany(Function(x) x).ToList()

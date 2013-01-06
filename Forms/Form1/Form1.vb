@@ -24676,6 +24676,11 @@ Public Class Form1
         DisplayMovie()
     End Sub
 
+    Private Sub RadioButtonMissingPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingPlot.CheckedChanged
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
+        DisplayMovie()
+    End Sub
+
     Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_TVDB_Scraper.CheckedChanged
         Try
             If CheckBox_Use_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
@@ -27178,4 +27183,6 @@ End Sub
     Private Sub DataGridViewMovies_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseHover
         TimerToolTip.Start()
     End Sub
+
+
 End Class
