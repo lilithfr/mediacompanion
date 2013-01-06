@@ -1642,14 +1642,6 @@ Public Class Form1
                     End If
 
 
-
-
-
-
-
-
-
-
                     If workingMovie.title <> Nothing Then
 
                         workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
@@ -2327,7 +2319,6 @@ Public Class Form1
         Dim dirinfo As String = String.Empty
         Dim pattern As String = "*.nfo"
 
-        'dList.Clear()
         realMoviePaths.Clear()
         For Each moviefolder In folderlist
             Dim hg As New IO.DirectoryInfo(moviefolder)
@@ -2348,15 +2339,7 @@ Public Class Form1
                 Next
             Next
 
-
-            'If mode = False Then frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
-            'frmSplash2.Label2.Visible = True
-            'frmSplash2.ProgressBar1.Maximum = realMoviePaths.Count - 1
-            'frmSplash2.ProgressBar1.Visible = True
-
             For f = 0 To realMoviePaths.Count - 1
-
-
                 ProgressAndStatus1.ReportProgress((f / realMoviePaths.Count) * 1000, "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString())
                 Application.DoEvents()
 
@@ -2365,14 +2348,10 @@ Public Class Form1
                     Return
                 End If
 
-                'frmSplash2.Label1.Text = "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString()
-                'If mode = False Then frmSplash2.ProgressBar1.Value = f
-
                 Dim subdirs As New System.IO.DirectoryInfo(realMoviePaths(f))
 
                 mov_ListFiles(dirinfo, pattern, subdirs)
             Next
-            'frmSplash2.Label2.Visible = False
 
         End If
     End Sub
@@ -17134,11 +17113,7 @@ Public Class Form1
 #End If
             End Try
             Call mov_CacheSave()
-            'filteredlist = fullmovielist
-            'Call clsGridViewMovie.mov_FiltersAndSortApply()
-            'Call loadmovielist()
             Call mov_FormPopulate()
-
             Call mov_CacheLoad()
             Call clsGridViewMovie.mov_FiltersAndSortApply()
 
@@ -17147,11 +17122,7 @@ Public Class Form1
                 DisplayMovie()
             End If
 
-
             ProgressAndStatus1.Visible = False
-
-
-
 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
