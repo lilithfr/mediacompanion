@@ -5274,11 +5274,11 @@ Public Class Form1
 
 
             Call mov_FormPopulate()
-            Call clsGridViewMovie.mov_FiltersAndSortApply()
-
-
             mess.Close()
         End If
+
+        Call mov_CacheLoad()
+        Call clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     'change watched status
@@ -5340,6 +5340,9 @@ Public Class Form1
                 Next
                 mess.Close()
             End If
+
+            Call mov_CacheLoad()
+            Call clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
