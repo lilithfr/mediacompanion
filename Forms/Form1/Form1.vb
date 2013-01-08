@@ -808,7 +808,7 @@ Public Class Form1
 
     
 
-    Private Sub mov_CacheLoad()
+    Public Sub mov_CacheLoad()
         fullMovieList.Clear()
         filteredList.Clear()
         filteredListObj.Clear()
@@ -929,7 +929,7 @@ Public Class Form1
 
 
         If fullMovieList.Count = 0 Then
-            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(filteredList, dList, fullMovieList, progressmode, movieFolders)
             Return
         End If
 
@@ -976,7 +976,7 @@ Public Class Form1
 
 
         'DataGridViewMovies.Rows(0).Selected = True
-        
+
     End Sub
 
     Private Sub util_RegexSetDefaultScraper()
@@ -2427,11 +2427,6 @@ Public Class Form1
             ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
         End If
 
-        'If MainFormLoadedStatus = True Then
-        ' PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-        ' End If
-
-
         mov_SplitContainerAutoPosition()
     End Sub
 
@@ -3043,7 +3038,7 @@ Public Class Form1
         Next
 
         If fullMovieList.Count = 0 Then
-            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(filteredList, dList, fullMovieList, progressmode, movieFolders)
             Return
         End If
 
@@ -3239,7 +3234,7 @@ Public Class Form1
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(filteredList, dList, fullMovieList, progressmode, movieFolders)
             messbox.Close()
         End If
 
@@ -5281,7 +5276,9 @@ Public Class Form1
     End Sub
 
     Private Sub RefreshMoviesToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMoviesToolStripMenuItem1.Click
-        Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+        Call Mc.mov_CacheRefresh.ex(filteredList, dList, fullMovieList, progressmode, movieFolders)
+        Call mov_CacheLoad()
+        Call DisplayMovie()
     End Sub
 
     Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click
@@ -19346,7 +19343,7 @@ Public Class Form1
         util_MainFormTitleUpdate()  'creates & shows new title to Form1, also includes current profile name
 
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(filteredList, dList, fullMovieList, progressmode, movieFolders)
         Else
             Call mov_CacheReload()
         End If
@@ -24758,7 +24755,7 @@ Public Class Form1
             loadinginfo = "Status :- Building Movie Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(filteredList, dList, fullMovieList, progressmode, movieFolders)
 
         Else
             loadinginfo = "Status :- Loading Movie Database"

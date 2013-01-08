@@ -1,8 +1,10 @@
 ﻿Imports Media_Companion
 
+
 Public Class mov_CacheRefresh
 
-    Public Sub ex(ByVal dList As List(Of String), ByVal fullMovieList As List(Of str_ComboList), ByVal progressmode As Boolean, ByVal movieFolders As List(Of String))
+    Public Sub ex(ByVal filteredList As List(Of str_ComboList), ByVal dList As List(Of String), ByVal fullMovieList As List(Of str_ComboList), ByVal progressmode As Boolean, ByVal movieFolders As List(Of String))
+
         Form1.Enabled = False
 
         Form1.ProgressAndStatus1.Display()
@@ -10,9 +12,9 @@ Public Class mov_CacheRefresh
         Form1.ProgressAndStatus1.ReportProgress(0, "Searching for Movie Folders.....")
         Application.DoEvents()
 
-        dList.Clear()
+        Form1.dList.Clear()
         fullMovieList.Clear()
-        Form1.filteredList.Clear()
+        filteredList.Clear()
         Form1.filteredListObj.Clear()
 
         If Preferences.usefoldernames = True Then         'use TRUE if folder contains nfo's, False if folder contains folders which contain nfo's
@@ -46,12 +48,13 @@ Public Class mov_CacheRefresh
 
         Form1.ProgressAndStatus1.Status("Save Data...")
         Call Mc.mov_CacheSave.ex(fullMovieList)
-        'Call mov_CacheLoad()
 
         Call Form1.mov_FormPopulate()
-
         Form1.ProgressAndStatus1.ReportProgress(0, "Apply Filters...")
-        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+
+
+        'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+
         Form1.ProgressAndStatus1.ReportProgress(0, "Reload Main Page...")
 
         If Form1.DataGridViewMovies.Rows.Count > 1 Then
