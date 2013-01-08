@@ -1296,7 +1296,7 @@ Public Class mov_StartNew
             End Try
         End If
 
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
 
     End Sub
 End Class

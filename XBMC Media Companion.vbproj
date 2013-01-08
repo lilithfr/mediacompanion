@@ -172,7 +172,7 @@
     <Compile Include="Forms\frmProgressScreen.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Classes.vb" />
+    <Compile Include="Classes\MediaCompanion.vb" />
     <Compile Include="Structures\BasicHomeMovie.vb" />
     <Compile Include="Structures\FanartList.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
@@ -431,10 +431,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram3.cd" />
-    <None Include="ClassDiagram4.cd" />
     <None Include="media_companion.chm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -816,7 +812,9 @@
       <Name>Utilites</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Modules\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

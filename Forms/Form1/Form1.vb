@@ -14,7 +14,6 @@ Imports System.ComponentModel
 Imports Media_Companion
 Imports Media_Companion.Movies
 Imports System.Linq
-
 #Const SilentErrorScream = True
 #Const NoRefocus = True
 
@@ -556,11 +555,11 @@ Public Class Form1
 
         'Parameters to display the movie grid at startup
         PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-        Classes.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
-        Classes.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
-        Classes.clsGridViewMovie.GridSort = "Asc"
-        Classes.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
-        Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
+        Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
+        Mc.clsGridViewMovie.GridSort = "Asc"
+        Mc.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         TooltipGridViewMovies1.Initialisation()
         DisplayMovie()
 
@@ -630,7 +629,7 @@ Public Class Form1
 
     Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         Try
-            Call Classes.mov_CacheSave.ex(fullMovieList)
+            Call Mc.mov_CacheSave.ex(fullMovieList)
             If Tv_CacheSave() Then
                 e.Cancel = True
                 Exit Sub
@@ -930,7 +929,7 @@ Public Class Form1
 
 
         If fullMovieList.Count = 0 Then
-            Call Classes.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
             Return
         End If
 
@@ -973,7 +972,7 @@ Public Class Form1
         DataGridViewMovies.DataSource = DataGridViewBindingSource
 
 
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
 
 
         'DataGridViewMovies.Rows(0).Selected = True
@@ -2169,37 +2168,31 @@ Public Class Form1
     End Sub
 
     Public Sub mov_FormPopulate()
-        Try
-            If Not IsNothing(workingMovieDetails) Then
-                If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
-                    Try
-                        For i = Panel8.Controls.Count - 1 To 0 Step -1
-                            Panel8.Controls.RemoveAt(i)
-                        Next
-                    Catch
-                    End Try
-                    Try
-                        For i = Panel2.Controls.Count - 1 To 0 Step -1
-                            Panel2.Controls.RemoveAt(i)
-                        Next
-                    Catch
-                    End Try
-                    Try
-                        TextBox8.Text = ""
-                    Catch
-                    End Try
-                End If
+        If Not IsNothing(workingMovieDetails) Then
+            If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
+                Try
+                    For i = Panel8.Controls.Count - 1 To 0 Step -1
+                        Panel8.Controls.RemoveAt(i)
+                    Next
+                Catch
+                End Try
+                Try
+                    For i = Panel2.Controls.Count - 1 To 0 Step -1
+                        Panel2.Controls.RemoveAt(i)
+                    Next
+                Catch
+                End Try
+                Try
+                    TextBox8.Text = ""
+                Catch
+                End Try
             End If
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
+        End If
 
 
-        Try
-            If workingMovie.fullpathandfilename <> Nothing And DataGridViewMovies.Rows.Count > 0 Then
-                workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
+        If workingMovie.fullpathandfilename <> Nothing And DataGridViewMovies.Rows.Count > 0 Then
+            workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
+            If IsNothing(workingMovieDetails) = False Then
                 If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
                 If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
                 If workingMovieDetails.fullmoviebody.director = Nothing Then workingMovieDetails.fullmoviebody.director = ""
@@ -2280,40 +2273,27 @@ Public Class Form1
                 HandleTrailerBtn(workingMovieDetails)
 
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
-                    Try
-                        If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
-                        Else
-                            If IO.File.Exists(workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fanartpath), "folder.jpg")) Then
-                                workingMovieDetails.fileinfo.posterpath = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
-                            End If
+
+                    If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
+                    Else
+                        If IO.File.Exists(workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fanartpath), "folder.jpg")) Then
+                            workingMovieDetails.fileinfo.posterpath = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                         End If
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
+                    End If
+
                 End If
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
-                    Try
-                        util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
-                        util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
-                        Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
-                        Label18.Visible = False
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
+
+                    util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
+                    Label18.Visible = False
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
-                    Try
-                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        Rating1.PictureInit = PictureBoxFanArt.Image
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
+
+                    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                    Rating1.PictureInit = PictureBoxFanArt.Image
+
                 End If
 
                 If Convert.ToInt32(workingMovieDetails.fullmoviebody.playcount) > 0 Then
@@ -2383,75 +2363,74 @@ Public Class Form1
                         ComboBoxFormatSource.SelectedIndex = f
                     End If
                 Next
-            Else
-                actorcb.Items.Clear()
-                PictureBoxActor.CancelAsync()
-                PictureBoxActor.Image = Nothing
-                PictureBoxActor.Refresh()
-                ComboBox5.Text = ""
 
-                Button27.Visible = False
-                Button28.Visible = False
-                thumbedItsMade = False
-                posterThumbedItsMade = False
-                CheckBox1.Visible = False
-                Button15.Visible = False
-                Button9.Visible = False
-                Button10.Visible = False
-                Label18.Visible = False
-                titletxt.Text = ""
-                TextBox3.Text = ""
-                outlinetxt.Text = ""
-                plottxt.Text = ""
-                taglinetxt.Text = ""
-                txtStars.Text = ""
-                genretxt.Text = ""
-                creditstxt.Text = ""
-                directortxt.Text = ""
-                studiotxt.Text = ""
-                pathtxt.Text = ""
-                imdbtxt.Text = ""
-                'actorarray.Clear()
 
-                ratingtxt.Text = ""
-                runtimetxt.Text = ""
-                votestxt.Text = ""
-                certtxt.Text = ""
-                PictureBoxFanArt.Image = Nothing
-                PictureBox2.Image = Nothing
-                moviethumb.Image = Nothing
-                Label16.Text = ""
-                Label17.Text = ""
-                PictureBox3.Image = Nothing
-                Label19.Text = ""
-                TextBox34.Text = ""
-                titletxt.Text = ""
-
-                roletxt.Text = ""
-                PictureBoxActor.Image = Nothing
-
-                Me.Refresh()
-                Application.DoEvents()
-            End If
-            If ratingtxt.Text.IndexOf("/10") <> -1 Then
-                ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
-                workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
-            End If
-
-            If ratingtxt.Text.Length > 3 Then
-                ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
-            End If
-
-            If MainFormLoadedStatus = True Then
                 PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+
             End If
+        Else
+            actorcb.Items.Clear()
+            PictureBoxActor.CancelAsync()
+            PictureBoxActor.Image = Nothing
+            PictureBoxActor.Refresh()
+            ComboBox5.Text = ""
 
+            Button27.Visible = False
+            Button28.Visible = False
+            thumbedItsMade = False
+            posterThumbedItsMade = False
+            CheckBox1.Visible = False
+            Button15.Visible = False
+            Button9.Visible = False
+            Button10.Visible = False
+            Label18.Visible = False
+            titletxt.Text = ""
+            TextBox3.Text = ""
+            outlinetxt.Text = ""
+            plottxt.Text = ""
+            taglinetxt.Text = ""
+            txtStars.Text = ""
+            genretxt.Text = ""
+            creditstxt.Text = ""
+            directortxt.Text = ""
+            studiotxt.Text = ""
+            pathtxt.Text = ""
+            imdbtxt.Text = ""
+            'actorarray.Clear()
 
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
+            ratingtxt.Text = ""
+            runtimetxt.Text = ""
+            votestxt.Text = ""
+            certtxt.Text = ""
+            PictureBoxFanArt.Image = Nothing
+            PictureBox2.Image = Nothing
+            moviethumb.Image = Nothing
+            Label16.Text = ""
+            Label17.Text = ""
+            PictureBox3.Image = Nothing
+            Label19.Text = ""
+            TextBox34.Text = ""
+            titletxt.Text = ""
+
+            roletxt.Text = ""
+            PictureBoxActor.Image = Nothing
+
+            Me.Refresh()
+            Application.DoEvents()
+        End If
+        If ratingtxt.Text.IndexOf("/10") <> -1 Then
+            ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
+            workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
+        End If
+
+        If ratingtxt.Text.Length > 3 Then
+            ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
+        End If
+
+        'If MainFormLoadedStatus = True Then
+        ' PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+        ' End If
+
 
         mov_SplitContainerAutoPosition()
     End Sub
@@ -2465,11 +2444,11 @@ Public Class Form1
 
         DeleteZeroLengthFile(fmd.fileinfo.trailerpath)
 
-        Button3.Enabled = False
+        ButtonTrailer.Enabled = False
 
         If IO.File.Exists(fmd.fileinfo.trailerpath) Then
-            Button3.Text = "Play Trailer"
-            Button3.Enabled = True
+            ButtonTrailer.Text = "Play Trailer"
+            ButtonTrailer.Enabled = True
         Else
             If Not Utilities.UrlIsValid(fmd.fullmoviebody.trailer) Then
 
@@ -2478,10 +2457,10 @@ Public Class Form1
                     nfoFunction.mov_NfoSave(fmd.fileinfo.fullpathandfilename, fmd, True)
                 End If
 
-                Button3.Text = "No trailer found"
+                ButtonTrailer.Text = "No trailer found"
             Else
-                Button3.Text = "Download Trailer"
-                Button3.Enabled = True
+                ButtonTrailer.Text = "Download Trailer"
+                ButtonTrailer.Enabled = True
             End If
         End If
     End Sub
@@ -2747,7 +2726,7 @@ Public Class Form1
     End Function
 
     Private Sub mov_ScanForNew()
-        Classes.mov_StartNew.ex(scraperLog)
+        Mc.mov_StartNew.ex(scraperLog)
     End Sub
 
 #Region "Auxiliary Procedures for Multithreading of Rescraping Movies Procedure Below"
@@ -2805,7 +2784,7 @@ Public Class Form1
                     Next
                 Catch ex As Exception
 #If SilentErrorScream Then
-    Throw ex
+                    Throw ex
 #End If
                 End Try
             End If
@@ -2856,7 +2835,7 @@ Public Class Form1
                     End While
                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                    Throw ex
 #End If
                 End Try
                 newMovieFoundTitle = newMovieList(f).title.ToString
@@ -2881,7 +2860,7 @@ Public Class Form1
                 End While
             Catch ex As Exception
 #If SilentErrorScream Then
-                        Throw ex
+                Throw ex
 #End If
             End Try
             ToolStripProgressBar1.Visible = False
@@ -2900,7 +2879,7 @@ Public Class Form1
             scraperLog &= " - OK!" & vbCrLf
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             If messbox.Visible = True Then messbox.Close()
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
         Else
@@ -2922,7 +2901,7 @@ Public Class Form1
                 movietoadd.filedate = Format(myDate, datePattern).ToString
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
             movietoadd.createdate = TempMovieToAdd.fileinfo.createdate
@@ -2957,7 +2936,7 @@ Public Class Form1
 
 
 
-   
+
 
     Public Sub DownloadTrailer(ByVal trailerPath As String, ByVal trailerUrl As String)
 
@@ -2976,7 +2955,7 @@ Public Class Form1
                     FileToBeDownloaded.DownloadFileWithProgress(trailerUrl, trailerPath)
                 Catch ex As Exception
 #If SilentErrorScream Then
-                  Throw ex
+                    Throw ex
 #End If
                 End Try
             End If
@@ -3064,12 +3043,12 @@ Public Class Form1
         Next
 
         If fullMovieList.Count = 0 Then
-            Call Classes.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
             Return
         End If
 
         Call mov_CacheLoad()
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
 
         Try
             DataGridViewMovies.Rows(0).Selected = True
@@ -3080,7 +3059,7 @@ Public Class Form1
         End Try
     End Sub
 
-    
+
 
     Private Sub util_VideoMode1(ByVal tempstring As String)
         Dim action As String
@@ -3260,7 +3239,7 @@ Public Class Form1
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Call Classes.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
             messbox.Close()
         End If
 
@@ -3291,7 +3270,7 @@ Public Class Form1
         Try
             'ToolStripButton10.Visible = True
             globalThreadCounter += 1
-            Call Classes.mov_StartNew.ex(scraperLog)
+            Call Mc.mov_StartNew.ex(scraperLog)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -3306,7 +3285,7 @@ Public Class Form1
                     ToolStripProgressBar1.ProgressBar.PerformStep()
                     ToolStripStatusLabel1.Text = e.UserState
                 Else
-                    Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                    Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                 End If
             End If
         Catch ex As Exception
@@ -3342,14 +3321,14 @@ Public Class Form1
                     MyFormObject.ShowDialog()
                 Catch ex As Exception
 #If SilentErrorScream Then
-                Throw ex
+                    Throw ex
 #End If
                 End Try
             End If
 
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -3517,7 +3496,7 @@ Public Class Form1
         End Try
     End Sub
 
-  
+
     'create list to browse
     '    Private Sub mov_MovieComboLoad()
     '        '#Replaced by datagrid     
@@ -4011,7 +3990,7 @@ Public Class Form1
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
         Catch ex As Exception
@@ -4035,7 +4014,7 @@ Public Class Form1
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
         Catch ex As Exception
@@ -4191,7 +4170,7 @@ Public Class Form1
             RadioButtonAll.Checked = True     'set movie filters indication back to all
             ComboBoxFilterMovieFormat.SelectedIndex = 0   'set filename filetype filter back to all
             ComboBoxFilterGenre.SelectedIndex = 0
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             DisplayMovie()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -4311,7 +4290,7 @@ Public Class Form1
             End If
         Next
 
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         If messbox.Visible = True Then messbox.Close()
 
         If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
@@ -4751,7 +4730,7 @@ Public Class Form1
                     End If
                 Next
 
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -4879,10 +4858,10 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            Call Classes.mov_CacheSave.ex(fullMovieList)
+            Call Mc.mov_CacheSave.ex(fullMovieList)
             If LabelCountFilter.Text.ToLower.IndexOf(" of ") <> -1 Then
 
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                 Call mov_FormPopulate()
             End If
         Else
@@ -4990,7 +4969,7 @@ Public Class Form1
                     End If
                 Next
             Next
-            Call Classes.mov_CacheSave.ex(fullMovieList)
+            Call Mc.mov_CacheSave.ex(fullMovieList)
             workingMovie.fullpathandfilename = Startfullpathandfilename
 
 
@@ -4999,7 +4978,7 @@ Public Class Form1
         End If
 
         Call mov_CacheLoad()
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     'change watched status
@@ -5063,7 +5042,7 @@ Public Class Form1
             End If
 
             Call mov_CacheLoad()
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5120,7 +5099,7 @@ Public Class Form1
 
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
         Catch ex As Exception
@@ -5203,7 +5182,7 @@ Public Class Form1
             End If
         Next
         Call mov_FormPopulate()
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
     End Sub
 
     Private Sub MediaCompanionForumToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionForumToolStripMenuItem.Click
@@ -5226,7 +5205,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+    Private Sub ButtonTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonTrailer.Click
 
         DeleteZeroLengthFile(workingMovieDetails.fileinfo.trailerpath)
 
@@ -5252,75 +5231,57 @@ Public Class Form1
 
             HandleTrailerBtn(workingMovieDetails)
 
-            If Not Button3.Enabled Then
+            If Not ButtonTrailer.Enabled Then
                 Exit Sub
             End If
         End If
 
-        Try
-            Try
-                If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
+        If Not IO.File.Exists(workingMovieDetails.fileinfo.trailerpath) Then
 
-                    DownloadTrailer(workingMovieDetails.fileinfo.trailerpath, workingMovieDetails.fullmoviebody.trailer)
+            DownloadTrailer(workingMovieDetails.fileinfo.trailerpath, workingMovieDetails.fullmoviebody.trailer)
 
-                    '                   If workingMovieDetails.fullmoviebody.trailer <> "" Then
-                    '                        Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
-                    '                        Dim wc As New Net.WebClient()
-                    '
-                    '                        Try
-                    '                            trailerdownloadpanel.Visible = True
-                    '                            FileToBeDownloaded = New WebFileDownloader
-                    '                            FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
-                    '                        Catch ex As Exception
-                    '#If SilentErrorScream Then
-                    '                            Throw ex
-                    '#End If
-                    '                        End Try
-                    '                    End If
+            '                   If workingMovieDetails.fullmoviebody.trailer <> "" Then
+            '                        Dim trailerurl As String = workingMovieDetails.fullmoviebody.trailer
+            '                        Dim wc As New Net.WebClient()
+            '
+            '                        Try
+            '                            trailerdownloadpanel.Visible = True
+            '                            FileToBeDownloaded = New WebFileDownloader
+            '                            FileToBeDownloaded.DownloadFileWithProgress(trailerurl, workingMovieDetails.fileinfo.trailerpath)
+            '                        Catch ex As Exception
+            '#If SilentErrorScream Then
+            '                            Throw ex
+            '#End If
+            '                        End Try
+            '                    End If
 
+        Else
+            Dim tempstring As String
+            tempstring = applicationPath & "\settings\temp.m3u"
+
+            Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
+
+            file.WriteLine(workingMovieDetails.fileinfo.trailerpath)
+            file.Close()
+
+            If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
+            If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
+            If Preferences.videomode = 3 Then
+                Preferences.videomode = 2
+                Call util_VideoMode2(tempstring)
+            End If
+            If Preferences.videomode >= 4 Then
+                If Preferences.selectedvideoplayer <> Nothing Then
+                    Call util_VideoMode4(tempstring)
                 Else
-                    Try
-                        Dim tempstring As String
-                        tempstring = applicationPath & "\settings\temp.m3u"
-
-                        Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
-
-                        file.WriteLine(workingMovieDetails.fileinfo.trailerpath)
-                        file.Close()
-
-                        If Preferences.videomode = 1 Then Call util_VideoMode1(tempstring)
-                        If Preferences.videomode = 2 Then Call util_VideoMode2(tempstring)
-                        If Preferences.videomode = 3 Then
-                            Preferences.videomode = 2
-                            Call util_VideoMode2(tempstring)
-                        End If
-                        If Preferences.videomode >= 4 Then
-                            If Preferences.selectedvideoplayer <> Nothing Then
-                                Call util_VideoMode4(tempstring)
-                            Else
-                                Call util_VideoMode1(tempstring)
-                            End If
-                        End If
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
+                    Call util_VideoMode1(tempstring)
                 End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-
+            End If
+        End If
     End Sub
 
     Private Sub RefreshMoviesToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMoviesToolStripMenuItem1.Click
-        Call Classes.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+        Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
     End Sub
 
     Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click
@@ -6383,7 +6344,7 @@ Public Class Form1
                 If bckrescrapewizard.CancellationPending Then Exit For
             Next
             Call mov_FilteredToFullMovieList()
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6437,7 +6398,7 @@ Public Class Form1
             ToolStripStatusLabel7.Visible = False
 
             Call util_ThreadsRunningCheck()
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             'Mov_RebuildMoviesFromNfoToXML(movieFolders)      'we do this because the wizard writes to the nfo's & not the cache - this reloads the cache from the nfo's & reloads
             ' movie list with the new data (required if year updated)
 
@@ -7402,7 +7363,7 @@ Public Class Form1
             If e.ProgressPercentage = 999999 Then
                 ToolStripStatusLabel4.Text = e.UserState
             ElseIf e.ProgressPercentage = 999998 Then
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                 ToolStripStatusLabel4.Text = e.UserState
             End If
             'ToolStrip1.Refresh()
@@ -7578,7 +7539,7 @@ Public Class Form1
     End Sub
 
     Private Sub ComboBoxFilterMovieFormat_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBoxFilterMovieFormat.SelectedValueChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
@@ -7624,7 +7585,6 @@ Public Class Form1
     Private Sub DisplayMovie()
         If DataGridViewMovies.SelectedRows.Count = 0 Then Exit Sub
 
-        Try
             Dim MultipleMoviesSelected As Boolean = True
             Dim needtoload As Boolean = False
             Dim done As Boolean = False
@@ -7741,15 +7701,7 @@ Public Class Form1
                 End If
             End If
 
-        Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            'End Try
-            'mov_SplitContainerAutoPosition("Selected Movie Changed")
-            'Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+
     End Sub
 
     Private Sub DataGridViewMovies_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewMovies.CellClick
@@ -7767,7 +7719,7 @@ Public Class Form1
                     TextBox1.BackColor = Color.White
                 End If
                 TextBox1.Refresh()
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -7783,7 +7735,7 @@ Public Class Form1
                     txt_titlesearch.BackColor = Color.White
                 End If
                 txt_titlesearch.Refresh()
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                 DisplayMovie()
             End If
         Catch ex As Exception
@@ -7816,7 +7768,7 @@ Public Class Form1
                 Preferences.moviedefaultlist = 2
 
                 'Preferences.SaveConfig()'we don't need to save this till MC Closes
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -7878,13 +7830,13 @@ Public Class Form1
 
     'reverse order
     Private Sub btnreverse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnreverse.CheckedChanged 
-        If Classes.clsGridViewMovie.GridSort = "Asc" Then
-            Classes.clsGridViewMovie.GridSort = "Desc"
+        If Mc.clsGridViewMovie.GridSort = "Asc" Then
+            Mc.clsGridViewMovie.GridSort = "Desc"
         Else
-            Classes.clsGridViewMovie.GridSort = "Asc"
+            Mc.clsGridViewMovie.GridSort = "Asc"
         End If
 
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
@@ -8514,7 +8466,7 @@ Public Class Form1
                             ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
-                            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required as we no longer move back to main page
@@ -8582,7 +8534,7 @@ Public Class Form1
         Next
 
         If replace = True Then
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
             'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
             'currentTabIndex = TabControl2.SelectedIndex
@@ -10458,7 +10410,7 @@ Public Class Form1
                 Next
                 stage = stage & vbCrLf
                 stage = stage & "applying filters" & vbCrLf
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                 stage = stage & vbCrLf
                 stage = stage & "Finalising" & vbCrLf
                 messbox.Close()
@@ -15165,7 +15117,7 @@ Public Class Form1
                     filteredList.Add(movie)
                 End If
             Next
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             LabelCountFilter.Text = "Displaying " & filteredList.Count & " " & topactorname & " movies"
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -16477,7 +16429,7 @@ Public Class Form1
                     End If
                 Next
             End If
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -16799,7 +16751,7 @@ Public Class Form1
                 If remove = True Then Preferences.offlinefolders.RemoveAt(f)
             Next
             Preferences.SaveConfig()
-            Call Classes.mov_CacheSave.ex(fullMovieList)
+            Call Mc.mov_CacheSave.ex(fullMovieList)
         End If
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
             Application.DoEvents()
@@ -16827,10 +16779,10 @@ Public Class Form1
             DataGridViewMovies.Rows(0).Selected = True
         End If
 
-        Call Classes.mov_CacheSave.ex(fullMovieList)
+        Call Mc.mov_CacheSave.ex(fullMovieList)
         Call mov_FormPopulate()
         Call mov_CacheLoad()
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
 
         If DataGridViewMovies.Rows.Count > 0 Then
             DataGridViewMovies.Rows(0).Selected = True
@@ -19394,7 +19346,7 @@ Public Class Form1
         util_MainFormTitleUpdate()  'creates & shows new title to Form1, also includes current profile name
 
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            Call Classes.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
         Else
             Call mov_CacheReload()
         End If
@@ -19724,7 +19676,7 @@ Public Class Form1
 
     Private Sub SearchForNewMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewMoviesToolStripMenuItem.Click
         ProgressAndStatus1.Display()
-        Call Classes.mov_StartNew.ex(scraperLog)
+        Call Mc.mov_StartNew.ex(scraperLog)
         ProgressAndStatus1.Visible = False
     End Sub
 
@@ -19737,7 +19689,7 @@ Public Class Form1
                     txt_titlesearch.BackColor = Color.White
                 End If
                 txt_titlesearch.Refresh()
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -20959,9 +20911,9 @@ Public Class Form1
             Next
         Next gridrow
 
-        Call Classes.mov_CacheSave.ex(fullMovieList)
+        Call Mc.mov_CacheSave.ex(fullMovieList)
         Call mov_FormPopulate()
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         frmSplash2.Hide()
         'mess.Close()
         Application.DoEvents()
@@ -21880,7 +21832,7 @@ Public Class Form1
                     End If
                 End If
             Next
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
             Call mov_FormPopulate()
 
             DisplayMovie()
@@ -22781,7 +22733,7 @@ Public Class Form1
                             ButtonNextFanart.Enabled = True
                             ButtonNextFanart.Visible = True 'show next movie button
                         Else
-                            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                         End If
 
                         'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
@@ -24237,37 +24189,37 @@ Public Class Form1
     End Sub
 
     Private Sub RadioButtonAll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonAll.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
     Private Sub RadioButtonWatched_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonWatched.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
     Private Sub RadioButtonUnWatched_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonUnWatched.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
     Private Sub RadioButtonDuplicates_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonDuplicates.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
     Private Sub RadioButtonMissingPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingPosters.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
     Private Sub RadioButtonMissingFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingFanart.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
     Private Sub RadioButtonMissingPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonMissingPlot.CheckedChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
@@ -24690,7 +24642,7 @@ Public Class Form1
     Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles ButtonNextFanart.Click
         Try
             If noFanart = False Then
-                Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
                 Call mov_FanartLoad()   'refresh fanart for the current movie
                 'If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
                 If DataGridViewMovies.Rows.Count = 0 Then
@@ -24806,7 +24758,7 @@ Public Class Form1
             loadinginfo = "Status :- Building Movie Database"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call Classes.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
+            Call Mc.mov_CacheRefresh.ex(dList, fullMovieList, progressmode, movieFolders)
 
         Else
             loadinginfo = "Status :- Loading Movie Database"
@@ -24877,7 +24829,7 @@ Public Class Form1
             Else
                 Preferences.showsortdate = False
             End If
-            Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -25707,8 +25659,8 @@ End Sub
 
 
     Private Sub cbSort_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles cbSort.SelectedIndexChanged 
-        Classes.clsGridViewMovie.GridFieldToDisplay2 = cbSort.Text
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Mc.clsGridViewMovie.GridFieldToDisplay2 = cbSort.Text
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
@@ -26409,7 +26361,7 @@ End Sub
             'MovieListComboBox.Items.Remove(MovieListComboBox.SelectedItems(0))
             DataGridViewMovies.Rows.RemoveAt(DataGridViewMovies.SelectedRows(0).Index)
 
-            Call Classes.mov_CacheSave.ex(fullMovieList)
+            Call Mc.mov_CacheSave.ex(fullMovieList)
         Catch
         End Try
     End Sub
@@ -26637,24 +26589,24 @@ End Sub
 
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
         If MainFormLoadedStatus = True Then
-            Classes.clsGridViewMovie.GridFieldToDisplay1 = "FileName"
-            Classes.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+            Mc.clsGridViewMovie.GridFieldToDisplay1 = "FileName"
+            Mc.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
             DisplayMovie()
         End If
     End Sub
 
     Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
         If MainFormLoadedStatus = True Then
-            Classes.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
-            Classes.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+            Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
+            Mc.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
             DisplayMovie()
         End If
     End Sub
 
     Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
         If MainFormLoadedStatus = True Then
-            Classes.clsGridViewMovie.GridFieldToDisplay1 = "Folder"
-            Classes.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
+            Mc.clsGridViewMovie.GridFieldToDisplay1 = "Folder"
+            Mc.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
             DisplayMovie()
         End If
     End Sub
@@ -26678,7 +26630,7 @@ End Sub
     End Sub
 
     Private Sub ComboBoxFilterGenre_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBoxFilterGenre.SelectedValueChanged
-        Call Classes.clsGridViewMovie.mov_FiltersAndSortApply()
+        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         DisplayMovie()
     End Sub
 
@@ -26689,7 +26641,7 @@ End Sub
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
         ProgressAndStatus1.Display()
-        Call Classes.mov_StartNew.ex(scraperLog)
+        Call Mc.mov_StartNew.ex(scraperLog)
         ProgressAndStatus1.Visible = False
         DisplayMovie()
 
