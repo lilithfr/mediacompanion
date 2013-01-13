@@ -13075,6 +13075,11 @@ Public Class Form1
 
         Dim tempint As Integer = 0
         Dim tempstring As String = ""
+
+        If IsNothing(WorkingTvShow.TvdbId.Value) = True Then
+            WorkingTvShow.TvdbId.Value = ""
+        End If
+
         If WorkingTvShow.TvdbId.Value.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
         If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
@@ -13128,9 +13133,10 @@ Public Class Form1
                 'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
                 Dim tvdbstuff As New TVDBScraper
                 Dim tvshowxmlstring As String = tvdbstuff.GetShow(WorkingTvShow.TvdbId.Value, langu)
-                If tvshowxmlstring = "!!! Error !!!" Then
+                If tvshowxmlstring = "!!!Error!!!" Then
                     MsgBox("Error scraping show")
-                    Exit Sub
+                    messbox.Hide()
+                    Return
                 End If
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(tvshowxmlstring)
@@ -24932,11 +24938,11 @@ Public Class Form1
         End Try
     End Sub
     Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
-        Try
-            tv_Rescrape()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'Try
+        tv_Rescrape()
+        'Catch ex As Exception
+        ' ExceptionHandler.LogError(ex)
+        ' End Try
     End Sub
     Private Sub PlayEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
         Try
