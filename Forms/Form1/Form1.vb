@@ -20385,6 +20385,9 @@ Public Class Form1
                             changed = True
                         End If
                     End If
+
+                    If mov.top250 = "" then mov.top250=0
+
                     If Convert.ToInt32(mov.top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
                         If IsNumeric(gridrow.Cells("top250").Value) Then
                             changed = True
