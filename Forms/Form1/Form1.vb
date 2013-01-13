@@ -15244,114 +15244,48 @@ Public Class Form1
     End Sub
 
     Private Sub mov_WallSetup()
+        Dim check As Boolean = True
+        Dim count As Integer = 0
+        Dim locx As Integer = 0
+        Dim locy As Integer = 0
 
-        Dim check As Boolean
-        check = True
-        If moviecount_bak <> DataGridViewMovies.RowCount Then
-            moviecount_bak = DataGridViewMovies.RowCount
-            check = False
-        End If
-
-		  If cbSort.SelectedIndex <> cbSortHidden.SelectedIndex then
-			   cbSortHidden.SelectedIndex = cbSort.SelectedIndex
-				 check = False
-		  End If
-
-        If btnreverse.CheckState <> CheckBox9.CheckState Then
-            CheckBox9.CheckState = btnreverse.CheckState
-            check = False
-        End If
-
-        If TextBox1.Text <> TextBox37.Text Then
-            TextBox37.Text = CheckBox1.Text
-            check = False
-        End If
-
-        If txt_titlesearch.Text <> TextBox36.Text Then
-            TextBox36.Text = txt_titlesearch.Text
-            check = False
-        End If
+        Dim filteredListObjWall As New List(Of Data_GridViewMovie)
+        filteredListObjWall = filteredListObj
 
 
-        If check = True Then Exit Sub
-
+        If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
+        If cbSort.SelectedIndex <> cbSortHidden.SelectedIndex Then cbSortHidden.SelectedIndex = cbSort.SelectedIndex : check = False
+        If btnreverse.CheckState <> CheckBox9.CheckState Then CheckBox9.CheckState = btnreverse.CheckState : check = False
+        If TextBox1.Text <> TextBox37.Text Then TextBox37.Text = CheckBox1.Text : check = False
+        If txt_titlesearch.Text <> TextBox36.Text Then TextBox36.Text = txt_titlesearch.Text : check = False
+        If check = True Then Return
 
         maxcount = Convert.ToInt32((TabPage22.Width - 50) / 150)
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 164 Then
-            maxcount += 1
-        End If
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
+        If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
         pictureList.Clear()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
             If TabPage22.Controls(i).Name = "" Then
@@ -15360,11 +15294,9 @@ Public Class Form1
         Next
         TabPage22.Refresh()
         Application.DoEvents()
-        Dim count As Integer = 0
-        Dim locx As Integer = 0
-        Dim locy As Integer = 0
+
         'Panel17.AutoScroll = False
-        For Each movie In filteredList
+        For Each Movie In filteredListObjWall
 
             bigPictureBox = New PictureBox()
             With bigPictureBox
@@ -15373,23 +15305,20 @@ Public Class Form1
                 .Height = 200
                 .SizeMode = PictureBoxSizeMode.StretchImage
                 '.Image = sender.image
-                Try
-                    Dim filename As String = Utilities.GetCRC32(movie.fullpathandfilename)
-                    Dim posterCache As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                    If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
-                        Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(movie.fullpathandfilename))
-                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
-                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
-                        bitmap2.Dispose()
-                    End If
-                    If File.Exists(posterCache) Then
-                        .Image = Utilities.LoadImage(posterCache)
-                    Else
-                        .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
-                    End If
-                Catch ex As Exception
+                Dim filename As String = Utilities.GetCRC32(Movie.fullpathandfilename)
+                Dim posterCache As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(Movie.fullpathandfilename)) Then
+                    Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(Movie.fullpathandfilename))
+                    bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                    Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
+                    bitmap2.Dispose()
+                End If
+                If File.Exists(posterCache) Then
+                    .Image = Utilities.LoadImage(posterCache)
+                Else
                     .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
-                End Try
+                End If
+                
 
                 'If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
                 '    Try
@@ -15415,17 +15344,17 @@ Public Class Form1
                 '    bitmap2.Dispose()
                 '    .Image = bitmap3
                 'End If
-                .Tag = movie.fullpathandfilename
+                .Tag = Movie.fullpathandfilename
                 Dim toolTip1 As ToolTip = New ToolTip(Me.components)
 
-                Dim outline As String = movie.outline
+                Dim outline As String = Movie.outline
                 Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
                 outline = ""
                 For Each line In newoutline
                     outline = outline & vbCrLf & line
                 Next
                 outline.TrimEnd(vbCrLf)
-                toolTip1.SetToolTip(bigPictureBox, movie.fullpathandfilename & vbCrLf & vbCrLf & movie.titleandyear & vbCrLf & outline)
+                toolTip1.SetToolTip(bigPictureBox, Movie.fullpathandfilename & vbCrLf & vbCrLf & Movie.titleandyear & vbCrLf & outline)
                 toolTip1.Active = True
                 toolTip1.InitialDelay = 0
 
@@ -15458,11 +15387,6 @@ Public Class Form1
             walllocked = False
         Next
         walllocked = False
-        'Panel17.AutoScroll = True
-        'Try
-        'Call resetwall()
-        'Catch
-        'End Try
     End Sub
 
     Private Sub mov_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
@@ -25045,28 +24969,26 @@ Public Class Form1
     End Sub
 
     Private Sub TvTreeview_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TvTreeview.MouseUp
-        Try
-            If e.Button = MouseButtons.Right Then
-                Dim pt As Point
-                pt.X = e.X
-                pt.Y = e.Y
-                'MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
 
-                Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
-                Dim objHitTestInfo As DataGridView.HitTestInfo
-                objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
-                DataGridViewMovies.Rows(objHitTestInfo.RowIndex).Selected = True
+        If e.Button = MouseButtons.Right Then
+            Dim pt As Point
+            pt.X = e.X
+            pt.Y = e.Y
+            'MovieListComboBox.SelectedIndex = MovieListComboBox.IndexFromPoint(pt)
 
-                TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
+            Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
+            Dim objHitTestInfo As DataGridView.HitTestInfo
+            objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
+            'DataGridViewMovies.Rows(objHitTestInfo.RowIndex).Selected = True
 
-                'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
+            TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
 
-                Tv_TreeViewContextMenuItemsEnable()
+            'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
 
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+            Tv_TreeViewContextMenuItemsEnable()
+
+        End If
+
     End Sub
 
 
