@@ -6638,7 +6638,7 @@ Public Class Form1
                                     newmovie.fileinfo.createdate = Format(myDate2, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                                    Throw ex
 #End If
                                 End Try
                                 If bckgrounddroppedfiles.CancellationPending Then Exit Sub
@@ -6669,7 +6669,7 @@ Public Class Form1
                                     movietoadd.filedate = Format(myDate, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                                    Throw ex
 #End If
                                 End Try
                                 movietoadd.outline = newmovie.fullmoviebody.outline
@@ -6715,7 +6715,7 @@ Public Class Form1
 
                                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                                Throw ex
+                                                    Throw ex
 #End If
                                                 End Try
                                             Case "credits"
@@ -6770,7 +6770,7 @@ Public Class Form1
                                     newmovie.fileinfo.createdate = Format(myDate2, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                                    Throw ex
 #End If
                                 End Try
                                 Dim done As Boolean = False
@@ -6830,7 +6830,7 @@ Public Class Form1
                                                                         End If
                                                                     Catch ex As Exception
 #If SilentErrorScream Then
-                                                                    Throw ex
+                                                                        Throw ex
 #End If
                                                                     End Try
                                                                 End If
@@ -6874,7 +6874,7 @@ Public Class Form1
                                     End If
                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                                    Throw ex
 #End If
                                 End Try
                                 If bckgrounddroppedfiles.CancellationPending Then Exit Sub
@@ -6893,7 +6893,7 @@ Public Class Form1
                                             thumbs = thumbs & testthumbs.ToString
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                             Thread.Sleep(1)
                                         End Try
@@ -6913,7 +6913,7 @@ Public Class Form1
                                             thumbs = thumbs & testthumbs.ToString
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                             Thread.Sleep(1)
                                         End Try
@@ -6932,7 +6932,7 @@ Public Class Form1
                                             thumbs = thumbs & testthumbs.ToString
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                             Thread.Sleep(1)
                                         End Try
@@ -6951,7 +6951,7 @@ Public Class Form1
                                             thumbs = thumbs & testthumbs.ToString
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                             Thread.Sleep(1)
                                         End Try
@@ -6987,7 +6987,7 @@ Public Class Form1
                                     End If
                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                                    Throw ex
 #End If
                                 End Try
 
@@ -7064,7 +7064,7 @@ Public Class Form1
                                     movietoadd.createdate = Format(myDate, datePattern).ToString
                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                Throw ex
+                                    Throw ex
 #End If
                                 End Try
                                 movietoadd.outline = newmovie.fullmoviebody.outline
@@ -7193,7 +7193,7 @@ Public Class Form1
                                         End If
                                     Catch ex As Exception
 #If SilentErrorScream Then
-                                    Throw ex
+                                        Throw ex
 #End If
                                     End Try
                                 End If
@@ -7256,7 +7256,7 @@ Public Class Form1
                                                     If fanartfound = False Then moviethumburl = ""
                                                 Catch ex As Exception
 #If SilentErrorScream Then
-                                                Throw ex
+                                                    Throw ex
 #End If
                                                 End Try
                                                 If moviethumburl <> "" Then
@@ -7331,7 +7331,7 @@ Public Class Form1
                                             End If
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                         End Try
                                     End If
@@ -7352,6 +7352,8 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+
+
 
     End Sub
 
@@ -7449,81 +7451,68 @@ Public Class Form1
     End Sub
 
     Private Sub DataGridViewMovies_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles DataGridViewMovies.DragDrop
-        Try
-            Dim files() As String
-            files = e.Data.GetData(DataFormats.FileDrop)
-            For f = 0 To UBound(files)
-                If IO.File.Exists(files(f)) Then
-                    ' This path is a file.
-                    Try
+
+        Dim files() As String
+
+
+
+        files = e.Data.GetData(DataFormats.FileDrop)
+        For f = 0 To UBound(files)
+            If IO.File.Exists(files(f)) Then
+                ' This path is a file.
+                Dim skip As Boolean = False
+                For Each item In fullMovieList
+                    If item.fullpathandfilename = files(f) Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                For Each item In droppedItems
+                    If item = files(f) Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                If mov_FileCheckValid(files(f)) = True Then
+                    If skip = False Then droppedItems.Add(files(f))
+                End If
+            Else
+                If IO.Directory.Exists(files(f)) Then
+                    ' This path is a directory.
+                    Dim di As New IO.DirectoryInfo(files(f))
+                    Dim diar1 As IO.FileInfo() = di.GetFiles()
+                    Dim dra As IO.FileInfo
+
+                    'list the names of all files in the specified directory
+                    For Each dra In diar1
                         Dim skip As Boolean = False
                         For Each item In fullMovieList
-                            If item.fullpathandfilename = files(f) Then
+                            If item.fullpathandfilename = dra.FullName Then
                                 skip = True
                                 Exit For
                             End If
                         Next
                         For Each item In droppedItems
-                            If item = files(f) Then
+                            If item = dra.FullName Then
                                 skip = True
                                 Exit For
                             End If
                         Next
-                        If mov_FileCheckValid(files(f)) = True Then
-                            If skip = False Then droppedItems.Add(files(f))
+                        If mov_FileCheckValid(dra.FullName) = True Then
+                            If skip = False Then droppedItems.Add(dra.FullName)
                         End If
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                    End Try
-                Else
-                    If IO.Directory.Exists(files(f)) Then
-                        ' This path is a directory.
-                        Dim di As New IO.DirectoryInfo(files(f))
-                        Dim diar1 As IO.FileInfo() = di.GetFiles()
-                        Dim dra As IO.FileInfo
-
-                        'list the names of all files in the specified directory
-                        For Each dra In diar1
-                            Try
-                                Dim skip As Boolean = False
-                                For Each item In fullMovieList
-                                    If item.fullpathandfilename = dra.FullName Then
-                                        skip = True
-                                        Exit For
-                                    End If
-                                Next
-                                For Each item In droppedItems
-                                    If item = dra.FullName Then
-                                        skip = True
-                                        Exit For
-                                    End If
-                                Next
-                                If mov_FileCheckValid(dra.FullName) = True Then
-                                    If skip = False Then droppedItems.Add(dra.FullName)
-                                End If
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                            End Try
-                        Next
-                    End If
-                End If
-            Next
-
-
-            If droppedItems.Count > 0 Then
-                If Not bckgrounddroppedfiles.IsBusy Then
-                    ToolStripStatusLabel4.Visible = True
-                    'ToolStripProgressBar4.Visible = True
-                    bckgrounddroppedfiles.RunWorkerAsync()
+                    Next
                 End If
             End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Next
+
+        If droppedItems.Count > 0 Then
+            If Not bckgrounddroppedfiles.IsBusy Then
+                ToolStripStatusLabel4.Visible = True
+                'ToolStripProgressBar4.Visible = True
+                bckgrounddroppedfiles.RunWorkerAsync()
+            End If
+        End If
 
     End Sub
 
