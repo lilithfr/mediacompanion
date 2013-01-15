@@ -820,24 +820,25 @@ Public Class Movie
 
                                                 SaveActorImageToCacheAndPath(newactor.actorthumb, GetActorFileName(newactor.actorname) )
                                             Else
+                                                If Preferences.actorsave then              
+                                                    Dim tempstring  = Preferences.actorsavepath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+
+                                                    Dim hg As New IO.DirectoryInfo(tempstring)
+                                                    If Not hg.Exists Then
+                                                        IO.Directory.CreateDirectory(tempstring)
+                                                    End If
                                                               
-                                                Dim tempstring  = Preferences.actorsavepath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+                                                    Dim workingpath = tempstring & "\" & detail.InnerText & ".jpg"
 
-                                                Dim hg As New IO.DirectoryInfo(tempstring)
-                                                If Not hg.Exists Then
-                                                    IO.Directory.CreateDirectory(tempstring)
-                                                End If
-                                                              
-                                                Dim workingpath = tempstring & "\" & detail.InnerText & ".jpg"
+                                                    DownloadCache.SaveImageToCacheAndPath(newactor.actorthumb, workingpath, Preferences.overwritethumbs, , GetHeightResolution(Preferences.ActorResolutionSI))
 
-                                                DownloadCache.SaveImageToCacheAndPath(newactor.actorthumb, workingpath, Preferences.overwritethumbs, , GetHeightResolution(Preferences.ActorResolutionSI))
+                                                    newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
 
-                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-
-                                                If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-                                                Else
-                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                                        newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                    Else
+                                                        newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                    End If
                                                 End If
                                             End If
 
@@ -1686,7 +1687,7 @@ Public Class Movie
 
     Shared Function SaveActorImageToCacheAndPath(url As String, path As String)
     
-        If Not Preferences.actorsave Then Return False
+        'If Not Preferences.actorsave Then Return False
 
         Dim height = GetHeightResolution(Preferences.ActorResolutionSI)
 
