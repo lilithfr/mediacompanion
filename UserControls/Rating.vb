@@ -30,7 +30,8 @@
         gr_dest.DrawImage(bm_source, 0, 0, PictureBoxWidth, PictureBoxWidth / Ratio)
 
         ValueRating = Convert.ToSingle(Value.Replace(".", ","))
-        Ratingwidth = 39 + (Convert.ToInt16((ValueRating * 10) * ((PictureBoxRating.Width - 39) / 100)))
+'        Ratingwidth = 39 + (Convert.ToInt16((ValueRating * 10) * ((PictureBoxRating.Width - 39) / 100)))
+        Ratingwidth = 39 + (Convert.ToInt16(ValueRating * ((PictureBoxRating.Width - 39) / 100)))
 
         'Copy Stars 
         Using gr As Graphics = Graphics.FromImage(bm_dest)
