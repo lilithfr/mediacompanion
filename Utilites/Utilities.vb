@@ -18,7 +18,7 @@ Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
-                                                 ".dvr-ms", ".img", ".strm", "ssif", "VIDEO_TS.IFO"}
+                                                 ".dvr-ms", ".img", ".strm", ".ssif", "VIDEO_TS.IFO"}
 
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
@@ -379,7 +379,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             If tempfilename.IndexOf("movie.nfo") <> -1 Then
                 Dim possiblemovies(1000) As String
                 Dim possiblemoviescount As Integer = 0
-                For f = 1 To 23
+                For f = 0 To 23
                     Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
                     Dim dir_info As New System.IO.DirectoryInfo(dirpath)
                     Dim pattern As String = "*" & VideoExtensions(f)
@@ -399,23 +399,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     actualpathandfilename = possiblemovies(possiblemoviescount)
                 ElseIf possiblemoviescount > 1 Then
                     Dim multistrings(6) As String
-                    multistrings(1) = "cd"
-                    multistrings(2) = "dvd"
-                    multistrings(3) = "part"
-                    multistrings(4) = "pt"
-                    multistrings(5) = "disk"
-                    multistrings(6) = "disc"
+                    multistrings(0) = "cd"
+                    multistrings(1) = "dvd"
+                    multistrings(2) = "part"
+                    multistrings(3) = "pt"
+                    multistrings(4) = "disk"
+                    multistrings(5) = "disc"
                     Dim types(5) As String
-                    types(1) = ""
-                    types(2) = "-"
-                    types(3) = "_"
-                    types(4) = " "
-                    types(5) = "."
+                    types(0) = ""
+                    types(1) = "-"
+                    types(2) = "_"
+                    types(3) = " "
+                    types(4) = "."
                     Dim workingstring As String
-                    For f = 1 To 6
-                        For g = 1 To 5
+                    For f = 0 To 5
+                        For g = 0 To 4
                             For h = 1 To possiblemoviescount
-                                workingstring = multistrings(f) & types(h) & "1"
+                                workingstring = multistrings(f) & types(g) & "1"
                                 Dim workingtitle As String = possiblemovies(h).ToLower
                                 If workingtitle.IndexOf(workingstring) <> -1 Then
                                     actualpathandfilename = possiblemovies(h)
