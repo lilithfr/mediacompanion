@@ -92,10 +92,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Assets\class_mpdb_thumbs.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Assets\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="imdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\imdb_thumbs\imdb_thumbs\bin\Release\imdb_thumbs.dll</HintPath>
@@ -110,8 +106,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="tmdb_posters">
-      <HintPath>Assets\tmdb_posters.dll</HintPath>
+    <Reference Include="WatTmdb, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\WatTmdb.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -458,9 +455,6 @@
     <Content Include="Assets\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\ICSharpCode.SharpZipLib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\imdb_thumbs.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -475,6 +469,7 @@
     <Content Include="Assets\pthreadGC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\RestSharp.dll" />
     <Content Include="Assets\scrapers\metadata.mc.hdtrailers.net\addon.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -482,6 +477,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\WatTmdb.dll" />
     <Content Include="Classes\tmdb_languages.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -691,9 +687,6 @@
     <Content Include="Assets\scrapers\xbmc.metadata\addon.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\tmdb_posters.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Classes\UseXBMCScrapers\readme.txt" />
     <Content Include="html_templates\another template.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -818,10 +811,6 @@
     <ProjectReference Include="Utilites\Utilites.vbproj">
       <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
       <Name>Utilites</Name>
-    </ProjectReference>
-    <ProjectReference Include="WatTmdb\WatTmdb.csproj">
-      <Project>{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}</Project>
-      <Name>WatTmdb</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
