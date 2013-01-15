@@ -1,5 +1,6 @@
 ﻿Imports System.Net
 Imports System.IO
+Imports System.Linq
 
 
 Public Class frmCoverArt
@@ -242,84 +243,94 @@ Public Class frmCoverArt
         Try
             Call initialise()
 
-            Dim tempsimdbid As String = String.Empty
+            'Dim tempsimdbid As String = String.Empty
           
-            Dim fanarturl As String = URLs.TMdbMovieLookup(tmdbid)
-            Dim apple2(3000) As String
-            Dim fanartlinecount As Integer = 0
+            'Dim fanarturl As String = URLs.TMdbMovieLookup(tmdbid)
+            'Dim apple2(3000) As String
+            'Dim fanartlinecount As Integer = 0
 
-            Dim wrGETURL As WebRequest
+            'Dim wrGETURL As WebRequest
 
-            wrGETURL = WebRequest.Create(fanarturl)
-            Dim myProxy As New WebProxy("myproxy", 80)
-            myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            Dim sLine As String = ""
-            fanartlinecount = 0
+            'wrGETURL = WebRequest.Create(fanarturl)
+            'Dim myProxy As New WebProxy("myproxy", 80)
+            'myProxy.BypassProxyOnLocal = True
+            'Dim objStream As Stream
+            'objStream = wrGETURL.GetResponse.GetResponseStream()
+            'Dim objReader As New StreamReader(objStream)
+            'Dim sLine As String = ""
+            'fanartlinecount = 0
 
-            Do While Not sLine Is Nothing
-                fanartlinecount += 1
-                sLine = objReader.ReadLine
-                apple2(fanartlinecount) = sLine
-            Loop
+            'Do While Not sLine Is Nothing
+            '    fanartlinecount += 1
+            '    sLine = objReader.ReadLine
+            '    apple2(fanartlinecount) = sLine
+            'Loop
 
-            fanartlinecount -= 1
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<id>") <> -1 Then
-                    tempsimdbid = apple2(f)
-                    tempsimdbid = tempsimdbid.Replace("<id>", "")
-                    tempsimdbid = tempsimdbid.Replace("</id>", "")
-                    tempsimdbid = tempsimdbid.Replace("  ", "")
-                    tempsimdbid = tempsimdbid.Trim
-                    Exit For
-                End If
-            Next
+            'fanartlinecount -= 1
+            'For f = 1 To fanartlinecount
+            '    If apple2(f).IndexOf("<id>") <> -1 Then
+            '        tempsimdbid = apple2(f)
+            '        tempsimdbid = tempsimdbid.Replace("<id>", "")
+            '        tempsimdbid = tempsimdbid.Replace("</id>", "")
+            '        tempsimdbid = tempsimdbid.Replace("  ", "")
+            '        tempsimdbid = tempsimdbid.Trim
+            '        Exit For
+            '    End If
+            'Next
 
-            ReDim apple2(3000)
-            fanartlinecount = 0
+            'ReDim apple2(3000)
+            'fanartlinecount = 0
 
-            fanarturl = URLs.TMdbGetInfo(tempsimdbid)
+            'fanarturl = URLs.TMdbGetInfo(tempsimdbid)
 
 
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            Dim myProxy2 As New WebProxy("myproxy", 80)
-            myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
+            'Dim wrGETURL2 As WebRequest
+            'wrGETURL2 = WebRequest.Create(fanarturl)
+            'Dim myProxy2 As New WebProxy("myproxy", 80)
+            'myProxy2.BypassProxyOnLocal = True
+            'Dim objStream2 As Stream
+            'objStream2 = wrGETURL2.GetResponse.GetResponseStream()
+            'Dim objReader2 As New StreamReader(objStream2)
+            'Dim sLine2 As String = ""
+            'fanartlinecount = 0
 
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
-            fanartlinecount -= 1
-            pagecount = 0
+            'Do While Not sLine2 Is Nothing
+            '    fanartlinecount += 1
+            '    sLine2 = objReader2.ReadLine
+            '    apple2(fanartlinecount) = sLine2
+            'Loop
+            'fanartlinecount -= 1
+            'pagecount = 0
+            'count = 0
+
+            'For f = 1 To fanartlinecount
+            '    If apple2(f).IndexOf("<poster size=""original"">") <> -1 Then
+            '        count += 1
+            '        posterurls(count, 0) = apple2(f)
+            '        If apple2(f + 1).IndexOf("<poster size=""mid"">") <> -1 Then
+            '            posterurls(count, 1) = apple2(f + 1)
+            '        ElseIf posterurls(count, 1) = Nothing And apple2(f + 2).IndexOf("<poster size=""mid"">") <> -1 Then
+            '            posterurls(count, 1) = apple2(f + 2)
+            '        ElseIf posterurls(count, 1) = Nothing And apple2(f - 1).IndexOf("<poster size=""mid"">") <> -1 Then
+            '            posterurls(count, 1) = apple2(f - 1)
+            '        ElseIf posterurls(count, 1) = Nothing And apple2(f - 2).IndexOf("<poster size=""mid"">") <> -1 Then
+            '            posterurls(count, 1) = apple2(f - 2)
+            '        End If
+            '        posterurls(count, 0) = posterurls(count, 0).Replace("<poster size=""original"">", "")
+            '        posterurls(count, 0) = posterurls(count, 0).Replace("</poster>", "")
+            '        posterurls(count, 1) = posterurls(count, 1).Replace("<poster size=""mid"">", "")
+            '        posterurls(count, 1) = posterurls(count, 1).Replace("</poster>", "")
+            '    End If
+            'Next
+
             count = 0
 
-            For f = 1 To fanartlinecount
-                If apple2(f).IndexOf("<poster size=""original"">") <> -1 Then
-                    count += 1
-                    posterurls(count, 0) = apple2(f)
-                    If apple2(f + 1).IndexOf("<poster size=""mid"">") <> -1 Then
-                        posterurls(count, 1) = apple2(f + 1)
-                    ElseIf posterurls(count, 1) = Nothing And apple2(f + 2).IndexOf("<poster size=""mid"">") <> -1 Then
-                        posterurls(count, 1) = apple2(f + 2)
-                    ElseIf posterurls(count, 1) = Nothing And apple2(f - 1).IndexOf("<poster size=""mid"">") <> -1 Then
-                        posterurls(count, 1) = apple2(f - 1)
-                    ElseIf posterurls(count, 1) = Nothing And apple2(f - 2).IndexOf("<poster size=""mid"">") <> -1 Then
-                        posterurls(count, 1) = apple2(f - 2)
-                    End If
-                    posterurls(count, 0) = posterurls(count, 0).Replace("<poster size=""original"">", "")
-                    posterurls(count, 0) = posterurls(count, 0).Replace("</poster>", "")
-                    posterurls(count, 1) = posterurls(count, 1).Replace("<poster size=""mid"">", "")
-                    posterurls(count, 1) = posterurls(count, 1).Replace("</poster>", "")
-                End If
+            Dim tmdb As New TMDb(tmdbid)
+
+            For Each item In tmdb.MC_Posters
+                 posterurls(count, 0) = item.hdUrl   
+                 posterurls(count, 1) = item.ldUrl 
+                 count += 1
             Next
 
             Call displayselection()

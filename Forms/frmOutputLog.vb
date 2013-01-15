@@ -12,15 +12,15 @@ Public Class frmoutputlog
     End Sub
 
     Public Sub New(ByVal displaystring As String, Optional ByVal forceoverride As Boolean = False)
+
+        InitializeComponent()
         Try
-            Me.InitializeComponent()
             If forceoverride = False Then
                 Me.Close()
             End If
             output = displaystring
-            ComboBoxLogViewType.Items.Add("Full")   'index 0
-            ComboBoxLogViewType.Items.Add("Brief")  'index 1 
-            ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
+
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -111,4 +111,8 @@ Public Class frmoutputlog
         '    Preferences.logview = 1 'set the new preference, it will be saved when MC exits.
         'End If
     End Sub
+
+Private Sub frmoutputlog_Shown( sender As System.Object,  e As System.EventArgs) Handles MyBase.Shown
+    ComboBoxLogViewType.SelectedIndex = Preferences.logview 'set the combobox entry as per the preferences
+End Sub
 End Class

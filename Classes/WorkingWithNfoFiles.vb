@@ -780,23 +780,27 @@ Public Class WorkingWithNfoFiles
         End If
     End Sub
 
-    Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String)
+    Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String) As ComboList
+
+        Dim newmovie As New ComboList
 
         Try
-            Dim newmovie As New str_ComboList(SetDefaults)
             If Not IO.File.Exists(path) Then
-                Return "Error"
-                Exit Function
+                newmovie.title = "Error"
+                Return newmovie
             Else
                 If mode = "movielist" Then
                     Dim movie As New XmlDocument
                     Try
                         movie.Load(path)
+                    'Catch
+                    '    newmovie.title = "Error"
+                    '    Return newmovie
+                    'End Try
                     Catch ex As Exception
                         If Not util_NfoValidate(path) Then
-                            newmovie.title = "ERROR"
-                            Return "ERROR"
-                            Exit Function
+                            newmovie.title = "Error"
+                            Return newmovie
                         End If
 
                         newmovie.createdate = "999999999999"
@@ -804,7 +808,7 @@ Public Class WorkingWithNfoFiles
                         Dim myDate2 As Date = filecreation2.LastWriteTime
                         Try
                             newmovie.filedate = Format(myDate2, Preferences.datePattern).ToString
-                        Catch ex2 As Exception
+                        Catch
                         End Try
                         newmovie.filename = IO.Path.GetFileName(path)
                         newmovie.foldername = Utilities.GetLastFolder(path)
@@ -826,8 +830,7 @@ Public Class WorkingWithNfoFiles
                         newmovie.top250 = "0"
                         newmovie.year = "0000"
 
-                        Return (newmovie)
-                        Exit Function
+                        Return newmovie
                     End Try
 
                     Dim thisresult As XmlNode = Nothing
@@ -942,7 +945,10 @@ Public Class WorkingWithNfoFiles
 
         Catch
         End Try
-        Return "Error"
+
+        newmovie.title = "Error"
+        Return newmovie
+
     End Function
 
 
@@ -961,7 +967,7 @@ Public Class WorkingWithNfoFiles
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
-                    newmovie.fullmoviebody.title = Utilities.CleanFileName(IO.Path.GetFileName(Form1.workingMovie.fullpathandfilename))
+                    newmovie.fullmoviebody.title = "Unknown" 'Utilities.CleanFileName(IO.Path.GetFileName(workingMovie.fullpathandfilename))
                     newmovie.fullmoviebody.year = "0000"
                     newmovie.fullmoviebody.top250 = "0"
                     newmovie.fullmoviebody.playcount = "0"
@@ -979,14 +985,13 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.rating = ""
                     newmovie.fullmoviebody.runtime = ""
                     newmovie.fullmoviebody.studio = ""
-                    newmovie.fullmoviebody.tagline = "Rescrapeing the movie should fix the problem"
+                    newmovie.fullmoviebody.tagline = "Rescraping the movie might fix the problem"
                     newmovie.fullmoviebody.trailer = ""
                     newmovie.fullmoviebody.votes = ""
                     newmovie.fullmoviebody.sortorder = ""
                     newmovie.fullmoviebody.country = ""
                     newmovie.fileinfo.createdate = "99991230235999"
                     Return newmovie
-                    Exit Function
                 End Try
                 Dim thisresult As XmlNode = Nothing
 
@@ -1803,7 +1808,9 @@ Public Class WorkingWithNfoFiles
                                         actorThumbFileName = System.IO.Path.Combine(Preferences.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
                                         localActorThumbFileName = System.IO.Path.Combine(Preferences.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
 
-                                        Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
+'                                       Utilities.DownloadImage(uri.OriginalString, localActorThumbFileName, True, False)
+                                        Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName )
+
                                         actorthumb = actorThumbFileName
                                     End If
                                 End If

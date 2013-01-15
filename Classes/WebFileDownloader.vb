@@ -1,5 +1,7 @@
-﻿Imports System.Net
+﻿Imports System.ComponentModel
+Imports System.Net
 Imports System.IO
+Imports System.Threading
 
 Public Class WebFileDownloader
     Public Event AmountDownloadedChanged(ByVal iNewProgress As Long)
@@ -35,7 +37,7 @@ Public Class WebFileDownloader
             Return URL
         End Try
     End Function
-    Public Function DownloadFileWithProgress(ByVal URL As String, ByVal Location As String) As Boolean
+    Public Function DownloadFileWithProgress(ByVal URL As String, ByVal Location As String, Optional bw As BackgroundWorker=Nothing) As Boolean
         Dim FS As FileStream = Nothing
         Try
             mCurrentFile = GetFileName(URL)
@@ -43,7 +45,7 @@ Public Class WebFileDownloader
             Dim bBuffer As Byte()
             ReDim bBuffer( 2*1024*1024 )
             Dim iBytesRead As Integer
-            Dim iTotalBytesRead As Integer
+            Dim iTotalBytesRead As Long
             Dim iRetries    as Integer = 0
             Dim iMaxRetries as Integer = 10
 
@@ -64,6 +66,7 @@ Public Class WebFileDownloader
                     RaiseEvent AmountDownloadedChanged(iTotalBytesRead)
                 End If
 
+
                 'Nov11 - AnotherPhil - Add retry handling with resume from last good position 
                 If iBytesRead = 0 then
                     sChunks.Close()
@@ -76,15 +79,16 @@ Public Class WebFileDownloader
                     sChunks       = myWebResponse.GetResponseStream
                     iRetries      = iRetries + 1
                 End If
-            Loop While (iTotalBytesRead < fSize) and (iRetries <= iMaxRetries)
+            Loop While (iTotalBytesRead < fSize) and (iRetries <= iMaxRetries) and Not Cancelled(bw)
             sChunks.Close()
             FS.Close()
 
             If (iTotalBytesRead < fSize) or (iTotalBytesRead = 0) then
                 File.Delete(Location)
 
+                If Cancelled(bw) then Return True
+                
                 Dim ex As Exception = New Exception( "Download failed" )
-
                 RaiseEvent FileDownloadFailed(ex)
             End If
 
@@ -121,5 +125,16 @@ Public Class WebFileDownloader
             Return Size.ToString
         End Try
         Return "Error"
+    End Function
+
+
+    Public Function Cancelled(bw As BackgroundWorker) As Boolean
+
+        Application.DoEvents
+        If Not IsNothing(bw) AndAlso bw.CancellationPending Then
+            Return True
+        End If
+
+        Return False
     End Function
 End Class

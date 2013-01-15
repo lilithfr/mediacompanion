@@ -314,7 +314,7 @@ Public Class mov_StartNew
                         End Try
                         Form1.nfoFunction.mov_NfoSave(nfopath, newmovie, True)
 
-                        Dim movietoadd As New str_ComboList(SetDefaults)
+                        Dim movietoadd As New ComboList(SetDefaults)
                         movietoadd.fullpathandfilename = nfopath
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                         movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)
@@ -887,7 +887,7 @@ Public Class mov_StartNew
                             Form1.DownloadTrailer(Form1.GetTrailerPath(nfopath), trailer)
                         End If
 
-                        Dim movietoadd As New str_ComboList(SetDefaults)
+                        Dim movietoadd As New ComboList(SetDefaults)
                         movietoadd.fullpathandfilename = nfopath
                         movietoadd.filename = IO.Path.GetFileName(newMovieList(f).nfopathandfilename)
                         movietoadd.foldername = Utilities.GetLastFolder(newMovieList(f).nfopathandfilename)

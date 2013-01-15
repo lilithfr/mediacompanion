@@ -7,6 +7,7 @@ Imports System.Drawing
 Imports System.Xml
 Imports System.Windows.Forms
 
+
 Namespace Tasks
     Public Class ScrapeShowTask
         Inherits TaskBase
@@ -427,64 +428,16 @@ Namespace Tasks
                         End If
                         If fanartposter <> "" Then
 
-                            Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "fanart.jpg")
-                            If Not IO.File.Exists(seasonpath) Then
+                            Dim seasonpath = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "fanart.jpg")
 
-                                'Dim buffer(4000000) As Byte
-                                'Dim size As Integer = 0
-                                'Dim bytesRead As Integer = 0
+                            Dim point      = GetBackDropResolution(Preferences.BackDropResolutionSI)
 
-                                'Dim thumburl As String = fanartposter
-                                'Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                'Dim res As HttpWebResponse = req.GetResponse()
-                                'Dim contents As Stream = res.GetResponseStream()
-                                'Dim bytesToRead As Integer = CInt(buffer.Length)
-                                Utilities.DownloadFile(fanartposter, seasonpath)
-                                Dim bmp As New Bitmap(seasonpath)
-
-
-
-                                'While bytesToRead > 0
-                                '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                                '    If size = 0 Then Exit While
-                                '    bytesToRead -= size
-                                '    bytesRead += size
-                                'End While
-
-
-
-                                If Preferences.resizefanart = 1 Then
-                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    Messages.Add("Fanart not resized")
-                                ElseIf Preferences.resizefanart = 2 Then
-                                    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                                        Dim bm_source As New Bitmap(bmp)
-                                        Dim bm_dest As New Bitmap(1280, 720)
-                                        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                        bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                        Messages.Add("Farart Resized to 1280x720")
-                                    Else
-                                        Messages.Add("Fanart not resized, already =< required size")
-                                        bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    End If
-                                ElseIf Preferences.resizefanart = 3 Then
-                                    If bmp.Width > 960 Or bmp.Height > 540 Then
-                                        Dim bm_source As New Bitmap(bmp)
-                                        Dim bm_dest As New Bitmap(960, 540)
-                                        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                        bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                        Messages.Add("Farart Resized to 960x540")
-                                    Else
-                                        Messages.Add("Fanart not resized, already =< required size")
-                                        bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                                    End If
-
-                                End If
-                            End If
+                            Try
+                                DownloadCache.SaveImageToCacheAndPath(fanartposter, seasonpath, Preferences.overwritethumbs, point.x, point.y )  
+                            Catch ex As Exception
+                                Messages.Add("Error [" & ex.Message & "] downloading Fanart")
+                                Me.RaiseError()
+                            End Try
                         End If
                     End If
 
@@ -677,5 +630,24 @@ Namespace Tasks
             Me.State = TaskState.Completed
         End Sub
 
+
+    Shared Function GetBackDropResolution(selectedIndex As Integer) As Point
+
+        'Don't resize selected
+        If selectedIndex=0 then Return New Point(0,0)
+
+        Dim x = XDocument.Load("Resolutions.xml")
+
+        Dim row = x.Descendants("Resolution").ElementAt(selectedIndex-1)
+        
+        Dim width  = Convert.ToInt32(row.Attribute("width" ).Value)
+        Dim height = Convert.ToInt32(row.Attribute("height").Value)
+
+        Return New Point(width,height)
+
+    End Function
+
     End Class
+
+
 End Namespace

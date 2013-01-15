@@ -7,17 +7,17 @@ Public NotInheritable Class URLs
         End Get
     End Property
 
-    Public Shared ReadOnly Property TMdbMovieLookup(ByVal sID As String)
-        Get
-            Return (String.Format("http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/{0}/{1}", TMdbAPIKey, sID))
-        End Get
-    End Property
+    'Public Shared ReadOnly Property TMdbMovieLookup(ByVal sID As String)
+    '    Get
+    '        Return (String.Format("http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/{0}/{1}", TMdbAPIKey, sID))
+    '    End Get
+    'End Property
 
-    Public Shared ReadOnly Property TMdbGetInfo(ByVal sID As String)
-        Get
-            Return (String.Format("http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{0}/{1}", TMdbAPIKey, sID))
-        End Get
-    End Property
+    'Public Shared ReadOnly Property TMdbGetInfo(ByVal sID As String)
+    '    Get
+    '        Return (String.Format("http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/{0}/{1}", TMdbAPIKey, sID))
+    '    End Get
+    'End Property
 
     Public Shared ReadOnly Property TVdbGetSeries(ByVal sSeriesName As String)
         Get

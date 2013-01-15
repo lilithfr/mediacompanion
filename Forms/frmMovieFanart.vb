@@ -1,8 +1,7 @@
-﻿
-Imports System.Net
+﻿Imports System.Net
 Imports System.IO
 Imports System.Xml
-
+Imports System.Linq
 
 Public Class frmMovieFanart
     Dim WithEvents bigpicbox As PictureBox
@@ -24,7 +23,7 @@ Public Class frmMovieFanart
         Dim tempint As Integer
         tempstring = tempstring.Replace("picture", "")
         tempint = Convert.ToDecimal(tempstring)
-        tempstring2 = fanartList(tempint).hdposter
+        tempstring2 = fanartList(tempint).hdUrl
 
 
         Dim buffer(4000000) As Byte
@@ -156,49 +155,56 @@ Public Class frmMovieFanart
                 Label2.Visible = True
             End If
 
-            Try
-                Dim tmdbposterscraper As New tmdb_posters.Class1
-                fanartList.Clear()
-                Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(Form1.workingMovieDetails.fullmoviebody.imdbid)
-                Dim bannerslist As New XmlDocument
-                bannerslist.LoadXml(tmdbimageresults)
-                Dim thisresult As XmlNode = Nothing
-                For Each item In bannerslist("tmdb_posterlist")
-                    Select Case item.name
-                        Case "fanart"
-                            Dim newfanart As New str_ListOfPosters(True)
-                            For Each backdrop In item
-                                If backdrop.childnodes(0).innertext = "original" Then
-                                    newfanart.hdposter = backdrop.childnodes(1).innertext
-                                    newfanart.hdwidth = backdrop.childnodes(2).innertext
-                                    newfanart.hdheight = backdrop.childnodes(3).innertext
-                                End If
-                                If backdrop.childnodes(0).innertext = "poster" Then
-                                    newfanart.ldposter = backdrop.childnodes(1).innertext
-                                    newfanart.ldwidth = backdrop.childnodes(2).innertext
-                                    newfanart.ldheight = backdrop.childnodes(3).innertext
-                                End If
-                                If newfanart.hdposter <> Nothing And newfanart.ldposter <> Nothing Then
-                                    If newfanart.hdposter <> "" And newfanart.ldposter <> "" Then
-                                        If newfanart.hdposter.IndexOf("http") <> -1 And newfanart.ldposter.IndexOf("http") <> -1 Then
-                                            If newfanart.hdposter.IndexOf(".jpg") <> -1 Or newfanart.hdposter.IndexOf(".png") <> -1 Then
-                                                If newfanart.ldposter.IndexOf(".jpg") <> -1 Or newfanart.ldposter.IndexOf(".png") <> -1 Then
-                                                    fanartList.Add(newfanart)
-                                                    Exit For
-                                                End If
-                                            End If
-                                        End If
-                                    End If
-                                End If
-                            Next
+            fanartList.Clear()
 
-                    End Select
-                Next
-            Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-            End Try
+            'Try
+            '    Dim tmdbposterscraper As New tmdb_posters.Class1
+'                Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(Form1.workingMovieDetails.fullmoviebody.imdbid)
+'                Dim bannerslist As New XmlDocument
+'                bannerslist.LoadXml(tmdbimageresults)
+'                Dim thisresult As XmlNode = Nothing
+'                For Each item In bannerslist("tmdb_posterlist")
+'                    Select Case item.name
+'                        Case "fanart"
+'                            Dim newfanart As New str_ListOfPosters(True)
+'                            For Each backdrop In item
+'                                If backdrop.childnodes(0).innertext = "original" Then
+'                                    newfanart.hdposter = backdrop.childnodes(1).innertext
+'                                    newfanart.hdwidth = backdrop.childnodes(2).innertext
+'                                    newfanart.hdheight = backdrop.childnodes(3).innertext
+'                                End If
+'                                If backdrop.childnodes(0).innertext = "poster" Then
+'                                    newfanart.ldposter = backdrop.childnodes(1).innertext
+'                                    newfanart.ldwidth = backdrop.childnodes(2).innertext
+'                                    newfanart.ldheight = backdrop.childnodes(3).innertext
+'                                End If
+'                                If newfanart.hdposter <> Nothing And newfanart.ldposter <> Nothing Then
+'                                    If newfanart.hdposter <> "" And newfanart.ldposter <> "" Then
+'                                        If newfanart.hdposter.IndexOf("http") <> -1 And newfanart.ldposter.IndexOf("http") <> -1 Then
+'                                            If newfanart.hdposter.IndexOf(".jpg") <> -1 Or newfanart.hdposter.IndexOf(".png") <> -1 Then
+'                                                If newfanart.ldposter.IndexOf(".jpg") <> -1 Or newfanart.ldposter.IndexOf(".png") <> -1 Then
+'                                                    fanartList.Add(newfanart)
+'                                                    Exit For
+'                                                End If
+'                                            End If
+'                                        End If
+'                                    End If
+'                                End If
+'                            Next
+
+'                    End Select
+'                Next
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'            End Try
+
+            Dim tmdb As New TMDb(Form1.workingmoviedetails.fullmoviebody.imdbid)
+
+
+            fanartList.AddRange(tmdb.Fanart)
+
 
             If fanartList.Count > 0 Then
                 Dim location As Integer = 0
@@ -216,7 +222,7 @@ Public Class frmMovieFanart
                             .Height = 200
                         End If
                         .SizeMode = PictureBoxSizeMode.Zoom
-                        .ImageLocation = item.ldposter
+                        .ImageLocation = item.ldUrl
                         .Visible = True
                         .BorderStyle = BorderStyle.Fixed3D
                         .Name = "picture" & itemcounter.ToString
@@ -278,7 +284,7 @@ Public Class frmMovieFanart
                         tempstring = b1.Name
                         tempstring = tempstring.Replace("checkbox", "")
                         tempint = Convert.ToDecimal(tempstring)
-                        tempstring2 = fanartList(tempint).hdposter
+                        tempstring2 = fanartList(tempint).hdUrl
                         allok = True
                         Exit For
                     End If
@@ -290,63 +296,9 @@ Public Class frmMovieFanart
                 Try
                     Panel1.Controls.Remove(Label1)
 
-                    'Dim buffer(4000000) As Byte
-                    'Dim size As Integer = 0
-                    'Dim bytesRead As Integer = 0
 
-                    'Dim fanartthumburl As String = tempstring2
-                    'Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
-                    'Dim res As HttpWebResponse = req.GetResponse()
-                    'Dim contents As Stream = res.GetResponseStream()
-                    'Dim bmp As New Bitmap(contents)
-
-
-                    'Dim bytesToRead As Integer = CInt(buffer.Length)
-
-                    'While bytesToRead > 0
-                    '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '    If size = 0 Then Exit While
-                    '    bytesToRead -= size
-                    '    bytesRead += size
-                    'End While
-                    'If Preferences.resizefanart = 1 Then
-                    '    Try
-                    '        Dim tempbitmap As Bitmap = bmp
-                    '        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    '    Catch ex As Exception
-                    '        tempstring = ex.Message.ToString
-                    '    End Try
-                    'ElseIf Preferences.resizefanart = 2 Then
-                    '    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(1280, 720)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                    '        Dim tempbitmap As Bitmap = bm_dest
-                    '        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    '    Else
-                    '        Threading.Thread.Sleep(30)
-                    '        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    '    End If
-                    'ElseIf Preferences.resizefanart = 3 Then
-                    '    If bmp.Width > 960 Or bmp.Height > 540 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(960, 540)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                    '        Dim tempbitmap As Bitmap = bm_dest
-                    '        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    '    Else
-                    '        Threading.Thread.Sleep(30)
-                    '        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    '    End If
-                    'End If
-                    'Dim exists As Boolean = System.IO.File.Exists(fanartpath)
-                    'If exists = True Then
-
-                    If Utilities.DownloadImage(tempstring2, fanartpath, True, Preferences.resizefanart) Then
+                 '  If Utilities.DownloadImage(tempstring2, fanartpath, True, Preferences.resizefanart) Then
+                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, fanartpath) Then
 
                         'mainfanart = New PictureBox
                         'Dim OriginalImage As New Bitmap(fanartpath)
@@ -417,63 +369,66 @@ Public Class frmMovieFanart
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
         Try
-            'set thumb
-            Dim MyWebClient As New System.Net.WebClient
-            Try
-                Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
-                Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
-                mainfanart.Image = New System.Drawing.Bitmap(ImageStream)
+            Movie.SaveFanartImageToCacheAndPath(TextBox5.Text,fanartpath)
 
+            ''set thumb
+            'Dim MyWebClient As New System.Net.WebClient
+            'Try
+            '    Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
+            '    Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
-                Dim tempstring As String
-
-                Dim bmp As New Bitmap(ImageStream)
+            '    mainfanart.Image = New System.Drawing.Bitmap(ImageStream)
 
 
-                If Preferences.resizefanart = 1 Then
-                    Try
-                        Dim tempbitmap As Bitmap = bmp
-                        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    Catch ex As Exception
-                        tempstring = ex.Message.ToString
-                    End Try
-                ElseIf Preferences.resizefanart = 2 Then
-                    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                        Dim bm_source As New Bitmap(bmp)
-                        Dim bm_dest As New Bitmap(1280, 720)
-                        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                        Dim tempbitmap As Bitmap = bm_dest
-                        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    Else
-                        Threading.Thread.Sleep(30)
-                        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    End If
-                ElseIf Preferences.resizefanart = 3 Then
-                    If bmp.Width > 960 Or bmp.Height > 540 Then
-                        Dim bm_source As New Bitmap(bmp)
-                        Dim bm_dest As New Bitmap(960, 540)
-                        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                        Dim tempbitmap As Bitmap = bm_dest
-                        tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    Else
-                        Threading.Thread.Sleep(30)
-                        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                    End If
-                End If
+            '    Dim tempstring As String
+
+            '    Dim bmp As New Bitmap(ImageStream)
+
+
+            '    If Preferences.resizefanart = 1 Then
+            '        Try
+            '            Dim tempbitmap As Bitmap = bmp
+            '            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+            '        Catch ex As Exception
+            '            tempstring = ex.Message.ToString
+            '        End Try
+            '    ElseIf Preferences.resizefanart = 2 Then
+            '        If bmp.Width > 1280 Or bmp.Height > 720 Then
+            '            Dim bm_source As New Bitmap(bmp)
+            '            Dim bm_dest As New Bitmap(1280, 720)
+            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
+            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+            '            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
+            '            Dim tempbitmap As Bitmap = bm_dest
+            '            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+            '        Else
+            '            Threading.Thread.Sleep(30)
+            '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+            '        End If
+            '    ElseIf Preferences.resizefanart = 3 Then
+            '        If bmp.Width > 960 Or bmp.Height > 540 Then
+            '            Dim bm_source As New Bitmap(bmp)
+            '            Dim bm_dest As New Bitmap(960, 540)
+            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
+            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+            '            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
+            '            Dim tempbitmap As Bitmap = bm_dest
+            '            tempbitmap.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+            '        Else
+            '            Threading.Thread.Sleep(30)
+            '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
+            '        End If
+            '    End If
 
                 Me.Close()
             Catch ex As Exception
                 MsgBox("Unable To Download Image")
             End Try
             Panel3.Visible = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        'Catch ex As Exception
+        '    ExceptionHandler.LogError(ex)
+        'End Try
 
     End Sub
 

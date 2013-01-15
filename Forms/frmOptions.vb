@@ -106,13 +106,13 @@ Public Class frmOptions
             End If
 
 
-            If Preferences.resizefanart = 1 Then
-                RadioButton17.Checked = True
-            ElseIf Preferences.resizefanart = 2 Then
-                RadioButton18.Checked = True
-            ElseIf Preferences.resizefanart = 3 Then
-                RadioButton19.Checked = True
-            End If
+            'If Preferences.resizefanart = 1 Then
+            '    RadioButton17.Checked = True
+            'ElseIf Preferences.resizefanart = 2 Then
+            '    RadioButton18.Checked = True
+            'ElseIf Preferences.resizefanart = 3 Then
+            '    RadioButton19.Checked = True
+            'End If
 
             moviefolders = Preferences.movieFolders
             tvfolders = Preferences.tvFolders
@@ -324,16 +324,16 @@ Public Class frmOptions
             End Select
 
 
-            If Preferences.resizefanart = 1 Then
-                RadioButton17.Checked = True
-            ElseIf Preferences.resizefanart = 2 Then
-                RadioButton18.Checked = True
-            ElseIf Preferences.resizefanart = 3 Then
-                RadioButton19.Checked = True
-            Else
-                Preferences.resizefanart = 1
-                RadioButton17.Checked = True
-            End If
+            'If Preferences.resizefanart = 1 Then
+            '    RadioButton17.Checked = True
+            'ElseIf Preferences.resizefanart = 2 Then
+            '    RadioButton18.Checked = True
+            'ElseIf Preferences.resizefanart = 3 Then
+            '    RadioButton19.Checked = True
+            'Else
+            '    Preferences.resizefanart = 1
+            '    RadioButton17.Checked = True
+            'End If
 
 
 
@@ -1110,38 +1110,9 @@ Public Class frmOptions
 
     End Sub
 
-    Private Sub RadioButton17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton17.CheckedChanged
-        Try
-            'unchanged
-            If RadioButton17.Checked = True Then
-                Preferences.resizefanart = 1
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
-    Private Sub RadioButton18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton18.CheckedChanged
-        Try
-            '1280x720
-            If RadioButton18.Checked = True Then
-                Preferences.resizefanart = 2
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
-    Private Sub RadioButton19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton19.CheckedChanged
-        Try
-            '960x540
-            If RadioButton19.Checked = True Then
-                Preferences.resizefanart = 3
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+
 
     Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
         Try

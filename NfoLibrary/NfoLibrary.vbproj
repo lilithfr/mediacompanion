@@ -68,7 +68,6 @@
     <Compile Include="Extention\ProtoImage.vb" />
     <Compile Include="Music\Album.vb" />
     <Compile Include="Music\Artist.vb" />
-    <Compile Include="Movie.vb" />
     <Compile Include="Music\MusicVideo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

@@ -5,7 +5,7 @@ Imports Media_Companion
 Imports Media_Companion.Preferences
 
 Public Class mov_CacheSave
-    Public Sub ex(ByVal fullMovieList As List(Of str_ComboList))   'save memory data to cache
+    Public Sub ex(ByVal fullMovieList As List(Of ComboList))   'save memory data to cache
         Dim fullpath As String = workingProfile.moviecache
         Dim doc As New XmlDocument
         Dim thispref As XmlNode = Nothing

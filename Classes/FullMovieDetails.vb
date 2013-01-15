@@ -1,3 +1,4 @@
+Imports Media_Companion
 
 Public Class FullMovieDetails
     Public fileinfo As New str_FileDetails(True)

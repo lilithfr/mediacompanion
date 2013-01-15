@@ -23,7 +23,6 @@ Partial Class frmBatchScraper
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
@@ -50,6 +49,7 @@ Partial Class frmBatchScraper
         Me.CheckBox15 = New System.Windows.Forms.CheckBox()
         Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -80,16 +80,6 @@ Partial Class frmBatchScraper
         Me.GroupBox1.TabIndex = 28
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Select Main Tags to Rescrape"
-        '
-        'CheckBox20
-        '
-        Me.CheckBox20.AutoSize = True
-        Me.CheckBox20.Location = New System.Drawing.Point(6, 111)
-        Me.CheckBox20.Name = "CheckBox20"
-        Me.CheckBox20.Size = New System.Drawing.Size(48, 17)
-        Me.CheckBox20.TabIndex = 18
-        Me.CheckBox20.Text = "Year"
-        Me.CheckBox20.UseVisualStyleBackColor = True
         '
         'CheckBox2
         '
@@ -350,13 +340,23 @@ Partial Class frmBatchScraper
         Me.Label1.Size = New System.Drawing.Size(440, 26)
         Me.Label1.TabIndex = 29
         Me.Label1.Text = "This form can be used to rescrape all movies, you can select which tags are updat" & _
-            "ed below," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "all other tags will remain unchanged."
+    "ed below," & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "all other tags will remain unchanged."
+        '
+        'CheckBox20
+        '
+        Me.CheckBox20.AutoSize = True
+        Me.CheckBox20.Location = New System.Drawing.Point(6, 111)
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Size = New System.Drawing.Size(48, 17)
+        Me.CheckBox20.TabIndex = 18
+        Me.CheckBox20.Text = "Year"
+        Me.CheckBox20.UseVisualStyleBackColor = True
         '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(477, 321)
+        Me.ClientSize = New System.Drawing.Size(485, 326)
         Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Button1)
@@ -367,7 +367,6 @@ Partial Class frmBatchScraper
         Me.MaximumSize = New System.Drawing.Size(493, 360)
         Me.MinimumSize = New System.Drawing.Size(493, 360)
         Me.Name = "frmBatchScraper"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Batch Update Wizard"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

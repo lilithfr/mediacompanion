@@ -82,7 +82,6 @@ Partial Class frmSplashscreen
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "frmSplashscreen"
         Me.ShowInTaskbar = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "splashscreen"
         Me.ResumeLayout(False)
         Me.PerformLayout()

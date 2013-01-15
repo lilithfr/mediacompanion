@@ -1,20 +1,24 @@
 
-Public Structure str_ListOfProfiles
-    Dim moviecache As String
-    Dim tvcache As String
-    Dim actorcache As String
-    Dim profilename As String
-    Dim regexlist As String
-    Dim filters As String
-    Dim config As String
-    Dim homemoviecache As String
-    Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
-        moviecache = ""
-        tvcache = ""
-        actorcache = ""
-        profilename = ""
-        regexlist = ""
-        filters = ""
-        config = ""
+Public Class ListOfProfiles
+
+    Property MovieCache     As String = ""
+    Property TvCache        As String = ""
+    Property ActorCache     As String = ""
+    Property ProfileName    As String = ""
+    Property RegExList      As String = ""
+    Property Filters        As String = ""
+    Property Config         As String = ""
+    Property HomeMovieCache As String = ""
+
+    Public Sub Assign(profileTo As ListOfProfiles)
+        profileTo.ActorCache  = ActorCache
+        profileTo.Config      = Config
+        profileTo.MovieCache  = MovieCache
+        profileTo.ProfileName = ProfileName
+        profileTo.RegExList   = RegExList
+        profileTo.Filters     = Filters
+        profileTo.TvCache     = TvCache
+        profileTo.ProfileName = ProfileName
     End Sub
-End Structure
+
+End Class

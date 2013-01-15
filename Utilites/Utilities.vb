@@ -470,7 +470,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return passed
     End Function
 
-    Public Shared Function EnumerateFolders(ByVal RootPath As String, ByVal MaxLevels As Long) As List(Of String)
+    Public Shared Function EnumerateFolders(ByVal RootPath As String, Optional ByVal MaxLevels As Long=999) As List(Of String)
         Return EnumerateFolders(RootPath, MaxLevels, 0)
     End Function
 
@@ -2271,11 +2271,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim bm_dest As New Bitmap(width, height)
         Using gr As Graphics = Graphics.FromImage(bm_dest)
             gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
- '           gr.DrawImage(bm_source, New Rectangle(0, 0, bm_dest.Width, bm_dest.Height), 0, 0, width, height, GraphicsUnit.Pixel)
             gr.DrawImage(bm_source, 0, 0, width, height)
         End Using
         Return bm_dest
     End Function
+
+
+
+    Public Shared Function GetImage(src As String) As Bitmap
+
+        Dim bm  As New Bitmap(src)
+        Dim bm2 As New Bitmap(bm )
+
+        bm.Dispose()
+
+        Return bm2
+    End Function
+
 
     Public Shared Function LoadImage(ByVal path As String) As Bitmap
         Try
@@ -2327,16 +2339,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Sub
 
-    Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False, Optional ByVal ImageResize As Integer = 0) As Boolean
-        Try
-            DownloadImage = DownloadCache.DownloadFileAndCache(URL, Path, ForceDownload, ImageResize)
-            If Not System.IO.File.Exists(Path) Then
-                DownloadImage = False
-            End If
-        Catch ex As Exception
-            DownloadImage = False
-        End Try
-    End Function
+    ' DownloadImage has been replaced - Please use these shared (aka static) functions:
+    '
+    '    Movie.SaveFanartImageToCacheAndPath(url As String, path As String)
+    '    Movie.SaveActorImageToCacheAndPath (url As String, path As String)
+    '    Movie.SavePosterImageToCacheAndPath(url As String, path As String)
+    '
+    'Public Shared Function DownloadImage(ByVal URL As String, ByVal Path As String, Optional ByVal ForceDownload As Boolean = False, Optional ByVal ImageResize As Integer = 0) As Boolean
+    '    Try
+    '        DownloadImage = DownloadCache.DownloadFileAndCache(URL, Path, ForceDownload, ImageResize)
+    '        If Not System.IO.File.Exists(Path) Then
+    '            DownloadImage = False
+    '        End If
+    '    Catch ex As Exception
+    '        DownloadImage = False
+    '    End Try
+    'End Function
 
     Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
         Dim asm As Assembly = Assembly.GetExecutingAssembly

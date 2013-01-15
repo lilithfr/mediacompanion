@@ -72,7 +72,7 @@ Public Class MediaInfoExport
         Dim mediaCollection
         If isMovies Then
             getTags = AddressOf getTagsMovies
-            mediaCollection = TryCast(CObj(media), List(Of str_ComboList))
+            mediaCollection = TryCast(CObj(media), List(Of ComboList))
         Else
             getTags = AddressOf getTagsTV
             mediaCollection = TryCast(CObj(media), NotifyingList(Of TvShow))
@@ -183,7 +183,7 @@ Public Class MediaInfoExport
         End If
     End Sub
 
-    Private Function getTagsMovies(ByVal text As String, ByVal movie As str_ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer)
+    Private Function getTagsMovies(ByVal text As String, ByVal movie As ComboList, ByVal counter As Integer, ByVal thumbpath As String, ByVal moviecount As Integer)
         Dim tokenCollection As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
         tokenCollection = tokenRegExp.Matches(text)

@@ -3,6 +3,8 @@ Imports System.Net
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Text
+Imports System
+Imports System.Drawing
 
 Public Class DownloadCache
 
@@ -42,7 +44,7 @@ Public Class DownloadCache
         Dim webResp As HttpWebResponse = webReq.GetResponse()
 
         If webResp.StatusCode = HttpStatusCode.NotModified Then
-            IO.File.Copy(CachePath, Path)
+            IO.File.Copy(CachePath, Path, True)
 
             Exit Sub
         End If
@@ -112,10 +114,94 @@ Public Class DownloadCache
         Return html
     End Function
 
+
+
+
+    Public Shared Function SaveImageToCacheAndPath(ByVal URL As String, Path As String, Optional ByVal ForceDownload As Boolean = False, _
+                                           Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0) As Boolean
+        
+        If Not SaveImageToCache(URL, Path, ForceDownload) then Return False
+
+        Dim CachePath = IO.Path.Combine(CacheFolder, GetCacheFileName(URL))
+
+        IfNotValidImage_Delete(CachePath)
+
+        
+
+        'Resize cache image only if need to
+        CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight )
+
+        File.Copy(CachePath, Path, True)
+
+        return True
+    End Function
+
+    Public Shared Sub IfNotValidImage_Delete(filename As String)
+        Try
+            Dim testImage = new Drawing.Bitmap(filename)
+        Catch ex As Exception
+            Try
+                File.Delete(filename)
+            Catch 
+            End Try
+            Throw 
+        End Try
+    End Sub
+
+
+
+    Public Shared Sub CopyAndDownSizeImage(ByVal src As String, ByVal dest As String, Optional ByVal resizeWidth As Integer=0, Optional ByVal resizeHeight As Integer=0)
+        Try
+            Dim img     = Utilities.GetImage(src)
+            Dim resized = False
+                
+            'Down-size only
+            If (resizeWidth<>0 and img.Width>resizeWidth) or img.Height>resizeHeight and Not (resizeWidth=0 And resizeHeight=0) then 
+
+                'Calc scaled height - width is passed in as zero for people pictures and posters.
+                If resizeWidth=0 then
+                    resizeWidth = img.Width * resizeHeight / img.Height
+                End If
+
+                img = Utilities.ResizeImage(img, resizeWidth, resizeHeight)
+                resized = True
+            End If
+            
+            If resized or src<>dest then
+                Utilities.SaveImage(img, dest)
+            End If
+        Catch
+        End Try
+    End Sub
+
+
+
+
     Public Shared Function DownloadFileAndCache(ByVal URL As String, Optional ByVal Path As String = "", _
                                           Optional ByVal ForceDownload As Boolean = False, _
                                           Optional ByVal resizeFanart As Integer = 0, _
                                           Optional ByRef strValue As String = "") As Boolean
+
+        
+        Dim returnCode As Boolean = SaveImageToCache(URL, Path, ForceDownload)
+
+        Dim CacheFileName As String = GetCacheFileName(URL)
+        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
+
+        
+        If String.IsNullOrEmpty(Path) Then
+            strValue = IO.File.ReadAllText(CachePath)
+        Else
+            Utilities.copyImage(CachePath, Path, resizeFanart)
+        End If
+
+        DownloadFileAndCache = returnCode
+    End Function
+
+
+
+    
+    Public Shared Function SaveImageToCache(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False) As Boolean
 
         Utilities.EnsureFolderExists(CacheFolder)
         Dim returnCode As Boolean = True
@@ -153,6 +239,8 @@ Public Class DownloadCache
                 Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
                     Using errorRespStream As Stream = errorResp.GetResponseStream()
                         Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
+
+                        'Writing to TvLog! -> Poo -> To do anyone -> Raise event?
                         Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", _
                                                                 errorResp.StatusCode, errorText, vbCrLf)
                     End Using
@@ -162,14 +250,9 @@ Public Class DownloadCache
 
         End If
 
-        If String.IsNullOrEmpty(Path) Then
-            strValue = IO.File.ReadAllText(CachePath)
-        Else
-            Utilities.copyImage(CachePath, Path, resizeFanart)
-        End If
-
-        DownloadFileAndCache = returnCode
+        Return returnCode
     End Function
+
 
 End Class
 

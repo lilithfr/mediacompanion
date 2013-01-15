@@ -104,6 +104,11 @@ Module General
         Return responseFromServer
     End Function
     Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
+
+        If IsNothing(mScraperManager) then
+		    mScraperManager = New ScraperManager(Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+        End If
+
         Dim TempScraper As Scraper = Nothing
         For Each c In mScraperManager.Scrapers
             If c.ID = ScraperIdentification Then
@@ -113,7 +118,7 @@ Module General
         Next
         Return TempScraper
     End Function
-    Private Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal convertAmps As Boolean = True, Optional ByVal InputBuffer As Integer = 1)
+    Public Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal convertAmps As Boolean = True, Optional ByVal InputBuffer As Integer = 1)
         Dim ChoosedScraper As Scraper
         InputBuffer -= 1
         'Dim ScraperFunctions As List(Of System.Xml.Linq.XElement)
@@ -677,30 +682,40 @@ Module General
         ImageFilename3 &= "-fanart.jpg"
         Dim myWebClient As New System.Net.WebClient()
         On Error Resume Next
-        myWebClient.DownloadFile(MoviePosterURL, ImageFilename)
-        File.Copy(ImageFilename, ImageFilename2)
-        myWebClient.DownloadFile(MovieFanartURL, ImageFilename3)
-        On Error GoTo 0
-        '-----------------Start Resize Fanart
-        If Preferences.resizefanart = 2 Then
-            Dim FanartToBeResized As New Bitmap(ImageFilename3)
-            If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-                Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
-                ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
-            Else
-                'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-            End If
-        ElseIf Preferences.resizefanart = 3 Then
-            Dim FanartToBeResized As New Bitmap(ImageFilename3)
-            If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-                Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
-                ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
-            Else
-                'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-            End If
 
-        End If
-        '-----------------End Resize Fanart
+        'myWebClient.DownloadFile(MoviePosterURL, ImageFilename)
+        
+        'myWebClient.DownloadFile(MovieFanartURL, ImageFilename3)
+
+        'On Error GoTo 0
+       
+
+        ''-----------------Start Resize Fanart
+        'If Preferences.resizefanart = 2 Then
+        '    Dim FanartToBeResized As New Bitmap(ImageFilename3)
+        '    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
+        '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
+        '        ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
+        '    Else
+        '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+        '    End If
+        'ElseIf Preferences.resizefanart = 3 Then
+        '    Dim FanartToBeResized As New Bitmap(ImageFilename3)
+        '    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
+        '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
+        '        ResizedFanart.Save(ImageFilename3, Imaging.ImageFormat.Jpeg)
+        '    Else
+        '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+        '    End If
+
+        'End If
+
+        ''-----------------End Resize Fanart
+
+        Movie.SavePosterImageToCacheAndPath(MoviePosterURL, ImageFilename)
+        File.Copy(ImageFilename, ImageFilename2, True)
+        Movie.SaveFanartImageToCacheAndPath(MovieFanartURL, ImageFilename3)
+
         Return True
 
     End Function
@@ -811,7 +826,7 @@ Module General
         End Try
 
     End Sub
-    Public Function Save_XBMC_IMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String) As Boolean
+    Public Sub Save_XBMC_IMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String)
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
@@ -863,7 +878,7 @@ Module General
         Catch
         End Try
         m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
-    End Function
+    End Sub
     Public Sub Read_XBMC_TMDB_Scraper_Config()
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
@@ -939,7 +954,7 @@ Module General
         End Try
 
     End Sub
-    Public Function Save_XBMC_TMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String) As Boolean
+    Public Sub Save_XBMC_TMDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String)
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
@@ -981,7 +996,7 @@ Module General
         Catch
         End Try
         m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
-    End Function
+    End Sub
 
 #End Region
 
@@ -1125,25 +1140,28 @@ Module General
         If Preferences.tvfanart = True Then
             Dim ImageFilename As String = Path & "\fanart.jpg"
             If ArtforDownload(2) <> Nothing Then
-                myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
-                '-----------------Start Resize Fanart
-                If Preferences.resizefanart = 2 Then
-                    Dim FanartToBeResized As New Bitmap(ImageFilename)
-                    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
-                        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
-                        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
-                    Else
-                        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-                    End If
-                ElseIf Preferences.resizefanart = 3 Then
-                    Dim FanartToBeResized As New Bitmap(ImageFilename)
-                    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
-                        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
-                        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
-                    Else
-                        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
-                    End If
-                End If
+
+                Movie.SaveFanartImageToCacheAndPath("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
+
+                'myWebClient.DownloadFile("http://thetvdb.com/banners/" & ArtforDownload(2), ImageFilename)
+                ''-----------------Start Resize Fanart
+                'If Preferences.resizefanart = 2 Then
+                '    Dim FanartToBeResized As New Bitmap(ImageFilename)
+                '    If (FanartToBeResized.Width > 1280) Or (FanartToBeResized.Height > 960) Then
+                '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 1280, 960)
+                '        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
+                '    Else
+                '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+                '    End If
+                'ElseIf Preferences.resizefanart = 3 Then
+                '    Dim FanartToBeResized As New Bitmap(ImageFilename)
+                '    If (FanartToBeResized.Width > 960) Or (FanartToBeResized.Height > 540) Then
+                '        Dim ResizedFanart As Bitmap = Utilities.ResizeImage(FanartToBeResized, 960, 540)
+                '        ResizedFanart.Save(ImageFilename, Imaging.ImageFormat.Jpeg)
+                '    Else
+                '        'scraperlog = scraperlog & "Fanart not resized, already =< required size" & vbCrLf
+                '    End If
+                'End If
                 '-----------------End Resize Fanart
             End If
         End If
@@ -1160,7 +1178,7 @@ Module General
                 If SeasonPosters(n) <> Nothing Then
                     myWebClient.DownloadFile(SeasonPosters(n), ImageFilename)
                     If n = 0 Then
-                        File.Copy(ImageFilename, Path & "\season-specials.tbn")
+                        File.Copy(ImageFilename, Path & "\season-specials.tbn", True)
                     End If
                 End If
 
@@ -1373,7 +1391,7 @@ Module General
         End Try
 
     End Sub
-    Public Function Save_XBMC_TVDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String) As Boolean
+    Public Sub Save_XBMC_TVDB_Scraper_Config(ByVal KeyToBeChanged As String, ByVal ChangeValue As String)
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList
         Dim m_node As XmlNode
@@ -1418,7 +1436,7 @@ Module General
         Catch
         End Try
         m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
-    End Function
+    End Sub
 #End Region
 
 
@@ -1556,7 +1574,7 @@ Module General
 
     Public Function Start_XBMC_MoviesScraping(ByVal Scraper As String, ByVal MovieName As String, ByVal Filename As String) As String
         ' 1st stage
-        Dim ExtraID As String = Movies.getExtraIdFromNFO(Filename)
+        Dim ExtraID As String = Movie.getExtraIdFromNFO(Filename)
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"

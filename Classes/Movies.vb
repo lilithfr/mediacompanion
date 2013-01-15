@@ -1,225 +1,883 @@
-﻿'Imports Media_Companion.Form1
-Imports System.Text.RegularExpressions
+﻿Imports System.ComponentModel
+Imports System.IO
+Imports System.Linq
+Imports System.Xml
+Imports Media_Companion
 
 
 Public Class Movies
-    Public Shared newMovieList As New List(Of str_NewMovie)
 
-    Public Shared Sub listMovieFiles(ByVal dir_info As IO.DirectoryInfo, ByVal moviePattern As String, Optional ByRef scraperLog As String = "")
-        Try
-            Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(moviePattern)
-            For Each fs_info As IO.FileInfo In fs_infos
-                Dim titleFull As String = fs_info.FullName
-                Dim titleDir As String = fs_info.Directory.ToString & IO.Path.DirectorySeparatorChar
-                Dim titleExt As String = fs_info.Extension
-                Dim doNotAdd As Boolean = False
-                Dim newmoviedetails As New str_NewMovie(Preferences.SetDefaults)
+    Public Event AmountDownloadedChanged (ByVal iNewProgress As Long)
+    Public Event FileDownloadSizeObtained(ByVal iFileSize    As Long)
+    Public Event FileDownloadComplete    ()
+    Public Event FileDownloadFailed      (ByVal ex As Exception)
 
-                If Preferences.usefoldernames = True Then
-                    scraperLog &= "  '" & fs_info.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
-                Else
-                    scraperLog &= "  '" & fs_info.ToString & "'"                    'log title name
-                End If
+    Private _actorDb              As New List(Of ActorDatabase)
 
-                Dim movieNfoFile As String = titleFull
-                If Utilities.findFileOfType(movieNfoFile, ".nfo") Then
-                    Try
-                        Dim filechck As IO.StreamReader = IO.File.OpenText(movieNfoFile)
-                        Dim tempstring As String
-                        Do
-                            tempstring = filechck.ReadLine
-                            If tempstring = Nothing Then Exit Do
-                            If tempstring.IndexOf("<movie>") <> -1 Then
-                                doNotAdd = True
-                                scraperLog &= " - valid MC .nfo found - scrape skipped!"
-                                Exit Do
-                            End If
-                        Loop Until filechck.EndOfStream
-                        filechck.Close()
-                    Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-                    End Try
-                End If
+    Public Property Bw            As BackgroundWorker = Nothing
+    Public Property MovieCache    As New List(Of ComboList)
+    
+    Public Property NewMovies     As New List(Of Movie)
+    Public Property PercentDone   As Integer = 0
 
-                If moviePattern = "*.vob" Then
-                    If IO.File.Exists(titleDir & "video_ts.ifo") Then
-                        scraperLog &= " VOB Pattern Found! DVD File Structure Found!"
-                    Else
-                        scraperLog &= " WARNING: No DVD File Structure Found - (VIDEO_TS.IFO missing)"
-                    End If
-                    scraperLog &= vbCrLf
-                    Exit For
-                Else
-                    Dim movieStackName As String = titleFull
-                    Dim firstPart As Boolean
-                    If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
-                        If Not firstPart Then doNotAdd = True
-                        If Preferences.namemode <> "1" Then titleFull = titleDir & movieStackName & titleExt
-                    End If
+    Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
 
-                    'ignore trailers
-                    Dim M As Match
-                    M = Regex.Match(titleFull, "[-_.]trailer")
-                    If M.Success Then
-                        scraperLog &= " - ignore trailer"
-                        doNotAdd = True
-                    End If
+    Public ReadOnly Property Data_GridViewMovieCache As List(Of Data_GridViewMovie)
+        Get
+            Return _data_GridViewMovieCache
+        End Get
+    End Property
+    
+    Private Sub Rebuild_Data_GridViewMovieCache
+        _data_GridViewMovieCache.Clear
 
-                    'ignore whatever this is meant to be!
-                    If titleFull.ToLower.IndexOf("sample") <> -1 And titleFull.ToLower.IndexOf("people") = -1 Then doNotAdd = True
+        For Each item In MovieCache
+            _data_GridViewMovieCache.Add(New Data_GridViewMovie(item))
+        Next
+    End Sub
 
-                    If Not doNotAdd And titleExt <> "ttt" Then
-                        newmoviedetails.mediapathandfilename = fs_info.FullName
-                        newmoviedetails.nfopath = titleDir
-                        newmoviedetails.nfopathandfilename = titleFull.Replace(titleExt, ".nfo")
 
-                        If Preferences.usefoldernames = True Or titleExt.ToLower = ".ifo" Then
-                            newmoviedetails.title = Utilities.GetLastFolder(newmoviedetails.nfopathandfilename)
-                        Else
-                            newmoviedetails.title = IO.Path.GetFileNameWithoutExtension(titleFull) '<--- could be movieStackName?
+
+    Public ReadOnly Property ActorDb As List(Of ActorDatabase)
+        Get
+            Return _actorDb
+        End Get
+    End Property
+
+    Public ReadOnly Property Cancelled As Boolean
+        Get
+            Application.DoEvents
+            If Not IsNothing(_bw) AndAlso _bw.WorkerSupportsCancellation AndAlso _bw.CancellationPending Then
+                ReportProgress("Cancelled!",vbCrLf & "!!! Operation cancelled by user")
+                Return True
+            End If
+            Return False
+        End Get
+    End Property
+
+
+    Sub New(Optional bw As BackgroundWorker=Nothing)
+        _bw = bw
+    End Sub
+
+
+    Sub newMovie_AmountDownloadedChanged(ByVal iNewProgress As Long)
+        RaiseEvent AmountDownloadedChanged(iNewProgress)
+    End Sub
+
+    Sub newMovie_FileDownloadSizeObtained(ByVal iFileSize As Long)
+        RaiseEvent FileDownloadSizeObtained(iFileSize)
+    End Sub
+
+    Sub newMovie_FileDownloadComplete
+        RaiseEvent FileDownloadComplete
+    End Sub
+
+    Sub newMovie_FileDownloadFailed(ByVal ex As Exception)
+        RaiseEvent FileDownloadFailed(ex)
+    End Sub
+
+    Sub ReportProgress( Optional progressText As String=Nothing, Optional log As String=Nothing, Optional command As Progress.Commands=Progress.Commands.SetIt )
+        ReportProgress(New Progress(progressText,log,command))
+    End Sub
+
+    Sub ReportProgress( ByVal oProgress As Progress )
+        If Not IsNothing(_bw) AndAlso _bw.WorkerReportsProgress Then
+            _bw.ReportProgress(PercentDone, oProgress)
+        End If
+    End Sub
+
+    Public Function FindCachedMovie(fullpathandfilename As String) As ComboList
+
+        Dim q = From m In _movieCache Where m.fullpathandfilename=fullpathandfilename
+
+        Return q.Single
+    End Function
+
+
+
+    Public Sub FindNewMovies(Optional scrape=True)
+        NewMovies.Clear
+        PercentDone = 0
+
+        Dim folders As New List(Of String)
+
+        AddOnlineFolders ( folders )
+        AddOfflineFolders( folders )
+
+        Dim i = 0
+        For Each folder In folders
+            i += 1
+            PercentDone = CalcPercentDone(i,folders.Count)
+            ReportProgress("Scanning folder " & i & " of " & folders.Count)
+
+            AddNewMovies(folder)
+            
+            If Cancelled then 
+                NewMovies.Clear
+                Exit Sub
+            End If
+        Next
+
+        If scrape then ScrapeNewMovies
+    End Sub
+
+    Private Sub AddMovieEventHandlers( oMovie As Movie )
+        AddHandler    oMovie.ProgressLogChanged,       AddressOf ReportProgress
+        AddHandler    oMovie.AmountDownloadedChanged,  AddressOf newMovie_AmountDownloadedChanged
+        AddHandler    oMovie.FileDownloadSizeObtained, AddressOf newMovie_FileDownloadSizeObtained
+        AddHandler    oMovie.FileDownloadComplete    , AddressOf newMovie_FileDownloadComplete
+        AddHandler    oMovie.FileDownloadFailed      , AddressOf newMovie_FileDownloadFailed
+    End Sub
+    
+    Private Sub RemoveMovieEventHandlers( oMovie As Movie )
+        RemoveHandler oMovie.ProgressLogChanged,       AddressOf ReportProgress
+        RemoveHandler oMovie.AmountDownloadedChanged,  AddressOf newMovie_AmountDownloadedChanged
+        RemoveHandler oMovie.FileDownloadSizeObtained, AddressOf newMovie_FileDownloadSizeObtained
+        RemoveHandler oMovie.FileDownloadComplete    , AddressOf newMovie_FileDownloadComplete
+        RemoveHandler oMovie.FileDownloadFailed      , AddressOf newMovie_FileDownloadFailed
+    End Sub
+    
+    Public Sub AddOnlineFolders( folders As List(Of String) )
+        For Each moviefolder In Preferences.movieFolders
+
+            Dim dirInfo As New DirectoryInfo(moviefolder)
+
+            If dirInfo.Exists Then
+                folders.Add(moviefolder)
+                ReportProgress("Searching movie Folder: " & dirInfo.FullName.ToString & vbCrLf)
+
+                For Each subfolder In Utilities.EnumerateFolders(moviefolder, 6)
+                    folders.Add(subfolder)
+                Next
+            End If
+            
+            If Cancelled then Exit Sub
+        Next
+    End Sub
+
+    Public Sub AddOfflineFolders( folders As List(Of String) )
+        For Each moviefolder In Preferences.offlinefolders
+
+            Dim dirInfo As New DirectoryInfo(moviefolder)
+
+            If dirInfo.Exists Then
+                ReportProgress(,"Found Offline Folder: " & dirInfo.FullName.ToString & vbCrLf & "Checking for subfolders" & vbCrLf)
+
+                For Each subfolder In Utilities.EnumerateFolders(moviefolder, 0)
+'                    ReportProgress(,"Subfolder added :- " & subfolder.ToString & vbCrLf)
+
+                    Dim DummyFileName As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
+                    Dim DummyFullName As String = Path.Combine(subfolder, DummyFileName)
+                    Dim NfoFullName   As String = DummyFullName.Replace(Path.GetExtension(DummyFullName), ".nfo")
+
+                    If Not File.Exists(NfoFullName) Then
+
+                        'Create temporary "tempoffline.ttt" file
+                        If Not File.Exists(Path.Combine(subfolder, "tempoffline.ttt")) Then
+                            Dim sTempFileName As String = Path.Combine(subfolder, "tempoffline.ttt")
+                            Dim fsTemp As New FileStream(sTempFileName, IO.FileMode.Create)
+                            fsTemp.Close()
                         End If
-                        Dim alreadyadded As Boolean = False
-                        For Each newmovie In newMovieList
-                            If newmovie.nfopathandfilename = newmoviedetails.nfopathandfilename Then
-                                alreadyadded = True
-                                scraperLog &= " - Already Added!"
+
+                        'Create temporary "whatever.avi"' file
+                        If Not File.Exists(DummyFullName) Then
+                            Dim fsTemp2 As New FileStream(DummyFullName, FileMode.Create)
+                            fsTemp2.Close()
+                        End If
+
+                        folders.Add(subfolder)
+                    End If
+                Next
+
+            End If
+        Next
+    End Sub
+
+    Public Sub AddNewMovies(DirPath As String)
+        Dim dirInfo As New DirectoryInfo(DirPath)
+        Dim found   As Integer = 0
+
+        For Each ext In Utilities.VideoExtensions
+            
+            ext = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)
+
+            Try
+                For Each fileInFo In dirInfo.GetFiles(ext)
+
+                    If not ValidateFile(fileInFo) then
+                        Continue For
+                    End if
+
+                    found += 1
+                    NewMovies.Add( New Movie(fileInFo.FullName,Me) )
+                Next 
+            Catch ex As Exception
+                #If SilentErrorScream Then
+                    Throw ex
+                #End If
+            End Try
+
+        Next
+
+        If found > 0 then
+           ReportProgress(,String.Format("{0} new movie{1} found in [{2}]", found, If(found=1,"","s"), DirPath) & vbCrLf)
+        End IF
+    End Sub
+
+    Public Sub ScrapeFiles(files as List(Of String))
+        AddNewMovies(files)
+        ScrapeNewMovies
+    End Sub
+
+    Public Sub AddNewMovies(files as List(Of String))
+        NewMovies.Clear
+        PercentDone = 0
+
+        Dim i     = 0
+        Dim found = 0
+
+        For Each file In files
+            Dim fileInfo = New IO.FileInfo(file)
+
+            i += 1
+            PercentDone = CalcPercentDone(i,files.Count)
+            ReportProgress("Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")")
+
+            If not ValidateFile(fileInFo) then
+                Continue For
+            End if
+
+            found += 1
+            NewMovies.Add( New Movie(fileInFo.FullName,Me) )
+
+            If Cancelled then Exit Sub
+        Next
+
+    End Sub
+
+    Sub ScrapeNewMovies
+        If NewMovies.Count>0 then
+            ReportProgress(,vbCrLf & vbCrLf & "A total of " & NewMovies.Count & " new movie" & If(NewMovies.Count=1,"","s") & " found -> Starting Main Scraper Process..." & vbCrLf & vbCrLf )
+        Else
+            ReportProgress(,vbCrLf & vbCrLf & "No new movies found" & vbCrLf & vbCrLf)
+        End If
+ 
+
+        Dim i = 0
+        For Each newMovie In NewMovies
+            i += 1
+            PercentDone = CalcPercentDone(i,NewMovies.Count)
+            ReportProgress( "Scraping " & i & " of " & NewMovies.Count )
+            
+            ScrapeMovie(newMovie)
+
+            If newMovie.TimingsLog <> "" then
+                ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
+            End If
+
+            If Cancelled then Exit Sub
+        Next
+
+        ReportProgress( ,"Finished" )
+    End Sub
+
+    Sub ScrapeMovie(movie As Movie)
+        AddMovieEventHandlers   ( movie )
+        movie.Scrape
+        RemoveMovieEventHandlers( movie )
+    End Sub
+
+
+    Sub ChangeMovie(NfoPathAndFilename As String, imdb As String)
+
+        Dim movie = New Movie(Utilities.GetFileName(NfoPathAndFilename),Me)
+
+        movie.DeleteScrapedFiles
+
+        AddMovieEventHandlers   ( movie )
+        movie.Scrape(imdb)
+        RemoveMovieEventHandlers( movie )
+    End Sub
+
+
+    Sub RescrapeSpecificMovie(fullpathandfilename As String,rl As RescrapeList)
+
+        Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename),Me)
+
+        AddMovieEventHandlers   ( movie )
+        movie.RescrapeSpecific  ( rl    )
+        RemoveMovieEventHandlers( movie )
+    End Sub
+
+
+    Sub BatchRescrapeSpecific(filteredList As List(Of ComboList), rl As RescrapeList)
+        Dim i=0
+        For Each item In filteredList
+            i += 1
+            PercentDone = CalcPercentDone(i,filteredList.Count)
+            ReportProgress("Batch Rescraping " & i & " of " & filteredList.Count)
+
+            Dim movie = New Movie(Utilities.GetFileName(item.fullpathandfilename),Me)
+
+            AddMovieEventHandlers   ( movie )
+            movie.RescrapeSpecific  ( rl    )
+            RemoveMovieEventHandlers( movie )
+
+            If Cancelled then Exit Sub
+        Next
+    End Sub
+
+
+    Sub RescrapeAll( NfoFilenames As List(Of String) )
+        Dim i=0
+        For Each NfoFilename In NfoFilenames
+            i += 1
+            PercentDone = CalcPercentDone(i,NfoFilenames.Count)
+            ReportProgress("Rescraping " & i & " of " & NfoFilenames.Count)
+            
+            RescrapeMovie(NfoFilename)
+
+            If Cancelled then Exit Sub
+        Next
+    End Sub
+
+
+    Sub RescrapeSpecific( _rescrapeList As RescrapeSpecificParams )
+        Dim rl As new RescrapeList(_rescrapeList.Field)
+
+        Dim i=0
+        For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
+            i += 1
+            PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
+            ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count)
+            RescrapeSpecificMovie(FullPathAndFilename,rl)
+
+            If Cancelled then Exit Sub
+        Next
+    End Sub
+
+    Function CapsFirstLetter(words As String)
+        Return Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words)
+    End Function
+
+
+    Sub RescrapeMovie(NfoFilename as String)
+
+        ScrapeMovie( New Movie(Utilities.GetFileName(NfoFilename),Me) )
+
+    End Sub
+
+
+
+    Function CalcPercentDone(onNumber As Integer, total As Integer)
+        Return (100 /total) * onNumber
+    End Function
+
+
+    Public Function ValidateFile(fileInFo As IO.FileInfo)
+
+        If AlreadyAdded(fileInFo.FullName) Then
+            ReportProgress(," - Already Added!")
+            Return False
+        End If
+
+        Dim log   = ""
+        Dim valid = Movie.IsValidMovieFile(fileInFo, log)
+
+        ReportProgress(log)
+
+        Return valid
+    End Function
+
+
+    Public Function AlreadyAdded(fullName as String) As Boolean
+        Dim q = From m In NewMovies Where m.nfopathandfilename.ToLower = fullName.ToLower
+        Return (q.Count > 0)
+    End Function
+
+
+    Public Sub LoadCaches
+        LoadMovieCache
+        LoadActorCache
+    End Sub
+
+
+    Public Sub SaveCaches
+        SaveMovieCache
+        SaveActorCache
+    End Sub
+
+
+    Public Sub LoadMovieCache
+
+        MovieCache.Clear
+
+        Dim movielist  As New XmlDocument
+        Dim objReader  As New StreamReader(Preferences.workingProfile.MovieCache)
+        Dim tempstring As String = objReader.ReadToEnd
+        objReader.Close
+
+        movielist.LoadXml(tempstring)
+
+
+        For Each thisresult In movielist("movie_cache")
+            Select Case thisresult.Name
+                Case "movie"
+                    Dim newmovie As New ComboList
+
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+
+                            Case "missingdata1"
+                                newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
+                            Case "source"
+                                newmovie.source = detail.InnerText
+                            Case "set"
+                                newmovie.movieset = detail.InnerText
+                            Case "sortorder"
+                                newmovie.sortorder = detail.InnerText
+                            Case "filedate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.filedate = "19000101000000" '01/01/1900 00:00:00
+                                Else
+                                    newmovie.filedate = detail.InnerText
+                                End If
+                            Case "createdate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.createdate = "19000101000000" '01/01/1900 00:00:00
+                                Else
+                                    newmovie.createdate = detail.InnerText
+                                End If
+
+                            Case "filename"
+                                newmovie.filename = detail.InnerText
+                            Case "foldername"
+                                newmovie.foldername = detail.InnerText
+                            Case "fullpathandfilename"
+                                newmovie.fullpathandfilename = detail.InnerText
+                            Case "genre"
+                                newmovie.genre = detail.InnerText & newmovie.genre
+                            Case "id"
+                                newmovie.id = detail.InnerText
+                            Case "playcount"
+                                newmovie.playcount = detail.InnerText
+                            Case "rating"
+                                newmovie.rating = detail.InnerText
+                            Case "title"
+                                newmovie.title = detail.InnerText
+                            Case "originaltitle"
+                                newmovie.originaltitle = detail.InnerText
+                            Case "titleandyear"
+                                '--------- aqui
+                                Dim TempString2 As String = detail.InnerText
+                                If Preferences.ignorearticle = True Then
+                                    If TempString2.ToLower.IndexOf("the ") = 0 Then
+                                        Dim Temp As String = TempString2.Substring(TempString2.Length - 7, 7)
+                                        TempString2 = TempString2.Substring(4, TempString2.Length - 11)
+                                        TempString2 = TempString2 & ", The" & Temp
+                                    End If
+                                End If
+
+                                newmovie.titleandyear = TempString2
+                            Case "top250"
+                                newmovie.top250 = detail.InnerText
+                            Case "year"
+                                newmovie.year = detail.InnerText
+                            Case "outline"
+                                newmovie.outline = detail.InnerText
+                            Case "plot"
+                                newmovie.plot = detail.InnerText
+                            Case "runtime"
+                                newmovie.runtime = detail.InnerText
+                            Case "votes"
+                                newmovie.votes = detail.InnerText
+                        End Select
+                    Next
+                    If newmovie.source = Nothing Then
+                        newmovie.source = ""
+                    End If
+                    If newmovie.movieset = Nothing Then
+                        newmovie.movieset = "-None-"
+                    End If
+                    If newmovie.movieset = "" Then
+                        newmovie.movieset = "-None-"
+                    End If
+
+                    MovieCache.Add(newmovie)
+            End Select
+        Next
+
+        Rebuild_Data_GridViewMovieCache
+    End Sub
+
+
+    Public Sub SaveMovieCache
+
+        Dim cacheFile As String = Preferences.workingProfile.MovieCache
+
+        If File.Exists(cacheFile) Then
+            File.Delete(cacheFile)
+        End If
+
+
+        Dim doc      As New XmlDocument
+        Dim xmlproc  As XmlDeclaration
+
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+
+        Dim root  As XmlElement
+        Dim child As XmlElement
+
+        root = doc.CreateElement("movie_cache")
+
+        Dim childchild As XmlElement
+
+        For Each movie In MovieCache
+
+            child = doc.CreateElement("movie")
+            childchild = doc.CreateElement("filedate")
+            childchild.InnerText = movie.filedate
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("createdate")
+            childchild.InnerText = movie.createdate
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("missingdata1")
+            childchild.InnerText = movie.missingdata1.ToString
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("filename")
+            childchild.InnerText = movie.filename
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("foldername")
+            childchild.InnerText = movie.foldername
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("fullpathandfilename")
+            childchild.InnerText = movie.fullpathandfilename
+            child.AppendChild(childchild)
+            If movie.source <> Nothing And movie.source <> "" Then
+                childchild = doc.CreateElement("source")
+                childchild.InnerText = movie.source
+                child.AppendChild(childchild)
+            Else
+                childchild = doc.CreateElement("source")
+                childchild.InnerText = ""
+                child.AppendChild(childchild)
+            End If
+            If movie.movieset <> Nothing Then
+                If movie.movieset <> "" Or movie.movieset <> "-None-" Then
+                    childchild = doc.CreateElement("set")
+                    childchild.InnerText = movie.movieset
+                    child.AppendChild(childchild)
+                Else
+                    childchild = doc.CreateElement("set")
+                    childchild.InnerText = ""
+                    child.AppendChild(childchild)
+                End If
+            Else
+                childchild = doc.CreateElement("set")
+                childchild.InnerText = ""
+                child.AppendChild(childchild)
+            End If
+            childchild = doc.CreateElement("genre")
+            childchild.InnerText = movie.genre
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("id")
+            childchild.InnerText = movie.id
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("playcount")
+            childchild.InnerText = movie.playcount
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("rating")
+            childchild.InnerText = movie.rating
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("title")
+            childchild.InnerText = movie.title
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("originaltitle")
+            childchild.InnerText = movie.originaltitle
+            child.AppendChild(childchild)
+            If movie.sortorder = Nothing Then
+                movie.sortorder = movie.title
+            End If
+            If movie.sortorder = "" Then
+                movie.sortorder = movie.title
+            End If
+            childchild = doc.CreateElement("outline")
+            childchild.InnerText = movie.outline
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("plot")
+            If movie.plot.Length() > 100 Then
+                childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
+            Else
+                childchild.InnerText = movie.plot
+            End If
+
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("sortorder")
+            childchild.InnerText = movie.sortorder
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("titleandyear")
+
+            Try
+                If movie.titleandyear.Length >= 5 Then
+                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 5 Then
+                        Dim Temp As String = movie.titleandyear.Replace(", the", String.Empty)
+                        movie.titleandyear = "The " & Temp
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+            childchild.InnerText = movie.titleandyear
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("runtime")
+            childchild.InnerText = movie.runtime
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("top250")
+            childchild.InnerText = movie.top250
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("year")
+            childchild.InnerText = movie.year
+            child.AppendChild(childchild)
+
+            If movie.votes <> Nothing And movie.votes <> "" Then
+                childchild = doc.CreateElement("votes")
+                childchild.InnerText = movie.votes
+                child.AppendChild(childchild)
+            Else
+                childchild = doc.CreateElement("votes")
+                childchild.InnerText = ""
+                child.AppendChild(childchild)
+            End If
+
+            root.AppendChild(child)
+        Next
+
+        doc.AppendChild(root)
+
+        Dim output As New XmlTextWriter(cacheFile, System.Text.Encoding.UTF8)
+
+        output.Formatting = Xml.Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
+    End Sub
+
+
+    Public Sub LoadMovieCacheFromNfos
+        MovieCache.Clear
+
+        mov_NfoLoad(Preferences.movieFolders  )
+        mov_NfoLoad(Preferences.offlinefolders)
+
+        For Each movie In MovieCache
+            If Not Preferences.usefoldernames Then
+                If movie.filename <> Nothing Then
+                    movie.filename = movie.filename.Replace(".nfo", "")
+                End If
+            End If
+        Next
+
+        Rebuild_Data_GridViewMovieCache
+    End Sub
+
+
+    Private Sub mov_NfoLoad(ByVal folderlist As List(Of String))
+        Dim tempint    As Integer
+        Dim dirinfo    As String = String.Empty
+        Const pattern = "*.nfo"
+        Dim moviePaths As New List(Of String)
+
+        For Each moviefolder In folderlist
+            If (New DirectoryInfo(moviefolder)).Exists Then
+                moviePaths.Add(moviefolder)
+            End If
+        Next
+
+        tempint = moviePaths.Count
+
+        'Add sub-folders
+        For f = 0 To tempint - 1
+            For Each subfolder In Utilities.EnumerateFolders(moviePaths(f), Long.MaxValue)
+                moviePaths.Add(subfolder)
+            Next
+        Next
+
+        For Each Path In moviePaths
+            mov_ListFiles(pattern, New DirectoryInfo(Path) )
+        Next
+    End Sub
+
+
+    Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+
+        Dim nfoFunction As New WorkingWithNfoFiles
+
+        Dim workingMovie
+
+        For Each oFileInfo In dirInfo.GetFiles(pattern)
+            Application.DoEvents()
+
+            If Not File.Exists(oFileInfo.FullName) Then Continue For
+               
+            workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
+
+            If workingMovie.title = "Error" Then Continue For    
+
+            If workingMovie.movieset <> Nothing Then
+                If workingMovie.movieset.IndexOf(" / ") = -1 Then
+                    Dim add As Boolean = True
+                    For Each item In Preferences.moviesets
+                        If item = workingMovie.movieset Then
+                            add = False
+                            Exit For
+                        End If
+                    Next
+                    If add Then
+                        Preferences.moviesets.Add(workingMovie.movieset)
+                    End If
+                Else
+                    Dim strArr() As String
+                    strArr = workingMovie.movieset.Split("/")
+                    For count = 0 To strArr.Length - 1
+                        strArr(count) = strArr(count).Trim
+                        Dim add As Boolean = True
+                        For Each item In Preferences.moviesets
+                            If item = strArr(count) Then
+                                add = False
                                 Exit For
                             End If
                         Next
-                        If alreadyadded = False Then
-                            scraperLog &= " - NEW!"
-                            newMovieList.Add(newmoviedetails)
-                        Else
-                            alreadyadded = False
+                        If add Then
+                            Preferences.moviesets.Add(strArr(count))
                         End If
-                    End If
+                    Next
                 End If
-                Application.DoEvents()
-                scraperLog &= vbCrLf
-            Next fs_info
-            fs_infos = Nothing
+            End If
 
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        Finally
-
-        End Try
+            workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+            If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
+                Dim skip As Boolean = False
+                For Each movie In MovieCache
+                    If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
+                        skip = True
+                        Exit For
+                    End If
+                Next
+                If Not skip Then
+                    Dim completebyte1 As Byte = 0
+                    Dim fanartexists As Boolean = IO.File.Exists(Preferences.GetFanartPath(workingMovie.fullpathandfilename))
+                    Dim posterexists As Boolean = IO.File.Exists(Preferences.GetPosterPath(workingMovie.fullpathandfilename))
+                    If fanartexists = False Then
+                        completebyte1 += 1
+                    End If
+                    If posterexists = False Then
+                        completebyte1 += 2
+                    End If
+                    workingMovie.missingdata1 = completebyte1
+                    MovieCache.Add(workingMovie)
+                    Data_GridViewMovieCache.Add( New Data_GridViewMovie(workingMovie) )
+                End If
+            End If
+        Next 
     End Sub
 
-    Public Shared Function getExtraIdFromNFO(ByVal fullPath As String, Optional ByRef scraperLog As String = "") As String
-        Dim extrapossibleID As String = Nothing
-        Dim fileNFO As String = fullPath
-        If Utilities.findFileOfType(fileNFO, ".nfo") Then
-            Dim objReader As New System.IO.StreamReader(fileNFO)
-            Dim tempInfo As String = objReader.ReadToEnd
-            objReader.Close()
-            Dim M As Match = Regex.Match(tempInfo, "(tt\d{7})")
-            If M.Success = True Then
-                extrapossibleID = M.Value
-                scraperLog = scraperLog & "IMDB ID found in nfo file:- " & extrapossibleID & vbCrLf
-            Else
-                scraperLog = scraperLog & "No IMDB ID found in NFO" & vbCrLf
-            End If
-            If Preferences.renamenfofiles = True Then   'reenabled choice as per user preference
-                Try
-                    If Not IO.File.Exists(fileNFO.Replace(".nfo", ".info")) Then
-                        IO.File.Move(fileNFO, fileNFO.Replace(".nfo", ".info"))
-                        scraperLog = scraperLog & "renaming nfo file to:- " & fileNFO.Replace(".nfo", ".info") & vbCrLf
-                    Else
-                        scraperLog = scraperLog & "!!! Unable to rename file, """ & fileNFO & """ already exists" & vbCrLf
-                    End If
-                Catch
-                    scraperLog = scraperLog & "!!! Unable to rename file, """ & fileNFO & """ already exists" & vbCrLf
-                End Try
-            Else
-                scraperLog = scraperLog & "Current nfo file will be overwritten" & vbCrLf
-            End If
-        End If
-        Return extrapossibleID
-    End Function
 
-    Public Shared Function fileRename(ByVal movieDetails As str_BasicMovieNFO, ByRef movieFileInfo As str_NewMovie) As String
-        Dim log As String = ""
-        Dim newpath As String = movieFileInfo.nfopath
-        Dim mediaFile As String = movieFileInfo.mediapathandfilename
-        Dim movieStackList As New List(Of String)(New String() {mediaFile})
-        Dim stackName As String = mediaFile
-        Dim isStack As Boolean = False
-        Dim isFirstPart As Boolean = True
-        Dim nextStackPart As String = ""
-        Dim stackdesignator As String = ""
-        Dim newextension As String = IO.Path.GetExtension(mediaFile)
-        Dim newfilename As String = Preferences.MovieRenameTemplate
-        Dim targetMovieFile As String = ""
-        Dim targetNfoFile As String = ""
-        Dim aFileExists As Boolean = False
-        Try
-            'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-            newfilename = newfilename.Replace("%T", movieDetails.title)         'replaces %T with movie title
-            newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
-            newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
-            newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
-            newfilename = newfilename.Replace("%R", movieDetails.rating)        'replaces %R with rating 
-            newfilename = newfilename.Replace("%L", movieDetails.runtime)       'replaces %L with runtime (length)
-            newfilename = newfilename.Replace("%S", movieDetails.source)        'replaces %S with movie source
-            newfilename = Utilities.cleanFilenameIllegalChars(newfilename)      'removes chars that can't be in a filename
+    Sub LoadActorCache
+        _actorDb.Clear
+        
+        Dim actorlist As New XmlDocument
 
-            'designate the new main movie file (without extension) and test the new filenames do not already exist
-            targetMovieFile = newpath & newfilename
-            targetNfoFile = targetMovieFile
-            If Utilities.testForFileByName(targetMovieFile, newextension) Then
-                aFileExists = True
-            Else
-                'determine if any 'part' names are in the original title - if so, compile a list of stacked media files for renaming
-                Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
-                    If isFirstPart Then
-                        isStack = True                    'this media file has already been added to the list, but check for existing file with new name
-                        Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
-                        targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
-                        If Utilities.testForFileByName(targetMovieFile, newextension) Then
-                            aFileExists = True
-                            Exit Do
-                        End If
-                        If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
-                    Else
-                        movieStackList.Add(mediaFile)
-                    End If
-                    stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
-                    mediaFile = stackName
-                Loop
-            End If
+        actorlist.Load(Preferences.workingProfile.actorcache)
 
-            If aFileExists = False Then         'if none of the possible renamed files already exist then we rename found media files
-                Dim logRename As String = ""    'used to build up a string of the renamed files for the log
-                movieStackList.Sort()           'we're sure hoping the originals were labelled correctly, ie only incremental numbers changing!
-                For i = 0 To movieStackList.Count - 1
-                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
-                    IO.File.Move(movieStackList(i), newpath & changename)
-                    logRename &= If(i, " and ", "") & changename
-                Next
-                log &= "Renamed Movie File to " & logRename & vbCrLf
+        Dim thisresult As XmlNode = Nothing
 
-                For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
-                    If System.IO.File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, subtitle)) Then
-                        System.IO.File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, subtitle), targetMovieFile & subtitle) ' subtitles file with .sub extension
-                        log &= "Renamed '" & subtitle & "' subtitle File" & vbCrLf
-                    End If
-                Next
+        For Each thisresult In actorlist("actor_cache")
+            Select Case thisresult.Name
+                Case "actor"
+                    
+                    Dim name    = ""
+                    Dim movieId = ""
+                    Dim detail As XmlNode = Nothing
 
-                'update the new movie structure with the new data
-                movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
-                movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
-                movieFileInfo.title = newfilename                                   'new title
-            Else
-                log &= String.Format("A file exists with the target filename of '{0}' - RENAME SKIPPED{1}", newfilename, vbCrLf)
-            End If
-        Catch ex As Exception
-            log &= "!!!Rename Movie File FAILED !!!" & vbCrLf
-        End Try
-        Return log
-    End Function
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+                            Case "name"
+                                name    = detail.InnerText
+                            Case "id"
+                                movieId = detail.InnerText
+                        End Select
+                    Next
+
+                    actorDB.Add( New ActorDatabase(name,movieId) )
+            End Select
+        Next
+    End Sub
+
+
+    Sub SaveActorCache
+        Dim doc As New XmlDocument
+
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc  As XmlDeclaration
+
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+
+        Dim root  As XmlElement
+        Dim child As XmlElement
+
+        root = doc.CreateElement("actor_cache")
+
+        Dim childchild As XmlElement
+
+        For Each actor In _actorDB
+            child = doc.CreateElement("actor")
+            childchild = doc.CreateElement("name")
+            childchild.InnerText = actor.actorname
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("id")
+            childchild.InnerText = actor.movieid
+            child.AppendChild(childchild)
+            root.AppendChild(child)
+        Next
+
+        doc.AppendChild(root)
+
+        Dim output As New XmlTextWriter(Preferences.workingProfile.actorcache, System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
+    End Sub
+
+
+    Public Sub RebuildCaches
+        RebuildMovieCache
+        RebuildActorCache
+    End Sub
+
+
+    Public Sub RebuildMovieCache
+        LoadMovieCacheFromNfos
+        SaveMovieCache
+    End Sub
+
+
+    Public Sub RebuildActorCache
+        'FixUpCorruptActors
+        _actorDB.Clear
+
+        For Each movie In MovieCache
+
+            Dim m As New Movie(movie.fullpathandfilename,Me)
+
+            m.LoadNFO
+            m.UpdateActorCache
+        Next
+
+        SaveActorCache
+    End Sub
+
 End Class

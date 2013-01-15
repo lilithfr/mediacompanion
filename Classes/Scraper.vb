@@ -5,7 +5,7 @@ Imports System.IO
 Imports System.Web
 Imports System.Data
 Imports System.Text.RegularExpressions
-
+Imports Media_Companion
 
 Public Class Classimdb
 
@@ -368,9 +368,7 @@ Public Class Classimdb
         End Try
     End Function
 
-    Public Function CharCount(ByVal OrigString As String, _
-  ByVal Chars As String, Optional ByVal CaseSensitive As Boolean = False) _
-  As Long
+    Public Function CharCount(ByVal OrigString As String, ByVal Chars As String, Optional ByVal CaseSensitive As Boolean = False) As Long
 
         Dim lLen As Long
         Dim lCharLen As Long
@@ -382,7 +380,10 @@ Public Class Classimdb
         Dim bytCompareType As Byte
 
         sInput = OrigString
-        If sInput = "" Then Exit Function
+        If sInput = "" Then 
+            Return 0
+        End If
+        
         lLen = Len(sInput)
         lCharLen = Len(Chars)
         lEndOfLoop = (lLen - lCharLen) + 1
@@ -1433,7 +1434,7 @@ Public Class Classimdb
         Finally
             Monitor.Exit(Me)
         End Try
-        Return "Error"
+        Return ""
     End Function
 
 

@@ -298,7 +298,7 @@ Public Class clsGridViewMovie
         GridviewMovieDesign(Form1.DataGridViewMovies)
 
 
-        Form1.LabelCountFilter.Text = "Displaying " & b.Count.ToString & " of  " & Form1.fullMovieList.Count & " movies"
+        Form1.LabelCountFilter.Text = "Displaying " & b.Count.ToString & " of  " & Form1.oMovies.MovieCache.Count & " movies"
 
         Return
 

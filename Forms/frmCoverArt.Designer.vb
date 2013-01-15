@@ -57,8 +57,8 @@ Partial Class frmCoverArt
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Location = New System.Drawing.Point(2, 240)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(254, 246)
@@ -342,7 +342,6 @@ Partial Class frmCoverArt
         Me.MinimumSize = New System.Drawing.Size(795, 524)
         Me.Name = "frmCoverArt"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "coverart"
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()

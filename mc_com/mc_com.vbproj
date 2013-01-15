@@ -63,20 +63,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="class_mpdb_thumbs">
-      <HintPath>..\Assets\class_mpdb_thumbs.dll</HintPath>
-    </Reference>
-    <Reference Include="imdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assets\imdb_thumbs.dll</HintPath>
-    </Reference>
-    <Reference Include="IMPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assets\IMPA.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
@@ -85,20 +73,12 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="tmdb_posters, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assets\tmdb_posters.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
-    <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
@@ -181,6 +161,10 @@
       <Project>{A3624371-E7E4-4E55-8E64-4460E758D39E}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NfoLibrary\NfoLibrary.vbproj">
+      <Project>{5433F636-07CC-4E16-A29C-A705F4E98A7F}</Project>
+      <Name>NfoLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProtoXML\ProtoXML.vbproj">
       <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
       <Name>ProtoXML</Name>
@@ -193,6 +177,9 @@
       <Project>{4A891BFA-D799-4F3A-AFBA-A53C4824F33C}</Project>
       <Name>XBMC Media Companion</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

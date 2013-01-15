@@ -22,14 +22,14 @@ Partial Class frmCopyProgress
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.ProgressBar2 = New System.Windows.Forms.ProgressBar()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.Button1 = New System.Windows.Forms.Button
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
+        Me.Label2 = New System.Windows.Forms.Label
+        Me.Label3 = New System.Windows.Forms.Label
+        Me.ProgressBar2 = New System.Windows.Forms.ProgressBar
+        Me.Label5 = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'ProgressBar1
@@ -92,7 +92,7 @@ Partial Class frmCopyProgress
         Me.Label5.TabIndex = 7
         Me.Label5.Text = "Overall Progress:"
         '
-        'frmCopyProgress
+        'copyprogress
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -105,8 +105,7 @@ Partial Class frmCopyProgress
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ProgressBar1)
-        Me.Name = "frmCopyProgress"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Name = "copyprogress"
         Me.Text = "File Copy"
         Me.ResumeLayout(False)
         Me.PerformLayout()

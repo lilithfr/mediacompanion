@@ -200,8 +200,8 @@ Partial Class frmTvPosters
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Location = New System.Drawing.Point(0, 248)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(254, 235)
@@ -353,7 +353,6 @@ Partial Class frmTvPosters
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(795, 524)
         Me.Name = "frmTvPosters"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "tvposters"
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()

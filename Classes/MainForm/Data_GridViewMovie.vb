@@ -24,6 +24,41 @@
     Dim _TitleUcase As String
 
 
+    Sub New 
+
+    End Sub
+
+    Sub New(movie As ComboList) 
+        Assign(movie)
+    End Sub
+
+    Public Sub Assign(movie As ComboList)
+        fullpathandfilename = movie.fullpathandfilename
+        movieset = movie.movieset
+        filename = movie.filename
+        foldername = movie.foldername
+        title = movie.title
+        originaltitle = movie.originaltitle
+        titleandyear = movie.titleandyear
+        year = movie.year
+        filedate = movie.filedate
+        id = movie.id
+        rating = movie.rating
+        top250 = movie.top250
+        genre = movie.genre
+        playcount = movie.playcount
+        sortorder = movie.sortorder
+        outline = movie.outline
+        runtime = movie.runtime
+        createdate = movie.createdate
+        missingdata1 = movie.missingdata1
+        plot = movie.plot
+        source = movie.source
+        votes = movie.votes
+        TitleUcase = movie.title.ToUpper
+    End Sub
+
+
     Public Property fullpathandfilename
         Get
             Return _fullpathandfilename

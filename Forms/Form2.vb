@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports System.Linq
 
 Public Class Form2
     Const SetDefaults = True
@@ -406,6 +407,9 @@ Public Class Form2
                             alternatemovie.fullmoviebody.trailer = trailer
                         End If
                     End If
+
+                    Dim tmdb As New TMDb(alternatemovie.fullmoviebody.imdbid)
+
                     If Preferences.nfoposterscraper <> 0 Then
                         Dim thumbs As String = ""
 
@@ -423,17 +427,21 @@ Public Class Form2
                         End If
 
 
-                        If Preferences.nfoposterscraper = 2 Or Preferences.nfoposterscraper = 3 Or Preferences.nfoposterscraper = 6 Or Preferences.nfoposterscraper = 7 Or Preferences.nfoposterscraper = 10 Or Preferences.nfoposterscraper = 11 Or Preferences.nfoposterscraper = 14 Or Preferences.nfoposterscraper = 15 Then
-                            Try
-                                Dim newobject2 As New tmdb_posters.Class1
-                                Dim teststring As New XmlDocument
-                                Dim testthumbs As String = newobject2.gettmdbposters(alternatemovie.fullmoviebody.imdbid)
-                                Dim testthumbs2 As String = "<totalthumbs>" & testthumbs & "</totalthumbs>"
-                                teststring.LoadXml(testthumbs2)
-                                thumbs = thumbs & testthumbs
-                            Catch ex As Exception
+                        'If Preferences.nfoposterscraper = 2 Or Preferences.nfoposterscraper = 3 Or Preferences.nfoposterscraper = 6 Or Preferences.nfoposterscraper = 7 Or Preferences.nfoposterscraper = 10 Or Preferences.nfoposterscraper = 11 Or Preferences.nfoposterscraper = 14 Or Preferences.nfoposterscraper = 15 Then
+                        '    Try
+                        '        Dim newobject2 As New tmdb_posters.Class1
+                        '        Dim teststring As New XmlDocument
+                        '        Dim testthumbs As String = newobject2.gettmdbposters(alternatemovie.fullmoviebody.imdbid)
+                        '        Dim testthumbs2 As String = "<totalthumbs>" & testthumbs & "</totalthumbs>"
+                        '        teststring.LoadXml(testthumbs2)
+                        '        thumbs = thumbs & testthumbs
+                        '    Catch ex As Exception
 
-                            End Try
+                        '    End Try
+                        'End If
+
+                        If {2,3,6,7,10,11,14,15}.Contains(Preferences.nfoposterscraper)
+                            alternatemovie.listthumbs.AddRange(tmdb.Thumbs)
                         End If
 
                         If Preferences.nfoposterscraper = 4 Or Preferences.nfoposterscraper = 5 Or Preferences.nfoposterscraper = 6 Or Preferences.nfoposterscraper = 7 Or Preferences.nfoposterscraper = 12 Or Preferences.nfoposterscraper = 13 Or Preferences.nfoposterscraper = 14 Or Preferences.nfoposterscraper = 15 Then
@@ -495,7 +503,7 @@ Public Class Form2
                         Dim posterpath As String = Form1.workingMovieDetails.fileinfo.posterpath
                         Dim jpegpath As String = posterpath.Replace(System.IO.Path.GetFileName(posterpath), "folder.jpg")
                         If IO.File.Exists(jpegpath) Then IO.File.Delete(jpegpath)
-                        Dim fanartpath As String = Form1.workingMovieDetails.fileinfo.fanartpath
+
                         If posterpath <> Nothing Then
                             If posterpath <> "" Then
                                 If IO.File.Exists(posterpath) Then IO.File.Delete(posterpath)
@@ -510,7 +518,8 @@ Public Class Form2
                                             Case "Movie Poster DB"
                                                 moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                             Case "themoviedb.org"
-                                                moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                'moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                moviethumburl = tmdb.FirstOriginalPosterUrl
                                         End Select
                                     Catch
                                         moviethumburl = "na"
@@ -525,7 +534,8 @@ Public Class Form2
                                                 Case "Movie Poster DB"
                                                     moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                                 Case "themoviedb.org"
-                                                    moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                    'moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                    moviethumburl = tmdb.FirstOriginalPosterUrl
                                             End Select
                                         End If
                                     Catch
@@ -541,7 +551,8 @@ Public Class Form2
                                                 Case "Movie Poster DB"
                                                     moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                                 Case "themoviedb.org"
-                                                    moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                    'moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                    moviethumburl = tmdb.FirstOriginalPosterUrl
                                             End Select
                                         End If
                                     Catch
@@ -557,7 +568,8 @@ Public Class Form2
                                                 Case "Movie Poster DB"
                                                     moviethumburl = Form1.scraperFunction2.mpdbthumb(alternatemovie.fullmoviebody.imdbid)
                                                 Case "themoviedb.org"
-                                                    moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                    'moviethumburl = Form1.scraperFunction2.tmdbthumb(alternatemovie.fullmoviebody.imdbid)
+                                                    moviethumburl = tmdb.FirstOriginalPosterUrl
                                             End Select
                                         End If
                                     Catch
@@ -605,123 +617,17 @@ Public Class Form2
                             End If
                         End If
 
+                        Dim FanartPath As String = Form1.workingMovieDetails.fileinfo.fanartpath
 
-                        If fanartpath <> Nothing Then
-                            If fanartpath <> "" Then
-                                If IO.File.Exists(fanartpath) Then IO.File.Delete(fanartpath)
+                        If FanartPath <> Nothing Then
+                            If FanartPath <> "" Then
 
-                                Try
+                                Dim FanartUrl As String=tmdb.GetBackDropUrl()
 
-
-
-
-                                    Dim moviethumburl As String = ""
-
-                                    If Preferences.savefanart = True Then
-
-                                        Dim temp As String = alternatemovie.fullmoviebody.imdbid
-
-                                        Dim fanarturl As String = "http://api.themoviedb.org/2.0/Movie.imdbLookup?imdb_id=" & temp & "&api_key=3f026194412846e530a208cf8a39e9cb"
-                                        Dim apple2(3000) As String
-                                        Dim fanartlinecount As Integer = 0
-                                        Try
-                                            Dim wrGETURL As WebRequest
-
-                                            wrGETURL = WebRequest.Create(fanarturl)
-                                            Dim myProxy As New WebProxy("myproxy", 80)
-                                            myProxy.BypassProxyOnLocal = True
-                                            Dim objStream As Stream
-                                            objStream = wrGETURL.GetResponse.GetResponseStream()
-                                            Dim objReader As New StreamReader(objStream)
-                                            Dim sLine As String = ""
-                                            fanartlinecount = 0
-
-                                            Do While Not sLine Is Nothing
-                                                fanartlinecount += 1
-                                                sLine = objReader.ReadLine
-                                                apple2(fanartlinecount) = sLine
-                                            Loop
-
-                                            fanartlinecount -= 1
-                                            Dim fanartfound As Boolean = False
-                                            For g = 1 To fanartlinecount
-                                                If apple2(g).IndexOf("<backdrop size=""original"">") <> -1 Then
-                                                    apple2(g) = apple2(g).Replace("<backdrop size=""original"">", "")
-                                                    apple2(g) = apple2(g).Replace("</backdrop>", "")
-                                                    apple2(g) = apple2(g).Replace("  ", "")
-                                                    apple2(g) = apple2(g).Trim
-                                                    If apple2(g).IndexOf("http") <> -1 And apple2(g).IndexOf(".jpg") <> -1 Or apple2(g).IndexOf(".jpeg") <> -1 Then
-                                                        moviethumburl = apple2(g)
-                                                        fanartfound = True
-                                                    End If
-                                                    Exit For
-                                                End If
-                                            Next
-                                            If fanartfound = False Then moviethumburl = ""
-                                        Catch
-                                        End Try
-
-                                        If moviethumburl <> "" Then
-                                            Utilities.DownloadImage(moviethumburl, fanartpath, True, Preferences.resizefanart)
-
-
-                                            'need to resize thumbs
-
-                                            'Try
-                                            '    Dim buffer(4000000) As Byte
-                                            '    Dim size As Integer = 0
-                                            '    Dim bytesRead As Integer = 0
-
-                                            '    Dim thumburl As String = moviethumburl
-                                            '    Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                            '    Dim res As HttpWebResponse = req.GetResponse()
-                                            '    Dim contents As Stream = res.GetResponseStream()
-                                            '    Dim bytesToRead As Integer = CInt(buffer.Length)
-                                            '    Dim bmp As New Bitmap(contents)
-
-
-
-                                            '    While bytesToRead > 0
-                                            '        size = contents.Read(buffer, bytesRead, bytesToRead)
-                                            '        If size = 0 Then Exit While
-                                            '        bytesToRead -= size
-                                            '        bytesRead += size
-                                            '    End While
-
-
-
-                                            '    If Preferences.resizefanart = 1 Then
-                                            '        bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                            '    ElseIf Preferences.resizefanart = 2 Then
-                                            '        If bmp.Width > 1280 Or bmp.Height > 720 Then
-                                            '            Dim bm_source As New Bitmap(bmp)
-                                            '            Dim bm_dest As New Bitmap(1280, 720)
-                                            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                            '            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                                            '            bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                            '        Else
-                                            '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                            '        End If
-                                            '    ElseIf Preferences.resizefanart = 3 Then
-                                            '        If bmp.Width > 960 Or bmp.Height > 540 Then
-                                            '            Dim bm_source As New Bitmap(bmp)
-                                            '            Dim bm_dest As New Bitmap(960, 540)
-                                            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                                            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                                            '            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                                            '            bm_dest.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                            '        Else
-                                            '            bmp.Save(fanartpath, Imaging.ImageFormat.Jpeg)
-                                            '        End If
-
-                                            '    End If
-                                            'Catch ex As Exception
-                                            'End Try
-                                        End If
-                                    End If
-                                Catch
-                                End Try
+                                If Not IsNothing(FanartUrl) then
+                                   'Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
+                                    Movie.SaveFanartImageToCacheAndPath(FanartUrl, FanartPath)
+                                End If
                             End If
                         End If
                     End If

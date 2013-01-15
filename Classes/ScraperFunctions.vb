@@ -139,42 +139,44 @@ Public Class ScraperFunctions
         Return "Error"
     End Function
 
-    Public Function tmdbthumb(ByVal posterimdbid As String)
-        Monitor.Enter(Me)
-        Try
-            Dim newobject2 As New tmdb_posters.Class1
-            Dim thumburl As String = String.Empty
-            Dim xmllist As String
-            Dim ok As Boolean = False
-            Try
-                xmllist = newobject2.gettmdbposters_newapi(posterimdbid)
-                Dim bannerslist As New XmlDocument
-                bannerslist.LoadXml(xmllist)
-                For Each item In bannerslist("tmdb_posterlist")
-                    Select Case item.name
-                        Case "poster"
-                            For Each img In item
-                                If img.childnodes(0).innertext = "original" Then
-                                    thumburl = img.childnodes(1).innertext
-                                    ok = True
-                                    Exit For
-                                End If
-                            Next
-                            If ok = True Then Exit For
-                    End Select
-                Next
-                Return thumburl
-            Catch ex As Exception
-                Thread.Sleep(1)
-            End Try
+    'Public Function tmdbthumb(ByVal posterimdbid As String)
+    '    Monitor.Enter(Me)
+    '    Try
+    '        Dim newobject2 As New tmdb_posters.Class1
+    '        Dim thumburl As String = String.Empty
+    '        Dim xmllist As String
+    '        Dim ok As Boolean = False
+    '        Try
+    '            xmllist = newobject2.gettmdbposters_newapi(posterimdbid)
+    '            Dim bannerslist As New XmlDocument
+    '            bannerslist.LoadXml(xmllist)
+    '            For Each item In bannerslist("tmdb_posterlist")
+    '                Select Case item.name
+    '                    Case "poster"
+    '                        For Each img In item
+    '                            If img.childnodes(0).innertext = "original" Then
+    '                                thumburl = img.childnodes(1).innertext
+    '                                ok = True
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                        If ok = True Then Exit For
+    '                End Select
+    '            Next
+    '            Return thumburl
+    '        Catch ex As Exception
+    '            Thread.Sleep(1)
+    '        End Try
 
 
-        Catch ex As Exception
-        Finally
-            Monitor.Exit(Me)
-        End Try
-        Return "Error"
-    End Function
+    '    Catch ex As Exception
+    '    Finally
+    '        Monitor.Exit(Me)
+    '    End Try
+    '    Return "Error"
+    'End Function
+
+
     Public Function mpdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
         Try

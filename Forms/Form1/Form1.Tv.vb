@@ -775,11 +775,20 @@ Partial Public Class Form1
             PathToUse = ImagePath
         End If
 
-        Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
-            fs.CopyTo(ms)
-            ms.Seek(0, System.IO.SeekOrigin.Begin)
-            PicBox.Image = Image.FromStream(ms)
-        End Using
+        Try
+            Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+                fs.CopyTo(ms)
+                ms.Seek(0, System.IO.SeekOrigin.Begin)
+                PicBox.Image = Image.FromStream(ms)
+            End Using
+        Catch
+            'Image is invalid e.g. not downloaded correctly -> Delete it
+            Try
+                File.Delete(PathToUse)
+            Catch
+            End Try
+        End Try
+
 
         Return True
     End Function
@@ -2444,7 +2453,10 @@ Partial Public Class Form1
 
                 Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "fanart.jpg")
                 If Not IO.File.Exists(seasonpath) Then
-                    Utilities.DownloadImage(fanartposter, seasonpath, True, Preferences.resizefanart)
+
+                    'Utilities.DownloadImage(fanartposter, seasonpath, True, Preferences.resizefanart)
+                    Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonpath)
+
                     '                    Try
                     '                        Dim buffer(4000000) As Byte
                     '                        Dim size As Integer = 0
@@ -3079,19 +3091,19 @@ Partial Public Class Form1
             End If
         Next
 
-        Dim Count As Long = TasksList.Items.Count
-        Dim Cursor As Long = 0
+        Dim taskCount  = TasksList.Items.Count
+        Dim Cursor = 0
 
         Dim CurrentTask As ITask
         Do
-            If Count < 1 Or Cursor >= Count Then
+            If taskCount < 1 Or Cursor >= taskCount Then
                 Exit Do
             End If
 
             CurrentTask = TasksList.Items(Cursor)
             If (TasksOnlyIncompleteTasks AndAlso CurrentTask.State = TaskState.Completed) OrElse Not Common.Tasks.Contains(CurrentTask) Then
                 TasksList.Items.Remove(CurrentTask)
-                Count -= 1
+                taskCount -= 1
 
             Else
                 Cursor += 1

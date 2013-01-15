@@ -70,7 +70,7 @@ Partial Class frmTVShowBrowser
         Me.Label1.Size = New System.Drawing.Size(332, 32)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "The TV Show Search Will Be Based On The Text Entry" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Below, Edit if Neccesary And " & _
-            "Press The Search Button"
+    "Press The Search Button"
         '
         'TextBox1
         '
@@ -346,7 +346,7 @@ Partial Class frmTVShowBrowser
         Me.Label3.Size = New System.Drawing.Size(371, 32)
         Me.Label3.TabIndex = 1
         Me.Label3.Text = "The options in this panel can be changed from the default and" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "  will be applied " & _
-            "only to this TV Show and any episodes it has"
+    "only to this TV Show and any episodes it has"
         '
         'Label5
         '
@@ -400,7 +400,6 @@ Partial Class frmTVShowBrowser
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmTVShowBrowser"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "TVShowBrowser"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
