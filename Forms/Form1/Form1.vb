@@ -24654,6 +24654,7 @@ Public Class Form1
 
         Me.CheckBox_ShowDateOnMovieList.Checked = Preferences.showsortdate
         Me.cbxCleanFilenameIgnorePart.Checked = Preferences.movieignorepart
+        Me.cbxNameMode.Checked = Preferences.namemode
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename), tv_RegexScraper)
         Read_XBMC_IMDB_Scraper_Config()
 
@@ -25203,6 +25204,21 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbxNameMode_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbxNameMode.CheckedChanged
+        Dim txtMovieTitle As String = "Movie (0000)"
+        Dim lstNameModeFiles As New List(Of String)(New String() {txtMovieTitle & " CD1.avi", txtMovieTitle & " CD2.avi"})
+        If cbxNameMode.Checked Then
+            Preferences.namemode = "1"
+            txtMovieTitle &= " CD1"
+        Else
+            Preferences.namemode = "0"
+        End If
+        lstNameModeFiles.Add(txtMovieTitle & ".nfo")
+        lstNameModeFiles.Add(txtMovieTitle & ".tbn")
+        lstNameModeFiles.Add(txtMovieTitle & "-fanart.jpg")
+        lstNameModeFiles.Sort()
+        lblNameMode.Text = String.Join(vbCrLf, lstNameModeFiles)
+    End Sub
 
     Private Sub Button2_Click_1(sender As System.Object, e As System.EventArgs) Handles Button2.Click
         util_FixSeasonEpisode()
@@ -26642,6 +26658,5 @@ End Sub
     Private Sub DataGridViewMovies_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseHover
         TimerToolTip.Start()
     End Sub
-
 
 End Class
