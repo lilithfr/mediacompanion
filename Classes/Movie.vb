@@ -454,7 +454,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToAddMissingData , "Assign missing data"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , " Updating caches"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
     End Sub
  
     Sub AppendScrapeFailedActions
