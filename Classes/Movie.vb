@@ -740,6 +740,11 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.year = thisresult.InnerText
                 Case "id"
                     _scrapedMovie.fullmoviebody.imdbid = thisresult.InnerText
+
+                    If IsNothing(_possibleImdb) Then
+                        _possibleImdb = _scrapedMovie.fullmoviebody.imdbid
+                        tmdb.Imdb = PossibleImdb
+                    End If
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
             End Select
