@@ -569,7 +569,7 @@ Public Class Form1
         PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
         Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
         Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
-        Mc.clsGridViewMovie.GridSort = "Asc"
+        Mc.clsGridViewMovie.GridSort = "Desc"
         Mc.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
         Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         TooltipGridViewMovies1.Initialisation()
