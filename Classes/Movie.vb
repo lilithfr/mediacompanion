@@ -1695,21 +1695,28 @@ Public Class Movie
         UpdateMovieCache
     End Sub
 
-    Sub UpdateActorCache
-        If Actors.Count=0 Then Exit Sub
-       
-        _parent.ActorDB.RemoveAll( Function(c) c.MovieId = Actors(0).MovieId )
-        _parent.ActorDB.AddRange(Actors)
+    Sub UpdateActorCache()
+        If Actors.Count = 0 Then Exit Sub
+
+        _parent.ActorDb.RemoveAll(Function(c) c.MovieId = Actors(0).MovieId)
+        _parent.ActorDb.AddRange(Actors)
     End Sub
 
-    Sub UpdateMovieCache
-        If _movieCache.fullpathandfilename="" Then Exit Sub
+    Sub UpdateActorCacheFromEmpty()
+        If Actors.Count = 0 Then Exit Sub
 
-        _parent.MovieCache.RemoveAll( Function(c) c.fullpathandfilename = _movieCache.fullpathandfilename )
+        '_parent.ActorDb.RemoveAll(Function(c) c.MovieId = Actors(0).MovieId)
+        _parent._tmpActorDb.AddRange(Actors)
+    End Sub
+
+    Sub UpdateMovieCache()
+        If _movieCache.fullpathandfilename = "" Then Exit Sub
+
+        _parent.MovieCache.RemoveAll(Function(c) c.fullpathandfilename = _movieCache.fullpathandfilename)
         _parent.MovieCache.Add(_movieCache)
 
-        _parent.Data_GridViewMovieCache.RemoveAll( Function(c) c.fullpathandfilename = _movieCache.fullpathandfilename )
-        _parent.Data_GridViewMovieCache.Add( New Data_GridViewMovie(_movieCache) )
+        _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = _movieCache.fullpathandfilename)
+        _parent.Data_GridViewMovieCache.Add(New Data_GridViewMovie(_movieCache))
     End Sub
  
   

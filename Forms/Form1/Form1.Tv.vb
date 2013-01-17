@@ -786,6 +786,7 @@ Partial Public Class Form1
             Try
                 File.Delete(PathToUse)
             Catch
+                Return util_ImageLoad(PicBox, DefaultPic, DefaultPic)
             End Try
             Return util_ImageLoad(PicBox, ImagePath, DefaultPic)
         End Try

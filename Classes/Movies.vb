@@ -12,7 +12,8 @@ Public Class Movies
     Public Event FileDownloadComplete    ()
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
-    Private _actorDb              As New List(Of ActorDatabase)
+    Private _actorDb As New List(Of ActorDatabase)
+    Public _tmpActorDb As New List(Of ActorDatabase)
 
     Public Property Bw            As BackgroundWorker = Nothing
     Public Property MovieCache    As New List(Of ComboList)
@@ -670,12 +671,14 @@ Public Class Movies
     Public Sub LoadMovieCacheFromNfos
         MovieCache.Clear
 
+        Dim t As New List(Of String)
 
-        ReportProgress("Searching online movie folders...")
-        mov_NfoLoad(Preferences.movieFolders)
-        If Cancelled Then Exit Sub
-        ReportProgress("Searching offline movie folders...")
-        mov_NfoLoad(Preferences.offlinefolders)
+        t.AddRange(Preferences.movieFolders)
+        t.AddRange(Preferences.offlinefolders)
+
+        ReportProgress("Searching movie folders...")
+        mov_NfoLoad(t)
+
         If Cancelled Then Exit Sub
 
         For Each movie In MovieCache
@@ -894,11 +897,17 @@ Public Class Movies
             Dim m As New Movie(movie.fullpathandfilename, Me)
 
             m.LoadNFO()
-            m.UpdateActorCache()
+            m.UpdateActorCacheFromEmpty()
             If Cancelled Then Exit Sub
         Next
 
         If Cancelled Then Exit Sub
+
+        Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
+
+        For Each item In q.Distinct()
+            _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
+        Next
 
         SaveActorCache()
     End Sub
