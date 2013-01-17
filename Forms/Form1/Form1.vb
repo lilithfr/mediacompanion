@@ -90,7 +90,6 @@ Public Class Form1
 
     Dim pictureList As New List(Of PictureBox)
     Dim screenshotTab As TabPage
-    Public actorDB As New List(Of ActorDatabase)
 
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
@@ -1176,36 +1175,36 @@ Public Class Form1
         oMovies.RebuildActorCache
     End Sub
 
-    Private Sub mov_ActorCacheSave()
-        Dim savepath As String = workingProfile.actorcache
-        Dim doc As New XmlDocument
+    'Private Sub mov_ActorCacheSave()
+    '    Dim savepath As String = workingProfile.actorcache
+    '    Dim doc As New XmlDocument
 
-        Dim thispref As XmlNode = Nothing
-        Dim xmlproc As XmlDeclaration
+    '    Dim thispref As XmlNode = Nothing
+    '    Dim xmlproc As XmlDeclaration
 
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
-        Dim root As XmlElement
-        Dim child As XmlElement
-        root = doc.CreateElement("actor_cache")
+    '    xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+    '    doc.AppendChild(xmlproc)
+    '    Dim root As XmlElement
+    '    Dim child As XmlElement
+    '    root = doc.CreateElement("actor_cache")
 
-        Dim childchild As XmlElement
-        For Each actor In actorDB
-            child = doc.CreateElement("actor")
-            childchild = doc.CreateElement("name")
-            childchild.InnerText = actor.actorname
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = actor.movieid
-            child.AppendChild(childchild)
-            root.AppendChild(child)
-        Next
-        doc.AppendChild(root)
-        Dim output As New XmlTextWriter(savepath, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
-    End Sub
+    '    Dim childchild As XmlElement
+    '    For Each actor In actorDB
+    '        child = doc.CreateElement("actor")
+    '        childchild = doc.CreateElement("name")
+    '        childchild.InnerText = actor.actorname
+    '        child.AppendChild(childchild)
+    '        childchild = doc.CreateElement("id")
+    '        childchild.InnerText = actor.movieid
+    '        child.AppendChild(childchild)
+    '        root.AppendChild(child)
+    '    Next
+    '    doc.AppendChild(root)
+    '    Dim output As New XmlTextWriter(savepath, System.Text.Encoding.UTF8)
+    '    output.Formatting = Formatting.Indented
+    '    doc.WriteTo(output)
+    '    output.Close()
+    'End Sub
 
     'Private Sub mov_ActorCacheLoad()
     '    actorDB.Clear()
@@ -10965,28 +10964,30 @@ Public Class Form1
 
     Private Sub Button11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button11.Click
         Try
-            Dim movie_ids As New List(Of String)
-            Dim topactorname As String = actorcb.Text
-            For Each actor In actorDB
-                If actor.actorname = actorcb.Text Then
-                    movie_ids.Add(actor.movieid)
-                End If
-            Next
-            filteredList.Clear()
-            For Each movie In oMovies.MovieCache
-                Dim add As Boolean = False
-                For Each id In movie_ids
-                    If id = movie.id Then
-                        add = True
-                        Exit For
-                    End If
-                Next
-                If add = True Then
-                    filteredList.Add(movie)
-                End If
-            Next
-            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
-            LabelCountFilter.Text = "Displaying " & filteredList.Count & " " & topactorname & " movies"
+            'Dim movie_ids As New List(Of String)
+            'Dim topactorname As String = actorcb.Text
+            'For Each actor In oMovies.ActorDb
+            '    If actor.actorname = actorcb.Text Then
+            '        movie_ids.Add(actor.movieid)
+            '    End If
+            'Next
+            'filteredList.Clear()
+            'filteredListObj.Clear()
+            'For Each movie In oMovies.MovieCache
+            '    Dim add As Boolean = False
+            '    For Each id In movie_ids
+            '        If id = movie.id Then
+            '            add = True
+            '            Exit For
+            '        End If
+            '    Next
+            '    If add = True Then
+            '        filteredList.Add(movie)
+            '        filteredListObj.Add( New Data_GridViewMovie(movie) )
+            '    End If
+            'Next
+            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(true)
+            LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & actorcb.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -12540,7 +12541,6 @@ Public Class Form1
         mov_RebuildMovieCaches
         TabControl2.SelectedIndex = 0
     End Sub
-
 
 
     Public Sub mov_RebuildMovieCaches

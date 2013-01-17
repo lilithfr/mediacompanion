@@ -205,9 +205,23 @@ Public Class clsGridViewMovie
     End Sub
 
 
-    Public Sub mov_FiltersAndSortApply()
+    Public Sub mov_FiltersAndSortApply(Optional filterByActor=False)
 
         Dim b = From f In Form1.filteredListObj Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
+
+        Dim movie_ids As New List(Of String) 
+
+        If filterByActor then
+            Dim topactorname As String = Form1.actorcb.Text
+
+            For Each actor In Form1.oMovies.ActorDb
+                If actor.actorname = Form1.actorcb.Text Then
+                    movie_ids.Add(actor.movieid)
+                End If
+            Next
+
+            b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
+        End If
 
         'b = From f In b Order By f.filename Ascending
 
