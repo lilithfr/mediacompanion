@@ -3747,7 +3747,7 @@ Public Class Form1
         mov_RebuildMovieCaches
     End Sub
 
-    Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click
+    Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
         Try
             filterOverride = True
             Dim newlist As New List(Of ComboList)
@@ -3776,7 +3776,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ListMoviesWithoutPostersToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutPostersToolStripMenuItem.Click
+    Private Sub ListMoviesWithoutPostersToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
         Try
             filterOverride = True
             Dim newlist As New List(Of ComboList)
