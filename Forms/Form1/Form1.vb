@@ -826,10 +826,11 @@ Public Class Form1
 
     Public Sub mov_CacheLoad()
 
-        oMovies.LoadMovieCache
+        mov_PreferencesDisplay
+        oMovies.LoadCaches
 
         If oMovies.MovieCache.Count = 0 Then
-            Call Mc.mov_RebuildMovieCaches.ex(filteredList, oMovies)
+            mov_RebuildMovieCaches
             Return
         End If
 
@@ -1206,175 +1207,175 @@ Public Class Form1
         output.Close()
     End Sub
 
-    Private Sub mov_ActorCacheLoad()
-        actorDB.Clear()
-        Dim loadpath As String = workingProfile.actorcache
-        Dim actorlist As New XmlDocument
-        actorlist.Load(loadpath)
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In actorlist("actor_cache")
-            Select Case thisresult.Name
-                Case "actor"
-                    Dim newactor As New ActorDatabase
-                    newactor.actorname = ""
-                    newactor.movieid = ""
-                    Dim detail As XmlNode = Nothing
-                    For Each detail In thisresult.ChildNodes
-                        Select Case detail.Name
-                            Case "name"
-                                newactor.actorname = detail.InnerText
-                            Case "id"
-                                newactor.movieid = detail.InnerText
-                        End Select
-                        If newactor.actorname <> "" And newactor.movieid <> "" Then
-                            actorDB.Add(newactor)
-                        End If
-                    Next
-            End Select
-        Next
-    End Sub
+    'Private Sub mov_ActorCacheLoad()
+    '    actorDB.Clear()
+    '    Dim loadpath As String = workingProfile.actorcache
+    '    Dim actorlist As New XmlDocument
+    '    actorlist.Load(loadpath)
+    '    Dim thisresult As XmlNode = Nothing
+    '    For Each thisresult In actorlist("actor_cache")
+    '        Select Case thisresult.Name
+    '            Case "actor"
+    '                Dim newactor As New ActorDatabase
+    '                newactor.actorname = ""
+    '                newactor.movieid = ""
+    '                Dim detail As XmlNode = Nothing
+    '                For Each detail In thisresult.ChildNodes
+    '                    Select Case detail.Name
+    '                        Case "name"
+    '                            newactor.actorname = detail.InnerText
+    '                        Case "id"
+    '                            newactor.movieid = detail.InnerText
+    '                    End Select
+    '                    If newactor.actorname <> "" And newactor.movieid <> "" Then
+    '                        actorDB.Add(newactor)
+    '                    End If
+    '                Next
+    '        End Select
+    '    Next
+    'End Sub
 
     
 
-    Private Sub mov_ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
+    'Private Sub mov_ListFiles(ByVal lst As String, ByVal pattern As String, ByVal dir_info As System.IO.DirectoryInfo)
 
-        Dim exists As Boolean
-        Dim propfile As Boolean = False
-        Dim allok As Boolean = False
-        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
-        Array.Sort(fs_infos, New clsCompareFileInfo)    'sorts found folder list
+    '    Dim exists As Boolean
+    '    Dim propfile As Boolean = False
+    '    Dim allok As Boolean = False
+    '    Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
+    '    Array.Sort(fs_infos, New clsCompareFileInfo)    'sorts found folder list
 
-        Dim counter As Integer = 1
-        Dim counter2 As Integer = 1
-        Dim progcounter As Integer = 1
-        If progressmode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
+    '    Dim counter As Integer = 1
+    '    Dim counter2 As Integer = 1
+    '    Dim progcounter As Integer = 1
+    '    If progressmode = True Then frmSplash2.ProgressBar1.Maximum = fs_infos.Length()
 
-        For Each fs_info As System.IO.FileInfo In fs_infos
-            Application.DoEvents()
-            If progressmode = True Then frmSplash2.ProgressBar1.Value = progcounter
-            progcounter += 1
+    '    For Each fs_info As System.IO.FileInfo In fs_infos
+    '        Application.DoEvents()
+    '        If progressmode = True Then frmSplash2.ProgressBar1.Value = progcounter
+    '        progcounter += 1
 
-            exists = (IO.File.Exists(fs_info.FullName))
-            If exists = True Then
-                frmSplash2.Label2.Text = fs_info.FullName
-                frmSplash2.Label2.Refresh()
-                Try
-                    workingMovie = nfoFunction.mov_NfoLoadBasic(fs_info.FullName, "movielist")
-                Catch ex As Exception
-                    Continue For    ' if we call an exception due to an nfo issue, try the next one
-                End Try
-                If workingMovie.title <> "ERROR" Then
+    '        exists = (IO.File.Exists(fs_info.FullName))
+    '        If exists = True Then
+    '            frmSplash2.Label2.Text = fs_info.FullName
+    '            frmSplash2.Label2.Refresh()
+    '            Try
+    '                workingMovie = nfoFunction.mov_NfoLoadBasic(fs_info.FullName, "movielist")
+    '            Catch ex As Exception
+    '                Continue For    ' if we call an exception due to an nfo issue, try the next one
+    '            End Try
+    '            If workingMovie.title <> "ERROR" Then
 
-                    If workingMovie.movieset <> Nothing Then
-                        If workingMovie.movieset.IndexOf(" / ") = -1 Then
-                            Dim add As Boolean = True
-                            For Each item In Preferences.moviesets
-                                If item = workingMovie.movieset Then
-                                    add = False
-                                    Exit For
-                                End If
-                            Next
-                            If add = True Then
-                                Preferences.moviesets.Add(workingMovie.movieset)
-                                'ComboBox3.Items.Add(workingMovie.movieset)
-                            End If
-                        Else
-                            Dim strArr() As String
-                            strArr = workingMovie.movieset.Split("/")
-                            For count = 0 To strArr.Length - 1
-                                strArr(count) = strArr(count).Trim
-                                Dim add As Boolean = True
-                                For Each item In Preferences.moviesets
-                                    If item = strArr(count) Then
-                                        add = False
-                                        Exit For
-                                    End If
-                                Next
-                                If add = True Then
-                                    Preferences.moviesets.Add(strArr(count))
-                                End If
-                            Next
-                        End If
-                    End If
-
-
-                    If workingMovie.title <> Nothing Then
-
-                        workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
-                        If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
-                            Dim skip As Boolean = False
-                            For Each movie In oMovies.MovieCache
-                                If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
-                                    skip = True
-                                    Exit For
-                                End If
-                            Next
-                            If skip = False Then
-                                Dim completebyte1 As Byte = 0
-                                Dim fanartexists As Boolean = IO.File.Exists(Preferences.GetFanartPath(workingMovie.fullpathandfilename))
-                                Dim posterexists As Boolean = IO.File.Exists(Preferences.GetPosterPath(workingMovie.fullpathandfilename))
-                                If fanartexists = False Then
-                                    completebyte1 += 1
-                                End If
-                                If posterexists = False Then
-                                    completebyte1 += 2
-                                End If
-                                workingMovie.missingdata1 = completebyte1
-                                oMovies.MovieCache.Add(workingMovie)
-                                'filteredlist.Add(workingmovie)
-                            End If
-                        End If
-                    End If
-                End If
-            End If
-        Next fs_info
-
-        fs_infos = Nothing
+    '                If workingMovie.movieset <> Nothing Then
+    '                    If workingMovie.movieset.IndexOf(" / ") = -1 Then
+    '                        Dim add As Boolean = True
+    '                        For Each item In Preferences.moviesets
+    '                            If item = workingMovie.movieset Then
+    '                                add = False
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                        If add = True Then
+    '                            Preferences.moviesets.Add(workingMovie.movieset)
+    '                            'ComboBox3.Items.Add(workingMovie.movieset)
+    '                        End If
+    '                    Else
+    '                        Dim strArr() As String
+    '                        strArr = workingMovie.movieset.Split("/")
+    '                        For count = 0 To strArr.Length - 1
+    '                            strArr(count) = strArr(count).Trim
+    '                            Dim add As Boolean = True
+    '                            For Each item In Preferences.moviesets
+    '                                If item = strArr(count) Then
+    '                                    add = False
+    '                                    Exit For
+    '                                End If
+    '                            Next
+    '                            If add = True Then
+    '                                Preferences.moviesets.Add(strArr(count))
+    '                            End If
+    '                        Next
+    '                    End If
+    '                End If
 
 
-    End Sub
+    '                If workingMovie.title <> Nothing Then
 
-    Public Sub mov_NfoLoad(ByVal folderlist As List(Of String), Optional ByVal mode As Boolean = False)
-        Dim tempint As Integer = 0
-        Dim dirinfo As String = String.Empty
-        Dim pattern As String = "*.nfo"
+    '                    workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+    '                    If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
+    '                        Dim skip As Boolean = False
+    '                        For Each movie In oMovies.MovieCache
+    '                            If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
+    '                                skip = True
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                        If skip = False Then
+    '                            Dim completebyte1 As Byte = 0
+    '                            Dim fanartexists As Boolean = IO.File.Exists(Preferences.GetFanartPath(workingMovie.fullpathandfilename))
+    '                            Dim posterexists As Boolean = IO.File.Exists(Preferences.GetPosterPath(workingMovie.fullpathandfilename))
+    '                            If fanartexists = False Then
+    '                                completebyte1 += 1
+    '                            End If
+    '                            If posterexists = False Then
+    '                                completebyte1 += 2
+    '                            End If
+    '                            workingMovie.missingdata1 = completebyte1
+    '                            oMovies.MovieCache.Add(workingMovie)
+    '                            'filteredlist.Add(workingmovie)
+    '                        End If
+    '                    End If
+    '                End If
+    '            End If
+    '        End If
+    '    Next fs_info
 
-        realMoviePaths.Clear()
-        For Each moviefolder In folderlist
-            Dim hg As New IO.DirectoryInfo(moviefolder)
-            If hg.Exists Then
-                realMoviePaths.Add(moviefolder)
-            End If
+    '    fs_infos = Nothing
 
-        Next
 
-        tempint = realMoviePaths.Count
-        If tempint > 0 Then
-            Dim newlist As List(Of String) = Nothing
-            For f = 0 To tempint - 1
-                newlist = Utilities.EnumerateFolders(realMoviePaths(f), Long.MaxValue)
+    'End Sub
 
-                For Each subfolder In newlist
-                    realMoviePaths.Add(subfolder)
-                Next
-            Next
+    'Public Sub mov_NfoLoad(ByVal folderlist As List(Of String), Optional ByVal mode As Boolean = False)
+    '    Dim tempint As Integer = 0
+    '    Dim dirinfo As String = String.Empty
+    '    Dim pattern As String = "*.nfo"
 
-            For f = 0 To realMoviePaths.Count - 1
-                ProgressAndStatus1.ReportProgress((f / realMoviePaths.Count) * 1000, "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString())
-                Application.DoEvents()
+    '    realMoviePaths.Clear()
+    '    For Each moviefolder In folderlist
+    '        Dim hg As New IO.DirectoryInfo(moviefolder)
+    '        If hg.Exists Then
+    '            realMoviePaths.Add(moviefolder)
+    '        End If
 
-                If ProgressAndStatus1.cancel = True Then
-                    ProgressAndStatus1.Visible = False
-                    Return
-                End If
+    '    Next
 
-                Dim subdirs As New System.IO.DirectoryInfo(realMoviePaths(f))
+    '    tempint = realMoviePaths.Count
+    '    If tempint > 0 Then
+    '        Dim newlist As List(Of String) = Nothing
+    '        For f = 0 To tempint - 1
+    '            newlist = Utilities.EnumerateFolders(realMoviePaths(f), Long.MaxValue)
 
-                mov_ListFiles(dirinfo, pattern, subdirs)
-            Next
+    '            For Each subfolder In newlist
+    '                realMoviePaths.Add(subfolder)
+    '            Next
+    '        Next
 
-        End If
-    End Sub
+    '        For f = 0 To realMoviePaths.Count - 1
+    '            ProgressAndStatus1.ReportProgress((f / realMoviePaths.Count) * 1000, "Scanning Folder:" & Environment.NewLine & realMoviePaths(f).ToString())
+    '            Application.DoEvents()
+
+    '            If ProgressAndStatus1.cancel = True Then
+    '                ProgressAndStatus1.Visible = False
+    '                Return
+    '            End If
+
+    '            Dim subdirs As New System.IO.DirectoryInfo(realMoviePaths(f))
+
+    '            mov_ListFiles(dirinfo, pattern, subdirs)
+    '        Next
+
+    '    End If
+    'End Sub
 
     Public Sub mov_FormPopulate()
         If Not IsNothing(workingMovieDetails) Then
@@ -2191,7 +2192,7 @@ Public Class Form1
         oMovies.LoadMovieCache
 
         If oMovies.MovieCache.Count = 0 Then
-            Mc.mov_RebuildMovieCaches.ex(filteredList, oMovies)
+            mov_RebuildMovieCaches
             Exit Sub
         End If
 
@@ -2385,7 +2386,7 @@ Public Class Form1
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-            Mc.mov_RebuildMovieCaches.ex(filteredList, oMovies)
+            mov_RebuildMovieCaches
             messbox.Close()
         End If
 
@@ -3757,9 +3758,7 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click
-
-        Call Mc.mov_RebuildMovieCaches.ex(filteredList, oMovies)
-        Call DisplayMovie()
+        mov_RebuildMovieCaches
     End Sub
 
     Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListMoviesWithoutFanartToolStripMenuItem.Click
@@ -4066,7 +4065,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub DisplayMovie()
+    Public Sub DisplayMovie()
         If DataGridViewMovies.SelectedRows.Count = 0 Then Exit Sub
 
             Dim MultipleMoviesSelected As Boolean = True
@@ -4341,6 +4340,7 @@ Public Class Form1
 
     Private Sub TabControl2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl2.SelectedIndexChanged
 
+        mov_PreferencesDisplay
         Dim tempstring As String = ""
         Dim tab As String = TabControl2.SelectedTab.Text
         If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" Then
@@ -12557,7 +12557,6 @@ Public Class Form1
                 If remove = True Then Preferences.offlinefolders.RemoveAt(f)
             Next
             Preferences.SaveConfig
-            oMovies.SaveMovieCache
         End If
         If folderstoadd.Count > 0 Or offlinefolderstoadd.Count > 0 Then
             Application.DoEvents()
@@ -12574,27 +12573,55 @@ Public Class Form1
             Else
                 progressmode = True
             End If
-            Call mov_NfoLoad(folderstoadd, progressmode)
-            Preferences.SaveConfig()
-
-            messbox.Close()
+            'Call mov_NfoLoad(folderstoadd, progressmode)
+            Preferences.SaveConfig
+            messbox.Close 'Where's the open???
         End If
 
-        DataGridViewMovies.ClearSelection()
-        If DataGridViewMovies.Rows.Count > 0 Then
-            DataGridViewMovies.Rows(0).Selected = True
-        End If
+        mov_RebuildMovieCaches
+        TabControl2.SelectedIndex = 0
+    End Sub
 
-        oMovies.SaveMovieCache
+
+
+    Public Sub mov_RebuildMovieCaches
+
+        Enabled = False
+
+        mov_PreferencesDisplay
+
+        ProgressAndStatus1.Display()
+        ProgressAndStatus1.Status("Rebuilding Movie caches...")
+        ProgressAndStatus1.ReportProgress(0, "Processing....")
+        Application.DoEvents()
+
+        oMovies.RebuildCaches
+
+        filteredList.Clear
+        filteredList.AddRange(oMovies.MovieCache)
+        filteredListObj.Clear
+        filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
+
+
+        ProgressAndStatus1.ReportProgress(0, "Apply Filters...")
         Mc.clsGridViewMovie.mov_FiltersAndSortApply
+
+        ProgressAndStatus1.ReportProgress(0, "Reload Main Page...")
         mov_FormPopulate
 
-        If DataGridViewMovies.Rows.Count > 0 Then
+        If DataGridViewMovies.Rows.Count>0 Then
             DataGridViewMovies.Rows(0).Selected = True
+            DisplayMovie
         End If
-        DisplayMovie
+
+        Activate
+        Enabled = True
         ProgressAndStatus1.Visible = False
     End Sub
+
+
+
+
 
     Private Sub tv_PosterCheck(ByVal season As String, ByVal path As String, ByVal tvdbid As String)
         Dim seasonposterpath As String = "na"
@@ -15118,7 +15145,7 @@ Public Class Form1
         util_MainFormTitleUpdate()  'creates & shows new title to Form1, also includes current profile name
 
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            Call Mc.mov_RebuildMovieCaches.ex(filteredList, oMovies)
+            mov_RebuildMovieCaches
         Else
             oMovies.LoadCaches
         End If
@@ -19904,11 +19931,10 @@ Public Class Form1
         '----------------------------------------------------------
         Dim loadinginfo As String = ""
         If Not IO.File.Exists(workingProfile.moviecache) Or Preferences.startupCache = False Then
-            loadinginfo = "Status :- Building Movie Database"
+            loadinginfo = "Status :- Building Movie caches"
             frmSplash.Label3.Text = loadinginfo
             frmSplash.Label3.Refresh()
-            Call Mc.mov_RebuildMovieCaches.ex(filteredList, oMovies)
-
+            mov_RebuildMovieCaches
         Else
             loadinginfo = "Status :- Loading Movie Database"
             frmSplash.Label3.Text = loadinginfo
@@ -19942,22 +19968,22 @@ Public Class Form1
             Call tv_CacheLoad()
         End If
         Call tv_Filter()
-        If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
-            loadinginfo = "Status :- Building Actor Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call mov_ActorRebuild()
-        Else
-            loadinginfo = "Status :- Loading Actor Database"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Dim NovaThread3 = New Thread(New ThreadStart(AddressOf mov_ActorCacheLoad))
-            NovaThread3.SetApartmentState(ApartmentState.STA)
-            NovaThread3.Start()
-            'Call loadactorcache()
-        End If
-        LabelCountFilter.Text = "Displaying " & filteredList.Count & " of  " & oMovies.MovieCache.Count & " movies"
-        Call mov_PreferencesDisplay()
+
+        'If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
+        '    loadinginfo = "Status :- Building Actor Database"
+        '    frmSplash.Label3.Text = loadinginfo
+        '    frmSplash.Label3.Refresh()
+        '    Call mov_ActorRebuild()
+        'Else
+        '    loadinginfo = "Status :- Loading Actor Database"
+        '    frmSplash.Label3.Text = loadinginfo
+        '    frmSplash.Label3.Refresh()
+        '    'Dim NovaThread3 = New Thread(New ThreadStart(AddressOf mov_ActorCacheLoad))
+        '    'NovaThread3.SetApartmentState(ApartmentState.STA)
+        '    'NovaThread3.Start()
+        '    oMovies.RebuildActorCache
+        '    'Call loadactorcache()
+        'End If
     End Sub
 
     

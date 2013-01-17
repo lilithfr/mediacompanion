@@ -132,7 +132,6 @@
     <Compile Include="Classes\HomeMovieDetails.vb" />
     <Compile Include="Classes\HomeMovies.vb" />
     <Compile Include="Classes\MainForm\clsCompareFileInfo.vb" />
-    <Compile Include="Classes\MainForm\mov_CacheRefresh.vb" />
     <Compile Include="Classes\MediaInfoExport.vb" />
     <Compile Include="Classes\Movie.vb" />
     <Compile Include="Classes\Movies.vb" />
