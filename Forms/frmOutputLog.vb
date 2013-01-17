@@ -82,6 +82,8 @@ Public Class frmoutputlog
         Dim briefoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below. second & rest of lines have extra char at front so we test first 4 chars.
         For Each line In briefoutput 'if each line is at least 4 chars then test if first 4 chars has "!!!". If true then add the line directly to the textbox minus the "!!!" on the front. 
             line = Strings.Replace(line, Chr(10), "") 'strips out the leading 'new line'
+
+            If IsNothing(line) Then Continue For
             If line = "!!!" Then
                 TextBox1.Text &= vbCrLf ' if a line only contains "!!!" then replace it with a carrage return/linefeed
             ElseIf line.Contains("!!! ") Then ' if it contains this then strip it from the fron & add it to the log (it will be show in both FULL & brief views)

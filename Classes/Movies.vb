@@ -670,8 +670,13 @@ Public Class Movies
     Public Sub LoadMovieCacheFromNfos
         MovieCache.Clear
 
-        mov_NfoLoad(Preferences.movieFolders  )
+
+        ReportProgress("Searching online movie folders...")
+        mov_NfoLoad(Preferences.movieFolders)
+        If Cancelled Then Exit Sub
+        ReportProgress("Searching offline movie folders...")
         mov_NfoLoad(Preferences.offlinefolders)
+        If Cancelled Then Exit Sub
 
         For Each movie In MovieCache
             If Not Preferences.usefoldernames Then
@@ -681,13 +686,13 @@ Public Class Movies
             End If
         Next
 
-        Rebuild_Data_GridViewMovieCache
+        Rebuild_Data_GridViewMovieCache()
     End Sub
 
 
     Private Sub mov_NfoLoad(ByVal folderlist As List(Of String))
-        Dim tempint    As Integer
-        Dim dirinfo    As String = String.Empty
+        Dim tempint As Integer
+        Dim dirinfo As String = String.Empty
         Const pattern = "*.nfo"
         Dim moviePaths As New List(Of String)
 
@@ -706,8 +711,15 @@ Public Class Movies
             Next
         Next
 
+
+        Dim i = 0
         For Each Path In moviePaths
-            mov_ListFiles(pattern, New DirectoryInfo(Path) )
+            i += 1
+            PercentDone = CalcPercentDone(i, moviePaths.Count)
+            ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
+
+            mov_ListFiles(pattern, New DirectoryInfo(Path))
+            If Cancelled Then Exit Sub
         Next
     End Sub
 
@@ -722,10 +734,10 @@ Public Class Movies
             Application.DoEvents()
 
             If Not File.Exists(oFileInfo.FullName) Then Continue For
-               
+
             workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
 
-            If workingMovie.title = "Error" Then Continue For    
+            If workingMovie.title = "Error" Then Continue For
 
             If workingMovie.movieset <> Nothing Then
                 If workingMovie.movieset.IndexOf(" / ") = -1 Then
@@ -779,16 +791,16 @@ Public Class Movies
                     End If
                     workingMovie.missingdata1 = completebyte1
                     MovieCache.Add(workingMovie)
-                    Data_GridViewMovieCache.Add( New Data_GridViewMovie(workingMovie) )
+                    Data_GridViewMovieCache.Add(New Data_GridViewMovie(workingMovie))
                 End If
             End If
-        Next 
+        Next
     End Sub
 
 
-    Sub LoadActorCache
-        _actorDb.Clear
-        
+    Sub LoadActorCache()
+        _actorDb.Clear()
+
         Dim actorlist As New XmlDocument
 
         actorlist.Load(Preferences.workingProfile.actorcache)
@@ -798,36 +810,36 @@ Public Class Movies
         For Each thisresult In actorlist("actor_cache")
             Select Case thisresult.Name
                 Case "actor"
-                    
-                    Dim name    = ""
+
+                    Dim name = ""
                     Dim movieId = ""
                     Dim detail As XmlNode = Nothing
 
                     For Each detail In thisresult.ChildNodes
                         Select Case detail.Name
                             Case "name"
-                                name    = detail.InnerText
+                                name = detail.InnerText
                             Case "id"
                                 movieId = detail.InnerText
                         End Select
                     Next
 
-                    actorDB.Add( New ActorDatabase(name,movieId) )
+                    actorDB.Add(New ActorDatabase(name, movieId))
             End Select
         Next
     End Sub
 
 
-    Sub SaveActorCache
+    Sub SaveActorCache()
         Dim doc As New XmlDocument
 
         Dim thispref As XmlNode = Nothing
-        Dim xmlproc  As XmlDeclaration
+        Dim xmlproc As XmlDeclaration
 
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
 
-        Dim root  As XmlElement
+        Dim root As XmlElement
         Dim child As XmlElement
 
         root = doc.CreateElement("actor_cache")
@@ -854,31 +866,41 @@ Public Class Movies
     End Sub
 
 
-    Public Sub RebuildCaches
-        RebuildMovieCache
-        RebuildActorCache
+    Public Sub RebuildCaches()
+        RebuildMovieCache()
+        If Cancelled Then Exit Sub
+        RebuildActorCache()
     End Sub
 
 
-    Public Sub RebuildMovieCache
-        LoadMovieCacheFromNfos
-        SaveMovieCache
+    Public Sub RebuildMovieCache()
+        LoadMovieCacheFromNfos()
+        If Cancelled Then Exit Sub
+        SaveMovieCache()
     End Sub
 
 
-    Public Sub RebuildActorCache
+    Public Sub RebuildActorCache()
         'FixUpCorruptActors
-        _actorDB.Clear
+        _actorDB.Clear()
+
+        Dim i = 0
 
         For Each movie In MovieCache
+            i += 1
+            PercentDone = CalcPercentDone(i, MovieCache.Count)
+            ReportProgress("Rebuilding actor cache " & i & " of " & MovieCache.Count)
 
-            Dim m As New Movie(movie.fullpathandfilename,Me)
+            Dim m As New Movie(movie.fullpathandfilename, Me)
 
-            m.LoadNFO
-            m.UpdateActorCache
+            m.LoadNFO()
+            m.UpdateActorCache()
+            If Cancelled Then Exit Sub
         Next
 
-        SaveActorCache
+        If Cancelled Then Exit Sub
+
+        SaveActorCache()
     End Sub
 
 End Class

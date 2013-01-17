@@ -12545,37 +12545,38 @@ Public Class Form1
 
     Public Sub mov_RebuildMovieCaches
 
-        Enabled = False
+        'Enabled = False
 
         mov_PreferencesDisplay
 
-        ProgressAndStatus1.Display()
-        ProgressAndStatus1.Status("Rebuilding Movie caches...")
-        ProgressAndStatus1.ReportProgress(0, "Processing....")
-        Application.DoEvents()
+        'ProgressAndStatus1.Display()
+        'ProgressAndStatus1.Status("Rebuilding Movie caches...")
+        'ProgressAndStatus1.ReportProgress(0, "Processing....")
+        'Application.DoEvents()
 
-        oMovies.RebuildCaches
+        'oMovies.RebuildCaches
+        RunBackgroundMovieScrape("RebuildCaches")
 
-        filteredList.Clear
-        filteredList.AddRange(oMovies.MovieCache)
-        filteredListObj.Clear
-        filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
+        'filteredList.Clear
+        'filteredList.AddRange(oMovies.MovieCache)
+        'filteredListObj.Clear
+        'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
 
 
-        ProgressAndStatus1.ReportProgress(0, "Apply Filters...")
-        Mc.clsGridViewMovie.mov_FiltersAndSortApply
+        'ProgressAndStatus1.ReportProgress(0, "Apply Filters...")
+        'Mc.clsGridViewMovie.mov_FiltersAndSortApply
 
-        ProgressAndStatus1.ReportProgress(0, "Reload Main Page...")
-        mov_FormPopulate
+        'ProgressAndStatus1.ReportProgress(0, "Reload Main Page...")
+        'mov_FormPopulate
 
-        If DataGridViewMovies.Rows.Count>0 Then
-            DataGridViewMovies.Rows(0).Selected = True
-            DisplayMovie
-        End If
+        'If DataGridViewMovies.Rows.Count>0 Then
+        '    DataGridViewMovies.Rows(0).Selected = True
+        '    DisplayMovie
+        'End If
 
-        Activate
-        Enabled = True
-        ProgressAndStatus1.Visible = False
+        'Activate
+        'Enabled = True
+        'ProgressAndStatus1.Visible = False
     End Sub
 
 
@@ -21899,6 +21900,7 @@ Function Get_MultiMovieProgressBar_Visiblity(action As String)
         Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
         Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
         Case "SearchForNewMovies"     : Return True
+        Case "RebuildCaches"          : Return False
     End Select
 
     MsgBox("Unrecognised scrape action : [" + action + "]!",MsgBoxStyle.Exclamation,"Programming Error!")
@@ -21933,6 +21935,11 @@ End Sub
 
 Public Sub RescrapeAll
     oMovies.RescrapeAll( _rescrapeList.FullPathAndFilenames )
+End Sub
+
+
+Public Sub RebuildCaches
+    oMovies.RebuildCaches
 End Sub
 
 
