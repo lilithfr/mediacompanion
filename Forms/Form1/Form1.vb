@@ -15670,7 +15670,10 @@ Public Class Form1
         newDS.ReadXml(XMLreader2)
         XMLreader2.Dispose()
 
-        DataGridView1.DataSource = newDS.Tables(0)
+        Try
+            DataGridView1.DataSource = newDS.Tables(0)
+        Catch
+        End Try
 
 '        DataGridView1.DataSource = DataGridViewMovies.DataSource       TO DO: Replace with this
 
@@ -16041,7 +16044,7 @@ Public Class Form1
 
         Call mov_TextBoxesSetup()
         Try
-            For f = 0 To DataGridView1.Rows.Count
+            For f = 0 To DataGridView1.Rows.Count-1
                 If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
                     DataGridView1.ClearSelection()
                     'DataGridView1.CurrentCell = DataGridView1.Rows(f).Cells(0)
