@@ -12448,8 +12448,8 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonSaveAndQuickRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSaveAndQuickRefresh.Click
-        ProgressAndStatus1.Display()
-        Application.DoEvents()
+        'ProgressAndStatus1.Display()
+        'Application.DoEvents()
 
         Dim folderstoadd As New List(Of String)
         Dim offlinefolderstoadd As New List(Of String)
@@ -12535,7 +12535,7 @@ Public Class Form1
             End If
             'Call mov_NfoLoad(folderstoadd, progressmode)
             Preferences.SaveConfig
-            messbox.Close 'Where's the open???
+       '     messbox.Close 'Where's the open???
         End If
 
         mov_RebuildMovieCaches
