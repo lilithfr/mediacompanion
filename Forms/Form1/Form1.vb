@@ -4083,6 +4083,18 @@ Public Class Form1
             End If
 
             If DataGridViewMovies.SelectedRows.Count = 1 Then
+
+                mov_ToolStripPlayMovie.Visible = True
+                mov_ToolStripOpenFolder.Visible = True
+                mov_ToolStripViewNfo.Visible = True
+                ToolStripSeparator17.Visible = True
+                ToolStripSeparator5.Visible = True
+                ToolStripSeparator4.Visible = True
+                mov_ToolStripFanartBrowserAlt.Visible = True
+                mov_ToolStripPosterBrowserAlt.Visible = True
+                mov_ToolStripEditMovieAlt.Visible = True
+                mov_ToolStripReloadFromCache.Visible = True
+
                 If titletxt.Visible = False Then
                     needtoload = True
                 End If
