@@ -78,23 +78,26 @@ Public Class frmoutputlog
         'Full shows every line of text & removes leading "!!!" 'brief' token from text
         'Breif shows text lines only that lead with "!!!"
 
-        TextBox1.Text = "" 'clears the log textbox
-        Dim briefoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below. second & rest of lines have extra char at front so we test first 4 chars.
-        For Each line In briefoutput 'if each line is at least 4 chars then test if first 4 chars has "!!!". If true then add the line directly to the textbox minus the "!!!" on the front. 
-            line = Strings.Replace(line, Chr(10), "") 'strips out the leading 'new line'
+        TextBox1.Text = output '"" 'clears the log textbox
 
-            If IsNothing(line) Then Continue For
-            If line = "!!!" Then
-                TextBox1.Text &= vbCrLf ' if a line only contains "!!!" then replace it with a carrage return/linefeed
-            ElseIf line.Contains("!!! ") Then ' if it contains this then strip it from the fron & add it to the log (it will be show in both FULL & brief views)
-                TextBox1.Text &= Strings.Right(line, Strings.Len(line) - 4) & vbCrLf
-            ElseIf ComboBoxLogViewType.SelectedIndex = 0 Then ' i.e. FULL display mode
-                TextBox1.Text &= line & vbCrLf  'Full log adds text even if it hasn't got "!!!" - 
-                Preferences.logview = 0 'set the new FULL preference, it will be saved when MC exits.
-            Else ' brief mode set
-                Preferences.logview = 1 'set the new Breif preference, it will be saved when MC exits.
-            End If
-        Next
+        'TOO SLOW...
+
+        'Dim briefoutput() As String = output.Split(vbCrLf) 'split the lines out of output so we can check each one below. second & rest of lines have extra char at front so we test first 4 chars.
+        'For Each line In briefoutput 'if each line is at least 4 chars then test if first 4 chars has "!!!". If true then add the line directly to the textbox minus the "!!!" on the front. 
+        '    line = Strings.Replace(line, Chr(10), "") 'strips out the leading 'new line'
+
+        '    If IsNothing(line) Then Continue For
+        '    If line = "!!!" Then
+        '        TextBox1.Text &= vbCrLf ' if a line only contains "!!!" then replace it with a carrage return/linefeed
+        '    ElseIf line.Contains("!!! ") Then ' if it contains this then strip it from the fron & add it to the log (it will be show in both FULL & brief views)
+        '        TextBox1.Text &= Strings.Right(line, Strings.Len(line) - 4) & vbCrLf
+        '    ElseIf ComboBoxLogViewType.SelectedIndex = 0 Then ' i.e. FULL display mode
+        '        TextBox1.Text &= line & vbCrLf  'Full log adds text even if it hasn't got "!!!" - 
+        '        Preferences.logview = 0 'set the new FULL preference, it will be saved when MC exits.
+        '    Else ' brief mode set
+        '        Preferences.logview = 1 'set the new Breif preference, it will be saved when MC exits.
+        '    End If
+        'Next
 
 
 

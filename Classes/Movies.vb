@@ -238,13 +238,14 @@ Public Class Movies
 
         Dim i     = 0
         Dim found = 0
-
+        Dim msg=""
         For Each file In files
             Dim fileInfo = New IO.FileInfo(file)
 
             i += 1
             PercentDone = CalcPercentDone(i,files.Count)
-            ReportProgress("Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")")
+            msg="Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
+            ReportProgress(msg,msg & vbCrLf)
 
             If not ValidateFile(fileInFo) then
                 Continue For

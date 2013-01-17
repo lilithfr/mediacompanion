@@ -21815,11 +21815,6 @@ End Sub
                     TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
                 End If
             End If
-
-
-
-
-
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21841,7 +21836,7 @@ End Sub
 Sub RunBackgroundMovieScrape(action As String)
 
     If Not BckWrkScnMovies.IsBusy Then
-
+        scraperLog                      = ""
         tsStatusLabel.Text              = ""
         tsMultiMovieProgressBar.Value   = tsMultiMovieProgressBar.Minimum
         tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action) 
@@ -21851,7 +21846,6 @@ Sub RunBackgroundMovieScrape(action As String)
         EnableDisableByTag("M",False)       'Disable all UI options that can't be run while scraper is running   
 
         BckWrkScnMovies.RunWorkerAsync(action)
-
     Else
         MsgBox("The Movie Scraper is Already Running")
     End If
