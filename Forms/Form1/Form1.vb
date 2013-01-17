@@ -850,6 +850,8 @@ Public Class Form1
         If DataGridViewMovies.Rows.Count > 0 then
             DataGridViewMovies.Rows(0).Selected = True
         End If
+
+        mov_FormPopulate
     End Sub
 
     Private Sub util_RegexSetDefaultScraper()
@@ -4051,6 +4053,10 @@ Public Class Form1
 
 
     Public Sub DisplayMovie()
+
+        'Clear all fields of the movie
+        MovieFormInit()
+
         If DataGridViewMovies.SelectedRows.Count = 0 Then Exit Sub
 
             Dim MultipleMoviesSelected As Boolean = True
@@ -4058,8 +4064,7 @@ Public Class Form1
             Dim done As Boolean = False
 
 
-            'Clear all fields of the movie
-            MovieFormInit()
+
 
             If DataGridViewMovies.SelectedRows.Count > 1 Then
                 MultipleMoviesSelected = True
@@ -10998,81 +11003,86 @@ Public Class Form1
         Dim locx As Integer = 0
         Dim locy As Integer = 0
         Dim maxcount As Integer = Convert.ToInt32((TabPage22.Width - 50) / 150)
-        If filteredList.Count / maxcount > 159 Then
+
+        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
             maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
-        If filteredList.Count / maxcount > 159 Then
-            maxcount += 1
-        End If
+        End While      
+
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
+        'If filteredList.Count / maxcount > 159 Then
+        '    maxcount += 1
+        'End If
         Try
             'Panel17.AutoScroll = False
             For Each pic In pictureList
@@ -11115,10 +11125,7 @@ Public Class Form1
         Dim locx As Integer = 0
         Dim locy As Integer = 0
 
-        Dim filteredListObjWall As New List(Of Data_GridViewMovie)
-        filteredListObjWall = filteredListObj
-
-
+       
         If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
         If cbSort.SelectedIndex <> cbSortHidden.SelectedIndex Then cbSortHidden.SelectedIndex = cbSort.SelectedIndex : check = False
         If btnreverse.CheckState <> CheckBox9.CheckState Then CheckBox9.CheckState = btnreverse.CheckState : check = False
@@ -11128,35 +11135,11 @@ Public Class Form1
 
         maxcount = Convert.ToInt32((TabPage22.Width - 50) / 150)
 
-        While (filteredListObjWall.Count / maxcount) > 164
+        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
             maxcount += 1
-        End While
+        End While        
+        
 
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
-        'If filteredListObjWall.Count / maxcount > 164 Then maxcount += 1
         pictureList.Clear()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
             If TabPage22.Controls(i).Name = "" Then
@@ -11167,7 +11150,10 @@ Public Class Form1
         Application.DoEvents()
 
         'Panel17.AutoScroll = False
-        For Each Movie In filteredListObjWall
+
+        For Each row As DataGridViewRow In DataGridViewMovies.Rows
+
+            Dim m As Data_GridViewMovie = row.DataBoundItem
 
             bigPictureBox = New PictureBox()
             With bigPictureBox
@@ -11176,10 +11162,10 @@ Public Class Form1
                 .Height = 200
                 .SizeMode = PictureBoxSizeMode.StretchImage
                 '.Image = sender.image
-                Dim filename As String = Utilities.GetCRC32(Movie.fullpathandfilename)
+                Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
                 Dim posterCache As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
-                If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(Movie.fullpathandfilename)) Then
-                    Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(Movie.fullpathandfilename))
+                If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(m.fullpathandfilename)) Then
+                    Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(m.fullpathandfilename))
                     bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
                     Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
                     bitmap2.Dispose()
@@ -11191,41 +11177,18 @@ Public Class Form1
                 End If
                 
 
-                'If IO.File.Exists(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
-                '    Try
-                '        .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
-                '    Catch ex As Exception
-                '        .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
-                '    End Try
-                'ElseIf IO.File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
-                '    Try
-                '        Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(movie.fullpathandfilename))
-                '        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
-                '        If Utilities.SaveImage(bitmap2, IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")) Then
-                '            .Image = Utilities.LoadBitmap(IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg"))
-                '        Else
-                '            .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
-                '        End If
-                '    Catch ex As Exception
-                '        .Image = Utilities.LoadBitmap(Utilities.DefaultPosterPath)
-                '    End Try
-                'Else
-                '    Dim bitmap2 As New Bitmap(Utilities.DefaultPosterPath)
-                '    Dim bitmap3 As New Bitmap(bitmap2)
-                '    bitmap2.Dispose()
-                '    .Image = bitmap3
-                'End If
-                .Tag = Movie.fullpathandfilename
+
+                .Tag = m.fullpathandfilename
                 Dim toolTip1 As ToolTip = New ToolTip(Me.components)
 
-                Dim outline As String = Movie.outline
+                Dim outline As String = m.outline
                 Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
                 outline = ""
                 For Each line In newoutline
                     outline = outline & vbCrLf & line
                 Next
                 outline.TrimEnd(vbCrLf)
-                toolTip1.SetToolTip(bigPictureBox, Movie.fullpathandfilename & vbCrLf & vbCrLf & Movie.titleandyear & vbCrLf & outline)
+                toolTip1.SetToolTip(bigPictureBox, m.fullpathandfilename & vbCrLf & vbCrLf & m.titleandyear & vbCrLf & outline)
                 toolTip1.Active = True
                 toolTip1.InitialDelay = 0
 
@@ -11256,7 +11219,8 @@ Public Class Form1
             Me.TabPage22.Refresh()
             Application.DoEvents()
             walllocked = False
-        Next
+	    Next
+
         walllocked = False
     End Sub
 
@@ -15530,7 +15494,12 @@ Public Class Form1
         root = doc.CreateElement("movie_cache")
 
         Dim childchild As XmlElement
-        For Each movie In filteredList
+
+'        For Each movie In filteredList
+        For Each row As DataGridViewRow In DataGridViewMovies.Rows
+
+            Dim movie As Data_GridViewMovie = row.DataBoundItem
+
             child = doc.CreateElement("movie")
             childchild = doc.CreateElement("filedate")
             childchild.InnerText = movie.filedate
@@ -15702,6 +15671,9 @@ Public Class Form1
         XMLreader2.Dispose()
 
         DataGridView1.DataSource = newDS.Tables(0)
+
+'        DataGridView1.DataSource = DataGridViewMovies.DataSource       TO DO: Replace with this
+
         DataGridView1.AllowUserToOrderColumns = True
         DataGridView1.RowHeadersVisible = True
         DataGridView1.RowHeadersWidth = 30
@@ -16061,6 +16033,7 @@ Public Class Form1
         For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
             For Each tempCell As Windows.Forms.DataGridViewCell In tempRow.Cells
                 If tempCell.Value = "Fanart" Or tempCell.Value = "Poster" Or tempCell.Value = "Poster & Fanart" Then
+                'If TypeName(tempCell.Value) = "Byte" AndAlso tempCell.Value > 0 then
                     tempCell.Style.BackColor = Color.Red
                 End If
             Next
