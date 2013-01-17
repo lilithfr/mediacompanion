@@ -11165,13 +11165,23 @@ Public Class Form1
                 Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
                 Dim posterCache As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
                 If Not File.Exists(posterCache) And File.Exists(Preferences.GetPosterPath(m.fullpathandfilename)) Then
-                    Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(m.fullpathandfilename))
-                    bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
-                    Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
-                    bitmap2.Dispose()
+                    Try
+                        Dim bitmap2 As New Bitmap(Preferences.GetPosterPath(m.fullpathandfilename))
+                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
+                        bitmap2.Dispose()
+                    Catch
+                        'Invalid file
+                        File.Delete(Preferences.GetPosterPath(m.fullpathandfilename))
+                    End Try
                 End If
                 If File.Exists(posterCache) Then
-                    .Image = Utilities.LoadImage(posterCache)
+                    Try
+                        .Image = Utilities.LoadImage(posterCache)
+                    Catch
+                        'Invalid file
+                        File.Delete(Preferences.GetPosterPath(m.fullpathandfilename))
+                    End Try
                 Else
                     .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
                 End If
