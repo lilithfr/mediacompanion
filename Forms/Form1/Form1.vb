@@ -15670,6 +15670,8 @@ Public Class Form1
         newDS.ReadXml(XMLreader2)
         XMLreader2.Dispose()
 
+        DataGridView1.DataSource = Nothing
+
         Try
             DataGridView1.DataSource = newDS.Tables(0)
         Catch
