@@ -18,7 +18,7 @@ Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
-                                                 ".dvr-ms", ".img", ".strm", ".ssif", "VIDEO_TS.IFO"}
+                                                 ".dvr-ms", ".img", ".strm", ".ssif", "video_ts.ifo"}
 
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
@@ -133,6 +133,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function UrlIsValid(ByVal url As String) As Boolean
+
+        If IsNothing(url) Then return False
+
         Dim is_valid As Boolean = False
         If url.ToLower().StartsWith("www.") Then url = _
             "http://" & url

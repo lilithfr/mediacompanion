@@ -4,7 +4,7 @@ Imports System.Linq
 Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports Media_Companion
-
+Imports System.Text
 
 Public Class Movie
 
@@ -342,16 +342,23 @@ Public Class Movie
 
     Public Shared Function IsValidMovieFile(fileInfo As IO.FileInfo, Optional ByRef log As String = "") As Boolean
 
+        If fileInfo.Name.ToLower="video_ts.ifo" Then
+            Return True
+        End If
+
+        Dim titleDir As String  = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
+
+        If IO.File.Exists(titleDir & "video_ts.ifo") Then
+            Return False
+        End If
+
         Dim q = From extension In Utilities.VideoExtensions Where extension.ToLower = fileInfo.Extension.ToLower
         If q.Count = 0 then Return False
-
 
         Dim moviePattern = q.Single
 
         moviePattern = If((moviePattern="VIDEO_TS.IFO"), moviePattern, "*" & moviePattern)
 
-
-        Dim titleDir As String  = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
 
         If Preferences.usefoldernames = True Then
             log &= "  '" & fileInfo.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
@@ -382,12 +389,27 @@ Public Class Movie
 
 
         If moviePattern = "*.vob" Then
-            If IO.File.Exists(titleDir & "video_ts.ifo") Then
-                log &= " VOB Pattern Found! DVD File Structure Found!"
-            Else
-                log &= " WARNING: No DVD File Structure Found - (VIDEO_TS.IFO missing)"
+
+            Dim PartNumberIndex = fileInfo.Name.LastIndexOf(".") - 1
+
+            If PartNumberIndex>0 Then
+
+	            Dim PartNumberChar = fileInfo.Name.Substring(PartNumberIndex,1)
+
+	            If Integer.TryParse(PartNumberChar, 0) Then
+
+		            Dim PreviousPartNumber = Convert.ToInt32(PartNumberChar) - 1
+
+		            Dim PreviousPartFileName = ChangeCharacter(fileInfo.Name, Convert.ToChar(Convert.ToChar(PreviousPartNumber.ToString)),PartNumberIndex)
+
+		            Return Not File.Exists(titleDir & PreviousPartFileName)
+	            End If
+
+	            Log &= "Part number not found - Assuming just the one part!"
+	            Return True
             End If
-            log &= vbCrLf
+
+            Log &= "??? File extension missing!"
             Return False
         End If
 
@@ -430,6 +452,7 @@ Public Class Movie
     Sub New
     End Sub
  
+
     Sub New( FullName As String, parent As Movies )
         Me.New
         _parent              = parent
@@ -439,6 +462,15 @@ Public Class Movie
 
 
     #Region "Subs"
+
+    Public Shared Function ChangeCharacter(s As String, replaceWith As Char, idx As Integer) As String
+	    Dim sb As New StringBuilder(s)
+
+	    sb(idx) = replaceWith
+
+	    Return sb.ToString
+    End Function
+
     Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
@@ -522,7 +554,7 @@ Public Class Movie
     End Function
 
     Sub ImdbScraper_GetBody
-        _imdbBody = ImdbScrapeBody(Title, PossibleYear, PossibleImdb)
+        _imdbBody = ImdbScrapeBody(SearchName, PossibleYear, PossibleImdb)
     End Sub
 
     Sub ImdbScraper_GetBodyByImdbOnly
@@ -533,7 +565,7 @@ Public Class Movie
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
         If Not IsNothing(Title) then
-            ReportProgress( Title, "Scraping Title:- " & Title & vbCrLf & "     (cleaned):- " & SearchName & vbCrLf )
+            ReportProgress( Title, "Scraping Title:- " & Title & vbCrLf )
         End If
 
         'If PossibleImdb <> "" then

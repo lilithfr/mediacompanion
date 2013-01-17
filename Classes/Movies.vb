@@ -228,6 +228,7 @@ Public Class Movies
     Public Sub ScrapeFiles(files as List(Of String))
         AddNewMovies(files)
         ScrapeNewMovies
+        files.Clear
     End Sub
 
     Public Sub AddNewMovies(files as List(Of String))

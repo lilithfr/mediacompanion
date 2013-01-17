@@ -9,9 +9,8 @@ Imports System.Xml
 Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
-'Imports Media_Companion
-'Imports Media_Companion.Movies
 Imports System.Linq
+
 #Const SilentErrorScream = True
 #Const NoRefocus = True
 
@@ -530,8 +529,6 @@ Public Class Form1
             mov_VideoSourcePopulate()
             Call util_FontSetup()
 
-
-
             Dim mediaDropdown As New SortedList(Of String, String)
             mediaInfoExp.addTemplates(mediaDropdown)
             For Each item In mediaDropdown
@@ -855,9 +852,6 @@ Public Class Form1
             DataGridViewMovies.Rows(0).Selected = False
         End If
     End Sub
-
-
-    
 
     Private Sub util_RegexSetDefaultScraper()
         tv_RegexScraper.Clear()
@@ -6283,8 +6277,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-
 
     Private Sub btnChangeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChangeMovie.Click
 
@@ -20535,22 +20527,6 @@ Public Class Form1
         'Try
             'rescrape all
             mov_RescrapeAllSelected
-            'If DataGridViewMovies.SelectedRows.Count > 1 Then
-            '    Dim list As New List(Of Integer)
-
-            '    For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
-            '        list.Add(sRow.Index)
-            '    Next
-
-            '    For Each a In list
-            '        DataGridViewMovies.ClearSelection()
-            '        DataGridViewMovies.Rows(a).Selected = True
-            '        DisplayMovie()
-            '    Next
-            '    Return
-            'Else
-            '    Call mov_Rescrape()
-            'End If
         'Catch ex As Exception
         '    ExceptionHandler.LogError(ex)
         'End Try
@@ -22193,6 +22169,7 @@ Sub DoScrapeDroppedFiles
     If Preferences.movies_useXBMC_Scraper Then
         Pre_Run_XBMC_Scraper
         mov_XBMCScrapeDroppedFiles
+        droppedItems.Clear
         Post_Run_XBMC_Scraper
         Exit Sub
     End If
