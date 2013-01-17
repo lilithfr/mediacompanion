@@ -849,8 +849,6 @@ Public Class Form1
 
         If DataGridViewMovies.Rows.Count > 0 then
             DataGridViewMovies.Rows(0).Selected = True
-        Else
-            DataGridViewMovies.Rows(0).Selected = False
         End If
     End Sub
 
@@ -2147,30 +2145,30 @@ Public Class Form1
 
 
 
-    Public Sub DownloadTrailer(ByVal trailerPath As String, ByVal trailerUrl As String)
+'    Public Sub DownloadTrailer(ByVal trailerPath As String, ByVal trailerUrl As String)
 
-        'Check for and delete zero length trailer - created when Url is invalid
-        DeleteZeroLengthFile(trailerPath)
+'        'Check for and delete zero length trailer - created when Url is invalid
+'        DeleteZeroLengthFile(trailerPath)
 
-        If Not IO.File.Exists(trailerPath) Then
+'        If Not IO.File.Exists(trailerPath) Then
 
-            If Utilities.UrlIsValid(trailerUrl) Then
+'            If Utilities.UrlIsValid(trailerUrl) Then
 
-                Dim wc As New Net.WebClient()
+'                Dim wc As New Net.WebClient()
 
-                Try
-                    'trailerdownloadpanel.Visible = True
- ''''                   ssFileDownload.Visible = True
-                    FileToBeDownloaded = New WebFileDownloader
-                    FileToBeDownloaded.DownloadFileWithProgress(trailerUrl, trailerPath)
-                Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-                End Try
-            End If
-        End If
-    End Sub
+'                Try
+'                    'trailerdownloadpanel.Visible = True
+' ''''                   ssFileDownload.Visible = True
+'                    FileToBeDownloaded = New WebFileDownloader
+'                    FileToBeDownloaded.DownloadFileWithProgress(trailerUrl, trailerPath)
+'                Catch ex As Exception
+'#If SilentErrorScream Then
+'                    Throw ex
+'#End If
+'                End Try
+'            End If
+'        End If
+'    End Sub
 
 
     Private Sub DeleteZeroLengthFile(ByVal fileName)
@@ -2184,72 +2182,59 @@ Public Class Form1
     End Sub
 
     Private Sub ReloadMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadMovieCacheToolStripMenuItem.Click
-        mov_CacheReload
-    End Sub
-
-    Private Sub mov_CacheReload
-
-        oMovies.LoadMovieCache
-
-        If oMovies.MovieCache.Count = 0 Then
-            mov_RebuildMovieCaches
-            Exit Sub
-        End If
-
+        'TO DO - REBUILD JUST SELECTED MOVIES
         mov_CacheLoad
-        Mc.clsGridViewMovie.mov_FiltersAndSortApply
-
-        If DataGridViewMovies.Rows.Count>0 Then
-            DataGridViewMovies.Rows(0).Selected = True
-        End If
     End Sub
 
-    'OBSOLETE...
-    Private Sub mov_CacheRefresh
-        Me.Enabled = False
-
-        frmSplash2.Text = "Refresh Movies..."
-        frmSplash2.Label1.Text = "Searching for Movie Folders....."
-        frmSplash2.Label2.Visible = False
-        frmSplash2.Show
-        Application.DoEvents
-
-        oMovies.RebuildMovieCache
-
-        frmSplash2.Label1.Text = "Processing...."
-
-        filteredList.Clear
-        filteredList.AddRange(oMovies.MovieCache)
-
-        Try
-            For Each movie In oMovies.MovieCache
-                Try
-                    If Preferences.usefoldernames = False Then
-                        If movie.filename <> Nothing Then
-                            movie.filename = movie.filename.Replace(".nfo", "")
-                        End If
-                    End If
-                Catch
-                    Exit For
-                End Try
-            Next
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-        frmSplash2.Label2.Visible = True
-        frmSplash2.Label2.Text = "Apply Filters..."
-  '      Call mov_FiltersAndSortApply()
-        frmSplash2.Label2.Text = "Reload Main Page..."
-        Call mov_FormPopulate()
 
 
+'    'OBSOLETE...
+'    Private Sub mov_CacheRefresh
+'        Me.Enabled = False
 
-        Me.Activate()
-        Me.Enabled = True
-        frmSplash2.Hide()
-    End Sub
+'        frmSplash2.Text = "Refresh Movies..."
+'        frmSplash2.Label1.Text = "Searching for Movie Folders....."
+'        frmSplash2.Label2.Visible = False
+'        frmSplash2.Show
+'        Application.DoEvents
+
+'        oMovies.RebuildMovieCache
+
+'        frmSplash2.Label1.Text = "Processing...."
+
+'        filteredList.Clear
+'        filteredList.AddRange(oMovies.MovieCache)
+
+'        Try
+'            For Each movie In oMovies.MovieCache
+'                Try
+'                    If Preferences.usefoldernames = False Then
+'                        If movie.filename <> Nothing Then
+'                            movie.filename = movie.filename.Replace(".nfo", "")
+'                        End If
+'                    End If
+'                Catch
+'                    Exit For
+'                End Try
+'            Next
+'        Catch ex As Exception
+'#If SilentErrorScream Then
+'            Throw ex
+'#End If
+'        End Try
+'        frmSplash2.Label2.Visible = True
+'        frmSplash2.Label2.Text = "Apply Filters..."
+'  '      Call mov_FiltersAndSortApply()
+'        frmSplash2.Label2.Text = "Reload Main Page..."
+'        Call mov_FormPopulate()
+
+
+
+'        Me.Activate()
+'        Me.Enabled = True
+'        frmSplash2.Hide()
+'    End Sub
+
 
     Private Sub util_VideoMode1(ByVal tempstring As String)
         Dim action As String
