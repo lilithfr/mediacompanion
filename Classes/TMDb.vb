@@ -65,7 +65,9 @@ Public Class TMDb
     Private _mcAlternateTitles      As New List(Of String)
     Private _cast                   As WatTmdb.V3.TmdbMovieCast
     Private _director               As String
-    Private _frodoThumbs            As New List(Of Thumb)
+    Private _frodoPosterThumbs      As New List(Of FrodoPosterThumb)
+    Private _frodoFanartThumbs      As New FrodoFanartThumbs
+
     Private _fetched                As Boolean = False
 
  
@@ -106,10 +108,17 @@ Public Class TMDb
 
 
 
-    Public ReadOnly Property FrodoThumbs
+    Public ReadOnly Property FrodoPosterThumbs
         Get
             Fetch
-            Return _frodoThumbs
+            Return _frodoPosterThumbs
+        End Get
+    End Property
+
+    Public ReadOnly Property FrodoFanartThumbs
+        Get
+            Fetch
+            Return _frodoFanartThumbs
         End Get
     End Property
 
@@ -397,21 +406,30 @@ Public Class TMDb
             AssignMC_Posters
             AssignMC_Thumbs
             AssignMC_Backdrops
-            AssignFrodoExtraThumbs
+            AssignFrodoExtraPosterThumbs
+            AssignFrodoExtraFanartThumbs
         End If
     End Sub
 
 
-    Private Sub AssignFrodoExtraThumbs
+    Private Sub AssignFrodoExtraPosterThumbs
 
         For Each item In ValidPosters
-            _frodoThumbs.Add(New Thumb("poster",HdPath & item.file_path))
+            _frodoPosterThumbs.Add(New FrodoPosterThumb("poster",HdPath+item.file_path))
         Next
 
+        'For Each item In ValidBackDrops
+        '    _frodoThumbs.Add(New Thumb("thumb",HdPath+item.file_path))
+        'Next
+    End Sub
+
+
+    Private Sub AssignFrodoExtraFanartThumbs
         For Each item In ValidBackDrops
-            _frodoThumbs.Add(New Thumb("thumb",HdPath & item.file_path))
+            _frodoFanartThumbs.Thumbs.Add(New FrodoFanartThumb( LdBackDropPath+item.file_path ,HdPath+item.file_path))
         Next
     End Sub
+
 
     Private Sub FixUpMovieImages
         FixUpMovieBackDrops

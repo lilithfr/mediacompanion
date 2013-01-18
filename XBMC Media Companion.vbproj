@@ -126,6 +126,7 @@
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\FrodoFanartThumb.vb" />
     <Compile Include="Classes\MainForm\clsGridViewMovie.vb" />
     <Compile Include="Classes\MainForm\Data_GridViewMovie.vb" />
     <Compile Include="Classes\ExceptionHandler.vb" />

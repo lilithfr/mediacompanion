@@ -1,4 +1,4 @@
-﻿Public Class Thumb
+﻿Public Class FrodoPosterThumb
 
     Property Aspect As String
     Property Url    As String
