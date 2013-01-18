@@ -65,7 +65,7 @@ Public Class TMDb
     Private _mcAlternateTitles      As New List(Of String)
     Private _cast                   As WatTmdb.V3.TmdbMovieCast
     Private _director               As String
-
+    Private _frodoThumbs            As New List(Of Thumb)
     Private _fetched                As Boolean = False
 
  
@@ -105,6 +105,13 @@ Public Class TMDb
     End Property
 
 
+
+    Public ReadOnly Property FrodoThumbs
+        Get
+            Fetch
+            Return _frodoThumbs
+        End Get
+    End Property
 
 
     Public ReadOnly Property Movie As WatTmdb.V3.TmdbMovie
@@ -390,7 +397,20 @@ Public Class TMDb
             AssignMC_Posters
             AssignMC_Thumbs
             AssignMC_Backdrops
+            AssignFrodoExtraThumbs
         End If
+    End Sub
+
+
+    Private Sub AssignFrodoExtraThumbs
+
+        For Each item In ValidPosters
+            _frodoThumbs.Add(New Thumb("poster",HdPath & item.file_path))
+        Next
+
+        For Each item In ValidBackDrops
+            _frodoThumbs.Add(New Thumb("thumb",HdPath & item.file_path))
+        Next
     End Sub
 
     Private Sub FixUpMovieImages

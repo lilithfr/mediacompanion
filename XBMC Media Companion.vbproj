@@ -140,6 +140,7 @@
     <Compile Include="Classes\RescrapeList.vb" />
     <Compile Include="Classes\RescrapeSpecificParams.vb" />
     <Compile Include="Classes\Shared\Actor.vb" />
+    <Compile Include="Classes\Thumb.vb" />
     <Compile Include="Classes\Times.vb" />
     <Compile Include="Classes\TMDb.vb" />
     <Compile Include="Classes\TvdbScraper.vb" />

@@ -476,6 +476,14 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
         Actions.Items.Add( New ScrapeAction(AddressOf ImdbScrapeActors            , "IMDB Actors scraper"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
+       
+        If Preferences.XBMC_version>0 Then 'LATER : and [add new preference] scrape extra thumbs enabled 
+            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoThumbs          , "Getting extra Frodo thumbs") )
+        Else
+            ReportProgress(,"Frodo extra URL scraping not selected" & vbCrLf)
+        End If
+
+
         Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
@@ -939,6 +947,15 @@ Public Class Movie
         Return TrailerUrl
     End Function
 
+
+    Sub GetFrodoThumbs
+        _scrapedMovie.frodoThumbs.Clear
+        _scrapedMovie.frodoThumbs.AddRange(tmdb.FrodoThumbs)
+
+        ReportProgress("Extra Frodo URLs: " & tmdb.FrodoThumbs.count, "Extra Frodo URLs found: " & tmdb.FrodoThumbs.count & vbCrLf)
+    End Sub
+
+
     Sub AssignPosterUrls
         If Preferences.nfoposterscraper = 0 Then
             ReportProgress(,"Extra poster URLs scraping not selected" & vbCrLf)
@@ -967,16 +984,10 @@ Public Class Movie
     End Function
 
     Sub GetPosterUrlsPart2
+
         If Preferences.nfoposterscraper And 1 then
             Try
                 If AddThumbs( (New IMPA.getimpaposters).getimpathumbs(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year) ) then Exit Sub
-            Catch
-            End Try
-        End If
-
-        If Preferences.nfoposterscraper And 2 then
-            Try
-                If AddThumbs( tmdb.Thumbs ) then Exit Sub
             Catch
             End Try
         End If
@@ -994,14 +1005,26 @@ Public Class Movie
             Catch
             End Try
         End If
+
+        If Preferences.nfoposterscraper And 2 then
+            Try
+                If AddThumbs( tmdb.Thumbs ) then Exit Sub
+            Catch
+            End Try
+        End If
     End Sub
 
+
     Function AddThumbs( thumbs As List(Of String) ) As Boolean
+
+        If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoThumbs.count >= Preferences.maximumthumbs then
+            Return True
+        End If
 
         For Each thumb In thumbs
             _scrapedMovie.listthumbs.Add(thumb)
 
-            If _scrapedMovie.listthumbs.Count >= Preferences.maximumthumbs then
+            If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoThumbs.count >= Preferences.maximumthumbs then
                 Return True
             End If
         Next
@@ -1010,6 +1033,11 @@ Public Class Movie
     End Function
 
     Function AddThumbs( thumbs As String ) As Boolean
+
+        If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoThumbs.count >= Preferences.maximumthumbs then
+            Return True
+        End If
+
         Try
             Dim xmlDoc As New XmlDocument
 
@@ -1021,7 +1049,7 @@ Public Class Movie
                         _scrapedMovie.listthumbs.Add(thisresult.InnerText)
                 End Select
 
-                If _scrapedMovie.listthumbs.Count >= Preferences.maximumthumbs then
+                If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoThumbs.count >= Preferences.maximumthumbs then
                     Return True
                 End If
             Next

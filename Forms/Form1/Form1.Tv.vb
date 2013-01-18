@@ -786,9 +786,20 @@ Partial Public Class Form1
             Try
                 File.Delete(PathToUse)
             Catch
-                Return util_ImageLoad(PicBox, DefaultPic, DefaultPic)
+                'Return util_ImageLoad(PicBox, DefaultPic, DefaultPic)
             End Try
-            Return util_ImageLoad(PicBox, ImagePath, DefaultPic)
+            'Return util_ImageLoad(PicBox, ImagePath, DefaultPic)
+
+            Try
+                Using fs As New System.IO.FileStream(DefaultPic, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+                    fs.CopyTo(ms)
+                    ms.Seek(0, System.IO.SeekOrigin.Begin)
+                    PicBox.Image = Image.FromStream(ms)
+                End Using
+            Catch
+                Return False
+            End Try
+            Return True
         End Try
 
 

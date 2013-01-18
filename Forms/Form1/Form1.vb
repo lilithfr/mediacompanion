@@ -22018,11 +22018,7 @@ Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System
     ssFileDownload.Visible     = False
     EnableDisableByTag("M",True)       'Re-enable disabled UI options that couldn't be run while scraper was running
 
-
-    If Not Preferences.disablelogfiles Then
-        Dim frm = New frmoutputlog(scraperLog, True)
-        frm.ShowDialog
-    End If
+    DisplayLogFile
 
     'TabPage14.Text = "Search for new movies"
     'TabPage14.ToolTipText = "Scan movie folders for new media files"
@@ -22208,7 +22204,12 @@ Private Sub Post_Run_XBMC_Scraper
 
     scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
 
-    If Not Preferences.disablelogfiles Then
+    DisplayLogFile
+End Sub
+
+Private Sub DisplayLogFile
+
+    If Not Preferences.disablelogfiles and scraperLog<>"" Then
         Dim MyFormObject As New frmoutputlog(scraperLog, True)
         Try
             MyFormObject.ShowDialog()

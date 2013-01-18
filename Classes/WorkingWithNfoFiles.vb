@@ -1198,7 +1198,7 @@ Public Class WorkingWithNfoFiles
             If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
                 'Try
                 Dim doc As New XmlDocument
-                Dim thumbnailstring As String = ""
+                'Dim thumbnailstring As String = "" Test code?
                 stage = 2
                 Dim thispref As XmlNode = Nothing
                 Dim xmlproc As XmlDeclaration
@@ -1618,6 +1618,15 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 22
                 Try
+                    For Each item In movietosave.frodoThumbs 
+
+                        child = doc.CreateElement("thumb")
+
+                        child.SetAttribute("aspect", item.Aspect)
+                        child.InnerText = item.Url
+                        root.AppendChild(child)
+                    Next
+                    
                     For Each thumbnail In movietosave.listthumbs
                         Try
                             child = doc.CreateElement("thumb")
@@ -1629,14 +1638,14 @@ Public Class WorkingWithNfoFiles
                 Catch
                 End Try
                 stage = 23
-                Try
-                    If thumbnailstring <> "" Then
-                        child = doc.CreateElement("thumb")
-                        child.InnerText = thumbnailstring
-                        root.AppendChild(child)
-                    End If
-                Catch
-                End Try
+                'Try                                                    Must be test code
+                '    If thumbnailstring <> "" Then
+                '        child = doc.CreateElement("thumb")
+                '        child.InnerText = thumbnailstring
+                '        root.AppendChild(child)
+                '    End If
+                'Catch
+                'End Try
                 stage = 24
                 Try
                     child = doc.CreateElement("runtime")
