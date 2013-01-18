@@ -966,6 +966,9 @@ Public Class Preferences
         child.InnerText = MovieImdbGenreRegEx.ToString
         root.AppendChild(child)
 
+        child = doc.CreateElement("xbmcartwork")
+        child.InnerText = Preferences.XBMC_version.ToString
+        root.AppendChild(child)
 
         child = doc.CreateElement("GetMovieSetFromTMDb")
         child.InnerText = GetMovieSetFromTMDb
@@ -1634,6 +1637,8 @@ Public Class Preferences
                 Case "MovieImdbGenreRegEx"
                     If thisresult.InnerText <> "" Then MovieImdbGenreRegEx = decxmlchars(thisresult.InnerXml)
 
+                Case "xbmcartwork"
+                    If thisresult.InnerText <> "" Then Preferences.XBMC_version = Convert.ToByte(thisresult.InnerText)
 
                 Case "GetMovieSetFromTMDb"       : GetMovieSetFromTMDb       = thisresult.InnerXml
                 Case "LogScrapeTimes"            : LogScrapeTimes            = thisresult.InnerXml
