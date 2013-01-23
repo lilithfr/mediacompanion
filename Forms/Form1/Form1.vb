@@ -7921,7 +7921,11 @@ Public Class Form1
         'Next
         Call nfoFunction.saveepisodenfo(alleps, path)
         Dim ext As String = ""
-        ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
+        If Preferences.XBMC_version = 0 Then
+            ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
+        ElseIf Preferences.XBMC_version = 2 Then
+            ext = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
+        End If
         If (IO.File.Exists(ext) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
             If Not IO.File.Exists(ext) Then
                 tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
@@ -18625,7 +18629,7 @@ Public Class Form1
                         If tvBatchList.doShowArt = True Then
 
                             If tvBatchList.shPosters = True Then
-                                TvGetArtwork(Cache.TvCache.Shows(f), True)
+                                TvGetArtwork(Cache.TvCache.Shows(f))
                             Else
                                 TvGetArtwork(Cache.TvCache.Shows(f), False)
                             End If

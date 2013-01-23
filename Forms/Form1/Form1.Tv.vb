@@ -1382,7 +1382,7 @@ Partial Public Class Form1
 
                     'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
 
-                    TvGetArtwork(NewShow, True)
+                    TvGetArtwork(NewShow)
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                         NewShow.EpisodeActorSource.Value = "tvdb"
                     Else
@@ -2155,7 +2155,7 @@ Partial Public Class Form1
         'messbox.Refresh()
         Application.DoEvents()
         Try
-            TvGetArtwork(BrokenShow, True)
+            TvGetArtwork(BrokenShow)
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
@@ -2619,7 +2619,7 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = False)
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True)
         Try
 
             Dim tvdbstuff As New TVDBScraper
