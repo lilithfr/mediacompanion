@@ -560,6 +560,9 @@ Public Class Form1
             DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
             mov_SplitContainerAutoPosition()
             tv_ShowSelectedCurrently()
+            Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
+            Panel4.Width = SplitContainer4.Width.ToString
+            Panel4.Height = SplitContainer4.Height.ToString / 2.11
             tv_SplitContainerAutoPosition()
         End If
 
@@ -733,6 +736,9 @@ Public Class Form1
             If MainFormLoadedStatus = True Then
                 PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
             End If
+            Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
+            Panel4.Width = SplitContainer4.Width.ToString
+            Panel4.Height = SplitContainer4.Height.ToString / 2.11
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6078,7 +6084,7 @@ Public Class Form1
                                         backup = posterArray(tempint).ldUrl
                                     End If
                                 Else
-'                                    tempstring2 = posterArray(tempint).ldposter
+                                    '                                    tempstring2 = posterArray(tempint).ldposter
                                     tempstring2 = posterArray(tempint).hdUrl
                                 End If
                                 allok = True
@@ -6169,7 +6175,7 @@ Public Class Form1
             Catch ex As Exception
                 ExceptionHandler.LogError(ex)
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
             Call mov_PosterSaved()
@@ -6207,6 +6213,7 @@ Public Class Form1
     End Sub
 
     Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
+
         Try
             Dim tempstring As String = ""
             Dim MyWebClient As New System.Net.WebClient
@@ -6727,6 +6734,7 @@ Public Class Form1
     End Sub
 
     Private Sub TabControl3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl3.SelectedIndexChanged
+        
         Try
             Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
             Dim tab As String = TabControl3.SelectedTab.Text
@@ -6860,9 +6868,14 @@ Public Class Form1
                 tvCurrentTabIndex = TabControl3.SelectedIndex
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
-                    util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
-
+                If Preferences.XBMC_version = 0 Then
+                    If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
+                        util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
+                    End If
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg")) Then
+                        util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg"), Utilities.DefaultScreenShotPath)
+                    End If
                 End If
                 If TextBox35.Text = "" Then
                     TextBox35.Text = "10"
@@ -7142,6 +7155,7 @@ Public Class Form1
     End Sub
 
     Private Sub btnTvShowSelectorScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShowSelectorScrape.Click
+        
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
@@ -7293,7 +7307,7 @@ Public Class Form1
 
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                         End Try
                                     End If
@@ -7356,7 +7370,7 @@ Public Class Form1
                                                             End If
                                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                                        Throw ex
+                                                            Throw ex
 #End If
                                                         End Try
                                                     End If
@@ -7372,7 +7386,7 @@ Public Class Form1
                         End While
                     Catch ex As Exception
 #If SilentErrorScream Then
-                    Throw ex
+                        Throw ex
 #End If
 
                     End Try
@@ -7906,8 +7920,8 @@ Public Class Form1
         '    Episode.Save()
         'Next
         Call nfoFunction.saveepisodenfo(alleps, path)
-        Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
-
+        Dim ext As String = ""
+        ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
         If (IO.File.Exists(ext) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
             If Not IO.File.Exists(ext) Then
                 tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
@@ -8515,7 +8529,7 @@ Public Class Form1
 
 
                     'If Utilities.DownloadImage(miscvar2, savepath, True, Preferences.resizefanart) Then
-                    If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) then
+                    If Movie.SaveFanartImageToCacheAndPath(miscvar2, savepath) Then
                         Try
                             util_ImageLoad(PictureBox10, savepath, Utilities.DefaultFanartPath)
                             PictureBox11.Image = PictureBox10.Image
@@ -8525,7 +8539,7 @@ Public Class Form1
                             End If
                         Catch ex As Exception
 #If SilentErrorScream Then
-                        Throw ex
+                            Throw ex
 #End If
                         End Try
                     Else
@@ -8945,7 +8959,7 @@ Public Class Form1
     End Sub
 
     Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
-
+       
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
 
@@ -9702,6 +9716,7 @@ Public Class Form1
     End Sub
 
     Private Sub RenameTVShowsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RenameEp.Click
+        
         Try
             Dim renamelog As String = ""
             Dim tempint As Integer = 0
@@ -9815,6 +9830,7 @@ Public Class Form1
                         Next
                         Dim temppath As String = renamefile
                         temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
+
                         If IO.File.Exists(temppath) Then
                             listtorename.Add(temppath)
                         End If
@@ -9899,7 +9915,7 @@ Public Class Form1
 
                 Catch ex As Exception
 #If SilentErrorScream Then
-                Throw ex
+                    Throw ex
 #End If
                 End Try
             End If
@@ -9921,6 +9937,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterSetup()
+        
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'If workingTvShow.tvdbid = currentposterid Then
         '    Exit Sub
@@ -9943,7 +9960,7 @@ Public Class Form1
             Panel16.Controls.RemoveAt(i)
         Next
 
-        ComboBox2.Items.Add("Main Poster")
+        ComboBox2.Items.Add("Main Image")
         ComboBox2.Items.Add("Season All")
         For Each tvshow In Cache.TvCache.Shows
             If tvshow.TvdbId = WorkingTvShow.TvdbId Then
@@ -9984,124 +10001,86 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
+    Public Sub BannerAndPosterViewer()
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            rbTVposter.Enabled = True
+            rbTVbanner.Enabled = True
+            Button53.Enabled = True
             Dim tempstring As String = ComboBox2.SelectedItem
-            If tempstring = "Main Poster" Then
-                rbTVposter.Enabled = True
-                rbTVbanner.Enabled = True
-                If Preferences.postertype = "banner" Then
-                    rbTVbanner.Checked = True
-                Else
-                    rbTVposter.Checked = True
+            Dim bmp As Bitmap, path As String = ""
+            If tempstring = "Main Image" Then
+                If Preferences.XBMC_version = 0 Then
+                    path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "poster.jpg")
+                    End If
                 End If
-                Button53.Enabled = True
-                If IO.File.Exists(WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")) Then
-                    Dim bmp As New Bitmap(WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"))
-                    workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
-                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                Else
-                    workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
-                    Dim bmp As New Bitmap(Utilities.DefaultPosterPath)
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
-                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                End If
+
             ElseIf tempstring = "Specials" Then
-                Button53.Enabled = True
-                rbTVposter.Enabled = True
-                rbTVposter.Checked = True
-                rbTVbanner.Enabled = False
-                Dim path As String = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
-                If IO.File.Exists(path) Then
-                    workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
-                    Dim bmp As New Bitmap(path)
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
-                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                Else
-                    If IO.File.Exists(WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season00.tbn")) Then
-                        Try
-                            Dim fi As New IO.FileInfo(WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season00.tbn"))
-                            Dim rename2 As String = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
-                            fi.MoveTo(rename2)
-                        Catch ex As Exception
-                            Dim bmp As New Bitmap(Utilities.DefaultPosterPath)
-                            Dim Image2 As New Bitmap(bmp)
-                            bmp.Dispose()
-                            PictureBox12.Image = Image2
-                            Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                        End Try
-                    Else
-                        Dim bmp As New Bitmap(Utilities.DefaultPosterPath)
-                        Dim Image2 As New Bitmap(bmp)
-                        bmp.Dispose()
-                        PictureBox12.Image = Image2
-                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                If Preferences.XBMC_version = 0 Then
+                    path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials-banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials-poster.jpg")
                     End If
                 End If
             ElseIf tempstring.IndexOf("Season") = 0 And tempstring.IndexOf("Season All") = -1 Then
-                Button53.Enabled = True
-                rbTVposter.Enabled = True
-                rbTVposter.Checked = True
-                rbTVbanner.Enabled = False
-                Dim path As String = tempstring.Replace("Season ", "")
+                path = tempstring.Replace("Season ", "")
                 path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season" & path & ".tbn")
-                If IO.File.Exists(path) Then
-                    workingposterpath = path
-                    Dim bmp As New Bitmap(path)
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
-                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                Else
-                    workingposterpath = path
-                    Dim bmp As New Bitmap(Utilities.DefaultPosterPath)
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
-                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                If Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = path.Replace(".tbn", "-banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = path.Replace(".tbn", "-poster.jpg")
+                    End If
                 End If
+
+
             ElseIf tempstring = "Season All" Then
-                rbTVposter.Enabled = True
-                rbTVbanner.Enabled = True
-                If Preferences.seasonall = "wide" Then
-                    rbTVbanner.Checked = True
-                Else
-                    rbTVposter.Checked = True
+                If Preferences.XBMC_version = 0 Then
+                    path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all-banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all-poster.jpg")
+                    End If
                 End If
-                Button53.Enabled = False
-                Dim path As String = ""
-                path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
-                If IO.File.Exists(path) Then
-                    workingposterpath = path
-                    Dim bmp As New Bitmap(path)
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
-                    Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+            End If
+
+            If IO.File.Exists(path) Then
+                bmp = New Bitmap(path)
+                Dim Image2 As New Bitmap(bmp)
+                PictureBox12.Image = Image2
+                If rbTVbanner.Checked = True Then
+                    Label73.Text = "Current Banner - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                 Else
-                    workingposterpath = path
-                    Dim bmp As New Bitmap(Utilities.DefaultPosterPath)
-                    Dim Image2 As New Bitmap(bmp)
-                    bmp.Dispose()
-                    PictureBox12.Image = Image2
                     Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                End If
+            Else
+                If rbTVbanner.Checked = True Then
+                    bmp = New Bitmap(Utilities.DefaultBannerPath)
+                Else
+                    bmp = New Bitmap(Utilities.DefaultPosterPath)
                 End If
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
 
+    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
+        BannerAndPosterViewer()
     End Sub
 
     Private Sub tv_TvdbThumbsGet()
+        
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim showlist As New XmlDocument
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -10146,6 +10125,7 @@ Public Class Form1
 
     Private Sub Button53_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button53.Click
         Try
+           
             'tvdb specific
             tvdbmode = True
             usedlist.Clear()
@@ -10165,11 +10145,11 @@ Public Class Form1
             If ComboBox2.SelectedItem.indexof("Specials") <> -1 Then
                 tempseason = "0"
             End If
-            'If ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And CheckBox8.Checked = True Then
-            If ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And rbTVposter.Checked = True Then
+            'If ComboBox2.SelectedItem.indexof("Main Image") <> -1 And CheckBox8.Checked = True Then
+            If ComboBox2.SelectedItem.indexof("Main Image") <> -1 And rbTVposter.Checked = True Then
                 tempseason = "poster"
-                'ElseIf ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And CheckBox8.Checked = False Then
-            ElseIf ComboBox2.SelectedItem.indexof("Main Poster") <> -1 And rbTVposter.Checked = False Then
+                'ElseIf ComboBox2.SelectedItem.indexof("Main Image") <> -1 And CheckBox8.Checked = False Then
+            ElseIf ComboBox2.SelectedItem.indexof("Main Image") <> -1 And rbTVposter.Checked = False Then
                 tempseason = "series"
             End If
             If tempseason = "poster" Or tempseason = "series" Then
@@ -10236,7 +10216,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterSelectionDisplay()
-
+        
         For i = Panel16.Controls.Count - 1 To 0 Step -1
             Panel16.Controls.RemoveAt(i)
         Next
@@ -10365,6 +10345,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
+        
         PictureBox13.Image = Nothing
         Dim tempstring As String = sender.name
         Dim tempint As Integer = 0
@@ -10488,12 +10469,15 @@ Public Class Form1
 
     Private Sub Button56_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button56.Click
         Try
-            'savebig
             Dim witherror As Boolean = False
             Dim witherror2 As Boolean = False
             Dim path As String = ""
-            If ComboBox2.Text.ToLower = "main poster" Then
-                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "folder.jpg")
+            If ComboBox2.Text.ToLower = "main image" Then
+                If Preferences.XBMC_version = 0 Then
+                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "folder.jpg")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
+                End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
                 Dim temp As String = ComboBox2.Text.ToLower
                 temp = temp.Replace(" ", "")
@@ -10586,7 +10570,7 @@ Public Class Form1
                     If Control.name = postname Then
                         Try
                             Dim path As String = ""
-                            If ComboBox2.Text.ToLower = "main poster" Then
+                            If ComboBox2.Text.ToLower = "main image" Then
                                 path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "folder.jpg")
                             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
                                 Dim temp As String = ComboBox2.Text.ToLower
@@ -10962,7 +10946,7 @@ Public Class Form1
                 End If
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             Finally
                 messbox.Close()
@@ -12626,7 +12610,7 @@ Public Class Form1
             Dim showlist As New XmlDocument
             'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
             Dim tvdbstuff As New TVDBScraper
-            Dim thumblist As String = tvdbstuff.getposterlist(tvdbid)
+            Dim thumblist As String = tvdbstuff.GetPosterList(tvdbid)
             Try
                 showlist.LoadXml(thumblist)
             Catch
@@ -12644,21 +12628,21 @@ Public Class Form1
                         For Each results In thisresult.ChildNodes
                             Select Case results.Name
                                 Case "url"
-                                    newtvposter.url = results.InnerText
+                                    newtvposter.Url = results.InnerText
                                 Case "bannertype"
-                                    newtvposter.bannerType = results.InnerText
+                                    newtvposter.BannerType = results.InnerText
                                 Case "language"
-                                    newtvposter.language = results.InnerText
+                                    newtvposter.Language = results.InnerText
                                 Case "season"
-                                    newtvposter.season = results.InnerText
+                                    newtvposter.Season = results.InnerText
                             End Select
                         Next
                 End Select
-                If newtvposter.language = Preferences.tvdblanguagecode And newtvposter.season = seasonnumber Then
-                    primaryposterurl = newtvposter.url
+                If newtvposter.Language = Preferences.TvdbLanguageCode And newtvposter.Season = seasonnumber Then
+                    primaryposterurl = newtvposter.Url
                     Exit For
                 Else
-                    If backupposterurl = "" And newtvposter.season = seasonnumber Then backupposterurl = newtvposter.url
+                    If backupposterurl = "" And newtvposter.Season = seasonnumber Then backupposterurl = newtvposter.Url
                 End If
             Next
             If primaryposterurl <> "" Then
@@ -17806,18 +17790,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button103_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button103.Click
-        Try
-            If SplitContainer4.Orientation = Orientation.Horizontal Then
-                SplitContainer4.Orientation = Orientation.Vertical
-            Else
-                SplitContainer4.Orientation = Orientation.Horizontal
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub CheckBox35_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox35.CheckedChanged
         Try
             If CheckBox35.CheckState = CheckState.Checked Then
@@ -17946,8 +17918,8 @@ Public Class Form1
                     'Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
 
 
-             '      If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
-                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) then
+                    '      If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
+                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
 
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
@@ -18511,7 +18483,7 @@ Public Class Form1
                                                                         destsorted = True
                                                                     Catch ex As Exception
 #If SilentErrorScream Then
-                                                                    Throw ex
+                                                                        Throw ex
 #End If
                                                                     End Try
                                                                 Else
@@ -18520,12 +18492,12 @@ Public Class Form1
                                                                 If destsorted = True Then
                                                                     Dim filename As String = acts.actorname.Replace(" ", "_")
                                                                     filename = filename & ".tbn"
-                                                                    filename = IO.Path.Combine(workingpath, filename)
+                                                                        filename = IO.Path.Combine(workingpath, filename)
                                                                     Utilities.DownloadFile(acts.actorthumb, filename)
                                                                 End If
                                                             Catch ex As Exception
 #If SilentErrorScream Then
-                                                            Throw ex
+                                                                Throw ex
 #End If
                                                             End Try
                                                         End If
@@ -18574,7 +18546,7 @@ Public Class Form1
                                                                                 destsorted = True
                                                                             Catch ex As Exception
 #If SilentErrorScream Then
-                                                                            Throw ex
+                                                                                Throw ex
 #End If
                                                                             End Try
                                                                         Else
@@ -18609,7 +18581,7 @@ Public Class Form1
                                                                             End If
                                                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                                                        Throw ex
+                                                                            Throw ex
 #End If
                                                                         End Try
                                                                     End If
@@ -18621,7 +18593,7 @@ Public Class Form1
                                         Next
                                     Catch ex As Exception
 #If SilentErrorScream Then
-                                    Throw ex
+                                        Throw ex
 #End If
                                     End Try
                                 End If
@@ -18635,7 +18607,7 @@ Public Class Form1
                                 End If
                             Catch ex As Exception
 #If SilentErrorScream Then
-                            Throw ex
+                                Throw ex
 #End If
                             End Try
                             Call nfoFunction.tv_NfoSave(Cache.TvCache.Shows(f).NfoFilePath, editshow, True)
@@ -18649,181 +18621,13 @@ Public Class Form1
                         'posters
                         Dim artlist As New List(Of TvBanners)
                         Dim showlist2 As New XmlDocument
-                        Dim thisresult2 As XmlNode
                         Dim artdone As Boolean = False
                         If tvBatchList.doShowArt = True Then
 
-                            Dim thumblist As String = tvdbstuff.GetPosterList(Cache.TvCache.Shows(f).TvdbId.Value)
-                            showlist2.LoadXml(thumblist)
-                            artdone = True
-                            thisresult2 = Nothing
-                            'CheckBox3 = seasons
-                            'CheckBox4 = fanart
-                            'CheckBox5 = poster
-                            For Each thisresult2 In showlist2("banners")
-                                Select Case thisresult2.Name
-                                    Case "banner"
-                                        Dim individualposter As New TvBanners
-                                        For Each results In thisresult2.ChildNodes
-                                            Select Case results.Name
-                                                Case "url"
-                                                    individualposter.Url = results.InnerText
-                                                Case "bannertype"
-                                                    individualposter.BannerType = results.InnerText
-                                                Case "resolution"
-                                                    individualposter.Resolution = results.InnerText
-                                                Case "language"
-                                                    individualposter.Language = results.InnerText
-                                                Case "season"
-                                                    individualposter.Season = results.InnerText
-                                            End Select
-                                        Next
-                                        artlist.Add(individualposter)
-                                End Select
-                            Next
-                            Dim tempstring As String = ""
-                            For g = 0 To 1000
-                                Dim seasonposter As String = ""
-                                If seasonposter = "" Then
-                                    For Each Image In artlist
-                                        If Image.Season = g.ToString And Image.Language = "en" Then
-                                            seasonposter = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If seasonposter = "" Then
-                                    For Each Image In artlist
-                                        If Image.Season = g.ToString Then
-                                            seasonposter = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If seasonposter <> "" Then
-                                    If g < 10 Then
-                                        tempstring = "0" & g.ToString
-                                    Else
-                                        tempstring = g.ToString
-                                    End If
-                                    If tvBatchList.shPosters = True Then
-                                        Dim seasonpath As String = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "season" & tempstring & ".tbn")
-                                        If tempstring = "00" Then
-                                            seasonpath = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "season-specials.tbn")
-                                        End If
-                                        If Not IO.File.Exists(seasonpath) Then
-                                            Utilities.DownloadFile(seasonposter, seasonpath)
-                                        End If
-                                    End If
-                                End If
-                            Next
-
-
-                            Dim fanartposter As String = ""
-                            If fanartposter = "" Then
-                                For Each Image In artlist
-                                    If Image.Language = "en" And Image.BannerType = "fanart" Then
-                                        fanartposter = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                            End If
-                            If fanartposter = "" Then
-                                For Each Image In artlist
-                                    If Image.BannerType = "fanart" Then
-                                        fanartposter = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                            End If
-                            If fanartposter <> "" And tvBatchList.shFanart = True Then
-
-                                Dim seasonpath As String = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "fanart.jpg")
-                                If Not IO.File.Exists(seasonpath) Then
-                              '      Utilities.DownloadImage(fanartposter, seasonpath, True, Preferences.resizefanart)
-                                    Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonpath)
-                                End If
-                            End If
-
-
-                            If Preferences.seasonall <> "none" Then
-                                Dim seasonallpath As String = ""
-                                Dim posterurlpath As String = ""
-                                If Preferences.seasonall = "poster" Then 'poster
-                                    For Each Image In artlist
-                                        If Image.Language = "en" And Image.BannerType = "poster" Then
-                                            posterurlpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                    If posterurlpath = "" Then
-                                        For Each Image In artlist
-                                            If Image.BannerType = "poster" Then
-                                                posterurlpath = Image.Url
-                                                Exit For
-                                            End If
-                                        Next
-                                    End If
-                                    seasonallpath = posterurlpath
-                                ElseIf Preferences.seasonall = "banner" Then 'banner
-                                    If posterurlpath = "" Then
-                                        For Each Image In artlist
-                                            If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
-                                                posterurlpath = Image.Url
-                                                Exit For
-                                            End If
-                                        Next
-                                    End If
-                                    If posterurlpath = "" Then
-                                        For Each Image In artlist
-                                            If Image.BannerType = "series" And Image.Season = Nothing Then
-                                                posterurlpath = Image.Url
-                                                Exit For
-                                            End If
-                                        Next
-                                    End If
-                                    If posterurlpath <> "" And RadioButton16.Checked = True Then
-                                        seasonallpath = posterurlpath
-                                    End If
-                                End If
-                                Dim seasonpath As String = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "season-all.tbn")
-                                If Not IO.File.Exists(seasonpath) And tvBatchList.shPosters = True Then
-                                    Utilities.DownloadFile(posterurlpath, seasonpath)
-                                    seasonpath = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "folder.jpg")
-                                    Utilities.DownloadFile(posterurlpath, seasonpath)
-
-                                    '                                    Try
-                                    '                                        Dim buffer(4000000) As Byte
-                                    '                                        Dim size As Integer = 0
-                                    '                                        Dim bytesRead As Integer = 0
-                                    '                                        Dim thumburl As String = posterurlpath
-                                    '                                        If (String.IsNullOrEmpty(thumburl)) Then Continue For
-                                    '                                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                    '                                        Dim res As HttpWebResponse = req.GetResponse()
-                                    '                                        Dim contents As Stream = res.GetResponseStream()
-                                    '                                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                                    '                                        While bytesToRead > 0
-                                    '                                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                                    '                                            If size = 0 Then Exit While
-                                    '                                            bytesToRead -= size
-                                    '                                            bytesRead += size
-                                    '                                        End While
-                                    '                                        Dim fstrm As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                    '                                        fstrm.Write(buffer, 0, bytesRead)
-                                    '                                        'contents.Close()
-                                    '                                        fstrm.Close()
-                                    '                                        seasonpath = Cache.TvCache.Shows(f).NfoFilePath.Replace(IO.Path.GetFileName(Cache.TvCache.Shows(f).NfoFilePath), "folder.jpg")
-                                    '                                        Dim fstrm2 As New FileStream(seasonpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                    '                                        fstrm2.Write(buffer, 0, bytesRead)
-                                    '                                        contents.Close()
-                                    '                                        fstrm2.Close()
-                                    '                                    Catch ex As WebException
-                                    '#If SilentErrorScream Then
-                                    '                                    Throw ex
-                                    '#End If
-                                    '                                        'MsgBox("Error Downloading main poster from TVDB")
-                                    '                                    End Try
-                                End If
+                            If tvBatchList.shPosters = True Then
+                                TvGetArtwork(Cache.TvCache.Shows(f), True)
+                            Else
+                                TvGetArtwork(Cache.TvCache.Shows(f), False)
                             End If
                         End If
                     End If
@@ -18928,27 +18732,31 @@ Public Class Form1
                                                         Dim downloadok As Boolean = True
                                                         If tvBatchList.doEpisodeArt = True And tvBatchList.epScreenshot = True Then
                                                             If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
-                                                                Dim screenshotpath As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
+                                                                Dim screenshotpath As String = ""
+                                                                If Preferences.XBMC_version = 0 Then
+                                                                    screenshotpath = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
+                                                                ElseIf Preferences.XBMC_version = 2 Then
+                                                                    screenshotpath = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "-thumb.jpg")
+                                                                End If
                                                                 If Not IO.File.Exists(screenshotpath) Then
-
-                                                                 '   Utilities.DownloadImage(episodescreenurl, screenshotpath)
-                                                                    Movie.SaveFanartImageToCacheAndPath(episodescreenurl, screenshotpath) 
                                                                 End If
-                                                            Else
-                                                                Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
-                                                                Dim pathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "")
-                                                                If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
-                                                                    progresstext = listofnewepisodes(h).VideoFilePath
-                                                                    tvbckrescrapewizard.ReportProgress(888888, progresstext)
-                                                                End If
+                                                                '   Utilities.DownloadImage(episodescreenurl, screenshotpath)
+                                                                Movie.SaveFanartImageToCacheAndPath(episodescreenurl, screenshotpath)
                                                             End If
-                                                            If downloadok = False Then
-                                                                Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
-                                                                Dim pathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "")
-                                                                If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
-                                                                    progresstext = listofnewepisodes(h).VideoFilePath
-                                                                    tvbckrescrapewizard.ReportProgress(888888, progresstext)
-                                                                End If
+                                                        Else
+                                                            Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
+                                                            Dim pathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "")
+                                                            If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
+                                                                progresstext = listofnewepisodes(h).VideoFilePath
+                                                                tvbckrescrapewizard.ReportProgress(888888, progresstext)
+                                                            End If
+                                                        End If
+                                                        If downloadok = False Then
+                                                            Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
+                                                            Dim pathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "")
+                                                            If Not IO.File.Exists(thumbpathandfilename) And tvBatchList.epCreateScreenshot = True Then
+                                                                progresstext = listofnewepisodes(h).VideoFilePath
+                                                                tvbckrescrapewizard.ReportProgress(888888, progresstext)
                                                             End If
                                                         End If
                                                     Case "actor"
@@ -18982,7 +18790,7 @@ Public Class Form1
                                             End If
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                             'MsgBox("hekp")
                                         End Try
@@ -19035,7 +18843,7 @@ Public Class Form1
                                             listofnewepisodes(h).Runtime.Value = minutes.ToString & " min"
                                         Catch ex As Exception
 #If SilentErrorScream Then
-                                        Throw ex
+                                            Throw ex
 #End If
                                         End Try
                                         nfoFunction.saveepisodenfo(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
@@ -19104,7 +18912,6 @@ Public Class Form1
         Dim FileSize As Long = MyFile.Length
         Return FileSize
     End Function
-
 
     Private Sub ExportmoviesMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripExportMovies.Click
         Try
@@ -19264,7 +19071,6 @@ Public Class Form1
             End If
         End If
     End Sub
-
 
     Private Sub Button109_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button109.Click
         Try
@@ -22216,9 +22022,10 @@ Private Sub DisplayLogFile
         Catch ex As Exception
         End Try
     End If
-End Sub
+    End Sub
 
-
-
+    Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
+        BannerAndPosterViewer()
+    End Sub
 
 End Class

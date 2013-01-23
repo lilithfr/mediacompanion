@@ -73,6 +73,7 @@ Partial Public Class Form1
         PictureBox6.Image = Nothing
         tv_PictureBoxLeft.Image = Nothing
         tv_PictureBoxRight.Image = Nothing
+        tv_PictureBoxBottom.Image = Nothing
         TextBox10.Text = ""
         TextBox11.Text = ""
         TextBox9.Text = ""
@@ -420,12 +421,21 @@ Partial Public Class Form1
             End If
             Button_TV_State.Tag = Show
 
-
-            If Preferences.postertype = "banner" Then
-                util_ImageLoad(tv_PictureBoxRight, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
-            Else
+            If Preferences.XBMC_version = 2 Then
+                Show.ImagePoster.FileName = "poster.jpg"
+                Show.ImageBanner.FileName = "banner.jpg"
+                util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
                 util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+            ElseIf Preferences.XBMC_version = 0 Then
+                If Preferences.postertype = "banner" Then
+                    util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
+                    util_ImageLoad(tv_PictureBoxRight, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                Else
+                    util_ImageLoad(tv_PictureBoxBottom, Utilities.DefaultBannerPath, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
+                    util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                End If
             End If
+
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
 
             Panel9.Visible = False
@@ -533,7 +543,9 @@ Partial Public Class Form1
                 If actor.actorname = ComboBox4.Text Then
                     TextBox18.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
-                    Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
+                    Dim tempname As String = ""
+                    tempname = actor.actorname.Replace(" ", "_") & ".jpg"
+
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
@@ -611,22 +623,40 @@ Partial Public Class Form1
                 If Preferences.postertype = "banner" Then
                     util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
                 Else
-                    util_ImageLoad(tv_PictureBoxRight, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Show.ImageBanner.Image
+                    util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Show.ImageBanner.Image
                 End If
             End If
         ElseIf trueseason = 0 Then          'Specials
-            If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
-                util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn"), Utilities.DefaultPosterPath)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
-            Else
-                util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), Utilities.DefaultPosterPath)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+            If Preferences.XBMC_version = 0 Then
+                If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials.tbn")) Then
+                    util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn"), Utilities.DefaultPosterPath)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
+                Else
+                    util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), Utilities.DefaultPosterPath)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                End If
+            ElseIf Preferences.XBMC_version = 2 Then
+                If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials-poster.jpg")) Then
+                    util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials-poster.jpg"), Utilities.DefaultPosterPath)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
+                Else
+                    util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), Utilities.DefaultPosterPath)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                End If
+                If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials-banner.jpg")) Then
+                    util_ImageLoad(tv_PictureBoxBottom, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials-banner.jpg"), Utilities.DefaultPosterPath)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
+                Else
+                    util_ImageLoad(tv_PictureBoxBottom, Show.NfoFilePath.Replace("tvshow.nfo", "banner.jpg"), Utilities.DefaultBannerPath)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                End If
             End If
         Else                                'Season01 & up
-            util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+            If Preferences.XBMC_version = 0 Then
+                util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+            ElseIf Preferences.XBMC_version = 2 Then
+                util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+                util_ImageLoad(tv_PictureBoxBottom, SelectedSeason.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+            End If
         End If
 
-        If Show.NfoFilePath <> Nothing Then
-            util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
-        End If
+            If Show.NfoFilePath <> Nothing Then
+                util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
+            End If
 
     End Sub
 
@@ -730,12 +760,21 @@ Partial Public Class Form1
         ' It could have been why Billy has used two pictureboxes for each single one shown.....
 
         If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
-            util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultScreenShotPath)
+            If Preferences.XBMC_version = 0 Then
+                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultScreenShotPath)
+            ElseIf Preferences.XBMC_version = 2 Then
+                util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultScreenShotPath)
+            End If
         End If
-        If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
-            util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-        End If
-        Panel9.Visible = True
+            If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
+                If Preferences.XBMC_version = 0 Then
+                    util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                ElseIf Preferences.XBMC_version = 2 Then
+                    util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                    util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                End If
+            End If
+            Panel9.Visible = True
 
     End Sub
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
@@ -1220,47 +1259,47 @@ Partial Public Class Form1
                                         'If destsorted = True Then
                                         Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
                                         filename = filename.Replace(" ", "_")
-                                        filename = filename & ".tbn"
+                                            filename = filename & ".tbn"
                                         filename = IO.Path.Combine(workingpath, filename)
                                         'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
                                         Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
                                         'End If
                                     End If
+                                    End If
+                                    If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
+                                        Dim workingpath As String = ""
+                                        Dim networkpath As String = Preferences.actorsavepath
+
+                                        tempstring = networkpath & "\" & id.Substring(id.Length - 2, 2)
+                                        Dim hg As New IO.DirectoryInfo(tempstring)
+                                        If Not hg.Exists Then
+                                            IO.Directory.CreateDirectory(tempstring)
+                                        End If
+                                        workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
+                                        If Not IO.File.Exists(workingpath) Then
+                                            Utilities.DownloadFile(NewAct.actorthumb, workingpath)
+                                        End If
+                                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
+                                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                            NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
+                                        Else
+                                            NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
+                                        End If
+
+
+                                    End If
                                 End If
-                                If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
-                                    Dim workingpath As String = ""
-                                    Dim networkpath As String = Preferences.actorsavepath
-
-                                    tempstring = networkpath & "\" & id.Substring(id.Length - 2, 2)
-                                    Dim hg As New IO.DirectoryInfo(tempstring)
-                                    If Not hg.Exists Then
-                                        IO.Directory.CreateDirectory(tempstring)
+                                Dim exists As Boolean = False
+                                For Each actors In NewShow.ListActors
+                                    If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
+                                        exists = True
+                                        Exit For
                                     End If
-                                    workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
-                                    If Not IO.File.Exists(workingpath) Then
-                                        Utilities.DownloadFile(NewAct.actorthumb, workingpath)
-                                    End If
-                                    NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
-                                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
-                                    Else
-                                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
-                                    End If
-
-
+                                Next
+                                If exists = False Then
+                                    NewShow.ListActors.Add(NewAct)
                                 End If
                             End If
-                            Dim exists As Boolean = False
-                            For Each actors In NewShow.ListActors
-                                If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
-                                    exists = True
-                                    Exit For
-                                End If
-                            Next
-                            If exists = False Then
-                                NewShow.ListActors.Add(NewAct)
-                            End If
-                        End If
 
 
 
@@ -1338,262 +1377,12 @@ Partial Public Class Form1
                     '        ArtList.Add(NewItem)
                     '    Next
                     'End If
-                    Dim ArtList As Tvdb.Banners = tvdbstuff.GetPosterList(NewShow.TvdbId.Value, True)
-                    If Not speedy AndAlso (Preferences.tvfanart = True OrElse Preferences.tvposter = True OrElse Preferences.seasonall <> "none") Then
-                        If Preferences.downloadtvseasonthumbs = True Then
-                            For f = 0 To ArtList.Items.SeasonMax
-                                Dim seasonposter As String = ""
-                                For Each Image In ArtList.Items
-                                    If Image.Season.Value = f.ToString And Image.Language.Value = templanguage Then
-                                        seasonposter = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                                If seasonposter = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Season.Value = f.ToString And Image.Language.Value = "en" Then
-                                            seasonposter = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If seasonposter = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Season.Value = f.ToString Then
-                                            seasonposter = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If seasonposter <> "" Then
-                                    If f < 10 Then
-                                        tempstring = "0" & f.ToString
-                                    Else
-                                        tempstring = f.ToString
-                                    End If
-                                    Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season" & tempstring & ".tbn")
-                                    If tempstring = "00" Then
-                                        seasonpath = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season-specials.tbn")
-                                    End If
-                                    If Not IO.File.Exists(seasonpath) Then
-
-                                        Utilities.DownloadFile(seasonposter, seasonpath)
-
-                                    End If
-                                End If
-                            Next
-                        End If
-
-                        If Preferences.tvfanart = True Then
-                            Dim fanartposter As String
-                            fanartposter = ""
-                            If CheckBox7.CheckState = CheckState.Checked Then
-                                For Each Image In ArtList.Items
-                                    If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Fanart Then
-                                        fanartposter = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                            End If
-                            If fanartposter = "" Then
-                                For Each Image In ArtList.Items
-                                    If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Fanart Then
-                                        fanartposter = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                            End If
-                            If fanartposter = "" Then
-                                For Each Image In ArtList.Items
-                                    If Image.Type = Tvdb.ArtType.Fanart Then
-                                        fanartposter = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                            End If
-                            If fanartposter <> "" Then
-
-                                Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "fanart.jpg")
-                                If Not IO.File.Exists(seasonpath) Then
-                                    Utilities.DownloadFile(fanartposter, seasonpath)
-                                End If
-                            End If
-                        End If
 
 
-                        Dim seasonallpath As String = ""
-                        If Preferences.tvposter = True Then
-                            Dim posterurlpath As String = ""
 
-                            If Preferences.postertype = "poster" Then 'poster
-                                For Each Image In ArtList.Items
-                                    If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Poster Then
-                                        posterurl = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                                If posterurlpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Poster Then
-                                            posterurlpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If posterurlpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Type = Tvdb.ArtType.Poster Then
-                                            posterurlpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If posterurlpath <> "" And Preferences.seasonall <> "none" Then
-                                    seasonallpath = posterurlpath
-                                End If
-                            ElseIf Preferences.postertype = "banner" Then 'banner
-                                For Each Image In ArtList.Items
-                                    If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Banner Then
-                                        posterurl = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                                If posterurlpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Banner Then
-                                            posterurlpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If posterurlpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Type = Tvdb.ArtType.Banner Then
-                                            posterurlpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If posterurlpath <> "" And RadioButton16.Checked = True Then
-                                    seasonallpath = posterurlpath
-                                End If
-                            End If
+                    'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
 
-                            If posterurlpath <> "" And speedy = False Then
-
-                                Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "folder.jpg")
-                                If Not IO.File.Exists(seasonpath) Then
-
-                                    Utilities.DownloadFile(posterurlpath, seasonpath)
-
-                                End If
-                            End If
-                        End If
-
-                        If Preferences.seasonall <> "none" And seasonallpath = "" Then
-                            If Preferences.seasonall = "poster" Then 'poster
-                                For Each Image In ArtList.Items
-                                    If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Poster Then
-                                        seasonallpath = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                                If seasonallpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Poster Then
-                                            seasonallpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If seasonallpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Type = Tvdb.ArtType.Poster Then
-                                            seasonallpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                            ElseIf Preferences.seasonall = "wide" = True Then 'banner
-                                For Each Image In ArtList.Items
-                                    If Image.Language.Value = templanguage And Image.Type = Tvdb.ArtType.Banner Then
-                                        seasonallpath = Image.Url
-                                        Exit For
-                                    End If
-                                Next
-                                If seasonallpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Language.Value = "en" And Image.Type = Tvdb.ArtType.Banner Then
-                                            seasonallpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                                If seasonallpath = "" Then
-                                    For Each Image In ArtList.Items
-                                        If Image.Type = Tvdb.ArtType.Banner Then
-                                            seasonallpath = Image.Url
-                                            Exit For
-                                        End If
-                                    Next
-                                End If
-                            End If
-
-                            If seasonallpath <> "" Then
-
-                                Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season-all.tbn")
-                                If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
-
-                                    Utilities.DownloadFile(seasonallpath, seasonallpath)
-
-                                End If
-                            End If
-                        ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
-                            Dim seasonpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "season-all.tbn")
-                            If Not IO.File.Exists(seasonpath) Then
-                                Utilities.DownloadFile(seasonallpath, seasonpath)
-                            End If
-                        End If
-                    End If
-                    'If artdone = False Then
-                    '    Dim thumblist As String = tvdbstuff.GetPosterList(newtvshow.tvdbid)
-                    '    showlist.LoadXml(thumblist)
-                    '    artdone = True
-                    '    'CheckBox3 = seasons
-                    '    'CheckBox4 = fanart
-                    '    'CheckBox5 = poster
-                    '    For Each thisresult As XmlNode In showlist("banners")
-                    '        Select Case thisresult.Name
-                    '            Case "banner"
-                    '                Dim individualposter As New TvBanners
-                    '                For Each results In thisresult.ChildNodes
-                    '                    Select Case results.Name
-                    '                        Case "url"
-                    '                            individualposter.url = results.InnerText
-                    '                        Case "bannertype"
-                    '                            individualposter.bannerType = results.InnerText
-                    '                        Case "resolution"
-                    '                            individualposter.resolution = results.InnerText
-                    '                        Case "language"
-                    '                            individualposter.language = results.InnerText
-                    '                        Case "season"
-                    '                            individualposter.season = results.InnerText
-                    '                    End Select
-                    '                Next
-                    '                artlist.Add(individualposter)
-                    '        End Select
-                    '    Next
-                    'End If
-
-                    For Each url In ArtList.Items
-                        If url.Type = Tvdb.ArtType.Fanart Then
-                            NewShow.posters.Add(url.Url)
-                        Else
-                            NewShow.fanart.Add(url.Url)
-                        End If
-                    Next
-
-                    'newtvshow.language = Preferences.tvdblanguagecode
+                    TvGetArtwork(NewShow, True)
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                         NewShow.EpisodeActorSource.Value = "tvdb"
                     Else
@@ -2114,29 +1903,29 @@ Partial Public Class Form1
                                                                                         Utilities.DownloadFile(newactor.actorthumb, filename)
                                                                                     End If
                                                                                 End If
-                                                                            End If
-                                                                            If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
-                                                                                Dim workingpath As String = ""
-                                                                                Dim networkpath As String = Preferences.actorsavepath
+                                                                                End If
+                                                                                If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
+                                                                                    Dim workingpath As String = ""
+                                                                                    Dim networkpath As String = Preferences.actorsavepath
 
-                                                                                tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                                                                                Dim hg As New IO.DirectoryInfo(tempstring)
-                                                                                If Not hg.Exists Then
-                                                                                    IO.Directory.CreateDirectory(tempstring)
-                                                                                End If
-                                                                                workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                                If Not IO.File.Exists(workingpath) Then
-                                                                                    Utilities.DownloadFile(newactor.actorthumb, workingpath)
-                                                                                End If
-                                                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                                                                                If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-                                                                                Else
-                                                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                                End If
+                                                                                    tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+                                                                                    Dim hg As New IO.DirectoryInfo(tempstring)
+                                                                                    If Not hg.Exists Then
+                                                                                        IO.Directory.CreateDirectory(tempstring)
+                                                                                    End If
+                                                                                    workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                                    If Not IO.File.Exists(workingpath) Then
+                                                                                        Utilities.DownloadFile(newactor.actorthumb, workingpath)
+                                                                                    End If
+                                                                                    newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                                                                                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                                                                        newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                                    Else
+                                                                                        newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                                    End If
 
+                                                                                End If
                                                                             End If
-                                                                        End If
                                                                 End Select
                                                                 If bckgroundscanepisodes.CancellationPending Then
                                                                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
@@ -2366,303 +2155,7 @@ Partial Public Class Form1
         'messbox.Refresh()
         Application.DoEvents()
         Try
-            'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-            Dim tvdbstuff As New TVDBScraper
-            Dim showlist As New XmlDocument
-            Dim thumblist As String = tvdbstuff.GetPosterList(BrokenShow.TvdbId.Value)
-            showlist.LoadXml(thumblist)
-            Dim thisresult As XmlNode = Nothing
-            Dim artlist As New List(Of TvBanners)
-            artlist.Clear()
-            For Each thisresult In showlist("banners")
-                Select Case thisresult.Name
-                    Case "banner"
-                        Dim individualposter As New TvBanners
-                        For Each results In thisresult.ChildNodes
-                            Select Case results.Name
-                                Case "url"
-                                    individualposter.Url = results.InnerText
-                                Case "bannertype"
-                                    individualposter.BannerType = results.InnerText
-                                Case "resolution"
-                                    individualposter.Resolution = results.InnerText
-                                Case "language"
-                                    individualposter.Language = results.InnerText
-                                Case "season"
-                                    individualposter.Season = results.InnerText
-                            End Select
-                        Next
-                        artlist.Add(individualposter)
-                End Select
-            Next
-            If artlist.Count = 0 Then
-                Exit Sub
-            End If
-            For f = 0 To 1000
-                Dim seasonposter As String = ""
-                For Each Image In artlist
-                    If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode Then
-                        seasonposter = Image.Url
-                        Exit For
-                    End If
-                Next
-                If seasonposter = "" Then
-                    For Each Image In artlist
-                        If Image.Season = f.ToString And Image.Language = "en" Then
-                            seasonposter = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If seasonposter = "" Then
-                    For Each Image In artlist
-                        If Image.Season = f.ToString Then
-                            seasonposter = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                Dim tempstring As String = ""
-                If seasonposter <> "" Then
-                    If f < 10 Then
-                        tempstring = "0" & f.ToString
-                    Else
-                        tempstring = f.ToString
-                    End If
-                    Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "season" & tempstring & ".tbn")
-                    If tempstring = "00" Then
-                        seasonpath = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "season-specials.tbn")
-                    End If
-                    If Not IO.File.Exists(seasonpath) Then
-                        Utilities.DownloadFile(seasonposter, seasonpath)
-                    End If
-                End If
-            Next
-            Dim fanartposter As String
-            fanartposter = ""
-            For Each Image In artlist
-                If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
-                    fanartposter = Image.Url
-                    Exit For
-                End If
-            Next
-            If fanartposter = "" Then
-                For Each Image In artlist
-                    If Image.Language = "en" And Image.BannerType = "fanart" Then
-                        fanartposter = Image.Url
-                        Exit For
-                    End If
-                Next
-            End If
-            If fanartposter = "" Then
-                For Each Image In artlist
-                    If Image.BannerType = "fanart" Then
-                        fanartposter = Image.Url
-                        Exit For
-                    End If
-                Next
-            End If
-            If fanartposter <> "" Then
-
-                Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "fanart.jpg")
-                If Not IO.File.Exists(seasonpath) Then
-
-                    'Utilities.DownloadImage(fanartposter, seasonpath, True, Preferences.resizefanart)
-                    Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonpath)
-
-                    '                    Try
-                    '                        Dim buffer(4000000) As Byte
-                    '                        Dim size As Integer = 0
-                    '                        Dim bytesRead As Integer = 0
-
-                    '                        Dim thumburl As String = fanartposter
-                    '                        Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                    '                        Dim res As HttpWebResponse = req.GetResponse()
-                    '                        Dim contents As Stream = res.GetResponseStream()
-                    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                    '                        Dim bmp As New Bitmap(contents)
-
-
-
-                    '                        While bytesToRead > 0
-                    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '                            If size = 0 Then Exit While
-                    '                            bytesToRead -= size
-                    '                            bytesRead += size
-                    '                        End While
-
-
-                    '                        Try
-                    '                            If Preferences.resizefanart = 1 Then
-                    '                                bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                    '                                scraperLog = scraperLog & "Fanart not resized" & vbCrLf
-                    '                            ElseIf Preferences.resizefanart = 2 Then
-                    '                                If bmp.Width > 1280 Or bmp.Height > 720 Then
-                    '                                    Dim bm_source As New Bitmap(bmp)
-                    '                                    Dim bm_dest As New Bitmap(1280, 720)
-                    '                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '                                    gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                    '                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                    '                                    scraperLog = scraperLog & "Farart Resized to 1280x720" & vbCrLf
-                    '                                Else
-                    '                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                    '                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                    '                                End If
-                    '                            ElseIf Preferences.resizefanart = 3 Then
-                    '                                If bmp.Width > 960 Or bmp.Height > 540 Then
-                    '                                    Dim bm_source As New Bitmap(bmp)
-                    '                                    Dim bm_dest As New Bitmap(960, 540)
-                    '                                    Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '                                    gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '                                    gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                    '                                    bm_dest.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                    '                                    scraperLog = scraperLog & "Farart Resized to 960x540" & vbCrLf
-                    '                                Else
-                    '                                    scraperLog = scraperLog & "Fanart not resized, already =< required size" & vbCrLf
-                    '                                    bmp.Save(seasonpath, Imaging.ImageFormat.Jpeg)
-                    '                                End If
-
-                    '                            End If
-                    '                        Catch
-                    '                        End Try
-                    '                    Catch ex As WebException
-                    '#If SilentErrorScream Then
-                    '                        Throw ex
-                    '#End If
-                    '                    End Try
-                End If
-            End If
-
-            Dim seasonallpath As String = ""
-            Dim posterurlpath As String = ""
-            Dim posterurl As String = ""
-            If Preferences.postertype = "poster" Then 'poster
-                For Each Image In artlist
-                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
-                        posterurl = Image.Url
-                        Exit For
-                    End If
-                Next
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.Language = "en" And Image.BannerType = "poster" Then
-                            posterurlpath = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.BannerType = "poster" Then
-                            posterurlpath = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath <> "" And Preferences.seasonall <> "none" Then
-                    seasonallpath = posterurlpath
-                End If
-            ElseIf Preferences.postertype = "banner" Then 'banner
-                For Each Image In artlist
-                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
-                        posterurl = Image.Url
-                        Exit For
-                    End If
-                Next
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
-                            posterurlpath = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath = "" Then
-                    For Each Image In artlist
-                        If Image.BannerType = "series" And Image.Season = Nothing Then
-                            posterurlpath = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If posterurlpath <> "" And RadioButton16.Checked = True Then
-                    seasonallpath = posterurlpath
-                End If
-            End If
-
-            If posterurlpath <> "" Then
-
-                Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "folder.jpg")
-                If Not IO.File.Exists(seasonpath) Then
-                    Utilities.DownloadFile(posterurlpath, seasonpath)
-                End If
-            End If
-
-
-
-            If Preferences.seasonall <> "none" And seasonallpath = "" Then
-                If Preferences.seasonall = "poster" Then 'poster
-                    For Each Image In artlist
-                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
-                            seasonallpath = Image.Url
-                            Exit For
-                        End If
-                    Next
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.Language = "en" And Image.BannerType = "poster" Then
-                                seasonallpath = Image.Url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.BannerType = "poster" Then
-                                seasonallpath = Image.Url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                ElseIf Preferences.seasonall = "wide" = True Then 'banner
-                    For Each Image In artlist
-                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
-                            seasonallpath = Image.Url
-                            Exit For
-                        End If
-                    Next
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
-                                seasonallpath = Image.Url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                    If seasonallpath = "" Then
-                        For Each Image In artlist
-                            If Image.BannerType = "series" And Image.Season = Nothing Then
-                                seasonallpath = Image.Url
-                                Exit For
-                            End If
-                        Next
-                    End If
-                End If
-
-                If seasonallpath <> "" Then
-
-                    Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "season-all.tbn")
-                    If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
-                        Utilities.DownloadFile(seasonallpath, seasonpath)
-                    End If
-                End If
-            ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
-                Dim seasonpath As String = BrokenShow.NfoFilePath.Replace(IO.Path.GetFileName(BrokenShow.NfoFilePath), "season-all.tbn")
-                If Not IO.File.Exists(seasonpath) Then
-                    Utilities.DownloadFile(seasonallpath, seasonpath)
-                End If
-            End If
+            TvGetArtwork(BrokenShow, True)
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
@@ -3124,6 +2617,357 @@ Partial Public Class Form1
 
             System.Windows.Forms.Application.DoEvents()
         Loop
+    End Sub
+
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = False)
+        Try
+
+            Dim tvdbstuff As New TVDBScraper
+            Dim showlist As New XmlDocument
+            Dim thumblist As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value)
+            showlist.LoadXml(thumblist)
+            Dim thisresult As XmlNode = Nothing
+            Dim artlist As New List(Of TvBanners)
+            artlist.Clear()
+            For Each thisresult In showlist("banners")
+                Select Case thisresult.Name
+                    Case "banner"
+                        Dim individualposter As New TvBanners
+                        For Each results In thisresult.ChildNodes
+                            Select Case results.Name
+                                Case "url"
+                                    individualposter.Url = results.InnerText
+                                Case "bannertype"
+                                    individualposter.BannerType = results.InnerText
+                                Case "resolution"
+                                    individualposter.Resolution = results.InnerText
+                                Case "language"
+                                    individualposter.Language = results.InnerText
+                                Case "season"
+                                    individualposter.Season = results.InnerText
+                            End Select
+                        Next
+                        artlist.Add(individualposter)
+                End Select
+            Next
+            If artlist.Count = 0 Then
+                Exit Sub
+            End If
+            For f = 0 To 1000
+                If Preferences.postertype <> "banner" Or Preferences.XBMC_version = 2 Then 'poster
+                    Dim seasonposter As String = ""
+                    For Each Image In artlist
+                        If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode Then
+                            seasonposter = Image.Url
+                            Exit For
+                        End If
+                    Next
+                    If seasonposter = "" Then
+                        For Each Image In artlist
+                            If Image.Season = f.ToString And Image.Language = "en" Then
+                                seasonposter = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If seasonposter = "" Then
+                        For Each Image In artlist
+                            If Image.Season = f.ToString Then
+                                seasonposter = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    Dim tempstring As String = ""
+                    If seasonposter <> "" Then
+                        If f < 10 Then
+                            tempstring = "0" & f.ToString
+                        Else
+                            tempstring = f.ToString
+                        End If
+                        If shPosters = True Then
+                            Dim seasonpath As String = ""
+                            If Preferences.XBMC_version = 0 Then
+                                seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
+                            ElseIf Preferences.XBMC_version = 2 Then
+                                seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-poster.jpg")
+                            End If
+                            If tempstring = "00" Then
+                                If Preferences.XBMC_version = 0 Then
+                                    seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
+                                ElseIf Preferences.XBMC_version = 2 Then
+                                    seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-poster.jpg")
+                                End If
+                            End If
+                            If Not IO.File.Exists(seasonpath) Then
+                                Utilities.DownloadFile(seasonposter, seasonpath)
+                            End If
+                        End If
+                    End If
+                End If
+                If Preferences.postertype = "banner" Or Preferences.XBMC_version = 2 Then 'banner
+                    Dim seasonbanner As String = ""
+                    For Each Image In artlist
+                        If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = "seasonwide" Then
+                            seasonbanner = Image.Url
+                            Exit For
+                        End If
+                    Next
+                    If seasonbanner = "" Then
+                        For Each Image In artlist
+                            If Image.Season = f.ToString And Image.Language = "en" Then
+                                seasonbanner = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If seasonbanner = "" Then
+                        For Each Image In artlist
+                            If Image.Season = f.ToString Then
+                                seasonbanner = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    Dim tempstring As String = ""
+                    If seasonbanner <> "" Then
+                        If f < 10 Then
+                            tempstring = "0" & f.ToString
+                        Else
+                            tempstring = f.ToString
+                        End If
+                        Dim seasonpath As String = ""
+                        If Preferences.XBMC_version = 0 Then
+                            seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
+                        ElseIf Preferences.XBMC_version = 2 Then
+                            seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
+                        End If
+                        If tempstring = "00" Then
+                            If Preferences.XBMC_version = 0 Then
+                                seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
+                            ElseIf Preferences.XBMC_version = 2 Then
+                                seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-banner.jpg")
+                            End If
+                        End If
+                        If Not IO.File.Exists(seasonpath) Then
+                            Utilities.DownloadFile(seasonbanner, seasonpath)
+                        End If
+                    End If
+                End If
+            Next
+            Dim fanartposter As String
+            fanartposter = ""
+            For Each Image In artlist
+                If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
+                    fanartposter = Image.Url
+                    Exit For
+                End If
+            Next
+            If fanartposter = "" Then
+                For Each Image In artlist
+                    If Image.Language = "en" And Image.BannerType = "fanart" Then
+                        fanartposter = Image.Url
+                        Exit For
+                    End If
+                Next
+            End If
+            If fanartposter = "" Then
+                For Each Image In artlist
+                    If Image.BannerType = "fanart" Then
+                        fanartposter = Image.Url
+                        Exit For
+                    End If
+                Next
+            End If
+            If fanartposter <> "" Then
+
+                Dim seasonpath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
+                If Preferences.XBMC_version = 2 Then
+                    Dim seasonfrodopath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
+                    If Not IO.File.Exists(seasonpath) Then
+                        Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonfrodopath)
+                    End If
+                End If
+                If Not IO.File.Exists(seasonpath) Then
+                    Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonpath)
+                End If
+            End If
+
+            Dim seasonallpath As String = ""
+            Dim posterurlpath As String = ""
+            Dim posterurl As String = ""
+            If Preferences.postertype = "poster" Or Preferences.XBMC_version = 2 Then 'poster
+                For Each Image In artlist
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
+                        posterurl = Image.Url
+                        Exit For
+                    End If
+                Next
+                If posterurlpath = "" Then
+                    For Each Image In artlist
+                        If Image.Language = "en" And Image.BannerType = "poster" Then
+                            posterurlpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If posterurlpath = "" Then
+                    For Each Image In artlist
+                        If Image.BannerType = "poster" Then
+                            posterurlpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If posterurlpath <> "" And Preferences.seasonall <> "none" Then
+                    seasonallpath = posterurlpath
+                End If
+                If posterurlpath <> "" Then
+                    Dim seasonpath As String = ""
+                    If Preferences.XBMC_version = 0 Then
+                        seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
+                    ElseIf Preferences.XBMC_version = 2 Then
+                        seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "poster.jpg")
+                    End If
+                    If Not IO.File.Exists(seasonpath) Then
+                        Utilities.DownloadFile(posterurlpath, seasonpath)
+                    End If
+                End If
+            End If
+            If Preferences.postertype = "banner" Or Preferences.XBMC_version = 2 Then 'banner
+                posterurl = ""
+                posterurlpath = ""
+                For Each Image In artlist
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
+                        posterurl = Image.Url
+                        Exit For
+                    End If
+                Next
+                If posterurlpath = "" Then
+                    For Each Image In artlist
+                        If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
+                            posterurlpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If posterurlpath = "" Then
+                    For Each Image In artlist
+                        If Image.BannerType = "series" And Image.Season = Nothing Then
+                            posterurlpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If posterurlpath <> "" And RadioButton16.Checked = True Then
+                    seasonallpath = posterurlpath
+                End If
+                If posterurlpath <> "" Then
+                    Dim seasonpath As String = ""
+                    If Preferences.XBMC_version = 0 Then
+                        seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
+                    ElseIf Preferences.XBMC_version = 2 Then
+                        seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "banner.jpg")
+                    End If
+                    If Not IO.File.Exists(seasonpath) Then
+                        Utilities.DownloadFile(posterurlpath, seasonpath)
+                    End If
+                End If
+            End If
+
+
+
+
+
+            If Preferences.seasonall <> "none" Or Preferences.XBMC_version = 2 Then
+                If Preferences.seasonall = "poster" Or Preferences.XBMC_version = 2 Then 'poster
+                    For Each Image In artlist
+                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
+                            seasonallpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                    If seasonallpath = "" Then
+                        For Each Image In artlist
+                            If Image.Language = "en" And Image.BannerType = "poster" Then
+                                seasonallpath = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If seasonallpath = "" Then
+                        For Each Image In artlist
+                            If Image.BannerType = "poster" Then
+                                seasonallpath = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If seasonallpath <> "" Then
+
+                        Dim seasonpath As String = ""
+                        If Preferences.XBMC_version = 0 Then
+                            seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all.tbn")
+                        ElseIf Preferences.XBMC_version = 2 Then
+                            seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-poster.jpg")
+                        End If
+                        If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
+                            Utilities.DownloadFile(seasonallpath, seasonpath)
+                        End If
+                    End If
+                End If
+                If Preferences.seasonall = "wide" Or Preferences.XBMC_version = 2 Then 'banner
+                    seasonall = ""
+                    seasonallpath = ""
+                    For Each Image In artlist
+                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
+                            seasonallpath = Image.Url
+                            Exit For
+                        End If
+                    Next
+                    If seasonallpath = "" Then
+                        For Each Image In artlist
+                            If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
+                                seasonallpath = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If seasonallpath = "" Then
+                        For Each Image In artlist
+                            If Image.BannerType = "series" And Image.Season = Nothing Then
+                                seasonallpath = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If seasonallpath <> "" Then
+                        Dim seasonpath As String = ""
+                        If Preferences.XBMC_version = 0 Then
+                            seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all.tbn")
+                        ElseIf Preferences.XBMC_version = 2 Then
+                            seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-banner.jpg")
+                        End If
+                        If Not IO.File.Exists(seasonpath) Or CheckBox6.CheckState = CheckState.Checked Then
+                            Utilities.DownloadFile(seasonallpath, seasonpath)
+                        End If
+                    End If
+                End If
+
+
+            ElseIf Preferences.seasonall <> "none" And seasonallpath <> "" Then
+                Dim seasonpath As String = ""
+                If Preferences.XBMC_version = 0 Then
+                    seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all.tbn")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    seasonpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-poster.jpg")
+                End If
+                If Not IO.File.Exists(seasonpath) Then
+                    Utilities.DownloadFile(seasonallpath, seasonpath)
+                End If
+            End If
+        Catch
+        End Try
     End Sub
 
     'Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick

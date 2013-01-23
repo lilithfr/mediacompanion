@@ -1218,10 +1218,17 @@ Public Class Movie
 
     Sub DeleteActors
         Try
-            For Each f In Directory.GetFiles(ActorPath, "*.tbn")
-                File.Delete(f)
-            Next
-            Directory.Delete(ActorPath)
+            If Preferences.XBMC_version = 0 Then
+                For Each f In Directory.GetFiles(ActorPath, "*.tbn")
+                    File.Delete(f)
+                Next
+                Directory.Delete(ActorPath)
+            ElseIf Preferences.XBMC_version = 2 Then
+                For Each f In Directory.GetFiles(ActorPath, "*.jpg")
+                    File.Delete(f)
+                Next
+                Directory.Delete(ActorPath)
+            End If
         Catch
         End Try
              

@@ -85,7 +85,8 @@ Public Class TVShows
                         listtorename.Add(temppath)
                     End If
                 End If
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
+                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".jpg")
+
                 If IO.File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
