@@ -21531,7 +21531,7 @@ End Sub
         End If
     End Sub
 
-    Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSaveChangesMoviePreference.Click
+    Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try
             Preferences.SaveConfig()
             ToolsToolStripMenuItem.DropDownItems.Clear()
