@@ -728,7 +728,7 @@
     </Content>
     <None Include="Resources\1356729777_video.png" />
     <None Include="Resources\1356729911_page_white_text.png" />
-    <None Include="Resolutions.xml">
+    <None Include="Assets\Resolutions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Resources\blank.png" />

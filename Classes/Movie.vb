@@ -70,15 +70,17 @@ Public Class Movie
     Property LogScrapeTimes            As Boolean = Preferences.LogScrapeTimes
     Property TrailerUrl           As String = ""
     Property PosterUrl            As String = ""
-    Property Actions              As New ScrapeActions
-    #End Region 'Read-write properties
+    Property Actions As New ScrapeActions
+    Property nfopathandfilename As String = ""
+
+#End Region 'Read-write properties
 
 
     #Region "Read-only properties"
 
     Shared Public ReadOnly Property Resolutions As XDocument
         Get
-            Return XDocument.Load(ResolutionsFile)
+            Return XDocument.Load(Preferences.applicationPath & "\Assets\" & ResolutionsFile)
         End Get 
     End Property
 
@@ -197,21 +199,15 @@ Public Class Movie
         End Get
     End Property
 
-    ReadOnly Property nfopathandfilename   As String
-        Get
-            Return mediapathandfilename.Replace(Extension, ".nfo")
-        End Get
-    End Property
-
     ReadOnly Property TitleFull As String
         Get
-            If _titleFull = "" then
+            If _titleFull = "" Then
                 Dim movieStackName As String = mediapathandfilename
-                Dim firstPart      As Boolean
+                Dim firstPart As Boolean
 
                 _titleFull = mediapathandfilename
                 If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
-                    If Preferences.namemode <> "1" Then 
+                    If Preferences.namemode <> "1" Then
                         _titleFull = nfopath & movieStackName & Extension
                     End If
                 End If
@@ -457,6 +453,7 @@ Public Class Movie
         Me.New
         _parent              = parent
         mediapathandfilename = FullName
+        nfopathandfilename = mediapathandfilename.Replace(Extension, ".nfo")
     End Sub
     #End Region 'Constructors
 
@@ -1614,7 +1611,7 @@ Public Class Movie
 
                 'update the new movie structure with the new data
                 movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
-       '         movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
+                movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
        '         movieFileInfo.Title = newfilename                                   'new title
             Else
                 log &= String.Format("A file exists with the target filename of '{0}' - RENAME SKIPPED{1}", newfilename, vbCrLf)
