@@ -2619,8 +2619,9 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True)
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True, Optional ByVal Both As Integer = 0)
         Try
+
             Dim tvdbstuff As New TVDBScraper
             Dim showlist As New XmlDocument
             Dim thumblist As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value)
@@ -2680,7 +2681,7 @@ Partial Public Class Form1
                 End If
                 If mainposter <> "" Then
                     Dim mainposterpath As String = ""
-                    If Preferences.XBMC_version = 0 Then
+                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                         mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
                     ElseIf Preferences.XBMC_version = 2 Then
                         mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "poster.jpg")
@@ -2688,7 +2689,7 @@ Partial Public Class Form1
                     If Not IO.File.Exists(mainposterpath) Then
                         Utilities.DownloadFile(mainposter, mainposterpath)
                     End If
-                    If Preferences.XBMC_version = 0 Then
+                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                         IO.File.Copy(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"))
                     ElseIf Preferences.XBMC_version = 2 Then
                         IO.File.Copy(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"))
@@ -2724,7 +2725,7 @@ Partial Public Class Form1
                 If mainbanner <> "" Then
                     Dim mainbannerpath As String = ""
                     Dim seasonallpath As String = ""
-                    If Preferences.XBMC_version = 0 Then
+                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                         mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
                     ElseIf Preferences.XBMC_version = 2 Then
                         mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "banner.jpg")
@@ -2732,7 +2733,7 @@ Partial Public Class Form1
                     If Not IO.File.Exists(mainbannerpath) Then
                         Utilities.DownloadFile(mainbanner, mainbannerpath)
                     End If
-                    If Preferences.XBMC_version = 0 Then
+                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                         IO.File.Copy(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"))
                     ElseIf Preferences.XBMC_version = 2 Then
                         IO.File.Copy(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"))
@@ -2776,13 +2777,13 @@ Partial Public Class Form1
                         End If
                         If shPosters = True Then
                             Dim seasonXXposterpath As String = ""
-                            If Preferences.XBMC_version = 0 Then
+                            If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                                 seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
                             ElseIf Preferences.XBMC_version = 2 Then
                                 seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-poster.jpg")
                             End If
                             If tempstring = "00" Then
-                                If Preferences.XBMC_version = 0 Then
+                                If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                                     seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
                                 ElseIf Preferences.XBMC_version = 2 Then
                                     seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-poster.jpg")
@@ -2828,13 +2829,13 @@ Partial Public Class Form1
                             tempstring = f.ToString
                         End If
                         Dim seasonXXbannerpath As String = ""
-                        If Preferences.XBMC_version = 0 Then
+                        If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                             seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
                         ElseIf Preferences.XBMC_version = 2 Then
                             seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
                         End If
                         If tempstring = "00" Then
-                            If Preferences.XBMC_version = 0 Then
+                            If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                                 seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
                             ElseIf Preferences.XBMC_version = 2 Then
                                 seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-banner.jpg")
@@ -2846,6 +2847,7 @@ Partial Public Class Form1
                     End If
                 End If
             Next
+
 
             'Main Fanart
             Dim fanartposter As String = ""
@@ -2885,7 +2887,11 @@ Partial Public Class Form1
                 End If
             End If
             If Preferences.XBMC_version = 1 Then
-                TvGetArtwork(currentshow)
+                Preferences.XBMC_version = 2
+                TvGetArtwork(currentshow, True, True)
+            End If
+            If Both = True Then
+                Preferences.XBMC_version = 1
             End If
         Catch
         End Try
