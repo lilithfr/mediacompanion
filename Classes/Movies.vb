@@ -201,7 +201,7 @@ Public Class Movies
 
         For Each ext In Utilities.VideoExtensions
             
-            ext = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)
+            ext = If((ext = "video_ts.ifo"), ext, "*" & ext)
 
             Try
                 For Each fileInFo In dirInfo.GetFiles(ext)

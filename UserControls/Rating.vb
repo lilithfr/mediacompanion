@@ -17,7 +17,7 @@
         Dim drawFont As New Font("Segoe UI", 13, FontStyle.Bold)
         Dim Ratio As Single
 
-        If Value = "" Then
+        If Value = "" Or Not Single.TryParse(Value, ValueRating) Then
             Return PictureInit
         End If
 
@@ -28,10 +28,9 @@
         Dim bm_dest As New Bitmap(PictureBoxWidth, PictureBoxHeight)
         Dim gr_dest As Graphics = Graphics.FromImage(bm_dest)
         gr_dest.DrawImage(bm_source, 0, 0, PictureBoxWidth, PictureBoxWidth / Ratio)
-
-        ValueRating = Convert.ToSingle(Value.Replace(".", ","))
-'        Ratingwidth = 39 + (Convert.ToInt16((ValueRating * 10) * ((PictureBoxRating.Width - 39) / 100)))
-        Ratingwidth = 39 + (Convert.ToInt16(ValueRating * ((PictureBoxRating.Width - 39) / 100)))
+        'ValueRating = Convert.ToSingle(Value.Replace(".", ","))
+        Ratingwidth = 39 + (Convert.ToInt16((ValueRating * 10) * ((PictureBoxRating.Width - 39) / 100)))
+        'Ratingwidth = 39 + (Convert.ToInt16(ValueRating * ((PictureBoxRating.Width - 39) / 100)))
 
         'Copy Stars 
         Using gr As Graphics = Graphics.FromImage(bm_dest)

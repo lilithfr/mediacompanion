@@ -338,23 +338,27 @@ Public Class Movie
 
     Public Shared Function IsValidMovieFile(fileInfo As IO.FileInfo, Optional ByRef log As String = "") As Boolean
 
-        If fileInfo.Name.ToLower="video_ts.ifo" Then
-            Return True
-        End If
+        Dim titleDir As String = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
 
-        Dim titleDir As String  = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
+        If fileInfo.Extension.ToLower = ".vob" Then
+            If IO.File.Exists(titleDir & "video_ts.ifo") Then
+                Return False
+            End If
 
-        If IO.File.Exists(titleDir & "video_ts.ifo") Then
+            Dim PartNumberIndex = fileInfo.Name.LastIndexOf(".") - 1
+            If PartNumberIndex > 0 Then
+                Dim PartNumberChar = fileInfo.Name.Substring(PartNumberIndex, 1)
+                If Integer.TryParse(PartNumberChar, 0) Then
+                    Dim PreviousPartNumber = Convert.ToInt32(PartNumberChar) - 1
+                    Dim PreviousPartFileName = ChangeCharacter(fileInfo.Name, Convert.ToChar(Convert.ToChar(PreviousPartNumber.ToString)), PartNumberIndex)
+                    Return Not File.Exists(titleDir & PreviousPartFileName)
+                End If
+                log &= "Part number not found - Assuming just the one part!"
+                Return True
+            End If
+            log &= "??? File extension missing!"
             Return False
         End If
-
-        Dim q = From extension In Utilities.VideoExtensions Where extension.ToLower = fileInfo.Extension.ToLower
-        If q.Count = 0 then Return False
-
-        Dim moviePattern = q.Single
-
-        moviePattern = If((moviePattern="VIDEO_TS.IFO"), moviePattern, "*" & moviePattern)
-
 
         If Preferences.usefoldernames = True Then
             log &= "  '" & fileInfo.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
@@ -383,33 +387,6 @@ Public Class Movie
             End Try
         End If
 
-
-        If moviePattern = "*.vob" Then
-
-            Dim PartNumberIndex = fileInfo.Name.LastIndexOf(".") - 1
-
-            If PartNumberIndex>0 Then
-
-	            Dim PartNumberChar = fileInfo.Name.Substring(PartNumberIndex,1)
-
-	            If Integer.TryParse(PartNumberChar, 0) Then
-
-		            Dim PreviousPartNumber = Convert.ToInt32(PartNumberChar) - 1
-
-		            Dim PreviousPartFileName = ChangeCharacter(fileInfo.Name, Convert.ToChar(Convert.ToChar(PreviousPartNumber.ToString)),PartNumberIndex)
-
-		            Return Not File.Exists(titleDir & PreviousPartFileName)
-	            End If
-
-	            Log &= "Part number not found - Assuming just the one part!"
-	            Return True
-            End If
-
-            Log &= "??? File extension missing!"
-            Return False
-        End If
-
-
         'ignore trailers
         Dim M As Match
         M = Regex.Match(fileInfo.FullName, "[-_.]trailer")
@@ -418,14 +395,12 @@ Public Class Movie
             Return False
         End If
 
-
         'ignore whatever this is meant to be!
         If fileInfo.FullName.ToLower.IndexOf("sample") <> -1 And fileInfo.FullName.ToLower.IndexOf("people") = -1 Then 
             Return False
         End If
 
-
-        If fileInfo.Extension = "ttt" Then 
+        If fileInfo.Extension = "ttt" Then
             Return False
         End If
 
@@ -437,7 +412,6 @@ Public Class Movie
              Return False
             End If
         End If
-
 
         Return true
     End Function
