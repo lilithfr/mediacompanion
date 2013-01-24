@@ -252,9 +252,9 @@ Public Class clsGridViewMovie
         Select Case Form1.cbSort.Text
             Case "A - Z"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.title Ascending
+                    b = From f In b Order By f.titleandyear Ascending
                 Else
-                    b = From f In b Order By f.title Descending
+                    b = From f In b Order By f.titleandyear Descending
                 End If
             Case "Movie Year"
                 If GridSort = "Asc" Then

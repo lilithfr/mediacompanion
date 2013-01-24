@@ -571,7 +571,7 @@ Public Class Form1
         PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
         Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
         Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
-        Mc.clsGridViewMovie.GridSort = "Desc"
+        Mc.clsGridViewMovie.GridSort = "Asc"
         Mc.clsGridViewMovie.GridviewMovieDesign(DataGridViewMovies)
         Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         TooltipGridViewMovies1.Initialisation()
@@ -4316,7 +4316,7 @@ Public Class Form1
 
     'reverse order
     Private Sub btnreverse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnreverse.CheckedChanged 
-        If Mc.clsGridViewMovie.GridSort = "Asc" Then
+        If btnreverse.CheckState = CheckState.Checked Then
             Mc.clsGridViewMovie.GridSort = "Desc"
         Else
             Mc.clsGridViewMovie.GridSort = "Asc"
