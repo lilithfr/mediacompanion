@@ -2619,7 +2619,7 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = False)
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True)
         Try
 
             Dim tvdbstuff As New TVDBScraper
