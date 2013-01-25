@@ -10005,7 +10005,7 @@ Public Class Form1
 
     End Sub
 
-    Public Sub BannerAndPosterViewer()
+    Public Function BannerAndPosterViewer()
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             rbTVposter.Enabled = True
@@ -10074,10 +10074,12 @@ Public Class Form1
                     bmp = New Bitmap(Utilities.DefaultPosterPath)
                 End If
             End If
+            Return workingposterpath
         Catch ex As Exception
+            Return 0
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
+    End Function
 
     Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
         BannerAndPosterViewer()
@@ -10476,80 +10478,111 @@ Public Class Form1
             Dim witherror As Boolean = False
             Dim witherror2 As Boolean = False
             Dim path As String = ""
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
             If ComboBox2.Text.ToLower = "main image" Then
                 If Preferences.XBMC_version = 0 Then
-                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "folder.jpg")
+                    path = workingposterpath
                 ElseIf Preferences.XBMC_version = 2 Then
-                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
+                    If rbTVbanner.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
+                    End If
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
                 Dim temp As String = ComboBox2.Text.ToLower
                 temp = temp.Replace(" ", "")
-                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
-            ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
-                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
-            ElseIf ComboBox2.Text.ToLower = "specials" Then
-                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
-            End If
-            If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
-                PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                If combostart = ComboBox2.SelectedItem Then
-                    tv_PictureBoxRight.Image = PictureBox13.Image
+                If Preferences.XBMC_version = 0 Then
+                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
+                    End If
                 End If
-                PictureBox12.Image = PictureBox13.Image
-                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-            Else
-                Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Res Image")
-                System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                messbox.Show()
-                Me.Refresh()
-                messbox.Refresh()
-                Dim i1 As New PictureBox
-
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = Button56.Tag
-                    Catch
-                        witherror = True
-                        Try
-                            .ImageLocation = Button57.Tag
-                        Catch
-                            witherror2 = True
-                        End Try
-                    End Try
-                End With
-
-                Try
-                    If Not i1 Is Nothing Then
-                        i1.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                        Dim OriginalImage As New Bitmap(path)
-                        Dim Image2 As New Bitmap(OriginalImage)
-                        OriginalImage.Dispose()
-
-                        'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                        tv_PictureBoxRight.ImageLocation = path
-                        tv_PictureBoxRight.Load()
-                        'End If
-                        workingposterpath = path
-
-                        PictureBox12.Image = Image2
-                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+            ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
+                If Preferences.XBMC_version = 0 Then
+                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
                     End If
-
-                    If witherror = True And witherror2 = False Then
-                        MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
+                End If
+            ElseIf ComboBox2.Text.ToLower = "specials" Then
+                If Preferences.XBMC_version = 0 Then
+                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
+                ElseIf Preferences.XBMC_version = 2 Then
+                    If rbTVbanner.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
+                    ElseIf rbTVposter.Checked = True Then
+                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
                     End If
-                    If witherror2 = True Then
-                        MsgBox("Unable to download image")
-                    End If
-                Catch ex As Exception
-                    MsgBox(ex.ToString)
-                Finally
-
-                    messbox.Close()
-                End Try
+                End If
             End If
+                    If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
+                        PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
+                        If combostart = ComboBox2.SelectedItem Then
+                            tv_PictureBoxRight.Image = PictureBox13.Image
+                        End If
+                        PictureBox12.Image = PictureBox13.Image
+                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                    Else
+                        Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        messbox.Show()
+                        Me.Refresh()
+                        messbox.Refresh()
+                        Dim i1 As New PictureBox
+
+                        With i1
+                            .WaitOnLoad = True
+                            Try
+                                .ImageLocation = Button56.Tag
+                            Catch
+                                witherror = True
+                                Try
+                                    .ImageLocation = Button57.Tag
+                                Catch
+                                    witherror2 = True
+                                End Try
+                            End Try
+                        End With
+
+                        Try
+                            If Not i1 Is Nothing Then
+                                i1.Image.Save(path, Imaging.ImageFormat.Jpeg)
+                                Dim OriginalImage As New Bitmap(path)
+                                Dim Image2 As New Bitmap(OriginalImage)
+                                OriginalImage.Dispose()
+
+                                'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                                tv_PictureBoxRight.ImageLocation = path
+                                tv_PictureBoxRight.Load()
+                                'End If
+                                workingposterpath = path
+
+                                PictureBox12.Image = Image2
+                                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                            End If
+
+                            If witherror = True And witherror2 = False Then
+                                MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
+                            End If
+                            If witherror2 = True Then
+                                MsgBox("Unable to download image")
+                            End If
+                        Catch ex As Exception
+                            MsgBox(ex.ToString)
+                        Finally
+
+                            messbox.Close()
+                        End Try
+                    End If
+                    path = ""
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21560,19 +21593,19 @@ End Sub
 
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
-''        ProgressAndStatus1.Display()
-    '    Call Mc.mov_StartNew.ex(scraperLog)
+        ''        ProgressAndStatus1.Display()
+        '    Call Mc.mov_StartNew.ex(scraperLog)
 
- ''       ProgressAndStatus1.Visible = False
- ''       DisplayMovie()
+        ''       ProgressAndStatus1.Visible = False
+        ''       DisplayMovie()
 
- '' NEEDED? ''
+        '' NEEDED? ''
 
-        SearchForNew
+        SearchForNew()
     End Sub
 
     Private Sub ButtonRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRescrapeMovie.Click
-        mov_Rescrape
+        mov_Rescrape()
     End Sub
 
     Private Sub TimerToolTip_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerToolTip.Tick
@@ -21643,393 +21676,392 @@ End Sub
 #Region "Movie scraping stuff"
 
 
-Sub RunBackgroundMovieScrape(action As String)
+    Sub RunBackgroundMovieScrape(action As String)
 
-    If Not BckWrkScnMovies.IsBusy Then
-        scraperLog                      = ""
-        tsStatusLabel.Text              = ""
-        tsMultiMovieProgressBar.Value   = tsMultiMovieProgressBar.Minimum
-        tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action) 
-        ScraperStatusStrip.Visible      = True
-        ssFileDownload    .Visible      = False
-        tsProgressBarFileDownload_Resize
-        EnableDisableByTag("M",False)       'Disable all UI options that can't be run while scraper is running   
+        If Not BckWrkScnMovies.IsBusy Then
+            scraperLog = ""
+            tsStatusLabel.Text = ""
+            tsMultiMovieProgressBar.Value = tsMultiMovieProgressBar.Minimum
+            tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action)
+            ScraperStatusStrip.Visible = True
+            ssFileDownload.Visible = False
+            tsProgressBarFileDownload_Resize()
+            EnableDisableByTag("M", False)       'Disable all UI options that can't be run while scraper is running   
 
-        BckWrkScnMovies.RunWorkerAsync(action)
-    Else
-        MsgBox("The Movie Scraper is Already Running")
-    End If
-End Sub
-
-
-Sub EnableDisableByTag(tagQualifier As String, state As Boolean)
-
-    If IsNothing(ControlsToDisableDuringMovieScrape) Then
-        ControlsToDisableDuringMovieScrape = (from c As Control in GetAllMatchingControls("M")).ToList
-    End If
-
-    For Each c In ControlsToDisableDuringMovieScrape
-        c.Enabled = state
-    Next
-
-    'Not picked up for some unknown reason...
-    MoviesToolStripMenuItem.Enabled = state
-End Sub
-
-
-Function GetAllMatchingControls(tagQualifier As String) As List(Of Control)
-
-    Dim allControls As New List(Of Control)
-
-    GetAllMatchingControls(tagQualifier, Me, allControls)
-
-    Return allControls
-End Function
-
-
-Sub GetAllMatchingControls(tagQualifier As String, parent as Control, allControls As List(Of Control))
-
-    Dim query = from c As Control in parent.Controls 'Where Not IsNothing(c) AndAlso Not IsNothing(c.Tag) AndAlso TypeName(c.Tag).ToLower="string" AndAlso c.tag=tagQualifier
-
-    For Each c As Control in query
-
-        Try
-            If Not IsNothing(c) AndAlso Not IsNothing(c.Tag) AndAlso TypeName(c.Tag).ToLower="string" AndAlso c.tag=tagQualifier then 
-                allControls.Add(c)
-            End If
-        Catch ex As Exception
-        End Try
-   
-        GetAllMatchingControls(tagQualifier,c, allControls)
-    Next
-
-End Sub
-
-
-Function Get_MultiMovieProgressBar_Visiblity(action As String)
-
-    Select action
-        Case "BatchRescrape"          : Return filteredList.Count>1
-        Case "ChangeMovie"            : Return False
-        Case "RescrapeAll"            : Return _rescrapeList.FullPathAndFilenames.Count>1
-        Case "RescrapeDisplayedMovie" : Return False
-        Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
-        Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
-        Case "SearchForNewMovies"     : Return True
-        Case "RebuildCaches"          : Return False
-    End Select
-
-    MsgBox("Unrecognised scrape action : [" + action + "]!",MsgBoxStyle.Exclamation,"Programming Error!")
-    Return False 
-End Function
-
-
-Private Sub mov_BckWrkScnMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkScnMovies.DoWork
-    Try
-        CallSubByName( DirectCast(e.Argument,String) )
-
-    Catch ex As Exception
-        ExceptionHandler.LogError(ex)
-    End Try
-End Sub
-
-
-Public Sub CallSubByName(SubName As String)
-    Me.GetType.GetMethod(SubName).Invoke(Me,Nothing)
-End Sub
-
-
-Public Sub BatchRescrape
-    oMovies.BatchRescrapeSpecific(filteredList,rescrapeList)
-End Sub
-
-
-Public Sub ChangeMovie
-    oMovies.ChangeMovie(workingMovieDetails.fileinfo.fullpathandfilename,ChangeMovieImdb)
-End Sub
-
-
-Public Sub RescrapeAll
-    oMovies.RescrapeAll( _rescrapeList.FullPathAndFilenames )
-End Sub
-
-
-Public Sub RebuildCaches
-    oMovies.RebuildCaches
-End Sub
-
-
-Public Sub RescrapeDisplayedMovie
-    oMovies.RescrapeMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-End Sub
-
-
-Public Sub RescrapeSpecific
-    oMovies.RescrapeSpecific(_rescrapeList)
-End Sub
-
-
-Public Sub ScrapeDroppedFiles
-    oMovies.ScrapeFiles(droppedItems)
-End Sub
-
-
-Public Sub SearchForNewMovies
-    oMovies.FindNewMovies
-End Sub
-
-
-Private Sub UpdateFilteredList
-    filteredList   .Clear
-    filteredListObj.Clear
-    filteredList   .AddRange(oMovies.MovieCache             )
-    filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
-
-    Mc.clsGridViewMovie.mov_FiltersAndSortApply
-    mov_FormPopulate
-    DisplayMovie
-End Sub
-
-
-Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
-
-    Dim oProgress As Progress = CType(e.UserState, Progress) 
-
-    If e.ProgressPercentage <> -1 then
-        tsMultiMovieProgressBar.Value = e.ProgressPercentage
-    End If
-
-    If oProgress.Command = Progress.Commands.Append
-        tsStatusLabel.Text &= oProgress.Message
-    Else
-        tsStatusLabel.Text = oProgress.Message
-    End If
-
-    scraperLog += oProgress.Log
-End Sub
-
-
-Private Sub XBMC_ProgressChanged(ByVal e As System.ComponentModel.ProgressChangedEventArgs)
-    If not scrapeAndQuit Then
-        If e.ProgressPercentage <> 999999 Then
-            ToolStripStatusLabel1.Text = e.UserState
+            BckWrkScnMovies.RunWorkerAsync(action)
         Else
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply
+            MsgBox("The Movie Scraper is Already Running")
         End If
-    End If
-End Sub
+    End Sub
 
 
-Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
+    Sub EnableDisableByTag(tagQualifier As String, state As Boolean)
 
-    UpdateFilteredList
+        If IsNothing(ControlsToDisableDuringMovieScrape) Then
+            ControlsToDisableDuringMovieScrape = (From c As Control In GetAllMatchingControls("M")).ToList
+        End If
 
-    ScraperStatusStrip.Visible = False
-    ssFileDownload.Visible     = False
-    EnableDisableByTag("M",True)       'Re-enable disabled UI options that couldn't be run while scraper was running
+        For Each c In ControlsToDisableDuringMovieScrape
+            c.Enabled = state
+        Next
 
-    DisplayLogFile
-
-    'TabPage14.Text = "Search for new movies"
-    'TabPage14.ToolTipText = "Scan movie folders for new media files"
-End Sub
-
-
-Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
-
-    Callback_ShowHideFileDownloadProgressBar(True,iFileSize)
-
-End Sub
-
-Private Sub FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long) Handles oMovies.AmountDownloadedChanged
-    me.Invoke(CType(Sub() Safe_FileDownload_AmountDownloadedChanged(iTotalBytesRead), MethodInvoker))
-End sub
+        'Not picked up for some unknown reason...
+        MoviesToolStripMenuItem.Enabled = state
+    End Sub
 
 
-Private Sub FileDownload_FileDownloadComplete Handles oMovies.FileDownloadComplete
-    Callback_ShowHideFileDownloadProgressBar(False,-1)
-End sub
+    Function GetAllMatchingControls(tagQualifier As String) As List(Of Control)
+
+        Dim allControls As New List(Of Control)
+
+        GetAllMatchingControls(tagQualifier, Me, allControls)
+
+        Return allControls
+    End Function
 
 
-Private Sub FileDownload_FileDownloadFailed Handles oMovies.FileDownloadFailed
-    Callback_ShowHideFileDownloadProgressBar(False,-1)
-End sub
+    Sub GetAllMatchingControls(tagQualifier As String, parent As Control, allControls As List(Of Control))
+
+        Dim query = From c As Control In parent.Controls 'Where Not IsNothing(c) AndAlso Not IsNothing(c.Tag) AndAlso TypeName(c.Tag).ToLower="string" AndAlso c.tag=tagQualifier
+
+        For Each c As Control In query
+
+            Try
+                If Not IsNothing(c) AndAlso Not IsNothing(c.Tag) AndAlso TypeName(c.Tag).ToLower = "string" AndAlso c.Tag = tagQualifier Then
+                    allControls.Add(c)
+                End If
+            Catch ex As Exception
+            End Try
+
+            GetAllMatchingControls(tagQualifier, c, allControls)
+        Next
+
+    End Sub
 
 
-'Initiate callback from main UI thread
-Sub Callback_ShowHideFileDownloadProgressBar(ByVal bool As Boolean,iFileSize As Long)
+    Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
-    me.Invoke(CType(Sub() ShowHideFileDownloadProgressBar(bool,iFileSize), MethodInvoker))
-End Sub
+        Select Case action
+            Case "BatchRescrape" : Return filteredList.Count > 1
+            Case "ChangeMovie" : Return False
+            Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "RescrapeDisplayedMovie" : Return False
+            Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
+            Case "SearchForNewMovies" : Return True
+            Case "RebuildCaches" : Return False
+        End Select
 
-
-Sub ShowHideFileDownloadProgressBar(ByVal bool As Boolean,iFileSize As Long)
-    ssFileDownload.Visible = bool
-    If bool then tsProgressBarFileDownload.Maximum = iFileSize
-End Sub
-
-
-Sub Safe_FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long)
-    tsProgressBarFileDownload.Value = iTotalBytesRead
-End Sub
-
-
-Private Sub Form1_KeyDown(sender As System.Object,  e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-    If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel
-End Sub
+        MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
+        Return False
+    End Function
 
 
-Private Sub tsLabelEscCancel_Click( sender As System.Object,  e As System.EventArgs) Handles tsLabelEscCancel.Click 
-    BckWrkScnMovies_Cancel
-End Sub
+    Private Sub mov_BckWrkScnMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkScnMovies.DoWork
+        Try
+            CallSubByName(DirectCast(e.Argument, String))
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
 
-Sub BckWrkScnMovies_Cancel
-    If BckWrkScnMovies.IsBusy Then
-		tsStatusLabel.Text = "* Cancelling... *"
-		BckWrkScnMovies.CancelAsync
-	 End If
-End Sub
+    Public Sub CallSubByName(SubName As String)
+        Me.GetType.GetMethod(SubName).Invoke(Me, Nothing)
+    End Sub
 
 
-Private Sub ssFileDownload_Resize( sender As System.Object,  e As System.EventArgs) Handles ssFileDownload.Resize
-    tsProgressBarFileDownload_Resize
-End Sub
+    Public Sub BatchRescrape()
+        oMovies.BatchRescrapeSpecific(filteredList, rescrapeList)
+    End Sub
 
 
-Private Sub tsProgressBarFileDownload_Resize
-    tsProgressBarFileDownload.Width = ssFileDownload.Width - 130
-End Sub
+    Public Sub ChangeMovie()
+        oMovies.ChangeMovie(workingMovieDetails.fileinfo.fullpathandfilename, ChangeMovieImdb)
+    End Sub
+
+
+    Public Sub RescrapeAll()
+        oMovies.RescrapeAll(_rescrapeList.FullPathAndFilenames)
+    End Sub
+
+
+    Public Sub RebuildCaches()
+        oMovies.RebuildCaches()
+    End Sub
+
+
+    Public Sub RescrapeDisplayedMovie()
+        oMovies.RescrapeMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+    End Sub
+
+
+    Public Sub RescrapeSpecific()
+        oMovies.RescrapeSpecific(_rescrapeList)
+    End Sub
+
+
+    Public Sub ScrapeDroppedFiles()
+        oMovies.ScrapeFiles(droppedItems)
+    End Sub
+
+
+    Public Sub SearchForNewMovies()
+        oMovies.FindNewMovies()
+    End Sub
+
+
+    Private Sub UpdateFilteredList()
+        filteredList.Clear()
+        filteredListObj.Clear()
+        filteredList.AddRange(oMovies.MovieCache)
+        filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
+
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+        mov_FormPopulate()
+        DisplayMovie()
+    End Sub
+
+
+    Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
+
+        Dim oProgress As Progress = CType(e.UserState, Progress)
+
+        If e.ProgressPercentage <> -1 Then
+            tsMultiMovieProgressBar.Value = e.ProgressPercentage
+        End If
+
+        If oProgress.Command = Progress.Commands.Append Then
+            tsStatusLabel.Text &= oProgress.Message
+        Else
+            tsStatusLabel.Text = oProgress.Message
+        End If
+
+        scraperLog += oProgress.Log
+    End Sub
+
+
+    Private Sub XBMC_ProgressChanged(ByVal e As System.ComponentModel.ProgressChangedEventArgs)
+        If Not scrapeAndQuit Then
+            If e.ProgressPercentage <> 999999 Then
+                ToolStripStatusLabel1.Text = e.UserState
+            Else
+                Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+            End If
+        End If
+    End Sub
+
+
+    Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
+
+        UpdateFilteredList()
+
+        ScraperStatusStrip.Visible = False
+        ssFileDownload.Visible = False
+        EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
+
+        DisplayLogFile()
+
+        'TabPage14.Text = "Search for new movies"
+        'TabPage14.ToolTipText = "Scan movie folders for new media files"
+    End Sub
+
+
+    Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
+
+        Callback_ShowHideFileDownloadProgressBar(True, iFileSize)
+
+    End Sub
+
+    Private Sub FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long) Handles oMovies.AmountDownloadedChanged
+        Me.Invoke(CType(Sub() Safe_FileDownload_AmountDownloadedChanged(iTotalBytesRead), MethodInvoker))
+    End Sub
+
+
+    Private Sub FileDownload_FileDownloadComplete() Handles oMovies.FileDownloadComplete
+        Callback_ShowHideFileDownloadProgressBar(False, -1)
+    End Sub
+
+
+    Private Sub FileDownload_FileDownloadFailed() Handles oMovies.FileDownloadFailed
+        Callback_ShowHideFileDownloadProgressBar(False, -1)
+    End Sub
+
+
+    'Initiate callback from main UI thread
+    Sub Callback_ShowHideFileDownloadProgressBar(ByVal bool As Boolean, iFileSize As Long)
+
+        Me.Invoke(CType(Sub() ShowHideFileDownloadProgressBar(bool, iFileSize), MethodInvoker))
+    End Sub
+
+
+    Sub ShowHideFileDownloadProgressBar(ByVal bool As Boolean, iFileSize As Long)
+        ssFileDownload.Visible = bool
+        If bool Then tsProgressBarFileDownload.Maximum = iFileSize
+    End Sub
+
+
+    Sub Safe_FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long)
+        tsProgressBarFileDownload.Value = iTotalBytesRead
+    End Sub
+
+
+    Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel()
+    End Sub
+
+
+    Private Sub tsLabelEscCancel_Click(sender As System.Object, e As System.EventArgs) Handles tsLabelEscCancel.Click
+        BckWrkScnMovies_Cancel()
+    End Sub
+
+
+    Sub BckWrkScnMovies_Cancel()
+        If BckWrkScnMovies.IsBusy Then
+            tsStatusLabel.Text = "* Cancelling... *"
+            BckWrkScnMovies.CancelAsync()
+        End If
+    End Sub
+
+
+    Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
+        tsProgressBarFileDownload_Resize()
+    End Sub
+
+
+    Private Sub tsProgressBarFileDownload_Resize()
+        tsProgressBarFileDownload.Width = ssFileDownload.Width - 130
+    End Sub
 
 
 #End Region 'Movie scraping stuff
 
 #Region "General 2 - Movie Preferences tab"
 
-Private Sub tcMoviePreferences_Selecting( sender As System.Object,  e As System.Windows.Forms.TabControlCancelEventArgs) Handles tcMoviePreferences.Selecting
-    TMDbControlsIni
-End Sub
+    Private Sub tcMoviePreferences_Selecting(sender As System.Object, e As System.Windows.Forms.TabControlCancelEventArgs) Handles tcMoviePreferences.Selecting
+        TMDbControlsIni()
+    End Sub
 
 
-Private Sub TMDbControlsIni
-    TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
+    Private Sub TMDbControlsIni()
+        TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
 
-    comboBoxTMDbSelectedLanguage.Text    = Preferences.TMDbSelectedLanguageName
-    cbUseCustomLanguage         .Checked = Preferences.TMDbUseCustomLanguage
-    tbCustomLanguageValue       .Text    = Preferences.TMDbCustomLanguageValue
+        comboBoxTMDbSelectedLanguage.Text = Preferences.TMDbSelectedLanguageName
+        cbUseCustomLanguage.Checked = Preferences.TMDbUseCustomLanguage
+        tbCustomLanguageValue.Text = Preferences.TMDbCustomLanguageValue
 
-    Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Preferences.BackDropResolutionSI) 'SI = Selected Index
-    Movie.LoadHeightResolutionOptions  (comboPosterResolutions  , Preferences.PosterResolutionSI  )
-    Movie.LoadHeightResolutionOptions  (comboActorResolutions   , Preferences.ActorResolutionSI   )
+        Movie.LoadBackDropResolutionOptions(comboBackDropResolutions, Preferences.BackDropResolutionSI) 'SI = Selected Index
+        Movie.LoadHeightResolutionOptions(comboPosterResolutions, Preferences.PosterResolutionSI)
+        Movie.LoadHeightResolutionOptions(comboActorResolutions, Preferences.ActorResolutionSI)
 
-    cbGetMovieSetFromTMDb.Checked = Preferences.GetMovieSetFromTMDb
+        cbGetMovieSetFromTMDb.Checked = Preferences.GetMovieSetFromTMDb
 
-    SetLanguageControlsState
-End Sub
-
-
-
-Private Sub SetLanguageControlsState
-    comboBoxTMDbSelectedLanguage.Enabled = Not cbUseCustomLanguage.Checked
-    gbCustomLanguage            .Enabled =     cbUseCustomLanguage.Checked
-End Sub
-
-Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged( sender As System.Object,  e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
-    Preferences.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
-End Sub
-
-Private Sub cbUseCustomLanguage_Click( sender As System.Object,  e As System.EventArgs) Handles cbUseCustomLanguage.Click
-    Preferences.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
-    SetLanguageControlsState
-End Sub
-
-Private Sub tbCustomLanguageValue_TextChanged( sender As System.Object,  e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
-    Preferences.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
-End Sub
-
-Private Sub comboActorResolutions_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles comboActorResolutions.SelectedIndexChanged
-    Preferences.ActorResolutionSI = comboActorResolutions.SelectedIndex
-End Sub
-
-Private Sub comboPosterResolutions_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles comboPosterResolutions.SelectedIndexChanged
-    Preferences.PosterResolutionSI = comboPosterResolutions.SelectedIndex
-End Sub
-
-Private Sub comboBackDropResolutions_SelectedIndexChanged( sender As System.Object,  e As System.EventArgs) Handles comboBackDropResolutions.SelectedIndexChanged
-    Preferences.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
-End Sub
-
-Private Sub cbGetMovieSetFromTMDb_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbGetMovieSetFromTMDb.CheckedChanged
-        Preferences.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked 
-End Sub
+        SetLanguageControlsState()
+    End Sub
 
 
-Private Sub llLanguagesFile_Click( sender As System.Object,  e As System.EventArgs) Handles llLanguagesFile.Click
-    System.Diagnostics.Process.Start(TMDb.LanguagesFile)
-End Sub
+
+    Private Sub SetLanguageControlsState()
+        comboBoxTMDbSelectedLanguage.Enabled = Not cbUseCustomLanguage.Checked
+        gbCustomLanguage.Enabled = cbUseCustomLanguage.Checked
+    End Sub
+
+    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
+        Preferences.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+    End Sub
+
+    Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) Handles cbUseCustomLanguage.Click
+        Preferences.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
+        SetLanguageControlsState()
+    End Sub
+
+    Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
+        Preferences.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
+    End Sub
+
+    Private Sub comboActorResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboActorResolutions.SelectedIndexChanged
+        Preferences.ActorResolutionSI = comboActorResolutions.SelectedIndex
+    End Sub
+
+    Private Sub comboPosterResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboPosterResolutions.SelectedIndexChanged
+        Preferences.PosterResolutionSI = comboPosterResolutions.SelectedIndex
+    End Sub
+
+    Private Sub comboBackDropResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboBackDropResolutions.SelectedIndexChanged
+        Preferences.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
+    End Sub
+
+    Private Sub cbGetMovieSetFromTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbGetMovieSetFromTMDb.CheckedChanged
+        Preferences.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
+    End Sub
+
+
+    Private Sub llLanguagesFile_Click(sender As System.Object, e As System.EventArgs) Handles llLanguagesFile.Click
+        System.Diagnostics.Process.Start(TMDb.LanguagesFile)
+    End Sub
 
 #End Region 'General 2 - Movie Preferences tab
 
 
-Sub SearchForNew
-    If Preferences.movies_useXBMC_Scraper Then
-        Pre_Run_XBMC_Scraper
-        mov_XBMCScrapingInitialization
-        Post_Run_XBMC_Scraper
-        Exit Sub
-    End If
+    Sub SearchForNew()
+        If Preferences.movies_useXBMC_Scraper Then
+            Pre_Run_XBMC_Scraper()
+            mov_XBMCScrapingInitialization()
+            Post_Run_XBMC_Scraper()
+            Exit Sub
+        End If
 
-    RunBackgroundMovieScrape("SearchForNewMovies")
-End Sub
-
-
-Sub DoScrapeDroppedFiles
-    If Preferences.movies_useXBMC_Scraper Then
-        Pre_Run_XBMC_Scraper
-        mov_XBMCScrapeDroppedFiles
-        droppedItems.Clear
-        Post_Run_XBMC_Scraper
-        Exit Sub
-    End If
-        
-    RunBackgroundMovieScrape("ScrapeDroppedFiles")
-End Sub
-
-Private Sub Pre_Run_XBMC_Scraper
-
-    scraperLog = "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
-
-    'If Preferences.usefoldernames Then
-    '    scraperLog &= "Using FOLDERNAMES to determine Movie Title...." & vbCrLf
-    'Else
-    '    scraperLog &= "Using FILENAMES to determine Movie Title...." & vbCrLf
-    'End If
-
-    scraperLog &= "Using XBMC Scraper...." & vbCrLf
-End Sub
+        RunBackgroundMovieScrape("SearchForNewMovies")
+    End Sub
 
 
-Private Sub Post_Run_XBMC_Scraper
-    UpdateFilteredList
+    Sub DoScrapeDroppedFiles()
+        If Preferences.movies_useXBMC_Scraper Then
+            Pre_Run_XBMC_Scraper()
+            mov_XBMCScrapeDroppedFiles()
+            droppedItems.Clear()
+            Post_Run_XBMC_Scraper()
+            Exit Sub
+        End If
 
-    scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
+        RunBackgroundMovieScrape("ScrapeDroppedFiles")
+    End Sub
 
-    DisplayLogFile
-End Sub
+    Private Sub Pre_Run_XBMC_Scraper()
 
-Private Sub DisplayLogFile
+        scraperLog = "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
 
-    If Not Preferences.disablelogfiles and scraperLog<>"" Then
-        Dim MyFormObject As New frmoutputlog(scraperLog, True)
-        Try
-            MyFormObject.ShowDialog()
-        Catch ex As Exception
-        End Try
-    End If
+        'If Preferences.usefoldernames Then
+        '    scraperLog &= "Using FOLDERNAMES to determine Movie Title...." & vbCrLf
+        'Else
+        '    scraperLog &= "Using FILENAMES to determine Movie Title...." & vbCrLf
+        'End If
+
+        scraperLog &= "Using XBMC Scraper...." & vbCrLf
+    End Sub
+
+
+    Private Sub Post_Run_XBMC_Scraper()
+        UpdateFilteredList()
+
+        scraperLog &= vbCrLf & "!!! Search for New Movies Complete." & vbCrLf
+
+        DisplayLogFile()
+    End Sub
+
+    Private Sub DisplayLogFile()
+
+        If Not Preferences.disablelogfiles And scraperLog <> "" Then
+            Dim MyFormObject As New frmoutputlog(scraperLog, True)
+            Try
+                MyFormObject.ShowDialog()
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
         BannerAndPosterViewer()
     End Sub
-
 End Class
