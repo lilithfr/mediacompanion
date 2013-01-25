@@ -10531,9 +10531,13 @@ Public Class Form1
             End If
                     If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
                         PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                        If combostart = ComboBox2.SelectedItem Then
-                            tv_PictureBoxRight.Image = PictureBox13.Image
-                        End If
+                If combostart = ComboBox2.SelectedItem Then
+                    If rbTVbanner.Checked = True Then
+                        tv_PictureBoxBottom.Image = PictureBox13.Image
+                    Else
+                        tv_PictureBoxRight.Image = PictureBox13.Image
+                    End If
+                     End If
                         PictureBox12.Image = PictureBox13.Image
                         Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
                     Else
@@ -10661,7 +10665,11 @@ Public Class Form1
                             Dim newpicbox As PictureBox = Control
                             newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
                             If combostart = ComboBox2.SelectedItem Then
-                                tv_PictureBoxRight.Image = newpicbox.Image
+                                If rbTVbanner.Checked = True Then
+                                    tv_PictureBoxBottom.Image = PictureBox13.Image
+                                Else
+                                    tv_PictureBoxRight.Image = PictureBox13.Image
+                                End If
                             End If
                             PictureBox12.Image = newpicbox.Image
                             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
