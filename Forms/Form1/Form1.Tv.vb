@@ -421,7 +421,7 @@ Partial Public Class Form1
             End If
             Button_TV_State.Tag = Show
 
-            If Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
+            If Preferences.XBMC_version <> 0 Then
                 Show.ImagePoster.FileName = "poster.jpg"
                 Show.ImageBanner.FileName = "banner.jpg"
                 util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
@@ -633,7 +633,7 @@ Partial Public Class Form1
                 Else
                     util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), Utilities.DefaultPosterPath)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
                 End If
-            ElseIf Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
+            ElseIf Preferences.XBMC_version <> 0 Then
                 If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials-poster.jpg")) Then
                     util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials-poster.jpg"), Utilities.DefaultPosterPath)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
                 Else
@@ -648,15 +648,15 @@ Partial Public Class Form1
         Else                                'Season01 & up
             If Preferences.XBMC_version = 0 Then
                 util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
-            ElseIf Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
+            ElseIf Preferences.XBMC_version <> 0 Then
                 util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
                 util_ImageLoad(tv_PictureBoxBottom, SelectedSeason.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
             End If
         End If
 
-            If Show.NfoFilePath <> Nothing Then
-                util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
-            End If
+        If Show.NfoFilePath <> Nothing Then
+            util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
+        End If
 
     End Sub
 
@@ -762,19 +762,19 @@ Partial Public Class Form1
         If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
             If Preferences.XBMC_version = 0 Then
                 util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultScreenShotPath)
-            ElseIf Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
+            ElseIf Preferences.XBMC_version <> 0 Then
                 util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultScreenShotPath)
             End If
         End If
-            If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
-                If Preferences.XBMC_version = 0 Then
-                    util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-                ElseIf Preferences.XBMC_version = 2 Then
-                    util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-                    util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-                End If
+        If (Season IsNot Nothing AndAlso Season.Poster IsNot Nothing) Then
+            If Preferences.XBMC_version = 0 Then
+                util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+            ElseIf Preferences.XBMC_version = 2 Then
+                util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
             End If
-            Panel9.Visible = True
+        End If
+        Panel9.Visible = True
 
     End Sub
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
@@ -2681,7 +2681,7 @@ Partial Public Class Form1
                 End If
                 If mainposter <> "" Then
                     Dim mainposterpath As String = ""
-                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                    If Preferences.XBMC_version <> 2 Then
                         mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
                     ElseIf Preferences.XBMC_version = 2 Then
                         mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "poster.jpg")
@@ -2689,7 +2689,7 @@ Partial Public Class Form1
                     If Not IO.File.Exists(mainposterpath) Then
                         Utilities.DownloadFile(mainposter, mainposterpath)
                     End If
-                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                    If Preferences.XBMC_version <> 2 Then
                         IO.File.Copy(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"))
                     ElseIf Preferences.XBMC_version = 2 Then
                         IO.File.Copy(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"))
@@ -2725,7 +2725,7 @@ Partial Public Class Form1
                 If mainbanner <> "" Then
                     Dim mainbannerpath As String = ""
                     Dim seasonallpath As String = ""
-                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                    If Preferences.XBMC_version <> 2 Then
                         mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
                     ElseIf Preferences.XBMC_version = 2 Then
                         mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "banner.jpg")
@@ -2733,7 +2733,7 @@ Partial Public Class Form1
                     If Not IO.File.Exists(mainbannerpath) Then
                         Utilities.DownloadFile(mainbanner, mainbannerpath)
                     End If
-                    If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                    If Preferences.XBMC_version <> 2 Then
                         IO.File.Copy(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"))
                     ElseIf Preferences.XBMC_version = 2 Then
                         IO.File.Copy(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"))
@@ -2777,13 +2777,13 @@ Partial Public Class Form1
                         End If
                         If shPosters = True Then
                             Dim seasonXXposterpath As String = ""
-                            If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                            If Preferences.XBMC_version <> 2 Then
                                 seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
                             ElseIf Preferences.XBMC_version = 2 Then
                                 seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-poster.jpg")
                             End If
                             If tempstring = "00" Then
-                                If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                                If Preferences.XBMC_version <> 2 Then
                                     seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
                                 ElseIf Preferences.XBMC_version = 2 Then
                                     seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-poster.jpg")
@@ -2829,13 +2829,13 @@ Partial Public Class Form1
                             tempstring = f.ToString
                         End If
                         Dim seasonXXbannerpath As String = ""
-                        If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                        If Preferences.XBMC_version <> 2 Then
                             seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
                         ElseIf Preferences.XBMC_version = 2 Then
                             seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
                         End If
                         If tempstring = "00" Then
-                            If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                            If Preferences.XBMC_version <> 2 Then
                                 seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
                             ElseIf Preferences.XBMC_version = 2 Then
                                 seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-banner.jpg")

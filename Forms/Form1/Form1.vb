@@ -6868,7 +6868,7 @@ Public Class Form1
                 tvCurrentTabIndex = TabControl3.SelectedIndex
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                If Preferences.XBMC_version <> 2 Then
                     If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
                         util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
                     End If
@@ -7922,7 +7922,7 @@ Public Class Form1
         'Next
         Call nfoFunction.saveepisodenfo(alleps, path)
         Dim ext As String = ""
-        If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+        If Preferences.XBMC_version <> 2 Then
             ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
         ElseIf Preferences.XBMC_version = 2 Then
             ext = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
@@ -18807,7 +18807,7 @@ Public Class Form1
                                                         If tvBatchList.doEpisodeArt = True And tvBatchList.epScreenshot = True Then
                                                             If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
                                                                 Dim screenshotpath As String = ""
-                                                                If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
+                                                                If Preferences.XBMC_version <> 2 Then
                                                                     screenshotpath = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
                                                                 ElseIf Preferences.XBMC_version = 2 Then
                                                                     screenshotpath = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "-thumb.jpg")
