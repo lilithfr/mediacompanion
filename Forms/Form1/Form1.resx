@@ -551,9 +551,6 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
   <metadata name="ListBox9.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="ListBox9.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>300, 17</value>
   </metadata>
@@ -2727,9 +2724,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1381, 17</value>
-  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1672, 17</value>
   </metadata>
@@ -2756,95 +2750,6 @@ If you do not wish to edid a field then leave it blank, only fields that contain
   </metadata>
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1606, 56</value>
-  </metadata>
-  <metadata name="ListBox13.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox17.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox16.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox45.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>284, 56</value>
-  </metadata>
-  <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CwAAAk1TRnQBSQFMAwEBAAEEAQABBAEAASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
-        AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
-        AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
-        AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
-        AYIBwQHM/wAnAAHSAdMB1AG9AdgB3QFDAcMB1AE+AcYB4AE5AcsB4QE8AckB3wE9AccB3gE9AcYB3QE+
-        AcUB3QE9AcQB3AE8AcMB2wE8AcMB2gE8AcEB2gE8AcEB2QE7Ab8B2AE6Ab8B2AE6Ab8B1wE7Ab0B2AE5
-        AbwB1wE6AboB1gE6AboB1gE5AboB1QE5AbkB1QE4AbgB1AE5AbcB0gE4AbYB0gE5AbUB0gE4AbUB0QE5
-        AbMBzwE3AasBwgGxAc0B1QHRAtP/ACEAAY0B0QHbATcBwgHZAT8BxwHfAT0BzgHkATgBvAHWAToBvwHU
-        AToBvAHWATgBuwHUATwBugHUAToBuAHUATcBtgHSATkBuQHNATYBtQHQATkBtgHOATkBtQHOATcBtAHN
-        ATsBswHMATgBsQHNATYBsAHMATYBsAHKATMBrwHKATQBrQHKATMBrQHHATcBrAHJATcBqwHHATsBqgHG
-        ATIBqAHGATMBpwHFATgBtgHRATcBswHQATABqQHGAYQBwwHR/wAhAAF4AcwB2QE9AcYB3wE8AcoB4QE3
-        AcMB2QFHAcUB3AE/AVcBXgEyAUMBSAFLAZ8BqQFGAWoBcAEuAUEBRwFkAa8BvAEtAUgBTQFPAYwBlwFC
-        AWQBaQEtAUIBRgFVAa8BwgE4AVMBWgEvAUIBRgEtAUIBRQEuAUcBTQFGAXIBfwFFAbkBzAE1AU4BUgEv
-        AUEBRwFGAW0BcgEoAS8BNAFHAXQBfgE0Aa4BxwEzAaoBxwE0AbEBzQE4AbEBywFxAb0Bzf8AIQABeQHO
-        AdsBPAHJAeEBPwHJAeABPAHGAdsBRAHLAd8BHwEgASEBBAIBAUgBjQGYASwBOQE+AQQBAQECAWIBmQGh
-        AQkCAgE+AVwBYwEmATMBNAECAQABAQFZAawBuQIbAR8BBAIBARkBIwEkAQUBAQEDAQQCAgFZAacBtgIU
-        ARUBBAEBAQIBPgFUAVYBAwECAQEBEAERARIBRwG1AcsBMwGtAckBOAGxAc0BNgGzAcwBcgG/Ac//ACEA
-        AXkB0AHcAT0BzAHjATwBzAHiATwByQHeAUcBzQHkAR0BIAEhAQIBAQEAAUcBkAGZASkBOgE/AQMBAQEA
-        AWMBfgGGAQMBAQEAATEBPgFBAScBNgE4AQMBAAEBAVQBrQG6ARsBGgEfAwIBWwGPAZgBDwENAQ8BAgIB
-        AVUBmwGnAhMBFQECAgEBZAGXAaABAwICAQwBCAEKAUsBtQHOATUBsgHKATQBtAHMATcBtQHNAXEBwAHQ
-        /wAhAAF7AdIB3gE/Ac0B5QE9Ac0B4wFAAc0B4QFLAdAB5wEdASABIQECAgABSQGSAZsBKQE6AT8BAwIB
-        AVoBYwFlAwEBIAElASYBMgI5AQMBAQEAAVcBsAG+AhoBHgEDAgIBWAGRAZkCEAERAQMCAQFVAZoBpgEU
-        ARIBFAECAgEBZQGZAaEBAwEBAQIBCwEIAQoBTQG5AdEBOAG1Ac0BNgG2Ac4BNwG3Ac4BcwHCAdL/ACEA
-        AXwB0wHfAT8BzwHmAT0B0AHmAT0B0QHlAUsB1AHqAR0BIAEhAQMCAQFJAZQBnQEnATsBPwMBA0IBBQEE
-        AQUBEAEPARABLwEuAS8BAQIAAVgBsgHAAhoBHgECAQEBAwFZAZEBmwEPARABEQEDAgEBVQGdAagBFQES
-        ARQBAgIBAWQBmgGjAQUBAAEBAQsBCAEJAUsBvAHTATcBuQHRATcBtwHQATkBuAHQAXQBxAHT/wAhAAF9
-        AdUB4QFAAdAB6AE+AdIB6AFAAdMB5wFOAdcB7AEfASABIgEDAQABAQFJAZUBngEoATwBPwMBAxUDOQME
-        AxQDAAFaAbQBwQEaARsBHwEDAQEBAwFZAZMBnQIPAREBAwIBAVgBngGqARUBEgEVAQIBAQECAWYBkgGb
-        AgEBAAEMAQkBCgFNAb4B1QE6AbwB1AE5AboB0wE7AboB0gF1AcUB1P8AIQABfQHWAeIBQAHSAekBQAHU
-        AeoBQAHXAeoBTQHbAe8BHwEgASIBAwEAAQEBSwGXAaABKAE9AT8DAAEDAgEBUwFyAXYBCwEHAQkGAAFa
-        AbcBwwIaAR4BAgEBAQMBYgGWAZwBEAEOARECAgEBAVgBpAGvARMBEgEVAQQBAQECAR0BIAEiAQQCAQEd
-        ASEBJQFDAcUB2QE8Ab8B1wE6AbwB1AE7AbwB1AF1AccB1v8AIQABfgHYAeQBQQHUAeoBQQHVAesBQgHa
-        Ae4BTwHdAfIBHwEgASEBAgEAAQEBTAGYAaABKAE9AT8DAAECAgABWAGaAaQBGgEdASABAQIAAQECAAFc
-        AbkBxgEaARsBHgEDAQABBAEkASsBMAEFAgMBCQIFAVoBuwHJARQBEwEVAQICAQFZAaMBqAFGAZMBnQFN
-        AbcByAEyAZUBpgE3AZsBrwE3Ab8B1wE7Ab4B2AF2AckB2P8AIQABfQHaAeQBQQHXAewBQAHTAeoBRQHd
-        AfEBTgHhAfABPwFXAVsBLAFBAUIBWgGrAbgBQAFrAXEBKgFBAUUBLAFBAUIBVwHAAcsBQwFkAWsBKwFB
-        AUUBLAFAAUQBXAHFAc4BPwFSAVgBKgFAAUQBLAFBAUYBMgFRAVMBTAGUAZwBTQHSAeQBNAFLAVEBLgE+
-        AUMBTAG6AcUBPwHHAeMBOwHIAd8BOAGzAckBPAG1AcsBNgG7AdUBPAG/AdoBdwHLAdj/ACEAAZkB3wHn
-        AUgB4QHuAT8B2QHqAToBzwHjAT4B4wHyAUYB4QHyAUQB4AHyAT8B3gHxAUMB3QHwAUQB3AHvAUEB3QHs
-        AUIB2QHwAT0B2gHtAUQB2QHtAUIB2AHsAUAB1gHsAT8B1wHpAUEB1QHpAUEB1AHoAT4B0wHpAUAB0AHp
-        AUABzwHnAUEB0gHkAUMBzwHnAToBzgHmATsBzQHkAT8BywHiATsBzAHiATUBuAHSATwBxQHZAUIBygHc
-        AZMB1AHe/wAhAAHSAtQBxQHbAdwBUgHkAe8BPwHWAeoBQAHRAeYBOwHRAeUBPQHQAeQBQQHOAeQBPQHO
-        AeQBPQHNAeMBQAHLAeMBPwHMAeABPwHLAeEBPAHJAeEBPAHIAd8BPQHIAd0BPgHGAd0BPgHGAd4BPAHE
-        Ad0BOwHEAdsBOgHEAdoBOAHCAdsBOgHBAdoBOAHCAdgBOgHAAdcBOQHAAdgBOgG+AdUBPAG9AdQBPQHB
-        AdkBUgHQAeABxgHYAdsB0wLU/wAnAAGPAeUB6QFpAecB9gFnAeYB9AFmAecB9QFlAeUB9AFlAeYB9AFl
-        AeQB8wFkAeQB8wFkAeQB8QFjAeIB8QFkAeMB8AFlAeIB8AFmAeEB8AFiAeEB7wFjAeAB7gFlAd8B7gFl
-        Ad8B7QFkAd4B7AFkAd4B7AFjAdwB6wFiAdwB7AFjAdwB7QFnAdoB7AFlAdoB7AFnAdoB7AFmAdgB6gFi
-        AdcB6QGVAdkB4f8AJwABQgFNAT4HAAE+AwABKAMAAYADAAEPAwABAQEAAQEFAAHwFwAD/wEAAcACAAED
-        3AABwAIAAQMMAAs=
-</value>
-  </data>
-  <metadata name="Button65.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox38.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Button14.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label79.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label68.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
   </metadata>
   <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>928, 17</value>
@@ -2924,27 +2829,77 @@ The search for offline movies is not recursive, so make
 sure the folders you want added are in one of your
 offline movie folder roots.</value>
   </data>
+  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <data name="Label99.Text" xml:space="preserve">
     <value>Media Companion can attempt to automatically download a Poster when a movie is first scraped, if this option is enabled, then the setting below allows you to prioritise the order that sources are checked for an available poster.</value>
   </data>
   <metadata name="lbCleanFilename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="lbCleanFilename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="lbVideoSource.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="lbVideoSource.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
+  <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>284, 56</value>
   </metadata>
-  <metadata name="ListBox3.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
+        CwAAAk1TRnQBSQFMAwEBAAEEAQABBAEAASABAAEPAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABgAMA
+        AQ8DAAEBAQABGAUAAYABFhgAAYgBywHVAUcBvwHVAUkBvgHTAUsBvQHTAUYBvAHRAUYBvAHRAUgBvAHQ
+        AUkBuwHQAUoBvAHRAUkBuwHQAUgBugHPAUkBuQHOAUcBuAHNAUgBuAHNAUYBtgHMAUYBtQHLAUYBtQHN
+        AUYBswHMAUYBswHLAUUBsgHLAUQBsQHKAUMBsQHJAUQBsQHIAUQBsAHIAUUBrwHHAUQBrQHGAUEBrQHE
+        AYIBwQHM/wAnAAHSAdMB1AG9AdgB3QFDAcMB1AE+AcYB4AE5AcsB4QE8AckB3wE9AccB3gE9AcYB3QE+
+        AcUB3QE9AcQB3AE8AcMB2wE8AcMB2gE8AcEB2gE8AcEB2QE7Ab8B2AE6Ab8B2AE6Ab8B1wE7Ab0B2AE5
+        AbwB1wE6AboB1gE6AboB1gE5AboB1QE5AbkB1QE4AbgB1AE5AbcB0gE4AbYB0gE5AbUB0gE4AbUB0QE5
+        AbMBzwE3AasBwgGxAc0B1QHRAtP/ACEAAY0B0QHbATcBwgHZAT8BxwHfAT0BzgHkATgBvAHWAToBvwHU
+        AToBvAHWATgBuwHUATwBugHUAToBuAHUATcBtgHSATkBuQHNATYBtQHQATkBtgHOATkBtQHOATcBtAHN
+        ATsBswHMATgBsQHNATYBsAHMATYBsAHKATMBrwHKATQBrQHKATMBrQHHATcBrAHJATcBqwHHATsBqgHG
+        ATIBqAHGATMBpwHFATgBtgHRATcBswHQATABqQHGAYQBwwHR/wAhAAF4AcwB2QE9AcYB3wE8AcoB4QE3
+        AcMB2QFHAcUB3AE/AVcBXgEyAUMBSAFLAZ8BqQFGAWoBcAEuAUEBRwFkAa8BvAEtAUgBTQFPAYwBlwFC
+        AWQBaQEtAUIBRgFVAa8BwgE4AVMBWgEvAUIBRgEtAUIBRQEuAUcBTQFGAXIBfwFFAbkBzAE1AU4BUgEv
+        AUEBRwFGAW0BcgEoAS8BNAFHAXQBfgE0Aa4BxwEzAaoBxwE0AbEBzQE4AbEBywFxAb0Bzf8AIQABeQHO
+        AdsBPAHJAeEBPwHJAeABPAHGAdsBRAHLAd8BHwEgASEBBAIBAUgBjQGYASwBOQE+AQQBAQECAWIBmQGh
+        AQkCAgE+AVwBYwEmATMBNAECAQABAQFZAawBuQIbAR8BBAIBARkBIwEkAQUBAQEDAQQCAgFZAacBtgIU
+        ARUBBAEBAQIBPgFUAVYBAwECAQEBEAERARIBRwG1AcsBMwGtAckBOAGxAc0BNgGzAcwBcgG/Ac//ACEA
+        AXkB0AHcAT0BzAHjATwBzAHiATwByQHeAUcBzQHkAR0BIAEhAQIBAQEAAUcBkAGZASkBOgE/AQMBAQEA
+        AWMBfgGGAQMBAQEAATEBPgFBAScBNgE4AQMBAAEBAVQBrQG6ARsBGgEfAwIBWwGPAZgBDwENAQ8BAgIB
+        AVUBmwGnAhMBFQECAgEBZAGXAaABAwICAQwBCAEKAUsBtQHOATUBsgHKATQBtAHMATcBtQHNAXEBwAHQ
+        /wAhAAF7AdIB3gE/Ac0B5QE9Ac0B4wFAAc0B4QFLAdAB5wEdASABIQECAgABSQGSAZsBKQE6AT8BAwIB
+        AVoBYwFlAwEBIAElASYBMgI5AQMBAQEAAVcBsAG+AhoBHgEDAgIBWAGRAZkCEAERAQMCAQFVAZoBpgEU
+        ARIBFAECAgEBZQGZAaEBAwEBAQIBCwEIAQoBTQG5AdEBOAG1Ac0BNgG2Ac4BNwG3Ac4BcwHCAdL/ACEA
+        AXwB0wHfAT8BzwHmAT0B0AHmAT0B0QHlAUsB1AHqAR0BIAEhAQMCAQFJAZQBnQEnATsBPwMBA0IBBQEE
+        AQUBEAEPARABLwEuAS8BAQIAAVgBsgHAAhoBHgECAQEBAwFZAZEBmwEPARABEQEDAgEBVQGdAagBFQES
+        ARQBAgIBAWQBmgGjAQUBAAEBAQsBCAEJAUsBvAHTATcBuQHRATcBtwHQATkBuAHQAXQBxAHT/wAhAAF9
+        AdUB4QFAAdAB6AE+AdIB6AFAAdMB5wFOAdcB7AEfASABIgEDAQABAQFJAZUBngEoATwBPwMBAxUDOQME
+        AxQDAAFaAbQBwQEaARsBHwEDAQEBAwFZAZMBnQIPAREBAwIBAVgBngGqARUBEgEVAQIBAQECAWYBkgGb
+        AgEBAAEMAQkBCgFNAb4B1QE6AbwB1AE5AboB0wE7AboB0gF1AcUB1P8AIQABfQHWAeIBQAHSAekBQAHU
+        AeoBQAHXAeoBTQHbAe8BHwEgASIBAwEAAQEBSwGXAaABKAE9AT8DAAEDAgEBUwFyAXYBCwEHAQkGAAFa
+        AbcBwwIaAR4BAgEBAQMBYgGWAZwBEAEOARECAgEBAVgBpAGvARMBEgEVAQQBAQECAR0BIAEiAQQCAQEd
+        ASEBJQFDAcUB2QE8Ab8B1wE6AbwB1AE7AbwB1AF1AccB1v8AIQABfgHYAeQBQQHUAeoBQQHVAesBQgHa
+        Ae4BTwHdAfIBHwEgASEBAgEAAQEBTAGYAaABKAE9AT8DAAECAgABWAGaAaQBGgEdASABAQIAAQECAAFc
+        AbkBxgEaARsBHgEDAQABBAEkASsBMAEFAgMBCQIFAVoBuwHJARQBEwEVAQICAQFZAaMBqAFGAZMBnQFN
+        AbcByAEyAZUBpgE3AZsBrwE3Ab8B1wE7Ab4B2AF2AckB2P8AIQABfQHaAeQBQQHXAewBQAHTAeoBRQHd
+        AfEBTgHhAfABPwFXAVsBLAFBAUIBWgGrAbgBQAFrAXEBKgFBAUUBLAFBAUIBVwHAAcsBQwFkAWsBKwFB
+        AUUBLAFAAUQBXAHFAc4BPwFSAVgBKgFAAUQBLAFBAUYBMgFRAVMBTAGUAZwBTQHSAeQBNAFLAVEBLgE+
+        AUMBTAG6AcUBPwHHAeMBOwHIAd8BOAGzAckBPAG1AcsBNgG7AdUBPAG/AdoBdwHLAdj/ACEAAZkB3wHn
+        AUgB4QHuAT8B2QHqAToBzwHjAT4B4wHyAUYB4QHyAUQB4AHyAT8B3gHxAUMB3QHwAUQB3AHvAUEB3QHs
+        AUIB2QHwAT0B2gHtAUQB2QHtAUIB2AHsAUAB1gHsAT8B1wHpAUEB1QHpAUEB1AHoAT4B0wHpAUAB0AHp
+        AUABzwHnAUEB0gHkAUMBzwHnAToBzgHmATsBzQHkAT8BywHiATsBzAHiATUBuAHSATwBxQHZAUIBygHc
+        AZMB1AHe/wAhAAHSAtQBxQHbAdwBUgHkAe8BPwHWAeoBQAHRAeYBOwHRAeUBPQHQAeQBQQHOAeQBPQHO
+        AeQBPQHNAeMBQAHLAeMBPwHMAeABPwHLAeEBPAHJAeEBPAHIAd8BPQHIAd0BPgHGAd0BPgHGAd4BPAHE
+        Ad0BOwHEAdsBOgHEAdoBOAHCAdsBOgHBAdoBOAHCAdgBOgHAAdcBOQHAAdgBOgG+AdUBPAG9AdQBPQHB
+        AdkBUgHQAeABxgHYAdsB0wLU/wAnAAGPAeUB6QFpAecB9gFnAeYB9AFmAecB9QFlAeUB9AFlAeYB9AFl
+        AeQB8wFkAeQB8wFkAeQB8QFjAeIB8QFkAeMB8AFlAeIB8AFmAeEB8AFiAeEB7wFjAeAB7gFlAd8B7gFl
+        Ad8B7QFkAd4B7AFkAd4B7AFjAdwB6wFiAdwB7AFjAdwB7QFnAdoB7AFlAdoB7AFnAdoB7AFmAdgB6gFi
+        AdcB6QGVAdkB4f8AJwABQgFNAT4HAAE+AwABKAMAAYADAAEPAwABAQEAAQEFAAHwFwAD/wEAAcACAAED
+        3AABwAIAAQMMAAs=
+</value>
+  </data>
   <metadata name="ListBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -3022,9 +2977,6 @@ added manually.</value>
   <metadata name="ListBox6.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="ListBox12.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="Label138.Text" xml:space="preserve">
     <value>If you have enabled the option to 'Save Actor
 Thumbs to the '.Actors' Folder' located in the
@@ -3060,55 +3012,10 @@ MC naming conventions.</value>
   <metadata name="ListBox_tv_RegexRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="ListBox_tv_RegexRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox_tv_RegexScrape.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="ListBox_tv_RegexScrape.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="TextBox_tv_RegexScrape_TestResult.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox_tv_RegexScrape_TestResult.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox20.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label169.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="btnSaveHomeMovie.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="PictureBox4.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox23.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label173.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label172.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox22.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label168.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label167.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox6.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="TextBox2.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="TextBox20.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -5193,18 +5100,6 @@ MC naming conventions.</value>
   <metadata name="Label166.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="RemoveHomeFoldersBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="AddHomeFolderBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ListBox19.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Label166.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="Label166.Text" xml:space="preserve">
     <value>Add your Home Movie folders from this location.
 
@@ -5215,18 +5110,6 @@ i.e. 'C:/Movies/'
 Would allow MC to find any movies located within the
 "Movies" folder, and all of its subfolders.</value>
   </data>
-  <metadata name="Label170.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="homeMovieScreenShotTimeTxtBx.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="homeMovie_ScreenShotBtn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="PictureBox5.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="Label170.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -5291,9 +5174,6 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>921, 95</value>
-  </metadata>
-  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1128, 95</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1257, 95</value>

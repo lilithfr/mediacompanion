@@ -65,6 +65,9 @@ Public Class Form1
     Public workingMovie As New ComboList
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
+    Public movieprefschanged As Boolean = False
+    Public cleanfilenameprefchanged As Boolean = False
+    Public videosourceprefchanged As Boolean = False
     Public scraperLog As String = ""
 
 
@@ -13768,7 +13771,10 @@ Public Class Form1
         cbMovieRuntimeFallbackToFile.Enabled = (Preferences.movieRuntimeDisplay = "scraper")
         cbMovieRuntimeFallbackToFile.Checked = Preferences.movieRuntimeFallbackToFile
 
-        generalprefschanged = False
+        TMDbControlsIni()
+
+        movieprefschanged = False
+        btnMoviePrefSaveChanges.Enabled = False
     End Sub
 
     Private Sub CheckBox16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox16.CheckedChanged
@@ -13778,7 +13784,8 @@ Public Class Form1
             Else
                 Preferences.disablelogfiles = True
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13846,10 +13853,11 @@ Public Class Form1
                 For f = 0 To 33
                     Preferences.certificatepriority(f) = ListBox11.Items(f)
                 Next
-                generalprefschanged = True
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
         Catch ex As Exception
@@ -13870,10 +13878,11 @@ Public Class Form1
                 For f = 0 To 33
                     Preferences.certificatepriority(f) = ListBox11.Items(f)
                 Next
-                generalprefschanged = True
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
 #If SilentErrorScream Then
-            Throw ex
+                Throw ex
 #End If
             End Try
         Catch ex As Exception
@@ -13890,16 +13899,16 @@ Public Class Form1
                 localactorpath.Enabled = True
                 xbmcactorpath.Enabled = True
                 Button77.Enabled = True
-                generalprefschanged = True
             Else
                 Preferences.actorsave = False
-                generalprefschanged = True
                 localactorpath.Text = ""
                 xbmcactorpath.Text = ""
                 localactorpath.Enabled = False
                 xbmcactorpath.Enabled = False
                 Button77.Enabled = False
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13943,23 +13952,17 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
-
         Preferences.gettrailer = CheckBox11.Checked
         cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
-        generalprefschanged = True
-
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
-
-
-	Private Sub cbDlTrailerDuringScrape_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTrailerDuringScrape.CheckedChanged
-
-		Preferences.DownloadTrailerDuringScrape = cbDlTrailerDuringScrape.Checked
-		generalprefschanged = True
-
-	End Sub
-
-
+    Private Sub cbDlTrailerDuringScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbDlTrailerDuringScrape.CheckedChanged
+        Preferences.DownloadTrailerDuringScrape = cbDlTrailerDuringScrape.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+    End Sub
 
     Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
         Try
@@ -14024,6 +14027,8 @@ Public Class Form1
                 RadioButton51.Enabled = False
                 RadioButton52.Enabled = False
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14049,6 +14054,8 @@ Public Class Form1
                 GroupBox_TMDB_Scraper_Preferences.Visible = True
                 GroupBox_TMDB_Scraper_Preferences.BringToFront()
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14073,6 +14080,8 @@ Public Class Form1
                 GroupBox_TMDB_Scraper_Preferences.Visible = False
                 GroupBox_TMDB_Scraper_Preferences.SendToBack()
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14086,7 +14095,8 @@ Public Class Form1
             Else
                 Preferences.usefoldernames = False
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14099,7 +14109,8 @@ Public Class Form1
             Else
                 Preferences.createfolderjpg = False
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14108,7 +14119,8 @@ Public Class Form1
     Private Sub ListBox9_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox9.SelectedIndexChanged
         Try
             Preferences.imdbmirror = ListBox9.SelectedItem
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14123,7 +14135,8 @@ Public Class Form1
             Else
                 Preferences.maxactors = 9999
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14139,7 +14152,8 @@ Public Class Form1
             Else
                 Preferences.maxmoviegenre = 9999
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14148,7 +14162,8 @@ Public Class Form1
     Private Sub IMPA_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles IMPA_chk.CheckedChanged
         Try
             Call mov_ThumbNailUrlsSet()
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14157,7 +14172,8 @@ Public Class Form1
     Private Sub mpdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mpdb_chk.CheckedChanged
         Try
             Call mov_ThumbNailUrlsSet()
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14166,7 +14182,8 @@ Public Class Form1
     Private Sub tmdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmdb_chk.CheckedChanged
         Try
             Call mov_ThumbNailUrlsSet()
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14175,7 +14192,8 @@ Public Class Form1
     Private Sub imdb_chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles imdb_chk.CheckedChanged
         Try
             Call mov_ThumbNailUrlsSet()
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14240,7 +14258,8 @@ Public Class Form1
     Private Sub localactorpath_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles localactorpath.TextChanged
         Try
             Preferences.actorsavepath = localactorpath.Text
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14249,7 +14268,8 @@ Public Class Form1
     Private Sub xbmcactorpath_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles xbmcactorpath.TextChanged
         Try
             Preferences.actornetworkpath = xbmcactorpath.Text
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14262,7 +14282,8 @@ Public Class Form1
             Else
                 Preferences.basicsavemode = False
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14270,16 +14291,17 @@ Public Class Form1
 
     Private Sub TabPage26_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage26.Leave
         Try
-            If generalprefschanged = True Then
+            If movieprefschanged Then
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
+                    applyAdvancedLists()
                     Preferences.SaveConfig()
-                    MsgBox("Changes Saved")
                 Else
                     Me.util_ConfigLoad()
                 End If
-                generalprefschanged = False
             End If
+            movieprefschanged = False
+            btnMoviePrefSaveChanges.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15310,7 +15332,8 @@ Public Class Form1
                 rbRuntimeScraper.Checked = True
             End If
             Call mov_SwitchRuntime()
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15342,6 +15365,8 @@ Public Class Form1
             cbMovieRuntimeFallbackToFile.Enabled = rbRuntimeScraper.Checked
 
             'Call mov_SwitchRuntime() 'Damn it - this call prevents MC starting, and I have no idea why! HueyHQ
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19391,6 +19416,7 @@ Public Class Form1
                 Save_XBMC_TVDB_Scraper_Config("absolutenumber", "true")
             End If
             'Read_XBMC_TVDB_Scraper_Config()
+            generalprefschanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19404,6 +19430,7 @@ Public Class Form1
                 Save_XBMC_TVDB_Scraper_Config("fanart", "false")
             End If
             'Read_XBMC_TVDB_Scraper_Config()
+            generalprefschanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19417,6 +19444,7 @@ Public Class Form1
                 Save_XBMC_TVDB_Scraper_Config("posters", "false")
             End If
             'Read_XBMC_TVDB_Scraper_Config()
+            generalprefschanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19426,6 +19454,7 @@ Public Class Form1
         Try
             Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
             'Read_XBMC_TVDB_Scraper_Config()
+            generalprefschanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19439,6 +19468,8 @@ Public Class Form1
                 Save_XBMC_TMDB_Scraper_Config("fanart", "false")
             End If
             'Read_XBMC_TMDB_Scraper_Config()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19452,6 +19483,8 @@ Public Class Form1
                 Save_XBMC_TMDB_Scraper_Config("imdbrating", "false")
             End If
             'Read_XBMC_TMDB_Scraper_Config()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19461,6 +19494,8 @@ Public Class Form1
         Try
             Save_XBMC_TMDB_Scraper_Config("trailerq", ComboBox_TMDB_HD_Trailer.Text)
             'Read_XBMC_TMDB_Scraper_Config()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19470,6 +19505,8 @@ Public Class Form1
         Try
             Save_XBMC_TMDB_Scraper_Config("language", ComboBox_TMDB_Title_Language.Text)
             'Read_XBMC_TMDB_Scraper_Config()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19482,6 +19519,8 @@ Public Class Form1
             Else
                 Save_XBMC_IMDB_Scraper_Config("fullcredits", "false")
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19494,6 +19533,8 @@ Public Class Form1
             Else
                 Save_XBMC_IMDB_Scraper_Config("fanart", "false")
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19506,6 +19547,8 @@ Public Class Form1
             Else
                 Save_XBMC_IMDB_Scraper_Config("tmdbthumbs", "false")
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19518,6 +19561,8 @@ Public Class Form1
             Else
                 Save_XBMC_IMDB_Scraper_Config("impawards", "false")
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19530,6 +19575,8 @@ Public Class Form1
             Else
                 Save_XBMC_IMDB_Scraper_Config("movieposterdb", "false")
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19542,6 +19589,8 @@ Public Class Form1
             Else
                 Save_XBMC_IMDB_Scraper_Config("imdbtrailer", "false")
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19550,6 +19599,8 @@ Public Class Form1
     Private Sub ComboBox_IMDB_HD_Trailer_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_HD_Trailer.SelectedIndexChanged
         Try
             Save_XBMC_IMDB_Scraper_Config("trailerq", ComboBox_IMDB_HD_Trailer.Text)
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19558,6 +19609,8 @@ Public Class Form1
     Private Sub ComboBox_IMDB_Poster_Actor_Size_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_Poster_Actor_Size.SelectedIndexChanged
         Try
             Save_XBMC_IMDB_Scraper_Config("imdbscale", ComboBox_IMDB_Poster_Actor_Size.Text)
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19566,6 +19619,8 @@ Public Class Form1
     Private Sub ComboBox_IMDB_Title_Language_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox_IMDB_Title_Language.SelectedIndexChanged
         Try
             Save_XBMC_IMDB_Scraper_Config("akatitles", ComboBox_IMDB_Title_Language.Text)
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19642,7 +19697,8 @@ Public Class Form1
             Else
                 Preferences.scrapefullcert = False
             End If
-            'generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19873,6 +19929,8 @@ Public Class Form1
                 Preferences.showsortdate = False
             End If
             Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20085,6 +20143,8 @@ Public Class Form1
     Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
         Try
             Preferences.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20239,14 +20299,17 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) 
+    Private Sub cbPreferredTrailerResolution_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbPreferredTrailerResolution.SelectedIndexChanged
         Preferences.moviePreferredTrailerResolution = cbPreferredTrailerResolution.Text.ToUpper()
-        generalprefschanged = True
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub MovieRenameTemplateTextBox_TextChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameTemplateTextBox.TextChanged
         Try
             Preferences.MovieRenameTemplate = MovieRenameTemplateTextBox.Text
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20255,6 +20318,8 @@ Public Class Form1
     Private Sub MovieRenameCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles MovieRenameCheckBox.CheckedChanged
         Try
             Preferences.MovieRenameEnable = MovieRenameCheckBox.Checked
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20267,6 +20332,8 @@ Public Class Form1
             Preferences.namemode = "0"
         End If
         lblNameMode.Text = createNameModeText()
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Function createNameModeText() As String
@@ -20359,6 +20426,8 @@ Public Class Form1
         Try
             Preferences.allfolders = chkbx_MovieAllFolders.Checked
             If chkbx_MovieAllFolders.Checked = True Then chkbx_usefoldernames.Checked = False
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20522,7 +20591,7 @@ Public Class Form1
 #End If
         End Try
     End Sub
-    Private Sub btnVideoSourceApply_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceApply.Click
+    Private Sub btnVideoSourceApply_Click(sender As System.Object, e As System.EventArgs)
         Dim count As Integer = lbVideoSource.Items.Count - 1
         ReDim Preferences.releaseformat(count)
         For g = 0 To count
@@ -20533,6 +20602,9 @@ Public Class Form1
 
     Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
         lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+        videosourceprefchanged = True
     End Sub
 
     Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
@@ -20543,6 +20615,9 @@ Public Class Form1
             If ComboBoxFormatSource.Text = strSelected Then ComboBoxFormatSource.SelectedIndex = 0
             lbVideoSource.Items.RemoveAt(idxSelected)
             mov_VideoSourcePopulate()
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+            videosourceprefchanged = True
         Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -20558,12 +20633,14 @@ Public Class Form1
             Else
                 Preferences.movieignorepart = False
             End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub btnCleanFilenameApply_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameApply.Click
+    Private Sub btnCleanFilenameApply_Click(sender As System.Object, e As System.EventArgs)
         Dim strTemp As String = ""
         For i = 0 To lbCleanFilename.Items.Count - 1
             strTemp &= lbCleanFilename.Items(i) & "|"
@@ -20573,10 +20650,36 @@ Public Class Form1
 
     Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameAdd.Click
         lbCleanFilename.Items.Add(txtCleanFilenameAdd.Text)
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+        cleanfilenameprefchanged = True
     End Sub
 
     Private Sub btnCleanFilenameRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameRemove.Click
         lbCleanFilename.Items.RemoveAt(lbCleanFilename.SelectedIndex)
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
+        cleanfilenameprefchanged = True
+    End Sub
+
+    Private Sub applyAdvancedLists()
+        If cleanfilenameprefchanged Then
+            Dim strTemp As String = ""
+            For i = 0 To lbCleanFilename.Items.Count - 1
+                strTemp &= lbCleanFilename.Items(i) & "|"
+            Next
+            Preferences.moviecleanTags = strTemp.TrimEnd("|")
+            cleanfilenameprefchanged = False
+        End If
+        If videosourceprefchanged Then
+            Dim count As Integer = lbVideoSource.Items.Count - 1
+            ReDim Preferences.releaseformat(count)
+            For g = 0 To count
+                Preferences.releaseformat(g) = lbVideoSource.Items(g)
+            Next
+            mov_VideoSourcePopulate()
+            videosourceprefchanged = False
+        End If
     End Sub
 
 Private Sub ToolStripMenuItem1_Click_1( sender As System.Object,  e As System.EventArgs) Handles ToolStripMenuItem1.Click
@@ -20705,7 +20808,8 @@ End Sub
     
     Private Sub cbMovieRuntimeFallbackToFile_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieRuntimeFallbackToFile.CheckedChanged
         Preferences.movieRuntimeFallbackToFile = cbMovieRuntimeFallbackToFile.Checked
-        generalprefschanged = True
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub TextBox_Plot_DoubleClick( sender As System.Object,  e As System.EventArgs) Handles TextBox_Plot.DoubleClick
@@ -21606,20 +21710,18 @@ End Sub
 
     Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try
+            applyAdvancedLists()
             Preferences.SaveConfig()
-            ToolsToolStripMenuItem.DropDownItems.Clear()
-            For Each com In Preferences.commandlist
-                ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-            Next
-            MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
-            generalprefschanged = False
+            'ToolsToolStripMenuItem.DropDownItems.Clear()
+            'For Each com In Preferences.commandlist
+            '    ToolsToolStripMenuItem.DropDownItems.Add(com.title)
+            'Next
+            'MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
+            movieprefschanged = False
+            btnMoviePrefSaveChanges.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
-
-    Private Sub PictureBoxFanArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
     End Sub
 
     Private Sub ComboBoxFilterGenre_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBoxFilterGenre.SelectedValueChanged
@@ -21630,7 +21732,6 @@ End Sub
     Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
         DisplayMovie()
     End Sub
-
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
         ''        ProgressAndStatus1.Display()
@@ -21979,9 +22080,12 @@ End Sub
 
 #Region "General 2 - Movie Preferences tab"
 
-    Private Sub tcMoviePreferences_Selecting(sender As System.Object, e As System.Windows.Forms.TabControlCancelEventArgs) Handles tcMoviePreferences.Selecting
-        TMDbControlsIni()
-    End Sub
+    'Private Sub tcMoviePreferences_Selecting( sender As System.Object,  e As System.Windows.Forms.TabControlCancelEventArgs) Handles tcMoviePreferences.Selecting
+    '        Dim retainPrefState As Boolean = movieprefschanged
+    '        TMDbControlsIni()
+    '        movieprefschanged = retainPrefState
+    '        btnMoviePrefSaveChanges.Enabled = retainPrefState
+    '    End Sub
 
 
     Private Sub TMDbControlsIni()
@@ -22009,31 +22113,45 @@ End Sub
 
     Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
         Preferences.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbUseCustomLanguage_Click(sender As System.Object, e As System.EventArgs) Handles cbUseCustomLanguage.Click
         Preferences.TMDbUseCustomLanguage = cbUseCustomLanguage.Checked
         SetLanguageControlsState()
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
         Preferences.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub comboActorResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboActorResolutions.SelectedIndexChanged
         Preferences.ActorResolutionSI = comboActorResolutions.SelectedIndex
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub comboPosterResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboPosterResolutions.SelectedIndexChanged
         Preferences.PosterResolutionSI = comboPosterResolutions.SelectedIndex
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub comboBackDropResolutions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles comboBackDropResolutions.SelectedIndexChanged
         Preferences.BackDropResolutionSI = comboBackDropResolutions.SelectedIndex
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
     Private Sub cbGetMovieSetFromTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbGetMovieSetFromTMDb.CheckedChanged
         Preferences.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
+        movieprefschanged = True
+        btnMoviePrefSaveChanges.Enabled = True
     End Sub
 
 
