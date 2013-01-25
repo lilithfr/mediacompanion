@@ -10340,7 +10340,6 @@ Public Class Form1
                         .Text = " "
                         AddHandler tvpostercheckboxes.CheckedChanged, AddressOf tv_PosterRadioChanged
                     End With
-
                     itemcounter += 1
                     location += 140
 
@@ -10585,7 +10584,7 @@ Public Class Form1
 
                             messbox.Close()
                         End Try
-                    End If
+            End If
                     path = ""
         Catch ex As Exception
             ExceptionHandler.LogError(ex)

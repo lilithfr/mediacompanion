@@ -421,7 +421,7 @@ Partial Public Class Form1
             End If
             Button_TV_State.Tag = Show
 
-            If Preferences.XBMC_version = 2 Then
+            If Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
                 Show.ImagePoster.FileName = "poster.jpg"
                 Show.ImageBanner.FileName = "banner.jpg"
                 util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
@@ -633,7 +633,7 @@ Partial Public Class Form1
                 Else
                     util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), Utilities.DefaultPosterPath)     'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
                 End If
-            ElseIf Preferences.XBMC_version = 2 Then
+            ElseIf Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
                 If IO.File.Exists(Show.NfoFilePath.ToLower.Replace("tvshow.nfo", "season-specials-poster.jpg")) Then
                     util_ImageLoad(tv_PictureBoxRight, Show.NfoFilePath.Replace("tvshow.nfo", "season-specials-poster.jpg"), Utilities.DefaultPosterPath)  'tv_PictureBoxRight.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
                 Else
@@ -648,7 +648,7 @@ Partial Public Class Form1
         Else                                'Season01 & up
             If Preferences.XBMC_version = 0 Then
                 util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
-            ElseIf Preferences.XBMC_version = 2 Then
+            ElseIf Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
                 util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
                 util_ImageLoad(tv_PictureBoxBottom, SelectedSeason.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
             End If
@@ -762,7 +762,7 @@ Partial Public Class Form1
         If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
             If Preferences.XBMC_version = 0 Then
                 util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path, Utilities.DefaultScreenShotPath)
-            ElseIf Preferences.XBMC_version = 2 Then
+            ElseIf Preferences.XBMC_version = 2 Or Preferences.XBMC_version = 1 Then
                 util_ImageLoad(tv_PictureBoxLeft, Episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg"), Utilities.DefaultScreenShotPath)
             End If
         End If
