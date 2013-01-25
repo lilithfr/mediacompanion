@@ -169,7 +169,7 @@ Public Class Form1
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
+        Label73.Text = ""
 
         BckWrkScnMovies.WorkerReportsProgress      = true
         BckWrkScnMovies.WorkerSupportsCancellation = true
@@ -6868,7 +6868,7 @@ Public Class Form1
                 tvCurrentTabIndex = TabControl3.SelectedIndex
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                If Preferences.XBMC_version = 0 Then
+                If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                     If IO.File.Exists(WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")) Then
                         util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
                     End If
@@ -7790,6 +7790,7 @@ Public Class Form1
                 myProcess.StartInfo.Arguments = proc_arguments
                 myProcess.Start()
                 myProcess.WaitForExit()
+
             End If
         Next
         messbox.Close()
@@ -7921,7 +7922,7 @@ Public Class Form1
         'Next
         Call nfoFunction.saveepisodenfo(alleps, path)
         Dim ext As String = ""
-        If Preferences.XBMC_version = 0 Then
+        If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
             ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
         ElseIf Preferences.XBMC_version = 2 Then
             ext = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
@@ -7931,6 +7932,7 @@ Public Class Form1
                 tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
                 Call ep_ScreenShotDo(ext)
             End If
+
         Else
 
 
@@ -7982,7 +7984,9 @@ Public Class Form1
                 End If
             End If
         End If
-
+        If Preferences.XBMC_version = 1 Then
+            IO.File.Copy(ext, ext.Replace(".tbn", "-thumb.jpg"))
+        End If
         If Preferences.autorenameepisodes = True Then
             Dim eps As New List(Of String)
             eps.Clear()
@@ -18804,7 +18808,7 @@ Public Class Form1
                                                         If tvBatchList.doEpisodeArt = True And tvBatchList.epScreenshot = True Then
                                                             If episodescreenurl <> "" And episodescreenurl.ToLower <> "http://www.thetvdb.com/banners/" Then
                                                                 Dim screenshotpath As String = ""
-                                                                If Preferences.XBMC_version = 0 Then
+                                                                If Preferences.XBMC_version = 0 Or Preferences.XBMC_version = 1 Then
                                                                     screenshotpath = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
                                                                 ElseIf Preferences.XBMC_version = 2 Then
                                                                     screenshotpath = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), "-thumb.jpg")
@@ -18813,6 +18817,9 @@ Public Class Form1
                                                                 End If
                                                                 '   Utilities.DownloadImage(episodescreenurl, screenshotpath)
                                                                 Movie.SaveFanartImageToCacheAndPath(episodescreenurl, screenshotpath)
+                                                                If Preferences.XBMC_version = 1 Then
+                                                                    IO.File.Copy(screenshotpath, screenshotpath.Replace(".tbn", "-thumb.jpg"))
+                                                                End If
                                                             End If
                                                         Else
                                                             Dim thumbpathandfilename As String = listofnewepisodes(h).VideoFilePath.Replace(IO.Path.GetExtension(listofnewepisodes(h).VideoFilePath), ".tbn")
