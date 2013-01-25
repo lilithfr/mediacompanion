@@ -10593,6 +10593,8 @@ Public Class Form1
         Try
             'savesmall
             Dim postname As String = ""
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
             For Each Control In Panel16.Controls
                 If Control.name.indexof("postercheckbox") <> -1 Then
                     Dim rb As RadioButton = Control
@@ -10608,15 +10610,47 @@ Public Class Form1
                         Try
                             Dim path As String = ""
                             If ComboBox2.Text.ToLower = "main image" Then
-                                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "folder.jpg")
+                                If Preferences.XBMC_version = 0 Then
+                                    path = workingposterpath
+                                ElseIf Preferences.XBMC_version = 2 Then
+                                    If rbTVbanner.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg")
+                                    ElseIf rbTVposter.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg")
+                                    End If
+                                End If
                             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
                                 Dim temp As String = ComboBox2.Text.ToLower
                                 temp = temp.Replace(" ", "")
-                                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
+                                If Preferences.XBMC_version = 0 Then
+                                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn")
+                                ElseIf Preferences.XBMC_version = 2 Then
+                                    If rbTVbanner.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg")
+                                    ElseIf rbTVposter.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg")
+                                    End If
+                                End If
                             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
-                                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
+                                If Preferences.XBMC_version = 0 Then
+                                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn")
+                                ElseIf Preferences.XBMC_version = 2 Then
+                                    If rbTVbanner.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg")
+                                    ElseIf rbTVposter.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg")
+                                    End If
+                                End If
                             ElseIf ComboBox2.Text.ToLower = "specials" Then
-                                path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
+                                If Preferences.XBMC_version = 0 Then
+                                    path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn")
+                                ElseIf Preferences.XBMC_version = 2 Then
+                                    If rbTVbanner.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg")
+                                    ElseIf rbTVposter.Checked = True Then
+                                        path = workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg")
+                                    End If
+                                End If
                             End If
                             Dim newpicbox As PictureBox = Control
                             newpicbox.Image.Save(path, Imaging.ImageFormat.Jpeg)
