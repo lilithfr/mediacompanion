@@ -24,6 +24,18 @@ Public Class Preferences
     Public Shared tv_RegexScraper As New List(Of String)
     Public Shared tv_RegexRename As New List(Of String)
 
+    Public Shared ReadOnly Property EdenEnabled As Boolean
+        Get
+            Return Preferences.XBMC_version<>2    '0=Eden only, 1=Both, 2=Frodo only
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property FrodoEnabled As Boolean
+        Get
+            Return Preferences.XBMC_version<>0    '0=Eden only, 1=Both, 2=Frodo only
+        End Get
+    End Property
+
     Public Shared Property applicationPath As String
         Get
             Return Utilities.applicationPath
