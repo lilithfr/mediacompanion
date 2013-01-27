@@ -2270,6 +2270,24 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
+
+    Public Shared Function SaveImageNoDispose(ByVal image As Bitmap, ByVal path As String) As Boolean
+        Try
+            If File.Exists(path) Then
+                File.Delete(path)
+            Else
+                Utilities.EnsureFolderExists(path)
+            End If
+
+            image.Save(path, Imaging.ImageFormat.Jpeg)
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
+
     Public Shared Function ResizeImage(ByVal bm_source As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_dest As New Bitmap(width, height)
         Using gr As Graphics = Graphics.FromImage(bm_dest)

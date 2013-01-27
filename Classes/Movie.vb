@@ -923,7 +923,7 @@ Public Class Movie
     Sub GetFrodoPosterThumbs
         _scrapedMovie.frodoPosterThumbs.Clear
 
-        If Preferences.XBMC_version>0 Then
+        If Preferences.FrodoEnabled Then
             _scrapedMovie.frodoPosterThumbs.AddRange(tmdb.FrodoPosterThumbs)
             ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count, "Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & vbCrLf)
         Else
@@ -935,7 +935,7 @@ Public Class Movie
     Sub GetFrodoFanartThumbs
         _scrapedMovie.frodoFanartThumbs.Thumbs.Clear
 
-        If Preferences.XBMC_version>0 Then
+        If Preferences.FrodoEnabled Then
             _scrapedMovie.frodoFanartThumbs.Thumbs.AddRange(tmdb.FrodoFanartThumbs.Thumbs)
             ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count, "Extra Frodo Poster thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
         End If
@@ -943,8 +943,7 @@ Public Class Movie
 
 
     Sub AssignPosterUrls
-        ' 2 = Post i.e. Frodo only
-        If Preferences.XBMC_version<2 Then
+        If Preferences.EdenEnabled Then
             If Preferences.nfoposterscraper = 0 Then
                 ReportProgress(,"Extra poster URLs scraping not selected" & vbCrLf)
                 Exit Sub
@@ -1196,17 +1195,17 @@ Public Class Movie
 
     Sub DeleteActors
         Try
-            If Preferences.XBMC_version = 0 Then
+            'If Preferences.XBMC_version = 0 Then
                 For Each f In Directory.GetFiles(ActorPath, "*.tbn")
                     File.Delete(f)
                 Next
-                Directory.Delete(ActorPath)
-            ElseIf Preferences.XBMC_version = 2 Then
+                'Directory.Delete(ActorPath)
+            'ElseIf Preferences.XBMC_version = 2 Then
                 For Each f In Directory.GetFiles(ActorPath, "*.jpg")
                     File.Delete(f)
                 Next
                 Directory.Delete(ActorPath)
-            End If
+            'End If
         Catch
         End Try
              
