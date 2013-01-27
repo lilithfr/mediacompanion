@@ -9803,6 +9803,12 @@ Public Class Form1
                     If renamefile.IndexOf(showpath) <> -1 Then
                         showtitle = tvshow.Title.Value
 
+                        If Preferences.ignorearticle = True Then
+                            If showtitle.ToLower.IndexOf("the ") = 0 Then
+                                showtitle = showtitle.Substring(4, showtitle.Length - 4) & ", The"
+                            End If
+                        End If
+
                         For Each episode In tvshow.Episodes
                             If episode.NfoFilePath = renamefile Then
                                 If seasonno = "" Then
