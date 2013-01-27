@@ -9839,16 +9839,6 @@ Public Class Form1
                                 listtorename.Add(temppath2)
                             End If
                         Next
-                        Dim temppath As String = renamefile
-                        temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
-
-                        If IO.File.Exists(temppath) Then
-                            listtorename.Add(temppath)
-                        End If
-                        temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
-                        If IO.File.Exists(temppath) Then
-                            listtorename.Add(temppath)
-                        End If
 
                         Dim di As DirectoryInfo = New DirectoryInfo(renamefile.Replace(IO.Path.GetFileName(renamefile), ""))
                         Dim filenama As String = IO.Path.GetFileNameWithoutExtension(renamefile)
@@ -9858,16 +9848,39 @@ Public Class Form1
                                 listtorename.Add(fiNext.FullName)
                             End If
                         Next
+
+                        Dim temppath As String = renamefile
+                        temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".tbn")
+                        If IO.File.Exists(temppath) Then
+                            If Not listtorename.Contains(temppath) Then
+                                listtorename.Add(temppath)
+                            End If
+                        End If
+
+                        temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
+                        If IO.File.Exists(temppath) Then
+                            If Not listtorename.Contains(temppath) Then
+                                listtorename.Add(temppath)
+                            End If
+                        End If
+
+                        temppath = temppath.Replace(IO.Path.GetExtension(temppath), "-thumb.jpg")
+                        If IO.File.Exists(temppath) Then
+                            If Not listtorename.Contains(temppath) Then
+                                listtorename.Add(temppath)
+                            End If
+                        End If
+
                         Dim oldnfofile As String = ""
                         Dim newnfofile As String = ""
                         For Each items In listtorename
                             If IO.Path.GetExtension(items).ToLower = ".nfo" And oldnfofile = "" Then
                                 oldnfofile = items
                                 newnfofile = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
-                                newnfofile = newnfofile.Replace("..", ".")
+                                'newnfofile = newnfofile.Replace("..", ".")
                             End If
-                            Dim newname As String = items.Replace(IO.Path.GetFileName(items), newfilename) & IO.Path.GetExtension(items)
-                            newname = newname.Replace("..", ".")
+                            Dim newname As String = items.Replace(filenama, newfilename)
+                            'newname = newname.Replace("..", ".")
                             Try
                                 renamelog += "!!! Renaming" & vbCrLf
                                 renamelog += "!!! " & items & vbCrLf & "!!! to " & vbCrLf & "!!! " & newname & vbCrLf
@@ -10537,62 +10550,62 @@ Public Class Form1
                     Else
                         tv_PictureBoxRight.Image = PictureBox13.Image
                     End If
-                     End If
-                        PictureBox12.Image = PictureBox13.Image
-                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                    Else
-                        Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        Me.Refresh()
-                        messbox.Refresh()
-                        Dim i1 As New PictureBox
+                End If
+                PictureBox12.Image = PictureBox13.Image
+                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+            Else
+                Dim messbox As frmMessageBox = New frmMessageBox("Please wait,", "", "Downloading Full Resolution Image")
+                System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                messbox.Show()
+                Me.Refresh()
+                messbox.Refresh()
+                Dim i1 As New PictureBox
 
-                        With i1
-                            .WaitOnLoad = True
-                            Try
-                                .ImageLocation = Button56.Tag
-                            Catch
-                                witherror = True
-                                Try
-                                    .ImageLocation = Button57.Tag
-                                Catch
-                                    witherror2 = True
-                                End Try
-                            End Try
-                        End With
-
+                With i1
+                    .WaitOnLoad = True
+                    Try
+                        .ImageLocation = Button56.Tag
+                    Catch
+                        witherror = True
                         Try
-                            If Not i1 Is Nothing Then
-                                i1.Image.Save(path, Imaging.ImageFormat.Jpeg)
-                                Dim OriginalImage As New Bitmap(path)
-                                Dim Image2 As New Bitmap(OriginalImage)
-                                OriginalImage.Dispose()
-
-                                'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                                tv_PictureBoxRight.ImageLocation = path
-                                tv_PictureBoxRight.Load()
-                                'End If
-                                workingposterpath = path
-
-                                PictureBox12.Image = Image2
-                                Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
-                            End If
-
-                            If witherror = True And witherror2 = False Then
-                                MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
-                            End If
-                            If witherror2 = True Then
-                                MsgBox("Unable to download image")
-                            End If
-                        Catch ex As Exception
-                            MsgBox(ex.ToString)
-                        Finally
-
-                            messbox.Close()
+                            .ImageLocation = Button57.Tag
+                        Catch
+                            witherror2 = True
                         End Try
+                    End Try
+                End With
+
+                Try
+                    If Not i1 Is Nothing Then
+                        i1.Image.Save(path, Imaging.ImageFormat.Jpeg)
+                        Dim OriginalImage As New Bitmap(path)
+                        Dim Image2 As New Bitmap(OriginalImage)
+                        OriginalImage.Dispose()
+
+                        'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                        tv_PictureBoxRight.ImageLocation = path
+                        tv_PictureBoxRight.Load()
+                        'End If
+                        workingposterpath = path
+
+                        PictureBox12.Image = Image2
+                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                    End If
+
+                    If witherror = True And witherror2 = False Then
+                        MsgBox("Unable to download hires image" & vbCrLf & "Lores Image downloaded instead")
+                    End If
+                    If witherror2 = True Then
+                        MsgBox("Unable to download image")
+                    End If
+                Catch ex As Exception
+                    MsgBox(ex.ToString)
+                Finally
+
+                    messbox.Close()
+                End Try
             End If
-                    path = ""
+            path = ""
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

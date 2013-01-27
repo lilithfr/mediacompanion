@@ -85,14 +85,22 @@ Public Class TVShows
                         listtorename.Add(temppath)
                     End If
                 End If
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".jpg")
 
+                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
                 If IO.File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
                     End If
                 End If
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
+
+                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".jpg")
+                If IO.File.Exists(temppath) Then
+                    If Not listtorename.Contains(temppath) Then
+                        listtorename.Add(temppath)
+                    End If
+                End If
+
+                temppath = temppath.Replace(IO.Path.GetExtension(temppath), "-thumb.jpg")
                 If IO.File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
@@ -102,8 +110,8 @@ Public Class TVShows
                 Dim StillOk As Boolean = True   'first we test every file we are going to rename, if they all can be renamed we then rename
                 Dim RenameFailedFile As String = ""
                 For Each ITEMS In listtorename
-                    Dim newname As String = ITEMS.Replace(IO.Path.GetFileName(ITEMS), newfilename) & IO.Path.GetExtension(ITEMS)
-                    newname = newname.Replace("..", ".")
+                    Dim newname As String = ITEMS.Replace(filenama, newfilename)
+                    'newname = newname.Replace("..", ".")
                     Dim fi As New IO.FileInfo(ITEMS)
                     If IO.File.Exists(newname) Then
                         RenameFailedFile = newname
@@ -114,9 +122,10 @@ Public Class TVShows
                 If StillOk = True Then
                     Dim FirstCount As Boolean = True
                     For Each ITEMS In listtorename
-                        Dim newname As String = ITEMS.Replace(IO.Path.GetFileName(ITEMS), newfilename) & IO.Path.GetExtension(ITEMS)
-                        newname = newname.Replace("..", ".")
+                        Dim newname As String = ITEMS.Replace(filenama, newfilename)
+                        'newname = newname.Replace("..", ".")
                         done = newname.Replace(IO.Path.GetExtension(newname), ".nfo")
+                        If done.Contains("-thumb.") Then done = done.Replace("-thumb", "")
                         Try
                             Dim fi As New IO.FileInfo(ITEMS)
                             fi.MoveTo(newname)
