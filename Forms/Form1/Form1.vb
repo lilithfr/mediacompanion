@@ -3940,9 +3940,9 @@ Public Class Form1
         frmSplash2.Hide()
     End Sub
 
-    Private Sub DataGridViewMovies_DoubleClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles DataGridViewMovies.DoubleClick 
+    Private Sub DataGridViewMovies_DoubleClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles DataGridViewMovies.DoubleClick
         Try
-            Dim info = DataGridViewMovies.HitTest(e.X,e.Y)
+            Dim info = DataGridViewMovies.HitTest(e.X, e.Y)
 
             If info.Type <> DataGridViewHitTestType.ColumnHeader Then
                 mov_Play("Movie")
@@ -3962,7 +3962,7 @@ Public Class Form1
             If IO.File.Exists(files(f)) Then
                 ' This path is a file.
                 Dim skip As Boolean = False
-                        For Each item In oMovies.MovieCache
+                For Each item In oMovies.MovieCache
                     If item.fullpathandfilename = files(f) Then
                         skip = True
                         Exit For
@@ -3987,7 +3987,7 @@ Public Class Form1
                     'list the names of all files in the specified directory
                     For Each dra In diar1
                         Dim skip As Boolean = False
-                                For Each item In oMovies.MovieCache
+                        For Each item In oMovies.MovieCache
                             If item.fullpathandfilename = dra.FullName Then
                                 skip = True
                                 Exit For
@@ -4008,7 +4008,7 @@ Public Class Form1
         Next
 
         If droppedItems.Count > 0 Then
-                DoScrapeDroppedFiles
+            DoScrapeDroppedFiles()
         End If
 
     End Sub
@@ -10032,6 +10032,8 @@ Public Class Form1
 
     Public Function BannerAndPosterViewer()
         Try
+            Me.Panel16.Hide()
+            Label72.Text = ""
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             rbTVposter.Enabled = True
             rbTVbanner.Enabled = True
@@ -10214,6 +10216,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterPanelPopulate()
+        Me.Panel16.Show()
         tvposterpage = 1
         If usedlist.Count <= 0 Then
             Label72.Text = "Displaying 0 of 0 Images"
