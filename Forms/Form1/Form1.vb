@@ -9966,7 +9966,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterSetup()
-        
+
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         'If workingTvShow.tvdbid = currentposterid Then
         '    Exit Sub
@@ -10111,7 +10111,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_TvdbThumbsGet()
-        
+
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim showlist As New XmlDocument
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
@@ -10156,7 +10156,7 @@ Public Class Form1
 
     Private Sub Button53_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button53.Click
         Try
-           
+
             'tvdb specific
             tvdbmode = True
             usedlist.Clear()
@@ -10197,7 +10197,11 @@ Public Class Form1
             Else
                 For Each poster In tvdbposterlist
                     If poster.Season = tempseason Then
-                        If poster.BannerType <> "fanart" Then usedlist.Add(poster)
+                        If rbTVbanner.Checked = True Then
+                            If poster.Resolution = "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "poster" Then usedlist.Add(poster)
+                        ElseIf rbTVposter.Checked = True Then
+                            If poster.Resolution <> "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "banner" Then usedlist.Add(poster)
+                        End If
                     End If
                 Next
             End If
@@ -10247,7 +10251,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterSelectionDisplay()
-        
+
         For i = Panel16.Controls.Count - 1 To 0 Step -1
             Panel16.Controls.RemoveAt(i)
         Next
@@ -10375,7 +10379,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_PosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
-        
+
         PictureBox13.Image = Nothing
         Dim tempstring As String = sender.name
         Dim tempint As Integer = 0
@@ -10547,8 +10551,8 @@ Public Class Form1
                     End If
                 End If
             End If
-                    If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
-                        PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
+            If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
+                PictureBox13.Image.Save(path, Imaging.ImageFormat.Jpeg)
                 If combostart = ComboBox2.SelectedItem Then
                     If rbTVbanner.Checked = True Then
                         tv_PictureBoxBottom.Image = PictureBox13.Image
