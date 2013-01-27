@@ -83,7 +83,7 @@ Public Class Movies
     End Sub
 
     Sub ReportProgress( ByVal oProgress As Progress )
-        If Not IsNothing(_bw) AndAlso _bw.WorkerReportsProgress Then
+        If Not IsNothing(_bw) AndAlso _bw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) and String.IsNullOrEmpty(oProgress.Message)) Then
             _bw.ReportProgress(PercentDone, oProgress)
         End If
     End Sub

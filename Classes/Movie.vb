@@ -350,8 +350,15 @@ Public Class Movie
                 Dim PartNumberChar = fileInfo.Name.Substring(PartNumberIndex, 1)
                 If Integer.TryParse(PartNumberChar, 0) Then
                     Dim PreviousPartNumber = Convert.ToInt32(PartNumberChar) - 1
-                    Dim PreviousPartFileName = ChangeCharacter(fileInfo.Name, Convert.ToChar(Convert.ToChar(PreviousPartNumber.ToString)), PartNumberIndex)
-                    Return Not File.Exists(titleDir & PreviousPartFileName)
+
+                    If PreviousPartNumber >= 0 Then
+                        Dim PreviousPartFileName = ChangeCharacter(fileInfo.Name, Convert.ToChar(Convert.ToChar(PreviousPartNumber.ToString)), PartNumberIndex)
+                        Dim PreviousPartFileExists = File.Exists(titleDir & PreviousPartFileName)
+
+                        If PreviousPartFileExists Then Return False
+                    End If    
+
+                    Return Not Utilities.findFileOfType(fileInfo.FullName, ".nfo")
                 End If
                 log &= "Part number not found - Assuming just the one part!"
                 Return True
