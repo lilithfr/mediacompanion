@@ -614,8 +614,10 @@ Public Class Classimdb
                     If webcounter > webpage.Count - 10 Then Exit For
                     If (webpage(f).IndexOf("<title>") <> -1) And (OriginalTitle = False) Then
                         Try
-                            Dim movieyear As String = ""
+                            Dim movieyear As String = Regex.Replace(Regex.Match(webpage(f), "(?<=\().*\d+(?=.*\))", RegexOptions.Singleline).ToString(), "\D", "")
+
                             movienfoarray = webpage(f)
+
                             filterstring = movienfoarray
                             movienfoarray = movienfoarray.Replace("<title>", "")
                             movienfoarray = movienfoarray.Replace("</title>", "")
@@ -640,7 +642,7 @@ Public Class Classimdb
                                 End If
                                 If first <> -1 Then
                                     first = movienfoarray.LastIndexOf(")")
-                                    movieyear = movienfoarray.Substring(first - 4, 4)
+                                    'movieyear = movienfoarray.Substring(first - 4, 4)
                                     first = movienfoarray.LastIndexOf("(")
                                     movienfoarray = movienfoarray.Substring(0, first)
                                     movienfoarray = movienfoarray.Trim()
@@ -649,7 +651,7 @@ Public Class Classimdb
 
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
-                            movieyear = encodespecialchrs(movieyear)
+                            'movieyear = encodespecialchrs(movieyear)
                             totalinfo = totalinfo & "<title>" & movienfoarray & "</title>" & vbCrLf
                             totalinfo = totalinfo & "<year>" & movieyear & "</year>" & vbCrLf
                             movienfoarray = ""
