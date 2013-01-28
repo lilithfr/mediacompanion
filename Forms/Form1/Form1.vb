@@ -10589,8 +10589,14 @@ Public Class Form1
                         OriginalImage.Dispose()
 
                         'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                        tv_PictureBoxRight.ImageLocation = path
-                        tv_PictureBoxRight.Load()
+                        If rbTVbanner.Checked Then
+                            tv_PictureBoxBottom.ImageLocation = path
+                            tv_PictureBoxBottom.Load()
+                        End If
+                        If rbTVposter.Checked Then
+                            tv_PictureBoxRight.ImageLocation = path
+                            tv_PictureBoxRight.Load()
+                        End If
                         'End If
                         workingposterpath = path
 
@@ -10775,11 +10781,25 @@ Public Class Form1
                             
                             Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
 
-                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-'                                tv_PictureBoxRight.ImageLocation = path
+'                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+''                                tv_PictureBoxRight.ImageLocation = path
+'                                tv_PictureBoxRight.ImageLocation = workingposterpath
+'                                tv_PictureBoxRight.Load()
+'                            End If
+
+
+
+                            If rbTVbanner.Checked Then
+                                tv_PictureBoxBottom.ImageLocation = workingposterpath
+                                tv_PictureBoxBottom.Load()
+                            End If
+                            If rbTVposter.Checked Then
                                 tv_PictureBoxRight.ImageLocation = workingposterpath
                                 tv_PictureBoxRight.Load()
                             End If
+
+
+
                             'workingposterpath = path
                         Catch ex As Exception
                             MsgBox(ex.ToString)
