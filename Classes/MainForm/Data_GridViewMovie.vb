@@ -52,7 +52,7 @@
         runtime = movie.runtime
         createdate = movie.createdate
         missingdata1 = movie.missingdata1
-        plot = movie.plot
+        plot = movie.plot.Trim
         source = movie.source
         votes = movie.votes
         TitleUcase = movie.title.ToUpper
