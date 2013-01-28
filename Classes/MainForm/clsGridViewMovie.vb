@@ -29,19 +29,35 @@ Public Class clsGridViewMovie
         imgPlot.HeaderText = "Plot"
         imgPlot.Name = "Plot"
 
+        'Performance tweak:
+        Dim x = Global.Media_Companion.My.Resources.Movie
+
+        'Dim watchedTm As New Times
+        'watchedTm.StartTm = DateTime.Now
+
         'Watched icon
         For Each row As DataGridViewRow In Form1.DataGridViewMovies.Rows
             If row.Cells(13).Value = "1" Then
-                row.Cells(23).Value = Global.Media_Companion.My.Resources.Movie
+                row.Cells(23).Value = x
             End If
         Next
 
+        'watchedTm.EndTm = DateTime.Now
+        'Dim plotTm As New Times
+        'plotTm.StartTm = DateTime.Now
+
+        'Performance tweak:
+        x = Global.Media_Companion.My.Resources.Page
+
         'plot icon
         For Each row As DataGridViewRow In Form1.DataGridViewMovies.Rows
-            If row.Cells(14).Value.trim <> "" Then
-                row.Cells(24).Value = Global.Media_Companion.My.Resources.Page
+            If row.Cells(19).Value <> "" Then
+                row.Cells(24).Value = x
             End If
         Next
+
+        'plotTm.EndTm = DateTime.Now
+
 
         Dim debug As Boolean = False
         If debug = False Then
