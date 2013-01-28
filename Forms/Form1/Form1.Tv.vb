@@ -421,12 +421,6 @@ Partial Public Class Form1
             End If
             Button_TV_State.Tag = Show
 
-            If Preferences.FrodoEnabled Then
-                Show.ImagePoster.FileName = "poster.jpg"
-                Show.ImageBanner.FileName = "banner.jpg"
-                util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
-                util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
-            End If
             If Preferences.EdenEnabled Then
                 If Preferences.postertype = "banner" Then
                     util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
@@ -435,6 +429,12 @@ Partial Public Class Form1
                     util_ImageLoad(tv_PictureBoxBottom, Utilities.DefaultBannerPath, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
                     util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
                 End If
+            End If
+            If Preferences.FrodoEnabled Then
+                Show.ImagePoster.FileName = "poster.jpg"
+                Show.ImageBanner.FileName = "banner.jpg"
+                util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
+                util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
             End If
 
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.Image = Show.ImageFanart.Image
@@ -1238,47 +1238,47 @@ Partial Public Class Form1
                                         'If destsorted = True Then
                                         Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
                                         filename = filename.Replace(" ", "_")
-                                            filename = filename & ".tbn"
+                                        filename = filename & ".tbn"
                                         filename = IO.Path.Combine(workingpath, filename)
                                         'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
                                         Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
                                         'End If
                                     End If
-                                    End If
-                                    If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
-                                        Dim workingpath As String = ""
-                                        Dim networkpath As String = Preferences.actorsavepath
-
-                                        tempstring = networkpath & "\" & id.Substring(id.Length - 2, 2)
-                                        Dim hg As New IO.DirectoryInfo(tempstring)
-                                        If Not hg.Exists Then
-                                            IO.Directory.CreateDirectory(tempstring)
-                                        End If
-                                        workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
-                                        If Not IO.File.Exists(workingpath) Then
-                                            Utilities.DownloadFile(NewAct.actorthumb, workingpath)
-                                        End If
-                                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
-                                        If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                            NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
-                                        Else
-                                            NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
-                                        End If
-
-
-                                    End If
                                 End If
-                                Dim exists As Boolean = False
-                                For Each actors In NewShow.ListActors
-                                    If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
-                                        exists = True
-                                        Exit For
+                                If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
+                                    Dim workingpath As String = ""
+                                    Dim networkpath As String = Preferences.actorsavepath
+
+                                    tempstring = networkpath & "\" & id.Substring(id.Length - 2, 2)
+                                    Dim hg As New IO.DirectoryInfo(tempstring)
+                                    If Not hg.Exists Then
+                                        IO.Directory.CreateDirectory(tempstring)
                                     End If
-                                Next
-                                If exists = False Then
-                                    NewShow.ListActors.Add(NewAct)
+                                    workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
+                                    If Not IO.File.Exists(workingpath) Then
+                                        Utilities.DownloadFile(NewAct.actorthumb, workingpath)
+                                    End If
+                                    NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
+                                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
+                                    Else
+                                        NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
+                                    End If
+
+
                                 End If
                             End If
+                            Dim exists As Boolean = False
+                            For Each actors In NewShow.ListActors
+                                If actors.actorname = NewAct.actorname And actors.actorrole = NewAct.actorrole Then
+                                    exists = True
+                                    Exit For
+                                End If
+                            Next
+                            If exists = False Then
+                                NewShow.ListActors.Add(NewAct)
+                            End If
+                        End If
 
 
 
@@ -1882,29 +1882,29 @@ Partial Public Class Form1
                                                                                         Utilities.DownloadFile(newactor.actorthumb, filename)
                                                                                     End If
                                                                                 End If
-                                                                                End If
-                                                                                If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
-                                                                                    Dim workingpath As String = ""
-                                                                                    Dim networkpath As String = Preferences.actorsavepath
-
-                                                                                    tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                                                                                    Dim hg As New IO.DirectoryInfo(tempstring)
-                                                                                    If Not hg.Exists Then
-                                                                                        IO.Directory.CreateDirectory(tempstring)
-                                                                                    End If
-                                                                                    workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                                    If Not IO.File.Exists(workingpath) Then
-                                                                                        Utilities.DownloadFile(newactor.actorthumb, workingpath)
-                                                                                    End If
-                                                                                    newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                                                                                    If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
-                                                                                        newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-                                                                                    Else
-                                                                                        newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                                                    End If
-
-                                                                                End If
                                                                             End If
+                                                                            If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
+                                                                                Dim workingpath As String = ""
+                                                                                Dim networkpath As String = Preferences.actorsavepath
+
+                                                                                tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+                                                                                Dim hg As New IO.DirectoryInfo(tempstring)
+                                                                                If Not hg.Exists Then
+                                                                                    IO.Directory.CreateDirectory(tempstring)
+                                                                                End If
+                                                                                workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                                If Not IO.File.Exists(workingpath) Then
+                                                                                    Utilities.DownloadFile(newactor.actorthumb, workingpath)
+                                                                                End If
+                                                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                                                                                If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
+                                                                                    newactor.actorthumb = Preferences.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
+                                                                                Else
+                                                                                    newactor.actorthumb = Preferences.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
+                                                                                End If
+
+                                                                            End If
+                                                                        End If
                                                                 End Select
                                                                 If bckgroundscanepisodes.CancellationPending Then
                                                                     Preferences.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
@@ -2576,7 +2576,7 @@ Partial Public Class Form1
             End If
         Next
 
-        Dim taskCount  = TasksList.Items.Count
+        Dim taskCount = TasksList.Items.Count
         Dim Cursor = 0
 
         Dim CurrentTask As ITask
@@ -2598,7 +2598,7 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True, Optional ByVal Both As Integer = 0)
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True)
         Try
 
             Dim tvdbstuff As New TVDBScraper
@@ -2662,8 +2662,7 @@ Partial Public Class Form1
                     Dim mainposterpath As String = ""
                     If Preferences.EdenEnabled Then
                         mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
-                    End If
-                    If Preferences.FrodoEnabled Then
+                    ElseIf Preferences.FrodoEnabled Then
                         mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "poster.jpg")
                     End If
                     If Not IO.File.Exists(mainposterpath) Then
@@ -2671,13 +2670,12 @@ Partial Public Class Form1
                     End If
                     If Preferences.EdenEnabled Then
                         IO.File.Copy(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"))
-                    End If
-                    If Preferences.FrodoEnabled Then
+                        If Preferences.FrodoEnabled Then IO.File.Copy(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all-poster.jpg"))
+                    ElseIf Preferences.FrodoEnabled Then
                         IO.File.Copy(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"))
                     End If
                 End If
             End If
-
             'Main Banner
             If Preferences.postertype = "banner" Or Preferences.FrodoEnabled Then 'banner
                 Dim mainbanner As String = ""
@@ -2705,11 +2703,9 @@ Partial Public Class Form1
                 End If
                 If mainbanner <> "" Then
                     Dim mainbannerpath As String = ""
-                    Dim seasonallpath As String = ""
                     If Preferences.EdenEnabled Then
                         mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
-                    End If
-                    If Preferences.FrodoEnabled Then
+                    ElseIf Preferences.FrodoEnabled Then
                         mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "banner.jpg")
                     End If
                     If Not IO.File.Exists(mainbannerpath) Then
@@ -2717,8 +2713,8 @@ Partial Public Class Form1
                     End If
                     If Preferences.EdenEnabled Then
                         IO.File.Copy(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"))
-                    End If
-                    If Preferences.FrodoEnabled Then
+                        If Preferences.FrodoEnabled Then IO.File.Copy(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all-banner.jpg"))
+                    ElseIf Preferences.FrodoEnabled Then
                         IO.File.Copy(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"))
                     End If
                 End If
@@ -2874,13 +2870,14 @@ Partial Public Class Form1
                 End If
             End If
             'If Preferences.XBMC_version = 1 Then
-                'Preferences.XBMC_version = 2                '!!!! 
-                TvGetArtwork(currentshow, True, True)
+            'Preferences.XBMC_version = 2                '!!!! 
+            'TvGetArtwork(currentshow, True)
             'End If
             'If Both = True Then
             '    Preferences.XBMC_version = 1
             'End If
         Catch
+            MsgBox("Art Failed")
         End Try
     End Sub
 
