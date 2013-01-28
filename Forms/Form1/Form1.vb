@@ -7978,7 +7978,9 @@ Public Class Form1
 
             Dim newName = ext.Replace(".tbn", "-thumb.jpg")
 
-            If Utilities.SafeDeleteFile(newName) then File.Copy(ext, newName)
+            If newName <> ext then
+                If Utilities.SafeDeleteFile(newName) then File.Copy(ext, newName)
+            End If
         End If
         If Preferences.autorenameepisodes = True Then
             Dim eps As New List(Of String)
