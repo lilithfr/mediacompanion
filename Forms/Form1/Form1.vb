@@ -7912,8 +7912,7 @@ Public Class Form1
         Dim ext As String = ""
         If Preferences.EdenEnabled Then
             ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        End If
-        If Preferences.FrodoEnabled Then
+        ElseIf Preferences.FrodoEnabled Then
             ext = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
         End If
         If (IO.File.Exists(ext) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
