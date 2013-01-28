@@ -7974,7 +7974,11 @@ Public Class Form1
             End If
         End If
         If Preferences.EdenEnabled and Preferences.FrodoEnabled Then        '...What if just Frodo enabled?
-            IO.File.Copy(ext, ext.Replace(".tbn", "-thumb.jpg"))
+'           IO.File.Copy(ext, ext.Replace(".tbn", "-thumb.jpg"))
+
+            Dim newName = ext.Replace(".tbn", "-thumb.jpg")
+
+            If Utilities.SafeDeleteFile(newName) then File.Copy(ext, newName)
         End If
         If Preferences.autorenameepisodes = True Then
             Dim eps As New List(Of String)

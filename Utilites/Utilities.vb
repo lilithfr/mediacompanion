@@ -2467,4 +2467,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
         Return string2clean
     End Function
+
+    Public Shared Function SafeDeleteFile(fileName As String)
+        If Not File.Exists(fileName) then Return True
+        Try
+            File.Delete(fileName)
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
 End Class
