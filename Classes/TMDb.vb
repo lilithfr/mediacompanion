@@ -6,9 +6,9 @@ Public Class TMDb
 
     Const Key = "3f026194412846e530a208cf8a39e9cb"
 
-    Public Const LanguagesFile               = "classes\tmdb_languages.xml"
-    Public Const TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
-    Public Const TMDbConfigFileMaxAgeInDays  = 1
+    Public Shared LanguagesFile               = Preferences.applicationPath & "\classes\tmdb_languages.xml"
+    Public Const  TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
+    Public Const  TMDbConfigFileMaxAgeInDays  = 1
 
     Enum Resolution
         FullHD=1920
