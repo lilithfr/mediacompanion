@@ -8282,7 +8282,7 @@ Public Class Form1
     '    End Try
     'End Sub
 
-    Private Sub PictureBox_Zoom(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxBottom.DoubleClick
+    Private Sub PictureBox_Zoom(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxBottom.DoubleClick, tv_PictureBoxRight.DoubleClick, tv_PictureBoxLeft.DoubleClick
         Try
             Dim picBox As PictureBox = sender
 
