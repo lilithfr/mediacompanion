@@ -291,4 +291,8 @@
     End Sub
 
     
+    Private Sub cbTmdbSetName_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTmdbSetName.CheckedChanged
+        Form1.rescrapeList.tmdb_set_name = cbTmdbSetName.Checked
+    End Sub
+
 End Class

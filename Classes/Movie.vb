@@ -1772,6 +1772,11 @@ Public Class Movie
             DoDownloadFanart
         End If
 
+        If rl.tmdb_set_name Then 
+            _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+            UpdateProperty( _rescrapedMovie.fullmoviebody.movieset  , _scrapedMovie.fullmoviebody.movieset )  
+        End If
+
         If rl.runtime_file or rl.mediatags or (rl.runtime And ((Preferences.movieRuntimeDisplay="file") or (Preferences.movieRuntimeFallbackToFile and _rescrapedMovie.fullmoviebody.runtime=""))) Then 
             If GetHdTags(_rescrapedMovie) then 
                 UpdateProperty(_rescrapedMovie.FileDetails, _scrapedMovie.FileDetails) 

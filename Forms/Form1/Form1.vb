@@ -3818,32 +3818,34 @@ Public Class Form1
         'Try
         '    If Not bckrescrapewizard.IsBusy Then
 
-                rescrapeList.credits = False
-                rescrapeList.director = False
-                rescrapeList.stars = False
-                rescrapeList.genre = False
-                rescrapeList.mediatags = False
+                'rescrapeList.credits = False
+                'rescrapeList.director = False
+                'rescrapeList.stars = False
+                'rescrapeList.genre = False
+                'rescrapeList.mediatags = False
 
-                rescrapeList.mpaa = False
-                rescrapeList.outline = False
-                rescrapeList.plot = False
+                'rescrapeList.mpaa = False
+                'rescrapeList.outline = False
+                'rescrapeList.plot = False
 
-                rescrapeList.premiered = False
-                rescrapeList.rating = False
-                rescrapeList.runtime = False
-                rescrapeList.studio = False
-                rescrapeList.tagline = False
-                rescrapeList.title = False
-                rescrapeList.top250 = False
-                rescrapeList.trailer = False
-                rescrapeList.votes = False
-                rescrapeList.year = False
-                rescrapeList.posterurls = False
-                rescrapeList.missingposters = False
-                rescrapeList.actors = False
-                rescrapeList.missingfanart = False
+                'rescrapeList.premiered = False
+                'rescrapeList.rating = False
+                'rescrapeList.runtime = False
+                'rescrapeList.studio = False
+                'rescrapeList.tagline = False
+                'rescrapeList.title = False
+                'rescrapeList.top250 = False
+                'rescrapeList.trailer = False
+                'rescrapeList.votes = False
+                'rescrapeList.year = False
+                'rescrapeList.posterurls = False
+                'rescrapeList.missingposters = False
+                'rescrapeList.actors = False
+                'rescrapeList.missingfanart = False
 
-                rescrapeList.activate = False
+                'rescrapeList.activate = False
+
+                rescrapeList.ResetFields
 
                 Dim displaywizard As New frmBatchScraper
                 displaywizard.ShowDialog
@@ -17549,6 +17551,11 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub tsmiTMDbSetName_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbSetName.Click
+        Call mov_ScrapeSpecific("tmdb_set_name")
+    End Sub
+
+
     Private Sub PictureBoxFanArt_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBoxFanArt.MouseUp, PictureBoxFanArt.Click
         Try
             If e.Button = Windows.Forms.MouseButtons.Right Then
@@ -22386,5 +22393,6 @@ End Sub
     Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
         BannerAndPosterViewer()
     End Sub
+
 
 End Class

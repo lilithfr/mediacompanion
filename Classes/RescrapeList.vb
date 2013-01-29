@@ -26,6 +26,7 @@ Public Class RescrapeList
     Property missingfanart  As Boolean
     Property activate       As Boolean
     Property runtime_file   As Boolean
+    Property tmdb_set_name  As Boolean
 
     Sub New
 
@@ -42,4 +43,14 @@ Public Class RescrapeList
             End If
         Next
     End Sub
+
+    Sub ResetFields
+        Dim propInfos() As PropertyInfo = Me.GetType.GetProperties
+
+        For Each propInfo in propInfos
+            propInfo.SetValue(Me,False,Nothing)
+        Next
+    End Sub
+
+
 End Class
