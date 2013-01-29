@@ -8250,30 +8250,48 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub PictureBox4_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxLeft.DoubleClick
-        Try
-            If tv_PictureBoxLeft.ImageLocation <> Nothing Then
-                If IO.File.Exists(tv_PictureBoxLeft.ImageLocation) Then
-                    Me.ControlBox = False
-                    MenuStrip1.Enabled = False
-                    'ToolStrip1.Enabled = False
-                    Dim newimage As New Bitmap(tv_PictureBoxLeft.ImageLocation)
-                    Call util_ZoomImage(newimage)
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub PictureBox4_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxLeft.DoubleClick
+    '    Try
+    '        If tv_PictureBoxLeft.ImageLocation <> Nothing Then
+    '            If IO.File.Exists(tv_PictureBoxLeft.ImageLocation) Then
+    '                Me.ControlBox = False
+    '                MenuStrip1.Enabled = False
+    '                'ToolStrip1.Enabled = False
+    '                Dim newimage As New Bitmap(tv_PictureBoxLeft.ImageLocation)
+    '                Call util_ZoomImage(newimage)
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
-    Private Sub PictureBox5_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxRight.DoubleClick
+    'Private Sub PictureBox5_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxRight.DoubleClick
+    '    Try
+    '        If tv_PictureBoxRight.ImageLocation <> Nothing Then
+    '            If IO.File.Exists(tv_PictureBoxRight.ImageLocation) Then
+    '                Me.ControlBox = False
+    '                MenuStrip1.Enabled = False
+    '                'ToolStrip1.Enabled = False
+    '                Dim newimage As New Bitmap(tv_PictureBoxRight.ImageLocation)
+    '                Call util_ZoomImage(newimage)
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
+
+    Private Sub PictureBox_Zoom(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxLeft.DoubleClick,tv_PictureBoxRight.DoubleClick,tv_PictureBoxBottom.DoubleClick
         Try
-            If tv_PictureBoxRight.ImageLocation <> Nothing Then
-                If IO.File.Exists(tv_PictureBoxRight.ImageLocation) Then
+            Dim picBox As PictureBox = sender
+
+            If picBox.ImageLocation <> Nothing Then
+                If IO.File.Exists(picBox.ImageLocation) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
                     'ToolStrip1.Enabled = False
-                    Dim newimage As New Bitmap(tv_PictureBoxRight.ImageLocation)
+                    Dim newimage As New Bitmap(picBox.ImageLocation)
                     Call util_ZoomImage(newimage)
                 End If
             End If
