@@ -563,9 +563,9 @@ Public Class Form1
             DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
             mov_SplitContainerAutoPosition()
             tv_ShowSelectedCurrently()
-            Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
-            Panel4.Width = SplitContainer4.Width.ToString
-            Panel4.Height = SplitContainer4.Height.ToString / 2.11
+            'Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
+            'Panel4.Width = SplitContainer4.Width.ToString
+            'Panel4.Height = SplitContainer4.Height.ToString / 2.11
             tv_SplitContainerAutoPosition()
         End If
 
@@ -739,9 +739,9 @@ Public Class Form1
             If MainFormLoadedStatus = True Then
                 PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
             End If
-            Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
-            Panel4.Width = SplitContainer4.Width.ToString
-            Panel4.Height = SplitContainer4.Height.ToString / 2.11
+            'Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
+            'Panel4.Width = SplitContainer4.Width.ToString
+            'Panel4.Height = SplitContainer4.Height.ToString / 2.11
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -8282,7 +8282,7 @@ Public Class Form1
     '    End Try
     'End Sub
 
-    Private Sub PictureBox_Zoom(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxLeft.DoubleClick,tv_PictureBoxRight.DoubleClick,tv_PictureBoxBottom.DoubleClick
+    Private Sub PictureBox_Zoom(ByVal sender As Object, ByVal e As System.EventArgs) Handles tv_PictureBoxBottom.DoubleClick
         Try
             Dim picBox As PictureBox = sender
 
@@ -22375,4 +22375,5 @@ End Sub
     Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
         BannerAndPosterViewer()
     End Sub
+
 End Class
