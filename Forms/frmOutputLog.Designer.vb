@@ -56,6 +56,7 @@ Partial Class frmoutputlog
         '
         'ComboBoxLogViewType
         '
+        Me.ComboBoxLogViewType.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.ComboBoxLogViewType.FormattingEnabled = true
         Me.ComboBoxLogViewType.Items.AddRange(New Object() {"Full", "Brief"})
         Me.ComboBoxLogViewType.Location = New System.Drawing.Point(580, 515)

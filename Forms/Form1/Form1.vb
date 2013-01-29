@@ -3864,6 +3864,14 @@ Public Class Form1
 
 
     Public Function GetTrailerPath(ByVal s As String)
+        Dim FileName As String = ""
+        
+        For Each extension In "mp4,flv,webm".Split(",")
+            FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer." & extension)
+
+            If File.Exists(FileName) Then Return FileName
+        Next
+
         Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
     End Function
 
@@ -22111,6 +22119,9 @@ End Sub
         filteredListObj.Clear()
         filteredList.AddRange(oMovies.MovieCache)
         filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
+
+        DataGridViewBindingSource.DataSource = filteredListObj
+        DataGridViewMovies.DataSource = DataGridViewBindingSource
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply()
         mov_FormPopulate()

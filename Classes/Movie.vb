@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports Media_Companion
 Imports System.Text
+Imports YouTubeFisher
 
 Public Class Movie
 
@@ -13,6 +14,7 @@ Public Class Movie
     Const MSG_ERROR = "ERROR!"
     Const MSG_OK    = "OK"
     Const MSG_DONT_RESIZE = "Don't resize"
+    Const YOU_TUBE_URL_PREFIX = "http://www.youtube.com/watch?v="
 
     Public Delegate Sub ActionDelegate()
 
@@ -59,6 +61,7 @@ Public Class Movie
     Private _title                As String = ""
     Private _parent               As Movies
     Private _possibleImdb         As String = "-1"
+    Private _youTubeTrailer       As YouTubeVideoFile
 
     Shared Private _availableHeightResolutions As List(Of Integer)
 
@@ -77,6 +80,12 @@ Public Class Movie
 
 
     #Region "Read-only properties"
+
+    Public ReadOnly Property YouTubeTrailer As YouTubeVideoFile
+        Get
+            Return _youTubeTrailer
+        End Get
+    End Property
 
     Shared Public ReadOnly Property Resolutions As XDocument
         Get
@@ -168,6 +177,29 @@ Public Class Movie
     '    Return Convert.ToInt32(row.Attribute("height").Value)
 
     'End Function
+
+
+    ReadOnly Property TrailerExists
+        Get
+            Return File.Exists(ActualTrailerPath)
+        End Get
+    End Property
+
+
+    ReadOnly Property ActualTrailerPath As String
+        Get
+            Dim s = NfoPathPrefName
+            Dim FileName As String = ""
+        
+            For Each item In "mp4,flv,webm".Split(",")
+                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
+
+                If File.Exists(FileName) Then Return FileName
+            Next
+
+            Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+        End Get
+    End Property
 
 
 
@@ -315,7 +347,16 @@ Public Class Movie
 
 	Public ReadOnly Property TrailerPath
         Get
-            Return Path.Combine( NfoPathPrefName.Replace(Path.GetFileName(NfoPathPrefName),""), Path.GetFileNameWithoutExtension(NfoPathPrefName) & "-trailer.flv")
+            Return Path.Combine(NfoPathPrefName.Replace(Path.GetFileName(NfoPathPrefName),""), Path.GetFileNameWithoutExtension(NfoPathPrefName) & "-trailer." & TrailerPathExtension)
+        End Get
+	End Property
+
+	Public ReadOnly Property TrailerPathExtension
+        Get
+            If Not IsNothing(_youTubeTrailer) Then
+                Return _youTubeTrailer.Extension
+            End If
+            Return "flv"
         End Get
 	End Property
 
@@ -887,20 +928,43 @@ Public Class Movie
             Exit Sub
         End If
 
+        If TrailerExists Then
+            ReportProgress("Trailer already exists","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
+            Exit Sub
+        End If
+
         _scrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
     End Sub
 
     Function GetTrailerUrl( title As String, imdb As String ) As String
         ReportProgress("Trailer URL")
 
+        _youTubeTrailer = Nothing
+        
         If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
             TrailerUrl = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, title)
-
-            'Add later when can dl youtube vids
-            'If TrailerUrl = "" and tmdb.Trailers.youtube.Count > 0 then
-            '    TrailerUrl = tmdb.GetTrailerUrl(Preferences.moviePreferredTrailerResolution)
-            'End If
         End If
+
+
+        'Try YouTube for HD and SD...
+        '
+        If TrailerUrl = "" and tmdb.Trailers.youtube.Count > 0 then
+            Dim ytVideoPage = tmdb.GetTrailerUrl(Preferences.moviePreferredTrailerResolution)
+            If ytVideoPage <> "" then
+
+			    Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+ytVideoPage)
+
+			    If yts.AvailableVideoFormat.Length>0 Then
+
+			        _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+
+			        If Not IsNothing(_youTubeTrailer) Then
+			            TrailerUrl = _youTubeTrailer.VideoUrl
+                    End If
+                End If
+            End If
+        End If
+
 
         If TrailerUrl = "" Then
             TrailerUrl = _imdbScraper.gettrailerurl(imdb, Preferences.imdbmirror)
@@ -1085,33 +1149,41 @@ Public Class Movie
 
     Sub DownloadTrailer(TrailerUrl As String)
 	    'Check for and delete zero length trailer - created when Url is invalid
-	    DeleteZeroLengthFile(TrailerPath)
+	    DeleteZeroLengthFile(ActualTrailerPath)
 
         If Not Preferences.DownloadTrailerDuringScrape Then
             Exit Sub
         End If
 
         'Don't re-download if trailer exists
-        If File.Exists(TrailerPath) then
+        If File.Exists(ActualTrailerPath) then
+            Exit Sub
+        End if
+
+        If TrailerUrl = "" then
             Exit Sub
         End if
 
         If Not Utilities.UrlIsValid(TrailerUrl) Then
+            ReportProgress("Invalid Trailer Url detected","Invalid Trailer Url detected")
             Exit Sub
         End if
 
-        ReportProgress("DL Trailer")
+        ReportProgress("DL Trailer","Downloading trailer...")
         _WebFileDownloader.DownloadFileWithProgress(TrailerUrl, TrailerPath,_parent.Bw)
+
+        DeleteZeroLengthFile(ActualTrailerPath)
 
         If Cancelled then Exit Sub
 
-        ReportProgress(MSG_OK,"Trailer downloaded OK" & vbCrLf)
+        ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
 	End Sub
 
 	Private Sub DeleteZeroLengthFile( fileName )
 		If File.Exists(fileName) then
 			If (New IO.FileInfo(fileName)).Length = 0 then
 				File.Delete(fileName)
+                ReportProgress("Zero length trailer deleted","Zero length trailer deleted : [" & fileName & "]")
 			End If
 		End If
 	End sub
@@ -1187,6 +1259,7 @@ Public Class Movie
 
 
     Sub DeleteScrapedFiles
+        DeleteNFO
         DeleteActors
         DeletePoster
         DeleteFanart
@@ -1212,6 +1285,10 @@ Public Class Movie
         'To Do : Delete from networkpath = Preferences.actorsavepath
     End Sub     
 
+
+    Sub DeleteNFO
+        Utilities.SafeDeleteFile(NfoPathPrefName)
+    End Sub
 
     Sub DeletePoster
         DeleteFile(PosterPath)
@@ -1654,9 +1731,13 @@ Public Class Movie
         If Cancelled then Exit Sub
              
         If rl.trailer Then
-            _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
-            UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
-            DownloadTrailer(TrailerUrl)
+            If TrailerExists Then
+                ReportProgress("Trailer already exists","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
+            Else
+                _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
+                UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
+                DownloadTrailer(TrailerUrl)
+            End If
         End If
        
         If Cancelled then Exit Sub
