@@ -1314,11 +1314,31 @@ Public Class Movie
         Try
             File.Delete(fileName)
         Catch ex As Exception
-            Dim x = ex.Message
+            Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
+            If answer=MsgBoxResult.Yes then
+                ShowTakeOwnsershipHelp
+            End If
         End Try
     End Sub
 
+    Sub ShowTakeOwnsershipHelp
+       Try
+            Dim FileName = Preferences.applicationPath & "\Assets\TakeOwnership.htm"
+            Dim helpFile =  "file:///" & FileName.Replace(" ", "%20").Replace("\","/")
 
+            If Preferences.selectedBrowser <> "" then
+                Process.Start(Preferences.selectedBrowser,helpFile)
+            Else
+                Try
+                    Process.Start(helpFile)
+                Catch ex As Exception
+                    MessageBox.Show( "An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
+                End Try
+            End If 
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
     Sub DownloadFanart
         If Not Preferences.savefanart then
