@@ -1305,7 +1305,7 @@ Public Class Movie
 
 
     Sub DeleteTrailer
-        DeleteFile(TrailerPath)
+        DeleteFile(ActualTrailerPath)
     End Sub
 
 

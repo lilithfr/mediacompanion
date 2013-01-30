@@ -31,6 +31,10 @@ Public Class Form1
     Public ChangeMovieImdb     = ""
     Public droppedItems        As New List(Of String)
     Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
+
+    Public Shared blnAbortFileDownload As Boolean
+    Public Shared ReadOnly countLock = New Object
+
     #End Region 'Movie scraping objects
 
 
@@ -22246,7 +22250,8 @@ End Sub
 
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-        If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel()
+        If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
+        If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
     End Sub
 
 
@@ -22255,13 +22260,19 @@ End Sub
     End Sub
 
 
-    Sub BckWrkScnMovies_Cancel()
+    Sub BckWrkScnMovies_Cancel
         If BckWrkScnMovies.IsBusy Then
             tsStatusLabel.Text = "* Cancelling... *"
             BckWrkScnMovies.CancelAsync()
         End If
     End Sub
 
+    Sub AbortFileDownload
+	    tsStatusLabel.Text = "* Aborting trailer download... *"
+	    Monitor.Enter(countLock)
+	    blnAbortFileDownload = True
+	    Monitor.Exit(countLock)
+    End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
         tsProgressBarFileDownload_Resize()
@@ -22269,7 +22280,7 @@ End Sub
 
 
     Private Sub tsProgressBarFileDownload_Resize()
-        tsProgressBarFileDownload.Width = ssFileDownload.Width - 130
+        tsProgressBarFileDownload.Width = ssFileDownload.Width - 200
     End Sub
 
 

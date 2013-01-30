@@ -38,6 +38,11 @@ Public Class WebFileDownloader
         End Try
     End Function
     Public Function DownloadFileWithProgress(ByVal URL As String, ByVal Location As String, Optional bw As BackgroundWorker=Nothing) As Boolean
+
+	    Monitor.Enter(Form1.countLock)
+	    Form1.blnAbortFileDownload = False
+	    Monitor.Exit(Form1.countLock)
+
         Dim FS As FileStream = Nothing
         Try
             mCurrentFile = GetFileName(URL)
@@ -48,7 +53,8 @@ Public Class WebFileDownloader
             Dim iTotalBytesRead As Long
             Dim iRetries    as Integer = 0
             Dim iMaxRetries as Integer = 10
-
+            Dim FileDownloadAborted As Boolean
+            
             FS = New FileStream(Location, FileMode.Create, FileAccess.Write)
             wRemote = WebRequest.Create(URL)
             Dim myWebResponse As WebResponse = wRemote.GetResponse
@@ -79,14 +85,19 @@ Public Class WebFileDownloader
                     sChunks       = myWebResponse.GetResponseStream
                     iRetries      = iRetries + 1
                 End If
-            Loop While (iTotalBytesRead < fSize) and (iRetries <= iMaxRetries) and Not Cancelled(bw)
+
+                Monitor.Enter(Form1.countLock)
+	            FileDownloadAborted = Form1.blnAbortFileDownload
+		        Monitor.Exit(Form1.countLock)
+
+            Loop While (iTotalBytesRead < fSize) and (iRetries <= iMaxRetries) and Not Cancelled(bw) And Not FileDownloadAborted
             sChunks.Close()
             FS.Close()
 
             If (iTotalBytesRead < fSize) or (iTotalBytesRead = 0) then
                 File.Delete(Location)
 
-                If Cancelled(bw) then Return True
+                If Cancelled(bw) or FileDownloadAborted then Return True
                 
                 Dim ex As Exception = New Exception( "Download failed" )
                 RaiseEvent FileDownloadFailed(ex)
