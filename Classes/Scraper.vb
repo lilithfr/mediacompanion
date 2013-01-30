@@ -34,6 +34,7 @@ Public Class Classimdb
     Const REGEX_TAGLINE             = ">Tagline.*?:</h4>[ \t\r\n]+(?<tagline>.*?)[ \t\r\n]+<span"
     Const REGEX_HREF_PATTERN        = "<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>"
     Const REGEX_MOVIE_TITLE_PATTERN = "(?<=<(title)>).*(?=<\/\1>)"
+    Const REGEX_RELEASE_DATE        = ">Release Date:</h4>(?<date>.*?)<span"
 
 
     Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
@@ -637,6 +638,26 @@ Public Class Classimdb
     End Property
 
 
+    ReadOnly Property ReleaseDate As String
+        Get
+            ReleaseDate=""
+
+            Dim RelDate As Date
+            Dim sRelDate As String = Regex.Match(Regex.Match(Html, REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
+
+            If Not sRelDate = "" Then
+                If Date.TryParse(sRelDate, RelDate) Then
+                    ReleaseDate = RelDate.ToString("yyyy-MM-dd")
+                End If
+            End If
+
+            Return ReleaseDate
+        End Get
+    End Property
+
+
+    
+
     Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
 
@@ -727,10 +748,11 @@ Public Class Classimdb
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
             
-                If Genres    <> "" then totalinfo = totalinfo & "<genre>"      & Genres     & "</genre>"    & vbCrLf
-                If Directors <> "" then totalinfo = totalinfo & "<director>"   & Directors  & "</director>" & vbCrLf
-                If Credits   <> "" then totalinfo = totalinfo & "<credits>"    & Credits    & "</credits>"  & vbCrLf
-
+                If Genres      <> "" then totalinfo = totalinfo & "<genre>"      & Genres      & "</genre>"     & vbCrLf
+                If Directors   <> "" then totalinfo = totalinfo & "<director>"   & Directors   & "</director>"  & vbCrLf
+                If Credits     <> "" then totalinfo = totalinfo & "<credits>"    & Credits     & "</credits>"   & vbCrLf
+                If ReleaseDate <> "" then totalinfo = totalinfo & "<premiered>"  & ReleaseDate & "</premiered>" & vbCrLf
+                
                 For f = 0 To webpage.Count - 1
                     webcounter = f
                     If webcounter > webpage.Count - 10 Then Exit For
@@ -1134,19 +1156,21 @@ Public Class Classimdb
                     End If
 
                     'premiered
-                    If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
-                        Try
-                            Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
-                        End Try
+                    If totalinfo.IndexOf("<premiered>") = -1 Then
+                        If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
+                            Try
+                                Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
+                                If M.Success = True Then
+                                    movienfoarray = M.Groups(1).Value
+                                Else
+                                    movienfoarray = "scraper error"
+                                End If
+                                movienfoarray = encodespecialchrs(movienfoarray)
+                                totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
+                            Catch
+                                totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
+                            End Try
+                        End If
                     End If
 
 
