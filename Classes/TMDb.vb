@@ -149,7 +149,8 @@ Public Class TMDb
             If s <> "" then
                 Return s.Substring(0,s.Length-2)
             End If
-                Return "Unknown"
+
+            Return ""
         End Get 
     End Property
 
@@ -170,7 +171,7 @@ Public Class TMDb
             If s <> "" then
                 Return s.Substring(0,s.Length-2)
             End If
-                Return "Unknown"
+                Return ""
         End Get 
     End Property
 
@@ -187,7 +188,7 @@ Public Class TMDb
                 End If
             Next
 
-            Return "Unknown"
+            Return ""
         End Get 
     End Property
 
@@ -209,7 +210,7 @@ Public Class TMDb
                 End If
             Next
 
-            Return "Unknown"
+            Return ""
         End Get 
     End Property
 
