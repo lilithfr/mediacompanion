@@ -1056,6 +1056,7 @@ Public Class Classimdb
                                 Else
                                     movienfoarray = "scraper error"
                                 End If
+                                movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                                 movienfoarray = Utilities.cleanSpecChars(movienfoarray.Trim())
                                 movienfoarray = encodespecialchrs(movienfoarray)
                                 totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
