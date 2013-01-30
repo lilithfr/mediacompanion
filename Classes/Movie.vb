@@ -1314,6 +1314,7 @@ Public Class Movie
         Try
             File.Delete(fileName)
         Catch ex As Exception
+            Dim x = ex.Message
         End Try
     End Sub
 
@@ -1713,7 +1714,6 @@ Public Class Movie
                 AssignScrapedMovie(_rescrapedMovie)
             End If
         
-            
             UpdateProperty( _rescrapedMovie.fullmoviebody.credits  , _scrapedMovie.fullmoviebody.credits  , rl.credits   )  
             UpdateProperty( _rescrapedMovie.fullmoviebody.director , _scrapedMovie.fullmoviebody.director , rl.director  )  
             UpdateProperty( _rescrapedMovie.fullmoviebody.stars    , _scrapedMovie.fullmoviebody.stars    , rl.stars     )  

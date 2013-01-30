@@ -22,6 +22,7 @@
     Dim _source As String
     Dim _votes As String
     Dim _TitleUcase As String
+    Dim _IntVotes As Integer=0
 
 
     Sub New 
@@ -55,6 +56,7 @@
         plot = movie.plot.Trim
         source = movie.source
         votes = movie.votes
+        Integer.TryParse(votes.Replace(",",""),IntVotes)
         TitleUcase = movie.title.ToUpper
     End Sub
 
@@ -264,6 +266,15 @@
         End Get
         Set(ByVal value)
             _TitleUcase = value
+        End Set
+    End Property
+
+    Public Property IntVotes
+        Get
+            Return _IntVotes
+        End Get
+        Set(ByVal value)
+            _IntVotes = value
         End Set
     End Property
 End Class

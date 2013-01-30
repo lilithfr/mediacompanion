@@ -636,12 +636,6 @@ Public Class Classimdb
         End Get
     End Property
 
-'<h4 class="inline">Writer:</h4>
-'            <span itemprop="writer" itemscope="" itemtype="http://schema.org/Person">
- '               <span itemprop="name">
-'<a href="/name/nm0000184/?ref_=tt_ov_wr" itemprop="url">George Lucas</a></span></span>
-'</div>
-'If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 And webpage(f + 1).IndexOf("href=""/keyword") < 0
 
     Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
@@ -848,19 +842,21 @@ Public Class Classimdb
 
 
                     'rating
-                    If webpage(f).IndexOf("itemprop=""ratingValue") <> -1 Then
-                        Try
-                            Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<rating>" & movienfoarray & "</rating>" & vbCrLf
-                        Catch
-                            totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
-                        End Try
+                    If totalinfo.IndexOf("<rating>") = -1 Then
+                        If webpage(f).IndexOf("<span itemprop=""ratingValue") <> -1 Then
+                            Try
+                                Dim M As Match = Regex.Match(webpage(f), "<span itemprop=""ratingValue"">(\d.\d)</span>")
+                                If M.Success = True Then
+                                    movienfoarray = M.Groups(1).Value
+                                Else
+                                    movienfoarray = "scraper error"
+                                End If
+                                movienfoarray = encodespecialchrs(movienfoarray)
+                                totalinfo = totalinfo & "<rating>" & movienfoarray & "</rating>" & vbCrLf
+                            Catch
+                                totalinfo = totalinfo & "<rating>scraper error</rating>" & vbCrLf
+                            End Try
+                        End If
                     End If
 
                     If webpage(f).IndexOf("<strong>Top 250 #") <> -1 Then

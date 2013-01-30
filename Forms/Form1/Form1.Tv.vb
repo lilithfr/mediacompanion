@@ -800,7 +800,8 @@ Partial Public Class Form1
                 ms.Seek(0, System.IO.SeekOrigin.Begin)
                 PicBox.Image = Image.FromStream(ms)
             End Using
-            PicBox.ImageLocation = PathToUse
+            'PicBox.ImageLocation = PathToUse
+            PicBox.Tag = PathToUse
         Catch
             'Image is invalid e.g. not downloaded correctly -> Delete it
             Try

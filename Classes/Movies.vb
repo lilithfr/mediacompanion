@@ -366,8 +366,11 @@ Public Class Movies
 
 
     Sub RescrapeMovie(NfoFilename as String)
+        Dim movie = New Movie(Utilities.GetFileName(NfoFilename),Me)
 
-        ScrapeMovie( New Movie(Utilities.GetFileName(NfoFilename),Me) )
+        movie.DeleteScrapedFiles
+
+        ScrapeMovie(movie)
 
     End Sub
 

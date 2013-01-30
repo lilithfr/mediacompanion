@@ -149,7 +149,6 @@ Public Class TMDb
             If s <> "" then
                 Return s.Substring(0,s.Length-2)
             End If
-
             Return ""
         End Get 
     End Property
@@ -171,7 +170,7 @@ Public Class TMDb
             If s <> "" then
                 Return s.Substring(0,s.Length-2)
             End If
-                Return ""
+            Return ""
         End Get 
     End Property
 
@@ -187,7 +186,6 @@ Public Class TMDb
                     Return person.name
                 End If
             Next
-
             Return ""
         End Get 
     End Property
@@ -209,7 +207,6 @@ Public Class TMDb
                     Return country.certification
                 End If
             Next
-
             Return ""
         End Get 
     End Property

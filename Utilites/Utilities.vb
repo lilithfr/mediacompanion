@@ -134,7 +134,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function UrlIsValid(ByVal url As String) As Boolean
         
-        If url.IndexOf(".youtube.com") Then Return True
+        If url.IndexOf(".youtube.com") > -1 Then Return True
         
         If IsNothing(url) Then return False
 

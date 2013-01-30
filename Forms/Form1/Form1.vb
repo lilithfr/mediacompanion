@@ -2588,32 +2588,39 @@ Public Class Form1
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
-                        PictureBoxActor.ImageLocation = temppath
-                        PictureBoxActor.Load()
+
+                        util_ImageLoad(PictureBoxActor, temppath, Utilities.DefaultActorPath)
+
+                        'PictureBoxActor.ImageLocation = temppath
+                        'PictureBoxActor.Load()
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
                             If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
-                                PictureBoxActor.ImageLocation = actorthumbpath
-                                PictureBoxActor.Load()
-                            Else
-                                PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                                PictureBoxActor.Load()
+                                'PictureBoxActor.ImageLocation = actorthumbpath
+                                'PictureBoxActor.Load()
+                                util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
+                            'Else
+                            '    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                            '    PictureBoxActor.Load()
                             End If
                         Else
-                            PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                            PictureBoxActor.Load()
+                            util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
+                            'PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                            'PictureBoxActor.Load()
                         End If
                     Else
-                        PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                        PictureBoxActor.Load()
+                        util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
+                        'PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                        'PictureBoxActor.Load()
                     End If
                     Exit For
                 Else
-                    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                    PictureBoxActor.Load()
+                    util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
+                    'PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                    'PictureBoxActor.Load()
                 End If
             Next
         Catch ex As Exception
@@ -3602,8 +3609,12 @@ Public Class Form1
             t.ShowDialog()
             Try
                 If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-                    PictureBoxFanArt.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                    PictureBoxFanArt.Load()
+                    
+                    'PictureBoxFanArt.ImageLocation = workingMovieDetails.fileinfo.fanartpath
+                    'PictureBoxFanArt.Load()
+
+                    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+
                     Rating1.PictureInit = PictureBoxFanArt.Image
 
 
@@ -6246,8 +6257,12 @@ Public Class Form1
                     tempstring = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
                     PictureBox3.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
                 End If
-                moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
-                moviethumb.Load()
+
+                'moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
+                'moviethumb.Load()
+
+                util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+
                 Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
                 Dim bitmap2 As New Bitmap(bitmap3)
                 bitmap3.Dispose()
@@ -6264,8 +6279,10 @@ Public Class Form1
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        poster.ImageLocation = path
-                        poster.Load()
+
+                        'poster.ImageLocation = path
+                        'poster.Load()
+                        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
                         Exit For
                     End If
                 Next
@@ -6431,8 +6448,9 @@ Public Class Form1
 
                 For Each poster As PictureBox In TabPage22.Controls
                     If poster.Tag = workingMovieDetails.fileinfo.fullpathandfilename Then
-                        poster.ImageLocation = path
-                        poster.Load()
+                        'poster.ImageLocation = path
+                        'poster.Load()
+                        util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
                         Exit For
                     End If
                 Next
@@ -6600,21 +6618,27 @@ Public Class Form1
                     Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
-                        PictureBox8.ImageLocation = temppath
-                        PictureBox8.Load()
+
+                        'PictureBox8.ImageLocation = temppath
+                        'PictureBox8.Load()
+
+                        util_ImageLoad(PictureBox8, temppath, Utilities.DefaultActorPath)
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         If actor.actorthumb.IndexOf("http") <> -1 Or IO.File.Exists(actor.actorthumb) Then
-                            PictureBox8.ImageLocation = actor.actorthumb
-                            PictureBox8.Load()
+                            'PictureBox8.ImageLocation = actor.actorthumb
+                            'PictureBox8.Load()
+                            util_ImageLoad(PictureBox8, actor.actorthumb, Utilities.DefaultActorPath)
                         Else
-                            PictureBox8.ImageLocation = Utilities.DefaultActorPath
-                            PictureBox8.Load()
+                            'PictureBox8.ImageLocation = Utilities.DefaultActorPath
+                            'PictureBox8.Load()
+                            util_ImageLoad(PictureBox8, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
                         End If
                     Else
-                        PictureBox8.ImageLocation = Utilities.DefaultActorPath
-                        PictureBox8.Load()
+                        'PictureBox8.ImageLocation = Utilities.DefaultActorPath
+                        'PictureBox8.Load()
+                        util_ImageLoad(PictureBox8, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
                     End If
                     PictureBox8.SizeMode = PictureBoxSizeMode.Zoom
                     PictureBox8.Load()
@@ -8296,12 +8320,14 @@ Public Class Form1
         Try
             Dim picBox As PictureBox = sender
 
-            If picBox.ImageLocation <> Nothing Then
-                If IO.File.Exists(picBox.ImageLocation) Then
+            Dim imageLocation As String = picBox.tag
+
+            If imageLocation <> Nothing Then
+                If IO.File.Exists(imageLocation) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
                     'ToolStrip1.Enabled = False
-                    Dim newimage As New Bitmap(picBox.ImageLocation)
+                    Dim newimage As New Bitmap(imageLocation)
                     Call util_ZoomImage(newimage)
                 End If
             End If
@@ -21022,7 +21048,7 @@ End Sub
             util_ZoomImage(New Bitmap(pictureBox.ImageLocation))
         Catch
             Dim wc As New WebClient()
-            Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.ImageLocation)
+            Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.tag)
             Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
             util_ZoomImage(New Bitmap(ImageStream))
