@@ -952,16 +952,19 @@ Public Class Movie
             Dim ytVideoPage = tmdb.GetTrailerUrl(Preferences.moviePreferredTrailerResolution)
             If ytVideoPage <> "" then
 
-			    Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+ytVideoPage)
+                Try
+			        Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+ytVideoPage)
 
-			    If yts.AvailableVideoFormat.Length>0 Then
+			        If yts.AvailableVideoFormat.Length>0 Then
 
-			        _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
+			            _youTubeTrailer = yts.selectTrailer(Preferences.moviePreferredTrailerResolution)
 
-			        If Not IsNothing(_youTubeTrailer) Then
-			            TrailerUrl = _youTubeTrailer.VideoUrl
+			            If Not IsNothing(_youTubeTrailer) Then
+			                TrailerUrl = _youTubeTrailer.VideoUrl
+                        End If
                     End If
-                End If
+                Catch       'Timed out...
+                End Try
             End If
         End If
 

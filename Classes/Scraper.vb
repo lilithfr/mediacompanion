@@ -1,4 +1,4 @@
-﻿
+﻿Imports System
 Imports System.Threading
 Imports System.Net
 Imports System.IO
@@ -6,8 +6,35 @@ Imports System.Web
 Imports System.Data
 Imports System.Text.RegularExpressions
 Imports Media_Companion
+Imports System.Runtime.CompilerServices
+Imports System.Text
+Imports System.IO.Compression
+Imports System.Xml.Serialization
+Imports System.Xml.XPath
+Imports System.Linq
+
+Module ModGlobals
+
+    <Extension()> _
+    Function CleanTitle(ByVal sString As String) As String
+        Dim CleanString As String = sString
+        If sString.StartsWith("""") Then CleanString = sString.Remove(0, 1)
+
+        If sString.EndsWith("""") Then CleanString = CleanString.Remove(CleanString.Length - 1, 1)
+
+        Return CleanString
+    End Function
+
+End Module
+
 
 Public Class Classimdb
+
+
+    Const REGEX_TAGLINE             = ">Tagline.*?:</h4>[ \t\r\n]+(?<tagline>.*?)[ \t\r\n]+<span"
+    Const REGEX_HREF_PATTERN        = "<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>"
+    Const REGEX_MOVIE_TITLE_PATTERN = "(?<=<(title)>).*(?=<\/\1>)"
+
 
     Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
         Monitor.Enter(Me)
@@ -520,6 +547,45 @@ Public Class Classimdb
         End Try
 
     End Function
+
+
+    Property Html As String=""
+
+    
+    ReadOnly Property Genres
+        Get
+    	    Dim D = 0
+            Dim W = 0
+
+		    D = Html.IndexOf("<h4 class=""inline"">Genres:</h4>")
+
+		    If Not D <= 0 Then
+				W = Html.IndexOf("</div>", D)
+
+				Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), REGEX_HREF_PATTERN, RegexOptions.Singleline)
+
+				Dim Gen = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
+
+                Dim lst = Gen.ToList
+                Dim s = ""
+
+                For g = 0 To lst.Count - 1
+                    If g = 0 Then
+                        s = lst(g)
+                    Else
+                        s = s & " / " & lst(g)
+                    End If
+                Next
+
+				Return s
+		    End If
+
+            Return ""
+        End Get
+    End Property
+
+
+
     Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
         Monitor.Enter(Me)
 
@@ -608,6 +674,9 @@ Public Class Classimdb
                 webpage = loadwebpage(tempstring, False)
 
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
+                Html = webPg
+            
+                If Genres <> "" then totalinfo = totalinfo & "<genre>"   & Genres  & "</genre>"   & vbCrLf
 
                 For f = 0 To webpage.Count - 1
                     webcounter = f
@@ -767,6 +836,8 @@ Public Class Classimdb
                                     movienfoarray = movienfoarray & " / " & listofdirectors(g)
                                 End If
                             Next
+                            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
@@ -797,6 +868,7 @@ Public Class Classimdb
                                     movienfoarray = movienfoarray & " / " & listofwriters(g)
                                 End If
                             Next
+                            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
@@ -825,6 +897,7 @@ Public Class Classimdb
                                     movienfoarray = movienfoarray & ", " & listofstars(g)
                                 End If
                             Next
+                            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
                             totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
@@ -835,31 +908,34 @@ Public Class Classimdb
 
 
                     'genre
-                     If f > 5 Then
-                        If webpage(f).IndexOf("itemprop=""genre""") <> -1 And webpage(f).IndexOf("<span>") = -1 Then
-                            Dim listofgenre As New List(Of String)
-                            Dim count As Integer = f
-                            Try
-                                For t = 1 To 10
-                                    If webpage(count + t).IndexOf("</div>") <> -1 Then Exit For
-                                    listofgenre.Add(webpage(count + t))
-                                Next
-                                For g = 0 To listofgenre.Count - 1
-                                    listofgenre(g) = listofgenre(g).Substring(listofgenre(g).IndexOf(">") + 1, listofgenre(g).IndexOf("<") - 5)
-                                Next
-                                For g = 0 To listofgenre.Count - 1
-                                    If g = 0 Then
-                                        movienfoarray = listofgenre(g)
-                                    Else
-                                        movienfoarray = movienfoarray & " / " & listofgenre(g)
-                                    End If
-                                Next
-                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<genre>scraper error</genre>" & vbCrLf
-                            End Try
+                    If totalinfo.IndexOf("<genre>") = -1 Then 
+                        If f > 5 Then
+                            If webpage(f).IndexOf("itemprop=""genre""") <> -1 And webpage(f).IndexOf("<span>") = -1 Then
+                                Dim listofgenre As New List(Of String)
+                                Dim count As Integer = f
+                                Try
+                                    For t = 1 To 10
+                                        If webpage(count + t).IndexOf("</div>") <> -1 Then Exit For
+                                        listofgenre.Add(webpage(count + t))
+                                    Next
+                                    For g = 0 To listofgenre.Count - 1
+                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).IndexOf(">") + 1, listofgenre(g).IndexOf("<") - 5)
+                                    Next
+                                    For g = 0 To listofgenre.Count - 1
+                                        If g = 0 Then
+                                            movienfoarray = listofgenre(g)
+                                        Else
+                                            movienfoarray = movienfoarray & " / " & listofgenre(g)
+                                        End If
+                                    Next
+                                    movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                                    movienfoarray = encodespecialchrs(movienfoarray)
+                                    totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
+                                Catch
+                                    totalinfo = totalinfo & "<genre>scraper error</genre>" & vbCrLf
+                                End Try
+                            End If
                         End If
                     End If
 
@@ -868,9 +944,13 @@ Public Class Classimdb
                     If webpage(f).IndexOf("<h4 class=""inline"">Tagline") <> -1 Then
                         Try
                             movienfoarray = webpage(f + 1)
+
+                            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+
                             movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                             movienfoarray = encodespecialchrs(movienfoarray)
-                            movienfoarray = movienfoarray.Trim()
+
+                '            movienfoarray = movienfoarray.Trim()
                             totalinfo = totalinfo & "<tagline>" & movienfoarray & "</tagline>" & vbCrLf
                         Catch
                             totalinfo = totalinfo & "<tagline>scraper error</tagline>" & vbCrLf
@@ -978,13 +1058,18 @@ Public Class Classimdb
                                 End If
                                 movienfoarray = Utilities.cleanSpecChars(movienfoarray.Trim())
                                 movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline><plot></plot>" & vbCrLf
+                                totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
+
+                                If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
                             Else
-                                totalinfo = totalinfo & "<outline>scaper error: possible format change</outline><plot></plot>" & vbCrLf
+                                totalinfo = totalinfo & "<outline>scaper error: possible format change</outline>" & vbCrLf
+
+                                If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
                             End If
                         Catch
                             'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
-                            totalinfo = totalinfo & "<outline>scraper error</outline><plot></plot>" & vbCrLf
+                            totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+                            If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
                         End Try
                     End If
 
@@ -1080,7 +1165,8 @@ Public Class Classimdb
                         End Try
                     End If
                 Next
-                'If imdbmirror <> "http://www.imdb.de/" Then
+
+                
                 Try
                     tempstring = imdbmirror & "title/" & imdbid & "/plotsummary"
                     Dim plots(20) As String
@@ -1116,6 +1202,7 @@ Public Class Classimdb
                             Loop
                             movienfoarray = movienfoarray.Replace("</a>", "")
                         End If
+                        movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                         movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                         movienfoarray = encodespecialchrs(movienfoarray)
                         totalinfo = totalinfo.Replace("<plot></plot>", "<plot>" & movienfoarray & "</plot>")
@@ -1123,7 +1210,7 @@ Public Class Classimdb
                 Catch
                     totalinfo = totalinfo & "<plot>scraper error</plot>"
                 End Try
-                'End If
+
 
                 'certs & mpaa
                 Try
@@ -1229,6 +1316,9 @@ Public Class Classimdb
             Monitor.Exit(Me)
         End Try
     End Function
+
+
+
     Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999)
         Dim webpage As New List(Of String)
         Dim actors(5000, 3)
