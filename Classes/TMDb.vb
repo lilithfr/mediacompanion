@@ -358,9 +358,12 @@ Public Class TMDb
         Try
             _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)   'JsonDeserialize(Of String)(TMDbConfigFile)
         Catch
-            _config_images_base_url = _api.GetConfiguration().images.base_url
-            'JsonSerialize(TMDbConfigFile,_config_images_base_url )
-            File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
+            Try
+                _config_images_base_url = _api.GetConfiguration().images.base_url
+                'JsonSerialize(TMDbConfigFile,_config_images_base_url )
+                File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
+            Catch
+            End Try
         End Try
 
 
@@ -390,10 +393,28 @@ Public Class TMDb
     Private Sub Fetch
         If _movie.id=0 and Not __Serialising and Not _fetched then
             _fetched     = True
-            _movie       = _api.GetMovieByIMDB  ( Imdb, _lookupLanguages.Item(0) )
-            _movieImages = _api.GetMovieImages  (_movie.id)
-            _trailers    = _api.GetMovieTrailers(_movie.id)
 
+            Dim tries=0
+            Dim ok=False
+
+            While tries<3 And Not ok
+                _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
+
+                If IsNothing(_movie) Then
+                    Threading.Thread.Sleep(500)
+                    tries &= 1
+                    Continue While
+                End If
+
+                _movieImages = _api.GetMovieImages  (_movie.id)
+                _trailers    = _api.GetMovieTrailers(_movie.id)
+                ok = True
+            End While
+            
+            If Not ok Then
+                Throw New Exception("TMDb is unavailale!")
+            End If
+            
             'If movie isn't found -> Create empty child objects
             If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
             If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
