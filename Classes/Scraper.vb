@@ -1112,47 +1112,49 @@ Public Class Classimdb
 
                     'outline
                     ''If webpage(f).IndexOf("<p>") <> -1 Then
-                    If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
-                        Try
-                            'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
-                            'movienfoarray = webpage(f + 1)
-                            movienfoarray = ""
-                            Dim endofoutline = f
-                            For endofoutline = (f) To webpage.Count - 2
-                                movienfoarray = movienfoarray & webpage(endofoutline)
-                                If webpage(endofoutline).IndexOf("</p>") <> -1 Then
-                                    Exit For
-                                End If
-                            Next
-                            If movienfoarray.Length > 0 Then
-                                'movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
-                                '' Some outlines are a partial listing and link to the plot summary
-                                'Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
-                                'If erasepos <> -1 Then
-                                '    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
-                                'End If
-                                Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
-                                If M.Success = True Then
-                                    movienfoarray = M.Groups(1).Value
+                    If totalinfo.IndexOf("<outline>") = -1 Then
+                        If webpage(f).IndexOf("itemprop=""description""") <> -1 Then
+                            Try
+                                'If webpage(f + 1).IndexOf("<p>") <> -1 And webpage(f + 2).IndexOf("</p>") <> -1 And webpage(f + 3).IndexOf("</p>") <> -1 Then
+                                'movienfoarray = webpage(f + 1)
+                                movienfoarray = ""
+                                Dim endofoutline = f
+                                For endofoutline = (f) To webpage.Count - 2
+                                    movienfoarray = movienfoarray & webpage(endofoutline)
+                                    If webpage(endofoutline).IndexOf("</p>") <> -1 Then
+                                        Exit For
+                                    End If
+                                Next
+                                If movienfoarray.Length > 0 Then
+                                    'movienfoarray = movienfoarray.Substring(movienfoarray.IndexOf(">") + 1)
+                                    '' Some outlines are a partial listing and link to the plot summary
+                                    'Dim erasepos = movienfoarray.IndexOf("<a href=""plotsummary""")
+                                    'If erasepos <> -1 Then
+                                    '    movienfoarray = movienfoarray.Remove(erasepos, movienfoarray.Length - erasepos)
+                                    'End If
+                                    Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+                                    If M.Success = True Then
+                                        movienfoarray = M.Groups(1).Value
+                                    Else
+                                        movienfoarray = "scraper error"
+                                    End If
+                                    movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray.Trim())
+                                    movienfoarray = encodespecialchrs(movienfoarray)
+                                    totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
+
+                                    If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
                                 Else
-                                    movienfoarray = "scraper error"
+                                    totalinfo = totalinfo & "<outline>scaper error: possible format change</outline>" & vbCrLf
+
+                                    If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
                                 End If
-                                movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-                                movienfoarray = Utilities.cleanSpecChars(movienfoarray.Trim())
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
-
+                            Catch
+                                'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
+                                totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
                                 If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-                            Else
-                                totalinfo = totalinfo & "<outline>scaper error: possible format change</outline>" & vbCrLf
-
-                                If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-                            End If
-                        Catch
-                            'totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
-                            totalinfo = totalinfo & "<outline>scraper error</outline>" & vbCrLf
-                            If totalinfo.IndexOf("<plot>") = -1 Then totalinfo = totalinfo & "<plot></plot>" & vbCrLf
-                        End Try
+                            End Try
+                        End If
                     End If
 
                     'premiered

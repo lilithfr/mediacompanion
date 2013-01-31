@@ -22280,7 +22280,7 @@ End Sub
 
 
     Private Sub tsProgressBarFileDownload_Resize()
-        tsProgressBarFileDownload.Width = ssFileDownload.Width - 200
+        tsProgressBarFileDownload.Width = ssFileDownload.Width - tsFileDownloadlabel.Width - 8
     End Sub
 
 

@@ -57,9 +57,13 @@ Public Class WebFileDownloader
             
             FS = New FileStream(Location, FileMode.Create, FileAccess.Write)
             wRemote = WebRequest.Create(URL)
+
+            wRemote.Timeout = 10000
+
             Dim myWebResponse As WebResponse = wRemote.GetResponse
             Dim fSize As long = myWebResponse.ContentLength
             RaiseEvent FileDownloadSizeObtained(fSize)
+
             Dim sChunks As Stream = myWebResponse.GetResponseStream
 
             Do
