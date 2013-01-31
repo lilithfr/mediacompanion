@@ -2713,13 +2713,13 @@ These settings allow you to override this behaviour, saving the actor thumbs to 
 </value>
   </data>
   <data name="Label128.Text" xml:space="preserve">
-    <value>Using multisave mode it is possible to edit multiple movies at the same time,
+    <value>Using multisave mode, it is possible to edit multiple movies at the same time.
 
 This can be any editable field including sets, and clicking the save button will
                           save the new details to all selected movies.
 
-If you do not wish to edid a field then leave it blank, only fields that contain
-                                             text will be changed.</value>
+If you do not wish to edit a field then leave it blank, as only fields that 
+                                     contain text will be changed.</value>
   </data>
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
