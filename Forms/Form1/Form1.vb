@@ -12001,11 +12001,12 @@ Public Class Form1
             'Dim picbox As PictureBox = item.SourceControl
             For f = 0 To DataGridViewMovies.RowCount - 1
                 'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells(0).ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells(0).Value.ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
                     DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
                     Application.DoEvents()
                     currentTabIndex = 4
                     Me.TabControl2.SelectedIndex = 4
