@@ -38,6 +38,7 @@ Public Class DownloadCache
         'Resize cache image only if need to
         CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
+        Utilities.EnsureFolderExists(Path)
         File.Copy(CachePath, Path, True)
 
         Return True
