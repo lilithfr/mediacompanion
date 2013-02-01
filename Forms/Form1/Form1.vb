@@ -39,6 +39,8 @@ Public Class Form1
 
     Public DataDirty As Boolean
 
+    Public CopyOfPreferencesIgnoreArticle As Boolean
+
     'Public Shared Preferences As New Structures
 
     Public MainFormLoadedStatus As Boolean = False
@@ -13438,6 +13440,9 @@ Public Class Form1
     End Sub
 
     Private Sub util_GeneralPreferencesSetup()
+
+        CopyOfPreferencesIgnoreArticle = Preferences.ignorearticle
+
         prefsload = True
         generalprefschanged = False
         Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
@@ -13668,6 +13673,11 @@ Public Class Form1
                 If tempint = DialogResult.Yes Then
                     Preferences.SaveConfig()
 
+                    If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
+                        oMovies.LoadMovieCache
+                        UpdateFilteredList
+                    End If
+                    
                     MsgBox("Changes Saved")
                 Else
                     Me.util_ConfigLoad()

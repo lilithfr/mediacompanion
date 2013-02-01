@@ -33,8 +33,9 @@ Public Class clsGridViewMovie
 
         Dim header_style As New DataGridViewCellStyle
 
-        header_style.BackColor = Color.Coral
-        header_style.Font = new Font(DataGridViewMovies.Font, FontStyle.Bold)
+        header_style.ForeColor = Color.White
+        header_style.BackColor = Color.DarkOliveGreen
+        header_style.Font      = new Font(DataGridViewMovies.Font, FontStyle.Bold)
 
         For Each col As DataGridViewcolumn in DataGridViewMovies.Columns
 	        col.HeaderCell.Style = header_style
