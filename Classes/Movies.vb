@@ -148,7 +148,7 @@ Public Class Movies
                 folders.Add(moviefolder)
                 ReportProgress("Searching movie Folder: " & dirInfo.FullName.ToString & vbCrLf)
 
-                For Each subfolder In Utilities.EnumerateFolders(moviefolder, 6)
+                For Each subfolder In Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
                     folders.Add(subfolder)
                 Next
             End If
@@ -713,7 +713,7 @@ Public Class Movies
 
         'Add sub-folders
         For f = 0 To tempint - 1
-            For Each subfolder In Utilities.EnumerateFolders(moviePaths(f), Long.MaxValue)
+            For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
                 moviePaths.Add(subfolder)
             Next
         Next

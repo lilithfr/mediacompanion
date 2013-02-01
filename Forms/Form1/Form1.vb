@@ -11,7 +11,7 @@ Imports System.Windows.Forms
 Imports System.ComponentModel
 Imports System.Linq
 
-#Const SilentErrorScream = True
+#Const SilentErrorScream = False
 #Const NoRefocus = True
 
 
@@ -37,7 +37,7 @@ Public Class Form1
 
     #End Region 'Movie scraping objects
 
-
+    Public DataDirty As Boolean
 
     'Public Shared Preferences As New Structures
 
@@ -16472,108 +16472,109 @@ Public Class Form1
             Preferences.SaveConfig()
         End If
 
-        Dim changed As Boolean = False
-        Dim gridrow As DataGridViewRow
+'        Dim changed As Boolean = False
+'        Dim gridrow As DataGridViewRow
 
-        For Each gridrow In DataGridView1.Rows
-            Dim idpath As String = gridrow.Cells("fullpathandfilename").Value
+'        For Each gridrow In DataGridView1.Rows
+'            Dim idpath As String = gridrow.Cells("fullpathandfilename").Value
 
-            For Each mov In oMovies.MovieCache
-                If mov.fullpathandfilename = idpath Then
-                    If mov.title <> gridrow.Cells("Title").Value Then
-                        changed = True
-                    End If
-                    If mov.outline <> gridrow.Cells("Outline").Value Then
-                        changed = True
-                    End If
-                    If mov.plot <> gridrow.Cells("Plot").Value Then
-                        changed = True
-                    End If
-                    If mov.genre <> gridrow.Cells("genre").Value Then
-                        changed = True
-                    End If
-                    If mov.rating <> gridrow.Cells("rating").Value Then
-                        changed = True
-                    End If
-                    Try
-                        If gridrow.Cells("playcount").Value Then
-                            If Convert.ToInt32(mov.playcount) <= 0 Then
-                                changed = True
-                            End If
-                        Else
-                            If Convert.ToInt32(mov.playcount) > 0 Then
-                                changed = True
-                            End If
-                        End If
-                    Catch
-                        If Convert.ToInt32(mov.playcount) > 0 Then
-                            changed = True
-                        End If
-                    End Try
-                    If mov.sortorder <> gridrow.Cells("sorttitle").Value Then
-                        changed = True
-                    End If
-                    If mov.year <> gridrow.Cells("year").Value Then
-                        If IsNumeric(gridrow.Cells("year").Value) Then
-                            changed = True
-                        End If
-                    End If
-                            Try
-                    If Convert.ToInt32(mov.top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
-                        If IsNumeric(gridrow.Cells("top250").Value) Then
-                            changed = True
-                        End If
-                    End If
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                            End Try
-                    Dim runtime As String = gridrow.Cells("runtime").Value
-                    runtime = runtime.Replace("min", "")
-                    runtime = runtime.Trim(" ")
-                    If IsNumeric(runtime) Then
-                        Dim temruntime As Integer = Convert.ToInt32(runtime)
-                        Dim tempstrin As String = temruntime.ToString & " min"
-                        If mov.runtime <> tempstrin Then
-                            changed = True
-                        End If
-                    End If
+'            For Each mov In oMovies.MovieCache
+'                If mov.fullpathandfilename = idpath Then
+'                    If mov.title <> gridrow.Cells("Title").Value Then
+'                        changed = True
+'                    End If
+'                    If mov.outline <> gridrow.Cells("Outline").Value Then
+'                        changed = True
+'                    End If
+'                    If mov.plot.Trim <> gridrow.Cells("Plot").Value.ToString Then
+'                        changed = True
+'                    End If
+'                    If mov.genre <> gridrow.Cells("genre").Value Then
+'                        changed = True
+'                    End If
+'                    If mov.rating <> gridrow.Cells("rating").Value Then
+'                        changed = True
+'                    End If
+'                    Try
+'                        If gridrow.Cells("playcount").Value Then
+'                            If Convert.ToInt32(mov.playcount) <= 0 Then
+'                                changed = True
+'                            End If
+'                        Else
+'                            If Convert.ToInt32(mov.playcount) > 0 Then
+'                                changed = True
+'                            End If
+'                        End If
+'                    Catch
+'                        If Convert.ToInt32(mov.playcount) > 0 Then
+'                            changed = True
+'                        End If
+'                    End Try
+'                    If mov.sortorder <> gridrow.Cells("sorttitle").Value Then
+'                        changed = True
+'                    End If
+'                    If mov.year <> gridrow.Cells("year").Value Then
+'                        If IsNumeric(gridrow.Cells("year").Value) Then
+'                            changed = True
+'                        End If
+'                    End If
+'                            Try
+'                    If Convert.ToInt32(mov.top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
+'                        If IsNumeric(gridrow.Cells("top250").Value) Then
+'                            changed = True
+'                        End If
+'                    End If
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                            End Try
+'                    Dim runtime As String = gridrow.Cells("runtime").Value
+'                    runtime = runtime.Replace("min", "")
+'                    runtime = runtime.Trim(" ")
+'                    If IsNumeric(runtime) Then
+'                        Dim temruntime As Integer = Convert.ToInt32(runtime)
+'                        Dim tempstrin As String = temruntime.ToString & " min"
+'                        If mov.runtime <> tempstrin Then
+'                            changed = True
+'                        End If
+'                    End If
 
-                    If mov.source <> gridrow.Cells("source").Value Then
-                        If mov.source = "" And gridrow.Cells("source").Value = Nothing Then
-                        Else
-                            If mov.source = Nothing Then
-                                If gridrow.Cells("source").Value <> "" Then
-                                    changed = True
-                                End If
-                            Else
-                                changed = True
-                            End If
-                        End If
-                    End If
+'                    If mov.source <> gridrow.Cells("source").Value Then
+'                        If mov.source = "" And gridrow.Cells("source").Value = Nothing Then
+'                        Else
+'                            If mov.source = Nothing Then
+'                                If gridrow.Cells("source").Value <> "" Then
+'                                    changed = True
+'                                End If
+'                            Else
+'                                changed = True
+'                            End If
+'                        End If
+'                    End If
 
-                    If mov.movieset <> gridrow.Cells("set").Value Then
-                        If mov.movieset = "-None-" And gridrow.Cells("set").Value = Nothing Then
-                        Else
-                            If mov.movieset = Nothing Then
-                                If gridrow.Cells("set").Value <> "-None-" Then
-                                    changed = True
-                                End If
-                            Else
-                                changed = True
-                            End If
-                        End If
-                    End If
-                End If
-                If changed = True Then Exit For
-            Next
-            If changed = True Then
-                Exit For
-            End If
+'                    If mov.movieset <> gridrow.Cells("set").Value Then
+'                        If mov.movieset = "-None-" And gridrow.Cells("set").Value = Nothing Then
+'                        Else
+'                            If mov.movieset = Nothing Then
+'                                If gridrow.Cells("set").Value <> "-None-" Then
+'                                    changed = True
+'                                End If
+'                            Else
+'                                changed = True
+'                            End If
+'                        End If
+'                    End If
+'                End If
+'                If changed = True Then Exit For
+'            Next
+'            If changed = True Then
+'                Exit For
+'            End If
 
-        Next gridrow
-        If changed = True Then
+'        Next gridrow
+
+        If DataDirty Then
             Dim tempint As Integer = MessageBox.Show("You appear to have made changes to some of your movie details." & vbCrLf & vbCrLf & "Any changes will be lost if you do not save the changes now." & "                 Do wish to save the changes?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If tempint = DialogResult.Yes Then
                 Call mov_TableChangesSave()
@@ -16581,6 +16582,8 @@ Public Class Form1
             End If
         End If
 
+        DataDirty=False
+        btn_movTableSave.Enabled = DataDirty
     End Sub
 
     Private Sub CheckBox21_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox21.CheckedChanged
@@ -19848,6 +19851,9 @@ Public Class Form1
     End Sub
 
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
+
+        Mc.clsGridViewMovie.SetDataGridViewMoviesFirstColumnWidth(DataGridViewMovies)
+
         Try
             DebugSplitter1PosLabel.Text = SplitContainer1.SplitterDistance
         Catch ex As Exception
@@ -19856,6 +19862,8 @@ Public Class Form1
     End Sub
 
     Private Sub SplitContainer5_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer5.SplitterMoved
+
+        ResizeBottomLHSPanel
         Try
             DebugSplitter5PosLabel.Text = SplitContainer5.SplitterDistance
         Catch ex As Exception
@@ -19863,6 +19871,18 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub ResizeBottomLHSPanel
+
+        Dim maxSize = gbGeneralFilters.Height+20
+
+        If SplitContainer5.Height-SplitContainer5.SplitterDistance > maxSize then 
+            SplitContainer5.SplitterDistance = SplitContainer5.Height-maxSize
+        End If
+
+        'Needed as workaround for splitter panel framework bug:
+        DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 124
+    End Sub
+    
     Private Sub ExtraDebugEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExtraDebugEnable.CheckedChanged
         Try
             If ExtraDebugEnable.Checked = True Then
@@ -21180,7 +21200,7 @@ End Sub
                 totalfolders.Add(moviefolder)
                 Dim newlist As List(Of String)
                 Try
-                    newlist = Utilities.EnumerateFolders(moviefolder, 6)
+                    newlist = Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
                     For Each subfolder In newlist
                         scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                         totalfolders.Add(subfolder)
@@ -21266,7 +21286,7 @@ End Sub
                 totalfolders.Add(moviefolder)
                 Dim newlist As List(Of String)
                 Try
-                    newlist = Utilities.EnumerateFolders(moviefolder, 6)
+                    newlist = Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
                     For Each subfolder In newlist
                         scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
                         totalfolders.Add(subfolder)
@@ -22433,4 +22453,8 @@ End Sub
     End Sub
 
 
+    Private Sub DataGridView1_CurrentCellDirtyStateChanged( sender As Object,  e As EventArgs) Handles DataGridView1.CurrentCellDirtyStateChanged
+        DataDirty = true
+        btn_movTableSave.Enabled = DataDirty
+    End Sub
 End Class

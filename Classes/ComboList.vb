@@ -12,7 +12,7 @@ Public Class ComboList
     Property filedate            As String = ""
     Property id                  As String = ""
     Property rating              As String = ""
-    Property top250              As String = ""
+    Property top250              As String = 0
     Property genre               As String = ""
     Property playcount           As String = ""
     Property sortorder           As String = ""

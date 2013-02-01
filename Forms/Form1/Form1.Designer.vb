@@ -223,7 +223,7 @@ Partial Class Form1
         Me.Label127 = New System.Windows.Forms.Label()
         Me.Label39 = New System.Windows.Forms.Label()
         Me.ComboBoxFilterGenre = New System.Windows.Forms.ComboBox()
-        Me.GroupBox21 = New System.Windows.Forms.GroupBox()
+        Me.gbGeneralFilters = New System.Windows.Forms.GroupBox()
         Me.RadioButtonMissingPlot = New System.Windows.Forms.RadioButton()
         Me.RadioButtonUnWatched = New System.Windows.Forms.RadioButton()
         Me.RadioButtonMissingFanart = New System.Windows.Forms.RadioButton()
@@ -1045,7 +1045,7 @@ Partial Class Form1
         Me.SplitContainer5.SuspendLayout
         CType(Me.DataGridViewMovies,System.ComponentModel.ISupportInitialize).BeginInit
         Me.Panel1.SuspendLayout
-        Me.GroupBox21.SuspendLayout
+        Me.gbGeneralFilters.SuspendLayout
         Me.trailerdownloadpanel.SuspendLayout
         CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer2.Panel1.SuspendLayout
@@ -1232,7 +1232,7 @@ Partial Class Form1
         'txt_titlesearch
         '
         Me.txt_titlesearch.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txt_titlesearch.Location = New System.Drawing.Point(7, 90)
+        Me.txt_titlesearch.Location = New System.Drawing.Point(4, 90)
         Me.txt_titlesearch.Margin = New System.Windows.Forms.Padding(4)
         Me.txt_titlesearch.Name = "txt_titlesearch"
         Me.txt_titlesearch.Size = New System.Drawing.Size(164, 22)
@@ -1242,7 +1242,7 @@ Partial Class Form1
         'Button6
         '
         Me.Button6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button6.Location = New System.Drawing.Point(897, 358)
+        Me.Button6.Location = New System.Drawing.Point(897, 380)
         Me.Button6.Margin = New System.Windows.Forms.Padding(4)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(110, 29)
@@ -1256,10 +1256,10 @@ Partial Class Form1
         '
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoSize = true
-        Me.CheckBox1.Location = New System.Drawing.Point(886, 497)
+        Me.CheckBox1.Location = New System.Drawing.Point(881, 517)
         Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(120, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(125, 19)
         Me.CheckBox1.TabIndex = 114
         Me.CheckBox1.Text = "Save Lo-Res Image"
         Me.ToolTip1.SetToolTip(Me.CheckBox1, "The default image saved is from the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"highest resolution available."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check this bo"& _ 
@@ -1271,7 +1271,7 @@ Partial Class Form1
         'Button16
         '
         Me.Button16.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button16.Location = New System.Drawing.Point(399, 540)
+        Me.Button16.Location = New System.Drawing.Point(399, 562)
         Me.Button16.Margin = New System.Windows.Forms.Padding(4)
         Me.Button16.Name = "Button16"
         Me.Button16.Size = New System.Drawing.Size(112, 29)
@@ -1283,7 +1283,7 @@ Partial Class Form1
         'Button17
         '
         Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button17.Location = New System.Drawing.Point(279, 540)
+        Me.Button17.Location = New System.Drawing.Point(279, 562)
         Me.Button17.Margin = New System.Windows.Forms.Padding(4)
         Me.Button17.Name = "Button17"
         Me.Button17.Size = New System.Drawing.Size(112, 29)
@@ -1295,7 +1295,7 @@ Partial Class Form1
         'Button18
         '
         Me.Button18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button18.Location = New System.Drawing.Point(153, 540)
+        Me.Button18.Location = New System.Drawing.Point(153, 562)
         Me.Button18.Margin = New System.Windows.Forms.Padding(4)
         Me.Button18.Name = "Button18"
         Me.Button18.Size = New System.Drawing.Size(118, 29)
@@ -1307,7 +1307,7 @@ Partial Class Form1
         'Button19
         '
         Me.Button19.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button19.Location = New System.Drawing.Point(33, 540)
+        Me.Button19.Location = New System.Drawing.Point(33, 562)
         Me.Button19.Margin = New System.Windows.Forms.Padding(4)
         Me.Button19.Name = "Button19"
         Me.Button19.Size = New System.Drawing.Size(112, 29)
@@ -1319,7 +1319,7 @@ Partial Class Form1
         'Button22
         '
         Me.Button22.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button22.Location = New System.Drawing.Point(906, 515)
+        Me.Button22.Location = New System.Drawing.Point(906, 537)
         Me.Button22.Margin = New System.Windows.Forms.Padding(4)
         Me.Button22.Name = "Button22"
         Me.Button22.Size = New System.Drawing.Size(100, 29)
@@ -1827,7 +1827,7 @@ Partial Class Form1
         Me.Panel8.Location = New System.Drawing.Point(4, 2)
         Me.Panel8.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(635, 471)
+        Me.Panel8.Size = New System.Drawing.Size(635, 493)
         Me.Panel8.TabIndex = 113
         Me.ToolTip1.SetToolTip(Me.Panel8, "Double Click a thumbnail to the left to view a large"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"preview Image. For TMDB and"& _ 
         " some IMPA posters"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"this will also display the HD image.")
@@ -1876,7 +1876,7 @@ Partial Class Form1
         Me.TextBox_Title.Location = New System.Drawing.Point(10, 7)
         Me.TextBox_Title.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox_Title.Name = "TextBox_Title"
-        Me.TextBox_Title.Size = New System.Drawing.Size(414, 35)
+        Me.TextBox_Title.Size = New System.Drawing.Size(403, 35)
         Me.TextBox_Title.TabIndex = 0
         Me.TextBox_Title.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.ToolTip1.SetToolTip(Me.TextBox_Title, "tt")
@@ -1885,7 +1885,7 @@ Partial Class Form1
         '
         Me.roletxt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.roletxt.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.roletxt.Location = New System.Drawing.Point(526, 416)
+        Me.roletxt.Location = New System.Drawing.Point(515, 416)
         Me.roletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.roletxt.Name = "roletxt"
         Me.roletxt.ReadOnly = true
@@ -1965,7 +1965,7 @@ Partial Class Form1
         Me.ButtonSearchNew.BackgroundImage = Global.Media_Companion.My.Resources.Resources.NewMovies
         Me.ButtonSearchNew.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ButtonSearchNew.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonSearchNew.Location = New System.Drawing.Point(192, 74)
+        Me.ButtonSearchNew.Location = New System.Drawing.Point(199, 74)
         Me.ButtonSearchNew.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonSearchNew.Name = "ButtonSearchNew"
         Me.ButtonSearchNew.Size = New System.Drawing.Size(122, 38)
@@ -1998,7 +1998,7 @@ Partial Class Form1
         Me.PictureBoxFanArt.Location = New System.Drawing.Point(0, 0)
         Me.PictureBoxFanArt.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBoxFanArt.Name = "PictureBoxFanArt"
-        Me.PictureBoxFanArt.Size = New System.Drawing.Size(289, 235)
+        Me.PictureBoxFanArt.Size = New System.Drawing.Size(278, 235)
         Me.PictureBoxFanArt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBoxFanArt.TabIndex = 127
         Me.PictureBoxFanArt.TabStop = false
@@ -2008,66 +2008,66 @@ Partial Class Form1
         '
         Me.ContextMenuStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RescrapeFanartToolStripMenuItem, Me.DownloadFanartToolStripMenuItem, Me.RescrapePToolStripMenuItem, Me.RescrapePosterFromTMDBToolStripMenuItem, Me.RescraToolStripMenuItem, Me.PeToolStripMenuItem, Me.DownloadPosterToolStripMenuItem, Me.DownloadPosterFromTMDBToolStripMenuItem, Me.DownloadPosterFromMPDBToolStripMenuItem, Me.DownloadPosterFromIMDBToolStripMenuItem})
         Me.ContextMenuStrip4.Name = "ContextMenuStrip4"
-        Me.ContextMenuStrip4.Size = New System.Drawing.Size(213, 224)
+        Me.ContextMenuStrip4.Size = New System.Drawing.Size(232, 224)
         '
         'RescrapeFanartToolStripMenuItem
         '
         Me.RescrapeFanartToolStripMenuItem.Name = "RescrapeFanartToolStripMenuItem"
-        Me.RescrapeFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.RescrapeFanartToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.RescrapeFanartToolStripMenuItem.Text = "Rescrape Fanart"
         '
         'DownloadFanartToolStripMenuItem
         '
         Me.DownloadFanartToolStripMenuItem.Name = "DownloadFanartToolStripMenuItem"
-        Me.DownloadFanartToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.DownloadFanartToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.DownloadFanartToolStripMenuItem.Text = "Download Fanart"
         '
         'RescrapePToolStripMenuItem
         '
         Me.RescrapePToolStripMenuItem.Name = "RescrapePToolStripMenuItem"
-        Me.RescrapePToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.RescrapePToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.RescrapePToolStripMenuItem.Text = "Rescrape Poster From IMPA"
         '
         'RescrapePosterFromTMDBToolStripMenuItem
         '
         Me.RescrapePosterFromTMDBToolStripMenuItem.Name = "RescrapePosterFromTMDBToolStripMenuItem"
-        Me.RescrapePosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.RescrapePosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.RescrapePosterFromTMDBToolStripMenuItem.Text = "Rescrape Poster From TMDB"
         '
         'RescraToolStripMenuItem
         '
         Me.RescraToolStripMenuItem.Name = "RescraToolStripMenuItem"
-        Me.RescraToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.RescraToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.RescraToolStripMenuItem.Text = "Rescrape Poster From MPDB"
         '
         'PeToolStripMenuItem
         '
         Me.PeToolStripMenuItem.Name = "PeToolStripMenuItem"
-        Me.PeToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.PeToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.PeToolStripMenuItem.Text = "Rescrape Poster From IMDB"
         '
         'DownloadPosterToolStripMenuItem
         '
         Me.DownloadPosterToolStripMenuItem.Name = "DownloadPosterToolStripMenuItem"
-        Me.DownloadPosterToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.DownloadPosterToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.DownloadPosterToolStripMenuItem.Text = "Download Poster from IMPA"
         '
         'DownloadPosterFromTMDBToolStripMenuItem
         '
         Me.DownloadPosterFromTMDBToolStripMenuItem.Name = "DownloadPosterFromTMDBToolStripMenuItem"
-        Me.DownloadPosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.DownloadPosterFromTMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.DownloadPosterFromTMDBToolStripMenuItem.Text = "Download Poster From TMDB"
         '
         'DownloadPosterFromMPDBToolStripMenuItem
         '
         Me.DownloadPosterFromMPDBToolStripMenuItem.Name = "DownloadPosterFromMPDBToolStripMenuItem"
-        Me.DownloadPosterFromMPDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.DownloadPosterFromMPDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.DownloadPosterFromMPDBToolStripMenuItem.Text = "Download Poster From MPDB"
         '
         'DownloadPosterFromIMDBToolStripMenuItem
         '
         Me.DownloadPosterFromIMDBToolStripMenuItem.Name = "DownloadPosterFromIMDBToolStripMenuItem"
-        Me.DownloadPosterFromIMDBToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.DownloadPosterFromIMDBToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
         Me.DownloadPosterFromIMDBToolStripMenuItem.Text = "Download Poster From IMDB"
         '
         'moviethumb
@@ -2091,7 +2091,7 @@ Partial Class Form1
         Me.Button44.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button44.BackgroundImage = CType(resources.GetObject("Button44.BackgroundImage"),System.Drawing.Image)
         Me.Button44.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button44.Location = New System.Drawing.Point(432, 7)
+        Me.Button44.Location = New System.Drawing.Point(421, 7)
         Me.Button44.Margin = New System.Windows.Forms.Padding(4)
         Me.Button44.Name = "Button44"
         Me.Button44.Size = New System.Drawing.Size(32, 32)
@@ -2104,7 +2104,7 @@ Partial Class Form1
         Me.Button_Save_TvShow_Episode.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button_Save_TvShow_Episode.BackgroundImage = CType(resources.GetObject("Button_Save_TvShow_Episode.BackgroundImage"),System.Drawing.Image)
         Me.Button_Save_TvShow_Episode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button_Save_TvShow_Episode.Location = New System.Drawing.Point(472, 7)
+        Me.Button_Save_TvShow_Episode.Location = New System.Drawing.Point(461, 7)
         Me.Button_Save_TvShow_Episode.Margin = New System.Windows.Forms.Padding(4)
         Me.Button_Save_TvShow_Episode.Name = "Button_Save_TvShow_Episode"
         Me.Button_Save_TvShow_Episode.Size = New System.Drawing.Size(32, 32)
@@ -2131,7 +2131,7 @@ Partial Class Form1
         Me.TvTreeview.Name = "TvTreeview"
         Me.TvTreeview.SelectedImageIndex = 4
         Me.TvTreeview.ShowLines = false
-        Me.TvTreeview.Size = New System.Drawing.Size(293, 462)
+        Me.TvTreeview.Size = New System.Drawing.Size(293, 484)
         Me.TvTreeview.StateImageList = Me.ImageList2
         Me.TvTreeview.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.TvTreeview, "Double click an episode to playback,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Use context menu (Right Mouse Click)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for a"& _ 
@@ -2141,150 +2141,150 @@ Partial Class Form1
         '
         Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tv_TreeViewContext_ShowTitle, Me.Tv_TreeViewContext_Play_Episode, Me.ToolStripSeparator18, Me.Tv_TreeViewContext_OpenFolder, Me.Tv_TreeViewContext_ViewNfo, Me.ToolStripSeparator1, Me.Tv_TreeViewContext_SearchNewEp, Me.Tv_TreeViewContext_RenameEp, Me.Tv_TreeViewContext_RescrapeShowOrEpisode, Me.ToolStripSeparator20, Me.Tv_TreeViewContext_RefreshShow, Me.Tv_TreeViewContext_ReloadFromCache, Me.ToolStripSeparator21, Me.Tv_TreeViewContext_ShowMissEps, Me.Tv_TreeViewContext_DispByAiredDate, Me.ToolStripSeparator22, Me.Tv_TreeViewContext_FindMissArt, Me.ToolStripSeparator2, Me.UnlockAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.ToolStripSeparator19, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem})
         Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(242, 442)
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(256, 442)
         Me.ContextMenuStrip2.Text = "Open Folder at file"
         '
         'Tv_TreeViewContext_ShowTitle
         '
         Me.Tv_TreeViewContext_ShowTitle.Name = "Tv_TreeViewContext_ShowTitle"
-        Me.Tv_TreeViewContext_ShowTitle.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_ShowTitle.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_ShowTitle.Text = "For Tv Show 'TvShowTitle'..."
         '
         'Tv_TreeViewContext_Play_Episode
         '
         Me.Tv_TreeViewContext_Play_Episode.Name = "Tv_TreeViewContext_Play_Episode"
-        Me.Tv_TreeViewContext_Play_Episode.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_Play_Episode.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_Play_Episode.Text = "Play Episode"
         '
         'ToolStripSeparator18
         '
         Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(252, 6)
         '
         'Tv_TreeViewContext_OpenFolder
         '
         Me.Tv_TreeViewContext_OpenFolder.Name = "Tv_TreeViewContext_OpenFolder"
-        Me.Tv_TreeViewContext_OpenFolder.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_OpenFolder.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_OpenFolder.Text = "Open Folder"
         '
         'Tv_TreeViewContext_ViewNfo
         '
         Me.Tv_TreeViewContext_ViewNfo.Name = "Tv_TreeViewContext_ViewNfo"
-        Me.Tv_TreeViewContext_ViewNfo.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_ViewNfo.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_ViewNfo.Text = "View .nfo File"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(252, 6)
         '
         'Tv_TreeViewContext_SearchNewEp
         '
         Me.Tv_TreeViewContext_SearchNewEp.Name = "Tv_TreeViewContext_SearchNewEp"
-        Me.Tv_TreeViewContext_SearchNewEp.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_SearchNewEp.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_SearchNewEp.Text = "Search this Show for new episodes"
         '
         'Tv_TreeViewContext_RenameEp
         '
         Me.Tv_TreeViewContext_RenameEp.Name = "Tv_TreeViewContext_RenameEp"
-        Me.Tv_TreeViewContext_RenameEp.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_RenameEp.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_RenameEp.Text = "Rename Episode(s)"
         '
         'Tv_TreeViewContext_RescrapeShowOrEpisode
         '
         Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Name = "Tv_TreeViewContext_RescrapeShowOrEpisode"
-        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape This Show"
         '
         'ToolStripSeparator20
         '
         Me.ToolStripSeparator20.Name = "ToolStripSeparator20"
-        Me.ToolStripSeparator20.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator20.Size = New System.Drawing.Size(252, 6)
         '
         'Tv_TreeViewContext_RefreshShow
         '
         Me.Tv_TreeViewContext_RefreshShow.Name = "Tv_TreeViewContext_RefreshShow"
-        Me.Tv_TreeViewContext_RefreshShow.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_RefreshShow.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_RefreshShow.Text = "Refresh this Show From .nfo"
         '
         'Tv_TreeViewContext_ReloadFromCache
         '
         Me.Tv_TreeViewContext_ReloadFromCache.Name = "Tv_TreeViewContext_ReloadFromCache"
-        Me.Tv_TreeViewContext_ReloadFromCache.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_ReloadFromCache.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_ReloadFromCache.Text = "Reload Item From Cache"
         '
         'ToolStripSeparator21
         '
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
-        Me.ToolStripSeparator21.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator21.Size = New System.Drawing.Size(252, 6)
         '
         'Tv_TreeViewContext_ShowMissEps
         '
         Me.Tv_TreeViewContext_ShowMissEps.Name = "Tv_TreeViewContext_ShowMissEps"
-        Me.Tv_TreeViewContext_ShowMissEps.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_ShowMissEps.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_ShowMissEps.Text = "Display Missing Episodes"
         '
         'Tv_TreeViewContext_DispByAiredDate
         '
         Me.Tv_TreeViewContext_DispByAiredDate.Name = "Tv_TreeViewContext_DispByAiredDate"
-        Me.Tv_TreeViewContext_DispByAiredDate.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_DispByAiredDate.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_DispByAiredDate.Text = "Display Episodes by Aired Date"
         '
         'ToolStripSeparator22
         '
         Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
-        Me.ToolStripSeparator22.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator22.Size = New System.Drawing.Size(252, 6)
         '
         'Tv_TreeViewContext_FindMissArt
         '
         Me.Tv_TreeViewContext_FindMissArt.Name = "Tv_TreeViewContext_FindMissArt"
-        Me.Tv_TreeViewContext_FindMissArt.Size = New System.Drawing.Size(241, 22)
+        Me.Tv_TreeViewContext_FindMissArt.Size = New System.Drawing.Size(255, 22)
         Me.Tv_TreeViewContext_FindMissArt.Text = "Find Missing Art For This Show"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(252, 6)
         '
         'UnlockAllToolStripMenuItem
         '
         Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
-        Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+        Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
         Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
         '
         'LockAllToolStripMenuItem
         '
         Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
-        Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+        Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
         Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
         '
         'ToolStripSeparator19
         '
         Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
-        Me.ToolStripSeparator19.Size = New System.Drawing.Size(238, 6)
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(252, 6)
         '
         'ExpandSelectedShowToolStripMenuItem
         '
         Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
-        Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+        Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
         Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
         '
         'CollapseSelectedShowToolStripMenuItem
         '
         Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
-        Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+        Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
         Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
         '
         'CollapseAllToolStripMenuItem
         '
         Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
-        Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+        Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
         Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
         '
         'ExpandAllToolStripMenuItem
         '
         Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
-        Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(241, 22)
+        Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(255, 22)
         Me.ExpandAllToolStripMenuItem.Text = "Expand All"
         '
         'ImageList2
@@ -2379,7 +2379,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Location = New System.Drawing.Point(11, 40)
         Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Name = "CheckBox_XBMC_Scraper_TMDB_IMDBRatings"
-        Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(124, 17)
+        Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Size = New System.Drawing.Size(139, 19)
         Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.TabIndex = 71
         Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.Text = "Get rating from IMDb"
         Me.CheckBox_XBMC_Scraper_TMDB_IMDBRatings.UseVisualStyleBackColor = true
@@ -2401,7 +2401,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Location = New System.Drawing.Point(11, 20)
         Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Name = "CheckBox_XBMC_Scraper_TMDB_Fanart"
-        Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(89, 17)
+        Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Size = New System.Drawing.Size(95, 19)
         Me.CheckBox_XBMC_Scraper_TMDB_Fanart.TabIndex = 67
         Me.CheckBox_XBMC_Scraper_TMDB_Fanart.Text = "Enable fanart"
         Me.CheckBox_XBMC_Scraper_TMDB_Fanart.UseVisualStyleBackColor = true
@@ -2526,7 +2526,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Location = New System.Drawing.Point(11, 149)
         Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Name = "CheckBox_XBMC_Scraper_IMDB_Trailer"
-        Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(147, 17)
+        Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Size = New System.Drawing.Size(159, 19)
         Me.CheckBox_XBMC_Scraper_IMDB_Trailer.TabIndex = 67
         Me.CheckBox_XBMC_Scraper_IMDB_Trailer.Text = "Fall back on IMDB trailers"
         Me.CheckBox_XBMC_Scraper_IMDB_Trailer.UseVisualStyleBackColor = true
@@ -2558,7 +2558,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Location = New System.Drawing.Point(11, 100)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB"
-        Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(196, 17)
+        Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Size = New System.Drawing.Size(215, 19)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.TabIndex = 4
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.Text = "Enable posters from MoviePosterDB"
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MoviePosterDB.UseVisualStyleBackColor = true
@@ -2569,7 +2569,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Location = New System.Drawing.Point(11, 80)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards"
-        Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(176, 17)
+        Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Size = New System.Drawing.Size(194, 19)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.TabIndex = 3
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.Text = "Enable posters from IMPAwards"
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_IMPAwards.UseVisualStyleBackColor = true
@@ -2580,7 +2580,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Location = New System.Drawing.Point(11, 60)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Name = "CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB"
-        Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(195, 17)
+        Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Size = New System.Drawing.Size(219, 19)
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.TabIndex = 2
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.Text = "Enable posters from themoviedb.org"
         Me.CheckBox_XBMC_Scraper_IMDB_Posters_MovieDB.UseVisualStyleBackColor = true
@@ -2602,7 +2602,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Location = New System.Drawing.Point(11, 40)
         Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Name = "CheckBox_XBMC_Scraper_IMDB_Fanart"
-        Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(188, 17)
+        Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Size = New System.Drawing.Size(212, 19)
         Me.CheckBox_XBMC_Scraper_IMDB_Fanart.TabIndex = 1
         Me.CheckBox_XBMC_Scraper_IMDB_Fanart.Text = "Enable fanart from themoviedb.org"
         Me.CheckBox_XBMC_Scraper_IMDB_Fanart.UseVisualStyleBackColor = true
@@ -2613,7 +2613,7 @@ Partial Class Form1
         Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Location = New System.Drawing.Point(11, 20)
         Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Name = "CheckBox_XBMC_Scraper_IMDB_FullCredits"
-        Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(132, 17)
+        Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Size = New System.Drawing.Size(143, 19)
         Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.TabIndex = 0
         Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.Text = "Enable full cast credits"
         Me.CheckBox_XBMC_Scraper_IMDB_FullCredits.UseVisualStyleBackColor = true
@@ -2633,256 +2633,256 @@ Partial Class Form1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mov_ToolStripMovieName, Me.mov_ToolStripPlayMovie, Me.mov_ToolStripPlayTrailer, Me.ToolStripSeparator17, Me.mov_ToolStripOpenFolder, Me.mov_ToolStripViewNfo, Me.ToolStripSeparator4, Me.mov_ToolStripReloadFromCache, Me.Mov_ToolStripRemoveMovie, Me.ToolStripSeparator5, Me.mov_ToolStripRescrapeAll, Me.mov_ToolStripRescrapeSpecific, Me.ToolStripSeparator23, Me.mov_ToolStripFanartBrowserAlt, Me.mov_ToolStripPosterBrowserAlt, Me.mov_ToolStripEditMovieAlt, Me.ToolStripSeparator24, Me.mov_ToolStripExportMovies})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(235, 320)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(253, 320)
         Me.ContextMenuStrip1.Text = "whatever"
         '
         'mov_ToolStripMovieName
         '
         Me.mov_ToolStripMovieName.Name = "mov_ToolStripMovieName"
-        Me.mov_ToolStripMovieName.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripMovieName.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripMovieName.Text = "Placeholder for Movie Name"
         '
         'mov_ToolStripPlayMovie
         '
         Me.mov_ToolStripPlayMovie.Name = "mov_ToolStripPlayMovie"
-        Me.mov_ToolStripPlayMovie.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripPlayMovie.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripPlayMovie.Text = "Play Movie"
         '
         'mov_ToolStripPlayTrailer
         '
         Me.mov_ToolStripPlayTrailer.Name = "mov_ToolStripPlayTrailer"
-        Me.mov_ToolStripPlayTrailer.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripPlayTrailer.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripPlayTrailer.Text = "Play Trailer"
         '
         'ToolStripSeparator17
         '
         Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
-        Me.ToolStripSeparator17.Size = New System.Drawing.Size(231, 6)
+        Me.ToolStripSeparator17.Size = New System.Drawing.Size(249, 6)
         '
         'mov_ToolStripOpenFolder
         '
         Me.mov_ToolStripOpenFolder.Name = "mov_ToolStripOpenFolder"
-        Me.mov_ToolStripOpenFolder.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripOpenFolder.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripOpenFolder.Text = "Open Folder"
         '
         'mov_ToolStripViewNfo
         '
         Me.mov_ToolStripViewNfo.Name = "mov_ToolStripViewNfo"
-        Me.mov_ToolStripViewNfo.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripViewNfo.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripViewNfo.Text = "View .nfo File"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(231, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(249, 6)
         '
         'mov_ToolStripReloadFromCache
         '
         Me.mov_ToolStripReloadFromCache.Name = "mov_ToolStripReloadFromCache"
-        Me.mov_ToolStripReloadFromCache.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripReloadFromCache.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripReloadFromCache.Text = "Reload From Cache"
         '
         'Mov_ToolStripRemoveMovie
         '
         Me.Mov_ToolStripRemoveMovie.Name = "Mov_ToolStripRemoveMovie"
-        Me.Mov_ToolStripRemoveMovie.Size = New System.Drawing.Size(234, 22)
+        Me.Mov_ToolStripRemoveMovie.Size = New System.Drawing.Size(252, 22)
         Me.Mov_ToolStripRemoveMovie.Text = "Remove Selected Movie From List"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(231, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(249, 6)
         '
         'mov_ToolStripRescrapeAll
         '
         Me.mov_ToolStripRescrapeAll.Name = "mov_ToolStripRescrapeAll"
-        Me.mov_ToolStripRescrapeAll.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripRescrapeAll.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripRescrapeAll.Text = "Rescrape All"
         '
         'mov_ToolStripRescrapeSpecific
         '
         Me.mov_ToolStripRescrapeSpecific.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem15, Me.ToolStripMenuItem8, Me.ToolStripMenuItem7, Me.ToolStripMenuItem6, Me.ToolStripMenuItem9, Me.ToolStripMenuItem10, Me.ToolStripMenuItem4, Me.ToolStripMenuItem19, Me.ToolStripMenuItem11, Me.ToolStripMenuItem21, Me.ToolStripMenuItem14, Me.ToolStripMenuItem5, Me.ToolStripMenuItem3, Me.tsmiTMDbSetName, Me.ToolStripMenuItem1, Me.ToolStripMenuItem20, Me.YearToolStripMenuItem, Me.ToolStripSeparator6, Me.ToolStripMenuItem16, Me.ToolStripMenuItem17, Me.ToolStripMenuItem18, Me.ToolStripSeparator7})
         Me.mov_ToolStripRescrapeSpecific.Name = "mov_ToolStripRescrapeSpecific"
-        Me.mov_ToolStripRescrapeSpecific.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripRescrapeSpecific.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripRescrapeSpecific.Text = "Rescrape Specific"
         '
         'ToolStripMenuItem15
         '
         Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
-        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem15.Text = "Actors"
         '
         'ToolStripMenuItem8
         '
         Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
-        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem8.Text = "Cert"
         '
         'ToolStripMenuItem7
         '
         Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem7.Text = "Credits"
         '
         'ToolStripMenuItem6
         '
         Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem6.Text = "Director"
         '
         'ToolStripMenuItem9
         '
         Me.ToolStripMenuItem9.Name = "ToolStripMenuItem9"
-        Me.ToolStripMenuItem9.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem9.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem9.Text = "Genre"
         '
         'ToolStripMenuItem10
         '
         Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
-        Me.ToolStripMenuItem10.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem10.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem10.Text = "Outline"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem4.Text = "Plot"
         '
         'ToolStripMenuItem19
         '
         Me.ToolStripMenuItem19.Name = "ToolStripMenuItem19"
-        Me.ToolStripMenuItem19.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem19.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem19.Text = "Rating"
         '
         'ToolStripMenuItem11
         '
         Me.ToolStripMenuItem11.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem12, Me.ToolStripMenuItem13})
         Me.ToolStripMenuItem11.Name = "ToolStripMenuItem11"
-        Me.ToolStripMenuItem11.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem11.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem11.Text = "Runtime"
         '
         'ToolStripMenuItem12
         '
         Me.ToolStripMenuItem12.Name = "ToolStripMenuItem12"
-        Me.ToolStripMenuItem12.Size = New System.Drawing.Size(126, 22)
+        Me.ToolStripMenuItem12.Size = New System.Drawing.Size(134, 22)
         Me.ToolStripMenuItem12.Text = "From IMDB"
         '
         'ToolStripMenuItem13
         '
         Me.ToolStripMenuItem13.Name = "ToolStripMenuItem13"
-        Me.ToolStripMenuItem13.Size = New System.Drawing.Size(126, 22)
+        Me.ToolStripMenuItem13.Size = New System.Drawing.Size(134, 22)
         Me.ToolStripMenuItem13.Text = "From File"
         '
         'ToolStripMenuItem21
         '
         Me.ToolStripMenuItem21.Name = "ToolStripMenuItem21"
-        Me.ToolStripMenuItem21.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem21.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem21.Text = "Stars"
         '
         'ToolStripMenuItem14
         '
         Me.ToolStripMenuItem14.Name = "ToolStripMenuItem14"
-        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem14.Text = "Studio"
         '
         'ToolStripMenuItem5
         '
         Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem5.Text = "Tagline"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem3.Text = "Title"
         '
         'tsmiTMDbSetName
         '
         Me.tsmiTMDbSetName.Name = "tsmiTMDbSetName"
-        Me.tsmiTMDbSetName.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiTMDbSetName.Size = New System.Drawing.Size(161, 22)
         Me.tsmiTMDbSetName.Text = "TMDb Set Name"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem1.Text = "Trailer"
         '
         'ToolStripMenuItem20
         '
         Me.ToolStripMenuItem20.Name = "ToolStripMenuItem20"
-        Me.ToolStripMenuItem20.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem20.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem20.Text = "Votes"
         '
         'YearToolStripMenuItem
         '
         Me.YearToolStripMenuItem.Name = "YearToolStripMenuItem"
-        Me.YearToolStripMenuItem.Size = New System.Drawing.Size(150, 22)
+        Me.YearToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
         Me.YearToolStripMenuItem.Text = "Year"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(147, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(158, 6)
         '
         'ToolStripMenuItem16
         '
         Me.ToolStripMenuItem16.Name = "ToolStripMenuItem16"
-        Me.ToolStripMenuItem16.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem16.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem16.Text = "Backdrop"
         Me.ToolStripMenuItem16.Visible = false
         '
         'ToolStripMenuItem17
         '
         Me.ToolStripMenuItem17.Name = "ToolStripMenuItem17"
-        Me.ToolStripMenuItem17.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem17.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem17.Text = "Poster"
         Me.ToolStripMenuItem17.Visible = false
         '
         'ToolStripMenuItem18
         '
         Me.ToolStripMenuItem18.Name = "ToolStripMenuItem18"
-        Me.ToolStripMenuItem18.Size = New System.Drawing.Size(150, 22)
+        Me.ToolStripMenuItem18.Size = New System.Drawing.Size(161, 22)
         Me.ToolStripMenuItem18.Text = "Media Tags"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(147, 6)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(158, 6)
         '
         'ToolStripSeparator23
         '
         Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
-        Me.ToolStripSeparator23.Size = New System.Drawing.Size(231, 6)
+        Me.ToolStripSeparator23.Size = New System.Drawing.Size(249, 6)
         '
         'mov_ToolStripFanartBrowserAlt
         '
         Me.mov_ToolStripFanartBrowserAlt.Name = "mov_ToolStripFanartBrowserAlt"
-        Me.mov_ToolStripFanartBrowserAlt.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripFanartBrowserAlt.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripFanartBrowserAlt.Text = "Fanart Browser (Alternative)"
         '
         'mov_ToolStripPosterBrowserAlt
         '
         Me.mov_ToolStripPosterBrowserAlt.Name = "mov_ToolStripPosterBrowserAlt"
-        Me.mov_ToolStripPosterBrowserAlt.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripPosterBrowserAlt.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripPosterBrowserAlt.Text = "Poster Browser (Alternative)"
         '
         'mov_ToolStripEditMovieAlt
         '
         Me.mov_ToolStripEditMovieAlt.Name = "mov_ToolStripEditMovieAlt"
-        Me.mov_ToolStripEditMovieAlt.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripEditMovieAlt.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripEditMovieAlt.Text = "Edit Movie (Alternative)"
         '
         'ToolStripSeparator24
         '
         Me.ToolStripSeparator24.Name = "ToolStripSeparator24"
-        Me.ToolStripSeparator24.Size = New System.Drawing.Size(231, 6)
+        Me.ToolStripSeparator24.Size = New System.Drawing.Size(249, 6)
         '
         'mov_ToolStripExportMovies
         '
         Me.mov_ToolStripExportMovies.Name = "mov_ToolStripExportMovies"
-        Me.mov_ToolStripExportMovies.Size = New System.Drawing.Size(234, 22)
+        Me.mov_ToolStripExportMovies.Size = New System.Drawing.Size(252, 22)
         Me.mov_ToolStripExportMovies.Text = "Export Selected Movies"
         '
         'TabPageLevel2MovMainBrowser
@@ -2986,6 +2986,7 @@ Partial Class Form1
         '
         Me.SplitContainer5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
         Me.SplitContainer5.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer5.Margin = New System.Windows.Forms.Padding(4)
         Me.SplitContainer5.Name = "SplitContainer5"
@@ -3012,13 +3013,13 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.Controls.Add(Me.Label127)
         Me.SplitContainer5.Panel2.Controls.Add(Me.Label39)
         Me.SplitContainer5.Panel2.Controls.Add(Me.ComboBoxFilterGenre)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.GroupBox21)
+        Me.SplitContainer5.Panel2.Controls.Add(Me.gbGeneralFilters)
         Me.SplitContainer5.Panel2.Controls.Add(Me.ComboBoxFilterMovieFormat)
         Me.SplitContainer5.Panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SplitContainer5.Panel2MinSize = 140
+        Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(325, 605)
-        Me.SplitContainer5.SplitterDistance = 448
+        Me.SplitContainer5.SplitterDistance = 452
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -3047,12 +3048,12 @@ Partial Class Form1
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridViewMovies.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridViewMovies.GridColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
-        Me.DataGridViewMovies.Location = New System.Drawing.Point(0, 116)
+        Me.DataGridViewMovies.Location = New System.Drawing.Point(4, 116)
         Me.DataGridViewMovies.Name = "DataGridViewMovies"
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 325)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(319, 329)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -3062,7 +3063,7 @@ Partial Class Form1
         Me.cbSort.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.cbSort.FormattingEnabled = true
         Me.cbSort.Items.AddRange(New Object() {"A - Z", "Movie Year", "Modified", "Runtime", "Rating", "Sort Order", "Date Added", "Votes"})
-        Me.cbSort.Location = New System.Drawing.Point(33, 44)
+        Me.cbSort.Location = New System.Drawing.Point(38, 45)
         Me.cbSort.Name = "cbSort"
         Me.cbSort.Size = New System.Drawing.Size(99, 21)
         Me.cbSort.TabIndex = 72
@@ -3071,10 +3072,10 @@ Partial Class Form1
         '
         Me.btnreverse.Appearance = System.Windows.Forms.Appearance.Button
         Me.btnreverse.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnreverse.Location = New System.Drawing.Point(139, 42)
+        Me.btnreverse.Location = New System.Drawing.Point(143, 44)
         Me.btnreverse.Margin = New System.Windows.Forms.Padding(4)
         Me.btnreverse.Name = "btnreverse"
-        Me.btnreverse.Size = New System.Drawing.Size(84, 24)
+        Me.btnreverse.Size = New System.Drawing.Size(84, 23)
         Me.btnreverse.TabIndex = 71
         Me.btnreverse.Text = "Invert Order"
         Me.btnreverse.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -3086,7 +3087,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(138, 428)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(138, 432)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -3096,10 +3097,10 @@ Partial Class Form1
         'ButtonResetFilters
         '
         Me.ButtonResetFilters.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonResetFilters.Location = New System.Drawing.Point(226, 42)
+        Me.ButtonResetFilters.Location = New System.Drawing.Point(235, 44)
         Me.ButtonResetFilters.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonResetFilters.Name = "ButtonResetFilters"
-        Me.ButtonResetFilters.Size = New System.Drawing.Size(86, 24)
+        Me.ButtonResetFilters.Size = New System.Drawing.Size(86, 23)
         Me.ButtonResetFilters.TabIndex = 67
         Me.ButtonResetFilters.Text = "Reset Filters"
         Me.ButtonResetFilters.UseVisualStyleBackColor = true
@@ -3108,7 +3109,7 @@ Partial Class Form1
         '
         Me.LabelCountFilter.AutoSize = true
         Me.LabelCountFilter.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.LabelCountFilter.Location = New System.Drawing.Point(4, 68)
+        Me.LabelCountFilter.Location = New System.Drawing.Point(4, 73)
         Me.LabelCountFilter.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelCountFilter.Name = "LabelCountFilter"
         Me.LabelCountFilter.Size = New System.Drawing.Size(135, 13)
@@ -3125,7 +3126,7 @@ Partial Class Form1
         Me.Panel1.Location = New System.Drawing.Point(4, 5)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(314, 33)
+        Me.Panel1.Size = New System.Drawing.Size(317, 33)
         Me.Panel1.TabIndex = 61
         '
         'RadioButtonFolder
@@ -3134,7 +3135,7 @@ Partial Class Form1
         Me.RadioButtonFolder.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.RadioButtonFolder.Image = Global.Media_Companion.My.Resources.Resources.Folder
         Me.RadioButtonFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RadioButtonFolder.Location = New System.Drawing.Point(213, 4)
+        Me.RadioButtonFolder.Location = New System.Drawing.Point(215, 2)
         Me.RadioButtonFolder.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonFolder.Name = "RadioButtonFolder"
         Me.RadioButtonFolder.Size = New System.Drawing.Size(94, 25)
@@ -3149,7 +3150,7 @@ Partial Class Form1
         Me.RadioButtonFileName.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.RadioButtonFileName.Image = Global.Media_Companion.My.Resources.Resources.Page
         Me.RadioButtonFileName.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RadioButtonFileName.Location = New System.Drawing.Point(120, 2)
+        Me.RadioButtonFileName.Location = New System.Drawing.Point(124, 2)
         Me.RadioButtonFileName.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonFileName.Name = "RadioButtonFileName"
         Me.RadioButtonFileName.Size = New System.Drawing.Size(85, 25)
@@ -3164,7 +3165,7 @@ Partial Class Form1
         Me.RadioButtonTitleAndYear.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.RadioButtonTitleAndYear.Image = Global.Media_Companion.My.Resources.Resources.Clock
         Me.RadioButtonTitleAndYear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RadioButtonTitleAndYear.Location = New System.Drawing.Point(25, 2)
+        Me.RadioButtonTitleAndYear.Location = New System.Drawing.Point(31, 2)
         Me.RadioButtonTitleAndYear.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonTitleAndYear.Name = "RadioButtonTitleAndYear"
         Me.RadioButtonTitleAndYear.Size = New System.Drawing.Size(87, 25)
@@ -3188,7 +3189,7 @@ Partial Class Form1
         '
         Me.Label1.AutoSize = true
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label1.Location = New System.Drawing.Point(4, 47)
+        Me.Label1.Location = New System.Drawing.Point(4, 49)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(28, 13)
@@ -3199,7 +3200,7 @@ Partial Class Form1
         '
         Me.Label127.AutoSize = true
         Me.Label127.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label127.Location = New System.Drawing.Point(137, 57)
+        Me.Label127.Location = New System.Drawing.Point(136, 51)
         Me.Label127.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label127.Name = "Label127"
         Me.Label127.Size = New System.Drawing.Size(77, 13)
@@ -3210,7 +3211,7 @@ Partial Class Form1
         '
         Me.Label39.AutoSize = true
         Me.Label39.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label39.Location = New System.Drawing.Point(138, 10)
+        Me.Label39.Location = New System.Drawing.Point(137, 4)
         Me.Label39.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label39.Name = "Label39"
         Me.Label39.Size = New System.Drawing.Size(72, 13)
@@ -3224,37 +3225,37 @@ Partial Class Form1
         Me.ComboBoxFilterGenre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxFilterGenre.IntegralHeight = false
         Me.ComboBoxFilterGenre.Items.AddRange(New Object() {"All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi", "Short", "Sport", "Thriller", "War", "Western", "Top250"})
-        Me.ComboBoxFilterGenre.Location = New System.Drawing.Point(139, 27)
+        Me.ComboBoxFilterGenre.Location = New System.Drawing.Point(138, 21)
         Me.ComboBoxFilterGenre.Margin = New System.Windows.Forms.Padding(4)
         Me.ComboBoxFilterGenre.MaxDropDownItems = 5
         Me.ComboBoxFilterGenre.Name = "ComboBoxFilterGenre"
         Me.ComboBoxFilterGenre.Size = New System.Drawing.Size(180, 23)
         Me.ComboBoxFilterGenre.TabIndex = 67
         '
-        'GroupBox21
+        'gbGeneralFilters
         '
-        Me.GroupBox21.Controls.Add(Me.RadioButtonMissingPlot)
-        Me.GroupBox21.Controls.Add(Me.RadioButtonUnWatched)
-        Me.GroupBox21.Controls.Add(Me.RadioButtonMissingFanart)
-        Me.GroupBox21.Controls.Add(Me.RadioButtonAll)
-        Me.GroupBox21.Controls.Add(Me.RadioButtonMissingPosters)
-        Me.GroupBox21.Controls.Add(Me.RadioButtonWatched)
-        Me.GroupBox21.Controls.Add(Me.RadioButtonDuplicates)
-        Me.GroupBox21.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox21.Location = New System.Drawing.Point(4, 0)
-        Me.GroupBox21.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox21.Name = "GroupBox21"
-        Me.GroupBox21.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox21.Size = New System.Drawing.Size(125, 138)
-        Me.GroupBox21.TabIndex = 65
-        Me.GroupBox21.TabStop = false
-        Me.GroupBox21.Text = "General Filters"
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonMissingPlot)
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonUnWatched)
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonMissingFanart)
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonAll)
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonMissingPosters)
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonWatched)
+        Me.gbGeneralFilters.Controls.Add(Me.RadioButtonDuplicates)
+        Me.gbGeneralFilters.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.gbGeneralFilters.Location = New System.Drawing.Point(4, 3)
+        Me.gbGeneralFilters.Margin = New System.Windows.Forms.Padding(4)
+        Me.gbGeneralFilters.Name = "gbGeneralFilters"
+        Me.gbGeneralFilters.Padding = New System.Windows.Forms.Padding(4)
+        Me.gbGeneralFilters.Size = New System.Drawing.Size(125, 129)
+        Me.gbGeneralFilters.TabIndex = 65
+        Me.gbGeneralFilters.TabStop = false
+        Me.gbGeneralFilters.Text = "General Filters"
         '
         'RadioButtonMissingPlot
         '
         Me.RadioButtonMissingPlot.AutoSize = true
         Me.RadioButtonMissingPlot.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonMissingPlot.Location = New System.Drawing.Point(8, 110)
+        Me.RadioButtonMissingPlot.Location = New System.Drawing.Point(8, 109)
         Me.RadioButtonMissingPlot.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonMissingPlot.Name = "RadioButtonMissingPlot"
         Me.RadioButtonMissingPlot.Size = New System.Drawing.Size(88, 17)
@@ -3266,7 +3267,7 @@ Partial Class Form1
         '
         Me.RadioButtonUnWatched.AutoSize = true
         Me.RadioButtonUnWatched.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonUnWatched.Location = New System.Drawing.Point(8, 50)
+        Me.RadioButtonUnWatched.Location = New System.Drawing.Point(8, 49)
         Me.RadioButtonUnWatched.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonUnWatched.Name = "RadioButtonUnWatched"
         Me.RadioButtonUnWatched.Size = New System.Drawing.Size(86, 17)
@@ -3278,7 +3279,7 @@ Partial Class Form1
         '
         Me.RadioButtonMissingFanart.AutoSize = true
         Me.RadioButtonMissingFanart.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonMissingFanart.Location = New System.Drawing.Point(8, 95)
+        Me.RadioButtonMissingFanart.Location = New System.Drawing.Point(8, 94)
         Me.RadioButtonMissingFanart.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonMissingFanart.Name = "RadioButtonMissingFanart"
         Me.RadioButtonMissingFanart.Size = New System.Drawing.Size(101, 17)
@@ -3290,7 +3291,7 @@ Partial Class Form1
         '
         Me.RadioButtonAll.AutoSize = true
         Me.RadioButtonAll.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonAll.Location = New System.Drawing.Point(8, 20)
+        Me.RadioButtonAll.Location = New System.Drawing.Point(8, 19)
         Me.RadioButtonAll.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonAll.Name = "RadioButtonAll"
         Me.RadioButtonAll.Size = New System.Drawing.Size(38, 17)
@@ -3302,7 +3303,7 @@ Partial Class Form1
         '
         Me.RadioButtonMissingPosters.AutoSize = true
         Me.RadioButtonMissingPosters.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonMissingPosters.Location = New System.Drawing.Point(8, 80)
+        Me.RadioButtonMissingPosters.Location = New System.Drawing.Point(8, 79)
         Me.RadioButtonMissingPosters.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonMissingPosters.Name = "RadioButtonMissingPosters"
         Me.RadioButtonMissingPosters.Size = New System.Drawing.Size(105, 17)
@@ -3314,7 +3315,7 @@ Partial Class Form1
         '
         Me.RadioButtonWatched.AutoSize = true
         Me.RadioButtonWatched.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonWatched.Location = New System.Drawing.Point(8, 35)
+        Me.RadioButtonWatched.Location = New System.Drawing.Point(8, 34)
         Me.RadioButtonWatched.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonWatched.Name = "RadioButtonWatched"
         Me.RadioButtonWatched.Size = New System.Drawing.Size(71, 17)
@@ -3326,7 +3327,7 @@ Partial Class Form1
         '
         Me.RadioButtonDuplicates.AutoSize = true
         Me.RadioButtonDuplicates.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButtonDuplicates.Location = New System.Drawing.Point(8, 65)
+        Me.RadioButtonDuplicates.Location = New System.Drawing.Point(8, 64)
         Me.RadioButtonDuplicates.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButtonDuplicates.Name = "RadioButtonDuplicates"
         Me.RadioButtonDuplicates.Size = New System.Drawing.Size(79, 17)
@@ -3341,7 +3342,7 @@ Partial Class Form1
         Me.ComboBoxFilterMovieFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxFilterMovieFormat.IntegralHeight = false
         Me.ComboBoxFilterMovieFormat.Items.AddRange(New Object() {"All"})
-        Me.ComboBoxFilterMovieFormat.Location = New System.Drawing.Point(139, 74)
+        Me.ComboBoxFilterMovieFormat.Location = New System.Drawing.Point(138, 68)
         Me.ComboBoxFilterMovieFormat.Margin = New System.Windows.Forms.Padding(4)
         Me.ComboBoxFilterMovieFormat.MaxDropDownItems = 5
         Me.ComboBoxFilterMovieFormat.Name = "ComboBoxFilterMovieFormat"
@@ -3382,7 +3383,7 @@ Partial Class Form1
         Me.Label32.Location = New System.Drawing.Point(6, 12)
         Me.Label32.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(210, 25)
+        Me.Label32.Size = New System.Drawing.Size(207, 25)
         Me.Label32.TabIndex = 2
         Me.Label32.Text = "Downloading Trailer..."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
         '
@@ -3468,7 +3469,7 @@ Partial Class Form1
         Me.ComboBoxFormatSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxFormatSource.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.ComboBoxFormatSource.FormattingEnabled = true
-        Me.ComboBoxFormatSource.Location = New System.Drawing.Point(358, 545)
+        Me.ComboBoxFormatSource.Location = New System.Drawing.Point(347, 545)
         Me.ComboBoxFormatSource.Margin = New System.Windows.Forms.Padding(4)
         Me.ComboBoxFormatSource.MaxDropDownItems = 25
         Me.ComboBoxFormatSource.Name = "ComboBoxFormatSource"
@@ -3483,7 +3484,7 @@ Partial Class Form1
         Me.lbl_movSource.BackColor = System.Drawing.Color.Gray
         Me.lbl_movSource.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbl_movSource.ForeColor = System.Drawing.Color.White
-        Me.lbl_movSource.Location = New System.Drawing.Point(303, 545)
+        Me.lbl_movSource.Location = New System.Drawing.Point(292, 545)
         Me.lbl_movSource.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbl_movSource.Name = "lbl_movSource"
         Me.lbl_movSource.Size = New System.Drawing.Size(55, 21)
@@ -3509,7 +3510,7 @@ Partial Class Form1
         Me.certtxt.Location = New System.Drawing.Point(80, 467)
         Me.certtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.certtxt.Name = "certtxt"
-        Me.certtxt.Size = New System.Drawing.Size(215, 22)
+        Me.certtxt.Size = New System.Drawing.Size(204, 22)
         Me.certtxt.TabIndex = 130
         '
         'txtStars
@@ -3520,7 +3521,7 @@ Partial Class Form1
         Me.txtStars.Location = New System.Drawing.Point(80, 417)
         Me.txtStars.Margin = New System.Windows.Forms.Padding(4)
         Me.txtStars.Name = "txtStars"
-        Me.txtStars.Size = New System.Drawing.Size(215, 22)
+        Me.txtStars.Size = New System.Drawing.Size(204, 22)
         Me.txtStars.TabIndex = 167
         '
         'lblStars
@@ -3544,7 +3545,7 @@ Partial Class Form1
         Me.HelpProvider1.SetHelpKeyword(Me.TextBox34, "210")
         Me.HelpProvider1.SetHelpNavigator(Me.TextBox34, System.Windows.Forms.HelpNavigator.TopicId)
         Me.HelpProvider1.SetHelpString(Me.TextBox34, "")
-        Me.TextBox34.Location = New System.Drawing.Point(420, 8)
+        Me.TextBox34.Location = New System.Drawing.Point(409, 8)
         Me.TextBox34.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox34.Name = "TextBox34"
         Me.HelpProvider1.SetShowHelp(Me.TextBox34, true)
@@ -3560,7 +3561,7 @@ Partial Class Form1
         Me.pathtxt.Margin = New System.Windows.Forms.Padding(4)
         Me.pathtxt.Name = "pathtxt"
         Me.pathtxt.ReadOnly = true
-        Me.pathtxt.Size = New System.Drawing.Size(215, 22)
+        Me.pathtxt.Size = New System.Drawing.Size(204, 22)
         Me.pathtxt.TabIndex = 150
         '
         'path
@@ -3583,7 +3584,7 @@ Partial Class Form1
         Me.DebugScreenSizeLabel.AutoSize = true
         Me.DebugScreenSizeLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugScreenSizeLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugScreenSizeLabel.Location = New System.Drawing.Point(528, 444)
+        Me.DebugScreenSizeLabel.Location = New System.Drawing.Point(517, 444)
         Me.DebugScreenSizeLabel.Name = "DebugScreenSizeLabel"
         Me.DebugScreenSizeLabel.Size = New System.Drawing.Size(118, 16)
         Me.DebugScreenSizeLabel.TabIndex = 165
@@ -3599,7 +3600,7 @@ Partial Class Form1
         Me.titletxt.Location = New System.Drawing.Point(80, 4)
         Me.titletxt.Margin = New System.Windows.Forms.Padding(4)
         Me.titletxt.Name = "titletxt"
-        Me.titletxt.Size = New System.Drawing.Size(274, 29)
+        Me.titletxt.Size = New System.Drawing.Size(263, 29)
         Me.titletxt.TabIndex = 161
         '
         'Button66
@@ -3608,7 +3609,7 @@ Partial Class Form1
         Me.Button66.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.Button66.BackgroundImage = CType(resources.GetObject("Button66.BackgroundImage"),System.Drawing.Image)
         Me.Button66.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button66.Location = New System.Drawing.Point(271, 544)
+        Me.Button66.Location = New System.Drawing.Point(260, 544)
         Me.Button66.Margin = New System.Windows.Forms.Padding(4)
         Me.Button66.Name = "Button66"
         Me.Button66.Size = New System.Drawing.Size(24, 24)
@@ -3620,7 +3621,7 @@ Partial Class Form1
         '
         Me.studiotxt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.studiotxt.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.studiotxt.Location = New System.Drawing.Point(358, 519)
+        Me.studiotxt.Location = New System.Drawing.Point(347, 519)
         Me.studiotxt.Margin = New System.Windows.Forms.Padding(4)
         Me.studiotxt.Name = "studiotxt"
         Me.studiotxt.Size = New System.Drawing.Size(161, 22)
@@ -3632,7 +3633,7 @@ Partial Class Form1
         Me.studio.BackColor = System.Drawing.Color.Gray
         Me.studio.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.studio.ForeColor = System.Drawing.Color.White
-        Me.studio.Location = New System.Drawing.Point(303, 519)
+        Me.studio.Location = New System.Drawing.Point(292, 519)
         Me.studio.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.studio.Name = "studio"
         Me.studio.Size = New System.Drawing.Size(55, 22)
@@ -3646,7 +3647,7 @@ Partial Class Form1
         Me.Label75.BackColor = System.Drawing.Color.Gray
         Me.Label75.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Bold)
         Me.Label75.ForeColor = System.Drawing.Color.White
-        Me.Label75.Location = New System.Drawing.Point(365, 8)
+        Me.Label75.Location = New System.Drawing.Point(354, 8)
         Me.Label75.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label75.Name = "Label75"
         Me.Label75.Size = New System.Drawing.Size(55, 22)
@@ -3675,8 +3676,8 @@ Partial Class Form1
         Me.SplitContainer2.Panel2.Controls.Add(Me.DebugSplitter2PosLabel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.moviethumb)
         Me.SplitContainer2.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SplitContainer2.Size = New System.Drawing.Size(561, 235)
-        Me.SplitContainer2.SplitterDistance = 289
+        Me.SplitContainer2.Size = New System.Drawing.Size(550, 235)
+        Me.SplitContainer2.SplitterDistance = 278
         Me.SplitContainer2.SplitterWidth = 5
         Me.SplitContainer2.TabIndex = 151
         '
@@ -3695,7 +3696,7 @@ Partial Class Form1
         'Rating1
         '
         Me.Rating1.BackColor = System.Drawing.Color.Transparent
-        Me.Rating1.Location = New System.Drawing.Point(5, 32706)
+        Me.Rating1.Location = New System.Drawing.Point(5, 32701)
         Me.Rating1.Name = "Rating1"
         Me.Rating1.Size = New System.Drawing.Size(34, 46079)
         Me.Rating1.TabIndex = 173
@@ -3720,14 +3721,14 @@ Partial Class Form1
         Me.genretxt.Location = New System.Drawing.Point(80, 442)
         Me.genretxt.Margin = New System.Windows.Forms.Padding(4)
         Me.genretxt.Name = "genretxt"
-        Me.genretxt.Size = New System.Drawing.Size(439, 22)
+        Me.genretxt.Size = New System.Drawing.Size(428, 22)
         Me.genretxt.TabIndex = 149
         '
         'creditstxt
         '
         Me.creditstxt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.creditstxt.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.creditstxt.Location = New System.Drawing.Point(358, 493)
+        Me.creditstxt.Location = New System.Drawing.Point(347, 493)
         Me.creditstxt.Margin = New System.Windows.Forms.Padding(4)
         Me.creditstxt.Name = "creditstxt"
         Me.creditstxt.Size = New System.Drawing.Size(161, 22)
@@ -3737,7 +3738,7 @@ Partial Class Form1
         '
         Me.directortxt.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.directortxt.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.directortxt.Location = New System.Drawing.Point(358, 467)
+        Me.directortxt.Location = New System.Drawing.Point(347, 467)
         Me.directortxt.Margin = New System.Windows.Forms.Padding(4)
         Me.directortxt.Name = "directortxt"
         Me.directortxt.Size = New System.Drawing.Size(161, 22)
@@ -3751,7 +3752,7 @@ Partial Class Form1
         Me.taglinetxt.Location = New System.Drawing.Point(80, 278)
         Me.taglinetxt.Margin = New System.Windows.Forms.Padding(4)
         Me.taglinetxt.Name = "taglinetxt"
-        Me.taglinetxt.Size = New System.Drawing.Size(561, 22)
+        Me.taglinetxt.Size = New System.Drawing.Size(550, 22)
         Me.taglinetxt.TabIndex = 144
         '
         'plottxt
@@ -3764,7 +3765,7 @@ Partial Class Form1
         Me.plottxt.Multiline = true
         Me.plottxt.Name = "plottxt"
         Me.plottxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.plottxt.Size = New System.Drawing.Size(562, 68)
+        Me.plottxt.Size = New System.Drawing.Size(551, 68)
         Me.plottxt.TabIndex = 143
         '
         'outlinetxt
@@ -3777,7 +3778,7 @@ Partial Class Form1
         Me.outlinetxt.Multiline = true
         Me.outlinetxt.Name = "outlinetxt"
         Me.outlinetxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.outlinetxt.Size = New System.Drawing.Size(561, 38)
+        Me.outlinetxt.Size = New System.Drawing.Size(550, 38)
         Me.outlinetxt.TabIndex = 142
         '
         'ButtonWatched
@@ -3787,7 +3788,7 @@ Partial Class Form1
         Me.ButtonWatched.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonWatched.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ButtonWatched.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonWatched.Location = New System.Drawing.Point(443, 569)
+        Me.ButtonWatched.Location = New System.Drawing.Point(432, 569)
         Me.ButtonWatched.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonWatched.Name = "ButtonWatched"
         Me.ButtonWatched.Size = New System.Drawing.Size(76, 25)
@@ -3800,7 +3801,7 @@ Partial Class Form1
         Me.ButtonTrailer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.ButtonTrailer.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.ButtonTrailer.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonTrailer.Location = New System.Drawing.Point(303, 570)
+        Me.ButtonTrailer.Location = New System.Drawing.Point(292, 570)
         Me.ButtonTrailer.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTrailer.Name = "ButtonTrailer"
         Me.ButtonTrailer.Size = New System.Drawing.Size(132, 24)
@@ -3828,7 +3829,7 @@ Partial Class Form1
         Me.Button11.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.Button11.BackgroundImage = CType(resources.GetObject("Button11.BackgroundImage"),System.Drawing.Image)
         Me.Button11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button11.Location = New System.Drawing.Point(495, 415)
+        Me.Button11.Location = New System.Drawing.Point(484, 415)
         Me.Button11.Margin = New System.Windows.Forms.Padding(4)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(24, 24)
@@ -3851,7 +3852,7 @@ Partial Class Form1
         Me.PictureBoxActor.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.PictureBoxActor.BackColor = System.Drawing.SystemColors.ControlLight
         Me.PictureBoxActor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBoxActor.Location = New System.Drawing.Point(526, 441)
+        Me.PictureBoxActor.Location = New System.Drawing.Point(515, 441)
         Me.PictureBoxActor.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBoxActor.Name = "PictureBoxActor"
         Me.PictureBoxActor.Size = New System.Drawing.Size(115, 150)
@@ -3875,7 +3876,7 @@ Partial Class Form1
         Me.director.BackColor = System.Drawing.Color.Gray
         Me.director.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.director.ForeColor = System.Drawing.Color.White
-        Me.director.Location = New System.Drawing.Point(303, 467)
+        Me.director.Location = New System.Drawing.Point(292, 467)
         Me.director.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.director.Name = "director"
         Me.director.Size = New System.Drawing.Size(55, 22)
@@ -3903,7 +3904,7 @@ Partial Class Form1
         Me.credits.BackColor = System.Drawing.Color.Gray
         Me.credits.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.credits.ForeColor = System.Drawing.Color.White
-        Me.credits.Location = New System.Drawing.Point(303, 493)
+        Me.credits.Location = New System.Drawing.Point(292, 493)
         Me.credits.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.credits.Name = "credits"
         Me.credits.Size = New System.Drawing.Size(55, 22)
@@ -3960,7 +3961,7 @@ Partial Class Form1
         Me.actorcb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.actorcb.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.actorcb.FormattingEnabled = true
-        Me.actorcb.Location = New System.Drawing.Point(358, 417)
+        Me.actorcb.Location = New System.Drawing.Point(347, 417)
         Me.actorcb.Margin = New System.Windows.Forms.Padding(4)
         Me.actorcb.MaxDropDownItems = 25
         Me.actorcb.MinimumSize = New System.Drawing.Size(135, 0)
@@ -3974,7 +3975,7 @@ Partial Class Form1
         Me.Label4.BackColor = System.Drawing.Color.Gray
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Bold)
         Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(303, 417)
+        Me.Label4.Location = New System.Drawing.Point(292, 417)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(55, 21)
@@ -4019,7 +4020,7 @@ Partial Class Form1
         Me.setsTxt.Location = New System.Drawing.Point(80, 545)
         Me.setsTxt.Name = "setsTxt"
         Me.setsTxt.ReadOnly = true
-        Me.setsTxt.Size = New System.Drawing.Size(189, 22)
+        Me.setsTxt.Size = New System.Drawing.Size(178, 22)
         Me.setsTxt.TabIndex = 171
         '
         'Label128
@@ -4098,7 +4099,7 @@ Partial Class Form1
         Me.Panel3.Controls.Add(Me.btngetthumb)
         Me.Panel3.Controls.Add(Me.TextBox5)
         Me.Panel3.Controls.Add(Me.Label9)
-        Me.Panel3.Location = New System.Drawing.Point(358, 468)
+        Me.Panel3.Location = New System.Drawing.Point(358, 490)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(654, 114)
@@ -4162,7 +4163,7 @@ Partial Class Form1
         Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonThumb3)
         Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonThumb1)
         Me.GroupBoxFanartExtrathumbs.Controls.Add(Me.RadioButtonFanart)
-        Me.GroupBoxFanartExtrathumbs.Location = New System.Drawing.Point(617, 450)
+        Me.GroupBoxFanartExtrathumbs.Location = New System.Drawing.Point(617, 472)
         Me.GroupBoxFanartExtrathumbs.Name = "GroupBoxFanartExtrathumbs"
         Me.GroupBoxFanartExtrathumbs.Size = New System.Drawing.Size(198, 100)
         Me.GroupBoxFanartExtrathumbs.TabIndex = 130
@@ -4174,7 +4175,7 @@ Partial Class Form1
         Me.RadioButtonThumb4.AutoSize = true
         Me.RadioButtonThumb4.Location = New System.Drawing.Point(121, 71)
         Me.RadioButtonThumb4.Name = "RadioButtonThumb4"
-        Me.RadioButtonThumb4.Size = New System.Drawing.Size(64, 17)
+        Me.RadioButtonThumb4.Size = New System.Drawing.Size(70, 19)
         Me.RadioButtonThumb4.TabIndex = 4
         Me.RadioButtonThumb4.Text = "Thumb4"
         Me.RadioButtonThumb4.UseVisualStyleBackColor = true
@@ -4184,7 +4185,7 @@ Partial Class Form1
         Me.RadioButtonThumb2.AutoSize = true
         Me.RadioButtonThumb2.Location = New System.Drawing.Point(7, 71)
         Me.RadioButtonThumb2.Name = "RadioButtonThumb2"
-        Me.RadioButtonThumb2.Size = New System.Drawing.Size(64, 17)
+        Me.RadioButtonThumb2.Size = New System.Drawing.Size(70, 19)
         Me.RadioButtonThumb2.TabIndex = 3
         Me.RadioButtonThumb2.Text = "Thumb2"
         Me.RadioButtonThumb2.UseVisualStyleBackColor = true
@@ -4194,7 +4195,7 @@ Partial Class Form1
         Me.RadioButtonThumb3.AutoSize = true
         Me.RadioButtonThumb3.Location = New System.Drawing.Point(121, 45)
         Me.RadioButtonThumb3.Name = "RadioButtonThumb3"
-        Me.RadioButtonThumb3.Size = New System.Drawing.Size(64, 17)
+        Me.RadioButtonThumb3.Size = New System.Drawing.Size(70, 19)
         Me.RadioButtonThumb3.TabIndex = 2
         Me.RadioButtonThumb3.Text = "Thumb3"
         Me.RadioButtonThumb3.UseVisualStyleBackColor = true
@@ -4204,7 +4205,7 @@ Partial Class Form1
         Me.RadioButtonThumb1.AutoSize = true
         Me.RadioButtonThumb1.Location = New System.Drawing.Point(7, 45)
         Me.RadioButtonThumb1.Name = "RadioButtonThumb1"
-        Me.RadioButtonThumb1.Size = New System.Drawing.Size(64, 17)
+        Me.RadioButtonThumb1.Size = New System.Drawing.Size(70, 19)
         Me.RadioButtonThumb1.TabIndex = 1
         Me.RadioButtonThumb1.Text = "Thumb1"
         Me.RadioButtonThumb1.UseVisualStyleBackColor = true
@@ -4215,7 +4216,7 @@ Partial Class Form1
         Me.RadioButtonFanart.Checked = true
         Me.RadioButtonFanart.Location = New System.Drawing.Point(7, 21)
         Me.RadioButtonFanart.Name = "RadioButtonFanart"
-        Me.RadioButtonFanart.Size = New System.Drawing.Size(55, 17)
+        Me.RadioButtonFanart.Size = New System.Drawing.Size(58, 19)
         Me.RadioButtonFanart.TabIndex = 0
         Me.RadioButtonFanart.TabStop = true
         Me.RadioButtonFanart.Text = "Fanart"
@@ -4224,7 +4225,7 @@ Partial Class Form1
         'ButtonNextFanart
         '
         Me.ButtonNextFanart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.ButtonNextFanart.Location = New System.Drawing.Point(732, 326)
+        Me.ButtonNextFanart.Location = New System.Drawing.Point(732, 348)
         Me.ButtonNextFanart.Name = "ButtonNextFanart"
         Me.ButtonNextFanart.Size = New System.Drawing.Size(275, 27)
         Me.ButtonNextFanart.TabIndex = 129
@@ -4235,7 +4236,7 @@ Partial Class Form1
         'ButtonFanartSaveLoRes
         '
         Me.ButtonFanartSaveLoRes.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.ButtonFanartSaveLoRes.Location = New System.Drawing.Point(842, 514)
+        Me.ButtonFanartSaveLoRes.Location = New System.Drawing.Point(842, 536)
         Me.ButtonFanartSaveLoRes.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonFanartSaveLoRes.Name = "ButtonFanartSaveLoRes"
         Me.ButtonFanartSaveLoRes.Size = New System.Drawing.Size(165, 32)
@@ -4261,7 +4262,7 @@ Partial Class Form1
         Me.Label17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label17.AutoSize = true
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label17.Location = New System.Drawing.Point(525, 392)
+        Me.Label17.Location = New System.Drawing.Point(525, 414)
         Me.Label17.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(56, 16)
@@ -4273,7 +4274,7 @@ Partial Class Form1
         Me.Label16.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label16.AutoSize = true
         Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label16.Location = New System.Drawing.Point(525, 367)
+        Me.Label16.Location = New System.Drawing.Point(525, 389)
         Me.Label16.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(56, 16)
@@ -4285,7 +4286,7 @@ Partial Class Form1
         Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label14.AutoSize = true
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label14.Location = New System.Drawing.Point(475, 392)
+        Me.Label14.Location = New System.Drawing.Point(475, 414)
         Me.Label14.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(56, 16)
@@ -4297,7 +4298,7 @@ Partial Class Form1
         Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label13.AutoSize = true
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label13.Location = New System.Drawing.Point(481, 367)
+        Me.Label13.Location = New System.Drawing.Point(481, 389)
         Me.Label13.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(51, 16)
@@ -4309,7 +4310,7 @@ Partial Class Form1
         Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoSize = true
         Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label12.Location = New System.Drawing.Point(477, 347)
+        Me.Label12.Location = New System.Drawing.Point(477, 369)
         Me.Label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(104, 16)
@@ -4321,7 +4322,7 @@ Partial Class Form1
         Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label10.AutoSize = true
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label10.Location = New System.Drawing.Point(643, 373)
+        Me.Label10.Location = New System.Drawing.Point(643, 395)
         Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(37, 16)
@@ -4332,7 +4333,7 @@ Partial Class Form1
         '
         Me.btncroptop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btncroptop.Font = New System.Drawing.Font("Microsoft Sans Serif", 6!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btncroptop.Location = New System.Drawing.Point(646, 331)
+        Me.btncroptop.Location = New System.Drawing.Point(646, 353)
         Me.btncroptop.Margin = New System.Windows.Forms.Padding(4)
         Me.btncroptop.Name = "btncroptop"
         Me.btncroptop.Size = New System.Drawing.Size(30, 29)
@@ -4344,7 +4345,7 @@ Partial Class Form1
         '
         Me.btncropbottom.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btncropbottom.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btncropbottom.Location = New System.Drawing.Point(646, 400)
+        Me.btncropbottom.Location = New System.Drawing.Point(646, 422)
         Me.btncropbottom.Margin = New System.Windows.Forms.Padding(4)
         Me.btncropbottom.Name = "btncropbottom"
         Me.btncropbottom.Size = New System.Drawing.Size(30, 29)
@@ -4356,7 +4357,7 @@ Partial Class Form1
         '
         Me.btncropright.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btncropright.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btncropright.Location = New System.Drawing.Point(691, 367)
+        Me.btncropright.Location = New System.Drawing.Point(691, 389)
         Me.btncropright.Margin = New System.Windows.Forms.Padding(4)
         Me.btncropright.Name = "btncropright"
         Me.btncropright.Size = New System.Drawing.Size(30, 29)
@@ -4368,7 +4369,7 @@ Partial Class Form1
         '
         Me.btncropleft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btncropleft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btncropleft.Location = New System.Drawing.Point(605, 367)
+        Me.btncropleft.Location = New System.Drawing.Point(605, 389)
         Me.btncropleft.Margin = New System.Windows.Forms.Padding(4)
         Me.btncropleft.Name = "btncropleft"
         Me.btncropleft.Size = New System.Drawing.Size(30, 29)
@@ -4379,7 +4380,7 @@ Partial Class Form1
         'btnsavecropped
         '
         Me.btnsavecropped.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btnsavecropped.Location = New System.Drawing.Point(897, 433)
+        Me.btnsavecropped.Location = New System.Drawing.Point(897, 455)
         Me.btnsavecropped.Margin = New System.Windows.Forms.Padding(4)
         Me.btnsavecropped.Name = "btnsavecropped"
         Me.btnsavecropped.Size = New System.Drawing.Size(110, 29)
@@ -4391,7 +4392,7 @@ Partial Class Form1
         'btnresetimage
         '
         Me.btnresetimage.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btnresetimage.Location = New System.Drawing.Point(897, 396)
+        Me.btnresetimage.Location = New System.Drawing.Point(897, 418)
         Me.btnresetimage.Margin = New System.Windows.Forms.Padding(4)
         Me.btnresetimage.Name = "btnresetimage"
         Me.btnresetimage.Size = New System.Drawing.Size(110, 29)
@@ -4410,7 +4411,7 @@ Partial Class Form1
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox1.Size = New System.Drawing.Size(550, 276)
+        Me.GroupBox1.Size = New System.Drawing.Size(550, 298)
         Me.GroupBox1.TabIndex = 102
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Current Fanart"
@@ -4425,7 +4426,7 @@ Partial Class Form1
         Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox2.MinimumSize = New System.Drawing.Size(124, 124)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(538, 248)
+        Me.PictureBox2.Size = New System.Drawing.Size(538, 270)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox2.TabIndex = 1
         Me.PictureBox2.TabStop = false
@@ -4434,7 +4435,7 @@ Partial Class Form1
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(842, 472)
+        Me.Button1.Location = New System.Drawing.Point(842, 494)
         Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(165, 29)
@@ -4445,7 +4446,7 @@ Partial Class Form1
         'ButtonFanrtSaveHiRes
         '
         Me.ButtonFanrtSaveHiRes.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.ButtonFanrtSaveHiRes.Location = New System.Drawing.Point(842, 554)
+        Me.ButtonFanrtSaveHiRes.Location = New System.Drawing.Point(842, 576)
         Me.ButtonFanrtSaveHiRes.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonFanrtSaveHiRes.Name = "ButtonFanrtSaveHiRes"
         Me.ButtonFanrtSaveHiRes.Size = New System.Drawing.Size(165, 29)
@@ -4464,26 +4465,26 @@ Partial Class Form1
         Me.Panel2.Location = New System.Drawing.Point(4, 4)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(440, 567)
+        Me.Panel2.Size = New System.Drawing.Size(440, 589)
         Me.Panel2.TabIndex = 95
         '
         'FanartContextMenu
         '
         Me.FanartContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SaveSelectedFanartAsToolStripMenuItem})
         Me.FanartContextMenu.Name = "ContextMenuStrip5"
-        Me.FanartContextMenu.Size = New System.Drawing.Size(192, 26)
+        Me.FanartContextMenu.Size = New System.Drawing.Size(196, 26)
         '
         'SaveSelectedFanartAsToolStripMenuItem
         '
         Me.SaveSelectedFanartAsToolStripMenuItem.Name = "SaveSelectedFanartAsToolStripMenuItem"
-        Me.SaveSelectedFanartAsToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.SaveSelectedFanartAsToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.SaveSelectedFanartAsToolStripMenuItem.Text = "Save Selected Fanart as"
         '
         'Label7
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label7.Location = New System.Drawing.Point(462, 450)
+        Me.Label7.Location = New System.Drawing.Point(462, 472)
         Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(131, 123)
@@ -4541,7 +4542,7 @@ Partial Class Form1
         Me.Panel6.Controls.Add(Me.Button8)
         Me.Panel6.Controls.Add(Me.TextBox4)
         Me.Panel6.Controls.Add(Me.Label11)
-        Me.Panel6.Location = New System.Drawing.Point(4, 500)
+        Me.Panel6.Location = New System.Drawing.Point(4, 522)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(635, 87)
@@ -4611,7 +4612,7 @@ Partial Class Form1
         'Button15
         '
         Me.Button15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button15.Location = New System.Drawing.Point(906, 552)
+        Me.Button15.Location = New System.Drawing.Point(906, 574)
         Me.Button15.Margin = New System.Windows.Forms.Padding(4)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(100, 29)
@@ -4644,7 +4645,7 @@ Partial Class Form1
         'Button20
         '
         Me.Button20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button20.Location = New System.Drawing.Point(519, 540)
+        Me.Button20.Location = New System.Drawing.Point(519, 562)
         Me.Button20.Margin = New System.Windows.Forms.Padding(4)
         Me.Button20.Name = "Button20"
         Me.Button20.Size = New System.Drawing.Size(112, 29)
@@ -4669,7 +4670,7 @@ Partial Class Form1
         Me.Label20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label20.AutoSize = true
         Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label20.Location = New System.Drawing.Point(700, 537)
+        Me.Label20.Location = New System.Drawing.Point(700, 559)
         Me.Label20.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(29, 13)
@@ -4680,7 +4681,7 @@ Partial Class Form1
         '
         Me.Button23.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button23.Font = New System.Drawing.Font("Microsoft Sans Serif", 6!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button23.Location = New System.Drawing.Point(700, 501)
+        Me.Button23.Location = New System.Drawing.Point(700, 523)
         Me.Button23.Margin = New System.Windows.Forms.Padding(4)
         Me.Button23.Name = "Button23"
         Me.Button23.Size = New System.Drawing.Size(30, 29)
@@ -4692,7 +4693,7 @@ Partial Class Form1
         '
         Me.Button24.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button24.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button24.Location = New System.Drawing.Point(700, 562)
+        Me.Button24.Location = New System.Drawing.Point(700, 584)
         Me.Button24.Margin = New System.Windows.Forms.Padding(4)
         Me.Button24.Name = "Button24"
         Me.Button24.Size = New System.Drawing.Size(30, 29)
@@ -4704,7 +4705,7 @@ Partial Class Form1
         '
         Me.Button25.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button25.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button25.Location = New System.Drawing.Point(738, 528)
+        Me.Button25.Location = New System.Drawing.Point(738, 550)
         Me.Button25.Margin = New System.Windows.Forms.Padding(4)
         Me.Button25.Name = "Button25"
         Me.Button25.Size = New System.Drawing.Size(30, 29)
@@ -4716,7 +4717,7 @@ Partial Class Form1
         '
         Me.Button26.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button26.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button26.Location = New System.Drawing.Point(662, 528)
+        Me.Button26.Location = New System.Drawing.Point(662, 550)
         Me.Button26.Margin = New System.Windows.Forms.Padding(4)
         Me.Button26.Name = "Button26"
         Me.Button26.Size = New System.Drawing.Size(30, 29)
@@ -4727,7 +4728,7 @@ Partial Class Form1
         'Button27
         '
         Me.Button27.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button27.Location = New System.Drawing.Point(798, 553)
+        Me.Button27.Location = New System.Drawing.Point(798, 575)
         Me.Button27.Margin = New System.Windows.Forms.Padding(4)
         Me.Button27.Name = "Button27"
         Me.Button27.Size = New System.Drawing.Size(100, 29)
@@ -4739,7 +4740,7 @@ Partial Class Form1
         'Button28
         '
         Me.Button28.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button28.Location = New System.Drawing.Point(798, 516)
+        Me.Button28.Location = New System.Drawing.Point(798, 538)
         Me.Button28.Margin = New System.Windows.Forms.Padding(4)
         Me.Button28.Name = "Button28"
         Me.Button28.Size = New System.Drawing.Size(100, 29)
@@ -4751,7 +4752,7 @@ Partial Class Form1
         'Label18
         '
         Me.Label18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Label18.Location = New System.Drawing.Point(133, 488)
+        Me.Label18.Location = New System.Drawing.Point(133, 510)
         Me.Label18.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(378, 16)
@@ -4763,7 +4764,7 @@ Partial Class Form1
         '
         Me.Label24.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label24.Location = New System.Drawing.Point(252, 515)
+        Me.Label24.Location = New System.Drawing.Point(252, 537)
         Me.Label24.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(176, 21)
@@ -4773,7 +4774,7 @@ Partial Class Form1
         'Button9
         '
         Me.Button9.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button9.Location = New System.Drawing.Point(519, 481)
+        Me.Button9.Location = New System.Drawing.Point(519, 503)
         Me.Button9.Margin = New System.Windows.Forms.Padding(4)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(91, 29)
@@ -4784,7 +4785,7 @@ Partial Class Form1
         'Button10
         '
         Me.Button10.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button10.Location = New System.Drawing.Point(34, 481)
+        Me.Button10.Location = New System.Drawing.Point(34, 503)
         Me.Button10.Margin = New System.Windows.Forms.Padding(4)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(91, 29)
@@ -4817,7 +4818,7 @@ Partial Class Form1
         '
         Me.Button12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button12.Location = New System.Drawing.Point(8, 548)
+        Me.Button12.Location = New System.Drawing.Point(8, 570)
         Me.Button12.Margin = New System.Windows.Forms.Padding(4)
         Me.Button12.Name = "Button12"
         Me.Button12.Size = New System.Drawing.Size(132, 29)
@@ -4829,7 +4830,7 @@ Partial Class Form1
         '
         Me.btnChangeMovie.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btnChangeMovie.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnChangeMovie.Location = New System.Drawing.Point(504, 548)
+        Me.btnChangeMovie.Location = New System.Drawing.Point(504, 570)
         Me.btnChangeMovie.Margin = New System.Windows.Forms.Padding(4)
         Me.btnChangeMovie.Name = "btnChangeMovie"
         Me.btnChangeMovie.Size = New System.Drawing.Size(70, 29)
@@ -4843,7 +4844,7 @@ Partial Class Form1
         Me.Label15.AutoSize = true
         Me.Label15.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label15.Location = New System.Drawing.Point(241, 551)
+        Me.Label15.Location = New System.Drawing.Point(241, 573)
         Me.Label15.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(205, 15)
@@ -4857,7 +4858,7 @@ Partial Class Form1
         Me.CheckBox2.Checked = true
         Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox2.Location = New System.Drawing.Point(774, 554)
+        Me.CheckBox2.Location = New System.Drawing.Point(774, 576)
         Me.CheckBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(244, 19)
@@ -4874,7 +4875,7 @@ Partial Class Form1
         Me.WebBrowser1.Margin = New System.Windows.Forms.Padding(4)
         Me.WebBrowser1.MinimumSize = New System.Drawing.Size(25, 25)
         Me.WebBrowser1.Name = "WebBrowser1"
-        Me.WebBrowser1.Size = New System.Drawing.Size(1017, 530)
+        Me.WebBrowser1.Size = New System.Drawing.Size(1017, 552)
         Me.WebBrowser1.TabIndex = 0
         '
         'TabPage7
@@ -5070,7 +5071,7 @@ Partial Class Form1
         Me.RadioButton27.Location = New System.Drawing.Point(86, 4)
         Me.RadioButton27.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton27.Name = "RadioButton27"
-        Me.RadioButton27.Size = New System.Drawing.Size(64, 22)
+        Me.RadioButton27.Size = New System.Drawing.Size(63, 22)
         Me.RadioButton27.TabIndex = 1
         Me.RadioButton27.Text = " Movie Year "
         Me.RadioButton27.UseVisualStyleBackColor = true
@@ -5100,7 +5101,7 @@ Partial Class Form1
         Me.TextBox8.Multiline = true
         Me.TextBox8.Name = "TextBox8"
         Me.TextBox8.ReadOnly = true
-        Me.TextBox8.Size = New System.Drawing.Size(1020, 583)
+        Me.TextBox8.Size = New System.Drawing.Size(1020, 605)
         Me.TextBox8.TabIndex = 0
         '
         'ToolTip2
@@ -5179,7 +5180,7 @@ Partial Class Form1
         Me.ToolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left
         Me.ToolStripStatusLabel1.BorderStyle = System.Windows.Forms.Border3DStyle.Etched
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(110, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 19)
         Me.ToolStripStatusLabel1.Text = "Movie Scan Progress"
         Me.ToolStripStatusLabel1.ToolTipText = "pooooooo"
         Me.ToolStripStatusLabel1.Visible = false
@@ -5190,7 +5191,7 @@ Partial Class Form1
         Me.ToolStripStatusLabel6.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left
         Me.ToolStripStatusLabel6.BorderStyle = System.Windows.Forms.Border3DStyle.Etched
         Me.ToolStripStatusLabel6.Name = "ToolStripStatusLabel6"
-        Me.ToolStripStatusLabel6.Size = New System.Drawing.Size(99, 17)
+        Me.ToolStripStatusLabel6.Size = New System.Drawing.Size(108, 19)
         Me.ToolStripStatusLabel6.Text = "Parsing TV Folders"
         Me.ToolStripStatusLabel6.Visible = false
         '
@@ -5208,7 +5209,7 @@ Partial Class Form1
         '
         Me.ToolStripStatusLabel2.BackColor = System.Drawing.Color.Transparent
         Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(172, 13)
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(186, 15)
         Me.ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
         Me.ToolStripStatusLabel2.ToolTipText = "boooooo"
         Me.ToolStripStatusLabel2.Visible = false
@@ -5227,7 +5228,7 @@ Partial Class Form1
         '
         Me.ToolStripStatusLabel3.BackColor = System.Drawing.Color.Transparent
         Me.ToolStripStatusLabel3.Name = "ToolStripStatusLabel3"
-        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(123, 13)
+        Me.ToolStripStatusLabel3.Size = New System.Drawing.Size(129, 15)
         Me.ToolStripStatusLabel3.Text = "Fanart Scan In Progress"
         Me.ToolStripStatusLabel3.Visible = false
         '
@@ -5244,7 +5245,7 @@ Partial Class Form1
         '
         Me.ToolStripStatusLabel4.BackColor = System.Drawing.Color.Transparent
         Me.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4"
-        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(122, 13)
+        Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(137, 15)
         Me.ToolStripStatusLabel4.Text = "Scraping dropped Movie"
         Me.ToolStripStatusLabel4.Visible = false
         '
@@ -5260,7 +5261,7 @@ Partial Class Form1
         '
         Me.ToolStripStatusLabel7.BackColor = System.Drawing.Color.Transparent
         Me.ToolStripStatusLabel7.Name = "ToolStripStatusLabel7"
-        Me.ToolStripStatusLabel7.Size = New System.Drawing.Size(153, 13)
+        Me.ToolStripStatusLabel7.Size = New System.Drawing.Size(168, 15)
         Me.ToolStripStatusLabel7.Text = "Movie Wizard Scan in Progress"
         Me.ToolStripStatusLabel7.Visible = false
         '
@@ -5276,14 +5277,14 @@ Partial Class Form1
         'ToolStripStatusLabel5
         '
         Me.ToolStripStatusLabel5.Name = "ToolStripStatusLabel5"
-        Me.ToolStripStatusLabel5.Size = New System.Drawing.Size(111, 13)
+        Me.ToolStripStatusLabel5.Size = New System.Drawing.Size(121, 15)
         Me.ToolStripStatusLabel5.Text = "ToolStripStatusLabel5"
         Me.ToolStripStatusLabel5.Visible = false
         '
         'ToolStripStatusLabel8
         '
         Me.ToolStripStatusLabel8.Name = "ToolStripStatusLabel8"
-        Me.ToolStripStatusLabel8.Size = New System.Drawing.Size(111, 13)
+        Me.ToolStripStatusLabel8.Size = New System.Drawing.Size(121, 15)
         Me.ToolStripStatusLabel8.Text = "ToolStripStatusLabel8"
         Me.ToolStripStatusLabel8.Visible = false
         '
@@ -5304,7 +5305,7 @@ Partial Class Form1
         'ToolStripStatusLabel9
         '
         Me.ToolStripStatusLabel9.Name = "ToolStripStatusLabel9"
-        Me.ToolStripStatusLabel9.Size = New System.Drawing.Size(111, 13)
+        Me.ToolStripStatusLabel9.Size = New System.Drawing.Size(121, 15)
         Me.ToolStripStatusLabel9.Text = "ToolStripStatusLabel9"
         Me.ToolStripStatusLabel9.Visible = false
         '
@@ -5641,6 +5642,7 @@ Partial Class Form1
         'btn_movTableSave
         '
         Me.btn_movTableSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btn_movTableSave.Enabled = false
         Me.btn_movTableSave.Location = New System.Drawing.Point(922, 572)
         Me.btn_movTableSave.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_movTableSave.Name = "btn_movTableSave"
@@ -5685,36 +5687,36 @@ Partial Class Form1
         '
         Me.ContextMenuStrip_table.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MarkAllSelectedAsWatchedToolStripMenuItem, Me.MarkAllSelectedAsUnWatchedToolStripMenuItem, Me.GoToToolStripMenuItem, Me.GoToSelectedMoviePosterSelectorToolStripMenuItem, Me.GoToSelectedMovieFanartSelectorToolStripMenuItem})
         Me.ContextMenuStrip_table.Name = "ContextMenuStrip_table"
-        Me.ContextMenuStrip_table.Size = New System.Drawing.Size(259, 114)
+        Me.ContextMenuStrip_table.Size = New System.Drawing.Size(281, 114)
         '
         'MarkAllSelectedAsWatchedToolStripMenuItem
         '
         Me.MarkAllSelectedAsWatchedToolStripMenuItem.Name = "MarkAllSelectedAsWatchedToolStripMenuItem"
-        Me.MarkAllSelectedAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+        Me.MarkAllSelectedAsWatchedToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.MarkAllSelectedAsWatchedToolStripMenuItem.Text = "Mark All Selected as Watched"
         '
         'MarkAllSelectedAsUnWatchedToolStripMenuItem
         '
         Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Name = "MarkAllSelectedAsUnWatchedToolStripMenuItem"
-        Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+        Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.MarkAllSelectedAsUnWatchedToolStripMenuItem.Text = "Mark All Selected as Un-Watched"
         '
         'GoToToolStripMenuItem
         '
         Me.GoToToolStripMenuItem.Name = "GoToToolStripMenuItem"
-        Me.GoToToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+        Me.GoToToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.GoToToolStripMenuItem.Text = " Go To Selected Movie in Main Browser"
         '
         'GoToSelectedMoviePosterSelectorToolStripMenuItem
         '
         Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Name = "GoToSelectedMoviePosterSelectorToolStripMenuItem"
-        Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+        Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.GoToSelectedMoviePosterSelectorToolStripMenuItem.Text = "Go To Selected Movie Poster Selector"
         '
         'GoToSelectedMovieFanartSelectorToolStripMenuItem
         '
         Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Name = "GoToSelectedMovieFanartSelectorToolStripMenuItem"
-        Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Size = New System.Drawing.Size(258, 22)
+        Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.GoToSelectedMovieFanartSelectorToolStripMenuItem.Text = "Go To Selected Movie Fanart Selector"
         '
         'TabPage9
@@ -5987,7 +5989,7 @@ Partial Class Form1
         Me.Panel21.Controls.Add(Me.Button107)
         Me.Panel21.Location = New System.Drawing.Point(3, 345)
         Me.Panel21.Name = "Panel21"
-        Me.Panel21.Size = New System.Drawing.Size(326, 155)
+        Me.Panel21.Size = New System.Drawing.Size(315, 155)
         Me.Panel21.TabIndex = 18
         '
         'Label144
@@ -6010,7 +6012,7 @@ Partial Class Form1
         Me.Button108.Location = New System.Drawing.Point(87, 116)
         Me.Button108.Margin = New System.Windows.Forms.Padding(4)
         Me.Button108.Name = "Button108"
-        Me.Button108.Size = New System.Drawing.Size(161, 30)
+        Me.Button108.Size = New System.Drawing.Size(150, 30)
         Me.Button108.TabIndex = 17
         Me.Button108.Text = "Load offline movie list..."
         Me.Button108.UseVisualStyleBackColor = true
@@ -6022,7 +6024,7 @@ Partial Class Form1
         Me.TextBox44.Location = New System.Drawing.Point(5, 30)
         Me.TextBox44.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox44.Name = "TextBox44"
-        Me.TextBox44.Size = New System.Drawing.Size(257, 23)
+        Me.TextBox44.Size = New System.Drawing.Size(246, 23)
         Me.TextBox44.TabIndex = 14
         '
         'Label146
@@ -6032,7 +6034,7 @@ Partial Class Form1
         Me.Label146.Location = New System.Drawing.Point(6, 66)
         Me.Label146.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label146.Name = "Label146"
-        Me.Label146.Size = New System.Drawing.Size(314, 45)
+        Me.Label146.Size = New System.Drawing.Size(303, 45)
         Me.Label146.TabIndex = 16
         Me.Label146.Text = "You can also create folders from a list in a text file that has each movie on a s"& _ 
     "eperate line. Use the browse button below to load the text file."
@@ -6041,7 +6043,7 @@ Partial Class Form1
         '
         Me.Button107.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button107.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button107.Location = New System.Drawing.Point(272, 26)
+        Me.Button107.Location = New System.Drawing.Point(261, 26)
         Me.Button107.Margin = New System.Windows.Forms.Padding(4)
         Me.Button107.Name = "Button107"
         Me.Button107.Size = New System.Drawing.Size(49, 29)
@@ -6083,7 +6085,7 @@ Partial Class Form1
         Me.ListBox15.Location = New System.Drawing.Point(4, 34)
         Me.ListBox15.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox15.Name = "ListBox15"
-        Me.ListBox15.Size = New System.Drawing.Size(325, 289)
+        Me.ListBox15.Size = New System.Drawing.Size(314, 289)
         Me.ListBox15.TabIndex = 8
         '
         'Button102
@@ -6102,7 +6104,7 @@ Partial Class Form1
         '
         Me.Button101.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button101.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button101.Location = New System.Drawing.Point(164, 507)
+        Me.Button101.Location = New System.Drawing.Point(153, 507)
         Me.Button101.Margin = New System.Windows.Forms.Padding(4)
         Me.Button101.Name = "Button101"
         Me.Button101.Size = New System.Drawing.Size(165, 30)
@@ -6514,7 +6516,7 @@ Partial Class Form1
         '
         Me.Button82.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button82.Location = New System.Drawing.Point(431, -650)
+        Me.Button82.Location = New System.Drawing.Point(431, -680)
         Me.Button82.Margin = New System.Windows.Forms.Padding(4)
         Me.Button82.Name = "Button82"
         Me.Button82.Size = New System.Drawing.Size(150, 30)
@@ -6623,7 +6625,7 @@ Partial Class Form1
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 22)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(1022, 560)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(1022, 582)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -6880,7 +6882,7 @@ Partial Class Form1
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(1022, 560)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(1022, 582)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -7235,7 +7237,7 @@ Partial Class Form1
         Me.TabControl3.Name = "TabControl3"
         Me.TabControl3.SelectedIndex = 0
         Me.TabControl3.ShowToolTips = true
-        Me.TabControl3.Size = New System.Drawing.Size(1032, 615)
+        Me.TabControl3.Size = New System.Drawing.Size(1032, 637)
         Me.TabControl3.TabIndex = 0
         '
         'TabPageLevel2TVMainBrowser
@@ -7246,7 +7248,7 @@ Partial Class Form1
         Me.TabPageLevel2TVMainBrowser.Location = New System.Drawing.Point(4, 27)
         Me.TabPageLevel2TVMainBrowser.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPageLevel2TVMainBrowser.Name = "TabPageLevel2TVMainBrowser"
-        Me.TabPageLevel2TVMainBrowser.Size = New System.Drawing.Size(1024, 584)
+        Me.TabPageLevel2TVMainBrowser.Size = New System.Drawing.Size(1024, 606)
         Me.TabPageLevel2TVMainBrowser.TabIndex = 0
         Me.TabPageLevel2TVMainBrowser.Text = "Main Browser"
         Me.TabPageLevel2TVMainBrowser.UseVisualStyleBackColor = true
@@ -7311,7 +7313,7 @@ Partial Class Form1
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label25)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label21)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Label43)
-        Me.SplitContainer3.Size = New System.Drawing.Size(1020, 580)
+        Me.SplitContainer3.Size = New System.Drawing.Size(1020, 602)
         Me.SplitContainer3.SplitterDistance = 308
         Me.SplitContainer3.SplitterWidth = 5
         Me.SplitContainer3.TabIndex = 1
@@ -7321,7 +7323,7 @@ Partial Class Form1
         Me.RadioButton53.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.RadioButton53.AutoSize = true
         Me.RadioButton53.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton53.Location = New System.Drawing.Point(8, 554)
+        Me.RadioButton53.Location = New System.Drawing.Point(8, 576)
         Me.RadioButton53.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton53.Name = "RadioButton53"
         Me.RadioButton53.Size = New System.Drawing.Size(146, 19)
@@ -7335,7 +7337,7 @@ Partial Class Form1
         Me.RadioButton44.AutoSize = true
         Me.RadioButton44.Checked = true
         Me.RadioButton44.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton44.Location = New System.Drawing.Point(182, 500)
+        Me.RadioButton44.Location = New System.Drawing.Point(182, 522)
         Me.RadioButton44.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton44.Name = "RadioButton44"
         Me.RadioButton44.Size = New System.Drawing.Size(115, 19)
@@ -7349,7 +7351,7 @@ Partial Class Form1
         Me.RadioButton32.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.RadioButton32.AutoSize = true
         Me.RadioButton32.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton32.Location = New System.Drawing.Point(8, 527)
+        Me.RadioButton32.Location = New System.Drawing.Point(8, 549)
         Me.RadioButton32.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton32.Name = "RadioButton32"
         Me.RadioButton32.Size = New System.Drawing.Size(127, 19)
@@ -7362,7 +7364,7 @@ Partial Class Form1
         Me.RadioButton31.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.RadioButton31.AutoSize = true
         Me.RadioButton31.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton31.Location = New System.Drawing.Point(149, 527)
+        Me.RadioButton31.Location = New System.Drawing.Point(149, 549)
         Me.RadioButton31.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton31.Name = "RadioButton31"
         Me.RadioButton31.Size = New System.Drawing.Size(107, 19)
@@ -7375,7 +7377,7 @@ Partial Class Form1
         Me.RadioButton30.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.RadioButton30.AutoSize = true
         Me.RadioButton30.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton30.Location = New System.Drawing.Point(72, 500)
+        Me.RadioButton30.Location = New System.Drawing.Point(72, 522)
         Me.RadioButton30.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton30.Name = "RadioButton30"
         Me.RadioButton30.Size = New System.Drawing.Size(102, 19)
@@ -7389,7 +7391,7 @@ Partial Class Form1
         Me.RadioButton29.AutoSize = true
         Me.RadioButton29.Checked = true
         Me.RadioButton29.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton29.Location = New System.Drawing.Point(8, 500)
+        Me.RadioButton29.Location = New System.Drawing.Point(8, 522)
         Me.RadioButton29.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton29.Name = "RadioButton29"
         Me.RadioButton29.Size = New System.Drawing.Size(60, 19)
@@ -7457,8 +7459,8 @@ Partial Class Form1
         '_tv_SplitContainer.Panel2
         '
         Me._tv_SplitContainer.Panel2.Controls.Add(Me.tv_PictureBoxBottom)
-        Me._tv_SplitContainer.Size = New System.Drawing.Size(502, 300)
-        Me._tv_SplitContainer.SplitterDistance = 224
+        Me._tv_SplitContainer.Size = New System.Drawing.Size(491, 322)
+        Me._tv_SplitContainer.SplitterDistance = 240
         Me._tv_SplitContainer.TabIndex = 11
         '
         'SplitContainer4
@@ -7478,8 +7480,8 @@ Partial Class Form1
         'SplitContainer4.Panel2
         '
         Me.SplitContainer4.Panel2.Controls.Add(Me.tv_PictureBoxRight)
-        Me.SplitContainer4.Size = New System.Drawing.Size(494, 212)
-        Me.SplitContainer4.SplitterDistance = 348
+        Me.SplitContainer4.Size = New System.Drawing.Size(483, 228)
+        Me.SplitContainer4.SplitterDistance = 337
         Me.SplitContainer4.SplitterWidth = 5
         Me.SplitContainer4.TabIndex = 50
         '
@@ -7489,7 +7491,7 @@ Partial Class Form1
         Me.tv_PictureBoxLeft.Location = New System.Drawing.Point(0, 0)
         Me.tv_PictureBoxLeft.Margin = New System.Windows.Forms.Padding(4)
         Me.tv_PictureBoxLeft.Name = "tv_PictureBoxLeft"
-        Me.tv_PictureBoxLeft.Size = New System.Drawing.Size(344, 208)
+        Me.tv_PictureBoxLeft.Size = New System.Drawing.Size(333, 224)
         Me.tv_PictureBoxLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.tv_PictureBoxLeft.TabIndex = 0
         Me.tv_PictureBoxLeft.TabStop = false
@@ -7501,7 +7503,7 @@ Partial Class Form1
         Me.tv_PictureBoxRight.Location = New System.Drawing.Point(0, 0)
         Me.tv_PictureBoxRight.Margin = New System.Windows.Forms.Padding(4)
         Me.tv_PictureBoxRight.Name = "tv_PictureBoxRight"
-        Me.tv_PictureBoxRight.Size = New System.Drawing.Size(137, 208)
+        Me.tv_PictureBoxRight.Size = New System.Drawing.Size(137, 224)
         Me.tv_PictureBoxRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.tv_PictureBoxRight.TabIndex = 0
         Me.tv_PictureBoxRight.TabStop = false
@@ -7512,7 +7514,7 @@ Partial Class Form1
         Me.tv_PictureBoxBottom.Location = New System.Drawing.Point(0, 0)
         Me.tv_PictureBoxBottom.Margin = New System.Windows.Forms.Padding(2)
         Me.tv_PictureBoxBottom.Name = "tv_PictureBoxBottom"
-        Me.tv_PictureBoxBottom.Size = New System.Drawing.Size(498, 68)
+        Me.tv_PictureBoxBottom.Size = New System.Drawing.Size(487, 74)
         Me.tv_PictureBoxBottom.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.tv_PictureBoxBottom.TabIndex = 47
         Me.tv_PictureBoxBottom.TabStop = false
@@ -7525,7 +7527,7 @@ Partial Class Form1
         Me.gpbxActorSource.Controls.Add(Me.Label41)
         Me.gpbxActorSource.Controls.Add(Me.Label66)
         Me.gpbxActorSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.gpbxActorSource.Location = New System.Drawing.Point(523, 235)
+        Me.gpbxActorSource.Location = New System.Drawing.Point(512, 257)
         Me.gpbxActorSource.Name = "gpbxActorSource"
         Me.gpbxActorSource.Size = New System.Drawing.Size(150, 75)
         Me.gpbxActorSource.TabIndex = 48
@@ -7607,10 +7609,10 @@ Partial Class Form1
         Me.Panel9.Controls.Add(Me.Label45)
         Me.Panel9.Controls.Add(Me.Label160)
         Me.Panel9.Controls.Add(Me.Button48)
-        Me.Panel9.Location = New System.Drawing.Point(10, 348)
+        Me.Panel9.Location = New System.Drawing.Point(10, 370)
         Me.Panel9.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(502, 225)
+        Me.Panel9.Size = New System.Drawing.Size(491, 225)
         Me.Panel9.TabIndex = 34
         '
         'TextBox_Plot
@@ -7623,7 +7625,7 @@ Partial Class Form1
         Me.TextBox_Plot.Multiline = true
         Me.TextBox_Plot.Name = "TextBox_Plot"
         Me.TextBox_Plot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox_Plot.Size = New System.Drawing.Size(420, 56)
+        Me.TextBox_Plot.Size = New System.Drawing.Size(409, 56)
         Me.TextBox_Plot.TabIndex = 7
         '
         'TextBox_Ep_Details
@@ -7633,7 +7635,7 @@ Partial Class Form1
         Me.TextBox_Ep_Details.Font = New System.Drawing.Font("Segoe UI", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.TextBox_Ep_Details.Location = New System.Drawing.Point(76, 198)
         Me.TextBox_Ep_Details.Name = "TextBox_Ep_Details"
-        Me.TextBox_Ep_Details.Size = New System.Drawing.Size(420, 23)
+        Me.TextBox_Ep_Details.Size = New System.Drawing.Size(409, 23)
         Me.TextBox_Ep_Details.TabIndex = 22
         '
         'TextBox29
@@ -7646,7 +7648,7 @@ Partial Class Form1
         Me.TextBox29.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox29.Name = "TextBox29"
         Me.TextBox29.ReadOnly = true
-        Me.TextBox29.Size = New System.Drawing.Size(419, 23)
+        Me.TextBox29.Size = New System.Drawing.Size(408, 23)
         Me.TextBox29.TabIndex = 18
         '
         'ComboBox5
@@ -7671,13 +7673,13 @@ Partial Class Form1
         Me.TextBox25.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox25.Name = "TextBox25"
         Me.TextBox25.ReadOnly = true
-        Me.TextBox25.Size = New System.Drawing.Size(382, 21)
+        Me.TextBox25.Size = New System.Drawing.Size(371, 21)
         Me.TextBox25.TabIndex = 14
         '
         'PictureBox8
         '
         Me.PictureBox8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.PictureBox8.Location = New System.Drawing.Point(531, -65)
+        Me.PictureBox8.Location = New System.Drawing.Point(520, -65)
         Me.PictureBox8.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox8.Name = "PictureBox8"
         Me.PictureBox8.Size = New System.Drawing.Size(203, 249)
@@ -7707,7 +7709,7 @@ Partial Class Form1
         Me.TextBox17.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox17.Name = "TextBox17"
         Me.TextBox17.ReadOnly = true
-        Me.TextBox17.Size = New System.Drawing.Size(420, 23)
+        Me.TextBox17.Size = New System.Drawing.Size(409, 23)
         Me.TextBox17.TabIndex = 17
         '
         'Label36
@@ -7766,7 +7768,7 @@ Partial Class Form1
         Me.TextBox_Credits.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox_Credits.Name = "TextBox_Credits"
         Me.TextBox_Credits.ReadOnly = true
-        Me.TextBox_Credits.Size = New System.Drawing.Size(172, 23)
+        Me.TextBox_Credits.Size = New System.Drawing.Size(161, 23)
         Me.TextBox_Credits.TabIndex = 9
         '
         'TextBox_Director
@@ -7789,7 +7791,7 @@ Partial Class Form1
         Me.TextBox_Rating.Location = New System.Drawing.Point(257, 100)
         Me.TextBox_Rating.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox_Rating.Name = "TextBox_Rating"
-        Me.TextBox_Rating.Size = New System.Drawing.Size(101, 23)
+        Me.TextBox_Rating.Size = New System.Drawing.Size(90, 23)
         Me.TextBox_Rating.TabIndex = 6
         '
         'Label49
@@ -7869,7 +7871,7 @@ Partial Class Form1
         Me.Button48.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button48.BackColor = System.Drawing.Color.Red
         Me.Button48.Font = New System.Drawing.Font("Arial", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button48.Location = New System.Drawing.Point(413, 99)
+        Me.Button48.Location = New System.Drawing.Point(402, 99)
         Me.Button48.Margin = New System.Windows.Forms.Padding(4)
         Me.Button48.Name = "Button48"
         Me.Button48.Size = New System.Drawing.Size(84, 23)
@@ -7883,7 +7885,7 @@ Partial Class Form1
         Me.Button_TV_State.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Button_TV_State.ImageIndex = 0
         Me.Button_TV_State.ImageList = Me.ImageList2
-        Me.Button_TV_State.Location = New System.Drawing.Point(598, 7)
+        Me.Button_TV_State.Location = New System.Drawing.Point(587, 7)
         Me.Button_TV_State.Margin = New System.Windows.Forms.Padding(4)
         Me.Button_TV_State.Name = "Button_TV_State"
         Me.Button_TV_State.Size = New System.Drawing.Size(75, 32)
@@ -7896,7 +7898,7 @@ Partial Class Form1
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = true
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label8.Location = New System.Drawing.Point(553, 14)
+        Me.Label8.Location = New System.Drawing.Point(542, 14)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(47, 15)
@@ -7907,19 +7909,19 @@ Partial Class Form1
         '
         Me.TextBox19.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox19.Location = New System.Drawing.Point(86, 371)
+        Me.TextBox19.Location = New System.Drawing.Point(86, 393)
         Me.TextBox19.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox19.Multiline = true
         Me.TextBox19.Name = "TextBox19"
         Me.TextBox19.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox19.Size = New System.Drawing.Size(420, 70)
+        Me.TextBox19.Size = New System.Drawing.Size(409, 70)
         Me.TextBox19.TabIndex = 32
         '
         'TextBox16
         '
         Me.TextBox16.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TextBox16.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox16.Location = New System.Drawing.Point(295, 449)
+        Me.TextBox16.Location = New System.Drawing.Point(284, 471)
         Me.TextBox16.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox16.Name = "TextBox16"
         Me.TextBox16.Size = New System.Drawing.Size(211, 21)
@@ -7929,7 +7931,7 @@ Partial Class Form1
         '
         Me.TextBox15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.TextBox15.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox15.Location = New System.Drawing.Point(86, 449)
+        Me.TextBox15.Location = New System.Drawing.Point(86, 471)
         Me.TextBox15.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox15.Name = "TextBox15"
         Me.TextBox15.Size = New System.Drawing.Size(150, 21)
@@ -7939,7 +7941,7 @@ Partial Class Form1
         '
         Me.Button47.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Button47.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button47.Location = New System.Drawing.Point(596, 49)
+        Me.Button47.Location = New System.Drawing.Point(585, 49)
         Me.Button47.Margin = New System.Windows.Forms.Padding(4)
         Me.Button47.Name = "Button47"
         Me.Button47.Size = New System.Drawing.Size(75, 25)
@@ -7950,7 +7952,7 @@ Partial Class Form1
         'PictureBox6
         '
         Me.PictureBox6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.PictureBox6.Location = New System.Drawing.Point(523, 370)
+        Me.PictureBox6.Location = New System.Drawing.Point(512, 392)
         Me.PictureBox6.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox6.Name = "PictureBox6"
         Me.PictureBox6.Size = New System.Drawing.Size(150, 200)
@@ -7963,7 +7965,7 @@ Partial Class Form1
         Me.TextBox18.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TextBox18.BackColor = System.Drawing.Color.White
         Me.TextBox18.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox18.Location = New System.Drawing.Point(559, 343)
+        Me.TextBox18.Location = New System.Drawing.Point(548, 365)
         Me.TextBox18.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox18.Name = "TextBox18"
         Me.TextBox18.ReadOnly = true
@@ -7974,7 +7976,7 @@ Partial Class Form1
         '
         Me.TextBox14.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TextBox14.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox14.Location = New System.Drawing.Point(295, 549)
+        Me.TextBox14.Location = New System.Drawing.Point(284, 571)
         Me.TextBox14.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox14.Name = "TextBox14"
         Me.TextBox14.Size = New System.Drawing.Size(211, 21)
@@ -7985,7 +7987,7 @@ Partial Class Form1
         Me.Label67.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label67.AutoSize = true
         Me.Label67.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label67.Location = New System.Drawing.Point(531, 53)
+        Me.Label67.Location = New System.Drawing.Point(520, 53)
         Me.Label67.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label67.Name = "Label67"
         Me.Label67.Size = New System.Drawing.Size(69, 15)
@@ -7996,7 +7998,7 @@ Partial Class Form1
         '
         Me.TextBox13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TextBox13.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox13.Location = New System.Drawing.Point(295, 481)
+        Me.TextBox13.Location = New System.Drawing.Point(284, 503)
         Me.TextBox13.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox13.Name = "TextBox13"
         Me.TextBox13.Size = New System.Drawing.Size(211, 21)
@@ -8009,7 +8011,7 @@ Partial Class Form1
         Me.ComboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBox4.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.ComboBox4.FormattingEnabled = true
-        Me.ComboBox4.Location = New System.Drawing.Point(559, 317)
+        Me.ComboBox4.Location = New System.Drawing.Point(548, 339)
         Me.ComboBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.ComboBox4.Name = "ComboBox4"
         Me.ComboBox4.Size = New System.Drawing.Size(114, 23)
@@ -8020,7 +8022,7 @@ Partial Class Form1
         '
         Me.TextBox12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.TextBox12.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox12.Location = New System.Drawing.Point(86, 549)
+        Me.TextBox12.Location = New System.Drawing.Point(86, 571)
         Me.TextBox12.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox12.Name = "TextBox12"
         Me.TextBox12.Size = New System.Drawing.Size(150, 21)
@@ -8031,7 +8033,7 @@ Partial Class Form1
         Me.TextBox11.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TextBox11.BackColor = System.Drawing.Color.White
         Me.TextBox11.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox11.Location = New System.Drawing.Point(295, 515)
+        Me.TextBox11.Location = New System.Drawing.Point(284, 537)
         Me.TextBox11.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox11.Name = "TextBox11"
         Me.TextBox11.Size = New System.Drawing.Size(211, 21)
@@ -8041,7 +8043,7 @@ Partial Class Form1
         '
         Me.TextBox10.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.TextBox10.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox10.Location = New System.Drawing.Point(86, 481)
+        Me.TextBox10.Location = New System.Drawing.Point(86, 503)
         Me.TextBox10.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox10.Name = "TextBox10"
         Me.TextBox10.Size = New System.Drawing.Size(150, 21)
@@ -8051,7 +8053,7 @@ Partial Class Form1
         '
         Me.TextBox9.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.TextBox9.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TextBox9.Location = New System.Drawing.Point(86, 515)
+        Me.TextBox9.Location = New System.Drawing.Point(86, 537)
         Me.TextBox9.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox9.Name = "TextBox9"
         Me.TextBox9.Size = New System.Drawing.Size(150, 21)
@@ -8062,7 +8064,7 @@ Partial Class Form1
         Me.Label44.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label44.AutoSize = true
         Me.Label44.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label44.Location = New System.Drawing.Point(53, 373)
+        Me.Label44.Location = New System.Drawing.Point(53, 395)
         Me.Label44.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label44.Name = "Label44"
         Me.Label44.Size = New System.Drawing.Size(34, 15)
@@ -8074,7 +8076,7 @@ Partial Class Form1
         Me.Label42.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label42.AutoSize = true
         Me.Label42.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label42.Location = New System.Drawing.Point(521, 321)
+        Me.Label42.Location = New System.Drawing.Point(510, 343)
         Me.Label42.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label42.Name = "Label42"
         Me.Label42.Size = New System.Drawing.Size(40, 15)
@@ -8086,7 +8088,7 @@ Partial Class Form1
         Me.Label35.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label35.AutoSize = true
         Me.Label35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label35.Location = New System.Drawing.Point(247, 452)
+        Me.Label35.Location = New System.Drawing.Point(236, 474)
         Me.Label35.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(48, 15)
@@ -8098,7 +8100,7 @@ Partial Class Form1
         Me.Label34.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label34.AutoSize = true
         Me.Label34.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label34.Location = New System.Drawing.Point(27, 452)
+        Me.Label34.Location = New System.Drawing.Point(27, 474)
         Me.Label34.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(60, 15)
@@ -8110,7 +8112,7 @@ Partial Class Form1
         Me.Label33.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label33.AutoSize = true
         Me.Label33.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label33.Location = New System.Drawing.Point(261, 552)
+        Me.Label33.Location = New System.Drawing.Point(250, 574)
         Me.Label33.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label33.Name = "Label33"
         Me.Label33.Size = New System.Drawing.Size(35, 15)
@@ -8122,7 +8124,7 @@ Partial Class Form1
         Me.Label29.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label29.AutoSize = true
         Me.Label29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label29.Location = New System.Drawing.Point(247, 484)
+        Me.Label29.Location = New System.Drawing.Point(236, 506)
         Me.Label29.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(49, 15)
@@ -8134,7 +8136,7 @@ Partial Class Form1
         Me.Label28.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label28.AutoSize = true
         Me.Label28.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label28.Location = New System.Drawing.Point(43, 552)
+        Me.Label28.Location = New System.Drawing.Point(43, 574)
         Me.Label28.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label28.Name = "Label28"
         Me.Label28.Size = New System.Drawing.Size(44, 15)
@@ -8146,7 +8148,7 @@ Partial Class Form1
         Me.Label26.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label26.AutoSize = true
         Me.Label26.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label26.Location = New System.Drawing.Point(43, 518)
+        Me.Label26.Location = New System.Drawing.Point(43, 540)
         Me.Label26.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(44, 15)
@@ -8158,7 +8160,7 @@ Partial Class Form1
         Me.Label25.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label25.AutoSize = true
         Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label25.Location = New System.Drawing.Point(249, 518)
+        Me.Label25.Location = New System.Drawing.Point(238, 540)
         Me.Label25.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(47, 15)
@@ -8170,7 +8172,7 @@ Partial Class Form1
         Me.Label21.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label21.AutoSize = true
         Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label21.Location = New System.Drawing.Point(16, 484)
+        Me.Label21.Location = New System.Drawing.Point(16, 506)
         Me.Label21.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(71, 15)
@@ -8182,7 +8184,7 @@ Partial Class Form1
         Me.Label43.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label43.AutoSize = true
         Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label43.Location = New System.Drawing.Point(522, 346)
+        Me.Label43.Location = New System.Drawing.Point(511, 368)
         Me.Label43.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label43.Name = "Label43"
         Me.Label43.Size = New System.Drawing.Size(39, 15)
@@ -8202,7 +8204,7 @@ Partial Class Form1
         Me.TabPage21.Location = New System.Drawing.Point(4, 25)
         Me.TabPage21.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage21.Name = "TabPage21"
-        Me.TabPage21.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage21.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage21.TabIndex = 7
         Me.TabPage21.Text = "Screenshot"
         Me.TabPage21.UseVisualStyleBackColor = true
@@ -8304,7 +8306,7 @@ Partial Class Form1
         Me.TabPage12.Location = New System.Drawing.Point(4, 25)
         Me.TabPage12.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage12.Name = "TabPage12"
-        Me.TabPage12.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage12.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage12.TabIndex = 1
         Me.TabPage12.Text = "Fanart"
         Me.TabPage12.ToolTipText = "Use this option to select from available fanart"
@@ -8675,7 +8677,7 @@ Partial Class Form1
         Me.TabPage20.Location = New System.Drawing.Point(4, 25)
         Me.TabPage20.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage20.Name = "TabPage20"
-        Me.TabPage20.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage20.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage20.TabIndex = 6
         Me.TabPage20.Text = "Posters"
         Me.TabPage20.UseVisualStyleBackColor = true
@@ -8989,7 +8991,7 @@ Partial Class Form1
         Me.TabPage13.Location = New System.Drawing.Point(4, 25)
         Me.TabPage13.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage13.Name = "TabPage13"
-        Me.TabPage13.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage13.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage13.TabIndex = 2
         Me.TabPage13.Text = "TV Show Selector"
         Me.TabPage13.ToolTipText = "Use this tab to select or change TV Show"
@@ -9439,7 +9441,7 @@ Partial Class Form1
         Me.TabPage15.Location = New System.Drawing.Point(4, 25)
         Me.TabPage15.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage15.Name = "TabPage15"
-        Me.TabPage15.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage15.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage15.TabIndex = 3
         Me.TabPage15.Text = "Search for new Episodes"
         Me.TabPage15.ToolTipText = "Searches folders for new episodes"
@@ -9454,7 +9456,7 @@ Partial Class Form1
         Me.TabPage16.Location = New System.Drawing.Point(4, 25)
         Me.TabPage16.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage16.Name = "TabPage16"
-        Me.TabPage16.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage16.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage16.TabIndex = 4
         Me.TabPage16.ToolTipText = "Open IMDB in default browser at selected show"
         Me.TabPage16.UseVisualStyleBackColor = true
@@ -9466,7 +9468,7 @@ Partial Class Form1
         Me.WebBrowser3.Margin = New System.Windows.Forms.Padding(4)
         Me.WebBrowser3.MinimumSize = New System.Drawing.Size(25, 25)
         Me.WebBrowser3.Name = "WebBrowser3"
-        Me.WebBrowser3.Size = New System.Drawing.Size(1020, 582)
+        Me.WebBrowser3.Size = New System.Drawing.Size(1020, 604)
         Me.WebBrowser3.TabIndex = 0
         '
         'TabPage17
@@ -9477,7 +9479,7 @@ Partial Class Form1
         Me.TabPage17.Location = New System.Drawing.Point(4, 25)
         Me.TabPage17.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage17.Name = "TabPage17"
-        Me.TabPage17.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage17.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage17.TabIndex = 5
         Me.TabPage17.Text = "TVDB"
         Me.TabPage17.ToolTipText = "Open TVDB in default browser at selected show"
@@ -9490,7 +9492,7 @@ Partial Class Form1
         Me.WebBrowser4.Margin = New System.Windows.Forms.Padding(4)
         Me.WebBrowser4.MinimumSize = New System.Drawing.Size(25, 25)
         Me.WebBrowser4.Name = "WebBrowser4"
-        Me.WebBrowser4.Size = New System.Drawing.Size(1020, 582)
+        Me.WebBrowser4.Size = New System.Drawing.Size(1020, 604)
         Me.WebBrowser4.TabIndex = 0
         '
         'TabPage23
@@ -9503,7 +9505,7 @@ Partial Class Form1
         Me.TabPage23.Location = New System.Drawing.Point(4, 25)
         Me.TabPage23.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage23.Name = "TabPage23"
-        Me.TabPage23.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage23.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage23.TabIndex = 8
         Me.TabPage23.Text = "Folders"
         Me.TabPage23.UseVisualStyleBackColor = true
@@ -9670,7 +9672,7 @@ Partial Class Form1
         '
         Me.btn_TvFoldersAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btn_TvFoldersAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btn_TvFoldersAdd.Location = New System.Drawing.Point(241, 442)
+        Me.btn_TvFoldersAdd.Location = New System.Drawing.Point(230, 442)
         Me.btn_TvFoldersAdd.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_TvFoldersAdd.Name = "btn_TvFoldersAdd"
         Me.btn_TvFoldersAdd.Size = New System.Drawing.Size(45, 29)
@@ -9685,7 +9687,7 @@ Partial Class Form1
         Me.TextBox40.Location = New System.Drawing.Point(21, 448)
         Me.TextBox40.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox40.Name = "TextBox40"
-        Me.TextBox40.Size = New System.Drawing.Size(212, 23)
+        Me.TextBox40.Size = New System.Drawing.Size(201, 23)
         Me.TextBox40.TabIndex = 11
         '
         'Label85
@@ -9704,7 +9706,7 @@ Partial Class Form1
         '
         Me.btn_TvFoldersRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btn_TvFoldersRemove.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btn_TvFoldersRemove.Location = New System.Drawing.Point(309, 480)
+        Me.btn_TvFoldersRemove.Location = New System.Drawing.Point(298, 480)
         Me.btn_TvFoldersRemove.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_TvFoldersRemove.Name = "btn_TvFoldersRemove"
         Me.btn_TvFoldersRemove.Size = New System.Drawing.Size(165, 29)
@@ -9716,7 +9718,7 @@ Partial Class Form1
         '
         Me.Label84.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label84.AutoSize = true
-        Me.Label84.Location = New System.Drawing.Point(294, 34)
+        Me.Label84.Location = New System.Drawing.Point(283, 34)
         Me.Label84.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label84.Name = "Label84"
         Me.Label84.Size = New System.Drawing.Size(181, 165)
@@ -9731,7 +9733,7 @@ Partial Class Form1
         Me.btn_TvFoldersBrowse.Location = New System.Drawing.Point(188, 480)
         Me.btn_TvFoldersBrowse.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_TvFoldersBrowse.Name = "btn_TvFoldersBrowse"
-        Me.btn_TvFoldersBrowse.Size = New System.Drawing.Size(104, 29)
+        Me.btn_TvFoldersBrowse.Size = New System.Drawing.Size(93, 29)
         Me.btn_TvFoldersBrowse.TabIndex = 8
         Me.btn_TvFoldersBrowse.Text = "Browse for Folder"
         Me.btn_TvFoldersBrowse.UseVisualStyleBackColor = true
@@ -9759,7 +9761,7 @@ Partial Class Form1
         Me.ListBox6.Margin = New System.Windows.Forms.Padding(4)
         Me.ListBox6.Name = "ListBox6"
         Me.ListBox6.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBox6.Size = New System.Drawing.Size(265, 244)
+        Me.ListBox6.Size = New System.Drawing.Size(254, 244)
         Me.ListBox6.Sorted = true
         Me.ListBox6.TabIndex = 0
         '
@@ -9772,7 +9774,7 @@ Partial Class Form1
         Me.TabPage24.Location = New System.Drawing.Point(4, 25)
         Me.TabPage24.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage24.Name = "TabPage24"
-        Me.TabPage24.Size = New System.Drawing.Size(1024, 586)
+        Me.TabPage24.Size = New System.Drawing.Size(1024, 608)
         Me.TabPage24.TabIndex = 9
         Me.TabPage24.Text = "TV Preferences"
         Me.TabPage24.UseVisualStyleBackColor = true
@@ -10347,7 +10349,7 @@ Partial Class Form1
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(1014, 511)
+        Me.TabPage31.Size = New System.Drawing.Size(1014, 489)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -10691,7 +10693,7 @@ Partial Class Form1
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1044, 627)
+        Me.TabControl1.Size = New System.Drawing.Size(1044, 649)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage11
@@ -10712,7 +10714,7 @@ Partial Class Form1
         Me.TabPage11.Location = New System.Drawing.Point(4, 27)
         Me.TabPage11.Name = "TabPage11"
         Me.TabPage11.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage11.Size = New System.Drawing.Size(1036, 596)
+        Me.TabPage11.Size = New System.Drawing.Size(1036, 618)
         Me.TabPage11.TabIndex = 0
         Me.TabPage11.Text = "Main Browser"
         Me.TabPage11.UseVisualStyleBackColor = true
@@ -10720,7 +10722,7 @@ Partial Class Form1
         'TextBox20
         '
         Me.TextBox20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox20.Location = New System.Drawing.Point(909, -902)
+        Me.TextBox20.Location = New System.Drawing.Point(909, -910)
         Me.TextBox20.Name = "TextBox20"
         Me.TextBox20.Size = New System.Drawing.Size(121, 23)
         Me.TextBox20.TabIndex = 30
@@ -10729,7 +10731,7 @@ Partial Class Form1
         '
         Me.Label169.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Label169.AutoSize = true
-        Me.Label169.Location = New System.Drawing.Point(868, -899)
+        Me.Label169.Location = New System.Drawing.Point(868, -907)
         Me.Label169.Name = "Label169"
         Me.Label169.Size = New System.Drawing.Size(33, 15)
         Me.Label169.TabIndex = 29
@@ -10762,7 +10764,7 @@ Partial Class Form1
         '
         Me.TextBox23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox23.Location = New System.Drawing.Point(364, -902)
+        Me.TextBox23.Location = New System.Drawing.Point(364, -910)
         Me.TextBox23.Name = "TextBox23"
         Me.TextBox23.Size = New System.Drawing.Size(498, 23)
         Me.TextBox23.TabIndex = 26
@@ -10771,7 +10773,7 @@ Partial Class Form1
         '
         Me.Label173.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label173.AutoSize = true
-        Me.Label173.Location = New System.Drawing.Point(305, -899)
+        Me.Label173.Location = New System.Drawing.Point(305, -907)
         Me.Label173.Name = "Label173"
         Me.Label173.Size = New System.Drawing.Size(51, 15)
         Me.Label173.TabIndex = 25
@@ -10781,7 +10783,7 @@ Partial Class Form1
         '
         Me.Label172.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label172.AutoSize = true
-        Me.Label172.Location = New System.Drawing.Point(309, -1024)
+        Me.Label172.Location = New System.Drawing.Point(309, -1032)
         Me.Label172.Name = "Label172"
         Me.Label172.Size = New System.Drawing.Size(49, 15)
         Me.Label172.TabIndex = 24
@@ -10791,7 +10793,7 @@ Partial Class Form1
         '
         Me.TextBox22.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TextBox22.Location = New System.Drawing.Point(364, -1024)
+        Me.TextBox22.Location = New System.Drawing.Point(364, -1032)
         Me.TextBox22.Multiline = true
         Me.TextBox22.Name = "TextBox22"
         Me.TextBox22.Size = New System.Drawing.Size(666, 116)
@@ -10842,47 +10844,47 @@ Partial Class Form1
         Me.ListBox18.ItemHeight = 15
         Me.ListBox18.Location = New System.Drawing.Point(6, 12)
         Me.ListBox18.Name = "ListBox18"
-        Me.ListBox18.Size = New System.Drawing.Size(290, 304)
+        Me.ListBox18.Size = New System.Drawing.Size(290, 4)
         Me.ListBox18.TabIndex = 18
         '
         'HomeMovieContextMenu
         '
         Me.HomeMovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlaceHolderforHomeMovieTitleToolStripMenuItem, Me.ToolStripSeparator25, Me.PlayHomeMovieToolStripMenuItem, Me.ToolStripSeparator26, Me.OpenFolderToolStripMenuItem, Me.OpenFileToolStripMenuItem})
         Me.HomeMovieContextMenu.Name = "HomeMovieContextMenu"
-        Me.HomeMovieContextMenu.Size = New System.Drawing.Size(220, 104)
+        Me.HomeMovieContextMenu.Size = New System.Drawing.Size(243, 104)
         '
         'PlaceHolderforHomeMovieTitleToolStripMenuItem
         '
         Me.PlaceHolderforHomeMovieTitleToolStripMenuItem.Name = "PlaceHolderforHomeMovieTitleToolStripMenuItem"
-        Me.PlaceHolderforHomeMovieTitleToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.PlaceHolderforHomeMovieTitleToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = "PlaceHolderforHomeMovieTitle"
         '
         'ToolStripSeparator25
         '
         Me.ToolStripSeparator25.Name = "ToolStripSeparator25"
-        Me.ToolStripSeparator25.Size = New System.Drawing.Size(216, 6)
+        Me.ToolStripSeparator25.Size = New System.Drawing.Size(239, 6)
         '
         'PlayHomeMovieToolStripMenuItem
         '
         Me.PlayHomeMovieToolStripMenuItem.Name = "PlayHomeMovieToolStripMenuItem"
-        Me.PlayHomeMovieToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.PlayHomeMovieToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.PlayHomeMovieToolStripMenuItem.Text = "Play Home Movie"
         '
         'ToolStripSeparator26
         '
         Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
-        Me.ToolStripSeparator26.Size = New System.Drawing.Size(216, 6)
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(239, 6)
         '
         'OpenFolderToolStripMenuItem
         '
         Me.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem"
-        Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.OpenFolderToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.OpenFolderToolStripMenuItem.Text = "Open Folder"
         '
         'OpenFileToolStripMenuItem
         '
         Me.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem"
-        Me.OpenFileToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
+        Me.OpenFileToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.OpenFileToolStripMenuItem.Text = "Open File"
         '
         'TabPage19
@@ -10894,7 +10896,7 @@ Partial Class Form1
         Me.TabPage19.Location = New System.Drawing.Point(4, 25)
         Me.TabPage19.Name = "TabPage19"
         Me.TabPage19.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage19.Size = New System.Drawing.Size(1036, 598)
+        Me.TabPage19.Size = New System.Drawing.Size(1036, 620)
         Me.TabPage19.TabIndex = 1
         Me.TabPage19.Text = "Folders"
         Me.TabPage19.UseVisualStyleBackColor = true
@@ -10940,7 +10942,7 @@ Partial Class Form1
         '
         Me.TabPage35.Location = New System.Drawing.Point(4, 25)
         Me.TabPage35.Name = "TabPage35"
-        Me.TabPage35.Size = New System.Drawing.Size(1036, 598)
+        Me.TabPage35.Size = New System.Drawing.Size(1036, 620)
         Me.TabPage35.TabIndex = 2
         Me.TabPage35.Text = "Search for new home movies"
         Me.TabPage35.UseVisualStyleBackColor = true
@@ -10953,7 +10955,7 @@ Partial Class Form1
         Me.TabPage36.Controls.Add(Me.PictureBox5)
         Me.TabPage36.Location = New System.Drawing.Point(4, 25)
         Me.TabPage36.Name = "TabPage36"
-        Me.TabPage36.Size = New System.Drawing.Size(1036, 598)
+        Me.TabPage36.Size = New System.Drawing.Size(1036, 620)
         Me.TabPage36.TabIndex = 3
         Me.TabPage36.Text = "Screenshot"
         Me.TabPage36.UseVisualStyleBackColor = true
@@ -11020,7 +11022,7 @@ Partial Class Form1
         Me.TabControl5.Margin = New System.Windows.Forms.Padding(4)
         Me.TabControl5.Name = "TabControl5"
         Me.TabControl5.SelectedIndex = 0
-        Me.TabControl5.Size = New System.Drawing.Size(1040, 623)
+        Me.TabControl5.Size = New System.Drawing.Size(1040, 645)
         Me.TabControl5.TabIndex = 32
         '
         'TabPage29
@@ -11042,7 +11044,7 @@ Partial Class Form1
         Me.TabPage29.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage29.Name = "TabPage29"
         Me.TabPage29.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage29.Size = New System.Drawing.Size(1032, 595)
+        Me.TabPage29.Size = New System.Drawing.Size(1032, 617)
         Me.TabPage29.TabIndex = 0
         Me.TabPage29.Text = "General"
         Me.TabPage29.UseVisualStyleBackColor = true
@@ -11545,7 +11547,7 @@ Partial Class Form1
         Me.TabPage33.Location = New System.Drawing.Point(4, 22)
         Me.TabPage33.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage33.Name = "TabPage33"
-        Me.TabPage33.Size = New System.Drawing.Size(1032, 597)
+        Me.TabPage33.Size = New System.Drawing.Size(1032, 619)
         Me.TabPage33.TabIndex = 1
         Me.TabPage33.Text = "Custom Commands - Tools Menu"
         Me.TabPage33.UseVisualStyleBackColor = true
@@ -11874,7 +11876,7 @@ Partial Class Form1
         Me.RichTextBoxTabConfigXML.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBoxTabConfigXML.Name = "RichTextBoxTabConfigXML"
         Me.RichTextBoxTabConfigXML.ReadOnly = true
-        Me.RichTextBoxTabConfigXML.Size = New System.Drawing.Size(1044, 627)
+        Me.RichTextBoxTabConfigXML.Size = New System.Drawing.Size(1044, 649)
         Me.RichTextBoxTabConfigXML.TabIndex = 0
         Me.RichTextBoxTabConfigXML.Text = ""
         '
@@ -11896,7 +11898,7 @@ Partial Class Form1
         Me.RichTextBoxTabMovieCache.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBoxTabMovieCache.Name = "RichTextBoxTabMovieCache"
         Me.RichTextBoxTabMovieCache.ReadOnly = true
-        Me.RichTextBoxTabMovieCache.Size = New System.Drawing.Size(1044, 627)
+        Me.RichTextBoxTabMovieCache.Size = New System.Drawing.Size(1044, 649)
         Me.RichTextBoxTabMovieCache.TabIndex = 0
         Me.RichTextBoxTabMovieCache.Text = ""
         '
@@ -11918,7 +11920,7 @@ Partial Class Form1
         Me.RichTextBoxTabTVCache.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBoxTabTVCache.Name = "RichTextBoxTabTVCache"
         Me.RichTextBoxTabTVCache.ReadOnly = true
-        Me.RichTextBoxTabTVCache.Size = New System.Drawing.Size(1044, 627)
+        Me.RichTextBoxTabTVCache.Size = New System.Drawing.Size(1044, 649)
         Me.RichTextBoxTabTVCache.TabIndex = 0
         Me.RichTextBoxTabTVCache.Text = ""
         '
@@ -11940,7 +11942,7 @@ Partial Class Form1
         Me.RichTextBoxTabProfile.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBoxTabProfile.Name = "RichTextBoxTabProfile"
         Me.RichTextBoxTabProfile.ReadOnly = true
-        Me.RichTextBoxTabProfile.Size = New System.Drawing.Size(1044, 627)
+        Me.RichTextBoxTabProfile.Size = New System.Drawing.Size(1044, 649)
         Me.RichTextBoxTabProfile.TabIndex = 0
         Me.RichTextBoxTabProfile.Text = ""
         '
@@ -11962,7 +11964,7 @@ Partial Class Form1
         Me.RichTextBoxTabActorCache.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBoxTabActorCache.Name = "RichTextBoxTabActorCache"
         Me.RichTextBoxTabActorCache.ReadOnly = true
-        Me.RichTextBoxTabActorCache.Size = New System.Drawing.Size(1044, 627)
+        Me.RichTextBoxTabActorCache.Size = New System.Drawing.Size(1044, 649)
         Me.RichTextBoxTabActorCache.TabIndex = 0
         Me.RichTextBoxTabActorCache.Text = ""
         '
@@ -11984,7 +11986,7 @@ Partial Class Form1
         Me.RichTextBoxTabRegex.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBoxTabRegex.Name = "RichTextBoxTabRegex"
         Me.RichTextBoxTabRegex.ReadOnly = true
-        Me.RichTextBoxTabRegex.Size = New System.Drawing.Size(1044, 627)
+        Me.RichTextBoxTabRegex.Size = New System.Drawing.Size(1044, 649)
         Me.RichTextBoxTabRegex.TabIndex = 0
         Me.RichTextBoxTabRegex.Text = ""
         '
@@ -12129,69 +12131,69 @@ Partial Class Form1
         'SearchForNewMoviesToolStripMenuItem
         '
         Me.SearchForNewMoviesToolStripMenuItem.Name = "SearchForNewMoviesToolStripMenuItem"
-        Me.SearchForNewMoviesToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.SearchForNewMoviesToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.SearchForNewMoviesToolStripMenuItem.Text = "Search for New Movies"
         '
         'BatchRescraperToolStripMenuItem
         '
         Me.BatchRescraperToolStripMenuItem.Name = "BatchRescraperToolStripMenuItem"
-        Me.BatchRescraperToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.BatchRescraperToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.BatchRescraperToolStripMenuItem.Text = "Batch Rescraper Wizard"
         '
         'ToolStripSeparator8
         '
         Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(269, 6)
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(265, 6)
         '
         'ToolStripMenuItemRebuildMovieCaches
         '
         Me.ToolStripMenuItemRebuildMovieCaches.Name = "ToolStripMenuItemRebuildMovieCaches"
-        Me.ToolStripMenuItemRebuildMovieCaches.Size = New System.Drawing.Size(272, 22)
+        Me.ToolStripMenuItemRebuildMovieCaches.Size = New System.Drawing.Size(268, 22)
         Me.ToolStripMenuItemRebuildMovieCaches.Text = "Refresh All Movies"
         '
         'RefreshMovieNfoFilesToolStripMenuItem
         '
         Me.RefreshMovieNfoFilesToolStripMenuItem.Name = "RefreshMovieNfoFilesToolStripMenuItem"
-        Me.RefreshMovieNfoFilesToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.RefreshMovieNfoFilesToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.RefreshMovieNfoFilesToolStripMenuItem.Text = "Rebuild Movie nfo files"
         '
         'ToolStripSeparator9
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(269, 6)
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(265, 6)
         '
         'ReloadMovieCacheToolStripMenuItem
         '
         Me.ReloadMovieCacheToolStripMenuItem.Name = "ReloadMovieCacheToolStripMenuItem"
-        Me.ReloadMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.ReloadMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.ReloadMovieCacheToolStripMenuItem.Text = "Reload Movie From Cache"
         '
         'ToolStripSeparator10
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(269, 6)
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(265, 6)
         '
         'ExportMovieListInfoToolStripMenuItem
         '
         Me.ExportMovieListInfoToolStripMenuItem.Name = "ExportMovieListInfoToolStripMenuItem"
-        Me.ExportMovieListInfoToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.ExportMovieListInfoToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.ExportMovieListInfoToolStripMenuItem.Text = "Export Movie List Info"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(269, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(265, 6)
         '
         'DownsizeAllFanartsToSelectedSizeToolStripMenuItem
         '
         Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Name = "DownsizeAllFanartsToSelectedSizeToolStripMenuItem"
-        Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Text = "Downsize all fanarts to selected size"
         '
         'DownsizeAllPostersToSelectedSizeToolStripMenuItem
         '
         Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Name = "DownsizeAllPostersToSelectedSizeToolStripMenuItem"
-        Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
+        Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(268, 22)
         Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Text = "Downsize all posters to selected size"
         '
         'TVShowsToolStripMenuItem
@@ -12284,25 +12286,25 @@ Partial Class Form1
         '
         Me.HToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SearchForNewHomeMoviesToolStripMenuItem, Me.RebuildHomeMovieCacheToolStripMenuItem})
         Me.HToolStripMenuItem.Name = "HToolStripMenuItem"
-        Me.HToolStripMenuItem.Size = New System.Drawing.Size(91, 20)
+        Me.HToolStripMenuItem.Size = New System.Drawing.Size(90, 20)
         Me.HToolStripMenuItem.Text = "Home Movies"
         '
         'SearchForNewHomeMoviesToolStripMenuItem
         '
         Me.SearchForNewHomeMoviesToolStripMenuItem.Name = "SearchForNewHomeMoviesToolStripMenuItem"
-        Me.SearchForNewHomeMoviesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.SearchForNewHomeMoviesToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
         Me.SearchForNewHomeMoviesToolStripMenuItem.Text = "Search for New Home Movies"
         '
         'RebuildHomeMovieCacheToolStripMenuItem
         '
         Me.RebuildHomeMovieCacheToolStripMenuItem.Name = "RebuildHomeMovieCacheToolStripMenuItem"
-        Me.RebuildHomeMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.RebuildHomeMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(232, 22)
         Me.RebuildHomeMovieCacheToolStripMenuItem.Text = "Rebuild Home Movie Cache"
         '
         'ProfilesToolStripMenuItem
         '
         Me.ProfilesToolStripMenuItem.Name = "ProfilesToolStripMenuItem"
-        Me.ProfilesToolStripMenuItem.Size = New System.Drawing.Size(57, 20)
+        Me.ProfilesToolStripMenuItem.Size = New System.Drawing.Size(58, 20)
         Me.ProfilesToolStripMenuItem.Text = "Profiles"
         Me.ProfilesToolStripMenuItem.Visible = false
         '
@@ -12310,7 +12312,7 @@ Partial Class Form1
         '
         Me.FileToolStripMenuItem.Enabled = false
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(36, 20)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         Me.FileToolStripMenuItem.Visible = false
         '
@@ -12334,7 +12336,7 @@ Partial Class Form1
         'ExportToXBMCToolStripMenuItem
         '
         Me.ExportToXBMCToolStripMenuItem.Name = "ExportToXBMCToolStripMenuItem"
-        Me.ExportToXBMCToolStripMenuItem.Size = New System.Drawing.Size(108, 20)
+        Me.ExportToXBMCToolStripMenuItem.Size = New System.Drawing.Size(106, 20)
         Me.ExportToXBMCToolStripMenuItem.Text = "Export To XBMC"
         Me.ExportToXBMCToolStripMenuItem.Visible = false
         '
@@ -12348,25 +12350,25 @@ Partial Class Form1
         'MediaCompanionHelpFileToolStripMenuItem
         '
         Me.MediaCompanionHelpFileToolStripMenuItem.Name = "MediaCompanionHelpFileToolStripMenuItem"
-        Me.MediaCompanionHelpFileToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+        Me.MediaCompanionHelpFileToolStripMenuItem.Size = New System.Drawing.Size(247, 22)
         Me.MediaCompanionHelpFileToolStripMenuItem.Text = "Media Companion Help File"
         '
         'MediaCompanionCodeplexSiteToolStripMenuItem
         '
         Me.MediaCompanionCodeplexSiteToolStripMenuItem.Name = "MediaCompanionCodeplexSiteToolStripMenuItem"
-        Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+        Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(247, 22)
         Me.MediaCompanionCodeplexSiteToolStripMenuItem.Text = "Media Companion Codeplex Site"
         '
         'XBMCMCThreadToolStripMenuItem
         '
         Me.XBMCMCThreadToolStripMenuItem.Name = "XBMCMCThreadToolStripMenuItem"
-        Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+        Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(247, 22)
         Me.XBMCMCThreadToolStripMenuItem.Text = "XBMC MC Thread"
         '
         'MediaCompanionForumToolStripMenuItem
         '
         Me.MediaCompanionForumToolStripMenuItem.Name = "MediaCompanionForumToolStripMenuItem"
-        Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
+        Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(247, 22)
         Me.MediaCompanionForumToolStripMenuItem.Text = "Media Companion Forum"
         Me.MediaCompanionForumToolStripMenuItem.Visible = false
         '
@@ -12390,35 +12392,35 @@ Partial Class Form1
         '
         Me.ContextMenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlayMovieToolStripMenuItem, Me.ToolStripSeparator3, Me.EditMovieToolStripMenuItem1, Me.DToolStripMenuItem, Me.OpenFolderToolStripMenuItem1})
         Me.ContextMenuStrip3.Name = "ContextMenuStrip3"
-        Me.ContextMenuStrip3.Size = New System.Drawing.Size(177, 98)
+        Me.ContextMenuStrip3.Size = New System.Drawing.Size(188, 98)
         '
         'PlayMovieToolStripMenuItem
         '
         Me.PlayMovieToolStripMenuItem.Name = "PlayMovieToolStripMenuItem"
-        Me.PlayMovieToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.PlayMovieToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
         Me.PlayMovieToolStripMenuItem.Text = "Play Movie"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(173, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(184, 6)
         '
         'EditMovieToolStripMenuItem1
         '
         Me.EditMovieToolStripMenuItem1.Name = "EditMovieToolStripMenuItem1"
-        Me.EditMovieToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
+        Me.EditMovieToolStripMenuItem1.Size = New System.Drawing.Size(187, 22)
         Me.EditMovieToolStripMenuItem1.Text = "Change Movie Poster"
         '
         'DToolStripMenuItem
         '
         Me.DToolStripMenuItem.Name = "DToolStripMenuItem"
-        Me.DToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.DToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
         Me.DToolStripMenuItem.Text = "Large Image View"
         '
         'OpenFolderToolStripMenuItem1
         '
         Me.OpenFolderToolStripMenuItem1.Name = "OpenFolderToolStripMenuItem1"
-        Me.OpenFolderToolStripMenuItem1.Size = New System.Drawing.Size(176, 22)
+        Me.OpenFolderToolStripMenuItem1.Size = New System.Drawing.Size(187, 22)
         Me.OpenFolderToolStripMenuItem1.Text = "Open Folder"
         '
         'ListBox8
@@ -12480,7 +12482,7 @@ Partial Class Form1
         'tsLabelEscCancel
         '
         Me.tsLabelEscCancel.Name = "tsLabelEscCancel"
-        Me.tsLabelEscCancel.Size = New System.Drawing.Size(72, 13)
+        Me.tsLabelEscCancel.Size = New System.Drawing.Size(78, 15)
         Me.tsLabelEscCancel.Text = "ESC to cancel"
         '
         'tsStatusLabel
@@ -12503,7 +12505,7 @@ Partial Class Form1
         'tsFileDownloadlabel
         '
         Me.tsFileDownloadlabel.Name = "tsFileDownloadlabel"
-        Me.tsFileDownloadlabel.Size = New System.Drawing.Size(242, 17)
+        Me.tsFileDownloadlabel.Size = New System.Drawing.Size(265, 17)
         Me.tsFileDownloadlabel.Text = "Downloading trailer - Press Control-C to cancel..."
         '
         'tsProgressBarFileDownload
@@ -12566,8 +12568,8 @@ Partial Class Form1
         CType(Me.DataGridViewMovies,System.ComponentModel.ISupportInitialize).EndInit
         Me.Panel1.ResumeLayout(false)
         Me.Panel1.PerformLayout
-        Me.GroupBox21.ResumeLayout(false)
-        Me.GroupBox21.PerformLayout
+        Me.gbGeneralFilters.ResumeLayout(false)
+        Me.gbGeneralFilters.PerformLayout
         Me.trailerdownloadpanel.ResumeLayout(false)
         Me.trailerdownloadpanel.PerformLayout
         Me.SplitContainer2.Panel1.ResumeLayout(false)
@@ -13508,7 +13510,7 @@ End Sub
     Friend WithEvents RadioButtonMissingPosters As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButtonDuplicates As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButtonUnWatched As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox21 As System.Windows.Forms.GroupBox
+    Friend WithEvents gbGeneralFilters As System.Windows.Forms.GroupBox
     Friend WithEvents ComboBoxFilterMovieFormat As System.Windows.Forms.ComboBox
     Friend WithEvents CheckBox_Use_XBMC_Scraper As System.Windows.Forms.CheckBox
     Friend WithEvents RadioButton52 As System.Windows.Forms.RadioButton

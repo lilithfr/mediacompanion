@@ -7,9 +7,11 @@ Public Class clsGridViewMovie
     Public GridSort As String
 
     Public Sub GridviewMovieDesign(ByVal DataGridViewMovies As DataGridView)
+
+        Cursor.Current = Cursors.WaitCursor
+
         Dim imgWatched As New DataGridViewImageColumn()
         Dim inImgWatched As Image = Global.Media_Companion.My.Resources.Resources.DotGray
-        Dim FirstColumnSize As Integer
 
         If DataGridViewMovies.Rows.Count < 1 Then Return
 
@@ -28,6 +30,18 @@ Public Class clsGridViewMovie
         End If
         imgPlot.HeaderText = "Plot"
         imgPlot.Name = "Plot"
+
+        Dim header_style As New DataGridViewCellStyle
+
+        header_style.BackColor = Color.Coral
+        header_style.Font = new Font(DataGridViewMovies.Font, FontStyle.Bold)
+
+        For Each col As DataGridViewcolumn in DataGridViewMovies.Columns
+	        col.HeaderCell.Style = header_style
+        Next
+
+        DataGridViewMovies.EnableHeadersVisualStyles = False
+
 
         'Performance tweak:
         Dim x = Global.Media_Companion.My.Resources.Movie
@@ -140,35 +154,35 @@ Public Class clsGridViewMovie
         DataGridViewMovies.Columns(2).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(2).ReadOnly = True
         DataGridViewMovies.Columns(2).SortMode = DataGridViewColumnSortMode.Automatic
-        DataGridViewMovies.Columns(2).ToolTipText = "File Name"
-        DataGridViewMovies.Columns(2).HeaderText = "File Name"
+        DataGridViewMovies.Columns(2).ToolTipText = "File name"
+        DataGridViewMovies.Columns(2).HeaderText = "File name"
 
         DataGridViewMovies.Columns(3).Width = 226
         DataGridViewMovies.Columns(3).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(3).ReadOnly = True
         DataGridViewMovies.Columns(3).SortMode = DataGridViewColumnSortMode.Automatic
-        DataGridViewMovies.Columns(3).ToolTipText = "Folder Name"
-        DataGridViewMovies.Columns(3).HeaderText = "Folder Name"
+        DataGridViewMovies.Columns(3).ToolTipText = "Folder name"
+        DataGridViewMovies.Columns(3).HeaderText = "Folder name"
 
         DataGridViewMovies.Columns(4).Width = 226
         DataGridViewMovies.Columns(4).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(4).ReadOnly = True
         DataGridViewMovies.Columns(4).SortMode = DataGridViewColumnSortMode.Automatic
-        DataGridViewMovies.Columns(4).ToolTipText = "Movies titles"
+        DataGridViewMovies.Columns(4).ToolTipText = "Movie titles"
         DataGridViewMovies.Columns(4).HeaderText = "Movies"
 
         DataGridViewMovies.Columns(6).Width = 226
         DataGridViewMovies.Columns(6).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(6).ReadOnly = True
         DataGridViewMovies.Columns(6).SortMode = DataGridViewColumnSortMode.Automatic
-        DataGridViewMovies.Columns(6).ToolTipText = "Movies titles"
+        DataGridViewMovies.Columns(6).ToolTipText = "Movie titles"
         DataGridViewMovies.Columns(6).HeaderText = "Movies"
 
         DataGridViewMovies.Columns(7).Width = 35
         DataGridViewMovies.Columns(7).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(7).ReadOnly = True
         DataGridViewMovies.Columns(7).SortMode = DataGridViewColumnSortMode.Automatic
-        DataGridViewMovies.Columns(7).ToolTipText = "Year of the movie"
+        DataGridViewMovies.Columns(7).ToolTipText = "Movie year"
         DataGridViewMovies.Columns(7).HeaderText = "Year"
 
         DataGridViewMovies.Columns(8).Width = 95
@@ -185,7 +199,7 @@ Public Class clsGridViewMovie
         DataGridViewMovies.Columns(10).ToolTipText = "Rating"
         DataGridViewMovies.Columns(10).HeaderText = "Rating"
 
-        DataGridViewMovies.Columns(16).Width = 53
+        DataGridViewMovies.Columns(16).Width = 58
         DataGridViewMovies.Columns(16).Resizable = DataGridViewTriState.True
         DataGridViewMovies.Columns(16).ReadOnly = True
         DataGridViewMovies.Columns(16).SortMode = DataGridViewColumnSortMode.Automatic
@@ -214,6 +228,14 @@ Public Class clsGridViewMovie
         DataGridViewMovies.Columns(25).ToolTipText = "Plot"
         DataGridViewMovies.Columns(25).HeaderText = "P"
 
+        SetDataGridViewMoviesFirstColumnWidth(DataGridViewMovies)
+        Cursor.Current = Cursors.Default
+        'DataGridViewMovies.Refresh()
+    End Sub
+
+    Sub SetDataGridViewMoviesFirstColumnWidth(DataGridViewMovies As DataGridView)
+        Dim FirstColumnSize As Integer
+
         If GridFieldToDisplay2 = "A - Z" Then FirstColumnSize = DataGridViewMovies.Width - 58
         If GridFieldToDisplay2 = "Sort Order" Then FirstColumnSize = DataGridViewMovies.Width - 58
         If GridFieldToDisplay2 = "Movie Year" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(7).Width - 58
@@ -223,14 +245,12 @@ Public Class clsGridViewMovie
         If GridFieldToDisplay2 = "Date Added" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(17).Width - 58
         If GridFieldToDisplay2 = "Votes" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(21).Width - 58
 
-        DataGridViewMovies.Columns(2).Width = FirstColumnSize
-        DataGridViewMovies.Columns(3).Width = FirstColumnSize
-        DataGridViewMovies.Columns(4).Width = FirstColumnSize
-        DataGridViewMovies.Columns(6).Width = FirstColumnSize
-
-
-        '        DataGridViewMovies.Refresh()
-
+        If FirstColumnSize>0 Then
+            DataGridViewMovies.Columns(2).Width = FirstColumnSize
+            DataGridViewMovies.Columns(3).Width = FirstColumnSize
+            DataGridViewMovies.Columns(4).Width = FirstColumnSize
+            DataGridViewMovies.Columns(6).Width = FirstColumnSize
+        End If
     End Sub
 
 
