@@ -1004,7 +1004,7 @@ Public Class Movie
 
         If Preferences.FrodoEnabled Then
             _scrapedMovie.frodoFanartThumbs.Thumbs.AddRange(tmdb.FrodoFanartThumbs.Thumbs)
-            ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count, "Extra Frodo Poster thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
+            ReportProgress("Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count, "Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
         End If
     End Sub
 
