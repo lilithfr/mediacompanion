@@ -10,9 +10,9 @@ Imports YouTubeFisher
 Public Class Movie
 
     Public Const ResolutionsFile = "Resolutions.xml"
-    Const MSG_PREFIX = " - "
-    Const MSG_ERROR = "ERROR!"
-    Const MSG_OK    = "OK"
+    Const MSG_PREFIX    = ""
+    Const MSG_ERROR = "-ERROR! "
+    Const MSG_OK    = "-OK "
     Const MSG_DONT_RESIZE = "Don't resize"
     Const YOU_TUBE_URL_PREFIX = "http://www.youtube.com/watch?v="
 
@@ -567,8 +567,6 @@ Public Class Movie
     Function FormatProgressText(Optional progressText As String=Nothing) As String
         If IsNothing(progressText) then Return Nothing
 
-        progressText = progressText.Trim
-
         If progressText.Length = 0 then Return Nothing
 
         Return MSG_PREFIX + progressText
@@ -586,7 +584,7 @@ Public Class Movie
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
         If Not IsNothing(Title) then
-            ReportProgress( Title, "Scraping Title:- " & Title & vbCrLf )
+            ReportProgress( " " & Title, "Scraping Title:- " & Title & vbCrLf )
         End If
 
         'If PossibleImdb <> "" then
@@ -595,7 +593,7 @@ Public Class Movie
 
         'ReportProgress( String.Format("Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) )
 
-        ReportProgress( "Main body" )
+        ReportProgress( " -Main body" )
    
         Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Preferences.imdbmirror, _imdbCounter)
     End Function
@@ -929,7 +927,7 @@ Public Class Movie
         End If
 
         If TrailerExists Then
-            ReportProgress("Trailer already exists","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
+            ReportProgress("Trailer already exists ","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
             Exit Sub
         End If
 
@@ -974,12 +972,12 @@ Public Class Movie
         End If
 
         If TrailerUrl = "" Then
-            ReportProgress("None found","No trailer URL found" & vbCrLf)
+            ReportProgress("-None found ","No trailer URL found" & vbCrLf)
         Else
             If Utilities.UrlIsValid(TrailerUrl) Then
                 ReportProgress(MSG_OK,"Trailer URL Scraped OK" & vbCrLf)
             Else
-                ReportProgress("Invalid!","!!! The Scraped Trailer URL is either invalid or not available [" & TrailerUrl & "]" & vbCrLf)
+                ReportProgress("-Invalid! ","!!! The Scraped Trailer URL is either invalid or not available [" & TrailerUrl & "]" & vbCrLf)
             End If
         End If
 
@@ -992,7 +990,7 @@ Public Class Movie
 
         If Preferences.FrodoEnabled Then
             _scrapedMovie.frodoPosterThumbs.AddRange(tmdb.FrodoPosterThumbs)
-            ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count, "Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & vbCrLf)
+            ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & " ", "Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & vbCrLf)
         Else
             ReportProgress(,"Frodo extra URL scraping not selected" & vbCrLf)
         End If
@@ -1004,7 +1002,7 @@ Public Class Movie
 
         If Preferences.FrodoEnabled Then
             _scrapedMovie.frodoFanartThumbs.Thumbs.AddRange(tmdb.FrodoFanartThumbs.Thumbs)
-            ReportProgress("Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count, "Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
+            ReportProgress("Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & " ", "Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
         End If
     End Sub
 
@@ -1029,7 +1027,7 @@ Public Class Movie
         If _scrapedMovie.listthumbs.Count > 0 then
             ReportProgress(MSG_OK,"Extra Poster URLs Scraped OK" & vbCrLf)
         Else
-            ReportProgress("None found","No extra Poster URLs found" + NfoPosterScraperInfo & vbCrLf)
+            ReportProgress("-None found ","No extra Poster URLs found" + NfoPosterScraperInfo & vbCrLf)
         End If
     End Sub
 
@@ -1168,7 +1166,7 @@ Public Class Movie
         End if
 
         If Not Utilities.UrlIsValid(TrailerUrl) Then
-            ReportProgress("Invalid Trailer Url detected","Invalid Trailer Url detected")
+            ReportProgress("Invalid Trailer Url detected ","Invalid Trailer Url detected")
             Exit Sub
         End if
 
@@ -1186,7 +1184,7 @@ Public Class Movie
 		If File.Exists(fileName) then
 			If (New IO.FileInfo(fileName)).Length = 0 then
 				File.Delete(fileName)
-                ReportProgress("Zero length trailer deleted","Zero length trailer deleted : [" & fileName & "]")
+                ReportProgress("-Zero length trailer deleted ","Zero length trailer deleted : [" & fileName & "]")
 			End If
 		End If
 	End sub
@@ -1262,6 +1260,10 @@ Public Class Movie
 
 
     Sub DeleteScrapedFiles
+        LoadNFO
+        RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
+        RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
+
         DeleteNFO
         DeleteActors
         DeletePoster
@@ -1368,7 +1370,7 @@ Public Class Movie
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
         Else
-            ReportProgress("Not available","Fanart not available for this movie on TMDb" & vbCrLf)
+            ReportProgress("-Not available ","Fanart not available for this movie on TMDb" & vbCrLf)
         End If
     End Sub
 
@@ -1756,7 +1758,7 @@ Public Class Movie
              
         If rl.trailer Then
             If TrailerExists Then
-                ReportProgress("Trailer already exists","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
+                ReportProgress("Trailer already exists ","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
             Else
                 _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
                 UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
@@ -1833,28 +1835,46 @@ Public Class Movie
         UpdateMovieCache
     End Sub
 
-    Sub UpdateActorCache()
-        If Actors.Count = 0 Then Exit Sub
+    Sub RemoveMovieFromCaches
+        RemoveActorsFromCache
+        RemoveMovieFromCache
+    End Sub
 
-        _parent.ActorDb.RemoveAll(Function(c) c.MovieId = Actors(0).MovieId)
+    Sub UpdateActorCache
+        RemoveActorsFromCache
         _parent.ActorDb.AddRange(Actors)
     End Sub
 
-    Sub UpdateActorCacheFromEmpty()
+    Sub RemoveActorsFromCache
         If Actors.Count = 0 Then Exit Sub
+        RemoveActorsFromCache(Actors(0).MovieId)
+    End Sub
 
-        '_parent.ActorDb.RemoveAll(Function(c) c.MovieId = Actors(0).MovieId)
+    Sub RemoveActorsFromCache(MovieId)
+        _parent.ActorDb.RemoveAll(Function(c) c.MovieId = MovieId)
+    End Sub
+
+    Sub UpdateActorCacheFromEmpty
+        If Actors.Count = 0 Then Exit Sub
         _parent._tmpActorDb.AddRange(Actors)
     End Sub
 
-    Sub UpdateMovieCache()
-        If _movieCache.fullpathandfilename = "" Then Exit Sub
+    Sub UpdateMovieCache
+        RemoveMovieFromCache
 
-        _parent.MovieCache.RemoveAll(Function(c) c.fullpathandfilename = _movieCache.fullpathandfilename)
         _parent.MovieCache.Add(_movieCache)
-
-        _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = _movieCache.fullpathandfilename)
         _parent.Data_GridViewMovieCache.Add(New Data_GridViewMovie(_movieCache))
+    End Sub
+ 
+    Sub RemoveMovieFromCache
+        RemoveMovieFromCache(_movieCache.fullpathandfilename)
+    End Sub
+ 
+    Sub RemoveMovieFromCache(fullpathandfilename)
+        If fullpathandfilename = "" Then Exit Sub
+
+        _parent.MovieCache             .RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
+        _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
     End Sub
  
   
