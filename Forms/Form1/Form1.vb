@@ -22467,4 +22467,8 @@ End Sub
         DataDirty = true
         btn_movTableSave.Enabled = DataDirty
     End Sub
+
+    Private Sub PictureBox6_Click(sender As System.Object, e As System.EventArgs) Handles PictureBox6.Click
+
+    End Sub
 End Class

@@ -545,7 +545,7 @@ Partial Public Class Form1
                     TextBox18.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
-                    tempname = actor.actorname.Replace(" ", "_") & ".jpg"
+                    tempname = actor.actorname.Replace(" ", "_") & ".tbn"
 
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
