@@ -11067,36 +11067,46 @@ Public Class Form1
                         If Convert.ToInt32(TextBox35.Text) > 0 Then
                             seconds = Convert.ToInt32(TextBox35.Text)
                         End If
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
 
+                    Dim proc_arguments As String = ""
+                    Dim myProcess As Process = New Process
+                    myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                    myProcess.StartInfo.CreateNoWindow = False
+                    myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
+                    If Preferences.EdenEnabled = True Then
                         If IO.File.Exists(thumbpathandfilename) Then
                             PictureBox14.Image = Nothing
                             IO.File.Delete(thumbpathandfilename)
                         End If
-
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-
-
-                        Dim myProcess As Process = New Process
-                        myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        myProcess.StartInfo.CreateNoWindow = False
-                        myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
-                        Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                        proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                         myProcess.StartInfo.Arguments = proc_arguments
                         myProcess.Start()
                         myProcess.WaitForExit()
-
-
-                        If System.IO.File.Exists(thumbpathandfilename) Then
-                            Dim bitmap2 As New Bitmap(thumbpathandfilename)
-                            Dim bitmap3 As New Bitmap(bitmap2)
-                            bitmap2.Dispose()
-                            PictureBox14.Image = bitmap3
-                            tv_PictureBoxLeft.Image = bitmap3
+                    End If
+                    If Preferences.FrodoEnabled = True Then
+                        thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
+                        If IO.File.Exists(thumbpathandfilename) Then
+                            PictureBox14.Image = Nothing
+                            IO.File.Delete(thumbpathandfilename)
                         End If
-                        Exit For
+                        proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                        myProcess.StartInfo.Arguments = proc_arguments
+                        myProcess.Start()
+                        myProcess.WaitForExit()
+                    End If
+
+                    If System.IO.File.Exists(thumbpathandfilename) Then
+                        Dim bitmap2 As New Bitmap(thumbpathandfilename)
+                        Dim bitmap3 As New Bitmap(bitmap2)
+                        bitmap2.Dispose()
+                        PictureBox14.Image = bitmap3
+                        tv_PictureBoxLeft.Image = bitmap3
+                    End If
+                    Exit For
                     End If
                 Next
                 messbox.Close()
