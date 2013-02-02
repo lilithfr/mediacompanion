@@ -1967,10 +1967,10 @@ Partial Class Form1
         Me.ButtonSearchNew.BackgroundImage = Global.Media_Companion.My.Resources.Resources.NewMovies
         Me.ButtonSearchNew.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ButtonSearchNew.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonSearchNew.Location = New System.Drawing.Point(199, 74)
+        Me.ButtonSearchNew.Location = New System.Drawing.Point(191, 74)
         Me.ButtonSearchNew.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonSearchNew.Name = "ButtonSearchNew"
-        Me.ButtonSearchNew.Size = New System.Drawing.Size(122, 38)
+        Me.ButtonSearchNew.Size = New System.Drawing.Size(130, 38)
         Me.ButtonSearchNew.TabIndex = 179
         Me.ButtonSearchNew.Text = "Search New "
         Me.ButtonSearchNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2711,147 +2711,147 @@ Partial Class Form1
         'ToolStripMenuItem15
         '
         Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
-        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem15.Text = "Actors"
         '
         'ToolStripMenuItem8
         '
         Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
-        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem8.Text = "Cert"
         '
         'ToolStripMenuItem7
         '
         Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem7.Text = "Credits"
         '
         'ToolStripMenuItem6
         '
         Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem6.Text = "Director"
         '
         'ToolStripMenuItem9
         '
         Me.ToolStripMenuItem9.Name = "ToolStripMenuItem9"
-        Me.ToolStripMenuItem9.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem9.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem9.Text = "Genre"
         '
         'ToolStripMenuItem10
         '
         Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
-        Me.ToolStripMenuItem10.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem10.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem10.Text = "Outline"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem4.Text = "Plot"
         '
         'ToolStripMenuItem19
         '
         Me.ToolStripMenuItem19.Name = "ToolStripMenuItem19"
-        Me.ToolStripMenuItem19.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem19.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem19.Text = "Rating"
         '
         'ToolStripMenuItem11
         '
         Me.ToolStripMenuItem11.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem12, Me.ToolStripMenuItem13})
         Me.ToolStripMenuItem11.Name = "ToolStripMenuItem11"
-        Me.ToolStripMenuItem11.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem11.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem11.Text = "Runtime"
         '
         'ToolStripMenuItem12
         '
         Me.ToolStripMenuItem12.Name = "ToolStripMenuItem12"
-        Me.ToolStripMenuItem12.Size = New System.Drawing.Size(137, 22)
+        Me.ToolStripMenuItem12.Size = New System.Drawing.Size(126, 22)
         Me.ToolStripMenuItem12.Text = "From IMDB"
         '
         'ToolStripMenuItem13
         '
         Me.ToolStripMenuItem13.Name = "ToolStripMenuItem13"
-        Me.ToolStripMenuItem13.Size = New System.Drawing.Size(137, 22)
+        Me.ToolStripMenuItem13.Size = New System.Drawing.Size(126, 22)
         Me.ToolStripMenuItem13.Text = "From File"
         '
         'ToolStripMenuItem21
         '
         Me.ToolStripMenuItem21.Name = "ToolStripMenuItem21"
-        Me.ToolStripMenuItem21.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem21.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem21.Text = "Stars"
         '
         'ToolStripMenuItem14
         '
         Me.ToolStripMenuItem14.Name = "ToolStripMenuItem14"
-        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem14.Text = "Studio"
         '
         'ToolStripMenuItem5
         '
         Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem5.Text = "Tagline"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem3.Text = "Title"
         '
         'tsmiTMDbSetName
         '
         Me.tsmiTMDbSetName.Name = "tsmiTMDbSetName"
-        Me.tsmiTMDbSetName.Size = New System.Drawing.Size(161, 22)
+        Me.tsmiTMDbSetName.Size = New System.Drawing.Size(150, 22)
         Me.tsmiTMDbSetName.Text = "TMDb Set Name"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem1.Text = "Trailer"
         '
         'ToolStripMenuItem20
         '
         Me.ToolStripMenuItem20.Name = "ToolStripMenuItem20"
-        Me.ToolStripMenuItem20.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem20.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem20.Text = "Votes"
         '
         'YearToolStripMenuItem
         '
         Me.YearToolStripMenuItem.Name = "YearToolStripMenuItem"
-        Me.YearToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
+        Me.YearToolStripMenuItem.Size = New System.Drawing.Size(150, 22)
         Me.YearToolStripMenuItem.Text = "Year"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(158, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(147, 6)
         '
         'ToolStripMenuItem16
         '
         Me.ToolStripMenuItem16.Name = "ToolStripMenuItem16"
-        Me.ToolStripMenuItem16.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem16.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem16.Text = "Backdrop"
         Me.ToolStripMenuItem16.Visible = false
         '
         'ToolStripMenuItem17
         '
         Me.ToolStripMenuItem17.Name = "ToolStripMenuItem17"
-        Me.ToolStripMenuItem17.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem17.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem17.Text = "Poster"
         Me.ToolStripMenuItem17.Visible = false
         '
         'ToolStripMenuItem18
         '
         Me.ToolStripMenuItem18.Name = "ToolStripMenuItem18"
-        Me.ToolStripMenuItem18.Size = New System.Drawing.Size(161, 22)
+        Me.ToolStripMenuItem18.Size = New System.Drawing.Size(150, 22)
         Me.ToolStripMenuItem18.Text = "Media Tags"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(158, 6)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(147, 6)
         '
         'ToolStripSeparator23
         '
@@ -12150,69 +12150,69 @@ Partial Class Form1
         'SearchForNewMoviesToolStripMenuItem
         '
         Me.SearchForNewMoviesToolStripMenuItem.Name = "SearchForNewMoviesToolStripMenuItem"
-        Me.SearchForNewMoviesToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.SearchForNewMoviesToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.SearchForNewMoviesToolStripMenuItem.Text = "Search for New Movies"
         '
         'BatchRescraperToolStripMenuItem
         '
         Me.BatchRescraperToolStripMenuItem.Name = "BatchRescraperToolStripMenuItem"
-        Me.BatchRescraperToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.BatchRescraperToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.BatchRescraperToolStripMenuItem.Text = "Batch Rescraper Wizard"
         '
         'ToolStripSeparator8
         '
         Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(281, 6)
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(269, 6)
         '
         'ToolStripMenuItemRebuildMovieCaches
         '
         Me.ToolStripMenuItemRebuildMovieCaches.Name = "ToolStripMenuItemRebuildMovieCaches"
-        Me.ToolStripMenuItemRebuildMovieCaches.Size = New System.Drawing.Size(284, 22)
+        Me.ToolStripMenuItemRebuildMovieCaches.Size = New System.Drawing.Size(272, 22)
         Me.ToolStripMenuItemRebuildMovieCaches.Text = "Refresh All Movies"
         '
         'RefreshMovieNfoFilesToolStripMenuItem
         '
         Me.RefreshMovieNfoFilesToolStripMenuItem.Name = "RefreshMovieNfoFilesToolStripMenuItem"
-        Me.RefreshMovieNfoFilesToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.RefreshMovieNfoFilesToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.RefreshMovieNfoFilesToolStripMenuItem.Text = "Rebuild Movie nfo files"
         '
         'ToolStripSeparator9
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(281, 6)
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(269, 6)
         '
         'ReloadMovieCacheToolStripMenuItem
         '
         Me.ReloadMovieCacheToolStripMenuItem.Name = "ReloadMovieCacheToolStripMenuItem"
-        Me.ReloadMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.ReloadMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.ReloadMovieCacheToolStripMenuItem.Text = "Reload Movie From Cache"
         '
         'ToolStripSeparator10
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(281, 6)
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(269, 6)
         '
         'ExportMovieListInfoToolStripMenuItem
         '
         Me.ExportMovieListInfoToolStripMenuItem.Name = "ExportMovieListInfoToolStripMenuItem"
-        Me.ExportMovieListInfoToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.ExportMovieListInfoToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.ExportMovieListInfoToolStripMenuItem.Text = "Export Movie List Info"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(281, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(269, 6)
         '
         'DownsizeAllFanartsToSelectedSizeToolStripMenuItem
         '
         Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Name = "DownsizeAllFanartsToSelectedSizeToolStripMenuItem"
-        Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem.Text = "Downsize all fanarts to selected size"
         '
         'DownsizeAllPostersToSelectedSizeToolStripMenuItem
         '
         Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Name = "DownsizeAllPostersToSelectedSizeToolStripMenuItem"
-        Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(284, 22)
+        Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Size = New System.Drawing.Size(272, 22)
         Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem.Text = "Downsize all posters to selected size"
         '
         'TVShowsToolStripMenuItem
@@ -12227,78 +12227,78 @@ Partial Class Form1
         '
         Me.SearchForNewEpisodesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SearchALLForNewEpisodesToolStripMenuItem})
         Me.SearchForNewEpisodesToolStripMenuItem.Name = "SearchForNewEpisodesToolStripMenuItem"
-        Me.SearchForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.SearchForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.SearchForNewEpisodesToolStripMenuItem.Text = "Search for New Episodes"
         '
         'SearchALLForNewEpisodesToolStripMenuItem
         '
         Me.SearchALLForNewEpisodesToolStripMenuItem.Name = "SearchALLForNewEpisodesToolStripMenuItem"
-        Me.SearchALLForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(240, 22)
+        Me.SearchALLForNewEpisodesToolStripMenuItem.Size = New System.Drawing.Size(236, 22)
         Me.SearchALLForNewEpisodesToolStripMenuItem.Text = "Search ALL for New Episodes"
         '
         'TVShowBrowserToolStripMenuItem
         '
         Me.TVShowBrowserToolStripMenuItem.Enabled = false
         Me.TVShowBrowserToolStripMenuItem.Name = "TVShowBrowserToolStripMenuItem"
-        Me.TVShowBrowserToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.TVShowBrowserToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.TVShowBrowserToolStripMenuItem.Text = "TV Show Browser"
         Me.TVShowBrowserToolStripMenuItem.Visible = false
         '
         'CheckRootsForToolStripMenuItem
         '
         Me.CheckRootsForToolStripMenuItem.Name = "CheckRootsForToolStripMenuItem"
-        Me.CheckRootsForToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.CheckRootsForToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.CheckRootsForToolStripMenuItem.Text = "Check Roots for New TV Shows"
         '
         'TV_BatchRescrapeWizardToolStripMenuItem
         '
         Me.TV_BatchRescrapeWizardToolStripMenuItem.Name = "TV_BatchRescrapeWizardToolStripMenuItem"
-        Me.TV_BatchRescrapeWizardToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.TV_BatchRescrapeWizardToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.TV_BatchRescrapeWizardToolStripMenuItem.Text = "Batch Rescraper Wizard"
         '
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(246, 6)
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(242, 6)
         '
         'RefreshShowsToolStripMenuItem
         '
         Me.RefreshShowsToolStripMenuItem.Name = "RefreshShowsToolStripMenuItem"
-        Me.RefreshShowsToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.RefreshShowsToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.RefreshShowsToolStripMenuItem.Text = "Refresh All TV Shows"
         '
         'ToolStripSeparator15
         '
         Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
-        Me.ToolStripSeparator15.Size = New System.Drawing.Size(246, 6)
+        Me.ToolStripSeparator15.Size = New System.Drawing.Size(242, 6)
         '
         'ReloadShowCacheToolStripMenuItem
         '
         Me.ReloadShowCacheToolStripMenuItem.Name = "ReloadShowCacheToolStripMenuItem"
-        Me.ReloadShowCacheToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.ReloadShowCacheToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.ReloadShowCacheToolStripMenuItem.Text = "Reload TV Show Cache"
         '
         'ToolStripSeparator16
         '
         Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
-        Me.ToolStripSeparator16.Size = New System.Drawing.Size(246, 6)
+        Me.ToolStripSeparator16.Size = New System.Drawing.Size(242, 6)
         '
         'ExportTVShowInfoToolStripMenuItem
         '
         Me.ExportTVShowInfoToolStripMenuItem.Name = "ExportTVShowInfoToolStripMenuItem"
-        Me.ExportTVShowInfoToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.ExportTVShowInfoToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.ExportTVShowInfoToolStripMenuItem.Text = "Export TV Show Info"
         '
         'ToolStripSeparator14
         '
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(246, 6)
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(242, 6)
         '
         'SearchForMissingEpisodesToolStripMenuItem
         '
         Me.SearchForMissingEpisodesToolStripMenuItem.CheckOnClick = true
         Me.SearchForMissingEpisodesToolStripMenuItem.Name = "SearchForMissingEpisodesToolStripMenuItem"
-        Me.SearchForMissingEpisodesToolStripMenuItem.Size = New System.Drawing.Size(249, 22)
+        Me.SearchForMissingEpisodesToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.SearchForMissingEpisodesToolStripMenuItem.Text = "Display Missing Episodes"
         '
         'HToolStripMenuItem
@@ -12311,13 +12311,13 @@ Partial Class Form1
         'SearchForNewHomeMoviesToolStripMenuItem
         '
         Me.SearchForNewHomeMoviesToolStripMenuItem.Name = "SearchForNewHomeMoviesToolStripMenuItem"
-        Me.SearchForNewHomeMoviesToolStripMenuItem.Size = New System.Drawing.Size(247, 22)
+        Me.SearchForNewHomeMoviesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
         Me.SearchForNewHomeMoviesToolStripMenuItem.Text = "Search for New Home Movies"
         '
         'RebuildHomeMovieCacheToolStripMenuItem
         '
         Me.RebuildHomeMovieCacheToolStripMenuItem.Name = "RebuildHomeMovieCacheToolStripMenuItem"
-        Me.RebuildHomeMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(247, 22)
+        Me.RebuildHomeMovieCacheToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
         Me.RebuildHomeMovieCacheToolStripMenuItem.Text = "Rebuild Home Movie Cache"
         '
         'ProfilesToolStripMenuItem
@@ -12369,25 +12369,25 @@ Partial Class Form1
         'MediaCompanionHelpFileToolStripMenuItem
         '
         Me.MediaCompanionHelpFileToolStripMenuItem.Name = "MediaCompanionHelpFileToolStripMenuItem"
-        Me.MediaCompanionHelpFileToolStripMenuItem.Size = New System.Drawing.Size(260, 22)
+        Me.MediaCompanionHelpFileToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
         Me.MediaCompanionHelpFileToolStripMenuItem.Text = "Media Companion Help File"
         '
         'MediaCompanionCodeplexSiteToolStripMenuItem
         '
         Me.MediaCompanionCodeplexSiteToolStripMenuItem.Name = "MediaCompanionCodeplexSiteToolStripMenuItem"
-        Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(260, 22)
+        Me.MediaCompanionCodeplexSiteToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
         Me.MediaCompanionCodeplexSiteToolStripMenuItem.Text = "Media Companion Codeplex Site"
         '
         'XBMCMCThreadToolStripMenuItem
         '
         Me.XBMCMCThreadToolStripMenuItem.Name = "XBMCMCThreadToolStripMenuItem"
-        Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(260, 22)
+        Me.XBMCMCThreadToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
         Me.XBMCMCThreadToolStripMenuItem.Text = "XBMC MC Thread"
         '
         'MediaCompanionForumToolStripMenuItem
         '
         Me.MediaCompanionForumToolStripMenuItem.Name = "MediaCompanionForumToolStripMenuItem"
-        Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(260, 22)
+        Me.MediaCompanionForumToolStripMenuItem.Size = New System.Drawing.Size(248, 22)
         Me.MediaCompanionForumToolStripMenuItem.Text = "Media Companion Forum"
         Me.MediaCompanionForumToolStripMenuItem.Visible = false
         '
@@ -12527,8 +12527,8 @@ Partial Class Form1
         'tsFileDownloadlabel
         '
         Me.tsFileDownloadlabel.Name = "tsFileDownloadlabel"
-        Me.tsFileDownloadlabel.Size = New System.Drawing.Size(242, 17)
-        Me.tsFileDownloadlabel.Text = "Downloading trailer - Press Control-C to cancel..."
+        Me.tsFileDownloadlabel.Size = New System.Drawing.Size(230, 17)
+        Me.tsFileDownloadlabel.Text = "Downloading trailer - Press Control-C to cancel"
         '
         'tsProgressBarFileDownload
         '
