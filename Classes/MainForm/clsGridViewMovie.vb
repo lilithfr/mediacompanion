@@ -246,12 +246,15 @@ Public Class clsGridViewMovie
         If GridFieldToDisplay2 = "Date Added" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(17).Width - 58
         If GridFieldToDisplay2 = "Votes" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(21).Width - 58
 
-        If FirstColumnSize>0 Then
-            DataGridViewMovies.Columns(2).Width = FirstColumnSize
-            DataGridViewMovies.Columns(3).Width = FirstColumnSize
-            DataGridViewMovies.Columns(4).Width = FirstColumnSize
-            DataGridViewMovies.Columns(6).Width = FirstColumnSize
-        End If
+        Try
+            If FirstColumnSize>0 Then
+                DataGridViewMovies.Columns(2).Width = FirstColumnSize
+                DataGridViewMovies.Columns(3).Width = FirstColumnSize
+                DataGridViewMovies.Columns(4).Width = FirstColumnSize
+                DataGridViewMovies.Columns(6).Width = FirstColumnSize
+            End If
+        Catch
+        End Try
     End Sub
 
 
