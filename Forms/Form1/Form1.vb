@@ -3107,6 +3107,14 @@ Public Class Form1
             ComboBoxFilterMovieFormat.SelectedIndex = 0   'set filename filetype filter back to all
             ComboBoxFilterGenre.SelectedIndex = 0
             Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+
+            Try
+                If DataGridViewMovies.SelectedRows.Count = 1 Then
+                    If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
+                End If
+            Catch
+            End Try
+
             DisplayMovie()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -4104,13 +4112,6 @@ Public Class Form1
 
 
     Public Sub DisplayMovie()
-
-        Try
-            If DataGridViewMovies.SelectedRows.Count = 1 Then
-                If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
-            End If
-        Catch
-        End Try
 
         'Clear all fields of the movie
         MovieFormInit()

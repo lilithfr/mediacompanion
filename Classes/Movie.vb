@@ -62,6 +62,8 @@ Public Class Movie
     Private _parent               As Movies
     Private _possibleImdb         As String = "-1"
     Private _youTubeTrailer       As YouTubeVideoFile
+    Private _nfoPathAndFilename   As String = ""
+
 
     Shared Private _availableHeightResolutions As List(Of Integer)
 
@@ -74,12 +76,37 @@ Public Class Movie
     Property TrailerUrl           As String = ""
     Property PosterUrl            As String = ""
     Property Actions As New ScrapeActions
-    Property nfopathandfilename As String = ""
+'    Property nfopathandfilename As String = ""
+    Property RenamedBaseName As String = ""
 
 #End Region 'Read-write properties
 
 
     #Region "Read-only properties"
+
+
+    ReadOnly Property NfoPathAndFilename As String
+        Get
+           If RenamedBaseName <>"" Then Return RenamedBaseName & ".nfo"
+
+           If _nfoPathAndFilename = "" Then
+                Dim movieStackName = mediapathandfilename
+                Dim firstPart As Boolean
+
+                _nfoPathAndFilename = mediapathandfilename.Replace(Extension, ".nfo")
+
+                If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
+                    If Preferences.namemode <> "1" Then
+                        _nfoPathAndFilename = nfopath & movieStackName & ".nfo"
+                    End If
+                End If
+            End If
+
+            Return _nfoPathAndFilename
+        End Get
+    End Property
+
+
 
     Public ReadOnly Property YouTubeTrailer As YouTubeVideoFile
         Get
@@ -202,6 +229,51 @@ Public Class Movie
     End Property
 
 
+    ReadOnly Property ActualBaseName As String
+        Get
+            Dim BaseName = mediapathandfilename.Replace(Extension,"")
+
+            'Long name
+            If File.Exists(BaseName & ".nfo") Then Return BaseName
+
+            Dim movieStackName = mediapathandfilename
+            Dim firstPart As Boolean
+
+            Utilities.isMultiPartMedia(movieStackName, False, firstPart)
+
+            'Short name
+            If File.Exists(nfopath & movieStackName & ".nfo") Then Return nfopath & movieStackName
+
+            Return "unknown"
+        End Get
+    End Property
+
+
+    ReadOnly Property ActualNfoPathAndFilename As String
+        Get
+            Return ActualBaseName & ".nfo"
+        End Get
+    End Property
+
+    Public ReadOnly Property ActualPosterPath As String
+        Get
+            Dim s = Preferences.GetPosterPath(NfoPathPrefName)
+
+            If File.Exists(s) Then Return s
+
+            Return ActualBaseName & ".tbn"
+        End Get 
+    End Property
+
+    Public ReadOnly Property ActualFanartPath As String
+        Get
+            Dim s = Preferences.GetFanartPath(NfoPathPrefName)
+
+            If File.Exists(s) Then Return s
+
+            Return ActualBaseName & "-fanart.jpg"
+        End Get 
+    End Property
 
 
     ReadOnly Property nfopath As String
@@ -475,7 +547,7 @@ Public Class Movie
         Me.New
         _parent              = parent
         mediapathandfilename = FullName
-        nfopathandfilename = mediapathandfilename.Replace(Extension, ".nfo")
+      '  nfopathandfilename = mediapathandfilename.Replace(Extension, ".nfo")
     End Sub
     #End Region 'Constructors
 
@@ -642,7 +714,7 @@ Public Class Movie
     End Sub
 
     Sub LoadNFO
-        _scrapedMovie = _nfoFunction.mov_NfoLoadFull(NfoPathPrefName)
+        _scrapedMovie = _nfoFunction.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
     End Sub
 
     Sub SaveNFO
@@ -1264,11 +1336,11 @@ Public Class Movie
         RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
         RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
 
-        DeleteNFO
         DeleteActors
         DeletePoster
         DeleteFanart
         DeleteTrailer
+        DeleteNFO
     End Sub
 
     Sub DeleteActors
@@ -1292,17 +1364,19 @@ Public Class Movie
 
 
     Sub DeleteNFO
-        Utilities.SafeDeleteFile(NfoPathPrefName)
+        Utilities.SafeDeleteFile(ActualNfoPathAndFilename)
     End Sub
 
     Sub DeletePoster
         DeleteFile(PosterPath)
         DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
+        DeleteFile(ActualPosterPath)
     End Sub
 
 
     Sub DeleteFanart
         DeleteFile(FanartPath)
+        DeleteFile(ActualFanartPath)
     End Sub
 
 
@@ -1694,7 +1768,10 @@ Public Class Movie
 
                 'update the new movie structure with the new data
                 movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
-                movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
+
+                RenamedBaseName = targetNfoFile
+
+        '        movieFileInfo.nfopathandfilename = targetNfoFile & ".nfo"           'this is the new nfo path (yet to be created)
        '         movieFileInfo.Title = newfilename                                   'new title
             Else
                 log &= String.Format("A file exists with the target filename of '{0}' - RENAME SKIPPED{1}", newfilename, vbCrLf)
