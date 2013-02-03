@@ -381,7 +381,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End If
 
         If actualpathandfilename = "" Then
-            If tempfilename.IndexOf("movie.nfo") <> -1 Then
+            If tempfilename.IndexOf("movie.nfo") = -1 Then
                 Dim possiblemovies(1000) As String
                 Dim possiblemoviescount As Integer = 0
                 For f = 0 To 23
