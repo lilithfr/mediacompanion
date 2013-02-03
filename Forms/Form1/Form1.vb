@@ -34,7 +34,7 @@ Public Class Form1
 
     Public Shared blnAbortFileDownload As Boolean
     Public Shared ReadOnly countLock = New Object
-
+    
     #End Region 'Movie scraping objects
 
     Public DataDirty As Boolean
@@ -1392,6 +1392,7 @@ Public Class Form1
     'End Sub
 
     Public Sub mov_FormPopulate()
+
         If Not IsNothing(workingMovieDetails) Then
             If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
                 Try
@@ -3868,6 +3869,16 @@ Public Class Form1
                 displaywizard.ShowDialog
 
                 If rescrapeList.activate Then
+
+                    _rescrapeList.FullPathAndFilenames.Clear
+
+                    For Each row As DataGridViewRow In DataGridViewMovies.Rows
+
+                        Dim m As Data_GridViewMovie = row.DataBoundItem
+
+                        _rescrapeList.FullPathAndFilenames.Add(m.fullpathandfilename)
+                    Next
+
                     RunBackgroundMovieScrape("BatchRescrape")
                 End If
 
@@ -4094,6 +4105,13 @@ Public Class Form1
 
     Public Sub DisplayMovie()
 
+        Try
+            If DataGridViewMovies.SelectedRows.Count = 1 Then
+                If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
+            End If
+        Catch
+        End Try
+
         'Clear all fields of the movie
         MovieFormInit()
 
@@ -4102,9 +4120,6 @@ Public Class Form1
             Dim MultipleMoviesSelected As Boolean = True
             Dim needtoload As Boolean = False
             Dim done As Boolean = False
-
-
-
 
             If DataGridViewMovies.SelectedRows.Count > 1 Then
                 MultipleMoviesSelected = True
@@ -4251,22 +4266,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub txt_titlesearch_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles txt_titlesearch.KeyUp
-        Try
-            If filterOverride = False Then
-                If txt_titlesearch.Text.Length > 0 Then
-                    txt_titlesearch.BackColor = Color.DarkOrange
-                Else
-                    txt_titlesearch.BackColor = Color.White
-                End If
-                txt_titlesearch.Refresh()
-                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
-                DisplayMovie()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
     Private Sub TextBox_GenreFilter_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
         Try
@@ -15735,7 +15734,23 @@ Public Class Form1
     End Sub
 
 
-    Private Sub txt_titlesearch_ModifiedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txt_titlesearch.ModifiedChanged
+    'Private Sub txt_titlesearch_ModifiedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txt_titlesearch.ModifiedChanged
+    '    Try
+    '        If filterOverride = False Then
+    '            If txt_titlesearch.Text.Length > 0 Then
+    '                txt_titlesearch.BackColor = Color.DarkOrange
+    '            Else
+    '                txt_titlesearch.BackColor = Color.White
+    '            End If
+    '            txt_titlesearch.Refresh()
+    '            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
+
+    Private Sub txt_titlesearch_KeyUp(ByVal sender As Object, ByVal e As Object) Handles txt_titlesearch.KeyUp,txt_titlesearch.ModifiedChanged
         Try
             If filterOverride = False Then
                 If txt_titlesearch.Text.Length > 0 Then
@@ -15743,13 +15758,15 @@ Public Class Form1
                 Else
                     txt_titlesearch.BackColor = Color.White
                 End If
-                txt_titlesearch.Refresh()
-                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
+                txt_titlesearch.Refresh
+                Mc.clsGridViewMovie.mov_FiltersAndSortApply
+                DisplayMovie
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 
     Private Sub mov_TableViewSetup()
         Preferences.tableview.Clear()
@@ -19113,17 +19130,17 @@ Public Class Form1
                                                             End If
                                                         End If
                                                     Case "actor"
-                                                            If tvBatchList.epActor = True And Preferences.episodeacrorsource = "tvdb" Then
-                                                                Dim actors As XmlNode = Nothing
-                                                                For Each actorl In thisresult.ChildNodes
-                                                                    Select Case actorl.name
-                                                                        Case "name"
-                                                                            Dim newactor As New str_MovieActors(SetDefaults)
-                                                                            newactor.actorname = actorl.innertext
-                                                                            newactors.Add(newactor)
-                                                                    End Select
-                                                                Next
-                                                            End If
+                                                        If tvBatchList.epActor = True And Preferences.episodeacrorsource = "tvdb" Then
+                                                            Dim actors As XmlNode = Nothing
+                                                            For Each actorl In thisresult.ChildNodes
+                                                                Select Case actorl.name
+                                                                    Case "name"
+                                                                        Dim newactor As New str_MovieActors(SetDefaults)
+                                                                        newactor.actorname = actorl.innertext
+                                                                        newactors.Add(newactor)
+                                                                End Select
+                                                            Next
+                                                        End If
                                                 End Select
                                             Next
                                             'newepisode.playcount = "0"
@@ -22151,14 +22168,14 @@ End Sub
     Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
         Select Case action
-            Case "BatchRescrape" : Return filteredList.Count > 1
-            Case "ChangeMovie" : Return False
-            Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "BatchRescrape"          : Return _rescrapeList.FullPathAndFilenames.Count>1               ' filteredList.Count > 1
+            Case "ChangeMovie"            : Return False
+            Case "RescrapeAll"            : Return _rescrapeList.FullPathAndFilenames.Count>1
             Case "RescrapeDisplayedMovie" : Return False
-            Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
-            Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
-            Case "SearchForNewMovies" : Return True
-            Case "RebuildCaches" : Return False
+            Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
+            Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
+            Case "SearchForNewMovies"     : Return True
+            Case "RebuildCaches"          : Return False
         End Select
 
         MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
@@ -22182,7 +22199,7 @@ End Sub
 
 
     Public Sub BatchRescrape()
-        oMovies.BatchRescrapeSpecific(filteredList, rescrapeList)
+        oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
     End Sub
 
 

@@ -314,14 +314,14 @@ Public Class Movies
     End Sub
 
 
-    Sub BatchRescrapeSpecific(filteredList As List(Of ComboList), rl As RescrapeList)
+    Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
         Dim i=0
-        For Each item In filteredList
+        For Each item In NfoFilenames
             i += 1
-            PercentDone = CalcPercentDone(i,filteredList.Count)
-            ReportProgress("Batch Rescraping " & i & " of " & filteredList.Count)
+            PercentDone = CalcPercentDone(i,NfoFilenames.Count)
+            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count)
 
-            Dim movie = New Movie(Utilities.GetFileName(item.fullpathandfilename),Me)
+            Dim movie = New Movie(Utilities.GetFileName(item),Me)
 
             AddMovieEventHandlers   ( movie )
             movie.RescrapeSpecific  ( rl    )
