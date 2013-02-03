@@ -718,6 +718,8 @@ Public Class Movie
     End Sub
 
     Sub SaveNFO
+        RemoveMovieFromCaches
+        DeleteNFO
         _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
     End Sub
 
@@ -1270,9 +1272,11 @@ Public Class Movie
     End Sub
  
     Private Sub DoDownloadPoster
-        If Not Preferences.overwritethumbs And File.Exists(PosterPath) Then
+        If Not Preferences.overwritethumbs And File.Exists(ActualPosterPath) Then
             Exit Sub
         End If
+
+        DeletePoster
 
         Dim validUrl = False
 
@@ -1426,10 +1430,12 @@ Public Class Movie
     End Sub
 
     Sub DoDownloadFanart
-        If Not Preferences.overwritethumbs and File.Exists(FanartPath) Then
+        If Not Preferences.overwritethumbs and File.Exists(ActualFanartPath) Then
             ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
             Exit Sub
         End If
+
+        DeleteFanart
 
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
@@ -1950,8 +1956,14 @@ Public Class Movie
     Sub RemoveMovieFromCache(fullpathandfilename)
         If fullpathandfilename = "" Then Exit Sub
 
-        _parent.MovieCache             .RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
-        _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
+        Dim key=fullpathandfilename
+
+        If _parent.MovieCache.RemoveAll(Function(c) c.fullpathandfilename = key) = 0 Then
+            key = ActualNfoPathAndFilename
+            _parent.MovieCache.RemoveAll(Function(c) c.fullpathandfilename = key)
+        End If
+
+        _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = key)
     End Sub
  
   

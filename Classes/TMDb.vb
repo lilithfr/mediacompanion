@@ -404,8 +404,14 @@ Public Class TMDb
                     Continue While
                 End If
 
-                _movieImages = _api.GetMovieImages  (_movie.id)
-                _trailers    = _api.GetMovieTrailers(_movie.id)
+                Try
+                    _movieImages = _api.GetMovieImages  (_movie.id)
+                Catch
+                End Try
+                Try
+                    _trailers    = _api.GetMovieTrailers(_movie.id)
+                Catch
+                End Try
                 ok = True
             End While
             
