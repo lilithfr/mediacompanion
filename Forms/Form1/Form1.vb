@@ -14271,7 +14271,7 @@ Public Class Form1
                 Button61.Enabled = False
 
 
-                RadioButton51.Enabled = True
+                RadioButton51.Enabled = False    'Hidden IMDB option for XBMC Scrapers as XBMC IMDB Scraper is broken.
                 RadioButton52.Enabled = True
                 If Preferences.XBMC_Scraper = "imdb" Then
                     RadioButton51.Checked = True

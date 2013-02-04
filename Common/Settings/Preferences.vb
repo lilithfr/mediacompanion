@@ -105,7 +105,7 @@ Public Class Preferences
     Public Shared nfoposterscraper As Integer
 
     'Dim tvdbmode As String
-    Public Shared XBMC_Scraper As String = ""
+    Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
     Public Shared font As String
     Public Shared moviethumbpriority() As String
     Public Shared certificatepriority() As String
@@ -129,6 +129,7 @@ Public Class Preferences
     Public Shared tablesortorder As String
     Public Shared movieRuntimeDisplay As String
     Public Shared selectedBrowser As String
+    Public Shared whatXBMCScraper As String = "tmdb"
 
     Public Shared intruntime As Boolean
     Public Shared autorenameepisodes As Boolean
@@ -178,6 +179,7 @@ Public Class Preferences
     Public Shared fixnfoid As Boolean
     Public Shared displayMissingEpisodes As Boolean = False
     Public Shared movieRuntimeFallbackToFile As Boolean = False
+    Public Shared moviesUseXBMCScraper As Boolean = False
 
     Public Shared moviesortorder As Byte
     Public Shared moviedefaultlist As Byte
@@ -314,6 +316,7 @@ Public Class Preferences
         keepfoldername = False
         enablehdtags = True
         savefanart = True
+        whatXBMCScraper = "tmdb"
     '    resizefanart = 1
         overwritethumbs = False
         startupmode = 1
