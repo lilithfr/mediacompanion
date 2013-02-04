@@ -41,6 +41,8 @@ Public Class Form1
 
     Public CopyOfPreferencesIgnoreArticle As Boolean
 
+    Public _yield As Boolean
+
     'Public Shared Preferences As New Structures
 
     Public MainFormLoadedStatus As Boolean = False
@@ -1391,7 +1393,7 @@ Public Class Form1
     '    End If
     'End Sub
 
-    Public Sub mov_FormPopulate()
+    Public Sub mov_FormPopulate(Optional yieldIng As Boolean=False)
 
         If Not IsNothing(workingMovieDetails) Then
             If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
@@ -1414,9 +1416,13 @@ Public Class Form1
             End If
         End If
 
+        If Yield(yieldIng) Then Return
 
         If workingMovie.fullpathandfilename <> Nothing And DataGridViewMovies.Rows.Count > 0 Then
             workingMovieDetails = nfoFunction.mov_NfoLoadFull(workingMovie.fullpathandfilename)
+
+            If Yield(yieldIng) Then Return
+
             If IsNothing(workingMovieDetails) = False Then
                 If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
                 If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
@@ -1494,9 +1500,9 @@ Public Class Form1
                 '                workingMovieDetails.fileinfo.trailerpath = IO.Path.Combine(workingMovieDetails.fileinfo.path.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.path), ""), System.IO.Path.GetFileNameWithoutExtension(workingMovieDetails.fileinfo.path) & "-trailer.flv")
 
                 workingMovieDetails.fileinfo.trailerpath = GetTrailerPath(workingMovieDetails.fileinfo.path)
-
+                If Yield(yieldIng) Then Return
                 HandleTrailerBtn(workingMovieDetails)
-
+                If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
 
                     If IO.File.Exists(workingMovieDetails.fileinfo.posterpath) Then
@@ -1507,10 +1513,13 @@ Public Class Form1
                     End If
 
                 End If
+                If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
 
                     util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    If Yield(yieldIng) Then Return
                     util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    If Yield(yieldIng) Then Return
                     Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
                     Label18.Visible = False
                 End If
@@ -1520,6 +1529,8 @@ Public Class Form1
                     Rating1.PictureInit = PictureBoxFanArt.Image
 
                 End If
+
+                If Yield(yieldIng) Then Return
 
                 If Convert.ToInt32(workingMovieDetails.fullmoviebody.playcount) > 0 Then
                     ButtonWatched.Text = "&Watched"
@@ -1542,6 +1553,8 @@ Public Class Form1
                     PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
                     PictureBoxActor.Load()
                 End If
+
+                If Yield(yieldIng) Then Return
 
                 If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
                     If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
@@ -1651,6 +1664,8 @@ Public Class Form1
         If ratingtxt.Text.Length > 3 Then
             ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
         End If
+
+        If Yield(yieldIng) Then Return
 
         mov_SplitContainerAutoPosition()
     End Sub
@@ -4135,8 +4150,15 @@ Public Class Form1
         PictureBoxActor.Image = Nothing
     End Sub
 
+    
 
-    Public Sub DisplayMovie()
+    Public Sub DisplayMovie(Optional yielding As Boolean=False)
+
+        If yielding Then
+            _yield = True
+            Application.DoEvents
+            _yield = False
+        End If
 
         'Clear all fields of the movie
         MovieFormInit()
@@ -4164,6 +4186,8 @@ Public Class Form1
                 mov_ToolStripReloadFromCache.Visible = False
             End If
 
+            If Yield(yielding) Then Return
+
             If DataGridViewMovies.SelectedRows.Count = 1 Then
 
                 mov_ToolStripPlayMovie.Visible = True
@@ -4187,12 +4211,17 @@ Public Class Form1
                 Label75.Visible = True
                 TextBox34.Visible = True
 
+                If Yield(yielding) Then Return
+
                 'Check if the file trailer exist
                 If IO.File.Exists(DataGridViewMovies.SelectedCells(0).Value.ToString) = True Then
+
+                    If Yield(yielding) Then Return
 
 '                    If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) = True And MultipleMoviesSelected = False Then
 
                     Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(0).Value.ToString)
+                    If Yield(yielding) Then Return
                     If movie.TrailerExists And MultipleMoviesSelected = False Then
                         mov_ToolStripPlayTrailer.Visible = True
                     Else
@@ -4202,6 +4231,8 @@ Public Class Form1
 
                 Dim query = From f In filteredListObj Where f.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString
                 Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
+
+               If Yield(yielding) Then Return
 
                 If queryList.Count > 0 Then
                     workingMovie.filedate = queryList(0).filedate
@@ -4216,9 +4247,9 @@ Public Class Form1
                     workingMovie.titleandyear = queryList(0).titleandyear
                     workingMovie.top250 = queryList(0).top250
                     workingMovie.year = queryList(0).year
-                    Call mov_FormPopulate()
+                    Call mov_FormPopulate(yielding)
                 Else
-                    If needtoload = True Then Call mov_FormPopulate()
+                    If needtoload = True Then Call mov_FormPopulate(yielding)
                 End If
                 done = True
             Else
@@ -4253,6 +4284,9 @@ Public Class Form1
                             End If
                             Exit For
                         End If
+
+                        If Yield(yielding) Then Return
+
                     Next
                 Next
                 If add = False Then
@@ -15793,13 +15827,20 @@ Public Class Form1
     Private Sub txt_titlesearch_KeyUp(ByVal sender As Object, ByVal e As Object) Handles txt_titlesearch.KeyUp,txt_titlesearch.ModifiedChanged
         Try
             If filterOverride = False Then
-                If txt_titlesearch.Text.Length > 0 Then
+
+                 _yield = True
+                Application.DoEvents
+                _yield = False
+
+               If txt_titlesearch.Text.Length > 0 Then
                     txt_titlesearch.BackColor = Color.DarkOrange
                 Else
                     txt_titlesearch.BackColor = Color.White
                 End If
                 txt_titlesearch.Refresh
                 Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+                
+                If _yield Then Return
 
                 Try
                     If DataGridViewMovies.SelectedRows.Count = 1 Then
@@ -15808,12 +15849,21 @@ Public Class Form1
                 Catch
                 End Try
 
-                DisplayMovie
+                DisplayMovie(True)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+
+    Public Function Yield(yielding As Boolean) As Boolean
+        If yielding Then
+            Application.DoEvents
+            Return _yield
+        End If
+        Return False
+    End Function
 
 
     Private Sub mov_TableViewSetup()
@@ -22072,7 +22122,7 @@ End Sub
     End Sub
 
     Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
-        DisplayMovie()
+        DisplayMovie(True)
     End Sub
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click

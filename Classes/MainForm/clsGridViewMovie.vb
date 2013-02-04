@@ -257,10 +257,24 @@ Public Class clsGridViewMovie
         End Try
     End Sub
 
+    Public Function Yield As Boolean
+        Dim yld As Boolean=False
+        Try
+            Application.DoEvents
+            yld = Form1._yield
+        Catch
+        End Try
+        
+        Return yld
+    End Function
 
     Public Sub mov_FiltersAndSortApply(Form1 As Form1, Optional filterByActor As Boolean=False)
 
+        If Yield Then Return
+
         Dim b = From f In Form1.filteredListObj Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
+
+        If Yield Then Return
 
         Dim movie_ids As New List(Of String) 
 
@@ -273,32 +287,59 @@ Public Class clsGridViewMovie
                 End If
             Next
 
+            If Yield Then Return
+
             b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
         End If
 
         'b = From f In b Order By f.filename Ascending
 
+        If Yield Then Return
+
         If Form1.RadioButtonAll.Checked = True Then b = From f In b
+
+        If Yield Then Return
+
         If Form1.RadioButtonWatched.Checked = True Then b = From f In b Where f.playcount = "1"
-        If Form1.RadioButtonUnWatched.Checked = True Then b = From f In b Where f.playcount = "0"
+ 
+        If Yield Then Return
+
+       If Form1.RadioButtonUnWatched.Checked = True Then b = From f In b Where f.playcount = "0"
+
+        If Yield Then Return
+
         If Form1.RadioButtonMissingPosters.Checked = True Then b = From f In b Where f.missingdata1 = "2" Or f.missingdata1 = "3"
+
+        If Yield Then Return
+
         If Form1.RadioButtonMissingFanart.Checked = True Then b = From f In b Where f.missingdata1 = "1" Or f.missingdata1 = "3"
-        If Form1.RadioButtonMissingPlot.Checked = True Then b = From f In b Where f.plot.ToString.Trim = ""
-        If Form1.RadioButtonDuplicates.Checked = True Then
+ 
+        If Yield Then Return
+
+       If Form1.RadioButtonMissingPlot.Checked = True Then b = From f In b Where f.plot.ToString.Trim = ""
+ 
+        If Yield Then Return
+
+       If Form1.RadioButtonDuplicates.Checked = True Then
             Dim sort = b.GroupBy(Function(f) f.id)
             b = sort.Where(Function(x) x.Count > 1).SelectMany(Function(x) x).ToList()
         End If
+
+        If Yield Then Return
 
         'Genre
         If Form1.ComboBoxFilterGenre.Text <> "All" Then
             b = From f In Form1.filteredListObj Where f.genre.Contains(Form1.ComboBoxFilterGenre.Text)
         End If
 
+        If Yield Then Return
+
         'Movie Format
         If Form1.ComboBoxFilterMovieFormat.Text <> "All" Then
             b = From f In Form1.filteredListObj Where f.source.Contains(Form1.ComboBoxFilterMovieFormat.Text)
         End If
 
+        If Yield Then Return
 
         'MessageBox.Show("#" & Form1.cbSort.Text & "#")
 
@@ -353,8 +394,7 @@ Public Class clsGridViewMovie
                 End If
         End Select
 
-
-
+        If Yield Then Return
 
         'Convert query to list
         'Dim Clist As List(Of Data_GridViewMovie) = b.ToList()
@@ -362,6 +402,9 @@ Public Class clsGridViewMovie
 
         Form1.DataGridViewMovies.Columns.Clear()
         Form1.DataGridViewBindingSource.DataSource = b
+
+        If Yield Then Return
+
         GridviewMovieDesign(Form1,Form1.DataGridViewMovies)
 
 
