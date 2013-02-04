@@ -3364,7 +3364,9 @@ Public Class Form1
             End If
 
             For f = 0 To oMovies.MovieCache.Count - 1
-                If oMovies.MovieCache(f).title = oldmovietitle Then
+'                If oMovies.MovieCache(f).title = oldmovietitle Then
+                If oMovies.MovieCache(f).fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
+
                     Dim newfullmovie As New ComboList
                     newfullmovie = oMovies.MovieCache(f)
                     Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -3399,14 +3401,20 @@ Public Class Form1
                     If newfullmovie.movieset = "" Then
                         newfullmovie.movieset = "-None-"
                     End If
-                    oMovies.MovieCache.RemoveAt(f)
-                    oMovies.MovieCache.Add(newfullmovie)
+
+                    'oMovies.MovieCache.RemoveAt(f)
+                    'oMovies.MovieCache.Add(newfullmovie)
+
+                    Dim movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+       
+                    movie.UpdateCaches
 
                     Exit For
                 End If
             Next
 
             oMovies.SaveMovieCache
+            UpdateFilteredList
 
             If LabelCountFilter.Text.ToLower.IndexOf(" of ") <> -1 Then
 
@@ -3511,8 +3519,12 @@ Public Class Form1
                             newfullmovie.source = ""
                         End If
                         '              newfullmovie.year = movie.fullmoviebody.year
-                        oMovies.MovieCache.RemoveAt(f)
-                        oMovies.MovieCache.Add(newfullmovie)
+                        'oMovies.MovieCache.RemoveAt(f)
+                        'oMovies.MovieCache.Add(newfullmovie)
+
+                        Dim m = oMovies.LoadMovie(movie.fileinfo.fullpathandfilename)
+       
+                        m.UpdateCaches
 
                         Exit For
                     End If
@@ -3525,7 +3537,7 @@ Public Class Form1
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             mov_FormPopulate
-
+            UpdateFilteredList
             mess.Close
         End If
     End Sub

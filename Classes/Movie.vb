@@ -656,16 +656,16 @@ Public Class Movie
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
         If Not IsNothing(Title) then
-            ReportProgress( " " & Title, "Scraping Title:- " & Title & vbCrLf )
+            ReportProgress( , "Scraping Title: " & Title & vbCrLf )
         End If
 
-        'If PossibleImdb <> "" then
-        '    ReportProgress( "IMDB " & PossibleImdb )
-        'End If
+        If PossibleImdb <> "" then
+            ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
+        End If
 
         'ReportProgress( String.Format("Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) )
 
-        ReportProgress( " -Main body" )
+        ReportProgress( " Main body" )
    
         Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Preferences.imdbmirror, _imdbCounter)
     End Function
