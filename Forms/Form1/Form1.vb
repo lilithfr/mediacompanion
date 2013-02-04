@@ -42,6 +42,7 @@ Public Class Form1
     Public CopyOfPreferencesIgnoreArticle As Boolean
 
     Public _yield As Boolean
+    Public LastMovieDisplayed As String=""
 
     'Public Shared Preferences As New Structures
 
@@ -4154,6 +4155,16 @@ Public Class Form1
 
     Public Sub DisplayMovie(Optional yielding As Boolean=False)
 
+        Try
+            If DataGridViewMovies.SelectedRows.Count = 1 Then
+                If LastMovieDisplayed = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
+            Else
+                LastMovieDisplayed = ""
+            End If
+            LastMovieDisplayed = DataGridViewMovies.SelectedCells(0).Value.ToString
+        Catch
+        End Try
+
         If yielding Then
             _yield = True
             Application.DoEvents
@@ -4221,6 +4232,7 @@ Public Class Form1
 '                    If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) = True And MultipleMoviesSelected = False Then
 
                     Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(0).Value.ToString)
+                    
                     If Yield(yielding) Then Return
                     If movie.TrailerExists And MultipleMoviesSelected = False Then
                         mov_ToolStripPlayTrailer.Visible = True
@@ -11335,7 +11347,7 @@ Public Class Form1
             '        filteredListObj.Add( New Data_GridViewMovie(movie) )
             '    End If
             'Next
-            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me,true)
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me,true)
             LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & actorcb.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -15842,12 +15854,6 @@ Public Class Form1
                 
                 If _yield Then Return
 
-                Try
-                    If DataGridViewMovies.SelectedRows.Count = 1 Then
-                        If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
-                    End If
-                Catch
-                End Try
 
                 DisplayMovie(True)
             End If

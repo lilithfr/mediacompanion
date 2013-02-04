@@ -329,14 +329,14 @@ Public Class clsGridViewMovie
 
         'Genre
         If Form1.ComboBoxFilterGenre.Text <> "All" Then
-            b = From f In Form1.filteredListObj Where f.genre.Contains(Form1.ComboBoxFilterGenre.Text)
+            b = From f In b Where f.genre.Contains(Form1.ComboBoxFilterGenre.Text)
         End If
 
         If Yield Then Return
 
         'Movie Format
         If Form1.ComboBoxFilterMovieFormat.Text <> "All" Then
-            b = From f In Form1.filteredListObj Where f.source.Contains(Form1.ComboBoxFilterMovieFormat.Text)
+            b = From f In b Where f.source.Contains(Form1.ComboBoxFilterMovieFormat.Text)
         End If
 
         If Yield Then Return
@@ -395,10 +395,6 @@ Public Class clsGridViewMovie
         End Select
 
         If Yield Then Return
-
-        'Convert query to list
-        'Dim Clist As List(Of Data_GridViewMovie) = b.ToList()
-        'filteredListObj = Clist
 
         Form1.DataGridViewMovies.Columns.Clear()
         Form1.DataGridViewBindingSource.DataSource = b
