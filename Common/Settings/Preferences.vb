@@ -257,6 +257,7 @@ Public Class Preferences
 
         'Movies
         movies_useXBMC_Scraper = False
+        XBMC_Scraper = "tmdb"
         moviedefaultlist = 0
         moviesortorder = 0
         imdbmirror = "http://www.imdb.com/"
