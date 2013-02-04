@@ -50,7 +50,7 @@ Public Class Movie
     Private _nfoFunction          As New WorkingWithNfoFiles
     Private _imdbCounter          As Integer =  0
     Private _imdbBody             As String  = ""
-    Private _scraped              As Boolean = False
+    Property Scraped             As Boolean = False
     Private _scrapedMovie         As New FullMovieDetails
     Private _rescrapedMovie       As FullMovieDetails
     Private _movieCache           As New ComboList
@@ -218,7 +218,7 @@ Public Class Movie
             Dim s = NfoPathPrefName
             Dim FileName As String = ""
         
-            For Each item In "mp4,flv,webm".Split(",")
+            For Each item In "mp4,flv,webm,mov,m4v".Split(",")
                 FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
 
                 If File.Exists(FileName) Then Return FileName
@@ -595,8 +595,8 @@ Public Class Movie
     End Sub
 
     Sub Scrape
-        If Not _scraped then
-            _scraped  = True
+        If Not Scraped then
+            Scraped  = True
             Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
             Actions.Items.Add( New ScrapeAction(AddressOf ImdbScraper_GetBody , "Scrape IMDB Main body"          ) )
             Actions.Items.Add( New ScrapeAction(AddressOf CheckImdbBodyScrape , "Checking IMDB Main body scrape" ) )            
@@ -715,6 +715,11 @@ Public Class Movie
 
     Sub LoadNFO
         _scrapedMovie = _nfoFunction.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
+        Scraped=True
+        Try
+            AssignMovieToCache
+        Catch
+        End Try
     End Sub
 
     Sub SaveNFO
@@ -1222,11 +1227,11 @@ Public Class Movie
         DownloadTrailer(TrailerUrl)
 	End Sub
 
-    Sub DownloadTrailer(TrailerUrl As String)
+    Sub DownloadTrailer(TrailerUrl As String, Optional forceTrailerDl As Boolean=False)
 	    'Check for and delete zero length trailer - created when Url is invalid
 	    DeleteZeroLengthFile(ActualTrailerPath)
 
-        If Not Preferences.DownloadTrailerDuringScrape Then
+        If Not Preferences.DownloadTrailerDuringScrape And Not forceTrailerDl Then
             Exit Sub
         End If
 
@@ -1800,7 +1805,7 @@ Public Class Movie
         _rescrapedMovie = New FullMovieDetails
         
         'Loads previously scraped details from NFO into _scrapedMovie
-        LoadNFO()
+        LoadNFO
 
         IniTmdb(_scrapedMovie.fullmoviebody.imdbid)
 
@@ -1808,7 +1813,7 @@ Public Class Movie
 
         If RescrapeBody(rl) then  
             
-            _scraped  = True
+            Scraped  = True
 
             _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
 
@@ -1839,13 +1844,13 @@ Public Class Movie
         
         If Cancelled then Exit Sub
              
-        If rl.trailer Then
+        If rl.trailer or rl.Download_Trailer Then
             If TrailerExists Then
                 ReportProgress("Trailer already exists ","Trailer already exists - To download again, delete the existing one first i.e. this file : [" & ActualTrailerPath & "]" & vbCrLf)
             Else
                 _rescrapedMovie.fullmoviebody.trailer = GetTrailerUrl(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.imdbid)
                 UpdateProperty(_rescrapedMovie.fullmoviebody.trailer, _scrapedMovie.fullmoviebody.trailer)  
-                DownloadTrailer(TrailerUrl)
+                DownloadTrailer(TrailerUrl,rl.Download_Trailer)
             End If
         End If
        

@@ -84,7 +84,10 @@ Public Class Movies
 
     Sub ReportProgress( ByVal oProgress As Progress )
         If Not IsNothing(_bw) AndAlso _bw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) and String.IsNullOrEmpty(oProgress.Message)) Then
-            _bw.ReportProgress(PercentDone, oProgress)
+            Try
+                _bw.ReportProgress(PercentDone, oProgress)
+            Catch
+            End Try
         End If
     End Sub
 
@@ -95,6 +98,16 @@ Public Class Movies
         Return q.Single
     End Function
 
+    Public Function LoadMovie(fullpathandfilename As String) As Movie
+
+        Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename),Me)
+
+        If IsNothing(movie) Then Return Nothing
+        
+        movie.LoadNFO
+
+        Return movie
+    End Function
 
 
     Public Sub FindNewMovies(Optional scrape=True)
@@ -287,6 +300,7 @@ Public Class Movies
 
     Sub ScrapeMovie(movie As Movie)
         AddMovieEventHandlers   ( movie )
+        movie.Scraped=False
         movie.Scrape
         RemoveMovieEventHandlers( movie )
     End Sub
@@ -299,6 +313,7 @@ Public Class Movies
         movie.DeleteScrapedFiles
 
         AddMovieEventHandlers   ( movie )
+        movie.Scraped=False
         movie.Scrape(imdb)
         RemoveMovieEventHandlers( movie )
     End Sub
@@ -309,6 +324,7 @@ Public Class Movies
         Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename),Me)
 
         AddMovieEventHandlers   ( movie )
+        movie.Scraped=False
         movie.RescrapeSpecific  ( rl    )
         RemoveMovieEventHandlers( movie )
     End Sub
@@ -319,11 +335,12 @@ Public Class Movies
         For Each item In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count)
+            ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " ")
 
             Dim movie = New Movie(Utilities.GetFileName(item),Me)
 
             AddMovieEventHandlers   ( movie )
+            movie.Scraped=False
             movie.RescrapeSpecific  ( rl    )
             RemoveMovieEventHandlers( movie )
 
@@ -337,7 +354,7 @@ Public Class Movies
         For Each NfoFilename In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-            ReportProgress("Rescraping " & i & " of " & NfoFilenames.Count)
+            ReportProgress("Rescraping " & i & " of " & NfoFilenames.Count & " ")
             
             RescrapeMovie(NfoFilename)
 
@@ -353,7 +370,7 @@ Public Class Movies
         For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
             i += 1
             PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
-            ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count)
+            ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             RescrapeSpecificMovie(FullPathAndFilename,rl)
 
             If Cancelled then Exit Sub
@@ -371,7 +388,6 @@ Public Class Movies
         movie.DeleteScrapedFiles
 
         ScrapeMovie(movie)
-
     End Sub
 
 
@@ -900,7 +916,7 @@ Public Class Movies
 
             Dim m As New Movie(movie.fullpathandfilename, Me)
 
-            m.LoadNFO()
+            m.LoadNFO
             m.UpdateActorCacheFromEmpty()
             If Cancelled Then Exit Sub
         Next

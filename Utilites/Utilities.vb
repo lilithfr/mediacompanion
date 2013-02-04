@@ -323,13 +323,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return stackName
     End Function
 
-    Public Shared Function GetTrailerName(ByVal path As String)
-        Dim ext As String = IO.Path.GetExtension(path)
-        Dim length As Integer = Strings.Len(path)
-        Dim lengthext As Integer = Strings.Len(ext)
-        Dim TrailerPath As String = Strings.Left(path, length - lengthext) & "-trailer.flv"
-        Return TrailerPath
-    End Function
+    'Public Shared Function GetTrailerName(ByVal path As String)
+    '    Dim ext As String = IO.Path.GetExtension(path)
+    '    Dim length As Integer = Strings.Len(path)
+    '    Dim lengthext As Integer = Strings.Len(ext)
+    '    Dim TrailerPath As String = Strings.Left(path, length - lengthext) & "-trailer.flv"
+    '    Return TrailerPath
+    'End Function
 
     Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String) As Boolean
         Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"

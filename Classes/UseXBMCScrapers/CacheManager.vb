@@ -132,7 +132,7 @@ Public Class CacheManager
                 dataStream.Close()
                 TMDBResponse.Close()
             Catch ex As Exception
-                MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + url, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                'MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + url, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return "ERROR" 'SK: added 
             End Try
 

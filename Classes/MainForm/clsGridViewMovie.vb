@@ -6,7 +6,7 @@ Public Class clsGridViewMovie
     Public GridFieldToDisplay2 As String
     Public GridSort As String
 
-    Public Sub GridviewMovieDesign(ByVal DataGridViewMovies As DataGridView)
+    Public Sub GridviewMovieDesign(Form1 As Form1, ByVal DataGridViewMovies As DataGridView)
 
         Cursor.Current = Cursors.WaitCursor
 
@@ -258,7 +258,7 @@ Public Class clsGridViewMovie
     End Sub
 
 
-    Public Sub mov_FiltersAndSortApply(Optional filterByActor=False)
+    Public Sub mov_FiltersAndSortApply(Form1 As Form1, Optional filterByActor As Boolean=False)
 
         Dim b = From f In Form1.filteredListObj Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
 
@@ -362,7 +362,7 @@ Public Class clsGridViewMovie
 
         Form1.DataGridViewMovies.Columns.Clear()
         Form1.DataGridViewBindingSource.DataSource = b
-        GridviewMovieDesign(Form1.DataGridViewMovies)
+        GridviewMovieDesign(Form1,Form1.DataGridViewMovies)
 
 
         Form1.LabelCountFilter.Text = "Displaying " & b.Count.ToString & " of  " & Form1.oMovies.MovieCache.Count & " movies"

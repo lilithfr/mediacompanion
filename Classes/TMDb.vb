@@ -4,7 +4,7 @@ Imports System.IO
 
 Public Class TMDb
 
-    Const Key = "3f026194412846e530a208cf8a39e9cb"
+    Public Const Key = "3f026194412846e530a208cf8a39e9cb"
 
     Public Shared LanguagesFile               = Preferences.applicationPath & "\classes\tmdb_languages.xml"
     Public Const  TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
