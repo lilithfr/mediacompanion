@@ -43,6 +43,8 @@ Public Class Form1
 
     Public _yield As Boolean
     Public LastMovieDisplayed As String=""
+    Public FilteringByActor As Boolean
+    Public FilteringBySet As Boolean
 
     'Public Shared Preferences As New Structures
 
@@ -3114,6 +3116,8 @@ Public Class Form1
     'reset all filters
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonResetFilters.Click
         Try
+            FilteringBySet=False
+            FilteringByActor=False
             filterOverride = False
             TextBox1.Text = ""
             txt_titlesearch.Text = ""
@@ -11347,7 +11351,8 @@ Public Class Form1
             '        filteredListObj.Add( New Data_GridViewMovie(movie) )
             '    End If
             'Next
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me,true)
+            FilteringByActor=True
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & actorcb.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -12543,22 +12548,8 @@ Public Class Form1
 
     Private Sub Button66_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button66.Click
         Try
-            DataGridViewMovies.DataSource = Nothing
-            filteredList.Clear()
-            If setsTxt.Text <> "-None-" Then
-                For Each movie In oMovies.MovieCache
-                    If movie.movieset = setsTxt.Text Then
-                        filteredList.Add(movie)
-                    End If
-                Next
-            Else
-                For Each movie In oMovies.MovieCache
-                    If movie.movieset = "-None-" Then
-                        filteredList.Add(movie)
-                    End If
-                Next
-            End If
-            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+            FilteringBySet=True
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

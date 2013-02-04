@@ -268,7 +268,7 @@ Public Class clsGridViewMovie
         Return yld
     End Function
 
-    Public Sub mov_FiltersAndSortApply(Form1 As Form1, Optional filterByActor As Boolean=False)
+    Public Sub mov_FiltersAndSortApply(Form1 As Form1)
 
         If Yield Then Return
 
@@ -278,7 +278,7 @@ Public Class clsGridViewMovie
 
         Dim movie_ids As New List(Of String) 
 
-        If filterByActor then
+        If Form1.FilteringByActor then
             Dim topactorname As String = Form1.actorcb.Text
 
             For Each actor In Form1.oMovies.ActorDb
@@ -290,6 +290,11 @@ Public Class clsGridViewMovie
             If Yield Then Return
 
             b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
+        End If
+
+
+        If Form1.FilteringBySet Then
+            b = From f In b Where f.movieset.ToLower.Contains(Form1.setsTxt.Text.ToLower)
         End If
 
         'b = From f In b Order By f.filename Ascending
