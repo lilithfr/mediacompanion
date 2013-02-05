@@ -8039,78 +8039,86 @@ Public Class Form1
         Dim ext As String = ""
         Dim ext1 As String = ""
         Dim ext2 As String = ""
+        Dim eden As Boolean
+        Dim frodo As Boolean
+        Dim edenart As Boolean
+        Dim frodoart As Boolean
+        eden = Preferences.EdenEnabled
+        frodo = Preferences.FrodoEnabled
         ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        If Preferences.EdenEnabled Then
-            ext1 = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        ElseIf Preferences.FrodoEnabled Then
-            ext2 = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
-        End If
-        If (IO.File.Exists(ext1) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
-            If Not IO.File.Exists(ext1) And Not IO.File.Exists(ext2) Then
-                tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
-                Call ep_ScreenShotDo(ext)
-            End If
+        ext1 = path.Replace(IO.Path.GetExtension(path), ".tbn")
+        ext2 = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
+        edenart = IO.File.Exists(ext1)
+        frodoart = IO.File.Exists(ext2)
 
-        Else
-
-
+        If Not alleps(0).Thumbnail.FileName = Nothing And alleps(0).Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
             Dim url As String = alleps(0).Thumbnail.FileName
-            If url = Nothing Then
-            Else
-                If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                    Utilities.DownloadFile(url, ext)
-                    '                    Try
-                    '                        Dim buffer(400000) As Byte
-                    '                        Dim size As Integer = 0
-                    '                        Dim bytesRead As Integer = 0
-                    '                        Dim req As HttpWebRequest = WebRequest.Create(url)
-                    '                        Dim res As HttpWebResponse = req.GetResponse()
-                    '                        Dim contents As Stream = res.GetResponseStream()
-                    '                        Dim bytesToRead As Integer = CInt(buffer.Length)
-
-
-
-
-                    '                        While bytesToRead > 0
-                    '                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '                            If size = 0 Then Exit While
-                    '                            bytesToRead -= size
-                    '                            bytesRead += size
-                    '                        End While
-
-
-                    '                        Try
-                    '                            tvScraperLog = tvScraperLog & "Saving Thumbnail To :- " & ext & vbCrLf
-                    '                            Dim fstrm As New FileStream(ext, FileMode.OpenOrCreate, FileAccess.Write)
-                    '                            fstrm.Write(buffer, 0, bytesRead)
-                    '                            contents.Close()
-                    '                            fstrm.Close()
-                    '                        Catch ex As Exception
-                    '                            tvScraperLog = tvScraperLog & "!!! Unable to Save Thumb" & vbCrLf
-                    '                            tvScraperLog = tvScraperLog & "!!! Error :- " & ex.Message.ToString & vbCrLf
-                    '                        End Try
-                    '                    Catch ex As Exception
-                    '#If SilentErrorScream Then
-                    '                        Throw ex
-                    '#End If
-                    '                    End Try
-                Else
-                    If (Not IO.File.Exists(ext1) Or Not IO.File.Exists(ext2)) And Preferences.autoepisodescreenshot = True Then
-                        tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
-                        Call ep_ScreenShotDo(ext)
-                    End If
+            If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+                Utilities.DownloadFile(url, ext)
+                If Not eden And frodo Then
+                    IO.File.Copy(ext, ext2)
+                    IO.File.Delete(ext)
+                ElseIf eden And frodo Then
+                    IO.File.Copy(ext, ext2)
                 End If
             End If
-        End If
-        If Preferences.EdenEnabled And Preferences.FrodoEnabled Then        '...What if just Frodo enabled?
-            '           IO.File.Copy(ext, ext.Replace(".tbn", "-thumb.jpg"))
-
-            Dim newName = ext.Replace(".tbn", "-thumb.jpg")
-
-            If newName <> ext Then
-                If Utilities.SafeDeleteFile(newName) Then File.Copy(ext, newName)
+        ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
+            tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
+            Call ep_ScreenShotDo(ext)
+        ElseIf edenart Or frodoart Then
+            If edenart And Not eden And Not frodoart Then
+                IO.File.Copy(ext, ext2)
+                IO.File.Delete(ext)
+            ElseIf edenart And frodo And Not frodoart Then
+                IO.File.Copy(ext, ext2)
+            ElseIf frodoart And Not frodo And Not edenart Then
+                IO.File.Copy(ext2, ext)
+                IO.File.Delete(ext2)
+            ElseIf frodoart And eden And Not edenart Then
+                IO.File.Copy(ext2, ext)
             End If
         End If
+        'End If
+        'End If
+        'Else
+        'If IO.File.Exists(ext1) Or IO.File.Exists(ext2) Then
+        'If eden And Not IO.File.Exists(ext1) And IO.File.Exists(2) Then
+        'Dim newname As String
+        'If Not FrodoEnabled Then
+
+        'End If
+        'End If
+        'If (IO.File.Exists(ext1) Or IO.File.Exists(ext2) Or alleps(0).Thumbnail.FileName = Nothing) And Preferences.autoepisodescreenshot = True Then
+        'If Not IO.File.Exists(ext1) And Not IO.File.Exists(ext2) Then
+        'tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
+        'Call ep_ScreenShotDo(ext)
+        'End If
+
+        '    Else
+
+
+        'Dim url As String = alleps(0).Thumbnail.FileName
+        'If url = Nothing Then
+        'Else
+        'If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+        'Utilities.DownloadFile(url, ext)
+        'Else
+        'If (Not IO.File.Exists(ext1) Or Not IO.File.Exists(ext2)) And Preferences.autoepisodescreenshot = True Then
+        'tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
+        'Call ep_ScreenShotDo(ext)
+        'End If
+        'End If
+        'End If
+        'End If
+        'If Preferences.EdenEnabled And Preferences.FrodoEnabled Then        '...What if just Frodo enabled?
+        '           IO.File.Copy(ext, ext.Replace(".tbn", "-thumb.jpg"))
+
+        'Dim newName = ext.Replace(".tbn", "-thumb.jpg")
+
+        'If newName <> ext Then
+        'If Utilities.SafeDeleteFile(newName) Then File.Copy(ext, newName)
+        'End If
+        'End If
         If Preferences.autorenameepisodes = True Then
             Dim eps As New List(Of String)
             eps.Clear()
@@ -9771,14 +9779,59 @@ Public Class Form1
             Dim eps As New List(Of Media_Companion.TvEpisode)
             eps.Add(newepisode)
             Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
+            Dim ext As String = ""
+            Dim ext1 As String = ""
+            Dim ext2 As String = ""
+            Dim eden As Boolean
+            Dim frodo As Boolean
+            Dim edenart As Boolean
+            Dim frodoart As Boolean
+            Dim fpath As String = newepisode.NfoFilePath
+            eden = Preferences.EdenEnabled
+            frodo = Preferences.FrodoEnabled
+            ext = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
+            ext1 = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
+            ext2 = fpath.Replace(IO.Path.GetExtension(fpath), "-thumb.jpg")
+            edenart = IO.File.Exists(ext1)
+            frodoart = IO.File.Exists(ext2)
+
+            If Not newepisode.Thumbnail.FileName = Nothing And newepisode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
+                Dim url As String = newepisode.Thumbnail.FileName
+                If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+                    Utilities.DownloadFile(url, ext)
+                    If Not eden And frodo Then
+                        IO.File.Copy(ext, ext2)
+                        IO.File.Delete(ext)
+                    ElseIf eden And frodo Then
+                        IO.File.Copy(ext, ext2)
+                    End If
+                End If
+            ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
+                tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
+                Call ep_ScreenShotDo(ext)
+            ElseIf edenart Or frodoart Then
+                If edenart And Not eden And Not frodoart Then
+                    IO.File.Copy(ext, ext2)
+                    IO.File.Delete(ext)
+                ElseIf edenart And frodo And Not frodoart Then
+                    IO.File.Copy(ext, ext2)
+                ElseIf frodoart And Not frodo And Not edenart Then
+                    IO.File.Copy(ext2, ext)
+                    IO.File.Delete(ext2)
+                ElseIf frodoart And eden And Not edenart Then
+                    IO.File.Copy(ext2, ext)
+                End If
+            End If
             '''''Call LoadTvEpisode(WorkingEpisode)
             tv_EpisodeSelected(TvTreeview.SelectedNode.Tag) 'reload the episode after it has been rescraped
             messbox.Close()
 
         End If
         'End If
-        Tv_CacheSave()
-        tv_CacheLoad()
+        'Tv_CacheSave()
+        'tv_CacheLoad()
+        'Dim show As String = WorkingTvShow.Title.Value
+        tv_CacheRefresh(WorkingTvShow)
 
 
         If Not tv_IMDbID_warned And tv_IMDbID_detected Then
