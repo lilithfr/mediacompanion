@@ -310,7 +310,7 @@ Public Class Movies
 
         Dim movie = New Movie(Utilities.GetFileName(NfoPathAndFilename),Me)
 
-        movie.DeleteScrapedFiles
+        movie.DeleteScrapedFiles(True)
 
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False

@@ -1340,7 +1340,7 @@ Public Class Movie
     End Sub
 
 
-    Sub DeleteScrapedFiles
+    Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
         LoadNFO
         RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
         RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
@@ -1348,7 +1348,9 @@ Public Class Movie
         DeleteActors
         DeletePoster
         DeleteFanart
-        DeleteTrailer
+
+        If incTrailer Then DeleteTrailer
+
         DeleteNFO
     End Sub
 
