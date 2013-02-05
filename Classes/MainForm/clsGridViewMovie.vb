@@ -270,6 +270,9 @@ Public Class clsGridViewMovie
 
     Public Sub mov_FiltersAndSortApply(Form1 As Form1)
 
+        Form1.DataGridViewMovies.Columns.Clear()
+        Form1.DataGridViewBindingSource.DataSource = Nothing
+
         If Yield Then Return
 
         Dim b = From f In Form1.filteredListObj Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
@@ -401,7 +404,6 @@ Public Class clsGridViewMovie
 
         If Yield Then Return
 
-        Form1.DataGridViewMovies.Columns.Clear()
         Form1.DataGridViewBindingSource.DataSource = b
 
         If Yield Then Return

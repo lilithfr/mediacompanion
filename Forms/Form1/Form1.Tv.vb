@@ -2588,14 +2588,17 @@ Partial Public Class Form1
                 Exit Do
             End If
 
-            CurrentTask = TasksList.Items(Cursor)
-            If (TasksOnlyIncompleteTasks AndAlso CurrentTask.State = TaskState.Completed) OrElse Not Common.Tasks.Contains(CurrentTask) Then
-                TasksList.Items.Remove(CurrentTask)
-                taskCount -= 1
+            Try
+                CurrentTask = TasksList.Items(Cursor)
+                If (TasksOnlyIncompleteTasks AndAlso CurrentTask.State = TaskState.Completed) OrElse Not Common.Tasks.Contains(CurrentTask) Then
+                    TasksList.Items.Remove(CurrentTask)
+                    taskCount -= 1
 
-            Else
-                Cursor += 1
-            End If
+                Else
+                    Cursor += 1
+                End If
+            Catch
+            End Try
 
             System.Windows.Forms.Application.DoEvents()
         Loop
