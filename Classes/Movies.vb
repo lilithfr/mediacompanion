@@ -312,6 +312,8 @@ Public Class Movies
 
         movie.DeleteScrapedFiles(True)
 
+        movie.ScrapedMovie.Init
+
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False
         movie.Scrape(imdb)

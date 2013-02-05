@@ -219,12 +219,12 @@ Public Class Movie
             Dim FileName As String = ""
         
             For Each item In "mp4,flv,webm,mov,m4v".Split(",")
-                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
+                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
 
                 If File.Exists(FileName) Then Return FileName
             Next
 
-            Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+            Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
         End Get
     End Property
 
