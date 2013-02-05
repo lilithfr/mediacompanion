@@ -1772,10 +1772,10 @@ Public Class Movie
                 Next
                 log &= "Renamed Movie File to " & logRename & vbCrLf
 
-                For Each subtitle As String In {".sub", ".srt", ".smi", ".idx"} 'rename any subtitle files with the same name as the movie
-                    If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, subtitle)) Then
-                        File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, subtitle), targetMovieFile & subtitle) ' subtitles file with .sub extension
-                        log &= "Renamed '" & subtitle & "' subtitle File" & vbCrLf
+                For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
+                    If File.Exists(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile)) Then
+                        File.Move(movieFileInfo.mediapathandfilename.Replace(newextension, anciliaryFile), targetMovieFile & anciliaryFile)
+                        log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
                     End If
                 Next
 

@@ -20,6 +20,11 @@ Public Class Utilities
                                                  ".rmvb", ".ogm", ".bin", ".ts", ".vob", ".m2ts", ".rar", ".flv",
                                                  ".dvr-ms", ".img", ".strm", ".ssif", "video_ts.ifo"}
 
+    'files that support main movie file, ie. art, subtitles, and trailers
+    Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
+                                                                "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v",
+                                                                ".sub", ".srt", ".smi", ".idx"}
+
     'common separators in filenames ie. dash, underscore, fullstop, and space
     Public Shared ReadOnly cleanSeparators As String = "-_. "
 
@@ -350,7 +355,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function testForFileByName(ByVal targetMovieFile As String, ByVal fileType As String) As Boolean
         Dim aFileExists As Boolean = False
-        For Each item As String In {fileType, ".nfo", ".tbn", "-fanart.jpg", ".sub", ".srt", ".smi", ".idx"} 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
+        Dim fileTypes As New ArrayList
+        fileTypes.Add(fileType)
+        fileTypes.AddRange(acceptedAnciliaryExts)
+        For Each item As String In fileTypes 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
             If System.IO.File.Exists(targetMovieFile & item) Then
                 aFileExists = True
                 Exit For
