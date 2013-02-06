@@ -9543,7 +9543,7 @@ Public Class Form1
                         WorkingTvShow.ListActors.Add(act)
                     Next
                 End If
-            Else
+            ElseIf imdbid <> "" Then
                 tvScraperLog = tvScraperLog & "Scraping actors from IMDB" & vbCrLf
                 Dim url As String
                 url = "http://www.imdb.com/title/" & imdbid & "/episodes"
