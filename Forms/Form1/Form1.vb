@@ -8036,18 +8036,15 @@ Public Class Form1
         '    Episode.Save()
         'Next
         Call nfoFunction.saveepisodenfo(alleps, path)
-        Dim ext As String = ""
-        Dim ext1 As String = ""
-        Dim ext2 As String = ""
+        Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
+        Dim ext1 As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
+        Dim ext2 As String = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
         Dim eden As Boolean
         Dim frodo As Boolean
         Dim edenart As Boolean
         Dim frodoart As Boolean
         eden = Preferences.EdenEnabled
         frodo = Preferences.FrodoEnabled
-        ext = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        ext1 = path.Replace(IO.Path.GetExtension(path), ".tbn")
-        ext2 = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
         edenart = IO.File.Exists(ext1)
         frodoart = IO.File.Exists(ext2)
 

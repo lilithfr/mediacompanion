@@ -1435,44 +1435,64 @@ Module Module1
             End If
         Next
         Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
-
-        If IO.File.Exists(ext) Or alleps(0).thumb = Nothing Then
-        Else
-            Dim buffer(400000) As Byte
-            Dim size As Integer = 0
-            Dim bytesRead As Integer = 0
-            Dim url As String = alleps(0).thumb
-            If url = Nothing Then
-            Else
+        Dim ext1 As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
+        Dim ext2 As String = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
+        Dim eden As Boolean
+        Dim frodo As Boolean
+        Dim edenart As Boolean
+        Dim frodoart As Boolean
+        eden = Preferences.EdenEnabled
+        frodo = Preferences.FrodoEnabled
+        edenart = IO.File.Exists(ext1)
+        frodoart = IO.File.Exists(ext2)
+        Dim url As String = alleps(0).thumb
+        If Not url = Nothing And url <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                    Try
-                        Dim req As HttpWebRequest = WebRequest.Create(url)
-                        Dim res As HttpWebResponse = req.GetResponse()
-                        Dim contents As Stream = res.GetResponseStream()
-                        Dim bytesToRead As Integer = CInt(buffer.Length)
-                        While bytesToRead > 0
-                            size = contents.Read(buffer, bytesRead, bytesToRead)
-                            If size = 0 Then Exit While
-                            bytesToRead -= size
-                            bytesRead += size
-                        End While
-                        Try
-                            Console.WriteLine("Saving Thumbnail To :- " & ext)
-                            Dim fstrm As New FileStream(ext, FileMode.OpenOrCreate, FileAccess.Write)
-                            fstrm.Write(buffer, 0, bytesRead)
-                            contents.Close()
-                            fstrm.Close()
-                        Catch ex As Exception
-                            Console.WriteLine("Unable to Save Thumb, Error: " & ex.Message.ToString)
-                        End Try
-                    Catch
-                    End Try
+                    Utilities.DownloadFile(url, ext)
+                    If Not eden And frodo Then
+                        IO.File.Copy(ext, ext2)
+                        IO.File.Delete(ext)
+                    ElseIf eden And frodo Then
+                        IO.File.Copy(ext, ext2)
+                    End If
                 End If
+        ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
+            Console.WriteLine("No Episode Thumb, AutoCreating ScreenShot from Movie")
+            Call screenshot(ext)
+        ElseIf edenart Or frodoart Then
+            If edenart And Not eden And Not frodoart Then
+                IO.File.Copy(ext, ext2)
+                IO.File.Delete(ext)
+            ElseIf edenart And frodo And Not frodoart Then
+                IO.File.Copy(ext, ext2)
+            ElseIf frodoart And Not frodo And Not edenart Then
+                IO.File.Copy(ext2, ext)
+                IO.File.Delete(ext2)
+            ElseIf frodoart And eden And Not edenart Then
+                IO.File.Copy(ext2, ext)
             End If
         End If
-        If Not IO.File.Exists(ext) And Preferences.autoepisodescreenshot = True Then
-            Call screenshot(ext)
-        End If
+        'If IO.File.Exists(ext) Or alleps(0).thumb = Nothing Then
+        'Else
+        'Dim buffer(400000) As Byte
+        'Dim size As Integer = 0
+        'Dim bytesRead As Integer = 0
+        'Dim url As String = alleps(0).thumb
+        'If url = Nothing Then
+        ' Else
+        'If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
+        'Try
+        'Utilities.DownloadFile(url, ext)
+        'Console.WriteLine("save image with Rob's code")
+        'Catch ex As Exception
+        'Console.WriteLine("Unable to Save Thumb, Error: " & ex.Message.ToString)
+        'End Try
+        'End If
+        'End If
+        'End If
+        'If Not IO.File.Exists(ext) And Preferences.autoepisodescreenshot = True Then
+        'Call screenshot(ext)
+        'End If
     End Sub
 
     Private Sub findnewepisodes(ByVal path As String)
