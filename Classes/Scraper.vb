@@ -30,7 +30,7 @@ Module ModGlobals
         If s="" Then
             s &= value
         Else
-            s &= ", " & value
+            s &= separator & value
         End If
     End Sub
 
@@ -587,34 +587,28 @@ Public Class Classimdb
     
     
 
-    ReadOnly Property Genres
+    ReadOnly Property Genres As String
         Get
-    	    Dim D = 0
+            Dim D = 0
             Dim W = 0
 
-		    D = Html.IndexOf("<h4 class=""inline"">Genres:</h4>")
+            D = Html.IndexOf("<h4 class=""inline"">Genres:</h4>")
 
-		    If Not D <= 0 Then
-				W = Html.IndexOf("</div>", D)
+            If Not D <= 0 Then
+                W = Html.IndexOf("</div>", D)
 
-				Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), REGEX_HREF_PATTERN, RegexOptions.Singleline)
+                Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), REGEX_HREF_PATTERN, RegexOptions.Singleline)
 
-				Dim Gen = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
+                Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
 
-                Dim lst = Gen.ToList
-                Dim s = ""
+                Genres = ""
 
-                For g = 0 To lst.Count - 1
-                    s.AppendValue(lst(g)," / ")
-                    'If g = 0 Then
-                    '    s = lst(g)
-                    'Else
-                    '    s = s & " / " & lst(g)
-                    'End If
+                For Each m In lst
+                    Genres.AppendValue(m, " / ")
                 Next
 
-				Return s
-		    End If
+                Return Genres
+            End If
 
             Return ""
         End Get
@@ -635,11 +629,6 @@ Public Class Classimdb
 
                 For g = 0 To lst.Count - 1
                     Directors.AppendValue(lst(g)," / ")
-                    'If g = 0 Then
-                    '    Directors = Dir(g)
-                    'Else
-                    '    Directors &= " / " & Dir(g)
-                    'End If
                 Next
 		    End If
             Return Directors
