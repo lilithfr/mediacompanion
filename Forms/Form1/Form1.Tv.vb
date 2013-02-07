@@ -1663,6 +1663,9 @@ Partial Public Class Form1
                         Exit Sub
                     End If
                     If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("tvshow.nfo", "")) <> -1 Then
+                        If Shows.ImdbId.Value Is Nothing Then
+                            Shows.Load()
+                        End If
                         language = Shows.Language.Value
                         sortorder = Shows.SortOrder.Value
                         tvdbid = Shows.TvdbId.Value
@@ -1956,7 +1959,7 @@ Partial Public Class Form1
                                     End If
                                 End If
                                 If imdbid = "" Then
-                                    Preferences.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show" & vbCrLf
+                                    Preferences.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show:  " & showtitle & vbCrLf
                                 End If
 
 

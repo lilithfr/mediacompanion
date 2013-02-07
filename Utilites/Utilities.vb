@@ -56,7 +56,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property DefaultScreenShotPath As String
 
     Public Shared Property ignoreParts As Boolean = False
-    Public Shared Property userCleanTags As String = "UNRATED|LIMITED"
+    Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
     Public Shared Property RARsize As Integer
 
     Private Shared _ApplicationPath As String
