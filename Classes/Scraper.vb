@@ -34,6 +34,15 @@ Module ModGlobals
         End If
     End Sub
 
+    <Extension()> _
+    Sub AppendList(ByRef s As String, lst As IEnumerable(Of String) , Optional separator As String=", ")
+        For Each m In lst
+            If s.IndexOf(m) = -1 Then
+                s.AppendValue(m, separator)
+            End If
+        Next
+    End Sub
+
 End Module
 
 
@@ -565,8 +574,7 @@ Public Class Classimdb
 
     ReadOnly Property Stars
         Get
-            Dim s=""
-
+            Dim s As String=""
             Dim context = Regex.Match(Html,REGEX_STARS, RegexOptions.Singleline).ToString
 
     	    If context = "" Then Return ""
@@ -585,12 +593,11 @@ Public Class Classimdb
 			Return s
         End Get
     End Property
-    
-    
+   
 
     ReadOnly Property Genres As String
         Get
-            Dim s=""
+            Dim s As String=""
             Dim D = 0
             Dim W = 0
 
@@ -603,9 +610,7 @@ Public Class Classimdb
 
                 Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
 
-                For Each m In lst
-                    s.AppendValue(m, " / ")
-                Next
+                s.AppendList(lst, " / ")
 
                 Return s
             End If
@@ -614,9 +619,10 @@ Public Class Classimdb
         End Get
     End Property
 
+
     ReadOnly Property Directors As String
         Get
-            Dim s=""
+            Dim s As String=""
 
 		    Dim D = Html.IndexOf("itemprop=""director""")
 
@@ -627,9 +633,7 @@ Public Class Classimdb
 				Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
 							 Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
 
-                For g = 0 To lst.Count - 1
-                    s.AppendValue(lst(g)," / ")
-                Next
+                s.AppendList(lst, " / ")
 		    End If
 
             Return s
@@ -640,7 +644,7 @@ Public Class Classimdb
     'NB Credits = Writer
     ReadOnly Property Credits As String
         Get
-            Dim s=""
+            Dim s As String=""
 
 		    Dim D = Html.IndexOf("itemprop=""writer""")
 
@@ -651,13 +655,12 @@ Public Class Classimdb
 				Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
 							 Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
 
-                For g = 0 To lst.Count - 1
-                    s.AppendValue(lst(g)," / ")
-                Next
+                s.AppendList(lst, " / ")
 		    End If
             Return s
         End Get
     End Property
+
 
 
     ReadOnly Property ReleaseDate As String
