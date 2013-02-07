@@ -4166,14 +4166,19 @@ Public Class Form1
 
     Public Sub DisplayMovie(Optional yielding As Boolean=False)
 
+        Dim selectedCells As DataGridViewSelectedCellCollection
+
         Try
+            selectedCells = DataGridViewMovies.SelectedCells
+
             If DataGridViewMovies.SelectedRows.Count = 1 Then
-                If LastMovieDisplayed = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
+                If LastMovieDisplayed = selectedCells(0).Value.ToString Then Return
             Else
                 LastMovieDisplayed = ""
             End If
-            LastMovieDisplayed = DataGridViewMovies.SelectedCells(0).Value.ToString
+            LastMovieDisplayed = selectedCells(0).Value.ToString
         Catch
+            Return
         End Try
 
         If yielding Then
@@ -4236,13 +4241,13 @@ Public Class Form1
                 If Yield(yielding) Then Return
 
                 'Check if the file trailer exist
-                If IO.File.Exists(DataGridViewMovies.SelectedCells(0).Value.ToString) = True Then
+                If IO.File.Exists(selectedCells(0).Value.ToString) = True Then
 
                     If Yield(yielding) Then Return
 
-'                    If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) = True And MultipleMoviesSelected = False Then
+'                    If System.IO.File.Exists(Utilities.GetTrailerName(selectedCells(0).Value.ToString)) = True And MultipleMoviesSelected = False Then
 
-                    Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(0).Value.ToString)
+                    Dim movie = oMovies.LoadMovie(selectedCells(0).Value.ToString)
                     
                     If Yield(yielding) Then Return
                     If movie.TrailerExists And MultipleMoviesSelected = False Then
@@ -4252,7 +4257,7 @@ Public Class Form1
                     End If
                 End If
 
-                Dim query = From f In filteredListObj Where f.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString
+                Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(0).Value.ToString
                 Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
                If Yield(yielding) Then Return
@@ -15905,6 +15910,7 @@ Public Class Form1
 
 
                 DisplayMovie(True)
+                Cursor.Current = Cursors.Default
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
