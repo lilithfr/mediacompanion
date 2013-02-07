@@ -675,9 +675,9 @@ Partial Public Class Form1
 
         Dim season As Integer = SelectedEpisode.Season.Value
         Dim episode As String = SelectedEpisode.Episode.Value
-        If episode < 10 Then
-            episode = "0" & episode
-        End If
+        'If episode < 10 Then
+        '    episode = "0" & episode
+        'End If
         Dim SeasonObj As New Media_Companion.TvSeason
         If SelectedEpisode.EpisodeNode.Parent IsNot Nothing Then
             SeasonObj = SelectedEpisode.EpisodeNode.Parent.Tag
