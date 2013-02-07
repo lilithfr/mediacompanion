@@ -565,11 +565,12 @@ Public Class Classimdb
 
     ReadOnly Property Stars
         Get
+            Dim s=""
+
             Dim context = Regex.Match(Html,REGEX_STARS, RegexOptions.Singleline).ToString
 
     	    If context = "" Then Return ""
-
-            Dim s=""
+            
             Dim star=""
 
             For Each m As Match In Regex.Matches(context, REGEX_HREF_PATTERN, RegexOptions.Singleline) 
@@ -589,6 +590,7 @@ Public Class Classimdb
 
     ReadOnly Property Genres As String
         Get
+            Dim s=""
             Dim D = 0
             Dim W = 0
 
@@ -601,22 +603,20 @@ Public Class Classimdb
 
                 Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
 
-                Genres = ""
-
                 For Each m In lst
-                    Genres.AppendValue(m, " / ")
+                    s.AppendValue(m, " / ")
                 Next
 
-                Return Genres
+                Return s
             End If
 
-            Return ""
+            Return s
         End Get
     End Property
 
     ReadOnly Property Directors As String
         Get
-            Directors=""
+            Dim s=""
 
 		    Dim D = Html.IndexOf("itemprop=""director""")
 
@@ -628,10 +628,11 @@ Public Class Classimdb
 							 Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
 
                 For g = 0 To lst.Count - 1
-                    Directors.AppendValue(lst(g)," / ")
+                    s.AppendValue(lst(g)," / ")
                 Next
 		    End If
-            Return Directors
+
+            Return s
         End Get
     End Property
 
@@ -639,7 +640,7 @@ Public Class Classimdb
     'NB Credits = Writer
     ReadOnly Property Credits As String
         Get
-            Credits=""
+            Dim s=""
 
 		    Dim D = Html.IndexOf("itemprop=""writer""")
 
@@ -651,33 +652,28 @@ Public Class Classimdb
 							 Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
 
                 For g = 0 To lst.Count - 1
-                    Credits.AppendValue(lst(g)," / ")
-                    'If g = 0 Then
-                    '    Credits = Dir(g)
-                    'Else
-                    '    Credits &= " / " & Dir(g)
-                    'End If
+                    s.AppendValue(lst(g)," / ")
                 Next
 		    End If
-            Return Directors
+            Return s
         End Get
     End Property
 
 
     ReadOnly Property ReleaseDate As String
         Get
-            ReleaseDate=""
+            Dim s=""
 
             Dim RelDate As Date
             Dim sRelDate As String = Regex.Match(Regex.Match(Html, REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
 
             If Not sRelDate = "" Then
                 If Date.TryParse(sRelDate, RelDate) Then
-                    ReleaseDate = RelDate.ToString("yyyy-MM-dd")
+                    s = RelDate.ToString("yyyy-MM-dd")
                 End If
             End If
 
-            Return ReleaseDate
+            Return s
         End Get
     End Property
 

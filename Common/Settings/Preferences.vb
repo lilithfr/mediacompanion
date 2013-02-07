@@ -222,7 +222,7 @@ Public Class Preferences
     Public Shared ActorResolutionSI         As Integer =  2     ' Height  768           SI = Selected Index
     Public Shared PosterResolutionSI        As Integer =  9     ' Height  1080  
     Public Shared BackDropResolutionSI      As Integer = 15     ' Full HD 1920x1080
-
+    Public Shared ShowMovieGridToolTip      As Boolean = True
     
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
@@ -1002,9 +1002,11 @@ Public Class Preferences
         root.AppendChild(doc, "TMDbUseCustomLanguage" , TMDbUseCustomLanguage    )
         root.AppendChild(doc, "TMDbCustomLanguage"    , TMDbCustomLanguageValue  )
        
-        root.AppendChild(doc, "ActorResolution"       , ActorResolutionSI          )
-        root.AppendChild(doc, "PosterResolution"      , PosterResolutionSI         )
-        root.AppendChild(doc, "BackDropResolution"    , BackDropResolutionSI       )
+        root.AppendChild(doc, "ActorResolution"       , ActorResolutionSI        )
+        root.AppendChild(doc, "PosterResolution"      , PosterResolutionSI       )
+        root.AppendChild(doc, "BackDropResolution"    , BackDropResolutionSI     )
+        
+        root.AppendChild(doc, "ShowMovieGridToolTip"  , ShowMovieGridToolTip     )
         
             
         doc.AppendChild(root)
@@ -1667,6 +1669,8 @@ Public Class Preferences
                 Case "PosterResolution"          : PosterResolutionSI          = thisresult.InnerXml
                 Case "BackDropResolution"        : BackDropResolutionSI        = thisresult.InnerXml
 
+                Case "ShowMovieGridToolTip"      : ShowMovieGridToolTip        = thisresult.InnerXml
+                
 
             End Select
             'Catch

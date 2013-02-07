@@ -43,9 +43,9 @@ Public Class Form1
 
     Public _yield As Boolean
     Public LastMovieDisplayed As String=""
-    Public FilteringByActor As Boolean
+    Public ActorFilter As String=""
     Public FilteringBySet As Boolean
-
+    
     'Public Shared Preferences As New Structures
 
     Public MainFormLoadedStatus As Boolean = False
@@ -1557,6 +1557,10 @@ Public Class Form1
                     PictureBoxActor.Load()
                 End If
 
+                If ActorFilter<>"" Then
+                    actorcb.SelectedItem = ActorFilter
+                End If
+
                 If Yield(yieldIng) Then Return
 
                 If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
@@ -2123,7 +2127,7 @@ Public Class Form1
             Dim Teste As Boolean = CreateMovieNfo(Utilities.GetFileName(newMovieFoundFilename), FullFileContent)
             If Teste = True Then mov_DBScrapedAdd(newMovieFoundFilename)
             'Call Mc.clsGridViewMovie.mov_FiltersAndSortApply()
-            UpdateFilteredList
+            'UpdateFilteredList
             If messbox.Visible = True Then messbox.Close()
             If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
         Else
@@ -2488,6 +2492,8 @@ Public Class Form1
             Throw ex
 #End If
         End Try
+
+        UpdateFilteredList
 
     '    ToolStripProgressBar1.Visible = False
         ToolStripStatusLabel6.Visible = False
@@ -3117,7 +3123,7 @@ Public Class Form1
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonResetFilters.Click
         Try
             FilteringBySet=False
-            FilteringByActor=False
+            ActorFilter=""
             filterOverride = False
             TextBox1.Text = ""
             txt_titlesearch.Text = ""
@@ -3208,7 +3214,7 @@ Public Class Form1
         If FullFileContent.ToLower <> "error" Then
 
             Dim Teste As Boolean = CreateMovieNfo(movie.mediapathandfilename, FullFileContent)
-            mov_ListRefresh()
+            'mov_ListRefresh()
         End If
         If messbox.Visible = True Then messbox.Close()
         If Me.Cursor = Cursors.WaitCursor Then Me.Cursor = Cursors.Default
@@ -3312,6 +3318,7 @@ Public Class Form1
         novaThread.SetApartmentState(ApartmentState.STA)
         novaThread.Start()
 
+        UpdateFilteredList
     End Sub
 
 
@@ -11401,7 +11408,7 @@ Public Class Form1
             '        filteredListObj.Add( New Data_GridViewMovie(movie) )
             '    End If
             'Next
-            FilteringByActor=True
+            ActorFilter=actorcb.Text
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & actorcb.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
         Catch ex As Exception
@@ -13668,6 +13675,7 @@ Public Class Form1
             ListBox17.Items.Add(com.command)
         Next
 
+        cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
     End Sub
 
     Private Sub RadioButton38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton38.CheckedChanged
@@ -22190,7 +22198,7 @@ End Sub
 
     Private Sub TimerToolTip_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerToolTip.Tick
         TimerToolTip.Enabled = False
-        TooltipGridViewMovies1.Visible = True
+        TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
     End Sub
 
     Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
@@ -22678,11 +22686,9 @@ End Sub
         btn_movTableSave.Enabled = DataDirty
     End Sub
 
-    Private Sub PictureBox6_Click(sender As System.Object, e As System.EventArgs) Handles PictureBox6.Click
 
-    End Sub
-
-    Private Sub TVShowsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles TVShowsToolStripMenuItem.Click
-
+    Private Sub cbShowMovieGridToolTip_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
+        Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
+        generalprefschanged = True
     End Sub
 End Class

@@ -1460,8 +1460,13 @@ Module General
 
             Dim nfoGenerator As WorkingWithNfoFiles
             nfoGenerator = New WorkingWithNfoFiles
+
             ' load nfo file to clean
             Dim movie As FullMovieDetails = nfoGenerator.mov_NfoLoadFull(nfoFilename)
+
+            If movie.fullmoviebody.movieset="" Then movie.fullmoviebody.movieset="-None-"
+            If movie.fullmoviebody.top250  ="" Then movie.fullmoviebody.top250  ="0"
+
             ' save to make sure additional features like saving actor thumbnails takes place
             nfoGenerator.mov_NfoSave(nfoFilename, movie, True)
 
@@ -1647,6 +1652,16 @@ Module General
             End If
         ElseIf Scraper.ToLower = "tmdb" Then
             Scraper = "metadata.themoviedb.org"
+
+            If MovieID.Substring(0, 2) = "tt" Then
+                Dim api As New WatTmdb.V3.Tmdb(TMDB.Key)
+
+                Dim movie = api.GetMovieByIMDB( MovieID, Preferences.TvdbLanguageCode )
+
+                MovieID = movie.id
+            End If
+
+
             If MovieID.Substring(0, 2) <> "tt" Then
                 'ParametersForScraper(0) = "http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/3f026194412846e530a208cf8a39e9cb/" & MovieID
                 ParametersForScraper(0) = String.Format("http://api.themoviedb.org/3/movie/{0}?api_key=57983e31fb435df4df77afb854740ea9&language={1}", MovieID, Preferences.TvdbLanguageCode)

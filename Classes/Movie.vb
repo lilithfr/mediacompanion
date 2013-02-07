@@ -53,7 +53,7 @@ Public Class Movie
     Property Scraped             As Boolean = False
     Private _scrapedMovie         As New FullMovieDetails
     Private _rescrapedMovie       As FullMovieDetails
-    Private _movieCache           As New ComboList
+    Public  _movieCache           As New ComboList
     Private _certificates         As New List(Of String)
     Private _imdbScraper          As New Classimdb
     Private _scraperFunctions     As New ScraperFunctions
@@ -715,6 +715,7 @@ Public Class Movie
 
     Sub LoadNFO
         _scrapedMovie = _nfoFunction.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
+        _nfoPathAndFilename=ActualNfoPathAndFilename
         Scraped=True
         Try
             AssignMovieToCache

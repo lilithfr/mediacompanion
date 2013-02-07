@@ -15,9 +15,17 @@ Public Class clsGridViewMovie
 
         If DataGridViewMovies.Rows.Count < 1 Then Return
 
+
+        'If Form1.DataGridViewMovies.Columns.Count = 26 Then
+        '    While Form1.DataGridViewMovies.Columns(0).CellType.Name="DataGridViewImageCell"
+        '        Form1.DataGridViewMovies.Columns.Remove(Form1.DataGridViewMovies.Columns(0))
+        '    End While
+        'End If
+
         imgWatched.Image = inImgWatched
         If Form1.DataGridViewMovies.Columns.Count < 26 Then
             Form1.DataGridViewMovies.Columns.Add(imgWatched)
+
         End If
         imgWatched.HeaderText = "Watched"
         imgWatched.Name = "Watched"
@@ -281,11 +289,10 @@ Public Class clsGridViewMovie
 
         Dim movie_ids As New List(Of String) 
 
-        If Form1.FilteringByActor then
-            Dim topactorname As String = Form1.actorcb.Text
+        If Form1.ActorFilter<>"" then
 
             For Each actor In Form1.oMovies.ActorDb
-                If actor.actorname = Form1.actorcb.Text Then
+                If actor.actorname = Form1.ActorFilter Then
                     movie_ids.Add(actor.movieid)
                 End If
             Next
@@ -404,14 +411,16 @@ Public Class clsGridViewMovie
 
         If Yield Then Return
 
-        Form1.DataGridViewBindingSource.DataSource = b
+        Dim lst = b.ToList
+
+        Form1.DataGridViewBindingSource.DataSource = lst
 
         If Yield Then Return
 
         GridviewMovieDesign(Form1,Form1.DataGridViewMovies)
 
 
-        Form1.LabelCountFilter.Text = "Displaying " & b.Count.ToString & " of  " & Form1.oMovies.MovieCache.Count & " movies"
+        Form1.LabelCountFilter.Text = "Displaying " & lst.Count.ToString & " of  " & Form1.oMovies.MovieCache.Count & " movies"
 
         Return
 
