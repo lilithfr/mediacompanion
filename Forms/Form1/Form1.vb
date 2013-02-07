@@ -22702,5 +22702,6 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+        generalprefschanged = True
     End Sub
 End Class
