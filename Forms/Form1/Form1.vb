@@ -22691,4 +22691,16 @@ End Sub
         Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
         generalprefschanged = True
     End Sub
+
+    Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
+        Try
+            If cbOverwriteArtwork.CheckState = CheckState.Checked Then
+                Preferences.overwritethumbs = False
+            Else
+                Preferences.overwritethumbs = True
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 End Class

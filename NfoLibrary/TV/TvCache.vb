@@ -278,9 +278,6 @@ Public Class TvCache
         For Each Show As TvShow In Shows
             For Each Season As TvSeason In Show.Seasons.Values
                 For Each Episode As TvEpisode In Season.Episodes
-                    'If Episode.Episode.Value < 10 Then
-                    '    Episode.Episode.Value = "0" & Episode.Episode.Value
-                    'End If
                     Episode.UpdateTreenode()
                 Next
                 Season.UpdateTreenode()
