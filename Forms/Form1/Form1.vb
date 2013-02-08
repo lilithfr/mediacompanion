@@ -22420,6 +22420,14 @@ Public Class Form1
         DataGridViewMovies.DataSource = DataGridViewBindingSource
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+
+        Try
+            For Each row As DataGridViewRow In DataGridViewMovies.Rows
+                row.Selected = (row.Cells(0).Value.ToString = workingMovie.fullpathandfilename)
+            Next
+        Catch
+        End Try
+        
         mov_FormPopulate()
         DisplayMovie()
     End Sub
