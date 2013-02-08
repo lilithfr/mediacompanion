@@ -773,11 +773,17 @@ Public Class Classimdb
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
             
-                If Genres      <> "" then totalinfo = totalinfo & "<genre>"      & Genres      & "</genre>"     & vbCrLf
-                If Directors   <> "" then totalinfo = totalinfo & "<director>"   & Directors   & "</director>"  & vbCrLf
-                If Credits     <> "" then totalinfo = totalinfo & "<credits>"    & Credits     & "</credits>"   & vbCrLf
-                If ReleaseDate <> "" then totalinfo = totalinfo & "<premiered>"  & ReleaseDate & "</premiered>" & vbCrLf
-                If Stars       <> "" then totalinfo = totalinfo & "<stars>"      & Stars       & "</stars>"     & vbCrLf
+                'If Genres      <> "" then totalinfo = totalinfo & "<genre>"      & Genres      & "</genre>"     & vbCrLf
+                'If Directors   <> "" then totalinfo = totalinfo & "<director>"   & Directors   & "</director>"  & vbCrLf
+                'If Credits     <> "" then totalinfo = totalinfo & "<credits>"    & Credits     & "</credits>"   & vbCrLf
+                'If ReleaseDate <> "" then totalinfo = totalinfo & "<premiered>"  & ReleaseDate & "</premiered>" & vbCrLf
+                'If Stars       <> "" then totalinfo = totalinfo & "<stars>"      & Stars       & "</stars>"     & vbCrLf
+
+                totalinfo = totalinfo & "<genre>"      & Genres      & "</genre>"     & vbCrLf
+                totalinfo = totalinfo & "<director>"   & Directors   & "</director>"  & vbCrLf
+                totalinfo = totalinfo & "<credits>"    & Credits     & "</credits>"   & vbCrLf
+                totalinfo = totalinfo & "<premiered>"  & ReleaseDate & "</premiered>" & vbCrLf
+                totalinfo = totalinfo & "<stars>"      & Stars       & "</stars>"     & vbCrLf
 
                 For f = 0 To webpage.Count - 1
                     webcounter = f
@@ -919,134 +925,134 @@ Public Class Classimdb
                         End Try
                     End If
 
-                    'director
-                    If totalinfo.IndexOf("<director>") = -1 Then
-                        If webpage(f).IndexOf("itemprop=""director""") <> -1 And webpage(f).IndexOf("</a>") = -1 Then
-                            Try
-                                movienfoarray = ""
-                                Dim listofdirectors As New List(Of String)
-                                listofdirectors.Clear()
-                                For g = 1 To 10
-                                    Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
-                                    If M.Success = True And M.Groups(1).Length Then
-                                        listofdirectors.Add(M.Groups(1).Value)
-                                    End If
-                                    If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                                Next
-                                For g = 0 To listofdirectors.Count - 1
-                                    If g = 0 Then
-                                        movienfoarray = listofdirectors(g)
-                                    Else
-                                        movienfoarray = movienfoarray & " / " & listofdirectors(g)
-                                    End If
-                                Next
-                                movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                    ''director
+                    'If totalinfo.IndexOf("<director>") = -1 Then
+                    '    If webpage(f).IndexOf("itemprop=""director""") <> -1 And webpage(f).IndexOf("</a>") = -1 Then
+                    '        Try
+                    '            movienfoarray = ""
+                    '            Dim listofdirectors As New List(Of String)
+                    '            listofdirectors.Clear()
+                    '            For g = 1 To 10
+                    '                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                    '                If M.Success = True And M.Groups(1).Length Then
+                    '                    listofdirectors.Add(M.Groups(1).Value)
+                    '                End If
+                    '                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                    '            Next
+                    '            For g = 0 To listofdirectors.Count - 1
+                    '                If g = 0 Then
+                    '                    movienfoarray = listofdirectors(g)
+                    '                Else
+                    '                    movienfoarray = movienfoarray & " / " & listofdirectors(g)
+                    '                End If
+                    '            Next
+                    '            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
 
-                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
-                            End Try
-                        End If
-                    End If
+                    '            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                    '            movienfoarray = encodespecialchrs(movienfoarray)
+                    '            totalinfo = totalinfo & "<director>" & movienfoarray & "</director>" & vbCrLf
+                    '        Catch
+                    '            totalinfo = totalinfo & "<director>scraper error</director>" & vbCrLf
+                    '        End Try
+                    '    End If
+                    'End If
 
-                    'credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
-                    'If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
-                    If totalinfo.IndexOf("<credits>") = -1 Then
-                        If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 And webpage(f + 1).IndexOf("href=""/keyword") < 0 Then
-                            '                                                                                           ^^^^^^^^^ Dirty hack to prevent this! ^^^^^^^^^^^
-                            Try
-                                movienfoarray = ""
-                                Dim listofwriters As New List(Of String)
-                                listofwriters.Clear()
-                                For g = 1 To 10
-                                    Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
-                                    If M.Success = True And M.Groups(1).Length Then
-                                        listofwriters.Add(M.Groups(1).Value)
-                                    End If
-                                    If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
-                                Next
-                                For g = 0 To listofwriters.Count - 1
-                                    If g = 0 Then
-                                        movienfoarray = listofwriters(g)
-                                    Else
-                                        movienfoarray = movienfoarray & " / " & listofwriters(g)
-                                    End If
-                                Next
-                                movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<credits>scraper error</credits>" & vbCrLf
-                            End Try
-                        End If
-                    End If
+                    ''credits        **** This will fail if 'Writer' appears under Keywords section. When IMDb enable itemprop= for this, use code from directors - HueyHQ
+                    ''If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 Then
+                    'If totalinfo.IndexOf("<credits>") = -1 Then
+                    '    If webpage(f).IndexOf("<h4 class=""inline"">") <> -1 And webpage(f + 1).IndexOf("Writer") <> -1 And webpage(f + 1).IndexOf("href=""/keyword") < 0 Then
+                    '        '                                                                                           ^^^^^^^^^ Dirty hack to prevent this! ^^^^^^^^^^^
+                    '        Try
+                    '            movienfoarray = ""
+                    '            Dim listofwriters As New List(Of String)
+                    '            listofwriters.Clear()
+                    '            For g = 1 To 10
+                    '                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                    '                If M.Success = True And M.Groups(1).Length Then
+                    '                    listofwriters.Add(M.Groups(1).Value)
+                    '                End If
+                    '                If webpage(f + g).IndexOf("</div>") <> -1 Then Exit For
+                    '            Next
+                    '            For g = 0 To listofwriters.Count - 1
+                    '                If g = 0 Then
+                    '                    movienfoarray = listofwriters(g)
+                    '                Else
+                    '                    movienfoarray = movienfoarray & " / " & listofwriters(g)
+                    '                End If
+                    '            Next
+                    '            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                    '            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                    '            movienfoarray = encodespecialchrs(movienfoarray)
+                    '            totalinfo = totalinfo & "<credits>" & movienfoarray & "</credits>" & vbCrLf
+                    '        Catch
+                    '            totalinfo = totalinfo & "<credits>scraper error</credits>" & vbCrLf
+                    '        End Try
+                    '    End If
+                    'End If
 
-                    'Stars
-                    If totalinfo.IndexOf("<stars>") = -1 Then
-                        If webpage(f).IndexOf("<h4 class=""inline"">Stars") <> -1 Then
-                            Try
-                                movienfoarray = ""
-                                Dim listofstars As New List(Of String)
-                                listofstars.Clear()
-                                For g = 1 To 10
-                                    Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
-                                    If M.Success = True And M.Groups(1).Length Then
-                                        listofstars.Add(M.Groups(1).Value)
-                                    End If
-                                    If webpage(f + g).IndexOf("</div>") <> -1 Or webpage(f + g).IndexOf("</span>") <> -1 Then Exit For
-                                Next
-                                For g = 0 To listofstars.Count - 1
-                                    If g = 0 Then
-                                        movienfoarray = listofstars(g)
-                                    Else
-                                        movienfoarray = movienfoarray & ", " & listofstars(g)
-                                    End If
-                                Next
-                                movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<stars>scraper error</stars>" & vbCrLf
-                            End Try
-                        End If
-                    End If
+                    ''Stars
+                    'If totalinfo.IndexOf("<stars>") = -1 Then
+                    '    If webpage(f).IndexOf("<h4 class=""inline"">Stars") <> -1 Then
+                    '        Try
+                    '            movienfoarray = ""
+                    '            Dim listofstars As New List(Of String)
+                    '            listofstars.Clear()
+                    '            For g = 1 To 10
+                    '                Dim M As Match = Regex.Match(webpage(f + g), ">(.*)</a>")
+                    '                If M.Success = True And M.Groups(1).Length Then
+                    '                    listofstars.Add(M.Groups(1).Value)
+                    '                End If
+                    '                If webpage(f + g).IndexOf("</div>") <> -1 Or webpage(f + g).IndexOf("</span>") <> -1 Then Exit For
+                    '            Next
+                    '            For g = 0 To listofstars.Count - 1
+                    '                If g = 0 Then
+                    '                    movienfoarray = listofstars(g)
+                    '                Else
+                    '                    movienfoarray = movienfoarray & ", " & listofstars(g)
+                    '                End If
+                    '            Next
+                    '            movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                    '            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                    '            movienfoarray = encodespecialchrs(movienfoarray)
+                    '            totalinfo = totalinfo & "<stars>" & movienfoarray & "</stars>" & vbCrLf
+                    '        Catch
+                    '            totalinfo = totalinfo & "<stars>scraper error</stars>" & vbCrLf
+                    '        End Try
+                    '    End If
+                    'End If
 
 
-                    'genre
-                    If totalinfo.IndexOf("<genre>") = -1 Then 
-                        If f > 5 Then
-                            If webpage(f).IndexOf("itemprop=""genre""") <> -1 And webpage(f).IndexOf("<span>") = -1 Then
-                                Dim listofgenre As New List(Of String)
-                                Dim count As Integer = f
-                                Try
-                                    For t = 1 To 10
-                                        If webpage(count + t).IndexOf("</div>") <> -1 Then Exit For
-                                        listofgenre.Add(webpage(count + t))
-                                    Next
-                                    For g = 0 To listofgenre.Count - 1
-                                        listofgenre(g) = listofgenre(g).Substring(listofgenre(g).IndexOf(">") + 1, listofgenre(g).IndexOf("<") - 5)
-                                    Next
-                                    For g = 0 To listofgenre.Count - 1
-                                        If g = 0 Then
-                                            movienfoarray = listofgenre(g)
-                                        Else
-                                            movienfoarray = movienfoarray & " / " & listofgenre(g)
-                                        End If
-                                    Next
-                                    movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                                    movienfoarray = encodespecialchrs(movienfoarray)
-                                    totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
-                                Catch
-                                    totalinfo = totalinfo & "<genre>scraper error</genre>" & vbCrLf
-                                End Try
-                            End If
-                        End If
-                    End If
+                    ''genre
+                    'If totalinfo.IndexOf("<genre>") = -1 Then 
+                    '    If f > 5 Then
+                    '        If webpage(f).IndexOf("itemprop=""genre""") <> -1 And webpage(f).IndexOf("<span>") = -1 Then
+                    '            Dim listofgenre As New List(Of String)
+                    '            Dim count As Integer = f
+                    '            Try
+                    '                For t = 1 To 10
+                    '                    If webpage(count + t).IndexOf("</div>") <> -1 Then Exit For
+                    '                    listofgenre.Add(webpage(count + t))
+                    '                Next
+                    '                For g = 0 To listofgenre.Count - 1
+                    '                    listofgenre(g) = listofgenre(g).Substring(listofgenre(g).IndexOf(">") + 1, listofgenre(g).IndexOf("<") - 5)
+                    '                Next
+                    '                For g = 0 To listofgenre.Count - 1
+                    '                    If g = 0 Then
+                    '                        movienfoarray = listofgenre(g)
+                    '                    Else
+                    '                        movienfoarray = movienfoarray & " / " & listofgenre(g)
+                    '                    End If
+                    '                Next
+                    '                movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                    '                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                    '                movienfoarray = encodespecialchrs(movienfoarray)
+                    '                totalinfo = totalinfo & "<genre>" & movienfoarray & "</genre>" & vbCrLf
+                    '            Catch
+                    '                totalinfo = totalinfo & "<genre>scraper error</genre>" & vbCrLf
+                    '            End Try
+                    '        End If
+                    '    End If
+                    'End If
 
 
                     'tagline
@@ -1185,23 +1191,23 @@ Public Class Classimdb
                         End If
                     End If
 
-                    'premiered
-                    If totalinfo.IndexOf("<premiered>") = -1 Then
-                        If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
-                            Try
-                                Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
-                                If M.Success = True Then
-                                    movienfoarray = M.Groups(1).Value
-                                Else
-                                    movienfoarray = "scraper error"
-                                End If
-                                movienfoarray = encodespecialchrs(movienfoarray)
-                                totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
-                            Catch
-                                totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
-                            End Try
-                        End If
-                    End If
+                    ''premiered
+                    'If totalinfo.IndexOf("<premiered>") = -1 Then
+                    '    If webpage(f).IndexOf("itemprop=""datePublished") <> -1 Then
+                    '        Try
+                    '            Dim M As Match = Regex.Match(webpage(f), "datetime=""(\d{4}-\d{2}-\d{2})"">")
+                    '            If M.Success = True Then
+                    '                movienfoarray = M.Groups(1).Value
+                    '            Else
+                    '                movienfoarray = "scraper error"
+                    '            End If
+                    '            movienfoarray = encodespecialchrs(movienfoarray)
+                    '            totalinfo = totalinfo & "<premiered>" & movienfoarray & "</premiered>" & vbCrLf
+                    '        Catch
+                    '            totalinfo = totalinfo & "<premiered>scraper error</premiered>" & vbCrLf
+                    '        End Try
+                    '    End If
+                    'End If
 
 
                     'studio
