@@ -586,7 +586,7 @@ Public Class Form1
         Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
         Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
         Mc.clsGridViewMovie.GridSort = "Asc"
-        Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+        Mc.clsGridViewMovie.GridviewMovieDesign(Me)
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         TooltipGridViewMovies1.Initialisation()
         DisplayMovie()
@@ -22144,7 +22144,7 @@ Public Class Form1
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
         If MainFormLoadedStatus = True Then
             Mc.clsGridViewMovie.GridFieldToDisplay1 = "FileName"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
     End Sub
@@ -22152,7 +22152,7 @@ Public Class Form1
     Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
         If MainFormLoadedStatus = True Then
             Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
     End Sub
@@ -22160,7 +22160,7 @@ Public Class Form1
     Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
         If MainFormLoadedStatus = True Then
             Mc.clsGridViewMovie.GridFieldToDisplay1 = "Folder"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
     End Sub
