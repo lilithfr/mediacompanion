@@ -22,7 +22,10 @@ Partial Class frmBatchScraper
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmBatchScraper))
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cbTmdbSetName = New System.Windows.Forms.CheckBox()
         Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
@@ -46,11 +49,12 @@ Partial Class frmBatchScraper
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.cbRenameFiles = New System.Windows.Forms.CheckBox()
         Me.CheckBox16 = New System.Windows.Forms.CheckBox()
         Me.CheckBox15 = New System.Windows.Forms.CheckBox()
         Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.cbTmdbSetName = New System.Windows.Forms.CheckBox()
+        Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.GroupBox4.SuspendLayout
@@ -82,6 +86,16 @@ Partial Class frmBatchScraper
         Me.GroupBox1.TabIndex = 28
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Main Tags to Rescrape"
+        '
+        'cbTmdbSetName
+        '
+        Me.cbTmdbSetName.AutoSize = true
+        Me.cbTmdbSetName.Location = New System.Drawing.Point(116, 110)
+        Me.cbTmdbSetName.Name = "cbTmdbSetName"
+        Me.cbTmdbSetName.Size = New System.Drawing.Size(102, 17)
+        Me.cbTmdbSetName.TabIndex = 19
+        Me.cbTmdbSetName.Text = "TMDb set name"
+        Me.cbTmdbSetName.UseVisualStyleBackColor = true
         '
         'CheckBox20
         '
@@ -255,7 +269,7 @@ Partial Class frmBatchScraper
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(15, 300)
+        Me.Button1.Location = New System.Drawing.Point(15, 326)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 32
@@ -266,7 +280,7 @@ Partial Class frmBatchScraper
         '
         Me.GroupBox3.Controls.Add(Me.CheckBox18)
         Me.GroupBox3.Controls.Add(Me.CheckBox17)
-        Me.GroupBox3.Location = New System.Drawing.Point(15, 227)
+        Me.GroupBox3.Location = New System.Drawing.Point(15, 253)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(455, 67)
         Me.GroupBox3.TabIndex = 31
@@ -295,7 +309,7 @@ Partial Class frmBatchScraper
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(395, 300)
+        Me.Button2.Location = New System.Drawing.Point(395, 326)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 33
@@ -304,15 +318,27 @@ Partial Class frmBatchScraper
         '
         'GroupBox4
         '
+        Me.GroupBox4.Controls.Add(Me.cbRenameFiles)
         Me.GroupBox4.Controls.Add(Me.CheckBox16)
         Me.GroupBox4.Controls.Add(Me.CheckBox15)
         Me.GroupBox4.Controls.Add(Me.CheckBox19)
         Me.GroupBox4.Location = New System.Drawing.Point(14, 180)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(456, 41)
+        Me.GroupBox4.Size = New System.Drawing.Size(456, 67)
         Me.GroupBox4.TabIndex = 34
         Me.GroupBox4.TabStop = false
         Me.GroupBox4.Text = "Other"
+        '
+        'cbRenameFiles
+        '
+        Me.cbRenameFiles.AutoSize = true
+        Me.cbRenameFiles.Location = New System.Drawing.Point(7, 41)
+        Me.cbRenameFiles.Name = "cbRenameFiles"
+        Me.cbRenameFiles.Size = New System.Drawing.Size(90, 17)
+        Me.cbRenameFiles.TabIndex = 16
+        Me.cbRenameFiles.Text = "Rename Files"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbRenameFiles, resources.GetString("cbRenameFiles.ToolTip"))
+        Me.cbRenameFiles.UseVisualStyleBackColor = true
         '
         'CheckBox16
         '
@@ -337,7 +363,7 @@ Partial Class frmBatchScraper
         'CheckBox19
         '
         Me.CheckBox19.AutoSize = true
-        Me.CheckBox19.Location = New System.Drawing.Point(133, 18)
+        Me.CheckBox19.Location = New System.Drawing.Point(139, 19)
         Me.CheckBox19.Name = "CheckBox19"
         Me.CheckBox19.Size = New System.Drawing.Size(131, 17)
         Me.CheckBox19.TabIndex = 0
@@ -354,21 +380,11 @@ Partial Class frmBatchScraper
         Me.Label1.Text = "This form can be used to rescrape all movies, you can select which tags are updat"& _ 
     "ed below,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"all other tags will remain unchanged."
         '
-        'cbTmdbSetName
-        '
-        Me.cbTmdbSetName.AutoSize = true
-        Me.cbTmdbSetName.Location = New System.Drawing.Point(116, 110)
-        Me.cbTmdbSetName.Name = "cbTmdbSetName"
-        Me.cbTmdbSetName.Size = New System.Drawing.Size(102, 17)
-        Me.cbTmdbSetName.TabIndex = 19
-        Me.cbTmdbSetName.Text = "TMDb set name"
-        Me.cbTmdbSetName.UseVisualStyleBackColor = true
-        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(485, 326)
+        Me.ClientSize = New System.Drawing.Size(477, 361)
         Me.ControlBox = false
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Button1)
@@ -376,8 +392,8 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.Label1)
-        Me.MaximumSize = New System.Drawing.Size(493, 360)
-        Me.MinimumSize = New System.Drawing.Size(493, 360)
+        Me.MaximumSize = New System.Drawing.Size(493, 400)
+        Me.MinimumSize = New System.Drawing.Size(493, 400)
         Me.Name = "frmBatchScraper"
         Me.Text = "Batch Update Wizard"
         Me.GroupBox1.ResumeLayout(false)
@@ -419,4 +435,6 @@ End Sub
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
     Friend WithEvents cbTmdbSetName As System.Windows.Forms.CheckBox
+    Friend WithEvents cbRenameFiles As System.Windows.Forms.CheckBox
+    Friend WithEvents ttBatchUpdateWizard As System.Windows.Forms.ToolTip
 End Class

@@ -1439,7 +1439,7 @@ Public Class Classimdb
 
 
 
-    Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999)
+    Public Function getimdbactors(ByVal imdbmirror As String, Optional ByVal imdbid As String = "", Optional ByVal title As String = "", Optional ByVal maxactors As Integer = 9999) As String
         Dim webpage As New List(Of String)
         Dim actors(5000, 3)
         Dim tempstring As String
@@ -1568,7 +1568,7 @@ Public Class Classimdb
 
         Return "Error"
     End Function
-    Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String)
+    Public Function gettrailerurl(ByVal imdbid As String, ByVal imdbmirror As String) As String
         Monitor.Enter(Me)
         Dim allok As Boolean = False
         Dim first As Integer

@@ -952,7 +952,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
 
-    Public Function mov_NfoLoadFull(ByVal path As String)
+    Public Function mov_NfoLoadFull(ByVal path As String) As FullMovieDetails
         Monitor.Enter(Me)
         Try
             Dim newmovie As New FullMovieDetails

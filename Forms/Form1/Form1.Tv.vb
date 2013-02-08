@@ -786,12 +786,13 @@ Partial Public Class Form1
     ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
     Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
         Dim PathToUse As String = DefaultPic
-        If Utilities.UrlIsValid(ImagePath) Then
+
+        If File.Exists(ImagePath) Then
+           PathToUse = ImagePath             
+        ElseIf Utilities.UrlIsValid(ImagePath) Then
             PicBox.ImageLocation = ImagePath
             PicBox.Load()
             Return True
-        ElseIf System.IO.File.Exists(ImagePath) Then
-            PathToUse = ImagePath
         End If
 
         Try

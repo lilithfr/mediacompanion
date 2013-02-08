@@ -108,14 +108,14 @@ Public Class TMDb
 
 
 
-    Public ReadOnly Property FrodoPosterThumbs
+    Public ReadOnly Property FrodoPosterThumbs As List(Of FrodoPosterThumb)
         Get
             Fetch
             Return _frodoPosterThumbs
         End Get
     End Property
 
-    Public ReadOnly Property FrodoFanartThumbs
+    Public ReadOnly Property FrodoFanartThumbs As FrodoFanartThumbs
         Get
             Fetch
             Return _frodoFanartThumbs
@@ -338,38 +338,66 @@ Public Class TMDb
 
         Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
 
-        'Trigger fetching of config again if the time limit has expired
-        If fi.Exists then
-            If  (DateTime.Now-fi.CreationTime).TotalDays>TMDbConfigFileMaxAgeInDays then
-                fi.Delete
-                _config_images_base_url = Nothing
-            End If
-        Else
-            _config_images_base_url = Nothing
-        End If
+        Dim expired As Boolean = True
+     
 
-        'Already assigned and up-to-date
-        If Not IsNothing(_config_images_base_url) then
-            return
-        End If
+        _config_images_base_url = Nothing
+
 
         Try
-            _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)   'JsonDeserialize(Of String)(TMDbConfigFile)
+            If fi.Exists then
+                expired = (DateTime.Now-fi.CreationTime).TotalDays>TMDbConfigFileMaxAgeInDays
+
+                If Not expired then
+                    _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
+                    Return  
+                End If
+            End If
         Catch
+        End Try
+ 
+
+        Dim tries As Integer=0
+
+
+        While tries<3
             Try
                 _config_images_base_url = _api.GetConfiguration().images.base_url
-                'JsonSerialize(TMDbConfigFile,_config_images_base_url )
+
+                If fi.Exists then fi.Delete
+
                 File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
+                Return
             Catch
+                System.Threading.Thread.Sleep(500)
+                tries += 1
             End Try
+        End While
+        
+
+        If Not IsNothing(_config_images_base_url) Then Return
+        
+
+        'Fallback on expired file
+        Try
+            If fi.Exists Then
+                _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
+            End If
+            Return
+        Catch
         End Try
 
 
-        If IsNothing(_config_images_base_url) then
-            _config_images_base_url = _api.GetConfiguration().images.base_url
-            'JsonSerialize(TMDbConfigFile,_config_images_base_url )
+        'If all else fails -> Write a default one
+        Try
+            _config_images_base_url = "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/"
+
+            If fi.Exists then fi.Delete
+
             File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
-        End If
+        Catch
+            Throw New Exception("AssignConfig_images_base_url failed")
+        End Try
     End Sub
 
 

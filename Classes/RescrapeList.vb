@@ -28,6 +28,8 @@ Public Class RescrapeList
     Property runtime_file   As Boolean
     Property tmdb_set_name  As Boolean
     Property Download_Trailer As Boolean
+    Property Rename_Files   As Boolean
+
     Sub New
 
     End Sub

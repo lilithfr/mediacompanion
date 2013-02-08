@@ -424,13 +424,13 @@ Public Class Movie
         End Get
     End Property
 
-	Public ReadOnly Property TrailerPath
+	Public ReadOnly Property TrailerPath As String
         Get
             Return Path.Combine(NfoPathPrefName.Replace(Path.GetFileName(NfoPathPrefName),""), Path.GetFileNameWithoutExtension(NfoPathPrefName) & "-trailer." & TrailerPathExtension)
         End Get
 	End Property
 
-	Public ReadOnly Property TrailerPathExtension
+	Public ReadOnly Property TrailerPathExtension As String
         Get
             If Not IsNothing(_youTubeTrailer) Then
                 Return _youTubeTrailer.Extension
@@ -1118,7 +1118,7 @@ Public Class Movie
         End If
     End Sub
 
-    Function NfoPosterScraperInfo
+    Function NfoPosterScraperInfo As String
         If Preferences.nfoposterscraper <> 15 then
             Return " - Try [X] checking more more\all NfoPosterScraper sources or edit config.xml and set nfoposterscraper to 15 (enable all sources)"
         End If
@@ -1267,7 +1267,7 @@ Public Class Movie
         ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
 	End Sub
 
-	Private Sub DeleteZeroLengthFile( fileName )
+	Private Sub DeleteZeroLengthFile( fileName As String )
 		If File.Exists(fileName) then
 			If (New IO.FileInfo(fileName)).Length = 0 then
 				File.Delete(fileName)
@@ -1919,6 +1919,12 @@ Public Class Movie
         AssignMovieToAddMissingData
         HandleOfflineFile             ' Do we need this?
         SaveNFO
+
+        If rl.Rename_Files And Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+            ReportProgress(,RenameExistingMetaFiles)
+            SaveNFO
+        End If
+
         UpdateCaches
     End Sub
 
@@ -2016,6 +2022,165 @@ Public Class Movie
         Return IO.Path.Combine(ActorPath, actorName.Replace(" ", "_") & ".tbn")
     End Function
 
+
+    Public Function RenameExistingMetaFiles As String
+
+        Dim log             = ""
+        Dim targetMovieFile = ""
+        Dim targetNfoFile   = ""
+        Dim oldName         = "" 
+        Dim newName         = "" 
+        Dim nextStackPart   = ""
+        Dim stackdesignator = ""
+        Dim newpath         = nfopath
+        Dim mediaFile       = mediapathandfilename
+        Dim stackName       = mediaFile
+        Dim isStack         = False
+        Dim isFirstPart     = True
+        Dim newextension    = IO.Path.GetExtension(mediaFile)
+        Dim newfilename     = NewNfoPathAndFilenameWithoutExtension
+
+        Dim movieStackList As New List(Of String)(New String() {mediaFile})
+        
+        Try
+            targetMovieFile = newpath & newfilename
+            targetNfoFile   = targetMovieFile
+
+
+            '
+            'PART 1 - Rename movie file(s):
+            '
+
+            '1.1 - Get movie file name(s):
+            Do While Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
+                If isFirstPart Then
+                    isStack = True    
+                    Dim i As Integer  
+                       
+                    If Not Preferences.MovieRenameEnable Then
+                        newfilename=stackName
+                    End If
+                                         
+                    targetMovieFile = newpath & newfilename & stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
+                    
+                    If Preferences.namemode = "1" Then targetNfoFile = targetMovieFile
+                Else
+                    movieStackList.Add(mediaFile)
+                End If
+                stackName = newpath & stackName & stackdesignator & nextStackPart & newextension
+                mediaFile = stackName
+            Loop
+
+            movieStackList.Sort 
+            
+            '1.2 - Rename movie file name(s):
+            For i = 0 To movieStackList.Count - 1
+
+                Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newextension)
+                
+                oldName = movieStackList(i)
+                newName = newpath & changename
+
+                RenameFile(oldName, newName, log)
+            Next
+
+
+            '
+            'PART 2 - Rename anciliary file(s) (nfo,poster,fanart & trailer):
+            '
+            For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts
+
+                newName = targetNfoFile & anciliaryFile
+
+                oldName = GetActualName(anciliaryFile)
+
+                If oldName<>"unknown" And anciliaryFile=".nfo" Then
+                    RemoveMovieFromCache
+                End If
+
+                If RenameFile(oldName, newName, log) And anciliaryFile=".nfo" Then
+                    _movieCache.fullpathandfilename = newName
+                    _movieCache.filename            = Path.GetFileName(newName)
+                    _movieCache.foldername          = Utilities.GetLastFolder(newName)
+                    UpdateMovieCache
+                End If
+             Next
+
+            mediapathandfilename = targetMovieFile & newextension
+
+            RenamedBaseName = targetNfoFile
+
+        Catch ex As Exception
+            log &= "!!!Rename Movie File FAILED !!!" & vbCrLf
+        End Try
+        Return log
+    End Function
+
+
+    Public Function GetActualName(anciliaryFile As String) As String
+      
+        Dim stackName       As String = mediapathandfilename
+        Dim stackDesignator As String = ""
+        Dim testName        As String = "" 
+
+        'Get stack name
+        Utilities.isMultiPartMedia(stackName, False, , stackDesignator)
+
+        testName = mediapathandfilename.Replace(IO.Path.GetExtension(mediapathandfilename), anciliaryFile)
+        If File.Exists(testName) Then Return testName
+ 
+        testName = NfoPathAndFilename.Replace(".nfo", anciliaryFile)
+        If File.Exists(testName) Then Return testName
+
+        'If stack part name in old name, try removing it...
+        If testName.Length-(stackDesignator.Length+1+anciliaryFile.Length) = testName.IndexOf(stackDesignator) then
+	        testName = testName.Substring(0,testName.Length-(stackDesignator.Length+1+anciliaryFile.Length))+anciliaryFile
+            If File.Exists(testName) Then Return testName
+        End If
+
+        If stackName<>mediapathandfilename Then
+            testName = nfopath & stackName & anciliaryFile
+            If File.Exists(testName) Then Return testName
+        End If
+
+        Return "unknown"
+    End Function
+
+
+    ReadOnly Property NewNfoPathAndFilenameWithoutExtension As String
+        Get
+            Dim s As String = Path.GetFileNameWithoutExtension(NfoPathAndFilename)
+
+            Try
+                If Preferences.MovieRenameEnable Then
+                    s = Preferences.MovieRenameTemplate
+                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title)         
+                    s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
+                    s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
+                    s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
+                    s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)        
+                    s = s.Replace("%L", _scrapedMovie.fullmoviebody.runtime)       
+                    s = s.Replace("%S", _scrapedMovie.fullmoviebody.source)        
+                    s = Utilities.cleanFilenameIllegalChars(s)     
+                End If
+            Catch
+            End Try
+
+            Return s
+        End Get
+    End Property
+
+
+    Function RenameFile(oldName As String, newName As String, Optional ByRef log As String="") As Boolean
+
+        If oldName<>newName AndAlso File.Exists(oldName) Then
+            File.Move(oldName,newName)
+            log &= "Renamed '" & Path.GetFileName(oldName) & "' to '" & Path.GetFileName(newName) & "'" & vbCrLf
+            Return True
+        End If
+
+        Return False
+    End Function
 
 
 End Class

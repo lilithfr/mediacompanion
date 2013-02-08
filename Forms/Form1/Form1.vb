@@ -20675,6 +20675,9 @@ Public Class Form1
             If DataGridViewMovies.SelectedRows.Count = 0 Then
                 e.Cancel = True
             End If
+
+            RenameFilesToolStripMenuItem.Enabled = Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode And Preferences.MovieRenameEnable
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -22118,21 +22121,23 @@ Public Class Form1
                 mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
             Else
 
+                Try
+                    'MovieListComboBox.SelectedItems.Clear()
+                    'MovieListComboBox.SelectedIndex = ptIndex
+                    'update context menu with movie name & also if we show the 'Play Trailer' menu item
+                    mov_ToolStripMovieName.BackColor = Color.Honeydew
+                    mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(6).Value.ToString & "'"
+                    mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
 
-                'MovieListComboBox.SelectedItems.Clear()
-                'MovieListComboBox.SelectedIndex = ptIndex
-                'update context menu with movie name & also if we show the 'Play Trailer' menu item
-                mov_ToolStripMovieName.BackColor = Color.Honeydew
-                mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(6).Value.ToString & "'"
-                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                    'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
 
-                'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
+                    'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) Then
 
-                'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) Then
+                    Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(0).Value.ToString)
 
-                Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(0).Value.ToString)
-
-                mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
+                    mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
+                Catch
+                End Try
             End If
         End If
         'Catch ex As Exception
@@ -22722,4 +22727,9 @@ Public Class Form1
         End Try
         generalprefschanged = True
     End Sub
+
+    Private Sub RenameFilesToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
+        mov_ScrapeSpecific("rename_files")
+    End Sub
+
 End Class

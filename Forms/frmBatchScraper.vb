@@ -295,4 +295,13 @@
         Form1.rescrapeList.tmdb_set_name = cbTmdbSetName.Checked
     End Sub
 
+    Private Sub cbRenameFiles_CheckedChanged( sender As Object,  e As EventArgs) Handles cbRenameFiles.CheckedChanged
+        Form1.rescrapeList.Rename_Files = cbRenameFiles.Checked
+    End Sub
+
+    Private Sub frmBatchScraper_Load( sender As Object,  e As EventArgs) Handles MyBase.Load
+
+        cbRenameFiles.Enabled = Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode And Preferences.MovieRenameEnable
+
+    End Sub
 End Class
