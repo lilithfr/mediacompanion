@@ -10164,6 +10164,14 @@ Public Class Form1
     Private Sub tv_PosterSetup()
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingSeason As TvSeason = tv_SeasonSelectedCurrently()
+        Dim ThisSeason As String
+        Dim SeasonNum As Integer = 0
+        If Not WorkingSeason Is Nothing Then
+            ThisSeason = WorkingSeason.ToString
+            ThisSeason = ThisSeason.Remove(0, 6)
+            SeasonNum = Val(ThisSeason)
+        End If
         'If workingTvShow.tvdbid = currentposterid Then
         '    Exit Sub
         'End If
@@ -10210,6 +10218,9 @@ Public Class Form1
         Next
 
         ComboBox2.SelectedIndex = 0
+        If SeasonNum > 0 Then
+            ComboBox2.SelectedIndex = SeasonNum + 1
+        End If
 
         '        For Each item In tvobjects
         '            ComboBox2.Items.Add(item)
