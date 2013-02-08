@@ -367,7 +367,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return aFileExists
     End Function
 
-    Public Shared Function GetFileName(ByVal path As String)
+    Public Shared Function GetFileName(ByVal path As String) As String
         Dim tempstring As String
         Dim tempfilename As String = path
         Dim actualpathandfilename As String = ""
@@ -576,7 +576,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "error"
     End Function
 
-    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withExtension As Boolean = False)
+    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withExtension As Boolean = False) As String
         Try 'to remove extension first if filename has one
             filename = filename.Replace(IO.Path.GetExtension(filename), "")
             'filename = Regex.Replace(filename, "(" & Join(VideoExtensions, "|") & ")+$", "")
@@ -2008,7 +2008,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         Return "Error"
     End Function
-    Public Shared Function cleanruntime(ByVal runtime As String)
+    Public Shared Function cleanruntime(ByVal runtime As String) As String
         Try
             Dim tempstring As String = runtime
             Dim hours As Integer = 0

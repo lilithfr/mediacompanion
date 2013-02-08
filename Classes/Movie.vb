@@ -78,6 +78,7 @@ Public Class Movie
     Property Actions As New ScrapeActions
 '    Property nfopathandfilename As String = ""
     Property RenamedBaseName As String = ""
+    Property Rescrape As Boolean=False
 
 #End Region 'Read-write properties
 
@@ -120,7 +121,7 @@ Public Class Movie
         End Get 
     End Property
 
-    Shared Public ReadOnly Property AvailableHeightResolutions
+    Shared Public ReadOnly Property AvailableHeightResolutions As List(Of Integer)
         Get
             If IsNothing(_availableHeightResolutions) then
                 _availableHeightResolutions = From x In Resolutions.Descendants("Resolution")
@@ -206,7 +207,7 @@ Public Class Movie
     'End Function
 
 
-    ReadOnly Property TrailerExists
+    ReadOnly Property TrailerExists As Boolean
         Get
             Return File.Exists(ActualTrailerPath)
         End Get
@@ -359,6 +360,8 @@ Public Class Movie
 
     Public ReadOnly Property NfoPathPrefName As String
         Get
+            If Rescrape Then Return ActualNfoPathAndFilename
+
             If Preferences.basicsavemode  Then
                 Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "movie.nfo")
             Else
@@ -369,12 +372,16 @@ Public Class Movie
 
     Public ReadOnly Property PosterPath As String
         Get
+            If Rescrape Then Return ActualPosterPath
+
             Return Preferences.GetPosterPath(NfoPathPrefName)
         End Get 
     End Property
 
     Public ReadOnly Property FanartPath As String
         Get
+            If Rescrape Then Return ActualFanartPath
+
             Return Preferences.GetFanartPath(NfoPathPrefName)
         End Get 
     End Property
@@ -725,7 +732,7 @@ Public Class Movie
 
     Sub SaveNFO
         RemoveMovieFromCaches
-        DeleteNFO
+        If Not Rescrape Then DeleteNFO
         _nfoFunction.mov_NfoSave(NfoPathPrefName, _scrapedMovie, True)
     End Sub
 
@@ -1282,7 +1289,7 @@ Public Class Movie
             Exit Sub
         End If
 
-        DeletePoster
+        If Not Rescrape Then DeletePoster
 
         Dim validUrl = False
 
@@ -1374,7 +1381,6 @@ Public Class Movie
         'To Do : Delete from networkpath = Preferences.actorsavepath
     End Sub     
 
-
     Sub DeleteNFO
         Utilities.SafeDeleteFile(ActualNfoPathAndFilename)
     End Sub
@@ -1443,7 +1449,7 @@ Public Class Movie
             Exit Sub
         End If
 
-        DeleteFanart
+        If Not Rescrape Then DeleteFanart
 
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
@@ -1805,6 +1811,7 @@ Public Class Movie
     
     Public Sub RescrapeSpecific(rl As RescrapeList)
 
+        Rescrape=True
         _rescrapedMovie = New FullMovieDetails
         
         'Loads previously scraped details from NFO into _scrapedMovie
@@ -1981,7 +1988,8 @@ Public Class Movie
 
         Dim point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
 
-        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, point.x, point.y )
+'        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, point.x, point.y )
+        Return DownloadCache.SaveImageToCacheAndPath(url, path, True, point.x, point.y )
     End Function
 
     Shared Function SaveActorImageToCacheAndPath(url As String, path As String)
@@ -1990,7 +1998,8 @@ Public Class Movie
 
         Dim height = GetHeightResolution(Preferences.ActorResolutionSI)
 
-        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
+'        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
+        Return DownloadCache.SaveImageToCacheAndPath(url, path, True, , height  )
     End Function
 
 
@@ -1998,7 +2007,8 @@ Public Class Movie
 
         Dim height = GetHeightResolution(Preferences.PosterResolutionSI)
 
-        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
+'        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
+        Return DownloadCache.SaveImageToCacheAndPath(url, path, True, , height  )
     End Function
 
 

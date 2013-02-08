@@ -586,9 +586,10 @@ Public Class Preferences
         'root.AppendChild(child)
 
 
-        child = doc.CreateElement("overwritethumbs")
-        child.InnerText = overwritethumbs.ToString.ToLower
-        root.AppendChild(child)
+        'Duplicate
+        'child = doc.CreateElement("overwritethumbs")
+        'child.InnerText = overwritethumbs.ToString.ToLower
+        'root.AppendChild(child)
 
 
         child = doc.CreateElement("defaulttvthumb")
@@ -722,7 +723,7 @@ Public Class Preferences
         child.InnerText = disabletvlogs.ToString.ToLower
         root.AppendChild(child)
 
-        child = doc.CreateElement("overwritethumb")
+        child = doc.CreateElement("overwritethumbs")
         child.InnerText = overwritethumbs.ToString.ToLower
         root.AppendChild(child)
 
@@ -1530,12 +1531,12 @@ Public Class Preferences
                         disabletvlogs = False
                     End If
 
-                Case "overwritethumb"
-                    If thisresult.InnerXml = "true" Then
-                        overwritethumbs = True
-                    ElseIf thisresult.InnerXml = "false" Then
-                        overwritethumbs = False
-                    End If
+                'Case "overwritethumb"
+                '    If thisresult.InnerXml = "true" Then
+                '        overwritethumbs = True
+                '    ElseIf thisresult.InnerXml = "false" Then
+                '        overwritethumbs = False
+                '    End If
 
                 Case "folderjpg"
                     If thisresult.InnerXml = "true" Then
