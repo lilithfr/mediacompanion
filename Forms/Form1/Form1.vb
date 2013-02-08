@@ -586,7 +586,7 @@ Public Class Form1
         Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
         Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
         Mc.clsGridViewMovie.GridSort = "Asc"
-        Mc.clsGridViewMovie.GridviewMovieDesign(Me,DataGridViewMovies)
+        Mc.clsGridViewMovie.GridviewMovieDesign(Me)
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         TooltipGridViewMovies1.Initialisation()
         DisplayMovie()
@@ -4163,15 +4163,18 @@ Public Class Form1
     End Sub
 
     
-
     Public Sub DisplayMovie(Optional yielding As Boolean=False)
-
-        Dim selectedCells As DataGridViewSelectedCellCollection
+        Try
+            DisplayMovie(DataGridViewMovies.SelectedCells,DataGridViewMovies.SelectedRows,yielding)
+        Catch
+            Return
+        End Try
+    End Sub
+    
+    Public Sub DisplayMovie(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection, yielding As Boolean)
 
         Try
-            selectedCells = DataGridViewMovies.SelectedCells
-
-            If DataGridViewMovies.SelectedRows.Count = 1 Then
+            If selectedRows.Count = 1 Then
                 If LastMovieDisplayed = selectedCells(0).Value.ToString Then Return
             Else
                 LastMovieDisplayed = ""
@@ -4190,153 +4193,142 @@ Public Class Form1
         'Clear all fields of the movie
         MovieFormInit()
 
-        If DataGridViewMovies.SelectedRows.Count = 0 Then Exit Sub
 
-            Dim MultipleMoviesSelected As Boolean = True
-            Dim needtoload As Boolean = False
-            Dim done As Boolean = False
+        If selectedRows.Count = 0 Then Exit Sub
 
-            If DataGridViewMovies.SelectedRows.Count > 1 Then
-                MultipleMoviesSelected = True
+
+        Dim needtoload As Boolean = False
+        Dim done As Boolean = False
+
+
+        If selectedRows.Count > 1 Then
+            mov_ToolStripPlayMovie.Visible = False
+            mov_ToolStripOpenFolder.Visible = False
+            mov_ToolStripViewNfo.Visible = False
+            ToolStripSeparator17.Visible = False
+            ToolStripSeparator5.Visible = False
+            ToolStripSeparator4.Visible = False
+            mov_ToolStripFanartBrowserAlt.Visible = False
+            mov_ToolStripPosterBrowserAlt.Visible = False
+            mov_ToolStripEditMovieAlt.Visible = False
+            mov_ToolStripReloadFromCache.Visible = False
+        End If
+
+        If Yield(yielding) Then Return
+
+        If selectedRows.Count = 1 Then
+
+            mov_ToolStripPlayMovie.Visible = True
+            mov_ToolStripOpenFolder.Visible = True
+            mov_ToolStripViewNfo.Visible = True
+            ToolStripSeparator17.Visible = True
+            ToolStripSeparator5.Visible = True
+            ToolStripSeparator4.Visible = True
+            mov_ToolStripFanartBrowserAlt.Visible = True
+            mov_ToolStripPosterBrowserAlt.Visible = True
+            mov_ToolStripEditMovieAlt.Visible = True
+            mov_ToolStripReloadFromCache.Visible = True
+
+            If titletxt.Visible = False Then
+                needtoload = True
             End If
-
-            If DataGridViewMovies.SelectedRows.Count > 1 Then
-                mov_ToolStripPlayMovie.Visible = False
-                mov_ToolStripOpenFolder.Visible = False
-                mov_ToolStripViewNfo.Visible = False
-                ToolStripSeparator17.Visible = False
-                ToolStripSeparator5.Visible = False
-                ToolStripSeparator4.Visible = False
-                mov_ToolStripFanartBrowserAlt.Visible = False
-                mov_ToolStripPosterBrowserAlt.Visible = False
-                mov_ToolStripEditMovieAlt.Visible = False
-                mov_ToolStripReloadFromCache.Visible = False
-            End If
+            titletxt.Visible = True
+            TextBoxMutisave.Visible = False
+            SplitContainer2.Visible = True
+            Label128.Visible = False
+            Label75.Visible = True
+            TextBox34.Visible = True
 
             If Yield(yielding) Then Return
 
-            If DataGridViewMovies.SelectedRows.Count = 1 Then
+            'Check if the file trailer exist
+            mov_ToolStripPlayTrailer.Visible = IO.File.Exists(selectedCells(0).Value.ToString)
 
-                mov_ToolStripPlayMovie.Visible = True
-                mov_ToolStripOpenFolder.Visible = True
-                mov_ToolStripViewNfo.Visible = True
-                ToolStripSeparator17.Visible = True
-                ToolStripSeparator5.Visible = True
-                ToolStripSeparator4.Visible = True
-                mov_ToolStripFanartBrowserAlt.Visible = True
-                mov_ToolStripPosterBrowserAlt.Visible = True
-                mov_ToolStripEditMovieAlt.Visible = True
-                mov_ToolStripReloadFromCache.Visible = True
+            If Yield(yielding) Then Return
 
-                If titletxt.Visible = False Then
-                    needtoload = True
-                End If
-                titletxt.Visible = True
-                TextBoxMutisave.Visible = False
-                SplitContainer2.Visible = True
-                Label128.Visible = False
-                Label75.Visible = True
-                TextBox34.Visible = True
+            Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(0).Value.ToString
+            Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
-                If Yield(yielding) Then Return
+            If Yield(yielding) Then Return
 
-                'Check if the file trailer exist
-                If IO.File.Exists(selectedCells(0).Value.ToString) = True Then
-
-                    If Yield(yielding) Then Return
-
-'                    If System.IO.File.Exists(Utilities.GetTrailerName(selectedCells(0).Value.ToString)) = True And MultipleMoviesSelected = False Then
-
-                    Dim movie = oMovies.LoadMovie(selectedCells(0).Value.ToString)
-                    
-                    If Yield(yielding) Then Return
-                    If movie.TrailerExists And MultipleMoviesSelected = False Then
-                        mov_ToolStripPlayTrailer.Visible = True
-                    Else
-                        mov_ToolStripPlayTrailer.Visible = False
-                    End If
-                End If
-
-                Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(0).Value.ToString
-                Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
-
-               If Yield(yielding) Then Return
-
-                If queryList.Count > 0 Then
-                    workingMovie.filedate = queryList(0).filedate
-                    workingMovie.filename = queryList(0).filename
-                    workingMovie.foldername = queryList(0).foldername
-                    workingMovie.fullpathandfilename = queryList(0).fullpathandfilename
-                    workingMovie.genre = queryList(0).genre
-                    workingMovie.id = queryList(0).id
-                    workingMovie.playcount = queryList(0).playcount
-                    workingMovie.rating = queryList(0).rating
-                    workingMovie.title = queryList(0).title
-                    workingMovie.titleandyear = queryList(0).titleandyear
-                    workingMovie.top250 = queryList(0).top250
-                    workingMovie.year = queryList(0).year
-                    Call mov_FormPopulate(yielding)
-                Else
-                    If needtoload = True Then Call mov_FormPopulate(yielding)
-                End If
-                done = True
+            If queryList.Count > 0 Then
+                workingMovie.filedate = queryList(0).filedate
+                workingMovie.filename = queryList(0).filename
+                workingMovie.foldername = queryList(0).foldername
+                workingMovie.fullpathandfilename = queryList(0).fullpathandfilename
+                workingMovie.genre = queryList(0).genre
+                workingMovie.id = queryList(0).id
+                workingMovie.playcount = queryList(0).playcount
+                workingMovie.rating = queryList(0).rating
+                workingMovie.title = queryList(0).title
+                workingMovie.titleandyear = queryList(0).titleandyear
+                workingMovie.top250 = queryList(0).top250
+                workingMovie.year = queryList(0).year
+                Call mov_FormPopulate(yielding)
             Else
-                outlinetxt.Text = ""
-                setsTxt.Text = ""
-                PictureBoxFanArt.Image = Nothing
-                moviethumb.Image = Nothing
-                roletxt.Text = ""
-                PictureBoxActor.Image = Nothing
-                SplitContainer2.Visible = False
-                titletxt.Visible = False
-                Label75.Visible = False
-                TextBox34.Visible = False
-                TextBoxMutisave.Visible = True
-                Label128.Visible = True
-                'ComboBox3.SelectedIndex = -1
-                Dim add As Boolean = True
-                Dim watched As String = ""
-                For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
-                    Dim old As String = watched
-                    For Each item In oMovies.MovieCache
-                        If item.fullpathandfilename = sRow.Cells(0).Value.ToString Then
+                If needtoload = True Then Call mov_FormPopulate(yielding)
+            End If
+            done = True
+        Else
+            outlinetxt.Text = ""
+            setsTxt.Text = ""
+            PictureBoxFanArt.Image = Nothing
+            moviethumb.Image = Nothing
+            roletxt.Text = ""
+            PictureBoxActor.Image = Nothing
+            SplitContainer2.Visible = False
+            titletxt.Visible = False
+            Label75.Visible = False
+            TextBox34.Visible = False
+            TextBoxMutisave.Visible = True
+            Label128.Visible = True
+            'ComboBox3.SelectedIndex = -1
+            Dim add As Boolean = True
+            Dim watched As String = ""
+            For Each sRow As DataGridViewRow In selectedRows
+                Dim old As String = watched
+                For Each item In oMovies.MovieCache
+                    If item.fullpathandfilename = sRow.Cells(0).Value.ToString Then
 
-                            If watched = "" Then
-                                watched = item.playcount
-                                old = watched
-                            Else
-                                watched = item.playcount
-                            End If
-                            If watched <> old Then
-                                add = False
-                            End If
-                            Exit For
+                        If watched = "" Then
+                            watched = item.playcount
+                            old = watched
+                        Else
+                            watched = item.playcount
                         End If
-
-                        If Yield(yielding) Then Return
-
-                    Next
-                Next
-                If add = False Then
-                    ButtonWatched.Text = ""
-                    ButtonWatched.BackColor = Color.Gray
-                Else
-                    If watched = "1" Then
-                        ButtonWatched.Text = "&Watched"
-                        ButtonWatched.BackColor = Color.LawnGreen
-                        ButtonWatched.Refresh()
-                    Else
-                        ButtonWatched.Text = "Un&watched"
-                        ButtonWatched.BackColor = Color.Red
-                        ButtonWatched.Refresh()
+                        If watched <> old Then
+                            add = False
+                        End If
+                        Exit For
                     End If
+
+                    If Yield(yielding) Then Return
+
+                Next
+            Next
+            If add = False Then
+                ButtonWatched.Text = ""
+                ButtonWatched.BackColor = Color.Gray
+            Else
+                If watched = "1" Then
+                    ButtonWatched.Text = "&Watched"
+                    ButtonWatched.BackColor = Color.LawnGreen
+                    ButtonWatched.Refresh()
+                Else
+                    ButtonWatched.Text = "Un&watched"
+                    ButtonWatched.BackColor = Color.Red
+                    ButtonWatched.Refresh()
                 End If
             End If
+        End If
 
 
     End Sub
 
     Private Sub DataGridViewMovies_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewMovies.CellClick
+        _yield = True
+        Application.DoEvents
+        _yield = False
         DisplayMovie()
     End Sub
 
@@ -22141,7 +22133,7 @@ Public Class Form1
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
         If MainFormLoadedStatus = True Then
             Mc.clsGridViewMovie.GridFieldToDisplay1 = "FileName"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
     End Sub
@@ -22149,7 +22141,7 @@ Public Class Form1
     Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
         If MainFormLoadedStatus = True Then
             Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
     End Sub
@@ -22157,7 +22149,7 @@ Public Class Form1
     Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
         If MainFormLoadedStatus = True Then
             Mc.clsGridViewMovie.GridFieldToDisplay1 = "Folder"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me, DataGridViewMovies)
+            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
     End Sub
@@ -22337,14 +22329,14 @@ Public Class Form1
     Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
         Select Case action
-            Case "BatchRescrape" : Return _rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
-            Case "ChangeMovie" : Return False
-            Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "BatchRescrape"          : Return _rescrapeList.FullPathAndFilenames.Count>1               ' filteredList.Count > 1
+            Case "ChangeMovie"            : Return False
+            Case "RescrapeAll"            : Return _rescrapeList.FullPathAndFilenames.Count>1
             Case "RescrapeDisplayedMovie" : Return False
-            Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
-            Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
-            Case "SearchForNewMovies" : Return True
-            Case "RebuildCaches" : Return False
+            Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
+            Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
+            Case "SearchForNewMovies"     : Return True
+            Case "RebuildCaches"          : Return False
         End Select
 
         MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
@@ -22506,8 +22498,8 @@ Public Class Form1
 
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-        If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel()
-        If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
+        If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
+        If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
     End Sub
 
 
@@ -22516,18 +22508,18 @@ Public Class Form1
     End Sub
 
 
-    Sub BckWrkScnMovies_Cancel()
+    Sub BckWrkScnMovies_Cancel
         If BckWrkScnMovies.IsBusy Then
             tsStatusLabel.Text = "* Cancelling... *"
             BckWrkScnMovies.CancelAsync()
         End If
     End Sub
 
-    Sub AbortFileDownload()
-        tsStatusLabel.Text = "* Aborting trailer download... *"
-        Monitor.Enter(countLock)
-        blnAbortFileDownload = True
-        Monitor.Exit(countLock)
+    Sub AbortFileDownload
+	    tsStatusLabel.Text = "* Aborting trailer download... *"
+	    Monitor.Enter(countLock)
+	    blnAbortFileDownload = True
+	    Monitor.Exit(countLock)
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
@@ -22694,7 +22686,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
+    Private Sub cbShowMovieGridToolTip_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
         Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
         generalprefschanged = True
     End Sub
