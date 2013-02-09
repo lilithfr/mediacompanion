@@ -1364,8 +1364,12 @@ Partial Public Class Form1
 
 
                     'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-
-                    TvGetArtwork(NewShow)
+                    If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                        TvGetArtwork(NewShow)
+                        TvGetArtwork(NewShow)
+                    Else
+                        TvGetArtwork(NewShow)
+                    End If
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                         NewShow.EpisodeActorSource.Value = "tvdb"
                     Else
@@ -1388,17 +1392,17 @@ Partial Public Class Form1
                     'nfoFunction.savetvshownfo(newtvshow.path, newtvshow, True)
 
                 End If
-                'DownloadMissingArt(NewShow)
-                NewShow.Save()
-                NewShow.UpdateTreenode()
-                'Cache.TvCache.Shows.Add(NewShow)
-                Cache.TvCache.Add(NewShow)
-                NewShow.SearchForEpisodesInFolder()
-                If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
-                    Preferences.tvFolders.Add(newTvFolders(0))
-                End If
-                bckgrnd_tvshowscraper.ReportProgress(0, NewShow)
-                newTvFolders.RemoveAt(0)
+                    'DownloadMissingArt(NewShow)
+                    NewShow.Save()
+                    NewShow.UpdateTreenode()
+                    'Cache.TvCache.Shows.Add(NewShow)
+                    Cache.TvCache.Add(NewShow)
+                    NewShow.SearchForEpisodesInFolder()
+                    If Not Preferences.tvFolders.Contains(newTvFolders(0)) Then
+                        Preferences.tvFolders.Add(newTvFolders(0))
+                    End If
+                    bckgrnd_tvshowscraper.ReportProgress(0, NewShow)
+                    newTvFolders.RemoveAt(0)
             Loop
 
         Catch ex As Exception
@@ -3120,19 +3124,27 @@ Partial Public Class Form1
                             tempstring = f.ToString
                         End If
                         Dim seasonXXbannerpath As String = ""
-                        If eden Then
-                            seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
-                            If Not IO.File.Exists(seasonXXbannerpath) Then
-                                Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                        Dim seasonXXposterpath As String = ""
+                        If tempstring <> "00" Then
+                            If eden Then
+                                seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
+                                If Not IO.File.Exists(seasonXXbannerpath) Then
+                                    Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                                End If
                             End If
-                        End If
-                        If frodo Then
-                            seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
-                            If Not IO.File.Exists(seasonXXbannerpath) Then
-                                Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                            If frodo Then
+                                seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-poster.jpg")
+                                seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
+                                If Not IO.File.Exists(seasonXXbannerpath) Then
+                                    Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                                    If IO.File.Exists(seasonXXbannerpath) Then
+                                        If FileCompare(seasonXXposterpath, seasonXXbannerpath) Then
+                                            IO.File.Delete(seasonXXbannerpath)
+                                        End If
+                                    End If
+                                End If
                             End If
-                        End If
-                        If tempstring = "00" Then
+                        ElseIf tempstring = "00" Then
                             If eden Then
                                 seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials.tbn")
                                 If Not IO.File.Exists(seasonXXbannerpath) Then
@@ -3140,9 +3152,15 @@ Partial Public Class Form1
                                 End If
                             End If
                             If frodo Then
+                                seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-poster.jpg")
                                 seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-specials-banner.jpg")
                                 If Not IO.File.Exists(seasonXXbannerpath) Then
                                     Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                                    If IO.File.Exists(seasonXXbannerpath) Then
+                                        If FileCompare(seasonXXposterpath, seasonXXbannerpath) Then
+                                            IO.File.Delete(seasonXXbannerpath)
+                                        End If
+                                    End If
                                 End If
                             End If
                         End If
