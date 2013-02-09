@@ -228,9 +228,8 @@
         End Try
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStart.Click
         Try
-            Form1.rescrapeList.activate = True
             Me.Close()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -295,13 +294,27 @@
         Form1.rescrapeList.tmdb_set_name = cbTmdbSetName.Checked
     End Sub
 
+
+    ReadOnly Property FilesRenamable As Boolean
+        Get
+            Return Not Preferences.usefoldernames And Not Preferences.basicsavemode And Preferences.MovieRenameEnable
+        End Get
+    End Property
+
+
+    'Disabled controls don't show tool tips (friggin' MS poo), so need to filter invalid changes 
+    ' 
     Private Sub cbRenameFiles_CheckedChanged( sender As Object,  e As EventArgs) Handles cbRenameFiles.CheckedChanged
-        Form1.rescrapeList.Rename_Files = cbRenameFiles.Checked
+        If FilesRenamable Then
+            Form1.rescrapeList.Rename_Files = cbRenameFiles.Checked
+        Else
+            cbRenameFiles.Checked = False
+        End If
     End Sub
 
-    Private Sub frmBatchScraper_Load( sender As Object,  e As EventArgs) Handles MyBase.Load
-
-        cbRenameFiles.Enabled = Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode And Preferences.MovieRenameEnable
-
+    'Fix MS XP tool tip won't display a second time bug (more friggin' MS poo)
+    Private Sub cbRenameFiles_MouseEnter( sender As System.Object,  e As System.EventArgs) Handles cbRenameFiles.MouseEnter
+        ttBatchUpdateWizard.Active = False
+        ttBatchUpdateWizard.Active = True
     End Sub
 End Class

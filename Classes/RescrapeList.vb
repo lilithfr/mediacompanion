@@ -24,7 +24,6 @@ Public Class RescrapeList
     Property mediatags      As Boolean
     Property missingposters As Boolean
     Property missingfanart  As Boolean
-    Property activate       As Boolean
     Property runtime_file   As Boolean
     Property tmdb_set_name  As Boolean
     Property Download_Trailer As Boolean
@@ -50,9 +49,29 @@ Public Class RescrapeList
         Dim propInfos() As PropertyInfo = Me.GetType.GetProperties
 
         For Each propInfo in propInfos
+
+            If Not propInfo.CanWrite Then Continue For
+
             propInfo.SetValue(Me,False,Nothing)
         Next
     End Sub
+
+    ReadOnly Property AnyEnabled As Boolean
+        Get
+            Dim propInfos() As PropertyInfo = Me.GetType.GetProperties
+
+            For Each propInfo in propInfos
+
+                If Not propInfo.CanWrite Then Continue For
+
+                Dim value As Boolean = propInfo.GetValue(Me,Nothing)
+
+                If value Then Return True
+            Next
+
+            Return False
+        End Get
+    End Property
 
 
 End Class

@@ -3925,7 +3925,7 @@ Public Class Form1
                 Dim displaywizard As New frmBatchScraper
                 displaywizard.ShowDialog
 
-                If rescrapeList.activate Then
+                If rescrapeList.AnyEnabled Then
 
                     _rescrapeList.FullPathAndFilenames.Clear
 

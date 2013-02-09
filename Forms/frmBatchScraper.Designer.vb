@@ -47,8 +47,8 @@ Partial Class frmBatchScraper
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.CheckBox18 = New System.Windows.Forms.CheckBox()
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.btnStart = New System.Windows.Forms.Button()
+        Me.gbOther = New System.Windows.Forms.GroupBox()
         Me.cbRenameFiles = New System.Windows.Forms.CheckBox()
         Me.CheckBox16 = New System.Windows.Forms.CheckBox()
         Me.CheckBox15 = New System.Windows.Forms.CheckBox()
@@ -57,7 +57,7 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
-        Me.GroupBox4.SuspendLayout
+        Me.gbOther.SuspendLayout
         Me.SuspendLayout
         '
         'GroupBox1
@@ -307,27 +307,27 @@ Partial Class frmBatchScraper
         Me.CheckBox17.Text = "Attempt To Locate && Download Fanart For Movies That Are Missing A Backdrop"
         Me.CheckBox17.UseVisualStyleBackColor = true
         '
-        'Button2
+        'btnStart
         '
-        Me.Button2.Location = New System.Drawing.Point(395, 326)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 33
-        Me.Button2.Text = "Start Update"
-        Me.Button2.UseVisualStyleBackColor = true
+        Me.btnStart.Location = New System.Drawing.Point(395, 326)
+        Me.btnStart.Name = "btnStart"
+        Me.btnStart.Size = New System.Drawing.Size(75, 23)
+        Me.btnStart.TabIndex = 33
+        Me.btnStart.Text = "Start Update"
+        Me.btnStart.UseVisualStyleBackColor = true
         '
-        'GroupBox4
+        'gbOther
         '
-        Me.GroupBox4.Controls.Add(Me.cbRenameFiles)
-        Me.GroupBox4.Controls.Add(Me.CheckBox16)
-        Me.GroupBox4.Controls.Add(Me.CheckBox15)
-        Me.GroupBox4.Controls.Add(Me.CheckBox19)
-        Me.GroupBox4.Location = New System.Drawing.Point(14, 180)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(456, 67)
-        Me.GroupBox4.TabIndex = 34
-        Me.GroupBox4.TabStop = false
-        Me.GroupBox4.Text = "Other"
+        Me.gbOther.Controls.Add(Me.cbRenameFiles)
+        Me.gbOther.Controls.Add(Me.CheckBox16)
+        Me.gbOther.Controls.Add(Me.CheckBox15)
+        Me.gbOther.Controls.Add(Me.CheckBox19)
+        Me.gbOther.Location = New System.Drawing.Point(14, 180)
+        Me.gbOther.Name = "gbOther"
+        Me.gbOther.Size = New System.Drawing.Size(456, 67)
+        Me.gbOther.TabIndex = 34
+        Me.gbOther.TabStop = false
+        Me.gbOther.Text = "Other"
         '
         'cbRenameFiles
         '
@@ -380,6 +380,13 @@ Partial Class frmBatchScraper
         Me.Label1.Text = "This form can be used to rescrape all movies, you can select which tags are updat"& _ 
     "ed below,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"all other tags will remain unchanged."
         '
+        'ttBatchUpdateWizard
+        '
+        Me.ttBatchUpdateWizard.AutoPopDelay = 10000
+        Me.ttBatchUpdateWizard.InitialDelay = 500
+        Me.ttBatchUpdateWizard.ReshowDelay = 100
+        Me.ttBatchUpdateWizard.ShowAlways = true
+        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -389,9 +396,10 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.GroupBox3)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.GroupBox4)
+        Me.Controls.Add(Me.btnStart)
+        Me.Controls.Add(Me.gbOther)
         Me.Controls.Add(Me.Label1)
+        Me.KeyPreview = true
         Me.MaximumSize = New System.Drawing.Size(493, 400)
         Me.MinimumSize = New System.Drawing.Size(493, 400)
         Me.Name = "frmBatchScraper"
@@ -400,8 +408,8 @@ Partial Class frmBatchScraper
         Me.GroupBox1.PerformLayout
         Me.GroupBox3.ResumeLayout(false)
         Me.GroupBox3.PerformLayout
-        Me.GroupBox4.ResumeLayout(false)
-        Me.GroupBox4.PerformLayout
+        Me.gbOther.ResumeLayout(false)
+        Me.gbOther.PerformLayout
         Me.ResumeLayout(false)
         Me.PerformLayout
 
@@ -425,8 +433,8 @@ End Sub
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox18 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox17 As System.Windows.Forms.CheckBox
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents btnStart As System.Windows.Forms.Button
+    Friend WithEvents gbOther As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox19 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox15 As System.Windows.Forms.CheckBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
