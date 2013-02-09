@@ -1994,8 +1994,8 @@ Public Class Movie
 
         Dim point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
 
-'        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, point.x, point.y )
-        Return DownloadCache.SaveImageToCacheAndPath(url, path, True, point.x, point.y )
+        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, point.X, point.Y)
+        'Return DownloadCache.SaveImageToCacheAndPath(url, path, True, point.X, point.Y)
     End Function
 
     Shared Function SaveActorImageToCacheAndPath(url As String, path As String)

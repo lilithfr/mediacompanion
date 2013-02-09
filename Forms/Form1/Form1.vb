@@ -8043,14 +8043,10 @@ Public Class Form1
         Dim ext As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
         Dim ext1 As String = path.Replace(IO.Path.GetExtension(path), ".tbn")
         Dim ext2 As String = path.Replace(IO.Path.GetExtension(path), "-thumb.jpg")
-        Dim eden As Boolean
-        Dim frodo As Boolean
-        Dim edenart As Boolean
-        Dim frodoart As Boolean
-        eden = Preferences.EdenEnabled
-        frodo = Preferences.FrodoEnabled
-        edenart = IO.File.Exists(ext1)
-        frodoart = IO.File.Exists(ext2)
+        Dim eden As Boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
+        Dim edenart As Boolean = IO.File.Exists(ext1)
+        Dim frodoart As Boolean = IO.File.Exists(ext2)
 
         If Not alleps(0).Thumbnail.FileName = Nothing And alleps(0).Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
             Dim url As String = alleps(0).Thumbnail.FileName
@@ -9780,21 +9776,22 @@ Public Class Form1
             Dim eps As New List(Of Media_Companion.TvEpisode)
             eps.Add(newepisode)
             Call nfoFunction.saveepisodenfo(eps, newepisode.NfoFilePath)
-            Dim ext As String = ""
-            Dim ext1 As String = ""
-            Dim ext2 As String = ""
-            Dim eden As Boolean
-            Dim frodo As Boolean
-            Dim edenart As Boolean
-            Dim frodoart As Boolean
             Dim fpath As String = newepisode.NfoFilePath
-            eden = Preferences.EdenEnabled
-            frodo = Preferences.FrodoEnabled
-            ext = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
-            ext1 = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
-            ext2 = fpath.Replace(IO.Path.GetExtension(fpath), "-thumb.jpg")
-            edenart = IO.File.Exists(ext1)
-            frodoart = IO.File.Exists(ext2)
+            Dim ext As String = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
+            Dim ext1 As String = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
+            Dim ext2 As String = fpath.Replace(IO.Path.GetExtension(fpath), "-thumb.jpg")
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled
+            Dim edenart As Boolean = IO.File.Exists(ext1)
+            Dim frodoart As Boolean = IO.File.Exists(ext2)
+
+            'eden = Preferences.EdenEnabled
+            'frodo = Preferences.FrodoEnabled
+            'ext = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
+            'ext1 = fpath.Replace(IO.Path.GetExtension(fpath), ".tbn")
+            'ext2 = fpath.Replace(IO.Path.GetExtension(fpath), "-thumb.jpg")
+            'edenart = IO.File.Exists(ext1)
+            'frodoart = IO.File.Exists(ext2)
 
             If Not newepisode.Thumbnail.FileName = Nothing And newepisode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
                 Dim url As String = newepisode.Thumbnail.FileName
@@ -19123,6 +19120,9 @@ Public Class Form1
 
                             If tvBatchList.shPosters = True Then
                                 TvGetArtwork(Cache.TvCache.Shows(f))
+                                If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                    TvGetArtwork(Cache.TvCache.Shows(f))
+                                End If
                             Else
                                 TvGetArtwork(Cache.TvCache.Shows(f), False)
                             End If

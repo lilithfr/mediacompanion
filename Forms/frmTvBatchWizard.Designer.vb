@@ -48,10 +48,10 @@ Partial Class tv_batch_wizard
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.CheckBoxRewiteAllNfo = New System.Windows.Forms.CheckBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.CheckBox21 = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxRewiteAllNfo = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -82,8 +82,8 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(408, 336)
-        Me.SplitContainer1.SplitterDistance = 161
+        Me.SplitContainer1.Size = New System.Drawing.Size(416, 343)
+        Me.SplitContainer1.SplitterDistance = 164
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -361,9 +361,19 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.Button2)
         Me.SplitContainer2.Panel2.Controls.Add(Me.Button1)
         Me.SplitContainer2.Panel2.Controls.Add(Me.CheckBox21)
-        Me.SplitContainer2.Size = New System.Drawing.Size(408, 388)
-        Me.SplitContainer2.SplitterDistance = 336
+        Me.SplitContainer2.Size = New System.Drawing.Size(416, 397)
+        Me.SplitContainer2.SplitterDistance = 343
         Me.SplitContainer2.TabIndex = 1
+        '
+        'CheckBoxRewiteAllNfo
+        '
+        Me.CheckBoxRewiteAllNfo.AutoSize = True
+        Me.CheckBoxRewiteAllNfo.Location = New System.Drawing.Point(18, 25)
+        Me.CheckBoxRewiteAllNfo.Name = "CheckBoxRewiteAllNfo"
+        Me.CheckBoxRewiteAllNfo.Size = New System.Drawing.Size(108, 17)
+        Me.CheckBoxRewiteAllNfo.TabIndex = 3
+        Me.CheckBoxRewiteAllNfo.Text = "Rewrite All NFO's"
+        Me.CheckBoxRewiteAllNfo.UseVisualStyleBackColor = True
         '
         'Button2
         '
@@ -393,21 +403,11 @@ Partial Class tv_batch_wizard
         Me.CheckBox21.Text = "Include locked shows"
         Me.CheckBox21.UseVisualStyleBackColor = True
         '
-        'CheckBoxRewiteAllNfo
-        '
-        Me.CheckBoxRewiteAllNfo.AutoSize = True
-        Me.CheckBoxRewiteAllNfo.Location = New System.Drawing.Point(18, 25)
-        Me.CheckBoxRewiteAllNfo.Name = "CheckBoxRewiteAllNfo"
-        Me.CheckBoxRewiteAllNfo.Size = New System.Drawing.Size(108, 17)
-        Me.CheckBoxRewiteAllNfo.TabIndex = 3
-        Me.CheckBoxRewiteAllNfo.Text = "Rewrite All NFO's"
-        Me.CheckBoxRewiteAllNfo.UseVisualStyleBackColor = True
-        '
         'tv_batch_wizard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(408, 388)
+        Me.ClientSize = New System.Drawing.Size(416, 397)
         Me.ControlBox = False
         Me.Controls.Add(Me.SplitContainer2)
         Me.MaximumSize = New System.Drawing.Size(424, 424)
