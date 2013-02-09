@@ -376,9 +376,9 @@ Public Class clsGridViewMovie
                 End If
             Case "Modified"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.createdate Ascending
+                    b = From f In b Order By f.filedate Ascending
                 Else
-                    b = From f In b Order By f.createdate Descending
+                    b = From f In b Order By f.filedate Descending
                 End If
             Case "Runtime"
                 If GridSort = "Asc" Then
@@ -394,9 +394,9 @@ Public Class clsGridViewMovie
                 End If
             Case "Sort(Order)"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.createdate Ascending
-                Else
                     b = From f In b Order By f.createdate Descending
+                Else
+                    b = From f In b Order By f.createdate Ascending
                 End If
             Case "Date Added"
                 If GridSort = "Asc" Then

@@ -990,7 +990,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.votes = ""
                     newmovie.fullmoviebody.sortorder = ""
                     newmovie.fullmoviebody.country = ""
-                    newmovie.fileinfo.createdate = "99991230235999"
+                    newmovie.fileinfo.createdate = ""
                     Return newmovie
                 End Try
                 Dim thisresult As XmlNode = Nothing
@@ -1769,13 +1769,7 @@ Public Class WorkingWithNfoFiles
                 End Try
                 Try
                     child = doc.CreateElement("createdate")
-                    If movietosave.fileinfo.createdate = Nothing Then
-                        Dim myDate2 As Date = System.DateTime.Now
-                        Try
-                            child.InnerText = Format(myDate2, Preferences.datePattern).ToString
-                        Catch ex2 As Exception
-                        End Try
-                    ElseIf movietosave.fileinfo.createdate = "" Then
+                    If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
                         Dim myDate2 As Date = System.DateTime.Now
                         Try
                             child.InnerText = Format(myDate2, Preferences.datePattern).ToString
@@ -2988,13 +2982,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             child = doc.CreateElement("createdate")
-            If homemovietosave.fileinfo.createdate = Nothing Then
-                Dim myDate2 As Date = System.DateTime.Now
-                Try
-                    child.InnerText = Format(myDate2, Preferences.datePattern).ToString
-                Catch ex2 As Exception
-                End Try
-            ElseIf homemovietosave.fileinfo.createdate = "" Then
+            If String.IsNullOrEmpty(homemovietosave.fileinfo.createdate) Then
                 Dim myDate2 As Date = System.DateTime.Now
                 Try
                     child.InnerText = Format(myDate2, Preferences.datePattern).ToString

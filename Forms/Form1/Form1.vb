@@ -3247,12 +3247,10 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
-                If workingMovieDetails.fileinfo.createdate <> Nothing Then
-                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
-                ElseIf workingMovieDetails.fileinfo.createdate <> "" Then
-                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate = workingMovieDetails.fileinfo.createdate
-                Else
+                If String.IsNullOrEmpty(workingMovieDetails.fileinfo.createdate) Then
                     newfullmovie.createdate = newfullmovie.filedate
+                Else
+                    newfullmovie.createdate = workingMovieDetails.fileinfo.createdate
                 End If
                 newfullmovie.originaltitle = workingMovieDetails.fullmoviebody.originaltitle
                 newfullmovie.outline = workingMovieDetails.fullmoviebody.outline

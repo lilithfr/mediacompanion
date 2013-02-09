@@ -781,15 +781,12 @@ Public Class Movie
 #End If
         End Try
 
-        Try
+        If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
             _movieCache.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        End Try
-
-        _movieCache.id        = _scrapedMovie.fullmoviebody.imdbid
+        Else
+            _movieCache.createdate = _scrapedMovie.fileinfo.createdate
+        End If
+        _movieCache.id = _scrapedMovie.fullmoviebody.imdbid
         _movieCache.rating    = _scrapedMovie.fullmoviebody.rating
         _movieCache.top250    = _scrapedMovie.fullmoviebody.top250
         _movieCache.genre     = _scrapedMovie.fullmoviebody.genre
