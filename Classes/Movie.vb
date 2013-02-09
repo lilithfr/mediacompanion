@@ -786,7 +786,7 @@ Public Class Movie
         Else
             _movieCache.createdate = _scrapedMovie.fileinfo.createdate
         End If
-        _movieCache.id = _scrapedMovie.fullmoviebody.imdbid
+        _movieCache.id        = _scrapedMovie.fullmoviebody.imdbid
         _movieCache.rating    = _scrapedMovie.fullmoviebody.rating
         _movieCache.top250    = _scrapedMovie.fullmoviebody.top250
         _movieCache.genre     = _scrapedMovie.fullmoviebody.genre
@@ -1319,9 +1319,8 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
-                DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
-
-        '          Utilities.DownloadImage(PosterUrl, PosterPath)
+                'DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
+                SavePosterImageToCacheAndPath(PosterUrl, PosterPath)
 
                 ReportProgress(MSG_OK,"Poster scraped OK" & vbCrLf)
 
@@ -1992,7 +1991,6 @@ Public Class Movie
         Dim point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
 
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, point.X, point.Y)
-        'Return DownloadCache.SaveImageToCacheAndPath(url, path, True, point.X, point.Y)
     End Function
 
     Shared Function SaveActorImageToCacheAndPath(url As String, path As String)
@@ -2010,8 +2008,7 @@ Public Class Movie
 
         Dim height = GetHeightResolution(Preferences.PosterResolutionSI)
 
-'        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
-        Return DownloadCache.SaveImageToCacheAndPath(url, path, True, , height  )
+        Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
     End Function
 
 
