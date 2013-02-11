@@ -77,6 +77,7 @@ Public Class Form1
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
     Public generalprefschanged As Boolean = False
     Public movieprefschanged As Boolean = False
+    Public tvprefschanged As Boolean = False
     Public cleanfilenameprefchanged As Boolean = False
     Public videosourceprefchanged As Boolean = False
     Public scraperLog As String = ""
@@ -13715,8 +13716,8 @@ Public Class Form1
         For Each prof In profileStruct.ProfileList
             ListBox13.Items.Add(prof.ProfileName)
         Next
-        Label112.Text = "Current Default Profile Is :- " & profileStruct.DefaultProfile
-        Label108.Text = "Current Startup Profile Is :- " & profileStruct.StartupProfile
+        Label112.Text = "Current Default Profile: " & profileStruct.DefaultProfile
+        Label108.Text = "Current Startup Profile: " & profileStruct.StartupProfile
         prefsload = False
 
         ListBox16.Items.Clear()
@@ -13728,6 +13729,8 @@ Public Class Form1
         Next
 
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
+        generalprefschanged = False
+        btnGeneralPrefsSaveChanges.Enabled = False
     End Sub
 
     Private Sub RadioButton38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton38.CheckedChanged
@@ -13735,7 +13738,10 @@ Public Class Form1
             If RadioButton38.Checked = True Then
                 Preferences.videomode = 1
             End If
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13746,7 +13752,10 @@ Public Class Form1
             If RadioButton37.Checked = True Then
                 Preferences.videomode = 2
             End If
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13771,7 +13780,10 @@ Public Class Form1
                 Label121.Visible = False
                 btn_custommediaplayer.Enabled = False
             End If
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13789,7 +13801,10 @@ Public Class Form1
                 Label121.Visible = True
                 Label121.Text = Preferences.selectedvideoplayer
             End If
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13815,7 +13830,6 @@ Public Class Form1
                 txtbx_minrarsize.Text = "8"
                 Exit Sub
             End If
-            If prefsload = False Then generalprefschanged = True
             Preferences.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -13829,6 +13843,10 @@ Public Class Form1
             Preferences.rarsize = 8
             txtbx_minrarsize.Text = "8"
         End If
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
 
@@ -13840,7 +13858,10 @@ Public Class Form1
             Else
                 Preferences.startupCache = True
             End If
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13856,7 +13877,10 @@ Public Class Form1
             Preferences.externalbrowser = CheckBox12.Checked
             btnFindBrowser.Enabled      = CheckBox12.Checked
 
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13880,6 +13904,7 @@ Public Class Form1
                     Me.util_ConfigLoad()
                 End If
                 generalprefschanged = False
+                btnGeneralPrefsSaveChanges.Enabled = False
             End If
             If Preferences.font <> Nothing Then
                 If Preferences.font <> "" Then
@@ -13888,6 +13913,15 @@ Public Class Form1
                     Call util_FontSetup()
                 End If
             End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
+        Try
+            Preferences.SaveConfig()
+            generalprefschanged = False
+            btnGeneralPrefsSaveChanges.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14202,7 +14236,8 @@ Public Class Form1
                 For f = 0 To 3
                     Preferences.moviethumbpriority(f) = lbPosterSourcePriorities.Items(f)
                 Next
-                generalprefschanged = True
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -14226,7 +14261,8 @@ Public Class Form1
                 For f = 0 To 3
                     Preferences.moviethumbpriority(f) = lbPosterSourcePriorities.Items(f)
                 Next
-                generalprefschanged = True
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -14312,15 +14348,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button82_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button82.Click
-        Try
-            Preferences.SaveConfig()
-            MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
-            generalprefschanged = False
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
 
     Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
@@ -14330,7 +14357,8 @@ Public Class Form1
             Else
                 Preferences.scrapemovieposters = False
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14343,7 +14371,8 @@ Public Class Form1
             Else
                 Preferences.savefanart = False
             End If
-            generalprefschanged = True
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14731,7 +14760,8 @@ Public Class Form1
                     Exit For
                 End If
             Next
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14744,7 +14774,8 @@ Public Class Form1
             Else
                 Preferences.tvposter = False
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14757,7 +14788,8 @@ Public Class Form1
             Else
                 Preferences.tvfanart = False
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14770,7 +14802,8 @@ Public Class Form1
             Else
                 Preferences.downloadtvseasonthumbs = False
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14781,7 +14814,8 @@ Public Class Form1
             If posterbtn.Checked = True Then
                 Preferences.postertype = "poster"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14792,7 +14826,8 @@ Public Class Form1
             If bannerbtn.Checked = True Then
                 Preferences.postertype = "banner"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14804,7 +14839,8 @@ Public Class Form1
             If RadioButton41.Checked = True Then
                 Preferences.seasonall = "none"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14816,7 +14852,8 @@ Public Class Form1
             If RadioButton40.Checked = True Then
                 Preferences.seasonall = "poster"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14828,7 +14865,8 @@ Public Class Form1
             If RadioButton39.Checked = True Then
                 Preferences.seasonall = "wide"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14859,7 +14897,8 @@ Public Class Form1
     Private Sub ComboBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox8.SelectedIndexChanged
         Try
             Preferences.TvdbActorScrape = ComboBox8.SelectedIndex.ToString
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14976,7 +15015,8 @@ Public Class Form1
         Else
             CheckBox_Use_XBMC_TVDB_Scraper.Checked = CheckState.Unchecked
         End If
-        generalprefschanged = False
+        tvprefschanged = False
+        btnTVPrefSaveChanges.Enabled = False
     End Sub
 
     Private Sub Button_tv_RegexScrape_Restore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexScrape_Restore.Click
@@ -14986,6 +15026,8 @@ Public Class Form1
             For Each Regex In tv_RegexScraper
                 ListBox_tv_RegexScrape.Items.Add(Regex)
             Next
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15003,6 +15045,8 @@ Public Class Form1
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
             ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15016,7 +15060,8 @@ Public Class Form1
             Else
                 Preferences.disabletvlogs = True
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15074,7 +15119,8 @@ Public Class Form1
             For Each regexp In ListBox_tv_RegexScrape.Items
                 tv_RegexScraper.Add(regexp)
             Next
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15090,7 +15136,8 @@ Public Class Form1
             ListBox_tv_RegexScrape.Items.Add(TextBox_tv_RegexScrape_New.Text)
             tv_RegexScraper.Add(TextBox_tv_RegexScrape_New.Text)
 
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15124,7 +15171,8 @@ Public Class Form1
             Next
             ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename >= idxRegexSelected, Preferences.tvrename - 1, Preferences.tvrename)
 
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15142,7 +15190,8 @@ Public Class Form1
             Next
             ComboBox_tv_EpisodeRename.SelectedIndex = Preferences.tvrename
 
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15165,13 +15214,14 @@ Public Class Form1
                 tv_RegexRename.Add(regexp)
             Next
             TextBox_tv_RegexRename_Edit.Clear()
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub Button_tv_RegexPrefSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_tv_RegexPrefSave.Click
+    Private Sub btnTVPrefSaveChanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVPrefSaveChanges.Click
         Try
             Preferences.SaveConfig()
             Call util_RegexSave()
@@ -15180,7 +15230,8 @@ Public Class Form1
                 ComboBox_tv_EpisodeRename.Items.Add(Regex)
             Next
             MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
-            generalprefschanged = False
+            tvprefschanged = False
+            btnTVPrefSaveChanges.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15188,7 +15239,7 @@ Public Class Form1
 
     Private Sub TabPage24_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage24.Leave
         Try
-            If generalprefschanged = True Then
+            If tvprefschanged = True Then
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
 
@@ -15200,7 +15251,8 @@ Public Class Form1
                     Me.util_ConfigLoad()
                     Call util_RegexLoad()
                 End If
-                generalprefschanged = False
+                tvprefschanged = False
+                btnTVPrefSaveChanges.Enabled = False
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -15426,7 +15478,7 @@ Public Class Form1
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = ListBox13.SelectedItem Then
                     profileStruct.defaultprofile = prof.ProfileName
-                    Label112.Text = "Current Default Profile Is :- " & prof.ProfileName
+                    Label112.Text = "Current Default Profile: " & prof.ProfileName
                     Call util_ProfileSave()
                     Exit For
                 End If
@@ -15442,7 +15494,7 @@ Public Class Form1
             For Each prof In profileStruct.ProfileList
                 If prof.ProfileName = ListBox13.SelectedItem Then
                     profileStruct.startupprofile = prof.ProfileName
-                    Label108.Text = "Current Startup Profile Is :- " & prof.ProfileName
+                    Label108.Text = "Current Startup Profile: " & prof.ProfileName
                     Call util_ProfileSave()
                     Exit For
                 End If
@@ -15773,17 +15825,29 @@ Public Class Form1
         If rbXBMCv_pre.Checked Then
             Preferences.XBMC_version = 0
         End If
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub rbXBMCv_post_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_post.CheckedChanged
         If rbXBMCv_post.Checked Then
             Preferences.XBMC_version = 2
         End If
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub rbXBMCv_both_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles rbXBMCv_both.CheckedChanged
         If rbXBMCv_both.Checked Then
             Preferences.XBMC_version = 1
+        End If
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
@@ -15805,7 +15869,8 @@ Public Class Form1
             Else
                 Preferences.enabletvhdtags = False
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15825,7 +15890,8 @@ Public Class Form1
             For Each item In ListBox_tv_RegexScrape.Items
                 tv_RegexScraper.Add(item)
             Next
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15845,7 +15911,8 @@ Public Class Form1
             For Each item In ListBox_tv_RegexScrape.Items
                 tv_RegexScraper.Add(item)
             Next
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -15866,7 +15933,8 @@ Public Class Form1
                 For Each item In ListBox_tv_RegexRename.Items
                     tv_RegexRename.Add(item)
                 Next
-                generalprefschanged = True
+                tvprefschanged = True
+                btnTVPrefSaveChanges.Enabled = True
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -15892,7 +15960,8 @@ Public Class Form1
                 For Each item In ListBox_tv_RegexRename.Items
                     tv_RegexRename.Add(item)
                 Next
-                generalprefschanged = True
+                tvprefschanged = True
+                btnTVPrefSaveChanges.Enabled = True
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -15907,7 +15976,8 @@ Public Class Form1
         Try
             If Renamer.setRenamePref(tv_RegexRename.Item(ComboBox_tv_EpisodeRename.SelectedIndex), tv_RegexScraper) Then
                 Preferences.tvrename = ComboBox_tv_EpisodeRename.SelectedIndex
-                generalprefschanged = True
+                tvprefschanged = True
+                btnTVPrefSaveChanges.Enabled = True
             Else
                 MsgBox("Format does not match scraper regex" & vbCrLf & "Please check")
             End If
@@ -16696,7 +16766,10 @@ Public Class Form1
 
                 Label130.Font = newFont
                 Label130.Text = fontString
+                If prefsload = False Then
                 generalprefschanged = True
+                    btnGeneralPrefsSaveChanges.Enabled = True
+                End If
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -18312,7 +18385,10 @@ Public Class Form1
             Else
                 Preferences.actorseasy = False
             End If
+            If prefsload = False Then
             generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18325,7 +18401,8 @@ Public Class Form1
             Else
                 Preferences.copytvactorthumbs = False
             End If
-            If prefsload = False Then generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18338,7 +18415,8 @@ Public Class Form1
             Else
                 Preferences.tvshowautoquick = False
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18351,7 +18429,8 @@ Public Class Form1
             Else
                 Preferences.autoepisodescreenshot = False
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18364,7 +18443,8 @@ Public Class Form1
             Else
                 Preferences.autorenameepisodes = False
             End If
-            If prefsload = False Then generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18521,6 +18601,10 @@ Public Class Form1
                 For Each com In Preferences.commandlist
                     ToolsToolStripMenuItem.DropDownItems.Add(com.title)
                 Next
+                If prefsload = False Then
+                    generalprefschanged = True
+                    btnGeneralPrefsSaveChanges.Enabled = True
+                End If
             Else
                 MsgBox("This feature needs both a title & command")
             End If
@@ -18563,6 +18647,10 @@ Public Class Form1
                 ListBox17.Items.Add(com.command)
                 ToolsToolStripMenuItem.DropDownItems.Add(com.title)
             Next
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -18725,7 +18813,10 @@ Public Class Form1
             Else
                 Preferences.intruntime = False
             End If
+            If prefsload = False Then
             generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19481,7 +19572,8 @@ Public Class Form1
                 Preferences.eprenamelowercase = False
             End If
             Renamer.applySeasonEpisodeCase()
-            If prefsload = False Then generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19728,7 +19820,10 @@ Public Class Form1
             Else
                 Preferences.ignorearticle = False
             End If
+            If prefsload = False Then
             generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19791,6 +19886,8 @@ Public Class Form1
                 GroupBox_TVDB_Scraper_Preferences.SendToBack()
             End If
             Read_XBMC_TVDB_Scraper_Config()
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19894,7 +19991,8 @@ Public Class Form1
                 Save_XBMC_TVDB_Scraper_Config("absolutenumber", "true")
             End If
             'Read_XBMC_TVDB_Scraper_Config()
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19908,7 +20006,8 @@ Public Class Form1
                 Save_XBMC_TVDB_Scraper_Config("fanart", "false")
             End If
             'Read_XBMC_TVDB_Scraper_Config()
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19922,7 +20021,8 @@ Public Class Form1
                 Save_XBMC_TVDB_Scraper_Config("posters", "false")
             End If
             'Read_XBMC_TVDB_Scraper_Config()
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19932,7 +20032,8 @@ Public Class Form1
         Try
             Save_XBMC_TVDB_Scraper_Config("language", ComboBox_TVDB_Language.Text)
             'Read_XBMC_TVDB_Scraper_Config()
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20119,7 +20220,10 @@ Public Class Form1
 
             Label130.Font = newFont
             Label130.Text = "Times New Roman, 9pt"
+            If prefsload = False Then
             generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -20285,6 +20389,10 @@ Public Class Form1
                 Preferences.renamenfofiles = False
             Else
                 Preferences.renamenfofiles = True
+            End If
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -21288,7 +21396,10 @@ Public Class Form1
             If filebrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 Preferences.selectedBrowser = filebrowser.FileName
             End If
-            If prefsload = False Then generalprefschanged = True
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -22759,7 +22870,10 @@ Public Class Form1
 
     Private Sub cbShowMovieGridToolTip_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
         Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
+        If prefsload = False Then
         generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub cbOverwriteArtwork_CheckedChanged(sender As Object, e As EventArgs) Handles cbOverwriteArtwork.CheckedChanged
@@ -22772,7 +22886,10 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+        If prefsload = False Then
         generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
     Private Sub RenameFilesToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
