@@ -2,7 +2,7 @@
 Public Class ComboList
 
     Property fullpathandfilename As String = "" 
-    Property movieset            As String = ""
+    Property MovieSet            As String = ""
     Property filename            As String = ""
     Property foldername          As String = ""
     Property title               As String = ""

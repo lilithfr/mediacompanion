@@ -28,7 +28,28 @@ Public Class Movies
             Return _data_GridViewMovieCache
         End Get
     End Property
-    
+
+ 
+    Public ReadOnly Property MoviesSetsIncNone As List(Of String)
+        Get
+            Dim q = From x In MovieCache Select ms=x.MovieSet.Split(",") Distinct
+             
+            Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
+        End Get
+    End Property    
+
+ 
+    Public ReadOnly Property MoviesSetsExNone As List(Of String)
+        Get
+            Dim x = MoviesSetsIncNone
+
+            x.Remove("-None-")
+
+            Return x
+        End Get
+    End Property    
+
+
     Private Sub Rebuild_Data_GridViewMovieCache
         _data_GridViewMovieCache.Clear
 
@@ -459,7 +480,7 @@ Public Class Movies
                             Case "source"
                                 newmovie.source = detail.InnerText
                             Case "set"
-                                newmovie.movieset = detail.InnerText
+                                newmovie.MovieSet = detail.InnerText
                             Case "sortorder"
                                 newmovie.sortorder = detail.InnerText
                             Case "filedate"
@@ -522,11 +543,11 @@ Public Class Movies
                     If newmovie.source = Nothing Then
                         newmovie.source = ""
                     End If
-                    If newmovie.movieset = Nothing Then
-                        newmovie.movieset = "-None-"
+                    If newmovie.MovieSet = Nothing Then
+                        newmovie.MovieSet = "-None-"
                     End If
-                    If newmovie.movieset = "" Then
-                        newmovie.movieset = "-None-"
+                    If newmovie.MovieSet = "" Then
+                        newmovie.MovieSet = "-None-"
                     End If
 
                     MovieCache.Add(newmovie)
@@ -589,10 +610,10 @@ Public Class Movies
                 childchild.InnerText = ""
                 child.AppendChild(childchild)
             End If
-            If movie.movieset <> Nothing Then
-                If movie.movieset <> "" Or movie.movieset <> "-None-" Then
+            If movie.MovieSet <> Nothing Then
+                If movie.MovieSet <> "" Or movie.MovieSet <> "-None-" Then
                     childchild = doc.CreateElement("set")
-                    childchild.InnerText = movie.movieset
+                    childchild.InnerText = movie.MovieSet
                     child.AppendChild(childchild)
                 Else
                     childchild = doc.CreateElement("set")

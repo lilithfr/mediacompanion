@@ -35,7 +35,7 @@
 
     Public Sub Assign(movie As ComboList)
         fullpathandfilename = movie.fullpathandfilename
-        movieset = movie.movieset
+        movieset = movie.MovieSet
         filename = movie.filename
         foldername = movie.foldername
         title = movie.title

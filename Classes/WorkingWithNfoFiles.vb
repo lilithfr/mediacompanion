@@ -816,7 +816,7 @@ Public Class WorkingWithNfoFiles
                         newmovie.genre = "problem / xml error"
                         newmovie.id = ""
                         newmovie.missingdata1 = 0
-                        newmovie.movieset = ""
+                        newmovie.MovieSet = ""
                         newmovie.source = ""
                         newmovie.originaltitle = newmovie.title
                         newmovie.outline = ""
@@ -852,10 +852,10 @@ Public Class WorkingWithNfoFiles
                                 Case "originaltitle"
                                     newmovie.originaltitle = thisresult.InnerText
                                 Case "set"
-                                    If newmovie.movieset = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
-                                        newmovie.movieset = thisresult.InnerText
+                                    If newmovie.MovieSet = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                        newmovie.MovieSet = thisresult.InnerText
                                     Else
-                                        newmovie.movieset = newmovie.movieset & " / " & thisresult.InnerText
+                                        newmovie.MovieSet = newmovie.MovieSet & " / " & thisresult.InnerText
                                     End If
                                 Case "source"
                                     newmovie.source = thisresult.InnerText
@@ -919,7 +919,7 @@ Public Class WorkingWithNfoFiles
                     If newmovie.id = Nothing Then newmovie.id = ""
                     If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
                     If newmovie.source = Nothing Then newmovie.source = ""
-                    If newmovie.movieset = "" Or newmovie.movieset = Nothing Then newmovie.movieset = "-None-"
+                    If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
                     'if there is no entry for originaltitle, then use the current title. this should only come into use
                     'for old movies since new ones will have the originaltitle created when scraped
                     If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title

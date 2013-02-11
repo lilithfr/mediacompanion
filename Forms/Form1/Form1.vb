@@ -3474,15 +3474,15 @@ Public Class Form1
                     newfullmovie.id = workingMovieDetails.fullmoviebody.imdbid
                     newfullmovie.outline = workingMovieDetails.fullmoviebody.outline
                     newfullmovie.plot = workingMovieDetails.fullmoviebody.plot
-                    newfullmovie.movieset = workingMovieDetails.fullmoviebody.movieset
+                    newfullmovie.MovieSet = workingMovieDetails.fullmoviebody.movieset
                     newfullmovie.source = workingMovieDetails.fullmoviebody.source
                     newfullmovie.year = workingMovieDetails.fullmoviebody.year
                     If newfullmovie.source = Nothing Then newfullmovie.source = ""
-                    If newfullmovie.movieset = Nothing Then
-                        newfullmovie.movieset = "-None-"
+                    If newfullmovie.MovieSet = Nothing Then
+                        newfullmovie.MovieSet = "-None-"
                     End If
-                    If newfullmovie.movieset = "" Then
-                        newfullmovie.movieset = "-None-"
+                    If newfullmovie.MovieSet = "" Then
+                        newfullmovie.MovieSet = "-None-"
                     End If
 
                     'oMovies.MovieCache.RemoveAt(f)
@@ -3590,12 +3590,12 @@ Public Class Form1
                         newfullmovie.runtime = movie.fullmoviebody.runtime
                         '              newfullmovie.id = movie.fullmoviebody.imdbid
                         newfullmovie.outline = movie.fullmoviebody.outline
-                        newfullmovie.movieset = movie.fullmoviebody.movieset
-                        If newfullmovie.movieset = Nothing Then
-                            newfullmovie.movieset = "-None-"
+                        newfullmovie.MovieSet = movie.fullmoviebody.movieset
+                        If newfullmovie.MovieSet = Nothing Then
+                            newfullmovie.MovieSet = "-None-"
                         End If
-                        If newfullmovie.movieset = "" Then
-                            newfullmovie.movieset = "-None-"
+                        If newfullmovie.MovieSet = "" Then
+                            newfullmovie.MovieSet = "-None-"
                         End If
                         newfullmovie.source = movie.fullmoviebody.source
                         If newfullmovie.source = Nothing Then
@@ -4193,7 +4193,7 @@ Public Class Form1
         workingMovie.titleandyear = Nothing
         workingMovie.top250 = Nothing
         workingMovie.year = Nothing
-        workingMovie.movieset = Nothing
+        workingMovie.MovieSet = Nothing
         setsTxt.Text = ""
         titletxt.Text = ""
         TextBox3.Text = ""
@@ -17157,7 +17157,7 @@ Public Class Form1
 #End If
                         End Try
                         Try
-                            If oMovies.MovieCache(f).movieset <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then
+                            If oMovies.MovieCache(f).MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then
                                 changed = True
                             End If
                         Catch ex As Exception
@@ -17232,7 +17232,7 @@ Public Class Form1
                             End Try
 
                             Try
-                                changedmovie.movieset = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
+                                changedmovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
                             Catch ex As Exception
 #If SilentErrorScream Then
                                 Throw ex
@@ -17278,7 +17278,7 @@ Public Class Form1
                             'changedmoviedetails.fullmoviebody.plot = changedmovie.plot
                             changedmoviedetails.fullmoviebody.rating = changedmovie.rating
                             changedmoviedetails.fullmoviebody.source = changedmovie.source
-                            changedmoviedetails.fullmoviebody.movieset = changedmovie.movieset
+                            changedmoviedetails.fullmoviebody.movieset = changedmovie.MovieSet
                             changedmoviedetails.fullmoviebody.sortorder = changedmovie.sortorder
                             changedmoviedetails.fullmoviebody.top250 = changedmovie.top250
 
@@ -21313,41 +21313,85 @@ Public Class Form1
 
 
     Private Sub MovieAddSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieAddSetBtn.Click
-        If ListBox4.SelectedItem <> Nothing Then
-            If ListBox4.SelectedItem <> "" Then
-                Dim exists As Boolean = False
-                For Each item In ListBox14.Items
-                    If item = ListBox4.SelectedItem Then
-                        exists = True
-                        Exit For
-                    End If
-                Next
-                If exists = False Then
-                    For f = ListBox14.Items.Count - 1 To 0 Step -1
-                        If ListBox14.Items(f) = "-None-" Then
-                            ListBox14.Items.RemoveAt(f)
-                        End If
-                    Next
-                    ListBox14.Items.Add(ListBox4.SelectedItem)
-                End If
-                workingMovieDetails.fullmoviebody.movieset = ""
-                Dim tempsets As String = ""
-                For f = 0 To ListBox14.Items.Count - 1
 
-                    If f = 0 Then
-                        tempsets = ListBox14.Items(f)
-                    Else
-                        tempsets = tempsets & " / " & ListBox14.Items(f)
-                    End If
-                Next
-                'workingMovieDetails.fullmoviebody.movieset = tempsets
-                setsTxt.Text = tempsets
+        If ListBox4.SelectedItems.Count=0 Then Return
 
-                Call mov_SaveQuick()
-
+        For Each item In ListBox4.SelectedItems
+            If ListBox14.Items.IndexOf(item) = -1 Then
+                ListBox14.Items.Add(item)
             End If
-        End If
+        Next
+        
+        ListBox14.Items.Remove("-None-")
+
+        Dim list As List(Of String) = new List(Of String)(ListBox14.Items.Cast(Of String)())
+
+        list = list.OrderBy(Function(m) m).ToList
+       
+        ListBox14.Items.Clear
+        ListBox14.Items.AddRange(list.ToArray)
+
+
+        workingMovieDetails.fullmoviebody.movieset = ""
+        Dim tempsets As String = ""
+        For f = 0 To ListBox14.Items.Count - 1
+
+            If f = 0 Then
+                tempsets = ListBox14.Items(f)
+            Else
+                tempsets = tempsets & " / " & ListBox14.Items(f)
+            End If
+        Next
+        'workingMovieDetails.fullmoviebody.movieset = tempsets
+        setsTxt.Text = tempsets
+
+        Call mov_SaveQuick()
+
+
+
+        'If ListBox4.SelectedItem <> Nothing Then
+        '    If ListBox4.SelectedItem <> "" Then
+                'Dim exists As Boolean = False
+                'For Each item In ListBox14.Items
+                '    If item = ListBox4.SelectedItem Then
+                '        exists = True
+                '        Exit For
+                '    End If
+                'Next
+                'If exists = False Then
+                '    For f = ListBox14.Items.Count - 1 To 0 Step -1
+                '        If ListBox14.Items(f) = "-None-" Then
+                '            ListBox14.Items.RemoveAt(f)
+                '        End If
+                '    Next
+                '    ListBox14.Items.Add(ListBox4.SelectedItem)
+                'End If
+
+        '        workingMovieDetails.fullmoviebody.movieset = ""
+        '        Dim tempsets As String = ""
+        '        For f = 0 To ListBox14.Items.Count - 1
+
+        '            If f = 0 Then
+        '                tempsets = ListBox14.Items(f)
+        '            Else
+        '                tempsets = tempsets & " / " & ListBox14.Items(f)
+        '            End If
+        '        Next
+        '        'workingMovieDetails.fullmoviebody.movieset = tempsets
+        '        setsTxt.Text = tempsets
+
+        '        Call mov_SaveQuick()
+
+        '    End If
+        'End If
+
+       
+        
+
     End Sub
+
+
+
 
     'Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
     '    If ListBox14.SelectedItem <> "-None-" Then
@@ -21525,29 +21569,53 @@ Public Class Form1
     'End Sub
 
     Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
-        If ListBox14.SelectedItem <> "-None-" Then
-            ListBox14.Items.Remove(ListBox14.SelectedItem)
-            If ListBox14.Items.Count = 0 Then
-                ListBox14.Items.Add("-None-")
-            End If
-            workingMovieDetails.fullmoviebody.movieset = ""
-            Dim tempsets As String = ""
-            For f = 0 To ListBox14.Items.Count - 1
-                If f = 0 Then
-                    tempsets = ListBox14.Items(f)
-                Else
-                    tempsets = tempsets & " / " & ListBox14.Items(f)
-                End If
-            Next
-            'workingMovieDetails.fullmoviebody.movieset = tempsets
-            setsTxt.Text = tempsets
 
-            Call mov_SaveQuick()
-        Else
-            MsgBox("Can only remove Added Sets")
+        If ListBox14.SelectedItems.Count=0 Then Return
+
+        Do While ListBox14.SelectedItems.Count>0
+            ListBox14.Items.Remove(ListBox14.SelectedItem)
+        Loop
+        
+        If ListBox14.Items.Count=0 Then
+            ListBox14.Items.Add("-None-")
         End If
 
+        workingMovieDetails.fullmoviebody.movieset = ""
+        Dim tempsets As String = ""
+        For f = 0 To ListBox14.Items.Count - 1
+            If f = 0 Then
+                tempsets = ListBox14.Items(f)
+            Else
+                tempsets = tempsets & " / " & ListBox14.Items(f)
+            End If
+        Next
+        'workingMovieDetails.fullmoviebody.movieset = tempsets
+        setsTxt.Text = tempsets
 
+        Call mov_SaveQuick()
+
+
+        'If ListBox14.SelectedItem <> "-None-" Then
+        '    ListBox14.Items.Remove(ListBox14.SelectedItem)
+        '    If ListBox14.Items.Count = 0 Then
+        '        ListBox14.Items.Add("-None-")
+        '    End If
+        '    workingMovieDetails.fullmoviebody.movieset = ""
+        '    Dim tempsets As String = ""
+        '    For f = 0 To ListBox14.Items.Count - 1
+        '        If f = 0 Then
+        '            tempsets = ListBox14.Items(f)
+        '        Else
+        '            tempsets = tempsets & " / " & ListBox14.Items(f)
+        '        End If
+        '    Next
+        '    'workingMovieDetails.fullmoviebody.movieset = tempsets
+        '    setsTxt.Text = tempsets
+
+        '    Call mov_SaveQuick()
+        'Else
+        '    MsgBox("Can only remove Added Sets")
+        'End If
     End Sub
 
     Private Sub SetupHomeMovies()
@@ -22905,4 +22973,15 @@ Public Class Form1
         mov_ScrapeSpecific("rename_files")
     End Sub
 
+    Private Sub btnMovieSetsRepopulateFromUsed_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
+
+        Preferences.moviesets.Clear
+        ListBox4.Items.Clear
+
+        Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
+
+        For Each mset In Preferences.moviesets
+            ListBox4.Items.Add(mset)
+        Next
+    End Sub
 End Class
