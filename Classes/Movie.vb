@@ -60,7 +60,7 @@ Public Class Movie
     Private _titleFull            As String = ""
     Private _title                As String = ""
     Private _parent               As Movies
-    Private _possibleImdb         As String = "-1"
+    Private _possibleImdb As String = String.Empty
     Private _youTubeTrailer       As YouTubeVideoFile
     Private _nfoPathAndFilename   As String = ""
 
@@ -388,13 +388,13 @@ Public Class Movie
 
     Public ReadOnly Property PossibleImdb As String
         Get
-            If _possibleImdb = "-1" Then
-                Dim log=""
+            If String.IsNullOrEmpty(_possibleImdb) Then
+                Dim log = ""
                 _possibleImdb = getExtraIdFromNFO(NfoPathAndFilename, log)
-                   
-                ReportProgress(,log)    
-                If IsNothing(_possibleImdb) Then
-                    Dim mat As Match = Regex.Match(nfopathandfilename, "(tt\d{7})")
+
+                ReportProgress(, log)
+                If String.IsNullOrEmpty(_possibleImdb) Then
+                    Dim mat As Match = Regex.Match(NfoPathAndFilename, "(tt\d{7})")
 
                     If mat.Success Then
                         _possibleImdb = mat.Value
@@ -876,7 +876,7 @@ Public Class Movie
                 Case "id"
                     _scrapedMovie.fullmoviebody.imdbid = thisresult.InnerText
 
-                    If IsNothing(_possibleImdb) Then
+                    If String.IsNullOrEmpty(_possibleImdb) Then
                         _possibleImdb = _scrapedMovie.fullmoviebody.imdbid
                         tmdb.Imdb = PossibleImdb
                     End If
@@ -1682,7 +1682,7 @@ Public Class Movie
 
 
     Public Shared Function getExtraIdFromNFO(ByVal fullPath As String, Optional log As String="") As String
-        Dim extrapossibleID As String = Nothing
+        Dim extrapossibleID As String = String.Empty
         Dim fileNFO As String = fullPath
         If Utilities.findFileOfType(fileNFO, ".nfo") Then
             Dim objReader As New StreamReader(fileNFO)
