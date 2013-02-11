@@ -390,7 +390,7 @@ Public Class Movie
         Get
             If _possibleImdb = "-1" Then
                 Dim log=""
-                _possibleImdb = getExtraIdFromNFO(nfopath,log)
+                _possibleImdb = getExtraIdFromNFO(NfoPathAndFilename, log)
                    
                 ReportProgress(,log)    
                 If IsNothing(_possibleImdb) Then
