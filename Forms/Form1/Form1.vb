@@ -21372,6 +21372,7 @@ Public Class Form1
         Mc.clsGridViewMovie.GridFieldToDisplay2 = cbSort.Text
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
+        Preferences.moviesortorder = cbSort.SelectedIndex
     End Sub
 
 
