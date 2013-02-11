@@ -759,7 +759,15 @@ Public Class Form1
             'Panel4.Width = SplitContainer4.Width.ToString
             'Panel4.Height = SplitContainer4.Height.ToString / 2.11
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+            Dim paramInfo As String = ""
+            
+            Try
+                paramInfo = "PictureBoxFanArt.Width:" & PictureBoxFanArt.Width.ToString & " PictureBoxFanArt.Height: " & PictureBoxFanArt.Height.ToString & " Rating:" & ratingtxt.Text
+            Catch ex2 As Exception
+                ExceptionHandler.LogError(ex2)
+            End Try
+
+            ExceptionHandler.LogError(ex,paramInfo)
         End Try
     End Sub
 

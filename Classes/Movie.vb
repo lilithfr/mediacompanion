@@ -1024,7 +1024,19 @@ Public Class Movie
         _youTubeTrailer = Nothing
         
         If Preferences.moviePreferredTrailerResolution.ToUpper() <> "SD" Then
-            TrailerUrl = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, title)
+            Try
+                TrailerUrl = MC_Scraper_Get_HD_Trailer_URL(Preferences.moviePreferredTrailerResolution, title)
+            Catch ex As Exception
+                Dim paramInfo As String = ""
+            
+                Try
+                    paramInfo = "Title: [" & title & "]"
+                Catch ex2 As Exception
+                    ExceptionHandler.LogError(ex2)
+                End Try
+
+                ExceptionHandler.LogError(ex,paramInfo)                
+            End Try
         End If
 
 
