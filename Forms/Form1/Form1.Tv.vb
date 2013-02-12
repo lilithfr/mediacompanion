@@ -2589,6 +2589,8 @@ Partial Public Class Form1
             Dim frodo As Boolean = Preferences.FrodoEnabled
             Dim overwriteimage As Boolean = Preferences.overwritethumbs
             Dim thumblist As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value)
+            Dim isposter As String = Preferences.postertype
+            Dim isseasonall As String = Preferences.seasonall
             showlist.LoadXml(thumblist)
             Dim thisresult As XmlNode = Nothing
             Dim artlist As New List(Of TvBanners)
@@ -2619,7 +2621,7 @@ Partial Public Class Form1
             End If
 
             'Main Poster
-            If Preferences.postertype = "poster" Or frodo Then 'poster
+            If (isposter = "poster" Or frodo) And Preferences.tvposter Then 'poster
                 Dim mainposter As String = ""
                 For Each Image In artlist
                     If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
@@ -2654,19 +2656,21 @@ Partial Public Class Form1
                         Utilities.DownloadFile(mainposter, mainposterpath)
                     End If
                     If frodo Then
-                        Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"), overwriteimage)
-                        If eden Then
-                            If Preferences.postertype = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "folder.jpg"), overwriteimage)
-                            If Preferences.seasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
+                        If isseasonall <> "none" Then
+                            Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"), overwriteimage)
                         End If
-                    ElseIf eden Then
-                        If Preferences.seasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
+                        If eden Then
+                            If isposter = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "folder.jpg"), overwriteimage)
+                            If isseasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
+                        End If
+                    ElseIf eden And isseasonall <> "none" Then
+                        If isseasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
                     End If
                 End If
             End If
 
             'Main Banner
-            If Preferences.postertype = "banner" Or frodo Then 'banner
+            If (isposter = "banner" Or frodo) And Preferences.tvposter Then 'banner
                 Dim mainbanner As String = ""
                 For Each Image In artlist
                     If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
@@ -2701,13 +2705,15 @@ Partial Public Class Form1
                         Utilities.DownloadFile(mainbanner, mainbannerpath)
                     End If
                     If frodo Then
-                        Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"), overwriteimage)
-                        If eden Then
-                            If Preferences.postertype = "banner" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "folder.jpg"), overwriteimage)
-                            If Preferences.seasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all.tbn"), overwriteimage)
+                        If isseasonall <> "none" Then
+                            Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"), overwriteimage)
                         End If
-                    ElseIf eden Then
-                        If Preferences.seasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
+                        If eden Then
+                            If isposter = "banner" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "folder.jpg"), overwriteimage)
+                            If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all.tbn"), overwriteimage)
+                        End If
+                    ElseIf eden And isseasonall <> "none" Then
+                        If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
                     End If
                 End If
             End If
@@ -2715,7 +2721,7 @@ Partial Public Class Form1
 
             'SeasonXX Poster
             For f = 0 To 1000
-                If Preferences.postertype = "poster" Or frodo Then 'poster
+                If (isposter = "poster" Or frodo) And Preferences.downloadtvseasonthumbs Then 'poster
                     Dim seasonXXposter As String = ""
                     For Each Image In artlist
                         If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode Then
@@ -2757,7 +2763,7 @@ Partial Public Class Form1
                             If Not IO.File.Exists(seasonXXposterpath) Then
                                 Utilities.DownloadFile(seasonXXposter, seasonXXposterpath)
                             End If
-                            If IO.File.Exists(seasonXXposterpath) And frodo And eden And Preferences.postertype = "poster" Then
+                            If IO.File.Exists(seasonXXposterpath) And frodo And eden And isposter = "poster" Then
                                 Utilities.SafeCopyFile(seasonXXposterpath, seasonXXposterpath.Replace("-poster.jpg", ".tbn"), overwriteimage)
                             End If
                         End If
@@ -2765,7 +2771,7 @@ Partial Public Class Form1
                 End If
 
                 'SeasonXX Banner
-                If Preferences.postertype = "banner" Or frodo Then 'banner
+                If (isposter = "banner" Or frodo) And Preferences.downloadtvseasonthumbs Then 'banner
                     Dim seasonXXbanner As String = ""
                     For Each Image In artlist
                         If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = "seasonwide" Then
@@ -2806,7 +2812,7 @@ Partial Public Class Form1
                         If Not IO.File.Exists(seasonXXbannerpath) Then
                             Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
                         End If
-                        If IO.File.Exists(seasonXXbannerpath) And frodo And eden And Preferences.postertype = "banner" Then
+                        If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
                             Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
                         End If
                     End If
@@ -2838,32 +2844,38 @@ Partial Public Class Form1
                     End If
                 Next
             End If
-            If fanartposter <> "" Then
-                Dim fanartposterpath As String = String.Empty
-                If frodo Then
-                    fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
-                ElseIf eden Then
+            If tvfanart Then
+                If fanartposter <> "" Then
+                    Dim fanartposterpath As String = String.Empty
+                    'If frodo Then
                     fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                End If
-                If Not IO.File.Exists(fanartposterpath) Then
-                    Utilities.DownloadFile(fanartposter, fanartposterpath)
-                End If
-                If IO.File.Exists(fanartposterpath) And frodo And eden Then
-                    Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("season-all-", ""), overwriteimage)
-                End If
-                '*** Haven't used Movie.SaveFanartImageToCacheAndPath because this code needs to be common for ***
-                '*** Movie and TV, I can see this use of movie class for TV shows as potential future issue.   *** - HueyHQ
+                    'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
+                    'ElseIf eden Then
+                    'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
+                    'End If
+                    If Not IO.File.Exists(fanartposterpath) Then
+                        Utilities.DownloadFile(fanartposter, fanartposterpath)
+                    End If
+                    If frodo And isseasonall <> "none" Then
+                        Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("fanart.jpg", "season-all-fanart.jpg"), overwriteimage)
+                    End If
+                    'If IO.File.Exists(fanartposterpath) And frodo And eden Then
+                    'Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("season-all-", ""), overwriteimage)
+                    'End If
+                    '*** Haven't used Movie.SaveFanartImageToCacheAndPath because this code needs to be common for ***
+                    '*** Movie and TV, I can see this use of movie class for TV shows as potential future issue.   *** - HueyHQ
 
-                'Dim fanartpath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                'If frodo Then
-                '    Dim seasonfrodopath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
-                '    If Not IO.File.Exists(fanartpath) Then
-                '        Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonfrodopath)
-                '    End If
-                'End If
-                'If Not IO.File.Exists(fanartpath) Then
-                '    Movie.SaveFanartImageToCacheAndPath(fanartposter, fanartpath)
-                'End If
+                    'Dim fanartpath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
+                    'If frodo Then
+                    '    Dim seasonfrodopath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
+                    '    If Not IO.File.Exists(fanartpath) Then
+                    '        Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonfrodopath)
+                    '    End If
+                    'End If
+                    'If Not IO.File.Exists(fanartpath) Then
+                    '    Movie.SaveFanartImageToCacheAndPath(fanartposter, fanartpath)
+                    'End If
+                End If
             End If
         Catch
         End Try
