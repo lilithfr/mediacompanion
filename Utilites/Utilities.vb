@@ -2481,21 +2481,26 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function SafeDeleteFile(ByVal fileName As String) As Boolean
         If Not File.Exists(fileName) Then Return True
-        Dim numTries As Integer = 0
-        While (True)
-            numTries += 1
-            Try
-                Using fs As New FileStream(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 100)
-                    fs.ReadByte()
-                    Exit While
-                End Using
-            Catch ex As Exception
-                If numTries > 10 Then Return False
-                Thread.Sleep(100)
-            End Try
-        End While
-        File.Delete(fileName)
-        Return True
+        Try
+            Dim numTries As Integer = 0
+            While (True)
+                numTries += 1
+                Try
+                    Using fs As New FileStream(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 100)
+                        fs.ReadByte()
+                        Exit While
+                    End Using
+                Catch ex As Exception
+                    If numTries > 10 Then Return False
+                    Thread.Sleep(100)
+                End Try
+            End While
+
+            File.Delete(fileName)
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
     End Function
 
     Public Shared Function SafeCopyFile(ByVal srcFile As String, ByVal destFile As String, Optional ByVal overwrite As Boolean = True) As Boolean
