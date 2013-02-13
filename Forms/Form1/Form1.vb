@@ -64,14 +64,14 @@ Public Class Form1
 
     'Replace the list of structure by a list of objects
 
-	Private ToolTipGridMoviePosition As Point
+    Private ToolTipGridMoviePosition As Point
 
-	Public Data_GridViewMovie As Data_GridViewMovie
-	'Public filteredListObj As New List(Of Data_GridViewMovie)
-	'Public DataGridViewBindingSource As New BindingSource
+    Public Data_GridViewMovie As Data_GridViewMovie
+    'Public filteredListObj As New List(Of Data_GridViewMovie)
+    'Public DataGridViewBindingSource As New BindingSource
 
 
-	Public homemovielist As New List(Of str_BasicHomeMovie)
+    Public homemovielist As New List(Of str_BasicHomeMovie)
     Public WorkingHomeMovie As New HomeMovieDetails
     Public workingMovie As New ComboList
     Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
@@ -585,9 +585,10 @@ Public Class Form1
             tv_SplitContainerAutoPosition()
         End If
 
+ '       PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+        Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
         'Parameters to display the movie grid at startup
-        PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
         Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
         Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
         Mc.clsGridViewMovie.GridSort = "Asc"
@@ -753,7 +754,8 @@ Public Class Form1
             End If
 
             If MainFormLoadedStatus = True Then
-                PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+ '              PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+                Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
             End If
             'Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
             'Panel4.Width = SplitContainer4.Width.ToString
@@ -867,10 +869,10 @@ Public Class Form1
         End If
 
 
-		filteredList   .Clear
-		'filteredListObj.Clear
-		filteredList   .AddRange(oMovies.MovieCache             )
-		'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
+        filteredList   .Clear
+        'filteredListObj.Clear
+        filteredList   .AddRange(oMovies.MovieCache             )
+        'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
 
 
 '		DataGridViewBindingSource.DataSource = filteredListObj
@@ -1545,7 +1547,7 @@ Public Class Form1
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
 
                     util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                    Rating1.PictureInit = PictureBoxFanArt.Image
+                    'Rating1.PictureInit = PictureBoxFanArt.Image
 
                 End If
 
@@ -1625,9 +1627,10 @@ Public Class Form1
                     End If
                 Next
 
+                mov_SplitContainerAutoPosition
 
-                PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-
+   '            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+                Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
             End If
         Else
             actorcb.Items.Clear()
@@ -1690,7 +1693,7 @@ Public Class Form1
 
         If Yield(yieldIng) Then Return
 
-        mov_SplitContainerAutoPosition()
+        'mov_SplitContainerAutoPosition()
     End Sub
 
 
@@ -3381,128 +3384,128 @@ Public Class Form1
     End Sub
 
 
-	Private Sub mov_SaveQuick()
+    Private Sub mov_SaveQuick()
 
-		If DataGridViewMovies.SelectedRows.Count = 0 Then Return
+        If DataGridViewMovies.SelectedRows.Count = 0 Then Return
 
-		If DataGridViewMovies.SelectedRows.Count = 1 Then 
+        If DataGridViewMovies.SelectedRows.Count = 1 Then 
 
             Dim movie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
-			movie.ScrapedMovie.fullmoviebody.title = titletxt.Text.Replace(" (" & workingMovieDetails.fullmoviebody.year & ")", "")
+            movie.ScrapedMovie.fullmoviebody.title = titletxt.Text.Replace(" (" & workingMovieDetails.fullmoviebody.year & ")", "")
 
-			If movie.ScrapedMovie.fullmoviebody.originaltitle = Nothing Or movie.ScrapedMovie.fullmoviebody.originaltitle = "" Then 
+            If movie.ScrapedMovie.fullmoviebody.originaltitle = Nothing Or movie.ScrapedMovie.fullmoviebody.originaltitle = "" Then 
                 movie.ScrapedMovie.fullmoviebody.originaltitle = movie.ScrapedMovie.fullmoviebody.title
             End If
 
-			movie.ScrapedMovie.fullmoviebody.director  = directortxt.Text
-			movie.ScrapedMovie.fullmoviebody.credits   = creditstxt.Text
-			movie.ScrapedMovie.fullmoviebody.studio    = studiotxt.Text
-			movie.ScrapedMovie.fullmoviebody.genre     = genretxt.Text
-			movie.ScrapedMovie.fullmoviebody.votes     = votestxt.Text
-			movie.ScrapedMovie.fullmoviebody.rating    = ratingtxt.Text
-			movie.ScrapedMovie.fullmoviebody.runtime   = runtimetxt.Text
-			movie.ScrapedMovie.fullmoviebody.outline   = outlinetxt.Text
-			movie.ScrapedMovie.fullmoviebody.plot      = plottxt.Text
-			movie.ScrapedMovie.fullmoviebody.tagline   = taglinetxt.Text
-			movie.ScrapedMovie.fullmoviebody.stars     = txtStars.Text.ToString.Replace(", See full cast and crew", "")
-			movie.ScrapedMovie.fullmoviebody.mpaa      = certtxt.Text
-			movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
+            movie.ScrapedMovie.fullmoviebody.director  = directortxt.Text
+            movie.ScrapedMovie.fullmoviebody.credits   = creditstxt.Text
+            movie.ScrapedMovie.fullmoviebody.studio    = studiotxt.Text
+            movie.ScrapedMovie.fullmoviebody.genre     = genretxt.Text
+            movie.ScrapedMovie.fullmoviebody.votes     = votestxt.Text
+            movie.ScrapedMovie.fullmoviebody.rating    = ratingtxt.Text
+            movie.ScrapedMovie.fullmoviebody.runtime   = runtimetxt.Text
+            movie.ScrapedMovie.fullmoviebody.outline   = outlinetxt.Text
+            movie.ScrapedMovie.fullmoviebody.plot      = plottxt.Text
+            movie.ScrapedMovie.fullmoviebody.tagline   = taglinetxt.Text
+            movie.ScrapedMovie.fullmoviebody.stars     = txtStars.Text.ToString.Replace(", See full cast and crew", "")
+            movie.ScrapedMovie.fullmoviebody.mpaa      = certtxt.Text
+            movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
 
-			If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-			If setsTxt.Text <> "-None-" Then
-				movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
-			Else
-				movie.ScrapedMovie.fullmoviebody.movieset = Nothing
-			End If
+            If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+            If setsTxt.Text <> "-None-" Then
+                movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+            Else
+                movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+            End If
 
-			movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
+            movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
 
-			
-			movie.AssignMovieToCache
-			movie.UpdateMovieCache
-			movie.SaveNFO
-
-'            oMovies.SaveMovieCache
-'            oMovies.LoadMovieCache
-			UpdateFilteredList
-		Else
-			Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
-			mess.Show()
-			mess.Refresh()
-			Application.DoEvents()
-
-			Dim i As Integer = DataGridViewMovies.CurrentRow.Index
-			Dim Startfullpathandfilename As String = DataGridViewMovies.Item(0, i).Value.ToString
-
-			For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
-
-				Dim filepath As String = item.Cells(0).Value.ToString
-				Dim movie    As Movie  = oMovies.LoadMovie(filepath)
-
-				If IsNothing(movie) Then Continue For
-
-				If directortxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
-				End If
-				If creditstxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
-				End If
-				If genretxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
-				End If
-				If certtxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
-				End If
-				If outlinetxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
-				End If
-				If runtimetxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
-				End If
-				If studiotxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
-				End If
-				If plottxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
-				End If
-				If taglinetxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
-				End If
-				If txtStars.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
-				End If
-				If ratingtxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
-				End If
-				If votestxt.Text <> "" Then
-					movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
-				End If
-
-				If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-				If setsTxt.Text <> "-None-" Then
-					movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
-				Else
-					movie.ScrapedMovie.fullmoviebody.movieset = Nothing
-				End If
-				movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
-
-				movie.AssignMovieToCache
-				movie.UpdateMovieCache
-				movie.SaveNFO
-			Next
+            
+            movie.AssignMovieToCache
+            movie.UpdateMovieCache
+            movie.SaveNFO
 
 '            oMovies.SaveMovieCache
 '            oMovies.LoadMovieCache
+            UpdateFilteredList
+        Else
+            Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
+            mess.Show()
+            mess.Refresh()
+            Application.DoEvents()
 
-			workingMovie.fullpathandfilename = Startfullpathandfilename
-			mov_FormPopulate
-			mess.Close
-		End If
-	End Sub
+            Dim i As Integer = DataGridViewMovies.CurrentRow.Index
+            Dim Startfullpathandfilename As String = DataGridViewMovies.Item(0, i).Value.ToString
+
+            For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+
+                Dim filepath As String = item.Cells(0).Value.ToString
+                Dim movie    As Movie  = oMovies.LoadMovie(filepath)
+
+                If IsNothing(movie) Then Continue For
+
+                If directortxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
+                End If
+                If creditstxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
+                End If
+                If genretxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
+                End If
+                If certtxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
+                End If
+                If outlinetxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
+                End If
+                If runtimetxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
+                End If
+                If studiotxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
+                End If
+                If plottxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
+                End If
+                If taglinetxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
+                End If
+                If txtStars.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
+                End If
+                If ratingtxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
+                End If
+                If votestxt.Text <> "" Then
+                    movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
+                End If
+
+                If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+                If setsTxt.Text <> "-None-" Then
+                    movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+                Else
+                    movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+                End If
+                movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
+
+                movie.AssignMovieToCache
+                movie.UpdateMovieCache
+                movie.SaveNFO
+            Next
+
+'            oMovies.SaveMovieCache
+'            oMovies.LoadMovieCache
+
+            workingMovie.fullpathandfilename = Startfullpathandfilename
+            mov_FormPopulate
+            mess.Close
+        End If
+    End Sub
 
 
-	'quicksavenfo
+    'quicksavenfo
 '	Private Sub mov_SaveQuick()
 
 '		If DataGridViewMovies.SelectedRows.Count = 0 Then Return
@@ -3618,7 +3621,7 @@ Public Class Form1
 '					'oMovies.MovieCache.Add(newfullmovie)
 
 '					Dim movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-	   
+       
 '					movie.UpdateCaches
 
 '					Exit For
@@ -3697,7 +3700,7 @@ Public Class Form1
 '					movie.ScrapedMovie.fullmoviebody.movieset = Nothing
 '				End If
 '				movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
-				
+                
 '				'nfoFunction.mov_NfoSave(filepath, movie, True)
 
 '				movie.AssignMovieToCache
@@ -3747,7 +3750,7 @@ Public Class Form1
 ''						'oMovies.MovieCache.Add(newfullmovie)
 
 ''						Dim m = oMovies.LoadMovie(movie.fileinfo.fullpathandfilename)
-	   
+       
 ''						m.UpdateCaches
 
 ''						Exit For
@@ -3766,13 +3769,13 @@ Public Class Form1
 '		End If
 '	End Sub
 
-	'change watched status
-	Private Sub ButtonWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonWatched.Click
-		Try
-			If DataGridViewMovies.SelectedRows.Count = 1 Then
-				If ButtonWatched.Text = "&Watched" Then
-					ButtonWatched.Text = "Un&watched"
-					ButtonWatched.BackColor = Color.Red
+    'change watched status
+    Private Sub ButtonWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonWatched.Click
+        Try
+            If DataGridViewMovies.SelectedRows.Count = 1 Then
+                If ButtonWatched.Text = "&Watched" Then
+                    ButtonWatched.Text = "Un&watched"
+                    ButtonWatched.BackColor = Color.Red
                     ButtonWatched.Refresh()
                     workingMovieDetails.fullmoviebody.playcount = "0"
                 Else
@@ -3878,8 +3881,7 @@ Public Class Form1
 
                     util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
-                    Rating1.PictureInit = PictureBoxFanArt.Image
-
+                    'Rating1.PictureInit = PictureBoxFanArt.Image
 
 
                 Else
@@ -4444,9 +4446,9 @@ Public Class Form1
             If Yield(yielding) Then Return
 
 '			Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(0).Value.ToString
-			Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = selectedCells(0).Value.ToString
+            Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = selectedCells(0).Value.ToString
 
-			Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
+            Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
             If Yield(yielding) Then Return
 
@@ -5264,7 +5266,8 @@ Public Class Form1
                         ' PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                         ' PictureBox7.Load()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        Rating1.PictureInit = PictureBoxFanArt.Image
+                        'Rating1.PictureInit = PictureBoxFanArt.Image
+                        Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
 
                         For Each paths In Preferences.offlinefolders
@@ -5455,7 +5458,7 @@ Public Class Form1
                     'PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
                     'PictureBox2.Load()
                     util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                    Rating1.PictureInit = PictureBoxFanArt.Image
+                    'Rating1.PictureInit = PictureBoxFanArt.Image
                     'PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
                     'PictureBox7.Load()
                     mov_SplitContainerAutoPosition()
@@ -5658,7 +5661,7 @@ Public Class Form1
                 Label17.Text = PictureBox2.Image.Height
                 If RadioButtonFanart.Checked Then ' i.e. this is a fanart task rather than an extrathumb task
                     PictureBoxFanArt.Image = PictureBox2.Image 'if we are saving the main fanart then update the art on the main form view
-                    Rating1.PictureInit = PictureBoxFanArt.Image
+    '                Rating1.PictureInit = PictureBoxFanArt.Image
                     For Each paths In Preferences.offlinefolders
                         If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
                             Dim mediapath As String
@@ -11857,7 +11860,7 @@ Public Class Form1
             Me.TabPage22.Refresh()
             Application.DoEvents()
             walllocked = False
-	    Next
+        Next
 
         walllocked = False
     End Sub
@@ -17905,14 +17908,14 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-	Private Sub mov_ScrapeSpecific(ByVal field As String)
+    Private Sub mov_ScrapeSpecific(ByVal field As String)
 
         _rescrapeList.Field = field
         _rescrapeList.FullPathAndFilenames.Clear
 
-		For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-			_rescrapeList.FullPathAndFilenames.Add(row.Cells(0).Value.ToString)
-		Next
+        For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+            _rescrapeList.FullPathAndFilenames.Add(row.Cells(0).Value.ToString)
+        Next
 
         RunBackgroundMovieScrape("RescrapeSpecific")
     End Sub
@@ -18191,7 +18194,7 @@ Public Class Form1
                 bitmap3.Dispose()
                 PictureBoxFanArt.Image = bmp4
                 PictureBox2.Image = bmp4
-                Rating1.PictureInit = bmp4
+ '               Rating1.PictureInit = bmp4
                         End If
                 End If
 
@@ -18695,7 +18698,8 @@ Public Class Form1
 
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        Rating1.PictureInit = PictureBoxFanArt.Image
+    '                    Rating1.PictureInit = PictureBoxFanArt.Image
+                        Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -21451,17 +21455,17 @@ Public Class Form1
 
         If ListBox4.SelectedItems.Count=0 Then Return
 
-		ListBox14.Items.Clear
+        ListBox14.Items.Clear
 
-		For Each item In ListBox4.SelectedItems
-			ListBox14.Items.Add(item)
-		Next
-		
-		'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-	   
-		setsTxt.Text = ListBox14.Items(0)
+        For Each item In ListBox4.SelectedItems
+            ListBox14.Items.Add(item)
+        Next
+        
+        'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
+       
+        setsTxt.Text = ListBox14.Items(0)
 
-		mov_SaveQuick
+        mov_SaveQuick
 
 
 
@@ -21696,11 +21700,11 @@ Public Class Form1
             ListBox14.Items.Add("-None-")
         End If
 
-		workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-		
-		setsTxt.Text = ListBox14.Items(0)
+        workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
+        
+        setsTxt.Text = ListBox14.Items(0)
 
-		mov_SaveQuick
+        mov_SaveQuick
 
 
         'If ListBox14.SelectedItem <> "-None-" Then
@@ -22760,9 +22764,9 @@ Public Class Form1
 
     Private Sub UpdateFilteredList()
         filteredList.Clear()
-		'filteredListObj.Clear()
-		filteredList.AddRange(oMovies.MovieCache)
-		'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
+        'filteredListObj.Clear()
+        filteredList.AddRange(oMovies.MovieCache)
+        'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
 
 '		DataGridViewBindingSource.DataSource = filteredListObj
 '		DataGridViewBindingSource.DataSource = oMovies.Data_GridViewMovieCache
@@ -22884,10 +22888,10 @@ Public Class Form1
     End Sub
 
     Sub AbortFileDownload
-	    tsStatusLabel.Text = "* Aborting trailer download... *"
-	    Monitor.Enter(countLock)
-	    blnAbortFileDownload = True
-	    Monitor.Exit(countLock)
+        tsStatusLabel.Text = "* Aborting trailer download... *"
+        Monitor.Enter(countLock)
+        blnAbortFileDownload = True
+        Monitor.Exit(countLock)
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
