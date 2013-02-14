@@ -17,6 +17,7 @@ Public Class Movies
 
     Public Property Bw            As BackgroundWorker = Nothing
     Public Property MovieCache    As New List(Of ComboList)
+    Public Property TmpMovieCache As New List(Of ComboList)
     
     Public Property NewMovies     As New List(Of Movie)
     Public Property PercentDone   As Integer = 0
@@ -717,7 +718,8 @@ Public Class Movies
 
 
     Public Sub LoadMovieCacheFromNfos
-        MovieCache.Clear
+'        MovieCache.Clear
+        TmpMovieCache.Clear
 
         Dim t As New List(Of String)
 
@@ -729,7 +731,8 @@ Public Class Movies
 
         If Cancelled Then Exit Sub
 
-        For Each movie In MovieCache
+'        For Each movie In MovieCache
+        For Each movie In TmpMovieCache
             If Not Preferences.usefoldernames Then
                 If movie.filename <> Nothing Then
                     movie.filename = movie.filename.Replace(".nfo", "")
@@ -737,6 +740,8 @@ Public Class Movies
             End If
         Next
 
+        MovieCache.Clear
+        MovieCache.AddRange(TmpMovieCache)
         Rebuild_Data_GridViewMovieCache()
     End Sub
 
@@ -828,7 +833,8 @@ Public Class Movies
             workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
             If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
                 Dim skip As Boolean = False
-                For Each movie In MovieCache
+'                For Each movie In MovieCache
+                For Each movie In TmpMovieCache
                     If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
                         skip = True
                         Exit For
@@ -845,8 +851,9 @@ Public Class Movies
                         completebyte1 += 2
                     End If
                     workingMovie.missingdata1 = completebyte1
-                    MovieCache.Add(workingMovie)
-                    Data_GridViewMovieCache.Add(New Data_GridViewMovie(workingMovie))
+'                    MovieCache.Add(workingMovie)
+                    TmpMovieCache.Add(workingMovie)
+'                    Data_GridViewMovieCache.Add(New Data_GridViewMovie(workingMovie))
                 End If
             End If
         Next
@@ -921,17 +928,21 @@ Public Class Movies
     End Sub
 
 
-    Public Sub RebuildCaches()
-        RebuildMovieCache()
+    Public Sub RebuildCaches
+        RebuildMovieCache
         If Cancelled Then Exit Sub
-        RebuildActorCache()
+        RebuildActorCache
     End Sub
 
 
-    Public Sub RebuildMovieCache()
-        LoadMovieCacheFromNfos()
-        If Cancelled Then Exit Sub
-        SaveMovieCache()
+    Public Sub RebuildMovieCache
+        LoadMovieCacheFromNfos
+
+        If Cancelled Then 
+            Exit Sub
+        End If
+
+        SaveMovieCache
     End Sub
 
 
