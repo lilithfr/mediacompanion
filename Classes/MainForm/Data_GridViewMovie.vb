@@ -60,6 +60,32 @@
         TitleUcase = movie.title.ToUpper
     End Sub
 
+    Public Function Export() As ComboList
+        Dim convertedMovie As New ComboList With {.fullpathandfilename = Me.fullpathandfilename,
+                                                  .MovieSet = Me.movieset,
+                                                  .filename = Me.filename,
+                                                  .foldername = Me.foldername,
+                                                  .title = Me.title,
+                                                  .originaltitle = Me.originaltitle,
+                                                  .titleandyear = Me.titleandyear,
+                                                  .year = Me.year,
+                                                  .filedate = Me.filedate,
+                                                  .id = Me.id,
+                                                  .rating = Me.rating,
+                                                  .top250 = Me.top250,
+                                                  .genre = Me.genre,
+                                                  .playcount = Me.playcount,
+                                                  .sortorder = Me.sortorder,
+                                                  .outline = Me.outline,
+                                                  .runtime = Me.runtime,
+                                                  .createdate = Me.createdate,
+                                                  .missingdata1 = Me.missingdata1,
+                                                  .plot = Me.plot.Trim,
+                                                  .source = Me.source,
+                                                  .votes = Me.votes
+                                                 }
+        Return convertedMovie
+    End Function
 
     Public Property fullpathandfilename
         Get

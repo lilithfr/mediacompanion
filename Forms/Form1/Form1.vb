@@ -12509,7 +12509,20 @@ Public Class Form1
         End With
         If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             savepath = SaveFileDialog1.FileName
-            Dim mediaCollection As Object = If(mediaType = MediaInfoExport.mediaType.Movie, filteredList, Cache.TvCache.Shows)
+            Dim mediaCollection As Object
+            If mediaType = MediaInfoExport.mediaType.Movie Then
+                'Dirty hack to get the media export to use the data grid source. Wasn't as straight forward as hoped,
+                'and after spending many hours trying to find an elegant solution, I gave up.
+                'If anyone comes across this and thinks "Huey, you twat, just do it like this", then please go right
+                'ahead! - HueyHQ 15Feb13
+                Dim mediaList As New List(Of ComboList)
+                For Each mediaItem As Data_GridViewMovie In DataGridViewMovies.DataSource
+                    mediaList.Add(mediaItem.Export)
+                Next
+                mediaCollection = mediaList
+            Else
+                mediaCollection = Cache.TvCache.Shows
+            End If
             mediaInfoExp.createDocument(savepath, mediaCollection)
         End If
     End Sub

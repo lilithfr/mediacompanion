@@ -731,7 +731,7 @@ Public Class Classimdb
             Dim tempstring As String
             Dim actors(10000, 3)
             Dim actorcount As Integer = 0
-            Dim filterstring As String
+            'Dim filterstring As String
             Dim last As Integer
             Dim length As Integer
             Dim tempint As Integer
