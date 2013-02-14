@@ -12,8 +12,6 @@ Imports System.Security.Cryptography
 Imports Microsoft.Win32
 
 
-
-
 Public Class Utilities
     Public Shared VideoExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".nrg", ".iso",

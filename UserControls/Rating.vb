@@ -65,6 +65,8 @@
             Return
         End If
 
+        iRating = Math.Min(iRating,10)
+
         Dim bmStars  As New Bitmap(PictureBoxRating.Image)
         Dim bmFanart As New Bitmap(pbFanart        .Image)
 
@@ -78,11 +80,25 @@
         Dim w As Integer = widthRatio *Ratingwidth
         Dim h As Integer = heightRatio*bmStars.Height
 
+        dim minScaler As Double = 1
+
+        If pbFanart.ClientRectangle.Width < 600 Then
+
+            minScaler = 600/pbFanart.ClientRectangle.Width
+
+            w = w*minScaler
+            h = h*minScaler
+
+            w = Math.Min(w, pbFanart.ClientRectangle.Width )
+            h = Math.Min(h, pbFanart.ClientRectangle.Height)
+        End If
+
+
         Dim rectFanart As New Rectangle(0, 0, w*2, h*2)
 
         Dim gr       As Graphics = Graphics.FromImage(bmFanart)
         Dim Brush    As New SolidBrush(Color.Black)
-        Dim fontSize As Integer = heightRatio*27
+        Dim fontSize As Integer = heightRatio*27*minScaler
         Dim drawFont As New Font("Segoe UI", fontSize, FontStyle.Bold)
 
         gr.DrawImage(bmStars, rectFanart, rectStars, GraphicsUnit.Pixel)

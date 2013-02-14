@@ -182,9 +182,16 @@ Public Class Movies
                 folders.Add(moviefolder)
                 ReportProgress("Searching movie Folder: " & dirInfo.FullName.ToString & vbCrLf)
 
-                For Each subfolder In Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
-                    folders.Add(subfolder)
-                Next
+                Dim lastfolder As String = moviefolder
+
+                Try
+                    For Each subfolder In Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
+                        lastfolder=subfolder
+                        folders.Add(subfolder)
+                    Next
+                Catch ex As Exception
+                    ExceptionHandler.LogError(ex,lastfolder)
+                End Try
             End If
             
             If Cancelled then Exit Sub
