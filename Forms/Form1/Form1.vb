@@ -3987,7 +3987,7 @@ Public Class Form1
 
     Private Sub XBMCMCThreadToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles XBMCMCThreadToolStripMenuItem.Click
         Try
-            Dim webAddress As String = "http://forum.xbmc.org/showthread.php?t=53640"
+            Dim webAddress As String = "http://forum.xbmc.org/showthread.php?t=129134"
             'Process.Start(webAddress)
             OpenUrl(webAddress)
         Catch ex As Exception
