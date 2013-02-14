@@ -755,7 +755,7 @@ Public Class Form1
 
             If MainFormLoadedStatus = True Then
  '              PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-                Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
+ '               Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
             End If
             'Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
             'Panel4.Width = SplitContainer4.Width.ToString
