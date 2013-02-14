@@ -182,15 +182,12 @@ Public Class Movies
                 folders.Add(moviefolder)
                 ReportProgress("Searching movie Folder: " & dirInfo.FullName.ToString & vbCrLf)
 
-                Dim lastfolder As String = moviefolder
-
                 Try
                     For Each subfolder In Utilities.EnumerateFolders(moviefolder)       'Max levels restriction of 6 deep removed
-                        lastfolder=subfolder
                         folders.Add(subfolder)
                     Next
                 Catch ex As Exception
-                    ExceptionHandler.LogError(ex,lastfolder)
+                    ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
                 End Try
             End If
             
@@ -760,9 +757,13 @@ Public Class Movies
 
         'Add sub-folders
         For f = 0 To tempint - 1
-            For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
-                moviePaths.Add(subfolder)
-            Next
+            Try
+                For Each subfolder In Utilities.EnumerateFolders(moviePaths(f))
+                    moviePaths.Add(subfolder)
+                Next
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+            End Try
         Next
 
 

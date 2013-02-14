@@ -38,6 +38,9 @@ Public Class Utilities
     'must have a separator character prefix so they do not get confused with standard text.
     Public Shared ReadOnly cleanTagsList_SepPrefix() As String = {"scr", "ts", "fs", "ws", "r5"}
 
+    Shared Property LastRootPath As String = ""
+
+
     Private Declare Function GetDiskFreeSpaceEx _
 Lib "kernel32" _
 Alias "GetDiskFreeSpaceExA" _
@@ -486,6 +489,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Private Shared Function EnumerateFolders(ByVal RootPath As String, ByVal MaxLevels As Long, ByVal Level As Long) As List(Of String)
+
+        LastRootPath = RootPath
+
         Dim TempReturn As New List(Of String)
         If String.IsNullOrEmpty(RootPath) Then Return Nothing
         Dim ChildList
