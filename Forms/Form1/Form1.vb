@@ -4028,7 +4028,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click
+    Private Sub ToolStripMenuItemRebuildMovieCaches_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItemRebuildMovieCaches.Click, Button3.Click
         mov_RebuildMovieCaches
     End Sub
 
@@ -23097,4 +23097,8 @@ Public Class Form1
             ListBox4.Items.Add(mset)
         Next
     End Sub
+
+Private Sub PictureBoxFanArt_Click( sender As Object,  e As EventArgs)
+
+End Sub
 End Class
