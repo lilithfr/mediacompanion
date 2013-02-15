@@ -16802,9 +16802,9 @@ Public Class Form1
                         Case "set"
                             setscolumn.Width = col.width
                             If col.visible = True Then
-                                setscolumn.Visible = True
-                                CheckBox30.CheckState = CheckState.Checked
-                                'setscolumn.Visible = False
+                                'setscolumn.Visible = True
+                                'CheckBox30.CheckState = CheckState.Checked
+                                setscolumn.Visible = False
                             Else
                                 setscolumn.Visible = False
                             End If

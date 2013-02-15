@@ -31,16 +31,36 @@ Public Class Movies
     End Property
 
 
+    'Public ReadOnly Property Genres_old As List(Of String)
+    '    Get
+    '        Dim q = From x In MovieCache Select ms=x.genre.Split(" / ") Distinct
+             
+    '        Dim lst = q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
+
+    '        lst.RemoveAll(Function(m) m="" )
+    '        lst.RemoveAll(Function(m) m="/")
+
+    '        Return lst
+    '    End Get
+    'End Property    
+
+
     Public ReadOnly Property Genres As List(Of String)
         Get
-            Dim q = From x In MovieCache Select ms=x.genre.Split(" / ") Distinct
+            Dim q = From x In MovieCache Select ms=x.genre.Split(" / ")
              
-            Dim lst = q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
+            Dim lst = q.SelectMany(Function(m) m).ToList
 
-            lst.Remove("")
-            lst.Remove("/")
+            lst.RemoveAll(Function(v) v="" )
+            lst.RemoveAll(Function(v) v="/")
 
-            Return lst
+            Dim q2 = From x In lst
+                        Group By x Into Num=Count
+                        Order By x
+                        Select x & " (" & Num.ToString & ")" 
+
+
+            Return q2.AsEnumerable.ToList
         End Get
     End Property    
 
@@ -57,7 +77,6 @@ Public Class Movies
             Return q.ToList
         End Get
     End Property    
-
 
 
     Public ReadOnly Property MoviesSetsByNumberOfFilmsDescending As List(Of String)

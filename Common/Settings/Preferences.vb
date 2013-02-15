@@ -225,7 +225,7 @@ Public Class Preferences
     Public Shared BackDropResolutionSI      As Integer = 15     ' Full HD 1920x1080
     Public Shared ShowMovieGridToolTip      As Boolean = True
     Public Shared ActorsFilterMinFilms      As Integer =  2
-    Public Shared MaxActorsInFilter         As Integer =  50
+    Public Shared MaxActorsInFilter         As Integer =  100
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
