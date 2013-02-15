@@ -308,7 +308,7 @@ Public Class clsGridViewMovie
 
 
 		If Form1.FilteringBySet Then
-            b = From f In b Where f.movieset.ToLower.Contains(Form1.ComboBox3.SelectedItem.ToLower)
+            b = From f In b Where f.movieset.ToString.ToLower.Contains(Form1.cbMovieDisplay_MovieSet.Text.ToLower)
 		End If
 
 		'b = From f In b Order By f.filename Ascending
