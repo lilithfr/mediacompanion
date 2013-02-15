@@ -4807,22 +4807,22 @@ Public Class Form1
         ElseIf tab.ToLower = "wall" Then
             Call mov_WallSetup()
         ElseIf tab.ToLower = "movie sets" Then
-            ListBox4.Items.Clear()
+            ListofMovieSets.Items.Clear()
             For Each mset In Preferences.moviesets
-                If mset <> "-None-" Then ListBox4.Items.Add(mset)
+                If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
             Next
-            Label164.Text = "Current Movie: """ & workingMovieDetails.fullmoviebody.title & """"
-            ListBox14.Items.Clear()
+            'Label164.Text = "Current Movie: """ & workingMovieDetails.fullmoviebody.title & """"
+            'ListBox14.Items.Clear()
             'If setsTxt.Text = "-None-" Then
             'ListBox14.Items.Add("-None-")
             'Else
             'If setsTxt.Text.IndexOf("/") <> -1 Then
 
-            Dim strArr() As String = workingMovieDetails.fullmoviebody.movieset.Split("/")
-            For count = 0 To strArr.Length - 1
-                strArr(count) = strArr(count).Trim
-                ListBox14.Items.Add(strArr(count))
-            Next
+            'Dim strArr() As String = workingMovieDetails.fullmoviebody.movieset.Split("/")
+            'For count = 0 To strArr.Length - 1
+            '    strArr(count) = strArr(count).Trim
+            '    ListBox14.Items.Add(strArr(count))
+            'Next
 
             'Else
             'ListBox14.Items.Add(workingMovieDetails.fullmoviebody.movieset)
@@ -12812,7 +12812,7 @@ Public Class Form1
                 Next
                 If ex = False Then
                     Preferences.moviesets.Add(TextBox38.Text)
-                    ListBox4.Items.Add(TextBox38.Text)
+                    ListofMovieSets.Items.Add(TextBox38.Text)
                     cbMovieDisplay_MovieSet.Items.Clear()
                     For Each mset In Preferences.moviesets
                         cbMovieDisplay_MovieSet.Items.Add(mset)
@@ -12862,11 +12862,11 @@ Public Class Form1
 
     Private Sub Button65_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button65.Click
         Try
-            For i = 0 To ListBox4.SelectedItems.Count - 1
+            For i = 0 To ListofMovieSets.SelectedItems.Count - 1
                 Dim tempboolean As Boolean = False
-                If ListBox4.SelectedItems(i) <> Nothing And ListBox4.SelectedItems(i) <> "" Then
+                If ListofMovieSets.SelectedItems(i) <> Nothing And ListofMovieSets.SelectedItems(i) <> "" Then
                     For Each mset In Preferences.moviesets
-                        If mset = ListBox4.SelectedItems(i) Then
+                        If mset = ListofMovieSets.SelectedItems(i) Then
                             If workingMovieDetails.fullmoviebody.movieset <> mset Then
                                 Preferences.moviesets.Remove(mset)
                             Else
@@ -12886,11 +12886,11 @@ Public Class Form1
                 End If
             Next
 
-            ListBox4.Items.Clear()
+            ListofMovieSets.Items.Clear()
             cbMovieDisplay_MovieSet.Items.Clear()
 
             For Each mset In Preferences.moviesets
-                If mset <> "-None-" Then ListBox4.Items.Add(mset)
+                If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
                 cbMovieDisplay_MovieSet.Items.Add(mset)
             Next
         Catch ex As Exception
@@ -21507,64 +21507,64 @@ Public Class Form1
     End Sub
 
 
-    Private Sub MovieAddSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieAddSetBtn.Click
+    'Private Sub MovieAddSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieAddSetBtn.Click
 
-        If ListBox4.SelectedItems.Count=0 Then Return
+    '    If ListBox4.SelectedItems.Count=0 Then Return
 
-        ListBox14.Items.Clear
+    '    ListBox14.Items.Clear
 
-        For Each item In ListBox4.SelectedItems
-            ListBox14.Items.Add(item)
-        Next
-        
-        'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-       
-        'setsTxt.Text = ListBox14.Items(0)
+    '    For Each item In ListBox4.SelectedItems
+    '        ListBox14.Items.Add(item)
+    '    Next
 
-        mov_SaveQuick
+    '    'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
+
+    '    'setsTxt.Text = ListBox14.Items(0)
+
+    '    mov_SaveQuick
 
 
 
-        'If ListBox4.SelectedItem <> Nothing Then
-        '    If ListBox4.SelectedItem <> "" Then
-                'Dim exists As Boolean = False
-                'For Each item In ListBox14.Items
-                '    If item = ListBox4.SelectedItem Then
-                '        exists = True
-                '        Exit For
-                '    End If
-                'Next
-                'If exists = False Then
-                '    For f = ListBox14.Items.Count - 1 To 0 Step -1
-                '        If ListBox14.Items(f) = "-None-" Then
-                '            ListBox14.Items.RemoveAt(f)
-                '        End If
-                '    Next
-                '    ListBox14.Items.Add(ListBox4.SelectedItem)
-                'End If
+    '    'If ListBox4.SelectedItem <> Nothing Then
+    '    '    If ListBox4.SelectedItem <> "" Then
+    '            'Dim exists As Boolean = False
+    '            'For Each item In ListBox14.Items
+    '            '    If item = ListBox4.SelectedItem Then
+    '            '        exists = True
+    '            '        Exit For
+    '            '    End If
+    '            'Next
+    '            'If exists = False Then
+    '            '    For f = ListBox14.Items.Count - 1 To 0 Step -1
+    '            '        If ListBox14.Items(f) = "-None-" Then
+    '            '            ListBox14.Items.RemoveAt(f)
+    '            '        End If
+    '            '    Next
+    '            '    ListBox14.Items.Add(ListBox4.SelectedItem)
+    '            'End If
 
-        '        workingMovieDetails.fullmoviebody.movieset = ""
-        '        Dim tempsets As String = ""
-        '        For f = 0 To ListBox14.Items.Count - 1
+    '    '        workingMovieDetails.fullmoviebody.movieset = ""
+    '    '        Dim tempsets As String = ""
+    '    '        For f = 0 To ListBox14.Items.Count - 1
 
-        '            If f = 0 Then
-        '                tempsets = ListBox14.Items(f)
-        '            Else
-        '                tempsets = tempsets & " / " & ListBox14.Items(f)
-        '            End If
-        '        Next
-        '        'workingMovieDetails.fullmoviebody.movieset = tempsets
-        '        setsTxt.Text = tempsets
+    '    '            If f = 0 Then
+    '    '                tempsets = ListBox14.Items(f)
+    '    '            Else
+    '    '                tempsets = tempsets & " / " & ListBox14.Items(f)
+    '    '            End If
+    '    '        Next
+    '    '        'workingMovieDetails.fullmoviebody.movieset = tempsets
+    '    '        setsTxt.Text = tempsets
 
-        '        Call mov_SaveQuick()
+    '    '        Call mov_SaveQuick()
 
-        '    End If
-        'End If
+    '    '    End If
+    '    'End If
 
-       
-        
 
-    End Sub
+
+
+    'End Sub
 
 
 
@@ -21744,45 +21744,45 @@ Public Class Form1
     '    End If
     'End Sub
 
-    Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
+    'Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
 
-        If ListBox14.SelectedItems.Count=0 Then Return
+    '    If ListBox14.SelectedItems.Count=0 Then Return
 
-        Do While ListBox14.SelectedItems.Count>0
-            ListBox14.Items.Remove(ListBox14.SelectedItem)
-        Loop
-        
-        If ListBox14.Items.Count=0 Then
-            ListBox14.Items.Add("-None-")
-        End If
+    '    Do While ListBox14.SelectedItems.Count>0
+    '        ListBox14.Items.Remove(ListBox14.SelectedItem)
+    '    Loop
 
-        'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-        
-        'setsTxt.Text = ListBox14.Items(0)
+    '    If ListBox14.Items.Count=0 Then
+    '        ListBox14.Items.Add("-None-")
+    '    End If
+
+    '    'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
+
+    '    'setsTxt.Text = ListBox14.Items(0)
 
 
-        'If ListBox14.SelectedItem <> "-None-" Then
-        '    ListBox14.Items.Remove(ListBox14.SelectedItem)
-        '    If ListBox14.Items.Count = 0 Then
-        '        ListBox14.Items.Add("-None-")
-        '    End If
-            workingMovieDetails.fullmoviebody.movieset = ""
-            Dim tempsets As String = ""
-            For f = 0 To ListBox14.Items.Count - 1
-                If f = 0 Then
-                    tempsets = ListBox14.Items(f)
-                Else
-                    tempsets = tempsets & " / " & ListBox14.Items(f)
-                End If
-            Next
-            workingMovieDetails.fullmoviebody.movieset = tempsets
-        '    setsTxt.Text = tempsets
+    '    'If ListBox14.SelectedItem <> "-None-" Then
+    '    '    ListBox14.Items.Remove(ListBox14.SelectedItem)
+    '    '    If ListBox14.Items.Count = 0 Then
+    '    '        ListBox14.Items.Add("-None-")
+    '    '    End If
+    '        workingMovieDetails.fullmoviebody.movieset = ""
+    '        Dim tempsets As String = ""
+    '        For f = 0 To ListBox14.Items.Count - 1
+    '            If f = 0 Then
+    '                tempsets = ListBox14.Items(f)
+    '            Else
+    '                tempsets = tempsets & " / " & ListBox14.Items(f)
+    '            End If
+    '        Next
+    '        workingMovieDetails.fullmoviebody.movieset = tempsets
+    '    '    setsTxt.Text = tempsets
 
-            mov_SaveQuick
-        'Else
-        '    MsgBox("Can only remove Added Sets")
-        'End If
-    End Sub
+    '        mov_SaveQuick
+    '    'Else
+    '    '    MsgBox("Can only remove Added Sets")
+    '    'End If
+    'End Sub
 
     Private Sub SetupHomeMovies()
         If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
@@ -23209,16 +23209,17 @@ Public Class Form1
     Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
 
         Preferences.moviesets.Clear
-        ListBox4.Items.Clear
+        ListofMovieSets.Items.Clear
 
         Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
 
         For Each mset In Preferences.moviesets
-            ListBox4.Items.Add(mset)
+            ListofMovieSets.Items.Add(mset)
         Next
     End Sub
 
 Private Sub PictureBoxFanArt_Click( sender As Object,  e As EventArgs)
 
 End Sub
+
 End Class
