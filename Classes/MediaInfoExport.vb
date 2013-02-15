@@ -80,6 +80,7 @@ Public Class MediaInfoExport
 
         Dim tempstring As String = ""
         Dim counter As Integer = 0
+        Dim limit As Integer = 0
         Dim tempDoc As String = ""
         Dim headerTagPresent As Boolean = False
         Dim tempBody As String = ""
@@ -127,16 +128,17 @@ Public Class MediaInfoExport
             tempstring = workingTemplate.body
         End If
 
-        M = Regex.Match(tempstring, "<<media_item>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
+        M = Regex.Match(tempstring, "<<media_item(?<limit>:\d+)?>>(?<mediaitem>.*?)<</media_item>>", regexBlockOption)
         If M.Success Then
             mediaTagpresent = True
             tempDoc &= tempstring.Substring(0, M.Index).Trim
             tempBody = tempstring.Substring(M.Index + M.Length)
             tempstring = M.Groups("mediaitem").Value
+            Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
         End If
 
         For Each mediaItem In mediaCollection
-            If frmMediaInfoExport.IsDisposed Then Exit For
+            If frmMediaInfoExport.IsDisposed OrElse (limit <> 0 And counter >= limit) Then Exit For
             displayLineTitle = String.Format("Processing: {0}", If(isMovies, mediaItem.title, mediaItem.title.Value))
             displayLineRemaining = String.Format("{0} {1}{2} Remaining", mediaCollection.Count - (counter + 1), If(isMovies, "Movie", "TV Show"), If((mediaCollection.Count - (counter + 1)) > 1, "s", ""))
             If isConsole Then
@@ -169,17 +171,17 @@ Public Class MediaInfoExport
                 Dim docWriter As New System.IO.StreamWriter(savePath, False, Encoding.UTF8)
                 docWriter.Write(tempDoc)
                 docWriter.Close()
-                If isConsole Then
-                    Console.WriteLine(" ".PadRight(padConsoleLine + 20))
-                Else
-                    Dim tempint As Integer = MessageBox.Show("Your list is now complete" & vbCrLf & " Do You wish to view it now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    If tempint = DialogResult.Yes Then Process.Start(savePath)
-                End If
             Catch ex As Exception
                 MsgBox(ex.ToString)
             Finally
                 frmMediaInfoExport.Close()
             End Try
+            If isConsole Then
+                Console.WriteLine(" ".PadRight(padConsoleLine + 20))
+            Else
+                Dim tempint As Integer = MessageBox.Show("Your list is now complete" & vbCrLf & " Do You wish to view it now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If tempint = DialogResult.Yes Then Process.Start(savePath)
+            End If
         End If
     End Sub
 
