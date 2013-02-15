@@ -101,28 +101,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\IMPA\IMPA\bin\Release\IMPA.dll</HintPath>
     </Reference>
-    <Reference Include="NfoLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>NfoLibrary\bin\Release\NfoLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="ProtoXML, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>NfoLibrary\bin\Release\ProtoXML.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Tasks, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>NfoLibrary\bin\Release\Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="TvdbScrapper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>NfoLibrary\bin\Release\TvdbScrapper.dll</HintPath>
-    </Reference>
     <Reference Include="WatTmdb, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Assets\WatTmdb.dll</HintPath>
@@ -488,7 +472,7 @@
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Untitled-1.png" />
-    <EmbeddedResource Include="Assets\MediaCompanion.ico" />
+    <Resource Include="Assets\MediaCompanion.ico" />
     <Content Include="Assets\pthreadGC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -917,6 +901,22 @@
     <ProjectReference Include="Common\Common.vbproj">
       <Project>{A3624371-E7E4-4E55-8E64-4460E758D39E}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="NfoLibrary\NfoLibrary.vbproj">
+      <Project>{5433F636-07CC-4E16-A29C-A705F4E98A7F}</Project>
+      <Name>NfoLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="ProtoXML\ProtoXML.vbproj">
+      <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
+      <Name>ProtoXML</Name>
+    </ProjectReference>
+    <ProjectReference Include="Tasks\Tasks.vbproj">
+      <Project>{34E2C884-046F-4E79-9FCD-D67DC9592489}</Project>
+      <Name>Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="TvdbScrapper\TvdbScrapper.vbproj">
+      <Project>{5B3BD48A-7DEE-4FF3-B7E8-8D41B83E25D3}</Project>
+      <Name>TvdbScrapper</Name>
     </ProjectReference>
     <ProjectReference Include="Utilites\Utilites.vbproj">
       <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
