@@ -533,17 +533,34 @@ Public Class Form1
         If scrapeAndQuit Then
             SearchForNew
         Else
+            Try
+                If ComboBox3.Items.Count <> Preferences.moviesets.Count Then
+                    ComboBox3.Items.Clear()
+                    For Each mset In Preferences.moviesets
+                        ComboBox3.Items.Add(mset)
+                    Next
+                End If
+                If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
+                    For Each mset In Preferences.moviesets
+                        ComboBox3.Items.Add(mset)
+                    Next
+                    For te = 0 To ComboBox3.Items.Count - 1
+                        If ComboBox3.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
+                            ComboBox3.SelectedIndex = te
+                            Exit For
+                        End If
+                    Next
+                End If
+                'If Not IsNothing(workingMovieDetails) Then
+                'setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
+                'End If
 
-            If Not IsNothing(workingMovieDetails) Then
-                setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
-            End If
-
-            If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-            'Catch ex As Exception
-            '#If SilentErrorScream Then
-            'Throw ex
-            '#End If
-            '           End Try
+                'If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
             mov_VideoSourcePopulate()
             Call util_FontSetup()
 
@@ -585,7 +602,7 @@ Public Class Form1
             tv_SplitContainerAutoPosition()
         End If
 
- '       PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+        '       PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
         'Parameters to display the movie grid at startup
@@ -1039,9 +1056,9 @@ Public Class Form1
                 Me.util_ConfigLoad()
             End If
         Next
-        'For Each item In Preferences.moviesets
-        '    ComboBox3.Items.Add(item)
-        'Next
+        For Each item In Preferences.moviesets
+            ComboBox3.Items.Add(item)
+        Next
     End Sub
 
     Private Sub util_ProfilesLoad()
@@ -1592,95 +1609,118 @@ Public Class Form1
                         Next
                         If add = True Then
                             Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
-                            'ComboBox3.Items.Add(workingMovie.movieset)
+                            ComboBox3.Items.Add(workingMovieDetails.fullmoviebody.movieset)
                         End If
-                    Else
-                        Dim strArr() As String
-                        strArr = workingMovieDetails.fullmoviebody.movieset.Split("/")
-                        For count = 0 To strArr.Length - 1
-                            strArr(count) = strArr(count).Trim
-                            Dim add As Boolean = True
-                            For Each item In Preferences.moviesets
-                                If item = strArr(count) Then
-                                    add = False
-                                    Exit For
-                                End If
-                            Next
-                            If add = True Then
-                                Preferences.moviesets.Add(strArr(count))
+                        For f = 0 To ComboBox3.Items.Count - 1
+                            If ComboBox3.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
+                                ComboBox3.SelectedIndex = f
+                                Exit For
                             End If
                         Next
+                    Else
+                        If ComboBox3.Items.Count = 0 Then
+                            If Preferences.moviesets.Count > 0 Then
+                                For Each mset In Preferences.moviesets
+                                    ComboBox3.Items.Add(mset)
+                                Next
+                            End If
+                        End If
+                        If ComboBox3.Items.Count = 0 Then
+                            ComboBox3.Items.Add("-None-")
+                        End If
+                        If ComboBox3.Items(0) <> "-None-" Then
+                            ComboBox3.Items.Insert(0, "-None-")
+                        End If
                     End If
-                End If
-
-
-
-                If workingMovieDetails.fullmoviebody.movieset <> "" Then
-                    setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
                 Else
-                    setsTxt.Text = "-None-"
+                    ComboBox3.SelectedIndex = 0
                 End If
+            'Dim strArr() As String
+            'strArr = workingMovieDetails.fullmoviebody.movieset.Split("/")
+            'For count = 0 To strArr.Length - 1
+            'strArr(count) = strArr(count).Trim
+            'Dim add As Boolean = True
+            'For Each item In Preferences.moviesets
+            'If item = strArr(count) Then
+            'add = False
+            'Exit For
+            'End If
+            'Next
+            'If add = True Then
+            'Preferences.moviesets.Add(strArr(count))
+            'End If
+            'Next
+            'End If
+            'End If
+            'ComboBox3.SelectedIndex = 0
 
-                For f = 0 To ComboBoxFormatSource.Items.Count - 1
-                    If ComboBoxFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
-                        ComboBoxFormatSource.SelectedIndex = f
-                    End If
-                Next
 
-                mov_SplitContainerAutoPosition
+            'If workingMovieDetails.fullmoviebody.movieset <> "" Then
+            'setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
+            'Else
+            'setsTxt.Text = "-None-"
+            'End If
 
-   '            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-                Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
-            End If
+            For f = 0 To ComboBoxFormatSource.Items.Count - 1
+                If ComboBoxFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
+                    ComboBoxFormatSource.SelectedIndex = f
+                End If
+            Next
+
+            mov_SplitContainerAutoPosition()
+
+            '            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+            Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
+        End If
         Else
-            actorcb.Items.Clear()
-            PictureBoxActor.CancelAsync()
-            PictureBoxActor.Image = Nothing
-            PictureBoxActor.Refresh()
-            ComboBox5.Text = ""
+        actorcb.Items.Clear()
+        PictureBoxActor.CancelAsync()
+        PictureBoxActor.Image = Nothing
+        PictureBoxActor.Refresh()
+        ComboBox5.Text = ""
 
-            Button27.Visible = False
-            Button28.Visible = False
-            thumbedItsMade = False
-            posterThumbedItsMade = False
-            CheckBox1.Visible = False
-            Button15.Visible = False
-            Button9.Visible = False
-            Button10.Visible = False
-            Label18.Visible = False
-            titletxt.Text = ""
-            TextBox3.Text = ""
-            outlinetxt.Text = ""
-            plottxt.Text = ""
-            taglinetxt.Text = ""
-            txtStars.Text = ""
-            genretxt.Text = ""
-            creditstxt.Text = ""
-            directortxt.Text = ""
-            studiotxt.Text = ""
-            pathtxt.Text = ""
-            imdbtxt.Text = ""
-            'actorarray.Clear()
+        Button27.Visible = False
+        Button28.Visible = False
+        thumbedItsMade = False
+        posterThumbedItsMade = False
+        CheckBox1.Visible = False
+        Button15.Visible = False
+        Button9.Visible = False
+        Button10.Visible = False
+        Label18.Visible = False
+        titletxt.Text = ""
+        TextBox3.Text = ""
+        outlinetxt.Text = ""
+        plottxt.Text = ""
+        taglinetxt.Text = ""
+        txtStars.Text = ""
+        genretxt.Text = ""
+        creditstxt.Text = ""
+        directortxt.Text = ""
+        studiotxt.Text = ""
+        pathtxt.Text = ""
+        imdbtxt.Text = ""
+        'actorarray.Clear()
 
-            ratingtxt.Text = ""
-            runtimetxt.Text = ""
-            votestxt.Text = ""
-            certtxt.Text = ""
-            PictureBoxFanArt.Image = Nothing
-            PictureBox2.Image = Nothing
-            moviethumb.Image = Nothing
-            Label16.Text = ""
-            Label17.Text = ""
-            PictureBox3.Image = Nothing
-            Label19.Text = ""
-            TextBox34.Text = ""
-            titletxt.Text = ""
+        ratingtxt.Text = ""
+        runtimetxt.Text = ""
+        votestxt.Text = ""
+        certtxt.Text = ""
+        PictureBoxFanArt.Image = Nothing
+        PictureBox2.Image = Nothing
+        moviethumb.Image = Nothing
+        Label16.Text = ""
+        Label17.Text = ""
+        PictureBox3.Image = Nothing
+        Label19.Text = ""
+        TextBox34.Text = ""
+        titletxt.Text = ""
 
-            roletxt.Text = ""
-            PictureBoxActor.Image = Nothing
+        roletxt.Text = ""
+        PictureBoxActor.Image = Nothing
 
-            Me.Refresh()
-            Application.DoEvents()
+        Me.Refresh()
+        Application.DoEvents()
         End If
         If ratingtxt.Text.IndexOf("/10") <> -1 Then
             ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
@@ -3398,7 +3438,8 @@ Public Class Form1
                 movie.ScrapedMovie.fullmoviebody.originaltitle = movie.ScrapedMovie.fullmoviebody.title
             End If
 
-            movie.ScrapedMovie.fullmoviebody.director  = directortxt.Text
+            movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
+            movie.ScrapedMovie.fullmoviebody.playcount = workingMovieDetails.fullmoviebody.playcount
             movie.ScrapedMovie.fullmoviebody.credits   = creditstxt.Text
             movie.ScrapedMovie.fullmoviebody.studio    = studiotxt.Text
             movie.ScrapedMovie.fullmoviebody.genre     = genretxt.Text
@@ -3412,23 +3453,31 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.mpaa      = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
 
-            If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-            If setsTxt.Text <> "-None-" Then
-                movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+            If ComboBox3.SelectedItem = Nothing Then
+                ComboBox3.SelectedItem = "-None-"
+            End If
+            If ComboBox3.SelectedItem <> "-None-" Then
+                movie.ScrapedMovie.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
             Else
                 movie.ScrapedMovie.fullmoviebody.movieset = Nothing
             End If
+            'If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+            'If setsTxt.Text <> "-None-" Then
+            'movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+            'Else
+            'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+            'End If
 
             movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
 
-            
-            movie.AssignMovieToCache
-            movie.UpdateMovieCache
-            movie.SaveNFO
 
-'            oMovies.SaveMovieCache
-'            oMovies.LoadMovieCache
-            UpdateFilteredList
+            movie.AssignMovieToCache()
+            movie.UpdateMovieCache()
+            movie.SaveNFO()
+
+            '            oMovies.SaveMovieCache
+            '            oMovies.LoadMovieCache
+            UpdateFilteredList()
         Else
             Dim mess As New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
             mess.Show()
@@ -3441,7 +3490,7 @@ Public Class Form1
             For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
 
                 Dim filepath As String = item.Cells(0).Value.ToString
-                Dim movie    As Movie  = oMovies.LoadMovie(filepath)
+                Dim movie As Movie = oMovies.LoadMovie(filepath)
 
                 If IsNothing(movie) Then Continue For
 
@@ -3482,25 +3531,31 @@ Public Class Form1
                     movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
                 End If
 
-                If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-                If setsTxt.Text <> "-None-" Then
-                    movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+                If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = "-None-"
+                If ComboBox3.SelectedItem <> "-None-" Then
+                    movie.ScrapedMovie.fullmoviebody.movieset = ComboBox3.Items(ComboBox3.SelectedIndex)
                 Else
                     movie.ScrapedMovie.fullmoviebody.movieset = Nothing
                 End If
+                'If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+                'If setsTxt.Text <> "-None-" Then
+                'movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+                'Else
+                'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+                'End If
                 movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
 
-                movie.AssignMovieToCache
-                movie.UpdateMovieCache
-                movie.SaveNFO
+                movie.AssignMovieToCache()
+                movie.UpdateMovieCache()
+                movie.SaveNFO()
             Next
 
-'            oMovies.SaveMovieCache
-'            oMovies.LoadMovieCache
+            '            oMovies.SaveMovieCache
+            '            oMovies.LoadMovieCache
 
             workingMovie.fullpathandfilename = Startfullpathandfilename
-            mov_FormPopulate
-            mess.Close
+            mov_FormPopulate()
+            mess.Close()
         End If
     End Sub
 
@@ -4337,7 +4392,7 @@ Public Class Form1
         workingMovie.top250 = Nothing
         workingMovie.year = Nothing
         workingMovie.MovieSet = Nothing
-        setsTxt.Text = ""
+        'setsTxt.Text = ""
         titletxt.Text = ""
         TextBox3.Text = ""
         'outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path"
@@ -4472,7 +4527,7 @@ Public Class Form1
             done = True
         Else
             outlinetxt.Text = ""
-            setsTxt.Text = ""
+            'setsTxt.Text = ""
             PictureBoxFanArt.Image = Nothing
             moviethumb.Image = Nothing
             roletxt.Text = ""
@@ -4769,20 +4824,20 @@ Public Class Form1
             Next
             Label164.Text = "Current Movie: """ & workingMovieDetails.fullmoviebody.title & """"
             ListBox14.Items.Clear()
-            If setsTxt.Text = "-None-" Then
-                ListBox14.Items.Add("-None-")
-            Else
-                If setsTxt.Text.IndexOf("/") <> -1 Then
-                    Dim strArr() As String
-                    strArr = workingMovieDetails.fullmoviebody.movieset.Split("/")
-                    For count = 0 To strArr.Length - 1
-                        strArr(count) = strArr(count).Trim
-                        ListBox14.Items.Add(strArr(count))
-                    Next
-                Else
-                    ListBox14.Items.Add(workingMovieDetails.fullmoviebody.movieset)
-                End If
-            End If
+            'If setsTxt.Text = "-None-" Then
+            'ListBox14.Items.Add("-None-")
+            'Else
+            'If setsTxt.Text.IndexOf("/") <> -1 Then
+            'Dim strArr() As String
+            'strArr = workingMovieDetails.fullmoviebody.movieset.Split("/")
+            'For count = 0 To strArr.Length - 1
+            'strArr(count) = strArr(count).Trim
+            'ListBox14.Items.Add(strArr(count))
+            'Next
+            'Else
+            'ListBox14.Items.Add(workingMovieDetails.fullmoviebody.movieset)
+            'End If
+            'End If
 
         ElseIf tab.ToLower = "movie preferences" Then
             Call mov_PreferencesSetup()
@@ -12782,6 +12837,43 @@ Public Class Form1
                 If ex = False Then
                     Preferences.moviesets.Add(TextBox38.Text)
                     ListBox4.Items.Add(TextBox38.Text)
+                    ComboBox3.Items.Clear()
+                    For Each mset In Preferences.moviesets
+                        ComboBox3.Items.Add(mset)
+                    Next
+                    If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
+                        Dim add As Boolean = True
+                        For Each mset In Preferences.moviesets
+                            If mset = workingMovieDetails.fullmoviebody.movieset Then
+                                add = False
+                            End If
+                        Next
+                        If add = True Then
+                            Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
+                            ComboBox3.Items.Add(workingMovieDetails.fullmoviebody.movieset)
+                        End If
+                        For f = 0 To ComboBox3.Items.Count - 1
+                            If ComboBox3.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
+                                ComboBox3.SelectedIndex = f
+                                Exit For
+                            End If
+                        Next
+                    Else
+                        If ComboBox3.Items.Count = 0 Then
+                            If Preferences.moviesets.Count > 0 Then
+                                For Each mset In Preferences.moviesets
+                                    ComboBox3.Items.Add(mset)
+                                Next
+                            End If
+                        End If
+                        If ComboBox3.Items.Count = 0 Then
+                            ComboBox3.Items.Add("-None-")
+                        End If
+                        If ComboBox3.Items(0) <> "-None-" Then
+                            ComboBox3.Items.Insert(0, "-None-")
+                        End If
+                        ComboBox3.SelectedIndex = 0
+                    End If
                 Else
                     MsgBox("This Movie Set Already Exists")
                 End If
@@ -12799,23 +12891,31 @@ Public Class Form1
                 If ListBox4.SelectedItems(i) <> Nothing And ListBox4.SelectedItems(i) <> "" Then
                     For Each mset In Preferences.moviesets
                         If mset = ListBox4.SelectedItems(i) Then
-                            tempboolean = True
+                            If workingMovieDetails.fullmoviebody.movieset <> mset Then
+                                Preferences.moviesets.Remove(mset)
+                            Else
+                                MsgBox("Unable to remove """ & mset & """, it is being used by the selected Movie")
+                            End If
                             Exit For
+                            'tempboolean = True
+                            'Exit For
                         End If
                     Next
-                    If tempboolean = False Then
-                        Preferences.moviesets.Remove(ListBox4.SelectedItems(i))
-                    Else
-                        MsgBox("Unable to remove """ & ListBox4.SelectedItems(i) & """, it is being used by the selected Movie")
-                    End If
-                    Exit For
+                    'If tempboolean = False Then
+                    'Preferences.moviesets.Remove(ListBox4.SelectedItems(i))
+                    'Else
+                    'MsgBox("Unable to remove """ & ListBox4.SelectedItems(i) & """, it is being used by the selected Movie")
+                    'End If
+                    'Exit For
                 End If
             Next
 
             ListBox4.Items.Clear()
+            ComboBox3.Items.Clear()
 
             For Each mset In Preferences.moviesets
                 If mset <> "-None-" Then ListBox4.Items.Add(mset)
+                ComboBox3.Items.Add(mset)
             Next
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -15885,23 +15985,23 @@ Public Class Form1
         'Dim tempboolean As Boolean = UrlIsValid("http://thetvdb.com/")
 
         Try
-            'If ComboBox3.Items.Count <> Preferences.moviesets.Count Then
-            '    ComboBox3.Items.Clear()
-            '    For Each mset In Preferences.moviesets
-            '        ComboBox3.Items.Add(mset)
-            '    Next
-            'End If
+            If ComboBox3.Items.Count <> Preferences.moviesets.Count Then
+                ComboBox3.Items.Clear()
+                For Each mset In Preferences.moviesets
+                    ComboBox3.Items.Add(mset)
+                Next
+            End If
             If workingMovieDetails.fullmoviebody.movieset <> "-None-" Then
-                'For Each mset In Preferences.moviesets
-                '    ComboBox3.Items.Add(mset)
-                'Next
-                'For te = 0 To ComboBox3.Items.Count - 1
-                '    If ComboBox3.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
-                '        ComboBox3.SelectedIndex = te
-                '        Exit For
-                '    End If
-                'Next
-                setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
+                For Each mset In Preferences.moviesets
+                    ComboBox3.Items.Add(mset)
+                Next
+                For te = 0 To ComboBox3.Items.Count - 1
+                    If ComboBox3.Items(te) = workingMovieDetails.fullmoviebody.movieset Then
+                        ComboBox3.SelectedIndex = te
+                        Exit For
+                    End If
+                Next
+                'setsTxt.Text = workingMovieDetails.fullmoviebody.movieset
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -16859,12 +16959,13 @@ Public Class Form1
                     pathtxt.Font = newFont
                     'CheckedListBox1.Font = newFont
                     TextBox34.Font = newFont
-                    setsTxt.Font = newFont
+                    'setsTxt.Font = newFont
                     DataGridViewMovies.Font = newFont
                     plottxt.Font = newFont
                     txtStars.Font = newFont
                     'titletxt.Font = newFont
-                    setsTxt.Font = newFont
+                    'setsTxt.Font = newFont
+                    ComboBox3.Font = newFont
                     ComboBox5.Font = newFont
                     TvTreeview.Font = newFont
                     TextBox25.Font = newFont
@@ -21478,7 +21579,7 @@ Public Class Form1
         
         'workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
        
-        setsTxt.Text = ListBox14.Items(0)
+        'setsTxt.Text = ListBox14.Items(0)
 
         mov_SaveQuick
 
@@ -21658,7 +21759,7 @@ Public Class Form1
             util_ZoomImage(New Bitmap(pictureBox.ImageLocation))
         Catch
             Dim wc As New WebClient()
-            Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.tag)
+            Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.Tag)
             Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
             util_ZoomImage(New Bitmap(ImageStream))
@@ -21705,21 +21806,21 @@ Public Class Form1
 
     Private Sub MovieRemoveSetBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MovieRemoveSetBtn.Click
 
-        If ListBox14.SelectedItems.Count=0 Then Return
+        If ListBox14.SelectedItems.Count = 0 Then Return
 
-        Do While ListBox14.SelectedItems.Count>0
+        Do While ListBox14.SelectedItems.Count > 0
             ListBox14.Items.Remove(ListBox14.SelectedItem)
         Loop
-        
-        If ListBox14.Items.Count=0 Then
+
+        If ListBox14.Items.Count = 0 Then
             ListBox14.Items.Add("-None-")
         End If
 
         workingMovieDetails.fullmoviebody.movieset = ListBox14.Items(0)
-        
-        setsTxt.Text = ListBox14.Items(0)
 
-        mov_SaveQuick
+        'setsTxt.Text = ListBox14.Items(0)
+
+        mov_SaveQuick()
 
 
         'If ListBox14.SelectedItem <> "-None-" Then
@@ -22000,7 +22101,7 @@ Public Class Form1
     End Sub
 
     Private Sub HomeMovieCacheSave()
-        Dim fullpath As String = workingProfile.homemoviecache
+        Dim fullpath As String = workingProfile.HomeMovieCache
         If homemovielist.Count > 0 Then
 
             If IO.File.Exists(fullpath) Then
@@ -22079,7 +22180,7 @@ Public Class Form1
         homemovielist.Clear()
 
         Dim movielist As New XmlDocument
-        Dim objReader As New System.IO.StreamReader(workingProfile.homemoviecache)
+        Dim objReader As New System.IO.StreamReader(workingProfile.HomeMovieCache)
         Dim tempstring As String = objReader.ReadToEnd
         objReader.Close()
 
@@ -22707,14 +22808,14 @@ Public Class Form1
     Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
         Select Case action
-            Case "BatchRescrape"          : Return _rescrapeList.FullPathAndFilenames.Count>1               ' filteredList.Count > 1
-            Case "ChangeMovie"            : Return False
-            Case "RescrapeAll"            : Return _rescrapeList.FullPathAndFilenames.Count>1
+            Case "BatchRescrape" : Return _rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
+            Case "ChangeMovie" : Return False
+            Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
             Case "RescrapeDisplayedMovie" : Return False
-            Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
-            Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
-            Case "SearchForNewMovies"     : Return True
-            Case "RebuildCaches"          : Return False
+            Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
+            Case "SearchForNewMovies" : Return True
+            Case "RebuildCaches" : Return False
         End Select
 
         MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
@@ -22783,9 +22884,9 @@ Public Class Form1
         filteredList.AddRange(oMovies.MovieCache)
         'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
 
-'		DataGridViewBindingSource.DataSource = filteredListObj
-'		DataGridViewBindingSource.DataSource = oMovies.Data_GridViewMovieCache
-'		DataGridViewMovies.DataSource = DataGridViewBindingSource
+        '		DataGridViewBindingSource.DataSource = filteredListObj
+        '		DataGridViewBindingSource.DataSource = oMovies.Data_GridViewMovieCache
+        '		DataGridViewMovies.DataSource = DataGridViewBindingSource
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -22795,7 +22896,7 @@ Public Class Form1
             Next
         Catch
         End Try
-        
+
         mov_FormPopulate()
         DisplayMovie()
     End Sub
@@ -22885,8 +22986,8 @@ Public Class Form1
 
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-        If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
-        If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
+        If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel()
+        If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
     End Sub
 
 
@@ -22895,14 +22996,14 @@ Public Class Form1
     End Sub
 
 
-    Sub BckWrkScnMovies_Cancel
+    Sub BckWrkScnMovies_Cancel()
         If BckWrkScnMovies.IsBusy Then
             tsStatusLabel.Text = "* Cancelling... *"
             BckWrkScnMovies.CancelAsync()
         End If
     End Sub
 
-    Sub AbortFileDownload
+    Sub AbortFileDownload()
         tsStatusLabel.Text = "* Aborting trailer download... *"
         Monitor.Enter(countLock)
         blnAbortFileDownload = True
@@ -23073,10 +23174,10 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cbShowMovieGridToolTip_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
+    Private Sub cbShowMovieGridToolTip_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbShowMovieGridToolTip.CheckedChanged
         Preferences.ShowMovieGridToolTip = cbShowMovieGridToolTip.Checked
         If prefsload = False Then
-        generalprefschanged = True
+            generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
@@ -23092,19 +23193,19 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
         If prefsload = False Then
-        generalprefschanged = True
+            generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
     End Sub
 
-    Private Sub RenameFilesToolStripMenuItem_Click( sender As Object,  e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
+    Private Sub RenameFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
         mov_ScrapeSpecific("rename_files")
     End Sub
 
-    Private Sub btnMovieSetsRepopulateFromUsed_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
+    Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
 
-        Preferences.moviesets.Clear
-        ListBox4.Items.Clear
+        Preferences.moviesets.Clear()
+        ListBox4.Items.Clear()
 
         Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
 

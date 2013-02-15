@@ -472,7 +472,7 @@
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Untitled-1.png" />
-    <Resource Include="Assets\MediaCompanion.ico" />
+    <Compile Include="Assets\MediaCompanion.ico" />
     <Content Include="Assets\pthreadGC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -833,9 +833,9 @@
     </Content>
     <None Include="Resources\1356729777_video.png" />
     <None Include="Resources\1356729911_page_white_text.png" />
-    <None Include="Assets\Resolutions.xml">
+    <Content Include="Assets\Resolutions.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="Resources\blank.png" />
     <None Include="Resources\clock-icon.png" />
     <None Include="Resources\Clap.png" />
