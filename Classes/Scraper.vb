@@ -66,7 +66,7 @@ Public Class Classimdb
 
     Const REGEX_TITLE_AND_YEAR      = "<title>(.*?)</title>"
     Const REGEX_TITLE               = "<title>(.*?) \("
-    Const REGEX_YEAR                = "(?<=\().*\d\d\d\d(?=.*\))"
+    Const REGEX_YEAR                = "\(.*?(\d{4}).*?\)" 
 
 
 
@@ -625,7 +625,7 @@ Public Class Classimdb
 
     ReadOnly Property Year
         Get
-            Return Regex.Match(TitleAndYear,REGEX_YEAR, RegexOptions.Singleline).ToString
+            Return Regex.Match(TitleAndYear,REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
         End Get
     End Property
    

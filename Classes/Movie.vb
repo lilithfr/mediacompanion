@@ -663,7 +663,7 @@ Public Class Movie
 	Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
 		If Not IsNothing(Title) then
-            ReportProgress(, String.Format("{0}Scraping Title: {1}{0}", vbCrLf, Title))
+			ReportProgress(, String.Format("{0}Scraping Title: {1}{0}", vbCrLf, Title))
 		End If
 
 		If PossibleImdb <> "" then

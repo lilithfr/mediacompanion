@@ -1661,66 +1661,66 @@ Public Class Form1
             'setsTxt.Text = "-None-"
             'End If
 
-            For f = 0 To ComboBoxFormatSource.Items.Count - 1
-                If ComboBoxFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
-                    ComboBoxFormatSource.SelectedIndex = f
-                End If
-            Next
+                For f = 0 To ComboBoxFormatSource.Items.Count - 1
+                    If ComboBoxFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
+                        ComboBoxFormatSource.SelectedIndex = f
+                    End If
+                Next
 
-            mov_SplitContainerAutoPosition()
+                mov_SplitContainerAutoPosition
 
-            '            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
-            Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
-        End If
+   '            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
+                Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
+            End If
         Else
-        actorcb.Items.Clear()
-        PictureBoxActor.CancelAsync()
-        PictureBoxActor.Image = Nothing
-        PictureBoxActor.Refresh()
-        ComboBox5.Text = ""
+            actorcb.Items.Clear()
+            PictureBoxActor.CancelAsync()
+            PictureBoxActor.Image = Nothing
+            PictureBoxActor.Refresh()
+            ComboBox5.Text = ""
 
-        Button27.Visible = False
-        Button28.Visible = False
-        thumbedItsMade = False
-        posterThumbedItsMade = False
-        CheckBox1.Visible = False
-        Button15.Visible = False
-        Button9.Visible = False
-        Button10.Visible = False
-        Label18.Visible = False
-        titletxt.Text = ""
-        TextBox3.Text = ""
-        outlinetxt.Text = ""
-        plottxt.Text = ""
-        taglinetxt.Text = ""
-        txtStars.Text = ""
-        genretxt.Text = ""
-        creditstxt.Text = ""
-        directortxt.Text = ""
-        studiotxt.Text = ""
-        pathtxt.Text = ""
-        imdbtxt.Text = ""
-        'actorarray.Clear()
+            Button27.Visible = False
+            Button28.Visible = False
+            thumbedItsMade = False
+            posterThumbedItsMade = False
+            CheckBox1.Visible = False
+            Button15.Visible = False
+            Button9.Visible = False
+            Button10.Visible = False
+            Label18.Visible = False
+            titletxt.Text = ""
+            TextBox3.Text = ""
+            outlinetxt.Text = ""
+            plottxt.Text = ""
+            taglinetxt.Text = ""
+            txtStars.Text = ""
+            genretxt.Text = ""
+            creditstxt.Text = ""
+            directortxt.Text = ""
+            studiotxt.Text = ""
+            pathtxt.Text = ""
+            imdbtxt.Text = ""
+            'actorarray.Clear()
 
-        ratingtxt.Text = ""
-        runtimetxt.Text = ""
-        votestxt.Text = ""
-        certtxt.Text = ""
-        PictureBoxFanArt.Image = Nothing
-        PictureBox2.Image = Nothing
-        moviethumb.Image = Nothing
-        Label16.Text = ""
-        Label17.Text = ""
-        PictureBox3.Image = Nothing
-        Label19.Text = ""
-        TextBox34.Text = ""
-        titletxt.Text = ""
+            ratingtxt.Text = ""
+            runtimetxt.Text = ""
+            votestxt.Text = ""
+            certtxt.Text = ""
+            PictureBoxFanArt.Image = Nothing
+            PictureBox2.Image = Nothing
+            moviethumb.Image = Nothing
+            Label16.Text = ""
+            Label17.Text = ""
+            PictureBox3.Image = Nothing
+            Label19.Text = ""
+            TextBox34.Text = ""
+            titletxt.Text = ""
 
-        roletxt.Text = ""
-        PictureBoxActor.Image = Nothing
+            roletxt.Text = ""
+            PictureBoxActor.Image = Nothing
 
-        Me.Refresh()
-        Application.DoEvents()
+            Me.Refresh()
+            Application.DoEvents()
         End If
         If ratingtxt.Text.IndexOf("/10") <> -1 Then
             ratingtxt.Text = ratingtxt.Text.Replace("/10", "")
@@ -3490,7 +3490,7 @@ Public Class Form1
             For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
 
                 Dim filepath As String = item.Cells(0).Value.ToString
-                Dim movie As Movie = oMovies.LoadMovie(filepath)
+                Dim movie    As Movie  = oMovies.LoadMovie(filepath)
 
                 If IsNothing(movie) Then Continue For
 
@@ -16959,7 +16959,6 @@ Public Class Form1
                     pathtxt.Font = newFont
                     'CheckedListBox1.Font = newFont
                     TextBox34.Font = newFont
-                    'setsTxt.Font = newFont
                     DataGridViewMovies.Font = newFont
                     plottxt.Font = newFont
                     txtStars.Font = newFont
@@ -22808,14 +22807,14 @@ Public Class Form1
     Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
         Select Case action
-            Case "BatchRescrape" : Return _rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
-            Case "ChangeMovie" : Return False
-            Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "BatchRescrape"          : Return _rescrapeList.FullPathAndFilenames.Count>1               ' filteredList.Count > 1
+            Case "ChangeMovie"            : Return False
+            Case "RescrapeAll"            : Return _rescrapeList.FullPathAndFilenames.Count>1
             Case "RescrapeDisplayedMovie" : Return False
-            Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
-            Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
-            Case "SearchForNewMovies" : Return True
-            Case "RebuildCaches" : Return False
+            Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
+            Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
+            Case "SearchForNewMovies"     : Return True
+            Case "RebuildCaches"          : Return False
         End Select
 
         MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
@@ -22986,8 +22985,8 @@ Public Class Form1
 
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-        If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel()
-        If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
+        If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
+        If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
     End Sub
 
 
@@ -22996,14 +22995,14 @@ Public Class Form1
     End Sub
 
 
-    Sub BckWrkScnMovies_Cancel()
+    Sub BckWrkScnMovies_Cancel
         If BckWrkScnMovies.IsBusy Then
             tsStatusLabel.Text = "* Cancelling... *"
             BckWrkScnMovies.CancelAsync()
         End If
     End Sub
 
-    Sub AbortFileDownload()
+    Sub AbortFileDownload
         tsStatusLabel.Text = "* Aborting trailer download... *"
         Monitor.Enter(countLock)
         blnAbortFileDownload = True

@@ -80,25 +80,14 @@
         Dim w As Integer = widthRatio *Ratingwidth
         Dim h As Integer = heightRatio*bmStars.Height
 
-        dim minScaler As Double = 1
-
-        If pbFanart.ClientRectangle.Width < 600 Then
-
-            minScaler = 600/pbFanart.ClientRectangle.Width
-
-            w = w*minScaler
-            h = h*minScaler
-
-            w = Math.Min(w, pbFanart.ClientRectangle.Width )
-            h = Math.Min(h, pbFanart.ClientRectangle.Height)
-        End If
+        Dim scaler As Double= bmFanart.Width/(pbFanart.ClientRectangle.Width*widthRatio)
 
 
-        Dim rectFanart As New Rectangle(0, 0, w*2, h*2)
+        Dim rectFanart As New Rectangle(0, 0, w*scaler, h*scaler)
 
         Dim gr       As Graphics = Graphics.FromImage(bmFanart)
         Dim Brush    As New SolidBrush(Color.Black)
-        Dim fontSize As Integer = heightRatio*27*minScaler
+        Dim fontSize As Integer = heightRatio*13*scaler
         Dim drawFont As New Font("Segoe UI", fontSize, FontStyle.Bold)
 
         gr.DrawImage(bmStars, rectFanart, rectStars, GraphicsUnit.Pixel)
