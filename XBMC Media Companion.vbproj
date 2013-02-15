@@ -472,7 +472,7 @@
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Untitled-1.png" />
-    <Compile Include="Assets\MediaCompanion.ico" />
+    <Resource Include="Assets\MediaCompanion.ico" />
     <Content Include="Assets\pthreadGC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
