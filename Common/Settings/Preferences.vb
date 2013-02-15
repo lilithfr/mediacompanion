@@ -182,6 +182,7 @@ Public Class Preferences
     Public Shared moviesUseXBMCScraper As Boolean = False
 
     Public Shared moviesortorder As Byte
+    Public Shared movieinvertorder As Byte
     Public Shared moviedefaultlist As Byte
     Public Shared startuptab As Byte
 
@@ -260,6 +261,7 @@ Public Class Preferences
         XBMC_Scraper = "tmdb"
         moviedefaultlist = 0
         moviesortorder = 0
+        movieinvertorder = 0
         imdbmirror = "http://www.imdb.com/"
         usefoldernames = False
         allfolders = False
@@ -857,7 +859,7 @@ Public Class Preferences
         root.AppendChild(child)
 
         child = doc.CreateElement("moviesortorder")
-        child.InnerText = moviesortorder.ToString
+        child.InnerText = movieinvertorder.ToString & moviesortorder.ToString
         root.AppendChild(child)
 
         child = doc.CreateElement("moviedefaultlist")
@@ -1617,7 +1619,17 @@ Public Class Preferences
                         eprenamelowercase = False
                     End If
                 Case "moviesortorder"
-                    If thisresult.InnerText <> "" Then moviesortorder = Convert.ToByte(thisresult.InnerText)
+                    If thisresult.InnerText <> "" Then
+                        Dim sortOrder() As Char = thisresult.InnerText.ToString.ToArray
+                        If sortOrder.Length < 2 Then
+                            ReDim Preserve sortOrder(1)
+                            sortOrder(1) = "0"
+                            Array.Reverse(sortOrder)
+                        End If
+                        movieinvertorder = Val(sortOrder(0))
+                        moviesortorder = Val(sortOrder(1))
+
+                    End If
                 Case "moviedefaultlist"
                     If thisresult.InnerText <> "" Then moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                 Case "startuptab"

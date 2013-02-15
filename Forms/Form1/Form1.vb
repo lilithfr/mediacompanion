@@ -4640,6 +4640,7 @@ Public Class Form1
         Else
             Mc.clsGridViewMovie.GridSort = "Asc"
         End If
+        Preferences.movieinvertorder = Convert.ToByte(btnreverse.Checked)
 
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
@@ -20619,6 +20620,7 @@ Public Class Form1
         End Select
 
         cbSort.SelectedIndex = Preferences.moviesortorder
+        btnreverse.Checked = Preferences.movieinvertorder
 
         '----------------------------------------------------------
 
