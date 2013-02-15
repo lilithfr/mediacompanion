@@ -1,64 +1,6 @@
 ﻿Public Class Rating
 
-    'Dim ValueRating As Single
-    'Dim PictureBoxWidth As Integer
-    'Public PictureInit As Image
-
-    'Private Sub Rating_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-    '    PictureBoxWidth = PictureBoxRating.Width
-    'End Sub
-    
-    'Public Function BitmapRating(ByVal PictureBoxInit As Image, ByVal PictureBoxWidth As Integer, ByVal PictureBoxHeight As Integer, ByVal Value As String) As Bitmap
-    '    Dim Ratingwidth As Integer
-    '    Dim Graph As New Bitmap(120, 40)
-    '    Dim Brush As New SolidBrush(Color.Black)
-    '    Dim BrushCircle As New SolidBrush(Color.Chocolate)
-    '    Dim pen As New System.Drawing.Pen(Color.DarkOrange, 30)
-    '    Dim drawFont As New Font("Segoe UI", 13, FontStyle.Bold)
-    '    Dim Ratio As Single
-
-    '    If Value = "" Or Not Single.TryParse(Value, ValueRating) Then
-    '        Return PictureInit
-    '    End If
-
-    '    Ratio = PictureInit.Width / PictureInit.Height
-
-    '    'Resize source Image
-    '    Dim bm_source As New Bitmap(PictureInit)
-    '    Dim bm_dest As New Bitmap(PictureBoxWidth, PictureBoxHeight)
-    '    Dim gr_dest As Graphics = Graphics.FromImage(bm_dest)
-
-    '    Dim topOffset As Integer = (PictureBoxHeight - (PictureBoxWidth / Ratio))/2
-
-    '    gr_dest.DrawImage(bm_source, 0, topOffset, PictureBoxWidth, PictureBoxWidth / Ratio)
-
-    '    'ValueRating = Convert.ToSingle(Value.Replace(".", ","))
-    '    Ratingwidth = 39 + (Convert.ToInt16((ValueRating * 10) * ((PictureBoxRating.Width - 39) / 100)))
-    '    'Ratingwidth = 39 + (Convert.ToInt16(ValueRating * ((PictureBoxRating.Width - 39) / 100)))
-
-    '    'Copy Stars 
-    '    Using gr As Graphics = Graphics.FromImage(bm_dest)
-    '        Dim src_rect As New Rectangle(0, topOffset, Ratingwidth, PictureBoxRating.Height)
-    '        Dim dst_rect As New Rectangle(0, topOffset, Ratingwidth, PictureBoxRating.Height)
-    '        gr.DrawImage(PictureBoxRating.Image, dst_rect, src_rect, GraphicsUnit.Pixel)
-    '    End Using
-
-    '    'write text
-    '    Dim Graphic As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bm_dest)
-
-    '    If Value.Length > 2 Then
-    '        Graphic.DrawString(Value.ToString.Substring(0, 3), drawFont, Brush, 0, topOffset+3)
-    '    Else
-    '        Graphic.DrawString(Value.ToString, drawFont, Brush, 8, topOffset+3)
-    '    End If
-
-    '    Return bm_dest
-    'End Function
-
-
-
     Public Sub BitmapRating_V2(ByRef pbFanart As PictureBox, ByVal sRating As String)
-
         Dim iRating  As Single
 
         If sRating = "" Or Not Single.TryParse(sRating, iRating) Then
@@ -68,35 +10,29 @@
         iRating = Math.Min(iRating,10)
 
         Dim bmStars  As New Bitmap(PictureBoxRating.Image)
-        Dim bmFanart As New Bitmap(pbFanart        .Image)
-
-        Dim Ratingwidth As Integer = 39 + (Convert.ToInt16((iRating * 10) * ((bmStars.Width - 39) / 100)))
-
-        Dim rectStars As New Rectangle(0, 0, Ratingwidth, bmStars.Height)
-
-        Dim widthRatio  As Double = bmFanart.Width /1920
-        Dim heightRatio As Double = bmFanart.Height/1080
-
-        Dim w As Integer = widthRatio *Ratingwidth
-        Dim h As Integer = heightRatio*bmStars.Height
-
-        Dim scaler As Double= bmFanart.Width/(pbFanart.ClientRectangle.Width*widthRatio)
-
-
-        Dim rectFanart As New Rectangle(0, 0, w*scaler, h*scaler)
-
-        Dim gr       As Graphics = Graphics.FromImage(bmFanart)
+        Dim grStars  As Graphics = Graphics.FromImage(bmStars)
         Dim Brush    As New SolidBrush(Color.Black)
-        Dim fontSize As Integer = heightRatio*13*scaler
-        Dim drawFont As New Font("Segoe UI", fontSize, FontStyle.Bold)
 
-        gr.DrawImage(bmStars, rectFanart, rectStars, GraphicsUnit.Pixel)
+        Dim drawFont As New Font("Segoe UI", 14, FontStyle.Bold)
 
         If sRating.Length > 2 Then
-            gr.DrawString(sRating.ToString.Substring(0, 3), drawFont, Brush, 0, heightRatio*5)
+            grStars.DrawString(sRating.ToString, drawFont, Brush, 0, 2)
         Else
-            gr.DrawString(sRating.ToString, drawFont, Brush, 8, heightRatio*5)
+            grStars.DrawString(sRating.ToString, drawFont, Brush, 8, 2)
         End If
+
+        Dim StarsWidth As Integer = 39 + (Convert.ToInt16((iRating * 10) * ((bmStars.Width - 39) / 100)))
+        Dim rectStars  As New Rectangle(0, 0, StarsWidth, bmStars.Height)
+
+        Dim bmFanart As New Bitmap(pbFanart.Image)
+        Dim grFanart As Graphics = Graphics.FromImage(bmFanart)
+
+        Dim w As Integer = StarsWidth    *bmFanart.Width/pbFanart.ClientRectangle.Width
+        Dim h As Integer = bmStars.Height*bmFanart.Width/pbFanart.ClientRectangle.Width
+
+        Dim rectFanart As New Rectangle(0, 0, w, h)
+
+        grFanart.DrawImage(bmStars, rectFanart, rectStars, GraphicsUnit.Pixel)
 
         pbFanart.Image = bmFanart
     End Sub
