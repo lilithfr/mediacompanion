@@ -20469,7 +20469,7 @@ Public Class Form1
     Private Sub ResizeBottomLHSPanel()
 
         Dim maxSize = 170
-        Dim minSize = 10
+        Dim minSize = 2
 
         If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
             SplitContainer5.SplitterDistance = SplitContainer5.Height - maxSize
@@ -20480,7 +20480,7 @@ Public Class Form1
         End If
 
         'Needed as workaround for splitter panel framework bug:
-        Dim h = SplitContainer5.SplitterDistance - 124
+        Dim h = SplitContainer5.SplitterDistance - 140
         If h < minSize Then h = minSize
         DataGridViewMovies.Height = h
     End Sub
