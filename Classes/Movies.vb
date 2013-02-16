@@ -94,9 +94,13 @@ Public Class Movies
 
     Public ReadOnly Property MoviesSetsIncNone As List(Of String)
         Get
-            Dim q = From x In MovieCache Select ms=x.MovieSet.Split(",") Distinct
+            Try
+                Dim q = From x In MovieCache Select ms=x.MovieSet.Split(",") Distinct
              
-            Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
+                Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
+            Catch
+                Return New List(Of String)
+            End Try
         End Get
     End Property    
 
