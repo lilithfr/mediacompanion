@@ -5332,7 +5332,7 @@ Public Class Form1
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
-                    Dim result As Boolean = mov_FanartSaved()
+                    Dim result As Boolean = UpdateMovieCache()
                     If result = True Then
                         If Me.cbFilterGeneral.Text="Missing Fanart" Then
                             ButtonNextFanart.Text = "Click here to move to next Movie"
@@ -5359,7 +5359,16 @@ Public Class Form1
 
     End Sub
 
-    Private Function mov_FanartSaved()
+    Private Function UpdateMovieCache
+
+        Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+
+        Return True
+    End Function
+
+    Private Function mov_FanartSaved_old()
         Dim replace As Boolean = False
         For f = 0 To oMovies.MovieCache.Count - 1
             Dim newmovie As New ComboList
@@ -5388,31 +5397,35 @@ Public Class Form1
     End Function
 
     Private Sub mov_PosterSaved()
-        Dim replace As Boolean = False
-        For f = 0 To oMovies.MovieCache.Count - 1
-            Dim newmovie As New ComboList
-            newmovie = oMovies.MovieCache(f)
-            If newmovie.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
-                If newmovie.missingdata1 = 3 Then
-                    newmovie.missingdata1 = 1
-                    replace = True
-                ElseIf newmovie.missingdata1 = 2 Then
-                    newmovie.missingdata1 = 0
-                    replace = True
-                End If
-                oMovies.MovieCache.RemoveAt(f)
-                oMovies.MovieCache.Add(newmovie)
-                Exit For
-            End If
-        Next
-
-        If replace = True Then
-            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            Call mov_FormPopulate()
-            'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
-            'currentTabIndex = TabControl2.SelectedIndex
-        End If
+        UpdateMovieCache
     End Sub
+
+    'Private Sub mov_PosterSaved_old
+    '    Dim replace As Boolean = False
+    '    For f = 0 To oMovies.MovieCache.Count - 1
+    '        Dim newmovie As New ComboList
+    '        newmovie = oMovies.MovieCache(f)
+    '        If newmovie.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename Then
+    '            If newmovie.missingdata1 = 3 Then
+    '                newmovie.missingdata1 = 1
+    '                replace = True
+    '            ElseIf newmovie.missingdata1 = 2 Then
+    '                newmovie.missingdata1 = 0
+    '                replace = True
+    '            End If
+    '            oMovies.MovieCache.RemoveAt(f)
+    '            oMovies.MovieCache.Add(newmovie)
+    '            Exit For
+    '        End If
+    '    Next
+
+    '    If replace = True Then
+    '        Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+    '        Call mov_FormPopulate()
+    '        'TabControl2.SelectedIndex = 0                      'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Poster
+    '        'currentTabIndex = TabControl2.SelectedIndex
+    '    End If
+    'End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         Try
@@ -5512,7 +5525,7 @@ Public Class Form1
                     '    PictureBox2.ImageLocation = defaultFanart
                     '    PictureBox2.Load()
                 End If
-                Call mov_FanartSaved()
+                Call UpdateMovieCache()
             Catch ex As Exception
                 MsgBox("Unable To Download Image")
             End Try
@@ -18804,7 +18817,7 @@ Public Class Form1
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
-                    Dim result As Boolean = mov_FanartSaved()
+                    Dim result As Boolean = UpdateMovieCache()
                     If result = True Then
 
                         If Me.cbFilterGeneral.Text="Missing Fanart" Then

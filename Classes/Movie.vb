@@ -580,10 +580,10 @@ Public Class Movie
 		Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
-		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assign new movie to cache" ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
-		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToAddMissingData , "Assign missing data"       ) )
+		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
+'		Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToAddMissingData , "Assign missing data"       ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
 		Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
@@ -720,12 +720,13 @@ Public Class Movie
 		 _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
 	End Sub
 
-	Sub LoadNFO
+	Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
 		_scrapedMovie = _nfoFunction.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
 		_nfoPathAndFilename=ActualNfoPathAndFilename
 		Scraped=True
 		Try
 			AssignMovieToCache
+            If bUpdateCaches Then UpdateCaches
 		Catch
 		End Try
 	End Sub
@@ -738,8 +739,7 @@ Public Class Movie
 
 	Sub AssignUnknownMovieToCache
 		AssignMovieToCache
-		_movieCache.missingdata1 = 3
-		_movieCache.runtime      = "0"
+		_movieCache.runtime = "0"
 	End Sub
 
 	Sub AssignMovieToCache
@@ -791,6 +791,7 @@ Public Class Movie
 		_movieCache.top250    = _scrapedMovie.fullmoviebody.top250
 		_movieCache.genre     = _scrapedMovie.fullmoviebody.genre
 		_movieCache.playcount = _scrapedMovie.fullmoviebody.playcount
+        AssignMovieToAddMissingData
 	End Sub
 
 	Sub AssignScrapedMovie
@@ -1483,13 +1484,21 @@ Public Class Movie
 		End If
 	End Sub
 
-	Private Sub AssignMovieToAddMissingData
+	Public Sub AssignMovieToAddMissingData
+
+        _movieCache.missingdata1 = 0
+
 		If Not File.Exists(FanartPath) Then
 			_movieCache.missingdata1 += 1
 		End If
 
 		If Not File.Exists(PosterPath) Then
 			_movieCache.missingdata1 += 2
+		End If
+
+        'Not used yet
+        If Not TrailerExists Then
+			_movieCache.missingdata1 += 4
 		End If
 	End Sub
 
@@ -1924,7 +1933,7 @@ Public Class Movie
 		End If
 
 		AssignMovieToCache
-		AssignMovieToAddMissingData
+'		AssignMovieToAddMissingData
 		HandleOfflineFile             ' Do we need this?
 		SaveNFO
 

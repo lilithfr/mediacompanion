@@ -1027,7 +1027,7 @@ Public Class Movies
 
             Dim m As New Movie(movie.fullpathandfilename, Me)
 
-            m.LoadNFO
+            m.LoadNFO(False)
             m.UpdateActorCacheFromEmpty()
             If Cancelled Then Exit Sub
         Next
