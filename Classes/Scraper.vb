@@ -46,9 +46,20 @@ Module ModGlobals
     <Extension()> _
     Sub AppendTag(ByRef s As String, name As String, value As String)
 
-        s &= "<" & name & ">" & value.Trim & "</" & name & ">"& vbCrLf
+        s &= "<" & name & ">" & value.Trim.EncodeSpecialChrs & "</" & name & ">"& vbCrLf
         
     End Sub
+
+     <Extension()> _
+    Function EncodeSpecialChrs(ByRef s As String) As String
+        s = s.Replace("&", "&amp;")
+        s = s.Replace("<", "&lt;")
+        s = s.Replace(">", "&gt;")
+        s = s.Replace(Chr(34), "&quot;")
+        s = s.Replace("'", "&apos;")
+
+        Return s
+    End Function
 
 
 End Module
@@ -1399,6 +1410,7 @@ Public Class Classimdb
         If text.IndexOf("'") <> -1 Then text = text.Replace("'", "&apos;")
         Return text
     End Function
+
     Private Function loadwebpage(ByVal url As String, ByVal method As Boolean)
 
         Dim webpage As New List(Of String)
