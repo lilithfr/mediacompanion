@@ -745,6 +745,8 @@ Public Class Movie
     Sub AssignMovieToCache
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
+        If _movieCache.MovieSet="" Then _movieCache.MovieSet = "-None-"
+
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
         _movieCache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
