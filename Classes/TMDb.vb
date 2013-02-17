@@ -8,7 +8,7 @@ Public Class TMDb
 
     Public Shared LanguagesFile               = Preferences.applicationPath & "\classes\tmdb_languages.xml"
     Public Const  TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
-    Public Const  TMDbConfigFileMaxAgeInDays  = 1
+    Public Const  TMDbConfigFileMaxAgeInDays  = 14
 
     Enum Resolution
         FullHD=1920
@@ -346,7 +346,7 @@ Public Class TMDb
 
         Try
             If fi.Exists then
-                expired = (DateTime.Now-fi.CreationTime).TotalDays>TMDbConfigFileMaxAgeInDays
+                expired = (DateTime.Now-fi.LastWriteTime).TotalDays>TMDbConfigFileMaxAgeInDays
 
                 If Not expired then
                     _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)

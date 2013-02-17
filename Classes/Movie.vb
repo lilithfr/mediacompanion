@@ -1301,6 +1301,7 @@ Public Class Movie
  
     Private Sub DoDownloadPoster
         If Not Preferences.overwritethumbs And File.Exists(ActualPosterPath) Then
+            ReportProgress(,"Poster already exists -> Skipping" & vbCrLf)
             Exit Sub
         End If
 
@@ -1721,7 +1722,7 @@ Public Class Movie
             Else
                 log &= "No IMDB ID found in NFO" & vbCrLf
             End If
-            If Preferences.renamenfofiles = True Then   'reenabled choice as per user preference
+            If Preferences.renamenfofiles And Not IsMCNfoFile(fileNFO) Then   'reenabled choice as per user preference
                 Try
                     If Not File.Exists(fileNFO.Replace(".nfo", ".info")) Then
                         File.Move(fileNFO, fileNFO.Replace(".nfo", ".info"))
@@ -1888,6 +1889,17 @@ Public Class Movie
        
         If Cancelled then Exit Sub
 
+
+        If rl.Frodo_Poster_Thumbs Then
+            GetFrodoPosterThumbs
+        End If
+        
+
+        If rl.Frodo_Fanart_Thumbs Then
+            GetFrodoFanartThumbs
+        End If
+        
+ 
         'Clears the existing poster urls and adds the rescraped ones directly into _scrapedMovie
         If rl.posterurls Then 
             _scrapedMovie.listthumbs.Clear
@@ -2206,6 +2218,33 @@ Public Class Movie
 
         Return False
     End Function
+
+
+    Shared Function IsMCNfoFile( movieNfoFile As String )
+        Try
+            Dim filechck As StreamReader = File.OpenText(movieNfoFile)
+            Dim s As String
+            Do
+                s = filechck.ReadLine
+
+                If s = Nothing Then Exit Do
+
+                If s.IndexOf("<movie>") <> -1 Then
+                    Return True
+                End If
+            Loop Until filechck.EndOfStream
+
+            filechck.Close
+
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        End Try
+
+        Return False
+    End Function
+
 
 
 End Class

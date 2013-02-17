@@ -228,7 +228,7 @@
         End Try
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStart.Click
+    Private Sub btnStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStart.Click
         Try
             Me.Close()
         Catch ex As Exception
@@ -236,8 +236,9 @@
         End Try
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
         Try
+            Form1.rescrapeList.ResetFields
             Me.Close()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -302,6 +303,8 @@
     End Property
 
 
+
+
     'Disabled controls don't show tool tips (friggin' MS poo), so need to filter invalid changes 
     ' 
     Private Sub cbRenameFiles_CheckedChanged( sender As Object,  e As EventArgs) Handles cbRenameFiles.CheckedChanged
@@ -313,8 +316,33 @@
     End Sub
 
     'Fix MS XP tool tip won't display a second time bug (more friggin' MS poo)
-    Private Sub cbRenameFiles_MouseEnter( sender As System.Object,  e As System.EventArgs) Handles cbRenameFiles.MouseEnter
+    Private Sub ForceToolTipDisplay( sender As System.Object,  e As System.EventArgs) Handles cbRenameFiles.MouseEnter,cbFrodo_Poster_Thumbs.MouseEnter,cbFrodo_Fanart_Thumbs.MouseEnter
         ttBatchUpdateWizard.Active = False
         ttBatchUpdateWizard.Active = True
     End Sub
+
+
+    Private Sub cbFrodo_Poster_Thumbs_CheckedChanged( sender As Object,  e As EventArgs) Handles cbFrodo_Poster_Thumbs.CheckedChanged
+        If Preferences.FrodoEnabled Then
+            Form1.rescrapeList.Frodo_Poster_Thumbs = cbFrodo_Poster_Thumbs.Checked
+        Else
+            cbFrodo_Poster_Thumbs.Checked = False
+        End If
+    End Sub
+
+
+    Private Sub cbFrodo_Fanart_Thumbs_CheckedChanged( sender As Object,  e As EventArgs) Handles cbFrodo_Fanart_Thumbs.CheckedChanged
+        If Preferences.FrodoEnabled Then
+            Form1.rescrapeList.Frodo_Fanart_Thumbs = cbFrodo_Fanart_Thumbs.Checked
+        Else
+            cbFrodo_Fanart_Thumbs.Checked = False
+        End If
+    End Sub
+
+
+    Private Sub cbTitle_CheckedChanged( sender As Object,  e As EventArgs) Handles cbTitle.CheckedChanged
+        Form1.rescrapeList.title = cbTitle.Checked
+    End Sub
+
+
 End Class

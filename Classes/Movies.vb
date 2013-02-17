@@ -464,7 +464,7 @@ Public Class Movies
         For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
             i += 1
             PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
-            ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
+            ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             RescrapeSpecificMovie(FullPathAndFilename,rl)
 
             If Cancelled then Exit Sub

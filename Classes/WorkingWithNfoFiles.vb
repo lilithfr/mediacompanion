@@ -1034,12 +1034,32 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.director = thisresult.InnerText
                         Case "stars"
                             newmovie.fullmoviebody.stars = thisresult.InnerText
+
+
+                        'Case "thumb"
+                        '    If thisresult.InnerText.IndexOf("&lt;thumbs&gt;") <> -1 Then
+                        '        thumbstring = thisresult.InnerText
+                        '    Else
+                        '        newmovie.listthumbs.Add(thisresult.InnerText)
+                        '    End If
+
+
                         Case "thumb"
                             If thisresult.InnerText.IndexOf("&lt;thumbs&gt;") <> -1 Then
                                 thumbstring = thisresult.InnerText
                             Else
-                                newmovie.listthumbs.Add(thisresult.InnerText)
+                                'Frodo - aspect="poster"
+                                If Not IsNothing(thisresult.Attributes.ItemOf("aspect"))  Then
+                                    newmovie.frodoPosterThumbs.Add(New FrodoPosterThumb( thisresult.Attributes("aspect").Value, thisresult.InnerText) )
+                                Else
+                                    newmovie.listthumbs.Add(thisresult.InnerText)
+                                End If
                             End If
+
+                        'Frodo <fanart url="">
+                        Case "fanart"
+                            newmovie.frodoFanartThumbs.Load(thisresult)
+
                         Case "premiered"
                             newmovie.fullmoviebody.premiered = thisresult.InnerText
                         Case "studio"

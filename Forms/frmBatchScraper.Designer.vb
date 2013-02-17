@@ -43,18 +43,21 @@ Partial Class frmBatchScraper
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.CheckBox18 = New System.Windows.Forms.CheckBox()
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.btnStart = New System.Windows.Forms.Button()
         Me.gbOther = New System.Windows.Forms.GroupBox()
+        Me.cbFrodo_Fanart_Thumbs = New System.Windows.Forms.CheckBox()
+        Me.cbFrodo_Poster_Thumbs = New System.Windows.Forms.CheckBox()
         Me.cbRenameFiles = New System.Windows.Forms.CheckBox()
         Me.CheckBox16 = New System.Windows.Forms.CheckBox()
         Me.CheckBox15 = New System.Windows.Forms.CheckBox()
         Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
+        Me.cbTitle = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -62,6 +65,7 @@ Partial Class frmBatchScraper
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.cbTitle)
         Me.GroupBox1.Controls.Add(Me.cbTmdbSetName)
         Me.GroupBox1.Controls.Add(Me.CheckBox20)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
@@ -267,14 +271,14 @@ Partial Class frmBatchScraper
         Me.CheckBox3.Text = "Rating"
         Me.CheckBox3.UseVisualStyleBackColor = true
         '
-        'Button1
+        'btnCancel
         '
-        Me.Button1.Location = New System.Drawing.Point(15, 326)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 32
-        Me.Button1.Text = "Cancel"
-        Me.Button1.UseVisualStyleBackColor = true
+        Me.btnCancel.Location = New System.Drawing.Point(15, 326)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 32
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = true
         '
         'GroupBox3
         '
@@ -318,6 +322,8 @@ Partial Class frmBatchScraper
         '
         'gbOther
         '
+        Me.gbOther.Controls.Add(Me.cbFrodo_Fanart_Thumbs)
+        Me.gbOther.Controls.Add(Me.cbFrodo_Poster_Thumbs)
         Me.gbOther.Controls.Add(Me.cbRenameFiles)
         Me.gbOther.Controls.Add(Me.CheckBox16)
         Me.gbOther.Controls.Add(Me.CheckBox15)
@@ -328,6 +334,28 @@ Partial Class frmBatchScraper
         Me.gbOther.TabIndex = 34
         Me.gbOther.TabStop = false
         Me.gbOther.Text = "Other"
+        '
+        'cbFrodo_Fanart_Thumbs
+        '
+        Me.cbFrodo_Fanart_Thumbs.AutoSize = true
+        Me.cbFrodo_Fanart_Thumbs.Location = New System.Drawing.Point(296, 41)
+        Me.cbFrodo_Fanart_Thumbs.Name = "cbFrodo_Fanart_Thumbs"
+        Me.cbFrodo_Fanart_Thumbs.Size = New System.Drawing.Size(127, 17)
+        Me.cbFrodo_Fanart_Thumbs.TabIndex = 18
+        Me.cbFrodo_Fanart_Thumbs.Text = "Frodo Fanart Thumbs"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbFrodo_Fanart_Thumbs, "Frodo support must be enabled before this option can be checked")
+        Me.cbFrodo_Fanart_Thumbs.UseVisualStyleBackColor = true
+        '
+        'cbFrodo_Poster_Thumbs
+        '
+        Me.cbFrodo_Poster_Thumbs.AutoSize = true
+        Me.cbFrodo_Poster_Thumbs.Location = New System.Drawing.Point(139, 41)
+        Me.cbFrodo_Poster_Thumbs.Name = "cbFrodo_Poster_Thumbs"
+        Me.cbFrodo_Poster_Thumbs.Size = New System.Drawing.Size(127, 17)
+        Me.cbFrodo_Poster_Thumbs.TabIndex = 17
+        Me.cbFrodo_Poster_Thumbs.Text = "Frodo Poster Thumbs"
+        Me.ttBatchUpdateWizard.SetToolTip(Me.cbFrodo_Poster_Thumbs, "Frodo support must be enabled before this option can be checked")
+        Me.cbFrodo_Poster_Thumbs.UseVisualStyleBackColor = true
         '
         'cbRenameFiles
         '
@@ -387,6 +415,16 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard.ReshowDelay = 100
         Me.ttBatchUpdateWizard.ShowAlways = true
         '
+        'cbTitle
+        '
+        Me.cbTitle.AutoSize = true
+        Me.cbTitle.Location = New System.Drawing.Point(226, 110)
+        Me.cbTitle.Name = "cbTitle"
+        Me.cbTitle.Size = New System.Drawing.Size(46, 17)
+        Me.cbTitle.TabIndex = 20
+        Me.cbTitle.Text = "Title"
+        Me.cbTitle.UseVisualStyleBackColor = true
+        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -394,7 +432,7 @@ Partial Class frmBatchScraper
         Me.ClientSize = New System.Drawing.Size(477, 361)
         Me.ControlBox = false
         Me.Controls.Add(Me.GroupBox1)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.btnStart)
         Me.Controls.Add(Me.gbOther)
@@ -429,7 +467,7 @@ End Sub
     Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox18 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox17 As System.Windows.Forms.CheckBox
@@ -445,4 +483,7 @@ End Sub
     Friend WithEvents cbTmdbSetName As System.Windows.Forms.CheckBox
     Friend WithEvents cbRenameFiles As System.Windows.Forms.CheckBox
     Friend WithEvents ttBatchUpdateWizard As System.Windows.Forms.ToolTip
+    Friend WithEvents cbFrodo_Fanart_Thumbs As System.Windows.Forms.CheckBox
+    Friend WithEvents cbFrodo_Poster_Thumbs As System.Windows.Forms.CheckBox
+    Friend WithEvents cbTitle As System.Windows.Forms.CheckBox
 End Class

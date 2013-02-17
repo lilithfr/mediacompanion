@@ -21056,6 +21056,9 @@ Public Class Form1
 
             RenameFilesToolStripMenuItem.Enabled = Not Preferences.usefoldernames AndAlso Not Preferences.basicsavemode And Preferences.MovieRenameEnable
 
+            tsmiRescrapeFrodo_Poster_Thumbs.Enabled = Preferences.FrodoEnabled
+            tsmiRescrapeFrodo_Fanart_Thumbs.Enabled = Preferences.FrodoEnabled
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -23268,6 +23271,30 @@ Public Class Form1
         Else
             cbMovieDisplay_MovieSet.SelectedItem = previouslySelected
         End If
+    End Sub
+
+    Private Sub ToolStripMenuItem23_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeCountry.Click
+        mov_ScrapeSpecific("country")
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeTop250.Click
+        mov_ScrapeSpecific("top250")
+    End Sub
+
+    Private Sub ToolStripMenuItem22_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePremiered.Click
+        mov_ScrapeSpecific("Premiered")
+    End Sub
+
+    Private Sub ToolStripMenuItem26_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePosterUrls.Click
+        mov_ScrapeSpecific("PosterUrls")
+    End Sub
+
+    Private Sub ToolStripMenuItem24_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Poster_Thumbs.Click
+        mov_ScrapeSpecific("Frodo_Poster_Thumbs")
+    End Sub
+
+    Private Sub ToolStripMenuItem25_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Fanart_Thumbs.Click
+        mov_ScrapeSpecific("Frodo_Fanart_Thumbs")
     End Sub
 
 End Class

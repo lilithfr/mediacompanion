@@ -24,6 +24,14 @@ Public Class FrodoFanartThumbs
 
         Return child
     End Function
+
+
+    Public Sub Load(node As XmlNode)
+        For Each child As XmlNode In node.ChildNodes
+            Thumbs.Add(New FrodoFanartThumb(child.Attributes("preview").Value,child.InnerText))
+        Next
+    End Sub
+
 End Class
 
 
