@@ -745,7 +745,7 @@ Public Class Movie
     Sub AssignMovieToCache
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
-        If _movieCache.MovieSet="" Then _movieCache.MovieSet = "-None-"
+'        If _movieCache.MovieSet="" Then _movieCache.MovieSet = "-None-"
 
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
@@ -896,6 +896,7 @@ Public Class Movie
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
         If _scrapedMovie.fullmoviebody.top250    = Nothing Then _scrapedMovie.fullmoviebody.top250    = "0"
 
+        _scrapedMovie.fullmoviebody.movieset = ""
 
         If Preferences.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
             _scrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
@@ -1919,7 +1920,12 @@ Public Class Movie
 
         If rl.tmdb_set_name Then 
             Try
-                _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+                _rescrapedMovie.fullmoviebody.movieset = ""
+
+                If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                    _rescrapedMovie.fullmoviebody.movieset = tmdb.Movie.belongs_to_collection.name
+                End If
+
                 UpdateProperty(_rescrapedMovie.fullmoviebody.movieset,_scrapedMovie.fullmoviebody.movieset)  
             Catch
             End Try

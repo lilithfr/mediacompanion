@@ -1061,7 +1061,7 @@ Public Class Preferences
                     For Each thisset In thisresult.ChildNodes
                         Select Case thisset.Name
                             Case "set"
-                                moviesets.Add(thisset.InnerText)
+                                If thisset.InnerText<>"" Then moviesets.Add(thisset.InnerText)
                         End Select
                     Next
                 Case "table"

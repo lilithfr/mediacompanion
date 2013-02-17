@@ -109,6 +109,7 @@ Public Class Movies
         Get
             Dim x = MoviesSetsIncNone
 
+            x.Remove("")
             x.Remove("-None-")
 
             Return x

@@ -1606,43 +1606,63 @@ Public Class Form1
 
                 If Yield(yieldIng) Then Return
 
-                If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
-                    If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
-                        Dim add As Boolean = True
-                        For Each item In Preferences.moviesets
-                            If item = workingMovieDetails.fullmoviebody.movieset Then
-                                add = False
-                                Exit For
-                            End If
-                        Next
-                        If add = True Then
-                            Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
-                            cbMovieDisplay_MovieSet.Items.Add(workingMovieDetails.fullmoviebody.movieset)
+                'If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
+                '    If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
+                '        Dim add As Boolean = True
+                '        For Each item In Preferences.moviesets
+                '            If item = workingMovieDetails.fullmoviebody.movieset Then
+                '                add = False
+                '                Exit For
+                '            End If
+                '        Next
+                '        If add = True Then
+                '            Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
+                '            cbMovieDisplay_MovieSet.Items.Add(workingMovieDetails.fullmoviebody.movieset)
+                '        End If
+                '        For f = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
+                '            If cbMovieDisplay_MovieSet.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
+                '                cbMovieDisplay_MovieSet.SelectedIndex = f
+                '                Exit For
+                '            End If
+                '        Next
+                '    Else
+                '        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
+                '            If Preferences.moviesets.Count > 0 Then
+                '                For Each mset In Preferences.moviesets
+                '                    cbMovieDisplay_MovieSet.Items.Add(mset)
+                '                Next
+                '            End If
+                '        End If
+                '        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
+                '            cbMovieDisplay_MovieSet.Items.Add("-None-")
+                '        End If
+                '        If cbMovieDisplay_MovieSet.Items(0) <> "-None-" Then
+                '            cbMovieDisplay_MovieSet.Items.Insert(0, "-None-")
+                '        End If
+                '    End If
+                'Else
+                '    cbMovieDisplay_MovieSet.SelectedIndex = 0
+                'End If
+
+
+                'Load cbMovieDisplay_MovieSet from preferences
+                '
+                If workingMovieDetails.fullmoviebody.movieset<>"-None-" And workingMovieDetails.fullmoviebody.movieset<>"" Then
+                    Dim add As Boolean = True
+                    For Each item In Preferences.moviesets
+                        If item = workingMovieDetails.fullmoviebody.movieset Then
+                            add = False
+                            Exit For
                         End If
-                        For f = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                            If cbMovieDisplay_MovieSet.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
-                                cbMovieDisplay_MovieSet.SelectedIndex = f
-                                Exit For
-                            End If
-                        Next
-                    Else
-                        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
-                            If Preferences.moviesets.Count > 0 Then
-                                For Each mset In Preferences.moviesets
-                                    cbMovieDisplay_MovieSet.Items.Add(mset)
-                                Next
-                            End If
-                        End If
-                        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
-                            cbMovieDisplay_MovieSet.Items.Add("-None-")
-                        End If
-                        If cbMovieDisplay_MovieSet.Items(0) <> "-None-" Then
-                            cbMovieDisplay_MovieSet.Items.Insert(0, "-None-")
-                        End If
+                    Next
+                    If add Then
+                        Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
                     End If
-                Else
-                    cbMovieDisplay_MovieSet.SelectedIndex = 0
                 End If
+
+                cbMovieDisplay_MovieSet.SelectedItem=Nothing
+
+                pop_cbMovieDisplay_MovieSet
 
                 For f = 0 To ComboBoxFormatSource.Items.Count - 1
                     If ComboBoxFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
@@ -12826,43 +12846,30 @@ Public Class Form1
                 If ex = False Then
                     Preferences.moviesets.Add(TextBox38.Text)
                     ListofMovieSets.Items.Add(TextBox38.Text)
-                    cbMovieDisplay_MovieSet.Items.Clear()
-                    For Each mset In Preferences.moviesets
-                        cbMovieDisplay_MovieSet.Items.Add(mset)
-                    Next
-                    If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
-                        Dim add As Boolean = True
-                        For Each mset In Preferences.moviesets
-                            If mset = workingMovieDetails.fullmoviebody.movieset Then
-                                add = False
-                            End If
-                        Next
-                        If add = True Then
-                            Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
-                            cbMovieDisplay_MovieSet.Items.Add(workingMovieDetails.fullmoviebody.movieset)
-                        End If
-                        For f = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                            If cbMovieDisplay_MovieSet.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
-                                cbMovieDisplay_MovieSet.SelectedIndex = f
-                                Exit For
-                            End If
-                        Next
-                    Else
-                        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
-                            If Preferences.moviesets.Count > 0 Then
-                                For Each mset In Preferences.moviesets
-                                    cbMovieDisplay_MovieSet.Items.Add(mset)
-                                Next
-                            End If
-                        End If
-                        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
-                            cbMovieDisplay_MovieSet.Items.Add("-None-")
-                        End If
-                        If cbMovieDisplay_MovieSet.Items(0) <> "-None-" Then
-                            cbMovieDisplay_MovieSet.Items.Insert(0, "-None-")
-                        End If
-                        cbMovieDisplay_MovieSet.SelectedIndex = 0
-                    End If
+                   
+                    pop_cbMovieDisplay_MovieSet
+
+                    'If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
+                    '    Dim add As Boolean = True
+                    '    For Each mset In Preferences.moviesets
+                    '        If mset = workingMovieDetails.fullmoviebody.movieset Then
+                    '            add = False
+                    '        End If
+                    '    Next
+                    '    If add = True Then
+                    '        Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
+                    '    End If
+
+
+                    '    For f = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
+                    '        If cbMovieDisplay_MovieSet.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
+                    '            cbMovieDisplay_MovieSet.SelectedIndex = f
+                    '            Exit For
+                    '        End If
+                    '    Next
+                    'Else
+                    '    cbMovieDisplay_MovieSet.SelectedIndex = 0
+                    'End If
                 Else
                     MsgBox("This Movie Set Already Exists")
                 End If
@@ -12900,12 +12907,12 @@ Public Class Form1
             Next
 
             ListofMovieSets.Items.Clear()
-            cbMovieDisplay_MovieSet.Items.Clear()
 
             For Each mset In Preferences.moviesets
                 If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
-                cbMovieDisplay_MovieSet.Items.Add(mset)
             Next
+
+            pop_cbMovieDisplay_MovieSet
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -23225,14 +23232,42 @@ Public Class Form1
         ListofMovieSets.Items.Clear
 
         Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
+        ListofMovieSets.Items.AddRange(oMovies.MoviesSetsExNone.ToArray)
 
-        For Each mset In Preferences.moviesets
-            ListofMovieSets.Items.Add(mset)
-        Next
+        pop_cbMovieDisplay_MovieSet
+
+        'For Each mset In Preferences.moviesets
+        '    ListofMovieSets.Items.Add(mset)
+        'Next
     End Sub
 
-Private Sub PictureBoxFanArt_Click( sender As Object,  e As EventArgs)
+    Sub pop_cbMovieDisplay_MovieSet
 
-End Sub
+        Dim previouslySelected = cbMovieDisplay_MovieSet.SelectedItem
+
+        cbMovieDisplay_MovieSet.Sorted = True
+        cbMovieDisplay_MovieSet.Items.Clear
+        cbMovieDisplay_MovieSet.Items.AddRange( Preferences.moviesets.ToArray )
+        cbMovieDisplay_MovieSet.Sorted = False
+
+        If cbMovieDisplay_MovieSet.Items.Count = 0 Then
+            cbMovieDisplay_MovieSet.Items.Add("-None-")
+        End If
+        If cbMovieDisplay_MovieSet.Items(0) <> "-None-" Then
+            cbMovieDisplay_MovieSet.Items.Insert(0, "-None-")
+        End If
+
+        cbMovieDisplay_MovieSet.SelectedIndex = 0
+
+        If previouslySelected=Nothing Then
+            If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
+                If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
+                    cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset
+                End If
+            End If
+        Else
+            cbMovieDisplay_MovieSet.SelectedItem = previouslySelected
+        End If
+    End Sub
 
 End Class
