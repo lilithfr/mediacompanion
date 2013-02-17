@@ -207,7 +207,13 @@
     Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
         Try
             If CheckBox17.CheckState = CheckState.Checked Then
-                Form1.rescrapeList.missingfanart = True
+                If Preferences.savefanart Then
+                    Form1.rescrapeList.missingfanart = True
+                Else
+                    Form1.rescrapeList.missingfanart = False
+                    CheckBox17.Checked = False
+                    MsgBox("Movie Preferences set to not download Fanart.", 48, "Movie Preferences")
+                End If
             Else
                 Form1.rescrapeList.missingfanart = False
             End If
@@ -219,7 +225,14 @@
     Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
         Try
             If CheckBox18.CheckState = CheckState.Checked Then
-                Form1.rescrapeList.missingposters = True
+                If Preferences.scrapemovieposters Then
+                    Form1.rescrapeList.missingposters = True
+                Else
+                    Form1.rescrapeList.missingposters = False
+                    CheckBox18.Checked = False
+                    MsgBox("Movie Preferences set to not download Posters.", 48, "Movie Preferences")
+
+                End If
             Else
                 Form1.rescrapeList.missingposters = False
             End If

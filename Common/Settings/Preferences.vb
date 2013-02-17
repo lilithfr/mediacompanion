@@ -537,9 +537,9 @@ Public Class Preferences
         child.InnerText = lastpath
         root.AppendChild(child)
 
-        child = doc.CreateElement("downloadfanart")
-        child.InnerText = savefanart.ToString.ToLower
-        root.AppendChild(child)
+        'child = doc.CreateElement("downloadfanart")
+        'child.InnerText = savefanart.ToString.ToLower
+        'root.AppendChild(child)
 
 
         child = doc.CreateElement("scrapemovieposters")
