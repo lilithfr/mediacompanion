@@ -199,7 +199,13 @@
         Try
             'missing posters
             If CheckBox9.CheckState = CheckState.Checked Then
-                Form1.tvBatchList.shPosters = True
+                If Preferences.tvposter Then
+                    Form1.tvBatchList.shPosters = True
+                Else
+                    Form1.tvBatchList.shPosters = False
+                    CheckBox9.Checked = False
+                    MsgBox("TV Preferences set to not download Poster.", 48, "TV Preferences Selected!")
+                End If
             Else
                 Form1.tvBatchList.shPosters = False
             End If
@@ -211,7 +217,13 @@
         Try
             'missing fanart
             If CheckBox10.CheckState = CheckState.Checked Then
-                Form1.tvBatchList.shFanart = True
+                If Preferences.tvfanart Then
+                    Form1.tvBatchList.shFanart = True
+                Else
+                    Form1.tvBatchList.shFanart = False
+                    CheckBox10.Checked = False
+                    MsgBox("TV Preferences set to not download Fanart.", 48, "TV Preferences Selected!")
+                End If
             Else
                 Form1.tvBatchList.shFanart = False
             End If
