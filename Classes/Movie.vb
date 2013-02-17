@@ -1299,13 +1299,25 @@ Public Class Movie
         DoDownloadPoster
     End Sub
  
-    Private Sub DoDownloadPoster
-        If Not Preferences.overwritethumbs And File.Exists(ActualPosterPath) Then
-            ReportProgress(,"Poster already exists -> Skipping" & vbCrLf)
-            Exit Sub
+    Private Sub DoDownloadPoster()
+        Dim eden As Boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
+        Dim edenart As String = ActualPosterPath
+        Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
+        If Not Preferences.overwritethumbs Then
+            If eden And File.Exists(edenart) And Not frodo Then
+                ReportProgress(, "Eden Poster already exists -> Skipping" & vbCrLf)
+                Exit Sub
+            ElseIf frodo And File.Exists(frodoart) And Not eden Then
+                ReportProgress(, "Frodo Poster already exists -> Skipping" & vbCrLf)
+                Exit Sub
+            ElseIf frodo And eden And File.Exists(edenart) And File.Exists(frodoart) Then
+                ReportProgress(, "Frodo & Eden Posters already exists -> Skipping" & vbCrLf)
+                Exit Sub
+            End If
         End If
 
-        If Not Rescrape Then DeletePoster
+        If Not Rescrape Then DeletePoster()
 
         Dim validUrl = False
 
@@ -1341,8 +1353,11 @@ Public Class Movie
                 'DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
                 SavePosterImageToCacheAndPath(PosterUrl, PosterPath)
 
-                ReportProgress(MSG_OK,"Poster scraped OK" & vbCrLf)
-
+                ReportProgress(MSG_OK, "Poster(s) scraped OK" & vbCrLf)
+                If frodo And Not IO.File.Exists(frodoart) Then
+                    IO.File.Copy(edenart, frodoart)
+                End If
+                
                 If Preferences.createfolderjpg Then
 
                     Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "folder.jpg")
@@ -1350,14 +1365,18 @@ Public Class Movie
                     If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
 
                         File.Copy(PosterPath, temppath, True)
-                        ReportProgress(,"Poster also saved as ""folder.jpg"" OK" & vbCrLf)
+                        ReportProgress(, "Poster also saved as ""folder.jpg"" OK" & vbCrLf)
                     Else
-                        ReportProgress(,"! ""folder.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
+                        ReportProgress(, "! ""folder.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
                     End If
                 End If
 
+                If Not eden Then
+                    Utilities.SafeDeleteFile(edenart)
+                End If
+
             Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf)
+                ReportProgress(MSG_ERROR, "!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf)
             End Try
         End If
     End Sub
