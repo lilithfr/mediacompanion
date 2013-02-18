@@ -2623,7 +2623,7 @@ Partial Public Class Form1
             End If
 
             'Main Poster
-            If (isposter = "poster" Or frodo) And Preferences.tvposter Then 'poster
+            If (isposter = "poster" Or frodo Or isseasonall = "poster") And Preferences.tvposter Then 'poster
                 Dim mainposter As String = ""
                 For Each Image In artlist
                     If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
@@ -2666,13 +2666,18 @@ Partial Public Class Form1
                             If isseasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
                         End If
                     ElseIf eden And isseasonall <> "none" Then
-                        If isseasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
+                        If isseasonall = "poster" Then
+                            Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
+                        End If
+                        If isposter = "banner" Then
+                            Utilities.SafeDeleteFile(mainposterpath)
+                        End If
                     End If
                 End If
             End If
 
             'Main Banner
-            If (isposter = "banner" Or frodo) And Preferences.tvposter Then 'banner
+            If (isposter = "banner" Or frodo Or isseasonall = "wide") And Preferences.tvposter Then 'banner
                 Dim mainbanner As String = ""
                 For Each Image In artlist
                     If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
@@ -2908,5 +2913,9 @@ Partial Public Class Form1
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
+    End Sub
+
+    Private Sub Label136_AutoSizeChanged(sender As Object, e As System.EventArgs) Handles Label136.AutoSizeChanged
+
     End Sub
 End Class

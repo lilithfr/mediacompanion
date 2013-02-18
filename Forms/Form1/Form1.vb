@@ -19519,8 +19519,15 @@ Public Class Form1
                         Dim artlist As New List(Of TvBanners)
                         Dim showlist2 As New XmlDocument
                         Dim artdone As Boolean = False
+                        Dim istvfanart As Boolean = Preferences.tvfanart
                         If tvBatchList.doShowArt = True Then
+                            If Not tvBatchList.shFanart Then
+                                Preferences.tvfanart = False
+                            End If
                             TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shPosters)
+                            If Not tvBatchList.shFanart Then
+                                Preferences.tvfanart = istvfanart
+                            End If
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
