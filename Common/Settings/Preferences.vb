@@ -1709,10 +1709,13 @@ Public Class Preferences
     Public Shared Function GetPosterPath(ByVal FullPath As String) As String
         Dim posterpath As String = FullPath
         If Not Utilities.findFileOfType(posterpath, ".tbn") Then
-            If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
-                posterpath = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-            Else
-                posterpath = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+            'Check Frodo naming convention
+            If Not Utilities.findFileOfType(posterpath, "-poster.jpg") Then
+                If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
+                    posterpath = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                Else
+                    posterpath = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                End If
             End If
         End If
         Return posterpath
