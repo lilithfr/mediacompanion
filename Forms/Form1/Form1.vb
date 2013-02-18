@@ -1687,7 +1687,7 @@ Public Class Form1
             thumbedItsMade = False
             posterThumbedItsMade = False
             CheckBox1.Visible = False
-            Button15.Visible = False
+            btnPosterTabs_SaveImage.Visible = False
             Button9.Visible = False
             Button10.Visible = False
             Label18.Visible = False
@@ -5809,7 +5809,7 @@ Public Class Form1
         pageCount = 0
         currentPage = 1
         CheckBox1.Visible = False
-        Button15.Visible = False
+        btnPosterTabs_SaveImage.Visible = False
         For i = Panel8.Controls.Count - 1 To 0 Step -1
             Panel8.Controls.RemoveAt(i)
         Next
@@ -5817,7 +5817,7 @@ Public Class Form1
         Else
             Preferences.maximumthumbs = 10
         End If
-        Button15.Visible = False
+        btnPosterTabs_SaveImage.Visible = False
         CheckBox1.Visible = False
 
         posterPicBoxes = Nothing
@@ -6072,7 +6072,7 @@ Public Class Form1
             End If
         Next
         If allok = True Then
-            Button15.Visible = True
+            btnPosterTabs_SaveImage.Visible = True
             If posterArray(0).ldUrl.ToLower.IndexOf("impawards") <> -1 Or posterArray(0).ldUrl.ToLower.IndexOf("themoviedb") <> -1 Then
                 CheckBox1.Visible = True
             Else
@@ -6080,7 +6080,7 @@ Public Class Form1
             End If
         Else
             CheckBox1.Visible = False
-            Button15.Visible = False
+            btnPosterTabs_SaveImage.Visible = False
         End If
 
     End Sub
@@ -6452,7 +6452,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button15_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button15.Click
+    Private Sub btnPosterTabs_SaveImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterTabs_SaveImage.Click
         Try
             Dim tempstring As String
             Dim tempint As Integer = 0
@@ -6524,7 +6524,14 @@ Public Class Form1
 
                 util_ImageLoad(PictureBox3, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
 
-                i1.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
+                'i1.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
+
+                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
+
+                For Each pth As String In Paths
+                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                Next
+
 
                 If Preferences.createfolderjpg = True Then
                     tempstring = workingMovieDetails.fileinfo.posterpath
@@ -6533,7 +6540,7 @@ Public Class Form1
                 End If
 
 
-                Dim bm_source As New Bitmap(workingMovieDetails.fileinfo.posterpath)
+                Dim bm_source As New Bitmap(Paths(0))
                 Dim bm_dest As New Bitmap(150, 200)
                 Dim gr As Graphics = Graphics.FromImage(bm_dest)
                 gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
@@ -6562,11 +6569,11 @@ Public Class Form1
 
                 'PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
                 'PictureBox3.Load()
-                util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                util_ImageLoad(PictureBox3, Paths(0), Utilities.DefaultPosterPath)
 
                 'moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
                 'moviethumb.Load()
-                util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
 
                 tempstring = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
                 Label19.Text = tempstring
@@ -6611,8 +6618,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
-
+    Private Sub btnSetThumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetThumb.Click
         Try
             Dim tempstring As String = ""
             Dim MyWebClient As New System.Net.WebClient
@@ -6622,18 +6628,21 @@ Public Class Form1
                 Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
                 PictureBox3.Image = New System.Drawing.Bitmap(ImageStream)
-                PictureBox3.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
+                
+                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
+
+                For Each pth As String In Paths
+                    PictureBox3.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                Next
+
                 If Preferences.createfolderjpg = True Then
-                    tempstring = workingMovieDetails.fileinfo.posterpath.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.posterpath), "folder.jpg")
+                    tempstring = Paths(0).Replace(IO.Path.GetFileName(Paths(0)), "folder.jpg")
                     PictureBox3.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
                 End If
 
-                'moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
-                'moviethumb.Load()
+                util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
 
-                util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
-
-                Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
+                Dim bitmap3 As New Bitmap(Paths(0))
                 Dim bitmap2 As New Bitmap(bitmap3)
                 bitmap3.Dispose()
                 Dim bm_source As New Bitmap(bitmap2)

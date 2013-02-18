@@ -1299,7 +1299,7 @@ Public Class Movie
         DoDownloadPoster
     End Sub
  
-    Private Sub DoDownloadPoster()
+    Private Sub DoDownloadPoster
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim edenart As String = ActualPosterPath
