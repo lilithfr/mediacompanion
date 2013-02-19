@@ -13,6 +13,24 @@ Imports System.Xml.Serialization
 Imports System.Xml.XPath
 Imports System.Linq
 
+
+Public Class MovieRegExs
+    Public Const REGEX_TAGLINE             = ">Tagline.*?:</h4>[ \t\r\n]+(?<tagline>.*?)[ \t\r\n]+<span"
+    Public Const REGEX_HREF_PATTERN        = "<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>"
+    'Const REGEX_MOVIE_TITLE_PATTERN = "<h1 class=""header"" itemprop=""name"">(.*?)<span class=""nobr"">"
+    'Const REGEX_MOVIE_YEAR_PATTERN  = "<img alt="".*?\((.*?)\).*?"" title="""
+    Public Const REGEX_RELEASE_DATE        = ">Release Date:</h4>(?<date>.*?)<span"
+    Public Const REGEX_STARS               = "Stars:</h4>(.*?)</div>"
+
+    Public Const REGEX_TITLE_AND_YEAR      = "<title>(.*?)</title>"
+    Public Const REGEX_TITLE               = "<title>(.*?) \("
+    Public Const REGEX_YEAR                = "\(.*?(\d{4}).*?\)" 
+    Public Const REGEX_NAME                = "itemprop=""name"">(?<name>.*?)</span>"                '"<span.*?>(?<name>.*?)</span>"
+    Public Const REGEX_STUDIO              = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
+    Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers:</h4>(.*?)</div>"
+End Class
+
+
 Module ModGlobals
 
     <Extension()> _
@@ -37,8 +55,10 @@ Module ModGlobals
     <Extension()> _
     Sub AppendList(ByRef s As String, lst As IEnumerable(Of String) , Optional separator As String=", ")
         For Each m In lst
-            If s.IndexOf(m.Trim) = -1 Then
-                s.AppendValue(m.Trim, separator)
+            m.ExtractName
+            m = m.Trim
+            If s.IndexOf(m) = -1 Then
+                s.AppendValue(m, separator)
             End If
         Next
     End Sub
@@ -49,6 +69,16 @@ Module ModGlobals
         s &= "<" & name & ">" & value.Trim.EncodeSpecialChrs & "</" & name & ">"& vbCrLf
         
     End Sub
+
+
+    <Extension()> _
+    Sub ExtractName(ByRef s As String)
+        
+        If s.IndexOf("itemprop=""name"">")>-1 Then s=Net.WebUtility.HtmlDecode( Regex.Match(s,MovieRegExs.REGEX_NAME, RegexOptions.Singleline).Groups("name").Value )
+                          
+    End Sub
+
+   
 
      <Extension()> _
     Function EncodeSpecialChrs(ByRef s As String) As String
@@ -66,19 +96,6 @@ End Module
 
 
 Public Class Classimdb
-
-
-    Const REGEX_TAGLINE             = ">Tagline.*?:</h4>[ \t\r\n]+(?<tagline>.*?)[ \t\r\n]+<span"
-    Const REGEX_HREF_PATTERN        = "<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>"
-    'Const REGEX_MOVIE_TITLE_PATTERN = "<h1 class=""header"" itemprop=""name"">(.*?)<span class=""nobr"">"
-    'Const REGEX_MOVIE_YEAR_PATTERN  = "<img alt="".*?\((.*?)\).*?"" title="""
-    Const REGEX_RELEASE_DATE        = ">Release Date:</h4>(?<date>.*?)<span"
-    Const REGEX_STARS               = "Stars:</h4>(.*?)</div>"
-
-    Const REGEX_TITLE_AND_YEAR      = "<title>(.*?)</title>"
-    Const REGEX_TITLE               = "<title>(.*?) \("
-    Const REGEX_YEAR                = "\(.*?(\d{4}).*?\)" 
-
 
 
     Public Function getimdbID_fromimdb(ByVal title As String, ByVal imdbmirror As String, Optional ByVal movieyear As String = "")
@@ -600,15 +617,17 @@ Public Class Classimdb
     ReadOnly Property Stars
         Get
             Dim s As String=""
-            Dim context = Regex.Match(Html,REGEX_STARS, RegexOptions.Singleline).ToString
+            Dim context = Regex.Match(Html,MovieRegExs.REGEX_STARS, RegexOptions.Singleline).ToString
 
             If context = "" Then Return ""
             
             Dim star=""
 
-            For Each m As Match In Regex.Matches(context, REGEX_HREF_PATTERN, RegexOptions.Singleline) 
+            For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline) 
 
                 star=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
+
+                star.ExtractName
 
                 If star.ToLower.IndexOf("see full cast and crew")>-1 Then Continue For
 
@@ -622,21 +641,21 @@ Public Class Classimdb
 
     ReadOnly Property TitleAndYear
         Get
-            Return Regex.Match(Html,REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
+            Return Regex.Match(Html,MovieRegExs.REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
         End Get
     End Property
    
 
     ReadOnly Property Title
         Get
-            Return Regex.Match(TitleAndYear,REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
+            Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
         End Get
     End Property
    
 
     ReadOnly Property Year
         Get
-            Return Regex.Match(TitleAndYear,REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
+            Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
         End Get
     End Property
    
@@ -653,7 +672,7 @@ Public Class Classimdb
             If Not D <= 0 Then
                 W = Html.IndexOf("</div>", D)
 
-                Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), REGEX_HREF_PATTERN, RegexOptions.Singleline)
+                Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline)
 
                 Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
 
@@ -676,7 +695,7 @@ Public Class Classimdb
             Dim W = If(D > 0, Html.IndexOf("</div>", D), 0)
 
             If Not D <= 0 And Not W <= 0 Then
-                Dim rDir As MatchCollection = Regex.Matches(Html.Substring(D, W - D), REGEX_HREF_PATTERN)
+                Dim rDir As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN)
                 Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
                              Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
 
@@ -684,6 +703,14 @@ Public Class Classimdb
             End If
 
             Return s
+        End Get
+    End Property
+
+
+    'Studio = Production
+    ReadOnly Property Studio As String
+        Get
+            Return GetNames(MovieRegExs.REGEX_STUDIO)
         End Get
     End Property
 
@@ -691,23 +718,9 @@ Public Class Classimdb
     'NB Credits = Writer
     ReadOnly Property Credits As String
         Get
-            Dim s As String=""
-
-            Dim D = Html.IndexOf("itemprop=""writer""")
-
-            Dim W = If(D > 0, Html.IndexOf("</div>", D), 0)
-
-            If Not D <= 0 And Not W <= 0 Then
-                Dim rDir As MatchCollection = Regex.Matches(Html.Substring(D, W - D), REGEX_HREF_PATTERN)
-                Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
-                             Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
-
-                s.AppendList(lst, " / ")
-            End If
-            Return s
+            Return GetNames(MovieRegExs.REGEX_CREDITS)
         End Get
     End Property
-
 
 
     ReadOnly Property ReleaseDate As String
@@ -715,7 +728,7 @@ Public Class Classimdb
             Dim s=""
 
             Dim RelDate As Date
-            Dim sRelDate As String = Regex.Match(Regex.Match(Html, REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
+            Dim sRelDate As String = Regex.Match(Regex.Match(Html, MovieRegExs.REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
 
             If Not sRelDate = "" Then
                 If Date.TryParse(sRelDate, RelDate) Then
@@ -728,6 +741,23 @@ Public Class Classimdb
     End Property
 
 
+    Function GetNames(RegExPattern As String) As String
+        Dim s As String=""
+        Dim context = Regex.Match(Html,RegExPattern, RegexOptions.Singleline).ToString
+
+        If context = "" Then Return ""
+            
+        Dim name=""
+
+        For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_NAME, RegexOptions.Singleline) 
+
+            name=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
+
+            s.AppendValue(name)
+        Next   
+
+        Return s
+    End Function
     
 
     Public Function getimdbbody(Optional ByVal title As String = "", Optional ByVal year As String = "", Optional ByVal imdbid As String = "", Optional ByVal imdbmirror As String = "", Optional ByVal imdbcounter As Integer = 0)
@@ -827,7 +857,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "stars"     , Stars       )
                 totalinfo.AppendTag( "title"     , Me.Title    )
                 totalinfo.AppendTag( "year"      , Me.Year     )
-
+                totalinfo.AppendTag( "studio"    , Studio      )
 
                 For f = 0 To webpage.Count - 1
                     webcounter = f
@@ -981,25 +1011,25 @@ Public Class Classimdb
 
 
 
-                    'studio
-                    If webpage(f).IndexOf("<h4 class=""inline"">Production") <> -1 Then
-                        Try
-                            movienfoarray = ""
-                            For g = 1 To 5
-                                If webpage(f + g).IndexOf("<a") <> -1 Then
-                                    movienfoarray = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
-                                    Exit For
-                                End If
-                            Next
-                            movienfoarray = movienfoarray.Trim()
-                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<studio>" & movienfoarray & "</studio>" & vbCrLf
-                            'Exit For
-                        Catch
-                            totalinfo = totalinfo & "<studio>scraper error</studio>" & vbCrLf
-                        End Try
-                    End If
+                    ''studio
+                    'If webpage(f).IndexOf("<h4 class=""inline"">Production") <> -1 Then
+                    '    Try
+                    '        movienfoarray = ""
+                    '        For g = 1 To 5
+                    '            If webpage(f + g).IndexOf("<a") <> -1 Then
+                    '                movienfoarray = webpage(f + g).Substring(webpage(f + g).IndexOf(">") + 1, webpage(f + g).IndexOf("</a>") - webpage(f + g).IndexOf(">") - 1)
+                    '                Exit For
+                    '            End If
+                    '        Next
+                    '        movienfoarray = movienfoarray.Trim()
+                    '        movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                    '        movienfoarray = encodespecialchrs(movienfoarray)
+                    '        totalinfo = totalinfo & "<studio>" & movienfoarray & "</studio>" & vbCrLf
+                    '        'Exit For
+                    '    Catch
+                    '        totalinfo = totalinfo & "<studio>scraper error</studio>" & vbCrLf
+                    '    End Try
+                    'End If
 
                     'country
                     If webpage(f).IndexOf("class=""inline"">Countr") <> -1 Then
