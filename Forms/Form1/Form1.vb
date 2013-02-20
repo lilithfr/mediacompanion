@@ -5322,8 +5322,11 @@ Public Class Form1
                     'End If
                     'Dim exists As Boolean = System.IO.File.Exists(mov_FanartORExtrathumbPath())
 
-                   ' If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
-                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) then
+                    ' If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
+                    Dim issavefanart As Boolean = Preferences.savefanart
+                    Preferences.savefanart = True
+                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
+                        Preferences.savefanart = issavefanart
 
                         ' PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
                         ' PictureBox2.Load()
@@ -5349,6 +5352,7 @@ Public Class Form1
                         ' PictureBox2.ImageLocation = Utilities.DefaultFanartPath
                         ' PictureBox2.Load()
                         util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
+                        Preferences.savefanart = issavefanart
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
@@ -18811,11 +18815,14 @@ Public Class Form1
 
 
                     '      If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
+                    Dim issavefanart As Boolean = Preferences.savefanart
+                    Preferences.savefanart = True
                     If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
+                        Preferences.savefanart = issavefanart
 
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-    '                    Rating1.PictureInit = PictureBoxFanArt.Image
+                        '                    Rating1.PictureInit = PictureBoxFanArt.Image
                         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
                         For Each paths In Preferences.offlinefolders
@@ -18828,6 +18835,7 @@ Public Class Form1
                         Next
                     Else
                         util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
+                        Preferences.savefanart = issavefanart
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
