@@ -13752,11 +13752,7 @@ Public Class Form1
         For Each folder In ListBox5.Items
             Folders = Utilities.EnumerateFolders(folder, 0)
             For Each strfolder2 As String In Folders
-                If Not ListBox6.Items.Contains(strfolder2) Then
-                    If strfolder2.Contains("System Volume Information") OrElse strfolder2.Contains("$RECYCLE.BIN") Then
-                        Continue For
-                    End If
-
+                If Not ListBox6.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
                     ListBox6.Items.Add(strfolder2)
                     newTvFolders.Add(strfolder2)
                 End If
@@ -13767,9 +13763,9 @@ Public Class Form1
     Public Sub tv_ShowScrape()
         tvFolders.Clear()
         For Each item In ListBox6.Items
-            If Not newTvFolders.Contains(item) Then
-                tvFolders.Add(item)
-            End If
+            'If Not newTvFolders.Contains(item) Then
+            tvFolders.Add(item)
+            'End If
         Next
         tvRootFolders.Clear()
         For Each item In ListBox5.Items
@@ -13781,6 +13777,8 @@ Public Class Form1
             MsgBox("Changes Saved")
             If Not bckgrnd_tvshowscraper.IsBusy Then
                 ' if this is not here, the tree view does not update correctly if the shows were removed.
+                ' ^^^ - not sure this statement is valid anymore; newTvFolders.Count = 0 does not execute
+                '       anything in bckgrnd_tvshowscraper.DoWork() - HueyHQ 20Feb2013
                 bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
         Else
