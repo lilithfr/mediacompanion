@@ -957,27 +957,39 @@ Public Class Movie
                                 Case "actorid"
                                     If newactor.actorthumb<>Nothing and detail.InnerText<>"" Then
                                         Try
+                                            Dim filename As String
                                             If Preferences.actorseasy Then
 
                                                 Dim hg As New IO.DirectoryInfo(ActorPath)
                                                 If Not hg.Exists Then
                                                     IO.Directory.CreateDirectory(ActorPath)
                                                 End If
-
-                                                SaveActorImageToCacheAndPath(newactor.actorthumb, GetActorFileName(newactor.actorname) )
+                                                filename = GetActorFileName(newactor.actorname)
+                                                SaveActorImageToCacheAndPath(newactor.actorthumb, filename)
+                                                If Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                    Utilities.SafeDeleteFile(filename)
+                                                ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                    Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                End If
                                             Else
-                                                If Preferences.actorsave then              
-                                                    Dim tempstring  = Preferences.actorsavepath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
+                                                If Preferences.actorsave Then
+                                                    Dim tempstring = Preferences.actorsavepath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
 
                                                     Dim hg As New IO.DirectoryInfo(tempstring)
                                                     If Not hg.Exists Then
                                                         IO.Directory.CreateDirectory(tempstring)
                                                     End If
-                                                              
+
                                                     Dim workingpath = tempstring & "\" & detail.InnerText & ".jpg"
 
                                                     DownloadCache.SaveImageToCacheAndPath(newactor.actorthumb, workingpath, Preferences.overwritethumbs, , GetHeightResolution(Preferences.ActorResolutionSI))
-
+                                                    If Preferences.EdenEnabled And Not Preferences.FrodoEnabled Then
+                                                        Utilities.SafeCopyFile(workingpath, workingpath.replace(".jpg", ".tbn"), Preferences.overwritethumbs)
+                                                        Utilities.SafeDeleteFile(workingpath)
+                                                    ElseIf Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                        Utilities.SafeCopyFile(workingpath, workingpath.replace(".jpg", ".tbn"), Preferences.overwritethumbs)
+                                                    End If
                                                     newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
 
                                                     If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
