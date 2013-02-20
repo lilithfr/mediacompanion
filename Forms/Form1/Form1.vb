@@ -19398,6 +19398,12 @@ Public Class Form1
                                                                     filename = filename & ".tbn"
                                                                         filename = IO.Path.Combine(workingpath, filename)
                                                                     Utilities.DownloadFile(acts.actorthumb, filename)
+                                                                    If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                                        Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                    ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                                        Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                        Utilities.SafeDeleteFile(filename)
+                                                                    End If
                                                                 End If
                                                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -19461,6 +19467,12 @@ Public Class Form1
                                                                             filename = filename & ".tbn"
                                                                             filename = IO.Path.Combine(workingpath, filename)
                                                                             Utilities.DownloadFile(newactor.actorthumb, filename)
+                                                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                                Utilities.SafeDeleteFile(filename)
+                                                                            End If
                                                                         End If
                                                                     End If
                                                                     If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
