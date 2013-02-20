@@ -68,7 +68,7 @@ Public Class Form1
 
     Public Data_GridViewMovie As Data_GridViewMovie
     'Public filteredListObj As New List(Of Data_GridViewMovie)
-    'Public DataGridViewBindingSource As New BindingSource
+    Public DataGridViewBindingSource As New BindingSource
 
 
     Public homemovielist As New List(Of str_BasicHomeMovie)
@@ -5322,8 +5322,11 @@ Public Class Form1
                     'End If
                     'Dim exists As Boolean = System.IO.File.Exists(mov_FanartORExtrathumbPath())
 
-                   ' If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
-                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) then
+                    ' If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
+                    Dim issavefanart As Boolean = Preferences.savefanart
+                    Preferences.savefanart = True
+                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
+                        Preferences.savefanart = issavefanart
 
                         ' PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
                         ' PictureBox2.Load()
@@ -5349,6 +5352,7 @@ Public Class Form1
                         ' PictureBox2.ImageLocation = Utilities.DefaultFanartPath
                         ' PictureBox2.Load()
                         util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
+                        Preferences.savefanart = issavefanart
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
@@ -13752,11 +13756,7 @@ Public Class Form1
         For Each folder In ListBox5.Items
             Folders = Utilities.EnumerateFolders(folder, 0)
             For Each strfolder2 As String In Folders
-                If Not ListBox6.Items.Contains(strfolder2) Then
-                    If strfolder2.Contains("System Volume Information") OrElse strfolder2.Contains("$RECYCLE.BIN") Then
-                        Continue For
-                    End If
-
+                If Not ListBox6.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
                     ListBox6.Items.Add(strfolder2)
                     newTvFolders.Add(strfolder2)
                 End If
@@ -13767,9 +13767,9 @@ Public Class Form1
     Public Sub tv_ShowScrape()
         tvFolders.Clear()
         For Each item In ListBox6.Items
-            If Not newTvFolders.Contains(item) Then
-                tvFolders.Add(item)
-            End If
+            'If Not newTvFolders.Contains(item) Then
+            tvFolders.Add(item)
+            'End If
         Next
         tvRootFolders.Clear()
         For Each item In ListBox5.Items
@@ -13781,6 +13781,8 @@ Public Class Form1
             MsgBox("Changes Saved")
             If Not bckgrnd_tvshowscraper.IsBusy Then
                 ' if this is not here, the tree view does not update correctly if the shows were removed.
+                ' ^^^ - not sure this statement is valid anymore; newTvFolders.Count = 0 does not execute
+                '       anything in bckgrnd_tvshowscraper.DoWork() - HueyHQ 20Feb2013
                 bckgrnd_tvshowscraper.RunWorkerAsync()
             End If
         Else
@@ -18813,11 +18815,14 @@ Public Class Form1
 
 
                     '      If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
+                    Dim issavefanart As Boolean = Preferences.savefanart
+                    Preferences.savefanart = True
                     If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
+                        Preferences.savefanart = issavefanart
 
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-    '                    Rating1.PictureInit = PictureBoxFanArt.Image
+                        '                    Rating1.PictureInit = PictureBoxFanArt.Image
                         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
                         For Each paths In Preferences.offlinefolders
@@ -18830,6 +18835,7 @@ Public Class Form1
                         Next
                     Else
                         util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
+                        Preferences.savefanart = issavefanart
                     End If
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
@@ -19400,6 +19406,12 @@ Public Class Form1
                                                                     filename = filename & ".tbn"
                                                                         filename = IO.Path.Combine(workingpath, filename)
                                                                     Utilities.DownloadFile(acts.actorthumb, filename)
+                                                                    If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                                        Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                    ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                                        Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                        Utilities.SafeDeleteFile(filename)
+                                                                    End If
                                                                 End If
                                                             Catch ex As Exception
 #If SilentErrorScream Then
@@ -19463,6 +19475,12 @@ Public Class Form1
                                                                             filename = filename & ".tbn"
                                                                             filename = IO.Path.Combine(workingpath, filename)
                                                                             Utilities.DownloadFile(newactor.actorthumb, filename)
+                                                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                                Utilities.SafeDeleteFile(filename)
+                                                                            End If
                                                                         End If
                                                                     End If
                                                                     If Preferences.actorsave = True And detail.InnerText <> "" And Preferences.actorseasy = False Then
@@ -22339,26 +22357,23 @@ Public Class Form1
     End Sub
 
 
+
     Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
-        Try
-            Dim tempstring As String
-            'tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
-            tempstring = DataGridViewMovies.SelectedCells(0).Value.ToString
 
-            For f = oMovies.MovieCache.Count - 1 To 0 Step -1
-                If oMovies.MovieCache(f).fullpathandfilename = tempstring Then
-                    oMovies.MovieCache.RemoveAt(f)
-                    Exit For
-                End If
-            Next
+        For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
 
-            'MovieListComboBox.Items.Remove(MovieListComboBox.SelectedItems(0))
-            DataGridViewMovies.Rows.RemoveAt(DataGridViewMovies.SelectedRows(0).Index)
+            oMovies.RemoveMovieFromCache(row.Cells(0).Value.ToString)
 
-            oMovies.SaveMovieCache()
+            DataGridViewMovies.Rows.RemoveAt(row.Index)
+        Next
 
-        Catch
-        End Try
+        DataGridViewMovies.ClearSelection
+        oMovies.SaveMovieCache
+
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+
+        Application.DoEvents
+        DisplayMovie
     End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
@@ -22882,6 +22897,8 @@ Public Class Form1
 
     Private Sub UpdateFilteredList()
 
+        Dim lastSelectedMovie = workingMovie.fullpathandfilename
+
         filteredList.Clear
         filteredList.AddRange(oMovies.MovieCache)
 
@@ -22935,7 +22952,7 @@ Public Class Form1
 
         Try
             For Each row As DataGridViewRow In DataGridViewMovies.Rows
-                row.Selected = (row.Cells(0).Value.ToString = workingMovie.fullpathandfilename)
+                row.Selected = (row.Cells(0).Value.ToString = lastSelectedMovie)
             Next
         Catch
         End Try

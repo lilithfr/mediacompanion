@@ -27,7 +27,7 @@ Public Class MovieRegExs
     Public Const REGEX_YEAR                = "\(.*?(\d{4}).*?\)" 
     Public Const REGEX_NAME                = "itemprop=""name"">(?<name>.*?)</span>"                '"<span.*?>(?<name>.*?)</span>"
     Public Const REGEX_STUDIO              = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
-    Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers:</h4>(.*?)</div>"
+    Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
 End Class
 
 
@@ -43,25 +43,30 @@ Module ModGlobals
         Return s
     End Function
 
+
     <Extension()> _
     Sub AppendValue(ByRef s As String, value As String, Optional separator As String=", ")
+
+        value = value.Trim
+
+        If s.IndexOf(value) > -1 Then Exit Sub
+
         If s="" Then
-            s &= value.Trim
+            s  = value
         Else
-            s &= separator & value.Trim
+            s &= separator & value
         End If
     End Sub
+
 
     <Extension()> _
     Sub AppendList(ByRef s As String, lst As IEnumerable(Of String) , Optional separator As String=", ")
         For Each m In lst
             m.ExtractName
-            m = m.Trim
-            If s.IndexOf(m) = -1 Then
-                s.AppendValue(m, separator)
-            End If
+            s.AppendValue(m, separator)
         Next
     End Sub
+
 
     <Extension()> _
     Sub AppendTag(ByRef s As String, name As String, value As String)
@@ -77,8 +82,7 @@ Module ModGlobals
         If s.IndexOf("itemprop=""name"">")>-1 Then s=Net.WebUtility.HtmlDecode( Regex.Match(s,MovieRegExs.REGEX_NAME, RegexOptions.Singleline).Groups("name").Value )
                           
     End Sub
-
-   
+  
 
      <Extension()> _
     Function EncodeSpecialChrs(ByRef s As String) As String
@@ -614,46 +618,63 @@ Public Class Classimdb
     Property Html As String=""
 
 
-    ReadOnly Property Stars
-        Get
-            Dim s As String=""
-            Dim context = Regex.Match(Html,MovieRegExs.REGEX_STARS, RegexOptions.Singleline).ToString
+    'ReadOnly Property Stars_Old As String
+    '    Get
+    '        Dim s As String=""
+    '        Dim context = Regex.Match(Html,MovieRegExs.REGEX_STARS, RegexOptions.Singleline).ToString
 
-            If context = "" Then Return ""
+    '        If context = "" Then Return ""
             
-            Dim star=""
+    '        Dim star=""
 
-            For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline) 
+    '        For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline) 
 
-                star=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
+    '            star=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
 
-                star.ExtractName
+    '            star.ExtractName
 
-                If star.ToLower.IndexOf("see full cast and crew")>-1 Then Continue For
+    '            If star.ToLower.IndexOf("see full cast and crew")>-1 Then Continue For
 
-                s.AppendValue(star)
-            Next   
+    '            s.AppendValue(star)
+    '        Next   
+
+    '        Return s
+    '    End Get
+    'End Property
+   
+
+    ReadOnly Property Stars As String
+        Get
+            Dim s       As String = ""
+            Dim context As String = Regex.Match(Html,MovieRegExs.REGEX_STARS, RegexOptions.Singleline).ToString
+
+            Dim lst = From M As Match In Regex.Matches(context, MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline) 
+                        Where Not M.Groups("name").ToString.ToLower.Contains("see full cast and crew") 
+                        Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
+
+            s.AppendList(lst)
 
             Return s
         End Get
     End Property
-   
 
-    ReadOnly Property TitleAndYear
+
+
+    ReadOnly Property TitleAndYear As String
         Get
             Return Regex.Match(Html,MovieRegExs.REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
         End Get
     End Property
    
 
-    ReadOnly Property Title
+    ReadOnly Property Title As String
         Get
             Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
         End Get
     End Property
    
 
-    ReadOnly Property Year
+    ReadOnly Property Year As String
         Get
             Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
         End Get

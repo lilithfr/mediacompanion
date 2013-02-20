@@ -413,8 +413,11 @@ Public Class clsGridViewMovie
 
         Dim lst = b.ToList
 
-        'Form1.DataGridViewBindingSource.DataSource = lst
-        Form1.DataGridViewMovies.DataSource = lst
+        'Form1.DataGridViewMovies.DataSource = lst
+
+        Form1.DataGridViewBindingSource.DataSource = lst
+        Form1.DataGridViewMovies       .DataSource = Form1.DataGridViewBindingSource
+
 
         If Yield Then Return
 

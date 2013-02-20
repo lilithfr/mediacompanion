@@ -1048,4 +1048,14 @@ Public Class Movies
         SaveActorCache()
     End Sub
 
+ 
+    Sub RemoveMovieFromCache(fullpathandfilename)
+
+        If fullpathandfilename = "" Then Exit Sub
+
+        MovieCache             .RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
+        Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
+    End Sub
+
+
 End Class
