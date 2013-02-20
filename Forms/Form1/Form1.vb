@@ -68,7 +68,7 @@ Public Class Form1
 
     Public Data_GridViewMovie As Data_GridViewMovie
     'Public filteredListObj As New List(Of Data_GridViewMovie)
-    'Public DataGridViewBindingSource As New BindingSource
+    Public DataGridViewBindingSource As New BindingSource
 
 
     Public homemovielist As New List(Of str_BasicHomeMovie)
@@ -22349,26 +22349,23 @@ Public Class Form1
     End Sub
 
 
+
     Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
-        Try
-            Dim tempstring As String
-            'tempstring = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
-            tempstring = DataGridViewMovies.SelectedCells(0).Value.ToString
 
-            For f = oMovies.MovieCache.Count - 1 To 0 Step -1
-                If oMovies.MovieCache(f).fullpathandfilename = tempstring Then
-                    oMovies.MovieCache.RemoveAt(f)
-                    Exit For
-                End If
-            Next
+        For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
 
-            'MovieListComboBox.Items.Remove(MovieListComboBox.SelectedItems(0))
-            DataGridViewMovies.Rows.RemoveAt(DataGridViewMovies.SelectedRows(0).Index)
+            oMovies.RemoveMovieFromCache(row.Cells(0).Value.ToString)
 
-            oMovies.SaveMovieCache()
+            DataGridViewMovies.Rows.RemoveAt(row.Index)
+        Next
 
-        Catch
-        End Try
+        DataGridViewMovies.ClearSelection
+        oMovies.SaveMovieCache
+
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+
+        Application.DoEvents
+        DisplayMovie
     End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
