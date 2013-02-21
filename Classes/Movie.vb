@@ -1378,17 +1378,21 @@ Public Class Movie
 
 
     Sub DeleteScrapedFiles(Optional incTrailer As Boolean=False)
-        LoadNFO
-        RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
-        RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
+        Try
+            LoadNFO
+            RemoveActorsFromCache(_scrapedMovie.fullmoviebody.imdbid        )
+            RemoveMovieFromCache (_scrapedMovie.fileinfo.fullpathandfilename)
 
-        DeleteActors
-        DeletePoster
-        DeleteFanart
+            DeleteActors
+            DeletePoster
+            DeleteFanart
 
-        If incTrailer Then DeleteTrailer
+            If incTrailer Then DeleteTrailer
 
-        DeleteNFO
+            DeleteNFO
+        Catch ex As Exception
+            ReportProgress(MSG_ERROR,"!!! Problem deleting scraped files" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf) 
+        End Try
     End Sub
 
     Sub DeleteActors
