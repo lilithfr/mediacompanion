@@ -9561,6 +9561,12 @@ Public Class Form1
                                             filename = filename & ".tbn"
                                             filename = IO.Path.Combine(workingpath, filename)
                                             Utilities.DownloadFile(acts.actorthumb, filename)
+                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                Utilities.SafeDeleteFile(filename)
+                                            End If
                                         End If
                                     End If
                                 End If
@@ -9576,6 +9582,12 @@ Public Class Form1
                                         workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
                                         If Not IO.File.Exists(workingpath) Then
                                             Utilities.DownloadFile(acts.actorthumb, workingpath)
+                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                Utilities.SafeDeleteFile(workingpath)
+                                            End If
                                         End If
                                         acts.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
                                         If Preferences.actornetworkpath.IndexOf("/") <> -1 Then

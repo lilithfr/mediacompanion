@@ -535,6 +535,8 @@ Partial Public Class Form1
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         If WorkingTvShow Is Nothing Then Exit Sub
         Dim imgLocation As String = Utilities.DefaultActorPath
+        Dim eden As Boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
         TextBox18.Clear()
         PictureBox6.Image = Nothing
         If useDefault Then
@@ -545,8 +547,11 @@ Partial Public Class Form1
                     TextBox18.Text = actor.actorrole
                     Dim temppath As String = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
                     Dim tempname As String = ""
-                    tempname = actor.actorname.Replace(" ", "_") & ".tbn"
-
+                    If eden And Not frodo Then
+                        tempname = actor.actorname.Replace(" ", "_") & ".tbn"
+                    ElseIf frodo Then
+                        tempname = actor.actorname.Replace(" ", "_") & ".jpg"
+                    End If
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
                         imgLocation = temppath
@@ -1246,6 +1251,12 @@ Partial Public Class Form1
                                         filename = IO.Path.Combine(workingpath, filename)
                                         'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
                                         Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
+                                        If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                            Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                        ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                            Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                            Utilities.SafeDeleteFile(filename)
+                                        End If
                                         'End If
                                     End If
                                 End If
@@ -1261,6 +1272,12 @@ Partial Public Class Form1
                                     workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
                                     If Not IO.File.Exists(workingpath) Then
                                         Utilities.DownloadFile(NewAct.actorthumb, workingpath)
+                                        If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                        ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                            Utilities.SafeDeleteFile(workingpath)
+                                        End If
                                     End If
                                     NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
                                     If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
@@ -1325,6 +1342,12 @@ Partial Public Class Form1
                                                         workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                         If Not IO.File.Exists(workingpath) Then
                                                             Utilities.DownloadFile(newactor.actorthumb, workingpath)
+                                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                Utilities.SafeDeleteFile(workingpath)
+                                                            End If
                                                         End If
                                                         newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                         If Preferences.actornetworkpath.IndexOf("/") <> -1 Then
