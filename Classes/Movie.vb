@@ -757,7 +757,6 @@ Public Class Movie
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.year                = _scrapedMovie.fullmoviebody.year
 
-
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
 
         Try

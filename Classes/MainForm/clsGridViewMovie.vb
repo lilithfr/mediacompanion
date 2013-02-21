@@ -25,262 +25,206 @@ Public Class clsGridViewMovie
 
     Public Sub GridviewMovieDesign(Form1 As Form1)
 
+        Dim dgv As DataGridView = Form1.DataGridViewMovies
 
-        If Form1.DataGridViewMovies.Columns.Count < 25 Then Return  '24
-        If Form1.DataGridViewMovies.Rows   .Count <  1 Then Return
-
+        If dgv.Columns.Count < 26 Then Return  '24
+        If dgv.Rows   .Count <  1 Then Return
 
         Cursor.Current = Cursors.WaitCursor
 
         Dim imgWatched As New DataGridViewImageColumn()
         Dim inImgWatched As Image = Global.Media_Companion.My.Resources.Resources.DotGray
 
-
-        While Form1.DataGridViewMovies.Columns(0).CellType.Name="DataGridViewImageCell"
-            Form1.DataGridViewMovies.Columns.Remove(Form1.DataGridViewMovies.Columns(0))
+        While dgv.Columns(0).CellType.Name="DataGridViewImageCell"
+            dgv.Columns.Remove(dgv.Columns(0))
         End While
 
 
         imgWatched.Image = inImgWatched
-        If Form1.DataGridViewMovies.Columns.Count < 27 Then         '26
-            Form1.DataGridViewMovies.Columns.Add(imgWatched)
+        If dgv.Columns.Count < 28 Then         '26
+            dgv.Columns.Add(imgWatched)
 
         End If
         imgWatched.HeaderText = "Watched"
-        imgWatched.Name = "Watched"
+        imgWatched.Name       = "Watched"
+
 
         Dim imgPlot As New DataGridViewImageColumn()
         Dim inImgPlot As Image = Global.Media_Companion.My.Resources.Resources.DotGray
         imgPlot.Image = inImgPlot
-        If Form1.DataGridViewMovies.Columns.Count < 27 Then     '26
-            Form1.DataGridViewMovies.Columns.Add(imgPlot)
+        If dgv.Columns.Count < 28 Then     '26
+            dgv.Columns.Add(imgPlot)
         End If
         imgPlot.HeaderText = "Plot"
-        imgPlot.Name = "Plot"
+        imgPlot.Name       = "ImgPlot"
+
 
         Dim header_style As New DataGridViewCellStyle
 
         header_style.ForeColor = Color.White
         header_style.BackColor = Color.ForestGreen
-        header_style.Font      = new Font(Form1.DataGridViewMovies.Font, FontStyle.Bold)
+        header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
 
-        For Each col As DataGridViewcolumn in Form1.DataGridViewMovies.Columns
+        For Each col As DataGridViewcolumn in dgv.Columns
             col.HeaderCell.Style = header_style
         Next
 
-        Form1.DataGridViewMovies.EnableHeadersVisualStyles = False
+        dgv.EnableHeadersVisualStyles = False
 
 
         'Performance tweak:
         Dim x = Global.Media_Companion.My.Resources.Movie
 
-        'Dim watchedTm As New Times
-        'watchedTm.StartTm = DateTime.Now
-
         'Watched icon
-        For Each row As DataGridViewRow In Form1.DataGridViewMovies.Rows
-            If row.Cells(13).Value = "1" Then       '13
-                row.Cells(25).Value = x             '24
+        For Each row As DataGridViewRow In dgv.Rows
+            If row.Cells("playcount").Value <> "0" Then
+                row.Cells("Watched").Value = x  
             End If
         Next
 
-        'watchedTm.EndTm = DateTime.Now
-        'Dim plotTm As New Times
-        'plotTm.StartTm = DateTime.Now
 
         'Performance tweak:
         x = Global.Media_Companion.My.Resources.Page
 
         'plot icon
-        For Each row As DataGridViewRow In Form1.DataGridViewMovies.Rows
-            If row.Cells(19).Value <> "" Then       '19
-                row.Cells(26).Value = x            '25
+        For Each row As DataGridViewRow In dgv.Rows
+            If row.Cells("plot").Value <> "" Then  
+                row.Cells("ImgPlot").Value = x 
             End If
         Next
 
-        'plotTm.EndTm = DateTime.Now
 
+        For Each column As DataGridViewColumn In dgv.Columns
+            column.Visible = False
+        Next
 
-        Dim debug As Boolean = False
-        If debug = False Then
-            Form1.DataGridViewMovies.Columns(0).Visible = False
-            Form1.DataGridViewMovies.Columns(1).Visible = False
-            If GridFieldToDisplay1 = "FileName" Then
-                Form1.DataGridViewMovies.Columns(2).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(2).Visible = False
-            End If
-            If GridFieldToDisplay1 = "Folder" Then
-                Form1.DataGridViewMovies.Columns(3).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(3).Visible = False
-            End If
-            Form1.DataGridViewMovies.Columns(4).Visible = False
-            Form1.DataGridViewMovies.Columns(5).Visible = False 
-            Form1.DataGridViewMovies.Columns(6).Visible = False
+          
+        dgv.Columns("filename"  ).Visible = GridFieldToDisplay1 = "FileName"
+        dgv.Columns("foldername").Visible = GridFieldToDisplay1 = "Folder" 
 
-            If GridFieldToDisplay1 = "TiteAndYear" Then
-                Form1.DataGridViewMovies.Columns(4).Visible = GridFieldToDisplay2="Movie Year"
-                Form1.DataGridViewMovies.Columns(6).Visible = GridFieldToDisplay2<>"Movie Year"
-            End If
-
-            If GridFieldToDisplay2 = "Movie Year" Then
-                Form1.DataGridViewMovies.Columns(7).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(7).Visible = False
-            End If
-
-
-            If GridFieldToDisplay2 = "Modified" Then
-                Form1.DataGridViewMovies.Columns(8).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(8).Visible = False
-            End If
-            Form1.DataGridViewMovies.Columns(9).Visible = False
-
-            If GridFieldToDisplay2 = "Rating" Then
-                Form1.DataGridViewMovies.Columns(10).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(10).Visible = False
-            End If
-
-            Form1.DataGridViewMovies.Columns(11).Visible = False
-            Form1.DataGridViewMovies.Columns(12).Visible = False 'genre
-            Form1.DataGridViewMovies.Columns(13).Visible = False 'playcount
-            Form1.DataGridViewMovies.Columns(14).Visible = False '
-            Form1.DataGridViewMovies.Columns(15).Visible = False
-            If GridFieldToDisplay2 = "Runtime" Then
-                Form1.DataGridViewMovies.Columns(16).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(16).Visible = False
-            End If
-            If GridFieldToDisplay2 = "Date Added" Then
-                Form1.DataGridViewMovies.Columns(17).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(17).Visible = False
-            End If
-            Form1.DataGridViewMovies.Columns(18).Visible = False
-            Form1.DataGridViewMovies.Columns(19).Visible = False
-            Form1.DataGridViewMovies.Columns(20).Visible = False
-   '         Form1.DataGridViewMovies.Columns(21).Visible = False
-            Form1.DataGridViewMovies.Columns(22).Visible = False
-
-            If GridFieldToDisplay2 = "Votes" Then
-                Form1.DataGridViewMovies.Columns(21).Visible = True
-            Else
-                Form1.DataGridViewMovies.Columns(21).Visible = False
-            End If
-
-            Form1.DataGridViewMovies.Columns(23).Visible = False
-            Form1.DataGridViewMovies.Columns(24).Visible = False
-            Form1.DataGridViewMovies.Columns(25).Visible = True
-            Form1.DataGridViewMovies.Columns(26).Visible = True
+             
+        If GridFieldToDisplay1="TitleAndYear" Then
+            dgv.Columns("DisplayTitle"       ).Visible = GridFieldToDisplay2 =  "Movie Year"
+            dgv.Columns("DisplayTitleAndYear").Visible = GridFieldToDisplay2 <> "Movie Year"
         End If
 
-        Form1.DataGridViewMovies.RowHeadersVisible = False
+        dgv.Columns("year"      ).Visible = GridFieldToDisplay2 = "Movie Year"
+        dgv.Columns("filedate"  ).Visible = GridFieldToDisplay2 = "Modified"
+        dgv.Columns("rating"    ).Visible = GridFieldToDisplay2 = "Rating" 
+        dgv.Columns("runtime"   ).Visible = GridFieldToDisplay2 = "Runtime"
+        dgv.Columns("createdate").Visible = GridFieldToDisplay2 = "Date Added" 
+        dgv.Columns("votes"     ).Visible = GridFieldToDisplay2 = "Votes" 
+        dgv.Columns("Watched"   ).Visible = True
+        dgv.Columns("ImgPlot"   ).Visible = True
 
-        Form1.DataGridViewMovies.Columns(2).Width = 226
-        Form1.DataGridViewMovies.Columns(2).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(2).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(2).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(2).ToolTipText = "File name"
-        Form1.DataGridViewMovies.Columns(2).HeaderText = "File name"
 
-        Form1.DataGridViewMovies.Columns(3).Width = 226
-        Form1.DataGridViewMovies.Columns(3).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(3).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(3).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(3).ToolTipText = "Folder name"
-        Form1.DataGridViewMovies.Columns(3).HeaderText = "Folder name"
+        dgv.RowHeadersVisible = False
 
-        Form1.DataGridViewMovies.Columns(4).Width = 226
-        Form1.DataGridViewMovies.Columns(4).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(4).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(4).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(4).ToolTipText = "Movie title"
-        Form1.DataGridViewMovies.Columns(4).HeaderText = "Title"
+        dgv.Columns("filename").Width = 226
+        dgv.Columns("filename").Resizable = DataGridViewTriState.True
+        dgv.Columns("filename").ReadOnly = True
+        dgv.Columns("filename").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("filename").ToolTipText = "File name"
+        dgv.Columns("filename").HeaderText = "File name"
 
-        Form1.DataGridViewMovies.Columns(6).Width = 226
-        Form1.DataGridViewMovies.Columns(6).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(6).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(6).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(6).ToolTipText = "Movie title"
-        Form1.DataGridViewMovies.Columns(6).HeaderText = "Title"
+        dgv.Columns("foldername").Width = 226
+        dgv.Columns("foldername").Resizable = DataGridViewTriState.True
+        dgv.Columns("foldername").ReadOnly = True
+        dgv.Columns("foldername").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("foldername").ToolTipText = "Folder name"
+        dgv.Columns("foldername").HeaderText = "Folder name"
 
-        Form1.DataGridViewMovies.Columns(7).Width = 35
-        Form1.DataGridViewMovies.Columns(7).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(7).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(7).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(7).ToolTipText = "Movie year"
-        Form1.DataGridViewMovies.Columns(7).HeaderText = "Year"
+        dgv.Columns("DisplayTitle").Width = 226
+        dgv.Columns("DisplayTitle").Resizable = DataGridViewTriState.True
+        dgv.Columns("DisplayTitle").ReadOnly = True
+        dgv.Columns("DisplayTitle").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("DisplayTitle").ToolTipText = "Title"
+        dgv.Columns("DisplayTitle").HeaderText = "Title"
 
-        Form1.DataGridViewMovies.Columns(8).Width = 95
-        Form1.DataGridViewMovies.Columns(8).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(8).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(8).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(8).ToolTipText = "Modified"
-        Form1.DataGridViewMovies.Columns(8).HeaderText = "Date"
+        dgv.Columns("DisplayTitleAndYear").Width = 226
+        dgv.Columns("DisplayTitleAndYear").Resizable = DataGridViewTriState.True
+        dgv.Columns("DisplayTitleAndYear").ReadOnly = True
+        dgv.Columns("DisplayTitleAndYear").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("DisplayTitleAndYear").ToolTipText = "Title & Year"
+        dgv.Columns("DisplayTitleAndYear").HeaderText = "Title & Year"
 
-        Form1.DataGridViewMovies.Columns(10).Width = 50
-        Form1.DataGridViewMovies.Columns(10).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(10).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(10).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(10).ToolTipText = "Rating"
-        Form1.DataGridViewMovies.Columns(10).HeaderText = "Rating"
+        dgv.Columns("year").Width = 35
+        dgv.Columns("year").Resizable = DataGridViewTriState.True
+        dgv.Columns("year").ReadOnly = True
+        dgv.Columns("year").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("year").ToolTipText = "Movie year"
+        dgv.Columns("year").HeaderText = "Year"
 
-        Form1.DataGridViewMovies.Columns(16).Width = 58
-        Form1.DataGridViewMovies.Columns(16).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(16).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(16).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(16).ToolTipText = "Runtime"
-        Form1.DataGridViewMovies.Columns(16).HeaderText = "Runtime"
+        dgv.Columns("filedate").Width = 95
+        dgv.Columns("filedate").Resizable = DataGridViewTriState.True
+        dgv.Columns("filedate").ReadOnly = True
+        dgv.Columns("filedate").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("filedate").ToolTipText = "Modified"
+        dgv.Columns("filedate").HeaderText = "Date"
 
-        Form1.DataGridViewMovies.Columns(17).Width = 95
-        Form1.DataGridViewMovies.Columns(17).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(17).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(17).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(17).ToolTipText = "Date Added"
-        Form1.DataGridViewMovies.Columns(17).HeaderText = "Date Added"
+        dgv.Columns("rating").Width = 50
+        dgv.Columns("rating").Resizable = DataGridViewTriState.True
+        dgv.Columns("rating").ReadOnly = True
+        dgv.Columns("rating").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("rating").ToolTipText = "Rating"
+        dgv.Columns("rating").HeaderText = "Rating"
 
-        Form1.DataGridViewMovies.Columns(21).Width = 50
-        Form1.DataGridViewMovies.Columns(21).Resizable = DataGridViewTriState.True
-        Form1.DataGridViewMovies.Columns(21).ReadOnly = True
-        Form1.DataGridViewMovies.Columns(21).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(21).ToolTipText = "Votes"
-        Form1.DataGridViewMovies.Columns(21).HeaderText = "Votes"
+        dgv.Columns("runtime").Width = 58
+        dgv.Columns("runtime").Resizable = DataGridViewTriState.True
+        dgv.Columns("runtime").ReadOnly = True
+        dgv.Columns("runtime").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("runtime").ToolTipText = "Runtime"
+        dgv.Columns("runtime").HeaderText = "Runtime"
 
-        Form1.DataGridViewMovies.Columns(25).Width = 20                        '24
-        Form1.DataGridViewMovies.Columns(25).ToolTipText = "Watched Status"
-        Form1.DataGridViewMovies.Columns(25).HeaderText = "W"
+        dgv.Columns("createdate").Width = 95
+        dgv.Columns("createdate").Resizable = DataGridViewTriState.True
+        dgv.Columns("createdate").ReadOnly = True
+        dgv.Columns("createdate").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("createdate").ToolTipText = "Date Added"
+        dgv.Columns("createdate").HeaderText = "Date Added"
 
-        Form1.DataGridViewMovies.Columns(26).Width = 20                        '25
-        Form1.DataGridViewMovies.Columns(26).ToolTipText = "Plot"
-        Form1.DataGridViewMovies.Columns(26).HeaderText = "P"
+        dgv.Columns("votes").Width = 50
+        dgv.Columns("votes").Resizable = DataGridViewTriState.True
+        dgv.Columns("votes").ReadOnly = True
+        dgv.Columns("votes").SortMode = DataGridViewColumnSortMode.Automatic
+        dgv.Columns("votes").ToolTipText = "Votes"
+        dgv.Columns("votes").HeaderText = "Votes"
 
-        SetDataGridViewMoviesFirstColumnWidth(Form1.DataGridViewMovies)
+        dgv.Columns("Watched").Width = 20                        '24
+        dgv.Columns("Watched").ToolTipText = "Watched Status"
+        dgv.Columns("Watched").HeaderText = "W"
+
+        dgv.Columns("ImgPlot").Width = 20                        '25
+        dgv.Columns("ImgPlot").ToolTipText = "Plot"
+        dgv.Columns("ImgPlot").HeaderText = "P"
+
+        SetDataGridViewMoviesFirstColumnWidth(dgv)
 
         Cursor.Current = Cursors.Default
-        'Form1.DataGridViewMovies.Refresh()
+        'dgv.Refresh()
     End Sub
 
-    Sub SetDataGridViewMoviesFirstColumnWidth(DataGridViewMovies As DataGridView)
+    Sub SetDataGridViewMoviesFirstColumnWidth(dgvMovies As DataGridView)
+
+        Const w As Integer = 58
+
         Dim FirstColumnSize As Integer
 
-        If GridFieldToDisplay2 = "A - Z" Then FirstColumnSize = DataGridViewMovies.Width - 58
-        If GridFieldToDisplay2 = "Sort Order" Then FirstColumnSize = DataGridViewMovies.Width - 58
-        If GridFieldToDisplay2 = "Movie Year" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(7).Width - 58
-        If GridFieldToDisplay2 = "Modified" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(8).Width - 58
-        If GridFieldToDisplay2 = "Rating" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(10).Width - 58
-        If GridFieldToDisplay2 = "Runtime" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(16).Width - 58
-        If GridFieldToDisplay2 = "Date Added" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(17).Width - 58
-        If GridFieldToDisplay2 = "Votes" Then FirstColumnSize = DataGridViewMovies.Width - DataGridViewMovies.Columns(21).Width - 58
+        If GridFieldToDisplay2 = "A - Z"      Then FirstColumnSize = dgvMovies.Width - w
+        If GridFieldToDisplay2 = "Sort Order" Then FirstColumnSize = dgvMovies.Width - w
+        If GridFieldToDisplay2 = "Movie Year" Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("year"      ).Width - w
+        If GridFieldToDisplay2 = "Modified"   Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("filedate"  ).Width - w
+        If GridFieldToDisplay2 = "Rating"     Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("rating"    ).Width - w
+        If GridFieldToDisplay2 = "Runtime"    Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("runtime"   ).Width - w
+        If GridFieldToDisplay2 = "Date Added" Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("createdate").Width - w
+        If GridFieldToDisplay2 = "Votes"      Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("votes"     ).Width - w
 
         Try
             If FirstColumnSize>0 Then
-                DataGridViewMovies.Columns(2).Width = FirstColumnSize
-                DataGridViewMovies.Columns(3).Width = FirstColumnSize
-                DataGridViewMovies.Columns(4).Width = FirstColumnSize
-                DataGridViewMovies.Columns(6).Width = FirstColumnSize
+                dgvMovies.Columns("filename"           ).Width = FirstColumnSize
+                dgvMovies.Columns("foldername"         ).Width = FirstColumnSize
+                dgvMovies.Columns("DisplayTitle"       ).Width = FirstColumnSize
+                dgvMovies.Columns("DisplayTitleAndYear").Width = FirstColumnSize
             End If
         Catch
         End Try
@@ -380,9 +324,9 @@ Public Class clsGridViewMovie
                 End If
             Case "Runtime"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.runtime Ascending
+                    b = From f In b Order By f.IntRuntime Ascending        
                 Else
-                    b = From f In b Order By f.runtime Descending
+                    b = From f In b Order By f.IntRuntime Descending
                 End If
             Case "Rating"
                 If GridSort = "Asc" Then

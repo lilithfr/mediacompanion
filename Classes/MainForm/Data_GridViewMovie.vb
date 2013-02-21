@@ -23,7 +23,7 @@
     Dim _votes As String
     Dim _TitleUcase As String
     Dim _IntVotes As Integer=0
-
+    Dim _IntRuntime As Integer=0
 
     Sub New 
 
@@ -58,6 +58,7 @@
         votes = movie.votes
         Integer.TryParse(votes.Replace(",",""),IntVotes)
         TitleUcase = movie.title.ToUpper
+        Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
     End Sub
 
     Public Function Export() As ComboList
@@ -132,6 +133,12 @@
             Else
                 Return t
             End If            
+        End Get
+    End Property
+
+    ReadOnly Property DisplayTitleAndYear As String
+        Get
+            Return DisplayTitle & " (" & If(IsNothing(year),"0000",year) & ")"
         End Get
     End Property
 
@@ -315,10 +322,14 @@
         End Set
     End Property
 
-    ReadOnly Property DisplayTitleAndYear As String
+    Public Property IntRuntime
         Get
-            Return DisplayTitle & " (" & If(IsNothing(year),"0000",year) & ")"
+            Return _IntRuntime
         End Get
+        Set(ByVal value)
+            _IntRuntime = value
+        End Set
     End Property
+
 
 End Class

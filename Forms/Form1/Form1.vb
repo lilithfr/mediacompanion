@@ -607,7 +607,7 @@ Public Class Form1
         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
         'Parameters to display the movie grid at startup
-        Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
+        Mc.clsGridViewMovie.GridFieldToDisplay1 = "TitleAndYear"
         Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
         Mc.clsGridViewMovie.GridSort = "Asc"
         Mc.clsGridViewMovie.GridviewMovieDesign(Me)
@@ -22621,7 +22621,7 @@ Public Class Form1
 
     Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
         If MainFormLoadedStatus = True Then
-            Mc.clsGridViewMovie.GridFieldToDisplay1 = "TiteAndYear"
+            Mc.clsGridViewMovie.GridFieldToDisplay1 = "TitleAndYear"
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
             DisplayMovie()
         End If
