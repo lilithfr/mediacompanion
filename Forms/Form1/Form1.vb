@@ -2722,13 +2722,20 @@ Public Class Form1
     'Browse Actors
     Private Sub actorcb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles actorcb.SelectedIndexChanged
         Try
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled
             For Each actor In workingMovieDetails.listactors
                 If actor.actorname = actorcb.SelectedItem Then
                     If actor.actorrole <> "" Then
                         roletxt.Text = actor.actorrole
                     End If
                     Dim temppath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
-                    Dim tempname As String = actor.actorname.Replace(" ", "_") & ".tbn"
+                    Dim tempname As String '= actor.actorname.Replace(" ", "_") & ".tbn"
+                    If eden And Not frodo Then
+                        tempname = actor.actorname.Replace(" ", "_") & ".tbn"
+                    ElseIf frodo Then
+                        tempname = actor.actorname.Replace(" ", "_") & ".jpg"
+                    End If
                     temppath = temppath & ".actors\" & tempname
                     If IO.File.Exists(temppath) Then
 
@@ -2745,9 +2752,9 @@ Public Class Form1
                                 'PictureBoxActor.ImageLocation = actorthumbpath
                                 'PictureBoxActor.Load()
                                 util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
-                            'Else
-                            '    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                            '    PictureBoxActor.Load()
+                                'Else
+                                '    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                                '    PictureBoxActor.Load()
                             End If
                         Else
                             util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
