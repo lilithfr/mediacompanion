@@ -7,7 +7,20 @@ Public Class ComboList
     Property foldername          As String = ""
     Property title               As String = ""
     Property originaltitle       As String = ""
-    Property titleandyear        As String = ""
+
+    'ReadOnly Property titleandyear As String
+    '    Get
+    '        Dim t = If(IsNothing(title),"Unknown",title)
+    '        Dim y = If(IsNothing(year ),"0000"   ,year )
+
+    '        If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
+    '            Return t.Substring(4, t.Length - 4) & ", The (" & y & ")"
+    '        Else
+    '            Return t & " (" & y & ")"
+    '        End If
+    '    End Get
+    'End Property
+    
     Property year                As String = ""
     Property filedate            As String = ""
     Property id                  As String = ""

@@ -40,7 +40,7 @@
         foldername = movie.foldername
         title = movie.title
         originaltitle = movie.originaltitle
-        titleandyear = movie.titleandyear
+        'titleandyear = movie.titleandyear
         year = movie.year
         filedate = movie.filedate
         id = movie.id
@@ -67,7 +67,6 @@
                                                   .foldername = Me.foldername,
                                                   .title = Me.title,
                                                   .originaltitle = Me.originaltitle,
-                                                  .titleandyear = Me.titleandyear,
                                                   .year = Me.year,
                                                   .filedate = Me.filedate,
                                                   .id = Me.id,
@@ -124,6 +123,18 @@
         End Set
     End Property
 
+    ReadOnly Property DisplayTitle As String
+        Get
+            Dim t As String = If(IsNothing(title),"Unknown",title)
+           
+            If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
+                Return t.Substring(4, t.Length - 4) & ", The"
+            Else
+                Return t
+            End If            
+        End Get
+    End Property
+
     Public Property title
         Get
             Return _title
@@ -142,14 +153,14 @@
         End Set
     End Property
 
-    Public Property titleandyear
-        Get
-            Return _titleandyear
-        End Get
-        Set(ByVal value)
-            _titleandyear = value
-        End Set
-    End Property
+    'Public Property titleandyear
+    '    Get
+    '        Return _titleandyear
+    '    End Get
+    '    Set(ByVal value)
+    '        _titleandyear = value
+    '    End Set
+    'End Property
 
     Public Property year
         Get
@@ -303,4 +314,11 @@
             _IntVotes = value
         End Set
     End Property
+
+    ReadOnly Property DisplayTitleAndYear As String
+        Get
+            Return DisplayTitle & " (" & If(IsNothing(year),"0000",year) & ")"
+        End Get
+    End Property
+
 End Class

@@ -745,8 +745,6 @@ Public Class Movie
     Sub AssignMovieToCache
         _movieCache.fullpathandfilename = NfoPathPrefName
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
-'        If _movieCache.MovieSet="" Then _movieCache.MovieSet = "-None-"
-
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
         _movieCache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
@@ -755,24 +753,9 @@ Public Class Movie
         _movieCache.sortorder           = _scrapedMovie.fullmoviebody.sortorder
         _movieCache.runtime             = _scrapedMovie.fullmoviebody.runtime
         _movieCache.votes               = _scrapedMovie.fullmoviebody.votes
-
-        If _scrapedMovie.fullmoviebody.title <> Nothing Then
-            If _scrapedMovie.fullmoviebody.year <> Nothing Then
-                If _scrapedMovie.fullmoviebody.title.ToLower.IndexOf("the") = 0 Then
-                    _movieCache.titleandyear = _scrapedMovie.fullmoviebody.title.Substring(4, _scrapedMovie.fullmoviebody.title.Length - 4) & ", The (" & _scrapedMovie.fullmoviebody.year & ")"
-                Else
-                    _movieCache.titleandyear = _scrapedMovie.fullmoviebody.title & " (" & _scrapedMovie.fullmoviebody.year & ")"
-                End If
-            Else
-                _movieCache.titleandyear = _scrapedMovie.fullmoviebody.title & " (0000)"
-            End If
-        Else
-            _movieCache.titleandyear = "Unknown (0000)"
-        End If
-
-        _movieCache.outline = _scrapedMovie.fullmoviebody.outline
-        _movieCache.plot    = _scrapedMovie.fullmoviebody.plot
-        _movieCache.year    = _scrapedMovie.fullmoviebody.year
+        _movieCache.outline             = _scrapedMovie.fullmoviebody.outline
+        _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
+        _movieCache.year                = _scrapedMovie.fullmoviebody.year
 
 
         Dim filecreation As New IO.FileInfo(nfopathandfilename)

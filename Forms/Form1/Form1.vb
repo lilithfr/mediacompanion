@@ -3344,16 +3344,16 @@ Public Class Form1
 
                 Dim newfullmovie As New ComboList
                 newfullmovie = oMovies.MovieCache(f)
-                '-------------- Aqui
-                If Preferences.ignorearticle = True Then
-                    If workingMovieDetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
-                        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title.Substring(4, workingMovieDetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingMovieDetails.fullmoviebody.year & ")"
-                    Else
-                        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
-                    End If
-                Else
-                    newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
-                End If
+                ''-------------- Aqui
+                'If Preferences.ignorearticle = True Then
+                '    If workingMovieDetails.fullmoviebody.title.ToLower.IndexOf("the ") = 0 Then
+                '        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title.Substring(4, workingMovieDetails.fullmoviebody.title.Length - 4) & ", The" & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                '    Else
+                '        newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                '    End If
+                'Else
+                '    newfullmovie.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                'End If
                 newfullmovie.genre = workingMovieDetails.fullmoviebody.genre
                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -4014,7 +4014,7 @@ Public Class Form1
             If filteredList(f).fullpathandfilename = oldmovietitle Then
                 Dim newfullmovie2 As New ComboList
                 newfullmovie2 = filteredList(f)
-                newfullmovie2.titleandyear = newmovietitle
+           '     newfullmovie2.titleandyear = newmovietitle
                 filteredList.RemoveAt(f)
                 Dim filecreation2 As New IO.FileInfo(workingMovieDetails.fileinfo.fullpathandfilename)
                 Dim myDate2 As Date = filecreation2.LastWriteTime
@@ -4032,7 +4032,7 @@ Public Class Form1
                 newfullmovie2.id = workingMovieDetails.fullmoviebody.imdbid
                 newfullmovie2.playcount = workingMovieDetails.fullmoviebody.playcount
                 newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating
-                newfullmovie2.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+            '    newfullmovie2.titleandyear = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 newfullmovie2.year = workingMovieDetails.fullmoviebody.year
 
                 filteredList.Add(newfullmovie2)
@@ -4109,7 +4109,7 @@ Public Class Form1
                 If Not IO.File.Exists(Preferences.GetFanartPath(movie.fullpathandfilename)) Then
                     Dim movietoadd As New ComboList
                     movietoadd.fullpathandfilename = movie.fullpathandfilename
-                    movietoadd.titleandyear = movie.titleandyear
+             '       movietoadd.titleandyear = movie.titleandyear
                     movietoadd.filename = movie.filename
                     movietoadd.year = movie.year
                     movietoadd.filedate = movie.filedate
@@ -4138,7 +4138,7 @@ Public Class Form1
                 If Not IO.File.Exists(Preferences.GetPosterPath(movie.fullpathandfilename)) Then
                     Dim movietoadd As New ComboList
                     movietoadd.fullpathandfilename = movie.fullpathandfilename
-                    movietoadd.titleandyear = movie.titleandyear
+                 '   movietoadd.titleandyear = movie.titleandyear
                     movietoadd.filename = movie.filename
                     movietoadd.year = movie.year
                     movietoadd.filedate = movie.filedate
@@ -4397,7 +4397,7 @@ Public Class Form1
         workingMovie.playcount = Nothing
         workingMovie.rating = Nothing
         workingMovie.title = Nothing
-        workingMovie.titleandyear = Nothing
+    '    workingMovie.titleandyear = Nothing
         workingMovie.top250 = Nothing
         workingMovie.year = Nothing
         workingMovie.MovieSet = Nothing
@@ -4526,7 +4526,7 @@ Public Class Form1
                 workingMovie.playcount = queryList(0).playcount
                 workingMovie.rating = queryList(0).rating
                 workingMovie.title = queryList(0).title
-                workingMovie.titleandyear = queryList(0).titleandyear
+         '       workingMovie.titleandyear = queryList(0).titleandyear
                 workingMovie.top250 = queryList(0).top250
                 workingMovie.year = queryList(0).year
                 Call mov_FormPopulate(yielding)
@@ -11907,7 +11907,7 @@ Public Class Form1
                     outline = outline & vbCrLf & line
                 Next
                 outline.TrimEnd(vbCrLf)
-                toolTip1.SetToolTip(bigPictureBox, m.fullpathandfilename & vbCrLf & vbCrLf & m.titleandyear & vbCrLf & outline)
+                toolTip1.SetToolTip(bigPictureBox, m.fullpathandfilename & vbCrLf & vbCrLf & m.DisplayTitleAndYear & vbCrLf & outline)
                 toolTip1.Active = True
                 toolTip1.InitialDelay = 0
 
@@ -14170,8 +14170,9 @@ Public Class Form1
                     Preferences.SaveConfig()
 
                     If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
-                        oMovies.LoadMovieCache
-                        UpdateFilteredList
+                    '    oMovies.LoadMovieCache
+                    '    UpdateFilteredList
+                        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
                     End If
                     
                     MsgBox("Changes Saved")
@@ -14195,6 +14196,13 @@ Public Class Form1
     Private Sub btnGeneralPrefsSaveChanges_Click(sender As System.Object, e As System.EventArgs) Handles btnGeneralPrefsSaveChanges.Click
         Try
             Preferences.SaveConfig()
+
+            If CopyOfPreferencesIgnoreArticle <> Preferences.ignorearticle Then
+            '    oMovies.LoadMovieCache
+            '    UpdateFilteredList
+                Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+            End If
+
             generalprefschanged = False
             btnGeneralPrefsSaveChanges.Enabled = False
         Catch ex As Exception
@@ -16441,10 +16449,10 @@ Public Class Form1
             childchild.InnerText = movie.title
             child.AppendChild(childchild)
             If movie.sortorder = Nothing Then
-                movie.sortorder = movie.title
+                movie.sortorder = movie.DisplayTitle
             End If
             If movie.sortorder = "" Then
-                movie.sortorder = movie.title
+                movie.sortorder = movie.DisplayTitle
             End If
             childchild = doc.CreateElement("outline")
             childchild.InnerText = movie.outline
@@ -16455,9 +16463,11 @@ Public Class Form1
             childchild = doc.CreateElement("sortorder")
             childchild.InnerText = movie.sortorder
             child.AppendChild(childchild)
-            childchild = doc.CreateElement("titleandyear")
-            childchild.InnerText = movie.titleandyear
-            child.AppendChild(childchild)
+
+            'childchild = doc.CreateElement("titleandyear")
+            'childchild.InnerText = movie.titleandyear
+            'child.AppendChild(childchild)
+
             childchild = doc.CreateElement("runtime")
             childchild.InnerText = movie.runtime
             child.AppendChild(childchild)
@@ -17550,7 +17560,7 @@ Public Class Form1
                             changedmoviedetails.fullmoviebody.top250 = changedmovie.top250
 
                             nfoFunction.mov_NfoSave(changedmoviedetails.fileinfo.fullpathandfilename, changedmoviedetails, True)
-                            changedmovie.titleandyear = changedmovie.title & " (" & changedmovie.year & ")"
+                   '         changedmovie.titleandyear = changedmovie.title & " (" & changedmovie.year & ")"
                             oMovies.MovieCache.RemoveAt(f)
                             oMovies.MovieCache.Add(changedmovie)
                             Exit For
@@ -22676,15 +22686,7 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
-        ''        ProgressAndStatus1.Display()
-        '    Call Mc.mov_StartNew.ex(scraperLog)
-
-        ''       ProgressAndStatus1.Visible = False
-        ''       DisplayMovie()
-
-        '' NEEDED? ''
-
-        SearchForNew()
+        SearchForNew
     End Sub
 
     Private Sub ButtonRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRescrapeMovie.Click
@@ -23166,11 +23168,11 @@ Public Class Form1
 #End Region 'General 2 - Movie Preferences tab
 
 
-    Sub SearchForNew()
+    Sub SearchForNew
         If Preferences.movies_useXBMC_Scraper Then
-            Pre_Run_XBMC_Scraper()
-            mov_XBMCScrapingInitialization()
-            Post_Run_XBMC_Scraper()
+            Pre_Run_XBMC_Scraper
+            mov_XBMCScrapingInitialization
+            Post_Run_XBMC_Scraper
             Exit Sub
         End If
 

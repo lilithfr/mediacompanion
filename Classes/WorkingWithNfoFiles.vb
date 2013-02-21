@@ -826,7 +826,7 @@ Public Class WorkingWithNfoFiles
                         newmovie.runtime = "0"
                         newmovie.sortorder = ""
                         newmovie.title = IO.Path.GetFileName(path)
-                        newmovie.titleandyear = newmovie.title & " (0000)"
+             '           newmovie.titleandyear = newmovie.title & " (0000)"
                         newmovie.top250 = "0"
                         newmovie.year = "0000"
 
@@ -838,17 +838,20 @@ Public Class WorkingWithNfoFiles
                     For Each thisresult In movie("movie")
                         Try
                             Select Case thisresult.Name
-                                Case "title"
-                                    Dim tempstring As String = ""
-                                    tempstring = thisresult.InnerText
-                                    '-------------- Aqui
-                                    If Preferences.ignorearticle = True Then
-                                        If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                            tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                            tempstring = tempstring & ", The"
-                                        End If
-                                    End If
-                                    newmovie.title = tempstring
+                                Case "title" : newmovie.title = thisresult.InnerText
+
+
+                                    'Dim tempstring As String = ""
+                                    'tempstring = thisresult.InnerText
+                                    ''-------------- Aqui
+                                    'If Preferences.ignorearticle = True Then
+                                    '    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                    '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                    '        tempstring = tempstring & ", The"
+                                    '    End If
+                                    'End If
+                                    'newmovie.title = tempstring
+
                                 Case "originaltitle"
                                     newmovie.originaltitle = thisresult.InnerText
                                 Case "set"
@@ -928,11 +931,11 @@ Public Class WorkingWithNfoFiles
                     If newmovie.rating = Nothing Then newmovie.rating = ""
                     If newmovie.runtime = Nothing Then newmovie.runtime = ""
                     If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
-                    If newmovie.title <> Nothing And newmovie.year <> Nothing Then
-                        newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
-                    Else
-                        newmovie.titleandyear = newmovie.title & "(0000)"
-                    End If
+                    'If newmovie.title <> Nothing And newmovie.year <> Nothing Then
+                    '    newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
+                    'Else
+                    '    newmovie.titleandyear = newmovie.title & "(0000)"
+                    'End If
                     If newmovie.top250 = Nothing Then newmovie.top250 = "0"
                     If newmovie.year = Nothing Then newmovie.year = "0001"
 

@@ -585,18 +585,18 @@ Public Class Movies
                                 newmovie.title = detail.InnerText
                             Case "originaltitle"
                                 newmovie.originaltitle = detail.InnerText
-                            Case "titleandyear"
-                                '--------- aqui
-                                Dim TempString2 As String = detail.InnerText
-                                If Preferences.ignorearticle = True Then
-                                    If TempString2.ToLower.IndexOf("the ") = 0 Then
-                                        Dim Temp As String = TempString2.Substring(TempString2.Length - 7, 7)
-                                        TempString2 = TempString2.Substring(4, TempString2.Length - 11)
-                                        TempString2 = TempString2 & ", The" & Temp
-                                    End If
-                                End If
+                            'Case "titleandyear"
+                            '    '--------- aqui
+                            '    Dim TempString2 As String = detail.InnerText
+                            '    If Preferences.ignorearticle = True Then
+                            '        If TempString2.ToLower.IndexOf("the ") = 0 Then
+                            '            Dim Temp As String = TempString2.Substring(TempString2.Length - 7, 7)
+                            '            TempString2 = TempString2.Substring(4, TempString2.Length - 11)
+                            '            TempString2 = TempString2 & ", The" & Temp
+                            '        End If
+                            '    End If
 
-                                newmovie.titleandyear = TempString2
+                            '    newmovie.titleandyear = TempString2
                             Case "top250"
                                 newmovie.top250 = detail.InnerText
                             Case "year"
@@ -734,22 +734,24 @@ Public Class Movies
             childchild = doc.CreateElement("sortorder")
             childchild.InnerText = movie.sortorder
             child.AppendChild(childchild)
-            childchild = doc.CreateElement("titleandyear")
 
-            Try
-                If movie.titleandyear.Length >= 5 Then
-                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 5 Then
-                        Dim Temp As String = movie.titleandyear.Replace(", the", String.Empty)
-                        movie.titleandyear = "The " & Temp
-                    End If
-                End If
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-            childchild.InnerText = movie.titleandyear
-            child.AppendChild(childchild)
+'            childchild = doc.CreateElement("titleandyear")
+'            Try
+'                If movie.titleandyear.Length >= 5 Then
+'                    If movie.titleandyear.ToLower.IndexOf(", the") = movie.titleandyear.Length - 5 Then
+'                        Dim Temp As String = movie.titleandyear.Replace(", the", String.Empty)
+'                        movie.titleandyear = "The " & Temp
+'                    End If
+'                End If
+'            Catch ex As Exception
+'#If SilentErrorScream Then
+'                Throw ex
+'#End If
+'            End Try
+'            childchild.InnerText = movie.titleandyear
+'            child.AppendChild(childchild)
+
+
             childchild = doc.CreateElement("runtime")
             childchild.InnerText = movie.runtime
             child.AppendChild(childchild)

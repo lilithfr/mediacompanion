@@ -26,7 +26,7 @@ Public Class clsGridViewMovie
     Public Sub GridviewMovieDesign(Form1 As Form1)
 
 
-        If Form1.DataGridViewMovies.Columns.Count < 24 Then Return
+        If Form1.DataGridViewMovies.Columns.Count < 25 Then Return  '24
         If Form1.DataGridViewMovies.Rows   .Count <  1 Then Return
 
 
@@ -42,7 +42,7 @@ Public Class clsGridViewMovie
 
 
         imgWatched.Image = inImgWatched
-        If Form1.DataGridViewMovies.Columns.Count < 26 Then
+        If Form1.DataGridViewMovies.Columns.Count < 27 Then         '26
             Form1.DataGridViewMovies.Columns.Add(imgWatched)
 
         End If
@@ -52,7 +52,7 @@ Public Class clsGridViewMovie
         Dim imgPlot As New DataGridViewImageColumn()
         Dim inImgPlot As Image = Global.Media_Companion.My.Resources.Resources.DotGray
         imgPlot.Image = inImgPlot
-        If Form1.DataGridViewMovies.Columns.Count < 26 Then
+        If Form1.DataGridViewMovies.Columns.Count < 27 Then     '26
             Form1.DataGridViewMovies.Columns.Add(imgPlot)
         End If
         imgPlot.HeaderText = "Plot"
@@ -79,8 +79,8 @@ Public Class clsGridViewMovie
 
         'Watched icon
         For Each row As DataGridViewRow In Form1.DataGridViewMovies.Rows
-            If row.Cells(13).Value = "1" Then
-                row.Cells(24).Value = x
+            If row.Cells(13).Value = "1" Then       '13
+                row.Cells(25).Value = x             '24
             End If
         Next
 
@@ -93,8 +93,8 @@ Public Class clsGridViewMovie
 
         'plot icon
         For Each row As DataGridViewRow In Form1.DataGridViewMovies.Rows
-            If row.Cells(19).Value <> "" Then
-                row.Cells(25).Value = x
+            If row.Cells(19).Value <> "" Then       '19
+                row.Cells(26).Value = x            '25
             End If
         Next
 
@@ -172,8 +172,9 @@ Public Class clsGridViewMovie
             End If
 
             Form1.DataGridViewMovies.Columns(23).Visible = False
-            Form1.DataGridViewMovies.Columns(24).Visible = True
+            Form1.DataGridViewMovies.Columns(24).Visible = False
             Form1.DataGridViewMovies.Columns(25).Visible = True
+            Form1.DataGridViewMovies.Columns(26).Visible = True
         End If
 
         Form1.DataGridViewMovies.RowHeadersVisible = False
@@ -196,15 +197,15 @@ Public Class clsGridViewMovie
         Form1.DataGridViewMovies.Columns(4).Resizable = DataGridViewTriState.True
         Form1.DataGridViewMovies.Columns(4).ReadOnly = True
         Form1.DataGridViewMovies.Columns(4).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(4).ToolTipText = "Movie titles"
-        Form1.DataGridViewMovies.Columns(4).HeaderText = "Movies"
+        Form1.DataGridViewMovies.Columns(4).ToolTipText = "Movie title"
+        Form1.DataGridViewMovies.Columns(4).HeaderText = "Title"
 
         Form1.DataGridViewMovies.Columns(6).Width = 226
         Form1.DataGridViewMovies.Columns(6).Resizable = DataGridViewTriState.True
         Form1.DataGridViewMovies.Columns(6).ReadOnly = True
         Form1.DataGridViewMovies.Columns(6).SortMode = DataGridViewColumnSortMode.Automatic
-        Form1.DataGridViewMovies.Columns(6).ToolTipText = "Movie titles"
-        Form1.DataGridViewMovies.Columns(6).HeaderText = "Movies"
+        Form1.DataGridViewMovies.Columns(6).ToolTipText = "Movie title"
+        Form1.DataGridViewMovies.Columns(6).HeaderText = "Title"
 
         Form1.DataGridViewMovies.Columns(7).Width = 35
         Form1.DataGridViewMovies.Columns(7).Resizable = DataGridViewTriState.True
@@ -248,13 +249,13 @@ Public Class clsGridViewMovie
         Form1.DataGridViewMovies.Columns(21).ToolTipText = "Votes"
         Form1.DataGridViewMovies.Columns(21).HeaderText = "Votes"
 
-        Form1.DataGridViewMovies.Columns(24).Width = 20
-        Form1.DataGridViewMovies.Columns(24).ToolTipText = "Watched Status"
-        Form1.DataGridViewMovies.Columns(24).HeaderText = "W"
+        Form1.DataGridViewMovies.Columns(25).Width = 20                        '24
+        Form1.DataGridViewMovies.Columns(25).ToolTipText = "Watched Status"
+        Form1.DataGridViewMovies.Columns(25).HeaderText = "W"
 
-        Form1.DataGridViewMovies.Columns(25).Width = 20
-        Form1.DataGridViewMovies.Columns(25).ToolTipText = "Plot"
-        Form1.DataGridViewMovies.Columns(25).HeaderText = "P"
+        Form1.DataGridViewMovies.Columns(26).Width = 20                        '25
+        Form1.DataGridViewMovies.Columns(26).ToolTipText = "Plot"
+        Form1.DataGridViewMovies.Columns(26).HeaderText = "P"
 
         SetDataGridViewMoviesFirstColumnWidth(Form1.DataGridViewMovies)
 
@@ -357,12 +358,13 @@ Public Class clsGridViewMovie
         End If
         
 
+
         Select Case Form1.cbSort.Text
             Case "A - Z"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.titleandyear Ascending
+                    b = From f In b Order By f.DisplayTitle Ascending            'DisplayTitleAndYear
                 Else
-                    b = From f In b Order By f.titleandyear Descending
+                    b = From f In b Order By f.DisplayTitle Descending           'DisplayTitleAndYear
                 End If
             Case "Movie Year"
                 If GridSort = "Asc" Then
