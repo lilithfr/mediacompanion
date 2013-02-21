@@ -1235,7 +1235,8 @@ Public Class Movie
 
     Sub AssignRuntime(sm As FullMovieDetails, Optional runtime_file As Boolean=False)
         If sm.FileDetails.filedetails_video.DurationInSeconds.Value <> Nothing And (runtime_file or (Preferences.movieRuntimeDisplay = "file") or (Preferences.movieRuntimeFallbackToFile and sm.fullmoviebody.runtime = "")) Then
-            sm.fullmoviebody.runtime = Utilities.cleanruntime(sm.FileDetails.filedetails_video.DurationInSeconds.Value) & " min"
+            'sm.fullmoviebody.runtime = Utilities.cleanruntime(sm.FileDetails.filedetails_video.DurationInSeconds.Value) & " min"
+            sm.fullmoviebody.runtime = Math.Round(sm.FileDetails.filedetails_video.DurationInSeconds.Value/60000).ToString & " min"
         End If
     End Sub
 

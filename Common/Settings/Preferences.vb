@@ -1892,41 +1892,56 @@ Public Class Preferences
 
             Try
                 If playlist.Count = 1 Then
-                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 61)
+                                                                       
+'                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 61)
+                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, "Duration")
                 ElseIf playlist.Count > 1 Then
-                    Dim totalmins As Integer = 0
+                    'Dim totalmins As Integer = 0
+                    'For f = 0 To playlist.Count - 1
+                    '    Dim M2 As mediainfo
+                    '    M2 = New mediainfo
+                    '    M2.Open(playlist(f))
+                    '    'Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
+                    '    Dim temptime As String = M2.Get_(StreamKind.Visual, 0, "Duration")
+                    '    Dim tempint As Integer
+                    '    If temptime <> Nothing Then
+                    '        Try
+                    '            '1h 24mn 48s 546ms
+                    '            Dim hours As Integer = 0
+                    '            Dim minutes As Integer = 0
+                    '            Dim tempstring2 As String = temptime
+                    '            tempint = tempstring2.IndexOf("h")
+                    '            If tempint <> -1 Then
+                    '                hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                    '                tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
+                    '                tempstring2 = Trim(tempstring2)
+                    '            End If
+                    '            tempint = tempstring2.IndexOf("mn")
+                    '            If tempint <> -1 Then
+                    '                minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                    '            End If
+                    '            If hours <> 0 Then
+                    '                hours = hours * 60
+                    '            End If
+                    '            minutes = minutes + hours
+                    '            totalmins = totalmins + minutes
+                    '        Catch
+                    '        End Try
+                    '    End If
+                    'Next
+                    'workingfiledetails.filedetails_video.DurationInSeconds.Value = totalmins & " min"
+
+                    Dim total As Integer=0
                     For f = 0 To playlist.Count - 1
-                        Dim M2 As mediainfo
-                        M2 = New mediainfo
+
+                        Dim M2 As mediainfo = New mediainfo
+
                         M2.Open(playlist(f))
-                        Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
-                        Dim tempint As Integer
-                        If temptime <> Nothing Then
-                            Try
-                                '1h 24mn 48s 546ms
-                                Dim hours As Integer = 0
-                                Dim minutes As Integer = 0
-                                Dim tempstring2 As String = temptime
-                                tempint = tempstring2.IndexOf("h")
-                                If tempint <> -1 Then
-                                    hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                    tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                                    tempstring2 = Trim(tempstring2)
-                                End If
-                                tempint = tempstring2.IndexOf("mn")
-                                If tempint <> -1 Then
-                                    minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                End If
-                                If hours <> 0 Then
-                                    hours = hours * 60
-                                End If
-                                minutes = minutes + hours
-                                totalmins = totalmins + minutes
-                            Catch
-                            End Try
-                        End If
+
+                       total += Convert.ToInt32(M2.Get_(StreamKind.Visual, 0, "Duration"))
                     Next
-                    workingfiledetails.filedetails_video.DurationInSeconds.Value = totalmins & " min"
+
+                    workingfiledetails.filedetails_video.DurationInSeconds.Value = total
                 End If
             Catch
                 workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 57)

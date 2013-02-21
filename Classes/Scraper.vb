@@ -933,23 +933,39 @@ Public Class Classimdb
                     End If
 
                     'runtime
+                    'If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
+                    '    movienfoarray = ""
+                    '    Try
+                    '        Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
+                    '        If M.Success = True Then
+                    '            movienfoarray = M.Groups(1).Value
+                    '        Else
+                    '            movienfoarray = "scraper error"
+                    '        End If
+
+                    '        movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                    '        movienfoarray = encodespecialchrs(movienfoarray)
+                    '        totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
+                    '    Catch
+                    '        totalinfo = totalinfo & "<runtime>scraper error</runtime>" & vbCrLf
+                    '    End Try
+                    'End If
+
                     If webpage(f).IndexOf("itemprop=""duration") <> -1 Then
                         movienfoarray = ""
                         Try
                             Dim M As Match = Regex.Match(webpage(f), ">(\d+ min)</time>")
-                            If M.Success = True Then
-                                movienfoarray = M.Groups(1).Value
-                            Else
-                                movienfoarray = "scraper error"
-                            End If
 
-                            movienfoarray = Utilities.cleanSpecChars(movienfoarray)
-                            movienfoarray = encodespecialchrs(movienfoarray)
-                            totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
+                            If M.Success Then
+                                movienfoarray = M.Groups(1).Value
+                                movienfoarray = Utilities.cleanSpecChars(movienfoarray)
+                                movienfoarray = encodespecialchrs(movienfoarray)
+                                totalinfo = totalinfo & "<runtime>" & movienfoarray & "</runtime>" & vbCrLf
+                            End If
                         Catch
-                            totalinfo = totalinfo & "<runtime>scraper error</runtime>" & vbCrLf
                         End Try
                     End If
+
                     If webpage(f).IndexOf("<div class=""infobar"">") <> -1 Then
                         Try
                             If webpage(f + 1).IndexOf("<img width=") <> 0 Then
