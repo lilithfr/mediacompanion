@@ -22408,7 +22408,14 @@ Public Class Form1
     End Sub
 
     Private Sub Mov_ToolStripRenameMovie_click(sender As Object, e As EventArgs) Handles Mov_ToolStripRenameMovie.Click
-        mov_ScrapeSpecific("rename_files")
+        Dim ismovrenenabled As Boolean = Preferences.MovieRenameEnable
+        If Preferences.MovieManualRename Then
+            Preferences.MovieRenameEnable = True
+            mov_ScrapeSpecific("rename_files")
+        Else
+            MsgBox("Manual Movie Rename is not enabled", 0)
+        End If
+        Preferences.MovieRenameEnable = ismovrenenabled
     End Sub
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
@@ -23376,6 +23383,16 @@ Public Class Form1
             generalprefschanged = True
             btnGeneralPrefsSaveChanges.Enabled = True
         End If
+    End Sub
+
+    Private Sub ManualRenameChkbox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ManualRenameChkbox.CheckedChanged
+        Try
+            Preferences.MovieManualRename = ManualRenameChkbox.Checked
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 End Class

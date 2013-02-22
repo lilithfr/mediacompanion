@@ -205,6 +205,7 @@ Public Class Preferences
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared OfflineDVDTitle As String
+    Public Shared MovieManualRename As Boolean
     Public Shared MovieRenameEnable As Boolean
     Public Shared MovieRenameTemplate As String
     Public Shared moviePreferredTrailerResolution As String
@@ -276,6 +277,7 @@ Public Class Preferences
         moviethumbpriority(3) = "IMDB"
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
+        MovieManualRename = False
         MovieRenameEnable = False
         MovieRenameTemplate = "%T (%Y)"
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
@@ -940,7 +942,14 @@ Public Class Preferences
         child.InnerText = OfflineDVDTitle
         root.AppendChild(child)
 
-
+        root.AppendChild(child)
+        child = doc.CreateElement("moviemanualrename")
+        If MovieManualRename = True Then
+            child.InnerText = "true"
+        Else
+            child.InnerText = "false"
+        End If
+        root.AppendChild(child)
 
         root.AppendChild(child)
         child = doc.CreateElement("movierenameenable")
@@ -1640,6 +1649,13 @@ Public Class Preferences
 
                 Case "offlinemovielabeltext"
                     If thisresult.InnerText <> "" Then OfflineDVDTitle = thisresult.InnerText
+
+                Case "moviemanualrename"
+                    If thisresult.InnerXml = "true" Then
+                        MovieManualRename = True
+                    ElseIf thisresult.InnerXml = "false" Then
+                        MovieManualRename = False
+                    End If
 
                 Case "movierenameenable"
                     If thisresult.InnerXml = "true" Then
