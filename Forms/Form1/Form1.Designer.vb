@@ -180,6 +180,7 @@ Partial Class Form1
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.mov_ToolStripReloadFromCache = New System.Windows.Forms.ToolStripMenuItem()
         Me.Mov_ToolStripRemoveMovie = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Mov_ToolStripRenameMovie = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.mov_ToolStripRescrapeAll = New System.Windows.Forms.ToolStripMenuItem()
         Me.mov_ToolStripRescrapeSpecific = New System.Windows.Forms.ToolStripMenuItem()
@@ -2714,7 +2715,7 @@ Partial Class Form1
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mov_ToolStripMovieName, Me.mov_ToolStripPlayMovie, Me.mov_ToolStripPlayTrailer, Me.ToolStripSeparator17, Me.mov_ToolStripOpenFolder, Me.mov_ToolStripViewNfo, Me.ToolStripSeparator4, Me.mov_ToolStripReloadFromCache, Me.Mov_ToolStripRemoveMovie, Me.ToolStripSeparator5, Me.mov_ToolStripRescrapeAll, Me.mov_ToolStripRescrapeSpecific, Me.ToolStripSeparator23, Me.mov_ToolStripFanartBrowserAlt, Me.mov_ToolStripPosterBrowserAlt, Me.mov_ToolStripEditMovieAlt, Me.ToolStripSeparator24, Me.mov_ToolStripExportMovies})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mov_ToolStripMovieName, Me.mov_ToolStripPlayMovie, Me.mov_ToolStripPlayTrailer, Me.ToolStripSeparator17, Me.mov_ToolStripOpenFolder, Me.mov_ToolStripViewNfo, Me.ToolStripSeparator4, Me.mov_ToolStripReloadFromCache, Me.Mov_ToolStripRemoveMovie, Me.Mov_ToolStripRenameMovie, Me.ToolStripSeparator5, Me.mov_ToolStripRescrapeAll, Me.mov_ToolStripRescrapeSpecific, Me.ToolStripSeparator23, Me.mov_ToolStripFanartBrowserAlt, Me.mov_ToolStripPosterBrowserAlt, Me.mov_ToolStripEditMovieAlt, Me.ToolStripSeparator24, Me.mov_ToolStripExportMovies})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(253, 320)
         Me.ContextMenuStrip1.Text = "whatever"
@@ -2770,6 +2771,13 @@ Partial Class Form1
         Me.Mov_ToolStripRemoveMovie.Name = "Mov_ToolStripRemoveMovie"
         Me.Mov_ToolStripRemoveMovie.Size = New System.Drawing.Size(252, 22)
         Me.Mov_ToolStripRemoveMovie.Text = "Remove selected movie(s) from list"
+        '
+        'Mov_ToolStripRenameMovie
+        '
+        Me.Mov_ToolStripRenameMovie.Name = "Mov_ToolStripRenameMovie"
+        Me.Mov_ToolStripRenameMovie.Size = New System.Drawing.Size(252, 22)
+        Me.Mov_ToolStripRenameMovie.Text = "Rename selected movie(s) in list"
+        Me.Mov_ToolStripRenameMovie.ToolTipText = resources.GetString("RenameFilesToolStripMenuItem.ToolTipText")
         '
         'ToolStripSeparator5
         '
@@ -13768,6 +13776,7 @@ End Sub
     Friend WithEvents HToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SearchForNewHomeMoviesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Mov_ToolStripRemoveMovie As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Mov_ToolStripRenameMovie As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabPage35 As System.Windows.Forms.TabPage
     Friend WithEvents RebuildHomeMovieCacheToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabPage36 As System.Windows.Forms.TabPage
