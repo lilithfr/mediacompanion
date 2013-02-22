@@ -11,7 +11,7 @@ Public Class Movie
 
     Public Const ResolutionsFile = "Resolutions.xml"
     Const MSG_PREFIX    = ""
-    Const MSG_ERROR = "-ERROR! "
+    Public Const MSG_ERROR = "-ERROR! "
     Const MSG_OK    = "-OK "
     Const MSG_DONT_RESIZE = "Don't resize"
     Const YOU_TUBE_URL_PREFIX = "http://www.youtube.com/watch?v="

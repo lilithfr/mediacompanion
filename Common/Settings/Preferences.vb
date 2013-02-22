@@ -226,6 +226,7 @@ Public Class Preferences
     Public Shared ShowMovieGridToolTip      As Boolean = True
     Public Shared ActorsFilterMinFilms      As Integer =  2
     Public Shared MaxActorsInFilter         As Integer =  100
+    Public Shared ShowLogOnError            As Boolean = True
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
@@ -1012,7 +1013,7 @@ Public Class Preferences
         root.AppendChild(doc, "BackDropResolution"    , BackDropResolutionSI     )
         
         root.AppendChild(doc, "ShowMovieGridToolTip"  , ShowMovieGridToolTip     )
-        
+        root.AppendChild(doc, "ShowLogOnError"        , ShowLogOnError           )
             
         doc.AppendChild(root)
 
@@ -1685,7 +1686,7 @@ Public Class Preferences
                 Case "BackDropResolution"        : BackDropResolutionSI        = thisresult.InnerXml
 
                 Case "ShowMovieGridToolTip"      : ShowMovieGridToolTip        = thisresult.InnerXml
-                
+                Case "ShowLogOnError"            : ShowLogOnError              = thisresult.InnerXml
 
             End Select
             'Catch

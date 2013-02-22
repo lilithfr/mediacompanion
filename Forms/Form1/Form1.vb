@@ -34,6 +34,7 @@ Public Class Form1
 
     Public Shared blnAbortFileDownload As Boolean
     Public Shared ReadOnly countLock = New Object
+    Public ScraperErrorDetected As Boolean    
     
     #End Region 'Movie scraping objects
 
@@ -2752,9 +2753,9 @@ Public Class Form1
                                 'PictureBoxActor.ImageLocation = actorthumbpath
                                 'PictureBoxActor.Load()
                                 util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
-                                'Else
-                                '    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                                '    PictureBoxActor.Load()
+                            'Else
+                            '    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
+                            '    PictureBoxActor.Load()
                             End If
                         Else
                             util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
@@ -14023,6 +14024,7 @@ Public Class Form1
         Next
 
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
+        cbShowLogOnError      .Checked = Preferences.ShowLogOnError
         generalprefschanged = False
         btnGeneralPrefsSaveChanges.Enabled = False
     End Sub
@@ -22677,31 +22679,31 @@ Public Class Form1
 
     Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterGenre.SelectedValueChanged, cbFilterSource.SelectedValueChanged
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-        DisplayMovie()
-    End Sub
-
+        DisplayMovie
+    End Sub   
+     
 
     Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterSet.SelectedValueChanged
-        If cbFilterSet.Text = "All" Then
-            SetFilter = ""
+        If cbFilterSet.Text="All" Then
+            SetFilter=""
         Else
-            SetFilter = cbFilterSet.Text.RemoveAfterMatch
+            SetFilter=cbFilterSet.Text.RemoveAfterMatch
         End If
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-        DisplayMovie()
+        DisplayMovie
     End Sub
-
+    
 
     Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
-        If cbFilterActor.Text = "All" Then
-            ActorFilter = ""
+        If cbFilterActor.Text="All" Then
+            ActorFilter=""
         Else
-            ActorFilter = cbFilterActor.Text.RemoveAfterMatch
+            ActorFilter=cbFilterActor.Text.RemoveAfterMatch
         End If
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-        DisplayMovie()
+        DisplayMovie
     End Sub
 
     Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
@@ -22709,7 +22711,7 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonSearchNew_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonSearchNew.Click
-        SearchForNew()
+        SearchForNew
     End Sub
 
     Private Sub ButtonRescrapeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRescrapeMovie.Click
@@ -22795,6 +22797,7 @@ Public Class Form1
             ssFileDownload.Visible = False
             tsProgressBarFileDownload_Resize()
             EnableDisableByTag("M", False)       'Disable all UI options that can't be run while scraper is running   
+            ScraperErrorDetected = False
 
             BckWrkScnMovies.RunWorkerAsync(action)
         Else
@@ -22850,14 +22853,14 @@ Public Class Form1
     Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
         Select Case action
-            Case "BatchRescrape" : Return _rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
-            Case "ChangeMovie" : Return False
-            Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            Case "BatchRescrape"          : Return _rescrapeList.FullPathAndFilenames.Count>1               ' filteredList.Count > 1
+            Case "ChangeMovie"            : Return False
+            Case "RescrapeAll"            : Return _rescrapeList.FullPathAndFilenames.Count>1
             Case "RescrapeDisplayedMovie" : Return False
-            Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
-            Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
-            Case "SearchForNewMovies" : Return True
-            Case "RebuildCaches" : Return False
+            Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
+            Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
+            Case "SearchForNewMovies"     : Return True
+            Case "RebuildCaches"          : Return False
         End Select
 
         MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
@@ -22924,11 +22927,11 @@ Public Class Form1
 
         Dim lastSelectedMovie = workingMovie.fullpathandfilename
 
-        filteredList.Clear()
+        filteredList.Clear
         filteredList.AddRange(oMovies.MovieCache)
 
 
-        cbFilterGenre.Items.Clear()
+        cbFilterGenre.Items.Clear
         cbFilterGenre.Items.Add("All")
         For Each item In oMovies.Genres
             cbFilterGenre.Items.Add(item)
@@ -22937,7 +22940,7 @@ Public Class Form1
         cbFilterGenre.SelectedItem = cbFilterGenre.Text
 
 
-        cbFilterSet.Items.Clear()
+        cbFilterSet.Items.Clear
         cbFilterSet.Items.Add("All")
         For Each item In oMovies.MoviesSetsByNumberOfFilmsDescending
             cbFilterSet.Items.Add(item)
@@ -22945,17 +22948,17 @@ Public Class Form1
         If cbFilterSet.Text = "" Then cbFilterSet.Text = "All"
 
 
-        If SetFilter <> "" Then
+        If SetFilter<>"" Then
             For Each item As String In cbFilterSet.Items
-                If item.IndexOf(SetFilter) = 0 Then
-                    cbFilterActor.SelectedItem = item
+                If item.IndexOf(SetFilter)=0 Then
+                    cbFilterActor.SelectedItem=item
                     Exit For
                 End If
             Next
         End If
 
 
-        cbFilterActor.Items.Clear()
+        cbFilterActor.Items.Clear
         cbFilterActor.Items.Add("All")
         For Each item In oMovies.ActorsByNumberOfFilmsDescending
             cbFilterActor.Items.Add(item)
@@ -22963,15 +22966,15 @@ Public Class Form1
         If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
 
 
-        If ActorFilter <> "" Then
+        If ActorFilter<>"" Then
             For Each item As String In cbFilterActor.Items
-                If item.IndexOf(ActorFilter) = 0 Then
-                    cbFilterActor.SelectedItem = item
+                If item.IndexOf(ActorFilter)=0 Then
+                    cbFilterActor.SelectedItem=item
                     Exit For
                 End If
             Next
         End If
-
+        
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -22981,7 +22984,7 @@ Public Class Form1
             Next
         Catch
         End Try
-
+        
         mov_FormPopulate()
         DisplayMovie()
     End Sub
@@ -22999,6 +23002,10 @@ Public Class Form1
             tsStatusLabel.Text &= oProgress.Message
         Else
             tsStatusLabel.Text = oProgress.Message
+        End If
+
+        If oProgress.Message = Movie.MSG_ERROR then
+            ScraperErrorDetected = True
         End If
 
         scraperLog += oProgress.Log
@@ -23071,8 +23078,8 @@ Public Class Form1
 
 
     Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-        If e.KeyCode = Keys.Escape Then BckWrkScnMovies_Cancel()
-        If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
+        If               e.KeyCode=Keys.Escape Then BckWrkScnMovies_Cancel
+        If e.Control And e.KeyCode=Keys.C      Then AbortFileDownload
     End Sub
 
 
@@ -23081,14 +23088,14 @@ Public Class Form1
     End Sub
 
 
-    Sub BckWrkScnMovies_Cancel()
+    Sub BckWrkScnMovies_Cancel
         If BckWrkScnMovies.IsBusy Then
             tsStatusLabel.Text = "* Cancelling... *"
             BckWrkScnMovies.CancelAsync()
         End If
     End Sub
 
-    Sub AbortFileDownload()
+    Sub AbortFileDownload
         tsStatusLabel.Text = "* Aborting trailer download... *"
         Monitor.Enter(countLock)
         blnAbortFileDownload = True
@@ -23191,11 +23198,11 @@ Public Class Form1
 #End Region 'General 2 - Movie Preferences tab
 
 
-    Sub SearchForNew()
+    Sub SearchForNew
         If Preferences.movies_useXBMC_Scraper Then
-            Pre_Run_XBMC_Scraper()
-            mov_XBMCScrapingInitialization()
-            Post_Run_XBMC_Scraper()
+            Pre_Run_XBMC_Scraper
+            mov_XBMCScrapingInitialization
+            Post_Run_XBMC_Scraper
             Exit Sub
         End If
 
@@ -23238,14 +23245,22 @@ Public Class Form1
     End Sub
 
     Private Sub DisplayLogFile()
+        If ScraperErrorDetected And Preferences.ShowLogOnError Then
+            scraperLog = "******************************************************************************" & vbCrLf &
+                         "* One or more errors were detected during scraping. See below for details.   *" & vbCrLf &
+                         "* To disable seeing this, turn off General Perference - 'Show log on error'. *" & vbCrLf & 
+                         "******************************************************************************" & vbCrLf & vbCrLf & scraperLog
+        End If
 
-        If Not Preferences.disablelogfiles And scraperLog <> "" Then
+        If (Not Preferences.disablelogfiles Or (ScraperErrorDetected And Preferences.ShowLogOnError)) And scraperLog <> "" Then
             Dim MyFormObject As New frmoutputlog(scraperLog, True)
             Try
                 MyFormObject.ShowDialog()
             Catch ex As Exception
             End Try
         End If
+
+        ScraperErrorDetected=False
     End Sub
 
     Private Sub rbTVbanner_CheckedChanged(sender As Object, e As EventArgs) Handles rbTVbanner.CheckedChanged
@@ -23289,26 +23304,26 @@ Public Class Form1
 
     Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
 
-        Preferences.moviesets.Clear()
-        ListofMovieSets.Items.Clear()
+        Preferences.moviesets.Clear
+        ListofMovieSets.Items.Clear
 
         Preferences.moviesets.AddRange(oMovies.MoviesSetsExNone)
         ListofMovieSets.Items.AddRange(oMovies.MoviesSetsExNone.ToArray)
 
-        pop_cbMovieDisplay_MovieSet()
+        pop_cbMovieDisplay_MovieSet
 
         'For Each mset In Preferences.moviesets
         '    ListofMovieSets.Items.Add(mset)
         'Next
     End Sub
 
-    Sub pop_cbMovieDisplay_MovieSet()
+    Sub pop_cbMovieDisplay_MovieSet
 
         Dim previouslySelected = cbMovieDisplay_MovieSet.SelectedItem
 
         cbMovieDisplay_MovieSet.Sorted = True
-        cbMovieDisplay_MovieSet.Items.Clear()
-        cbMovieDisplay_MovieSet.Items.AddRange(Preferences.moviesets.ToArray)
+        cbMovieDisplay_MovieSet.Items.Clear
+        cbMovieDisplay_MovieSet.Items.AddRange( Preferences.moviesets.ToArray )
         cbMovieDisplay_MovieSet.Sorted = False
 
         If cbMovieDisplay_MovieSet.Items.Count = 0 Then
@@ -23320,7 +23335,7 @@ Public Class Form1
 
         cbMovieDisplay_MovieSet.SelectedIndex = 0
 
-        If previouslySelected = Nothing Then
+        If previouslySelected=Nothing Then
             If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
                 If workingMovieDetails.fullmoviebody.movieset.IndexOf(" / ") = -1 Then
                     cbMovieDisplay_MovieSet.SelectedItem = workingMovieDetails.fullmoviebody.movieset
@@ -23331,28 +23346,36 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ToolStripMenuItem23_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeCountry.Click
+    Private Sub ToolStripMenuItem23_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeCountry.Click
         mov_ScrapeSpecific("country")
     End Sub
 
-    Private Sub ToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeTop250.Click
+    Private Sub ToolStripMenuItem2_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeTop250.Click
         mov_ScrapeSpecific("top250")
     End Sub
 
-    Private Sub ToolStripMenuItem22_Click(sender As Object, e As EventArgs) Handles tsmiRescrapePremiered.Click
+    Private Sub ToolStripMenuItem22_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePremiered.Click
         mov_ScrapeSpecific("Premiered")
     End Sub
 
-    Private Sub ToolStripMenuItem26_Click(sender As Object, e As EventArgs) Handles tsmiRescrapePosterUrls.Click
+    Private Sub ToolStripMenuItem26_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePosterUrls.Click
         mov_ScrapeSpecific("PosterUrls")
     End Sub
 
-    Private Sub ToolStripMenuItem24_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeFrodo_Poster_Thumbs.Click
+    Private Sub ToolStripMenuItem24_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Poster_Thumbs.Click
         mov_ScrapeSpecific("Frodo_Poster_Thumbs")
     End Sub
 
-    Private Sub ToolStripMenuItem25_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeFrodo_Fanart_Thumbs.Click
+    Private Sub ToolStripMenuItem25_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeFrodo_Fanart_Thumbs.Click
         mov_ScrapeSpecific("Frodo_Fanart_Thumbs")
+    End Sub
+
+    Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
+        Preferences.ShowLogOnError = cbShowLogOnError.Checked
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
     End Sub
 
 End Class
