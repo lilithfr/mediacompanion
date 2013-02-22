@@ -1853,7 +1853,8 @@ Public Class Movie
     Public Sub RescrapeSpecific(rl As RescrapeList)
 
         Rescrape=True
-        
+        'Preferences.LoadConfig()
+                        
         _rescrapedMovie = New FullMovieDetails
         
         'Loads previously scraped details from NFO into _scrapedMovie

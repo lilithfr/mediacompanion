@@ -20725,6 +20725,7 @@ Public Class Form1
         Me.ScrapeFullCertCheckBox.Checked = Preferences.scrapefullcert
 
         Me.MovieRenameCheckBox.Checked = Preferences.MovieRenameEnable
+        Me.ManualRenameChkbox.Checked = Preferences.MovieManualRename
         Me.TextBox_OfflineDVDTitle.Text = Preferences.OfflineDVDTitle
         Me.MovieRenameTemplateTextBox.Text = Preferences.MovieRenameTemplate
         Me.SearchForMissingEpisodesToolStripMenuItem.Checked = Preferences.displayMissingEpisodes
@@ -22412,6 +22413,7 @@ Public Class Form1
         If Preferences.MovieManualRename Then
             Preferences.MovieRenameEnable = True
             mov_ScrapeSpecific("rename_files")
+            Thread.Sleep(250)
         Else
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
