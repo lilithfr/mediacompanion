@@ -302,11 +302,31 @@ Public Class TvShow
             Episode.ShowObj = Me
             Episode.ShowId.Value = Me.TvdbId.Value
 
-            If IsNothing(CurrentSeason.MaxEpisodeCount) Then
-                CurrentSeason.MaxEpisodeCount = Integer.Parse(Episode.Episode.Value)
-            ElseIf Integer.Parse(Episode.Episode.Value) > CurrentSeason.MaxEpisodeCount Then
-                CurrentSeason.MaxEpisodeCount = Integer.Parse(Episode.Episode.Value)
+            Dim EpisodeNum As Integer                                                                         'code added as suggestion
+            If Not Integer.TryParse(Episode.Episode.Value, EpisodeNum) Then                                   ' by Archaetect on Codeplex 
+                Dim Match As System.Text.RegularExpressions.Match                                             ' to halt error caused if
+                Dim Regex As New System.Text.RegularExpressions.Regex("[sS][0-9][0-9][eE]([0-9][0-9])[^0-9]") ' missing season or episode
+                Match = Regex.Match(Episode.NfoFilePath)                                                      ' number.
+                If Match.Success Then                                                                         ' This code should allow next 
+                    Integer.TryParse(Match.Value, EpisodeNum)                                                 ' episode to continue scraping
+                End If
             End If
+
+            If EpisodeNum > 0 Then
+                If IsNothing(CurrentSeason.MaxEpisodeCount) Then
+                    CurrentSeason.MaxEpisodeCount = EpisodeNum
+                ElseIf EpisodeNum > CurrentSeason.MaxEpisodeCount Then
+                    CurrentSeason.MaxEpisodeCount = EpisodeNum
+                End If
+            Else
+                CurrentSeason.MaxEpisodeCount = CurrentSeason.Episodes.Count
+            End If
+
+            'If IsNothing(CurrentSeason.MaxEpisodeCount) Then
+            'CurrentSeason.MaxEpisodeCount = Integer.Parse(Episode.Episode.Value)
+            'ElseIf Integer.Parse(Episode.Episode.Value) > CurrentSeason.MaxEpisodeCount Then
+            'CurrentSeason.MaxEpisodeCount = Integer.Parse(Episode.Episode.Value)
+            'End If
         End If
     End Sub
 
