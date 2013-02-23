@@ -22413,7 +22413,9 @@ Public Class Form1
         If Preferences.MovieManualRename Then
             Preferences.MovieRenameEnable = True
             mov_ScrapeSpecific("rename_files")
-            Thread.Sleep(250)
+            While BckWrkScnMovies.IsBusy 
+                Application.DoEvents
+            End While
         Else
             MsgBox("Manual Movie Rename is not enabled", 0)
         End If
