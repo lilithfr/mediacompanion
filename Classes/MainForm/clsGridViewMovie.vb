@@ -334,11 +334,11 @@ Public Class clsGridViewMovie
                 Else
                     b = From f In b Order By f.rating Descending
                 End If
-            Case "Sort(Order)"
+            Case "Sort Order"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.createdate Descending
+                    b = From f In b Order By f.sortorder Descending
                 Else
-                    b = From f In b Order By f.createdate Ascending
+                    b = From f In b Order By f.sortorder Ascending
                 End If
             Case "Date Added"
                 If GridSort = "Asc" Then
