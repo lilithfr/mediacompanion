@@ -8928,6 +8928,8 @@ Public Class Form1
     End Sub
 
     Private Sub Button42_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button42.Click
+        Dim issavefanart As Boolean = Preferences.savefanart
+        Preferences.savefanart =true
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Label2.Text = "Please Wait, Trying to Download Fanart"
@@ -9030,14 +9032,15 @@ Public Class Form1
                         PictureBox10.Image = Nothing
                         PictureBox11.Image = Nothing
                     End If
-
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
 
             End If
+            Preferences.savefanart = issavefanart
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+            Preferences.savefanart=issavefanart
         End Try
 
     End Sub
