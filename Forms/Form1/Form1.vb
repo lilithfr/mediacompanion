@@ -10556,13 +10556,15 @@ Public Class Form1
             rbTVposter.Enabled = True
             rbTVbanner.Enabled = True
             Button53.Enabled = True
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled
             Dim tempstring As String = ComboBox2.SelectedItem
             Dim bmp As Bitmap, path As String = ""
             If tempstring = "Main Image" Then
-                If Preferences.EdenEnabled Then
+                If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
                 End If
-                If Preferences.FrodoEnabled Then
+                If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "banner.jpg")
                     ElseIf rbTVposter.Checked = True Then
@@ -10571,10 +10573,10 @@ Public Class Form1
                 End If
 
             ElseIf tempstring = "Specials" Then
-                If Preferences.EdenEnabled Then
+                If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
                 End If
-                If Preferences.FrodoEnabled Then
+                If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials-banner.jpg")
                     ElseIf rbTVposter.Checked = True Then
@@ -10584,7 +10586,7 @@ Public Class Form1
             ElseIf tempstring.IndexOf("Season") = 0 And tempstring.IndexOf("Season All") = -1 Then
                 path = tempstring.Replace("Season ", "")
                 path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season" & path & ".tbn")
-                If Preferences.FrodoEnabled Then
+                If eden Then
                     If rbTVbanner.Checked = True Then
                         path = path.Replace(".tbn", "-banner.jpg")
                     ElseIf rbTVposter.Checked = True Then
@@ -10594,10 +10596,10 @@ Public Class Form1
 
 
             ElseIf tempstring = "Season All" Then
-                If Preferences.EdenEnabled Then
+                If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
                 End If
-                If Preferences.FrodoEnabled Then
+                If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all-banner.jpg")
                     ElseIf rbTVposter.Checked = True Then
@@ -10621,6 +10623,8 @@ Public Class Form1
                 Else
                     bmp = New Bitmap(Utilities.DefaultPosterPath)
                 End If
+                Dim Image2 As New Bitmap(bmp)
+                PictureBox12.Image=Image2
             End If
             Return workingposterpath
         Catch ex As Exception

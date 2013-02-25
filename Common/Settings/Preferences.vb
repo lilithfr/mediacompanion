@@ -274,10 +274,10 @@ Public Class Preferences
         allfolders = False
         ReDim moviethumbpriority(3)
         maxmoviegenre = 99
-        moviethumbpriority(0) = "Internet Movie Poster Awards"
-        moviethumbpriority(1) = "themoviedb.org"
+        moviethumbpriority(0) = "themoviedb.org"
+        moviethumbpriority(1) = "IMDB"
         moviethumbpriority(2) = "Movie Poster DB"
-        moviethumbpriority(3) = "IMDB"
+        moviethumbpriority(3) = "Internet Movie Poster Awards"
         movieRuntimeDisplay = "scraper"
         moviePreferredTrailerResolution = "720"
         MovieManualRename = False
