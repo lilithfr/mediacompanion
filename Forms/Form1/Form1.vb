@@ -608,10 +608,34 @@ Public Class Form1
         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
         'Parameters to display the movie grid at startup
-        Mc.clsGridViewMovie.GridFieldToDisplay1 = "TitleAndYear"
-        Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
-        Mc.clsGridViewMovie.GridSort = "Asc"
-        Mc.clsGridViewMovie.GridviewMovieDesign(Me)
+
+
+
+        Select Case Preferences.moviedefaultlist
+            Case 0
+                RadioButtonTitleAndYear.Checked = True
+            Case 1
+                RadioButtonFileName.Checked = True
+            Case 2
+                RadioButtonFolder.Checked = True
+        End Select
+
+        Try
+            cbSort.SelectedIndex = Preferences.moviesortorder
+        Catch
+             cbSort.SelectedIndex = 0
+        End Try
+        btnreverse.Checked = Preferences.movieinvertorder
+        If btnreverse.Checked Then
+            Mc.clsGridViewMovie.GridSort = "Desc"
+        Else
+            Mc.clsGridViewMovie.GridSort = "Asc"
+        End If
+        
+        'Mc.clsGridViewMovie.GridFieldToDisplay1 = "TitleAndYear"
+        'Mc.clsGridViewMovie.GridFieldToDisplay2 = "Movie Year"
+        'Mc.clsGridViewMovie.GridSort = "Asc"
+        'Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 
 
         'Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
@@ -621,6 +645,7 @@ Public Class Form1
 
         MainFormLoadedStatus = True
 
+        
         UpdateFilteredList
 
         Common.Tasks.StartTaskEngine()
@@ -4707,12 +4732,12 @@ Public Class Form1
 
     'reverse order
     Private Sub btnreverse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnreverse.CheckedChanged 
-        If btnreverse.CheckState = CheckState.Checked Then
+        If btnreverse.Checked Then
             Mc.clsGridViewMovie.GridSort = "Desc"
         Else
             Mc.clsGridViewMovie.GridSort = "Asc"
         End If
-        Preferences.movieinvertorder = Convert.ToByte(btnreverse.Checked)
+        Preferences.movieinvertorder = btnreverse.Checked
 
         Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         DisplayMovie()
@@ -17043,6 +17068,7 @@ Public Class Form1
                     cbFilterSet.Font = newFont
                     cbFilterActor.Font = newFont
                     cbFilterSource.Font = newFont
+                    LabelCountFilter.Font = newFont
 
                     Me.Refresh()
                     Application.DoEvents()
@@ -20757,18 +20783,6 @@ Public Class Form1
         Renamer.setRenamePref(tv_RegexRename.Item(Preferences.tvrename), tv_RegexScraper)
         Read_XBMC_IMDB_Scraper_Config()
 
-        Select Case Preferences.moviedefaultlist
-            Case 0
-                RadioButtonTitleAndYear.Checked = True
-            Case 1
-                RadioButtonFileName.Checked = True
-            Case 2
-                RadioButtonFolder.Checked = True
-        End Select
-
-        cbSort.SelectedIndex = Preferences.moviesortorder
-        btnreverse.Checked = Preferences.movieinvertorder
-
         '----------------------------------------------------------
 
         mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
@@ -20828,6 +20842,7 @@ Public Class Form1
         '    oMovies.RebuildActorCache
         '    'Call loadactorcache()
         'End If
+
     End Sub
 
 
@@ -22668,28 +22683,33 @@ Public Class Form1
 
 
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
-        If MainFormLoadedStatus = True Then
-            Mc.clsGridViewMovie.GridFieldToDisplay1 = "FileName"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
-            DisplayMovie()
-        End If
+        HandleMovieList_DisplayChange("FileName")
     End Sub
 
     Private Sub RadioButtonTitleAndYear_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonTitleAndYear.CheckedChanged
-        If MainFormLoadedStatus = True Then
-            Mc.clsGridViewMovie.GridFieldToDisplay1 = "TitleAndYear"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
+        HandleMovieList_DisplayChange("TitleAndYear")
+    End Sub
+
+    Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
+        HandleMovieList_DisplayChange("Folder")
+    End Sub
+
+
+    Sub HandleMovieList_DisplayChange(DisplayField As String)
+        Mc.clsGridViewMovie.GridFieldToDisplay1 = DisplayField
+
+        If RadioButtonTitleAndYear.Checked Then Preferences.moviedefaultlist=0
+        If RadioButtonFileName    .Checked Then Preferences.moviedefaultlist=1
+        If RadioButtonFolder      .Checked Then Preferences.moviedefaultlist=2
+
+        Mc.clsGridViewMovie.GridviewMovieDesign(Me)
+        If MainFormLoadedStatus Then
             DisplayMovie()
         End If
     End Sub
 
-    Private Sub RadioButtonFolder_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFolder.CheckedChanged
-        If MainFormLoadedStatus = True Then
-            Mc.clsGridViewMovie.GridFieldToDisplay1 = "Folder"
-            Mc.clsGridViewMovie.GridviewMovieDesign(Me)
-            DisplayMovie()
-        End If
-    End Sub
+
+
 
     Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try

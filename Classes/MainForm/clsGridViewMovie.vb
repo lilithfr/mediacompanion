@@ -25,6 +25,8 @@ Public Class clsGridViewMovie
 
     Public Sub GridviewMovieDesign(Form1 As Form1)
 
+        If Not Form1.MainFormLoadedStatus Then Exit Sub
+
         Dim dgv As DataGridView = Form1.DataGridViewMovies
 
         If dgv.Columns.Count < 27 Then Return  '24
@@ -232,6 +234,8 @@ Public Class clsGridViewMovie
     End Function
 
     Public Sub mov_FiltersAndSortApply(Form1 As Form1)
+
+        If Not Form1.MainFormLoadedStatus Then Exit Sub
 
         Dim b = From f In Form1.oMovies.Data_GridViewMovieCache Where f.TitleUcase.Contains(Form1.txt_titlesearch.Text.ToUpper)
 

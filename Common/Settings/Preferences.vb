@@ -181,8 +181,8 @@ Public Class Preferences
     Public Shared movieRuntimeFallbackToFile As Boolean = False
     Public Shared moviesUseXBMCScraper As Boolean = False
 
-    Public Shared moviesortorder As Byte
-    Public Shared movieinvertorder As Byte
+    Public Shared moviesortorder As Integer
+    Public Shared movieinvertorder As Boolean
     Public Shared moviedefaultlist As Byte
     Public Shared startuptab As Byte
 
@@ -268,7 +268,7 @@ Public Class Preferences
         XBMC_Scraper = "tmdb"
         moviedefaultlist = 0
         moviesortorder = 0
-        movieinvertorder = 0
+  '      movieinvertorder = 0
         imdbmirror = "http://www.imdb.com/"
         usefoldernames = False
         allfolders = False
@@ -866,10 +866,6 @@ Public Class Preferences
         child.InnerText = tvshowrefreshlog.ToString.ToLower
         root.AppendChild(child)
 
-        child = doc.CreateElement("moviesortorder")
-        child.InnerText = movieinvertorder.ToString & moviesortorder.ToString
-        root.AppendChild(child)
-
         child = doc.CreateElement("moviedefaultlist")
         child.InnerText = moviedefaultlist.ToString
         root.AppendChild(child)
@@ -1031,6 +1027,9 @@ Public Class Preferences
         root.AppendChild(doc, "DateFormat"               , DateFormat               )
         root.AppendChild(doc, "MovieList_ShowColPlot"    , MovieList_ShowColPlot    )
         root.AppendChild(doc, "MovieList_ShowColWatched" , MovieList_ShowColWatched )
+        root.AppendChild(doc, "moviesortorder"           , moviesortorder           )
+        root.AppendChild(doc, "movieinvertorder"         , movieinvertorder         )
+
 
 
         doc.AppendChild(root)
@@ -1639,18 +1638,7 @@ Public Class Preferences
                     ElseIf thisresult.InnerXml = "false" Then
                         eprenamelowercase = False
                     End If
-                Case "moviesortorder"
-                    If thisresult.InnerText <> "" Then
-                        Dim sortOrder() As Char = thisresult.InnerText.ToString.ToArray
-                        If sortOrder.Length < 2 Then
-                            ReDim Preserve sortOrder(1)
-                            sortOrder(1) = "0"
-                            Array.Reverse(sortOrder)
-                        End If
-                        movieinvertorder = Val(sortOrder(0))
-                        moviesortorder = Val(sortOrder(1))
 
-                    End If
                 Case "moviedefaultlist"
                     If thisresult.InnerText <> "" Then moviedefaultlist = Convert.ToByte(thisresult.InnerText)
                 Case "startuptab"
@@ -1715,6 +1703,8 @@ Public Class Preferences
                 Case "DateFormat"                : DateFormat                  = thisresult.InnerXml
                 Case "MovieList_ShowColPlot"     : MovieList_ShowColPlot       = thisresult.InnerXml
                 Case "MovieList_ShowColWatched"  : MovieList_ShowColWatched    = thisresult.InnerXml
+                Case "moviesortorder"            : moviesortorder              = thisresult.InnerXml
+                Case "movieinvertorder"          : movieinvertorder            = thisresult.InnerXml
 
             End Select
             'Catch
