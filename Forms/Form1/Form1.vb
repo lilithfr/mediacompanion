@@ -14514,6 +14514,8 @@ Public Class Form1
         tbDateFormat                .Text    = Preferences.DateFormat
         cbMovieList_ShowColPlot     .Checked = Preferences.MovieList_ShowColPlot
         cbMovieList_ShowColWatched  .Checked = Preferences.MovieList_ShowColWatched
+        nudActorsFilterMinFilms     .Text    = Preferences.ActorsFilterMinFilms
+        nudMaxActorsInFilter        .Text    = Preferences.MaxActorsInFilter
 
         TMDbControlsIni()
 
@@ -22689,6 +22691,8 @@ Public Class Form1
                 m.ClearStoredCalculatedFields
             Next
 
+            Assign_FilterActor
+
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 
@@ -22987,23 +22991,7 @@ Public Class Form1
         End If
 
 
-        cbFilterActor.Items.Clear
-        cbFilterActor.Items.Add("All")
-        For Each item In oMovies.ActorsByNumberOfFilmsDescending
-            cbFilterActor.Items.Add(item)
-        Next
-        If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
-
-
-        If ActorFilter<>"" Then
-            For Each item As String In cbFilterActor.Items
-                If item.IndexOf(ActorFilter)=0 Then
-                    cbFilterActor.SelectedItem=item
-                    Exit For
-                End If
-            Next
-        End If
-        
+        Assign_FilterActor
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23018,6 +23006,23 @@ Public Class Form1
         DisplayMovie()
     End Sub
 
+    Sub Assign_FilterActor
+        cbFilterActor.Items.Clear
+        cbFilterActor.Items.Add("All")
+        For Each item In oMovies.ActorsByNumberOfFilmsDescending
+            cbFilterActor.Items.Add(item)
+        Next
+        If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
+
+        If ActorFilter<>"" Then
+            For Each item As String In cbFilterActor.Items
+                If item.IndexOf(ActorFilter)=0 Then
+                    cbFilterActor.SelectedItem=item
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
 
     Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
 
@@ -23446,5 +23451,28 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+
+    Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
+        Try
+            Preferences.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+
+    Private Sub nudMaxActorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxActorsInFilter.ValueChanged
+        Try
+            Preferences.MaxActorsInFilter = nudMaxActorsInFilter.Value
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
 
 End Class
