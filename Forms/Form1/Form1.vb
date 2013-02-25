@@ -17034,6 +17034,16 @@ Public Class Form1
                     TextBox11.Font = newFont
                     TextBox12.Font = newFont
                     TextBox14.Font = newFont
+
+                    ratingtxt.Font = newFont
+                    votestxt.Font = newFont
+                    imdbtxt.Font = newFont
+                    cbFilterGeneral.Font = newFont
+                    cbFilterGenre.Font = newFont
+                    cbFilterSet.Font = newFont
+                    cbFilterActor.Font = newFont
+                    cbFilterSource.Font = newFont
+
                     Me.Refresh()
                     Application.DoEvents()
                 Catch ex As Exception
