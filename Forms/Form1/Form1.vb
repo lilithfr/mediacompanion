@@ -10583,39 +10583,52 @@ Public Class Form1
             Button53.Enabled = True
             Dim eden As Boolean = Preferences.EdenEnabled
             Dim frodo As Boolean = Preferences.FrodoEnabled
+            Dim edenpath As String =""
+            Dim frodopath As string =""
             Dim tempstring As String = ComboBox2.SelectedItem
             Dim bmp As Bitmap, path As String = ""
+            EdenImageTrue.Visible = False
+            FrodoImageTrue.Visible=False
             If tempstring = "Main Image" Then
                 If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
+                    edenpath = path
                 End If
                 If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "banner.jpg")
+                        frodopath = path
                     ElseIf rbTVposter.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "poster.jpg")
+                        frodopath = path
                     End If
                 End If
 
             ElseIf tempstring = "Specials" Then
                 If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials.tbn")
+                    edenpath = path
                 End If
                 If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials-banner.jpg")
+                        frodopath = path
                     ElseIf rbTVposter.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-specials-poster.jpg")
+                        frodopath = path
                     End If
                 End If
             ElseIf tempstring.IndexOf("Season") = 0 And tempstring.IndexOf("Season All") = -1 Then
                 path = tempstring.Replace("Season ", "")
                 path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season" & path & ".tbn")
-                If eden Then
+                edenpath = path
+                If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = path.Replace(".tbn", "-banner.jpg")
+                        frodopath = path
                     ElseIf rbTVposter.Checked = True Then
                         path = path.Replace(".tbn", "-poster.jpg")
+                        frodopath = path
                     End If
                 End If
 
@@ -10623,18 +10636,54 @@ Public Class Form1
             ElseIf tempstring = "Season All" Then
                 If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
+                    edenpath = path
                 End If
                 If frodo Then
                     If rbTVbanner.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all-banner.jpg")
+                        frodopath = path
                     ElseIf rbTVposter.Checked = True Then
                         path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all-poster.jpg")
+                        frodopath = path
                     End If
                 End If
             End If
 
-            If IO.File.Exists(path) Then
-                bmp = New Bitmap(path)
+            If (eden and IO.File.Exists(edenpath)) or (frodo and IO.File.Exists(frodopath)) Then
+                EdenImageTrue.Visible =False
+                EdenImageTrue.Text = "Eden Image Present"
+                FrodoImageTrue.Visible=False
+                FrodoImageTrue.Text = "Frodo Image Present"
+                ArtMode.Text=""
+                If eden and Not frodo Then
+                    bmp = New Bitmap(edenpath)
+                    EdenImageTrue.Visible=true
+                    FrodoImageTrue.Visible=false
+                    ArtMode.Text="Pre-Frodo Enabled
+                End If
+                If frodo and Not eden then
+                    bmp = New Bitmap(frodopath)
+                    EdenImageTrue.Visible=false
+                    FrodoImageTrue.Visible=True
+                    ArtMode.Text="Frodo Enabled"
+                End If
+                If frodo and eden then
+                    ArtMode.text="Both Enabled"
+                    EdenImageTrue.Visible=True
+                    FrodoImageTrue.Visible=True
+                    If IO.File.Exists(edenpath) then 
+                        bmp = New Bitmap(edenpath)
+                        EdenImageTrue.Text = "Eden Image Present"
+                    Else
+                        EdenImageTrue.Text = "No Eden Image
+                    End If
+                    If IO.File.Exists(frodopath) then 
+                        bmp = new bitmap(frodopath)
+                        FrodoImageTrue.Text="Frodo Image Present"
+                    Else
+                        FrodoImageTrue.Text = "No Frodo Image"
+                    End If
+                End If
                 Dim Image2 As New Bitmap(bmp)
                 PictureBox12.Image = Image2
                 If rbTVbanner.Checked = True Then
@@ -10645,8 +10694,36 @@ Public Class Form1
             Else
                 If rbTVbanner.Checked = True Then
                     bmp = New Bitmap(Utilities.DefaultBannerPath)
+                    If eden and not frodo then
+                        EdenImageTrue.Text="No Eden Image"
+                        EdenImageTrue.Visible=True
+                        FrodoImageTrue.Visible=False
+                    ElseIf frodo and Not eden then
+                        FrodoImageTrue.Text="No Frodo Image"
+                        FrodoImageTrue.Visible=True
+                        EdenImageTrue.Visible=False
+                    ElseIf frodo and eden then
+                        EdenImageTrue.Text="No Eden Image"
+                        EdenImageTrue.Visible=True
+                        FrodoImageTrue.Text="No Frodo Image"
+                        FrodoImageTrue.Visible=True
+                    End If
                 Else
                     bmp = New Bitmap(Utilities.DefaultPosterPath)
+                    If eden and not frodo then
+                        EdenImageTrue.Text="No Eden Image"
+                        EdenImageTrue.Visible=True
+                        FrodoImageTrue.Visible=False
+                    ElseIf frodo and Not eden then
+                        FrodoImageTrue.Text="No Frodo Image"
+                        FrodoImageTrue.Visible=True
+                        EdenImageTrue.Visible=False
+                    ElseIf frodo and eden then
+                        EdenImageTrue.Text="No Eden Image"
+                        EdenImageTrue.Visible=True
+                        FrodoImageTrue.Text="No Frodo Image"
+                        FrodoImageTrue.Visible=True
+                    End If
                 End If
                 Dim Image2 As New Bitmap(bmp)
                 PictureBox12.Image=Image2
@@ -11059,18 +11136,23 @@ Public Class Form1
             Dim witherror As Boolean = False
             Dim witherror2 As Boolean = False
             Dim path As String = ""
+            Dim eden As Int16=0
+            Dim frodo As Int16=0
             Dim imagePaths As New ArrayList
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
             If ComboBox2.Text.ToLower = "main image" Then
                 If Preferences.EdenEnabled Then
                     imagePaths.Add(workingposterpath)
+                    eden =1
                 End If
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg"))
+                        frodo =1
                     ElseIf rbTVposter.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg"))
+                        frodo = 1
                     End If
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") = -1 Then
@@ -11078,34 +11160,43 @@ Public Class Form1
                 temp = temp.Replace(" ", "")
                 If Preferences.EdenEnabled Then
                     imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & ".tbn"))
+                    eden =1
                 End If
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-banner.jpg"))
+                        frodo = 1
                     ElseIf rbTVposter.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), temp & "-poster.jpg"))
+                        frodo = 1
                     End If
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
                 If Preferences.EdenEnabled Then
                     imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn"))
+                    eden =1
                 End If
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg"))
+                        frodo = 1
                     ElseIf rbTVposter.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg"))
+                        frodo = 1
                     End If
                 End If
             ElseIf ComboBox2.Text.ToLower = "specials" Then
                 If Preferences.EdenEnabled Then
                     imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials.tbn"))
+                    eden =1
                 End If
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-banner.jpg"))
+                        frodo = 1
                     ElseIf rbTVposter.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-specials-poster.jpg"))
+                        frodo = 1
                     End If
                 End If
             End If
@@ -11166,6 +11257,15 @@ Public Class Form1
 
                     If witherror = True  Then
                         MsgBox("Unable to download image")
+                    Else
+                        If eden =1 then
+                            EdenImageTrue.Visible =True
+                            EdenImageTrue.Text="Eden Image Present"
+                        End if
+                        If frodo =1 then
+                            FrodoImageTrue.Visible =True
+                            FrodoImageTrue.Text="Frodo Image Present"
+                        End if
                     End If
                 Catch ex As Exception
                     MsgBox(ex.ToString)
