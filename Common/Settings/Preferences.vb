@@ -231,6 +231,7 @@ Public Class Preferences
     Public Shared DateFormat                As String  = "YYYY-MM-DD"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
     Public Shared MovieList_ShowColPlot     As Boolean = False
     Public Shared MovieList_ShowColWatched  As Boolean = False
+    Public Shared MovieScraper_MaxStudios   As Integer = 9     ' 9 = Max
 
     Public Shared applicationDatapath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\Media Companion\"
 
@@ -1029,7 +1030,8 @@ Public Class Preferences
         root.AppendChild(doc, "MovieList_ShowColWatched" , MovieList_ShowColWatched )
         root.AppendChild(doc, "moviesortorder"           , moviesortorder           )
         root.AppendChild(doc, "movieinvertorder"         , movieinvertorder         )
-
+        root.AppendChild(doc, "MovieScraper_MaxStudios"  , MovieScraper_MaxStudios  )
+        
 
 
         doc.AppendChild(root)
@@ -1705,6 +1707,7 @@ Public Class Preferences
                 Case "MovieList_ShowColWatched"  : MovieList_ShowColWatched    = thisresult.InnerXml
                 Case "moviesortorder"            : moviesortorder              = thisresult.InnerXml
                 Case "movieinvertorder"          : movieinvertorder            = thisresult.InnerXml
+                Case "MovieScraper_MaxStudios"   : MovieScraper_MaxStudios     = thisresult.InnerXml
 
             End Select
             'Catch

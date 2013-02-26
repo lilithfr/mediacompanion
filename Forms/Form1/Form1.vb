@@ -14656,6 +14656,7 @@ Public Class Form1
         cbMovieList_ShowColWatched  .Checked = Preferences.MovieList_ShowColWatched
         nudActorsFilterMinFilms     .Text    = Preferences.ActorsFilterMinFilms
         nudMaxActorsInFilter        .Text    = Preferences.MaxActorsInFilter
+        nudMovieScraper_MaxStudios  .Text    = Preferences.MovieScraper_MaxStudios
 
         TMDbControlsIni()
 
@@ -23564,74 +23565,99 @@ Public Class Form1
     End Sub
 
     Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
-        Preferences.ShowLogOnError = cbShowLogOnError.Checked
-        If prefsload = False Then
-            generalprefschanged = True
-            btnGeneralPrefsSaveChanges.Enabled = True
+        If MainFormLoadedStatus Then
+            Preferences.ShowLogOnError = cbShowLogOnError.Checked
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         End If
     End Sub
 
     Private Sub ManualRenameChkbox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ManualRenameChkbox.CheckedChanged
-        Try
-            Preferences.MovieManualRename = ManualRenameChkbox.Checked
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieManualRename = ManualRenameChkbox.Checked
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
     End Sub
 
     Private Sub tbDateFormat_TextChanged( sender As System.Object,  e As System.EventArgs) Handles tbDateFormat.TextChanged
-        Try
-            Preferences.DateFormat = tbDateFormat.Text
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.DateFormat = tbDateFormat.Text
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
     End Sub
 
     Private Sub cbMovieList_ShowColPlot_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColPlot.CheckedChanged
-        Try
-            Preferences.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieList_ShowColPlot = cbMovieList_ShowColPlot.Checked
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
     End Sub
 
     Private Sub cbMovieList_ShowColWatched_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieList_ShowColWatched.CheckedChanged
-        Try
-            Preferences.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+         If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieList_ShowColWatched = cbMovieList_ShowColWatched.Checked
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
     End Sub
 
 
     Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
-        Try
-            Preferences.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.ActorsFilterMinFilms = nudActorsFilterMinFilms.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
     End Sub
 
 
     Private Sub nudMaxActorsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxActorsInFilter.ValueChanged
-        Try
-            Preferences.MaxActorsInFilter = nudMaxActorsInFilter.Value
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MaxActorsInFilter = nudMaxActorsInFilter.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
     End Sub
 
 
+    Private Sub nudMovieScraper_MaxStudios_ValueChanged( sender As Object,  e As EventArgs) Handles nudMovieScraper_MaxStudios.ValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieScraper_MaxStudios = nudMovieScraper_MaxStudios.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
 End Class

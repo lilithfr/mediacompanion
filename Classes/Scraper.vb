@@ -731,7 +731,7 @@ Public Class Classimdb
     'Studio = Production
     ReadOnly Property Studio As String
         Get
-            Return GetNames(MovieRegExs.REGEX_STUDIO)
+            Return GetNames(MovieRegExs.REGEX_STUDIO,Preferences.MovieScraper_MaxStudios)
         End Get
     End Property
 
@@ -762,7 +762,7 @@ Public Class Classimdb
     End Property
 
 
-    Function GetNames(RegExPattern As String) As String
+    Function GetNames(RegExPattern As String, Optional ByVal Max As Integer=-1) As String
         Dim s As String=""
         Dim context = Regex.Match(Html,RegExPattern, RegexOptions.Singleline).ToString
 
@@ -770,11 +770,16 @@ Public Class Classimdb
             
         Dim name=""
 
+        If Max=-1 Then Max=999 
+        Dim i As Integer=0
+
         For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_NAME, RegexOptions.Singleline) 
 
             name=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
 
             s.AppendValue(name)
+            i += 1
+            If i=Max Then Exit For
         Next   
 
         Return s
