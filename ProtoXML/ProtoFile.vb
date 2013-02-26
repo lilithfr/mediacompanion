@@ -163,8 +163,9 @@ Public Class ProtoFile
 
     Public Sub LoadXml(ByVal Input As XNode)
         Me.Doc = New XDocument(Input)
-
         LoadDoc()
+        Me.IsAltered = False    'These two properties have been moved here from TvCache.vb:Load() as this function is the
+        Me.IsCache = True       'only one that uses LoadXml(XNode) so far. Please note if using this. - HueyHQ 27Feb2013
     End Sub
 
 

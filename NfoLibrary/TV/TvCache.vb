@@ -206,12 +206,9 @@ Public Class TvCache
                 Case "tvshow"
                     Dim NewShow As New TvShow
                     NewShow.LoadXml(Node)
-                    NewShow.IsAltered = False
                     NewShow.NfoFilePath = Node.Attribute("NfoPath")
-                    DirectCast(NewShow.CacheDoc.FirstNode, System.Xml.Linq.XElement).FirstAttribute.Value = NewShow.NfoFilePath
+                    DirectCast(NewShow.CacheDoc.FirstNode, XElement).FirstAttribute.Value = NewShow.NfoFilePath
 
-                    NewShow.IsCache = True
-                    'NewShow.UpdateTreenode()
                     Shows.Add(NewShow)
                     Items.Add(NewShow)
                     If NewShow.TvdbId.Value IsNot Nothing AndAlso Not ShowsByID.ContainsKey(NewShow.TvdbId.Value) Then ShowsByID.Add(NewShow.TvdbId.Value, NewShow)
@@ -221,29 +218,20 @@ Public Class TvCache
                 Case "season"
                     Dim NewShow As New Media_Companion.TvSeason
                     NewShow.LoadXml(Node)
-                    NewShow.IsAltered = False
-                    'NewShow.NfoFilePath = Node.Attribute("NfoPath")
-                    NewShow.IsCache = True
-                    'NewShow.UpdateTreenode()
                     Seasons.Add(NewShow)
                     Items.Add(NewShow)
                 Case "episodedetails"
                     Dim NewShow As New TvEpisode
                     NewShow.LoadXml(Node)
-                    NewShow.IsAltered = False
-                    NewShow.MediaExtension = Node.Attribute("MediaExtension")
+                    'NewShow.MediaExtension = Node.Attribute("MediaExtension") 'is not being used in TV cache as yet - HueyHQ 26Feb2013
                     NewShow.NfoFilePath = Node.Attribute("NfoPath")
-                    NewShow.IsCache = True
-                    'NewShow.UpdateTreenode()
                     Episodes.Add(NewShow)
                     Items.Add(NewShow)
 
                 Case Else
                     Dim NewShow As New ProtoFile(Node.Name.ToString)
                     NewShow.LoadXml(Node)
-                    NewShow.IsAltered = False
                     NewShow.NfoFilePath = Node.Attribute("NfoPath")
-                    NewShow.IsCache = True
                     Other.Add(NewShow)
                     Items.Add(NewShow)
             End Select
@@ -256,22 +244,12 @@ Public Class TvCache
 
     Private Sub AttachEpisodes()
         For Each Show As TvShow In Shows
-            For Each Episode As Media_Companion.TvEpisode In Me.Episodes
-                If Show.TvdbId.Value = Episode.ShowId.Value Then
-                    Show.AddEpisode(Episode)
-                End If
+            Dim showID = Show.TvdbId.Value
+            Dim EpisodeList = Episodes.Where(Function(ele As TvEpisode) ele.ShowId.Value = showID)
+            For Each episode In EpisodeList
+                Show.AddEpisode(episode)
             Next
         Next
-
-        'For Each Episode As TvEpisode In Episodes
-
-        '    If Episode.ShowId.Value IsNot Nothing Then
-        '        ShowsByID(Episode.ShowId.Value).AddEpisode(Episode)
-        '    Else
-        '        Dim ThisIsBad = True
-        '    End If
-        'Next
-
     End Sub
 
     Private Sub UpdateTreeNodes()

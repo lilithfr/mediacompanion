@@ -1619,7 +1619,7 @@ Public Class Movie
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             myProcess.StartInfo.CreateNoWindow = False
             myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
-            Dim proc_arguments As String = "-r 1 -b 1800 -qmax 6 -i """ & Preferences.applicationPath & "\Settings\%03d.jpg"" -vcodec msmpeg4v2 """ & mediapath & """"
+            Dim proc_arguments As String = "-r 1 -b:v 1800 -qmax 6 -i """ & Preferences.applicationPath & "\Settings\%03d.jpg"" -vcodec msmpeg4v2 -y """ & mediapath & """"
             myProcess.StartInfo.Arguments = proc_arguments
             myProcess.Start()
             myProcess.WaitForExit()
