@@ -1217,7 +1217,8 @@ Partial Public Class Form1
                         NewAct.ActorId = Act.Id
                         NewAct.actorname = Act.Name.Value
                         NewAct.actorrole = Act.Role.Value
-                        NewAct.actorthumb = Act.Image.Value
+                        NewAct.actorthumb = "http://thetvdb.com/banners/"&Act.Image.Value
+                        
 
                         If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId = Nothing Then
                             Dim id As String = ""
@@ -1250,14 +1251,13 @@ Partial Public Class Form1
                                         filename = filename & ".tbn"
                                         filename = IO.Path.Combine(workingpath, filename)
                                         'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
-                                        Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
+                                        Utilities.DownloadFile(NewAct.actorthumb, filename) 'Removed "http://thetvdb.com/banners/_cache/" & from front of NewAct.actorthumb
                                         If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
                                             Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
                                         ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
                                             Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
                                             Utilities.SafeDeleteFile(filename)
                                         End If
-                                        'End If
                                     End If
                                 End If
                                 If Preferences.actorsave = True And id <> "" And Preferences.actorseasy = False Then
