@@ -160,7 +160,8 @@ Public Class clsGridViewMovie
 
     Sub SetColWidth(col As DataGridViewColumn, Optional widthAdjustment As Integer=0)
 
-        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells      'Set auto-size mode
+    '   col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells          'AllCells = slow
+        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells    'Set auto-size mode
 
         Dim initialAutoSizeWidth As Integer = col.Width                 'Save calculated width after auto-sizing
 
