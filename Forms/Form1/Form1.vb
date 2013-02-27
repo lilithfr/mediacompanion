@@ -23157,8 +23157,8 @@ Public Class Form1
         If SetFilter<>"" Then
             Dim found As Boolean=False
             For Each item As String In cbFilterSet.Items
-                If item.IndexOf(SetFilter)=0 Then
-                    cbFilterActor.SelectedItem=item
+                If item.IndexOf(SetFilter & " (")=0 Then
+                    cbFilterSet.SelectedItem=item    
                     found=True
                     Exit For
                 End If
@@ -23179,7 +23179,7 @@ Public Class Form1
 
         If ActorFilter<>"" Then
             For Each item As String In cbFilterActor.Items
-                If item.IndexOf(ActorFilter)=0 Then
+                If item.IndexOf(ActorFilter & " (")=0 Then
                     cbFilterActor.SelectedItem=item
                     Exit For
                 End If
