@@ -13163,7 +13163,7 @@ Public Class Form1
         Try
             Try
 
-                TextBox34.Text = titletxt.Text
+            '   TextBox34.Text = titletxt.Text
                 'For Each item In workingmoviedetails.alternativetitles
                 '    If item = currenttitle Then
                 '        workingmoviedetails.alternativetitles.Remove(item)
