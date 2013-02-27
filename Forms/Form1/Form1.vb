@@ -10601,7 +10601,8 @@ Public Class Form1
             Dim edenpath As String =""
             Dim frodopath As string =""
             Dim tempstring As String = ComboBox2.SelectedItem
-            Dim bmp As Bitmap, path As String = ""
+            Dim bmp As Bitmap = Nothing
+            Dim path As String = ""
             EdenImageTrue.Visible = False
             FrodoImageTrue.Visible=False
             If tempstring = "Main Image" Then
@@ -21647,14 +21648,6 @@ Public Class Form1
 #End If
         End Try
     End Sub
-    Private Sub btnVideoSourceApply_Click(sender As System.Object, e As System.EventArgs)
-        Dim count As Integer = lbVideoSource.Items.Count - 1
-        ReDim Preferences.releaseformat(count)
-        For g = 0 To count
-            Preferences.releaseformat(g) = lbVideoSource.Items(g)
-        Next
-        mov_VideoSourcePopulate()
-    End Sub
 
     Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
         lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
@@ -21694,14 +21687,6 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
-
-    Private Sub btnCleanFilenameApply_Click(sender As System.Object, e As System.EventArgs)
-        Dim strTemp As String = ""
-        For i = 0 To lbCleanFilename.Items.Count - 1
-            strTemp &= lbCleanFilename.Items(i) & "|"
-        Next
-        Preferences.moviecleanTags = strTemp.TrimEnd("|")
     End Sub
 
     Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameAdd.Click
