@@ -28,6 +28,7 @@ Public Class MovieRegExs
     Public Const REGEX_NAME                = "itemprop=""name"">(?<name>.*?)</span>"                '"<span.*?>(?<name>.*?)</span>"
     Public Const REGEX_STUDIO              = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
     Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
+    Public Const REGEX_ORIGINAL_TITLE      = "<span class=""title-extra"" itemprop=""name"">(.*?)<i>\(original title\)</i>"
 End Class
 
 
@@ -669,8 +670,19 @@ Public Class Classimdb
 
     ReadOnly Property Title As String
         Get
-            Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
+            Dim s As String = ""
+
+            If Preferences.Original_Title Then
+                s=Original_Title
+            End If
+                
+            If s="" Then  
+                s=Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
+            End If
+
+            Return s
         End Get
+
     End Property
    
 
@@ -681,6 +693,14 @@ Public Class Classimdb
     End Property
    
 
+    ReadOnly Property Original_Title As String
+        Get
+            Return Regex.Match(Html,MovieRegExs.REGEX_ORIGINAL_TITLE, RegexOptions.Singleline).Groups(1).Value.Trim
+        End Get
+    End Property
+   
+
+   
 
     ReadOnly Property Genres As String
         Get

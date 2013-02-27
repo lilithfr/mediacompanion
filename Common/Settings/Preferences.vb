@@ -179,6 +179,9 @@ Public Class Preferences
     Public Shared releaseformat() As String
     Public Shared tableview As New List(Of String)
     Public Shared tablesortorder As String
+
+    Public Shared Original_Title As Boolean=False
+
     Public Shared Property movieignorepart As Boolean
         Get
             Return Utilities.ignoreParts
@@ -536,6 +539,9 @@ Public Class Preferences
         root.AppendChild(doc, "SetsFilterMinFilms"        ,         SetsFilterMinFilms       )          'nudSetsFilterMinFilms
         root.AppendChild(doc, "MaxSetsInFilter"           ,         MaxSetsInFilter          )          'nudMaxSetsInFilter
         root.AppendChild(doc, "MovieFilters_Sets_Order"   ,         MovieFilters_Sets_Order  )          'cbMovieFilters_Sets_Order
+        root.AppendChild(doc, "Original_Title"            ,         Original_Title           )          'cbOriginal_Title
+
+        
 
 
         tempstring = If(moviethumbpriority.Count, String.Join("|", moviethumbpriority), "")
@@ -860,6 +866,8 @@ Public Class Preferences
                     Case "SetsFilterMinFilms"                   : SetsFilterMinFilms        = thisresult.InnerXml
                     Case "MaxSetsInFilter"                      : MaxSetsInFilter           = thisresult.InnerXml
                     Case "MovieFilters_Sets_Order"              : MovieFilters_Sets_Order   = thisresult.InnerXml
+
+                    Case "Original_Title"                       : Original_Title            = thisresult.InnerXml
 
                 End Select
             End If

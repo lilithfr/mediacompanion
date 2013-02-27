@@ -14647,6 +14647,8 @@ Public Class Form1
         nudMaxSetsInFilter          .Text          = Preferences.MaxSetsInFilter
         cbMovieFilters_Sets_Order   .SelectedIndex = Preferences.MovieFilters_Sets_Order
 
+        chkbOriginal_Title          .Checked       = Preferences.Original_Title     
+
         TMDbControlsIni()
 
         movieprefschanged = False
@@ -23715,5 +23717,17 @@ Public Class Form1
         End If
     End Sub
 
+
+    Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles chkbOriginal_Title.CheckedChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.Original_Title = chkbOriginal_Title.Checked
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
 
 End Class
