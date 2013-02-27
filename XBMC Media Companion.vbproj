@@ -455,7 +455,6 @@
     <None Include="Classes\UseXBMCScrapers\ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TextFile1.txt" />
     <None Include="Resources\RefreshAll.png" />
     <None Include="Assets\class_mpdb_thumbs.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

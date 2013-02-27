@@ -157,8 +157,16 @@ Public Class Preferences
     Public Shared ActorResolutionSI As Integer = 2     ' Height  768           SI = Selected Index
     Public Shared PosterResolutionSI As Integer = 9     ' Height  1080  
     Public Shared BackDropResolutionSI As Integer = 15     ' Full HD 1920x1080
-    Public Shared ActorsFilterMinFilms As Integer = 2
-    Public Shared MaxActorsInFilter As Integer = 100
+
+    Public Shared ActorsFilterMinFilms      As Integer =   1
+    Public Shared MaxActorsInFilter         As Integer = 500
+    Public Shared MovieFilters_Actors_Order As Integer =   0        ' 0=Number of films desc 1=A-Z
+
+    Public Shared SetsFilterMinFilms        As Integer =   1             
+    Public Shared MaxSetsInFilter           As Integer = 500
+    Public Shared MovieFilters_Sets_Order   As Integer =   0        ' 0=Number of films desc 1=A-Z
+
+
     Public Shared DateFormat As String = "YYYY-MM-DD"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
     Public Shared MovieList_ShowColPlot As Boolean = False
     Public Shared MovieList_ShowColWatched As Boolean = False
@@ -514,14 +522,21 @@ Public Class Preferences
         root.AppendChild(doc, "ActorResolution",                    ActorResolutionSI)                  'comboActorResolutions
         root.AppendChild(doc, "PosterResolution",                   PosterResolutionSI)                 'comboPosterResolutions
         root.AppendChild(doc, "BackDropResolution",                 BackDropResolutionSI)               'comboBackDropResolutions
-        root.AppendChild(doc, "ActorsFilterMinFilms",               ActorsFilterMinFilms)               'nudActorsFilterMinFilms
-        root.AppendChild(doc, "MaxActorsInFilter",                  MaxActorsInFilter)                  'nudMaxActorsInFilter
         root.AppendChild(doc, "DateFormat",                         DateFormat)                         'tbDateFormat
         root.AppendChild(doc, "MovieList_ShowColPlot",              MovieList_ShowColPlot)              'cbMovieList_ShowColPlot
         root.AppendChild(doc, "MovieList_ShowColWatched",           MovieList_ShowColWatched)           'cbMovieList_ShowColWatched
         root.AppendChild(doc, "moviesortorder",                     moviesortorder)                     'cbSort
         root.AppendChild(doc, "movieinvertorder",                   movieinvertorder)                   'btnreverse
         root.AppendChild(doc, "MovieScraper_MaxStudios",            MovieScraper_MaxStudios)            'nudMovieScraper_MaxStudios
+
+        root.AppendChild(doc, "ActorsFilterMinFilms"      ,         ActorsFilterMinFilms     )          'nudActorsFilterMinFilms
+        root.AppendChild(doc, "MaxActorsInFilter"         ,         MaxActorsInFilter        )          'nudMaxActorsInFilter
+        root.AppendChild(doc, "MovieFilters_Actors_Order" ,         MovieFilters_Actors_Order)          'cbMovieFilters_Actors_Order
+
+        root.AppendChild(doc, "SetsFilterMinFilms"        ,         SetsFilterMinFilms       )          'nudSetsFilterMinFilms
+        root.AppendChild(doc, "MaxSetsInFilter"           ,         MaxSetsInFilter          )          'nudMaxSetsInFilter
+        root.AppendChild(doc, "MovieFilters_Sets_Order"   ,         MovieFilters_Sets_Order  )          'cbMovieFilters_Sets_Order
+
 
         tempstring = If(moviethumbpriority.Count, String.Join("|", moviethumbpriority), "")
         root.AppendChild(doc, "moviethumbpriority", tempstring)                                         'Button61,Button73
@@ -830,8 +845,6 @@ Public Class Preferences
                     Case "PosterResolution"                     : PosterResolutionSI = thisresult.InnerXml
                     Case "BackDropResolution"                   : BackDropResolutionSI = thisresult.InnerXml
                     Case "ShowMovieGridToolTip"                 : ShowMovieGridToolTip = thisresult.InnerXml
-                    Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms = thisresult.InnerXml
-                    Case "MaxActorsInFilter"                    : MaxActorsInFilter = thisresult.InnerXml
                     Case "ShowLogOnError"                       : ShowLogOnError = thisresult.InnerXml
                     Case "DateFormat"                           : DateFormat = thisresult.InnerXml
                     Case "MovieList_ShowColPlot"                : MovieList_ShowColPlot = thisresult.InnerXml
@@ -839,6 +852,14 @@ Public Class Preferences
                     Case "moviesortorder"                       : moviesortorder = thisresult.InnerXml
                     Case "movieinvertorder"                     : movieinvertorder = thisresult.InnerXml
                     Case "MovieScraper_MaxStudios"              : MovieScraper_MaxStudios = thisresult.InnerXml
+
+                    Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
+                    Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml
+                    Case "MovieFilters_Actors_Order"            : MovieFilters_Actors_Order = thisresult.InnerXml
+
+                    Case "SetsFilterMinFilms"                   : SetsFilterMinFilms        = thisresult.InnerXml
+                    Case "MaxSetsInFilter"                      : MaxSetsInFilter           = thisresult.InnerXml
+                    Case "MovieFilters_Sets_Order"              : MovieFilters_Sets_Order   = thisresult.InnerXml
 
                 End Select
             End If

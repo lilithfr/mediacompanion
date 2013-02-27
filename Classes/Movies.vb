@@ -65,30 +65,68 @@ Public Class Movies
     End Property    
 
 
-    Public ReadOnly Property ActorsByNumberOfFilmsDescending As List(Of String)
+    Public ReadOnly Property ActorsFilter As List(Of String)
         Get
             Dim q = From x In ActorDb 
                 Group By x.ActorName Into NumFilms=Count 
-                Order by NumFilms Descending, ActorName 
-                Take Preferences.MaxActorsInFilter 
                 Where NumFilms>=Preferences.ActorsFilterMinFilms 
-                Select ActorName & " (" & NumFilms.ToString & ")" 
+            
+            If Preferences.MovieFilters_Actors_Order=0 Then 
+                q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
+            Else
+                q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
+            End If
 
-            Return q.ToList
+            Dim r = From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxActorsInFilter
+
+            Return r.ToList
         End Get
     End Property    
 
 
-    Public ReadOnly Property MoviesSetsByNumberOfFilmsDescending As List(Of String)
+    'Public ReadOnly Property ActorsByNumberOfFilmsDescending As List(Of String)
+    '    Get
+    '        Dim q = From x In ActorDb 
+    '            Group By x.ActorName Into NumFilms=Count 
+    '            Order by NumFilms Descending, ActorName 
+    '            Take Preferences.MaxActorsInFilter 
+    '            Where NumFilms>=Preferences.ActorsFilterMinFilms 
+    '            Select ActorName & " (" & NumFilms.ToString & ")" 
+
+    '        Return q.ToList
+    '    End Get
+    'End Property    
+
+
+    Public ReadOnly Property SetsFilter As List(Of String)
         Get
             Dim q = From x In MovieCache 
                 Group By x.MovieSet Into NumFilms=Count
-                Order By NumFilms Descending, MovieSet
-                Select MovieSet & " (" & NumFilms.ToString & ")" 
-             
-            Return q.ToList
+                Where NumFilms>=Preferences.SetsFilterMinFilms 
+
+            If Preferences.MovieFilters_Sets_Order=0 Then 
+                q = From x In q Order by x.NumFilms Descending, x.MovieSet Ascending
+            Else
+                q = From x In q Order by x.MovieSet.Replace("-None-","") Ascending , x.NumFilms Descending
+            End If
+
+            Dim r = From x In q Select( x.MovieSet & " (" & x.NumFilms.ToString & ")" ) Take Preferences.MaxSetsInFilter 
+
+            Return r.ToList
         End Get
     End Property    
+
+
+    'Public ReadOnly Property MoviesSetsByNumberOfFilmsDescending As List(Of String)
+    '    Get
+    '        Dim q = From x In MovieCache 
+    '            Group By x.MovieSet Into NumFilms=Count
+    '            Order By NumFilms Descending, MovieSet
+    '            Select MovieSet & " (" & NumFilms.ToString & ")" 
+             
+    '        Return q.ToList
+    '    End Get
+    'End Property    
 
 
 

@@ -14632,14 +14632,20 @@ Public Class Form1
 
         cbPreferredTrailerResolution.Text = Preferences.moviePreferredTrailerResolution.ToUpper()
 
-        cbMovieRuntimeFallbackToFile.Enabled = (Preferences.movieRuntimeDisplay = "scraper")
-        cbMovieRuntimeFallbackToFile.Checked = Preferences.movieRuntimeFallbackToFile
-        tbDateFormat                .Text    = Preferences.DateFormat
-        cbMovieList_ShowColPlot     .Checked = Preferences.MovieList_ShowColPlot
-        cbMovieList_ShowColWatched  .Checked = Preferences.MovieList_ShowColWatched
-        nudActorsFilterMinFilms     .Text    = Preferences.ActorsFilterMinFilms
-        nudMaxActorsInFilter        .Text    = Preferences.MaxActorsInFilter
-        nudMovieScraper_MaxStudios  .Text    = Preferences.MovieScraper_MaxStudios
+        cbMovieRuntimeFallbackToFile.Enabled       = (Preferences.movieRuntimeDisplay = "scraper")
+        cbMovieRuntimeFallbackToFile.Checked       = Preferences.movieRuntimeFallbackToFile
+        tbDateFormat                .Text          = Preferences.DateFormat
+        cbMovieList_ShowColPlot     .Checked       = Preferences.MovieList_ShowColPlot
+        cbMovieList_ShowColWatched  .Checked       = Preferences.MovieList_ShowColWatched
+        nudMovieScraper_MaxStudios  .Text          = Preferences.MovieScraper_MaxStudios
+
+        nudActorsFilterMinFilms     .Text          = Preferences.ActorsFilterMinFilms
+        nudMaxActorsInFilter        .Text          = Preferences.MaxActorsInFilter
+        cbMovieFilters_Actors_Order .SelectedIndex = Preferences.MovieFilters_Actors_Order
+
+        nudSetsFilterMinFilms       .Text          = Preferences.SetsFilterMinFilms
+        nudMaxSetsInFilter          .Text          = Preferences.MaxSetsInFilter
+        cbMovieFilters_Sets_Order   .SelectedIndex = Preferences.MovieFilters_Sets_Order
 
         TMDbControlsIni()
 
@@ -22814,12 +22820,12 @@ Public Class Form1
         Try
             applyAdvancedLists()
 
-
             For Each row As DataGridViewRow In DataGridViewMovies.Rows
                 Dim m As Data_GridViewMovie = row.DataBoundItem
                 m.ClearStoredCalculatedFields
             Next
 
+            Assign_FilterSet
             Assign_FilterActor
 
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
@@ -23100,41 +23106,8 @@ Public Class Form1
         filteredList.Clear
         filteredList.AddRange(oMovies.MovieCache)
 
-
-        Dim selected = cbFilterGenre.Text
-
-        cbFilterGenre.Items.Clear
-        cbFilterGenre.Items.Add("All")
-        For Each item In oMovies.Genres
-            cbFilterGenre.Items.Add(item)
-        Next
-        If cbFilterGenre.Text = "" Then cbFilterGenre.Text = "All"
-        cbFilterGenre.SelectedItem=cbFilterGenre.Text
-        cbFilterGenre.SelectedItem=selected
-
-
-        cbFilterSet.Items.Clear
-        cbFilterSet.Items.Add("All")
-        For Each item In oMovies.MoviesSetsByNumberOfFilmsDescending
-            cbFilterSet.Items.Add(item)
-        Next
-        If cbFilterSet.Text = "" Then cbFilterSet.Text = "All"
-
-
-        If SetFilter<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cbFilterSet.Items
-                If item.IndexOf(SetFilter)=0 Then
-                    cbFilterActor.SelectedItem=item
-                    found=True
-                    Exit For
-                End If
-            Next
-
-            If Not found Then SetFilter=""
-        End If
-
-
+        Assign_FilterGenre
+        Assign_FilterSet
         Assign_FilterActor
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
@@ -23156,10 +23129,48 @@ Public Class Form1
         State = ProgramState.Other
     End Sub
 
+
+    Sub Assign_FilterGenre
+        Dim selected = cbFilterGenre.Text
+
+        cbFilterGenre.Items.Clear
+        cbFilterGenre.Items.Add("All")
+        For Each item In oMovies.Genres
+            cbFilterGenre.Items.Add(item)
+        Next
+        If cbFilterGenre.Text = "" Then cbFilterGenre.Text = "All"
+        cbFilterGenre.SelectedItem=cbFilterGenre.Text
+        cbFilterGenre.SelectedItem=selected
+    End Sub
+
+
+    Sub Assign_FilterSet
+        cbFilterSet.Items.Clear
+        cbFilterSet.Items.Add("All")
+        For Each item In oMovies.SetsFilter
+            cbFilterSet.Items.Add(item)
+        Next
+        If cbFilterSet.Text = "" Then cbFilterSet.Text = "All"
+
+        If SetFilter<>"" Then
+            Dim found As Boolean=False
+            For Each item As String In cbFilterSet.Items
+                If item.IndexOf(SetFilter)=0 Then
+                    cbFilterActor.SelectedItem=item
+                    found=True
+                    Exit For
+                End If
+            Next
+
+            If Not found Then SetFilter=""
+        End If
+    End Sub
+
+
     Sub Assign_FilterActor
         cbFilterActor.Items.Clear
         cbFilterActor.Items.Add("All")
-        For Each item In oMovies.ActorsByNumberOfFilmsDescending
+        For Each item In oMovies.ActorsFilter
             cbFilterActor.Items.Add(item)
         Next
         If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
@@ -23173,6 +23184,7 @@ Public Class Form1
             Next
         End If
     End Sub
+
 
     Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
 
@@ -23613,6 +23625,19 @@ Public Class Form1
     End Sub
 
 
+    Private Sub nudMovieScraper_MaxStudios_ValueChanged( sender As Object,  e As EventArgs) Handles nudMovieScraper_MaxStudios.ValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieScraper_MaxStudios = nudMovieScraper_MaxStudios.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
     Private Sub nudActorsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudActorsFilterMinFilms.ValueChanged
         If MainFormLoadedStatus Then
             Try
@@ -23639,10 +23664,10 @@ Public Class Form1
     End Sub
 
 
-    Private Sub nudMovieScraper_MaxStudios_ValueChanged( sender As Object,  e As EventArgs) Handles nudMovieScraper_MaxStudios.ValueChanged
+    Private Sub cbMovieFilters_Actors_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Actors_Order.SelectedValueChanged
         If MainFormLoadedStatus Then
             Try
-                Preferences.MovieScraper_MaxStudios = nudMovieScraper_MaxStudios.Value
+                Preferences.MovieFilters_Actors_Order = cbMovieFilters_Actors_Order.SelectedIndex
                 movieprefschanged = True
                 btnMoviePrefSaveChanges.Enabled = True
             Catch ex As Exception
@@ -23650,4 +23675,45 @@ Public Class Form1
             End Try
         End If
     End Sub
+
+
+    Private Sub nudSetsFilterMinFilms_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudSetsFilterMinFilms.ValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.SetsFilterMinFilms = nudSetsFilterMinFilms.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
+    Private Sub nudMaxSetsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxSetsInFilter.ValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MaxSetsInFilter = nudMaxSetsInFilter.Value
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
+    Private Sub cbMovieFilters_Sets_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Sets_Order.SelectedValueChanged
+        If MainFormLoadedStatus Then
+            Try
+                Preferences.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
+                movieprefschanged = True
+                btnMoviePrefSaveChanges.Enabled = True
+            Catch ex As Exception
+                ExceptionHandler.LogError(ex)
+            End Try
+        End If
+    End Sub
+
+
 End Class
