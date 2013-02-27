@@ -19268,9 +19268,14 @@ Public Class Form1
 
     Private Sub LockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LockAllToolStripMenuItem.Click
         Try
-            For Each Show As TvShow In Cache.TvCache.Shows
-                Show.State = ShowState.Locked
+            Dim Show As Media_Companion.TvShow
+            For Each Show In Cache.TvCache.Shows 'Removed "As TvShow" from before "In Cache."
+                Show.Load()
+                Show.State = Media_Companion.ShowState.Locked
+                Show.Save()
+                Tv_CacheSave()
             Next
+            tv_CacheLoad()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19278,9 +19283,14 @@ Public Class Form1
 
     Private Sub UnlockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnlockAllToolStripMenuItem.Click
         Try
-            For Each Show As TvShow In Cache.TvCache.Shows
-                Show.State = ShowState.Open
+            Dim Show As Media_Companion.TvShow
+            For Each Show In Cache.TvCache.Shows
+                Show.Load()
+                Show.State = Media_Companion.ShowState.Open
+                Show.Save()
+                Tv_CacheSave()
             Next
+            tv_CacheLoad()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
