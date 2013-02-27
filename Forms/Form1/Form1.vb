@@ -10583,7 +10583,8 @@ Public Class Form1
             Dim edenpath As String =""
             Dim frodopath As string =""
             Dim tempstring As String = ComboBox2.SelectedItem
-            Dim bmp As Bitmap, path As String = ""
+            Dim bmp As Bitmap = Nothing
+            Dim path As String = ""
             EdenImageTrue.Visible = False
             FrodoImageTrue.Visible=False
             If tempstring = "Main Image" Then
@@ -15309,23 +15310,29 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub RadioButton43_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton43.CheckedChanged
-        Try
-            If RadioButton43.Checked = True Then
-                Preferences.sortorder = "default"
-            End If
-            generalprefschanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub RadioButton43_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton43.CheckedChanged
+    '    Try
+    '        If RadioButton43.Checked = True Then
+    '            Preferences.sortorder = "default"
+    '        Else
+    '            Preferences.sortorder = "dvd"
+    '        End If
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
     Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton42.CheckedChanged
         Try
             If RadioButton42.Checked = True Then
                 Preferences.sortorder = "dvd"
+            Else
+                Preferences.sortorder = "default"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19243,9 +19250,14 @@ Public Class Form1
 
     Private Sub LockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LockAllToolStripMenuItem.Click
         Try
-            For Each Show As TvShow In Cache.TvCache.Shows
-                Show.State = ShowState.Locked
+            Dim Show As Media_Companion.TvShow
+            For Each Show In Cache.TvCache.Shows 'Removed "As TvShow" from before "In Cache."
+                Show.Load()
+                Show.State = Media_Companion.ShowState.Locked
+                Show.Save()
+                Tv_CacheSave()
             Next
+            tv_CacheLoad()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -19253,9 +19265,14 @@ Public Class Form1
 
     Private Sub UnlockAllToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnlockAllToolStripMenuItem.Click
         Try
-            For Each Show As TvShow In Cache.TvCache.Shows
-                Show.State = ShowState.Open
+            Dim Show As Media_Companion.TvShow
+            For Each Show In Cache.TvCache.Shows
+                Show.Load()
+                Show.State = Media_Companion.ShowState.Open
+                Show.Save()
+                Tv_CacheSave()
             Next
+            tv_CacheLoad()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -21629,14 +21646,6 @@ Public Class Form1
 #End If
         End Try
     End Sub
-    Private Sub btnVideoSourceApply_Click(sender As System.Object, e As System.EventArgs)
-        Dim count As Integer = lbVideoSource.Items.Count - 1
-        ReDim Preferences.releaseformat(count)
-        For g = 0 To count
-            Preferences.releaseformat(g) = lbVideoSource.Items(g)
-        Next
-        mov_VideoSourcePopulate()
-    End Sub
 
     Private Sub btnVideoSourceAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceAdd.Click
         lbVideoSource.Items.Add(txtVideoSourceAdd.Text)
@@ -21676,14 +21685,6 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-    End Sub
-
-    Private Sub btnCleanFilenameApply_Click(sender As System.Object, e As System.EventArgs)
-        Dim strTemp As String = ""
-        For i = 0 To lbCleanFilename.Items.Count - 1
-            strTemp &= lbCleanFilename.Items(i) & "|"
-        Next
-        Preferences.moviecleanTags = strTemp.TrimEnd("|")
     End Sub
 
     Private Sub btnCleanFilenameAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnCleanFilenameAdd.Click
