@@ -15328,23 +15328,29 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub RadioButton43_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton43.CheckedChanged
-        Try
-            If RadioButton43.Checked = True Then
-                Preferences.sortorder = "default"
-            End If
-            generalprefschanged = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub RadioButton43_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton43.CheckedChanged
+    '    Try
+    '        If RadioButton43.Checked = True Then
+    '            Preferences.sortorder = "default"
+    '        Else
+    '            Preferences.sortorder = "dvd"
+    '        End If
+    '        tvprefschanged = True
+    '        btnTVPrefSaveChanges.Enabled = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
     Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton42.CheckedChanged
         Try
             If RadioButton42.Checked = True Then
                 Preferences.sortorder = "dvd"
+            Else
+                Preferences.sortorder = "default"
             End If
-            generalprefschanged = True
+            tvprefschanged = True
+            btnTVPrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

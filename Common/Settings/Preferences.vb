@@ -574,7 +574,7 @@ Public Class Preferences
         root.AppendChild(doc, "tvshowautoquick",        tvshowautoquick)        'CheckBox35
         root.AppendChild(doc, "copytvactorthumbs",      copytvactorthumbs)      'CheckBox34
         root.AppendChild(doc, "displayMissingEpisodes", displayMissingEpisodes) 'SearchForMissingEpisodesToolStripMenuItem
-        root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42,RadioButton43
+        root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42
         root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
         root.AppendChild(doc, "downloadtvfanart",       tvfanart)               'CheckBox10
         root.AppendChild(doc, "downloadtvposter",       tvposter)               'CheckBox14
@@ -583,9 +583,9 @@ Public Class Preferences
         root.AppendChild(doc, "disabletvlogs",          disabletvlogs)          'CheckBox17
         root.AppendChild(doc, "postertype",             postertype)             'posterbtn
         root.AppendChild(doc, "seasonall",              seasonall)              'RadioButton39-41
-        root.AppendChild(doc, "tvrename",               tvrename)               'ComboBox3
+        root.AppendChild(doc, "tvrename",               tvrename)               'ComboBox_tv_EpisodeRename
         root.AppendChild(doc, "eprenamelowercase",      eprenamelowercase)      'CheckBox_tv_EpisodeRenameCase
-        root.AppendChild(doc, "tvshowrefreshlog",       tvshowrefreshlog)       'CheckBox11
+        root.AppendChild(doc, "tvshowrefreshlog",       tvshowrefreshlog)       'set from frmOptions - obsolete
         root.AppendChild(doc, "autoepisodescreenshot",  autoepisodescreenshot)  'CheckBox36
         root.AppendChild(doc, "TVShowUseXBMCScraper",   tvshow_useXBMC_Scraper) 'CheckBox_Use_XBMC_TVDB_Scraper
         root.AppendChild(doc, "autorenameepisodes",     autorenameepisodes)     'CheckBox_tv_EpisodeRenameAuto
