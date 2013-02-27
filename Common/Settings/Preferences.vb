@@ -99,7 +99,7 @@ Public Class Preferences
     Public Shared ignorearticle As Boolean
     Public Shared intruntime As Boolean
     Public Shared XBMC_version As Byte
-    Public Shared ShowMovieGridToolTip As Boolean = True
+    Public Shared ShowMovieGridToolTip As Boolean = False
     Public Shared ShowLogOnError As Boolean = True
     Public Shared font As String
 
