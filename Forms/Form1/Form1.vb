@@ -15129,7 +15129,6 @@ Public Class Form1
                 Preferences.lastpath = thefoldernames
                 Preferences.actorsavepath = thefoldernames
             End If
-            generalprefschanged = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -17240,7 +17239,7 @@ Public Class Form1
                 Label130.Font = newFont
                 Label130.Text = fontString
                 If prefsload = False Then
-                generalprefschanged = True
+                    generalprefschanged = True
                     btnGeneralPrefsSaveChanges.Enabled = True
                 End If
             End If
@@ -18859,7 +18858,7 @@ Public Class Form1
                 Preferences.actorseasy = False
             End If
             If prefsload = False Then
-            generalprefschanged = True
+                generalprefschanged = True
                 btnGeneralPrefsSaveChanges.Enabled = True
             End If
         Catch ex As Exception
@@ -19302,7 +19301,7 @@ Public Class Form1
                 Preferences.intruntime = False
             End If
             If prefsload = False Then
-            generalprefschanged = True
+                generalprefschanged = True
                 btnGeneralPrefsSaveChanges.Enabled = True
             End If
         Catch ex As Exception
@@ -20320,7 +20319,7 @@ Public Class Form1
                 Preferences.ignorearticle = False
             End If
             If prefsload = False Then
-            generalprefschanged = True
+                generalprefschanged = True
                 btnGeneralPrefsSaveChanges.Enabled = True
             End If
         Catch ex As Exception
@@ -20685,7 +20684,7 @@ Public Class Form1
             Label130.Font = newFont
             Label130.Text = "Times New Roman, 9pt"
             If prefsload = False Then
-            generalprefschanged = True
+                generalprefschanged = True
                 btnGeneralPrefsSaveChanges.Enabled = True
             End If
         Catch ex As Exception
@@ -21502,7 +21501,6 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-        If prefsload = False Then generalprefschanged = True
     End Sub
 
     Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
@@ -22707,7 +22705,6 @@ Public Class Form1
         End Try
     End Sub
 
-
     Private Sub PictureBox4_DoubleClick1(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.DoubleClick
         Try
             Try
@@ -22739,11 +22736,6 @@ Public Class Form1
 
     End Sub
 
-
-
-
-
-
     Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
         mov_ToolStripPlayTrailer.Visible = True
 
@@ -22751,11 +22743,6 @@ Public Class Form1
         'Dim ptIndex As Integer = MovieListComboBox.IndexFromPoint(e.X, e.Y)
         'If e.Button = MouseButtons.Right AndAlso ptIndex > -1 AndAlso MovieListComboBox.SelectedItems.Count > 0 Then
         If e.Button = MouseButtons.Right Then
-
-
-
-
-
             Dim multistelect As Boolean = False
             'If more than one movie is selected, check if right-click is on the selection.
             'If MovieListComboBox.SelectedItems.Count > 1 And MovieListComboBox.GetSelected(ptIndex) Then
@@ -22796,7 +22783,6 @@ Public Class Form1
         'End Try
     End Sub
 
-
     Private Sub RadioButtonFileName_CheckedChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButtonFileName.CheckedChanged
         HandleMovieList_DisplayChange("FileName")
     End Sub
@@ -22809,13 +22795,12 @@ Public Class Form1
         HandleMovieList_DisplayChange("Folder")
     End Sub
 
-
     Sub HandleMovieList_DisplayChange(DisplayField As String)
         Mc.clsGridViewMovie.GridFieldToDisplay1 = DisplayField
 
-        If RadioButtonTitleAndYear.Checked Then Preferences.moviedefaultlist=0
-        If RadioButtonFileName    .Checked Then Preferences.moviedefaultlist=1
-        If RadioButtonFolder      .Checked Then Preferences.moviedefaultlist=2
+        If RadioButtonTitleAndYear.Checked Then Preferences.moviedefaultlist = 0
+        If RadioButtonFileName    .Checked Then Preferences.moviedefaultlist = 1
+        If RadioButtonFolder      .Checked Then Preferences.moviedefaultlist = 2
 
         Mc.clsGridViewMovie.GridviewMovieDesign(Me)
         If MainFormLoadedStatus Then
@@ -22823,20 +22808,17 @@ Public Class Form1
         End If
     End Sub
 
-
-
-
     Private Sub ButtonSaveChangesMoviePreference_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePrefSaveChanges.Click
         Try
             applyAdvancedLists()
 
             For Each row As DataGridViewRow In DataGridViewMovies.Rows
                 Dim m As Data_GridViewMovie = row.DataBoundItem
-                m.ClearStoredCalculatedFields
+                m.ClearStoredCalculatedFields()
             Next
 
-            Assign_FilterSet
-            Assign_FilterActor
+            Assign_FilterSet()
+            Assign_FilterActor()
 
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
@@ -22854,39 +22836,36 @@ Public Class Form1
         End Try
     End Sub
 
-
     Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterGenre.SelectedValueChanged, cbFilterSource.SelectedValueChanged
-        If State<>ProgramState.UpdatingFilteredList And State<>ProgramState.ResettingFilters Then
+        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie
+            DisplayMovie()
         End If
-    End Sub   
+    End Sub
      
-
     Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterSet.SelectedValueChanged
-        If State<>ProgramState.UpdatingFilteredList And State<>ProgramState.ResettingFilters Then
-            If cbFilterSet.Text="All" Then
-                SetFilter=""
+        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+            If cbFilterSet.Text = "All" Then
+                SetFilter = ""
             Else
-                SetFilter=cbFilterSet.Text.RemoveAfterMatch
+                SetFilter = cbFilterSet.Text.RemoveAfterMatch
             End If
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie
+            DisplayMovie()
         End If
     End Sub
     
-
     Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
-        If State<>ProgramState.UpdatingFilteredList And State<>ProgramState.ResettingFilters Then
-            If cbFilterActor.Text="All" Then
-                ActorFilter=""
+        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+            If cbFilterActor.Text = "All" Then
+                ActorFilter = ""
             Else
-                ActorFilter=cbFilterActor.Text.RemoveAfterMatch
+                ActorFilter = cbFilterActor.Text.RemoveAfterMatch
             End If
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie
+            DisplayMovie()
         End If
     End Sub
 

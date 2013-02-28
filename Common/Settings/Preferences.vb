@@ -139,7 +139,6 @@ Public Class Preferences
     Public Shared moviedefaultlist As Byte
     Public Shared moviesUseXBMCScraper As Boolean = False
     Public Shared movies_useXBMC_Scraper As Boolean
-    Public Shared whatXBMCScraper As String = "tmdb"
     Public Shared whatXBMCScraperIMBD As Boolean
     Public Shared whatXBMCScraperTVDB As Boolean
     Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
@@ -325,8 +324,6 @@ Public Class Preferences
         keepfoldername = False
         enablehdtags = True
         savefanart = True
-        whatXBMCScraper = "tmdb"
-        '    resizefanart = 1
         overwritethumbs = False
         maxactors = 9999
         createfolderjpg = False
@@ -431,26 +428,29 @@ Public Class Preferences
 
 
         'Form Settings ------------------------------------------------------------
-        root.AppendChild(doc, "backgroundcolour", backgroundcolour)
-        root.AppendChild(doc, "forgroundcolour", forgroundcolour)
-        root.AppendChild(doc, "remembersize", remembersize)
-        root.AppendChild(doc, "locx", locx)
-        root.AppendChild(doc, "locy", locy)
-        root.AppendChild(doc, "formheight", formheight)
-        root.AppendChild(doc, "formwidth", formwidth)
-        root.AppendChild(doc, "splitcontainer1", splt1)
-        root.AppendChild(doc, "splitcontainer2", splt2)
-        root.AppendChild(doc, "splitcontainer3", splt3)
-        root.AppendChild(doc, "splitcontainer4", splt4)
-        root.AppendChild(doc, "splitcontainer5", splt5)
-        root.AppendChild(doc, "maximised", maximised)
-        root.AppendChild(doc, "startuptab", startuptab)
-        root.AppendChild(doc, "logview", logview)
-        root.AppendChild(doc, "LogScrapeTimes", LogScrapeTimes)
-        root.AppendChild(doc, "ScrapeTimingsLogThreshold", ScrapeTimingsLogThreshold)
-        root.AppendChild(doc, "maximumthumbs", maximumthumbs)
-        root.AppendChild(doc, "lastpath", lastpath)
-        root.AppendChild(doc, "MovieImdbGenreRegEx", MovieImdbGenreRegEx)
+        root.AppendChild(doc, "backgroundcolour",           backgroundcolour)
+        root.AppendChild(doc, "forgroundcolour",            forgroundcolour)
+        root.AppendChild(doc, "remembersize",               remembersize)
+        root.AppendChild(doc, "locx",                       locx)
+        root.AppendChild(doc, "locy",                       locy)
+        root.AppendChild(doc, "formheight",                 formheight)
+        root.AppendChild(doc, "formwidth",                  formwidth)
+        root.AppendChild(doc, "splitcontainer1",            splt1)
+        root.AppendChild(doc, "splitcontainer2",            splt2)
+        root.AppendChild(doc, "splitcontainer3",            splt3)
+        root.AppendChild(doc, "splitcontainer4",            splt4)
+        root.AppendChild(doc, "splitcontainer5",            splt5)
+        root.AppendChild(doc, "maximised",                  maximised)
+        root.AppendChild(doc, "startuptab",                 startuptab)
+        root.AppendChild(doc, "logview",                    logview)
+        root.AppendChild(doc, "LogScrapeTimes",             LogScrapeTimes)
+        root.AppendChild(doc, "ScrapeTimingsLogThreshold",  ScrapeTimingsLogThreshold)
+        root.AppendChild(doc, "maximumthumbs",              maximumthumbs)
+        root.AppendChild(doc, "lastpath",                   lastpath)
+        root.AppendChild(doc, "MovieImdbGenreRegEx",        MovieImdbGenreRegEx)
+        root.AppendChild(doc, "moviedefaultlist",           moviedefaultlist)           'RadioButtonFileName,RadioButtonTitleAndYear,RadioButtonFolder
+        root.AppendChild(doc, "moviesortorder",             moviesortorder)             'cbSort
+        root.AppendChild(doc, "movieinvertorder",           movieinvertorder)           'btnreverse
 
 
         'General Prefs ------------------------------------------------------------
@@ -475,10 +475,10 @@ Public Class Preferences
 
         'Movie Prefs ------------------------------------------------------------
         root.AppendChild(doc, "DownloadTrailerDuringScrape",        DownloadTrailerDuringScrape)        'cbDlTrailerDuringScrape
-        root.AppendChild(doc, "gettrailer",                         gettrailer)                         'CheckBox4
-        root.AppendChild(doc, "keepfoldername",                     keepfoldername)                     'CheckBox10
+        root.AppendChild(doc, "gettrailer",                         gettrailer)                         'CheckBox11
+        root.AppendChild(doc, "keepfoldername",                     keepfoldername)                     'set from frmOptions but still in use - obsolete?
         root.AppendChild(doc, "ignoretrailers",                     ignoretrailers)                     'set from frmOptions - obsolete
-        root.AppendChild(doc, "moviescraper",                       moviescraper)                       'RadioButton3
+        root.AppendChild(doc, "moviescraper",                       moviescraper)                       'set from frmOptions - obsolete
         root.AppendChild(doc, "nfoposterscraper",                   nfoposterscraper)                   'IMPA_chk,mpdb_chk,tmdb_chk,imdb_chk
         root.AppendChild(doc, "alwaysuseimdbid",                    alwaysuseimdbid)                    'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreactorthumbs",                  ignoreactorthumbs)                  'set from frmOptions - obsolete
@@ -505,13 +505,12 @@ Public Class Preferences
         root.AppendChild(doc, "transparencyvalue",                  transparencyvalue)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "keepfoldername",                     keepfoldername)                     'set from frmOptions but still in use - obsolete?
         root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
-        root.AppendChild(doc, "savefanart",                         savefanart)                         'CheckBox3
+        root.AppendChild(doc, "savefanart",                         savefanart)                         'CheckBox13
         root.AppendChild(doc, "roundminutes",                       roundminutes)                       'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreparts",                        movieignorepart)                    'cbxCleanFilenameIgnorePart
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
-        root.AppendChild(doc, "moviedefaultlist",                   moviedefaultlist)                   'RadioButtonFileName,RadioButtonTitleAndYear,RadioButtonFolder
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
-        root.AppendChild(doc, "whatXBMCScraper",                    whatXBMCScraper)                    'RadioButton51
+        root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       'RadioButton51
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
         root.AppendChild(doc, "movierenameenable",                  MovieRenameEnable)                  'MovieRenameCheckBox
@@ -528,8 +527,6 @@ Public Class Preferences
         root.AppendChild(doc, "DateFormat",                         DateFormat)                         'tbDateFormat
         root.AppendChild(doc, "MovieList_ShowColPlot",              MovieList_ShowColPlot)              'cbMovieList_ShowColPlot
         root.AppendChild(doc, "MovieList_ShowColWatched",           MovieList_ShowColWatched)           'cbMovieList_ShowColWatched
-        root.AppendChild(doc, "moviesortorder",                     moviesortorder)                     'cbSort
-        root.AppendChild(doc, "movieinvertorder",                   movieinvertorder)                   'btnreverse
         root.AppendChild(doc, "MovieScraper_MaxStudios",            MovieScraper_MaxStudios)            'nudMovieScraper_MaxStudios
 
         root.AppendChild(doc, "ActorsFilterMinFilms"      ,         ActorsFilterMinFilms     )          'nudActorsFilterMinFilms
@@ -539,7 +536,7 @@ Public Class Preferences
         root.AppendChild(doc, "SetsFilterMinFilms"        ,         SetsFilterMinFilms       )          'nudSetsFilterMinFilms
         root.AppendChild(doc, "MaxSetsInFilter"           ,         MaxSetsInFilter          )          'nudMaxSetsInFilter
         root.AppendChild(doc, "MovieFilters_Sets_Order"   ,         MovieFilters_Sets_Order  )          'cbMovieFilters_Sets_Order
-        root.AppendChild(doc, "Original_Title"            ,         Original_Title           )          'cbOriginal_Title
+        root.AppendChild(doc, "Original_Title"            ,         Original_Title           )          'chkbOriginal_Title
 
         
 
@@ -736,7 +733,7 @@ Public Class Preferences
                             End If
                         Next
 
-                    Case "whatXBMCScraper"
+                    Case "whatXBMCScraper" 'made obsolete and changed to "xbmcscraper", but may be still be present in users config
                         XBMC_Scraper = thisresult.InnerXml
                         If thisresult.InnerXml = "imdb" Then
                             whatXBMCScraperIMBD = True
@@ -744,6 +741,7 @@ Public Class Preferences
                             whatXBMCScraperTVDB = True
                         End If
 
+                    Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText
                     Case "seasonall"                            : seasonall = thisresult.InnerText
                     Case "splitcontainer1"                      : splt1 = Convert.ToInt32(thisresult.InnerText)
                     Case "splitcontainer2"                      : splt2 = Convert.ToInt32(thisresult.InnerText)
