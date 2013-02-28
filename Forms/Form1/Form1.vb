@@ -7633,7 +7633,7 @@ Public Class Form1
                 Dim bannerurl As String
                 Dim fanarturl As String
 
-                WorkingTvShow.ListActors.Clear()
+                WorkingTvShow.clearActors()
 
                 WorkingTvShow.State = Media_Companion.ShowState.Open
 
@@ -9511,7 +9511,7 @@ Public Class Form1
                 End If
                 Dim showlist As New XmlDocument
                 showlist.LoadXml(tvshowxmlstring)
-                WorkingTvShow.ListActors.Clear()
+                WorkingTvShow.clearActors()
                 Dim thisresult As XmlNode = Nothing
                 Dim maxcount As Integer = 0
                 For Each thisresult In showlist("fulltvshow")
@@ -9645,7 +9645,7 @@ Public Class Form1
                     End Select
                 Next
                 If WorkingTvShow.TvShowActorSource.Value = "imdb" And WorkingTvShow.ImdbId <> Nothing Then
-                    WorkingTvShow.ListActors.Clear()
+                    WorkingTvShow.clearActors()
                     '                    Dim imdbscraper As New imdb.Classimdbscraper
                     Dim imdbscraper As New Classimdb
                     Dim actorlist As String
@@ -9874,7 +9874,7 @@ Public Class Form1
 
             If actorsource = "tvdb" Then
                 If newepisode.ListActors.Count > 0 Then
-                    WorkingTvShow.ListActors.Clear()
+                    WorkingTvShow.ListActors.Clear() 'Possibly doesn't need to use WorkingTvShow.clearActor() as the NFO is created "manually"
                     For Each act In newepisode.ListActors
                         WorkingTvShow.ListActors.Add(act)
                     Next
@@ -19563,7 +19563,6 @@ Public Class Form1
                                                     Exit For
                                                 End If
                                                 maxcount += 1
-                                                Dim id As String = ""
                                                 Dim acts As New str_MovieActors(SetDefaults)
                                                 Dim results As XmlNode = Nothing
                                                 Dim lan As New str_PossibleShowList(SetDefaults)
@@ -19577,7 +19576,7 @@ Public Class Form1
                                                         Case "thumb"
                                                             acts.actorthumb = results.InnerText
                                                         Case "actorid"
-                                                            id = results.InnerText
+                                                            acts.actorid = results.InnerText
                                                     End Select
                                                 Next
                                                 '.Add(acts)actorlist
@@ -19621,6 +19620,7 @@ Public Class Form1
                                                         End If
                                                     End If
                                                 End If
+                                                actorlist.Add(acts)
                                             End If
                                     End Select
                                 Next
@@ -19723,7 +19723,7 @@ Public Class Form1
                                 End If
                                 If tvBatchList.doShowActors = True Then
                                     If actorlist.Count > 0 Then
-                                        editshow.ListActors.Clear()
+                                        editshow.clearActors()
                                         For Each act In actorlist
                                             editshow.ListActors.Add(act)
                                         Next

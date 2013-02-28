@@ -333,48 +333,6 @@ Public Class TVDBScraper
                 End Select
             Next
 
-            mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            Dim objStream3 As Stream
-            objStream3 = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader3 As New StreamReader(objStream3)
-            xmlfile = objReader3.ReadToEnd
-            Dim showlist3 As New XmlDocument
-            'Try
-            showlist3.LoadXml(xmlfile)
-            thisresult = Nothing
-            For Each thisresult In showlist3("Actors")
-
-                Select Case thisresult.Name
-                    Case "Actor"
-                        tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New str_possibleshowlist(SetDefaults)
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "id"
-                                    tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
-                                Case "Image"
-                                    If mirrorselection.InnerXml <> Nothing Then
-                                        If mirrorselection.InnerXml <> "" Then
-                                            tvshowdetails = tvshowdetails & "<thumb>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-                                        End If
-                                    End If
-                                Case "Name"
-                                    tvshowdetails = tvshowdetails & "<name>" & mirrorselection.InnerXml & "</name>"
-                                Case "Role"
-                                    If mirrorselection.InnerXml <> Nothing Then
-                                        If mirrorselection.InnerXml <> "" Then
-                                            tvshowdetails = tvshowdetails & "<role>" & mirrorselection.InnerXml & "</role>"
-                                        End If
-                                    End If
-                            End Select
-                        Next
-                        tvshowdetails = tvshowdetails & "</actor>"
-                End Select
-            Next
-
-
             tvshowdetails = tvshowdetails & "</fulltvshow>"
 
             Return tvshowdetails

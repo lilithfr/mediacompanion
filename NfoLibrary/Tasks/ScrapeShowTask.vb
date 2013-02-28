@@ -55,7 +55,7 @@ Namespace Tasks
 
 
             Me.Show.Seasons.Clear()
-            Me.Show.ListActors.Clear()
+            Me.Show.clearActors()
 
             Me.Scrape()
 

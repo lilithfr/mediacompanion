@@ -217,6 +217,11 @@ Public Class ProtoFile
         Me.IsCache = False
     End Sub
 
+    Public Sub DeleteElement(ByVal elementName As String)
+        CleanNode(Doc.Root, elementName)
+        'Me.SurpressAlter = True
+    End Sub
+
     Public Sub Save() Implements IProtoXFile.Save
         Me.IsAltered = False
         Me.Save(Me.NfoFilePath)
@@ -241,7 +246,7 @@ Public Class ProtoFile
         CleanNode(Doc.Root)
     End Sub
 
-    Private Sub CleanNode(ByVal Element As XElement)
+    Private Sub CleanNode(ByVal Element As XElement, ByVal Optional elementName As String = "")
         Dim Cursor As XElement
         Dim NextOne As XNode
         If Element Is Nothing Then Exit Sub
@@ -258,7 +263,7 @@ Public Class ProtoFile
 
         Do
             NextOne = Cursor.NextNode
-            If Cursor.Nodes.Count = 0 AndAlso Cursor.Attributes.Count = 0 Then
+            If Cursor.Nodes.Count = 0 AndAlso Cursor.Attributes.Count = 0 OrElse Cursor.Name.LocalName = elementName Then
                 Cursor.Remove()
             Else
                 CleanNode(Cursor)

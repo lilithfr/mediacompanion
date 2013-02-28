@@ -159,6 +159,11 @@ Public Class TvShow
         End Set
     End Property
 
+    Public Sub clearActors()
+        MyBase.DeleteElement("actor")
+        Me.ListActors.Clear()
+    End Sub
+
     Public Sub GetPossibleShows()
         'Dim possibleshows As New List(Of possibleshowlist)
         Dim xmlfile As String
