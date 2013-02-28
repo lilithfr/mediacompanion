@@ -22924,14 +22924,14 @@ Public Class Form1
 
             If indexunderthemouse > -1 Then
                 Dim movietitle As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(4).Value.ToString
-                Dim movieYear As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(7).Value.ToString
-                Dim Rating As String = "Rating: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(10).Value.ToString
-                If DataGridViewMovies.Rows(indexunderthemouse).Cells(16).Value.ToString.Length > 3 Then
-                    Runtime = "Runtime: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(16).Value.ToString.Substring(0, DataGridViewMovies.Rows(indexunderthemouse).Cells(16).Value.ToString.IndexOf("min") + 3)
+                Dim movieYear As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(8).Value.ToString
+                Dim Rating As String = "Rating: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(11).Value.ToString
+                If DataGridViewMovies.Rows(indexunderthemouse).Cells(17).Value.ToString.Length > 3 Then
+                    Runtime = "Runtime: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(17).Value.ToString.Substring(0, DataGridViewMovies.Rows(indexunderthemouse).Cells(17).Value.ToString.IndexOf("min") + 3)
                 End If
                 RatingRuntime = Rating & "     " & Runtime
 
-                Dim Plot As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(15).Value.ToString
+                Dim Plot As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(16).Value.ToString
 
                 If objHitTestInfo.RowY > -1 Then
                     'TooltipGridViewMovies1.Visible = True
