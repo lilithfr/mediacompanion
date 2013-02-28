@@ -11737,6 +11737,8 @@ Public Class Form1
             Dim seasonno As String = WorkingEpisode.Season.Value
             Dim episodeno As String = WorkingEpisode.Episode.Value
             Dim language As String = WorkingTvShow.Language.Value
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled 
             If language = Nothing Then language = "en"
             If language = "" Then language = "en"
             If sortorder = Nothing Then sortorder = "default"
@@ -11804,6 +11806,12 @@ Public Class Form1
                             Dim bitmap2 As New Bitmap(tempstring)
                             Dim bitmap3 As New Bitmap(bitmap2)
                             bitmap2.Dispose()
+                            If frodo and Not eden then
+                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
+                                IO.File.Delete(tempstring)
+                            Else If frodo and eden then
+                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
+                            End If
                             PictureBox14.Image = bitmap3
                             tv_PictureBoxLeft.Image = bitmap3
                             messbox.Close()

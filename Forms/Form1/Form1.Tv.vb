@@ -2162,6 +2162,8 @@ Partial Public Class Form1
     End Sub
     Private Sub tv_Filter(ByVal overrideShowIsMissing As String) 'ByVal butt As String)
         Dim butt As String = ""
+        Dim eden As boolean = Preferences.EdenEnabled
+        Dim frodo As Boolean = Preferences.FrodoEnabled
         Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
 
         If RadioButton29.Checked = True Then butt = "all"
@@ -2257,14 +2259,20 @@ Partial Public Class Form1
                 End If
             Next
         ElseIf butt = "screenshot" Then
+            Dim edenart As String =""
+            Dim frodoart As String =""
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     For Each episode As Media_Companion.TvEpisode In Season.Episodes
-                        If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) AndAlso IO.File.Exists(episode.Thumbnail.Path) Then
-                            episode.Visible = False
-                        Else
-                            episode.Visible = True
-                            episode.EpisodeNode.EnsureVisible()
+                        edenart = episode.Thumbnail.Path
+                        frodoart = episode.Thumbnail.Path.Replace(".tbn","-thumb.jpg")
+                        If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) then
+                            If ((eden and not frodo) andalso IO.File.Exists(edenart)) or ((frodo and Not eden) andalso IO.File.Exists(frodoart)) or ((frodo and eden) and (IO.file.Exists(edenart) And IO.File.Exists(frodoart))) Then
+                                episode.Visible = False
+                            Else
+                                episode.Visible = True
+                                episode.EpisodeNode.EnsureVisible()
+                            End If
                         End If
                     Next
                     If Season.VisibleEpisodeCount = 0 Then
@@ -2314,9 +2322,16 @@ Partial Public Class Form1
                 End If
             Next
         ElseIf butt = "posters" Then
+            Dim edenpost As String =""
+            Dim frodopost As String =""
+            Dim frodobann As String =""
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
-                    If Season.Poster.Exists Then
+                    edenpost = Season.Poster.path
+                    frodopost = Season.Poster.Path.replace(".tbn","-poster.jpg")
+                    frodobann = Season.Poster.Path.replace(".tbn","-banner.jpg")
+                    'If Season.Poster.Exists Then
+                    If ((eden and frodo) andalso (IO.File.Exists(edenpost) and (IO.File.Exists(frodopost) andalso IO.File.Exists(frodobann)))) or ((eden and Not frodo) andalso IO.File.Exists(edenpost)) or ((frodo and Not eden) andalso (IO.file.exists(frodopost) or IO.file.exists(frodobann))) Then
                         Season.Visible = False
                     Else
                         Season.Visible = True
