@@ -2366,14 +2366,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Sub
 
-    Public Shared Sub DownloadFile(ByVal URL As String, ByVal Path As String)
+    Public Shared Function DownloadFile(ByVal URL As String, ByVal Path As String) as boolean
         Try
             Dim returnState As Boolean = DownloadCache.DownloadFileAndCache(URL, Path, True)
             'DownloadCache.DownloadFileToDisk(URL, Path, True)
+            Return returnstate
         Catch ex As Exception
-
+            Return False
         End Try
-    End Sub
+        
+    End Function
 
     ' DownloadImage has been replaced - Please use these shared (aka static) functions:
     '

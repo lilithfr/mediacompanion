@@ -344,6 +344,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmBigTvEpisodeText.resx">
       <DependentUpon>frmBigTvEpisodeText.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBatchScraper.resx">
       <DependentUpon>frmBatchScraper.vb</DependentUpon>
@@ -351,6 +352,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBigMovieText.resx">
       <DependentUpon>frmBigMovieText.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCopyProgress.resx">
       <DependentUpon>frmCopyProgress.vb</DependentUpon>
@@ -374,6 +376,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmExceptions.resx">
       <DependentUpon>frmExceptions.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmOutputLog.resx">
       <DependentUpon>frmOutputLog.vb</DependentUpon>

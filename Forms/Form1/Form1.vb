@@ -8372,16 +8372,22 @@ Public Class Form1
         If Not alleps(0).Thumbnail.FileName = Nothing And alleps(0).Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
             Dim url As String = alleps(0).Thumbnail.FileName
             If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                Utilities.DownloadFile(url, ext)
-                If Not eden And frodo Then
-                    IO.File.Copy(ext, ext2)
-                    IO.File.Delete(ext)
-                ElseIf eden And frodo Then
-                    IO.File.Copy(ext, ext2)
-                End If
+                If Utilities.DownloadFile(url, ext) then
+                    If Not eden And frodo Then
+                        IO.File.Copy(ext, ext2)
+                        IO.File.Delete(ext)
+                    ElseIf eden And frodo Then
+                        IO.File.Copy(ext, ext2)
+                    End If
+                ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
+                        tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episode" & vbCrLf
+                        Call ep_ScreenShotDo(ext)
+                Else
+                    tvScraperLog = tvScraperLog & "   ****   Unable to Download Episode Thumb  ****" & vbCrLf
+                End If 
             End If
         ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-            tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
+            tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episode" & vbCrLf
             Call ep_ScreenShotDo(ext)
         ElseIf edenart Or frodoart Then
             If edenart And Not eden And Not frodoart Then
@@ -10132,16 +10138,22 @@ Public Class Form1
             If Not newepisode.Thumbnail.FileName = Nothing And newepisode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" And Not edenart And Not frodoart Then
                 Dim url As String = newepisode.Thumbnail.FileName
                 If url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then
-                    Utilities.DownloadFile(url, ext)
-                    If Not eden And frodo Then
-                        IO.File.Copy(ext, ext2)
-                        IO.File.Delete(ext)
-                    ElseIf eden And frodo Then
-                        IO.File.Copy(ext, ext2)
+                    If Utilities.DownloadFile(url, ext) Then
+                        If Not eden And frodo Then
+                            IO.File.Copy(ext, ext2)
+                            IO.File.Delete(ext)
+                        ElseIf eden And frodo Then
+                            IO.File.Copy(ext, ext2)
+                        End If
+                    ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
+                        tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episodee" & vbCrLf
+                        Call ep_ScreenShotDo(ext)
+                    Else
+                        tvScraperLog = tvScraperLog & "   ****   Unable to Download Episode Thumb  ****" & vbCrLf
                     End If
                 End If
             ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
-                tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Movie" & vbCrLf
+                tvScraperLog = tvScraperLog & "No Episode Thumb, AutoCreating ScreenShot from Episode" & vbCrLf
                 Call ep_ScreenShotDo(ext)
             ElseIf edenart Or frodoart Then
                 If edenart And Not eden And Not frodoart Then

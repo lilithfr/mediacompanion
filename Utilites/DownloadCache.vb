@@ -86,18 +86,20 @@ Public Class DownloadCache
                                           Optional ByRef strValue As String = "") As Boolean
 
         Dim returnCode As Boolean = SaveImageToCache(URL, Path, ForceDownload)
+        If returnCode Then
+            Dim CacheFileName As String = GetCacheFileName(URL)
+            Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
 
-        Dim CacheFileName As String = GetCacheFileName(URL)
-        Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
 
-
-        If String.IsNullOrEmpty(Path) Then
-            strValue = IO.File.ReadAllText(CachePath)
-        Else
-            Utilities.copyImage(CachePath, Path, resizeFanart)
+            If String.IsNullOrEmpty(Path) Then
+                strValue = IO.File.ReadAllText(CachePath)
+            Else
+                Utilities.copyImage(CachePath, Path, resizeFanart)
+            End If
         End If
 
         DownloadFileAndCache = returnCode
+        Return returncode
     End Function
 
     Public Shared Function SaveImageToCache(ByVal URL As String, Optional ByVal Path As String = "", Optional ByVal ForceDownload As Boolean = False) As Boolean
@@ -153,8 +155,8 @@ Public Class DownloadCache
                         Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
 
                         'Writing to TvLog! -> Poo -> To do anyone -> Raise event?
-                        Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", _
-                                                                errorResp.StatusCode, errorText, vbCrLf)
+                        returnCode = False
+                        'Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", errorResp.StatusCode, vbCrLf)
                     End Using
                 End Using
                 returnCode = False
