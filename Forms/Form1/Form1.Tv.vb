@@ -1251,12 +1251,13 @@ Partial Public Class Form1
                                         filename = filename & ".tbn"
                                         filename = IO.Path.Combine(workingpath, filename)
                                         'Prepended the TVDb path as the API image path may have changed - hope this is across the board, tho'. Huey
-                                        Utilities.DownloadFile(NewAct.actorthumb, filename) 'Removed "http://thetvdb.com/banners/_cache/" & from front of NewAct.actorthumb
-                                        If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                                            Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                        ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                                            Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                            Utilities.SafeDeleteFile(filename)
+                                        If Utilities.DownloadFile(NewAct.actorthumb, filename) Then 'Removed "http://thetvdb.com/banners/_cache/" & from front of NewAct.actorthumb
+                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                Utilities.SafeCopyFile(filename, filename.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                Utilities.SafeDeleteFile(filename)
+                                            End If
                                         End If
                                     End If
                                 End If
@@ -1271,12 +1272,13 @@ Partial Public Class Form1
                                     End If
                                     workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
                                     If Not IO.File.Exists(workingpath) Then
-                                        Utilities.DownloadFile(NewAct.actorthumb, workingpath)
-                                        If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                                            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                        ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                                            Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                            Utilities.SafeDeleteFile(workingpath)
+                                        If Utilities.DownloadFile(NewAct.actorthumb, workingpath) Then
+                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                Utilities.SafeDeleteFile(workingpath)
+                                            End If
                                         End If
                                     End If
                                     NewAct.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, id.Substring(id.Length - 2, 2))
@@ -1341,12 +1343,13 @@ Partial Public Class Form1
                                                         End If
                                                         workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
                                                         If Not IO.File.Exists(workingpath) Then
-                                                            Utilities.DownloadFile(newactor.actorthumb, workingpath)
-                                                            If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
-                                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                                            ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
-                                                                Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
-                                                                Utilities.SafeDeleteFile(workingpath)
+                                                            If Utilities.DownloadFile(newactor.actorthumb, workingpath) Then
+                                                                If Preferences.EdenEnabled And Preferences.FrodoEnabled Then
+                                                                    Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                ElseIf Preferences.FrodoEnabled And Not Preferences.EdenEnabled Then
+                                                                    Utilities.SafeCopyFile(workingpath, workingpath.Replace(".tbn", ".jpg"), Preferences.overwritethumbs)
+                                                                    Utilities.SafeDeleteFile(workingpath)
+                                                                End If
                                                             End If
                                                         End If
                                                         newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
