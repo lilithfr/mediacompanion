@@ -1595,10 +1595,13 @@ Public Class Form1
                 End If
                 If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
-
-                    util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    Dim workingposter As String = workingMovieDetails.fileinfo.posterpath
+                    If Preferences.FrodoEnabled Then workingposter =workingposter.Replace(".tbn","-poster.jpg")
+                    'util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    util_ImageLoad(moviethumb, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
-                    util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    'util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
+                    util_ImageLoad(PictureBox3, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
                     Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
                     Label18.Visible = False
