@@ -766,7 +766,7 @@ Public Class Preferences
                     Case "logview"                              : logview = thisresult.InnerXml
                     Case "fanartnotstacked"                     : fanartnotstacked = thisresult.InnerXml
                     Case "posternotstacked"                     : posternotstacked = thisresult.InnerXml
-                    Case "downloadfanart"                       : savefanart = thisresult.InnerXml
+'                   Case "downloadfanart"                       : savefanart = thisresult.InnerXml
                     Case "scrapemovieposters"                   : scrapemovieposters = thisresult.InnerXml
                     Case "usefanart"                            : usefanart = thisresult.InnerXml
                     Case "dontdisplayposter"                    : dontdisplayposter = thisresult.InnerXml
@@ -810,7 +810,7 @@ Public Class Preferences
                     Case "folderjpg"                            : createfolderjpg = thisresult.InnerXml
                     Case "savefanart"                           : savefanart = thisresult.InnerXml
                     Case "postertype"                           : postertype = thisresult.InnerXml
-                    Case "tvactorscrape"                        : TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
+'                   Case "tvactorscrape"                        : TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
                     Case "videomode"                            : videomode = Convert.ToInt32(thisresult.InnerXml)
                     Case "selectedvideoplayer"                  : selectedvideoplayer = thisresult.InnerXml
                     Case "maximagecount"                        : maximagecount = Convert.ToInt32(thisresult.InnerXml)
@@ -1068,7 +1068,14 @@ Public Class Preferences
                 If playlist.Count = 1 Then
                                                                        
 '                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 61)
-                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, "Duration")
+'                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, "Duration")
+
+                    Try
+                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration"))
+                    Catch
+                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Convert.ToInt32(MI.Get_(StreamKind.Audio , 0, "Duration"))
+                    End Try
+
                 ElseIf playlist.Count > 1 Then
                     'Dim totalmins As Integer = 0
                     'For f = 0 To playlist.Count - 1
@@ -1111,14 +1118,19 @@ Public Class Preferences
                         Dim M2 As mediainfo = New mediainfo
 
                         M2.Open(playlist(f))
-
-                       total += Convert.ToInt32(M2.Get_(StreamKind.Visual, 0, "Duration"))
+                        
+                        Try
+                            total += Convert.ToInt32(M2.Get_(StreamKind.Visual, 0, "Duration"))
+                        Catch
+                            total += Convert.ToInt32(M2.Get_(StreamKind.Audio , 0, "Duration"))
+                        End Try
                     Next
 
                     workingfiledetails.filedetails_video.DurationInSeconds.Value = total
                 End If
             Catch
-                workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 57)
+'                workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 57)
+                workingfiledetails.filedetails_video.DurationInSeconds.Value = -1
             End Try
             workingfiledetails.filedetails_video.Bitrate.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
             workingfiledetails.filedetails_video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")

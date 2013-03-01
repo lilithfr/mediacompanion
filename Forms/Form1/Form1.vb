@@ -1596,7 +1596,12 @@ Public Class Form1
                 If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Dim workingposter As String = workingMovieDetails.fileinfo.posterpath
-                    If Preferences.FrodoEnabled Then workingposter =workingposter.Replace(".tbn","-poster.jpg")
+                    If Preferences.FrodoEnabled Then 
+                        Dim frodoPath As String = workingposter.Replace(".tbn","-poster.jpg")
+
+                        If File.Exists(frodoPath) Then workingposter = frodoPath
+                    End If
+
                     'util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                     util_ImageLoad(moviethumb, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
@@ -14106,7 +14111,9 @@ Public Class Form1
         Label130.Font = newFont
         Label130.Text = Preferences.font
 
-        chkbx_disablecache.CheckState       = If(Preferences.startupCache, CheckState.Checked, CheckState.Unchecked)
+'        chkbx_disablecache.CheckState      = If(Preferences.startupCache, CheckState.Checked, CheckState.Unchecked)
+        chkbx_disablecache.Checked          = Not Preferences.startupCache
+
         cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.Checked, CheckState.Unchecked)
 
         CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
@@ -14286,11 +14293,14 @@ Public Class Form1
 
     Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         Try
-            If chkbx_disablecache.Checked = True Then
-                Preferences.startupCache = False
-            Else
-                Preferences.startupCache = True
-            End If
+            'If chkbx_disablecache.Checked = True Then
+            '    Preferences.startupCache = False
+            'Else
+            '    Preferences.startupCache = True
+            'End If
+
+            Preferences.startupCache = Not chkbx_disablecache.Checked
+
             If prefsload = False Then
                 generalprefschanged = True
                 btnGeneralPrefsSaveChanges.Enabled = True
