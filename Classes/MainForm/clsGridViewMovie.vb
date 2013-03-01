@@ -254,7 +254,7 @@ Public Class clsGridViewMovie
 
             Case "Missing Fanart" : b = From f In b Where f.missingdata1 = "1" Or f.missingdata1 = "3"
 
-            Case "Missing Plot"   : b = From f In b Where f.plot.ToString.Trim = ""
+            Case "Missing Plot"   : b = From f In b Where f.plot.ToString.Trim = "" or f.plot.ToString.Trim = "scraper error"
         End Select
 
         If Yield Then Return
