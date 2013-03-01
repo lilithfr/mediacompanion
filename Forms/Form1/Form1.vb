@@ -14084,6 +14084,7 @@ Public Class Form1
 
         prefsload = True
         generalprefschanged = False
+
         Dim tcc As TypeConverter = TypeDescriptor.GetConverter(GetType(System.Drawing.Font))
         Dim newFont As System.Drawing.Font
         If Preferences.font <> Nothing Then
@@ -14104,21 +14105,19 @@ Public Class Form1
         End If
         Label130.Font = newFont
         Label130.Text = Preferences.font
-        If Preferences.ignorearticle = True Then
-            CheckBox41.CheckState = CheckState.Checked
-        Else
-            CheckBox41.CheckState = CheckState.Unchecked
-        End If
-        If Preferences.intruntime = True Then
-            CheckBox38.CheckState = CheckState.Checked
-        Else
-            CheckBox38.CheckState = CheckState.Unchecked
-        End If
-        If Preferences.actorseasy = True Then
-            CheckBox33.CheckState = CheckState.Checked
-        Else
-            CheckBox33.CheckState = CheckState.Unchecked
-        End If
+
+        chkbx_disablecache.CheckState       = If(Preferences.startupCache, CheckState.Checked, CheckState.Unchecked)
+        cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.Checked, CheckState.Unchecked)
+
+        CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
+        CheckBox41.CheckState               = If(Preferences.ignorearticle, CheckState.Checked, CheckState.Unchecked)
+        CheckBox38.CheckState               = If(Preferences.intruntime, CheckState.Checked, CheckState.Unchecked)
+        CheckBox33.CheckState               = If(Preferences.actorseasy, CheckState.Checked, CheckState.Unchecked)
+
+        txtbx_minrarsize.Text               = Preferences.rarsize.ToString
+        CheckBox12.Checked                  = Preferences.externalbrowser
+        btnFindBrowser.Enabled              = CheckBox12.Checked
+
 
         If Preferences.videomode = 1 Then
             RadioButton38.Checked = True
@@ -14126,14 +14125,6 @@ Public Class Form1
             RadioButton37.Checked = True
         ElseIf Preferences.videomode = 4 Then
             RadioButton36.Checked = True
-        End If
-
-        If Preferences.XBMC_version = 0 Then
-            rbXBMCv_pre.Checked = True
-        ElseIf Preferences.XBMC_version = 1 Then
-            rbXBMCv_both.Checked = True
-        ElseIf Preferences.XBMC_version = 2 Then
-            rbXBMCv_post.Checked = True
         End If
 
         If Preferences.videomode = 4 Then
@@ -14144,27 +14135,24 @@ Public Class Form1
             btn_custommediaplayer.Enabled = False
             Label121.Visible = False
         End If
-        txtbx_minrarsize.Text = Preferences.rarsize.ToString
 
-        CheckBox12.Checked     = Preferences.externalbrowser
-        btnFindBrowser.Enabled = CheckBox12.Checked
-
-        If Preferences.startupCache = True Then
-            chkbx_disablecache.Checked = False
-        Else
-            chkbx_disablecache.Checked = True
+        If Preferences.XBMC_version = 0 Then
+            rbXBMCv_pre.Checked = True
+        ElseIf Preferences.XBMC_version = 1 Then
+            rbXBMCv_both.Checked = True
+        ElseIf Preferences.XBMC_version = 2 Then
+            rbXBMCv_post.Checked = True
         End If
+
+        Label112.Text = "Current Default Profile: " & profileStruct.DefaultProfile
+        Label108.Text = "Current Startup Profile: " & profileStruct.StartupProfile
         ListBox13.Items.Clear()
         For Each prof In profileStruct.ProfileList
             ListBox13.Items.Add(prof.ProfileName)
         Next
-        Label112.Text = "Current Default Profile: " & profileStruct.DefaultProfile
-        Label108.Text = "Current Startup Profile: " & profileStruct.StartupProfile
-        prefsload = False
 
         ListBox16.Items.Clear()
         ListBox17.Items.Clear()
-
         For Each com In Preferences.commandlist
             ListBox16.Items.Add(com.title)
             ListBox17.Items.Add(com.command)
@@ -14173,6 +14161,7 @@ Public Class Form1
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
         cbShowLogOnError      .Checked = Preferences.ShowLogOnError
 
+        prefsload = False
         generalprefschanged = False
         btnGeneralPrefsSaveChanges.Enabled = False
     End Sub
@@ -15209,79 +15198,6 @@ Public Class Form1
         For Each Regex In tv_RegexRename
             ComboBox_tv_EpisodeRename.Items.Add(Regex)
         Next
-        ComboBox_tv_EpisodeRename.SelectedIndex = If(Preferences.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Preferences.tvrename, 0)
-        If Preferences.eprenamelowercase = True Then
-            CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Checked
-        Else
-            CheckBox_tv_EpisodeRenameCase.CheckState = CheckState.Unchecked
-        End If
-        If Preferences.enabletvhdtags = True Then
-            CheckBox20.CheckState = CheckState.Checked
-        Else
-            CheckBox20.CheckState = CheckState.Unchecked
-        End If
-        If Preferences.autorenameepisodes = True Then
-            CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Checked
-        Else
-            CheckBox_tv_EpisodeRenameAuto.CheckState = CheckState.Unchecked
-        End If
-        If Preferences.autoepisodescreenshot = True Then
-            CheckBox36.CheckState = CheckState.Checked
-        Else
-            CheckBox36.CheckState = CheckState.Unchecked
-        End If
-        If Preferences.tvshowautoquick = True Then
-            CheckBox35.CheckState = CheckState.Checked
-        Else
-            CheckBox35.CheckState = CheckState.Unchecked
-        End If
-
-        If Preferences.copytvactorthumbs = True Then
-            CheckBox34.CheckState = CheckState.Checked
-        Else
-            CheckBox34.CheckState = CheckState.Unchecked
-        End If
-
-        If Preferences.disabletvlogs = True Then
-            CheckBox17.CheckState = CheckState.Unchecked
-        Else
-            CheckBox17.CheckState = CheckState.Checked
-        End If
-
-        ListBox12.Items.Clear()
-        ListBox12.Items.Add(Preferences.tvdblanguage)
-        If ListBox12.Items.Count <> 0 Then
-            ListBox12.SelectedIndex = 0
-        End If
-
-        Select Case Preferences.seasonall
-            Case "none"
-                RadioButton41.Checked = True
-            Case "poster"
-                RadioButton40.Checked = True
-            Case "wide"
-                RadioButton39.Checked = True
-        End Select
-
-        If Preferences.tvposter = True Then
-            CheckBox14.CheckState = CheckState.Checked
-        Else
-            CheckBox14.CheckState = CheckState.Unchecked
-        End If
-
-        If Preferences.tvfanart = True Then
-            CheckBox10.CheckState = CheckState.Checked
-        Else
-            CheckBox10.CheckState = CheckState.Unchecked
-        End If
-
-        If Preferences.downloadtvseasonthumbs = True Then
-            CheckBox15.CheckState = CheckState.Checked
-        Else
-            CheckBox15.CheckState = CheckState.Unchecked
-        End If
-
-        ComboBox8.SelectedIndex = Preferences.tvdbactorscrape
 
         ListBox_tv_RegexScrape.Items.Clear()
         For Each regexc In tv_RegexScraper
@@ -15293,11 +15209,36 @@ Public Class Form1
             ListBox_tv_RegexRename.Items.Add(regexc)
         Next
 
-        If Preferences.enabletvhdtags = True Then
-            CheckBox20.CheckState = CheckState.Checked
-        Else
-            CheckBox20.CheckState = CheckState.Unchecked
+        ListBox12.Items.Clear()
+        ListBox12.Items.Add(Preferences.TvdbLanguage)
+        If ListBox12.Items.Count <> 0 Then
+            ListBox12.SelectedIndex = 0
         End If
+
+        ComboBox8.SelectedIndex                     = Preferences.TvdbActorScrape
+        ComboBox_tv_EpisodeRename.SelectedIndex     = If(Preferences.tvrename < ComboBox_tv_EpisodeRename.Items.Count, Preferences.tvrename, 0)
+
+        CheckBox17.CheckState                       = If(Preferences.disabletvlogs, CheckState.Unchecked, CheckState.Checked)
+
+        CheckBox20.CheckState                       = If(Preferences.enabletvhdtags, CheckState.Checked, CheckState.Unchecked)
+        CheckBox_tv_EpisodeRenameCase.CheckState    = If(Preferences.eprenamelowercase, CheckState.Checked, CheckState.Unchecked)
+        CheckBox_tv_EpisodeRenameAuto.CheckState    = If(Preferences.autorenameepisodes, CheckState.Checked, CheckState.Unchecked)
+        CheckBox36.CheckState                       = If(Preferences.autoepisodescreenshot, CheckState.Checked, CheckState.Unchecked)
+        CheckBox35.CheckState                       = If(Preferences.tvshowautoquick, CheckState.Checked, CheckState.Unchecked)
+        CheckBox34.CheckState                       = If(Preferences.copytvactorthumbs, CheckState.Checked, CheckState.Unchecked)
+        CheckBox14.CheckState                       = If(Preferences.tvposter, CheckState.Checked, CheckState.Unchecked)
+        CheckBox10.CheckState                       = If(Preferences.tvfanart, CheckState.Checked, CheckState.Unchecked)
+        CheckBox15.CheckState                       = If(Preferences.downloadtvseasonthumbs, CheckState.Checked, CheckState.Unchecked)
+        CheckBox_Use_XBMC_TVDB_Scraper.CheckState   = If(Preferences.tvshow_useXBMC_Scraper, CheckState.Checked, CheckState.Unchecked)
+
+        Select Case Preferences.seasonall
+            Case "none"
+                RadioButton41.Checked = True
+            Case "poster"
+                RadioButton40.Checked = True
+            Case "wide"
+                RadioButton39.Checked = True
+        End Select
 
         If Preferences.sortorder = "dvd" Then
             RadioButton42.Checked = True
@@ -15310,11 +15251,7 @@ Public Class Form1
         Else
             bannerbtn.Checked = True
         End If
-        If Preferences.tvshow_useXBMC_Scraper = True Then
-            CheckBox_Use_XBMC_TVDB_Scraper.Checked = CheckState.Checked
-        Else
-            CheckBox_Use_XBMC_TVDB_Scraper.Checked = CheckState.Unchecked
-        End If
+
         tvprefschanged = False
         btnTVPrefSaveChanges.Enabled = False
     End Sub

@@ -451,6 +451,7 @@ Public Class Preferences
         root.AppendChild(doc, "moviedefaultlist",           moviedefaultlist)           'RadioButtonFileName,RadioButtonTitleAndYear,RadioButtonFolder
         root.AppendChild(doc, "moviesortorder",             moviesortorder)             'cbSort
         root.AppendChild(doc, "movieinvertorder",           movieinvertorder)           'btnreverse
+        root.AppendChild(doc, "displayMissingEpisodes",     displayMissingEpisodes)     'SearchForMissingEpisodesToolStripMenuItem
 
         'Still to do
         child = doc.CreateElement("moviesets")
@@ -482,7 +483,7 @@ Public Class Preferences
         root.AppendChild(doc, "renamenfofiles",         renamenfofiles)         'CheckBoxRenameNFOtoINFO
         root.AppendChild(doc, "actorseasy",             actorseasy)             'CheckBox33
         root.AppendChild(doc, "rarsize",                rarsize)                'txtbx_minrarsize
-        root.AppendChild(doc, "overwritethumbs",        overwritethumbs)        'cbOverwriteArtwork
+        root.AppendChild(doc, "overwritethumbs",        overwritethumbs)        'cbOverwriteArtwork - does not appear to be used?
         root.AppendChild(doc, "videomode",              videomode)              'RadioButton36-38
         root.AppendChild(doc, "selectedvideoplayer",    selectedvideoplayer)    'btn_custommediaplayer
         root.AppendChild(doc, "externalbrowser",        externalbrowser)        'CheckBox12
@@ -587,7 +588,6 @@ Public Class Preferences
         'TV Prefs ------------------------------------------------------------
         root.AppendChild(doc, "tvshowautoquick",        tvshowautoquick)        'CheckBox35
         root.AppendChild(doc, "copytvactorthumbs",      copytvactorthumbs)      'CheckBox34
-        root.AppendChild(doc, "displayMissingEpisodes", displayMissingEpisodes) 'SearchForMissingEpisodesToolStripMenuItem
         root.AppendChild(doc, "tvdbmode",               sortorder)              'RadioButton42
         root.AppendChild(doc, "tvdbactorscrape",        TvdbActorScrape)        'ComboBox8
         root.AppendChild(doc, "downloadtvfanart",       tvfanart)               'CheckBox10
