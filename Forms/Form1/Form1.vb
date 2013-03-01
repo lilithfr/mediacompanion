@@ -17272,10 +17272,298 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub mov_TableChangesSave()
-        'Dim mess As New frmMessageBox("Saving Changes", "", "Please Wait")
-        'mess.Show()
-        'mess.Refresh()
+'    Private Sub mov_TableChangesSave()
+'        'Dim mess As New frmMessageBox("Saving Changes", "", "Please Wait")
+'        'mess.Show()
+'        'mess.Refresh()
+'        DataDirty=False
+'        frmSplash2.Text = "Saving Table Changes..."
+'        frmSplash2.Label1.Text = "Saving Movie Data....."
+'        frmSplash2.Label1.Visible = True
+'        frmSplash2.Label2.Visible = True
+'        frmSplash2.ProgressBar1.Visible = True
+'        frmSplash2.ProgressBar1.Maximum = DataGridView1.Rows.Count
+'        frmSplash2.Show()
+'        Dim progcount As Integer = 0
+'        Application.DoEvents()
+'        Dim gridrow As DataGridViewRow
+
+'        For Each gridrow In DataGridView1.Rows
+'            progcount += 1
+'            frmSplash2.ProgressBar1.Value = progcount
+
+
+'            Dim changed As Boolean = False
+'            Dim idpath As String = gridrow.Cells("fullpathandfilename").Value
+'            Dim array As New List(Of String)
+'            frmSplash2.Label2.Text = gridrow.Cells("Title").Value
+'            For f = oMovies.MovieCache.Count - 1 To 0 Step -1
+'                changed = False
+'                If Not array.Contains(oMovies.MovieCache(f).fullpathandfilename) Then
+'                    If oMovies.MovieCache(f).fullpathandfilename = idpath Then
+'                        array.Add(oMovies.MovieCache(f).fullpathandfilename)
+'                        Try
+'                            If oMovies.MovieCache(f).title <> gridrow.Cells("Title").Value Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).outline <> gridrow.Cells("Outline").Value Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).genre <> gridrow.Cells("genre").Value Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).rating <> gridrow.Cells("rating").Value Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If gridrow.Cells("playcount").Value = True Then
+'                                If oMovies.MovieCache(f).playcount <= 0 Then
+'                                    changed = True
+'                                End If
+'                            Else
+'                                If oMovies.MovieCache(f).playcount > 0 Then
+'                                    changed = True
+'                                End If
+'                            End If
+'                        Catch
+'                            If oMovies.MovieCache(f).playcount > 0 Then
+'                                changed = True
+'                            End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).sortorder <> gridrow.Cells("sorttitle").Value Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).year <> gridrow.Cells("year").Value Then
+'                                If IsNumeric(gridrow.Cells("year").Value) Then
+'                                    changed = True
+'                                End If
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If Convert.ToInt32(oMovies.MovieCache(f).top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
+'                                If IsNumeric(gridrow.Cells("top250").Value) Then
+'                                    changed = True
+'                                End If
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            Dim runtime As String = gridrow.Cells("runtime").Value
+'                            runtime = runtime.Replace("min", "")
+'                            runtime = runtime.Trim(" ")
+'                            If IsNumeric(runtime) Then
+'                                Dim temruntime As Integer = Convert.ToInt32(runtime)
+'                                Dim tempstrin As String = temruntime.ToString & " min"
+'                                If oMovies.MovieCache(f).runtime <> tempstrin Then
+'                                    changed = True
+'                                End If
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                        Try
+'                            If oMovies.MovieCache(f).MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then
+'                                changed = True
+'                            End If
+'                        Catch ex As Exception
+'#If SilentErrorScream Then
+'                            Throw ex
+'#End If
+'                        End Try
+'                    End If
+'                    If changed = True And IO.File.Exists(oMovies.MovieCache(f).fullpathandfilename) Then
+'                        Dim changedmoviedetails As New FullMovieDetails
+'                        Dim changedmovie As New ComboList
+'                        changedmoviedetails = nfoFunction.mov_NfoLoadFull(oMovies.MovieCache(f).fullpathandfilename)
+'                        If IsNothing(changedmoviedetails) Then Continue For
+'                        If Not changedmoviedetails Is Nothing Then
+'                            changedmovie = oMovies.MovieCache(f)
+'                            Try
+'                                changedmovie.genre = gridrow.Cells("genre").Value
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+'                            Try
+'                                changedmovie.title = gridrow.Cells("title").Value
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+'                            Try
+'                                changedmovie.year = gridrow.Cells("year").Value
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+'                            Try
+'                                changedmovie.sortorder = gridrow.Cells("sorttitle").Value
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+'                            Try
+'                                changedmovie.rating = gridrow.Cells("rating").Value
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+'                            Try
+'                                changedmovie.outline = gridrow.Cells("outline").Value
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+'                            ' Because plot is truncated to 100 chars to save moviecache.xml length, we don't want the user to overwrite the real plot
+'                            '                            Try
+'                            '                                changedmovie.plot = gridrow.Cells("plot").Value
+'                            '                            Catch ex As Exception
+'                            '#If SilentErrorScream Then
+'                            '                                Throw ex
+'                            '#End If
+'                            '                            End Try
+'                            Try
+'                                changedmovie.source = If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value)
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+
+'                            Try
+'                                changedmovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+
+'                            Try
+'                                If IsNumeric(gridrow.Cells("top250").Value) Then
+'                                    changed = True
+'                                End If
+'                                changedmovie.top250 = Convert.ToInt32(gridrow.Cells("top250").Value).ToString
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+
+'                            Try
+'                                If gridrow.Cells("playcount").EditedFormattedValue = True Then
+'                                    If Convert.ToInt32(changedmovie.playcount) > 0 Then
+'                                    Else
+'                                        changedmovie.playcount = "1"
+'                                    End If
+'                                Else
+'                                    changedmovie.playcount = "0"
+'                                End If
+'                            Catch ex As Exception
+'#If SilentErrorScream Then
+'                                Throw ex
+'#End If
+'                            End Try
+
+'                            changedmovie.runtime = Utilities.cleanruntime(gridrow.Cells("runtime").Value)
+
+'                            changedmoviedetails.fullmoviebody.runtime = changedmovie.runtime
+'                            'changedmoviedetails.filedetails.filedetails_video.DurationInSeconds.Value = changedmovie.runtime.ToString
+
+'                            changedmoviedetails.fullmoviebody.title = changedmovie.title
+'                            changedmoviedetails.fullmoviebody.year = changedmovie.year
+'                            changedmoviedetails.fullmoviebody.playcount = changedmovie.playcount
+'                            changedmoviedetails.fullmoviebody.genre = changedmovie.genre
+'                            changedmoviedetails.fullmoviebody.outline = changedmovie.outline
+'                            'changedmoviedetails.fullmoviebody.plot = changedmovie.plot
+'                            changedmoviedetails.fullmoviebody.rating = changedmovie.rating
+'                            changedmoviedetails.fullmoviebody.source = changedmovie.source
+'                            changedmoviedetails.fullmoviebody.movieset = changedmovie.MovieSet
+'                            changedmoviedetails.fullmoviebody.sortorder = changedmovie.sortorder
+'                            changedmoviedetails.fullmoviebody.top250 = changedmovie.top250
+
+'                            nfoFunction.mov_NfoSave(changedmoviedetails.fileinfo.fullpathandfilename, changedmoviedetails, True)
+'                   '         changedmovie.titleandyear = changedmovie.title & " (" & changedmovie.year & ")"
+'                            oMovies.MovieCache.RemoveAt(f)
+'                            oMovies.MovieCache.Add(changedmovie)
+'                            Exit For
+'                        End If
+'                    End If
+'                End If
+'            Next
+'        Next gridrow
+
+'        oMovies.SaveMovieCache
+        
+'        'Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+'        'mov_FormPopulate
+
+'        UpdateFilteredList
+
+'        frmSplash2.Hide()
+'        'mess.Close()
+'        Application.DoEvents()
+'        Me.BringToFront()
+'    End Sub
+
+
+   Private Sub mov_TableChangesSave()
+
+        DataDirty=False
+
         frmSplash2.Text = "Saving Table Changes..."
         frmSplash2.Label1.Text = "Saving Movie Data....."
         frmSplash2.Label1.Visible = True
@@ -17283,278 +17571,292 @@ Public Class Form1
         frmSplash2.ProgressBar1.Visible = True
         frmSplash2.ProgressBar1.Maximum = DataGridView1.Rows.Count
         frmSplash2.Show()
-        Dim progcount As Integer = 0
-        Application.DoEvents()
-        Dim gridrow As DataGridViewRow
 
-        For Each gridrow In DataGridView1.Rows
+        Application.DoEvents
+
+        Dim progcount     As Integer = 0
+        Dim changed       As Boolean
+        Dim oCachedMovie  As ComboList
+
+
+        For Each gridrow As DataGridViewRow In DataGridView1.Rows
+
+            changed    = False
             progcount += 1
+
             frmSplash2.ProgressBar1.Value = progcount
-
-
-            Dim changed As Boolean = False
-            Dim idpath As String = gridrow.Cells("fullpathandfilename").Value
-            Dim array As New List(Of String)
             frmSplash2.Label2.Text = gridrow.Cells("Title").Value
-            For f = oMovies.MovieCache.Count - 1 To 0 Step -1
-                changed = False
-                If Not array.Contains(oMovies.MovieCache(f).fullpathandfilename) Then
-                    If oMovies.MovieCache(f).fullpathandfilename = idpath Then
-                        array.Add(oMovies.MovieCache(f).fullpathandfilename)
-                        Try
-                            If oMovies.MovieCache(f).title <> gridrow.Cells("Title").Value Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
+            
+            oCachedMovie = oMovies.FindCachedMovie( gridrow.Cells("fullpathandfilename").Value )
+
+
+            Try
+                If oCachedMovie.title <> gridrow.Cells("Title").Value Then
+                    changed = True
+                End If
+            Catch ex As Exception
 #If SilentErrorScream Then
-                            Throw ex
+                Throw ex
 #End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).outline <> gridrow.Cells("Outline").Value Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
+            End Try
+            Try
+                If oCachedMovie.outline <> gridrow.Cells("Outline").Value Then
+                    changed = True
+                End If
+            Catch ex As Exception
 #If SilentErrorScream Then
-                            Throw ex
+                Throw ex
 #End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).genre <> gridrow.Cells("genre").Value Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
+            End Try
+            Try
+                If oCachedMovie.genre <> gridrow.Cells("genre").Value Then
+                    changed = True
+                End If
+            Catch ex As Exception
 #If SilentErrorScream Then
-                            Throw ex
+                Throw ex
 #End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).rating <> gridrow.Cells("rating").Value Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
+            End Try
+            Try
+                If oCachedMovie.rating <> gridrow.Cells("rating").Value Then
+                    changed = True
+                End If
+            Catch ex As Exception
 #If SilentErrorScream Then
-                            Throw ex
+                Throw ex
 #End If
-                        End Try
-                        Try
-                            If gridrow.Cells("playcount").Value = True Then
-                                If oMovies.MovieCache(f).playcount <= 0 Then
-                                    changed = True
-                                End If
-                            Else
-                                If oMovies.MovieCache(f).playcount > 0 Then
-                                    changed = True
-                                End If
-                            End If
-                        Catch
-                            If oMovies.MovieCache(f).playcount > 0 Then
-                                changed = True
-                            End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).sortorder <> gridrow.Cells("sorttitle").Value Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).year <> gridrow.Cells("year").Value Then
-                                If IsNumeric(gridrow.Cells("year").Value) Then
-                                    changed = True
-                                End If
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                        Try
-                            If Convert.ToInt32(oMovies.MovieCache(f).top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
-                                If IsNumeric(gridrow.Cells("top250").Value) Then
-                                    changed = True
-                                End If
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                        Try
-                            Dim runtime As String = gridrow.Cells("runtime").Value
-                            runtime = runtime.Replace("min", "")
-                            runtime = runtime.Trim(" ")
-                            If IsNumeric(runtime) Then
-                                Dim temruntime As Integer = Convert.ToInt32(runtime)
-                                Dim tempstrin As String = temruntime.ToString & " min"
-                                If oMovies.MovieCache(f).runtime <> tempstrin Then
-                                    changed = True
-                                End If
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
-                        Try
-                            If oMovies.MovieCache(f).MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then
-                                changed = True
-                            End If
-                        Catch ex As Exception
-#If SilentErrorScream Then
-                            Throw ex
-#End If
-                        End Try
+            End Try
+            Try
+                'If gridrow.Cells("playcount").Value = True Then
+                If gridrow.Cells("playcount").EditedFormattedValue Then
+                    If oCachedMovie.playcount <= 0 Then
+                        changed = True
                     End If
-                    If changed = True And IO.File.Exists(oMovies.MovieCache(f).fullpathandfilename) Then
-                        Dim changedmoviedetails As New FullMovieDetails
-                        Dim changedmovie As New ComboList
-                        changedmoviedetails = nfoFunction.mov_NfoLoadFull(oMovies.MovieCache(f).fullpathandfilename)
-                        If IsNothing(changedmoviedetails) Then Continue For
-                        If Not changedmoviedetails Is Nothing Then
-                            changedmovie = oMovies.MovieCache(f)
-                            Try
-                                changedmovie.genre = gridrow.Cells("genre").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            Try
-                                changedmovie.title = gridrow.Cells("title").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            Try
-                                changedmovie.year = gridrow.Cells("year").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            Try
-                                changedmovie.sortorder = gridrow.Cells("sorttitle").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            Try
-                                changedmovie.rating = gridrow.Cells("rating").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            Try
-                                changedmovie.outline = gridrow.Cells("outline").Value
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-                            ' Because plot is truncated to 100 chars to save moviecache.xml length, we don't want the user to overwrite the real plot
-                            '                            Try
-                            '                                changedmovie.plot = gridrow.Cells("plot").Value
-                            '                            Catch ex As Exception
-                            '#If SilentErrorScream Then
-                            '                                Throw ex
-                            '#End If
-                            '                            End Try
-                            Try
-                                changedmovie.source = If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value)
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-
-                            Try
-                                changedmovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-
-                            Try
-                                If IsNumeric(gridrow.Cells("top250").Value) Then
-                                    changed = True
-                                End If
-                                changedmovie.top250 = Convert.ToInt32(gridrow.Cells("top250").Value).ToString
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-
-                            Try
-                                If gridrow.Cells("playcount").EditedFormattedValue = True Then
-                                    If Convert.ToInt32(changedmovie.playcount) > 0 Then
-                                    Else
-                                        changedmovie.playcount = "1"
-                                    End If
-                                Else
-                                    changedmovie.playcount = "0"
-                                End If
-                            Catch ex As Exception
-#If SilentErrorScream Then
-                                Throw ex
-#End If
-                            End Try
-
-                            changedmovie.runtime = Utilities.cleanruntime(gridrow.Cells("runtime").Value)
-
-                            changedmoviedetails.fullmoviebody.runtime = changedmovie.runtime
-                            'changedmoviedetails.filedetails.filedetails_video.DurationInSeconds.Value = changedmovie.runtime.ToString
-
-                            changedmoviedetails.fullmoviebody.title = changedmovie.title
-                            changedmoviedetails.fullmoviebody.year = changedmovie.year
-                            changedmoviedetails.fullmoviebody.playcount = changedmovie.playcount
-                            changedmoviedetails.fullmoviebody.genre = changedmovie.genre
-                            changedmoviedetails.fullmoviebody.outline = changedmovie.outline
-                            'changedmoviedetails.fullmoviebody.plot = changedmovie.plot
-                            changedmoviedetails.fullmoviebody.rating = changedmovie.rating
-                            changedmoviedetails.fullmoviebody.source = changedmovie.source
-                            changedmoviedetails.fullmoviebody.movieset = changedmovie.MovieSet
-                            changedmoviedetails.fullmoviebody.sortorder = changedmovie.sortorder
-                            changedmoviedetails.fullmoviebody.top250 = changedmovie.top250
-
-                            nfoFunction.mov_NfoSave(changedmoviedetails.fileinfo.fullpathandfilename, changedmoviedetails, True)
-                   '         changedmovie.titleandyear = changedmovie.title & " (" & changedmovie.year & ")"
-                            oMovies.MovieCache.RemoveAt(f)
-                            oMovies.MovieCache.Add(changedmovie)
-                            Exit For
-                        End If
+                Else
+                    If oCachedMovie.playcount > 0 Then
+                        changed = True
                     End If
                 End If
-            Next
-        Next gridrow
+            Catch
+                If oCachedMovie.playcount > 0 Then
+                    changed = True
+                End If
+            End Try
+            Try
+                If oCachedMovie.sortorder <> gridrow.Cells("sorttitle").Value Then
+                    changed = True
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+            Try
+                If oCachedMovie.year <> gridrow.Cells("year").Value Then
+                    If IsNumeric(gridrow.Cells("year").Value) Then
+                        changed = True
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+            Try
+                If Convert.ToInt32(oCachedMovie.top250) <> Convert.ToInt32(gridrow.Cells("top250").Value) Then
+                    If IsNumeric(gridrow.Cells("top250").Value) Then
+                        changed = True
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+
+            Dim runtime        As String=""
+            Dim intRunTime     As Integer
+            Dim runTimeChanged As Boolean
+            Dim newRunTime     As String=""
+
+            Try
+                runtime = gridrow.Cells("runtime").Value
+                runtime = runtime.Replace("min", "")
+                runtime = runtime.Trim(" ")
+                If IsNumeric(runtime) Then
+                    intRunTime = Convert.ToInt32(runtime)
+                    newRunTime = intRunTime.ToString & " min"
+                    If oCachedMovie.runtime <> newRunTime Then
+                        changed = True
+                        runTimeChanged = True
+                    End If
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+            Try
+                If oCachedMovie.source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then
+                    changed = True
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+            Try
+                If oCachedMovie.MovieSet <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then
+                    changed = True
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+
+
+
+            If changed And IO.File.Exists(oCachedMovie.fullpathandfilename) Then
+
+                Dim oMovie As Movie = oMovies.LoadMovie(oCachedMovie.fullpathandfilename)
+
+                If IsNothing(oMovie) Then Continue For
+
+
+                Try
+                    oCachedMovie.genre = gridrow.Cells("genre").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+                Try
+                    oCachedMovie.title = gridrow.Cells("title").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+                Try
+                    oCachedMovie.year = gridrow.Cells("year").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+                Try
+                    oCachedMovie.sortorder = gridrow.Cells("sorttitle").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+                Try
+                    oCachedMovie.rating = gridrow.Cells("rating").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+                Try
+                    oCachedMovie.outline = gridrow.Cells("outline").Value
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+                ' Because plot is truncated to 100 chars to save moviecache.xml length, we don't want the user to overwrite the real plot
+                '                            Try
+                '                                oCachedMovie.plot = gridrow.Cells("plot").Value
+                '                            Catch ex As Exception
+                '#If SilentErrorScream Then
+                '                                Throw ex
+                '#End If
+                '                            End Try
+                Try
+                    oCachedMovie.source = If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value)
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+
+                Try
+                    oCachedMovie.MovieSet = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+
+                Try
+                    oCachedMovie.top250 = Convert.ToInt32(gridrow.Cells("top250").Value).ToString
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+
+                Try
+                    If gridrow.Cells("playcount").EditedFormattedValue = True Then
+                        If Convert.ToInt32(oCachedMovie.playcount) > 0 Then
+                        Else
+                            oCachedMovie.playcount = "1"
+                        End If
+                    Else
+                        oCachedMovie.playcount = "0"
+                    End If
+                Catch ex As Exception
+#If SilentErrorScream Then
+                    Throw ex
+#End If
+                End Try
+
+               'oCachedMovie.runtime = Utilities.cleanruntime(gridrow.Cells("runtime").Value)
+
+               'oMovie.ScrapedMovie.fullmoviebody.runtime = oCachedMovie.runtime
+
+                If runTimeChanged Then
+                    oMovie.ScrapedMovie.fullmoviebody.runtime = newRunTime
+                End If
+
+                'oMovie.ScrapedMovie.filedetails.filedetails_video.DurationInSeconds.Value = oCachedMovie.runtime.ToString
+
+                oMovie.ScrapedMovie.fullmoviebody.title = oCachedMovie.title
+                oMovie.ScrapedMovie.fullmoviebody.year = oCachedMovie.year
+                oMovie.ScrapedMovie.fullmoviebody.playcount = oCachedMovie.playcount
+                oMovie.ScrapedMovie.fullmoviebody.genre = oCachedMovie.genre
+                oMovie.ScrapedMovie.fullmoviebody.outline = oCachedMovie.outline
+                'oMovie.ScrapedMovie.fullmoviebody.plot = oCachedMovie.plot
+                oMovie.ScrapedMovie.fullmoviebody.rating = oCachedMovie.rating
+                oMovie.ScrapedMovie.fullmoviebody.source = oCachedMovie.source
+                oMovie.ScrapedMovie.fullmoviebody.movieset = oCachedMovie.MovieSet
+                oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
+                oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
+
+                oMovie.AssignMovieToCache
+                oMovie.SaveNFO
+                oMovie.UpdateMovieCache
+
+            End If
+        Next
+
 
         oMovies.SaveMovieCache
         
-        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-        mov_FormPopulate
+        'Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        'mov_FormPopulate
 
-        frmSplash2.Hide()
-        'mess.Close()
-        Application.DoEvents()
-        Me.BringToFront()
+        UpdateFilteredList
+
+        frmSplash2.Hide
+
+        Application.DoEvents
+        Me.BringToFront
     End Sub
+
+
 
     Private Sub Button97_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_movTableSave.Click
         Try
