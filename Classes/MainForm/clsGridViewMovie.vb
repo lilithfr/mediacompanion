@@ -126,21 +126,21 @@ Public Class clsGridViewMovie
             IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
         End If
 
-        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"  ,"File name"                    )
-        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"    ,"Folder name"                  )
-        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year","Movie year"   ,"Year"    , -20)
-        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"  ,"Date Modified","Modified"     )
-        IniColumn(dgv,"rating"           ,GridFieldToDisplay2="Rating"    ,               ,          , -20)
-        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"   ,"Runtime"      ,          , -20)
-        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added","Date Added"   ,"Added"        )
-        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"                                     )
+        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"  ,"File name"                                                               )
+        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"    ,"Folder name"                                                             )
+        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year","Movie year"   ,"Year"    , -20                                           )
+        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"  ,"Date Modified","Modified"                                                )
+        IniColumn(dgv,"rating"           ,GridFieldToDisplay2="Rating"    ,               ,          , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"   ,"Runtime"      ,          , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added","Date Added"   ,"Added"                                                   )
+        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"     , "Votes"       ,          , -10, DataGridViewContentAlignment.MiddleRight )
           
         SetFirstColumnWidth(dgv)
 
         Cursor.Current = Cursors.Default
     End Sub
 
-    Sub IniColumn(dgv As DataGridView, name As String, visible As Boolean, Optional toolTip As String=Nothing, Optional headerText As String=Nothing, Optional widthAdjustment As Integer=0)
+    Sub IniColumn(dgv As DataGridView, name As String, visible As Boolean, Optional toolTip As String=Nothing, Optional headerText As String=Nothing, Optional widthAdjustment As Integer=0, Optional alignment As DataGridViewContentAlignment=Nothing )
 
         Dim col As DataGridViewColumn = dgv.Columns(name)
 
@@ -150,6 +150,20 @@ Public Class clsGridViewMovie
         col.ToolTipText = toolTip
         col.HeaderText  = If(IsNothing(headerText),toolTip,headerText)
         SetColWidth(col,widthAdjustment)
+       
+        If Not IsNothing(alignment) Then
+
+            Dim header_style As New DataGridViewCellStyle
+
+            header_style.ForeColor = Color.White
+            header_style.BackColor = Color.ForestGreen
+            header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
+            header_style.Alignment = alignment
+
+            col.HeaderCell.Style = header_style
+
+            col.DefaultCellStyle.Alignment = alignment
+        End If
     End Sub
 
 
