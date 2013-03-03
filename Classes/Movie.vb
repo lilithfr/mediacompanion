@@ -232,20 +232,35 @@ Public Class Movie
 
     ReadOnly Property ActualBaseName As String
         Get
-            Dim BaseName = mediapathandfilename.Replace(Extension,"")
+            Dim pos As Integer=0
+            Try
+                Dim BaseName = mediapathandfilename.Replace(Extension,"")
 
-            'Long name
-            If File.Exists(BaseName & ".nfo") Then Return BaseName
+                pos = 1
 
-            Dim movieStackName = mediapathandfilename
-            Dim firstPart As Boolean
+                'Long name
+                If File.Exists(BaseName & ".nfo") Then Return BaseName
 
-            Utilities.isMultiPartMedia(movieStackName, False, firstPart)
+                Dim movieStackName = mediapathandfilename
+                Dim firstPart As Boolean
 
-            'Short name
-            If File.Exists(nfopath & movieStackName & ".nfo") Then Return nfopath & movieStackName
+                pos = 2
 
-            Return "unknown"
+                Utilities.isMultiPartMedia(movieStackName, False, firstPart)
+
+                pos = 3
+
+                'Short name
+                If File.Exists(nfopath & movieStackName & ".nfo") Then Return nfopath & movieStackName
+
+                pos = 4
+
+                Return "unknown"
+            Catch ex As Exception
+                Dim paramInfo As String = "mediapathandfilename: [" & mediapathandfilename & "] Pos: [" & pos & "] Extension : [" & Extension & "]"
+                ReportProgress(MSG_ERROR,"!!! Exception thrown in ReadOnly Property ActualBaseName" & vbCrLf & "!!! Exception : [" & ex.ToString & "]" & vbCrLf & vbCrLf & "Param info : [" & paramInfo & "]" & vbCrLf & vbCrLf)
+                Return "unknown"
+            End Try
         End Get
     End Property
 
