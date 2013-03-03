@@ -6493,7 +6493,7 @@ Public Class Form1
 
     Private Sub btnPosterTabs_SaveImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterTabs_SaveImage.Click
         Try
-            Dim tempstring As String
+            Dim tempstring As String =""
             Dim tempint As Integer = 0
             Dim realnumber As Integer = 0
             Dim tempstring2 As String = ""
@@ -14438,6 +14438,10 @@ Public Class Form1
         xbmcactorpath.Enabled                   = Preferences.actorsave
         Button77.Enabled                        = Preferences.actorsave
 
+        If Not Preferences.usefoldernames and Not Preferences.allfolders then
+            chkbx_createfolderjpg.Enabled = False 
+        End If
+
         Select Case Preferences.maxactors
             Case 9999
                 ComboBox7.SelectedItem = "All Available"
@@ -14812,8 +14816,14 @@ Public Class Form1
             If chkbx_usefoldernames.CheckState = CheckState.Checked Then
                 Preferences.usefoldernames = True
                 chkbx_MovieAllFolders.Checked = False
+                chkbx_createfolderjpg.Enabled = True
             Else
                 Preferences.usefoldernames = False
+                If Not Preferences.allfolders then
+                    chkbx_createfolderjpg.Checked = False
+                    chkbx_createfolderjpg.Enabled = False
+                    'Preferences.createfolderjpg = False
+                End If
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14824,7 +14834,7 @@ Public Class Form1
 
     Private Sub chkbx_createfolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_createfolderjpg.CheckedChanged
         Try
-            If chkbx_createfolderjpg.CheckState = CheckState.Checked Then
+            If chkbx_createfolderjpg.CheckState = CheckState.Checked and (Preferences.usefoldernames or Preferences.allfolders) Then
                 Preferences.createfolderjpg = True
             Else
                 Preferences.createfolderjpg = False
@@ -21585,7 +21595,15 @@ Public Class Form1
     Private Sub CheckBoxMovieAllFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkbx_MovieAllFolders.CheckedChanged
         Try
             Preferences.allfolders = chkbx_MovieAllFolders.Checked
-            If chkbx_MovieAllFolders.Checked = True Then chkbx_usefoldernames.Checked = False
+            If chkbx_MovieAllFolders.Checked = True Then 
+                chkbx_usefoldernames.Checked = False
+                chkbx_createfolderjpg.Enabled = True
+            Else
+                If Not Preferences.usefoldernames Then
+                    chkbx_createfolderjpg.Enabled = False
+                    chkbx_createfolderjpg.Checked = False
+                End If
+            End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
