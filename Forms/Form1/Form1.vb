@@ -23810,4 +23810,49 @@ Public Class Form1
         End If
     End Sub
 
+Private Sub Button4_Click( sender As System.Object,  e As System.EventArgs) Handles Button4.Click
+        Try
+            If TextBox21.Text = Nothing Then
+                Exit Sub
+            End If
+            If TextBox21.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = TextBox21.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In ListBox7.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    ListBox7.Items.Add(tempstring)
+                    TextBox21.Text = ""
+                    newTvFolders.Add(tempstring)
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        ListBox7.Items.Add(tempstring)
+                        ListBox7.Refresh()
+                        TextBox21.Text = ""
+                        'newTvFolders.Add(tempstring)
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+End Sub
 End Class
