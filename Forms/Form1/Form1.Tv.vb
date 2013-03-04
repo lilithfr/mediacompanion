@@ -1217,7 +1217,7 @@ Partial Public Class Form1
                         NewAct.ActorId = Act.Id
                         NewAct.actorname = Act.Name.Value
                         NewAct.actorrole = Act.Role.Value
-                        If Act.Role.Value <>"" Then
+                        If Act.Image.Value <>"" Then
                             NewAct.actorthumb = "http://thetvdb.com/banners/"&Act.Image.Value
                         Else
                             NewAct.actorthumb = ""
