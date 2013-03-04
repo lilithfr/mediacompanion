@@ -1217,7 +1217,11 @@ Partial Public Class Form1
                         NewAct.ActorId = Act.Id
                         NewAct.actorname = Act.Name.Value
                         NewAct.actorrole = Act.Role.Value
-                        NewAct.actorthumb = "http://thetvdb.com/banners/"&Act.Image.Value
+                        If Act.Role.Value <>"" Then
+                            NewAct.actorthumb = "http://thetvdb.com/banners/"&Act.Image.Value
+                        Else
+                            NewAct.actorthumb = ""
+                        End If
                         
 
                         If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 3 Or NewShow.ImdbId = Nothing Then
@@ -1227,7 +1231,7 @@ Partial Public Class Form1
                             Dim lan As New str_PossibleShowList(SetDefaults)
 
 
-                            If Not String.IsNullOrEmpty(NewAct.actorthumb) Then
+                            If Not String.IsNullOrEmpty(NewAct.actorthumb) and NewAct.actorthumb <>"http://thetvdb.com/banners/" Then
                                 If NewAct.actorthumb <> "" And Preferences.actorseasy = True And speedy = False Then
                                     If NewShow.TvShowActorSource.Value <> "imdb" Or NewShow.ImdbId = Nothing Then
                                         Dim workingpath As String = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
