@@ -23843,7 +23843,7 @@ Public Class Form1
         End If
     End Sub
 
-Private Sub Button4_Click( sender As System.Object,  e As System.EventArgs) Handles Button4.Click
+    Private Sub Button4_Click( sender As System.Object,  e As System.EventArgs) Handles Button4.Click
         Try
             If TextBox21.Text = Nothing Then
                 Exit Sub
@@ -23886,6 +23886,11 @@ Private Sub Button4_Click( sender As System.Object,  e As System.EventArgs) Hand
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
 
-End Sub
+
+    Private Sub DataGridViewMovies_ColumnHeaderMouseClick( sender As Object,  e As DataGridViewCellMouseEventArgs) Handles DataGridViewMovies.ColumnHeaderMouseClick
+        btnreverse.Checked = Not btnreverse.Checked
+        btnreverse_CheckedChanged(Nothing,Nothing)
+    End Sub
 End Class
