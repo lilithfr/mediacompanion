@@ -285,7 +285,8 @@ Public Class clsGridViewMovie
 
         'Set
         If Form1.SetFilter<>"" Then
-            b = From f In b Where f.movieset.Contains(Form1.SetFilter)
+'            b = From f In b Where f.movieset.Contains(Form1.SetFilter)
+            b = From f In b Where f.movieset=Form1.SetFilter
             If Yield Then Return
         End If
 
