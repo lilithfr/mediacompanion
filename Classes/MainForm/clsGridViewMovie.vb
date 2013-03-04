@@ -133,7 +133,7 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"rating"           ,GridFieldToDisplay2="Rating"    ,               ,          , -20, DataGridViewContentAlignment.MiddleCenter)
         IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"   ,"Runtime"      ,          , -20, DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added","Date Added"   ,"Added"                                                   )
-        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"     , "Votes"       ,          , -10, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"     ,"Votes"        ,          ,    , DataGridViewContentAlignment.MiddleRight )
           
         SetFirstColumnWidth(dgv)
 
@@ -258,17 +258,19 @@ Public Class clsGridViewMovie
         'General
         Select Form1.cbFilterGeneral.Text
 
-            Case "Watched"        : b = From f In b Where f.playcount <> "0"
+            Case "Watched"         : b = From f In b Where f.playcount <> "0"
 
-            Case "Unwatched"      : b = From f In b Where f.playcount  = "0"
+            Case "Unwatched"       : b = From f In b Where f.playcount  = "0"
 
-            Case "Duplicates"     : Dim sort = b.GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
+            Case "Duplicates"      : Dim sort = b.GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
 
-            Case "Missing Poster" : b = From f In b Where f.missingdata1 = "2" Or f.missingdata1 = "3"
+            Case "Missing Poster"  : b = From f In b Where f.MissingPoster
 
-            Case "Missing Fanart" : b = From f In b Where f.missingdata1 = "1" Or f.missingdata1 = "3"
+            Case "Missing Fanart"  : b = From f In b Where f.MissingFanart
 
-            Case "Missing Plot"   : b = From f In b Where f.plot.ToString.Trim = "" or f.plot.ToString.Trim = "scraper error"
+            Case "Missing Trailer" : b = From f In b Where f.MissingTrailer
+
+            Case "Missing Plot"    : b = From f In b Where f.plot.ToString.Trim = "" or f.plot.ToString.Trim = "scraper error"
         End Select
 
         If Yield Then Return

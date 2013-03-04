@@ -880,6 +880,33 @@ Public Class Preferences
         Return line
     End Function
 
+
+    Public Shared Function TrailerExists(NfoPathPrefName As String) As Boolean
+            
+        Return File.Exists(ActualTrailerPath(NfoPathPrefName))
+
+    End Function
+
+
+    Public Shared Function ActualTrailerPath(NfoPathPrefName As String) As String
+
+            Dim s = NfoPathPrefName
+            Dim FileName As String = ""
+        
+            For Each item In "mp4,flv,webm,mov,m4v".Split(",")
+                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
+
+                If File.Exists(FileName) Then Return FileName
+            Next
+
+            Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+
+    End Function
+
+
+
+
+
     Public Shared Function GetPosterPath(ByVal FullPath As String) As String
         Dim posterpath As String = FullPath
         If Not Utilities.findFileOfType(posterpath, ".tbn") Then

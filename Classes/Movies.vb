@@ -957,12 +957,18 @@ Public Class Movies
                     Dim completebyte1 As Byte = 0
                     Dim fanartexists As Boolean = IO.File.Exists(Preferences.GetFanartPath(workingMovie.fullpathandfilename))
                     Dim posterexists As Boolean = IO.File.Exists(Preferences.GetPosterPath(workingMovie.fullpathandfilename))
+
                     If fanartexists = False Then
                         completebyte1 += 1
                     End If
                     If posterexists = False Then
                         completebyte1 += 2
                     End If
+
+                    If Not Preferences.TrailerExists(workingMovie.fullpathandfilename) Then
+                        completebyte1 += 4
+                    End If
+
                     workingMovie.missingdata1 = completebyte1
 '                    MovieCache.Add(workingMovie)
                     TmpMovieCache.Add(workingMovie)

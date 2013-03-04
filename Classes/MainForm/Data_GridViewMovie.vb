@@ -269,11 +269,11 @@
         End Set
     End Property
 
-    Public Property missingdata1
+    Public Property missingdata1 As Byte
         Get
             Return _missingdata1
         End Get
-        Set(ByVal value)
+        Set(ByVal value As Byte)
             _missingdata1 = value
         End Set
     End Property
@@ -357,6 +357,24 @@
             End If
 
             Return _DisplayCreateDate
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingFanart As Boolean
+        Get
+            Return _missingdata1 And 1
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingPoster As Boolean
+        Get
+            Return _missingdata1 And 2
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingTrailer As Boolean
+        Get
+            Return _missingdata1 And 4
         End Get
     End Property
 

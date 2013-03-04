@@ -6624,6 +6624,21 @@ Public Class Form1
 #End If
             End Try
             Call mov_PosterSaved()
+
+            If DataGridViewMovies.Rows.Count = 0 Then
+                MsgBox("There are no more missing posters")
+            Else
+                Dim currentIndex As Integer=0
+
+                If Not IsNothing(DataGridViewMovies.CurrentRow) Then 
+                    currentIndex = DataGridViewMovies.CurrentRow.Index
+                End If
+
+                DataGridViewMovies.ClearSelection
+                DataGridViewMovies.Rows(currentIndex).Selected = True
+
+                DisplayMovie
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -23223,7 +23238,7 @@ Public Class Form1
             DataGridViewMovies.Rows(0).Selected=True
         End If
 
-        mov_FormPopulate()
+ '       mov_FormPopulate()
         DisplayMovie()
 
         State = ProgramState.Other
