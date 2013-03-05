@@ -14352,7 +14352,7 @@ Public Class Form1
                     
                     MsgBox("Changes Saved")
                 Else
-                    Me.util_ConfigLoad()
+                    Me.util_ConfigLoad(True)
                 End If
                 generalprefschanged = False
                 btnGeneralPrefsSaveChanges.Enabled = False
@@ -15033,7 +15033,7 @@ Public Class Form1
                     applyAdvancedLists()
                     Preferences.SaveConfig()
                 Else
-                    util_ConfigLoad()
+                    util_ConfigLoad(True)
                 End If
             End If
             movieprefschanged = False
@@ -15513,7 +15513,7 @@ Public Class Form1
                     MsgBox("Changes Saved")
                 Else
 
-                    Me.util_ConfigLoad()
+                    Me.util_ConfigLoad(True)
                     Call util_RegexLoad()
                 End If
                 tvprefschanged = False
@@ -20997,7 +20997,7 @@ Public Class Form1
     End Sub
 
 
-    Public Sub util_ConfigLoad()
+    Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )
         Preferences.LoadConfig()
         'MovieListComboBox.Items.Clear()
         DataGridViewMovies.DataSource = Nothing
@@ -21058,6 +21058,7 @@ Public Class Form1
             Call homemovieCacheLoad()
         End If
 
+        If Not prefs then
         If Not IO.File.Exists(workingProfile.tvcache) Or Preferences.startupCache = False Then
             loadinginfo = "Status :- Building TV Database"
             frmSplash.Label3.Text = loadinginfo
@@ -21070,6 +21071,7 @@ Public Class Form1
             Call tv_CacheLoad()
         End If
         Call tv_Filter()
+        End If
 
         'If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
         '    loadinginfo = "Status :- Building Actor Database"
