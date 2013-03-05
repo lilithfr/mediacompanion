@@ -14686,6 +14686,26 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbFanartInFolders_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbFanartInFolders.CheckedChanged
+        Try
+            If cbFanartInFolders.CheckState = CheckState.Checked Then
+                If Preferences.usefoldernames or Preferences.allfolders Then
+                    Preferences.fanartjpg = True
+                Else 
+                    Preferences.fanartjpg = False
+                    cbFanartInFolders.Checked = False
+                    MsgBox("Either Use Foldername or All Movies in Folders not selected!")
+                End If
+            Else
+                Preferences.fanartjpg = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
         Preferences.gettrailer = CheckBox11.Checked
         cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
