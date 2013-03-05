@@ -17,6 +17,7 @@ Imports System.Linq
 
 Public Class Form1
 
+    Const NFO_INDEX As Integer = 1
 
     Public Dim WithEvents BckWrkScnMovies As BackgroundWorker = New BackgroundWorker
 
@@ -3264,7 +3265,7 @@ Public Class Form1
 
             Try
                 If DataGridViewMovies.SelectedRows.Count = 1 Then
-                    If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(0).Value.ToString Then Return
+                    If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString Then Return
                 End If
             Catch
             End Try
@@ -3731,7 +3732,7 @@ Public Class Form1
 
 '			For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
 
-'				Dim filepath As String = item.Cells(0).Value.ToString
+'				Dim filepath As String = item.Cells(NFO_INDEX).Value.ToString
 
 '				'Dim movie As New FullMovieDetails
 '				'movie = nfoFunction.mov_NfoLoadFull(filepath)
@@ -4265,7 +4266,7 @@ Public Class Form1
     Private Sub mov_Play(ByVal type As String)
         If DataGridViewMovies.SelectedRows.Count < 1 Then Return
         Dim tempstring As String
-        tempstring = DataGridViewMovies.SelectedCells(0).Value.ToString
+        tempstring = DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString
         Dim playlist As New List(Of String)
         Select Case type
             Case "Movie"
@@ -4452,7 +4453,7 @@ Public Class Form1
     
     Public Sub DisplayMovie(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection, yielding As Boolean)
 
-        Const NFO_INDEX As Integer = 1
+        
         Try
             If selectedRows.Count = 1 Then
                 If LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString Then Return
@@ -16926,7 +16927,7 @@ Public Class Form1
             For f = 0 To DataGridView1.Rows.Count-1
                 If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
                     DataGridView1.ClearSelection()
-                    'DataGridView1.CurrentCell = DataGridView1.Rows(f).Cells(0)
+                    'DataGridView1.CurrentCell = DataGridView1.Rows(f).Cells(NFO_INDEX)
                     'DataGridView1.Rows(f).Selected = True
                     DataGridView1.FirstDisplayedScrollingRowIndex = f
                     Exit For
@@ -18282,7 +18283,7 @@ Public Class Form1
             Next
             'For f = 0 To MovieListComboBox.Items.Count - 1
             For f = 0 To DataGridViewMovies.RowCount - 1
-                'If DataGridViewMovies.SelectedCells(0).Value.ToString = tempstring Then
+                'If DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString = tempstring Then
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
@@ -20209,7 +20210,7 @@ Public Class Form1
                     Dim playlist As New List(Of String)
                     'tempstring = Utilities.GetFileName(tempstring)
 
-                    Dim tempstring As String = Utilities.GetFileName(DataGridViewMovies.SelectedCells(0).Value.ToString)
+                    Dim tempstring As String = Utilities.GetFileName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
 
                     playlist = Utilities.GetMediaList(tempstring)
                     If playlist.Count > 0 Then
@@ -22896,9 +22897,9 @@ Public Class Form1
 
                     'If System.IO.File.Exists(Utilities.GetTrailerName(CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value)) Then
 
-                    'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(0).Value.ToString)) Then
+                    'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)) Then
 
-                    Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(0).Value.ToString)
+                    Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
 
                     mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
                 Catch
