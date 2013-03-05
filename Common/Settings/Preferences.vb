@@ -553,6 +553,7 @@ Public Class Preferences
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       'RadioButton52
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "offlinemovielabeltext",              OfflineDVDTitle)                    'TextBox_OfflineDVDTitle
+        root.AppendChild(doc, "moviemanualrename",                  MovieManualRename)                  'MovieManualRename
         root.AppendChild(doc, "movierenameenable",                  MovieRenameEnable)                  'MovieRenameCheckBox
         root.AppendChild(doc, "movierenametemplate",                MovieRenameTemplate)                'MovieRenameTemplateTextBox
         root.AppendChild(doc, "showsortdate",                       showsortdate)                       'CheckBox_ShowDateOnMovieList
