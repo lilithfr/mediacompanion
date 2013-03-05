@@ -30,7 +30,7 @@ Public Class clsGridViewMovie
         Dim dgv As DataGridView = Form1.DataGridViewMovies
 
         If dgv.Columns.Count < 27 Then Return  '24
-        If dgv.Rows   .Count <  1 Then Return
+   '    If dgv.Rows   .Count <  1 Then Return
 
         Cursor.Current = Cursors.WaitCursor
 
