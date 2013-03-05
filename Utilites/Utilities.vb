@@ -180,7 +180,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return input
     End Function
 
-    Public Shared Function CreateScreenShot(ByVal FilePath As String, Optional ByVal Overwrite As Boolean = False) As String
+    Public Shared Function CreateScreenShot(ByVal FilePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As String
         Dim thumbpathandfilename As String = FilePath.Replace(IO.Path.GetExtension(FilePath), ".tbn")
 
         Dim ThumbExists As Boolean = Not IO.File.Exists(thumbpathandfilename)

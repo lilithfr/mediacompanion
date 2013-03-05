@@ -290,7 +290,7 @@ Module Module1
                         Dim tempstring2 As String = fullnfopath.Replace(IO.Path.GetFileName(fullnfopath), tempfilename)
                         If IO.File.Exists(tempstring2) Then
                             Try
-                                Dim seconds As Integer = 10
+                                Dim seconds As Integer = Preferences.ScrShtDelay
                                 Dim myProcess As Process = New Process
                                 myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                                 myProcess.StartInfo.CreateNoWindow = False

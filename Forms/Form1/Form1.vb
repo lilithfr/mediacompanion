@@ -11691,7 +11691,7 @@ Public Class Form1
                     Dim tempstring2 As String
                     tempstring2 = pathandfilename & ext
                     If IO.File.Exists(tempstring2) Then
-                        Dim seconds As Integer = 10
+                        Dim seconds As Integer = Preferences.ScrShtDelay
                         If Convert.ToInt32(TextBox35.Text) > 0 Then
                             seconds = Convert.ToInt32(TextBox35.Text)
                         End If
@@ -20004,7 +20004,7 @@ Public Class Form1
                                                                     myProcess.StartInfo.CreateNoWindow = False
                                                                     myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
                                                                     If Preferences.EdenEnabled = True Then
-                                                                        Dim seconds As Integer = 10
+                                                                        Dim seconds As Integer = Preferences.ScrShtDelay 
                                                                         proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                                                                         myProcess.StartInfo.Arguments = proc_arguments
                                                                         myProcess.Start()
@@ -20012,7 +20012,7 @@ Public Class Form1
                                                                     End If
                                                                     If Preferences.FrodoEnabled = True Then
                                                                         thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
-                                                                        Dim seconds As Integer = 10
+                                                                        Dim seconds As Integer = Preferences.ScrShtDelay
                                                                         proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                                                                         myProcess.StartInfo.Arguments = proc_arguments
                                                                         myProcess.Start()
@@ -20156,7 +20156,7 @@ Public Class Form1
                 ToolStripStatusLabel8.Text = e.UserState
             ElseIf e.ProgressPercentage = 888888 Then
                 'Dim getthumb As New createscreenshot
-                Dim result As String = Utilities.CreateScreenShot(e.UserState)
+                Dim result As String = Utilities.CreateScreenShot(e.UserState, Preferences.ScrShtDelay)
             Else
                 ToolStripStatusLabel8.Text = e.UserState
                 ToolStripProgressBar7.Value = e.ProgressPercentage
