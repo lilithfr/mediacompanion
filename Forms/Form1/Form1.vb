@@ -9570,7 +9570,12 @@ Public Class Form1
                                     Case "name"
                                         acts.actorname = results.InnerText
                                     Case "role"
-                                        acts.actorrole = results.InnerText
+                                        Dim newstring As String
+                                        newstring = results.InnerText
+                                        newstring = newstring.TrimEnd("|")
+                                        newstring = newstring.TrimStart("|")
+                                        newstring = newstring.Replace("|", ", ")
+                                        acts.actorrole = newstring
                                     Case "thumb"
                                         acts.actorthumb = results.InnerText
                                     Case "actorid"
@@ -19683,7 +19688,12 @@ Public Class Form1
                                                         Case "name"
                                                             acts.actorname = results.InnerText
                                                         Case "role"
-                                                            acts.actorrole = results.InnerText
+                                                            Dim newstring As String
+                                                            newstring = results.InnerText
+                                                            newstring = newstring.TrimEnd("|")
+                                                            newstring = newstring.TrimStart("|")
+                                                            newstring = newstring.Replace("|", ", ")
+                                                            acts.actorrole = newstring
                                                         Case "thumb"
                                                             acts.actorthumb = results.InnerText
                                                         Case "actorid"

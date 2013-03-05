@@ -1218,7 +1218,12 @@ Partial Public Class Form1
                         Dim NewAct As New Media_Companion.Actor
                         NewAct.ActorId = Act.Id
                         NewAct.actorname = Act.Name.Value
-                        NewAct.actorrole = Act.Role.Value
+                        Dim newstring As String
+                            newstring = Act.Role.Value
+                            newstring = newstring.TrimEnd("|")
+                            newstring = newstring.TrimStart("|")
+                            newstring = newstring.Replace("|", ", ")
+                        NewAct.actorrole = newstring
                         If Act.Image.Value <>"" Then
                             NewAct.actorthumb = "http://thetvdb.com/banners/"&Act.Image.Value
                         Else
