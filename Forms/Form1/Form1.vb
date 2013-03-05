@@ -4523,7 +4523,7 @@ Public Class Form1
             If Yield(yielding) Then Return
 
             'Check if the file trailer exist
-            mov_ToolStripPlayTrailer.Visible = IO.File.Exists(selectedCells(NFO_INDEX).Value.ToString)
+'            mov_ToolStripPlayTrailer.Visible = IO.File.Exists(selectedCells(NFO_INDEX).Value.ToString)
 
             If Yield(yielding) Then Return
 
@@ -4547,6 +4547,9 @@ Public Class Form1
          '       workingMovie.titleandyear = queryList(0).titleandyear
                 workingMovie.top250 = queryList(0).top250
                 workingMovie.year = queryList(0).year
+
+                mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
+
                 Call mov_FormPopulate(yielding)
             Else
                 If needtoload = True Then Call mov_FormPopulate(yielding)
@@ -22901,9 +22904,13 @@ Public Class Form1
 
                     'If System.IO.File.Exists(Utilities.GetTrailerName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)) Then
 
-                    Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
+                    'Dim movie = oMovies.LoadMovie(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
 
-                    mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
+                    'mov_ToolStripPlayTrailer.Visible = movie.TrailerExists
+
+                    Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
+
+                    mov_ToolStripPlayTrailer.Visible = Not movie.MissingTrailer
                 Catch
                 End Try
             End If
