@@ -16434,11 +16434,11 @@ Public Class Form1
             childchild = doc.CreateElement("title")
             childchild.InnerText = movie.title
             child.AppendChild(childchild)
-            If movie.sortorder = Nothing Then
-                movie.sortorder = movie.DisplayTitle
+            If movie.SortOrder = Nothing Then
+                movie.SortOrder = movie.DisplayTitle
             End If
-            If movie.sortorder = "" Then
-                movie.sortorder = movie.DisplayTitle
+            If movie.SortOrder = "" Then
+                movie.SortOrder = movie.DisplayTitle
             End If
             childchild = doc.CreateElement("outline")
             childchild.InnerText = movie.outline
@@ -16447,7 +16447,7 @@ Public Class Form1
             childchild.InnerText = movie.plot
             child.AppendChild(childchild)
             childchild = doc.CreateElement("sortorder")
-            childchild.InnerText = movie.sortorder
+            childchild.InnerText = movie.SortOrder
             child.AppendChild(childchild)
 
             'childchild = doc.CreateElement("titleandyear")

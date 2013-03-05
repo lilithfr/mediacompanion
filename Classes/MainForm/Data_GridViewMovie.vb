@@ -51,7 +51,7 @@
         top250 = movie.top250
         genre = movie.genre
         playcount = movie.playcount
-        sortorder = movie.sortorder
+        SortOrder = movie.sortorder
         outline = movie.outline
         runtime = movie.runtime
         createdate = movie.createdate
@@ -79,7 +79,7 @@
                                                   .top250 = Me.top250,
                                                   .genre = Me.genre,
                                                   .playcount = Me.playcount,
-                                                  .sortorder = Me.sortorder,
+                                                  .sortorder = Me.SortOrder,
                                                   .outline = Me.outline,
                                                   .runtime = Me.runtime,
                                                   .createdate = Me.createdate,
@@ -237,11 +237,11 @@
         End Set
     End Property
 
-    Public Property sortorder
+    Public Property SortOrder As String
         Get
             Return _sortorder
         End Get
-        Set(ByVal value)
+        Set(ByVal value As String)
             _sortorder = value
         End Set
     End Property
@@ -381,6 +381,20 @@
             Return _missingdata1 And 4
         End Get
     End Property
+
+
+    ReadOnly Property DisplaySortOrder As String
+        Get
+            Dim t As String = If(IsNothing(SortOrder),"Unknown",SortOrder)
+           
+            If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
+                Return t.Substring(4, t.Length - 4) & ", The"
+            Else
+                Return t
+            End If            
+        End Get
+    End Property
+
 
     Public Function DecodeDateTime(s As String) As String
 
