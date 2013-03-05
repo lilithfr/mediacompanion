@@ -14178,6 +14178,7 @@ Public Class Form1
 
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
         cbShowLogOnError      .Checked = Preferences.ShowLogOnError
+        cbUseMultipleThreads  .Checked = Preferences.UseMultipleThreads
 
         prefsload = False
         generalprefschanged = False
@@ -14499,6 +14500,7 @@ Public Class Form1
         tmdb_chk.CheckState = If(Preferences.nfoposterscraper And 2, CheckState.Checked, CheckState.Unchecked)
         mpdb_chk.CheckState = If(Preferences.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
         imdb_chk.CheckState = If(Preferences.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
+
 
         If Preferences.movies_useXBMC_Scraper = True Then
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
@@ -23983,6 +23985,18 @@ Public Class Form1
         If tvprefschanged = False Then
             tvprefschanged = True
             btnTVPrefSaveChanges.Enabled = True
+        End If
+    End Sub
+
+
+
+    Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
+        If MainFormLoadedStatus Then
+            Preferences.UseMultipleThreads = cbUseMultipleThreads.Checked
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
         End If
     End Sub
 

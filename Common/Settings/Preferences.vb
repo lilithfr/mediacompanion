@@ -12,6 +12,16 @@ Module Ext
         child.InnerText = value
         root.AppendChild(child)
     End Sub
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value() As String, Optional separator As String="|")
+
+        Dim child As XmlElement = doc.CreateElement(name)
+
+        child.InnerText = If(value.Count>0, String.Join(separator,value), "")
+        root.AppendChild(child)
+    End Sub
+
 End Module
 
 
@@ -179,7 +189,8 @@ Public Class Preferences
     Public Shared tableview As New List(Of String)
     Public Shared tablesortorder As String
 
-    Public Shared Original_Title As Boolean=False
+    Public Shared Original_Title     As Boolean=False
+    Public Shared UseMultipleThreads As Boolean=False
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -575,17 +586,12 @@ Public Class Preferences
         root.AppendChild(doc, "SetsFilterMinFilms",                 SetsFilterMinFilms)                 'nudSetsFilterMinFilms
         root.AppendChild(doc, "MaxSetsInFilter",                    MaxSetsInFilter)                    'nudMaxSetsInFilter
         root.AppendChild(doc, "MovieFilters_Sets_Order",            MovieFilters_Sets_Order)            'cbMovieFilters_Sets_Order
-        root.AppendChild(doc, "Original_Title",                     Original_Title)                     'chkbOriginal_Title
+        root.AppendChild(doc, "Original_Title",                     Original_Title         )            'chkbOriginal_Title
+        root.AppendChild(doc, "UseMultipleThreads",                 UseMultipleThreads     )            'cbUseMultipleThreads
 
-        tempstring = If(moviethumbpriority.Count, String.Join("|", moviethumbpriority), "")
-        root.AppendChild(doc, "moviethumbpriority", tempstring)                                         'Button61,Button73
-
-        tempstring = If(releaseformat.Count, String.Join("|", releaseformat), "")
-        root.AppendChild(doc, "releaseformat", tempstring)                                              'btnVideoSourceAdd,btnVideoSourceRemove
-
-        tempstring = If(certificatepriority.Count, String.Join("|", certificatepriority), "")
-        root.AppendChild(doc, "certificatepriority", tempstring)                                        'Button74,Button75
-
+        root.AppendChildList(doc, "moviethumbpriority"  ,           moviethumbpriority    )             'Button61,Button73
+        root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
+        root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
 
 
         'TV Prefs ------------------------------------------------------------
@@ -867,7 +873,7 @@ Public Class Preferences
                     Case "MovieFilters_Sets_Order"              : MovieFilters_Sets_Order   = thisresult.InnerXml
 
                     Case "Original_Title"                       : Original_Title            = thisresult.InnerXml
-
+                    Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
                 End Select
             End If
         Next
@@ -889,8 +895,32 @@ Public Class Preferences
     Public Shared Function TrailerExists(NfoPathPrefName As String) As Boolean
             
         Return File.Exists(ActualTrailerPath(NfoPathPrefName))
-
     End Function
+
+
+    Public Shared Function FanartExists(NfoPathPrefName As String) As Boolean
+            
+        Return File.Exists(Preferences.GetFanartPath(NfoPathPrefName))
+    End Function
+
+
+    Public Shared Function PosterExists(NfoPathPrefName As String) As Boolean
+
+        Return File.Exists(Preferences.GetPosterPath(NfoPathPrefName))
+    End Function
+
+
+    Public Shared Function GetMissingData(NfoPathPrefName As String) As Byte
+
+        Dim MissingData As Byte = 0
+
+        If Not Preferences.FanartExists (NfoPathPrefName) Then MissingData += 1
+        If Not Preferences.PosterExists (NfoPathPrefName) Then MissingData += 2
+        If Not Preferences.TrailerExists(NfoPathPrefName) Then MissingData += 4
+
+        Return MissingData
+    End Function
+
 
 
     Public Shared Function ActualTrailerPath(NfoPathPrefName As String) As String

@@ -102,7 +102,7 @@ Public Class Movies
 
             Dim r = (From x In q Select x.Resolution & " (" & x.NumFilms.ToString & ")").ToList
 
-            r.Item(r.Count-1) = r.Item(r.Count-1).Replace("-1","Unknown")
+            If r.Count>0 Then r.Item(r.Count-1) = r.Item(r.Count-1).Replace("-1","Unknown")
 
             Return r
         End Get
@@ -550,8 +550,8 @@ Public Class Movies
 
 
 
-    Function CalcPercentDone(onNumber As Integer, total As Integer)
-        Return (100 /total) * onNumber
+    Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
+        Return ((100 /total) * onNumber)
     End Function
 
 
@@ -886,6 +886,188 @@ Public Class Movies
     End Sub
 
 
+    Property TotalNumberOfFolders As Integer
+    Property NumberOfFoldersDone  As Integer
+    Property BWs As New List(Of BackgroundWorker)
+    Property NumActiveThreads     As Integer
+
+    Public Sub MT_LoadMovieCacheFromNfos
+
+        TmpMovieCache.Clear
+        TotalNumberOfFolders=0
+        NumberOfFoldersDone =0
+
+        BWs.Clear
+
+        Dim RootMovieFolders As New List(Of String)
+
+        RootMovieFolders.AddRange(Preferences.movieFolders)
+        RootMovieFolders.AddRange(Preferences.offlinefolders)
+
+        ReportProgress("Searching movie folders...")
+
+        For each item In RootMovieFolders
+
+            Dim bw As BackgroundWorker = New BackgroundWorker
+
+            bw.WorkerReportsProgress      = True
+            bw.WorkerSupportsCancellation = True
+
+            AddHandler bw.DoWork            , AddressOf bw_DoWork
+            AddHandler bw.ProgressChanged   , AddressOf bw_ProgressChanged
+            AddHandler bw.RunWorkerCompleted, AddressOf bw_RunWorkerCompleted
+
+            BWs.Add(bw)
+            NumActiveThreads += 1
+
+            bw.RunWorkerAsync(item)
+        Next
+
+        Dim Cancelling As Boolean = False
+        Dim Busy       As Boolean = True
+
+        While Busy
+            Threading.Thread.Sleep(250)
+
+            If Cancelled And Not Cancelling Then 
+                Cancelling = True
+                For each item As BackgroundWorker in BWs
+                    Try
+                        item.CancelAsync
+                    Catch
+                    End Try
+                Next
+            End If
+            
+
+            Busy = False
+
+            For each item As BackgroundWorker in BWs
+                Try
+                    Busy = Busy Or item.IsBusy
+                Catch
+                End Try
+            Next
+
+        End While
+      
+        If Cancelled Then Exit Sub
+
+        MovieCache.Clear
+        MovieCache.AddRange(TmpMovieCache)
+
+        Rebuild_Data_GridViewMovieCache
+    End Sub
+
+
+    Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
+
+        Dim bw     As BackgroundWorker = CType(sender, BackgroundWorker)
+        Dim folder As String = DirectCast(e.Argument, String)
+        Dim Cache  As New List(Of ComboList)
+
+        MT_mov_NfoLoad(bw,folder,Cache)
+
+        e.Result = Cache
+    End Sub
+
+
+    Private Sub bw_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs)
+
+        Dim mp As MovieProgress = CType(e.UserState, MovieProgress)
+
+        Select mp.ProgressEvent
+
+            Case MovieProgress.MsgType.GotFoldersCount : TotalNumberOfFolders += mp.Data
+                                                         ReportProgress("Total number of folders : [" & TotalNumberOfFolders & "]")
+
+            Case MovieProgress.MsgType.NextOne         : NumberOfFoldersDone += 1
+                                                         PercentDone = CalcPercentDone(NumberOfFoldersDone, TotalNumberOfFolders)
+                                                         ReportProgress("Active threads : [" & NumActiveThreads & "] - Scanning folder " & NumberOfFoldersDone & " of " & TotalNumberOfFolders)
+
+        End Select
+
+    End Sub
+
+
+    Private Sub bw_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
+
+        If IsNothing(e.Result) Then Exit Sub
+
+        Dim Cache As List(Of ComboList) = CType(e.Result, List(Of ComboList))
+ 
+        TmpMovieCache.AddRange(Cache) 
+        NumActiveThreads -= 1
+    End Sub
+
+
+
+    Private Sub MT_mov_NfoLoad(bw As BackgroundWorker, folder As String,Cache As List(Of ComboList))
+
+        Const pattern = "*.nfo"
+        
+        Dim moviePaths As New List(Of String)
+
+        If Not (New DirectoryInfo(folder)).Exists Then Exit Sub
+
+        moviePaths.Add(folder)
+
+        'Add sub-folders
+        Try
+            For Each subfolder In Utilities.EnumerateFolders(moviePaths(0))
+                moviePaths.Add(subfolder)
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+        End Try
+
+        bw.ReportProgress( -1, New MovieProgress(MovieProgress.MsgType.GotFoldersCount,moviePaths.Count) )
+
+
+        For Each Path In moviePaths
+
+            bw.ReportProgress( -1, New MovieProgress(MovieProgress.MsgType.NextOne,Nothing) )
+
+            MT_mov_ListFiles( pattern, New DirectoryInfo(Path), Cache )
+            If Cancelled Then Exit Sub
+        Next
+
+
+        If Not Preferences.usefoldernames Then
+            For Each movie In Cache
+                If movie.filename <> Nothing Then movie.filename = movie.filename.Replace(".nfo", "")
+            Next
+        End If
+    End Sub
+
+
+
+    Private Sub MT_mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo, Cache As List(Of ComboList))
+
+        Dim nfoFunction  As New WorkingWithNfoFiles
+        Dim workingMovie As ComboList
+
+        For Each oFileInfo In dirInfo.GetFiles(pattern)
+            Application.DoEvents()
+
+            If Cancelled Then Exit Sub
+
+            If Not File.Exists(oFileInfo.FullName) Then Continue For
+
+            workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
+
+            If workingMovie.title = "Error"                    Then Continue For
+            If workingMovie.genre.IndexOf("skipthisfile") > -1 Then Continue For
+
+            workingMovie.foldername   = Utilities  .GetLastFolder (workingMovie.fullpathandfilename)
+            workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
+
+            Cache.Add(workingMovie)
+        Next
+    End Sub
+
+
+
     Private Sub mov_NfoLoad(ByVal folderlist As List(Of String))
         Dim tempint As Integer
         Dim dirinfo As String = String.Empty
@@ -923,6 +1105,7 @@ Public Class Movies
         Next
     End Sub
 
+
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
 
         Dim nfoFunction As New WorkingWithNfoFiles
@@ -932,74 +1115,21 @@ Public Class Movies
         For Each oFileInfo In dirInfo.GetFiles(pattern)
             Application.DoEvents()
 
+            If Cancelled Then Exit Sub
+
             If Not File.Exists(oFileInfo.FullName) Then Continue For
 
             workingMovie = nfoFunction.mov_NfoLoadBasic(oFileInfo.FullName, "movielist")
 
             If workingMovie.title = "Error" Then Continue For
 
-            'If workingMovie.movieset <> Nothing Then
-            '    If workingMovie.movieset.IndexOf(" / ") = -1 Then
-            '        Dim add As Boolean = True
-            '        For Each item In Preferences.moviesets
-            '            If item = workingMovie.movieset Then
-            '                add = False
-            '                Exit For
-            '            End If
-            '        Next
-            '        If add Then
-            '            Preferences.moviesets.Add(workingMovie.movieset)
-            '        End If
-            '    Else
-            '        Dim strArr() As String
-            '        strArr = workingMovie.movieset.Split("/")
-            '        For count = 0 To strArr.Length - 1
-            '            strArr(count) = strArr(count).Trim
-            '            Dim add As Boolean = True
-            '            For Each item In Preferences.moviesets
-            '                If item = strArr(count) Then
-            '                    add = False
-            '                    Exit For
-            '                End If
-            '            Next
-            '            If add Then
-            '                Preferences.moviesets.Add(strArr(count))
-            '            End If
-            '        Next
-            '    End If
-            'End If
-
             workingMovie.foldername = Utilities.GetLastFolder(workingMovie.fullpathandfilename)
+
             If workingMovie.genre.IndexOf("skipthisfile") = -1 Then
-                Dim skip As Boolean = False
-'                For Each movie In MovieCache
-                'For Each movie In TmpMovieCache
-                '    If movie.fullpathandfilename = workingMovie.fullpathandfilename Then
-                '        skip = True
-                '        Exit For
-                '    End If
-                'Next
-                'If Not skip Then
-                    Dim completebyte1 As Byte = 0
-                    Dim fanartexists As Boolean = IO.File.Exists(Preferences.GetFanartPath(workingMovie.fullpathandfilename))
-                    Dim posterexists As Boolean = IO.File.Exists(Preferences.GetPosterPath(workingMovie.fullpathandfilename))
 
-                    If fanartexists = False Then
-                        completebyte1 += 1
-                    End If
-                    If posterexists = False Then
-                        completebyte1 += 2
-                    End If
+                workingMovie.missingdata1 = Preferences.GetMissingData(workingMovie.fullpathandfilename)
 
-                    If Not Preferences.TrailerExists(workingMovie.fullpathandfilename) Then
-                        completebyte1 += 4
-                    End If
-
-                    workingMovie.missingdata1 = completebyte1
-'                    MovieCache.Add(workingMovie)
-                    TmpMovieCache.Add(workingMovie)
-'                    Data_GridViewMovieCache.Add(New Data_GridViewMovie(workingMovie))
-                'End If
+                TmpMovieCache.Add(workingMovie)
             End If
         Next
     End Sub
@@ -1081,7 +1211,13 @@ Public Class Movies
 
 
     Public Sub RebuildMovieCache
-        LoadMovieCacheFromNfos
+        
+        If Preferences.UseMultipleThreads Then
+            MT_LoadMovieCacheFromNfos
+        Else
+            LoadMovieCacheFromNfos
+        End If
+
 
         If Cancelled Then 
             Exit Sub
