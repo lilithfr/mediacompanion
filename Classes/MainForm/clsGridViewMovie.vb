@@ -290,6 +290,11 @@ Public Class clsGridViewMovie
             If Yield Then Return
         End If
 
+        'Resolution
+        If Form1.ResolutionFilter<>"" Then
+            b = From f In b Where f.Resolution=Convert.ToInt32(Form1.ResolutionFilter)
+            If Yield Then Return
+        End If
 
         'Actor
         If Form1.ActorFilter<>"" then

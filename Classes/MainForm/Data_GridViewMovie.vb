@@ -27,6 +27,8 @@
     Dim _DisplayFileDate   As String
     Dim _DisplayCreateDate As String
 
+    Property Resolution As Integer = -1
+
     Sub New 
     End Sub
 
@@ -60,6 +62,7 @@
         Integer.TryParse(votes.Replace(",",""),IntVotes)
         TitleUcase = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
+        Resolution = movie.Resolution
     End Sub
 
     Public Function Export() As ComboList
@@ -83,7 +86,8 @@
                                                   .missingdata1 = Me.missingdata1,
                                                   .plot = Me.plot.Trim,
                                                   .source = Me.source,
-                                                  .votes = Me.votes
+                                                  .votes = Me.votes,
+                                                  .Resolution = Me.Resolution
                                                  }
         Return convertedMovie
     End Function

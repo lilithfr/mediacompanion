@@ -904,7 +904,17 @@ Public Class Preferences
     End Function
 
 
+    Public Shared Function GetActorPath(ByVal FullPath As String, ByVal ActorName As String) As String
 
+        Dim Path As String = FullPath.Replace(IO.Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
+
+        If Preferences.FrodoEnabled And File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
+        If Preferences.EdenEnabled  And File.Exists(Path & ".tbn") Then Return Path & ".tbn"  
+          
+        If File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
+        
+        Return Path & ".tbn"  
+    End Function
 
 
     Public Shared Function GetPosterPath(ByVal FullPath As String) As String

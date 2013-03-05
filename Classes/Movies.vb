@@ -4,6 +4,16 @@ Imports System.Linq
 Imports System.Xml
 Imports Media_Companion
 
+Module Ext
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String)
+
+        Dim child As XmlElement = doc.CreateElement(name)
+
+        child.InnerText = value
+        root.AppendChild(child)
+    End Sub
+End Module
 
 Public Class Movies
 
@@ -80,6 +90,21 @@ Public Class Movies
             Dim r = From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxActorsInFilter
 
             Return r.ToList
+        End Get
+    End Property    
+
+
+    Public ReadOnly Property ResolutionFilter As List(Of String)
+        Get
+            Dim q = From x In MovieCache 
+                Group By x.Resolution Into NumFilms=Count 
+                Order by Resolution Descending
+
+            Dim r = (From x In q Select x.Resolution & " (" & x.NumFilms.ToString & ")").ToList
+
+            r.Item(r.Count-1) = r.Item(r.Count-1).Replace("-1","Unknown")
+
+            Return r
         End Get
     End Property    
 
@@ -647,6 +672,8 @@ Public Class Movies
                                 newmovie.runtime = detail.InnerText
                             Case "votes"
                                 newmovie.votes = detail.InnerText
+
+                            Case "Resolution" : newmovie.Resolution = detail.InnerText
                         End Select
                     Next
                     If newmovie.source = Nothing Then
@@ -810,6 +837,8 @@ Public Class Movies
                 child.AppendChild(childchild)
             End If
 
+            child.AppendChild(doc, "Resolution", movie.Resolution)     
+
             root.AppendChild(child)
         Next
 
@@ -837,14 +866,12 @@ Public Class Movies
 
         If Cancelled Then Exit Sub
 
-'        For Each movie In MovieCache
-        For Each movie In TmpMovieCache
-            If Not Preferences.usefoldernames Then
-                If movie.filename <> Nothing Then
-                    movie.filename = movie.filename.Replace(".nfo", "")
-                End If
-            End If
-        Next
+        If Not Preferences.usefoldernames Then
+    '       For Each movie In MovieCache
+            For Each movie In TmpMovieCache
+                If movie.filename <> Nothing Then movie.filename = movie.filename.Replace(".nfo", "")
+            Next
+        End If
 
         'No duplicates found...
         'Dim q = From item In TmpMovieCache Group by item.fullpathandfilename Into Group Select Group
@@ -896,12 +923,11 @@ Public Class Movies
         Next
     End Sub
 
-
     Private Sub mov_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
 
         Dim nfoFunction As New WorkingWithNfoFiles
 
-        Dim workingMovie
+        Dim workingMovie As ComboList
 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
             Application.DoEvents()

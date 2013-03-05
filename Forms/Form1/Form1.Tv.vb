@@ -792,6 +792,8 @@ Partial Public Class Form1
     Public Shared Function util_ImageLoad(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
         Dim PathToUse As String = DefaultPic
 
+        PicBox.Tag = Nothing
+
         If File.Exists(ImagePath) Then
            PathToUse = ImagePath             
         ElseIf Utilities.UrlIsValid(ImagePath) Then
