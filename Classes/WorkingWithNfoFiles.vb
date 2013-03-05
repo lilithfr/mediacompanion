@@ -788,163 +788,209 @@ Public Class WorkingWithNfoFiles
             If Not IO.File.Exists(path) Then
                 newmovie.title = "Error"
                 Return newmovie
-            Else
-                If mode = "movielist" Then
-                    Dim movie As New XmlDocument
-                    Try
-                        movie.Load(path)
-                    'Catch
-                    '    newmovie.title = "Error"
-                    '    Return newmovie
-                    'End Try
-                    Catch ex As Exception
-                        If Not util_NfoValidate(path) Then
-                            newmovie.title = "Error"
-                            Return newmovie
-                        End If
+            End If
 
-                        newmovie.createdate = "999999999999"
-                        Dim filecreation2 As New IO.FileInfo(path)
-                        Dim myDate2 As Date = filecreation2.LastWriteTime
-                        Try
-                            newmovie.filedate = Format(myDate2, Preferences.datePattern).ToString
-                        Catch
-                        End Try
-                        newmovie.filename = IO.Path.GetFileName(path)
-                        newmovie.foldername = Utilities.GetLastFolder(path)
-                        newmovie.fullpathandfilename = path
-                        newmovie.genre = "problem / xml error"
-                        newmovie.id = ""
-                        newmovie.missingdata1 = 0
-                        newmovie.MovieSet = ""
-                        newmovie.source = ""
-                        newmovie.originaltitle = newmovie.title
-                        newmovie.outline = ""
-                        newmovie.playcount = "0"
-                        newmovie.plot = ""
-                        newmovie.rating = ""
-                        newmovie.runtime = "0"
-                        newmovie.sortorder = ""
-                        newmovie.title = IO.Path.GetFileName(path)
-             '           newmovie.titleandyear = newmovie.title & " (0000)"
-                        newmovie.top250 = "0"
-                        newmovie.year = "0000"
-
+            If mode = "movielist" Then
+                Dim movie As New XmlDocument
+                Try
+                    movie.Load(path)
+                'Catch
+                '    newmovie.title = "Error"
+                '    Return newmovie
+                'End Try
+                Catch ex As Exception
+                    If Not util_NfoValidate(path) Then
+                        newmovie.title = "Error"
                         Return newmovie
-                    End Try
+                    End If
 
-                    Dim thisresult As XmlNode = Nothing
-
-                    For Each thisresult In movie("movie")
-                        Try
-                            Select Case thisresult.Name
-                                Case "title" : newmovie.title = thisresult.InnerText
-
-
-                                    'Dim tempstring As String = ""
-                                    'tempstring = thisresult.InnerText
-                                    ''-------------- Aqui
-                                    'If Preferences.ignorearticle = True Then
-                                    '    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                    '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                    '        tempstring = tempstring & ", The"
-                                    '    End If
-                                    'End If
-                                    'newmovie.title = tempstring
-
-                                Case "originaltitle"
-                                    newmovie.originaltitle = thisresult.InnerText
-                                Case "set"
-                                    If newmovie.MovieSet = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
-                                        newmovie.MovieSet = thisresult.InnerText
-                                    Else
-                                        newmovie.MovieSet = newmovie.MovieSet & " / " & thisresult.InnerText
-                                    End If
-                                Case "source"
-                                    newmovie.source = thisresult.InnerText
-                                Case "year"
-                                    newmovie.year = thisresult.InnerText
-                                Case "outline"
-                                    newmovie.outline = thisresult.InnerText
-                                Case "plot"
-                                    newmovie.plot = thisresult.InnerText
-                                Case "genre"
-                                    If newmovie.genre = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
-                                        newmovie.genre = thisresult.InnerText
-                                    Else
-                                        newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
-                                    End If
-                                Case "id"
-                                    If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
-                                Case "playcount"
-                                    newmovie.playcount = thisresult.InnerText
-                                Case "rating"
-                                    newmovie.rating = thisresult.InnerText
-                                    If newmovie.rating.IndexOf("/10") <> -1 Then newmovie.rating.Replace("/10", "")
-                                    If newmovie.rating.IndexOf(" ") <> -1 Then newmovie.rating.Replace(" ", "")
-                                Case "top250"
-                                    newmovie.top250 = thisresult.InnerText
-                                Case "sortorder"
-                                    newmovie.sortorder = thisresult.InnerText
-                                Case "sorttitle"
-                                    newmovie.sortorder = thisresult.InnerText
-                                Case "runtime"
-                                    newmovie.runtime = thisresult.InnerText
-                                    If IsNumeric(newmovie.runtime) Then
-                                        newmovie.runtime = newmovie.runtime & " min"
-                                    End If
-                                Case "createdate"
-                                    newmovie.createdate = thisresult.InnerText
-                                Case "votes"
-                                    newmovie.votes = thisresult.InnerText
-                            End Select
-                        Catch ex As Exception
-                            MsgBox(ex.ToString)
-                        End Try
-                    Next
-
-                    'Now we need to make sure no varibles are still set to NOTHING before returning....
-                    Dim filecreation As New IO.FileInfo(path)
-                    Dim myDate As Date = filecreation.LastWriteTime
-
-
-                    If newmovie.title = Nothing Then newmovie.title = "ERR - This Movie Has No TITLE!"
-                    If newmovie.createdate = "" Or newmovie.createdate = Nothing Then newmovie.createdate = "18000101000000"
+                    newmovie.createdate = "999999999999"
+                    Dim filecreation2 As New IO.FileInfo(path)
+                    Dim myDate2 As Date = filecreation2.LastWriteTime
                     Try
-                        newmovie.filedate = Format(myDate, Preferences.datePattern)
-                    Catch ex As Exception
-                        MsgBox(ex.ToString)
+                        newmovie.filedate = Format(myDate2, Preferences.datePattern).ToString
+                    Catch
                     End Try
                     newmovie.filename = IO.Path.GetFileName(path)
                     newmovie.foldername = Utilities.GetLastFolder(path)
                     newmovie.fullpathandfilename = path
-                    If newmovie.genre = Nothing Then newmovie.genre = ""
-                    If newmovie.id = Nothing Then newmovie.id = ""
-                    If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
-                    If newmovie.source = Nothing Then newmovie.source = ""
-                    If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
-                    'if there is no entry for originaltitle, then use the current title. this should only come into use
-                    'for old movies since new ones will have the originaltitle created when scraped
-                    If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
-                    If newmovie.playcount = Nothing Then newmovie.playcount = "0"
-                    If newmovie.plot = Nothing Then newmovie.plot = ""
-                    If newmovie.rating = Nothing Then newmovie.rating = ""
-                    If newmovie.runtime = Nothing Then newmovie.runtime = ""
-                    If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
-                    'If newmovie.title <> Nothing And newmovie.year <> Nothing Then
-                    '    newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
-                    'Else
-                    '    newmovie.titleandyear = newmovie.title & "(0000)"
-                    'End If
-                    If newmovie.top250 = Nothing Then newmovie.top250 = "0"
-                    If newmovie.year = Nothing Then newmovie.year = "0001"
+                    newmovie.genre = "problem / xml error"
+                    newmovie.id = ""
+                    newmovie.missingdata1 = 0
+                    newmovie.MovieSet = ""
+                    newmovie.source = ""
+                    newmovie.originaltitle = newmovie.title
+                    newmovie.outline = ""
+                    newmovie.playcount = "0"
+                    newmovie.plot = ""
+                    newmovie.rating = ""
+                    newmovie.runtime = "0"
+                    newmovie.sortorder = ""
+                    newmovie.title = IO.Path.GetFileName(path)
+            '           newmovie.titleandyear = newmovie.title & " (0000)"
+                    newmovie.top250 = "0"
+                    newmovie.year = "0000"
 
-                    'MsgBox(Format(myDate, "MMddyy"))
-                    'MsgBox(myDate.ToString("MMddyy"))
+                    Return newmovie
+                End Try
 
-                End If
-                Return newmovie
+                Dim thisresult As XmlNode = Nothing
+
+                For Each thisresult In movie("movie")
+                    Try
+                        Select Case thisresult.Name
+                            Case "title" : newmovie.title = thisresult.InnerText
+
+
+                                'Dim tempstring As String = ""
+                                'tempstring = thisresult.InnerText
+                                ''-------------- Aqui
+                                'If Preferences.ignorearticle = True Then
+                                '    If tempstring.ToLower.IndexOf("the ") = 0 Then
+                                '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
+                                '        tempstring = tempstring & ", The"
+                                '    End If
+                                'End If
+                                'newmovie.title = tempstring
+
+                            Case "originaltitle"
+                                newmovie.originaltitle = thisresult.InnerText
+                            Case "set"
+                                If newmovie.MovieSet = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                    newmovie.MovieSet = thisresult.InnerText
+                                Else
+                                    newmovie.MovieSet = newmovie.MovieSet & " / " & thisresult.InnerText
+                                End If
+                            Case "source"
+                                newmovie.source = thisresult.InnerText
+                            Case "year"
+                                newmovie.year = thisresult.InnerText
+                            Case "outline"
+                                newmovie.outline = thisresult.InnerText
+                            Case "plot"
+                                newmovie.plot = thisresult.InnerText
+                            Case "genre"
+                                If newmovie.genre = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                    newmovie.genre = thisresult.InnerText
+                                Else
+                                    newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
+                                End If
+                            Case "id"
+                                If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
+                            Case "playcount"
+                                newmovie.playcount = thisresult.InnerText
+                            Case "rating"
+                                newmovie.rating = thisresult.InnerText
+                                If newmovie.rating.IndexOf("/10") <> -1 Then newmovie.rating.Replace("/10", "")
+                                If newmovie.rating.IndexOf(" ") <> -1 Then newmovie.rating.Replace(" ", "")
+                            Case "top250"
+                                newmovie.top250 = thisresult.InnerText
+                            Case "sortorder"
+                                newmovie.sortorder = thisresult.InnerText
+                            Case "sorttitle"
+                                newmovie.sortorder = thisresult.InnerText
+                            Case "runtime"
+                                newmovie.runtime = thisresult.InnerText
+                                If IsNumeric(newmovie.runtime) Then
+                                    newmovie.runtime = newmovie.runtime & " min"
+                                End If
+                            Case "createdate"
+                                newmovie.createdate = thisresult.InnerText
+                            Case "votes"
+                                newmovie.votes = thisresult.InnerText
+
+                            Case "fileinfo"
+
+                                Dim gotWidth  As Boolean
+                                Dim gotHeight As Boolean
+
+                                For Each res In thisresult.ChildNodes
+                                    If res.name="streamdetails" Then
+
+                                        Dim newfilenfo As New FullFileDetails
+
+                                        For Each detail In res.ChildNodes
+                                            If detail.Name="video" Then
+                                                Dim videodetails As XmlNode = Nothing
+
+
+                                                For Each videodetails In detail.ChildNodes
+                                                    Select Case videodetails.Name
+                                                        Case "width"
+                                                            newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
+                                                            gotWidth=True
+                                                        Case "height"
+                                                            newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
+                                                            gotHeight=True
+                                                    End Select
+
+                                                    If gotWidth And gotHeight Then
+                                                        newmovie.Resolution = newfilenfo.filedetails_video.VideoResolution
+                                                        Exit For
+                                                    End If
+                                                Next
+
+                                                If gotWidth And gotHeight Then
+                                                    Exit For
+                                                End If
+                                            End If
+                                        Next
+                            
+                                        If gotWidth And gotHeight Then
+                                            Exit For
+                                        End If
+                                    End If
+                                Next
+
+    '                       Case "Resolution" : newmovie.Resolution = thisresult.InnerText          'Add later?...to replace above...
+                        End Select
+                    Catch ex As Exception
+                        MsgBox(ex.ToString)
+                    End Try
+                Next
+
+                'Now we need to make sure no varibles are still set to NOTHING before returning....
+                Dim filecreation As New IO.FileInfo(path)
+                Dim myDate As Date = filecreation.LastWriteTime
+
+
+                If newmovie.title = Nothing Then newmovie.title = "ERR - This Movie Has No TITLE!"
+                If newmovie.createdate = "" Or newmovie.createdate = Nothing Then newmovie.createdate = "18000101000000"
+                Try
+                    newmovie.filedate = Format(myDate, Preferences.datePattern)
+                Catch ex As Exception
+                    MsgBox(ex.ToString)
+                End Try
+                newmovie.filename = IO.Path.GetFileName(path)
+                newmovie.foldername = Utilities.GetLastFolder(path)
+                newmovie.fullpathandfilename = path
+                If newmovie.genre = Nothing Then newmovie.genre = ""
+                If newmovie.id = Nothing Then newmovie.id = ""
+                If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
+                If newmovie.source = Nothing Then newmovie.source = ""
+                If newmovie.MovieSet = "" Or newmovie.MovieSet = Nothing Then newmovie.MovieSet = "-None-"
+                'if there is no entry for originaltitle, then use the current title. this should only come into use
+                'for old movies since new ones will have the originaltitle created when scraped
+                If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
+                If newmovie.playcount = Nothing Then newmovie.playcount = "0"
+                If newmovie.plot = Nothing Then newmovie.plot = ""
+                If newmovie.rating = Nothing Then newmovie.rating = ""
+                If newmovie.runtime = Nothing Then newmovie.runtime = ""
+                If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
+                'If newmovie.title <> Nothing And newmovie.year <> Nothing Then
+                '    newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
+                'Else
+                '    newmovie.titleandyear = newmovie.title & "(0000)"
+                'End If
+                If newmovie.top250 = Nothing Then newmovie.top250 = "0"
+                If newmovie.year = Nothing Then newmovie.year = "0001"
+
+                'MsgBox(Format(myDate, "MMddyy"))
+                'MsgBox(myDate.ToString("MMddyy"))
+
             End If
+            Return newmovie
+
 
         Catch
         End Try

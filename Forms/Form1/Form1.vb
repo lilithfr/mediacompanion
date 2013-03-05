@@ -56,7 +56,8 @@ Public Class Form1
     Public LastMovieDisplayed As String=""
     Public ActorFilter        As String=""
     Public SetFilter          As String=""
-    
+    Public ResolutionFilter   As String=""
+
     'Public Shared Preferences As New Structures
 
     Public MainFormLoadedStatus As Boolean = False
@@ -2766,55 +2767,33 @@ Public Class Form1
     'Browse Actors
     Private Sub actorcb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles actorcb.SelectedIndexChanged
         Try
-            Dim eden As Boolean = Preferences.EdenEnabled
-            Dim frodo As Boolean = Preferences.FrodoEnabled
             For Each actor In workingMovieDetails.listactors
                 If actor.actorname = actorcb.SelectedItem Then
                     If actor.actorrole <> "" Then
                         roletxt.Text = actor.actorrole
                     End If
-                    Dim temppath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename), "")
-                    Dim tempname As String = "" 'actor.actorname.Replace(" ", "_") & ".tbn"
-                    If eden And Not frodo Then
-                        tempname = actor.actorname.Replace(" ", "_") & ".tbn"
-                    ElseIf frodo Then
-                        tempname = actor.actorname.Replace(" ", "_") & ".jpg"
-                    End If
-                    temppath = temppath & ".actors\" & tempname
+
+                    Dim temppath = GetActorPath(workingMovieDetails.fileinfo.fullpathandfilename,actor.actorname)
+
                     If IO.File.Exists(temppath) Then
-
                         util_ImageLoad(PictureBoxActor, temppath, Utilities.DefaultActorPath)
-
-                        'PictureBoxActor.ImageLocation = temppath
-                        'PictureBoxActor.Load()
                         Exit Sub
                     End If
                     If actor.actorthumb <> Nothing Then
                         Dim actorthumbpath As String = Preferences.GetActorThumbPath(actor.actorthumb)
                         If actorthumbpath <> "none" Then
                             If IO.File.Exists(actorthumbpath) Or actorthumbpath.ToLower.IndexOf("http") <> -1 Then
-                                'PictureBoxActor.ImageLocation = actorthumbpath
-                                'PictureBoxActor.Load()
                                 util_ImageLoad(PictureBoxActor, actorthumbpath, Utilities.DefaultActorPath)
-                            'Else
-                            '    PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                            '    PictureBoxActor.Load()
                             End If
                         Else
                             util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
-                            'PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                            'PictureBoxActor.Load()
                         End If
                     Else
                         util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
-                        'PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                        'PictureBoxActor.Load()
                     End If
                     Exit For
                 Else
                     util_ImageLoad(PictureBoxActor, Utilities.DefaultActorPath, Utilities.DefaultActorPath)
-                    'PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
-                    'PictureBoxActor.Load()
                 End If
             Next
         Catch ex As Exception
@@ -3300,6 +3279,7 @@ Public Class Form1
         State=ProgramState.ResettingFilters
         ActorFilter=""
         SetFilter=""
+        ResolutionFilter=""
         filterOverride = False
         TextBox1.Text = ""
         txt_titlesearch.Text = ""
@@ -3311,11 +3291,12 @@ Public Class Form1
         ButtonNextFanart.Visible = False   'hide next movie button on fanart tab used for missing fanart
         ButtonNextFanart.Text = "Click here to move to next Movie without Fanart"  'resetthe button text back to default for when its next show
             
-        cbFilterGeneral.SelectedIndex = 0
-        cbFilterGenre  .SelectedIndex = 0
-        cbFilterSet    .SelectedIndex = 0
-        cbFilterActor  .SelectedIndex = 0
-        cbFilterSource .SelectedIndex = 0
+        cbFilterGeneral   .SelectedIndex = 0
+        cbFilterGenre     .SelectedIndex = 0
+        cbFilterSet       .SelectedIndex = 0
+        cbFilterActor     .SelectedIndex = 0
+        cbFilterSource    .SelectedIndex = 0
+        cbFilterResolution.SelectedIndex = 0
         State=ProgramState.Other
     End Sub
 
@@ -3537,7 +3518,7 @@ Public Class Form1
 
             For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
 
-                Dim filepath As String = item.Cells(0).Value.ToString
+                Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
                 Dim movie    As Movie  = oMovies.LoadMovie(filepath)
 
                 If IsNothing(movie) Then Continue For
@@ -3910,7 +3891,7 @@ Public Class Form1
                     watched = "1"
                 End If
                 For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
-                    Dim filepath As String = sRow.Cells(0).Value.ToString
+                    Dim filepath As String = sRow.Cells("fullpathandfilename").Value.ToString
                     If (IO.File.Exists(filepath)) Then
                         Dim movie As New FullMovieDetails
                         movie = nfoFunction.mov_NfoLoadFull(filepath)
@@ -4471,13 +4452,14 @@ Public Class Form1
     
     Public Sub DisplayMovie(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection, yielding As Boolean)
 
+        Const NFO_INDEX As Integer = 1
         Try
             If selectedRows.Count = 1 Then
-                If LastMovieDisplayed = selectedCells(0).Value.ToString Then Return
+                If LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString Then Return
             Else
                 LastMovieDisplayed = ""
             End If
-            LastMovieDisplayed = selectedCells(0).Value.ToString
+            LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString
         Catch
             Return
         End Try
@@ -4540,12 +4522,12 @@ Public Class Form1
             If Yield(yielding) Then Return
 
             'Check if the file trailer exist
-            mov_ToolStripPlayTrailer.Visible = IO.File.Exists(selectedCells(0).Value.ToString)
+            mov_ToolStripPlayTrailer.Visible = IO.File.Exists(selectedCells(NFO_INDEX).Value.ToString)
 
             If Yield(yielding) Then Return
 
-'			Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(0).Value.ToString
-            Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = selectedCells(0).Value.ToString
+'			Dim query = From f In filteredListObj Where f.fullpathandfilename = selectedCells(NFO_INDEX).Value.ToString
+            Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = selectedCells(NFO_INDEX).Value.ToString
 
             Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
@@ -4588,7 +4570,7 @@ Public Class Form1
             For Each sRow As DataGridViewRow In selectedRows
                 Dim old As String = watched
                 For Each item In oMovies.MovieCache
-                    If item.fullpathandfilename = sRow.Cells(0).Value.ToString Then
+                    If item.fullpathandfilename = sRow.Cells(NFO_INDEX).Value.ToString Then
 
                         If watched = "" Then
                             watched = item.playcount
@@ -12140,7 +12122,7 @@ Public Class Form1
         Dim tempstring As String = item.Tag
         For f = 0 To DataGridViewMovies.RowCount - 1
             'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-            If DataGridViewMovies.Rows(f).Cells(0).ToString = tempstring Then
+            If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                 'MovieListComboBox.SelectedItems.Clear()
                 'MovieListComboBox.SelectedIndex = f
                 DataGridViewMovies.ClearSelection()
@@ -12636,7 +12618,7 @@ Public Class Form1
             'Dim picbox As PictureBox = item.SourceControl
             For f = 0 To DataGridViewMovies.RowCount - 1
                 'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells(0).Value.ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
@@ -17002,6 +16984,7 @@ Public Class Form1
                     cbFilterSet.Font = newFont
                     cbFilterActor.Font = newFont
                     cbFilterSource.Font = newFont
+                    cbFilterResolution.Font = newFont
                     LabelCountFilter.Font = newFont
 
                     Me.Refresh()
@@ -18167,7 +18150,7 @@ Public Class Form1
             Next
             For f = 0 To DataGridViewMovies.Rows.Count - 1
                 'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells(0).ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
@@ -18261,7 +18244,7 @@ Public Class Form1
             Next
             For f = 0 To DataGridViewMovies.Rows.Count - 1
                 'If CType(MovieListComboBox.Items(f), ValueDescriptionPair).Value = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells(0).ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
@@ -18290,7 +18273,7 @@ Public Class Form1
             'For f = 0 To MovieListComboBox.Items.Count - 1
             For f = 0 To DataGridViewMovies.RowCount - 1
                 'If DataGridViewMovies.SelectedCells(0).Value.ToString = tempstring Then
-                If DataGridViewMovies.Rows(f).Cells(0).ToString = tempstring Then
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
                     'MovieListComboBox.SelectedItems.Clear()
                     'MovieListComboBox.SelectedIndex = f
                     DataGridViewMovies.ClearSelection()
@@ -18348,7 +18331,7 @@ Public Class Form1
         _rescrapeList.FullPathAndFilenames.Clear
 
         For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-            _rescrapeList.FullPathAndFilenames.Add(row.Cells(0).Value.ToString)
+            _rescrapeList.FullPathAndFilenames.Add(row.Cells("fullpathandfilename").Value.ToString)
         Next
 
         RunBackgroundMovieScrape("RescrapeSpecific")
@@ -20221,7 +20204,7 @@ Public Class Form1
                             End If
                         Next
 
-                        Dim fullpathandfilename As String = sRow.Cells(0).Value.ToString
+                        Dim fullpathandfilename As String = sRow.Cells("fullpathandfilename").Value.ToString
 
                         listoffilestomove.Add(fullpathandfilename)
                         If IO.File.Exists(Preferences.GetFanartPath(fullpathandfilename)) Then
@@ -20832,7 +20815,7 @@ Public Class Form1
 
     Private Sub ResizeBottomLHSPanel()
 
-        Dim maxSize = 170
+        Dim maxSize = 200
         Dim minSize = 2
 
         If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
@@ -22666,7 +22649,7 @@ Public Class Form1
 
         For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
 
-            oMovies.RemoveMovieFromCache(row.Cells(0).Value.ToString)
+            oMovies.RemoveMovieFromCache(row.Cells("fullpathandfilename").Value.ToString)
 
             DataGridViewMovies.Rows.RemoveAt(row.Index)
         Next
@@ -22982,6 +22965,19 @@ Public Class Form1
             DisplayMovie()
         End If
     End Sub
+     
+    Private Sub cbFilterResolutionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterResolution.SelectedValueChanged
+        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+            If cbFilterResolution.Text = "All" Then
+                ResolutionFilter = ""
+            Else
+                ResolutionFilter = cbFilterResolution.Text.RemoveAfterMatch.Replace("Unknown","-1")
+            End If
+
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+            DisplayMovie()
+        End If
+    End Sub
     
     Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
         If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
@@ -23225,12 +23221,13 @@ Public Class Form1
         Assign_FilterGenre
         Assign_FilterSet
         Assign_FilterActor
+        Assign_FilterResolution
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
         Try
             For Each row As DataGridViewRow In DataGridViewMovies.Rows
-                row.Selected = (row.Cells(0).Value.ToString = lastSelectedMovie)
+                row.Selected = (row.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie)
             Next
         Catch
         End Try
@@ -23279,6 +23276,32 @@ Public Class Form1
             Next
 
             If Not found Then SetFilter=""
+        End If
+    End Sub
+
+
+
+    Sub Assign_FilterResolution
+
+        cbFilterResolution.Items.Clear
+        cbFilterResolution.Items.Add("All")
+
+        For Each item In oMovies.ResolutionFilter
+            cbFilterResolution.Items.Add(item)
+        Next
+        If cbFilterResolution.Text = "" Then cbFilterResolution.Text = "All"
+
+        If ResolutionFilter<>"" Then
+            Dim found As Boolean=False
+            For Each item As String In cbFilterResolution.Items
+                If item.IndexOf(ResolutionFilter & " (")=0 Then
+                    cbFilterResolution.SelectedItem=item    
+                    found=True
+                    Exit For
+                End If
+            Next
+
+            If Not found Then ResolutionFilter=""
         End If
     End Sub
 

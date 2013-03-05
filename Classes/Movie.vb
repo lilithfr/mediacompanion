@@ -771,6 +771,7 @@ Public Class Movie
         _movieCache.outline             = _scrapedMovie.fullmoviebody.outline
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.year                = _scrapedMovie.fullmoviebody.year
+        _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
 
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
 
@@ -794,6 +795,7 @@ Public Class Movie
         _movieCache.playcount = _scrapedMovie.fullmoviebody.playcount
         AssignMovieToAddMissingData
     End Sub
+
 
     Sub AssignScrapedMovie
         AssignScrapedMovie(_scrapedMovie)
@@ -1341,7 +1343,7 @@ Public Class Movie
                     Case "Movie Poster DB"
                         PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
                     Case "themoviedb.org"
-                        'moviethumburl = scraperFunction2.tmdbthumb(newmovie.fullmoviebody.imdbid)
+                        'moviethumburl = scraperFunction2.tmdbthumb(_scrapedMovie.fullmoviebody.imdbid)
                         PosterUrl = tmdb.FirstOriginalPosterUrl
                 End Select
             Catch
