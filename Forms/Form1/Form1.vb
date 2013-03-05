@@ -10206,12 +10206,17 @@ Public Class Form1
 
             Dim TVShowNFOContent As String = ""
             If Button45.Text = "TVDB" Then
-                WorkingTvShow.TvShowActorSource.Value = "imdb"
-                Button45.Text = "IMDB"
+                If WorkingTvShow.ImdbId.Value<>"" Then
+                    WorkingTvShow.TvShowActorSource.Value = "imdb"
+                    Button45.Text = "IMDB"
+                Else
+                    MsgBox("No IMDB ID allocated to this Show!")
+                End If
             Else
                 WorkingTvShow.TvShowActorSource.Value = "tvdb"
                 Button45.Text = "TVDB"
             End If
+            WorkingTvShow.Save()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
