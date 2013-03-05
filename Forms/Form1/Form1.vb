@@ -22050,7 +22050,8 @@ Public Class Form1
 
     Private Sub ZoomActorPictureBox(pictureBox As PictureBox)
 
-        If pictureBox.ImageLocation = Utilities.DefaultActorPath Then
+'        If pictureBox.ImageLocation = Utilities.DefaultActorPath Then
+        If pictureBox.Tag.ToString = Utilities.DefaultActorPath Then
             Exit Sub
         End If
 
@@ -22058,7 +22059,8 @@ Public Class Form1
         MenuStrip1.Enabled = False
 
         Try
-            util_ZoomImage(New Bitmap(pictureBox.ImageLocation))
+'            util_ZoomImage(New Bitmap(pictureBox.ImageLocation))
+            util_ZoomImage(New Bitmap(pictureBox.Tag.ToString))
         Catch
             Dim wc As New WebClient()
             Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.Tag)
