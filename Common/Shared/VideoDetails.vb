@@ -23,9 +23,10 @@ Public Class VideoDetails
     Public ReadOnly Property VideoResolution As Integer
         Get
             Try
-                Dim w As Integer = Convert.ToInt32(Width.Value)
+                Dim w As Integer = Convert.ToInt32(Width .Value)
                 Dim h As Integer = Convert.ToInt32(Height.Value)
 
+                If w =   0 Or  h =  0  Then Return  -1
                 If w<= 720 And h<=480  Then Return 480
                 If w<= 768 And h<=576  Then Return 576
                 If w<= 960 And h<=544  Then Return 540

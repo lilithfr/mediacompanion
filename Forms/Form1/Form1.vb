@@ -23321,7 +23321,7 @@ Public Class Form1
         If ResolutionFilter<>"" Then
             Dim found As Boolean=False
             For Each item As String In cbFilterResolution.Items
-                If item.IndexOf(ResolutionFilter & " (")=0 Then
+                If item.IndexOf(ResolutionFilter.Replace("-1","Unknown") & " (")=0 Then
                     cbFilterResolution.SelectedItem=item    
                     found=True
                     Exit For
