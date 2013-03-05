@@ -551,7 +551,12 @@ Public Class Movies
 
 
     Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
-        Return ((100 /total) * onNumber)
+        Try
+            If total = 0 Then total=onNumber
+            Return ((100 /total) * onNumber)
+        Catch
+            Return 1
+        End Try
     End Function
 
 
