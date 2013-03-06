@@ -553,7 +553,7 @@ Public Class Movies
     Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
         Try
             If total = 0 Then total=onNumber
-            Return ((100 /total) * onNumber)
+            Return Math.Min( (100/total)*onNumber , 100 )
         Catch
             Return 1
         End Try
