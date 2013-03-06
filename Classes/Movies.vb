@@ -932,7 +932,7 @@ Public Class Movies
         Dim Busy       As Boolean = True
 
         While Busy
-            Threading.Thread.Sleep(250)
+            Threading.Thread.Sleep(100)
 
             If Cancelled And Not Cancelling Then 
                 Cancelling = True
@@ -947,9 +947,10 @@ Public Class Movies
 
             Busy = False
 
-            For each item As BackgroundWorker in BWs
+            For Each item As BackgroundWorker in BWs
                 Try
                     Busy = Busy Or item.IsBusy
+                    If Busy Then Exit For
                 Catch
                 End Try
             Next
@@ -986,23 +987,24 @@ Public Class Movies
             Case MovieProgress.MsgType.GotFoldersCount : TotalNumberOfFolders += mp.Data
                                                          ReportProgress("Total number of folders : [" & TotalNumberOfFolders & "]")
 
-            Case MovieProgress.MsgType.NextOne         : NumberOfFoldersDone += 1
+            Case MovieProgress.MsgType.DoneSome        : NumberOfFoldersDone += mp.Data
                                                          PercentDone = CalcPercentDone(NumberOfFoldersDone, TotalNumberOfFolders)
                                                          ReportProgress("Active threads : [" & NumActiveThreads & "] - Scanning folder " & NumberOfFoldersDone & " of " & TotalNumberOfFolders)
 
         End Select
-
     End Sub
 
 
     Private Sub bw_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
+        Threading.Monitor.Enter(Me)
+        NumActiveThreads -= 1
 
         If IsNothing(e.Result) Then Exit Sub
 
         Dim Cache As List(Of ComboList) = CType(e.Result, List(Of ComboList))
  
         TmpMovieCache.AddRange(Cache) 
-        NumActiveThreads -= 1
+        Threading.Monitor.Exit(Me)
     End Sub
 
 
@@ -1026,17 +1028,31 @@ Public Class Movies
             ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
         End Try
 
-        bw.ReportProgress( -1, New MovieProgress(MovieProgress.MsgType.GotFoldersCount,moviePaths.Count) )
 
+        Dim progress As MovieProgress = New MovieProgress
+
+        progress.ProgressEvent = MovieProgress.MsgType.GotFoldersCount
+        progress.Data          = moviePaths.Count
+
+        bw.ReportProgress( -1, progress.Clone )
+
+        Dim   i           As Integer = 0
+        Const ReportEvery As Integer = 1
+
+        progress.ProgressEvent = MovieProgress.MsgType.DoneSome
+        progress.Data          = ReportEvery
 
         For Each Path In moviePaths
-
-            bw.ReportProgress( -1, New MovieProgress(MovieProgress.MsgType.NextOne,Nothing) )
+            i += 1
+            If i Mod ReportEvery=0 Then bw.ReportProgress( -1, progress.Clone )
 
             MT_mov_ListFiles( pattern, New DirectoryInfo(Path), Cache )
             If Cancelled Then Exit Sub
         Next
 
+        progress.Data = i Mod ReportEvery
+
+        bw.ReportProgress( -1, progress.Clone )
 
         If Not Preferences.usefoldernames Then
             For Each movie In Cache
@@ -1053,7 +1069,7 @@ Public Class Movies
         Dim workingMovie As ComboList
 
         For Each oFileInfo In dirInfo.GetFiles(pattern)
-            Application.DoEvents()
+'            Application.DoEvents()
 
             If Cancelled Then Exit Sub
 
