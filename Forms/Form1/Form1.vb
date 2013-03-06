@@ -23195,7 +23195,7 @@ Public Class Form1
             Case "RescrapeSpecific"       : Return _rescrapeList.FullPathAndFilenames.Count>1
             Case "ScrapeDroppedFiles"     : Return droppedItems.Count>1
             Case "SearchForNewMovies"     : Return True
-            Case "RebuildCaches"          : Return False
+            Case "RebuildCaches"          : Return True
         End Select
 
         MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
