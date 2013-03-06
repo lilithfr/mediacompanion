@@ -294,7 +294,7 @@ Module Module1
                                 Dim myProcess As Process = New Process
                                 myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                                 myProcess.StartInfo.CreateNoWindow = False
-                                myProcess.StartInfo.FileName = Preferences.applicationPath & "ffmpeg.exe"
+                                myProcess.StartInfo.FileName = Preferences.applicationPath & "\Assets\ffmpeg.exe"
                                 Dim proc_arguments As String = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
                                 myProcess.StartInfo.Arguments = proc_arguments
                                 myProcess.Start()
