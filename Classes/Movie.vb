@@ -2006,7 +2006,7 @@ Public Class Movie
 
         If rl.Rename_Files And Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
             ReportProgress(,RenameExistingMetaFiles)
-            SaveNFO
+            'SaveNFO
         End If
 
         UpdateCaches
