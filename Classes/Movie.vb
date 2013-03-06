@@ -47,23 +47,23 @@ Public Class Movie
     
     Private WithEvents _WebFileDownloader As New WebFileDownloader
 
-    Private _nfoFunction          As New WorkingWithNfoFiles
-    Private _imdbCounter          As Integer =  0
-    Private _imdbBody             As String  = ""
-    Property Scraped              As Boolean = False
-    Private _scrapedMovie         As New FullMovieDetails
-    Private _rescrapedMovie       As FullMovieDetails
-    Public  _movieCache           As New ComboList
-    Private _certificates         As New List(Of String)
-    Private _imdbScraper          As New Classimdb
-    Private _scraperFunctions     As New ScraperFunctions
-    Private _titleFull            As String = ""
-    Private _title                As String = ""
-    Private _parent               As Movies
-    Private _possibleImdb         As String = String.Empty
-    Private _youTubeTrailer       As YouTubeVideoFile
-    Private _nfoPathAndFilename   As String = ""
-
+    Private _nfoFunction              As New WorkingWithNfoFiles
+    Private _imdbCounter              As Integer =  0
+    Private _imdbBody                 As String  = ""
+    Property Scraped                  As Boolean = False
+    Private _scrapedMovie             As New FullMovieDetails
+    Private _rescrapedMovie           As FullMovieDetails
+    Public  _movieCache               As New ComboList
+    Private _certificates             As New List(Of String)
+    Private _imdbScraper              As New Classimdb
+    Private _scraperFunctions         As New ScraperFunctions
+    Private _titleFull                As String = ""
+    Private _title                    As String = ""
+    Private _parent                   As Movies
+    Private _possibleImdb             As String = String.Empty
+    Private _youTubeTrailer           As YouTubeVideoFile
+    Private _nfoPathAndFilename       As String = ""
+    Private _actualNfoPathAndFilename As String
 
     Shared Private _availableHeightResolutions As List(Of Integer)
 
@@ -267,6 +267,8 @@ Public Class Movie
 
     ReadOnly Property ActualNfoPathAndFilename As String
         Get
+            If Not IsNothing(_actualNfoPathAndFilename) Then Return _actualNfoPathAndFilename
+
             Return ActualBaseName & ".nfo"
         End Get
     End Property
@@ -564,6 +566,14 @@ Public Class Movie
     Sub New
     End Sub
  
+
+    Sub New( parent As Movies, NfoName As String )
+        Me.New
+        _parent                   = parent
+        _actualNfoPathAndFilename = NfoName
+        mediapathandfilename      = Utilities.GetFileName(NfoName,True)
+    End Sub
+
 
     Sub New( FullName As String, parent As Movies )
         Me.New
@@ -1414,17 +1424,17 @@ Public Class Movie
 
     Sub DeleteActors
         Try
-            'If Preferences.XBMC_version = 0 Then
+            'Only delete actors if movies are in separate folders
+            If Preferences.allfolders Then
                 For Each f In Directory.GetFiles(ActorPath, "*.tbn")
                     File.Delete(f)
                 Next
-                'Directory.Delete(ActorPath)
-            'ElseIf Preferences.XBMC_version = 2 Then
+
                 For Each f In Directory.GetFiles(ActorPath, "*.jpg")
                     File.Delete(f)
                 Next
                 Directory.Delete(ActorPath)
-            'End If
+            End If
         Catch
         End Try
              

@@ -251,7 +251,8 @@ Public Class Movies
 
     Public Function LoadMovie(fullpathandfilename As String) As Movie
 
-        Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename),Me)
+'       Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename,True),Me)
+        Dim movie = New Movie(Me,fullpathandfilename)
 
         If IsNothing(movie) Then Return Nothing
         
@@ -463,7 +464,8 @@ Public Class Movies
 
     Sub ChangeMovie(NfoPathAndFilename As String, imdb As String)
 
-        Dim movie = New Movie(Utilities.GetFileName(NfoPathAndFilename),Me)
+  '     Dim movie = New Movie(Utilities.GetFileName(NfoPathAndFilename,True),Me)
+        Dim movie = New Movie(Me,NfoPathAndFilename)
 
         movie.DeleteScrapedFiles(True)
 
@@ -478,7 +480,8 @@ Public Class Movies
 
     Sub RescrapeSpecificMovie(fullpathandfilename As String,rl As RescrapeList)
 
-        Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename),Me)
+'       Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename,True),Me)
+        Dim movie = New Movie(Me,fullpathandfilename)
 
         AddMovieEventHandlers   ( movie )
         movie.Scraped=False
@@ -494,7 +497,8 @@ Public Class Movies
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
             ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " ")
 
-            Dim movie = New Movie(Utilities.GetFileName(item),Me)
+'           Dim movie = New Movie(Utilities.GetFileName(item,True),Me)
+            Dim movie = New Movie(Me,item)
 
             AddMovieEventHandlers   ( movie )
             movie.Scraped=False
@@ -540,7 +544,8 @@ Public Class Movies
 
 
     Sub RescrapeMovie(NfoFilename as String)
-        Dim movie = New Movie(Utilities.GetFileName(NfoFilename),Me)
+'       Dim movie = New Movie(Utilities.GetFileName(NfoFilename,True),Me)
+        Dim movie = New Movie(Me,NfoFilename)
 
         'movie.DeleteScrapedFiles
         movie.Rescrape=True
@@ -1259,7 +1264,9 @@ Public Class Movies
             PercentDone = CalcPercentDone(i, MovieCache.Count)
             ReportProgress("Rebuilding actor cache " & i & " of " & MovieCache.Count)
 
-            Dim m As New Movie(movie.fullpathandfilename, Me)
+'           Dim m As New Movie(movie.fullpathandfilename, Me)
+'           Dim m As New Movie(Utilities.GetFileName(movie.fullpathandfilename,True), Me)
+            Dim m = New Movie(Me,movie.fullpathandfilename)
 
             m.LoadNFO(False)
             m.UpdateActorCacheFromEmpty()

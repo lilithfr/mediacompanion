@@ -368,7 +368,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return aFileExists
     End Function
 
-    Public Shared Function GetFileName(ByVal path As String) As String
+    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = False) As String
         Dim tempstring As String
         Dim tempfilename As String = path
         Dim actualpathandfilename As String = ""
@@ -396,7 +396,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 For f = 0 To 23
                     Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
                     Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+
                     Dim pattern As String = "*" & VideoExtensions(f)
+
+                    If strict Then pattern = IO.Path.GetFileNameWithoutExtension(path) & "*" & VideoExtensions(f)
+
                     Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
                     For Each fs_info As System.IO.FileInfo In fs_infos
                         'Application.DoEvents()
