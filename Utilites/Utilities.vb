@@ -368,7 +368,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return aFileExists
     End Function
 
-    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = False) As String
+    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean=True) As String
         Dim tempstring As String
         Dim tempfilename As String = path
         Dim actualpathandfilename As String = ""
