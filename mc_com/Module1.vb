@@ -1459,6 +1459,12 @@ Module Module1
         ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
             Console.WriteLine("No Episode Thumb, AutoCreating ScreenShot from Movie")
             Call screenshot(ext)
+            If Not eden And frodo Then
+                IO.File.Copy(ext, ext2)
+                IO.File.Delete(ext)
+            ElseIf eden And frodo Then
+                IO.File.Copy(ext, ext2)
+            End If
         ElseIf edenart Or frodoart Then
             If edenart And Not eden And Not frodoart Then
                 IO.File.Copy(ext, ext2)
