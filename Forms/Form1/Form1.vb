@@ -201,6 +201,7 @@ Public Class Form1
 
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
         Label73.Text = ""
 
         BckWrkScnMovies.WorkerReportsProgress      = true
@@ -375,6 +376,8 @@ Public Class Form1
                 End If
             Next
         End If
+
+
         If workingProfile.homemoviecache = "" Then workingProfile.homemoviecache = tempstring & "homemoviecache.xml"
         'Update Main Form Window Title to show Currrent Version - displays current profile so has to be done after profile is loaded
         util_MainFormTitleUpdate()
@@ -433,9 +436,7 @@ Public Class Form1
         'If applicationpath.IndexOf("/") <> -1 Then tempstring = applicationpath & "/" & "config.xml"
         'If applicationpath.IndexOf("\") <> -1 Then tempstring = applicationpath & "\" & "config.xml"
 
-
-
-
+        Movies.SpinUpDrives
 
 
         If scrapeAndQuit = False Then
@@ -16542,24 +16543,22 @@ Public Class Form1
                             chi.InnerText = bbol
                         End If
                         If chi.Name = "missingdata1" Then
-                            If chi.InnerText = "" Then
+                            If chi.InnerText = "" Or Not IsNumeric(chi.InnerText) Then
                                 chi.InnerText = "0"
+                            Else
+                                chi.InnerText = Movie.GetMissingDataText( Convert.ToByte(chi.InnerText) )
                             End If
-                            If Not IsNumeric(chi.InnerText) Then
-                                chi.InnerText = "0"
-                            End If
-                            Dim play As Integer = Convert.ToInt32(chi.InnerText)
-                            Dim bbol As String = String.Empty
-                            If play = 0 Then
-                                bbol = "None"
-                            ElseIf play = 1 Then
-                                bbol = "Fanart"
-                            ElseIf play = 2 Then
-                                bbol = "Poster"
-                            ElseIf play = "3" Then
-                                bbol = "Poster & Fanart"
-                            End If
-                            chi.InnerText = bbol
+                            'Dim play As Integer = Convert.ToInt32(chi.InnerText)
+                            'Dim bbol As String = String.Empty
+                            'If play = 0 Then
+                            '    bbol = "None"
+                            'ElseIf play And 1 Then
+                            '    bbol = "Fanart"
+                            'ElseIf play And 2 Then
+                            '    bbol = "Poster"
+                            'ElseIf play And 3 Then
+                            '    bbol = "Poster & Fanart"
+                            'End If
                         End If
                     Next
             End Select
@@ -16749,7 +16748,7 @@ Public Class Form1
         With artcolumn
             Dim oCell As DataGridViewCell = New DataGridViewTextBoxCell
             .CellTemplate = oCell
-            .HeaderText = "Missing Artwork"
+            .HeaderText = "Missing"
             .Name = "missingdata1"
             .DataPropertyName = "missingdata1"
             .SortMode = DataGridViewColumnSortMode.Automatic

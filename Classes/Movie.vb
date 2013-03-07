@@ -108,6 +108,12 @@ Public Class Movie
     End Property
 
 
+    ReadOnly Property PosterCachePath As String
+        Get
+            Return Path.Combine(Preferences.applicationPath, "settings\postercache\" & Utilities.GetCRC32(NfoPathPrefName) & ".jpg")
+        End Get
+    End Property
+
 
     Public ReadOnly Property YouTubeTrailer As YouTubeVideoFile
         Get
@@ -115,11 +121,13 @@ Public Class Movie
         End Get
     End Property
 
+
     Shared Public ReadOnly Property Resolutions As XDocument
         Get
             Return XDocument.Load(Preferences.applicationPath & "\Assets\" & ResolutionsFile)
         End Get 
     End Property
+
 
     Shared Public ReadOnly Property AvailableHeightResolutions As List(Of Integer)
         Get
@@ -135,7 +143,6 @@ Public Class Movie
             Return _availableHeightResolutions
         End Get
     End Property
-
 
 
     Shared Sub LoadBackDropResolutionOptions(ByRef cb As ComboBox, Optional selectedIndex As Integer=0)
@@ -175,9 +182,7 @@ Public Class Movie
 
         Return AvailableHeightResolutions(selectedIndex-1)
     End Function
-
-    
-
+ 
 
     Shared Sub LoadHeightResolutionOptions(ByRef cb As ComboBox, Optional selectedIndex As Integer=0)
         cb.Items.Clear
@@ -1374,6 +1379,7 @@ Public Class Movie
             Try
                 'DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
                 SavePosterImageToCacheAndPath(PosterUrl, PosterPath)
+                SavePosterToPosterWallCache
 
                 ReportProgress(MSG_OK, "Poster(s) scraped OK" & vbCrLf)
                 If frodo And Not IO.File.Exists(frodoart) Then
@@ -2092,12 +2098,56 @@ Public Class Movie
     End Function
 
 
-    Shared Function SavePosterImageToCacheAndPath(url As String, path As String)
+    Shared Function SavePosterImageToCacheAndPath(url As String, path As String) As Boolean
 
         Dim height = GetHeightResolution(Preferences.PosterResolutionSI)
 
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
     End Function
+
+
+
+    Sub SavePosterToPosterWallCache
+        If File.Exists(PosterPath) Then
+            Try
+                Dim bm As New Bitmap(PosterPath)
+
+                bm = Utilities.ResizeImage(bm, 150, 200)
+
+                Utilities.SaveImage(bm, PosterCachePath)
+
+                bm.Dispose
+            Catch
+                'Invalid file
+                Utilities.SafeDeleteFile(PosterPath     )
+                Utilities.SafeDeleteFile(PosterCachePath)
+            End Try
+        End If
+    End Sub
+
+    Sub LoadPosterFromPosterCache(picBox As PictureBox)
+
+        If Not File.Exists(PosterCachePath) Then SavePosterToPosterWallCache
+
+        picBox.Tag = Nothing
+
+        If File.Exists(PosterCachePath) Then
+            Try
+                picBox.Image = Utilities.LoadImage(PosterCachePath)
+                picBox.Tag = PosterPath
+            Catch
+                'Invalid file
+                Utilities.SafeDeleteFile(PosterPath     )
+                Utilities.SafeDeleteFile(PosterCachePath)
+            End Try
+        Else
+            Try
+                picBox.Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
+            Catch
+            End Try
+        End If
+
+    End Sub
 
 
     Function GetActorFileName( actorName As String) As String
@@ -2290,6 +2340,21 @@ Public Class Movie
         Return False
     End Function
 
+
+    Shared Function GetMissingDataText(missingdata1 As Byte) As String
+ 
+        If missingdata1 = 0 Then Return "None"
+        If missingdata1 = 1 Then Return "Fanart"
+        If missingdata1 = 2 Then Return "Poster"
+        If missingdata1 = 3 Then Return "Fanart & Poster"
+        If missingdata1 = 4 Then Return "Trailer"
+        If missingdata1 = 5 Then Return "Fanart & Trailer"
+        If missingdata1 = 6 Then Return "Poster & Trailer"
+        If missingdata1 = 7 Then Return "Fanart, Poster & Trailer"
+
+        Return "Error in GetMissingDataText - Passed : [" & missingdata1 & "]"
+
+    End Function
 
 
 End Class

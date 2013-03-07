@@ -1293,5 +1293,29 @@ Public Class Movies
         Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = fullpathandfilename)
     End Sub
 
+        
+
+    Public Shared Sub SpinUpDrives
+        For each item In Preferences.movieFolders
+            
+            Dim bw As BackgroundWorker = New BackgroundWorker
+
+            AddHandler bw.DoWork, AddressOf bw_SpinupDrive
+
+            bw.RunWorkerAsync(item)
+        Next
+    End Sub
+
+    Shared Sub bw_SpinupDrive(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
+        Try
+            Dim file As String = Path.Combine( DirectCast(e.Argument,String) , "delme.tmp" )
+
+            IO.File.WriteAllText(file, "Anything")
+
+            Utilities.SafeDeleteFile(file)
+        Catch
+        End Try
+    End Sub
+
 
 End Class
