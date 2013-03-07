@@ -2489,6 +2489,35 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return string2clean
     End Function
 
+    Public Shared Function CheckForXMLIllegalChars(ByRef xmlfile As String) As Boolean
+        Dim xmlOK As Boolean = False
+        Dim numCharLimit As Integer = 10    'Arbitrary limit so we don't get lost in an infinite loop
+        Do
+            Dim episode As New XmlDocument
+            Try
+                episode.LoadXml(xmlfile)    'Load XML as normal - if all goes well, we're outta here!
+                xmlOK = True
+            Catch ex As XmlException
+                xmlfile = Utilities.ReplaceXMLIllegalChars(xmlfile, ex.LineNumber, ex.LinePosition) 'Let's assume an illegal character is the problem, and convert it.
+                numCharLimit -= 1
+            End Try
+        Loop Until xmlOK Or numCharLimit = 0
+        Return xmlOK
+    End Function
+
+    Public Shared Function ReplaceXMLIllegalChars(ByVal xmlfile As String, ByVal linenumber As Long, ByVal charpos As Integer) As String
+        Dim lines As New List(Of String)
+        Using reader As New StringReader(xmlfile)   'Using StringReader to take care of unknown newlines
+            While reader.Peek() <> -1
+                lines.Add(reader.ReadLine())
+            End While
+        End Using
+        Dim suspectLine As String = lines(linenumber - 1)
+        Dim suspectChar As String = suspectLine.Substring(charpos - 2, 2)    'Not ideal but the "illegal" character may be after a "<" so we have to go back an extra character position
+        lines(linenumber - 1) = suspectLine.Replace(suspectChar, System.Security.SecurityElement.Escape(suspectChar))
+        Return String.Join(Environment.NewLine, lines)
+    End Function
+
     Public Shared Function SafeDeleteFile(ByVal fileName As String) As Boolean
         If Not File.Exists(fileName) Then Return True
         Try

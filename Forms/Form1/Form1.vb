@@ -12891,113 +12891,64 @@ Public Class Form1
     End Sub
 
     Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByVal seriesno As String, ByVal episodeno As String, ByVal language As String)
-        Dim ErrorCounter As Integer = 0
         Dim episodestring As String = ""
-        Dim episodeurl2 As String = ""
+        Dim episodeurl As String = ""
         Dim xmlfile As String
-        While ErrorCounter <= 10
-            Try
 
-                episodestring = ""
-                episodeurl2 = ""
-                If language.ToLower.IndexOf(".xml") = -1 Then
-                    language = language & ".xml"
-                End If
-                episodeurl2 = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
-                Dim myProxy As New WebProxy("myproxy", 80)
-                myProxy.BypassProxyOnLocal = True
+        If language.ToLower.IndexOf(".xml") = -1 Then
+            language = language & ".xml"
+        End If
+        episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
 
-                xmlfile = Utilities.DownloadTextFiles(episodeurl2)
-
-                If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
-
-                Dim episode As New XmlDocument
-
-                episode.LoadXml(xmlfile)
-
-                episodestring = "<episodedetails>"
-                episodestring = episodestring & "<url>" & episodeurl2 & "</url>"
-                Dim mirrorslist As New XmlDocument
-                'Try
-                mirrorslist.LoadXml(xmlfile)
-                Dim thisresult As XmlNode = Nothing
-                For Each thisresult In mirrorslist("Data")
-
-                    Select Case thisresult.Name
-                        Case "Episode"
-                            Dim mirrorselection As XmlNode = Nothing
-                            For Each mirrorselection In thisresult.ChildNodes
-                                Select Case mirrorselection.Name
-                                    Case "EpisodeName"
-                                        episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
-                                    Case "FirstAired"
-                                        episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
-                                    Case "GuestStars"
-                                        Dim tempstring As String = mirrorselection.InnerXml
-                                        Try
-                                            tempstring = tempstring.TrimStart("|")
-                                            tempstring = tempstring.TrimEnd("|")
-                                            Dim tvtempstring2 As String
-                                            Dim tvtempint As Integer = 0
-                                            Dim a() As String
-                                            Dim j As Integer = 0
-                                            tvtempstring2 = ""
-                                            a = tempstring.Split("|")
-                                            tvtempint = a.GetUpperBound(0)
-                                            tvtempstring2 = a(0)
-                                            If tvtempint >= 0 Then
-                                                For j = 0 To tvtempint
-                                                    Try
-                                                        episodestring = episodestring & "<actor>" & "<name>" & a(j) & "</name></actor>"
-                                                    Catch ex As Exception
-#If SilentErrorScream Then
-                                                        Throw ex
-#End If
-                                                    End Try
-                                                Next
-                                            End If
-                                        Catch ex As Exception
-#If SilentErrorScream Then
-                                            Throw ex
-#End If
-                                        End Try
-                                    Case "Director"
-                                        Dim tempstring As String = mirrorselection.InnerXml
-                                        tempstring = tempstring.TrimStart("|")
-                                        tempstring = tempstring.TrimEnd("|")
-                                        episodestring = episodestring & "<director>" & tempstring & "</director>"
-                                    Case "Writer"
-                                        Dim tempstring As String = mirrorselection.InnerXml
-                                        tempstring = tempstring.TrimStart("|")
-                                        tempstring = tempstring.TrimEnd("|")
-                                        episodestring = episodestring & "<credits>" & tempstring & "</credits>"
-                                    Case "Overview"
-                                        episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
-                                    Case "Rating"
-                                        episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
-                                    Case "filename"
-                                        episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-                                End Select
-                            Next
-                    End Select
-                Next
-                episodestring = episodestring & "</episodedetails>"
-                Return episodestring
-                'Catch ex As Exception
-                '    Return "ERROR - <url>" & episodeurl & "</url>"
-                'Finally
-                '    Monitor.Exit(Me)
-                'End Try
-            Catch ex As Exception
-                If ErrorCounter <= 10 Then
-                    ErrorCounter += 1
-                Else
-                    episodestring = Nothing
-                End If
-            End Try
-
-        End While
-        Return "Error"
+        xmlfile = Utilities.DownloadTextFiles(episodeurl)
+        Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
+        If xmlOK Then
+            episodestring = "<episodedetails>"
+            episodestring = episodestring & "<url>" & episodeurl & "</url>"
+            Dim mirrorslist As New XmlDocument
+            mirrorslist.LoadXml(xmlfile)
+            Dim thisresult As XmlNode = Nothing
+            For Each thisresult In mirrorslist("Data")
+                Select Case thisresult.Name
+                    Case "Episode"
+                        Dim mirrorselection As XmlNode = Nothing
+                        For Each mirrorselection In thisresult.ChildNodes
+                            Select Case mirrorselection.Name
+                                Case "EpisodeName"
+                                    episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
+                                Case "FirstAired"
+                                    episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
+                                Case "GuestStars"
+                                    Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
+                                    For Each guest In gueststars
+                                        If Not String.IsNullOrEmpty(guest) Then
+                                            episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
+                                        End If
+                                    Next
+                                Case "Director"
+                                    Dim tempstring As String = mirrorselection.InnerXml
+                                    tempstring = tempstring.Trim("|")
+                                    episodestring = episodestring & "<director>" & tempstring & "</director>"
+                                Case "Writer"
+                                    Dim tempstring As String = mirrorselection.InnerXml
+                                    tempstring = tempstring.Trim("|")
+                                    episodestring = episodestring & "<credits>" & tempstring & "</credits>"
+                                Case "Overview"
+                                    episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
+                                Case "Rating"
+                                    episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "filename"
+                                    episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+                            End Select
+                        Next
+                End Select
+            Next
+            episodestring = episodestring & "</episodedetails>"
+        Else
+            If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
+            episodestring = "Error"
+        End If
+        Return episodestring
     End Function
 
     Private Sub ReloadItemToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripReloadFromCache.Click
