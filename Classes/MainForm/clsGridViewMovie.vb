@@ -256,7 +256,7 @@ Public Class clsGridViewMovie
 
 
         'General
-        Select Form1.cbFilterGeneral.Text
+        Select Form1.cbFilterGeneral.Text.RemoveAfterMatch
 
             Case "Watched"         : b = From f In b Where f.playcount <> "0"
 

@@ -37,4 +37,23 @@ Public Class ComboList
     Property source              As String  = ""
     Property votes               As String  = ""
     Property Resolution         As Integer = -1
+
+    Public ReadOnly Property MissingFanart As Boolean
+        Get
+            Return _missingdata1 And 1
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingPoster As Boolean
+        Get
+            Return _missingdata1 And 2
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingTrailer As Boolean
+        Get
+            Return _missingdata1 And 4
+        End Get
+    End Property
+
 End Class

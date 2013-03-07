@@ -34,25 +34,12 @@ Public Class Movies
 
     Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
 
+
     Public ReadOnly Property Data_GridViewMovieCache As List(Of Data_GridViewMovie)
         Get
             Return _data_GridViewMovieCache
         End Get
     End Property
-
-
-    'Public ReadOnly Property Genres_old As List(Of String)
-    '    Get
-    '        Dim q = From x In MovieCache Select ms=x.genre.Split(" / ") Distinct
-             
-    '        Dim lst = q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
-
-    '        lst.RemoveAll(Function(m) m="" )
-    '        lst.RemoveAll(Function(m) m="/")
-
-    '        Return lst
-    '    End Get
-    'End Property    
 
 
     Public ReadOnly Property Genres As List(Of String)
@@ -69,10 +56,93 @@ Public Class Movies
                         Order By x
                         Select x & " (" & Num.ToString & ")" 
 
-
             Return q2.AsEnumerable.ToList
         End Get
     End Property    
+
+
+    Public ReadOnly Property GeneralFilters As List(Of String)
+        Get
+            Dim lst As List(Of String) = New List(Of String)
+
+            lst.Add( "All"          )
+            lst.Add( Watched        )
+            lst.Add( Unwatched      )
+            lst.Add( Duplicates     )
+            lst.Add( MissingFanart  )
+            lst.Add( MissingPoster  )
+            lst.Add( MissingPlot    )
+            lst.Add( MissingTrailer )
+
+            Return lst
+        End Get
+    End Property    
+
+    Public ReadOnly Property MissingFanart As String
+        Get
+            Return "Missing Fanart (" & (From x In MovieCache Where x.MissingFanart).Count & ")" 
+        End Get
+    End Property    
+
+
+    Public ReadOnly Property MissingTrailer As String
+        Get
+            Return "Missing Trailer (" & (From x In MovieCache Where x.MissingTrailer).Count & ")" 
+        End Get
+    End Property    
+
+
+    Public ReadOnly Property MissingPoster As String
+        Get
+            Return "Missing Poster (" & (From x In MovieCache Where x.MissingPoster).Count & ")" 
+        End Get
+    End Property    
+     
+
+    Public ReadOnly Property MissingPlot As String
+        Get
+            Return "Missing Plot (" & (From x In MovieCache Where x.plot.ToString.Trim = "" or x.plot.ToString.Trim = "scraper error").Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property Watched As String
+        Get
+            Return "Watched (" & (From x In MovieCache Where x.playcount<>"0").Count & ")" 
+
+            'Dim q = From x In MovieCache Where x.playcount <> "0" 
+            '            Group By x.playcount Into Num=Count
+            '            Select "Watched (" & Num.ToString & ")" 
+             
+            'Return q.ToList(0)
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property Duplicates As String
+        Get
+            Dim total          As Integer = (From x In MovieCache).Count
+            Dim total_distinct As Integer = (From x In MovieCache Select x.id).Distinct.Count
+
+            Dim num_duplicates = total - total_distinct
+
+            Return "Duplicates (" & num_duplicates & ")"
+        End Get
+    End Property    
+
+
+    Public ReadOnly Property Unwatched As String
+        Get
+            Return "Unwatched (" & (From x In MovieCache Where x.playcount="0").Count & ")" 
+
+            'Dim q = From x In MovieCache Where x.playcount = "0" 
+            '            Group By x.playcount Into Num=Count
+            '            Select "Unwatched (" & Num.ToString & ")" 
+             
+            'Return q.ToList(0)
+        End Get
+    End Property    
+
 
 
     Public ReadOnly Property ActorsFilter As List(Of String)

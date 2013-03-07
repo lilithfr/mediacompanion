@@ -23266,6 +23266,7 @@ Public Class Form1
         filteredList.Clear
         filteredList.AddRange(oMovies.MovieCache)
 
+        Assign_FilterGeneral
         Assign_FilterGenre
         Assign_FilterSet
         Assign_FilterActor
@@ -23288,6 +23289,18 @@ Public Class Form1
         DisplayMovie()
 
         State = ProgramState.Other
+    End Sub
+
+
+    Sub Assign_FilterGeneral
+        Dim selected = cbFilterGeneral.Text
+
+        cbFilterGeneral.Items.Clear
+        cbFilterGeneral.Items.AddRange( oMovies.GeneralFilters.ToArray )
+
+        If cbFilterGeneral.Text = "" Then cbFilterGeneral.Text = "All"
+        cbFilterGeneral.SelectedItem=cbFilterGenre.Text
+        cbFilterGeneral.SelectedItem=selected
     End Sub
 
 
