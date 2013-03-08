@@ -788,6 +788,11 @@ Public Class Movie
         _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.movieset
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.filename            = Path.GetFileName(nfopathandfilename)
+
+        If Not Preferences.usefoldernames Then
+            If _movieCache.filename <> Nothing Then _movieCache.filename = _movieCache.filename.Replace(".nfo", "")
+        End If    
+
         _movieCache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
         _movieCache.title               = _scrapedMovie.fullmoviebody.title
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle

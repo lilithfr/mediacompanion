@@ -3503,7 +3503,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
             movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
             movie.ScrapedMovie.fullmoviebody.source   = If(ComboBoxFormatSource.SelectedIndex=0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
-            
+
             movie.AssignMovieToCache
             movie.UpdateMovieCache
             movie.SaveNFO
