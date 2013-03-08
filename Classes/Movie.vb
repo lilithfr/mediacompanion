@@ -283,6 +283,10 @@ Public Class Movie
             Dim s = Preferences.GetPosterPath(NfoPathPrefName)
 
             If File.Exists(s) Then Return s
+            If Preferences.basicsavemode then
+                s= NfoPathPrefName.Replace(".nfo",".tbn")
+                Return s
+            End If
 
             Return ActualBaseName & ".tbn"
         End Get 
@@ -293,6 +297,13 @@ Public Class Movie
             Dim s = Preferences.GetFanartPath(NfoPathPrefName)
 
             If File.Exists(s) Then Return s
+            If Preferences.basicsavemode then
+                s= NfoPathPrefName.Replace("movie.nfo","fanart.jpg")
+                Return s
+            End If
+            'If Preferences.fanartjpg Then
+            '    s=IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
+            'End If
 
             Return ActualBaseName & "-fanart.jpg"
         End Get 
@@ -1329,7 +1340,7 @@ Public Class Movie
     Private Sub DoDownloadPoster
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
-        Dim edenart As String = ActualPosterPath
+        Dim edenart As String = NfoPathPrefName.Replace(".nfo",".tbn")
         Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
         If Not Preferences.overwritethumbs Then
             If eden And File.Exists(edenart) And Not frodo Then
@@ -1377,12 +1388,13 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
+                Dim newPosterPath = edenart 
                 'DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
-                SavePosterImageToCacheAndPath(PosterUrl, PosterPath)
+                SavePosterImageToCacheAndPath(PosterUrl, newPosterPath)
                 SavePosterToPosterWallCache
 
                 ReportProgress(MSG_OK, "Poster(s) scraped OK" & vbCrLf)
-                If frodo And Not IO.File.Exists(frodoart) Then
+                If frodo And Not IO.File.Exists(frodoart) And Not Preferences.basicsavemode Then
                     IO.File.Copy(edenart, frodoart)
                 End If
                 
@@ -1507,27 +1519,42 @@ Public Class Movie
         End If
 
         DoDownloadFanart
+        If Preferences.fanartjpg Then
+            Dim s As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
+            Dim t As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
+            If IO.File.Exists(t) and Not IO.File.Exists(s) then
+                IO.File.Copy(t,s)
+            End If
+
+        End If
     End Sub
 
     Sub DoDownloadFanart
-        If Not Preferences.overwritethumbs and File.Exists(ActualFanartPath) Then
+        Dim isfanartjpg As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
+        Dim isMovieFanart As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
+        If Not Preferences.overwritethumbs and (File.Exists(isMovieFanart) AndAlso File.Exists(isfanartjpg)) Then
             ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
             Exit Sub
         End If
-
+        Dim newFanartPath As String = FanartPath
         If Not Rescrape Then DeleteFanart
-
+        If Preferences.basicsavemode or (Preferences.fanartjpg and (Preferences.usefoldernames or Preferences.allfolders)) then
+            newFanartPath = FanartPath.Replace("movie-","")
+        End If
+        If Not Preferences.basicsavemode Then
+            newFanartPath = isMovieFanart
+        End If
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
         If Not IsNothing(FanartUrl) then
             ReportProgress("Fanart",)
             Try
    '            Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
-                SaveFanartImageToCacheAndPath(FanartUrl, FanartPath)
+                SaveFanartImageToCacheAndPath(FanartUrl, newFanartPath)
 
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
-                ReportProgress(MSG_ERROR,"!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
+                ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
         Else
             ReportProgress("-Not available ","Fanart not available for this movie on TMDb" & vbCrLf)
@@ -1978,7 +2005,7 @@ Public Class Movie
         If Cancelled then Exit Sub
 
         If rl.missingfanart Then 
-            DoDownloadFanart
+            DownloadFanart
         End If
 
         If rl.tmdb_set_name Then 

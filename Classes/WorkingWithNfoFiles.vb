@@ -1246,6 +1246,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)
                 newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path)
                 newmovie.fileinfo.trailerpath = ""
+                newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
                 newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path)
 
                 Return newmovie

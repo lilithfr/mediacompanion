@@ -14802,11 +14802,14 @@ Public Class Form1
                 Preferences.usefoldernames = True
                 chkbx_MovieAllFolders.Checked = False
                 chkbx_createfolderjpg.Enabled = True
+                cbFanartInFolders.Enabled = True
             Else
                 Preferences.usefoldernames = False
                 If Not Preferences.allfolders then
                     chkbx_createfolderjpg.Checked = False
                     chkbx_createfolderjpg.Enabled = False
+                    cbFanartInFolders.Checked = False
+                    cbFanartInFolders.Enabled = False
                     'Preferences.createfolderjpg = False
                 End If
             End If
@@ -21590,10 +21593,13 @@ Public Class Form1
             If chkbx_MovieAllFolders.Checked = True Then 
                 chkbx_usefoldernames.Checked = False
                 chkbx_createfolderjpg.Enabled = True
+                cbFanartInFolders.Enabled=True
             Else
                 If Not Preferences.usefoldernames Then
                     chkbx_createfolderjpg.Enabled = False
                     chkbx_createfolderjpg.Checked = False
+                    cbFanartInFolders.Checked = False
+                    cbFanartInFolders.Enabled = False
                 End If
             End If
             movieprefschanged = True
