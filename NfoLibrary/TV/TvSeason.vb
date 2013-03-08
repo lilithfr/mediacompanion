@@ -32,11 +32,11 @@ Public Class TvSeason
 
             Select Case value
                 Case -1                  'case -1 is unknown season
-                    Me.Poster.FileName = "season-specials.tbn"
+                    Me.Poster.FileName = "season-specials" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
                 Case 0                   'case 0 is specials
-                    Me.Poster.FileName = "season-specials.tbn"
+                    Me.Poster.FileName = "season-specials" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
                 Case Else                'all other are normal seasons 
-                    Me.Poster.FileName = "season" & Media_Companion.Utilities.PadNumber(value, 2) & ".tbn"
+                    Me.Poster.FileName = "season" & Media_Companion.Utilities.PadNumber(value, 2) & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
             End Select
             
             _SeasonNumber = value
@@ -57,7 +57,7 @@ Public Class TvSeason
     End Property
 
     Public Property ShowId As New ProtoXML.ProtoProperty(Me, "ShowId")
-    Public Property Poster As New ProtoXML.ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "seasonX.tbn"}
+    Public Property Poster As New ProtoXML.ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "seasonX" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")}
 
     Public Property Episodes As New List(Of TvEpisode)
 

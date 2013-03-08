@@ -670,19 +670,11 @@ Public Class MediaInfoExport
             Select Case tokenInstr(0)
                 Case "createimage"
                     If imagepath <> "" And tokenInstr.Length > 1 Then
-                        Dim origImage = Preferences.GetPosterPath(tvShow.NfoFilePath)
-                        origImage = origImage.Replace(IO.Path.GetFileName(origImage), "folder.jpg")
+                        Dim origImage As String = tvShow.ImagePoster.Path
                         Dim imageType As String = "poster"
-                        Dim imgTest As Image = Image.FromFile(origImage)
                         If tokenInstr.Length > 2 AndAlso tokenInstr(2) = "banner" Then
                             imageType = "banner"
-                            If imgTest.Height / imgTest.Width > 1 Then
-                                origImage = origImage.Replace(IO.Path.GetFileName(origImage), "season-all.tbn")
-                            End If
-                        Else
-                            If imgTest.Height / imgTest.Width < 1 Then
-                                origImage = origImage.Replace(IO.Path.GetFileName(origImage), "season-all.tbn")
-                            End If
+                            origImage = tvShow.ImageBanner.Path
                         End If
 
                         If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
@@ -813,13 +805,10 @@ Public Class MediaInfoExport
             Select Case tokenInstr(0)
                 Case "createimage"
                     If imagepath <> "" And tokenInstr.Length > 1 Then
-                        Dim origImage = Preferences.GetPosterPath(tvShow.NfoFilePath)
-                        Dim imageName As String = "season" & If(currSeason >= 10, "", "0") & currSeason.ToString & ".tbn"
-                        If currSeason = 0 Then imageName = "season-specials.tbn"
-                        origImage = origImage.Replace(IO.Path.GetFileName(origImage), imageName)
+                        Dim imagetest As String = tvShow.Seasons(currSeason).Poster.Path
 
                         If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
-                        strNFOprop &= Utilities.createImage(origImage, tokenInstr(1), imagepath)
+                        strNFOprop &= Utilities.createImage(tvShow.Seasons(currSeason).Poster.Path, tokenInstr(1), imagepath)
                     End If
 
                 Case "show_counter"

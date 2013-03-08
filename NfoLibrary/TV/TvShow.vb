@@ -55,8 +55,8 @@ Public Class TvShow
 
     Public Property ImageFanart As New ProtoImage(Me, "fanart", Utilities.DefaultFanartPath) With {.FileName = "fanart.jpg"}
     Public Property ImagePoster As New ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "folder.jpg"}
-    Public Property ImageBanner As New ProtoImage(Me, "banner", Utilities.DefaultBannerPath) With {.FileName = "folder.jpg"}
-    Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons", Utilities.DefaultPosterPath) With {.FileName = "seasonall.tbn"}
+    Public Property ImageBanner As New ProtoImage(Me, "banner", Utilities.DefaultBannerPath) With {.FileName = "banner.jpg"}
+    Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons", Utilities.DefaultPosterPath) With {.FileName = "season" & If(Preferences.FrodoEnabled, "-all-poster.jpg", "all.tbn")}
     Public Property ImageClearArt As New ProtoImage(Me, "clearart", Utilities.DefaultBannerPath) With {.FileName = "clearart.png"}
     Public Property ImageLogo As New ProtoImage(Me, "logo", Utilities.DefaultBannerPath) With {.FileName = "logo.png"}
 
@@ -282,9 +282,9 @@ Public Class TvShow
                     CurrentSeason.SeasonLabel = "Season " & Utilities.PadNumber(Episode.Season.Value, 2)
                     CurrentSeason.Poster.FolderPath = Me.FolderPath
                     If Episode.Season.Value <> 0 Then
-                        CurrentSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & ".tbn" 'here we set as example for season 1 the 'season01.tbn'
+                        CurrentSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
                     Else
-                        CurrentSeason.Poster.FileName = "season-specials.tbn"  'if season is a special i.e. season00 then we use the season-specials.tbn
+                        CurrentSeason.Poster.FileName = "season-specials" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
                     End If
 
 
@@ -292,7 +292,7 @@ Public Class TvShow
                     CurrentSeason.SeasonNumber = -1
                     CurrentSeason.SeasonLabel = Episode.Season.Value
                     CurrentSeason.Poster.FolderPath = Me.FolderPath
-                    CurrentSeason.Poster.FileName = "season-all.tbn"
+                    CurrentSeason.Poster.FileName = "season-all" & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")
                 End If
             Else
                 CurrentSeason = Me.Seasons(Episode.Season.Value)

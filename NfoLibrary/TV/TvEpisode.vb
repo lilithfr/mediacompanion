@@ -33,7 +33,7 @@ Public Class TvEpisode
                 'End If
             End If
 
-            Me.Thumbnail.Path = _PureName & ".tbn"
+            Me.Thumbnail.Path = _PureName & If(Preferences.FrodoEnabled, "-thumb.jpg", ".tbn")
 
             ' Me.EditAttribute("PureName", Me.PureName)
             ' Me.EditAttribute("MediaExtension", Me.MediaExtension)
