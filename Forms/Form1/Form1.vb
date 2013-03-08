@@ -5409,6 +5409,7 @@ Public Class Form1
 
         Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
+        Assign_FilterGeneral
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
         Return True
@@ -23256,8 +23257,15 @@ Public Class Form1
         cbFilterGeneral.Items.AddRange( oMovies.GeneralFilters.ToArray )
 
         If cbFilterGeneral.Text = "" Then cbFilterGeneral.Text = "All"
-        cbFilterGeneral.SelectedItem=cbFilterGenre.Text
-        cbFilterGeneral.SelectedItem=selected
+
+        If selected<>"" Then
+            For Each item As String In cbFilterGeneral.Items
+                If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
+                    cbFilterGeneral.SelectedItem=item    
+                    Exit For
+                End If
+            Next
+        End If
     End Sub
 
 
@@ -23269,9 +23277,17 @@ Public Class Form1
         For Each item In oMovies.Genres
             cbFilterGenre.Items.Add(item)
         Next
+
         If cbFilterGenre.Text = "" Then cbFilterGenre.Text = "All"
-        cbFilterGenre.SelectedItem=cbFilterGenre.Text
-        cbFilterGenre.SelectedItem=selected
+
+        If selected<>"" Then
+            For Each item As String In cbFilterGenre.Items
+                If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
+                    cbFilterGenre.SelectedItem=item    
+                    Exit For
+                End If
+            Next
+        End If
     End Sub
 
 
