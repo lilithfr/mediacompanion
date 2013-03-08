@@ -24005,4 +24005,19 @@ Public Class Form1
         End If
     End Sub
 
+Private Sub btnTvSearchNew_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvSearchNew.Click
+        Try
+            Call ep_Search()
+        Catch ex As Exception
+
+        End Try
+End Sub
+
+Private Sub btnTvRefreshAll_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvRefreshAll.Click
+        Try
+            Call tv_CacheRefresh()
+        Catch ex As Exception
+
+        End Try
+End Sub
 End Class
