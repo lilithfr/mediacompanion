@@ -23197,6 +23197,7 @@ Public Class Form1
 
     Public Sub RescrapeDisplayedMovie()
         oMovies.RescrapeMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+        oMovies.SaveCaches
     End Sub
 
 

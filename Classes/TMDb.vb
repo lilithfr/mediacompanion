@@ -4,7 +4,8 @@ Imports System.IO
 
 Public Class TMDb
 
-    Public Const Key = "3f026194412846e530a208cf8a39e9cb"
+    Public Const Key          = "3f026194412846e530a208cf8a39e9cb"
+    Public Const TMDB_EXC_MSG = "TMDb is unavailale!"
 
     Public Shared LanguagesFile               = Preferences.applicationPath & "\classes\tmdb_languages.xml"
     Public Const  TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
@@ -212,85 +213,172 @@ Public Class TMDb
     End Property
 
 
+    'Private Sub FetchCast
+    '    If IsNothing(_cast) then
+    '        Dim tries=0
+    '        Dim ok=False
+
+    '        While tries<3 And Not ok
+    '            Try
+    '                _cast = _api.GetMovieCast(_movie.id)
+    '            Catch
+    '                Threading.Thread.Sleep(500)
+    '                tries &= 1
+    '                Continue While
+    '            End Try
+    '            ok=True
+    '        End While
+
+    '        If Not ok Then
+    '            Throw New Exception("TMDb is unavailale!")
+    '        End If
+    '    End If
+    'End Sub
+
+
+
+    Function GetMovieCast As Boolean
+        _cast = _api.GetMovieCast(_movie.id)
+        Return Not IsNothing(_cast)
+    End Function
+
+
     Private Sub FetchCast
         If IsNothing(_cast) then
-            Dim tries=0
-            Dim ok=False
-
-            While tries<3 And Not ok
-                Try
-                    _cast = _api.GetMovieCast(_movie.id)
-                Catch
-                    Threading.Thread.Sleep(500)
-                    tries &= 1
-                    Continue While
-                End Try
-                ok=True
-            End While
-
-            If Not ok Then
-                Throw New Exception("TMDb is unavailale!")
-            End If
+            If Not (new RetryHandler(AddressOf GetMovieCast)).Execute Then Throw New Exception(TMDB_EXC_MSG)
         End If
     End Sub
+
+
+
+
+    'Private Sub FetchReleases
+    '    If IsNothing(_releases) then
+    '        Dim tries=0
+    '        Dim ok=False
+
+    '        While tries<3 And Not ok
+    '            Try
+    '               _releases = _api.GetMovieReleases(_movie.id)
+    '            Catch
+    '                Threading.Thread.Sleep(500)
+    '                tries &= 1
+    '                Continue While
+    '            End Try
+    '            ok=True
+    '        End While
+
+    '        If Not ok Then
+    '            Throw New Exception(TMDB_EXC_MSG)
+    '        End If
+    '    End If
+    'End Sub
+
+
+    Function GetMovieReleases As Boolean
+        _releases = _api.GetMovieReleases(_movie.id)
+        Return Not IsNothing(_releases)
+    End Function
 
 
     Private Sub FetchReleases
         If IsNothing(_releases) then
-            Dim tries=0
-            Dim ok=False
-
-            While tries<3 And Not ok
-                Try
-                   _releases = _api.GetMovieReleases(_movie.id)
-                Catch
-                    Threading.Thread.Sleep(500)
-                    tries &= 1
-                    Continue While
-                End Try
-                ok=True
-            End While
-
-            If Not ok Then
-                Throw New Exception("TMDb is unavailale!")
-            End If
+            If Not (new RetryHandler(AddressOf GetMovieReleases)).Execute Then Throw New Exception(TMDB_EXC_MSG)
         End If
     End Sub
+
+
+    'Public ReadOnly Property AlternateTitles As List(Of String)
+    '    Get
+    '        Fetch
+    '        If IsNothing(_alternateTitles) then 
+
+    '            Dim tries=0
+    '            Dim ok=False
+
+    '            While tries<3 And Not ok
+    '                Try
+    '                   _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
+    '                Catch
+    '                    Threading.Thread.Sleep(500)
+    '                    tries &= 1
+    '                    Continue While
+    '                End Try
+    '                ok=True
+    '            End While
+
+    '            If Not ok Then
+    '                Throw New Exception(TMDB_EXC_MSG)
+    '            End If
+
+
+    '            For Each item In _alternateTitles.titles
+    '                _mcAlternateTitles.Add(item.title)
+    '            Next
+    '        End If
+
+    '        Return _mcAlternateTitles
+    '    End Get 
+    'End Property
+
+
+    Function GetMovieAlternateTitles As Boolean
+        _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
+        Return Not IsNothing(_alternateTitles)
+    End Function
 
 
     Public ReadOnly Property AlternateTitles As List(Of String)
         Get
             Fetch
             If IsNothing(_alternateTitles) then 
-
-                Dim tries=0
-                Dim ok=False
-
-                While tries<3 And Not ok
-                    Try
-                       _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
-                    Catch
-                        Threading.Thread.Sleep(500)
-                        tries &= 1
-                        Continue While
-                    End Try
-                    ok=True
-                End While
-
-                If Not ok Then
-                    Throw New Exception("TMDb is unavailale!")
-                End If
-
-
-                For Each item In _alternateTitles.titles
-                    _mcAlternateTitles.Add(item.title)
-                Next
+                If Not (new RetryHandler(AddressOf GetMovieAlternateTitles)).Execute Then Throw New Exception(TMDB_EXC_MSG)
             End If
+
+            _mcAlternateTitles.Clear
+
+            For Each item In _alternateTitles.titles
+                _mcAlternateTitles.Add(item.title)
+            Next
 
             Return _mcAlternateTitles
         End Get 
     End Property
 
+
+
+    'Public ReadOnly Property AlternateTitles As List(Of String)
+    '    Get
+    '        Fetch
+    '        If IsNothing(_alternateTitles) then 
+
+    '            Dim tries=0
+    '            Dim ok=False
+
+    '            While tries<3 And Not ok
+    '                Try
+    '                   _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
+    '                Catch
+    '                    Threading.Thread.Sleep(500)
+    '                    tries &= 1
+    '                    Continue While
+    '                End Try
+    '                ok=True
+    '            End While
+
+    '            If Not ok Then
+    '                Throw New Exception(TMDB_EXC_MSG)
+    '            End If
+
+
+    '            For Each item In _alternateTitles.titles
+    '                _mcAlternateTitles.Add(item.title)
+    '            Next
+    '        End If
+
+    '        Return _mcAlternateTitles
+    '    End Get 
+    'End Property
 
     Public ReadOnly Property MovieImages As WatTmdb.V3.TmdbMovieImages
         Get
@@ -383,15 +471,89 @@ Public Class TMDb
         End If
     End Sub
 
+
+    'Private Sub AssignConfig_images_base_url
+
+    '    Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
+
+    '    Dim expired As Boolean = True
+     
+
+    '    _config_images_base_url = Nothing
+
+
+    '    Try
+    '        If fi.Exists then
+    '            expired = (DateTime.Now-fi.LastWriteTime).TotalDays>TMDbConfigFileMaxAgeInDays
+
+    '            If Not expired then
+    '                _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
+    '                Return  
+    '            End If
+    '        End If
+    '    Catch
+    '    End Try
+ 
+
+    '    Dim tries As Integer=0
+
+
+    '    While tries<3
+    '        Try
+    '            _config_images_base_url = _api.GetConfiguration().images.base_url
+
+    '            If fi.Exists then fi.Delete
+
+    '            File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
+    '            Return
+    '        Catch
+    '            System.Threading.Thread.Sleep(500)
+    '            tries += 1
+    '        End Try
+    '    End While
+        
+
+    '    If Not IsNothing(_config_images_base_url) Then Return
+        
+
+    '    'Fallback on expired file
+    '    Try
+    '        If fi.Exists Then
+    '            _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
+    '        End If
+    '        Return
+    '    Catch
+    '    End Try
+
+
+    '    'If all else fails -> Write a default one
+    '    Try
+    '        _config_images_base_url = "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/"
+
+    '        If fi.Exists then fi.Delete
+
+    '        File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
+    '    Catch
+    '        Throw New Exception("AssignConfig_images_base_url failed")
+    '    End Try
+    'End Sub
+
+
+
+    Function GetConfiguration As Boolean
+        _config_images_base_url = _api.GetConfiguration().images.base_url
+        Return Not IsNothing(_config_images_base_url)
+    End Function
+
+
+
     Private Sub AssignConfig_images_base_url
 
         Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
 
         Dim expired As Boolean = True
-     
 
         _config_images_base_url = Nothing
-
 
         Try
             If fi.Exists then
@@ -406,32 +568,21 @@ Public Class TMDb
         End Try
  
 
-        Dim tries As Integer=0
+        Dim Ok As Boolean = (new RetryHandler(AddressOf GetConfiguration)).Execute
 
-
-        While tries<3
+        If Ok Then
             Try
-                _config_images_base_url = _api.GetConfiguration().images.base_url
-
                 If fi.Exists then fi.Delete
-
                 File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
                 Return
             Catch
-                System.Threading.Thread.Sleep(500)
-                tries += 1
             End Try
-        End While
+        End If
         
-
-        If Not IsNothing(_config_images_base_url) Then Return
-        
-
+       
         'Fallback on expired file
         Try
-            If fi.Exists Then
-                _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
-            End If
+            If fi.Exists Then _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
             Return
         Catch
         End Try
@@ -442,12 +593,12 @@ Public Class TMDb
             _config_images_base_url = "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/"
 
             If fi.Exists then fi.Delete
-
             File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
         Catch
             Throw New Exception("AssignConfig_images_base_url failed")
         End Try
     End Sub
+
 
 
     'Public Sub JsonSerialize(Of T)(sFileName As String, ByVal obj As T )
@@ -465,43 +616,91 @@ Public Class TMDb
     'End Function
 
 
+    'Private Sub Fetch
+    '    If _movie.id=0 and Not __Serialising and Not _fetched then
+    '        _fetched     = True
+
+    '        Dim tries=0
+    '        Dim ok=False
+
+    '        While tries<3 And Not ok
+    '            Try
+    '                _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
+    '            Catch
+    '                Threading.Thread.Sleep(500)
+    '                tries &= 1
+    '                Continue While
+    '            End Try
+
+    '            If IsNothing(_movie) Then
+    '                Threading.Thread.Sleep(500)
+    '                tries &= 1
+    '                Continue While
+    '            End If
+
+    '            Try
+    '                _movieImages = _api.GetMovieImages  (_movie.id)
+    '            Catch
+    '            End Try
+    '            Try
+    '                _trailers    = _api.GetMovieTrailers(_movie.id)
+    '            Catch
+    '            End Try
+    '            ok = True
+    '        End While
+            
+    '        If Not ok Then
+    '            Throw New Exception(TMDB_EXC_MSG)
+    '        End If
+            
+    '        'If movie isn't found -> Create empty child objects
+    '        If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
+    '        If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
+    '        If IsNothing(_trailers.youtube     ) then _trailers.youtube      = New List(Of WatTmdb.V3.Youtube )
+
+    '        FixUpMovieImages
+
+    '        AssignValidBackDrops
+    '        AssignValidPosters
+    '        AssignMC_Posters
+    '        AssignMC_Thumbs
+    '        AssignMC_Backdrops
+    '        AssignFrodoExtraPosterThumbs
+    '        AssignFrodoExtraFanartThumbs
+    '    End If
+    'End Sub
+
+    Function GetMovieByIMDB As Boolean
+        _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
+        Return Not IsNothing(_movie)
+    End Function
+
+    Function GetMovieImages As Boolean
+         _movieImages = _api.GetMovieImages  (_movie.id)
+        Return Not IsNothing(_movieImages)
+    End Function
+
+    Function GetMovieTrailers As Boolean
+        _trailers    = _api.GetMovieTrailers(_movie.id)
+        Return Not IsNothing(_trailers)
+    End Function
+
+
     Private Sub Fetch
         If _movie.id=0 and Not __Serialising and Not _fetched then
-            _fetched     = True
 
-            Dim tries=0
-            Dim ok=False
+            _fetched = True
 
-            While tries<3 And Not ok
-                Try
-                    _movie = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
-                Catch
-                    Threading.Thread.Sleep(500)
-                    tries &= 1
-                    Continue While
-                End Try
-
-                If IsNothing(_movie) Then
-                    Threading.Thread.Sleep(500)
-                    tries &= 1
-                    Continue While
-                End If
-
-                Try
-                    _movieImages = _api.GetMovieImages  (_movie.id)
-                Catch
-                End Try
-                Try
-                    _trailers    = _api.GetMovieTrailers(_movie.id)
-                Catch
-                End Try
-                ok = True
-            End While
+            Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
             
-            If Not ok Then
-                Throw New Exception("TMDb is unavailale!")
-            End If
-            
+            rhs.Add( new RetryHandler(AddressOf GetMovieByIMDB  ) )
+            rhs.Add( new RetryHandler(AddressOf GetMovieImages  ) )
+            rhs.Add( new RetryHandler(AddressOf GetMovieTrailers) )
+      
+            For Each rh in rhs
+                If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
+            Next
+                  
             'If movie isn't found -> Create empty child objects
             If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
             If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
@@ -518,6 +717,7 @@ Public Class TMDb
             AssignFrodoExtraFanartThumbs
         End If
     End Sub
+
 
 
     Private Sub AssignFrodoExtraPosterThumbs

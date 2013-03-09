@@ -575,8 +575,9 @@ Public Class Movies
             movie.RescrapeSpecific  ( rl    )
             RemoveMovieEventHandlers( movie )
 
-            If Cancelled then Exit Sub
+            If Cancelled then Exit For
         Next
+        SaveCaches
     End Sub
 
 
@@ -589,8 +590,9 @@ Public Class Movies
             
             RescrapeMovie(NfoFilename)
 
-            If Cancelled then Exit Sub
+            If Cancelled then Exit For
         Next
+        SaveCaches
     End Sub
 
 
@@ -604,8 +606,9 @@ Public Class Movies
             ReportProgress("Rescraping '" & CapsFirstLetter(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
             RescrapeSpecificMovie(FullPathAndFilename,rl)
 
-            If Cancelled then Exit Sub
+            If Cancelled then Exit For
         Next
+        SaveCaches
     End Sub
 
     Function CapsFirstLetter(words As String)

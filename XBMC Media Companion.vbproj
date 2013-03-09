@@ -146,6 +146,7 @@
     <Compile Include="Classes\Renamer.vb" />
     <Compile Include="Classes\RescrapeList.vb" />
     <Compile Include="Classes\RescrapeSpecificParams.vb" />
+    <Compile Include="Classes\RetryHandler.vb" />
     <Compile Include="Classes\Shared\Actor.vb" />
     <Compile Include="Classes\Thumb.vb" />
     <Compile Include="Classes\Times.vb" />
