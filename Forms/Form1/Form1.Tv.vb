@@ -1225,7 +1225,7 @@ Partial Public Class Form1
                             newstring = newstring.Replace("|", ", ")
                         NewAct.actorrole = newstring
                         If Act.Image.Value <>"" Then
-                            NewAct.actorthumb = "http://thetvdb.com/banners/"&Act.Image.Value
+                            NewAct.actorthumb = "http://thetvdb.com/banners/_cache/"&Act.Image.Value
                         Else
                             NewAct.actorthumb = ""
                         End If
