@@ -23930,8 +23930,9 @@ Public Class Form1
                 Dim f As New IO.DirectoryInfo(tempstring)
                 If f.Exists Then
                     ListBox7.Items.Add(tempstring)
+                    ListBox7.Refresh()
                     TextBox21.Text = ""
-                    newTvFolders.Add(tempstring)
+                    'newTvFolders.Add(tempstring)
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
