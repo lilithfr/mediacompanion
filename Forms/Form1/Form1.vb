@@ -233,7 +233,7 @@ Public Class Form1
         'TasksList.DataSource = Common.Tasks
 
         ForegroundWorkTimer.Interval = 500
-        AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
+'        AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
 
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -694,18 +694,18 @@ Public Class Form1
     End Sub
 
 #If Not Refocus Then
-    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
-        Try
-            If messbox.Visible = True Then
-                messbox.Activate()
-                messbox.BringToFront()
-                messbox.Focus()
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    'Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
+    '    Try
+    '        If messbox.Visible = True Then
+    '            messbox.Activate()
+    '            messbox.BringToFront()
+    '            messbox.Focus()
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
 
-    End Sub
+    'End Sub
 #End If
 
 
@@ -1609,9 +1609,9 @@ Public Class Form1
                     util_ImageLoad(moviethumb, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
                     'util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
-                    util_ImageLoad(PictureBox3, workingposter, Utilities.DefaultPosterPath)
+                    util_ImageLoad(PictureBoxAssignedMoviePoster, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
-                    Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
+                    Label19.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                     Label18.Visible = False
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -1761,7 +1761,7 @@ Public Class Form1
             moviethumb.Image = Nothing
             Label16.Text = ""
             Label17.Text = ""
-            PictureBox3.Image = Nothing
+            PictureBoxAssignedMoviePoster.Image = Nothing
             Label19.Text = ""
             TextBox34.Text = ""
             titletxt.Text = ""
@@ -4805,25 +4805,29 @@ Public Class Form1
             Else
                 MsgBox("No IMDB ID is available for this movie")
             End If
+
         ElseIf tab.ToLower = "file details" Then
             'Me.TabControl2.SelectedIndex = m_CurrentTabIndex
             currentTabIndex = TabControl2.SelectedIndex
             If TextBox8.Text = "" Then Call util_FileDetailsGet()
+
         ElseIf tab.ToLower = "fanart" Then
             GroupBoxFanartExtrathumbs.Visible = usefoldernames Or allfolders 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
             If Panel2.Controls.Count = 0 Then
                 Call mov_FanartLoad()
             End If
             currentTabIndex = TabControl2.SelectedIndex
- '          EnableFanartScrolling
+            UpdateMissingFanartNav
+            EnableFanartScrolling
+
         ElseIf tab.ToLower = "open folder" Then
             Me.TabControl2.SelectedIndex = currentTabIndex
             Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
-        ElseIf tab.ToLower = "Posters" Then
-            'HueyHQ - "Posters" <> tab.ToLower... ever! This is a bug that falls thru so that
-            '         currentTabIndex = TabControl2.SelectedIndex in the else statement below.
-            '         It works, so leave it be! (For now.)
-            Me.TabControl2.SelectedIndex = currentTabIndex
+
+        ElseIf tab.ToLower = "posters" Then
+            currentTabIndex = TabControl2.SelectedIndex
+            UpdateMissingPosterNav
+
         ElseIf tab.ToLower = "rescrape movie" Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 Call mov_Rescrape()
@@ -4844,33 +4848,19 @@ Public Class Form1
                ' TabPage14.Text = "...Cancelling..."
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 BckWrkScnMovies.CancelAsync()
+
         ElseIf tab.ToLower = "wall" Then
             Call mov_WallSetup()
+
         ElseIf tab.ToLower = "movie sets" Then
             ListofMovieSets.Items.Clear()
             For Each mset In Preferences.moviesets
                 If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
             Next
-            'Label164.Text = "Current Movie: """ & workingMovieDetails.fullmoviebody.title & """"
-            'ListBox14.Items.Clear()
-            'If setsTxt.Text = "-None-" Then
-            'ListBox14.Items.Add("-None-")
-            'Else
-            'If setsTxt.Text.IndexOf("/") <> -1 Then
-
-            'Dim strArr() As String = workingMovieDetails.fullmoviebody.movieset.Split("/")
-            'For count = 0 To strArr.Length - 1
-            '    strArr(count) = strArr(count).Trim
-            '    ListBox14.Items.Add(strArr(count))
-            'Next
-
-            'Else
-            'ListBox14.Items.Add(workingMovieDetails.fullmoviebody.movieset)
-            'End If
-            'End If
 
         ElseIf tab.ToLower = "movie preferences" Then
             Call mov_PreferencesSetup()
+
         ElseIf tab.ToLower = "table" Then
             currentTabIndex = TabControl2.SelectedIndex
             Call mov_TableSetup()
@@ -4878,8 +4868,6 @@ Public Class Form1
             currentTabIndex = TabControl2.SelectedIndex
         End If
 
-        'Reload the list of movies in the grid
-        'NEEDED?    Call mov_CacheLoad()
     End Sub
 
     Private Sub mov_ChangeMovieSetup()
@@ -4946,8 +4934,6 @@ Public Class Form1
     Private Sub mov_FanartLoad()
         RadioButtonFanart.Checked = True
 
-
-        '            Dim scraperfunction As New imdb.Classimdbscraper ' add to comment this one because of changes i made to the Class "Scraper" (ClassimdbScraper)
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
             Try
                 If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
@@ -5068,12 +5054,6 @@ Public Class Form1
                 End With
 
                 Me.Panel2.Controls.Add(mainlabel2)
-
-                'If Me.cbFilterGeneral.Text="Missing Fanart" Then     'If no fanart found & If the Missing Fanart RadioButton is checked
-                '    btnNextMissingFanart.Enabled = True
-                '    btnNextMissingFanart.Visible = True            'then show the next movie button so we can go to the next movie without saving
-                '    noFanart = True                             'only required if this button is visible
-                'End If
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -5309,12 +5289,7 @@ Public Class Form1
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
 
-                    Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-
-'                    UpdateFilteredList
-                    Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-                    UpdateMissingFanartNav
-
+                    UpdateMissingFanart
 
                 Catch ex As WebException
                     MsgBox(ex.Message)
@@ -5326,6 +5301,18 @@ Public Class Form1
         Finally
             messbox.Close
         End Try
+    End Sub
+
+
+    Sub UpdateMissingFanart
+        oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+
+        State = ProgramState.ResettingFilters
+        Assign_FilterGeneral
+        State = ProgramState.Other
+
+'       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        UpdateMissingFanartNav
     End Sub
 
 
@@ -5396,15 +5383,86 @@ Public Class Form1
     End Sub
 
 
-    Private Function UpdateMovieCache
+    Sub UpdateMissingPoster
+        oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
-        Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-
+        State = ProgramState.ResettingFilters
         Assign_FilterGeneral
-        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        State = ProgramState.Other
 
-        Return True
-    End Function
+'       Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        UpdateMissingPosterNav             
+    End Sub
+
+
+    
+    Sub UpdateMissingPosterNav
+
+        'Default to selecting first row if non selected
+        If DataGridViewMovies.SelectedRows.Count=0 And DataGridViewMovies.Rows.Count>1 Then
+            DataGridViewMovies.Rows(0).Selected=True
+        End If
+
+        UpdateMissingPosterNextBtn
+        UpdateMissingPosterPrevBtn
+        UpdatelblPosterMissingCount
+    End Sub
+
+
+    Sub UpdatelblPosterMissingCount
+        Dim i As Integer = 0
+        Dim x As Integer = 0
+
+        While i<DataGridViewMovies.Rows.Count
+            Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
+
+            If row.MissingPoster Then x = x + 1
+
+            i = i + 1
+        End While
+
+        lblPosterMissingCount.Text = x & " Missing" 
+    End Sub
+
+    Sub UpdateMissingPosterNextBtn 
+        btnNextMissingPoster.Enabled = False
+
+        If DataGridViewMovies.SelectedRows.Count=0 Then Return
+
+        Dim i As Integer = DataGridViewMovies.SelectedRows(0).Index + 1
+        While i<DataGridViewMovies.Rows.Count
+            Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
+
+            If row.MissingPoster Then 
+                btnNextMissingPoster.Enabled = True
+                btnNextMissingPoster.Tag = i
+                Return
+            End If
+
+            i = i + 1
+        End While
+    End Sub
+
+
+    Sub UpdateMissingPosterPrevBtn
+        btnPrevMissingPoster.Enabled = False
+
+        If DataGridViewMovies.SelectedRows.Count=0 Then Return
+
+        Dim i As Integer = DataGridViewMovies.SelectedRows(0).Index - 1
+        While i>=0
+            Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
+
+            If row.MissingPoster Then 
+                btnPrevMissingPoster.Enabled = True
+                btnPrevMissingPoster.Tag = i
+                Return
+            End If
+
+            i = i - 1
+        End While
+    End Sub
+
 
     Private Function mov_FanartSaved_old()
         Dim replace As Boolean = False
@@ -5434,9 +5492,9 @@ Public Class Form1
         Return replace
     End Function
 
-    Private Sub mov_PosterSaved()
-        UpdateMovieCache
-    End Sub
+    'Private Sub mov_PosterSaved()
+    '    UpdateMovieCache
+    'End Sub
 
     'Private Sub mov_PosterSaved_old
     '    Dim replace As Boolean = False
@@ -5509,9 +5567,7 @@ Public Class Form1
                 mov_SplitContainerAutoPosition()
             End If
 
-            Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            UpdateMissingFanartNav
+            UpdateMissingFanart
         Catch ex As Exception
             MsgBox("Unable To Download Image")
         End Try
@@ -5792,7 +5848,8 @@ Public Class Form1
         posterArray.Clear()
     End Sub
 
-    Private Sub Button19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button19.Click
+
+    Private Sub btn_TMDb_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TMDb_posters.Click
         Try
             messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -5805,36 +5862,6 @@ Public Class Form1
 
                 posterArray.AddRange( tmdb.MC_Posters )
 
-
-                'Dim tmdbposterscraper As New tmdb_posters.Class1
-
-                'Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingMovieDetails.fullmoviebody.imdbid)
-                'Dim bannerslist As New XmlDocument
-                'bannerslist.LoadXml(tmdbimageresults)
-                'Dim thisresult As XmlNode = Nothing
-                'For Each item In bannerslist("tmdb_posterlist")
-                '    Select Case item.name
-                '        Case "poster"
-                '            Dim newfanart As New str_ListOfPosters(SetDefaults)
-                '            For Each backdrop In item
-                '                If backdrop.childnodes(0).innertext = "original" Then
-                '                    newfanart.hdposter = backdrop.childnodes(1).innertext
-                '                End If
-                '                If backdrop.childnodes(0).innertext = "mid" Then
-                '                    newfanart.ldposter = backdrop.childnodes(1).innertext
-                '                End If
-                '                If newfanart.hdposter <> Nothing And newfanart.ldposter <> Nothing Then
-                '                    If newfanart.hdposter <> "" And newfanart.ldposter <> "" Then
-                '                        If newfanart.hdposter.IndexOf("http") <> -1 And newfanart.hdposter.IndexOf(".jpg") <> -1 And newfanart.ldposter.IndexOf("http") <> -1 And newfanart.ldposter.IndexOf(".jpg") <> -1 Then
-                '                            posterArray.Add(newfanart)
-                '                            Exit For
-                '                        End If
-                '                    End If
-                '                End If
-                '            Next
-
-                '    End Select
-                'Next
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -5846,8 +5873,8 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
     End Sub
+
 
     Private Sub mov_PosterSelectionDisplay()
         Dim names As New List(Of String)()
@@ -6324,7 +6351,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button18_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button18.Click
+    Private Sub btn_MPDB_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_MPDB_posters.Click
         Try
             messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -6378,7 +6405,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button16.Click
+    Private Sub btn_IMPA_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_IMPA_posters.Click
         Try
             messbox = New frmMessageBox("Please wait,", "", "Scraping Movie Poster List")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -6425,7 +6452,6 @@ Public Class Form1
             Dim backup As String = ""
 
 
-
             For Each button As Control In Me.Panel8.Controls
                 If button.Name.IndexOf("postercheckbox") <> -1 Then
                     Dim b1 As RadioButton = CType(button, RadioButton)
@@ -6458,13 +6484,10 @@ Public Class Form1
             Next
 
 
-
-
-
             If allok = False Then
                 MsgBox("No Poster Is Selected")
+                Return
             End If
-
 
 
             Try
@@ -6485,7 +6508,7 @@ Public Class Form1
                     End If
                 End If
 
-                util_ImageLoad(PictureBox3, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
+                util_ImageLoad(PictureBoxAssignedMoviePoster, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath)
 
                 'i1.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
 
@@ -6530,15 +6553,11 @@ Public Class Form1
                     End If
                 Next
 
-                'PictureBox3.ImageLocation = workingMovieDetails.fileinfo.posterpath
-                'PictureBox3.Load()
-                util_ImageLoad(PictureBox3, Paths(0), Utilities.DefaultPosterPath)
+                util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
 
-                'moviethumb.ImageLocation = workingMovieDetails.fileinfo.posterpath
-                'moviethumb.Load()
                 util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
 
-                tempstring = "Current Loaded Poster - " & PictureBox3.Image.Width.ToString & " x " & PictureBox3.Image.Height.ToString
+                tempstring = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                 Label19.Text = tempstring
                 Label19.Refresh()
             Catch ex As Exception
@@ -6547,35 +6566,22 @@ Public Class Form1
                 Throw ex
 #End If
             End Try
-            Call mov_PosterSaved()
 
-            If DataGridViewMovies.Rows.Count = 0 Then
-                MsgBox("There are no more missing posters")
-            Else
-                Dim currentIndex As Integer=0
+            UpdateMissingPoster
 
-                If Not IsNothing(DataGridViewMovies.CurrentRow) Then 
-                    currentIndex = DataGridViewMovies.CurrentRow.Index
-                End If
-
-                DataGridViewMovies.ClearSelection
-                DataGridViewMovies.Rows(currentIndex).Selected = True
-
-                DisplayMovie
-            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
 
     End Sub
 
-    Private Sub PictureBox3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox3.Click
+    Private Sub PictureBox3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxAssignedMoviePoster.Click
         Try
-            If Not PictureBox3.Image Is Nothing Then
+            If Not PictureBoxAssignedMoviePoster.Image Is Nothing Then
                 Me.ControlBox = False
                 MenuStrip1.Enabled = False
                 'ToolStrip1.Enabled = False
-                Call util_ZoomImage(PictureBox3.Image)
+                Call util_ZoomImage(PictureBoxAssignedMoviePoster.Image)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -6605,17 +6611,17 @@ Public Class Form1
                 Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox4.Text)
                 Dim ImageStream As New IO.MemoryStream(ImageInBytes)
 
-                PictureBox3.Image = New System.Drawing.Bitmap(ImageStream)
+                PictureBoxAssignedMoviePoster.Image = New System.Drawing.Bitmap(ImageStream)
                 
                 Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
 
                 For Each pth As String In Paths
-                    PictureBox3.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                    PictureBoxAssignedMoviePoster.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                 Next
 
                 If Preferences.createfolderjpg = True Then
                     tempstring = Paths(0).Replace(IO.Path.GetFileName(Paths(0)), "folder.jpg")
-                    PictureBox3.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
+                    PictureBoxAssignedMoviePoster.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
                 End If
 
                 util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
@@ -6646,7 +6652,9 @@ Public Class Form1
             Catch ex As Exception
                 MsgBox("Unable To Download Image")
             End Try
-            Call mov_PosterSaved()
+    
+            UpdateMissingPoster
+
             Panel6.Visible = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -6727,7 +6735,7 @@ Public Class Form1
     Private Sub Button23_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseDown
         Try
             'crop top
-            If PictureBox3.Image Is Nothing Then Exit Sub
+            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
             mov_PosterTimerSet("top")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -6737,7 +6745,7 @@ Public Class Form1
     Private Sub Button24_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button24.MouseDown
         Try
             'crop bottom
-            If PictureBox3.Image Is Nothing Then Exit Sub
+            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
             mov_PosterTimerSet("bottom")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -6747,7 +6755,7 @@ Public Class Form1
     Private Sub Button26_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button26.MouseDown
         Try
             'crop left
-            If PictureBox3.Image Is Nothing Then Exit Sub
+            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
             mov_PosterTimerSet("left")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -6757,7 +6765,7 @@ Public Class Form1
     Private Sub Button25_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button25.MouseDown
         Try
             'crop right
-            If PictureBox3.Image Is Nothing Then Exit Sub
+            If PictureBoxAssignedMoviePoster.Image Is Nothing Then Exit Sub
             mov_PosterTimerSet("right")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -6768,10 +6776,10 @@ Public Class Form1
         Try
             'reset
             posterThumbedItsMade = False
-            PictureBox3.Image = moviethumb.Image
+            PictureBoxAssignedMoviePoster.Image = moviethumb.Image
             Button28.Visible = False
             Button27.Visible = False
-            Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+            Label19.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6783,8 +6791,8 @@ Public Class Form1
             posterThumbedItsMade = False
             Try
                 Dim stream As New System.IO.MemoryStream
-                PictureBox3.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
-                moviethumb.Image = PictureBox3.Image
+                PictureBoxAssignedMoviePoster.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
+                moviethumb.Image = PictureBoxAssignedMoviePoster.Image
                 Button28.Visible = False
                 Button27.Visible = False
 
@@ -6831,22 +6839,22 @@ Public Class Form1
         End Try
     End Sub
     Private Sub mov_PosterCrop()
-        Dim imagewidth As Integer = PictureBox3.Image.Width
-        Dim imageheight As Integer = PictureBox3.Image.Height
+        Dim imagewidth As Integer = PictureBoxAssignedMoviePoster.Image.Width
+        Dim imageheight As Integer = PictureBoxAssignedMoviePoster.Image.Height
         thumbedItsMade = True
 
         Select Case posterCropString
             Case "top"
-                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone()
+                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone()
             Case "bottom"
-                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone()
+                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone()
             Case "left"
-                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone()
+                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone()
             Case "right"
-                PictureBox3.Image = util_ImageCrop(PictureBox3.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone()
+                PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone()
         End Select
-        PictureBox3.SizeMode = PictureBoxSizeMode.Zoom
-        Label19.Text = "Current Loaded Poster - " & PictureBox3.Image.Width & " X " & PictureBox3.Image.Height
+        PictureBoxAssignedMoviePoster.SizeMode = PictureBoxSizeMode.Zoom
+        Label19.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
     End Sub
 
     Private Sub Button23_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseUp
@@ -18677,7 +18685,7 @@ Public Class Form1
                         Dim bitmap3 As New Bitmap(posterpath)
                         Dim bmp4 As New Bitmap(bitmap3)
                         bitmap3.Dispose()
-                        PictureBox3.Image = bmp4
+                        PictureBoxAssignedMoviePoster.Image = bmp4
                         moviethumb.Image = bmp4
 
                         Dim bitmap5 As New Bitmap(posterpath)
@@ -20737,16 +20745,29 @@ Public Class Form1
     'End Sub
 
 
-
-
     Private Sub btnPrevNextMissingFanart_Click(sender As System.Object, e As System.EventArgs) Handles btnPrevMissingFanart.Click, btnNextMissingFanart.Click
+        btnPrevMissingFanart.Enabled = False
+        btnNextMissingFanart.Enabled = False
 
         DataGridViewMovies.ClearSelection
         DataGridViewMovies.Rows(sender.Tag).Selected = True
         DisplayMovie
-        mov_FanartLoad
         UpdateMissingFanartNav
+        mov_FanartLoad
+   End Sub
+
+
+    Private Sub btnPrevNextMissingPoster_Click(sender As System.Object, e As System.EventArgs) Handles btnPrevMissingPoster.Click, btnNextMissingPoster.Click
+        btnPrevMissingPoster.Enabled = False
+        btnNextMissingPoster.Enabled = False
+
+        PictureBoxAssignedMoviePoster.Image = Nothing
+        DataGridViewMovies.ClearSelection
+        DataGridViewMovies.Rows(sender.Tag).Selected = True
+        DisplayMovie
+        UpdateMissingPosterNav
     End Sub
+
 
 
     Private Sub CheckBoxRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBoxRenameNFOtoINFO.CheckedChanged
@@ -22762,14 +22783,14 @@ Public Class Form1
     End Sub
 
     Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterGenre.SelectedValueChanged, cbFilterSource.SelectedValueChanged
-        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+        If State = ProgramState.Other Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             DisplayMovie()
         End If
     End Sub
      
     Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterSet.SelectedValueChanged
-        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+        If State = ProgramState.Other Then
             If cbFilterSet.Text = "All" Then
                 SetFilter = ""
             Else
@@ -22782,7 +22803,7 @@ Public Class Form1
     End Sub
      
     Private Sub cbFilterResolutionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterResolution.SelectedValueChanged
-        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+        If State = ProgramState.Other Then
             If cbFilterResolution.Text = "All" Then
                 ResolutionFilter = ""
             Else
@@ -22795,7 +22816,7 @@ Public Class Form1
     End Sub
     
     Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
-        If State <> ProgramState.UpdatingFilteredList And State <> ProgramState.ResettingFilters Then
+        If State = ProgramState.Other Then
             If cbFilterActor.Text = "All" Then
                 ActorFilter = ""
             Else
@@ -23831,17 +23852,5 @@ Public Class Form1
 
         End Try
     End Sub
-
-    Private Sub TabPageMovieFanart_Enter( sender As System.Object,  e As System.EventArgs) Handles TabPageMovieFanart.Enter
-        UpdateMissingFanartNav
-        EnableFanartScrolling
-    End Sub
-
-
-    Private Sub TabPageMovieFanart_Leave( sender As System.Object,  e As System.EventArgs) Handles TabPageMovieFanart.Leave
-        Assign_FilterGeneral
-        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)        
-    End Sub
-
 
 End Class

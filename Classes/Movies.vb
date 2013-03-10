@@ -319,6 +319,14 @@ Public Class Movies
         Return q.Single
     End Function
 
+    Public Function FindData_GridViewCachedMovie(fullpathandfilename As String) As Data_GridViewMovie
+
+        Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename=fullpathandfilename
+
+        Return q.Single
+    End Function
+
+
     Public Function LoadMovie(fullpathandfilename As String) As Movie
 
 '       Dim movie = New Movie(Utilities.GetFileName(fullpathandfilename,True),Me)

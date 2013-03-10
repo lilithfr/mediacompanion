@@ -42,7 +42,7 @@ Public Class ComboList
         End Get
     End Property
 
-    Public Sub Update(From As ComboList)
+    Public Sub Assign(From As ComboList)
         Me.fullpathandfilename = From.fullpathandfilename
         Me.MovieSet            = From.MovieSet           
         Me.filename            = From.filename           
