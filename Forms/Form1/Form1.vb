@@ -3289,10 +3289,7 @@ Public Class Form1
         TextBox1.BackColor = Color.White
         cbSort.SelectedIndex = 0
         RadioButtonTitleAndYear.Checked = True
-
-        ButtonNextFanart.Visible = False   'hide next movie button on fanart tab used for missing fanart
-        ButtonNextFanart.Text = "Click here to move to next Movie without Fanart"  'resetthe button text back to default for when its next show
-            
+          
         cbFilterGeneral   .SelectedIndex = 0
         cbFilterGenre     .SelectedIndex = 0
         cbFilterSet       .SelectedIndex = 0
@@ -4818,6 +4815,7 @@ Public Class Form1
                 Call mov_FanartLoad()
             End If
             currentTabIndex = TabControl2.SelectedIndex
+ '          EnableFanartScrolling
         ElseIf tab.ToLower = "open folder" Then
             Me.TabControl2.SelectedIndex = currentTabIndex
             Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
@@ -4971,60 +4969,16 @@ Public Class Form1
 #End If
             End Try
         End If
+
         Me.Refresh()
         Application.DoEvents()
-        'Dim scraperfunction As New Classimdb
-        'Dim tmdbposterscraper As New tmdb_posters.Class1
         fanartArray.Clear()
         noFanart = False
-        ButtonNextFanart.Visible = False
-        'Dim tmdbimageresults As String = tmdbposterscraper.gettmdbposters_newapi(workingMovieDetails.fullmoviebody.imdbid)
-        ''Dim tmdbimageresults As String = gettmdbposters_newapi(workingmoviedetails.fullmoviebody.imdbid)
-'        Dim bannerslist As New XmlDocument
-'        Try
-'            bannerslist.LoadXml(tmdbimageresults)
-'            Dim thisresult As XmlNode = Nothing
-'            For Each item In bannerslist("tmdb_posterlist")
-'                Select Case item.name
-'                    Case "fanart"
-'                        Dim newfanart As New str_ListOfPosters(SetDefaults)
-'                        For Each backdrop In item
-'                            If backdrop.childnodes(0).innertext = "original" Then
-'                                newfanart.hdposter = backdrop.childnodes(1).innertext
-'                                newfanart.hdwidth = backdrop.childnodes(2).innertext
-'                                newfanart.hdheight = backdrop.childnodes(3).innertext
-'                            End If
-'                            If backdrop.childnodes(0).innertext = "poster" Then
-'                                newfanart.ldposter = backdrop.childnodes(1).innertext
-'                                newfanart.ldwidth = backdrop.childnodes(2).innertext
-'                                newfanart.ldheight = backdrop.childnodes(3).innertext
-'                            End If
-'                            If newfanart.hdposter <> Nothing And newfanart.ldposter <> Nothing Then
-'                                If newfanart.hdposter <> "" And newfanart.ldposter <> "" Then
-'                                    If newfanart.hdposter.IndexOf("http") <> -1 And newfanart.ldposter.IndexOf("http") <> -1 Then
-'                                        If newfanart.hdposter.IndexOf(".jpg") <> -1 Or newfanart.hdposter.IndexOf(".png") <> -1 Then
-'                                            If newfanart.ldposter.IndexOf(".jpg") <> -1 Or newfanart.ldposter.IndexOf(".png") <> -1 Then
-'                                                fanartArray.Add(newfanart)
-'                                                Exit For
-'                                            End If
-'                                        End If
-'                                    End If
-'                                End If
-'                            End If
-'                        Next
 
-'                End Select
-'            Next
-'        Catch ex As Exception
-'#If SilentErrorScream Then
-'            Throw ex
-'#End If
-'        End Try
 
         Dim tmdb As New TMDb(workingmoviedetails.fullmoviebody.imdbid)
 
         fanartArray.AddRange(tmdb.Fanart)
-
 
         Try
             If fanartArray.Count > 0 Then
@@ -5098,6 +5052,8 @@ Public Class Form1
                     Me.Refresh()
                     Application.DoEvents()
                 Next
+
+                EnableFanartScrolling
             Else
                 Dim mainlabel2 As Label
                 mainlabel2 = New Label
@@ -5113,11 +5069,11 @@ Public Class Form1
 
                 Me.Panel2.Controls.Add(mainlabel2)
 
-                If Me.cbFilterGeneral.Text="Missing Fanart" Then     'If no fanart found & If the Missing Fanart RadioButton is checked
-                    ButtonNextFanart.Enabled = True
-                    ButtonNextFanart.Visible = True            'then show the next movie button so we can go to the next movie without saving
-                    noFanart = True                             'only required if this button is visible
-                End If
+                'If Me.cbFilterGeneral.Text="Missing Fanart" Then     'If no fanart found & If the Missing Fanart RadioButton is checked
+                '    btnNextMissingFanart.Enabled = True
+                '    btnNextMissingFanart.Visible = True            'then show the next movie button so we can go to the next movie without saving
+                '    noFanart = True                             'only required if this button is visible
+                'End If
             End If
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -5125,6 +5081,19 @@ Public Class Form1
 #End If
         End Try
     End Sub
+
+
+    'Set focus on the first checkbox to enable mouse wheel scrolling 
+    Sub EnableFanartScrolling
+        Try
+            Dim rb As RadioButton = Panel2.Controls("moviefanartcheckbox0")
+                
+            rb.Select                       'Causes RadioButtons checked state to toggle
+            rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
+        Catch
+        End Try
+    End Sub
+
 
     Private Sub util_ZoomImage2(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -5253,113 +5222,75 @@ Public Class Form1
 
     End Sub
 
-    Private Sub FanartHiresSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanrtSaveHiRes.Click
+
+
+    Private Sub ButtonFanartSaveLoRes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanartSaveLoRes.Click
+        SaveFanart(False)
+    End Sub
+
+
+    Private Sub ButtonFanartSaveHiRes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanartSaveHiRes.Click
+        SaveFanart(True)
+    End Sub
+
+
+    Private Sub SaveFanart(hd As Boolean)
         Try
             messbox = New frmMessageBox("Downloading Fanart...")
-            messbox.Text = "Please Wait..."
+            messbox.Show
 
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
-            Me.Refresh()
-            Application.DoEvents()
+            
+            'Me.Refresh
+            'messbox.Refresh
+            'Me.Refresh
+            'Application.DoEvents
 
-            Dim tempstring As String
-            Dim tempint As Integer = 0
+            Dim tempstring  As String = String.Empty
+            Dim tempint     As Integer = 0
             Dim tempstring2 As String = String.Empty
-            Dim allok As Boolean = False
+            Dim allok       As Boolean = False
+
+            'Find selected fanart, if any
             For Each button As Control In Me.Panel2.Controls
+
                 If button.Name.IndexOf("checkbox") <> -1 Then
                     Dim b1 As RadioButton = CType(button, RadioButton)
                     If b1.Checked = True Then
                         tempstring = b1.Name
                         tempstring = tempstring.Replace("moviefanartcheckbox", "")
                         tempint = Convert.ToDecimal(tempstring)
-                        tempstring2 = fanartArray(tempint).hdUrl
+
+                        If hd then                         
+                            tempstring2 = fanartArray(tempint).hdUrl
+                        Else
+                            tempstring2 = fanartArray(tempint).ldUrl
+                        End If
+
                         allok = True
                         Exit For
                     End If
                 End If
             Next
-            If allok = False Then
+
+            If Not allok Then
                 MsgBox("No Fanart Is Selected")
             Else
                 Try
                     Panel1.Controls.Remove(Label1)
-                    'Utilities.DownloadFile(fanartthumburl, bmp)
-                    'Dim buffer(40000000) As Byte
-                    'Dim size As Integer = 0
-                    'Dim bytesRead As Integer = 0
 
-                    'Dim fanartthumburl As String = tempstring2
-                    'Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
-                    'Dim res As HttpWebResponse = req.GetResponse()
-                    'Dim contents As Stream = res.GetResponseStream()
-                    'Dim bmp As New Bitmap(contents)
-
-
-                    'Dim bytesToRead As Integer = CInt(buffer.Length)
-
-                    'While bytesToRead > 0
-                    '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '    If size = 0 Then Exit While
-                    '    bytesToRead -= size
-                    '    bytesRead += size
-                    'End While
-                    'If Preferences.resizefanart = 1 Then
-                    '    Try
-                    '        Dim tempbitmap As Bitmap = New Bitmap(bmp)
-                    '        Utilities.SaveImage(tempbitmap, mov_FanartORExtrathumbPath)
-
-                    '    Catch ex As Exception
-                    '        tempstring = ex.Message.ToString
-                    '    End Try
-                    'ElseIf Preferences.resizefanart = 2 Then
-                    '    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(1280, 720)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                    '        Dim tempbitmap As Bitmap = New Bitmap(bm_dest)
-                    '        Utilities.SaveImage(tempbitmap, mov_FanartORExtrathumbPath)
-                    '    Else
-                    '        Thread.Sleep(30)
-                    '        Utilities.SaveImage(bmp, mov_FanartORExtrathumbPath)
-                    '    End If
-                    'ElseIf Preferences.resizefanart = 3 Then
-                    '    If bmp.Width > 960 Or bmp.Height > 540 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(960, 540)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                    '        Dim tempbitmap As Bitmap = New Bitmap(bm_dest)
-                    '        Utilities.SaveImage(tempbitmap, mov_FanartORExtrathumbPath)
-                    '    Else
-                    '        Thread.Sleep(30)
-                    '        Utilities.SaveImage(bmp, mov_FanartORExtrathumbPath)
-                    '    End If
-                    'End If
-                    'Dim exists As Boolean = System.IO.File.Exists(mov_FanartORExtrathumbPath())
-
-                    ' If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
                     Dim issavefanart As Boolean = Preferences.savefanart
+
                     Preferences.savefanart = True
+
                     If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
                         Preferences.savefanart = issavefanart
 
-                        ' PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
-                        ' PictureBox2.Load()
                         util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
 
-                        ' PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                        ' PictureBox7.Load()
                         util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        'Rating1.PictureInit = PictureBoxFanArt.Image
-                        Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
+                        Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
                         For Each paths In Preferences.offlinefolders
                             Dim offlinepath As String = paths & "\"
@@ -5371,39 +5302,99 @@ Public Class Form1
                             End If
                         Next
                     Else
-                        ' PictureBox2.ImageLocation = Utilities.DefaultFanartPath
-                        ' PictureBox2.Load()
                         util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
                         Preferences.savefanart = issavefanart
                     End If
+
                     Label16.Text = PictureBox2.Image.Width
                     Label17.Text = PictureBox2.Image.Height
-                    Dim result As Boolean = UpdateMovieCache()
-                    If result = True Then
-                        If Me.cbFilterGeneral.Text="Missing Fanart" Then
-                            ButtonNextFanart.Text = "Click here to move to next Movie"
-                            ButtonNextFanart.Enabled = True
-                            ButtonNextFanart.Visible = True 'show next movie button
-                        Else
-                            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-                        End If
 
-                        'Call loadinfofile() 'reloads main page information     'not required as we no longer move back to main page
-                        'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after changing Fanart 
-                        'currentTabIndex = TabControl2.SelectedIndex
-                    End If
+                    Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+
+'                    UpdateFilteredList
+                    Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+                    UpdateMissingFanartNav
+
+
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
             End If
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         Finally
-            messbox.Close()
+            messbox.Close
         End Try
-
-
     End Sub
+
+
+    Sub UpdateMissingFanartNav
+
+        'Default to selecting first row if non selected
+        If DataGridViewMovies.SelectedRows.Count=0 And DataGridViewMovies.Rows.Count>1 Then
+            DataGridViewMovies.Rows(0).Selected=True
+        End If
+
+        UpdateMissingFanartNextBtn
+        UpdateMissingFanartPrevBtn
+        UpdatelblFanartMissingCount
+    End Sub
+
+    Sub UpdatelblFanartMissingCount
+        Dim i As Integer = 0
+        Dim x As Integer = 0
+
+        While i<DataGridViewMovies.Rows.Count
+            Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
+
+            If row.MissingFanart Then x = x + 1
+
+            i = i + 1
+        End While
+
+        lblFanartMissingCount.Text = x & " Missing" 
+    End Sub
+
+    Sub UpdateMissingFanartNextBtn 
+        btnNextMissingFanart.Enabled = False
+
+        If DataGridViewMovies.SelectedRows.Count=0 Then Return
+
+        Dim i As Integer = DataGridViewMovies.SelectedRows(0).Index + 1
+        While i<DataGridViewMovies.Rows.Count
+            Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
+
+            If row.MissingFanart Then 
+                btnNextMissingFanart.Enabled = True
+                btnNextMissingFanart.Tag = i
+                Return
+            End If
+
+            i = i + 1
+        End While
+    End Sub
+
+
+    Sub UpdateMissingFanartPrevBtn
+        btnPrevMissingFanart.Enabled = False
+
+        If DataGridViewMovies.SelectedRows.Count=0 Then Return
+
+        Dim i As Integer = DataGridViewMovies.SelectedRows(0).Index - 1
+        While i>=0
+            Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
+
+            If row.MissingFanart Then 
+                btnPrevMissingFanart.Enabled = True
+                btnPrevMissingFanart.Tag = i
+                Return
+            End If
+
+            i = i - 1
+        End While
+    End Sub
+
 
     Private Function UpdateMovieCache
 
@@ -5498,88 +5489,33 @@ Public Class Form1
 
     Private Sub btngetthumb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btngetthumb.Click
         Try
-
             Movie.SaveFanartImageToCacheAndPath(TextBox5.Text,mov_FanartORExtrathumbPath)
 
-            'Dim MyWebClient As New System.Net.WebClient
-            'Try
-            '    Dim ImageInBytes() As Byte = MyWebClient.DownloadData(TextBox5.Text)
-            '    Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+            Dim exists As Boolean = IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
 
-            '    'mainfanart.Image = New System.Drawing.Bitmap(ImageStream)
+            If exists Then
+                For Each paths In Preferences.offlinefolders
+                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
+                        Dim mediapath As String
+                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                    End If
+                Next
 
+                util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
 
-            '    Dim tempstring As String
+                util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
-            '    Dim bmp As New Bitmap(ImageStream)
+                mov_SplitContainerAutoPosition()
+            End If
 
-
-            '    If Preferences.resizefanart = 1 Then
-            '        Try
-            '            Dim tempbitmap As Bitmap = bmp
-            '            tempbitmap.Save(mov_FanartORExtrathumbPath(), Imaging.ImageFormat.Jpeg)
-            '        Catch ex As Exception
-            '            tempstring = ex.Message.ToString
-            '        End Try
-            '    ElseIf Preferences.resizefanart = 2 Then
-            '        If bmp.Width > 1280 Or bmp.Height > 720 Then
-            '            Dim bm_source As New Bitmap(bmp)
-            '            Dim bm_dest As New Bitmap(1280, 720)
-            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-            '            gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-            '            Dim tempbitmap As Bitmap = bm_dest
-            '            tempbitmap.Save(mov_FanartORExtrathumbPath(), Imaging.ImageFormat.Jpeg)
-            '        Else
-            '            Thread.Sleep(30)
-            '            bmp.Save(mov_FanartORExtrathumbPath(), Imaging.ImageFormat.Jpeg)
-            '        End If
-            '    ElseIf Preferences.resizefanart = 3 Then
-            '        If bmp.Width > 960 Or bmp.Height > 540 Then
-            '            Dim bm_source As New Bitmap(bmp)
-            '            Dim bm_dest As New Bitmap(960, 540)
-            '            Dim gr As Graphics = Graphics.FromImage(bm_dest)
-            '            gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-            '            gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-            '            Dim tempbitmap As Bitmap = bm_dest
-            '            tempbitmap.Save(mov_FanartORExtrathumbPath(), Imaging.ImageFormat.Jpeg)
-            '        Else
-            '            Thread.Sleep(30)
-            '            bmp.Save(mov_FanartORExtrathumbPath(), Imaging.ImageFormat.Jpeg)
-            '        End If
-            '    End If
-
-                Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
-                If exists = True Then
-                    For Each paths In Preferences.offlinefolders
-                        If workingMovieDetails.fileinfo.fanartpath.IndexOf(paths) <> -1 Then
-                            Dim mediapath As String
-                            mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                            Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                        End If
-                    Next
-
-                    'mainfanart = New PictureBox
-                    util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
-                    'PictureBox2.ImageLocation = mov_FanartORExtrathumbPath()
-                    'PictureBox2.Load()
-                    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                    'Rating1.PictureInit = PictureBoxFanArt.Image
-                    'PictureBox7.ImageLocation = workingMovieDetails.fileinfo.fanartpath
-                    'PictureBox7.Load()
-                    mov_SplitContainerAutoPosition()
-                    'Else
-                    '    PictureBox2.ImageLocation = defaultFanart
-                    '    PictureBox2.Load()
-                End If
-                Call UpdateMovieCache()
-            Catch ex As Exception
-                MsgBox("Unable To Download Image")
-            End Try
-            Panel3.Visible = False
-  '      Catch ex As Exception
-  '         ExceptionHandler.LogError(ex)
-  '     End Try
+            Dim oMovie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+            UpdateMissingFanartNav
+        Catch ex As Exception
+            MsgBox("Unable To Download Image")
+        End Try
+        Panel3.Visible = False
     End Sub
 
     Private Sub btncancelgetthumburl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btncancelgetthumburl.Click
@@ -19012,148 +18948,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button104_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonFanartSaveLoRes.Click
-        Try
-            messbox = New frmMessageBox("Please wait,", "", "Downloading Fanart")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
-            Me.Refresh()
-            Application.DoEvents()
-
-            Dim tempstring As String = String.Empty
-            Dim tempint As Integer = 0
-            Dim tempstring2 As String = String.Empty
-            Dim allok As Boolean = False
-            For Each button As Control In Me.Panel2.Controls
-                If button.Name.IndexOf("checkbox") <> -1 Then
-                    Dim b1 As RadioButton = CType(button, RadioButton)
-                    If b1.Checked = True Then
-                        tempstring = b1.Name
-                        tempstring = tempstring.Replace("moviefanartcheckbox", "")
-                        tempint = Convert.ToDecimal(tempstring)
-                        tempstring2 = fanartArray(tempint).ldUrl
-                        allok = True
-                        Exit For
-                    End If
-                End If
-            Next
-            If allok = False Then
-                MsgBox("No Fanart Is Selected")
-            Else
-                Try
-                    Panel1.Controls.Remove(Label1)
-
-                    'Dim buffer(40000000) As Byte
-                    'Dim size As Integer = 0
-                    'Dim bytesRead As Integer = 0
-
-                    'Dim fanartthumburl As String = tempstring2
-                    'Dim req As HttpWebRequest = WebRequest.Create(fanartthumburl)
-                    'Dim res As HttpWebResponse = req.GetResponse()
-                    'Dim contents As Stream = res.GetResponseStream()
-                    'Dim bmp As New Bitmap(contents)
-
-
-                    'Dim bytesToRead As Integer = CInt(buffer.Length)
-
-                    'While bytesToRead > 0
-                    '    size = contents.Read(buffer, bytesRead, bytesToRead)
-                    '    If size = 0 Then Exit While
-                    '    bytesToRead -= size
-                    '    bytesRead += size
-                    'End While
-                    'If Preferences.resizefanart = 1 Then
-                    '    Try
-                    '        Dim tempbitmap As Bitmap = bmp
-                    '        Utilities.SaveImage(tempbitmap, mov_FanartORExtrathumbPath)
-                    '    Catch ex As Exception
-                    '        tempstring = ex.Message.ToString
-                    '    End Try
-                    'ElseIf Preferences.resizefanart = 2 Then
-                    '    If bmp.Width > 1280 Or bmp.Height > 720 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(1280, 720)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 1280 - 1, 720 - 1)
-                    '        Dim tempbitmap As Bitmap = bm_dest
-                    '        Utilities.SaveImage(tempbitmap, mov_FanartORExtrathumbPath)
-                    '    Else
-                    '        Thread.Sleep(30)
-                    '        Utilities.SaveImage(bmp, mov_FanartORExtrathumbPath)
-                    '    End If
-                    'ElseIf Preferences.resizefanart = 3 Then
-                    '    If bmp.Width > 960 Or bmp.Height > 540 Then
-                    '        Dim bm_source As New Bitmap(bmp)
-                    '        Dim bm_dest As New Bitmap(960, 540)
-                    '        Dim gr As Graphics = Graphics.FromImage(bm_dest)
-                    '        gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-                    '        gr.DrawImage(bm_source, 0, 0, 960 - 1, 540 - 1)
-                    '        Dim tempbitmap As Bitmap = bm_dest
-                    '        Utilities.SaveImage(tempbitmap, mov_FanartORExtrathumbPath)
-                    '    Else
-                    '        Thread.Sleep(30)
-                    '        Utilities.SaveImage(bmp, mov_FanartORExtrathumbPath)
-                    '    End If
-                    'End If
-                    'Dim exists As Boolean = System.IO.File.Exists(workingMovieDetails.fileinfo.fanartpath)
-
-
-                    '      If Utilities.DownloadImage(tempstring2, mov_FanartORExtrathumbPath, True, Preferences.resizefanart) Then
-                    Dim issavefanart As Boolean = Preferences.savefanart
-                    Preferences.savefanart = True
-                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, mov_FanartORExtrathumbPath) Then
-                        Preferences.savefanart = issavefanart
-
-                        util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
-                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        '                    Rating1.PictureInit = PictureBoxFanArt.Image
-                        Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
-
-                        For Each paths In Preferences.offlinefolders
-                            Dim offlinepath As String = paths & "\"
-                            If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
-                                Dim mediapath As String
-                                mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                                Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                            End If
-                        Next
-                    Else
-                        util_ImageLoad(PictureBox2, Utilities.DefaultFanartPath, Utilities.DefaultFanartPath)
-                        Preferences.savefanart = issavefanart
-                    End If
-                    Label16.Text = PictureBox2.Image.Width
-                    Label17.Text = PictureBox2.Image.Height
-                    Dim result As Boolean = UpdateMovieCache()
-                    If result = True Then
-
-                        If Me.cbFilterGeneral.Text="Missing Fanart" Then
-                            ButtonNextFanart.Text = "Click here to move to next Movie"
-                            ButtonNextFanart.Enabled = True
-                            ButtonNextFanart.Visible = True 'show next movie button
-                        Else
-                            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-                        End If
-
-                        'Call loadinfofile() 'reloads main page information     'not required is not moving back to main page
-                        'TabControl2.SelectedIndex = 0                        'Commented Out so that MC doesn't switch back to Movie/Main Tab after chaneing Fanart 
-                        'currentTabIndex = TabControl2.SelectedIndex
-                    End If
-                Catch ex As WebException
-                    MsgBox(ex.Message)
-                End Try
-            End If
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-
-        Finally
-            messbox.Close()
-        End Try
-
-    End Sub
 
     Private Sub Button105_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button105.Click
         Try
@@ -20902,42 +20696,56 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button112_Click(sender As System.Object, e As System.EventArgs) Handles ButtonNextFanart.Click
-        Try
-            If noFanart = False Then
-                Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-                Call mov_FanartLoad()   'refresh fanart for the current movie
-                'If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
-                If DataGridViewMovies.Rows.Count = 0 Then
-                    ButtonNextFanart.Visible = True
-                    ButtonNextFanart.Enabled = False
-                    ButtonNextFanart.Text = "All Fanart Done!"
-                Else
-                    If noFanart = False Then ButtonNextFanart.Visible = False 'Hide button whilst getting new fanart NOTE: noFanart can be changed by loadfanart inside the original If noFanart false
-                End If
-            Else
-                'Dim maxIndex As Integer = MovieListComboBox.Items.Count - 1
-                Dim maxIndex As Integer = DataGridViewMovies.Rows.Count - 1
-                'Dim currentIndex As Integer = MovieListComboBox.SelectedIndex
-                Dim currentIndex As Integer = DataGridViewMovies.CurrentRow.Index
 
 
-                If currentIndex > maxIndex Then
-                    ButtonNextFanart.Enabled = False
-                    ButtonNextFanart.Text = "All Fanart Done!"
-                Else
-                    'MovieListComboBox.ClearSelected()
-                    'MovieListComboBox.SetSelected(currentIndex, True)
-                    DataGridViewMovies.ClearSelection()
-                    DataGridViewMovies.Rows(currentIndex).Selected = True
+    'Private Sub btnNextMissingFanart_Click(sender As System.Object, e As System.EventArgs) Handles btnNextMissingFanart.Click
+    '    Try
+    '        If noFanart = False Then
+    '            Call Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+    '            Call mov_FanartLoad()   'refresh fanart for the current movie
+    '            'If MovieListComboBox.Items.Count = 0 Then   'last fanart saved
+    '            If DataGridViewMovies.Rows.Count = 0 Then
+    '                btnNextMissingFanart.Visible = True
+    '                btnNextMissingFanart.Enabled = False
+    '                btnNextMissingFanart.Text = "All Fanart Done!"
+    '            Else
+    '                If noFanart = False Then btnNextMissingFanart.Visible = False 'Hide button whilst getting new fanart NOTE: noFanart can be changed by loadfanart inside the original If noFanart false
+    '            End If
+    '        Else
+    '            'Dim maxIndex As Integer = MovieListComboBox.Items.Count - 1
+    '            Dim maxIndex As Integer = DataGridViewMovies.Rows.Count - 1
+    '            'Dim currentIndex As Integer = MovieListComboBox.SelectedIndex
+    '            Dim currentIndex As Integer = DataGridViewMovies.CurrentRow.Index
 
-                    mov_FanartLoad()
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
 
+    '            If currentIndex > maxIndex Then
+    '                btnNextMissingFanart.Enabled = False
+    '                btnNextMissingFanart.Text = "All Fanart Done!"
+    '            Else
+    '                'MovieListComboBox.ClearSelected()
+    '                'MovieListComboBox.SetSelected(currentIndex, True)
+    '                DataGridViewMovies.ClearSelection()
+    '                DataGridViewMovies.Rows(currentIndex).Selected = True
+
+    '                mov_FanartLoad()
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+
+    'End Sub
+
+
+
+
+    Private Sub btnPrevNextMissingFanart_Click(sender As System.Object, e As System.EventArgs) Handles btnPrevMissingFanart.Click, btnNextMissingFanart.Click
+
+        DataGridViewMovies.ClearSelection
+        DataGridViewMovies.Rows(sender.Tag).Selected = True
+        DisplayMovie
+        mov_FanartLoad
+        UpdateMissingFanartNav
     End Sub
 
 
@@ -24008,19 +23816,32 @@ Public Class Form1
         End If
     End Sub
 
-Private Sub btnTvSearchNew_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvSearchNew.Click
+    Private Sub btnTvSearchNew_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvSearchNew.Click
         Try
             Call ep_Search()
         Catch ex As Exception
 
         End Try
-End Sub
+    End Sub
 
-Private Sub btnTvRefreshAll_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvRefreshAll.Click
+    Private Sub btnTvRefreshAll_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvRefreshAll.Click
         Try
             Call tv_CacheRefresh()
         Catch ex As Exception
 
         End Try
-End Sub
+    End Sub
+
+    Private Sub TabPageMovieFanart_Enter( sender As System.Object,  e As System.EventArgs) Handles TabPageMovieFanart.Enter
+        UpdateMissingFanartNav
+        EnableFanartScrolling
+    End Sub
+
+
+    Private Sub TabPageMovieFanart_Leave( sender As System.Object,  e As System.EventArgs) Handles TabPageMovieFanart.Leave
+        Assign_FilterGeneral
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)        
+    End Sub
+
+
 End Class

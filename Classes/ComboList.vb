@@ -7,20 +7,6 @@ Public Class ComboList
     Property foldername          As String = ""
     Property title               As String = ""
     Property originaltitle       As String = ""
-
-    'ReadOnly Property titleandyear As String
-    '    Get
-    '        Dim t = If(IsNothing(title),"Unknown",title)
-    '        Dim y = If(IsNothing(year ),"0000"   ,year )
-
-    '        If Preferences.ignorearticle And t.ToLower.IndexOf("the ")=0 Then
-    '            Return t.Substring(4, t.Length - 4) & ", The (" & y & ")"
-    '        Else
-    '            Return t & " (" & y & ")"
-    '        End If
-    '    End Get
-    'End Property
-    
     Property year                As String  = ""
     Property filedate            As String  = ""
     Property id                  As String  = ""
@@ -36,7 +22,7 @@ Public Class ComboList
     Property plot                As String  = ""
     Property source              As String  = ""
     Property votes               As String  = ""
-    Property Resolution         As Integer = -1
+    Property Resolution          As Integer = -1
 
     Public ReadOnly Property MissingFanart As Boolean
         Get
@@ -55,5 +41,30 @@ Public Class ComboList
             Return _missingdata1 And 4
         End Get
     End Property
+
+    Public Sub Update(From As ComboList)
+        Me.fullpathandfilename = From.fullpathandfilename
+        Me.MovieSet            = From.MovieSet           
+        Me.filename            = From.filename           
+        Me.foldername          = From.foldername         
+        Me.title               = From.title              
+        Me.originaltitle       = From.originaltitle      
+        Me.year                = From.year               
+        Me.filedate            = From.filedate           
+        Me.id                  = From.id                 
+        Me.rating              = From.rating             
+        Me.top250              = From.top250             
+        Me.genre               = From.genre              
+        Me.playcount           = From.playcount          
+        Me.sortorder           = From.sortorder          
+        Me.outline             = From.outline            
+        Me.runtime             = From.runtime            
+        Me.createdate          = From.createdate         
+        Me.missingdata1        = From.missingdata1       
+        Me.plot                = From.plot               
+        Me.source              = From.source             
+        Me.votes               = From.votes              
+        Me.Resolution          = From.Resolution         
+    End Sub
 
 End Class

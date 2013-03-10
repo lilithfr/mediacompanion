@@ -2086,6 +2086,27 @@ Public Class Movie
     End Sub
 
     Sub UpdateMovieCache
+        'Dim key=_movieCache.fullpathandfilename
+        'Dim c As ComboList = Nothing
+        
+        'Try
+        '    c = _parent.FindCachedMovie(key)
+        'Catch ex As Exception
+        'End Try
+        
+        'If IsNothing(c) Then
+        '    key = ActualNfoPathAndFilename
+        '    Try
+        '        c = _parent.FindCachedMovie(key)
+        '    Catch
+        '    End Try
+        'End If
+
+        'If Not IsNothing(c) Then
+        '    c.Update(_movieCache)
+        '    Return
+        'End If
+        
         RemoveMovieFromCache
 
         _parent.MovieCache.Add(_movieCache)
