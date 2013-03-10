@@ -14404,7 +14404,8 @@ Public Class Form1
         Button77.Enabled                        = Preferences.actorsave
 
         If Not Preferences.usefoldernames and Not Preferences.allfolders then
-            chkbx_createfolderjpg.Enabled = False 
+            chkbx_createfolderjpg.Enabled = False
+            cbFanartInFolders.Enabled=False
         End If
 
         Select Case Preferences.maxactors
