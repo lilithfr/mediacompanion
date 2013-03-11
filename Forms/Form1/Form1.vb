@@ -1611,7 +1611,7 @@ Public Class Form1
                     'util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                     util_ImageLoad(PictureBoxAssignedMoviePoster, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
-                    Label19.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+                    lblCurrentLoadedPoster.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                     Label18.Visible = False
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -1762,7 +1762,7 @@ Public Class Form1
             Label16.Text = ""
             Label17.Text = ""
             PictureBoxAssignedMoviePoster.Image = Nothing
-            Label19.Text = ""
+            lblCurrentLoadedPoster.Text = ""
             TextBox34.Text = ""
             titletxt.Text = ""
 
@@ -6558,8 +6558,8 @@ Public Class Form1
                 util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
 
                 tempstring = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-                Label19.Text = tempstring
-                Label19.Refresh()
+                lblCurrentLoadedPoster.Text = tempstring
+                lblCurrentLoadedPoster.Refresh()
             Catch ex As Exception
                 ExceptionHandler.LogError(ex)
 #If SilentErrorScream Then
@@ -6779,7 +6779,7 @@ Public Class Form1
             PictureBoxAssignedMoviePoster.Image = moviethumb.Image
             Button28.Visible = False
             Button27.Visible = False
-            Label19.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
+            lblCurrentLoadedPoster.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -6854,7 +6854,7 @@ Public Class Form1
                 PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone()
         End Select
         PictureBoxAssignedMoviePoster.SizeMode = PictureBoxSizeMode.Zoom
-        Label19.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
+        lblCurrentLoadedPoster.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
     End Sub
 
     Private Sub Button23_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseUp
