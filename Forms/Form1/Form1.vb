@@ -1539,7 +1539,7 @@ Public Class Form1
                 Next
                 titletxt.Text = workingMovieDetails.fullmoviebody.title '& " (" & workingmoviedetails.fullmoviebody.year & ")"
                 TextBox3.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
-                TextBox7.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+                tbCurrentMoviePoster.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 Me.ToolTip1.SetToolTip(Me.titletxt, "Original Title: '" & workingMovieDetails.fullmoviebody.originaltitle & "'")
                 If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
                 TextBox34.Text = workingMovieDetails.fullmoviebody.sortorder
@@ -1611,7 +1611,7 @@ Public Class Form1
                     'util_ImageLoad(PictureBox3, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
                     util_ImageLoad(PictureBoxAssignedMoviePoster, workingposter, Utilities.DefaultPosterPath)
                     If Yield(yieldIng) Then Return
-                    lblCurrentLoadedPoster.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
+                    lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                     Label18.Visible = False
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
@@ -1729,12 +1729,12 @@ Public Class Form1
             PictureBoxActor.Refresh()
             ComboBox5.Text = ""
 
-            Button27.Visible = False
-            Button28.Visible = False
+            btnMoviePosterSaveCroppedImage.Enabled = False
+            btnMoviePosterResetImage.Enabled = False
             thumbedItsMade = False
             posterThumbedItsMade = False
-            CheckBox1.Visible = False
-            btnPosterTabs_SaveImage.Visible = False
+            cbMoviePosterSaveLoRes.Enabled = False
+            btnPosterTabs_SaveImage.Enabled = False
             Button9.Visible = False
             Button10.Visible = False
             Label18.Visible = False
@@ -5827,8 +5827,8 @@ Public Class Form1
     Private Sub mov_PosterInitialise()
         pageCount = 0
         currentPage = 1
-        CheckBox1.Visible = False
-        btnPosterTabs_SaveImage.Visible = False
+        cbMoviePosterSaveLoRes.Enabled = False
+        btnPosterTabs_SaveImage.Enabled = False
         For i = Panel8.Controls.Count - 1 To 0 Step -1
             Panel8.Controls.RemoveAt(i)
         Next
@@ -5836,8 +5836,8 @@ Public Class Form1
         Else
             Preferences.maximumthumbs = 10
         End If
-        btnPosterTabs_SaveImage.Visible = False
-        CheckBox1.Visible = False
+        btnPosterTabs_SaveImage.Enabled = False
+        cbMoviePosterSaveLoRes.Enabled = False
 
         posterPicBoxes = Nothing
         posterCheckBoxes = Nothing
@@ -6062,15 +6062,11 @@ Public Class Form1
             End If
         Next
         If allok = True Then
-            btnPosterTabs_SaveImage.Visible = True
-            If posterArray(0).ldUrl.ToLower.IndexOf("impawards") <> -1 Or posterArray(0).ldUrl.ToLower.IndexOf("themoviedb") <> -1 Then
-                CheckBox1.Visible = True
-            Else
-                CheckBox1.Visible = False
-            End If
+            btnPosterTabs_SaveImage.Enabled = True
+            cbMoviePosterSaveLoRes.Enabled =  (  posterArray(0).ldUrl.ToLower.IndexOf("impawards")<>-1  Or  posterArray(0).ldUrl.ToLower.IndexOf("themoviedb")<>-1  ) 
         Else
-            CheckBox1.Visible = False
-            btnPosterTabs_SaveImage.Visible = False
+            cbMoviePosterSaveLoRes.Enabled = False
+            btnPosterTabs_SaveImage.Enabled = False
         End If
 
     End Sub
@@ -6464,8 +6460,8 @@ Public Class Form1
                             If tempstring2 = Nothing Then
                                 tempint = Convert.ToDecimal(tempstring)
                                 tempint = tempint + ((currentPage - 1) * 10)
-                                If CheckBox1.Visible = True Then
-                                    If CheckBox1.CheckState = CheckState.Checked Then
+                                If cbMoviePosterSaveLoRes.Enabled = True Then
+                                    If cbMoviePosterSaveLoRes.CheckState = CheckState.Checked Then
                                         tempstring2 = posterArray(tempint).ldUrl
                                     Else
                                         tempstring2 = posterArray(tempint).hdUrl
@@ -6557,8 +6553,7 @@ Public Class Form1
 
                 util_ImageLoad(moviethumb, Paths(0), Utilities.DefaultPosterPath)
 
-                tempstring = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width.ToString & " x " & PictureBoxAssignedMoviePoster.Image.Height.ToString
-                lblCurrentLoadedPoster.Text = tempstring
+                lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
                 lblCurrentLoadedPoster.Refresh()
             Catch ex As Exception
                 ExceptionHandler.LogError(ex)
@@ -6678,13 +6673,14 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button22_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button22.Click
-        Try
-            WebBrowser1.GoBack()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Commented out as nothing to do with btnPosterTabs_ResizeImage and not called - nb Button12.Click implements this code
+    'Private Sub Button22_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterTabs_ResizeImage.Click
+    '    Try
+    '        WebBrowser1.GoBack()
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
     Private Sub btnChangeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChangeMovie.Click
 
@@ -6725,8 +6721,8 @@ Public Class Form1
     End Sub
     Private Sub mov_PosterTimerSet(ByVal direction As String)
         posterThumbedItsMade = True
-        Button27.Visible = True
-        Button28.Visible = True
+        btnMoviePosterSaveCroppedImage.Enabled = True
+        btnMoviePosterResetImage.Enabled = True
         posterCropString = direction
         Timer3.Interval = 1000 ' timer is set initially to 1000ms, user clicks & holds for over 1sec, then timer fires for repeat action, timer sets itself to 150ms when activated
         mov_PosterCrop() ' we do a crop immediately that the button is pushed down, repeat will happen if button is not MouseUp which disables the timer
@@ -6772,20 +6768,20 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button28_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button28.Click
+    Private Sub btnMoviePosterResetImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePosterResetImage.Click
         Try
             'reset
             posterThumbedItsMade = False
             PictureBoxAssignedMoviePoster.Image = moviethumb.Image
-            Button28.Visible = False
-            Button27.Visible = False
-            lblCurrentLoadedPoster.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
+            btnMoviePosterResetImage.Enabled = False
+            btnMoviePosterSaveCroppedImage.Enabled = False
+            lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub Button27_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button27.Click
+    Private Sub btnMoviePosterSaveCroppedImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoviePosterSaveCroppedImage.Click
         Try
             'save cropped
             posterThumbedItsMade = False
@@ -6793,8 +6789,8 @@ Public Class Form1
                 Dim stream As New System.IO.MemoryStream
                 PictureBoxAssignedMoviePoster.Image.Save(workingMovieDetails.fileinfo.posterpath, System.Drawing.Imaging.ImageFormat.Jpeg)
                 moviethumb.Image = PictureBoxAssignedMoviePoster.Image
-                Button28.Visible = False
-                Button27.Visible = False
+                btnMoviePosterResetImage.Enabled = False
+                btnMoviePosterSaveCroppedImage.Enabled = False
 
                 Dim bitmap3 As New Bitmap(workingMovieDetails.fileinfo.posterpath)
                 Dim bitmap2 As New Bitmap(bitmap3)
@@ -6854,7 +6850,7 @@ Public Class Form1
                 PictureBoxAssignedMoviePoster.Image = util_ImageCrop(PictureBoxAssignedMoviePoster.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone()
         End Select
         PictureBoxAssignedMoviePoster.SizeMode = PictureBoxSizeMode.Zoom
-        lblCurrentLoadedPoster.Text = "Current Loaded Poster - " & PictureBoxAssignedMoviePoster.Image.Width & " X " & PictureBoxAssignedMoviePoster.Image.Height
+        lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
     End Sub
 
     Private Sub Button23_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button23.MouseUp
@@ -11970,7 +11966,7 @@ Public Class Form1
         If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
         If cbSort.SelectedIndex <> cbSortHidden.SelectedIndex Then cbSortHidden.SelectedIndex = cbSort.SelectedIndex : check = False
         If btnreverse.CheckState <> CheckBox9.CheckState Then CheckBox9.CheckState = btnreverse.CheckState : check = False
-        If TextBox1.Text <> TextBox37.Text Then TextBox37.Text = CheckBox1.Text : check = False
+        If TextBox1.Text <> TextBox37.Text Then TextBox37.Text = cbMoviePosterSaveLoRes.Text : check = False
         If txt_titlesearch.Text <> TextBox36.Text Then TextBox36.Text = txt_titlesearch.Text : check = False
         If check = True Then Return
 
