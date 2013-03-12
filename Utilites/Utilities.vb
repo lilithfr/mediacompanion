@@ -2021,6 +2021,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim tempstring As String = runtime
             Dim hours As Integer = 0
             Dim minutes As Integer = 0
+            Dim tempruntime As Integer = 0
             If runtime.ToLower.IndexOf("min") <> -1 Then
                 tempstring = runtime.Substring(0, runtime.ToLower.IndexOf("min"))
                 tempstring = Trim(tempstring)
@@ -2050,6 +2051,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     End If
                     minutes = minutes + (hours * 60)
                 Catch
+                End Try
+            ElseIf IsNumeric(tempstring) Then
+                Try
+                    tempruntime = Convert.ToInt32(tempstring)
+                    minutes = Math.Round(tempruntime/60000)
+                Catch 
                 End Try
             End If
 
