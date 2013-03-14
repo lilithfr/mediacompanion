@@ -42,6 +42,50 @@ Public Class ComboList
         End Get
     End Property
 
+
+    Public ReadOnly Property MissingRating As String
+        Get
+            Return rating.ToString.Trim=""
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingGenre As String
+        Get
+            Return genre.ToString.Trim=""
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingOutline As String
+        Get
+            Return outline.ToString.Trim=""
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingRuntime As String
+        Get
+            Return runtime=""
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingVotes As String
+        Get
+            Return votes.ToString.Trim=""
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingYear As String
+        Get
+            Return year.ToString.Trim=""
+        End Get
+    End Property  
+
+
+
     Public Sub Assign(From As ComboList)
         Me.fullpathandfilename = From.fullpathandfilename
         Me.MovieSet            = From.MovieSet           

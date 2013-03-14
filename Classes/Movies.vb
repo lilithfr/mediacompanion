@@ -70,9 +70,15 @@ Public Class Movies
             lst.Add( Unwatched      )
             lst.Add( Duplicates     )
             lst.Add( MissingFanart  )
-            lst.Add( MissingPoster  )
+            lst.Add( MissingGenre   )
+            lst.Add( MissingOutline )
             lst.Add( MissingPlot    )
+            lst.Add( MissingPoster  )
+            lst.Add( MissingRating  )
+            lst.Add( MissingRuntime )
             lst.Add( MissingTrailer )
+            lst.Add( MissingVotes   )
+            lst.Add( MissingYear    )
 
             Return lst
         End Get
@@ -102,6 +108,48 @@ Public Class Movies
     Public ReadOnly Property MissingPlot As String
         Get
             Return "Missing Plot (" & (From x In MovieCache Where x.plot.ToString.Trim = "" or x.plot.ToString.Trim = "scraper error").Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingRating As String
+        Get
+            Return "Missing Rating (" & (From x In MovieCache Where x.MissingRating).Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingGenre As String
+        Get
+            Return "Missing Genre (" & (From x In MovieCache Where x.MissingGenre).Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingOutline As String
+        Get
+            Return "Missing Outline (" & (From x In MovieCache Where x.MissingOutline).Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingRuntime As String
+        Get
+            Return "Missing Runtime (" & (From x In MovieCache Where x.MissingRuntime).Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingVotes As String
+        Get
+            Return "Missing Votes (" & (From x In MovieCache Where x.MissingVotes).Count & ")" 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingYear As String
+        Get
+            Return "Missing Year (" & (From x In MovieCache Where x.MissingYear).Count & ")" 
         End Get
     End Property  
 

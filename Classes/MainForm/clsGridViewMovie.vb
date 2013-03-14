@@ -186,7 +186,6 @@ Public Class clsGridViewMovie
 
 
     Sub SetFirstColumnWidth(dgvMovies As DataGridView)
-
         Try
             Dim firstColWidth As Integer = dgvMovies.Width - 17
 
@@ -209,32 +208,6 @@ Public Class clsGridViewMovie
             End If
         Catch
         End Try
-
-        'Dim w As Integer = 217
-
-        'Try
-        '    If Not Preferences.MovieList_ShowColPlot    then w = w - dgvMovies.Columns("ImgPlot").Width
-        '    If Not Preferences.MovieList_ShowColWatched then w = w - dgvMovies.Columns("Watched").Width
-
-        '    Dim FirstColumnSize As Integer
-
-        '    If GridFieldToDisplay2 = "A - Z"      Then FirstColumnSize = dgvMovies.Width - w
-        '    If GridFieldToDisplay2 = "Sort Order" Then FirstColumnSize = dgvMovies.Width - w
-        '    If GridFieldToDisplay2 = "Movie Year" Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("year"             ).Width - w
-        '    If GridFieldToDisplay2 = "Modified"   Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("DisplayFileDate"  ).Width - w
-        '    If GridFieldToDisplay2 = "Rating"     Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("rating"           ).Width - w
-        '    If GridFieldToDisplay2 = "Runtime"    Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("runtime"          ).Width - w
-        '    If GridFieldToDisplay2 = "Date Added" Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("DisplayCreateDate").Width - w
-        '    If GridFieldToDisplay2 = "Votes"      Then FirstColumnSize = dgvMovies.Width - dgvMovies.Columns("votes"            ).Width - w
-
-        '    If FirstColumnSize>0 Then
-        '        dgvMovies.Columns("filename"           ).Width = FirstColumnSize
-        '        dgvMovies.Columns("foldername"         ).Width = FirstColumnSize
-        '        dgvMovies.Columns("DisplayTitle"       ).Width = FirstColumnSize
-        '        dgvMovies.Columns("DisplayTitleAndYear").Width = FirstColumnSize
-        '    End If
-        'Catch
-        'End Try
     End Sub
 
     Public Function Yield As Boolean
@@ -271,6 +244,14 @@ Public Class clsGridViewMovie
             Case "Missing Trailer" : b = From f In b Where f.MissingTrailer
 
             Case "Missing Plot"    : b = From f In b Where f.plot.ToString.Trim = "" or f.plot.ToString.Trim = "scraper error"
+
+            Case "Missing Genre"   : b = From f In b Where f.MissingGenre
+            Case "Missing Outline" : b = From f In b Where f.MissingOutline
+            Case "Missing Rating"  : b = From f In b Where f.MissingRating
+            Case "Missing Runtime" : b = From f In b Where f.MissingRuntime
+            Case "Missing Votes"   : b = From f In b Where f.MissingVotes
+            Case "Missing Year"    : b = From f In b Where f.MissingYear
+  
         End Select
 
         If Yield Then Return

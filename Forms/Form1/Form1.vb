@@ -233,7 +233,7 @@ Public Class Form1
         'TasksList.DataSource = Common.Tasks
 
         ForegroundWorkTimer.Interval = 500
-'        AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
+        AddHandler ForegroundWorkTimer.Tick, AddressOf ForegroundWorkPumper
 
         Dim asm As Assembly = Assembly.GetExecutingAssembly
         Dim InternalResourceNames() As String = asm.GetManifestResourceNames
@@ -694,18 +694,18 @@ Public Class Form1
     End Sub
 
 #If Not Refocus Then
-    'Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
-    '    Try
-    '        If messbox.Visible = True Then
-    '            messbox.Activate()
-    '            messbox.BringToFront()
-    '            messbox.Focus()
-    '        End If
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
+    Private Sub Form1_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Activated
+        Try
+            If messbox.Visible = True Then
+                messbox.Activate()
+                messbox.BringToFront()
+                messbox.Focus()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
-    'End Sub
+    End Sub
 #End If
 
 
