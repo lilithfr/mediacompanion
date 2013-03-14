@@ -10475,13 +10475,6 @@ Public Class Form1
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingSeason As TvSeason = tv_SeasonSelectedCurrently()
-        Dim ThisSeason As String
-        Dim SeasonNum As Integer = 0
-        If Not WorkingSeason Is Nothing Then
-            ThisSeason = WorkingSeason.ToString
-            ThisSeason = ThisSeason.Remove(0, 6)
-            SeasonNum = Val(ThisSeason)
-        End If
         'If workingTvShow.tvdbid = currentposterid Then
         '    Exit Sub
         'End If
@@ -10528,10 +10521,19 @@ Public Class Form1
         Next
 
         ComboBox2.SelectedIndex = 0
-        If SeasonNum > 0 Then
-            ComboBox2.SelectedIndex = SeasonNum + 1
-        End If
+        
+        
+        If Not WorkingSeason is Nothing then
+            Dim ThisSeason As String = WorkingSeason.ToString 
+            If ThisSeason = "Season 00" then ThisSeason = "Specials"
+            For i=0 to ComboBox2.Items.Count
+                ComboBox2.SelectedIndex = i
+                If ComboBox2.text = ThisSeason Then
+                    Exit For
+                End If
+            Next
 
+        End If
         '        For Each item In tvobjects
         '            ComboBox2.Items.Add(item)
         '            If item = combostart Then
