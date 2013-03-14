@@ -107,7 +107,7 @@ Public Class Movies
 
     Public ReadOnly Property MissingPlot As String
         Get
-            Return "Missing Plot (" & (From x In MovieCache Where x.plot.ToString.Trim = "" or x.plot.ToString.Trim = "scraper error").Count & ")" 
+            Return "Missing Plot (" & (From x In MovieCache Where x.MissingPlot).Count & ")" 
         End Get
     End Property  
 
@@ -154,19 +154,6 @@ Public Class Movies
     End Property  
 
 
-    Public ReadOnly Property Watched As String
-        Get
-            Return "Watched (" & (From x In MovieCache Where x.playcount<>"0").Count & ")" 
-
-            'Dim q = From x In MovieCache Where x.playcount <> "0" 
-            '            Group By x.playcount Into Num=Count
-            '            Select "Watched (" & Num.ToString & ")" 
-             
-            'Return q.ToList(0)
-        End Get
-    End Property  
-
-
     Public ReadOnly Property Duplicates As String
         Get
             Dim total          As Integer = (From x In MovieCache).Count
@@ -179,18 +166,18 @@ Public Class Movies
     End Property    
 
 
+    Public ReadOnly Property Watched As String
+        Get
+            Return "Watched (" & (From x In MovieCache Where x.Watched).Count & ")" 
+        End Get
+    End Property  
+
+
     Public ReadOnly Property Unwatched As String
         Get
-            Return "Unwatched (" & (From x In MovieCache Where x.playcount="0").Count & ")" 
-
-            'Dim q = From x In MovieCache Where x.playcount = "0" 
-            '            Group By x.playcount Into Num=Count
-            '            Select "Unwatched (" & Num.ToString & ")" 
-             
-            'Return q.ToList(0)
+            Return "Unwatched (" & (From x In MovieCache Where Not x.Watched).Count & ")" 
         End Get
     End Property    
-
 
 
     Public ReadOnly Property ActorsFilter As List(Of String)

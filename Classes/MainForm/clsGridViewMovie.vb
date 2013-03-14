@@ -231,20 +231,15 @@ Public Class clsGridViewMovie
         'General
         Select Form1.cbFilterGeneral.Text.RemoveAfterMatch
 
-            Case "Watched"         : b = From f In b Where f.playcount <> "0"
-
-            Case "Unwatched"       : b = From f In b Where f.playcount  = "0"
+            Case "Watched"         : b = From f In b Where     f.Watched
+            Case "Unwatched"       : b = From f In b Where Not f.Watched
 
             Case "Duplicates"      : Dim sort = b.GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
 
             Case "Missing Poster"  : b = From f In b Where f.MissingPoster
-
             Case "Missing Fanart"  : b = From f In b Where f.MissingFanart
-
             Case "Missing Trailer" : b = From f In b Where f.MissingTrailer
-
-            Case "Missing Plot"    : b = From f In b Where f.plot.ToString.Trim = "" or f.plot.ToString.Trim = "scraper error"
-
+            Case "Missing Plot"    : b = From f In b Where f.MissingPlot
             Case "Missing Genre"   : b = From f In b Where f.MissingGenre
             Case "Missing Outline" : b = From f In b Where f.MissingOutline
             Case "Missing Rating"  : b = From f In b Where f.MissingRating

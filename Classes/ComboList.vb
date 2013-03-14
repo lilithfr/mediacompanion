@@ -43,47 +43,58 @@ Public Class ComboList
     End Property
 
 
-    Public ReadOnly Property MissingRating As String
+    Public ReadOnly Property MissingRating As Boolean
         Get
             Return rating.ToString.Trim=""
         End Get
     End Property  
 
 
-    Public ReadOnly Property MissingGenre As String
+    Public ReadOnly Property MissingGenre As Boolean
         Get
             Return genre.ToString.Trim=""
         End Get
     End Property  
 
 
-    Public ReadOnly Property MissingOutline As String
+    Public ReadOnly Property MissingOutline As Boolean
         Get
             Return outline.ToString.Trim=""
         End Get
     End Property  
 
 
-    Public ReadOnly Property MissingRuntime As String
+    Public ReadOnly Property MissingRuntime As Boolean
         Get
             Return runtime=""
         End Get
     End Property  
 
 
-    Public ReadOnly Property MissingVotes As String
+    Public ReadOnly Property MissingVotes As Boolean
         Get
             Return votes.ToString.Trim=""
         End Get
     End Property  
 
 
-    Public ReadOnly Property MissingYear As String
+    Public ReadOnly Property MissingYear As Boolean
         Get
             Return year.ToString.Trim=""
         End Get
     End Property  
 
+    Public ReadOnly Property MissingPlot As Boolean
+        Get
+            Return plot.ToString.Trim="" Or plot.ToString.Trim="scraper error"
+        End Get
+    End Property  
+
+    Public ReadOnly Property Watched As Boolean
+        Get
+            Return playcount<>"0"
+        End Get
+    End Property  
 
 
     Public Sub Assign(From As ComboList)
