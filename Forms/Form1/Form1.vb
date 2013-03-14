@@ -1481,8 +1481,8 @@ Public Class Form1
         If Not IsNothing(workingMovieDetails) Then
             If workingMovie.fullpathandfilename <> workingMovieDetails.fileinfo.fullpathandfilename Then
                 Try
-                    For i = Panel8.Controls.Count - 1 To 0 Step -1
-                        Panel8.Controls.RemoveAt(i)
+                    For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
+                        panelAvailableMoviePosters.Controls.RemoveAt(i)
                     Next
                 Catch
                 End Try
@@ -4753,6 +4753,7 @@ Public Class Form1
         mov_PreferencesDisplay
         Dim tempstring As String = ""
         Dim tab As String = TabControl2.SelectedTab.Text
+
         If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" Then
             If workingMovieDetails Is Nothing And movieFolders.Count = 0 And Preferences.offlinefolders.Count = 0 Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
@@ -4770,8 +4771,8 @@ Public Class Form1
             End If
         Else
             currentTabIndex = Me.TabControl2.SelectedIndex
-
         End If
+
         If tab = "" Then
             If workingMovieDetails.fullmoviebody.imdbid <> Nothing Then
                 If Preferences.externalbrowser = True Then
@@ -4782,8 +4783,8 @@ Public Class Form1
                     OpenUrl(tempstring)
                 Else
 
-                    Dim url As String
-                    url = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
+                    Dim url As String = "http://www.imdb.com/title/" & workingMovieDetails.fullmoviebody.imdbid & "/"
+
                     Try
                         If WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> url Then
                             WebBrowser2.Stop()
@@ -4806,6 +4807,12 @@ Public Class Form1
                 MsgBox("No IMDB ID is available for this movie")
             End If
 
+        ElseIf tab = "Main Browser" Then
+
+            'Need to update displayed movies list as user may have invalidated it by have a 'missing...' filter selected and assigning one or more missing items
+            currentTabIndex = TabControl2.SelectedIndex
+            UpdateFilteredList
+
         ElseIf tab.ToLower = "file details" Then
             'Me.TabControl2.SelectedIndex = m_CurrentTabIndex
             currentTabIndex = TabControl2.SelectedIndex
@@ -4826,6 +4833,7 @@ Public Class Form1
 
         ElseIf tab.ToLower = "posters" Then
             currentTabIndex = TabControl2.SelectedIndex
+            gbMoviePostersAvailable.Refresh
             UpdateMissingPosterNav
 
         ElseIf tab.ToLower = "rescrape movie" Then
@@ -5646,8 +5654,8 @@ Public Class Form1
         Try
             If PictureBox2.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             cropString = "top"
             Timer2.Enabled = True
         Catch ex As Exception
@@ -5659,8 +5667,8 @@ Public Class Form1
         Try
             If PictureBox2.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call util_ImageCropTop()
             cropString = "bottom"
             Timer2.Enabled = True
@@ -5673,8 +5681,8 @@ Public Class Form1
         Try
             If PictureBox2.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call util_ImageCropTop()
             cropString = "left"
             Timer2.Enabled = True
@@ -5687,8 +5695,8 @@ Public Class Form1
         Try
             If PictureBox2.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call util_ImageCropTop()
             cropString = "right"
             Timer2.Enabled = True
@@ -5740,8 +5748,8 @@ Public Class Form1
         Try
             thumbedItsMade = False
             util_ImageLoad(PictureBox2, mov_FanartORExtrathumbPath(), Utilities.DefaultFanartPath)
-            btnresetimage.Visible = False
-            btnsavecropped.Visible = False
+            btnresetimage.Enabled = False
+            btnSaveCropped.Enabled = False
             Label16.Text = PictureBox2.Image.Width
             Label17.Text = PictureBox2.Image.Height
         Catch ex As Exception
@@ -5749,7 +5757,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavecropped.Click
+    Private Sub btnsavecropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCropped.Click
         Try
             thumbedItsMade = False
             Try
@@ -5768,8 +5776,8 @@ Public Class Form1
                         End If
                     Next
                 End If
-                btnresetimage.Visible = False
-                btnsavecropped.Visible = False
+                btnresetimage.Enabled = False
+                btnSaveCropped.Enabled = False
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -5829,8 +5837,8 @@ Public Class Form1
         currentPage = 1
         cbMoviePosterSaveLoRes.Enabled = False
         btnPosterTabs_SaveImage.Enabled = False
-        For i = Panel8.Controls.Count - 1 To 0 Step -1
-            Panel8.Controls.RemoveAt(i)
+        For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
+            panelAvailableMoviePosters.Controls.RemoveAt(i)
         Next
         If Preferences.maximumthumbs < 1 Then
         Else
@@ -5969,8 +5977,8 @@ Public Class Form1
                         itemcounter += 1
 
 
-                        Me.Panel8.Controls.Add(posterPicBoxes())
-                        Me.Panel8.Controls.Add(posterCheckBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     End If
                     If tempboolean = False Then
                         posterPicBoxes() = New PictureBox()
@@ -6000,8 +6008,8 @@ Public Class Form1
                         itemcounter += 1
 
 
-                        Me.Panel8.Controls.Add(posterPicBoxes())
-                        Me.Panel8.Controls.Add(posterCheckBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     End If
                     Me.Refresh()
                     Application.DoEvents()
@@ -6024,7 +6032,7 @@ Public Class Form1
                 .Text = "No Posters Were Found For This Movie"
 
             End With
-            Me.Panel8.Controls.Add(mainlabel2)
+            Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
         If itemcounter = 0 Then
             Button9.Visible = False
@@ -6040,7 +6048,7 @@ Public Class Form1
 
             End With
             Label18.Text = "0 of 0 Images"
-            Me.Panel8.Controls.Add(mainlabel2)
+            Me.panelAvailableMoviePosters.Controls.Add(mainlabel2)
         End If
         messbox.Close()
     End Sub
@@ -6052,7 +6060,7 @@ Public Class Form1
         Dim allok As Boolean = False
         tempstring = tempstring.Replace("postercheckbox", "")
         tempint = Convert.ToDecimal(tempstring)
-        For Each button As Control In Me.Panel8.Controls
+        For Each button As Control In Me.panelAvailableMoviePosters.Controls
             If button.Name.IndexOf("postercheckbox") <> -1 Then
                 Dim b1 As RadioButton = CType(button, RadioButton)
                 If b1.Checked = True Then
@@ -6085,7 +6093,7 @@ Public Class Form1
             .Text = tempstring
             .BringToFront()
         End With
-        Me.Panel8.Controls.Add(resLabel)
+        Me.panelAvailableMoviePosters.Controls.Add(resLabel)
         Me.Refresh()
         Application.DoEvents()
     End Sub
@@ -6122,8 +6130,8 @@ Public Class Form1
 
     Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
         Try
-            For i = Panel8.Controls.Count - 1 To 0 Step -1
-                Panel8.Controls.RemoveAt(i)
+            For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
+                panelAvailableMoviePosters.Controls.RemoveAt(i)
             Next
             messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -6183,8 +6191,8 @@ Public Class Form1
                         itemcounter += 1
 
 
-                        Me.Panel8.Controls.Add(posterPicBoxes())
-                        Me.Panel8.Controls.Add(posterCheckBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     End If
                     If tempboolean = False Then
 
@@ -6215,8 +6223,8 @@ Public Class Form1
                         itemcounter += 1
 
 
-                        Me.Panel8.Controls.Add(posterPicBoxes())
-                        Me.Panel8.Controls.Add(posterCheckBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                     End If
                     Me.Refresh()
                     Application.DoEvents()
@@ -6239,8 +6247,8 @@ Public Class Form1
 
     Private Sub Button10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button10.Click
         Try
-            For i = Panel8.Controls.Count - 1 To 0 Step -1
-                Panel8.Controls.RemoveAt(i)
+            For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
+                panelAvailableMoviePosters.Controls.RemoveAt(i)
             Next
             messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -6299,8 +6307,8 @@ Public Class Form1
                     itemcounter += 1
 
 
-                    Me.Panel8.Controls.Add(posterPicBoxes())
-                    Me.Panel8.Controls.Add(posterCheckBoxes())
+                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                 End If
                 If tempboolean = False Then
                     posterPicBoxes() = New PictureBox()
@@ -6330,8 +6338,8 @@ Public Class Form1
                     itemcounter += 1
 
 
-                    Me.Panel8.Controls.Add(posterPicBoxes())
-                    Me.Panel8.Controls.Add(posterCheckBoxes())
+                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
+                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
                 End If
                 Me.Refresh()
                 Application.DoEvents()
@@ -6448,7 +6456,7 @@ Public Class Form1
             Dim backup As String = ""
 
 
-            For Each button As Control In Me.Panel8.Controls
+            For Each button As Control In Me.panelAvailableMoviePosters.Controls
                 If button.Name.IndexOf("postercheckbox") <> -1 Then
                     Dim b1 As RadioButton = CType(button, RadioButton)
                     If b1.Checked = True Then
@@ -21819,7 +21827,7 @@ Public Class Form1
                 Try
                     Process.Start(url)
                 Catch ex As Exception
-                    MessageBox.Show("An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK)
+                    MessageBox.Show("An error occurred while trying to launch the default browser - Under 'General Preferences' check 'Use external Browser...' and then locate your browser to fix this error", "", MessageBoxButtons.OK)
                 End Try
             End If
         Catch ex As Exception

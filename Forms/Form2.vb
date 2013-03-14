@@ -836,8 +836,8 @@ Public Class Form2
         Try
             If moviethumb.Image Is Nothing Then Exit Sub
             thumbeditsmade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call croptop()
             cropstring = "top"
             Timer1.Enabled = True
@@ -856,8 +856,8 @@ Public Class Form2
         Try
             If moviethumb.Image Is Nothing Then Exit Sub
             thumbeditsmade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call cropbottom()
             cropstring = "bottom"
             Timer1.Enabled = True
@@ -876,8 +876,8 @@ Public Class Form2
         Try
             If moviethumb.Image Is Nothing Then Exit Sub
             thumbeditsmade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call cropleft()
             cropstring = "left"
             Timer1.Enabled = True
@@ -896,8 +896,8 @@ Public Class Form2
         Try
             If moviethumb.Image Is Nothing Then Exit Sub
             editsmade = True
-            btnresetimage.Visible = True
-            btnsavecropped.Visible = True
+            btnresetimage.Enabled = True
+            btnSaveCropped.Enabled = True
             Call cropright()
             cropstring = "right"
             Timer1.Enabled = True
@@ -1025,8 +1025,8 @@ Public Class Form2
         Try
             thumbeditsmade = False
             moviethumb.Image = Form1.moviethumb.Image
-            btnresetimage.Visible = False
-            btnsavecropped.Visible = False
+            btnresetimage.Enabled = False
+            btnSaveCropped.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -1040,8 +1040,8 @@ Public Class Form2
             Dim stream As New System.IO.MemoryStream
             moviethumb.Image.Save(tempstring, System.Drawing.Imaging.ImageFormat.Jpeg)
             Form1.moviethumb.Image = moviethumb.Image
-            btnresetimage.Visible = False
-            btnsavecropped.Visible = False
+            btnresetimage.Enabled = False
+            btnSaveCropped.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

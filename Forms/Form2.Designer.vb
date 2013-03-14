@@ -903,7 +903,7 @@ Partial Class Form2
         Me.btnresetimage.Size = New System.Drawing.Size(75, 23)
         Me.btnresetimage.TabIndex = 0
         Me.btnresetimage.Text = "Reset Crop"
-        Me.btnresetimage.Visible = False
+        Me.btnresetimage.Enabled = False
         '
         'btnsavecropped
         '
@@ -912,7 +912,7 @@ Partial Class Form2
         Me.btnsavecropped.Size = New System.Drawing.Size(75, 23)
         Me.btnsavecropped.TabIndex = 0
         Me.btnsavecropped.Text = "Saved Cropped"
-        Me.btnsavecropped.Visible = False
+        Me.btnSaveCropped.Enabled = False
         '
         'Button2
         '
