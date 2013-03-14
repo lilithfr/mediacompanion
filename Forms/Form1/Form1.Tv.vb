@@ -657,13 +657,27 @@ Partial Public Class Form1
                 util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
             End If
             If Preferences.FrodoEnabled Then
-                util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
-                util_ImageLoad(tv_PictureBoxBottom, SelectedSeason.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+                'util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath)
+                'util_ImageLoad(tv_PictureBoxBottom, SelectedSeason.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath)
+                util_ImageLoad(tv_PictureBoxRight, SelectedSeason.Poster.Path, Utilities.DefaultPosterPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
+                util_ImageLoad(tv_PictureBoxBottom, SelectedSeason.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultBannerPath)              ' tv_PictureBoxRight.Image = SelectedSeason.Poster.Image
             End If
         End If
 
         If Show.NfoFilePath <> Nothing Then
             util_ImageLoad(tv_PictureBoxLeft, Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath) 'tv_PictureBoxLeft.ImageLocation = Show.NfoFilePath.Replace("tvshow.nfo", "fanart.jpg")
+        End If
+
+        ComboBox4.Items.Clear()
+        For Each actor In Show.ListActors
+            If actor.actorname <> Nothing AndAlso Not ComboBox4.Items.Contains(actor.actorname) Then
+                ComboBox4.Items.Add(actor.actorname)
+            End If
+        Next
+        If ComboBox4.Items.Count = 0 Then
+            Call tv_ActorDisplay(True)
+        Else
+            ComboBox4.SelectedIndex = 0
         End If
 
     End Sub
@@ -678,6 +692,7 @@ Partial Public Class Form1
         End If
         Panel9.Visible = True
 
+        Dim Show As TvShow = tv_ShowSelectedCurrently()
         Dim season As Integer = SelectedEpisode.Season.Value
         Dim episode As Integer = SelectedEpisode.Episode.Value
         Dim SeasonObj As New Media_Companion.TvSeason
@@ -697,6 +712,17 @@ Partial Public Class Form1
         Tv_TreeViewContext_ReloadFromCache.Enabled = True
         Tv_TreeViewContext_OpenFolder.Enabled = True
 
+        ComboBox4.Items.Clear()
+        For Each actor In Show.ListActors
+            If actor.actorname <> Nothing AndAlso Not ComboBox4.Items.Contains(actor.actorname) Then
+                ComboBox4.Items.Add(actor.actorname)
+            End If
+        Next
+        If ComboBox4.Items.Count = 0 Then
+            Call tv_ActorDisplay(True)
+        Else
+            ComboBox4.SelectedIndex = 0
+        End If
 
     End Sub
 
@@ -780,8 +806,8 @@ Partial Public Class Form1
                 util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
             End If
             If Preferences.FrodoEnabled Then
-                util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path.Replace(".tbn", "-poster.jpg"), Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
-                util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace(".tbn", "-banner.jpg"), Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                util_ImageLoad(tv_PictureBoxRight, Season.Poster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
+                util_ImageLoad(tv_PictureBoxBottom, Season.Poster.Path.Replace("-poster.jpg", "-banner.jpg"), Utilities.DefaultBannerPath) 'tv_PictureBoxRight.Image = Season.Poster.Image
             End If
         End If
         Panel9.Visible = True
