@@ -1418,6 +1418,7 @@ Public Class Movie
                 End If
 
                 If Not eden Then
+                    GC.Collect
                     Utilities.SafeDeleteFile(edenart)
                 End If
 
