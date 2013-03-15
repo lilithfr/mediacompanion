@@ -28,6 +28,7 @@
     Dim _DisplayCreateDate As String
 
     Property Resolution As Integer = -1
+    Property Audio      As New List(Of AudioDetails)
 
     Sub New 
     End Sub
@@ -63,6 +64,12 @@
         TitleUcase = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
         Resolution = movie.Resolution
+        AssignAudio(movie.Audio)
+    End Sub
+
+    Public Sub AssignAudio(From As List(Of AudioDetails))
+        Me.Audio.Clear
+        Me.Audio.AddRange(From)
     End Sub
 
     Public Function Export() As ComboList
@@ -87,7 +94,8 @@
                                                   .plot = Me.plot.Trim,
                                                   .source = Me.source,
                                                   .votes = Me.votes,
-                                                  .Resolution = Me.Resolution
+                                                  .Resolution = Me.Resolution,
+                                                  .Audio      = Me.Audio
                                                  }
         Return convertedMovie
     End Function

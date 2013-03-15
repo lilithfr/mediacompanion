@@ -910,30 +910,42 @@ Public Class WorkingWithNfoFiles
                                         Dim newfilenfo As New FullFileDetails
 
                                         For Each detail In res.ChildNodes
-                                            If detail.Name="video" Then
-                                                Dim videodetails As XmlNode = Nothing
+                                            Select Case detail.Name
 
+                                                Case "video" 
+                                                            For Each videodetails As XmlNode In detail.ChildNodes
+                                                                Select Case videodetails.Name
+                                                                    Case "width"
+                                                                        newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
+                                                                        gotWidth=True
+                                                                    Case "height"
+                                                                        newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
+                                                                        gotHeight=True
+                                                                End Select
 
-                                                For Each videodetails In detail.ChildNodes
-                                                    Select Case videodetails.Name
-                                                        Case "width"
-                                                            newfilenfo.filedetails_video.Width.Value = videodetails.InnerText
-                                                            gotWidth=True
-                                                        Case "height"
-                                                            newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
-                                                            gotHeight=True
-                                                    End Select
+                                                                If gotWidth And gotHeight Then
+                                                                    newmovie.Resolution = newfilenfo.filedetails_video.VideoResolution
+                                                                    Exit For
+                                                                End If
+                                                            Next
 
-                                                    If gotWidth And gotHeight Then
-                                                        newmovie.Resolution = newfilenfo.filedetails_video.VideoResolution
-                                                        Exit For
-                                                    End If
-                                                Next
+                                                Case "audio"
+                                                        Dim audio As New AudioDetails
+                                                        For Each audiodetails As XmlNode In detail.ChildNodes
 
-                                                If gotWidth And gotHeight Then
-                                                    Exit For
-                                                End If
-                                            End If
+                                                            Select Case audiodetails.Name
+                                                                Case "language"
+                                                                    audio.Language.Value = audiodetails.InnerText
+                                                                Case "codec"
+                                                                    audio.Codec.Value = audiodetails.InnerText
+                                                                Case "channels"
+                                                                    audio.Channels.Value = audiodetails.InnerText
+                                                                Case "bitrate"
+                                                                    audio.Bitrate.Value = audiodetails.InnerText
+                                                            End Select
+                                                        Next
+                                                        newmovie.Audio.Add(audio)
+                                            End Select
                                         Next
                             
                                         If gotWidth And gotHeight Then

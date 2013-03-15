@@ -272,6 +272,13 @@ Public Class clsGridViewMovie
             If Yield Then Return
         End If
 
+
+        If Form1.AudioCodecsFilter<>"" Then
+            b = From f In b From a In f.Audio Where a.Codec.Value=Form1.AudioCodecsFilter Select f
+            If Yield Then Return
+        End If
+
+
         'Actor
         If Form1.ActorFilter<>"" then
             Dim movie_ids As New List(Of String) 

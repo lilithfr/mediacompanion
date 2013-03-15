@@ -58,6 +58,7 @@ Public Class Form1
     Public ActorFilter        As String=""
     Public SetFilter          As String=""
     Public ResolutionFilter   As String=""
+    Public AudioCodecsFilter  As String=""
 
     'Public Shared Preferences As New Structures
 
@@ -3282,6 +3283,7 @@ Public Class Form1
         ActorFilter=""
         SetFilter=""
         ResolutionFilter=""
+        AudioCodecsFilter=""
         filterOverride = False
         TextBox1.Text = ""
         txt_titlesearch.Text = ""
@@ -3290,12 +3292,14 @@ Public Class Form1
         cbSort.SelectedIndex = 0
         RadioButtonTitleAndYear.Checked = True
           
-        cbFilterGeneral   .SelectedIndex = 0
-        cbFilterGenre     .SelectedIndex = 0
-        cbFilterSet       .SelectedIndex = 0
-        cbFilterActor     .SelectedIndex = 0
-        cbFilterSource    .SelectedIndex = 0
-        cbFilterResolution.SelectedIndex = 0
+        cbFilterGeneral    .SelectedIndex = 0
+        cbFilterGenre      .SelectedIndex = 0
+        cbFilterSet        .SelectedIndex = 0
+        cbFilterActor      .SelectedIndex = 0
+        cbFilterSource     .SelectedIndex = 0
+        cbFilterResolution .SelectedIndex = 0
+        cbFilterAudioCodecs.SelectedIndex = 0
+
         State=ProgramState.Other
     End Sub
 
@@ -16930,6 +16934,7 @@ Public Class Form1
                     cbFilterActor.Font = newFont
                     cbFilterSource.Font = newFont
                     cbFilterResolution.Font = newFont
+                    cbFilterAudioCodecs.Font = newFont
                     LabelCountFilter.Font = newFont
 
                     Me.Refresh()
@@ -20623,7 +20628,7 @@ Public Class Form1
 
     Private Sub ResizeBottomLHSPanel()
 
-        Dim maxSize = 200
+        Dim maxSize = 220
         Dim minSize = 2
 
         If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
@@ -22824,6 +22829,19 @@ Public Class Form1
             DisplayMovie()
         End If
     End Sub
+     
+    Private Sub cbFilterAudioCodecsChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterAudioCodecs.SelectedValueChanged
+        If State = ProgramState.Other Then
+            If cbFilterAudioCodecs.Text = "All" Then
+                AudioCodecsFilter = ""
+            Else
+                AudioCodecsFilter = cbFilterAudioCodecs.Text.RemoveAfterMatch   '.Replace("Unknown","-1")
+            End If
+
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+            DisplayMovie()
+        End If
+    End Sub
     
     Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
         If State = ProgramState.Other Then
@@ -23070,6 +23088,7 @@ Public Class Form1
         Assign_FilterSet
         Assign_FilterActor
         Assign_FilterResolution
+        Assign_FilterAudioCodecs
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23179,6 +23198,33 @@ Public Class Form1
             If Not found Then ResolutionFilter=""
         End If
     End Sub
+
+
+    Sub Assign_FilterAudioCodecs
+
+        cbFilterAudioCodecs.Items.Clear
+        cbFilterAudioCodecs.Items.Add("All")
+
+        For Each item In oMovies.AudioCodecsFilter
+            cbFilterAudioCodecs.Items.Add(item)
+        Next
+        If cbFilterAudioCodecs.Text = "" Then cbFilterAudioCodecs.Text = "All"
+
+        If AudioCodecsFilter<>"" Then
+            Dim found As Boolean=False
+            For Each item As String In cbFilterAudioCodecs.Items
+                If item.IndexOf(AudioCodecsFilter & " (")=0 Then        'AudioCodecsFilter.Replace("-1","Unknown")
+                    cbFilterAudioCodecs.SelectedItem=item    
+                    found=True
+                    Exit For
+                End If
+            Next
+
+            If Not found Then AudioCodecsFilter=""
+        End If
+    End Sub
+
+
 
 
     Sub Assign_FilterActor

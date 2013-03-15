@@ -803,6 +803,7 @@ Public Class Movie
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.year                = _scrapedMovie.fullmoviebody.year
         _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
+        _movieCache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
 
         Dim filecreation As New IO.FileInfo(nfopathandfilename)
 

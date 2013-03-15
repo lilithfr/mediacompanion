@@ -7,22 +7,23 @@ Public Class ComboList
     Property foldername          As String = ""
     Property title               As String = ""
     Property originaltitle       As String = ""
-    Property year                As String  = ""
-    Property filedate            As String  = ""
-    Property id                  As String  = ""
-    Property rating              As String  = ""
-    Property top250              As String  = 0
-    Property genre               As String  = ""
-    Property playcount           As String  = ""
-    Property sortorder           As String  = ""
-    Property outline             As String  = ""
-    Property runtime             As String  = ""
-    Property createdate          As String  = ""
-    Property missingdata1        As Byte    = 0
-    Property plot                As String  = ""
-    Property source              As String  = ""
-    Property votes               As String  = ""
-    Property Resolution          As Integer = -1
+    Property year                As String = ""
+    Property filedate            As String = ""
+    Property id                  As String = ""
+    Property rating              As String = ""
+    Property top250              As String = 0
+    Property genre               As String = ""
+    Property playcount           As String = ""
+    Property sortorder           As String = ""
+    Property outline             As String = ""
+    Property runtime             As String = ""
+    Property createdate          As String = ""
+    Property missingdata1        As Byte   = 0
+    Property plot                As String = ""
+    Property source              As String = ""
+    Property votes               As String = ""
+    Property Resolution          As Integer= -1
+    Property Audio               As New List(Of AudioDetails)
 
     Public ReadOnly Property MissingFanart As Boolean
         Get
@@ -119,7 +120,14 @@ Public Class ComboList
         Me.plot                = From.plot               
         Me.source              = From.source             
         Me.votes               = From.votes              
-        Me.Resolution          = From.Resolution         
+        Me.Resolution          = From.Resolution    
+        
+        AssignAudio(From.Audio)
+    End Sub
+
+    Public Sub AssignAudio(From As List(Of AudioDetails))
+        Me.Audio.Clear
+        Me.Audio.AddRange(From)
     End Sub
 
 End Class

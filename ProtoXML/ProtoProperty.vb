@@ -1,4 +1,5 @@
-﻿
+﻿Imports System.Xml
+
 Public Class ProtoProperty
     Inherits ProtoXChildBase
 
@@ -146,6 +147,16 @@ Public Class ProtoProperty
     Public Overrides Function CreateNew() As IProtoXChild
         Return New ProtoProperty(Me.ParentClass, Me.NodeName)
     End Function
+
+
+    Public Function GetChild(doc As XmlDocument) As XmlElement
+        Dim child = doc.CreateElement(NodeName.tolower)
+
+        child.InnerText = Value
+
+        Return child
+    End Function
+
 End Class
 
 

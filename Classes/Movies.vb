@@ -214,18 +214,24 @@ Public Class Movies
     End Property    
 
 
-    'Public ReadOnly Property ActorsByNumberOfFilmsDescending As List(Of String)
-    '    Get
-    '        Dim q = From x In ActorDb 
-    '            Group By x.ActorName Into NumFilms=Count 
-    '            Order by NumFilms Descending, ActorName 
-    '            Take Preferences.MaxActorsInFilter 
-    '            Where NumFilms>=Preferences.ActorsFilterMinFilms 
-    '            Select ActorName & " (" & NumFilms.ToString & ")" 
 
-    '        Return q.ToList
-    '    End Get
-    'End Property    
+    'language
+
+    'channels
+    'bitrate
+
+    Public ReadOnly Property AudioCodecsFilter As List(Of String)
+        Get
+            Dim q = From m In MovieCache From a In m.Audio 
+                        Select Codec=a.Codec.Value
+                        Group By Codec Into Num=Count
+                        Order By Codec
+                        Select Codec & " (" & Num.ToString & ")" 
+
+            Return q.ToList
+        End Get
+    End Property    
+
 
 
     Public ReadOnly Property SetsFilter As List(Of String)
@@ -245,18 +251,6 @@ Public Class Movies
             Return r.ToList
         End Get
     End Property    
-
-
-    'Public ReadOnly Property MoviesSetsByNumberOfFilmsDescending As List(Of String)
-    '    Get
-    '        Dim q = From x In MovieCache 
-    '            Group By x.MovieSet Into NumFilms=Count
-    '            Order By NumFilms Descending, MovieSet
-    '            Select MovieSet & " (" & NumFilms.ToString & ")" 
-             
-    '        Return q.ToList
-    '    End Get
-    'End Property    
 
 
 
@@ -800,6 +794,28 @@ Public Class Movies
                                 newmovie.votes = detail.InnerText
 
                             Case "Resolution" : newmovie.Resolution = detail.InnerText
+
+
+                            Case "audio"
+                                    newmovie.Audio.Clear
+
+                                    Dim audio As New AudioDetails
+                                    For Each audiodetails As XmlNode In detail.ChildNodes
+
+                                        Select Case audiodetails.Name
+                                            Case "language"
+                                                audio.Language.Value = audiodetails.InnerText
+                                            Case "codec"
+                                                audio.Codec.Value = audiodetails.InnerText
+                                            Case "channels"
+                                                audio.Channels.Value = audiodetails.InnerText
+                                            Case "bitrate"
+                                                audio.Bitrate.Value = audiodetails.InnerText
+                                        End Select
+                                    Next
+                                    newmovie.Audio.Add(audio)
+
+
                         End Select
                     Next
                     If newmovie.source = Nothing Then
@@ -964,6 +980,12 @@ Public Class Movies
             End If
 
             child.AppendChild(doc, "Resolution", movie.Resolution)     
+            
+   '        childchild = doc.CreateElement("audio")
+
+            For Each item in movie.Audio
+                child.AppendChild(item.GetChild(doc))
+            Next
 
             root.AppendChild(child)
         Next
