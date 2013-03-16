@@ -64,6 +64,8 @@ Public Class Movie
     Private _youTubeTrailer           As YouTubeVideoFile
     Private _nfoPathAndFilename       As String = ""
     Private _actualNfoPathAndFilename As String
+    Private _rescrape                 As Boolean = False
+    Private _previousCache            As ComboList = Nothing
 
     Shared Private _availableHeightResolutions As List(Of Integer)
 
@@ -78,7 +80,24 @@ Public Class Movie
     Property Actions As New ScrapeActions
 '    Property nfopathandfilename As String = ""
     Property RenamedBaseName As String = ""
-    Property Rescrape As Boolean=False
+
+
+    Property Rescrape As Boolean
+        Get
+            Return _rescrape
+        End Get
+
+        Set(value As Boolean)
+
+            _rescrape = value
+
+            If _rescrape Then
+                _previousCache = _parent.FindCachedMovie(_actualNfoPathAndFilename)
+            Else
+                _previousCache = Nothing
+            End If
+        End Set
+    End Property
 
 #End Region 'Read-write properties
 
@@ -945,6 +964,12 @@ Public Class Movie
             Next
             If done = True Then Exit For
         Next
+
+
+        If Rescrape Then
+            _scrapedMovie.fullmoviebody.source    = _previousCache.source
+            _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
+        End If
 
     End Sub
     
