@@ -19727,7 +19727,9 @@ Public Class Form1
                                                 End If
                                                 finalString += tempepisode.Substring(i * chunkSize, chunkSize2) & vbCrLf
                                             Next
-                                            MsgBox("tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value, MsgBoxStyle.OkOnly, "tvdb ERROR!")
+                                            'MsgBox("tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value, MsgBoxStyle.OkOnly, "tvdb ERROR!")
+                                            progresstext="tvdb was unable to process the following show episode." & vbCrLf & Cache.TvCache.Shows(f).Title.Value & " - S" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Season.Value, 2) & "E" & Utilities.PadNumber(Cache.TvCache.Shows(f).Episodes(g).Episode.Value, 2) & " " & Cache.TvCache.Shows(f).Episodes(g).Title.Value
+                                            tvbckrescrapewizard.ReportProgress(progress, progresstext)
                                             'MsgBox("TVDB reported the following error" & vbCrLf & finalString, MsgBoxStyle.OkOnly, "ERROR!")
 
                                             Continue For
