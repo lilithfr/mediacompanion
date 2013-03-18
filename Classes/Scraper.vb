@@ -29,6 +29,7 @@ Public Class MovieRegExs
     Public Const REGEX_STUDIO              = "<h4 class=""inline"">Production.*?/h4>(.*?)</div>"
     Public Const REGEX_CREDITS             = "<h4 class=""inline"">Writers?:</h4>(.*?)</div>"
     Public Const REGEX_ORIGINAL_TITLE      = "<span class=""title-extra"" itemprop=""name"">(.*?)<i>\(original title\)</i>"
+    Public Const REGEX_PLOT                = "itemprop=""description"">(?<plot>.*?)</p>"
 End Class
 
 
@@ -83,7 +84,13 @@ Module ModGlobals
         If s.IndexOf("itemprop=""name"">")>-1 Then s=Net.WebUtility.HtmlDecode( Regex.Match(s,MovieRegExs.REGEX_NAME, RegexOptions.Singleline).Groups("name").Value )
                           
     End Sub
-  
+
+    <Extension()> _
+    Function StripTagsLeaveContent(ByRef s As String) As String
+        
+        Return Net.WebUtility.HtmlDecode( Regex.Replace(s, "<(.|\n)+?>", String.Empty) )
+                          
+    End Function  
 
      <Extension()> _
     Function EncodeSpecialChrs(ByRef s As String) As String
@@ -764,6 +771,13 @@ Public Class Classimdb
     End Property
 
 
+    'ReadOnly Property Plot As String
+    '    Get
+    '        Return Regex.Match(Html,MovieRegExs.REGEX_PLOT, RegexOptions.Singleline).ToString.Trim.StripHRef
+    '    End Get
+    'End Property
+
+
     ReadOnly Property ReleaseDate As String
         Get
             Dim s=""
@@ -904,6 +918,8 @@ Public Class Classimdb
                 totalinfo.AppendTag( "title"     , Me.Title    )
                 totalinfo.AppendTag( "year"      , Me.Year     )
                 totalinfo.AppendTag( "studio"    , Studio      )
+    '           totalinfo.AppendTag( "plot"      , Plot        )
+
 
                 For f = 0 To webpage.Count - 1
                     webcounter = f
@@ -1047,14 +1063,15 @@ Public Class Classimdb
                                 Next
                                 If movienfoarray.Length > 0 Then
 
-                                    Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+'                                   Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
+                                    Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(</p)")
                                     If M.Success = True Then
-                                        movienfoarray = M.Groups(1).Value
+                                        movienfoarray = M.Groups(1).Value.StripTagsLeaveContent.Trim
                                     Else
                                         movienfoarray = "scraper error"
                                     End If
-                                    movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
-                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray.Trim())
+                           '        movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
+                                    movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                                     movienfoarray = encodespecialchrs(movienfoarray)
                                     totalinfo = totalinfo & "<outline>" & movienfoarray & "</outline>" & vbCrLf
 
@@ -1156,16 +1173,19 @@ Public Class Classimdb
                         End If
                     Next
                     If plots(biggest) <> Nothing Then
-                        movienfoarray = plots(biggest)
-                        If movienfoarray.IndexOf("<a href=") <> -1 Then
-                            Do Until movienfoarray.IndexOf("<a href=") = -1
-                                first = movienfoarray.LastIndexOf("<a href=")
-                                last = movienfoarray.LastIndexOf("/"">")
-                                tempstring = movienfoarray.Substring(first, last - first + 3)
-                                movienfoarray = movienfoarray.Replace(tempstring, "")
-                            Loop
-                            movienfoarray = movienfoarray.Replace("</a>", "")
-                        End If
+
+                        movienfoarray = plots(biggest).StripTagsLeaveContent
+
+                        'If movienfoarray.IndexOf("<a href=") <> -1 Then
+                        '    Do Until movienfoarray.IndexOf("<a href=") = -1
+                        '        first = movienfoarray.LastIndexOf("<a href=")
+                        '        last = movienfoarray.LastIndexOf("/"">")
+                        '        tempstring = movienfoarray.Substring(first, last - first + 3)
+                        '        movienfoarray = movienfoarray.Replace(tempstring, "")
+                        '    Loop
+                        '    movienfoarray = movienfoarray.Replace("</a>", "")
+                        'End If
+
                         movienfoarray = Regex.Replace(movienfoarray, "<.*?>", "").Trim
                         movienfoarray = Utilities.cleanSpecChars(movienfoarray)
                         movienfoarray = encodespecialchrs(movienfoarray)
