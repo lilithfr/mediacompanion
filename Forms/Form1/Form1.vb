@@ -20641,7 +20641,9 @@ Public Class Form1
 
     Private Sub ResizeBottomLHSPanel()
 
-        Dim maxSize = 290
+        If Not MainFormLoadedStatus Then Return
+
+        Dim maxSize = GetMovieFilterPanelSize
         Dim minSize = 2
 
         If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
@@ -20657,6 +20659,27 @@ Public Class Form1
         If h < minSize Then h = minSize
         DataGridViewMovies.Height = h
     End Sub
+
+
+
+    Function GetMovieFilterPanelSize As Integer
+
+        Dim TopOffset       As Integer =  4
+        Dim FilterSpace     As Integer = 30
+
+        Dim count As Integer = 0
+        Dim query = From c As Control In SplitContainer5.Panel2.Controls Where c.Name.IndexOf("cbFilter")=0
+
+        For Each cb As ComboBox In query
+            If cb.Visible Then count += 1
+        Next
+
+        Return (count*FilterSpace)+(TopOffset*2)
+
+    End Function
+
+
+
 
     Private Sub ExtraDebugEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExtraDebugEnable.CheckedChanged
         Try
@@ -24044,11 +24067,21 @@ Public Class Form1
         End Try
     End Sub
 
-Private Sub bnt_TvChkFolderList_Click( sender As System.Object,  e As System.EventArgs) Handles bnt_TvChkFolderList.Click
+    Private Sub bnt_TvChkFolderList_Click( sender As System.Object,  e As System.EventArgs) Handles bnt_TvChkFolderList.Click
         Try
             Call tv_Showremovedfromlist()
         Catch ex As Exception
 
         End Try
-End Sub
+    End Sub
+
+
+    Private Sub  ConfigureMovieFiltersToolStripMenuItem1_Click( sender As Object,  e As EventArgs) Handles ConfigureMovieFiltersToolStripMenuItem1.Click
+        Dim frm As new frmConfigureMovieFilters
+
+        frm.Init(SplitContainer5.Panel2)
+        
+        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then ResizeBottomLHSPanel
+    End Sub
+
 End Class
