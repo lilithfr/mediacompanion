@@ -2054,7 +2054,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             ElseIf IsNumeric(tempstring) Then
                 Try
                     tempruntime = Convert.ToInt32(tempstring)
-                    minutes = Math.Round(tempruntime/60000)
+                    minutes = Math.Round(tempruntime/60)
                 Catch 
                 End Try
             End If

@@ -835,23 +835,24 @@ Module Module1
                                     singleepisode.filedetails = get_hdtags(getfilename(singleepisode.episodepath))
                                     If Not singleepisode.filedetails.filedetails_video.duration Is Nothing Then
                                         '1h 24mn 48s 546ms
-                                        Dim hours As Integer
+                                        'Dim hours As Integer
                                         Dim minutes As Integer
                                         tempstring = singleepisode.filedetails.filedetails_video.duration
-                                        tempint = tempstring.IndexOf("h")
-                                        If tempint <> -1 Then
-                                            hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                            tempstring = Trim(tempstring)
-                                        End If
-                                        tempint = tempstring.IndexOf("mn")
-                                        If tempint <> -1 Then
-                                            minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                        End If
-                                        If hours <> 0 Then
-                                            hours = hours * 60
-                                        End If
-                                        minutes = minutes + hours
+                                        'tempint = tempstring.IndexOf("h")
+                                        'If tempint <> -1 Then
+                                            'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                            'tempstring = Trim(tempstring)
+                                        'End If
+                                        'tempint = tempstring.IndexOf("mn")
+                                        'If tempint <> -1 Then
+                                            'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                        'End If
+                                        'If hours <> 0 Then
+                                            'hours = hours * 60
+                                        'End If
+                                        'minutes = minutes + hours
+                                        minutes =Math.Round(Convert.ToInt32(tempstring)/60)
                                         singleepisode.runtime = minutes.ToString & " min"
                                     End If
                                 Catch
@@ -965,7 +966,7 @@ Module Module1
                     End If
                     If listofepisodes(0).filedetails.filedetails_video.duration <> Nothing Then
                         If listofepisodes(0).filedetails.filedetails_video.duration <> "" Then
-                            filedetailschildchild = doc.CreateElement("duration")
+                            filedetailschildchild = doc.CreateElement("durationinseconds")
                             filedetailschildchild.InnerText = listofepisodes(0).filedetails.filedetails_video.duration
                             filedetailschild.AppendChild(filedetailschildchild)
                         End If
@@ -1198,7 +1199,7 @@ Module Module1
                             End If
                             If ep.filedetails.filedetails_video.duration <> Nothing Then
                                 If ep.filedetails.filedetails_video.duration <> "" Then
-                                    childchildchildchild = document.CreateElement("duration")
+                                    childchildchildchild = document.CreateElement("durationinseconds")
                                     childchildchildchild.InnerText = ep.filedetails.filedetails_video.duration
                                     childchildchild.AppendChild(childchildchildchild)
                                 End If
@@ -1984,7 +1985,9 @@ Module Module1
 
             Try
                 If playlist.Count = 1 Then
-                    workingfiledetails.filedetails_video.duration = MI.Get_(StreamKind.Visual, 0, 61)
+                    Dim temptime As String = MI.Get_(StreamKind.Visual, 0, "Duration")
+                    Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
+                    workingfiledetails.filedetails_video.duration = Convert.ToString(seconds)
                 ElseIf playlist.Count > 1 Then
                     Dim totalmins As Integer = 0
                     For f = 0 To playlist.Count - 1
@@ -1992,28 +1995,31 @@ Module Module1
                         M2 = New mediainfo
                         M2.Open(playlist(f))
                         Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
-                        Dim tempint As Integer
+                        'Dim tempint As Integer
                         If temptime <> Nothing Then
                             Try
                                 '1h 24mn 48s 546ms
-                                Dim hours As Integer = 0
-                                Dim minutes As Integer = 0
-                                Dim tempstring2 As String = temptime
-                                tempint = tempstring2.IndexOf("h")
-                                If tempint <> -1 Then
-                                    hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                    tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                                    tempstring2 = Trim(tempstring2)
-                                End If
-                                tempint = tempstring2.IndexOf("mn")
-                                If tempint <> -1 Then
-                                    minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                End If
-                                If hours <> 0 Then
-                                    hours = hours * 60
-                                End If
-                                minutes = minutes + hours
-                                totalmins = totalmins + minutes
+                                'Dim hours As Integer = 0
+                                'Dim minutes As Integer = 0
+                                'Dim tempstring2 As String = temptime
+                                'tempint = tempstring2.IndexOf("h")
+                                'If tempint <> -1 Then
+                                    'hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                                    'tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
+                                    'tempstring2 = Trim(tempstring2)
+                                'End If
+                                'tempint = tempstring2.IndexOf("mn")
+                                'If tempint <> -1 Then
+                                    'minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                                'End If
+                                'If hours <> 0 Then
+                                    'hours = hours * 60
+                                'End If
+                                'minutes = minutes + hours
+                                'totalmins = totalmins + minutes
+                                Dim seconds As Integer = Math.Round(Convert.ToInt32(temptime)/1000)
+                                'Dim totalmins As String 
+                                totalmins = Convert.ToString(Math.Round(seconds/60))
                             Catch
                             End Try
                         End If

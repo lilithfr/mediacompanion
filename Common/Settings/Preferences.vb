@@ -1131,9 +1131,9 @@ Public Class Preferences
 '                    workingfiledetails.filedetails_video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, "Duration")
 
                     Try
-                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration"))
+                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration"))/1000)
                     Catch
-                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Convert.ToInt32(MI.Get_(StreamKind.Audio , 0, "Duration"))
+                        workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Audio , 0, "Duration"))/1000)
                     End Try
 
                 ElseIf playlist.Count > 1 Then
@@ -1180,9 +1180,9 @@ Public Class Preferences
                         M2.Open(playlist(f))
                         
                         Try
-                            total += Convert.ToInt32(M2.Get_(StreamKind.Visual, 0, "Duration"))
+                            total += Math.Round(Convert.ToInt32(M2.Get_(StreamKind.Visual, 0, "Duration"))/1000)
                         Catch
-                            total += Convert.ToInt32(M2.Get_(StreamKind.Audio , 0, "Duration"))
+                            total += Math.Round(Convert.ToInt32(M2.Get_(StreamKind.Audio , 0, "Duration"))/1000)
                         End Try
                     Next
 
