@@ -406,7 +406,7 @@ Public Class Movie
     
     Public ReadOnly Property SearchName As String
         Get
-            Return Utilities.CleanFileName(Title, False)
+            Return Utilities.CleanFileName(Title)
         End Get 
     End Property
 
@@ -857,9 +857,9 @@ Public Class Movie
 
         If Preferences.keepfoldername Then
             If Preferences.usefoldernames Then
-                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(nfopathandfilename), False)
+                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(nfopathandfilename))
             Else
-                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Path.GetFileName(nfopathandfilename), False)
+                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(Path.GetFileName(nfopathandfilename)))
             End If
         End If
 
@@ -1772,9 +1772,9 @@ Public Class Movie
     Sub TMDbAssignScrapedMovie
         If Preferences.keepfoldername Then
              If Preferences.usefoldernames Then
-                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(nfopathandfilename), False)
+                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.GetLastFolder(nfopathandfilename))
             Else
-                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Path.GetFileName(nfopathandfilename), False)
+                _scrapedMovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(Path.GetFileName(nfopathandfilename)))
             End If
         Else
             _scrapedMovie.fullmoviebody.title = tmdb.Movie.title

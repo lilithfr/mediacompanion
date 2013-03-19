@@ -584,12 +584,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "error"
     End Function
 
-    Public Shared Function CleanFileName(ByVal filename As String, Optional ByVal withExtension As Boolean = False) As String
-        Try 'to remove extension first if filename has one
-            filename = filename.Replace(IO.Path.GetExtension(filename), "")
-            'filename = Regex.Replace(filename, "(" & Join(VideoExtensions, "|") & ")+$", "")
-        Catch
-        End Try
+    Public Shared Function RemoveFilenameExtension(filename As String)
+        Return filename.Replace(IO.Path.GetExtension(filename), "")
+    End Function
+
+    Public Shared Function CleanFileName(ByVal filename As String) As String
 
         Dim currentposition As Integer = filename.Length
         Try

@@ -185,7 +185,7 @@ Public Class Form2
             If Preferences.usefoldernames = True Then
                 tempstring = Form1.workingMovie.foldername
             Else
-                tempstring = Utilities.CleanFileName(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename))
+                tempstring = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)))
             End If
 
             tempstring = tempstring.Replace(" ", "+")
@@ -253,7 +253,7 @@ Public Class Form2
                                 Else
                                     If Preferences.usefoldernames = False Then
                                         Dim tempstring2 As String = IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename)
-                                        alternatemovie.fullmoviebody.title = Utilities.CleanFileName(tempstring2)
+                                        alternatemovie.fullmoviebody.title = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(tempstring2))
                                     Else
                                         alternatemovie.fullmoviebody.title = Utilities.CleanFileName(Form1.workingMovieDetails.fileinfo.foldername)
                                     End If

@@ -4895,7 +4895,7 @@ Public Class Form1
     Private Sub mov_ChangeMovieSetup()
         Dim tempstring As String = ""
         If Preferences.usefoldernames = False Then
-            tempstring = Utilities.CleanFileName(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename))
+            tempstring = Utilities.CleanFileName(Utilities.RemoveFilenameExtension(IO.Path.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)))
         Else
             tempstring = Utilities.GetLastFolder(workingMovieDetails.fileinfo.fullpathandfilename)
         End If

@@ -1583,7 +1583,7 @@ Module General
         If (ExtraID = Nothing) Or (Scraper.ToLower <> "imdb") Then
             If Scraper.ToLower = "imdb" Then Scraper = "metadata.imdb.com"
             If Scraper.ToLower = "tmdb" Then Scraper = "metadata.themoviedb.org"
-            ParametersForScraper(0) = Utilities.CleanFileName(MovieName, False)
+            ParametersForScraper(0) = Utilities.CleanFileName(MovieName)
             ParametersForScraper(1) = GetYearByFilename(MovieName, False)
             FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
             FinalScrapResult = FinalScrapResult.Replace("<url>", "")
