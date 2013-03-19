@@ -1091,45 +1091,14 @@ Public Class Preferences
 
             workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
             workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
-            If workingfiledetails.filedetails_video.Width <> Nothing Then
-                If IsNumeric(workingfiledetails.filedetails_video.Width.Value) Then
-                    If workingfiledetails.filedetails_video.Height <> Nothing Then
-                        If IsNumeric(workingfiledetails.filedetails_video.Height.Value) Then
-                            '                            Dim tempwidth As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.width)
-                            '                            Dim tempheight As Integer = Convert.ToInt32(workingfiledetails.filedetails_video.height)
-                            '                            Dim aspect As Decimal
-                            Try
-                                '                                aspect = tempwidth / tempheight  'Next three line are wrong for getting display aspect ratio
-                                '                                aspect = FormatNumber(aspect, 3)
-                                '                                If aspect > 0 Then workingfiledetails.filedetails_video.aspect = aspect.ToString
 
-                                Dim Information As String = MI.Inform
-                                Dim BeginString As Integer = Information.ToLower.IndexOf(":", Information.ToLower.IndexOf("display aspect ratio"))
-                                Dim EndString As Integer = Information.ToLower.IndexOf("frame rate")
-                                Dim SizeofString As Integer = EndString - BeginString
-                                Dim DisplayAspectRatio As String = Information.Substring(BeginString, SizeofString).Trim(" ", ":", Chr(10), Chr(13))
+            Try
+                Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
 
-                                If Len(DisplayAspectRatio) > 0 Then
-
-                                    'workingfiledetails.filedetails_video.Aspect.Value = DisplayAspectRatio
-                                
-                                    Dim ints() = DisplayAspectRatio.Split(":")
-
-                                    workingfiledetails.filedetails_video.Aspect.Value =  Math.Round(ints(0)/ints(1),2).ToString
-
-                                    
-                                Else
-                                    workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
-                                End If
-
-                            Catch ex As Exception
-
-                            End Try
-                        End If
-                    End If
-                End If
-            End If
-            'workingfiledetails.filedetails_video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
+                workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio).ToString("F2")
+            Catch ex As Exception
+                workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
+            End Try
 
 
             tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
