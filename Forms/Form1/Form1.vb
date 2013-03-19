@@ -21143,6 +21143,20 @@ Public Class Form1
         ' ExceptionHandler.LogError(ex)
         ' End Try
     End Sub
+    Private Sub WatchedShowOrEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_WatchedShowOrEpisode.Click
+        'Try
+        Tv_MarkAsWatched()
+        'Catch ex As Exception
+        ' ExceptionHandler.LogError(ex)
+        ' End Try
+    End Sub
+    Private Sub UnWatchedShowOrEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_UnWatchedShowOrEpisode.Click
+        'Try
+        Tv_MarkAsUnWatched()
+        'Catch ex As Exception
+        ' ExceptionHandler.LogError(ex)
+        ' End Try
+    End Sub
     Private Sub PlayEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
         Try
             Dim tempstring As String = DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath

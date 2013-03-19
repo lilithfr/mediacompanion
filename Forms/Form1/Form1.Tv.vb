@@ -162,10 +162,14 @@ Partial Public Class Form1
             Tv_TreeViewContext_Play_Episode.Enabled = False
             Tv_TreeViewContext_ViewNfo.Text = "View TVShow .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape TVShow"
+            Tv_TreeViewContext_WatchedShowOrEpisode.Text = "Mark This Show as Watched"
+            Tv_TreeViewContext_UnWatchedShowOrEpisode.Text = "Mark This Show as UnWatched"
 
             Tv_TreeViewContext_OpenFolder.Enabled = True
             Tv_TreeViewContext_ViewNfo.Enabled = True
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_FindMissArt.Enabled = True
             Tv_TreeViewContext_RefreshShow.Enabled = True
             Tv_TreeViewContext_ReloadFromCache.Enabled = True
@@ -179,10 +183,14 @@ Partial Public Class Form1
             Tv_TreeViewContext_Play_Episode.Enabled = False
             Tv_TreeViewContext_ViewNfo.Text = "View Season .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Season"
+            Tv_TreeViewContext_WatchedShowOrEpisode.Text = "Mark This Season as Watched"
+            Tv_TreeViewContext_UnWatchedShowOrEpisode.Text = "Mark This Season as UnWatched"
 
             Tv_TreeViewContext_OpenFolder.Enabled = True
             Tv_TreeViewContext_ViewNfo.Enabled = False
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = False
+            Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_FindMissArt.Enabled = False
             Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
@@ -196,10 +204,14 @@ Partial Public Class Form1
             Tv_TreeViewContext_Play_Episode.Enabled = True
             Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
             Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape Episode"
+            Tv_TreeViewContext_WatchedShowOrEpisode.Text = "Mark Episode as Watched"
+            Tv_TreeViewContext_UnWatchedShowOrEpisode.Text = "Mark Episode as UnWatched"
 
             Tv_TreeViewContext_OpenFolder.Enabled = True
             Tv_TreeViewContext_ViewNfo.Enabled = True
             Tv_TreeViewContext_RescrapeShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_WatchedShowOrEpisode.Enabled = True
+            Tv_TreeViewContext_UnWatchedShowOrEpisode.Enabled = True
             Tv_TreeViewContext_FindMissArt.Enabled = False
             Tv_TreeViewContext_RefreshShow.Enabled = False
             Tv_TreeViewContext_ReloadFromCache.Enabled = False
@@ -3046,5 +3058,15 @@ Partial Public Class Form1
             MsgBox((nofolder.Count).toString +" folder/s removed")
         End If
     End Sub
+
+    Private Sub Tv_MarkAsWatched
+        MsgBox("What!!")
+
+    End Sub
+
+    Private Sub Tv_MarkAsUnWatched
+        MsgBox("Now!!!")
+    End Sub
+
 
 End Class
