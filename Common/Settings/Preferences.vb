@@ -1108,9 +1108,16 @@ Public Class Preferences
                                 Dim EndString As Integer = Information.ToLower.IndexOf("frame rate")
                                 Dim SizeofString As Integer = EndString - BeginString
                                 Dim DisplayAspectRatio As String = Information.Substring(BeginString, SizeofString).Trim(" ", ":", Chr(10), Chr(13))
-                                'DisplayAspectRatio = DisplayAspectRatio.Substring(0, Len(DisplayAspectRatio) - 1)
+
                                 If Len(DisplayAspectRatio) > 0 Then
-                                    workingfiledetails.filedetails_video.Aspect.Value = DisplayAspectRatio
+
+                                    'workingfiledetails.filedetails_video.Aspect.Value = DisplayAspectRatio
+                                
+                                    Dim ints() = DisplayAspectRatio.Split(":")
+
+                                    workingfiledetails.filedetails_video.Aspect.Value =  Math.Round(ints(0)/ints(1),2).ToString
+
+                                    
                                 Else
                                     workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
                                 End If
