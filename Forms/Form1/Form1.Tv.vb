@@ -3059,13 +3059,58 @@ Partial Public Class Form1
         End If
     End Sub
 
-    Private Sub Tv_MarkAsWatched
-        MsgBox("What!!")
+    Private Sub Tv_MarkAsWatched()
+        If TvTreeview.SelectedNode Is Nothing Then Exit Sub
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvSeason As TvSeason=tv_SeasonSelectedCurrently()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        If WorkingTvShow Is Nothing Then Exit Sub
+
+        If Not IsNothing(WorkingEpisode) Then 
+            WorkingEpisode.Load()
+            WorkingEpisode.PlayCount.Value = 1
+            WorkingEpisode.Save()
+        ElseIf Not IsNothing(WorkingTvSeason) Then
+            For Each ep in WorkingTvSeason.Episodes
+                ep.Load()
+                ep.Playcount.Value=1
+                ep.Save()
+            Next
+        ElseIf Not IsNothing(WorkingTvShow) Then
+            For Each ep In WorkingTvShow.Episodes
+                ep.Load()
+                ep.PlayCount.Value=1
+                ep.Save()
+            Next
+        End If
 
     End Sub
 
-    Private Sub Tv_MarkAsUnWatched
-        MsgBox("Now!!!")
+    Private Sub Tv_MarkAsUnWatched()
+        If TvTreeview.SelectedNode Is Nothing Then Return
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvSeason As TvSeason=tv_SeasonSelectedCurrently()
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        If WorkingTvShow Is Nothing Then Exit Sub
+
+        If Not IsNothing(WorkingEpisode) Then 
+            WorkingEpisode.Load()
+            WorkingEpisode.PlayCount.Value = 0
+            WorkingEpisode.Save()
+        ElseIf Not IsNothing(WorkingTvSeason) Then
+            For Each ep in WorkingTvSeason.Episodes
+                ep.Load()
+                ep.Playcount.Value=0
+                ep.Save()
+            Next
+        ElseIf Not IsNothing(WorkingTvShow) Then
+            For Each ep In WorkingTvShow.Episodes
+                ep.Load()
+                ep.PlayCount.Value=0
+                ep.Save()
+            Next
+        End If
+
     End Sub
 
 
