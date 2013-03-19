@@ -198,6 +198,7 @@ Public Class Form1
     Dim currenttitle As String
     Public homemovietabindex As Integer = 0
 
+
     Private Sub Form1_BackgroundImageChanged(sender As Object, e As System.EventArgs) Handles Me.BackgroundImageChanged
 
     End Sub
@@ -442,7 +443,6 @@ Public Class Form1
 
         Movies.SpinUpDrives
 
-
         If scrapeAndQuit = False Then
             Me.Visible = True
 
@@ -662,7 +662,6 @@ Public Class Form1
 
         MainFormLoadedStatus = True
 
-        
         UpdateFilteredList
 
         Common.Tasks.StartTaskEngine()
@@ -670,6 +669,9 @@ Public Class Form1
         'Catch ex As Exception
         '    ExceptionHandler.LogError(ex)
         'End Try
+
+        Preferences.movie_filters.InitFilterPanel(SplitContainer5.Panel2)
+
 
     End Sub
 
@@ -20643,7 +20645,7 @@ Public Class Form1
 
         If Not MainFormLoadedStatus Then Return
 
-        Dim maxSize = GetMovieFilterPanelSize
+        Dim maxSize = Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
         Dim minSize = 2
 
         If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
@@ -20659,25 +20661,6 @@ Public Class Form1
         If h < minSize Then h = minSize
         DataGridViewMovies.Height = h
     End Sub
-
-
-
-    Function GetMovieFilterPanelSize As Integer
-
-        Dim TopOffset       As Integer =  4
-        Dim FilterSpace     As Integer = 30
-
-        Dim count As Integer = 0
-        Dim query = From c As Control In SplitContainer5.Panel2.Controls Where c.Name.IndexOf("cbFilter")=0
-
-        For Each cb As ComboBox In query
-            If cb.Visible Then count += 1
-        Next
-
-        Return (count*FilterSpace)+(TopOffset*2)
-
-    End Function
-
 
 
 
@@ -20860,6 +20843,7 @@ Public Class Form1
 
     Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean =False )
         Preferences.LoadConfig()
+
         'MovieListComboBox.Items.Clear()
         DataGridViewMovies.DataSource = Nothing
 
@@ -24081,7 +24065,14 @@ Public Class Form1
 
         frm.Init(SplitContainer5.Panel2)
         
-        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then ResizeBottomLHSPanel
+        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then 
+            ResizeBottomLHSPanel
+            Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
+            Preferences.movie_filters.UpdateFromPanel(SplitContainer5.Panel2)
+            Preferences.SaveConfig
+        End If
     End Sub
+
+
 
 End Class

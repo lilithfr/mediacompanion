@@ -193,6 +193,8 @@ Public Class Preferences
     Public Shared Original_Title     As Boolean=False
     Public Shared UseMultipleThreads As Boolean=False
 
+    Public Shared movie_filters As MovieFilters = New MovieFilters
+
     Public Shared Property movieignorepart As Boolean
         Get
             Return Utilities.ignoreParts
@@ -596,6 +598,8 @@ Public Class Preferences
         root.AppendChildList(doc, "releaseformat"       ,           releaseformat         )             'btnVideoSourceAdd,btnVideoSourceRemove
         root.AppendChildList(doc, "certificatepriority" ,           certificatepriority   )             'Button74,Button75
 
+        root.AppendChild(movie_filters.GetChild(doc))
+
 
         'TV Prefs ------------------------------------------------------------
         root.AppendChild(doc, "tvshowautoquick",        tvshowautoquick)        'CheckBox35
@@ -658,8 +662,9 @@ Public Class Preferences
         End Try
 
 
-        For Each thisresult In prefs("xbmc_media_companion_config_v1.0")
-            If thisresult.InnerText <> "" Then  'If blank, preference remains at default value
+        For Each thisresult As XmlNode In prefs("xbmc_media_companion_config_v1.0")
+'            If thisresult.InnerText <> "" Then  'If blank, preference remains at default value
+            If thisresult.InnerXml <> "" Then  'If blank, preference remains at default value
 
                 Select Case thisresult.Name
                     Case "moviesets"
@@ -878,6 +883,9 @@ Public Class Preferences
 
                     Case "Original_Title"                       : Original_Title            = thisresult.InnerXml
                     Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
+                    Case "movie_filters"                        : movie_filters.Load(thisresult)
+
+                    Case Else : Dim x = thisresult
                 End Select
             End If
         Next

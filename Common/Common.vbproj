@@ -48,6 +48,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -69,6 +71,7 @@
     <Compile Include="MediaNFOVideo.vb" />
     <Compile Include="Settings\ListOfCommands.vb" />
     <Compile Include="Settings\ListOfProfiles.vb" />
+    <Compile Include="Settings\MovieFilters.vb" />
     <Compile Include="Settings\Preferences.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

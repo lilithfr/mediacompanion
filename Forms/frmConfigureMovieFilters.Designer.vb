@@ -34,13 +34,13 @@ Partial Class frmConfigureMovieFilters
         Me.tbMovieFilters.Location = New System.Drawing.Point(0, 0)
         Me.tbMovieFilters.Multiline = true
         Me.tbMovieFilters.Name = "tbMovieFilters"
-        Me.tbMovieFilters.Size = New System.Drawing.Size(284, 261)
+        Me.tbMovieFilters.Size = New System.Drawing.Size(213, 232)
         Me.tbMovieFilters.TabIndex = 2
         '
         'btnApply
         '
         Me.btnApply.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnApply.Location = New System.Drawing.Point(223, 230)
+        Me.btnApply.Location = New System.Drawing.Point(155, 202)
         Me.btnApply.Name = "btnApply"
         Me.btnApply.Size = New System.Drawing.Size(49, 23)
         Me.btnApply.TabIndex = 6
@@ -53,14 +53,14 @@ Partial Class frmConfigureMovieFilters
         Me.clbMovieFilters.FormattingEnabled = true
         Me.clbMovieFilters.Location = New System.Drawing.Point(12, 12)
         Me.clbMovieFilters.Name = "clbMovieFilters"
-        Me.clbMovieFilters.Size = New System.Drawing.Size(260, 214)
+        Me.clbMovieFilters.Size = New System.Drawing.Size(192, 184)
         Me.clbMovieFilters.TabIndex = 9
         '
         'frmConfigureMovieFilters
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 261)
+        Me.ClientSize = New System.Drawing.Size(213, 232)
         Me.Controls.Add(Me.clbMovieFilters)
         Me.Controls.Add(Me.btnApply)
         Me.Controls.Add(Me.tbMovieFilters)
