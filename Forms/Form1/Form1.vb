@@ -8883,6 +8883,7 @@ Public Class Form1
                 Me.Refresh()
                 Application.DoEvents()
             Next
+            EnableTvFanartScrolling
         Else
             Dim mainlabel2 As Label
             mainlabel2 = New Label
@@ -8902,6 +8903,17 @@ Public Class Form1
 
         'End Try
 
+    End Sub
+
+        'Set focus on the first checkbox to enable mouse wheel scrolling 
+    Sub EnableTvFanartScrolling
+        Try
+            Dim rb As RadioButton = Panel13.Controls("checkbox0")
+                
+            rb.Select                       'Causes RadioButtons checked state to toggle
+            rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
+        Catch
+        End Try
     End Sub
 
     Private Sub Button42_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button42.Click
