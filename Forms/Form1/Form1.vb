@@ -21903,7 +21903,7 @@ Public Class Form1
     Private Sub ZoomActorPictureBox(pictureBox As PictureBox)
 
 '        If pictureBox.ImageLocation = Utilities.DefaultActorPath Then
-        If pictureBox.Tag.ToString = Utilities.DefaultActorPath Then
+        If IsNothing(pictureBox.Tag) orElse  pictureBox.Tag.ToString = Utilities.DefaultActorPath Then
             Exit Sub
         End If
 
