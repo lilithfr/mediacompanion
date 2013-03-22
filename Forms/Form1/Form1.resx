@@ -2723,6 +2723,9 @@ If you do not wish to edit a field then leave it blank, only fields that contain
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1381, 17</value>
+  </metadata>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>209, 56</value>
   </metadata>
@@ -2750,59 +2753,12 @@ If you do not wish to edit a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>477, 95</value>
   </metadata>
-  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>928, 17</value>
+  <metadata name="TvEpContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>195, 72</value>
   </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>These sets can be used to group collections of movies together within XBMC,
-eg. Add the movie set "Star Wars Collection", and make all
-Star Wars movies part of this set. They would be added to the XBMC library
-as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
-  </data>
-  <data name="Label86.Text" xml:space="preserve">
-    <value>Add your movie folders from this location.
-
-Your movies can be organised however you please,
-and MC uses a recursive search method so subfolders
-will be checked.
-i.e. 'C:/Movies/'
-Would allow MC to find any movies located within the
-"Movies" folder, and all of its subfolders.</value>
-  </data>
-  <data name="Label87.Text" xml:space="preserve">
-    <value>If you have removed or added folders then use the
-"Save &amp;&amp; Quick Refresh" button to save the folders
-and update the movie list.
-
-Once folders have been added and saved, use the
-"Search for new movies" tab to allow MC to find and
-scrape any located media</value>
-  </data>
-  <data name="Label136.Text" xml:space="preserve">
-    <value>Offline Movie Folders are a feature of Media Companion
-that allows your DVD/Blu-Ray Collection to be added to
-your library without it being stored on your system.
-
-To add an offline movie, create a folder in one of your 
-selected offline movie folders and label it as the title of
-the movie it represents. 
-eg: \Offline Movie Folder\Star Trek.
-When Media Companion searches for new movies it
-will search for the movie and add the appropriate nfo,
-tbn, and fanart to the folder, it will also create a 
-16 second movie clip from the fanart that asks you to
-insert the Appropriate Disk.
-
-The search for offline movies is not recursive, so make
-sure the folders you want added are in one of your
-offline movie folder roots.</value>
-  </data>
-  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="btnTVPrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="Label99.Text" xml:space="preserve">
-    <value>Media Companion can attempt to automatically download a Poster when a movie is first scraped, if this option is enabled, then the setting below allows you to prioritise the order that sources are checked for an available poster.</value>
-  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>613, 56</value>
   </metadata>
@@ -2861,6 +2817,65 @@ offline movie folder roots.</value>
         AdcB6QGVAdkB4f8AJwABQgFNAT4HAAE+AwABKAMAAYADAAEPAwABAQEAAQEFAAHwFwAD/wEAAcACAAED
         3AABwAIAAQMMAAs=
 </value>
+  </data>
+  <metadata name="btnGeneralPrefsSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>928, 17</value>
+  </metadata>
+  <data name="Label68.Text" xml:space="preserve">
+    <value>These sets can be used to group collections of movies together within XBMC,
+eg. Add the movie set "Star Wars Collection", and make all
+Star Wars movies part of this set. They would be added to the XBMC library
+as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
+  </data>
+  <data name="Label86.Text" xml:space="preserve">
+    <value>Add your movie folders from this location.
+
+Your movies can be organised however you please,
+and MC uses a recursive search method so subfolders
+will be checked.
+i.e. 'C:/Movies/'
+Would allow MC to find any movies located within the
+"Movies" folder, and all of its subfolders.</value>
+  </data>
+  <data name="Label87.Text" xml:space="preserve">
+    <value>If you have removed or added folders then use the
+"Save &amp;&amp; Quick Refresh" button to save the folders
+and update the movie list.
+
+Once folders have been added and saved, use the
+"Search for new movies" tab to allow MC to find and
+scrape any located media</value>
+  </data>
+  <data name="Label136.Text" xml:space="preserve">
+    <value>Offline Movie Folders are a feature of Media Companion
+that allows your DVD/Blu-Ray Collection to be added to
+your library without it being stored on your system.
+
+To add an offline movie, create a folder in one of your 
+selected offline movie folders and label it as the title of
+the movie it represents. 
+eg: \Offline Movie Folder\Star Trek.
+When Media Companion searches for new movies it
+will search for the movie and add the appropriate nfo,
+tbn, and fanart to the folder, it will also create a 
+16 second movie clip from the fanart that asks you to
+insert the Appropriate Disk.
+
+The search for offline movies is not recursive, so make
+sure the folders you want added are in one of your
+offline movie folder roots.</value>
+  </data>
+  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="Label99.Text" xml:space="preserve">
+    <value>Media Companion can attempt to automatically download a Poster when a movie is first scraped, if this option is enabled, then the setting below allows you to prioritise the order that sources are checked for an available poster.</value>
   </data>
   <data name="Label56.Text" xml:space="preserve">
     <value>If one of the above TV Shows is the correct one, then select your preferred options from the panel opposite, and select scrape.
@@ -5019,6 +5034,9 @@ method is much faster than using XBMC scrapers to read the nfo files, and second
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>135, 134</value>
+  </metadata>
+  <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>342, 134</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>471, 134</value>

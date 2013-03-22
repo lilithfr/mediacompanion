@@ -23959,4 +23959,35 @@ Public Class Form1
 
 
 
+Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
+        Try
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+End Sub
+
+Private Sub SelNewFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles SelNewFanartToolStripMenuItem.Click
+        Try
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+End Sub
+
+Private Sub RescrapeTvEpThumbToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles RescrapeTvEpThumbToolStripMenuItem.Click
+        Try
+            TvEpThumbRescrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+End Sub
+
+Private Sub RescrapeTvEpScreenShotToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles RescrapeTvEpScreenShotToolStripMenuItem.Click
+        Try
+            TvEpThumbScreenShot()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+End Sub
 End Class
