@@ -2561,4 +2561,21 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         IO.File.Copy(srcFile, destFile)
         Return True
     End Function
+
+    Public Shared Function IsBanner(ByVal srcfile As String) As Boolean
+        Dim state As Boolean = False
+        Try
+            Dim srcimg As Bitmap 
+            srcimg = GetImage(srcfile)
+            Dim width As Integer = srcimg.Width 
+            Dim height As Integer= srcimg.Height 
+            If width > (height * 3) Then 
+                state = True
+            End If
+            srcimg.Dispose()           
+        Catch ex As Exception
+
+        End Try
+        Return state
+    End Function
 End Class

@@ -435,8 +435,13 @@ Partial Public Class Form1
 
             If Preferences.EdenEnabled Then
                 If Preferences.postertype = "banner" Then
-                    util_ImageLoad(tv_PictureBoxBottom, Show.ImageBanner.Path, Utilities.DefaultPreFrodoBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
-                    util_ImageLoad(tv_PictureBoxRight, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                    If Utilities.IsBanner(Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")) Then
+                        util_ImageLoad(tv_PictureBoxBottom, Show.NfoFilePath.Replace("tvshow.nfo", "folder.jpg"), Utilities.DefaultPreFrodoBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
+                        util_ImageLoad(tv_PictureBoxRight, Utilities.DefaultPosterPath, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                    Else
+                        util_ImageLoad(tv_PictureBoxBottom, Utilities.DefaultPreFrodoBannerPath, Utilities.DefaultPreFrodoBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
+                        util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
+                    End If
                 Else
                     util_ImageLoad(tv_PictureBoxBottom, Utilities.DefaultPreFrodoBannerPath, Utilities.DefaultPreFrodoBannerPath) 'this function resolves file lock issue 'tv_PictureBoxRight.Image = Show.ImageBanner.Image  'this method locks the file so it cannot be replaced
                     util_ImageLoad(tv_PictureBoxRight, Show.ImagePoster.Path, Utilities.DefaultPosterPath) 'tv_PictureBoxRight.Image = Show.ImagePoster.Image
