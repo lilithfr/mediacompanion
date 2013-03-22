@@ -3118,5 +3118,186 @@ Partial Public Class Form1
 
     End Sub
 
+    Private Sub TvEpThumbScreenShot()
+        Try
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            If IsNumeric(TextBox35.Text) Then
+                Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
+                Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")
+                Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                Dim exists As Boolean = False
+                For Each ext In Utilities.VideoExtensions
+                    Dim tempstring2 As String
+                    tempstring2 = pathandfilename & ext
+                    If IO.File.Exists(tempstring2) Then
+                        Dim seconds As Integer = Preferences.ScrShtDelay
+                        If Convert.ToInt32(TextBox35.Text) > 0 Then
+                            seconds = Convert.ToInt32(TextBox35.Text)
+                        End If
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+
+                    Dim proc_arguments As String = ""
+                    Dim myProcess As Process = New Process
+                    myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                    myProcess.StartInfo.CreateNoWindow = False
+                    myProcess.StartInfo.FileName = applicationPath & "\Assets\ffmpeg.exe"
+                    If Preferences.EdenEnabled = True Then
+                        If IO.File.Exists(thumbpathandfilename) Then
+                            PictureBox14.Image = Nothing
+                            IO.File.Delete(thumbpathandfilename)
+                        End If
+                        proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                        myProcess.StartInfo.Arguments = proc_arguments
+                        myProcess.Start()
+                        myProcess.WaitForExit()
+                    End If
+                    If Preferences.FrodoEnabled = True Then
+                        thumbpathandfilename = thumbpathandfilename.Replace(".tbn", "-thumb.jpg")
+                        If IO.File.Exists(thumbpathandfilename) Then
+                            PictureBox14.Image = Nothing
+                            IO.File.Delete(thumbpathandfilename)
+                        End If
+                        proc_arguments = "-y -i """ & tempstring2 & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & thumbpathandfilename & """"
+                        myProcess.StartInfo.Arguments = proc_arguments
+                        myProcess.Start()
+                        myProcess.WaitForExit()
+                    End If
+
+                    If System.IO.File.Exists(thumbpathandfilename) Then
+                        Dim bitmap2 As New Bitmap(thumbpathandfilename)
+                        Dim bitmap3 As New Bitmap(bitmap2)
+                        bitmap2.Dispose()
+                        PictureBox14.Image = bitmap3
+                        tv_PictureBoxLeft.Image = bitmap3
+                    End If
+                    Exit For
+                    End If
+                Next
+                messbox.Close()
+            Else
+                MsgBox("Please enter a numerical value into the textbox")
+                TextBox34.Focus()
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub TvEpThumbRescrape()
+        Try
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim messbox As frmMessageBox = New frmMessageBox("Checking TVDB for screenshot", "", "Please Wait")
+            'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
+            Dim episodescraper As New TVDBScraper
+            Dim id As String = WorkingTvShow.TvdbId.Value
+            Dim sortorder As String = WorkingTvShow.SortOrder.Value
+            Dim seasonno As String = WorkingEpisode.Season.Value
+            Dim episodeno As String = WorkingEpisode.Episode.Value
+            Dim language As String = WorkingTvShow.Language.Value
+            Dim eden As Boolean = Preferences.EdenEnabled
+            Dim frodo As Boolean = Preferences.FrodoEnabled 
+            If language = Nothing Then language = "en"
+            If language = "" Then language = "en"
+            If sortorder = Nothing Then sortorder = "default"
+            If sortorder = "" Then sortorder = "default"
+
+
+            If id = Nothing Then
+                MsgBox("No ID is available for this show")
+                Exit Sub
+            End If
+            If id = "" Then
+                MsgBox("No ID is available for this show")
+                Exit Sub
+            End If
+            If episodeno = Nothing Then
+                MsgBox("No Episode Number is available for this show")
+                Exit Sub
+            End If
+            If episodeno = "" Then
+                MsgBox("No Episode Number is available for this show")
+                Exit Sub
+            End If
+            If seasonno = Nothing Then
+                MsgBox("No Season Number is available for this show")
+                Exit Sub
+            End If
+            If seasonno = "" Then
+                MsgBox("No Season Number is available for this show")
+                Exit Sub
+            End If
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
+            Dim tempepisode As String = episodescraper.getepisode(WorkingTvShow.TvdbId.Value, sortorder, seasonno, episodeno, language)
+            Dim thumburl As String = ""
+            messbox.Close()
+            Dim scrapedepisode As New XmlDocument
+            Try
+                If tempepisode <> Nothing Then
+                    scrapedepisode.LoadXml(tempepisode)
+                    Dim thisresult As XmlNode = Nothing
+                    For Each thisresult In scrapedepisode("episodedetails")
+                        Select Case thisresult.Name
+                            Case "thumb"
+                                thumburl = thisresult.InnerText
+                                Exit For
+                                Exit Select
+                        End Select
+                    Next
+                    If thumburl <> "" And thumburl.ToLower <> "http://www.thetvdb.com/banners/" Then
+                        messbox = New frmMessageBox("Screenshot found, downloading now", "", "Please Wait")
+                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        messbox.Show()
+                        messbox.Refresh()
+                        Application.DoEvents()
+                        Dim tempstring As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
+                        Dim MyWebClient As New System.Net.WebClient
+                        Try
+                            Dim ImageInBytes() As Byte = MyWebClient.DownloadData(thumburl)
+                            Dim ImageStream As New IO.MemoryStream(ImageInBytes)
+
+                            PictureBox15.Image = New System.Drawing.Bitmap(ImageStream)
+                            PictureBox15.Image.Save(tempstring, Imaging.ImageFormat.Jpeg)
+                            Dim bitmap2 As New Bitmap(tempstring)
+                            Dim bitmap3 As New Bitmap(bitmap2)
+                            bitmap2.Dispose()
+                            If frodo and Not eden then
+                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
+                                IO.File.Delete(tempstring)
+                            Else If frodo and eden then
+                                Utilities.SafeCopyFile(tempstring, tempstring.Replace(".tbn","-thumb.jpg"),true)
+                            End If
+                            PictureBox14.Image = bitmap3
+                            tv_PictureBoxLeft.Image = bitmap3
+                            messbox.Close()
+                        Catch ex As Exception
+                            MsgBox("Unable To Download Image")
+                        End Try
+                    Else
+                        MsgBox("No Episode Screenshot Found On TVDB")
+                    End If
+                Else
+                    MsgBox("No Episode Screenshot Found On TVDB")
+                End If
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            Finally
+                messbox.Close()
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
 
 End Class
