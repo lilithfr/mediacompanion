@@ -43,6 +43,7 @@ Public Class Form1
     Enum ProgramState
         ResettingFilters
 	    UpdatingFilteredList
+        ResizingSplitterPanel
 	    Other
     End Enum
 
@@ -20653,28 +20654,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub ResizeBottomLHSPanel()
-
-        If Not MainFormLoadedStatus Then Return
-
-        Dim maxSize = Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
-        Dim minSize = 2
-
-        If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
-            SplitContainer5.SplitterDistance = SplitContainer5.Height - maxSize
-        End If
-
-        If SplitContainer5.Height - SplitContainer5.SplitterDistance < minSize Then
-            SplitContainer5.SplitterDistance = SplitContainer5.Height - minSize
-        End If
-
-        'Needed as workaround for splitter panel framework bug:
-        Dim h = SplitContainer5.SplitterDistance - 140
-        If h < minSize Then h = minSize
-        DataGridViewMovies.Height = h
-    End Sub
-
-
 
     Private Sub ExtraDebugEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExtraDebugEnable.CheckedChanged
         Try
@@ -24097,6 +24076,52 @@ Public Class Form1
             Preferences.movie_filters.UpdateFromPanel(SplitContainer5.Panel2)
             Preferences.SaveConfig
         End If
+    End Sub
+
+
+    Private Sub SplitContainer5_DoubleClick(sender As Object,  e As EventArgs) Handles SplitContainer5.DoubleClick
+
+        Dim max = Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
+
+        If SplitContainer5.Panel2.Height = max-5 Then
+            ResizeBottomLHSPanel(0)
+        Else
+            ResizeBottomLHSPanel(max)
+        End If
+    End Sub
+
+
+    Private Sub ResizeBottomLHSPanel(height As Integer)
+        State = ProgramState.ResizingSplitterPanel
+
+        SplitContainer5.SplitterDistance = SplitContainer5.Height - height
+
+        DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 140
+
+        State = ProgramState.Other
+    End Sub
+
+
+    Private Sub ResizeBottomLHSPanel()
+        If State = ProgramState.ResizingSplitterPanel Then Return
+
+        If Not MainFormLoadedStatus Then Return
+ 
+        Dim maxSize = Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
+        Dim minSize = 2
+
+        If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
+            SplitContainer5.SplitterDistance = SplitContainer5.Height - maxSize
+        End If
+
+        If SplitContainer5.Height - SplitContainer5.SplitterDistance < minSize Then
+            SplitContainer5.SplitterDistance = SplitContainer5.Height - minSize
+        End If
+
+        'Needed as workaround for splitter panel framework bug:
+        Dim h = SplitContainer5.SplitterDistance - 140
+        If h < minSize Then h = minSize
+        DataGridViewMovies.Height = h
     End Sub
 
 
