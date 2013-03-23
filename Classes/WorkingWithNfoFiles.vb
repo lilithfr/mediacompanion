@@ -1261,6 +1261,10 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
                 newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path)
 
+                If newmovie.fullmoviebody.movieset = "" Then
+                    newmovie.fullmoviebody.movieset = "-None-"
+                End If
+
                 Return newmovie
             End If
         Catch ex As Exception
