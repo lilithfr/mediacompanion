@@ -44,6 +44,11 @@
                 Form1.tvBatchList.doShowArt = True
             End If
 
+            If CheckBox22.CheckState = CheckState.Checked Then
+                Form1.tvBatchList.doShows = True
+                Form1.tvBatchList.doShowArt = True
+            End If
+
             If CheckBox11.CheckState = CheckState.Checked Then
                 Form1.tvBatchList.doEpisodes = True
                 Form1.tvBatchList.doEpisodeBody = True
@@ -224,6 +229,19 @@
                     CheckBox10.Checked = False
                     MsgBox("TV Preferences set to not download Fanart.", 48, "TV Preferences Selected!")
                 End If
+            Else
+                Form1.tvBatchList.shFanart = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+        Private Sub CheckBox22_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox22.CheckedChanged
+        Try
+            'missing season art
+            If CheckBox22.CheckState = CheckState.Checked Then
+                Form1.tvBatchList.shSeason = True
             Else
                 Form1.tvBatchList.shFanart = False
             End If

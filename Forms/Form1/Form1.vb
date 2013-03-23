@@ -19185,6 +19185,7 @@ Public Class Form1
                 tvBatchList.shFanart = False
                 tvBatchList.shGenre = False
                 tvBatchList.shPosters = False
+                tvBatchList.shSeason = False
                 tvBatchList.shMpaa = False
                 tvBatchList.shPlot = False
                 tvBatchList.shRating = False
@@ -23961,7 +23962,9 @@ Public Class Form1
 
 Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
         Try
-
+            Dim Showname As TvShow = tv_ShowSelectedCurrently()
+            Me.tvBatchList.shFanart = True
+            TvGetArtwork(Showname,False)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -23969,7 +23972,9 @@ End Sub
 
 Private Sub SelNewFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles SelNewFanartToolStripMenuItem.Click
         Try
-
+            Me.TabPage12.Select
+            TabControl3.SelectedIndex=1
+            
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -23989,5 +23994,28 @@ Private Sub RescrapeTvEpScreenShotToolStripMenuItem_Click( sender As System.Obje
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+End Sub
+
+Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles tv_PictureBoxLeft.MouseUp, tv_PictureBoxLeft.Click
+        Try
+            If e.Button = Windows.Forms.MouseButtons.Right Then
+                ReScrFanartToolStripMenuItem.Visible=False
+                SelNewFanartToolStripMenuItem.Visible=False
+                RescrapeTvEpThumbToolStripMenuItem.Visible=False
+                RescrapeTvEpScreenShotToolStripMenuItem.Visible=False
+                If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Or TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
+                    ReScrFanartToolStripMenuItem.Visible=True
+                    SelNewFanartToolStripMenuItem.Visible=True
+                ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+                    RescrapeTvEpThumbToolStripMenuItem.Visible=True
+                    RescrapeTvEpScreenShotToolStripMenuItem.Visible=True
+                Else
+                    Exit Sub
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+
 End Sub
 End Class

@@ -2706,6 +2706,7 @@ Partial Public Class Form1
             showlist.LoadXml(thumblist)
             Dim thisresult As XmlNode = Nothing
             Dim artlist As New List(Of TvBanners)
+            Dim shSeason As Boolean = Me.tvBatchList.shSeason
             artlist.Clear()
             For Each thisresult In showlist("banners")
                 Select Case thisresult.Name
@@ -2732,145 +2733,148 @@ Partial Public Class Form1
                 Exit Sub
             End If
 
-            'Main Poster
-            If (isposter = "poster" Or frodo Or isseasonall = "poster") And Preferences.tvposter Then 'poster
-                Dim mainposter As String = ""
-                For Each Image In artlist
-                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
-                        mainposter = Image.Url
-                        Exit For
-                    End If
-                Next
-                If mainposter = "" Then
+            'Posters, Main and Season Including Banners
+            If shPosters Then
+                'Main Poster
+                If (isposter = "poster" Or frodo Or isseasonall = "poster") And Preferences.tvposter Then 'poster
+                    Dim mainposter As String = ""
                     For Each Image In artlist
-                        If Image.Language = "en" And Image.BannerType = "poster" Then
+                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "poster" Then
                             mainposter = Image.Url
                             Exit For
                         End If
                     Next
-                End If
-                If mainposter = "" Then
-                    For Each Image In artlist
-                        If Image.BannerType = "poster" Then
-                            mainposter = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If mainposter <> "" Then
-                    Dim mainposterpath As String = ""
-                    If frodo Then
-                        mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "poster.jpg")
-                    ElseIf eden Then
-                        mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
-                    End If
-                    If Not IO.File.Exists(mainposterpath) Then
-                        Utilities.DownloadFile(mainposter, mainposterpath)
-                    End If
-                    If frodo Then
-                        If isseasonall <> "none" Then
-                            Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"), overwriteimage)
-                        End If
-                        If eden Then
-                            If isposter = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "folder.jpg"), overwriteimage)
-                            If isseasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
-                        End If
-                    ElseIf eden And isseasonall <> "none" Then
-                        If isseasonall = "poster" Then
-                            Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
-                        End If
-                        If isposter = "banner" Then
-                            Utilities.SafeDeleteFile(mainposterpath)
-                        End If
-                    End If
-                End If
-            End If
-
-            'Main Banner
-            If (isposter = "banner" Or frodo Or isseasonall = "wide") And Preferences.tvposter Then 'banner
-                Dim mainbanner As String = ""
-                For Each Image In artlist
-                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
-                        mainbanner = Image.Url
-                        Exit For
-                    End If
-                Next
-                If mainbanner = "" Then
-                    For Each Image In artlist
-                        If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
-                            mainbanner = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If mainbanner = "" Then
-                    For Each Image In artlist
-                        If Image.BannerType = "series" And Image.Season = Nothing Then
-                            mainbanner = Image.Url
-                            Exit For
-                        End If
-                    Next
-                End If
-                If mainbanner <> "" Then
-                    Dim mainbannerpath As String = ""
-                    If frodo Then
-                        mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "banner.jpg")
-                    ElseIf eden Then
-                        mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
-                    End If
-                    If Not IO.File.Exists(mainbannerpath) Then
-                        Utilities.DownloadFile(mainbanner, mainbannerpath)
-                    End If
-                    If frodo Then
-                        If isseasonall <> "none" Then
-                            Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"), overwriteimage)
-                        End If
-                        If eden Then
-                            If isposter = "banner" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "folder.jpg"), overwriteimage)
-                            If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all.tbn"), overwriteimage)
-                        End If
-                    ElseIf eden And isseasonall <> "none" Then
-                        If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
-                    End If
-                End If
-            End If
-
-
-            'SeasonXX Poster
-            For f = 0 To 1000
-                If (isposter = "poster" Or frodo) And Preferences.downloadtvseasonthumbs Then 'poster
-                    Dim seasonXXposter As String = ""
-                    For Each Image In artlist
-                        If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode Then
-                            seasonXXposter = Image.Url
-                            Exit For
-                        End If
-                    Next
-                    If seasonXXposter = "" Then
+                    If mainposter = "" Then
                         For Each Image In artlist
-                            If Image.Season = f.ToString And Image.Language = "en" Then
-                                seasonXXposter = Image.Url
+                            If Image.Language = "en" And Image.BannerType = "poster" Then
+                                mainposter = Image.Url
                                 Exit For
                             End If
                         Next
                     End If
-                    If seasonXXposter = "" Then
+                    If mainposter = "" Then
                         For Each Image In artlist
-                            If Image.Season = f.ToString Then
-                                seasonXXposter = Image.Url
+                            If Image.BannerType = "poster" Then
+                                mainposter = Image.Url
                                 Exit For
                             End If
                         Next
                     End If
-                    Dim tempstring As String = ""
-                    If seasonXXposter <> "" Then
-                        If f < 10 Then
-                            tempstring = "0" & f.ToString
-                        Else
-                            tempstring = f.ToString
+                    If mainposter <> "" Then
+                        Dim mainposterpath As String = ""
+                        If frodo Then
+                            mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "poster.jpg")
+                        ElseIf eden Then
+                            mainposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
                         End If
-                        If tempstring = "00" Then tempstring = "-specials"
-                        If shPosters = True Then
+                        If Not IO.File.Exists(mainposterpath) Then
+                            Utilities.DownloadFile(mainposter, mainposterpath)
+                        End If
+                        If frodo Then
+                            If isseasonall <> "none" Then
+                                Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all-poster.jpg"), overwriteimage)
+                            End If
+                            If eden Then
+                                If isposter = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "folder.jpg"), overwriteimage)
+                                If isseasonall = "poster" Then Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("poster.jpg", "season-all.tbn"), overwriteimage)
+                            End If
+                        ElseIf eden And isseasonall <> "none" Then
+                            If isseasonall = "poster" Then
+                                Utilities.SafeCopyFile(mainposterpath, mainposterpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
+                            End If
+                            If isposter = "banner" Then
+                                Utilities.SafeDeleteFile(mainposterpath)
+                            End If
+                        End If
+                    End If
+                End If
+
+                'Main Banner
+                If (isposter = "banner" Or frodo Or isseasonall = "wide") And Preferences.tvposter Then 'banner
+                    Dim mainbanner As String = ""
+                    For Each Image In artlist
+                        If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "series" And Image.Season = Nothing Then
+                            mainbanner = Image.Url
+                            Exit For
+                        End If
+                    Next
+                    If mainbanner = "" Then
+                        For Each Image In artlist
+                            If Image.Language = "en" And Image.BannerType = "series" And Image.Season = Nothing Then
+                                mainbanner = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If mainbanner = "" Then
+                        For Each Image In artlist
+                            If Image.BannerType = "series" And Image.Season = Nothing Then
+                                mainbanner = Image.Url
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If mainbanner <> "" Then
+                        Dim mainbannerpath As String = ""
+                        If frodo Then
+                            mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "banner.jpg")
+                        ElseIf eden Then
+                            mainbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "folder.jpg")
+                        End If
+                        If Not IO.File.Exists(mainbannerpath) Then
+                            Utilities.DownloadFile(mainbanner, mainbannerpath)
+                        End If
+                        If frodo Then
+                            If isseasonall <> "none" Then
+                                Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all-banner.jpg"), overwriteimage)
+                            End If
+                            If eden Then
+                                If isposter = "banner" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "folder.jpg"), overwriteimage)
+                                If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("banner.jpg", "season-all.tbn"), overwriteimage)
+                            End If
+                        ElseIf eden And isseasonall <> "none" Then
+                            If isseasonall = "wide" Then Utilities.SafeCopyFile(mainbannerpath, mainbannerpath.Replace("folder.jpg", "season-all.tbn"), overwriteimage)
+                        End If
+                    End If
+                End If
+            End If
+            'Dim shSeason As Boolean =True
+            If shSeason Then
+                'SeasonXX Poster
+                For f = 0 To 1000
+                    If (isposter = "poster" Or frodo) And Preferences.downloadtvseasonthumbs Then 'poster
+                        Dim seasonXXposter As String = ""
+                        For Each Image In artlist
+                            If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode Then
+                                seasonXXposter = Image.Url
+                                Exit For
+                            End If
+                        Next
+                        If seasonXXposter = "" Then
+                            For Each Image In artlist
+                                If Image.Season = f.ToString And Image.Language = "en" Then
+                                    seasonXXposter = Image.Url
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                        If seasonXXposter = "" Then
+                            For Each Image In artlist
+                                If Image.Season = f.ToString Then
+                                    seasonXXposter = Image.Url
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                        Dim tempstring As String = ""
+                        If seasonXXposter <> "" Then
+                            If f < 10 Then
+                                tempstring = "0" & f.ToString
+                            Else
+                                tempstring = f.ToString
+                            End If
+                            If tempstring = "00" Then tempstring = "-specials"
+                            'If shSeason = True Then
                             Dim seasonXXposterpath As String = ""
                             If frodo Then
                                 seasonXXposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-poster.jpg")
@@ -2883,59 +2887,59 @@ Partial Public Class Form1
                             If IO.File.Exists(seasonXXposterpath) And frodo And eden And isposter = "poster" Then
                                 Utilities.SafeCopyFile(seasonXXposterpath, seasonXXposterpath.Replace("-poster.jpg", ".tbn"), overwriteimage)
                             End If
+                            'End If
                         End If
                     End If
-                End If
 
-                'SeasonXX Banner
-                If (isposter = "banner" Or frodo) And Preferences.downloadtvseasonthumbs Then 'banner
-                    Dim seasonXXbanner As String = ""
-                    For Each Image In artlist
-                        If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = "seasonwide" Then
-                            seasonXXbanner = Image.Url
-                            Exit For
-                        End If
-                    Next
-                    If seasonXXbanner = "" Then
+                    'SeasonXX Banner
+                    If (isposter = "banner" Or frodo) And Preferences.downloadtvseasonthumbs Then 'banner
+                        Dim seasonXXbanner As String = ""
                         For Each Image In artlist
-                            If Image.Season = f.ToString And Image.Language = "en" And Image.Resolution = "seasonwide" Then
+                            If Image.Season = f.ToString And Image.Language = Preferences.TvdbLanguageCode And Image.Resolution = "seasonwide" Then
                                 seasonXXbanner = Image.Url
                                 Exit For
                             End If
                         Next
-                    End If
-                    If seasonXXbanner = "" Then
-                        For Each Image In artlist
-                            If Image.Season = f.ToString And Image.Resolution = "seasonwide" Then
-                                seasonXXbanner = Image.Url
-                                Exit For
+                        If seasonXXbanner = "" Then
+                            For Each Image In artlist
+                                If Image.Season = f.ToString And Image.Language = "en" And Image.Resolution = "seasonwide" Then
+                                    seasonXXbanner = Image.Url
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                        If seasonXXbanner = "" Then
+                            For Each Image In artlist
+                                If Image.Season = f.ToString And Image.Resolution = "seasonwide" Then
+                                    seasonXXbanner = Image.Url
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                        Dim tempstring As String = ""
+                        If seasonXXbanner <> "" Then
+                            If f < 10 Then
+                                tempstring = "0" & f.ToString
+                            Else
+                                tempstring = f.ToString
                             End If
-                        Next
-                    End If
-                    Dim tempstring As String = ""
-                    If seasonXXbanner <> "" Then
-                        If f < 10 Then
-                            tempstring = "0" & f.ToString
-                        Else
-                            tempstring = f.ToString
-                        End If
-                        If tempstring = "00" Then tempstring = "-specials"
-                        Dim seasonXXbannerpath As String = ""
-                        If frodo Then
-                            seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
-                        ElseIf eden Then
-                            seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
-                        End If
-                        If Not IO.File.Exists(seasonXXbannerpath) Then
-                            Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
-                        End If
-                        If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
-                            Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
+                            If tempstring = "00" Then tempstring = "-specials"
+                            Dim seasonXXbannerpath As String = ""
+                            If frodo Then
+                                seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & "-banner.jpg")
+                            ElseIf eden Then
+                                seasonXXbannerpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season" & tempstring & ".tbn")
+                            End If
+                            If Not IO.File.Exists(seasonXXbannerpath) Then
+                                Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                            End If
+                            If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
+                                Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
+                            End If
                         End If
                     End If
-                End If
-            Next
-
+                Next
+            End If
 
             'Main Fanart
             Dim fanartposter As String = ""

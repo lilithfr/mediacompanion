@@ -52,23 +52,24 @@ Partial Class tv_batch_wizard
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.CheckBox21 = New System.Windows.Forms.CheckBox()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer2.Panel1.SuspendLayout()
-        Me.SplitContainer2.Panel2.SuspendLayout()
-        Me.SplitContainer2.SuspendLayout()
-        Me.SuspendLayout()
+        Me.CheckBox22 = New System.Windows.Forms.CheckBox()
+        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SplitContainer1.Panel1.SuspendLayout
+        Me.SplitContainer1.Panel2.SuspendLayout
+        Me.SplitContainer1.SuspendLayout
+        Me.GroupBox1.SuspendLayout
+        Me.GroupBox2.SuspendLayout
+        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SplitContainer2.Panel1.SuspendLayout
+        Me.SplitContainer2.Panel2.SuspendLayout
+        Me.SplitContainer2.SuspendLayout
+        Me.SuspendLayout
         '
         'SplitContainer1
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.IsSplitterFixed = True
+        Me.SplitContainer1.IsSplitterFixed = true
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer1.Name = "SplitContainer1"
         Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
@@ -88,6 +89,7 @@ Partial Class tv_batch_wizard
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CheckBox22)
         Me.GroupBox1.Controls.Add(Me.CheckBox10)
         Me.GroupBox1.Controls.Add(Me.CheckBox9)
         Me.GroupBox1.Controls.Add(Me.CheckBox8)
@@ -98,116 +100,116 @@ Partial Class tv_batch_wizard
         Me.GroupBox1.Controls.Add(Me.CheckBox3)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
-        Me.GroupBox1.Location = New System.Drawing.Point(11, 30)
+        Me.GroupBox1.Location = New System.Drawing.Point(11, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(364, 107)
+        Me.GroupBox1.Size = New System.Drawing.Size(364, 140)
         Me.GroupBox1.TabIndex = 1
-        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Tags to Rescrape"
         '
         'CheckBox10
         '
-        Me.CheckBox10.AutoSize = True
-        Me.CheckBox10.Location = New System.Drawing.Point(7, 90)
+        Me.CheckBox10.AutoSize = true
+        Me.CheckBox10.Location = New System.Drawing.Point(7, 113)
         Me.CheckBox10.Name = "CheckBox10"
         Me.CheckBox10.Size = New System.Drawing.Size(265, 17)
         Me.CheckBox10.TabIndex = 9
         Me.CheckBox10.Text = "Search for and download missing fanart if available"
-        Me.CheckBox10.UseVisualStyleBackColor = True
+        Me.CheckBox10.UseVisualStyleBackColor = true
         '
         'CheckBox9
         '
-        Me.CheckBox9.AutoSize = True
+        Me.CheckBox9.AutoSize = true
         Me.CheckBox9.Location = New System.Drawing.Point(7, 67)
         Me.CheckBox9.Name = "CheckBox9"
-        Me.CheckBox9.Size = New System.Drawing.Size(357, 17)
+        Me.CheckBox9.Size = New System.Drawing.Size(277, 17)
         Me.CheckBox9.TabIndex = 8
-        Me.CheckBox9.Text = "Search for and download missing posters if available (Main && Seasons)"
-        Me.CheckBox9.UseVisualStyleBackColor = True
+        Me.CheckBox9.Text = "Search for and download missing poster/s if available"
+        Me.CheckBox9.UseVisualStyleBackColor = true
         '
         'CheckBox8
         '
-        Me.CheckBox8.AutoSize = True
+        Me.CheckBox8.AutoSize = true
         Me.CheckBox8.Location = New System.Drawing.Point(198, 44)
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(56, 17)
         Me.CheckBox8.TabIndex = 7
         Me.CheckBox8.Text = "Actors"
-        Me.CheckBox8.UseVisualStyleBackColor = True
+        Me.CheckBox8.UseVisualStyleBackColor = true
         '
         'CheckBox7
         '
-        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.AutoSize = true
         Me.CheckBox7.Location = New System.Drawing.Point(198, 21)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(56, 17)
         Me.CheckBox7.TabIndex = 6
         Me.CheckBox7.Text = "Studio"
-        Me.CheckBox7.UseVisualStyleBackColor = True
+        Me.CheckBox7.UseVisualStyleBackColor = true
         '
         'CheckBox6
         '
-        Me.CheckBox6.AutoSize = True
+        Me.CheckBox6.AutoSize = true
         Me.CheckBox6.Location = New System.Drawing.Point(284, 20)
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(55, 17)
         Me.CheckBox6.TabIndex = 5
         Me.CheckBox6.Text = "Genre"
-        Me.CheckBox6.UseVisualStyleBackColor = True
+        Me.CheckBox6.UseVisualStyleBackColor = true
         '
         'CheckBox5
         '
-        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.AutoSize = true
         Me.CheckBox5.Location = New System.Drawing.Point(105, 44)
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(56, 17)
         Me.CheckBox5.TabIndex = 4
         Me.CheckBox5.Text = "MPAA"
-        Me.CheckBox5.UseVisualStyleBackColor = True
+        Me.CheckBox5.UseVisualStyleBackColor = true
         '
         'CheckBox4
         '
-        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.AutoSize = true
         Me.CheckBox4.Location = New System.Drawing.Point(105, 21)
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(65, 17)
         Me.CheckBox4.TabIndex = 3
         Me.CheckBox4.Text = "Runtime"
-        Me.CheckBox4.UseVisualStyleBackColor = True
+        Me.CheckBox4.UseVisualStyleBackColor = true
         '
         'CheckBox3
         '
-        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.AutoSize = true
         Me.CheckBox3.Location = New System.Drawing.Point(284, 44)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(44, 17)
         Me.CheckBox3.TabIndex = 2
         Me.CheckBox3.Text = "Plot"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.CheckBox3.UseVisualStyleBackColor = true
         '
         'CheckBox2
         '
-        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.AutoSize = true
         Me.CheckBox2.Location = New System.Drawing.Point(7, 44)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(57, 17)
         Me.CheckBox2.TabIndex = 1
         Me.CheckBox2.Text = "Rating"
-        Me.CheckBox2.UseVisualStyleBackColor = True
+        Me.CheckBox2.UseVisualStyleBackColor = true
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.AutoSize = true
         Me.CheckBox1.Location = New System.Drawing.Point(7, 20)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(73, 17)
         Me.CheckBox1.TabIndex = 0
         Me.CheckBox1.Text = "Premiered"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.CheckBox1.UseVisualStyleBackColor = true
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoSize = true
         Me.Label1.Location = New System.Drawing.Point(3, 3)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(117, 13)
@@ -230,113 +232,113 @@ Partial Class tv_batch_wizard
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(364, 109)
         Me.GroupBox2.TabIndex = 1
-        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.TabStop = false
         Me.GroupBox2.Text = "Select Tags to Rescrape"
         '
         'CheckBox20
         '
-        Me.CheckBox20.AutoSize = True
+        Me.CheckBox20.AutoSize = true
         Me.CheckBox20.Location = New System.Drawing.Point(283, 44)
         Me.CheckBox20.Name = "CheckBox20"
         Me.CheckBox20.Size = New System.Drawing.Size(82, 17)
         Me.CheckBox20.TabIndex = 9
         Me.CheckBox20.Text = "Media Tags"
-        Me.CheckBox20.UseVisualStyleBackColor = True
+        Me.CheckBox20.UseVisualStyleBackColor = true
         '
         'CheckBox19
         '
-        Me.CheckBox19.AutoSize = True
-        Me.CheckBox19.Enabled = False
+        Me.CheckBox19.AutoSize = true
+        Me.CheckBox19.Enabled = false
         Me.CheckBox19.Location = New System.Drawing.Point(6, 90)
         Me.CheckBox19.Name = "CheckBox19"
         Me.CheckBox19.Size = New System.Drawing.Size(265, 17)
         Me.CheckBox19.TabIndex = 8
         Me.CheckBox19.Text = "Create Screenshot if none is available to download"
-        Me.CheckBox19.UseVisualStyleBackColor = True
+        Me.CheckBox19.UseVisualStyleBackColor = true
         '
         'CheckBox18
         '
-        Me.CheckBox18.AutoSize = True
+        Me.CheckBox18.AutoSize = true
         Me.CheckBox18.Location = New System.Drawing.Point(6, 67)
         Me.CheckBox18.Name = "CheckBox18"
         Me.CheckBox18.Size = New System.Drawing.Size(220, 17)
         Me.CheckBox18.TabIndex = 7
         Me.CheckBox18.Text = "Attempt to download missing screenshots"
-        Me.CheckBox18.UseVisualStyleBackColor = True
+        Me.CheckBox18.UseVisualStyleBackColor = true
         '
         'CheckBox17
         '
-        Me.CheckBox17.AutoSize = True
+        Me.CheckBox17.AutoSize = true
         Me.CheckBox17.Location = New System.Drawing.Point(283, 20)
         Me.CheckBox17.Name = "CheckBox17"
         Me.CheckBox17.Size = New System.Drawing.Size(65, 17)
         Me.CheckBox17.TabIndex = 6
         Me.CheckBox17.Text = "Runtime"
-        Me.CheckBox17.UseVisualStyleBackColor = True
+        Me.CheckBox17.UseVisualStyleBackColor = true
         '
         'CheckBox16
         '
-        Me.CheckBox16.AutoSize = True
+        Me.CheckBox16.AutoSize = true
         Me.CheckBox16.Location = New System.Drawing.Point(197, 44)
         Me.CheckBox16.Name = "CheckBox16"
         Me.CheckBox16.Size = New System.Drawing.Size(56, 17)
         Me.CheckBox16.TabIndex = 5
         Me.CheckBox16.Text = "Actors"
-        Me.CheckBox16.UseVisualStyleBackColor = True
+        Me.CheckBox16.UseVisualStyleBackColor = true
         '
         'CheckBox15
         '
-        Me.CheckBox15.AutoSize = True
+        Me.CheckBox15.AutoSize = true
         Me.CheckBox15.Location = New System.Drawing.Point(104, 44)
         Me.CheckBox15.Name = "CheckBox15"
         Me.CheckBox15.Size = New System.Drawing.Size(58, 17)
         Me.CheckBox15.TabIndex = 4
         Me.CheckBox15.Text = "Credits"
-        Me.CheckBox15.UseVisualStyleBackColor = True
+        Me.CheckBox15.UseVisualStyleBackColor = true
         '
         'CheckBox14
         '
-        Me.CheckBox14.AutoSize = True
+        Me.CheckBox14.AutoSize = true
         Me.CheckBox14.Location = New System.Drawing.Point(104, 20)
         Me.CheckBox14.Name = "CheckBox14"
         Me.CheckBox14.Size = New System.Drawing.Size(63, 17)
         Me.CheckBox14.TabIndex = 3
         Me.CheckBox14.Text = "Director"
-        Me.CheckBox14.UseVisualStyleBackColor = True
+        Me.CheckBox14.UseVisualStyleBackColor = true
         '
         'CheckBox13
         '
-        Me.CheckBox13.AutoSize = True
+        Me.CheckBox13.AutoSize = true
         Me.CheckBox13.Location = New System.Drawing.Point(197, 20)
         Me.CheckBox13.Name = "CheckBox13"
         Me.CheckBox13.Size = New System.Drawing.Size(57, 17)
         Me.CheckBox13.TabIndex = 2
         Me.CheckBox13.Text = "Rating"
-        Me.CheckBox13.UseVisualStyleBackColor = True
+        Me.CheckBox13.UseVisualStyleBackColor = true
         '
         'CheckBox12
         '
-        Me.CheckBox12.AutoSize = True
+        Me.CheckBox12.AutoSize = true
         Me.CheckBox12.Location = New System.Drawing.Point(6, 44)
         Me.CheckBox12.Name = "CheckBox12"
         Me.CheckBox12.Size = New System.Drawing.Size(64, 17)
         Me.CheckBox12.TabIndex = 1
         Me.CheckBox12.Text = "Air Date"
-        Me.CheckBox12.UseVisualStyleBackColor = True
+        Me.CheckBox12.UseVisualStyleBackColor = true
         '
         'CheckBox11
         '
-        Me.CheckBox11.AutoSize = True
+        Me.CheckBox11.AutoSize = true
         Me.CheckBox11.Location = New System.Drawing.Point(6, 20)
         Me.CheckBox11.Name = "CheckBox11"
         Me.CheckBox11.Size = New System.Drawing.Size(44, 17)
         Me.CheckBox11.TabIndex = 0
         Me.CheckBox11.Text = "Plot"
-        Me.CheckBox11.UseVisualStyleBackColor = True
+        Me.CheckBox11.UseVisualStyleBackColor = true
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoSize = true
         Me.Label2.Location = New System.Drawing.Point(3, 3)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(112, 13)
@@ -346,7 +348,7 @@ Partial Class tv_batch_wizard
         'SplitContainer2
         '
         Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer2.IsSplitterFixed = True
+        Me.SplitContainer2.IsSplitterFixed = true
         Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer2.Name = "SplitContainer2"
         Me.SplitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal
@@ -367,13 +369,13 @@ Partial Class tv_batch_wizard
         '
         'CheckBoxRewiteAllNfo
         '
-        Me.CheckBoxRewiteAllNfo.AutoSize = True
+        Me.CheckBoxRewiteAllNfo.AutoSize = true
         Me.CheckBoxRewiteAllNfo.Location = New System.Drawing.Point(18, 25)
         Me.CheckBoxRewiteAllNfo.Name = "CheckBoxRewiteAllNfo"
         Me.CheckBoxRewiteAllNfo.Size = New System.Drawing.Size(108, 17)
         Me.CheckBoxRewiteAllNfo.TabIndex = 3
         Me.CheckBoxRewiteAllNfo.Text = "Rewrite All NFO's"
-        Me.CheckBoxRewiteAllNfo.UseVisualStyleBackColor = True
+        Me.CheckBoxRewiteAllNfo.UseVisualStyleBackColor = true
         '
         'Button2
         '
@@ -382,7 +384,7 @@ Partial Class tv_batch_wizard
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Cancel"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.UseVisualStyleBackColor = true
         '
         'Button1
         '
@@ -391,48 +393,58 @@ Partial Class tv_batch_wizard
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 1
         Me.Button1.Text = "Start Update"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.UseVisualStyleBackColor = true
         '
         'CheckBox21
         '
-        Me.CheckBox21.AutoSize = True
+        Me.CheckBox21.AutoSize = true
         Me.CheckBox21.Location = New System.Drawing.Point(18, 8)
         Me.CheckBox21.Name = "CheckBox21"
         Me.CheckBox21.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox21.TabIndex = 0
         Me.CheckBox21.Text = "Include locked shows"
-        Me.CheckBox21.UseVisualStyleBackColor = True
+        Me.CheckBox21.UseVisualStyleBackColor = true
+        '
+        'CheckBox22
+        '
+        Me.CheckBox22.AutoSize = true
+        Me.CheckBox22.Location = New System.Drawing.Point(7, 90)
+        Me.CheckBox22.Name = "CheckBox22"
+        Me.CheckBox22.Size = New System.Drawing.Size(274, 17)
+        Me.CheckBox22.TabIndex = 10
+        Me.CheckBox22.Text = "Search and download missing Season art if available"
+        Me.CheckBox22.UseVisualStyleBackColor = true
         '
         'tv_batch_wizard
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(416, 397)
-        Me.ControlBox = False
+        Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
         Me.MaximumSize = New System.Drawing.Size(424, 424)
         Me.MinimumSize = New System.Drawing.Size(424, 424)
         Me.Name = "tv_batch_wizard"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "TV Batch Wizard"
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.PerformLayout()
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.PerformLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
-        Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.PerformLayout()
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer2.ResumeLayout(False)
-        Me.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.ResumeLayout(false)
+        Me.SplitContainer1.Panel1.PerformLayout
+        Me.SplitContainer1.Panel2.ResumeLayout(false)
+        Me.SplitContainer1.Panel2.PerformLayout
+        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer1.ResumeLayout(false)
+        Me.GroupBox1.ResumeLayout(false)
+        Me.GroupBox1.PerformLayout
+        Me.GroupBox2.ResumeLayout(false)
+        Me.GroupBox2.PerformLayout
+        Me.SplitContainer2.Panel1.ResumeLayout(false)
+        Me.SplitContainer2.Panel2.ResumeLayout(false)
+        Me.SplitContainer2.Panel2.PerformLayout
+        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer2.ResumeLayout(false)
+        Me.ResumeLayout(false)
 
-    End Sub
+End Sub
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
@@ -463,4 +475,5 @@ Partial Class tv_batch_wizard
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBoxRewiteAllNfo As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox22 As System.Windows.Forms.CheckBox
 End Class
