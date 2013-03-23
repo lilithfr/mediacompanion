@@ -1254,8 +1254,8 @@ Partial Public Class Form1
                     Dim posterurl As String = ""
                     Dim tempstring As String = ""
 
-                    If templanguage = Nothing Then templanguage = "en"
-                    If templanguage = "" Then templanguage = "en"
+                    If templanguage = Nothing Then templanguage = Preferences.TvdbLanguageCode    '"en"
+                    If templanguage = "" Then templanguage = Preferences.TvdbLanguageCode    '"en"
                     Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(tvshowid, templanguage, True)
                     If SeriesInfo.FailedLoad Then
                         MsgBox("Please adjust the TV Show title and try again", MsgBoxStyle.OkOnly, String.Format("'{0}' - No Show Returned", FolderName))
