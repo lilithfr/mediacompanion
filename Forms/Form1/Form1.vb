@@ -23965,6 +23965,7 @@ Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As S
             Dim Showname As TvShow = tv_ShowSelectedCurrently()
             Me.tvBatchList.shFanart = True
             TvGetArtwork(Showname,False)
+            tv_ShowLoad(Showname)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

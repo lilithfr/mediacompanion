@@ -3125,6 +3125,7 @@ Partial Public Class Form1
     Private Sub TvEpThumbScreenShot()
         Try
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            If Textbox35.Text ="" Then TextBox35.Text = Preferences.ScrShtDelay
             If IsNumeric(TextBox35.Text) Then
                 Dim thumbpathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
                 Dim pathandfilename As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "")

@@ -24,6 +24,7 @@ Partial Class tv_batch_wizard
     Private Sub InitializeComponent()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.CheckBox10 = New System.Windows.Forms.CheckBox()
         Me.CheckBox9 = New System.Windows.Forms.CheckBox()
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
@@ -52,7 +53,6 @@ Partial Class tv_batch_wizard
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.CheckBox21 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -106,6 +106,16 @@ Partial Class tv_batch_wizard
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Tags to Rescrape"
+        '
+        'CheckBox22
+        '
+        Me.CheckBox22.AutoSize = true
+        Me.CheckBox22.Location = New System.Drawing.Point(7, 90)
+        Me.CheckBox22.Name = "CheckBox22"
+        Me.CheckBox22.Size = New System.Drawing.Size(274, 17)
+        Me.CheckBox22.TabIndex = 10
+        Me.CheckBox22.Text = "Search and download missing Season art if available"
+        Me.CheckBox22.UseVisualStyleBackColor = true
         '
         'CheckBox10
         '
@@ -404,16 +414,6 @@ Partial Class tv_batch_wizard
         Me.CheckBox21.TabIndex = 0
         Me.CheckBox21.Text = "Include locked shows"
         Me.CheckBox21.UseVisualStyleBackColor = true
-        '
-        'CheckBox22
-        '
-        Me.CheckBox22.AutoSize = true
-        Me.CheckBox22.Location = New System.Drawing.Point(7, 90)
-        Me.CheckBox22.Name = "CheckBox22"
-        Me.CheckBox22.Size = New System.Drawing.Size(274, 17)
-        Me.CheckBox22.TabIndex = 10
-        Me.CheckBox22.Text = "Search and download missing Season art if available"
-        Me.CheckBox22.UseVisualStyleBackColor = true
         '
         'tv_batch_wizard
         '

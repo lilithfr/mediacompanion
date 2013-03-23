@@ -9126,6 +9126,7 @@ Partial Class Form1
         Me.TextBox35.Location = New System.Drawing.Point(928, 517)
         Me.TextBox35.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBox35.Name = "TextBox35"
+        Me.TextBox35.Text = "10"
         Me.TextBox35.Size = New System.Drawing.Size(58, 21)
         Me.TextBox35.TabIndex = 3
         Me.TextBox35.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
