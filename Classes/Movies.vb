@@ -1538,6 +1538,7 @@ Public Class Movies
                         If( result Is Nothing, "Unassigned", result.field ) = filterValue
                     Select 
                         m
+                    Distinct
     End Function
 
 #End Region
