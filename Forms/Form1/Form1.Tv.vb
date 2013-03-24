@@ -2217,12 +2217,15 @@ Partial Public Class Form1
 
 
     Public Sub tv_MissingArtDownload(ByVal BrokenShow As TvShow)
-        'Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
-        'messbox.Show()
-        'messbox.Refresh()
+        Dim messbox As New frmMessageBox("Attempting to download art", "", "       Please Wait")
+        messbox.Show()
+        messbox.Refresh()
         Application.DoEvents()
         Try
+            Dim isseason As Boolean = Me.tvBatchList.shSeason
+            Me.tvBatchList.shSeason=True
             TvGetArtwork(BrokenShow)
+            Me.tvBatchList.shSeason=isseason
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
