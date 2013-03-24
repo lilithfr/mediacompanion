@@ -676,15 +676,22 @@ Public Class Movie
 
             Dim action = Actions.Items(0)
 
-            action.Run
+            Try
+                action.Run
 
-            If LogScrapeTimes And action.Time.ElapsedTimeMs > ScrapeTimingsLogThreshold then
-                TimingsLog &= vbCrLf & "[" & action.ActionName & "] took " & action.Time.ElapsedTimeMs & "ms to run"
-            End if
+                If LogScrapeTimes And action.Time.ElapsedTimeMs > ScrapeTimingsLogThreshold then
+                    TimingsLog &= vbCrLf & "[" & action.ActionName & "] took " & action.Time.ElapsedTimeMs & "ms to run"
+                End if
 
-            If Cancelled then Exit Sub
+                Actions.Items.RemoveAt(0)
 
-            Actions.Items.RemoveAt(0)
+                If Cancelled then Exit Sub
+
+            Catch ex As Exception
+                ReportProgress(MSG_ERROR,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)                
+                Actions.Items.Clear         
+            End Try
+
         End While
     End Sub
 
