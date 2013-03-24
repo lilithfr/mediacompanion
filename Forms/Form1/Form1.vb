@@ -14213,7 +14213,9 @@ Public Class Form1
         MovieRenameCheckBox.CheckState          = If(Preferences.MovieRenameEnable, CheckState.Checked, CheckState.Unchecked)
         CheckBox_ShowDateOnMovieList.CheckState = If(Preferences.showsortdate, CheckState.Checked, CheckState.Unchecked)
  
-        saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
+        'saveactorchkbx.CheckState               = If(Preferences.actorsave, CheckState.Checked, CheckState.Unchecked)
+        saveactorchkbx.CheckState = CheckState.Unchecked
+
         localactorpath.Enabled                  = Preferences.actorsave
         xbmcactorpath.Enabled                   = Preferences.actorsave
         Button77.Enabled                        = Preferences.actorsave
