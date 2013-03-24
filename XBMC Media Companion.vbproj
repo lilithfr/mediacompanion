@@ -36,7 +36,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>3.5.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -508,42 +508,42 @@
     <None Include="Assets\YouTubeUrlGrabber.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\TakeOwnership.htm">
+    <Content Include="Assets\TakeOwnership.htm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\filelist.xml">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\filelist.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image001.png">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image001.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image002.jpg">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image002.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image003.png">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image003.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image004.jpg">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image004.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image005.png">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image005.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image006.jpg">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image006.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image007.png">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image007.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image008.jpg">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image008.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image009.png">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image009.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\TakeOwnership_files\image010.jpg">
+    </Content>
+    <Content Include="Assets\TakeOwnership_files\image010.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="Assets\scrapers\metadata.themoviedb.org\resources\language\Afrikaans\strings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
