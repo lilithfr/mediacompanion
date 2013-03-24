@@ -673,7 +673,7 @@ Public Class Form1
 
         Preferences.movie_filters.InitFilterPanel(SplitContainer5.Panel2)
 
-
+        If Preferences.CheckForNewVersion Then CheckForNewVersion
     End Sub
 
 
@@ -13900,9 +13900,10 @@ Public Class Form1
         CheckBox33.CheckState               = If(Preferences.actorseasy, CheckState.Checked, CheckState.Unchecked)
 
         txtbx_minrarsize.Text               = Preferences.rarsize.ToString
-        CheckBox12.Checked                  = Preferences.externalbrowser
-        btnFindBrowser.Enabled              = CheckBox12.Checked
+        cbExternalbrowser.Checked           = Preferences.externalbrowser
+        btnFindBrowser.Enabled              = cbExternalbrowser.Checked
 
+        cbCheckForNewVersion.Checked        = Preferences.CheckForNewVersion
 
         If Preferences.videomode = 1 Then
             RadioButton38.Checked = True
@@ -14089,15 +14090,15 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub CheckBox12_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox12.CheckedChanged
+    Private Sub CheckBox12_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
         Try
             'If CheckBox12.Checked = True Then
             '    Preferences.externalbrowser = True
             'Else
             '    Preferences.externalbrowser = False
             'End If
-            Preferences.externalbrowser = CheckBox12.Checked
-            btnFindBrowser.Enabled      = CheckBox12.Checked
+            Preferences.externalbrowser = cbExternalbrowser.Checked
+            btnFindBrowser.Enabled      = cbExternalbrowser.Checked
 
             If prefsload = False Then
                 generalprefschanged = True
@@ -23874,6 +23875,19 @@ Public Class Form1
         End If
     End Sub
 
+
+    Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) Handles cbCheckForNewVersion.CheckedChanged
+        If MainFormLoadedStatus Then
+            Preferences.CheckForNewVersion = cbCheckForNewVersion.Checked
+            If prefsload = False Then
+                generalprefschanged = True
+                btnGeneralPrefsSaveChanges.Enabled = True
+            End If
+        End If
+    End Sub
+
+    
+
     Private Sub btnTvSearchNew_Click( sender As System.Object,  e As System.EventArgs) Handles btnTvSearchNew.Click
         Try
             Call ep_Search()
@@ -24019,4 +24033,29 @@ Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.Windo
         End Try
 
 End Sub
+
+
+    Public Sub CheckForNewVersion
+        Dim homePage         = "http://mediacompanion.codeplex.com"
+        Dim downloadPage     = "http://mediacompanion.codeplex.com/releases"
+        Dim MC_Version_RegEx = "<th><span class=""rating_header"">current</span></th>.*?<td>[\s]+.*?([0-9]*\.?[0-9]+).*?[\s]+</td>"
+
+        Dim s As New Classimdb
+
+        Dim html As String = s.loadwebpage(homePage,True)
+
+        Dim m = Regex.Match(html,MC_Version_RegEx, RegexOptions.Singleline)
+
+        Dim displayVersion As String = m.Groups(1).Value.Trim
+        Dim latestVersion  As String = displayVersion.Replace(".","")
+
+        Dim currVersion   As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)).Replace(".","").Replace("Version=","")
+
+        If latestVersion<>currVersion Then
+            Dim answer = MsgBox("Would you like to open the download page?", MsgBoxStyle.YesNo, "New version " & displayVersion & " available")
+            If answer=MsgBoxResult.Yes Then
+                OpenUrl(downloadPage)
+            End If
+         End If
+    End Sub
 End Class

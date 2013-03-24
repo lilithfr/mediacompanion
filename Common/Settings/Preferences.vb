@@ -195,6 +195,8 @@ Public Class Preferences
 
     Public Shared movie_filters As MovieFilters = New MovieFilters
 
+    Public Shared CheckForNewVersion As Boolean=True
+
     Public Shared Property movieignorepart As Boolean
         Get
             Return Utilities.ignoreParts
@@ -509,7 +511,9 @@ Public Class Preferences
         root.AppendChild(doc, "intruntime",             intruntime)             'CheckBox38
         root.AppendChild(doc, "xbmcartwork",            XBMC_version)           'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
         root.AppendChild(doc, "ShowMovieGridToolTip",   ShowMovieGridToolTip)   'cbShowMovieGridToolTip
-        root.AppendChild(doc, "ShowLogOnError",         ShowLogOnError)         'cbShowLogOnError
+        root.AppendChild(doc, "ShowLogOnError"      ,   ShowLogOnError      )   'cbShowLogOnError
+        root.AppendChild(doc, "CheckForNewVersion"  ,   CheckForNewVersion  )
+
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
         End If
@@ -527,6 +531,7 @@ Public Class Preferences
             End If
         Next
 
+        
 
         'Movie Prefs ------------------------------------------------------------
         root.AppendChild(doc, "DownloadTrailerDuringScrape",        DownloadTrailerDuringScrape)        'cbDlTrailerDuringScrape
@@ -884,6 +889,7 @@ Public Class Preferences
                     Case "Original_Title"                       : Original_Title            = thisresult.InnerXml
                     Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
                     Case "movie_filters"                        : movie_filters.Load(thisresult)
+                    Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
 
                     Case Else : Dim x = thisresult
                 End Select

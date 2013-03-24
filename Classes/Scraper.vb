@@ -1523,7 +1523,7 @@ Public Class Classimdb
         Return text
     End Function
 
-    Private Function loadwebpage(ByVal url As String, ByVal method As Boolean)
+    Public Function loadwebpage(ByVal url As String, ByVal IntoSingleString As Boolean)
 
         Dim webpage As New List(Of String)
         Monitor.Enter(Me)
@@ -1542,7 +1542,7 @@ Public Class Classimdb
             Dim objReader As New StreamReader(objStream)
             Dim sLine As String = ""
 
-            If method = False Then
+            If IntoSingleString = False Then
                 Do While Not sLine Is Nothing
 
                     sLine = objReader.ReadLine
@@ -1555,7 +1555,7 @@ Public Class Classimdb
             End If
             objReader.Close()
 
-            If method = False Then
+            If IntoSingleString = False Then
                 Return webpage
             Else
                 Return sLine
