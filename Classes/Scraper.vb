@@ -1066,7 +1066,7 @@ Public Class Classimdb
 '                                   Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(<a|</p)")
                                     Dim M As Match = Regex.Match(movienfoarray, "<p itemprop=""description"">(.+?)(</p)")
                                     If M.Success = True Then
-                                        movienfoarray = M.Groups(1).Value.StripTagsLeaveContent.Trim
+                                        movienfoarray = M.Groups(1).Value.StripTagsLeaveContent.Replace("See full summary »","").Trim
                                     Else
                                         movienfoarray = "scraper error"
                                     End If

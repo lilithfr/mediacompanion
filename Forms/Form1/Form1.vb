@@ -23118,6 +23118,7 @@ Public Class Form1
 
     Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
 
+        LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
         UpdateFilteredList()
 
         ScraperStatusStrip.Visible = False
