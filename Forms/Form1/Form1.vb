@@ -1606,10 +1606,16 @@ Public Class Form1
                 If Yield(yieldIng) Then Return
                 If workingMovieDetails.fileinfo.posterpath <> Nothing Then
                     Dim workingposter As String = workingMovieDetails.fileinfo.posterpath
+                    Dim frodoPath As String
                     If Preferences.FrodoEnabled Then 
-                        Dim frodoPath As String = workingposter.Replace(".tbn","-poster.jpg")
-
-                        If File.Exists(frodoPath) Then workingposter = frodoPath
+                        If workingMovieDetails.fileinfo.videotspath<>"" Then
+                            frodoPath = workingMovieDetails.fileinfo.videotspath+"poster.jpg"
+                        Else
+                            frodoPath = workingposter.Replace(".tbn","-poster.jpg")
+                        End If
+                        If File.Exists(frodoPath) Then 
+                            workingposter = frodoPath
+                        End If
                     End If
 
                     'util_ImageLoad(moviethumb, workingMovieDetails.fileinfo.posterpath, Utilities.DefaultPosterPath)
