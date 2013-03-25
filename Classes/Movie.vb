@@ -64,6 +64,7 @@ Public Class Movie
     Private _youTubeTrailer           As YouTubeVideoFile
     Private _nfoPathAndFilename       As String = ""
     Private _actualNfoPathAndFilename As String
+    Private _videotsrootpath          As String =""
     Private _rescrape                 As Boolean = False
     Private _previousCache            As ComboList = Nothing
 
