@@ -1379,8 +1379,15 @@ Public Class Movie
     Private Sub DoDownloadPoster
         Dim eden As Boolean = Preferences.EdenEnabled
         Dim frodo As Boolean = Preferences.FrodoEnabled
+        If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
+            _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
+        End If
+        '_videotsrootpath= Utilities.RootVideoTsFolder(NfoPathPrefName)
         Dim edenart As String = NfoPathPrefName.Replace(".nfo",".tbn")
-        Dim frodoart As String = edenart.Replace(".tbn", "-poster.jpg")
+        Dim frodoart As String = edenart.Replace(".tbn","-poster.jpg")
+        If _videotsrootpath<>"" Then 
+            frodoart = _videotsrootpath+"poster.jpg"
+        End If
         If Not Preferences.overwritethumbs Then
             If eden And File.Exists(edenart) And Not frodo Then
                 ReportProgress(, "Eden Poster already exists -> Skipping" & vbCrLf)
@@ -1567,10 +1574,26 @@ Public Class Movie
             End If
 
         End If
+        'If Preferences.FrodoEnabled and (_videotsrootpath<>"") Then
+        '    Dim t As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
+        '    Dim s As String = _videotsrootpath+"fanart.jpg"
+        '    If IO.File.Exists(t) Then
+        '        IO.File.Copy(t,s)
+        '    End If
+        '    If Not Preferences.EdenEnabled Then
+        '        GC.Collect()
+        '        Utilities.SafeDeleteFile(t)
+        '    End If
+        'End If
     End Sub
 
     Sub DoDownloadFanart
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
+        Dim frodoart As String =""
+        If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
+            _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
+            frodoart = _videotsrootpath+"fanart.jpg"
+        End If
         Dim isMovieFanart As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
         If Not Preferences.overwritethumbs and (File.Exists(isMovieFanart) AndAlso File.Exists(isfanartjpg)) Then
             ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
@@ -1586,18 +1609,24 @@ Public Class Movie
         End If
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
-        If Not IsNothing(FanartUrl) then
+        If IsNothing(FanartUrl) then
+            ReportProgress("-Not available ","Fanart not available for this movie on TMDb" & vbCrLf)
+        Else
             ReportProgress("Fanart",)
             Try
    '            Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
                 SaveFanartImageToCacheAndPath(FanartUrl, newFanartPath)
+                If Preferences.FrodoEnabled and _videotsrootpath<>"" Then
+                    If Not IO.File.Exists(frodoart) Then
+                        IO.File.Copy(newFanartPath,frodoart)
+                    End If
+                End If
 
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
             End Try
-        Else
-            ReportProgress("-Not available ","Fanart not available for this movie on TMDb" & vbCrLf)
+                    
         End If
     End Sub
 

@@ -1628,8 +1628,20 @@ Public Class Form1
                     Label18.Visible = False
                 End If
                 If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
+                    Dim workingfanart As String = workingMovieDetails.fileinfo.fanartpath
+                    Dim frodoPath As String
+                    If Preferences.FrodoEnabled Then 
+                        If workingMovieDetails.fileinfo.videotspath<>"" Then
+                            frodoPath = workingMovieDetails.fileinfo.videotspath+"fanart.jpg"
+                        Else
+                            frodoPath = workingfanart
+                        End If
+                        If File.Exists(frodoPath) Then 
+                            workingfanart = frodoPath
+                        End If
+                    End If
 
-                    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                    util_ImageLoad(PictureBoxFanArt, workingfanart, Utilities.DefaultFanartPath)
                     'Rating1.PictureInit = PictureBoxFanArt.Image
 
                 End If
