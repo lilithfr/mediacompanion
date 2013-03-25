@@ -1566,35 +1566,25 @@ Public Class Movie
         End If
 
         DoDownloadFanart
-        If Preferences.fanartjpg Then
-            Dim s As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
-            Dim t As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
-            If IO.File.Exists(t) and Not IO.File.Exists(s) then
-                IO.File.Copy(t,s)
-            End If
-
-        End If
-        'If Preferences.FrodoEnabled and (_videotsrootpath<>"") Then
+        'If Preferences.fanartjpg Then
+        '    Dim s As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
         '    Dim t As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
-        '    Dim s As String = _videotsrootpath+"fanart.jpg"
-        '    If IO.File.Exists(t) Then
+        '    If IO.File.Exists(t) and Not IO.File.Exists(s) then
         '        IO.File.Copy(t,s)
         '    End If
-        '    If Not Preferences.EdenEnabled Then
-        '        GC.Collect()
-        '        Utilities.SafeDeleteFile(t)
-        '    End If
+
         'End If
     End Sub
 
     Sub DoDownloadFanart
         Dim isfanartjpg As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
+        Dim isMovieFanart As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
         Dim frodoart As String =""
         If IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
             frodoart = _videotsrootpath+"fanart.jpg"
         End If
-        Dim isMovieFanart As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
+
         If Not Preferences.overwritethumbs and (File.Exists(isMovieFanart) AndAlso File.Exists(isfanartjpg)) Then
             ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
             Exit Sub
@@ -1620,8 +1610,17 @@ Public Class Movie
                     If Not IO.File.Exists(frodoart) Then
                         IO.File.Copy(newFanartPath,frodoart)
                     End If
+                    If Not Preferences.EdenEnabled Then
+                        GC.Collect
+                        Utilities.SafeDeleteFile(newFanartPath)
+                    End If
                 End If
-
+                GC.Collect()
+                If Preferences.fanartjpg and (Preferences.usefoldernames or Preferences.allfolders) then
+                    If IO.File.Exists(isMovieFanart) Then
+                        IO.File.Copy(isMovieFanart,isfanartjpg)
+                    End If
+                End If
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
