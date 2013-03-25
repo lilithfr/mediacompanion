@@ -18354,7 +18354,7 @@ Public Class Form1
                 RescrapeFanartToolStripMenuItem.Visible = False
                 DownloadFanartToolStripMenuItem.Visible = False
                 Try
-                    If IO.File.Exists(Preferences.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Then
+                    If IO.File.Exists(Preferences.GetFanartPath(workingMovieDetails.fileinfo.fullpathandfilename)) Or (workingMovieDetails.fileinfo.videotspath <>"" and IO.File.Exists(workingMovieDetails.fileinfo.videotspath+"fanart.jpg")) Then
                         RescrapeFanartToolStripMenuItem.Visible = True
                     Else
                         DownloadFanartToolStripMenuItem.Visible = True
@@ -18452,6 +18452,7 @@ Public Class Form1
         Dim FanartPath As String=workingMovieDetails.fileinfo.fanartpath
         Dim tmdb       As New TMDb(workingMovieDetails.fullmoviebody.imdbid)
         Dim FanartUrl  As String=tmdb.GetBackDropUrl()
+        Dim isvideotspath As String = If(workingMovieDetails.fileinfo.videotspath="","",workingMovieDetails.fileinfo.videotspath+"fanart.jpg")
 
         If IsNothing(FanartUrl) then
             MsgBox("No Fanart Found on TMDB")
@@ -18459,15 +18460,26 @@ Public Class Form1
 
             'If Utilities.DownloadImage(FanartUrl, FanartPath) then
             If Movie.SaveFanartImageToCacheAndPath(FanartUrl, FanartPath) then
+                If Preferences.FrodoEnabled and isvideotspath<>"" Then
+                    If IO.File.Exists(isvideotspath) Then
+                        Utilities.SafeDeleteFile(isvideotspath)
+                    End If
+                    IO.File.Copy(FanartPath,isvideotspath)
+                    GC.Collect
+                    If Not Preferences.EdenEnabled Then
+                        Utilities.SafeDeleteFile(FanartPath)
+                    End If
+                    FanartPath=isvideotspath
+                End If
 
-                            For Each paths In Preferences.offlinefolders
-                                Dim offlinepath As String = paths & "\"
-                                If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
-                                    Dim mediapath As String
-                                    mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
-                                    Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
-                                End If
-                            Next
+                For Each paths In Preferences.offlinefolders
+                    Dim offlinepath As String = paths & "\"
+                    If workingMovieDetails.fileinfo.fanartpath.IndexOf(offlinepath) <> -1 Then
+                        Dim mediapath As String
+                        mediapath = Utilities.GetFileName(workingMovieDetails.fileinfo.fullpathandfilename)
+                        Call mov_OfflineDvdProcess(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fullmoviebody.title, mediapath)
+                    End If
+                Next
 
                 Dim bitmap3 As New Bitmap(FanartPath)
                 Dim bmp4 As New Bitmap(bitmap3)
@@ -18475,8 +18487,8 @@ Public Class Form1
                 PictureBoxFanArt.Image = bmp4
                 PictureBox2.Image = bmp4
  '               Rating1.PictureInit = bmp4
-                        End If
-                End If
+            End If
+        End If
 
         messbox.Close()
 
