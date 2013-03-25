@@ -18,7 +18,7 @@ Public Class frmConfigureMovieFilters
 
         Dim lbl As Label
         Dim i   As Integer=0
-        Dim query = From c As Control In FilterContainer.Controls Where c.Name.IndexOf("cbFilter")=0 Order by c.Tag
+        Dim query = From c As Control In FilterContainer.Controls Where c.Name.IndexOf("cbFilter")=0 Order by Convert.ToInt16(c.Tag.ToString)
 
         For Each cb As ComboBox In query
 

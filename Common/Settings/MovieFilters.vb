@@ -110,7 +110,7 @@ Public Class MovieFilters
         Dim Y           As Integer
         Dim lbl         As Label
 
-        Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible Order by c.Tag Descending
+        Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible Order by Convert.ToInt16(c.Tag.ToString) Descending
 
         For Each cb As ComboBox In query
             lbl = oPanel.Controls("lbl"+ cb.Name.SubString(2,cb.Name.Length-2))

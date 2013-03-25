@@ -214,6 +214,19 @@ Public Class Movies
     End Property    
 
 
+    Public ReadOnly Property NumAudioTracks As List(Of String)
+        Get
+            Dim q = From m In MovieCache 
+                Group By NumTracks=m.Audio.Count Into NumFilms=Count 
+                Order By NumTracks
+
+            Dim r = (From x In q Select x.NumTracks & " (" & x.NumFilms.ToString & ")").ToList
+
+            Return r
+        End Get
+    End Property    
+
+
     Public ReadOnly Property AudioLanguagesFilter As List(Of String)
         Get
             Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
@@ -835,7 +848,7 @@ Public Class Movies
 
 
                             Case "audio"
-                                    newmovie.Audio.Clear
+                    '               newmovie.Audio.Clear
 
                                     Dim audio As New AudioDetails
                                     For Each audiodetails As XmlNode In detail.ChildNodes
@@ -1520,6 +1533,14 @@ Public Class Movies
     Function ApplyAudioChannelsFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
         Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
+
+        Return Filter(b,filterValue,leftOuterJoinTable)
+    End Function
+
+
+    Function ApplyNumAudioTracksFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
+
+        Dim leftOuterJoinTable = From m In b Select m.fullpathandfilename, field=If(m.Audio.Count.ToString="","Unknown",m.Audio.Count.ToString)
 
         Return Filter(b,filterValue,leftOuterJoinTable)
     End Function

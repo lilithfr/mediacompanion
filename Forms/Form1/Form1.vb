@@ -63,6 +63,7 @@ Public Class Form1
     Public AudioLanguagesFilter As String=""
     Public AudioChannelsFilter  As String=""
     Public AudioBitratesFilter  As String=""
+    Public NumAudioTracksFilter As String=""
 
     'Public Shared Preferences As New Structures
 
@@ -208,6 +209,7 @@ Public Class Form1
     'TODO: (Form1_Load) Need to refactor
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
+        AddHandler Preferences.PropertyChanged_MkvMergeGuiPath, AddressOf MkvMergeGuiPath_ChangeHandler
         Label73.Text = ""
 
         BckWrkScnMovies.WorkerReportsProgress      = true
@@ -3330,6 +3332,7 @@ Public Class Form1
         cbFilterAudioLanguages.SelectedIndex = 0
         cbFilterAudioBitrates .SelectedIndex = 0
         cbFilterAudioChannels .SelectedIndex = 0
+        cbFilterNumAudioTracks.SelectedIndex = 0
 
         State=ProgramState.Other
     End Sub
@@ -13965,6 +13968,7 @@ Public Class Form1
         cbShowMovieGridToolTip.Checked = Preferences.ShowMovieGridToolTip
         cbShowLogOnError      .Checked = Preferences.ShowLogOnError
         cbUseMultipleThreads  .Checked = Preferences.UseMultipleThreads
+   '    tbMkvMergeGuiPath     .Text    = Preferences.MkvMergeGuiPath
 
         prefsload = False
         generalprefschanged = False
@@ -14110,11 +14114,6 @@ Public Class Form1
 
     Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
         Try
-            'If CheckBox12.Checked = True Then
-            '    Preferences.externalbrowser = True
-            'Else
-            '    Preferences.externalbrowser = False
-            'End If
             Preferences.externalbrowser = cbExternalbrowser.Checked
             btnFindBrowser.Enabled      = cbExternalbrowser.Checked
 
@@ -16815,6 +16814,8 @@ Public Class Form1
                     cbFilterAudioLanguages.Font = newFont
                     cbFilterAudioBitrates .Font = newFont
                     cbFilterAudioChannels .Font = newFont
+                    cbFilterNumAudioTracks.Font = newFont
+
                     LabelCountFilter.Font = newFont
 
                     Me.Refresh()
@@ -22658,18 +22659,14 @@ Public Class Form1
                 m.ClearStoredCalculatedFields()
             Next
 
-            Assign_FilterSet()
-            Assign_FilterActor()
+            Assign_MovieFilter(cbFilterSet, oMovies.SetsFilter, SetFilter)
+            Assign_FilterActor
 
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 
             Preferences.SaveConfig()
-            'ToolsToolStripMenuItem.DropDownItems.Clear()
-            'For Each com In Preferences.commandlist
-            '    ToolsToolStripMenuItem.DropDownItems.Add(com.title)
-            'Next
-            'MsgBox("Changes Saved!" & vbCrLf & vbCrLf & "Please restart the program" & vbCrLf & "for the changes to take effect")
+
             movieprefschanged = False
             btnMoviePrefSaveChanges.Enabled = False
         Catch ex As Exception
@@ -22685,103 +22682,61 @@ Public Class Form1
     End Sub
      
     Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterSet.SelectedValueChanged
-        If State = ProgramState.Other Then
-            If cbFilterSet.Text = "All" Then
-                SetFilter = ""
-            Else
-                SetFilter = cbFilterSet.Text.RemoveAfterMatch
-            End If
-
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+        HandleMovieFilter_SelectedValueChanged(cbFilterSet,SetFilter)
     End Sub
      
     Private Sub cbFilterResolutionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterResolution.SelectedValueChanged
-        If State = ProgramState.Other Then
-            If cbFilterResolution.Text = "All" Then
-                ResolutionFilter = ""
-            Else
-                ResolutionFilter = cbFilterResolution.Text.RemoveAfterMatch.Replace("Unknown","-1")
-            End If
-
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+        HandleMovieFilter_SelectedValueChanged(cbFilterResolution,ResolutionFilter,True)
     End Sub
-
 
       
     Private Sub cbFilterAudioLanguagesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterAudioLanguages.SelectedValueChanged
-        If State = ProgramState.Other Then
-            If cbFilterAudioLanguages.Text = "All" Then
-                AudioLanguagesFilter = ""
-            Else
-                AudioLanguagesFilter = cbFilterAudioLanguages.Text.RemoveAfterMatch   '.Replace("Unknown","-1")
-            End If
-
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+        HandleMovieFilter_SelectedValueChanged(cbFilterAudioLanguages,AudioLanguagesFilter)
     End Sub
 
      
     Private Sub cbFilterAudioBitratesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterAudioBitrates.SelectedValueChanged
-        If State = ProgramState.Other Then
-            If cbFilterAudioBitrates.Text = "All" Then
-                AudioBitratesFilter = ""
-            Else
-                AudioBitratesFilter = cbFilterAudioBitrates.Text.RemoveAfterMatch   '.Replace("Unknown","-1")
-            End If
-
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+        HandleMovieFilter_SelectedValueChanged(cbFilterAudioBitrates,AudioBitratesFilter)
     End Sub
 
      
     Private Sub cbFilterAudioChannelsChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterAudioChannels.SelectedValueChanged
-        If State = ProgramState.Other Then
-            If cbFilterAudioChannels.Text = "All" Then
-                AudioChannelsFilter = ""
-            Else
-                AudioChannelsFilter = cbFilterAudioChannels.Text.RemoveAfterMatch   '.Replace("Unknown","-1")
-            End If
+        HandleMovieFilter_SelectedValueChanged(cbFilterAudioChannels,AudioChannelsFilter)
+    End Sub
 
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+     
+    Private Sub cbFilterNumAudioTracksChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterNumAudioTracks.SelectedValueChanged
+        HandleMovieFilter_SelectedValueChanged(cbFilterNumAudioTracks,NumAudioTracksFilter)
     End Sub
 
      
     Private Sub cbFilterAudioCodecsChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterAudioCodecs.SelectedValueChanged
-        If State = ProgramState.Other Then
-            If cbFilterAudioCodecs.Text = "All" Then
-                AudioCodecsFilter = ""
-            Else
-                AudioCodecsFilter = cbFilterAudioCodecs.Text.RemoveAfterMatch   '.Replace("Unknown","-1")
-            End If
-
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+        HandleMovieFilter_SelectedValueChanged(cbFilterAudioCodecs,AudioCodecsFilter)
     End Sub
     
 
-
-
     Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
+        HandleMovieFilter_SelectedValueChanged(cbFilterActor,ActorFilter)
+    End Sub
+
+
+
+    Sub HandleMovieFilter_SelectedValueChanged(cbFilter As ComboBox, ByRef filterValue As String, Optional replaceUnknown As Boolean = False)
         If State = ProgramState.Other Then
-            If cbFilterActor.Text = "All" Then
-                ActorFilter = ""
+
+            If cbFilter.Text = "All" Then
+                filterValue = ""
             Else
-                ActorFilter = cbFilterActor.Text.RemoveAfterMatch
+                filterValue = cbFilter.Text.RemoveAfterMatch
+
+                If replaceUnknown Then filterValue = filterValue.Replace("Unknown","-1")
             End If
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             DisplayMovie()
         End If
     End Sub
+
 
     Private Sub DataGridViewMovies_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles DataGridViewMovies.KeyUp
         DisplayMovie(True)
@@ -22965,43 +22920,43 @@ Public Class Form1
     End Sub
 
 
-    Public Sub ChangeMovie()
+    Public Sub ChangeMovie
         oMovies.ChangeMovie(workingMovieDetails.fileinfo.fullpathandfilename, ChangeMovieImdb)
     End Sub
 
 
-    Public Sub RescrapeAll()
+    Public Sub RescrapeAll
         oMovies.RescrapeAll(_rescrapeList.FullPathAndFilenames)
     End Sub
 
 
-    Public Sub RebuildCaches()
-        oMovies.RebuildCaches()
+    Public Sub RebuildCaches
+        oMovies.RebuildCaches
     End Sub
 
 
-    Public Sub RescrapeDisplayedMovie()
+    Public Sub RescrapeDisplayedMovie
         oMovies.RescrapeMovie(workingMovieDetails.fileinfo.fullpathandfilename)
         oMovies.SaveCaches
     End Sub
 
 
-    Public Sub RescrapeSpecific()
+    Public Sub RescrapeSpecific
         oMovies.RescrapeSpecific(_rescrapeList)
     End Sub
 
 
-    Public Sub ScrapeDroppedFiles()
+    Public Sub ScrapeDroppedFiles
         oMovies.ScrapeFiles(droppedItems)
     End Sub
 
 
-    Public Sub SearchForNewMovies()
-        oMovies.FindNewMovies()
+    Public Sub SearchForNewMovies
+        oMovies.FindNewMovies
     End Sub
 
 
-    Private Sub UpdateFilteredList()
+    Private Sub UpdateFilteredList
 
         State = ProgramState.UpdatingFilteredList
 
@@ -23011,14 +22966,15 @@ Public Class Form1
         filteredList.AddRange(oMovies.MovieCache)
 
         Assign_FilterGeneral
-        Assign_FilterGenre
-        Assign_FilterSet
         Assign_FilterActor
-        Assign_FilterResolution
-        Assign_FilterAudioCodecs
-        Assign_FilterAudioChannels
-        Assign_FilterAudioBitrates
-        Assign_FilterAudioLanguages
+        Assign_MovieFilter( cbFilterResolution     , oMovies.ResolutionFilter     , ResolutionFilter.Replace("-1","Unknown") )
+        Assign_MovieFilter( cbFilterGenre          , oMovies.Genres               , cbFilterGenre.Text   )
+        Assign_MovieFilter( cbFilterSet            , oMovies.SetsFilter           , SetFilter            )
+        Assign_MovieFilter( cbFilterAudioLanguages , oMovies.AudioLanguagesFilter , AudioLanguagesFilter )
+        Assign_MovieFilter( cbFilterAudioChannels  , oMovies.AudioChannelsFilter  , AudioChannelsFilter  )
+        Assign_MovieFilter( cbFilterAudioBitrates  , oMovies.AudioBitratesFilter  , AudioBitratesFilter  )
+        Assign_MovieFilter( cbFilterAudioCodecs    , oMovies.AudioCodecsFilter    , AudioCodecsFilter    )
+        Assign_MovieFilter( cbFilterNumAudioTracks , oMovies.NumAudioTracks       , NumAudioTracksFilter )
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23037,6 +22993,47 @@ Public Class Form1
         DisplayMovie()
 
         State = ProgramState.Other
+    End Sub
+
+
+'    Sub Assign_FilterGenre
+        'Dim selected = cbFilterGenre.Text
+
+        'cbFilterGenre.Items.Clear
+        'cbFilterGenre.Items.Add("All")
+        'For Each item In oMovies.Genres
+        '    cbFilterGenre.Items.Add(item)
+        'Next
+
+        'If cbFilterGenre.Text = "" Then cbFilterGenre.Text = "All"
+
+        'If selected<>"" Then
+        '    For Each item As String In cbFilterGenre.Items
+        '        If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
+        '            cbFilterGenre.SelectedItem=item    
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
+'    End Sub
+
+
+    Sub Assign_FilterActor
+        cbFilterActor.Items.Clear
+        cbFilterActor.Items.Add("All")
+        For Each item In oMovies.ActorsFilter
+            cbFilterActor.Items.Add(item)
+        Next
+        If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
+
+        If ActorFilter<>"" Then
+            For Each item As String In cbFilterActor.Items
+                If item.IndexOf(ActorFilter & " (")=0 Then
+                    cbFilterActor.SelectedItem=item
+                    Exit For
+                End If
+            Next
+        End If
     End Sub
 
 
@@ -23059,193 +23056,31 @@ Public Class Form1
     End Sub
 
 
-    Sub Assign_FilterGenre
-        Dim selected = cbFilterGenre.Text
+    Sub Assign_MovieFilter(cb As ComboBox, items As List(Of String), filterValue As String)
+        cb.Items.Clear
+        cb.Items.Add("All")
+        cb.Items.AddRange(items.ToArray)
 
-        cbFilterGenre.Items.Clear
-        cbFilterGenre.Items.Add("All")
-        For Each item In oMovies.Genres
-            cbFilterGenre.Items.Add(item)
-        Next
+        'For Each item In items
+        '    cb.Items.Add(item)
+        'Next
 
-        If cbFilterGenre.Text = "" Then cbFilterGenre.Text = "All"
+        If cb.Text = "" Then cb.Text = "All"
 
-        If selected<>"" Then
-            For Each item As String In cbFilterGenre.Items
-                If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
-                    cbFilterGenre.SelectedItem=item    
-                    Exit For
-                End If
-            Next
-        End If
-    End Sub
-
-
-    Sub Assign_FilterSet
-        cbFilterSet.Items.Clear
-        cbFilterSet.Items.Add("All")
-        For Each item In oMovies.SetsFilter
-            cbFilterSet.Items.Add(item)
-        Next
-        If cbFilterSet.Text = "" Then cbFilterSet.Text = "All"
-
-        If SetFilter<>"" Then
+        If filterValue<>"" Then
             Dim found As Boolean=False
-            For Each item As String In cbFilterSet.Items
-                If item.IndexOf(SetFilter & " (")=0 Then
-                    cbFilterSet.SelectedItem=item    
+            For Each item As String In cb.Items
+                If item.IndexOf(filterValue & " (")=0 Then    
+                    cb.SelectedItem=item    
                     found=True
                     Exit For
                 End If
             Next
 
-            If Not found Then SetFilter=""
+            If Not found Then filterValue=""
         End If
     End Sub
 
-
-
-    Sub Assign_FilterResolution
-
-        cbFilterResolution.Items.Clear
-        cbFilterResolution.Items.Add("All")
-
-        For Each item In oMovies.ResolutionFilter
-            cbFilterResolution.Items.Add(item)
-        Next
-        If cbFilterResolution.Text = "" Then cbFilterResolution.Text = "All"
-
-        If ResolutionFilter<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cbFilterResolution.Items
-                If item.IndexOf(ResolutionFilter.Replace("-1","Unknown") & " (")=0 Then
-                    cbFilterResolution.SelectedItem=item    
-                    found=True
-                    Exit For
-                End If
-            Next
-
-            If Not found Then ResolutionFilter=""
-        End If
-    End Sub
-
-
-    Sub Assign_FilterAudioLanguages
-        cbFilterAudioLanguages.Items.Clear
-        cbFilterAudioLanguages.Items.Add("All")
-
-        For Each item In oMovies.AudioLanguagesFilter
-            cbFilterAudioLanguages.Items.Add(item)
-        Next
-        If cbFilterAudioLanguages.Text = "" Then cbFilterAudioLanguages.Text = "All"
-
-        If AudioLanguagesFilter<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cbFilterAudioLanguages.Items
-                If item.IndexOf(AudioLanguagesFilter & " (")=0 Then        'AudioLanguagesFilter.Replace("-1","Unknown")
-                    cbFilterAudioLanguages.SelectedItem=item    
-                    found=True
-                    Exit For
-                End If
-            Next
-
-            If Not found Then AudioLanguagesFilter=""
-        End If
-    End Sub
-
-
-    Sub Assign_FilterAudioChannels
-        cbFilterAudioChannels.Items.Clear
-        cbFilterAudioChannels.Items.Add("All")
-
-        For Each item In oMovies.AudioChannelsFilter
-            cbFilterAudioChannels.Items.Add(item)
-        Next
-        If cbFilterAudioChannels.Text = "" Then cbFilterAudioChannels.Text = "All"
-
-        If AudioChannelsFilter<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cbFilterAudioChannels.Items
-                If item.IndexOf(AudioChannelsFilter & " (")=0 Then        'AudioChannelsFilter.Replace("-1","Unknown")
-                    cbFilterAudioChannels.SelectedItem=item    
-                    found=True
-                    Exit For
-                End If
-            Next
-
-            If Not found Then AudioChannelsFilter=""
-        End If
-    End Sub
-
-
-
-    Sub Assign_FilterAudioBitrates
-        cbFilterAudioBitrates.Items.Clear
-        cbFilterAudioBitrates.Items.Add("All")
-
-        For Each item In oMovies.AudioBitratesFilter
-            cbFilterAudioBitrates.Items.Add(item)
-        Next
-        If cbFilterAudioBitrates.Text = "" Then cbFilterAudioBitrates.Text = "All"
-
-        If AudioBitratesFilter<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cbFilterAudioBitrates.Items
-                If item.IndexOf(AudioBitratesFilter & " (")=0 Then        'AudioBitratesFilter.Replace("-1","Unknown")
-                    cbFilterAudioBitrates.SelectedItem=item    
-                    found=True
-                    Exit For
-                End If
-            Next
-
-            If Not found Then AudioBitratesFilter=""
-        End If
-    End Sub
-
-
-    Sub Assign_FilterAudioCodecs
-        cbFilterAudioCodecs.Items.Clear
-        cbFilterAudioCodecs.Items.Add("All")
-
-        For Each item In oMovies.AudioCodecsFilter
-            cbFilterAudioCodecs.Items.Add(item)
-        Next
-        If cbFilterAudioCodecs.Text = "" Then cbFilterAudioCodecs.Text = "All"
-
-        If AudioCodecsFilter<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cbFilterAudioCodecs.Items
-                If item.IndexOf(AudioCodecsFilter & " (")=0 Then        'AudioCodecsFilter.Replace("-1","Unknown")
-                    cbFilterAudioCodecs.SelectedItem=item    
-                    found=True
-                    Exit For
-                End If
-            Next
-
-            If Not found Then AudioCodecsFilter=""
-        End If
-    End Sub
-
-
-
-
-    Sub Assign_FilterActor
-        cbFilterActor.Items.Clear
-        cbFilterActor.Items.Add("All")
-        For Each item In oMovies.ActorsFilter
-            cbFilterActor.Items.Add(item)
-        Next
-        If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
-
-        If ActorFilter<>"" Then
-            For Each item As String In cbFilterActor.Items
-                If item.IndexOf(ActorFilter & " (")=0 Then
-                    cbFilterActor.SelectedItem=item
-                    Exit For
-                End If
-            Next
-        End If
-    End Sub
 
 
     Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
@@ -24077,5 +23912,35 @@ End Sub
                 OpenUrl(downloadPage)
             End If
          End If
+    End Sub
+
+    Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles llMkvMergeGuiPath.Click
+        OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
+    End Sub
+
+    Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles btnMkvMergeGuiPath.Click
+
+        Dim ofd As New OpenFileDialog
+
+        ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+        ofd.Filter           = "Executable Files|*.exe"
+        ofd.Title            = "Locate mkvmerge GUI (mmg.exe)"
+
+        If ofd.ShowDialog = Windows.Forms.DialogResult.OK Then Preferences.MkvMergeGuiPath = ofd.FileName
+
+        If prefsload = False Then
+            generalprefschanged = True
+            btnGeneralPrefsSaveChanges.Enabled = True
+        End If
+        
+    End Sub
+
+    Sub MkvMergeGuiPath_ChangeHandler
+        tsmiOpenInMkvmergeGUI.Enabled = True
+        tbMkvMergeGuiPath.Text = Preferences.MkvMergeGuiPath  
+    End Sub
+
+    Private Sub tsmiOpenInMkvmergeGUI_Click( sender As Object,  e As EventArgs) Handles tsmiOpenInMkvmergeGUI.Click
+        Process.Start(Preferences.MkvMergeGuiPath,"""" & Utilities.GetFileName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString) & """")
     End Sub
 End Class

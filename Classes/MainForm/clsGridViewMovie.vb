@@ -273,11 +273,13 @@ Public Class clsGridViewMovie
         End If
 
 
-        If Form1.AudioCodecsFilter   <>"" Then b = Form1.oMovies.ApplyAudioCodecFilter   ( b , Form1.AudioCodecsFilter    )
-        If Form1.AudioLanguagesFilter<>"" Then b = Form1.oMovies.ApplyAudioLanguageFilter( b , Form1.AudioLanguagesFilter )
-        If Form1.AudioChannelsFilter <>"" Then b = Form1.oMovies.ApplyAudioChannelsFilter( b , Form1.AudioChannelsFilter  )
-        If Form1.AudioBitratesFilter <>"" Then b = Form1.oMovies.ApplyAudioBitrateFilter ( b , Form1.AudioBitratesFilter  )
+        If Form1.AudioCodecsFilter    <>"" Then b = Form1.oMovies.ApplyAudioCodecFilter     ( b , Form1.AudioCodecsFilter    )
+        If Form1.AudioLanguagesFilter <>"" Then b = Form1.oMovies.ApplyAudioLanguageFilter  ( b , Form1.AudioLanguagesFilter )
+        If Form1.AudioChannelsFilter  <>"" Then b = Form1.oMovies.ApplyAudioChannelsFilter  ( b , Form1.AudioChannelsFilter  )
+        If Form1.AudioBitratesFilter  <>"" Then b = Form1.oMovies.ApplyAudioBitrateFilter   ( b , Form1.AudioBitratesFilter  )
+        If Form1.NumAudioTracksFilter <>"" Then b = Form1.oMovies.ApplyNumAudioTracksFilter ( b , Form1.NumAudioTracksFilter )
 
+        ' , oMovies.NumAudioTracks   
 
         'Actor
         If Form1.ActorFilter<>"" then

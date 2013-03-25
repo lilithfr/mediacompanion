@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Xml
 Imports System.Threading
-
+Imports System.ComponentModel
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
@@ -25,10 +25,14 @@ Module Ext
 End Module
 
 
-Public Class Preferences
+Public Class Preferences 
+
+    Shared Event PropertyChanged_MkvMergeGuiPath
+
     Public Const SetDefaults = True
     Public Const datePattern As String = "yyyyMMddHHmmss"
     Public Const nfoDatePattern As String = "yyyy-MM-dd"
+
 
     'Not saved items
     Public Shared fixnfoid As Boolean
@@ -112,6 +116,22 @@ Public Class Preferences
     Public Shared ShowMovieGridToolTip As Boolean = False
     Public Shared ShowLogOnError As Boolean = True
     Public Shared font As String
+    Private Shared _MkvMergeGuiPath As String
+
+    Shared Property MkvMergeGuiPath As String
+        Get
+            Return _MkvMergeGuiPath
+        End Get
+        Set (ByVal value As String)
+            If File.Exists(value) Then
+                _MkvMergeGuiPath = value
+                RaiseEvent PropertyChanged_MkvMergeGuiPath
+            End If
+        End Set
+    End Property
+
+
+
 
     'Saved Movie Prefs
     Public Shared DownloadTrailerDuringScrape As Boolean
@@ -510,9 +530,10 @@ Public Class Preferences
         root.AppendChild(doc, "ignorearticle",          ignorearticle)          'CheckBox41
         root.AppendChild(doc, "intruntime",             intruntime)             'CheckBox38
         root.AppendChild(doc, "xbmcartwork",            XBMC_version)           'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
-        root.AppendChild(doc, "ShowMovieGridToolTip",   ShowMovieGridToolTip)   'cbShowMovieGridToolTip
-        root.AppendChild(doc, "ShowLogOnError"      ,   ShowLogOnError      )   'cbShowLogOnError
-        root.AppendChild(doc, "CheckForNewVersion"  ,   CheckForNewVersion  )
+        root.AppendChild(doc, "ShowMovieGridToolTip" ,  ShowMovieGridToolTip )  'cbShowMovieGridToolTip
+        root.AppendChild(doc, "ShowLogOnError"       ,  ShowLogOnError       )  'cbShowLogOnError
+        root.AppendChild(doc, "CheckForNewVersion"   ,  CheckForNewVersion   )
+        root.AppendChild(doc, "MkvMergeGuiPath"      ,  MkvMergeGuiPath      )  'tbMkvMergeGuiPath
 
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -890,6 +911,7 @@ Public Class Preferences
                     Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
                     Case "movie_filters"                        : movie_filters.Load(thisresult)
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
+                    Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml 
 
                     Case Else : Dim x = thisresult
                 End Select
