@@ -9,7 +9,7 @@
     Dim _year As String
     Dim _filedate As String
     Dim _id As String
-    Dim _rating As String
+    Dim _rating As Double
     Dim _top250 As String
     Dim _genre As String
     Dim _playcount As String
@@ -209,11 +209,11 @@
         End Set
     End Property
 
-    Public Property rating
+    Public Property rating As Double
         Get
             Return _rating
         End Get
-        Set(ByVal value)
+        Set(ByVal value As Double)
             _rating = value
         End Set
     End Property

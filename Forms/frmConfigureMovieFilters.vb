@@ -20,12 +20,12 @@ Public Class frmConfigureMovieFilters
         Dim i   As Integer=0
         Dim query = From c As Control In FilterContainer.Controls Where c.Name.IndexOf("cbFilter")=0 Order by Convert.ToInt16(c.Tag.ToString)
 
-        For Each cb As ComboBox In query
+        For Each c As Control In query
 
-            lbl = FilterContainer.Controls("lbl"+ cb.Name.SubString(2,cb.Name.Length-2))
+            lbl = FilterContainer.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
 
             clbMovieFilters.Items.Add(lbl.Text)
-            clbMovieFilters.SetItemChecked(i,cb.Visible)
+            clbMovieFilters.SetItemChecked(i,c.Visible)
             i += 1
         Next
     End Sub
@@ -37,7 +37,7 @@ Public Class frmConfigureMovieFilters
 
 
     Private Sub ConfigureFilters
-        Dim cb    As ComboBox
+        Dim cb    As Control
         Dim lbl   As Label
         Dim show  As Boolean
         Dim item  As String

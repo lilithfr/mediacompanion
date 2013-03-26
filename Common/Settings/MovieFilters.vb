@@ -80,18 +80,18 @@ Public Class MovieFilters
 
 
     Public Sub SetMovieFiltersVisibility(oPanel As Panel)
-        Dim cb    As ComboBox
+        Dim c     As Control
         Dim lbl   As Label
         Dim item  As MovieFilter
 
         For i=Items.Count-1 To 0 Step -1
 
             item = Items(i)
-            cb   = oPanel.Controls(item.Name)
-            lbl  = oPanel.Controls("lbl"+ cb.Name.SubString(2,cb.Name.Length-2))
+            c    = oPanel.Controls(item.Name)
+            lbl  = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
 
-            cb .Tag     = item.Tag
-            cb .Visible = item.Visible
+            c  .Tag     = item.Tag
+            c  .Visible = item.Visible
             lbl.Visible = item.Visible
         Next
     End Sub
@@ -112,11 +112,11 @@ Public Class MovieFilters
 
         Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible Order by Convert.ToInt16(c.Tag.ToString) Descending
 
-        For Each cb As ComboBox In query
-            lbl = oPanel.Controls("lbl"+ cb.Name.SubString(2,cb.Name.Length-2))
+        For Each c As Control In query
+            lbl = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
             Y   = oPanel.Height - (index*FilterSpace)
 
-            cb .Location = New Point( cb .Location.X, Y )
+            c  .Location = New Point( c .Location.X, Y )
             lbl.Location = New Point( lbl.Location.X, Y )
 
             index += 1
@@ -125,23 +125,31 @@ Public Class MovieFilters
 
 
     Public Sub UpdateFromPanel(oPanel As Panel)
+        '
+        'Add new since previous release
+        '
+        Dim query = From 
+                        c As Control In oPanel.Controls 
+                    Where
+                        c.Name.IndexOf("cbFilter")=0 _
+                    And
+                        Not Items.Any(Function(x) x.Name = c.Name)
+                    Select 
+                        c
 
-        If Items.Count=0 Then
-            Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0
+        For Each c As Control In query
+            Dim item As New MovieFilter
+            
+            item.Name = c.Name
+            Items.Add(item)
+        Next
 
-            For Each cb As ComboBox In query
-                Dim item As New MovieFilter
-
-                item.Name = cb.Name
-                Items.Add(item)
-            Next
-        End If
 
         For Each item in Items
-            Dim cb As ComboBox = oPanel.Controls(item.Name)
+            Dim c As Control = oPanel.Controls(item.Name)
 
-            item.Tag     = cb.Tag
-            item.Visible = cb.Visible 
+            item.Tag     = c.Tag
+            item.Visible = c.Visible 
         Next
     End Sub
 

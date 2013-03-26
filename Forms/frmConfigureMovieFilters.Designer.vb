@@ -22,25 +22,15 @@ Partial Class frmConfigureMovieFilters
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.tbMovieFilters = New System.Windows.Forms.TextBox()
         Me.btnApply = New System.Windows.Forms.Button()
         Me.clbMovieFilters = New System.Windows.Forms.CheckedListBox()
+        Me.lblInfo = New System.Windows.Forms.Label()
         Me.SuspendLayout
-        '
-        'tbMovieFilters
-        '
-        Me.tbMovieFilters.BackColor = System.Drawing.Color.DarkSeaGreen
-        Me.tbMovieFilters.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbMovieFilters.Location = New System.Drawing.Point(0, 0)
-        Me.tbMovieFilters.Multiline = true
-        Me.tbMovieFilters.Name = "tbMovieFilters"
-        Me.tbMovieFilters.Size = New System.Drawing.Size(213, 232)
-        Me.tbMovieFilters.TabIndex = 2
         '
         'btnApply
         '
         Me.btnApply.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnApply.Location = New System.Drawing.Point(155, 202)
+        Me.btnApply.Location = New System.Drawing.Point(153, 233)
         Me.btnApply.Name = "btnApply"
         Me.btnApply.Size = New System.Drawing.Size(49, 23)
         Me.btnApply.TabIndex = 6
@@ -51,19 +41,32 @@ Partial Class frmConfigureMovieFilters
         '
         Me.clbMovieFilters.CheckOnClick = true
         Me.clbMovieFilters.FormattingEnabled = true
-        Me.clbMovieFilters.Location = New System.Drawing.Point(12, 12)
+        Me.clbMovieFilters.Location = New System.Drawing.Point(10, 12)
         Me.clbMovieFilters.Name = "clbMovieFilters"
         Me.clbMovieFilters.Size = New System.Drawing.Size(192, 184)
         Me.clbMovieFilters.TabIndex = 9
+        '
+        'lblInfo
+        '
+        Me.lblInfo.AutoSize = true
+        Me.lblInfo.BackColor = System.Drawing.Color.DarkSeaGreen
+        Me.lblInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblInfo.ForeColor = System.Drawing.Color.Black
+        Me.lblInfo.Location = New System.Drawing.Point(30, 199)
+        Me.lblInfo.Name = "lblInfo"
+        Me.lblInfo.Size = New System.Drawing.Size(153, 26)
+        Me.lblInfo.TabIndex = 10
+        Me.lblInfo.Text = "Drag 'n drop to change order."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check\uncheck to show\hide."
         '
         'frmConfigureMovieFilters
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(213, 232)
+        Me.BackColor = System.Drawing.Color.DarkSeaGreen
+        Me.ClientSize = New System.Drawing.Size(213, 268)
+        Me.Controls.Add(Me.lblInfo)
         Me.Controls.Add(Me.clbMovieFilters)
         Me.Controls.Add(Me.btnApply)
-        Me.Controls.Add(Me.tbMovieFilters)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "frmConfigureMovieFilters"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -72,7 +75,7 @@ Partial Class frmConfigureMovieFilters
         Me.PerformLayout
 
 End Sub
-    Friend WithEvents tbMovieFilters As System.Windows.Forms.TextBox
     Friend WithEvents btnApply As System.Windows.Forms.Button
     Friend WithEvents clbMovieFilters As System.Windows.Forms.CheckedListBox
+    Friend WithEvents lblInfo As System.Windows.Forms.Label
 End Class

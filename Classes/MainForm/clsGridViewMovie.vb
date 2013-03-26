@@ -252,6 +252,9 @@ Public Class clsGridViewMovie
         If Yield Then Return
 
 
+        'Rating
+        b = From f In b Where f.rating >= Form1.cbFilterRating.SelectedMin and f.rating <= Form1.cbFilterRating.SelectedMax
+
         'Genre
         If Form1.cbFilterGenre.Text <> "All" Then
             b = From f In b Where f.genre.Contains(Form1.cbFilterGenre.Text.RemoveAfterMatch)

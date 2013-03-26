@@ -3336,6 +3336,7 @@ Public Class Form1
         cbFilterAudioBitrates .SelectedIndex = 0
         cbFilterAudioChannels .SelectedIndex = 0
         cbFilterNumAudioTracks.SelectedIndex = 0
+        cbFilterRating        .Reset
 
         State=ProgramState.Other
     End Sub
@@ -22781,7 +22782,18 @@ Public Class Form1
         HandleMovieFilter_SelectedValueChanged(cbFilterActor,ActorFilter)
     End Sub
 
+    Private Sub cbFilterRatingChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRating.SelectionChanged
+        If State = ProgramState.Other Then
 
+            _yield = True
+            Application.DoEvents
+            _yield = False
+
+            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+
+            DisplayMovie(True)
+        End If
+    End Sub
 
     Sub HandleMovieFilter_SelectedValueChanged(cbFilter As ComboBox, ByRef filterValue As String, Optional replaceUnknown As Boolean = False)
         If State = ProgramState.Other Then
@@ -22795,7 +22807,7 @@ Public Class Form1
             End If
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
+            DisplayMovie
         End If
     End Sub
 
