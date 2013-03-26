@@ -23964,6 +23964,8 @@ End Sub
         Dim displayVersion As String = m.Groups(1).Value.Trim
         Dim latestVersion  As String = displayVersion.Replace(".","")
 
+        If latestVersion.Length<4 Then Exit Sub
+
         Dim currVersion   As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)).Replace(".","").Replace("Version=","")
 
         If latestVersion<>currVersion Then
