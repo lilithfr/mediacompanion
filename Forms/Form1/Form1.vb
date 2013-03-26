@@ -24006,7 +24006,14 @@ End Sub
     End Sub
 
     Private Sub tsmiOpenInMkvmergeGUI_Click( sender As Object,  e As EventArgs) Handles tsmiOpenInMkvmergeGUI.Click
-        Process.Start(Preferences.MkvMergeGuiPath,"""" & Utilities.GetFileName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString) & """")
+
+        If DataGridViewMovies.SelectedRows.Count>10 Then
+            If MsgBox("Are you sure you want to open that many?",MsgBoxStyle.YesNo,"About to open " & DataGridViewMovies.SelectedRows.Count & " instances of Mkvmerge Gui")<>MsgBoxResult.Ok Then Exit Sub
+        End If
+
+        For Each row In DataGridViewMovies.SelectedRows
+            Process.Start(Preferences.MkvMergeGuiPath,"""" & Utilities.GetFileName(row.Cells("fullpathandfilename").Value) & """")
+        Next
     End Sub
 
 
