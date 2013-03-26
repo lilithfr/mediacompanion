@@ -23957,7 +23957,7 @@ End Sub
 
         Dim s As New Classimdb
 
-        Dim html As String = s.loadwebpage(homePage,True).ToString
+        Dim html As String = s.loadwebpage(homePage,True,10).ToString
 
         Dim m = Regex.Match(html,MC_Version_RegEx, RegexOptions.Singleline)
 

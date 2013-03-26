@@ -1523,13 +1523,15 @@ Public Class Classimdb
         Return text
     End Function
 
-    Public Function loadwebpage(ByVal url As String, ByVal IntoSingleString As Boolean)
+    Public Function loadwebpage(ByVal Url As String, ByVal IntoSingleString As Boolean, Optional TimeoutInSecs As Integer=-1)
 
         Dim webpage As New List(Of String)
         Monitor.Enter(Me)
 
         Try
-            Dim wrGETURL As WebRequest = WebRequest.Create(url)
+            Dim wrGETURL As WebRequest = WebRequest.Create(Url)
+
+            If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
 
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
 
