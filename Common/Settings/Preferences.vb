@@ -1009,7 +1009,7 @@ Public Class Preferences
 
 
 
-    Public Shared Function GetPosterPaths(ByVal FullPath As String) As List(Of String)
+    Public Shared Function GetPosterPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
         Dim lst=New List(Of String)
         Dim path As String = FullPath
 
@@ -1026,9 +1026,15 @@ Public Class Preferences
         End If
 
         If Preferences.FrodoEnabled Then
-            path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-poster.jpg")
-            lst.Add( path )
+            If videots = "" Then        
+                path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-poster.jpg")
+                lst.Add( path )
+            Else
+                path = videots+"poster.jpg"
+                lst.Add(path)
+            End If
         End If
+        
 
         Return lst
     End Function

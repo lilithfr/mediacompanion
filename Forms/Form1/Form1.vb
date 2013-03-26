@@ -6584,7 +6584,7 @@ Public Class Form1
 
                 'i1.Image.Save(workingMovieDetails.fileinfo.posterpath, Imaging.ImageFormat.Jpeg)
 
-                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename)
+                Dim Paths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
 
                 For Each pth As String In Paths
                     i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
@@ -18575,10 +18575,14 @@ Public Class Form1
             messbox.Refresh()
             Application.DoEvents()
             Dim posterpath As String = ""
+            Dim isvideotspath As String = ""
             If Not workingMovieDetails Is Nothing Then
                 If workingMovieDetails.fileinfo.fullpathandfilename <> Nothing Then
                     If workingMovieDetails.fileinfo.fullpathandfilename <> "" Then
                         posterpath = Preferences.GetPosterPath(workingMovieDetails.fileinfo.fullpathandfilename)
+                    End If
+                    If workingMovieDetails.fileinfo.videotspath<>"" Then
+                        isvideotspath=workingMovieDetails.fileinfo.videotspath+"poster.jpg"
                     End If
                 End If
             End If
@@ -18611,6 +18615,17 @@ Public Class Form1
                     Try
                  '      Utilities.DownloadImage(moviethumburl, posterpath)
                         Movie.SavePosterImageToCacheAndPath(moviethumburl, posterpath)
+                        If Preferences.FrodoEnabled and isvideotspath<>"" Then
+                            If IO.File.Exists(isvideotspath) Then
+                                Utilities.SafeDeleteFile(isvideotspath)
+                            End If
+                            IO.File.Copy(posterpath,isvideotspath)
+                            GC.Collect
+                            If Not Preferences.EdenEnabled Then
+                                Utilities.SafeDeleteFile(posterpath)
+                            End If
+                            posterpath=isvideotspath
+                        End If
 
                         Dim temppath As String = posterpath.Replace(System.IO.Path.GetFileName(posterpath), "folder.jpg")
                         If Preferences.createfolderjpg = True Then
@@ -23942,7 +23957,7 @@ End Sub
 
         Dim s As New Classimdb
 
-        Dim html As String = s.loadwebpage(homePage,True)
+        Dim html As String = s.loadwebpage(homePage,True).ToString
 
         Dim m = Regex.Match(html,MC_Version_RegEx, RegexOptions.Singleline)
 
