@@ -108,7 +108,7 @@ Public Class MediaInfoExport
         If M.Success Then
             headerTagPresent = True
             tempstring = getTags(M.Groups("header").Value, mediaCollection(0), counter, "!HEADER!", mediaCollection.Count)
-            tempDoc = String.Format("<html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
+            tempDoc = String.Format("<!DOCTYPE html>{0}<head>{1}</head>{0}", vbCrLf, tempstring)
         End If
 
         If Regex.IsMatch(workingTemplate.body, "<<(smallimage|createimage(:\w*?)*)>>") Then
@@ -221,6 +221,13 @@ Public Class MediaInfoExport
 
                 Case "title"
                     strNFOprop = If(movie.title <> Nothing, movie.title, "")
+                    If Not String.IsNullOrEmpty(strNFOprop) And tokenInstr.Length > 1 Then
+                        Dim M As Match = Regex.Match(strNFOprop, "^(?<article>The )(?<title>.*?)$")
+                        If M.Success Then
+                            strNFOprop = M.Groups("title").Value.Trim
+                            If tokenInstr(1) = "append" Then strNFOprop.AppendValue(M.Groups("article").Value.Trim)
+                        End If
+                    End If
 
                 Case "movieyear"
                     strNFOprop = If(movie.year <> Nothing, movie.year, "0000")
