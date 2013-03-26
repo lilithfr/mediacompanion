@@ -939,12 +939,19 @@ Public Class Preferences
 
 
     Public Shared Function FanartExists(NfoPathPrefName As String) As Boolean
-            
+        If Preferences.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
+            NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
+            Return File.Exists(NfoPathPrefName+"fanart.jpg")
+        End If
         Return File.Exists(Preferences.GetFanartPath(NfoPathPrefName))
     End Function
 
 
     Public Shared Function PosterExists(NfoPathPrefName As String) As Boolean
+        If Preferences.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
+            NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
+            Return File.Exists(NfoPathPrefName+"poster.jpg")
+        End If
 
         Return File.Exists(Preferences.GetPosterPath(NfoPathPrefName))
     End Function
@@ -953,7 +960,7 @@ Public Class Preferences
     Public Shared Function GetMissingData(NfoPathPrefName As String) As Byte
 
         Dim MissingData As Byte = 0
-
+        
         If Not Preferences.FanartExists (NfoPathPrefName) Then MissingData += 1
         If Not Preferences.PosterExists (NfoPathPrefName) Then MissingData += 2
         If Not Preferences.TrailerExists(NfoPathPrefName) Then MissingData += 4
