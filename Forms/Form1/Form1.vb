@@ -1744,6 +1744,7 @@ Public Class Form1
                     End If
                 Next
 
+                btnPlayMovie.Enabled = True
                 mov_SplitContainerAutoPosition
 
    '            PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
@@ -1795,6 +1796,8 @@ Public Class Form1
 
             roletxt.Text = ""
             PictureBoxActor.Image = Nothing
+
+            btnPlayMovie.Enabled = False
 
             Me.Refresh()
             Application.DoEvents()
@@ -4474,6 +4477,7 @@ Public Class Form1
         moviethumb.Image = Nothing
         roletxt.Text = ""
         PictureBoxActor.Image = Nothing
+        btnPlayMovie.Enabled = False
     End Sub
 
     
@@ -4486,7 +4490,6 @@ Public Class Form1
     End Sub
     
     Public Sub DisplayMovie(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection, yielding As Boolean)
-
         
         Try
             If selectedRows.Count = 1 Then
@@ -24004,5 +24007,10 @@ End Sub
 
     Private Sub tsmiOpenInMkvmergeGUI_Click( sender As Object,  e As EventArgs) Handles tsmiOpenInMkvmergeGUI.Click
         Process.Start(Preferences.MkvMergeGuiPath,"""" & Utilities.GetFileName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString) & """")
+    End Sub
+
+
+    Private Sub btnPlayMovie_Click( sender As System.Object,  e As System.EventArgs) Handles btnPlayMovie.Click
+        mov_Play("Movie")
     End Sub
 End Class
