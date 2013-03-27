@@ -1468,7 +1468,7 @@ Module Module1
                 Console.WriteLine("Frodo Screenshot Saved")
             ElseIf eden And frodo Then
                 IO.File.Copy(ext, ext2)
-                onsole.WriteLine("Eden & Frodo Screenshot Saved")
+                Console.WriteLine("Eden & Frodo Screenshot Saved")
             End If
         ElseIf edenart Or frodoart Then
             If edenart And Not eden And Not frodoart Then

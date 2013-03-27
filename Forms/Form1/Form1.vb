@@ -673,7 +673,9 @@ Public Class Form1
         '    ExceptionHandler.LogError(ex)
         'End Try
 
-        Preferences.movie_filters.InitFilterPanel(SplitContainer5.Panel2)
+
+        Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
+        UpdateMovieFiltersPanel
 
         If Preferences.CheckForNewVersion Then CheckForNewVersion
     End Sub
@@ -23842,13 +23844,16 @@ Public Class Form1
         frm.Init(SplitContainer5.Panel2)
         
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then 
-            ResizeBottomLHSPanel
-            Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
-            Preferences.movie_filters.UpdateFromPanel(SplitContainer5.Panel2)
+            UpdateMovieFiltersPanel
             Preferences.SaveConfig
         End If
     End Sub
 
+    Sub UpdateMovieFiltersPanel
+        ResizeBottomLHSPanel
+        Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
+        Preferences.movie_filters.UpdateFromPanel     (SplitContainer5.Panel2)
+    End Sub
 
     Private Sub SplitContainer5_DoubleClick(sender As Object,  e As EventArgs) Handles SplitContainer5.DoubleClick
 

@@ -67,16 +67,6 @@ Public Class MovieFilters
         Return child
     End Function
 
-    '
-    ' Load Prefs
-    ' Set filter visibilty + tag for order
-    ' Set filter locations
-    '
-    Public Sub InitFilterPanel(oPanel As Panel)
-
-        SetMovieFiltersVisibility(oPanel)
-        PositionMovieFilters     (oPanel)
-    End Sub
 
 
     Public Sub SetMovieFiltersVisibility(oPanel As Panel)
