@@ -59,7 +59,7 @@
         missingdata1 = movie.missingdata1
         plot = movie.plot.Trim
         source = movie.source
-        votes = movie.votes
+        votes = movie.Votes
         Integer.TryParse(votes.Replace(",",""),IntVotes)
         TitleUcase = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
@@ -93,7 +93,7 @@
                                                   .missingdata1 = Me.missingdata1,
                                                   .plot = Me.plot.Trim,
                                                   .source = Me.source,
-                                                  .votes = Me.votes,
+                                                  .Votes = Me.votes,
                                                   .Resolution = Me.Resolution,
                                                   .Audio      = Me.Audio
                                                  }

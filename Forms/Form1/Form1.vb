@@ -250,8 +250,6 @@ Public Class Form1
             Dim Temp1 As ManifestResourceInfo = asm.GetManifestResourceInfo(Temp)
         Next
 
-        ResetFilters
-
         
         'Try
         '    Dim scraperfunction As New imdb.Classimdbscraper
@@ -664,6 +662,8 @@ Public Class Form1
 
 
         MainFormLoadedStatus = True
+
+        ResetFilters
 
         UpdateFilteredList
 
@@ -3339,6 +3339,8 @@ Public Class Form1
         cbFilterAudioChannels .SelectedIndex = 0
         cbFilterNumAudioTracks.SelectedIndex = 0
         cbFilterRating        .Reset
+        cbFilterVotes         .Max = oMovies.MaxVotes
+        cbFilterVotes         .Reset
 
         State=ProgramState.Other
     End Sub
@@ -22733,10 +22735,7 @@ Public Class Form1
     End Sub
 
     Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterGenre.SelectedValueChanged, cbFilterSource.SelectedValueChanged
-        If State = ProgramState.Other Then
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie()
-        End If
+        ApplyMovieFilters
     End Sub
      
     Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterSet.SelectedValueChanged
@@ -22778,15 +22777,17 @@ Public Class Form1
     End Sub
 
     Private Sub cbFilterRatingChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRating.SelectionChanged
+        ApplyMovieFilters
+    End Sub
+
+    Private Sub cbFilterVotesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterVotes.SelectionChanged
+        ApplyMovieFilters
+    End Sub
+
+    Private Sub ApplyMovieFilters
         If State = ProgramState.Other Then
-
-            _yield = True
-            Application.DoEvents
-            _yield = False
-
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-
-            DisplayMovie(True)
+            DisplayMovie
         End If
     End Sub
 
@@ -22801,8 +22802,7 @@ Public Class Form1
                 If replaceUnknown Then filterValue = filterValue.Replace("Unknown","-1")
             End If
 
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie
+            ApplyMovieFilters
         End If
     End Sub
 

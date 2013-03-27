@@ -825,7 +825,7 @@ Public Class Movie
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle
         _movieCache.sortorder           = _scrapedMovie.fullmoviebody.sortorder
         _movieCache.runtime             = _scrapedMovie.fullmoviebody.runtime
-        _movieCache.votes               = _scrapedMovie.fullmoviebody.votes
+        _movieCache.Votes               = _scrapedMovie.fullmoviebody.votes
         _movieCache.outline             = _scrapedMovie.fullmoviebody.outline
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.year                = _scrapedMovie.fullmoviebody.year

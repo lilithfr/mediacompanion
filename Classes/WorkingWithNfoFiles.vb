@@ -897,7 +897,7 @@ Public Class WorkingWithNfoFiles
                             Case "createdate"
                                 newmovie.createdate = thisresult.InnerText
                             Case "votes"
-                                newmovie.votes = thisresult.InnerText
+                                newmovie.Votes = thisresult.InnerText
 
                             Case "fileinfo"
 

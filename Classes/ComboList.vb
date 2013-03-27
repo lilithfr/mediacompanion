@@ -21,7 +21,7 @@ Public Class ComboList
     Property missingdata1        As Byte   = 0
     Property plot                As String = ""
     Property source              As String = ""
-    Property votes               As String = ""
+    Property Votes               As Integer= 0
     Property Resolution          As Integer= -1
     Property Audio               As New List(Of AudioDetails)
 
@@ -74,7 +74,7 @@ Public Class ComboList
 
     Public ReadOnly Property MissingVotes As Boolean
         Get
-            Return votes.ToString.Trim=""
+            Return Votes.ToString.Trim=""
         End Get
     End Property  
 
@@ -119,7 +119,7 @@ Public Class ComboList
         Me.missingdata1        = From.missingdata1       
         Me.plot                = From.plot               
         Me.source              = From.source             
-        Me.votes               = From.votes              
+        Me.Votes               = From.Votes              
         Me.Resolution          = From.Resolution    
         
         AssignAudio(From.Audio)

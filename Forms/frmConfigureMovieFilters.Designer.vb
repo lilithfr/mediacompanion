@@ -25,12 +25,14 @@ Partial Class frmConfigureMovieFilters
         Me.btnApply = New System.Windows.Forms.Button()
         Me.clbMovieFilters = New System.Windows.Forms.CheckedListBox()
         Me.lblInfo = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel1.SuspendLayout
         Me.SuspendLayout
         '
         'btnApply
         '
         Me.btnApply.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btnApply.Location = New System.Drawing.Point(153, 233)
+        Me.btnApply.Location = New System.Drawing.Point(153, 274)
         Me.btnApply.Name = "btnApply"
         Me.btnApply.Size = New System.Drawing.Size(49, 23)
         Me.btnApply.TabIndex = 6
@@ -39,43 +41,55 @@ Partial Class frmConfigureMovieFilters
         '
         'clbMovieFilters
         '
+        Me.clbMovieFilters.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.clbMovieFilters.CheckOnClick = true
         Me.clbMovieFilters.FormattingEnabled = true
         Me.clbMovieFilters.Location = New System.Drawing.Point(10, 12)
         Me.clbMovieFilters.Name = "clbMovieFilters"
-        Me.clbMovieFilters.Size = New System.Drawing.Size(192, 184)
+        Me.clbMovieFilters.Size = New System.Drawing.Size(192, 212)
         Me.clbMovieFilters.TabIndex = 9
         '
         'lblInfo
         '
         Me.lblInfo.AutoSize = true
-        Me.lblInfo.BackColor = System.Drawing.Color.DarkSeaGreen
         Me.lblInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblInfo.ForeColor = System.Drawing.Color.Black
-        Me.lblInfo.Location = New System.Drawing.Point(30, 199)
+        Me.lblInfo.Location = New System.Drawing.Point(18, 6)
         Me.lblInfo.Name = "lblInfo"
         Me.lblInfo.Size = New System.Drawing.Size(153, 26)
         Me.lblInfo.TabIndex = 10
         Me.lblInfo.Text = "Drag 'n drop to change order."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Check\uncheck to show\hide."
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.SystemColors.Info
+        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.lblInfo)
+        Me.Panel1.Location = New System.Drawing.Point(10, 225)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(192, 42)
+        Me.Panel1.TabIndex = 11
         '
         'frmConfigureMovieFilters
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DarkSeaGreen
-        Me.ClientSize = New System.Drawing.Size(213, 268)
-        Me.Controls.Add(Me.lblInfo)
+        Me.ClientSize = New System.Drawing.Size(213, 302)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.clbMovieFilters)
         Me.Controls.Add(Me.btnApply)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "frmConfigureMovieFilters"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Configure Movie Filters"
+        Me.Panel1.ResumeLayout(false)
+        Me.Panel1.PerformLayout
         Me.ResumeLayout(false)
-        Me.PerformLayout
 
 End Sub
     Friend WithEvents btnApply As System.Windows.Forms.Button
     Friend WithEvents clbMovieFilters As System.Windows.Forms.CheckedListBox
     Friend WithEvents lblInfo As System.Windows.Forms.Label
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
 End Class

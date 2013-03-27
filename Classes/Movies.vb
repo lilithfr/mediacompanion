@@ -61,6 +61,17 @@ Public Class Movies
     End Property    
 
 
+    Public ReadOnly Property MaxVotes As Integer
+        Get
+            If MovieCache.Count=0 Then Return 0
+
+            Dim q = Aggregate m In MovieCache Into Max(m.Votes)
+
+            Return q
+        End Get
+    End Property    
+
+
     Public ReadOnly Property GeneralFilters As List(Of String)
         Get
             Dim lst As List(Of String) = New List(Of String)
@@ -842,7 +853,11 @@ Public Class Movies
                             Case "runtime"
                                 newmovie.runtime = detail.InnerText
                             Case "votes"
-                                newmovie.votes = detail.InnerText
+                                Try
+                                    newmovie.Votes = detail.InnerText
+                                Catch
+                                    newmovie.Votes = 0
+                                End Try
 
                             Case "Resolution" : newmovie.Resolution = detail.InnerText
 
@@ -1020,16 +1035,17 @@ Public Class Movies
             childchild.InnerText = movie.year
             child.AppendChild(childchild)
 
-            If movie.votes <> Nothing And movie.votes <> "" Then
-                childchild = doc.CreateElement("votes")
-                childchild.InnerText = movie.votes
-                child.AppendChild(childchild)
-            Else
-                childchild = doc.CreateElement("votes")
-                childchild.InnerText = ""
-                child.AppendChild(childchild)
-            End If
+            'If movie.Votes <> Nothing And movie.Votes <> "" Then
+            '    childchild = doc.CreateElement("votes")
+            '    childchild.InnerText = movie.Votes
+            '    child.AppendChild(childchild)
+            'Else
+            '    childchild = doc.CreateElement("votes")
+            '    childchild.InnerText = ""
+            '    child.AppendChild(childchild)
+            'End If
 
+            child.AppendChild(doc, "votes"     , movie.Votes     )     
             child.AppendChild(doc, "Resolution", movie.Resolution)     
             
    '        childchild = doc.CreateElement("audio")
