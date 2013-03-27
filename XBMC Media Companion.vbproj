@@ -134,6 +134,7 @@
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\NewVersionCheckResult.vb" />
     <Compile Include="Classes\MovieProgress.vb" />
     <Compile Include="Classes\FrodoFanartThumb.vb" />
     <Compile Include="Classes\MainForm\clsGridViewMovie.vb" />

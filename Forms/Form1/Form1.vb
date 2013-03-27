@@ -19,7 +19,8 @@ Public Class Form1
 
     Const NFO_INDEX As Integer = 1
 
-    Public Dim WithEvents BckWrkScnMovies As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
 
 
     #Region "Movie scraping related objects"
@@ -677,7 +678,7 @@ Public Class Form1
         Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
         UpdateMovieFiltersPanel
 
-        If Preferences.CheckForNewVersion Then CheckForNewVersion
+        If Preferences.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
     End Sub
 
 
@@ -23963,9 +23964,43 @@ Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.Windo
 End Sub
 
 
-    Public Sub CheckForNewVersion
+
+    Sub BckWrkCheckNewVersion_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkCheckNewVersion.DoWork
+
+        Dim ShowNoNewVersionMsgBox As String = DirectCast(e.Argument, Boolean)
+
+        e.Result = New NewVersionCheckResult(ShowNoNewVersionMsgBox,CheckForNewVersion)
+    End Sub
+
+
+
+    Private Sub BckWrkCheckNewVersion_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkCheckNewVersion.RunWorkerCompleted
+
+        Dim Results As NewVersionCheckResult = e.Result
+
+        If IsNothing(Results.NewVersion) Then 
+
+            If Results.ShowNoNewVersionMsgBox Then
+                MsgBox("You're up-to-date!", MsgBoxStyle.OkOnly, "No new version found")
+            End If
+
+            Exit Sub
+        End If
+        
+
+        Dim answer = MsgBox("Would you like to open the download page?", MsgBoxStyle.YesNo, "New version " & Results.NewVersion & " available")
+
+        If answer=MsgBoxResult.Yes Then
+            Dim downloadPage = "http://mediacompanion.codeplex.com/releases"
+            OpenUrl(downloadPage)
+        End If
+    End Sub
+
+
+
+    Public Function CheckForNewVersion As String
         Dim homePage         = "http://mediacompanion.codeplex.com"
-        Dim downloadPage     = "http://mediacompanion.codeplex.com/releases"
+        
         Dim MC_Version_RegEx = "<th><span class=""rating_header"">current</span></th>.*?<td>[\s]+.*?([0-9]*\.?[0-9]+).*?[\s]+</td>"
 
         Dim s As New Classimdb
@@ -23976,18 +24011,13 @@ End Sub
 
         Dim displayVersion As String = m.Groups(1).Value.Trim
         Dim latestVersion  As String = displayVersion.Replace(".","")
+        Dim currVersion    As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)).Replace(".","").Replace("Version=","")
 
-        If latestVersion.Length<4 Then Exit Sub
+        If latestVersion.Length<4     Then Return Nothing
+        If latestVersion<>currVersion Then Return displayVersion
 
-        Dim currVersion   As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)).Replace(".","").Replace("Version=","")
-
-        If latestVersion<>currVersion Then
-            Dim answer = MsgBox("Would you like to open the download page?", MsgBoxStyle.YesNo, "New version " & displayVersion & " available")
-            If answer=MsgBoxResult.Yes Then
-                OpenUrl(downloadPage)
-            End If
-         End If
-    End Sub
+        Return Nothing
+    End Function
 
     Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles llMkvMergeGuiPath.Click
         OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
@@ -24029,5 +24059,9 @@ End Sub
 
     Private Sub btnPlayMovie_Click( sender As System.Object,  e As System.EventArgs) Handles btnPlayMovie.Click
         mov_Play("Movie")
+    End Sub
+
+    Private Sub tsmiCheckForNewVersion_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiCheckForNewVersion.Click
+        BckWrkCheckNewVersion.RunWorkerAsync(True)
     End Sub
 End Class
