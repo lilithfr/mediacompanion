@@ -1453,8 +1453,10 @@ Module Module1
                     If Not eden And frodo Then
                         IO.File.Copy(ext, ext2)
                         IO.File.Delete(ext)
+                        Console.WriteLine("Frodo Episode Thumb downloaded")
                     ElseIf eden And frodo Then
                         IO.File.Copy(ext, ext2)
+                        Console.WriteLine("Eden & Frodo Episode Thumb downloaded")
                     End If
                 End If
         ElseIf (Not edenart And Not frodoart) And Preferences.autoepisodescreenshot = True Then
@@ -1463,8 +1465,10 @@ Module Module1
             If Not eden And frodo Then
                 IO.File.Copy(ext, ext2)
                 IO.File.Delete(ext)
+                Console.WriteLine("Frodo Screenshot Saved")
             ElseIf eden And frodo Then
                 IO.File.Copy(ext, ext2)
+                onsole.WriteLine("Eden & Frodo Screenshot Saved")
             End If
         ElseIf edenart Or frodoart Then
             If edenart And Not eden And Not frodoart Then
