@@ -215,7 +215,7 @@ Public Class Preferences
 
     Public Shared movie_filters As MovieFilters = New MovieFilters
 
-    Public Shared CheckForNewVersion As Boolean=True
+    Public Shared CheckForNewVersion As Boolean=False
 
     Public Shared Property movieignorepart As Boolean
         Get

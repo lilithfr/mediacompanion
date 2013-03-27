@@ -1442,7 +1442,7 @@ Partial Public Class Form1
                     End If
 
                     TvGetArtwork(NewShow)
-
+                    
                     If Preferences.TvdbActorScrape = 0 Or Preferences.TvdbActorScrape = 2 Then
                         NewShow.EpisodeActorSource.Value = "tvdb"
                     Else
@@ -2222,10 +2222,7 @@ Partial Public Class Form1
         messbox.Refresh()
         Application.DoEvents()
         Try
-            Dim isseason As Boolean = Me.tvBatchList.shSeason
-            Me.tvBatchList.shSeason=True
             TvGetArtwork(BrokenShow)
-            Me.tvBatchList.shSeason=isseason
         Catch
         End Try
         Call tv_ShowLoad(BrokenShow)
@@ -2695,7 +2692,7 @@ Partial Public Class Form1
         Loop
     End Sub
 
-    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shPosters As Boolean = True, Optional ByVal Both As Integer = 0)
+    Private Sub TvGetArtwork(ByVal currentshow As Media_Companion.TvShow, Optional ByVal shFanart As Boolean = True, Optional ByVal shPosters As Boolean = True,Optional ByVal shSeason As Boolean = True)
         Try
 
             Dim tvdbstuff As New TVDBScraper
@@ -2709,7 +2706,6 @@ Partial Public Class Form1
             showlist.LoadXml(thumblist)
             Dim thisresult As XmlNode = Nothing
             Dim artlist As New List(Of TvBanners)
-            Dim shSeason As Boolean = Me.tvBatchList.shSeason
             artlist.Clear()
             For Each thisresult In showlist("banners")
                 Select Case thisresult.Name
@@ -2945,60 +2941,62 @@ Partial Public Class Form1
             End If
 
             'Main Fanart
-            Dim fanartposter As String = ""
-            For Each Image In artlist
-                If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
-                    fanartposter = Image.Url
-                    Exit For
+            If shFanart Then
+                Dim fanartposter As String = ""
+                For Each Image In artlist
+                    If Image.Language = Preferences.TvdbLanguageCode And Image.BannerType = "fanart" Then
+                        fanartposter = Image.Url
+                        Exit For
+                    End If
+                Next
+                If fanartposter = "" Then
+                    For Each Image In artlist
+                        If Image.Language = "en" And Image.BannerType = "fanart" Then
+                            fanartposter = Image.Url
+                            Exit For
+                        End If
+                    Next
                 End If
-            Next
-            If fanartposter = "" Then
-                For Each Image In artlist
-                    If Image.Language = "en" And Image.BannerType = "fanart" Then
-                        fanartposter = Image.Url
-                        Exit For
-                    End If
-                Next
-            End If
-            If fanartposter = "" Then
-                For Each Image In artlist
-                    If Image.BannerType = "fanart" Then
-                        fanartposter = Image.Url
-                        Exit For
-                    End If
-                Next
-            End If
-            If tvfanart Then
-                If fanartposter <> "" Then
-                    Dim fanartposterpath As String = String.Empty
-                    'If frodo Then
-                    fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                    'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
-                    'ElseIf eden Then
-                    'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                    'End If
-                    If Not IO.File.Exists(fanartposterpath) Then
-                        Utilities.DownloadFile(fanartposter, fanartposterpath)
-                    End If
-                    If frodo And isseasonall <> "none" Then
-                        Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("fanart.jpg", "season-all-fanart.jpg"), overwriteimage)
-                    End If
-                    'If IO.File.Exists(fanartposterpath) And frodo And eden Then
-                    'Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("season-all-", ""), overwriteimage)
-                    'End If
-                    '*** Haven't used Movie.SaveFanartImageToCacheAndPath because this code needs to be common for ***
-                    '*** Movie and TV, I can see this use of movie class for TV shows as potential future issue.   *** - HueyHQ
+                If fanartposter = "" Then
+                    For Each Image In artlist
+                        If Image.BannerType = "fanart" Then
+                            fanartposter = Image.Url
+                            Exit For
+                        End If
+                    Next
+                End If
+                If tvfanart Then
+                    If fanartposter <> "" Then
+                        Dim fanartposterpath As String = String.Empty
+                        'If frodo Then
+                        fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
+                        'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
+                        'ElseIf eden Then
+                        'fanartposterpath = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
+                        'End If
+                        If Not IO.File.Exists(fanartposterpath) Then
+                            Utilities.DownloadFile(fanartposter, fanartposterpath)
+                        End If
+                        If frodo And isseasonall <> "none" Then
+                            Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("fanart.jpg", "season-all-fanart.jpg"), overwriteimage)
+                        End If
+                        'If IO.File.Exists(fanartposterpath) And frodo And eden Then
+                        'Utilities.SafeCopyFile(fanartposterpath, fanartposterpath.Replace("season-all-", ""), overwriteimage)
+                        'End If
+                        '*** Haven't used Movie.SaveFanartImageToCacheAndPath because this code needs to be common for ***
+                        '*** Movie and TV, I can see this use of movie class for TV shows as potential future issue.   *** - HueyHQ
 
-                    'Dim fanartpath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
-                    'If frodo Then
-                    '    Dim seasonfrodopath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
-                    '    If Not IO.File.Exists(fanartpath) Then
-                    '        Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonfrodopath)
-                    '    End If
-                    'End If
-                    'If Not IO.File.Exists(fanartpath) Then
-                    '    Movie.SaveFanartImageToCacheAndPath(fanartposter, fanartpath)
-                    'End If
+                        'Dim fanartpath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "fanart.jpg")
+                        'If frodo Then
+                        '    Dim seasonfrodopath As String = currentshow.NfoFilePath.Replace(IO.Path.GetFileName(currentshow.NfoFilePath), "season-all-fanart.jpg")
+                        '    If Not IO.File.Exists(fanartpath) Then
+                        '        Movie.SaveFanartImageToCacheAndPath(fanartposter, seasonfrodopath)
+                        '    End If
+                        'End If
+                        'If Not IO.File.Exists(fanartpath) Then
+                        '    Movie.SaveFanartImageToCacheAndPath(fanartposter, fanartpath)
+                        'End If
+                    End If
                 End If
             End If
         Catch

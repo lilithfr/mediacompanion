@@ -19606,19 +19606,12 @@ Public Class Form1
 
 
 
-                        'posters
+                        'Posters, Fanart and Season art
                         Dim artlist As New List(Of TvBanners)
                         Dim showlist2 As New XmlDocument
                         Dim artdone As Boolean = False
-                        Dim istvfanart As Boolean = Preferences.tvfanart
                         If tvBatchList.doShowArt = True Then
-                            If Not tvBatchList.shFanart Then
-                                Preferences.tvfanart = False
-                            End If
-                            TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shPosters)
-                            If Not tvBatchList.shFanart Then
-                                Preferences.tvfanart = istvfanart
-                            End If
+                            TvGetArtwork(Cache.TvCache.Shows(f), tvBatchList.shFanart, tvBatchList.shPosters, tvBatchList.shSeason)
                         End If
                     End If
                     If tvBatchList.doEpisodes = True Then
@@ -23907,8 +23900,8 @@ Public Class Form1
 Private Sub ReScrFanartToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
         Try
             Dim Showname As TvShow = tv_ShowSelectedCurrently()
-            Me.tvBatchList.shFanart = True
-            TvGetArtwork(Showname,False)
+            'Me.tvBatchList.shFanart = True
+            TvGetArtwork(Showname,True, False, False)
             tv_ShowLoad(Showname)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
