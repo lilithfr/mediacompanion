@@ -46,7 +46,7 @@ Public Class ComboList
 
     Public ReadOnly Property MissingRating As Boolean
         Get
-            Return rating.ToString.Trim=""
+            Return rating=0     '.ToString.Trim=""
         End Get
     End Property  
 

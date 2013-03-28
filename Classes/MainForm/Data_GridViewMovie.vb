@@ -486,4 +486,10 @@
         End Get
     End Property  
 
+    Public ReadOnly Property DisplayRating As String
+        Get
+            Return _rating.ToString("f1")
+        End Get
+
+    End Property
 End Class

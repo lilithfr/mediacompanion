@@ -130,7 +130,7 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"    ,"Folder name"                                                             )
         IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year","Movie year"   ,"Year"    , -20                                           )
         IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"  ,"Date Modified","Modified"                                                )
-        IniColumn(dgv,"rating"           ,GridFieldToDisplay2="Rating"    ,               ,          , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"    ,"Rating"       ,"Rating"  , -20, DataGridViewContentAlignment.MiddleCenter)
         IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"   ,"Runtime"      ,          , -20, DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added","Date Added"   ,"Added"                                                   )
         IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"     ,"Votes"        ,          ,    , DataGridViewContentAlignment.MiddleRight )
@@ -195,7 +195,7 @@ Public Class clsGridViewMovie
 
             If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
             If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
-            If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("rating"           ).Width
+            If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
             If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
             If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
             If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width

@@ -9,13 +9,27 @@ Module StringExtensions
     
     <Extension()> _
     Function ToInt(ByVal s As String) As Integer
-        Dim tempInt as Integer
 
-        If Integer.TryParse(s.Replace(",",""), tempInt) Then Return tempInt
+        Dim num as Integer
+
+        If Integer.TryParse(s.Replace(",",""), num) Then Return num
         
         Return 0
+
+    End Function
+    
+    <Extension()> _
+    Function ToDouble(ByVal s As String) As Double
+
+        Dim num as Double
+
+        If Double.TryParse(s.Replace(",",""), num) Then Return num
+        
+        Return 0
+
     End Function
 
+    
 End Module
 
 Public Class WorkingWithNfoFiles
