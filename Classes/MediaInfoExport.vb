@@ -225,7 +225,7 @@ Public Class MediaInfoExport
                         Dim M As Match = Regex.Match(strNFOprop, "^(?<article>The )(?<title>.*?)$")
                         If M.Success Then
                             strNFOprop = M.Groups("title").Value.Trim
-                            If tokenInstr(1) = "append" Then strNFOprop.AppendValue(M.Groups("article").Value.Trim)
+                            If tokenInstr(1).StartsWith("append") Then strNFOprop.AppendValue(M.Groups("article").Value.Trim)
                         End If
                     End If
 
