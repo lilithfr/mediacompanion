@@ -253,8 +253,8 @@ Public Class clsGridViewMovie
 
         
         b = From f In b Where f.rating   >= Form1.cbFilterRating.SelectedMin and f.rating   <= Form1.cbFilterRating.SelectedMax     'Rating
-
         b = From f In b Where f.IntVotes >= Form1.cbFilterVotes .SelectedMin and f.IntVotes <= Form1.cbFilterVotes .SelectedMax     'Votes
+        b = From f In b Where f.year     >= Form1.cbFilterYear  .SelectedMin and f.year     <= Form1.cbFilterYear  .SelectedMax     'Year
        
 
         'Genre

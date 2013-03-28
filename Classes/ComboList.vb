@@ -7,7 +7,7 @@ Public Class ComboList
     Property foldername          As String = ""
     Property title               As String = ""
     Property originaltitle       As String = ""
-    Property year                As String = ""
+    Property year                As Integer= 0
     Property filedate            As String = ""
     Property id                  As String = ""
     Property rating              As String = ""
@@ -74,14 +74,14 @@ Public Class ComboList
 
     Public ReadOnly Property MissingVotes As Boolean
         Get
-            Return Votes.ToString.Trim=""
+            Return Votes=0          '.ToString.Trim=""
         End Get
     End Property  
 
 
     Public ReadOnly Property MissingYear As Boolean
         Get
-            Return year.ToString.Trim=""
+            Return year=0           '.ToString.Trim=""
         End Get
     End Property  
 

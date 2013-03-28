@@ -3,6 +3,20 @@ Imports System.IO
 Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports Media_Companion
+Imports System.Runtime.CompilerServices
+
+Module StringExtensions
+    
+    <Extension()> _
+    Function ToInt(ByVal s As String) As Integer
+        Dim tempInt as Integer
+
+        If Integer.TryParse(s.Replace(",",""), tempInt) Then Return tempInt
+        
+        Return 0
+    End Function
+
+End Module
 
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
@@ -864,7 +878,7 @@ Public Class WorkingWithNfoFiles
                             Case "source"
                                 newmovie.source = thisresult.InnerText
                             Case "year"
-                                newmovie.year = thisresult.InnerText
+                                newmovie.year = thisresult.InnerText.ToInt
                             Case "outline"
                                 newmovie.outline = thisresult.InnerText
                             Case "plot"
@@ -897,7 +911,8 @@ Public Class WorkingWithNfoFiles
                             Case "createdate"
                                 newmovie.createdate = thisresult.InnerText
                             Case "votes"
-                                newmovie.Votes = thisresult.InnerText
+                                newmovie.Votes = thisresult.InnerText.ToInt
+
 
                             Case "fileinfo"
 

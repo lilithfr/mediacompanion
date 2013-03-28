@@ -61,6 +61,17 @@ Public Class Movies
     End Property    
 
 
+    Public ReadOnly Property MinVotes As Integer
+        Get
+            If MovieCache.Count=0 Then Return 0
+
+            Dim q = Aggregate m In MovieCache Into Min(m.Votes)
+
+            Return q
+        End Get
+    End Property    
+
+
     Public ReadOnly Property MaxVotes As Integer
         Get
             If MovieCache.Count=0 Then Return 0
@@ -70,6 +81,29 @@ Public Class Movies
             Return q
         End Get
     End Property    
+
+
+    Public ReadOnly Property MinYear As Integer
+        Get
+            If MovieCache.Count=0 Then Return 0
+
+            Dim q = Aggregate m In MovieCache Into Min(m.Year)
+
+            Return q
+        End Get
+    End Property    
+
+
+    Public ReadOnly Property MaxYear As Integer
+        Get
+            If MovieCache.Count=0 Then Return 0
+
+            Dim q = Aggregate m In MovieCache Into Max(m.Year)
+
+            Return q
+        End Get
+    End Property    
+
 
 
     Public ReadOnly Property GeneralFilters As List(Of String)

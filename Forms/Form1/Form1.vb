@@ -3347,9 +3347,17 @@ Public Class Form1
         cbFilterAudioBitrates .SelectedIndex = 0
         cbFilterAudioChannels .SelectedIndex = 0
         cbFilterNumAudioTracks.SelectedIndex = 0
+
         cbFilterRating        .Reset
+
+        cbFilterVotes         .Min = oMovies.MinVotes
         cbFilterVotes         .Max = oMovies.MaxVotes
         cbFilterVotes         .Reset
+
+        cbFilterYear          .Min = oMovies.MinYear
+        cbFilterYear          .Max = oMovies.MaxYear
+        cbFilterYear          .Reset
+
 
         State=ProgramState.Other
     End Sub
@@ -22790,6 +22798,10 @@ Public Class Form1
     End Sub
 
     Private Sub cbFilterVotesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterVotes.SelectionChanged
+        ApplyMovieFilters
+    End Sub
+
+    Private Sub cbFilterYearChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.SelectionChanged
         ApplyMovieFilters
     End Sub
 
