@@ -23871,19 +23871,24 @@ Public Class Form1
     End Sub
 
     Sub UpdateMovieFiltersPanel
-        ResizeBottomLHSPanel
+        'ResizeBottomLHSPanel
         Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
         Preferences.movie_filters.UpdateFromPanel     (SplitContainer5.Panel2)
+        ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
     End Sub
+
+    ReadOnly Property MovieFiltersPanelMaxHeight As Integer
+        Get
+            Return Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
+        End Get
+    End Property
 
     Private Sub SplitContainer5_DoubleClick(sender As Object,  e As EventArgs) Handles SplitContainer5.DoubleClick
 
-        Dim max = Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
-
-        If SplitContainer5.Panel2.Height = max-5 Then
+        If SplitContainer5.Panel2.Height = MovieFiltersPanelMaxHeight-5 Then
             ResizeBottomLHSPanel(0)
         Else
-            ResizeBottomLHSPanel(max)
+            ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
         End If
     End Sub
 
@@ -23904,7 +23909,7 @@ Public Class Form1
 
         If Not MainFormLoadedStatus Then Return
  
-        Dim maxSize = Preferences.movie_filters.GetMovieFilterPanelSize(SplitContainer5.Panel2)
+        Dim maxSize = MovieFiltersPanelMaxHeight
         Dim minSize = 2
 
         If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
