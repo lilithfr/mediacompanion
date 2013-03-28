@@ -825,10 +825,10 @@ Public Class Movie
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle
         _movieCache.sortorder           = _scrapedMovie.fullmoviebody.sortorder
         _movieCache.runtime             = _scrapedMovie.fullmoviebody.runtime
-        _movieCache.Votes               = _scrapedMovie.fullmoviebody.votes
+        _movieCache.Votes               = _scrapedMovie.fullmoviebody.votes.ToInt
         _movieCache.outline             = _scrapedMovie.fullmoviebody.outline
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
-        _movieCache.year                = _scrapedMovie.fullmoviebody.year
+        _movieCache.year                = _scrapedMovie.fullmoviebody.year.ToInt
         _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
         _movieCache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
 
