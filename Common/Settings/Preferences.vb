@@ -2,6 +2,7 @@
 Imports System.Xml
 Imports System.Threading
 Imports System.ComponentModel
+Imports MediaInfoNET
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
@@ -123,7 +124,7 @@ Public Class Preferences
             Return _MkvMergeGuiPath
         End Get
         Set (ByVal value As String)
-            If File.Exists(value) Then
+            If IO.File.Exists(value) Then
                 _MkvMergeGuiPath = value
                 RaiseEvent PropertyChanged_MkvMergeGuiPath
             End If
@@ -676,7 +677,7 @@ Public Class Preferences
         tableview.Clear()
 
 
-        If Not File.Exists(workingProfile.Config) Then
+        If Not IO.File.Exists(workingProfile.Config) Then
             Exit Sub
         End If
 
@@ -934,26 +935,26 @@ Public Class Preferences
 
     Public Shared Function TrailerExists(NfoPathPrefName As String) As Boolean
             
-        Return File.Exists(ActualTrailerPath(NfoPathPrefName))
+        Return IO.File.Exists(ActualTrailerPath(NfoPathPrefName))
     End Function
 
 
     Public Shared Function FanartExists(NfoPathPrefName As String) As Boolean
         If Preferences.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
-            Return File.Exists(NfoPathPrefName+"fanart.jpg")
+            Return IO.File.Exists(NfoPathPrefName+"fanart.jpg")
         End If
-        Return File.Exists(Preferences.GetFanartPath(NfoPathPrefName))
+        Return IO.File.Exists(Preferences.GetFanartPath(NfoPathPrefName))
     End Function
 
 
     Public Shared Function PosterExists(NfoPathPrefName As String) As Boolean
         If Preferences.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower="video_ts.nfo" Then
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
-            Return File.Exists(NfoPathPrefName+"poster.jpg")
+            Return IO.File.Exists(NfoPathPrefName+"poster.jpg")
         End If
 
-        Return File.Exists(Preferences.GetPosterPath(NfoPathPrefName))
+        Return IO.File.Exists(Preferences.GetPosterPath(NfoPathPrefName))
     End Function
 
 
@@ -978,7 +979,7 @@ Public Class Preferences
             For Each item In "mp4,flv,webm,mov,m4v".Split(",")
                 FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
 
-                If File.Exists(FileName) Then Return FileName
+                If IO.File.Exists(FileName) Then Return FileName
             Next
 
             Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
@@ -990,10 +991,10 @@ Public Class Preferences
 
         Dim Path As String = FullPath.Replace(IO.Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
 
-        If Preferences.FrodoEnabled And File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
-        If Preferences.EdenEnabled  And File.Exists(Path & ".tbn") Then Return Path & ".tbn"  
+        If Preferences.FrodoEnabled And IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
+        If Preferences.EdenEnabled  And IO.File.Exists(Path & ".tbn") Then Return Path & ".tbn"  
           
-        If File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
+        If IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
         
         Return Path & ".tbn"  
     End Function
@@ -1126,12 +1127,15 @@ Public Class Preferences
             Dim curVS As Integer = 0
             Dim addVS As Boolean = False
             Dim numOfVideoStreams As Integer = MI.Count_Get(StreamKind.Visual)
+            Dim aviFile As MediaFile = New MediaFile(filename)
 
             Dim tempmediainfo As String
             Dim tempmediainfo2 As String
 
-            workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
-            workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
+            'workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
+            workingfiledetails.filedetails_video.Width.Value = aviFile.Video(0).Width
+            'workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
+            workingfiledetails.filedetails_video.Height.Value = aviFile.Video(0).Height
 
             Try
                 Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
@@ -1143,6 +1147,7 @@ Public Class Preferences
 
 
             tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+            tempmediainfo = aviFile.Video(0).Format
             If tempmediainfo.ToLower = "avc" Then
                 tempmediainfo2 = "h264"
             Else
@@ -1151,7 +1156,8 @@ Public Class Preferences
 
             'workingfiledetails.filedetails_video.codec = tempmediainfo2
             'workingfiledetails.filedetails_video.formatinfo = tempmediainfo
-            workingfiledetails.filedetails_video.Codec.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            'workingfiledetails.filedetails_video.Codec.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            workingfiledetails.filedetails_video.Codec.Value = aviFile.Video(0).CodecID
             If workingfiledetails.filedetails_video.Codec.Value = "DX50" Then
                 workingfiledetails.filedetails_video.Codec.Value = "DIVX"
             End If
@@ -1159,7 +1165,7 @@ Public Class Preferences
             If workingfiledetails.filedetails_video.Codec.Value.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
                 workingfiledetails.filedetails_video.Codec.Value = "h264"
             End If
-            workingfiledetails.filedetails_video.FormatInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+            workingfiledetails.filedetails_video.FormatInfo.Value = aviFile.Video(0).CodecID
             Dim fs(100) As String
             For f = 1 To 100
                 fs(f) = MI.Get_(StreamKind.Visual, 0, f)
@@ -1269,6 +1275,7 @@ Public Class Preferences
             Dim numOfAudioStreams As Integer = MI.Count_Get(StreamKind.Audio)
             Dim curAS As Integer = 0
             Dim addAS As Boolean = False
+            Dim tmpaud As String = ""
 
             'get audio data
             If numOfAudioStreams > 0 Then
@@ -1278,13 +1285,18 @@ Public Class Preferences
                     If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                         audio.Codec.Value = "MP3"
                     Else
-                        audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
+                        'audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
+                        audio.Codec.Value = aviFile.Audio(curAS).Format 
                     End If
                     If audio.Codec.Value = "AC-3" Then
                         audio.Codec.Value = "AC3"
                     End If
+                    tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                     If audio.Codec.Value = "DTS" Then
-                        audio.Codec.Value = "dca"
+                        If tmpaud = "dts ma / core" Then audio.Codec.Value = "dtshd_ma"
+                        If tmpaud="dts hra / core" Then audio.Codec.Value="dtshd_hra"
+                    Else
+                        audio.Codec.Value = "DTS"
                     End If
                     audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
                     audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
@@ -1313,3 +1325,4 @@ Public Class Preferences
         Return Nothing
     End Function
 End Class
+
