@@ -10,16 +10,16 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.ComponentModel
 Imports System.Linq
-Imports System.Runtime.InteropServices
+'Imports System.Runtime.InteropServices
 
 #Const SilentErrorScream = False
 #Const NoRefocus = True
 
-Module ModWindows
-    <DllImport("user32.dll")> _
-    Function WindowFromPoint(ByVal Point As POINT) As IntPtr
-    End Function
-End Module
+'Module ModWindows
+'    <DllImport("user32.dll")> _
+'    Function WindowFromPoint(ByVal Point As POINT) As IntPtr
+'    End Function
+'End Module
 
 
 
@@ -22805,6 +22805,12 @@ Public Class Form1
         ApplyMovieFilters
     End Sub
 
+    Property ShowMovieFilterConfig As Boolean = True
+
+    Private Sub cbFilterEndSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.EndSliding, cbFilterVotes.EndSliding, cbFilterRating.EndSliding
+        ShowMovieFilterConfig = False
+    End Sub
+
     Private Sub ApplyMovieFilters
         If State = ProgramState.Other Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
@@ -24093,22 +24099,27 @@ End Sub
 
     Private Sub cmsConfigureMovieFilters_Opening(sender As Object,  e As CancelEventArgs) Handles cmsConfigureMovieFilters.Opening
 
-        Dim c As Control = GetControlAtMousePosition
+        If Not ShowMovieFilterConfig Then
+            ShowMovieFilterConfig = True
+            e.Cancel = True
+        End If
 
-        If IsNothing(c) Then Return
+        'Dim c As Control = GetControlAtMousePosition
 
-        If GetControlAtMousePosition.GetType = GetType(UserControl_RangeSlider.SelectionRangeSlider) Then e.Cancel = True
+        'If IsNothing(c) Then Return
+
+        'If GetControlAtMousePosition.GetType = GetType(UserControl_RangeSlider.SelectionRangeSlider) Then e.Cancel = True
     End Sub
 
 
-    Function GetControlAtMousePosition As Control
+    'Function GetControlAtMousePosition As Control
 
-        Dim hWnd As IntPtr = WindowFromPoint(Control.MousePosition)
+    '    Dim hWnd As IntPtr = WindowFromPoint(Control.MousePosition)
 
-        If hWnd = IntPtr.Zero Then Return Nothing
+    '    If hWnd = IntPtr.Zero Then Return Nothing
 
-        Return Control.FromHandle(hWnd)
-    End Function
+    '    Return Control.FromHandle(hWnd)
+    'End Function
 
 
 End Class
