@@ -3325,7 +3325,7 @@ Public Class Form1
         txt_titlesearch.Text = ""
         txt_titlesearch.BackColor = Color.White
         TextBox1.BackColor = Color.White
-        cbSort.SelectedIndex = 0
+'       cbSort.SelectedIndex = 0
         RadioButtonTitleAndYear.Checked = True
           
         cbFilterGeneral       .SelectedIndex = 0
