@@ -908,9 +908,10 @@ Public Class WorkingWithNfoFiles
                             Case "playcount"
                                 newmovie.playcount = thisresult.InnerText
                             Case "rating"
-                                newmovie.rating = thisresult.InnerText.Replace("/10", "").Replace(" ", "")
-                                'If newmovie.rating.IndexOf("/10") <> -1 Then newmovie.rating.Replace("/10", "")
-                                'If newmovie.rating.IndexOf(" ") <> -1 Then newmovie.rating.Replace(" ", "")
+                                Dim tempStr As String = thisresult.InnerText
+                                If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
+                                If tempStr.IndexOf(" "  ) <> -1 Then tempStr.Replace(" "  , "")
+                                newmovie.rating = tempStr.ToDouble
                             Case "top250"
                                 newmovie.top250 = thisresult.InnerText
                             Case "sortorder"
