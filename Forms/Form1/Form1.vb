@@ -3340,20 +3340,22 @@ Public Class Form1
         cbFilterAudioChannels .SelectedIndex = 0
         cbFilterNumAudioTracks.SelectedIndex = 0
 
-        cbFilterRating        .Reset
+        UpdateMinMaxMovieFilters
 
-        cbFilterVotes         .Min = oMovies.MinVotes
-        cbFilterVotes         .Max = oMovies.MaxVotes
         cbFilterVotes         .Reset
-
-        cbFilterYear          .Min = oMovies.MinYear
-        cbFilterYear          .Max = oMovies.MaxYear
+        cbFilterRating        .Reset
         cbFilterYear          .Reset
 
 
         State=ProgramState.Other
     End Sub
 
+    Sub UpdateMinMaxMovieFilters
+        cbFilterVotes         .Min = oMovies.MinVotes
+        cbFilterVotes         .Max = oMovies.MaxVotes
+        cbFilterYear          .Min = oMovies.MinYear
+        cbFilterYear          .Max = oMovies.MaxYear
+    End Sub
 
     'Medianfo.dll to outputlog
     Private Sub util_FileDetailsGet()
@@ -23066,6 +23068,7 @@ Public Class Form1
         Assign_MovieFilter( cbFilterAudioBitrates  , oMovies.AudioBitratesFilter  , AudioBitratesFilter  )
         Assign_MovieFilter( cbFilterAudioCodecs    , oMovies.AudioCodecsFilter    , AudioCodecsFilter    )
         Assign_MovieFilter( cbFilterNumAudioTracks , oMovies.NumAudioTracks       , NumAudioTracksFilter )
+        UpdateMinMaxMovieFilters
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
