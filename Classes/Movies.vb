@@ -859,7 +859,7 @@ Public Class Movies
                             Case "playcount"
                                 newmovie.playcount = detail.InnerText
                             Case "rating"
-                                newmovie.rating = detail.InnerText
+                                newmovie.rating = detail.InnerText.ToString.ToDouble
                             Case "title"
                                 newmovie.title = detail.InnerText
                             Case "originaltitle"

@@ -3,34 +3,7 @@ Imports System.IO
 Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports Media_Companion
-Imports System.Runtime.CompilerServices
 
-Module StringExtensions
-    
-    <Extension()> _
-    Function ToInt(ByVal s As String) As Integer
-
-        Dim num as Integer
-
-        If Integer.TryParse(s.Replace(",",""), num) Then Return num
-        
-        Return 0
-
-    End Function
-    
-    <Extension()> _
-    Function ToDouble(ByVal s As String) As Double
-
-        Dim num as Double
-
-        If Double.TryParse(s.Replace(",",""), num) Then Return num
-        
-        Return 0
-
-    End Function
-
-    
-End Module
 
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
