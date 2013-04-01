@@ -884,7 +884,7 @@ Public Class WorkingWithNfoFiles
                                 Dim tempStr As String = thisresult.InnerText
                                 If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
                                 If tempStr.IndexOf(" "  ) <> -1 Then tempStr.Replace(" "  , "")
-                                newmovie.rating = tempStr.ToDouble
+                                newmovie.rating = tempStr.ToRating
                             Case "top250"
                                 newmovie.top250 = thisresult.InnerText
                             Case "sortorder"

@@ -1,20 +1,6 @@
 ﻿Imports System.Linq
 Imports System.Runtime.CompilerServices
 
-Module ModGlobals2
-
-    <Extension()> _
-    Function RemoveAfterMatch(ByVal s As String, Optional match As String=" (") As String
-        Dim i As Integer = s.IndexOf(match)
-
-        If i=-1 Then Return s
-        
-        Return s.Substring(0,i)
-    End Function
-
-End Module
-
-
 
 
 Public Class clsGridViewMovie
