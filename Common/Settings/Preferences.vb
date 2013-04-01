@@ -1133,9 +1133,19 @@ Public Class Preferences
             Dim tempmediainfo2 As String
 
             'workingfiledetails.filedetails_video.Width.Value = MI.Get_(StreamKind.Visual, curVS, "Width")
-            workingfiledetails.filedetails_video.Width.Value = aviFile.Video(0).Width
+            Try            
+            tempmediainfo = aviFile.Video(0).Width
+            Catch
+                tempmediainfo=""
+            End Try
+            workingfiledetails.filedetails_video.Width.Value = tempmediainfo
             'workingfiledetails.filedetails_video.Height.Value = MI.Get_(StreamKind.Visual, curVS, "Height")
-            workingfiledetails.filedetails_video.Height.Value = aviFile.Video(0).Height
+            Try
+                tempmediainfo= aviFile.Video(0).Height 
+            Catch
+                tempmediainfo=""
+            End Try 
+            workingfiledetails.filedetails_video.Height.Value = tempmediainfo
 
             Try
                 Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
@@ -1146,8 +1156,12 @@ Public Class Preferences
             End Try
 
 
-            tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
-            tempmediainfo = aviFile.Video(0).Format
+            'tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+            Try
+                tempmediainfo = aviFile.Video(0).Format
+            Catch
+                tempmediainfo=""
+            End Try 
             If tempmediainfo.ToLower = "avc" Then
                 tempmediainfo2 = "h264"
             Else
@@ -1157,7 +1171,7 @@ Public Class Preferences
             'workingfiledetails.filedetails_video.codec = tempmediainfo2
             'workingfiledetails.filedetails_video.formatinfo = tempmediainfo
             'workingfiledetails.filedetails_video.Codec.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
-            workingfiledetails.filedetails_video.Codec.Value = aviFile.Video(0).CodecID
+            workingfiledetails.filedetails_video.Codec.Value = tempmediainfo2
             If workingfiledetails.filedetails_video.Codec.Value = "DX50" Then
                 workingfiledetails.filedetails_video.Codec.Value = "DIVX"
             End If
@@ -1165,7 +1179,12 @@ Public Class Preferences
             If workingfiledetails.filedetails_video.Codec.Value.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
                 workingfiledetails.filedetails_video.Codec.Value = "h264"
             End If
-            workingfiledetails.filedetails_video.FormatInfo.Value = aviFile.Video(0).CodecID
+            Try
+                tempmediainfo=aviFile.Video(0).CodecID 
+            Catch 
+                tempmediainfo=""
+            End Try
+            workingfiledetails.filedetails_video.FormatInfo.Value = tempmediainfo 
             Dim fs(100) As String
             For f = 1 To 100
                 fs(f) = MI.Get_(StreamKind.Visual, 0, f)
@@ -1248,7 +1267,7 @@ Public Class Preferences
             workingfiledetails.filedetails_video.Container.Value = tempmediainfo
             'workingfiledetails.filedetails_video.codecid = MI.Get_(StreamKind.Visual, curVS, "CodecID")
 
-            workingfiledetails.filedetails_video.CodecInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
+            'workingfiledetails.filedetails_video.CodecInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID/Info")
             workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, 102)
             'Video()
             'Format                     : MPEG-4 Visual
@@ -1286,17 +1305,25 @@ Public Class Preferences
                         audio.Codec.Value = "MP3"
                     Else
                         'audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
-                        audio.Codec.Value = aviFile.Audio(curAS).Format 
+                        Try
+                            tempmediainfo = aviFile.Audio(curAS).Format
+                        Catch
+                            tempmediainfo=""
+                        End Try
+                        audio.Codec.Value = tempmediainfo
                     End If
                     If audio.Codec.Value = "AC-3" Then
                         audio.Codec.Value = "AC3"
                     End If
                     tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                     If audio.Codec.Value = "DTS" Then
-                        If tmpaud = "dts ma / core" Then audio.Codec.Value = "dtshd_ma"
-                        If tmpaud="dts hra / core" Then audio.Codec.Value="dtshd_hra"
-                    Else
-                        audio.Codec.Value = "DTS"
+                        If tmpaud = "dts ma / core" Then 
+                            audio.Codec.Value = "dtshd_ma"
+                        ElseIf tmpaud="dts hra / core" Then
+                            audio.Codec.Value="dtshd_hra"
+                        Else
+                            audio.Codec.Value = "DTS"
+                        End If
                     End If
                     audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
                     audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")

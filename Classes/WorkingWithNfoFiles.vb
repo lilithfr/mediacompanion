@@ -1483,73 +1483,75 @@ Public Class WorkingWithNfoFiles
                     End Try
 
                     stage = 16
-
-                    For Each item In movietosave.filedetails.filedetails_audio
-                        Try
-                            filedetailschild = doc.CreateElement("audio")
-                        Catch
-                        End Try
-                        Try
-                            If item.Language.Value <> Nothing Then
-                                If item.Language.Value <> "" Then
-                                    filedetailschildchild = doc.CreateElement("language")
-                                    filedetailschildchild.InnerText = item.Language.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                        Catch
-                        End Try
-                        Try
-                            If item.Codec.Value <> Nothing Then
-                                If item.Codec.Value <> "" Then
-                                    filedetailschildchild = doc.CreateElement("codec")
-                                    filedetailschildchild.InnerText = item.Codec.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                        Catch
-                        End Try
-                        Try
-                            If item.Channels.Value <> Nothing Then
-                                If item.Channels.Value <> "" Then
-                                    filedetailschildchild = doc.CreateElement("channels")
-                                    filedetailschildchild.InnerText = item.Channels.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                        Catch
-                        End Try
-                        Try
-                            If item.Bitrate.Value <> Nothing Then
-                                If item.Bitrate.Value <> "" Then
-                                    filedetailschildchild = doc.CreateElement("bitrate")
-                                    filedetailschildchild.InnerText = item.Bitrate.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
-                                End If
-                            End If
-                        Catch
-                        End Try
-                        anotherchild.AppendChild(filedetailschild)
-                    Next
-                    stage = 17
                     Try
-                        filedetailschild = doc.CreateElement("subtitle")
+                        For Each item In movietosave.filedetails.filedetails_audio
+                            Try
+                                filedetailschild = doc.CreateElement("audio")
+                            Catch
+                            End Try
+                            Try
+                                If item.Language.Value <> Nothing Then
+                                    If item.Language.Value <> "" Then
+                                        filedetailschildchild = doc.CreateElement("language")
+                                        filedetailschildchild.InnerText = item.Language.Value
+                                        filedetailschild.AppendChild(filedetailschildchild)
+                                    End If
+                                End If
+                            Catch
+                            End Try
+                            Try
+                                If item.Codec.Value <> Nothing Then
+                                    If item.Codec.Value <> "" Then
+                                        filedetailschildchild = doc.CreateElement("codec")
+                                        filedetailschildchild.InnerText = item.Codec.Value
+                                        filedetailschild.AppendChild(filedetailschildchild)
+                                    End If
+                                End If
+                            Catch
+                            End Try
+                            Try
+                                If item.Channels.Value <> Nothing Then
+                                    If item.Channels.Value <> "" Then
+                                        filedetailschildchild = doc.CreateElement("channels")
+                                        filedetailschildchild.InnerText = item.Channels.Value
+                                        filedetailschild.AppendChild(filedetailschildchild)
+                                    End If
+                                End If
+                            Catch
+                            End Try
+                            Try
+                                If item.Bitrate.Value <> Nothing Then
+                                    If item.Bitrate.Value <> "" Then
+                                        filedetailschildchild = doc.CreateElement("bitrate")
+                                        filedetailschildchild.InnerText = item.Bitrate.Value
+                                        filedetailschild.AppendChild(filedetailschildchild)
+                                    End If
+                                End If
+                            Catch
+                            End Try
+                            anotherchild.AppendChild(filedetailschild)
+                        Next
                     Catch
                     End Try
+                    stage = 17
                     Dim tempint As Integer = 0
-                    For Each entry In movietosave.filedetails.filedetails_subtitles
-                        Try
-                            If entry.language <> Nothing Then
-                                If entry.Language.Value <> "" Then
-                                    tempint += 1
-                                    filedetailschildchild = doc.CreateElement("language")
-                                    filedetailschildchild.InnerText = entry.Language.Value
-                                    filedetailschild.AppendChild(filedetailschildchild)
+                    Try
+                        filedetailschild = doc.CreateElement("subtitle")
+                        For Each entry In movietosave.filedetails.filedetails_subtitles
+                            Try
+                                If entry.language <> Nothing Then
+                                    If entry.Language.Value <> "" Then
+                                        tempint += 1
+                                        filedetailschildchild = doc.CreateElement("language")
+                                        filedetailschildchild.InnerText = entry.Language.Value
+                                        filedetailschild.AppendChild(filedetailschildchild)
+                                    End If
                                 End If
-                            End If
-                        Catch
-                        End Try
-                    Next
+                            Catch
+                            End Try
+                        Next
+                    Catch
+                    End Try
                     stage = 18
                     Try
                         If tempint > 0 Then
