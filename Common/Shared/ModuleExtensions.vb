@@ -13,9 +13,22 @@ Public Module ModuleExtensions
     
     <Extension()> _
     Public Function ToRating(ByVal s As String) As Double
-        Dim num as Double
+        'Dim num as Double
 
-        If Double.TryParse(s.Replace(",","."), num) Then 
+        'If Double.TryParse(s.Replace(",","."), num) Then 
+        '    If num>=0 and num<=10 Then Return num
+        'End If
+        
+        'Return 0
+
+        Dim num As Double
+        Dim x   As String = s
+                            
+        x = x.Replace("/10", "" )
+        x = x.Replace(" "  , "" )
+        x = x.Replace(","  , ".")
+
+        If Double.TryParse(x,num) Then 
             If num>=0 and num<=10 Then Return num
         End If
         

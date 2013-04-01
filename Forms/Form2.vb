@@ -280,7 +280,7 @@ Public Class Form2
                             Case "premiered"
                                 alternatemovie.fullmoviebody.premiered = thisresult.InnerText
                             Case "rating"
-                                alternatemovie.fullmoviebody.rating = thisresult.InnerText
+                                alternatemovie.fullmoviebody.rating = thisresult.InnerText.ToString.ToRating.ToString
                             Case "runtime"
                                 alternatemovie.fullmoviebody.runtime = thisresult.InnerText
                             Case "studio"

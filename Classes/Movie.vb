@@ -917,7 +917,7 @@ Public Class Movie
                 Case "premiered"
                     _scrapedMovie.fullmoviebody.premiered = thisresult.InnerText
                 Case "rating"
-                    _scrapedMovie.fullmoviebody.rating = thisresult.InnerText
+                    _scrapedMovie.fullmoviebody.rating = thisresult.InnerText.ToString.ToRating.ToString
                 Case "runtime"
                     _scrapedMovie.fullmoviebody.runtime = thisresult.InnerText
                     If _scrapedMovie.fullmoviebody.runtime.IndexOf(":") <> -1 Then

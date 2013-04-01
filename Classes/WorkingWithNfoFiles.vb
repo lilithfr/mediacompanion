@@ -881,10 +881,11 @@ Public Class WorkingWithNfoFiles
                             Case "playcount"
                                 newmovie.playcount = thisresult.InnerText
                             Case "rating"
-                                Dim tempStr As String = thisresult.InnerText
-                                If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
-                                If tempStr.IndexOf(" "  ) <> -1 Then tempStr.Replace(" "  , "")
-                                newmovie.rating = tempStr.ToRating
+                                'Dim tempStr As String = thisresult.InnerText
+                                'If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
+                                'If tempStr.IndexOf(" "  ) <> -1 Then tempStr.Replace(" "  , "")
+                                'newmovie.rating = tempStr.ToRating
+                                newmovie.rating = thisresult.InnerText.ToRating
                             Case "top250"
                                 newmovie.top250 = thisresult.InnerText
                             Case "sortorder"
@@ -1148,9 +1149,9 @@ Public Class WorkingWithNfoFiles
                         Case "playcount"
                             newmovie.fullmoviebody.playcount = thisresult.InnerText
                         Case "rating"
-                            newmovie.fullmoviebody.rating = thisresult.InnerText
-                            If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
-                            If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
+                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString
+                            'If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
+                            'If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
                         Case "top250"
                             newmovie.fullmoviebody.top250 = thisresult.InnerText
                         Case "createdate"
