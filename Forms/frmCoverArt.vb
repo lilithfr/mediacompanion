@@ -1224,6 +1224,11 @@ Public Class frmCoverArt
                                 If Preferences.createfolderjpg = True Then
                                     b1.Image.Save(folderjpgpath)
                                 End If
+                                If Preferences.FrodoEnabled and Preferences.EdenEnabled then
+                                    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
+                                    b1.Image.Save(frodopath)
+                                    posterpath=frodopath
+                                End If
                                 Form2.moviethumb.Image = b1.Image
                                 Form1.moviethumb.Image = b1.Image
                                 mainposter.Image = b1.Image
@@ -1289,6 +1294,11 @@ Public Class frmCoverArt
                                 b1.Image.Save(posterpath)
                                 If Preferences.createfolderjpg = True Then
                                     b1.Image.Save(folderjpgpath)
+                                End If
+                                If Preferences.FrodoEnabled and Preferences.EdenEnabled then
+                                    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
+                                    b1.Image.Save(frodopath)
+                                    posterpath=frodopath
                                 End If
                                 Form2.moviethumb.Image = b1.Image
                                 Form1.moviethumb.Image = b1.Image
