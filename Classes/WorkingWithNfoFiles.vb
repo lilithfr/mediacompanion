@@ -989,7 +989,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
                 If newmovie.playcount = Nothing Then newmovie.playcount = "0"
                 If newmovie.plot = Nothing Then newmovie.plot = ""
-                If newmovie.rating = Nothing Then newmovie.rating = ""
+                If newmovie.rating = Nothing Then newmovie.rating = 0
                 If newmovie.runtime = Nothing Then newmovie.runtime = ""
                 If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
                 'If newmovie.title <> Nothing And newmovie.year <> Nothing Then
