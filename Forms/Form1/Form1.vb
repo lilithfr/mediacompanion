@@ -22190,7 +22190,7 @@ Public Class Form1
 
     Private Sub HomeMovieCacheSave()
         Dim fullpath As String = workingProfile.HomeMovieCache
-        If homemovielist.Count > 0 Then
+        If homemovielist.Count > 0 And homemoviefolders.Count > 0 Then
 
             If IO.File.Exists(fullpath) Then
                 Dim don As Boolean = False
@@ -22260,7 +22260,13 @@ Public Class Form1
 #End If
                 End Try
             Next
-
+        Else
+            Try
+                If IO.File.Exists(fullpath) Then
+                    IO.File.Delete(fullpath)
+                End If
+            Catch 
+            End Try
         End If
     End Sub
 
@@ -22444,6 +22450,7 @@ Public Class Form1
                 Preferences.homemoviefolders.Add(item)
             Next
             Call SaveConfig()
+            Call rebuildHomeMovies()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
