@@ -20836,6 +20836,13 @@ Public Class Form1
         Call tv_Filter()
         End If
 
+        If homemoviefolders.Count > 0 Then
+            ListBox19.Items.Clear()
+            For Each folder In homemoviefolders
+                ListBox19.Items.Add(folder)
+            Next
+        End If
+
         'If Not IO.File.Exists(workingProfile.actorcache) Or Preferences.startupCache = False Then
         '    loadinginfo = "Status :- Building Actor Database"
         '    frmSplash.Label3.Text = loadinginfo
@@ -22357,19 +22364,19 @@ Public Class Form1
     End Sub
 
     Private Sub loadhomemoviedetails()
-        TextBox2.Text = ""
-        TextBox6.Text = ""
-        TextBox20.Text = ""
-        TextBox22.Text = ""
-        TextBox23.Text = ""
+        HmMovTitle.Text = ""
+        HmMovSort.Text = ""
+        HmMovYear.Text = ""
+        HmMovPlot.Text = ""
+        HmMovStars.Text = ""
         PictureBox4.Image = Nothing
         WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
         WorkingHomeMovie.fileinfo.fanartpath = Preferences.GetFanartPath(WorkingHomeMovie.fileinfo.fullpathandfilename)
-        TextBox2.Text = WorkingHomeMovie.fullmoviebody.title
-        TextBox6.Text = WorkingHomeMovie.fullmoviebody.sortorder
-        TextBox22.Text = WorkingHomeMovie.fullmoviebody.plot
-        TextBox23.Text = WorkingHomeMovie.fullmoviebody.stars
-        TextBox20.Text = WorkingHomeMovie.fullmoviebody.year
+        HmMovTitle.Text = WorkingHomeMovie.fullmoviebody.title
+        HmMovSort.Text = WorkingHomeMovie.fullmoviebody.sortorder
+        HmMovPlot.Text = WorkingHomeMovie.fullmoviebody.plot
+        HmMovStars.Text = WorkingHomeMovie.fullmoviebody.stars
+        HmMovYear.Text = WorkingHomeMovie.fullmoviebody.year
         PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = WorkingHomeMovie.fullmoviebody.title
         PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
         PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
@@ -22380,15 +22387,15 @@ Public Class Form1
 
 
     Private Sub btnSaveHomeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveHomeMovie.Click
-        If TextBox2.Text <> "" Then
-            WorkingHomeMovie.fullmoviebody.title = TextBox2.Text
+        If HmMovTitle.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.title = HmMovTitle.Text
         End If
-        If TextBox6.Text <> "" Then
-            WorkingHomeMovie.fullmoviebody.sortorder = TextBox6.Text
+        If HmMovSort.Text <> "" Then
+            WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
         End If
-        WorkingHomeMovie.fullmoviebody.year = TextBox20.Text
-        WorkingHomeMovie.fullmoviebody.plot = TextBox22.Text
-        WorkingHomeMovie.fullmoviebody.stars = TextBox23.Text
+        WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
+        WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
+        WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
         nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
     End Sub
 
