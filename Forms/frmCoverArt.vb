@@ -25,6 +25,8 @@ Public Class frmCoverArt
     Dim movieyear As String
     Dim folderjpgpath As String
     Dim tmdbid As String = Form1.workingMovieDetails.fullmoviebody.imdbid
+    Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
+    Dim applicationPath As String = Preferences.applicationPath
 
 
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -1236,6 +1238,25 @@ Public Class frmCoverArt
                                 tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
                                 Label6.Text = tempstring
                                 mainposter.Visible = True
+
+                                Dim bm_source As New Bitmap(b1.image) 'save to postercache
+                                Dim bm_dest As New Bitmap(150, 200)
+                                Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                                gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                                gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
+                                Dim tempbitmap As Bitmap = bm_dest
+                                Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
+                                Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                                tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
+                                tempbitmap.Dispose()
+
+                                For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
+                                    If poster.Tag = fullpathandfilename Then
+                                        poster.ImageLocation = path
+                                        poster.Load()
+                                        Exit For
+                                    End If
+                                Next
                                 Me.Close()
                                 Exit For
                             Else
@@ -1311,6 +1332,25 @@ Public Class frmCoverArt
                                     .WaitOnLoad = True
                                     .ImageLocation = (posterurls(realnumber + 1, 1))
                                 End With
+
+                                Dim bm_source As New Bitmap(b1.image) 'save to postercache
+                                Dim bm_dest As New Bitmap(150, 200)
+                                Dim gr As Graphics = Graphics.FromImage(bm_dest)
+                                gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
+                                gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
+                                Dim tempbitmap As Bitmap = bm_dest
+                                Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
+                                Dim path As String = IO.Path.Combine(applicationPath, "settings\postercache\" & filename & ".jpg")
+                                tempbitmap.Save(path, Imaging.ImageFormat.Jpeg)
+                                tempbitmap.Dispose()
+
+                                For Each poster As PictureBox In Form1.TabPage22.Controls 'update wall cache
+                                    If poster.Tag = fullpathandfilename Then
+                                        poster.ImageLocation = path
+                                        poster.Load()
+                                        Exit For
+                                    End If
+                                Next
                                 Me.Close()
                                 Exit For
                             Else
