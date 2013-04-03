@@ -21935,10 +21935,10 @@ Public Class Form1
     'End Sub
 
     Private Sub SetupHomeMovies()
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
             MsgBox("Please add A Folder containing Home Movies")
             Try
-                TabControl1.SelectedIndex = 1
+                TabControl1.SelectedIndex = 4
             Catch
             End Try
         Else
@@ -22495,10 +22495,10 @@ Public Class Form1
 
     Private Sub TabControl1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl1.SelectedIndexChanged
 
-        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 1 Then
+        If Preferences.homemoviefolders.Count = 0 And homemovielist.Count = 0 And TabControl1.SelectedIndex <> 4 Then
             MsgBox("Please add A Folder containing Home Movies")
             Try
-                TabControl1.SelectedIndex = 1
+                TabControl1.SelectedIndex = 4
             Catch
             End Try
             homeTabIndex = 1
@@ -22509,6 +22509,9 @@ Public Class Form1
         If tab = "search for new home movies" Then
             TabControl1.SelectedIndex = homeTabIndex
             Call homeMovieScan()
+        ElseIf tab="refresh list" Then
+            TabControl1.SelectedIndex = homeTabIndex
+            Call rebuildHomeMovies()
         ElseIf tab = "screenshot" Then
             If IO.File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
                 Try
