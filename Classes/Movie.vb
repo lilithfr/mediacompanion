@@ -756,7 +756,7 @@ Public Class Movie
     Sub CheckImdbBodyScrape
         'Failed...
         If ImdbBody = "MIC" Then   
-            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Preferences.imdbmirror & """" & vbCrLf)
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Preferences.imdbmirror & """" & vbCrLf & "IMDB may not be available" & vbCrLf )
             AppendScrapeFailedActions
         Else
             ReportProgress(MSG_OK,"Movie Body Scraped OK" & vbCrLf)

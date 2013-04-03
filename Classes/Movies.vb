@@ -695,6 +695,17 @@ Public Class Movies
 
     Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
         Dim i=0
+        Dim NfoFileList As New List(Of String)
+        
+        For Each item In NfoFilenames
+            If IO.File.Exists(item) Then
+                NfoFileList.Add(item)
+            Else
+                ReportProgress("Could Not find " & item & vbCrLf & "Please Refresh All Movies before running Batch Rescraper Wizard" )
+            End If
+        Next
+
+        If NfoFilenames.count <> NfoFileList.count Then NfoFilenames = NfoFileList
         For Each item In NfoFilenames
             i += 1
             PercentDone = CalcPercentDone(i,NfoFilenames.Count)
