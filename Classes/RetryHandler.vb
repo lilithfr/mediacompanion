@@ -36,6 +36,7 @@ Public Class RetryHandler
         While _tries<MaxRetries And Not ok
             Try
                _ok = Action.Invoke
+                _tries &=1
             Catch
                 Threading.Thread.Sleep(InterTryDelayMs)
                 _tries &= 1

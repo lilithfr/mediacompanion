@@ -687,35 +687,40 @@ Public Class TMDb
 
 
     Private Sub Fetch
-        If _movie.id=0 and Not __Serialising and Not _fetched then
+        Try
+            If _movie.id=0 and Not __Serialising and Not _fetched then
 
-            _fetched = True
+                _fetched = True
 
-            Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
+                Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
             
-            rhs.Add( new RetryHandler(AddressOf GetMovieByIMDB  ) )
-            rhs.Add( new RetryHandler(AddressOf GetMovieImages  ) )
-            rhs.Add( new RetryHandler(AddressOf GetMovieTrailers) )
+                rhs.Add( new RetryHandler(AddressOf GetMovieByIMDB  ) )
+                rhs.Add( new RetryHandler(AddressOf GetMovieImages  ) )
+                rhs.Add( new RetryHandler(AddressOf GetMovieTrailers) )
       
-            For Each rh in rhs
-                If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
-            Next
+                For Each rh in rhs
+                    If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
+                Next
                   
-            'If movie isn't found -> Create empty child objects
-            If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
-            If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
-            If IsNothing(_trailers.youtube     ) then _trailers.youtube      = New List(Of WatTmdb.V3.Youtube )
+                'If movie isn't found -> Create empty child objects
+                If IsNothing(_movieImages.backdrops) then _movieImages.backdrops = New List(Of WatTmdb.v3.Backdrop)
+                If IsNothing(_movieImages.posters  ) then _movieImages.posters   = New List(Of WatTmdb.v3.Poster  )
+                If IsNothing(_trailers.youtube     ) then _trailers.youtube      = New List(Of WatTmdb.V3.Youtube )
 
-            FixUpMovieImages
+                FixUpMovieImages
 
-            AssignValidBackDrops
-            AssignValidPosters
-            AssignMC_Posters
-            AssignMC_Thumbs
-            AssignMC_Backdrops
-            AssignFrodoExtraPosterThumbs
-            AssignFrodoExtraFanartThumbs
-        End If
+                AssignValidBackDrops
+                AssignValidPosters
+                AssignMC_Posters
+                AssignMC_Thumbs
+                AssignMC_Backdrops
+                AssignFrodoExtraPosterThumbs
+                AssignFrodoExtraFanartThumbs
+            End If
+        Catch ex As Exception
+            Throw New Exception (ex.Message)
+        End Try
+
     End Sub
 
 
