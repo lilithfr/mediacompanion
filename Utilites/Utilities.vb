@@ -339,13 +339,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     '    Return TrailerPath
     'End Function
 
-    Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String) As Boolean
+    Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String, Optional ByVal basicsave As Boolean = False) As Boolean
         Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"
         Dim returnCode As Boolean = False
         Dim typeOfFile(2) As String
         typeOfFile(0) = pathOnly & GetStackName(fullPath) & fileType                            'multi-part string removed
         typeOfFile(1) = pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType     'match filename sans extension
-        typeOfFile(2) = pathOnly & Regex.Replace("movie" & fileType, "movie-", "")              'special case where using folder-per-movie
+        If basicsave Then
+            typeOfFile(2) = pathOnly & Regex.Replace("movie" & fileType, "movie-", "")              'special case where using folder-per-movie
+        End If
         For Each file As String In typeOfFile
             If IO.File.Exists(file) Then
                 returnCode = True

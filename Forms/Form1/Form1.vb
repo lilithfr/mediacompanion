@@ -5356,6 +5356,12 @@ Public Class Form1
                             If Not Preferences.EdenEnabled Then
                                 Utilities.SafeDeleteFile(OldFanartPath)
                             End If
+                        ElseIf Preferences.fanartjpg Then
+                            Dim fanartjpgpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(workingMovieDetails.fileinfo.filename,"fanart.jpg")
+                                If IO.File.Exists(fanartjpgpath) Then
+                                    Utilities.SafeDeleteFile(fanartjpgpath)
+                                End If
+                            IO.File.Copy(FanartOrExtraPath,fanartjpgpath)
                         End If
                         Preferences.savefanart = issavefanart
 
@@ -14292,6 +14298,9 @@ Public Class Form1
         If Not Preferences.usefoldernames and Not Preferences.allfolders then
             chkbx_createfolderjpg.Enabled = False
             cbFanartInFolders.Enabled=False
+            Preferences.fanartjpg=False
+        Else
+            cbFanartInFolders.CheckState        = If(Preferences.fanartjpg, CheckState.Checked, CheckState.Unchecked)
         End If
 
         Select Case Preferences.maxactors

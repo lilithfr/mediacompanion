@@ -1052,7 +1052,7 @@ Public Class Preferences
 
     Public Shared Function GetFanartPath(ByVal FullPath As String) As String
         Dim fanartPath As String = FullPath
-        If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg") Then
+        If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Preferences.basicsavemode) Then
             fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
         End If
         Return fanartPath
