@@ -6548,6 +6548,8 @@ Public Class Form1
             Dim allok As Boolean = False
             Dim backup As String = ""
 
+            messbox = New frmMessageBox("Downloading Poster...")
+            messbox.Show
 
             For Each button As Control In Me.panelAvailableMoviePosters.Controls
                 If button.Name.IndexOf("postercheckbox") <> -1 Then
@@ -6668,7 +6670,7 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
-
+        messbox.Close()
     End Sub
 
     Private Sub PictureBox3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxAssignedMoviePoster.Click

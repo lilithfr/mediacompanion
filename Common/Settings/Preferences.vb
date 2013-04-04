@@ -1022,15 +1022,23 @@ Public Class Preferences
         Dim path As String = FullPath
 
         If Preferences.EdenEnabled Then
-            If Not Utilities.findFileOfType(path, ".tbn") Then
-                If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
-                    path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-                Else
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                End If
+            If Not Preferences.basicsavemode Then
+                path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                lst.Add(path)
             End If
+            IF Preferences.basicsavemode or Preferences.createfolderjpg Then
+                path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                lst.Add(path)
+            End If
+            'If Not Utilities.findFileOfType(path, ".tbn") Then
+            '    If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
+            '        path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+            '    Else
+            '        path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+            '    End If
+            'End If
 
-            lst.Add(path)
+            'lst.Add(path)
         End If
 
         If Preferences.FrodoEnabled Then
