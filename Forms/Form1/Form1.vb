@@ -22659,6 +22659,18 @@ Public Class Form1
         Select Case TabLevel1.SelectedTab.Text.ToLower
             Case "general preferences"
                 Call util_GeneralPreferencesSetup()
+            Case "config.xml"
+                RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\settings\config.xml"
+            Case "moviecache" 
+                RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache) ' applicationPath & "\settings\moviecache.xml"
+            Case = "tvcache" 
+                RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache) ' applicationPath & "\settings\tvcache.xml"
+            Case = "actorcache" 
+                RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache) '  applicationPath & "\settings\actorcache.xml"
+            Case = "profile" 
+                RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml") '  applicationPath & "\settings\profile.xml"
+            Case = "regex" 
+                RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml"
         End Select
 
     End Sub
