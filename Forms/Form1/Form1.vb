@@ -10811,6 +10811,7 @@ Public Class Form1
                 End If
                 Dim Image2 As New Bitmap(bmp)
                 PictureBox12.Image=Image2
+                GC.Collect
             End If
             Return workingposterpath
         Catch ex As Exception
