@@ -579,8 +579,11 @@ Partial Public Class Form1
                 End If
             Next
         End If
-        util_ImageLoad(PictureBox6, imgLocation, Utilities.DefaultActorPath)
-        PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
+        Try
+            util_ImageLoad(PictureBox6, imgLocation, Utilities.DefaultActorPath)
+            PictureBox6.SizeMode = PictureBoxSizeMode.Zoom
+        Catch
+        End Try
     End Sub
 
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
