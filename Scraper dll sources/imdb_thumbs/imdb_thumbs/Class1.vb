@@ -40,6 +40,7 @@ Public Class Class1
         Dim totalpages As Integer
         Dim tempint As Integer
         Dim reached As Boolean = False
+        Try
         For f = 1 To fanartlinecount
             If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
                 apple2(f) = apple2(f).Replace("<a href=""?page=", "")
@@ -55,7 +56,7 @@ Public Class Class1
                     reached = False
                     Exit For
                 End If
-                If apple2(f).IndexOf("src=""http://") <> -1 Then
+                If apple2(f).IndexOf("src=""http://") <> -1 And apple2(f).IndexOf("._V1._") <> -1 Then
                     apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src=""") - 1, apple2(f).Length - apple2(f).IndexOf("src=""") - 1)
                     apple2(f).TrimStart()
                     apple2(f) = apple2(f).Replace("src=""", "")
@@ -65,6 +66,8 @@ Public Class Class1
                 End If
             End If
         Next
+        Catch ex As Exception 
+        End Try
         For g = 2 To totalpages
             fanarturl = "http://www.imdb.com/title/" & imdbid & "/mediaindex?page=" & g.ToString
             ReDim apple2(10000)
@@ -177,9 +180,9 @@ Public Class Class1
             'try other method
         End If
 
-        If allok = True Then
+        'If allok = True Then
             Return newimdbid
-        End If
+        'End If
 
 
     End Function
@@ -362,7 +365,7 @@ Public Class Class1
 
             Return thumbs
         Catch
-
+            Return thumbs
         Finally
             Monitor.Exit(Me)
         End Try

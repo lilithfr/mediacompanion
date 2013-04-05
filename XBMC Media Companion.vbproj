@@ -95,7 +95,7 @@
     </Reference>
     <Reference Include="imdb_thumbs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\imdb_thumbs\imdb_thumbs\bin\Release\imdb_thumbs.dll</HintPath>
+      <HintPath>Scraper dll sources\imdb_thumbs\imdb_thumbs\bin\Debug\imdb_thumbs.dll</HintPath>
     </Reference>
     <Reference Include="IMPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -483,9 +483,6 @@
     <Content Include="Assets\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\imdb_thumbs.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\IMPA.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
