@@ -2401,6 +2401,7 @@ Partial Public Class Form1
             Dim frodopost As String =""
             Dim frodobann As String =""
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                item.Visible=False
                 For Each Season As Media_Companion.TvSeason In item.Seasons.Values
                     edenpost = Season.Poster.path
                     frodopost = Season.Poster.Path.replace(".tbn","-poster.jpg")
@@ -2415,7 +2416,12 @@ Partial Public Class Form1
                         Episode.Visible = False
                     Next
                 Next
-                item.Visible = Not item.ImagePoster.Exists
+                If frodo and Not IO.File.Exists(item.FolderPath+"poster.jpg") Then
+                    item.Visible = True
+                ElseIf eden and Not frodo Then
+                    item.Visible = Not item.ImagePoster.Exists
+                End If
+                
             Next
         End If
         ' End If
