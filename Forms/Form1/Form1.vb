@@ -10161,27 +10161,27 @@ Public Class Form1
                 If newepisode.Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                     Try
                         '1h 24mn 48s 546ms
-                        Dim hours As Integer = 0
-                        Dim minutes As Integer = 0
+                        'Dim hours As Integer = 0
+                        'Dim minutes As Integer = 0
                         tempstring = newepisode.Details.StreamDetails.Video.DurationInSeconds.Value
-                        tempint = tempstring.IndexOf("h")
-                        If tempint <> -1 Then
-                            hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                            tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                            tempstring = Trim(tempstring)
-                        End If
-                        tempint = tempstring.IndexOf("mn")
-                        If tempint <> -1 Then
-                            minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                        End If
-                        If hours <> 0 Then
-                            hours = hours * 60
-                            minutes = minutes + hours
-                        End If
+                        'tempint = tempstring.IndexOf("h")
+                        'If tempint <> -1 Then
+                            'hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                            'tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                            'tempstring = Trim(tempstring)
+                        'End If
+                        'tempint = tempstring.IndexOf("mn")
+                        'If tempint <> -1 Then
+                            'minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                        'End If
+                        'If hours <> 0 Then
+                            'hours = hours * 60
+                            'minutes = minutes + hours
+                        'End If
                         If Preferences.intruntime Then
-                            newepisode.Runtime.Value = minutes.ToString
+                            newepisode.Runtime.Value = Math.Round(tempstring/60).ToString
                         Else
-                            newepisode.Runtime.Value = minutes.ToString & " min"
+                            newepisode.Runtime.Value = Math.Round(tempstring/60).ToString & " min"
                         End If
                         
                     Catch ex As Exception
@@ -19872,29 +19872,29 @@ Public Class Form1
                                     If listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
                                         Try
                                             '1h 24mn 48s 546ms
-                                            Dim tempint As Integer = 0
-                                            Dim hours As Integer = 0
-                                            Dim minutes As Integer = 0
+                                            'Dim tempint As Integer = 0
+                                            'Dim hours As Integer = 0
+                                            'Dim minutes As Integer = 0
                                             Dim tempstring As String
                                             tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
-                                            tempint = tempstring.IndexOf("h")
-                                            If tempint <> -1 Then
-                                                hours = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                                tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
-                                                tempstring = Trim(tempstring)
-                                            End If
-                                            tempint = tempstring.IndexOf("mn")
-                                            If tempint <> -1 Then
-                                                minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
-                                            End If
-                                            If hours <> 0 Then
-                                                hours = hours * 60
-                                            End If
-                                            minutes = minutes + hours
+                                            'tempint = tempstring.IndexOf("h")
+                                            'If tempint <> -1 Then
+                                            '    hours = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            '    tempstring = tempstring.Substring(tempint + 1, tempstring.Length - (tempint + 1))
+                                            '    tempstring = Trim(tempstring)
+                                            'End If
+                                            'tempint = tempstring.IndexOf("mn")
+                                            'If tempint <> -1 Then
+                                            '    minutes = Convert.ToInt32(tempstring.Substring(0, tempint))
+                                            'End If
+                                            'If hours <> 0 Then
+                                            '    hours = hours * 60
+                                            'End If
+                                            'minutes = minutes + hours
                                             If Preferences.intruntime Then
-                                                listofnewepisodes(h).Runtime.Value = minutes.ToString
+                                                listofnewepisodes(h).Runtime.Value = Math.Round(tempstring/60).ToString
                                             Else
-                                                listofnewepisodes(h).Runtime.Value = minutes.ToString & " min"
+                                                listofnewepisodes(h).Runtime.Value = Math.Round(tempstring/60).ToString & " min"
                                             End If
                                             
                                         Catch ex As Exception

@@ -75,7 +75,7 @@
             End If
             If CheckBox17.CheckState = CheckState.Checked Then
                 Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
+                Form1.tvBatchList.doEpisodeMediaTags = True
             End If
             If CheckBox18.CheckState = CheckState.Checked Then
                 Form1.tvBatchList.doEpisodes = True
