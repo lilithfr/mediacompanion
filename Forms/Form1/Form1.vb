@@ -10178,8 +10178,12 @@ Public Class Form1
                             hours = hours * 60
                             minutes = minutes + hours
                         End If
-
-                        newepisode.Runtime.Value = minutes.ToString & " min"
+                        If Preferences.intruntime Then
+                            newepisode.Runtime.Value = minutes.ToString
+                        Else
+                            newepisode.Runtime.Value = minutes.ToString & " min"
+                        End If
+                        
                     Catch ex As Exception
 #If SilentErrorScream Then
                             Throw ex
@@ -19887,7 +19891,12 @@ Public Class Form1
                                                 hours = hours * 60
                                             End If
                                             minutes = minutes + hours
-                                            listofnewepisodes(h).Runtime.Value = minutes.ToString & " min"
+                                            If Preferences.intruntime Then
+                                                listofnewepisodes(h).Runtime.Value = minutes.ToString
+                                            Else
+                                                listofnewepisodes(h).Runtime.Value = minutes.ToString & " min"
+                                            End If
+                                            
                                         Catch ex As Exception
 #If SilentErrorScream Then
                                             Throw ex

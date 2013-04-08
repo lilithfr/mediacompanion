@@ -2074,7 +2074,11 @@ Partial Public Class Form1
                                         'minutes += hours * 60
                                     'End If
                                     'minutes = minutes + hours
-                                    singleepisode.Runtime.Value = Math.Round(tempstring/60).ToString & " min"
+                                    If Preferences.intruntime Then
+                                        singleepisode.Runtime.Value = Math.Round(tempstring/60).ToString
+                                    Else
+                                        singleepisode.Runtime.Value = Math.Round(tempstring/60).ToString & " min"
+                                    End If
                                     progresstext &= "OK."
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                 End If
