@@ -9102,6 +9102,9 @@ Public Class Form1
                         PictureBox10.Image = Nothing
                         PictureBox11.Image = Nothing
                     End If
+                    If Preferences.FrodoEnabled Then 
+                        Utilities.SafeCopyFile(savepath,savepath.Replace("fanart.jpg","season-all-fanart.jpg"),True)
+                    End If
                 Catch ex As WebException
                     MsgBox(ex.Message)
                 End Try
@@ -11246,9 +11249,11 @@ Public Class Form1
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg"))
+                        imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg"))
                         frodo =1
                     ElseIf rbTVposter.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg"))
+                        imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg"))
                         frodo = 1
                     End If
                 End If
