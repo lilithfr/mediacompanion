@@ -738,9 +738,9 @@ Public Class Movie
             ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
         End If
 
-        'ReportProgress( String.Format("Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) )
+        ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
 
-        ReportProgress( " Main body" )
+        ReportProgress( "- Main body " )
    
         Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Preferences.imdbmirror, _imdbCounter)
     End Function
