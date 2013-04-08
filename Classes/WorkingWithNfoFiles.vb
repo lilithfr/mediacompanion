@@ -736,9 +736,9 @@ Public Class WorkingWithNfoFiles
                 xmlEpisodechild.InnerText = ep.Plot.Value
                 xmlEpisode.AppendChild(xmlEpisodechild)
 
-                xmlEpisodechild = document.CreateElement("thumb")
-                xmlEpisodechild.InnerText = ep.Thumbnail.Path
-                xmlEpisode.AppendChild(xmlEpisodechild)
+                'xmlEpisodechild = document.CreateElement("thumb")
+                'xmlEpisodechild.InnerText = ep.Thumbnail.Path
+                'xmlEpisode.AppendChild(xmlEpisodechild)
 
                 xmlEpisodechild = document.CreateElement("runtime")
                 xmlEpisodechild.InnerText = ep.Runtime.Value

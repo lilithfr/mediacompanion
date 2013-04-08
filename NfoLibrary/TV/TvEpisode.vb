@@ -1,5 +1,6 @@
 ﻿Imports ProtoXML
 Imports Media_Companion
+Imports MediaInfoNET
 
 
 Public Class TvEpisode
@@ -220,6 +221,7 @@ Public Class TvEpisode
         Dim curVS As Integer = 0
         Dim addVS As Boolean = False
         Dim numOfVideoStreams As Integer = MI.Count_Get(StreamKind.Visual)
+        Dim aviFile As MediaFile = New MediaFile(filename)
 
         Dim tempmediainfo As String
         Dim tempmediainfo2 As String
@@ -257,7 +259,17 @@ Public Class TvEpisode
         'Me.Details.StreamDetails.Video.aspect = MI.Get_(StreamKind.Visual, 0, 79)
 
 
-        tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+        'tempmediainfo = MI.Get_(StreamKind.Visual, curVS, "Format")
+        'If tempmediainfo.ToLower = "avc" Then
+        '    tempmediainfo2 = "h264"
+        'Else
+        '    tempmediainfo2 = tempmediainfo
+        'End If
+        Try
+            tempmediainfo = aviFile.Video(0).Format
+        Catch
+            tempmediainfo=""
+        End Try 
         If tempmediainfo.ToLower = "avc" Then
             tempmediainfo2 = "h264"
         Else
@@ -266,7 +278,7 @@ Public Class TvEpisode
 
         'Me.Details.StreamDetails.Video.codec = tempmediainfo2
         'Me.Details.StreamDetails.Video.formatinfo = tempmediainfo
-        Me.Details.StreamDetails.Video.Codec.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+        Me.Details.StreamDetails.Video.Codec.Value = tempmediainfo2 'MI.Get_(StreamKind.Visual, curVS, "CodecID")
         If Me.Details.StreamDetails.Video.Codec.Value = "DX50" Then
             Me.Details.StreamDetails.Video.Codec.Value = "DIVX"
         End If
@@ -274,7 +286,13 @@ Public Class TvEpisode
         If Me.Details.StreamDetails.Video.Codec.Value.ToLower.IndexOf("mpeg4/iso/avc") <> -1 Then
             Me.Details.StreamDetails.Video.Codec.Value = "h264"
         End If
-        Me.Details.StreamDetails.Video.FormatInfo.Value = MI.Get_(StreamKind.Visual, curVS, "CodecID")
+
+        Try
+            tempmediainfo=aviFile.Video(0).CodecID 
+        Catch 
+            tempmediainfo=""
+        End Try
+        Me.Details.StreamDetails.Video.FormatInfo.Value = tempmediainfo
         Dim fs(100) As String
         For f = 1 To 100
             fs(f) = MI.Get_(StreamKind.Visual, 0, f)
@@ -282,41 +300,45 @@ Public Class TvEpisode
 
         Try
             If playlist.Count = 1 Then
-                Me.Details.StreamDetails.Video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 61)
+                Try
+                    Me.Details.StreamDetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration"))/1000)
+                Catch
+                    Me.Details.StreamDetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(MI.Get_(StreamKind.Visual, 0, "Duration"))/1000)
+                End Try
             ElseIf playlist.Count > 1 Then
-                Dim totalmins As Integer = 0
-                For f = 0 To playlist.Count - 1
-                    Dim M2 As mediainfo
-                    M2 = New mediainfo
-                    M2.Open(playlist(f))
-                    Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
-                    Dim tempint As Integer
-                    If temptime <> Nothing Then
-                        Try
-                            '1h 24mn 48s 546ms
-                            Dim hours As Integer = 0
-                            Dim minutes As Integer = 0
-                            Dim tempstring2 As String = temptime
-                            tempint = tempstring2.IndexOf("h")
-                            If tempint <> -1 Then
-                                hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                                tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
-                                tempstring2 = Trim(tempstring2)
-                            End If
-                            tempint = tempstring2.IndexOf("mn")
-                            If tempint <> -1 Then
-                                minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
-                            End If
-                            If hours <> 0 Then
-                                hours = hours * 60
-                            End If
-                            minutes = minutes + hours
-                            totalmins = totalmins + minutes
-                        Catch
-                        End Try
-                    End If
-                Next
-                Me.Details.StreamDetails.Video.DurationInSeconds.Value = totalmins & " min"
+                'Dim totalmins As Integer = 0
+                'For f = 0 To playlist.Count - 1
+                '    Dim M2 As mediainfo
+                '    M2 = New mediainfo
+                '    M2.Open(playlist(f))
+                '    Dim temptime As String = M2.Get_(StreamKind.Visual, 0, 61)
+                '    Dim tempint As Integer
+                '    If temptime <> Nothing Then
+                '        Try
+                '            '1h 24mn 48s 546ms
+                '            Dim hours As Integer = 0
+                '            Dim minutes As Integer = 0
+                '            Dim tempstring2 As String = temptime
+                '            tempint = tempstring2.IndexOf("h")
+                '            If tempint <> -1 Then
+                '                hours = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                '                tempstring2 = tempstring2.Substring(tempint + 1, tempstring2.Length - (tempint + 1))
+                '                tempstring2 = Trim(tempstring2)
+                '            End If
+                '            tempint = tempstring2.IndexOf("mn")
+                '            If tempint <> -1 Then
+                '                minutes = Convert.ToInt32(tempstring2.Substring(0, tempint))
+                '            End If
+                '            If hours <> 0 Then
+                '                hours = hours * 60
+                '            End If
+                '            minutes = minutes + hours
+                '            totalmins = totalmins + minutes
+                '        Catch
+                '        End Try
+                '    End If
+                'Next
+                'Me.Details.StreamDetails.Video.DurationInSeconds.Value = totalmins & " min"
             End If
         Catch
             Me.Details.StreamDetails.Video.DurationInSeconds.Value = MI.Get_(StreamKind.Visual, 0, 57)
@@ -358,6 +380,7 @@ Public Class TvEpisode
         Dim curAS As Integer = 0
         Dim addAS As Boolean = False
 
+        Dim tmpaud As String = ""
         'get audio data
         If numOfAudioStreams > 0 Then
             While curAS < numOfAudioStreams
@@ -366,13 +389,26 @@ Public Class TvEpisode
                 If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
                     audio.Codec.Value = "MP3"
                 Else
-                    audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
+                    'audio.Codec.Value = MI.Get_(StreamKind.Audio, curAS, "Format")
+                    Try
+                        tempmediainfo = aviFile.Audio(curAS).Format
+                    Catch
+                        tempmediainfo=""
+                    End Try
+                    audio.Codec.Value = tempmediainfo
                 End If
                 If audio.Codec.Value = "AC-3" Then
                     audio.Codec.Value = "AC3"
                 End If
+                tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                 If audio.Codec.Value = "DTS" Then
-                    audio.Codec.Value = "dca"
+                    If tmpaud = "dts ma / core" Then 
+                        audio.Codec.Value = "dtshd_ma"
+                    ElseIf tmpaud="dts hra / core" Then
+                        audio.Codec.Value="dtshd_hra"
+                    Else
+                        audio.Codec.Value = "DTS"
+                    End If
                 End If
                 audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
                 audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
