@@ -2123,6 +2123,12 @@ Partial Public Class Form1
                 For Each Shows In Cache.TvCache.Shows
                     If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
                         'workingtvshow = nfoFunction.loadfulltnshownfo(Shows.fullpath)
+                        If episodearray(0).Episode.Value=1 Then
+                            Dim Seasonxx As String = Shows.folderpath+"Season"+(If(episodearray(0).Season.Value <10,"0"+episodearray(0).Season.Value,episodearray(0).Season.Value))+(If(Preferences.FrodoEnabled,"-poster.jpg",".tbn"))
+                            If Not IO.File.Exists(Seasonxx) Then
+                                TvGetArtwork(Shows, False,False,True)
+                            End If
+                        End If
                         For Each ept In episodearray
                             Dim list = Shows.MissingEpisodes
                             For j = list.Count - 1 To 0 Step -1
