@@ -9395,7 +9395,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub TextBox2_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Enter
+    Private Sub TextBox_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Enter
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
         If Panel9.Visible = False Then
@@ -9408,7 +9408,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub TextBox2_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Leave
+    Private Sub TextBox_Title_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox_Title.Leave
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
 
         Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
@@ -24150,4 +24150,17 @@ End Sub
     End Sub
 
 
+    Private Sub ReloadHtmlTemplatesToolStripMenuItem_Click( sender As System.Object,  e As System.EventArgs) Handles ReloadHtmlTemplatesToolStripMenuItem.Click
+        Dim mediaDropdown As New SortedList(Of String, String)
+        mediaInfoExp.addTemplates(mediaDropdown)
+        ExportMovieListInfoToolStripMenuItem.DropDownItems.Clear()
+        ExportTVShowInfoToolStripMenuItem.DropDownItems.Clear()
+        For Each item In mediaDropdown
+	        If item.Value = MediaInfoExport.mediaType.Movie Then
+		        ExportMovieListInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+		    ElseIf item.Value = MediaInfoExport.mediaType.TV Then
+		        ExportTVShowInfoToolStripMenuItem.DropDownItems.Add(item.Key)
+	        End If
+        Next
+    End Sub
 End Class
