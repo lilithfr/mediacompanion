@@ -279,7 +279,11 @@ Public Class TvShow
 
                 If Utilities.IsNumeric(Episode.Season.Value) Then
                     CurrentSeason.SeasonNumber = Episode.Season.Value
-                    CurrentSeason.SeasonLabel = "Season " & Utilities.PadNumber(Episode.Season.Value, 2)
+                    If CurrentSeason.SeasonNumber=0 THen
+                        CurrentSeason.SeasonLabel = "Specials"
+                    Else
+                        CurrentSeason.SeasonLabel = "Season " & Utilities.PadNumber(Episode.Season.Value, 2)
+                    End If
                     CurrentSeason.Poster.FolderPath = Me.FolderPath
                     If Episode.Season.Value <> 0 Then
                         CurrentSeason.Poster.FileName = "season" & Utilities.PadNumber(Episode.Season.Value, 2) & If(Preferences.FrodoEnabled, "-poster.jpg", ".tbn")

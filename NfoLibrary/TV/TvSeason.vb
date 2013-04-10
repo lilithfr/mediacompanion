@@ -23,9 +23,9 @@ Public Class TvSeason
     Private _SeasonNumber As Integer
     Public Shadows Property SeasonNumber As Integer
         Get
-            If Not Me.SeasonNode.Text = "Season " & Utilities.PadNumber(_SeasonNumber, 2) Then
-                Me.SeasonNode.Text = "Season " & Utilities.PadNumber(_SeasonNumber, 2)
-            End If
+            'If Not Me.SeasonNode.Text = "Season " & Utilities.PadNumber(_SeasonNumber, 2) Then
+                'Me.SeasonNode.Text = "Season " & Utilities.PadNumber(_SeasonNumber, 2)
+            'End If
             Return _SeasonNumber
         End Get
         Set(ByVal value As Integer)
