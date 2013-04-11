@@ -9,6 +9,7 @@ Public Class MediaInfoExport
         Movie
         TV
     End Enum
+
     Private Structure mediaInfoExportTemplate
         Dim title As String
         Dim path As String  'not used anymore as the template is stored when adding
@@ -16,6 +17,7 @@ Public Class MediaInfoExport
         Dim type As mediaType
         Dim css As String
         Dim cssfile As String
+
         Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
             title = ""
             path = ""
@@ -25,6 +27,7 @@ Public Class MediaInfoExport
             cssfile = ""
         End Sub
     End Structure
+
     Dim workingTemplate As mediaInfoExportTemplate
     Dim templateList As New List(Of mediaInfoExportTemplate)
     Dim fullTemplateString As String = Nothing
@@ -222,10 +225,11 @@ Public Class MediaInfoExport
                 Case "title"
                     strNFOprop = If(movie.title <> Nothing, movie.title, "")
                     If Not String.IsNullOrEmpty(strNFOprop) And tokenInstr.Length > 1 Then
-                        Dim M As Match = Regex.Match(strNFOprop, "^(?<article>The )(?<title>.*?)$")
+                        Dim M As Match = Regex.Match(movie.title, "^(?<article>The )?(?<title>.*?)$")
                         If M.Success Then
                             strNFOprop = M.Groups("title").Value.Trim
                             If tokenInstr(1).StartsWith("append") Then strNFOprop.AppendValue(M.Groups("article").Value.Trim)
+                            If tokenInstr(1).StartsWith("article") Then strNFOprop = M.Groups("article").Value.Trim
                         End If
                     End If
 
@@ -455,7 +459,8 @@ Public Class MediaInfoExport
                                     Case "country"
                                         strNFOprop = newplotdetails.fullmoviebody.country
                                     Case "runtime"
-                                        strNFOprop = newplotdetails.fullmoviebody.runtime
+                                        Dim M As Match = Regex.Match(newplotdetails.fullmoviebody.runtime.Trim, "^(?<rt>\d{1,3}).*?")
+                                        strNFOprop = If(M.Success, M.Groups("rt").Value, "0")
                                     Case "mpaa"
                                         strNFOprop = newplotdetails.fullmoviebody.mpaa
                                     Case "genre"
@@ -1065,6 +1070,11 @@ Public Class MediaInfoExport
             returnCode = True
         End If
         Return returnCode
+    End Function
+
+    Public Function getPossibleFileType() As String
+        Dim M As Match = Regex.Match(workingTemplate.title, "(?<type>xml|csv)")
+        Return If(M.Success, M.Groups("type").Value, "html")
     End Function
 
 End Class
