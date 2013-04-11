@@ -12670,10 +12670,20 @@ Public Class Form1
 
     Private Sub util_ExportMediaListInfo(ByVal mediaType As String)
         Dim savepath As String
+        Dim extensions As New Dictionary(Of String, String)
+        extensions.Add("html", "Html Documents (*.html)|*.html")
+        extensions.Add("xml", "XML Data (*.xml)|*.xml")
+        extensions.Add("csv", "CSV (Comma delimited) (*.csv)|*.csv")
+        Dim ext As String = mediaInfoExp.getPossibleFileType
+        Dim idx As Integer
+        For idx = 1 To extensions.Count
+            If extensions.Keys(idx - 1) = ext Then Exit For
+        Next
         With SaveFileDialog1
-            .DefaultExt = "html"
-            .Filter = "Html Documents (*.html)|*.html|XML Data (*.xml)|*.xml|CSV (Comma delimited) (*.csv)|*.csv"
-            .Title = "Save HTML File"
+            .DefaultExt = ext
+            .Filter = String.Join("|", extensions.Values)
+            .FilterIndex = idx
+            .Title = "ExportMedia File"
             .OverwritePrompt = True
             .CheckPathExists = True
         End With
