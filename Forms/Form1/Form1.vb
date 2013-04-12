@@ -14297,10 +14297,10 @@ Public Class Form1
 
         cbDlTrailerDuringScrape.CheckState      = If(Preferences.DownloadTrailerDuringScrape, CheckState.Checked, CheckState.Unchecked)
         CheckBox11.CheckState                   = If(Preferences.gettrailer, CheckState.Checked, CheckState.Unchecked)
-        CheckBox18.CheckState                   = If(Preferences.scrapemovieposters, CheckState.Checked, CheckState.Unchecked)
+        cbMoviePosterScrape.CheckState          = If(Preferences.scrapemovieposters, CheckState.Checked, CheckState.Unchecked)
         CheckBox13.CheckState                   = If(Preferences.savefanart, CheckState.Checked, CheckState.Unchecked)
-        chkbx_usefoldernames.CheckState         = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
-        chkbx_MovieAllFolders.CheckState        = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
+        cbMovieUseFolderNames.CheckState         = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
+        cbMovieAllInFolders.CheckState        = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         chkbx_createfolderjpg.CheckState        = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
         chkbx_basicsave.CheckState              = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
         cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
@@ -14319,9 +14319,12 @@ Public Class Form1
         If Not Preferences.usefoldernames and Not Preferences.allfolders then
             chkbx_createfolderjpg.Enabled = False
             cbFanartInFolders.Enabled=False
+            cbMoviePosterInFolder.Enabled=False
             Preferences.fanartjpg=False
+            Preferences.posterjpg=False
         Else
             cbFanartInFolders.CheckState        = If(Preferences.fanartjpg, CheckState.Checked, CheckState.Unchecked)
+            cbMoviePosterInFolder.CheckState    = If(Preferences.posterjpg, CheckState.Checked, CheckState.Unchecked)
         End If
 
         Select Case Preferences.maxactors
@@ -14528,9 +14531,9 @@ Public Class Form1
 
 
 
-    Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
+    Private Sub cbMoviePosterScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMoviePosterScrape.CheckedChanged
         Try
-            If CheckBox18.CheckState = CheckState.Checked Then
+            If cbMoviePosterScrape.CheckState = CheckState.Checked Then
                 Preferences.scrapemovieposters = True
             Else
                 Preferences.scrapemovieposters = False
@@ -14539,6 +14542,25 @@ Public Class Form1
             btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMoviePosterInFolder_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMoviePosterInFolder.CheckedChanged
+        Try
+            If cbMoviePosterInFolder.CheckState = CheckState.Checked Then
+                If Preferences.usefoldernames or Preferences.allfolders Then
+                    Preferences.posterjpg = True
+                Else 
+                    Preferences.posterjpg = False
+                    cbMoviePosterInFolder.Checked = False
+                    MsgBox("Either Use Foldername or All Movies in Folders not selected!")
+                End If
+            Else
+                Preferences.posterjpg = False
+            End If
+
+        Catch ex As Exception
+
         End Try
     End Sub
 
@@ -14714,13 +14736,14 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub chkbx_usefoldernames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_usefoldernames.CheckedChanged
+    Private Sub cbMovieUseFolderNames_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieUseFolderNames.CheckedChanged
         Try
-            If chkbx_usefoldernames.CheckState = CheckState.Checked Then
+            If cbMovieUseFolderNames.CheckState = CheckState.Checked Then
                 Preferences.usefoldernames = True
-                chkbx_MovieAllFolders.Checked = False
+                cbMovieAllInFolders.Checked = False
                 chkbx_createfolderjpg.Enabled = True
                 cbFanartInFolders.Enabled = True
+                cbMoviePosterInFolder.Enabled = True
             Else
                 Preferences.usefoldernames = False
                 If Not Preferences.allfolders then
@@ -14728,7 +14751,34 @@ Public Class Form1
                     chkbx_createfolderjpg.Enabled = False
                     cbFanartInFolders.Checked = False
                     cbFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Checked = False
+                    cbMoviePosterInFolder.Enabled = False
                     'Preferences.createfolderjpg = False
+                End If
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovieAllInFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovieAllInFolders.CheckedChanged
+        Try
+            Preferences.allfolders = cbMovieAllInFolders.Checked
+            If cbMovieAllInFolders.Checked = True Then 
+                cbMovieUseFolderNames.Checked = False
+                chkbx_createfolderjpg.Enabled = True
+                cbFanartInFolders.Enabled = True
+                cbMoviePosterInFolder.Enabled = True
+            Else
+                If Not Preferences.usefoldernames Then
+                    chkbx_createfolderjpg.Enabled = False
+                    chkbx_createfolderjpg.Checked = False
+                    cbFanartInFolders.Checked = False
+                    cbFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Checked = False
+                    cbMoviePosterInFolder.Enabled = False
                 End If
             End If
             movieprefschanged = True
@@ -21428,27 +21478,7 @@ Public Class Form1
         Return fanartpath
     End Function
 
-    Private Sub CheckBoxMovieAllFolders_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkbx_MovieAllFolders.CheckedChanged
-        Try
-            Preferences.allfolders = chkbx_MovieAllFolders.Checked
-            If chkbx_MovieAllFolders.Checked = True Then 
-                chkbx_usefoldernames.Checked = False
-                chkbx_createfolderjpg.Enabled = True
-                cbFanartInFolders.Enabled=True
-            Else
-                If Not Preferences.usefoldernames Then
-                    chkbx_createfolderjpg.Enabled = False
-                    chkbx_createfolderjpg.Checked = False
-                    cbFanartInFolders.Checked = False
-                    cbFanartInFolders.Enabled = False
-                End If
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+
 
     Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
         mov_SplitContainerAutoPosition()
@@ -24173,4 +24203,6 @@ End Sub
 	        End If
         Next
     End Sub
+
+
 End Class

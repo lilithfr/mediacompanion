@@ -2753,6 +2753,9 @@ If you do not wish to edit a field then leave it blank, only fields that contain
   <metadata name="bckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>477, 95</value>
   </metadata>
+  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>613, 56</value>
   </metadata>
@@ -2812,9 +2815,6 @@ If you do not wish to edit a field then leave it blank, only fields that contain
         3AABwAIAAQMMAAs=
 </value>
   </data>
-  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="ContextMenuStrip_table.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>928, 17</value>
   </metadata>
@@ -2861,12 +2861,6 @@ insert the Appropriate Disk.
 The search for offline movies is not recursive, so make
 sure the folders you want added are in one of your
 offline movie folder roots.</value>
-  </data>
-  <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label99.Text" xml:space="preserve">
-    <value>Media Companion can attempt to automatically download a Poster when a movie is first scraped, if this option is enabled, then the setting below allows you to prioritise the order that sources are checked for an available poster.</value>
   </data>
   <metadata name="btnTVPrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
