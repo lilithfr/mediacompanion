@@ -10733,6 +10733,7 @@ Public Class Form1
 
 
             ElseIf tempstring = "Season All" Then
+                Button53.Enabled = False
                 If eden Then
                     path = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "season-all.tbn")
                     edenpath = path
@@ -11249,11 +11250,11 @@ Public Class Form1
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "banner.jpg"))
-                        imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg"))
+                        'imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-banner.jpg"))
                         frodo =1
                     ElseIf rbTVposter.Checked = True Then
                         imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "poster.jpg"))
-                        imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg"))
+                        'imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all-poster.jpg"))
                         frodo = 1
                     End If
                 End If
@@ -11275,8 +11276,13 @@ Public Class Form1
                 End If
             ElseIf ComboBox2.Text.ToLower.IndexOf("season") <> -1 And ComboBox2.Text.ToLower.IndexOf("all") <> -1 Then
                 If Preferences.EdenEnabled Then
-                    imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn"))
-                    eden =1
+                    If Preferences.seasonall="poster" and rbTVposter.Checked Then
+                        imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn"))
+                        eden =1
+                    ElseIf Preferences.seasonall="wide" and rbTVbanner.Checked Then
+                        imagePaths.Add(workingposterpath.Replace(IO.Path.GetFileName(workingposterpath), "season-all.tbn"))
+                        eden =1
+                    End If 
                 End If
                 If Preferences.FrodoEnabled Then
                     If rbTVbanner.Checked = True Then
