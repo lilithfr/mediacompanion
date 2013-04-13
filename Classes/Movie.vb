@@ -1444,7 +1444,7 @@ Public Class Movie
                     IO.File.Copy(edenart, frodoart)
                 End If
                 
-                If Preferences.createfolderjpg Then
+                If Preferences.createfolderjpg Then         'Save folder.jpg
 
                     Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "folder.jpg")
 
@@ -1454,6 +1454,19 @@ Public Class Movie
                         ReportProgress(, "Poster also saved as ""folder.jpg"" OK" & vbCrLf)
                     Else
                         ReportProgress(, "! ""folder.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
+                    End If
+                End If
+
+                If Preferences.posterjpg Then               'Save poster.jpg
+
+                    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "poster.jpg")
+
+                    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
+
+                        File.Copy(PosterPath, temppath, True)
+                        ReportProgress(, "Poster also saved as ""poster.jpg"" OK" & vbCrLf)
+                    Else
+                        ReportProgress(, "! ""poster.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
                     End If
                 End If
 
