@@ -11312,6 +11312,7 @@ Public Class Form1
                 For Each savepath As String In imagePaths
                     PictureBox13.Image.Save(savepath, Imaging.ImageFormat.Jpeg)
                 Next
+                GC.Collect()
                 If combostart = ComboBox2.SelectedItem Then
                     If rbTVbanner.Checked = True Then
                         tv_PictureBoxBottom.Image = PictureBox13.Image
@@ -11389,7 +11390,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button57_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button57.Click
+    Private Sub Button57_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button57.Click ' disabled
         'Try
         '    'savesmall
         '    Dim postname As String = ""
@@ -22470,8 +22471,16 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub HomeMovieFoldersRefresh()
+        Preferences.homemoviefolders.Clear()
+        For Each item In ListBox19.Items
+            Preferences.homemoviefolders.Add(item)
+        Next
+        Call SaveConfig()
+        Call rebuildHomeMovies()
+    End Sub
 
-    Private Sub btnSaveHomeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveHomeMovie.Click
+    Private Sub btnHomeMovieSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieSave.Click
         If HmMovTitle.Text <> "" Then
             WorkingHomeMovie.fullmoviebody.title = HmMovTitle.Text
         End If
@@ -22486,7 +22495,7 @@ Public Class Form1
 
 
 
-    Private Sub AddHomeFolderBtn_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddHomeFolderBtn.Click
+    Private Sub btnHomeFolderAdd_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFolderAdd.Click
         Try
             Dim allok As Boolean = True
             Dim theFolderBrowser As New FolderBrowserDialog
@@ -22505,11 +22514,12 @@ Public Class Form1
                 If allok = True Then
                     ListBox19.Items.Add(thefoldernames)
                     ListBox19.Refresh()
-                    Preferences.homemoviefolders.Clear()
-                    For Each item In ListBox19.Items
-                        Preferences.homemoviefolders.Add(item)
-                    Next
-                    Call SaveConfig()
+                    Call HomeMovieFoldersRefresh()
+                    'Preferences.homemoviefolders.Clear()
+                    'For Each item In ListBox19.Items
+                    '    Preferences.homemoviefolders.Add(item)
+                    'Next
+                    'Call SaveConfig()
                 Else
                     MsgBox("        Folder Already Exists")
                 End If
@@ -22519,23 +22529,72 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub RemoveHomeFoldersBtn_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveHomeFoldersBtn.Click
+    Private Sub btnHomeFoldersRemove_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeFoldersRemove.Click
         Try
             While ListBox19.SelectedItems.Count > 0
                 ListBox19.Items.Remove(ListBox19.SelectedItems(0))
             End While
-            Preferences.homemoviefolders.Clear()
-            For Each item In ListBox19.Items
-                Preferences.homemoviefolders.Add(item)
-            Next
-            Call SaveConfig()
-            Call rebuildHomeMovies()
+            Call HomeMovieFoldersRefresh()
+            'Preferences.homemoviefolders.Clear()
+            'For Each item In ListBox19.Items
+            '    Preferences.homemoviefolders.Add(item)
+            'Next
+            'Call SaveConfig()
+            'Call rebuildHomeMovies()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
+        Private Sub btnHomeManualPathAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnHomeManualPathAdd.Click
+        Try
+            If tbHomeManualPath.Text = Nothing Then
+                Exit Sub
+            End If
+            If tbHomeManualPath.Text = "" Then
+                Exit Sub
+            End If
+            Dim tempstring As String = tbHomeManualPath.Text
+            Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Do While tempstring.LastIndexOf("/") = tempstring.Length - 1
+                tempstring = tempstring.Substring(0, tempstring.Length - 1)
+            Loop
+            Dim exists As Boolean = False
+            For Each item In ListBox19.Items
+                If item.ToString.ToLower = tempstring.ToLower Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists = True Then
+                MsgBox("        Folder Already Exists")
+            Else
+                Dim f As New IO.DirectoryInfo(tempstring)
+                If f.Exists Then
+                    ListBox19.Items.Add(tempstring)
+                    ListBox19.Refresh()
+                    Call HomeMovieFoldersRefresh()
+                    tbHomeManualPath.Text = ""
+                    'newTvFolders.Add(tempstring)
+                Else
+                    Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If tempint = DialogResult.Yes Then
+                        ListBox19.Items.Add(tempstring)
+                        ListBox19.Refresh()
+                        Call HomeMovieFoldersRefresh()
+                        tbHomeManualPath.Text = ""
+                        'newTvFolders.Add(tempstring)
+                    End If
+                    Call HomeMovieFoldersRefresh()
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
 
+    End Sub
 
     Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
 
@@ -22618,10 +22677,10 @@ Public Class Form1
         Call rebuildHomeMovies()
     End Sub
 
-    Private Sub homeMovie_ScreenShotBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles homeMovie_ScreenShotBtn.Click
+    Private Sub btnHomeMovieScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHomeMovieScreenShot.Click
         Try
 
-            If IsNumeric(homeMovieScreenShotTimeTxtBx.Text) Then
+            If IsNumeric(tbHomeMovieScreenShotDelay.Text) Then
                 Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(WorkingHomeMovie.fileinfo.fullpathandfilename), "-fanart.jpg")
                 Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(WorkingHomeMovie.fileinfo.fullpathandfilename), "")
                 Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
@@ -22631,8 +22690,8 @@ Public Class Form1
                     tempstring2 = pathandfilename & ext
                     If IO.File.Exists(tempstring2) Then
                         Dim seconds As Integer = 10
-                        If Convert.ToInt32(homeMovieScreenShotTimeTxtBx.Text) > 0 Then
-                            seconds = Convert.ToInt32(homeMovieScreenShotTimeTxtBx.Text)
+                        If Convert.ToInt32(tbHomeMovieScreenShotDelay.Text) > 0 Then
+                            seconds = Convert.ToInt32(tbHomeMovieScreenShotDelay.Text)
                         End If
 
                         If IO.File.Exists(thumbpathandfilename) Then
@@ -22674,7 +22733,7 @@ Public Class Form1
                 messbox.Close()
             Else
                 MsgBox("Please enter a numerical value into the textbox")
-                homeMovieScreenShotTimeTxtBx.Focus()
+                tbHomeMovieScreenShotDelay.Focus()
                 Exit Sub
             End If
         Catch ex As Exception
@@ -23828,15 +23887,15 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Button4_Click( sender As System.Object,  e As System.EventArgs) Handles Button4.Click
+    Private Sub btnMovieManualPathAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovieManualPathAdd.Click
         Try
-            If TextBox21.Text = Nothing Then
+            If tbMovieManualPath.Text = Nothing Then
                 Exit Sub
             End If
-            If TextBox21.Text = "" Then
+            If tbMovieManualPath.Text = "" Then
                 Exit Sub
             End If
-            Dim tempstring As String = TextBox21.Text
+            Dim tempstring As String = tbMovieManualPath.Text
             Do While tempstring.LastIndexOf("\") = tempstring.Length - 1
                 tempstring = tempstring.Substring(0, tempstring.Length - 1)
             Loop
@@ -23857,14 +23916,14 @@ Public Class Form1
                 If f.Exists Then
                     ListBox7.Items.Add(tempstring)
                     ListBox7.Refresh()
-                    TextBox21.Text = ""
+                    tbMovieManualPath.Text = ""
                     'newTvFolders.Add(tempstring)
                 Else
                     Dim tempint As Integer = MessageBox.Show("This folder does not appear to exist" & vbCrLf & "Are you sure you wish to add it", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If tempint = DialogResult.Yes Then
                         ListBox7.Items.Add(tempstring)
                         ListBox7.Refresh()
-                        TextBox21.Text = ""
+                        tbMovieManualPath.Text = ""
                         'newTvFolders.Add(tempstring)
                     End If
                 End If
@@ -24216,6 +24275,7 @@ End Sub
 	        End If
         Next
     End Sub
+
 
 
 End Class
