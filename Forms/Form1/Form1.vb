@@ -14564,9 +14564,10 @@ Public Class Form1
             Else
                 Preferences.posterjpg = False
             End If
-
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
         Catch ex As Exception
-
+            ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
