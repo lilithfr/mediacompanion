@@ -471,6 +471,10 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 passed = False
             ElseIf Strings.Right(s, ".appledouble".Length) = ".appledouble" Then
                 passed = False
+            ElseIf Strings.Right(s, 9) = ".ds_store" Then
+                passed = False
+            ElseIf Strings.Right(s, 3) = ".tb" Then
+                passed = False
             ElseIf Strings.Right(s, 8) = "(noscan)" Then
                 passed = False
             ElseIf Strings.Right(s, 6) = "sample" Then
@@ -2439,6 +2443,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Return URL.Substring(URL.LastIndexOf("/") + 1)
         Catch ex As Exception
             Return URL
+        End Try
+    End Function
+    Public Shared Function GetFileNameFromPath(byVal ispath as String) as String
+        Try
+            Return ispath.Substring(ispath.LastIndexOf("\") + 1)
+        Catch ex As Exception
+            Return ispath
         End Try
     End Function
 

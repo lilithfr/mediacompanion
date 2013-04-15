@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Xml
 Imports Media_Companion
 
+
 Public Class TvShow
     Inherits ProtoFile
 
@@ -248,7 +249,7 @@ Public Class TvShow
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
             For Each fs_info As System.IO.FileInfo In fs_infos
                 'Application.DoEvents()
-                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" Then
+                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" and fs_info.ToString.Substring(0,2)<>"._" Then
                     Dim NewEpisode As New TvEpisode
                     NewEpisode.NfoFilePath = fs_info.FullName
                     NewEpisode.Load()

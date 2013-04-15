@@ -8665,6 +8665,8 @@ Public Class Form1
                         End If
                     End If
                 End If
+                Dim truefilename As String = Utilities.GetFileNameFromPath(filename_video)
+                If truefilename.Substring(0,2)="._" Then add = False
                 If add = True Then
                     Dim newep As New TvEpisode
                     newep.NfoFilePath = filename_nfo
