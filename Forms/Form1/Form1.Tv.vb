@@ -3071,19 +3071,20 @@ Partial Public Class Form1
 
         'Dim folder As String
         If IsNothing(nofolder) and Not IsNothing(remfolder) Then nofolder=remfolder
-        If nofolder.Count >= 0 Then
+        If nofolder.Count > 0 Then
             For Each folder In nofolder
                 For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
                     If Item.FolderPath.Trim("\") = folder Then
-                        TvTreeview.Nodes.Remove(Item.ShowNode)
-                        Cache.TvCache.Remove(Item)
+                        'TvTreeview.Nodes.Remove(Item.ShowNode)
+                        'Cache.TvCache.Remove(Item)
                         Exit For
                     End If
                 Next
                 ListBox6.Items.Remove(folder)
                 tvFolders.Remove(folder)
             Next
-            tv_ShowScrape()
+            tv_CacheRefresh
+            'tv_ShowScrape()
             MsgBox((nofolder.Count).toString +" folder/s removed")
         End If
     End Sub
