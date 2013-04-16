@@ -43,6 +43,9 @@ Partial Public Class TvShow
         If SearchForEpisodesAsWell Then
             SearchForEpisodesInFolder()
         End If
+        If Preferences.displayMissingEpisodes Then
+
+        End If
     End Sub
 
     Public Overloads Sub Load(ByVal Path As String, ByVal SearchForEpisodesAsWell As Boolean)

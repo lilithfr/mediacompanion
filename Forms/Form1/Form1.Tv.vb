@@ -2511,6 +2511,8 @@ Partial Public Class Form1
 
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
+                        'NewEpisode.SeasonNumber.Value = Utilities.PadNumber(NewEpisode.SeasonNumber.Value,2)
+                        'NewEpisode.EpisodeNumber.Value = Utilities.PadNumber(NewEpisode.EpisodeNumber.Value,2)
                         If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
                             MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
@@ -2527,8 +2529,69 @@ Partial Public Class Form1
                 End If
             End If
         Next
+        'Tv_EpisodesMissingLoad(showlist)
         Tv_CacheSave()
 
+    End Sub
+
+    Private Sub  Tv_EpisodesMissingLoad(ByVal ShowList As List(Of TvShow))
+        For Each item In ShowList
+            Dim showid As String = item.TvdbId.Value
+            If IsNumeric(showid) Then
+                Dim dir_info As New System.IO.DirectoryInfo(applicationPath & "\missing\")
+                Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
+                For Each fs_info As System.IO.FileInfo In fs_infos
+                    Dim MissingEpisode As New TvEpisode
+                    MissingEpisode.NfoFilePath = fs_info.FullName
+                    MissingEpisode.Load()
+                    If MissingEpisode.TvdbId.value = showid Then
+
+                    End If
+
+                Next
+            End If
+        Next
+        'If item.State = Media_Companion.ShowState.Open Then
+        '        Dim showid As String = item.TvdbId.Value
+        '        If IsNumeric(showid) Then
+        '            'http://www.thetvdb.com/api/6E82FED600783400/series/85137/all/en.xml
+        '            Dim language As String = ""
+        '            If item.Language.Value <> "" Then
+        '                language = item.Language.Value
+        '            Else
+        '                language = "en"
+        '            End If
+        '            Dim sortorder As String = item.SortOrder.Value
+        '            Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & showid & "/all/" & language & ".xml"
+        '            If sortorder = "" Then
+        '                sortorder = "default"
+        '            End If
+        '            Dim xmlfile As String
+
+        '            xmlfile = Utilities.DownloadTextFiles(url)
+
+        '            Dim SeriesInfo As New Tvdb.ShowData
+        '            SeriesInfo.LoadXml(xmlfile)
+
+        '            For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+        '                Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
+        '                If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
+        '                    Dim MissingEpisode As New Media_Companion.TvEpisode
+        '                    MissingEpisode.NfoFilePath = IO.Path.Combine(Preferences.applicationPath, "missing\" & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+        '                    MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
+        '                    MissingEpisode.IsMissing = True
+        '                    MissingEpisode.IsCache = True
+        '                    MissingEpisode.ShowObj = item
+        '                    MissingEpisode.Save()
+        '                    item.AddEpisode(MissingEpisode)
+        '                    Bckgrndfindmissingepisodes.ReportProgress(1, MissingEpisode)
+        '                End If
+        '            Next
+
+        '        End If
+        '    End If
+        'Next
+        'Tv_CacheSave()
     End Sub
 
     Public Sub tv_CacheLoad()
@@ -3324,6 +3387,7 @@ Partial Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 
 
 End Class

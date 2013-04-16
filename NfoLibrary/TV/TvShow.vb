@@ -259,7 +259,12 @@ Public Class TvShow
 
             Next fs_info
         Next
+        'If Preferences.displayMissingEpisodes Then
+            'Tv_EpisodesMissingLoad()
+        'End If
     End Sub
+
+
 
     Public Sub AddEpisode(ByRef Episode As TvEpisode)
         If Not Cache.TvCache.Contains(Episode) Then
