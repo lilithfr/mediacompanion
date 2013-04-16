@@ -32,8 +32,8 @@ Partial Public Class TvShow
         End If
 
         If Me.MissingEpisodes.Count > 0 Then
-            ShowNode.ImageKey = "missing"
-            ShowNode.SelectedImageKey = "missing"
+            ShowNode.ImageKey = "missing.png"
+            ShowNode.SelectedImageKey = "missing.png"
         End If
 
     End Sub
