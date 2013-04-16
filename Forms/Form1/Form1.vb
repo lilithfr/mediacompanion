@@ -19118,6 +19118,7 @@ Public Class Form1
                 Preferences.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
                 Preferences.SaveConfig()
                 If Preferences.displayMissingEpisodes = False OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                    tv_CacheRefresh 
                     tv_Filter()
                     Return
                 End If
@@ -24280,4 +24281,10 @@ End Sub
 
 
 
+Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.EventArgs)
+
+End Sub
+Private Sub PictureBoxFanArt_Click( sender As System.Object,  e As System.EventArgs)
+
+End Sub
 End Class

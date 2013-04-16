@@ -74,8 +74,13 @@ Public Class TvShow
         Get
             Select Case _State.Value
                 Case Media_Companion.ShowState.Open
-                    ShowNode.ImageKey = "blank"
-                    ShowNode.SelectedImageKey = "blank"
+                    If ShowNode.ImageKey = "missing.png" Then
+                        ShowNode.ImageKey = "missing.png"
+                        ShowNode.SelectedImageKey = "missing.png"
+                    Else
+                        ShowNode.ImageKey = "blank"
+                        ShowNode.SelectedImageKey = "blank"
+                    End If
                 Case Media_Companion.ShowState.Locked
                     ShowNode.ImageKey = "padlock"
                     ShowNode.SelectedImageKey = "padlock"

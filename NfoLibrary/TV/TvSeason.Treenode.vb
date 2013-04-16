@@ -10,6 +10,25 @@ Partial Public Class TvSeason
 
         If Me.SeasonNode.TreeView Is Nothing Then
             If ShowObj IsNot Nothing Then
+                If ShowObj.MissingEpisodes.Count > 0 Then
+                    Dim seasonismissingeps As Boolean = False
+                    Dim thisseason As String = ""
+                    For Each ShSeason In ShowObj.Seasons
+                        If ShSeason.Value.SeasonLabel = Me.SeasonLabel Then thisseason = ShSeason.key : Exit For
+                    Next
+                    For Each missingep In ShowObj.MissingEpisodes
+                        If missingep.Season.Value = thisseason Then seasonismissingeps = True : Exit For
+                    Next
+                    If seasonismissingeps Then
+                        SeasonNode.ImageKey = "missing.png"
+                        SeasonNode.SelectedImageKey = "missing.png"
+                    Else
+                        SeasonNode.ImageKey = "blank"
+                        SeasonNode.SelectedImageKey = "blank"
+                    End If
+                    
+                    SeasonNode.SelectedImageKey = "missing.png"
+                End If
                 Me.ShowObj.ShowNode.Nodes.Add(Me.SeasonNode)
             End If
         End If
