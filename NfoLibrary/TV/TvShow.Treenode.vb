@@ -31,6 +31,11 @@ Partial Public Class TvShow
             ShowNode.ForeColor = Drawing.Color.Red
         End If
 
+        If Me.MissingEpisodes.Count > 0 Then
+            ShowNode.ImageKey = "missing"
+            ShowNode.SelectedImageKey = "missing"
+        End If
+
     End Sub
 
     Public Overrides Sub Load(ByVal Path As String)
