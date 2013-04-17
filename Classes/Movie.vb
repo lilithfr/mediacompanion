@@ -785,7 +785,10 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.playcount = "0"
         End If
 
-         _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+        If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
+            _scrapedMovie.fileinfo.createdate = Format(System.DateTime.Now, Preferences.datePattern).ToString
+        End If
+
     End Sub
 
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
@@ -977,6 +980,7 @@ Public Class Movie
         If Rescrape Then
             _scrapedMovie.fullmoviebody.source    = _previousCache.source
             _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
+            _scrapedMovie.fileinfo.createdate = _previousCache.createdate
         End If
 
     End Sub
