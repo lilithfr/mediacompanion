@@ -90,7 +90,7 @@ Public Class TvEpisode
     Public Property Director As New ProtoProperty(Me, "director")
     Public Property Premiered As New ProtoProperty(Me, "premiered")
     Public Property Status As New ProtoProperty(Me, "status", CacheMode:=CacheMode.Both)
-    Public Property Aired As New ProtoProperty(Me, "aired")
+    Public Property Aired As New ProtoProperty(Me, "aired", CacheMode:=CacheMode.Both)
     Public Property Studio As New ProtoProperty(Me, "studio")
     Public Property Trailer As New ProtoProperty(Me, "trailer")
     Public Property Genre As New ProtoProperty(Me, "genre")
