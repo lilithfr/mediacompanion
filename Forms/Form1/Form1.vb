@@ -3566,73 +3566,78 @@ Public Class Form1
             mess.Show()
             mess.Refresh()
             Application.DoEvents()
+            Dim Startfullpathandfilename As String = ""
+            If Not ISNothing(DataGridViewMovies.CurrentRow) Then
+                Dim i As Integer = DataGridViewMovies.CurrentRow.Index
+                Startfullpathandfilename = DataGridViewMovies.Item(0, i).Value.ToString
 
-            Dim i As Integer = DataGridViewMovies.CurrentRow.Index
-            Dim Startfullpathandfilename As String = DataGridViewMovies.Item(0, i).Value.ToString
+                For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
 
-            For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+                    Dim movie    As Movie  = oMovies.LoadMovie(filepath)
 
-                Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-                Dim movie    As Movie  = oMovies.LoadMovie(filepath)
+                    If IsNothing(movie) Then Continue For
 
-                If IsNothing(movie) Then Continue For
+                    If directortxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
+                    End If
+                    If creditstxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
+                    End If
+                    If genretxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
+                    End If
+                    If certtxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
+                    End If
+                    If outlinetxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
+                    End If
+                    If runtimetxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
+                    End If
+                    If studiotxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
+                    End If
+                    If plottxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
+                    End If
+                    If taglinetxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
+                    End If
+                    If txtStars.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
+                    End If
+                    If ratingtxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
+                    End If
+                    If votestxt.Text <> "" Then
+                        movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
+                    End If
 
-                If directortxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.director = directortxt.Text
-                End If
-                If creditstxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.credits = creditstxt.Text
-                End If
-                If genretxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
-                End If
-                If certtxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
-                End If
-                If outlinetxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.outline = outlinetxt.Text
-                End If
-                If runtimetxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
-                End If
-                If studiotxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.studio = studiotxt.Text
-                End If
-                If plottxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.plot = plottxt.Text
-                End If
-                If taglinetxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
-                End If
-                If txtStars.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
-                End If
-                If ratingtxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
-                End If
-                If votestxt.Text <> "" Then
-                    movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
-                End If
+                    If cbMovieDisplay_MovieSet.SelectedItem = Nothing Then cbMovieDisplay_MovieSet.SelectedItem = "-None-"
+                    If cbMovieDisplay_MovieSet.SelectedItem <> "-None-" Then
+                        movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
+                    Else
+                        movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+                    End If
+                    'If setsTxt.Text = "" Then setsTxt.Text = "-None-"
+                    'If setsTxt.Text <> "-None-" Then
+                    'movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
+                    'Else
+                    'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
+                    'End If
+                    movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
 
-                If cbMovieDisplay_MovieSet.SelectedItem = Nothing Then cbMovieDisplay_MovieSet.SelectedItem = "-None-"
-                If cbMovieDisplay_MovieSet.SelectedItem <> "-None-" Then
-                    movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-                Else
-                    movie.ScrapedMovie.fullmoviebody.movieset = Nothing
-                End If
-                'If setsTxt.Text = "" Then setsTxt.Text = "-None-"
-                'If setsTxt.Text <> "-None-" Then
-                'movie.ScrapedMovie.fullmoviebody.movieset = setsTxt.Text
-                'Else
-                'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
-                'End If
-                movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
-
-                movie.AssignMovieToCache
-                movie.UpdateMovieCache
-                movie.SaveNFO
-            Next
-
+                    movie.AssignMovieToCache
+                    movie.UpdateMovieCache
+                    movie.SaveNFO
+                Next
+            Else
+                mess.Close
+                MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
+                Exit Sub
+            End If
 '            oMovies.SaveMovieCache
 '            oMovies.LoadMovieCache
 
