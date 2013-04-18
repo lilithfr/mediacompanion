@@ -14852,7 +14852,7 @@ Public Class Form1
             ElseIf ComboBox6.SelectedItem.ToString.ToLower = "none" Then
                 Preferences.maxmoviegenre = 0
             Else
-                Preferences.maxmoviegenre = 9999
+                Preferences.maxmoviegenre = 99
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
