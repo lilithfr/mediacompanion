@@ -5346,27 +5346,37 @@ Public Class Form1
 
                     Dim issavefanart As Boolean = Preferences.savefanart
                     Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
+                    Dim FanartOrExtraFanartPath As String = mov_FanartORExtraFanartPath
+                    Dim xtra As Boolean = False
+                    If RadioButtonThumb1.Checked or RadioButtonThumb2.Checked or RadioButtonThumb3.Checked or RadioButtonThumb4.Checked Then xtra = True
 
                     Preferences.savefanart = True
 
+                    If FanartOrExtraFanartPath <> FanartOrExtraPath and Preferences.movxtrafanart Then 
+                        Dim extrfanart As Boolean = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraFanartPath)
+                    'ElseIf 
+                    End If
+
                     If Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath) Then
-                        If Preferences.FrodoEnabled and workingMovieDetails.fileinfo.videotspath<>"" Then
-                            Dim OldFanartPath As String = FanartOrExtraPath
-                            FanartOrExtraPath=workingMovieDetails.fileinfo.videotspath+"fanart.jpg"
-                            If IO.File.Exists(FanartOrExtraPath) Then
-                                Utilities.SafeDeleteFile(FanartOrExtraPath)
-                            End If
-                            IO.File.Copy(OldFanartPath,FanartOrExtraPath)
-                            GC.Collect
-                            If Not Preferences.EdenEnabled Then
-                                Utilities.SafeDeleteFile(OldFanartPath)
-                            End If
-                        ElseIf Preferences.fanartjpg Then
-                            Dim fanartjpgpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(workingMovieDetails.fileinfo.filename,"fanart.jpg")
-                                If IO.File.Exists(fanartjpgpath) Then
-                                    Utilities.SafeDeleteFile(fanartjpgpath)
+                        If Not xtra Then
+                            If Preferences.FrodoEnabled and workingMovieDetails.fileinfo.videotspath<>"" Then
+                                Dim OldFanartPath As String = FanartOrExtraPath
+                                FanartOrExtraPath=workingMovieDetails.fileinfo.videotspath+"fanart.jpg"
+                                If IO.File.Exists(FanartOrExtraPath) Then
+                                    Utilities.SafeDeleteFile(FanartOrExtraPath)
                                 End If
-                            IO.File.Copy(FanartOrExtraPath,fanartjpgpath)
+                                IO.File.Copy(OldFanartPath,FanartOrExtraPath)
+                                GC.Collect
+                                If Not Preferences.EdenEnabled Then
+                                    Utilities.SafeDeleteFile(OldFanartPath)
+                                End If
+                            ElseIf Preferences.fanartjpg Then
+                                Dim fanartjpgpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(workingMovieDetails.fileinfo.filename,"fanart.jpg")
+                                    If IO.File.Exists(fanartjpgpath) Then
+                                        Utilities.SafeDeleteFile(fanartjpgpath)
+                                    End If
+                                IO.File.Copy(FanartOrExtraPath,fanartjpgpath)
+                            End If
                         End If
                         Preferences.savefanart = issavefanart
 
@@ -14313,8 +14323,10 @@ Public Class Form1
         cbMovieTrailerUrl.CheckState                   = If(Preferences.gettrailer, CheckState.Checked, CheckState.Unchecked)
         cbMoviePosterScrape.CheckState          = If(Preferences.scrapemovieposters, CheckState.Checked, CheckState.Unchecked)
         CheckBox13.CheckState                   = If(Preferences.savefanart, CheckState.Checked, CheckState.Unchecked)
-        cbMovieUseFolderNames.CheckState         = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
-        cbMovieAllInFolders.CheckState        = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
+        cbMovieUseFolderNames.CheckState        = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
+        cbMovXtraThumbs.CheckState              = If(Preferences.movxtrathumb, CheckState.Checked, CheckState.Unchecked)
+        cbMovXtraFanart.CheckState              = If(Preferences.movxtrafanart, CheckState.Checked, CheckState.Unchecked)
+        cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         chkbx_createfolderjpg.CheckState        = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
         chkbx_basicsave.CheckState              = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
         cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
@@ -14815,6 +14827,34 @@ Public Class Form1
                 Preferences.createfolderjpg = True
             Else
                 Preferences.createfolderjpg = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovXtraThumbs_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraThumbs.CheckedChanged
+        Try
+            If cbMovXtraThumbs.CheckState = CheckState.Checked Then
+                Preferences.movxtrathumb = True
+            Else
+                Preferences.movxtrathumb = False
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cbMovXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovXtraFanart.CheckedChanged
+        Try
+            If cbMovXtraFanart.CheckState = CheckState.Checked Then
+                Preferences.movxtrafanart = True
+            Else
+                Preferences.movxtrafanart = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -21500,6 +21540,30 @@ Public Class Form1
         Return fanartpath
     End Function
 
+    Private Function mov_FanartORExtraFanartPath() As String
+        Dim fanarttype As String = ""
+        If RadioButtonFanart.Checked Then fanarttype = "Fanart"
+        If RadioButtonThumb1.Checked Then fanarttype = "Thumb1"
+        If RadioButtonThumb2.Checked Then fanarttype = "Thumb2"
+        If RadioButtonThumb3.Checked Then fanarttype = "Thumb3"
+        If RadioButtonThumb4.Checked Then fanarttype = "Thumb4"
+        Dim fanartpath As String = ""
+        Select Case fanarttype
+            Case "Fanart"
+                fanartpath = workingMovieDetails.fileinfo.fanartpath
+            Case "Thumb1"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart1.jpg"
+            Case "Thumb2"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart2.jpg"
+            Case "Thumb3"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart3.jpg"
+            Case "Thumb4"
+                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart4.jpg"
+
+        End Select
+        Return fanartpath
+    End Function
+
 
 
     Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
@@ -24292,4 +24356,6 @@ End Sub
 Private Sub PictureBoxFanArt_Click( sender As System.Object,  e As System.EventArgs)
 
 End Sub
+
+
 End Class
