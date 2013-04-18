@@ -4879,7 +4879,12 @@ Public Class Form1
             If TextBox8.Text = "" Then Call util_FileDetailsGet()
 
         ElseIf tab.ToLower = "fanart" Then
-            GroupBoxFanartExtrathumbs.Visible = usefoldernames Or allfolders 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
+            Dim isrootfolder As Boolean = False
+            For Each moviefolder In movieFolders
+                Dim movfolder As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace("\"&workingMovieDetails.fileinfo.filename,"")
+                If moviefolder = movfolder Then isrootfolder = True  'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
+            Next
+            GroupBoxFanartExtrathumbs.Visible = Not isrootfolder AndAlso usefoldernames Or allfolders 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
             If Panel2.Controls.Count = 0 Then
                 Call mov_FanartLoad()
             End If
@@ -5346,18 +5351,17 @@ Public Class Form1
 
                     Dim issavefanart As Boolean = Preferences.savefanart
                     Dim FanartOrExtraPath As String = mov_FanartORExtrathumbPath
-                    Dim FanartOrExtraFanartPath As String = mov_FanartORExtraFanartPath
                     Dim xtra As Boolean = False
+                    Dim extrfanart As Boolean = False
                     If RadioButtonThumb1.Checked or RadioButtonThumb2.Checked or RadioButtonThumb3.Checked or RadioButtonThumb4.Checked Then xtra = True
 
                     Preferences.savefanart = True
 
-                    If FanartOrExtraFanartPath <> FanartOrExtraPath and Preferences.movxtrafanart Then 
-                        Dim extrfanart As Boolean = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraFanartPath)
-                    'ElseIf 
-                    End If
+                    If xtra AndAlso Preferences.movxtrafanart Then extrfanart = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath.Replace("extrathumbs\thumb","extrafanart\fanart"))
+                    If xtra AndAlso Preferences.movxtrathumb Then extrfanart = Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath)
+                    
 
-                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath) Then
+                    If xtra OrElse Movie.SaveFanartImageToCacheAndPath(tempstring2, FanartOrExtraPath) Then
                         If Not xtra Then
                             If Preferences.FrodoEnabled and workingMovieDetails.fileinfo.videotspath<>"" Then
                                 Dim OldFanartPath As String = FanartOrExtraPath
@@ -5379,13 +5383,14 @@ Public Class Form1
                             End If
                         End If
                         Preferences.savefanart = issavefanart
-
-                        util_ImageLoad(PictureBox2, FanartOrExtraPath, Utilities.DefaultFanartPath)
-                        If FanartOrExtraPath<>workingMovieDetails.fileinfo.fanartpath Then
-                            util_ImageLoad(PictureBoxFanArt, FanartOrExtraPath, Utilities.DefaultFanartPath)
-                        Else
-                            util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                        End If
+                        mov_DisplayFanart
+                        'util_ImageLoad(PictureBox2, FanartOrExtraPath, Utilities.DefaultFanartPath)
+                        util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        'If FanartOrExtraPath<>workingMovieDetails.fileinfo.fanartpath Then
+                        '    util_ImageLoad(PictureBoxFanArt, FanartOrExtraPath, Utilities.DefaultFanartPath)
+                        'Else
+                        '    util_ImageLoad(PictureBoxFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                        'End If
                         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
                         For Each paths In Preferences.offlinefolders
@@ -14840,7 +14845,13 @@ Public Class Form1
             If cbMovXtraThumbs.CheckState = CheckState.Checked Then
                 Preferences.movxtrathumb = True
             Else
-                Preferences.movxtrathumb = False
+                If cbMovXtraFanart.CheckState = CheckState.Unchecked Then
+                    cbMovXtraThumbs.CheckState = CheckState.Checked
+                    Preferences.movxtrathumb = True
+                    MsgBox("Either Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
+                Else
+                    Preferences.movxtrathumb = False
+                End If
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -14854,7 +14865,13 @@ Public Class Form1
             If cbMovXtraFanart.CheckState = CheckState.Checked Then
                 Preferences.movxtrafanart = True
             Else
-                Preferences.movxtrafanart = False
+                If cbMovXtraThumbs.CheckState = CheckState.Unchecked Then
+                    cbMovXtraFanart.CheckState = CheckState.Checked
+                    Preferences.movxtrafanart = True
+                    MsgBox("Either Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
+                Else
+                    Preferences.movxtrafanart = False
+                End If
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
@@ -21495,6 +21512,9 @@ Public Class Form1
         If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
             Try
                 Dim fanartpath = mov_FanartORExtrathumbPath()
+                Dim xtra As Boolean = False
+                If RadioButtonThumb1.Checked or RadioButtonThumb2.Checked or RadioButtonThumb3.Checked or RadioButtonThumb4.Checked Then xtra = True
+                If xtra AndAlso Preferences.movxtrafanart and Not Preferences.movxtrathumb Then fanartpath = fanartpath.Replace("extrathumbs\thumb","extrafanart\fanart")
                 If IO.File.Exists(fanartpath) Then
                     Dim OriginalImage As New Bitmap(fanartpath)
                     Dim Image2 As New Bitmap(OriginalImage)
@@ -21540,29 +21560,29 @@ Public Class Form1
         Return fanartpath
     End Function
 
-    Private Function mov_FanartORExtraFanartPath() As String
-        Dim fanarttype As String = ""
-        If RadioButtonFanart.Checked Then fanarttype = "Fanart"
-        If RadioButtonThumb1.Checked Then fanarttype = "Thumb1"
-        If RadioButtonThumb2.Checked Then fanarttype = "Thumb2"
-        If RadioButtonThumb3.Checked Then fanarttype = "Thumb3"
-        If RadioButtonThumb4.Checked Then fanarttype = "Thumb4"
-        Dim fanartpath As String = ""
-        Select Case fanarttype
-            Case "Fanart"
-                fanartpath = workingMovieDetails.fileinfo.fanartpath
-            Case "Thumb1"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart1.jpg"
-            Case "Thumb2"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart2.jpg"
-            Case "Thumb3"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart3.jpg"
-            Case "Thumb4"
-                fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart4.jpg"
+    'Private Function mov_FanartORExtraFanartPath() As String
+    '    Dim fanarttype As String = ""
+    '    If RadioButtonFanart.Checked Then fanarttype = "Fanart"
+    '    If RadioButtonThumb1.Checked Then fanarttype = "Thumb1"
+    '    If RadioButtonThumb2.Checked Then fanarttype = "Thumb2"
+    '    If RadioButtonThumb3.Checked Then fanarttype = "Thumb3"
+    '    If RadioButtonThumb4.Checked Then fanarttype = "Thumb4"
+    '    Dim fanartpath As String = ""
+    '    Select Case fanarttype
+    '        Case "Fanart"
+    '            fanartpath = workingMovieDetails.fileinfo.fanartpath
+    '        Case "Thumb1"
+    '            fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart1.jpg"
+    '        Case "Thumb2"
+    '            fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart2.jpg"
+    '        Case "Thumb3"
+    '            fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart3.jpg"
+    '        Case "Thumb4"
+    '            fanartpath = Strings.Left(workingMovieDetails.fileinfo.fanartpath, workingMovieDetails.fileinfo.fanartpath.LastIndexOf("\")) & "\extrafanart\fanart4.jpg"
 
-        End Select
-        Return fanartpath
-    End Function
+    '    End Select
+    '    Return fanartpath
+    'End Function
 
 
 
