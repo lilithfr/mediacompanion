@@ -1149,7 +1149,7 @@ Public Class Movie
         End If
 
 
-        If TrailerUrl = "" Then
+        If TrailerUrl = "" And Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.imdbid) Then
             TrailerUrl = _imdbScraper.gettrailerurl(imdb, Preferences.imdbmirror)
         End If
 
