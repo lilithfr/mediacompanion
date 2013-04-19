@@ -4881,11 +4881,11 @@ Public Class Form1
         ElseIf tab.ToLower = "fanart" Then
             Dim isrootfolder As Boolean = False
             For Each moviefolder In movieFolders
-                Dim movfolder As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace("\"&workingMovieDetails.fileinfo.filename,"")
+               Dim movfolder As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace("\"&workingMovieDetails.fileinfo.filename,"")
                 If moviefolder = movfolder Then isrootfolder = True  'Check movie isn't in a rootfolder, if so, disable extrathumbs option from displaying
             Next
             GroupBoxFanartExtrathumbs.Visible = Not isrootfolder AndAlso usefoldernames Or allfolders 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
-            If Panel2.Controls.Count = 0 Then
+            If Panel2.Controls.Count = 0 Then   
                 Call mov_FanartLoad()
             End If
             currentTabIndex = TabControl2.SelectedIndex
