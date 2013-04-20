@@ -14021,7 +14021,7 @@ Public Class Form1
 '        chkbx_disablecache.CheckState      = If(Preferences.startupCache, CheckState.Checked, CheckState.Unchecked)
         chkbx_disablecache.Checked          = Not Preferences.startupCache
 
-        cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.Checked, CheckState.Unchecked)
+        cbOverwriteArtwork.CheckState       = If(Preferences.overwritethumbs, CheckState.UnChecked, CheckState.checked)
 
         CheckBoxRenameNFOtoINFO.CheckState  = If(Preferences.renamenfofiles, CheckState.Checked, CheckState.Unchecked)
         CheckBox41.CheckState               = If(Preferences.ignorearticle, CheckState.Checked, CheckState.Unchecked)
