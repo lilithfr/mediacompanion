@@ -32,7 +32,7 @@ Public Module ModuleExtensions
 
     <Extension()> _
     Public Function RemoveAfterMatch(ByVal s As String, Optional match As String=" (") As String
-        Dim i As Integer = s.IndexOf(match)
+        Dim i As Integer = s.LastIndexOf(match)
 
         If i=-1 Then Return s
         
