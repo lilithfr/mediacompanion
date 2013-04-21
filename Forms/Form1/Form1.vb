@@ -1564,7 +1564,7 @@ Public Class Form1
                 directortxt.Text = workingMovieDetails.fullmoviebody.director
                 studiotxt.Text = workingMovieDetails.fullmoviebody.studio
                 pathtxt.Text = workingMovie.fullpathandfilename
-                ratingtxt.Text = workingMovieDetails.fullmoviebody.rating
+                ratingtxt.Text = workingMovieDetails.fullmoviebody.rating.FormatRating
                 imdbtxt.Text = workingMovieDetails.fullmoviebody.imdbid
 
                 'runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime

@@ -15,6 +15,8 @@
 
         Dim drawFont As New Font("Segoe UI", 14, FontStyle.Bold)
 
+        sRating = sRating.FormatRating
+
         If sRating.Length > 2 Then
             grStars.DrawString(sRating.ToString, drawFont, Brush, 0, 2)
         Else

@@ -3,6 +3,7 @@ Imports System.Runtime.CompilerServices
 
 Public Module ModuleExtensions
 
+
     <Extension()> _
     Public Function ToInt(ByVal s As String) As Integer
         Dim num as Integer
@@ -27,6 +28,20 @@ Public Module ModuleExtensions
         End If
         
         Return 0
+    End Function
+
+
+    <Extension()> _
+    Public Function FormatRating(ByVal s As String) As String
+        Dim numRating As Single
+
+        If s = "" Or Not Single.TryParse(s, numRating) Then
+            Return s
+        End If
+
+        numRating = Math.Min(numRating,10)
+
+        Return numRating.ToString("f1")
     End Function
 
 
