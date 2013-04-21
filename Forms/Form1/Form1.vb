@@ -674,10 +674,6 @@ Public Class Form1
         '    ExceptionHandler.LogError(ex)
         'End Try
 
-
-        Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
-        UpdateMovieFiltersPanel
-
         If Preferences.CheckForNewVersion Then BckWrkCheckNewVersion.RunWorkerAsync(False)
     End Sub
 
@@ -22926,6 +22922,9 @@ Public Class Form1
                 RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\settings\profile.xml") '  applicationPath & "\settings\profile.xml"
             Case = "regex" 
                 RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml"
+            Case "movies"
+                Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
+                UpdateMovieFiltersPanel
         End Select
 
     End Sub
