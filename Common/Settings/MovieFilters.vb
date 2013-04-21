@@ -106,6 +106,7 @@ Public Class MovieFilters
             lbl = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
             Y   = oPanel.Height - (index*FilterSpace)
 
+            c.Width      = 174
             c  .Location = New Point( c .Location.X, Y )
             lbl.Location = New Point( lbl.Location.X, Y )
 
