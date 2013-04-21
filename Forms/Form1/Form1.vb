@@ -14358,9 +14358,9 @@ Public Class Form1
         CheckBox16.CheckState                   = If(Preferences.disablelogfiles, CheckState.Unchecked, CheckState.Checked)
 
         cbDlTrailerDuringScrape.CheckState      = If(Preferences.DownloadTrailerDuringScrape, CheckState.Checked, CheckState.Unchecked)
-        cbMovieTrailerUrl.CheckState                   = If(Preferences.gettrailer, CheckState.Checked, CheckState.Unchecked)
+        cbMovieTrailerUrl.CheckState            = If(Preferences.gettrailer, CheckState.Checked, CheckState.Unchecked)
         cbMoviePosterScrape.CheckState          = If(Preferences.scrapemovieposters, CheckState.Checked, CheckState.Unchecked)
-        cbMovFanartScrape.CheckState                   = If(Preferences.savefanart, CheckState.Checked, CheckState.Unchecked)
+        cbMovFanartScrape.CheckState            = If(Preferences.savefanart, CheckState.Checked, CheckState.Unchecked)
         cbMovieUseFolderNames.CheckState        = If(Preferences.usefoldernames, CheckState.Checked, CheckState.Unchecked)
         cbMovXtraThumbs.CheckState              = If(Preferences.movxtrathumb, CheckState.Checked, CheckState.Unchecked)
         cbMovXtraFanart.CheckState              = If(Preferences.movxtrafanart, CheckState.Checked, CheckState.Unchecked)
@@ -14679,17 +14679,36 @@ Public Class Form1
     End Sub
 
     Private Sub cbMovieTrailerUrl_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieTrailerUrl.CheckedChanged
-        Preferences.gettrailer = cbMovieTrailerUrl.Checked
-        cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
-        movieprefschanged = True
-        btnMoviePrefSaveChanges.Enabled = True
+        Try
+            If cbMovieTrailerUrl.CheckState = CheckState.Checked Then
+                Preferences.gettrailer = True
+            Else
+                If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
+                    'Preferences.gettrailer = True
+                    cbMovieTrailerUrl.CheckState = CheckState.Checked 
+                Else
+                    Preferences.gettrailer = False
+                End If
+            End If
+            'Preferences.gettrailer = cbMovieTrailerUrl.Checked
+            'cbPreferredTrailerResolution.Enabled = Preferences.gettrailer
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch
+        End Try
     End Sub
 
     Private Sub cbDlTrailerDuringScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbDlTrailerDuringScrape.CheckedChanged
         Try
-            If cbDlTrailerDuringScrape.CheckState =CheckState.Checked Then
-                Preferences.DownloadTrailerDuringScrape = cbDlTrailerDuringScrape.Checked
-                cbMovieTrailerUrl.Checked = True
+            If cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
+                Preferences.DownloadTrailerDuringScrape = True
+                cbMovieTrailerUrl.CheckState = CheckState.Checked 
+            
+                'cbDlTrailerDuringScrape.CheckState = CheckState.Checked Then
+                'Preferences.DownloadTrailerDuringScrape = cbDlTrailerDuringScrape.Checked
+                'cbMovieTrailerUrl.Checked = True
+            Else 
+                Preferences.DownloadTrailerDuringScrape = False
             End If
             movieprefschanged = True
             btnMoviePrefSaveChanges.Enabled = True
