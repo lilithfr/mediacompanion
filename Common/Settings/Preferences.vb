@@ -151,6 +151,7 @@ Public Class Preferences
     Public Shared fanartnotstacked As Boolean
     Public Shared posternotstacked As Boolean
     Public Shared scrapemovieposters As Boolean
+    Public Shared movrootfoldercheck As Boolean
     Public Shared posterjpg As Boolean
     Public Shared usefanart As Boolean
     Public Shared dontdisplayposter As Boolean
@@ -289,6 +290,7 @@ Public Class Preferences
         rarsize = 8
         renamenfofiles = True
         scrapemovieposters = True
+        movrootfoldercheck = True
         posterjpg = False
         dontdisplayposter = False
         usetransparency = False 'not used in gen2
@@ -578,6 +580,7 @@ Public Class Preferences
         root.AppendChild(doc, "fanartnotstacked",                   fanartnotstacked)                   'set from frmOptions - obsolete
         root.AppendChild(doc, "posternotstacked",                   posternotstacked)                   'set from frmOptions - obsolete
         root.AppendChild(doc, "scrapemovieposters",                 scrapemovieposters)                 'cbMoviePosterScrape
+        root.AppendChild(doc, "movrootfoldercheck",                 movrootfoldercheck)                 'cbMovRootFolderCheck
         root.AppendChild(doc, "posterjpg",                          posterjpg)                          'cbMoviePosterInFolder
         root.AppendChild(doc, "usefanart",                          usefanart)                          'set from frmOptions - obsolete
         root.AppendChild(doc, "dontdisplayposter",                  dontdisplayposter)                  'set from frmOptions - obsolete
@@ -822,6 +825,7 @@ Public Class Preferences
                     Case "posternotstacked"                     : posternotstacked = thisresult.InnerXml
 '                   Case "downloadfanart"                       : savefanart = thisresult.InnerXml
                     Case "scrapemovieposters"                   : scrapemovieposters = thisresult.InnerXml
+                    Case "movrootfoldercheck"                   : movrootfoldercheck = thisresult.InnerXml 
                     Case "posterjpg"                            : posterjpg = thisresult.InnerXml 
                     Case "usefanart"                            : usefanart = thisresult.InnerXml
                     Case "dontdisplayposter"                    : dontdisplayposter = thisresult.InnerXml
