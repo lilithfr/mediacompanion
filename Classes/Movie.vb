@@ -1591,14 +1591,7 @@ Public Class Movie
         End If
 
         DoDownloadFanart
-        'If Preferences.fanartjpg Then
-        '    Dim s As String = IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
-        '    Dim t As String = NfoPathPrefName.Replace(".nfo","-fanart.jpg")
-        '    If IO.File.Exists(t) and Not IO.File.Exists(s) then
-        '        IO.File.Copy(t,s)
-        '    End If
 
-        'End If
     End Sub
 
     Sub DoDownloadFanart
@@ -1644,6 +1637,8 @@ Public Class Movie
                 If Preferences.fanartjpg and (Preferences.usefoldernames or Preferences.allfolders) then
                     If IO.File.Exists(isMovieFanart) Then
                         IO.File.Copy(isMovieFanart,isfanartjpg)
+                        GC.Collect
+                        Utilities.SafeDeleteFile(isMovieFanart)
                     End If
                 End If
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)

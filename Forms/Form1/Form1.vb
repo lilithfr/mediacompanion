@@ -14383,12 +14383,12 @@ Public Class Form1
 
         If Not Preferences.usefoldernames and Not Preferences.allfolders then
             cbMovCreateFolderjpg.Enabled = False
-            cbFanartInFolders.Enabled=False
+            cbMovieFanartInFolders.Enabled=False
             cbMoviePosterInFolder.Enabled=False
             Preferences.fanartjpg=False
             Preferences.posterjpg=False
         Else
-            cbFanartInFolders.CheckState        = If(Preferences.fanartjpg, CheckState.Checked, CheckState.Unchecked)
+            cbMovieFanartInFolders.CheckState        = If(Preferences.fanartjpg, CheckState.Checked, CheckState.Unchecked)
             cbMoviePosterInFolder.CheckState    = If(Preferences.posterjpg, CheckState.Checked, CheckState.Unchecked)
         End If
 
@@ -14658,14 +14658,14 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFanartInFolders_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbFanartInFolders.CheckedChanged
+    Private Sub cbMovieFanartInFolders_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovieFanartInFolders.CheckedChanged
         Try
-            If cbFanartInFolders.CheckState = CheckState.Checked Then
+            If cbMovieFanartInFolders.CheckState = CheckState.Checked Then
                 If Preferences.usefoldernames or Preferences.allfolders Then
                     Preferences.fanartjpg = True
                 Else 
                     Preferences.fanartjpg = False
-                    cbFanartInFolders.Checked = False
+                    cbMovieFanartInFolders.Checked = False
                     MsgBox("Either Use Foldername or All Movies in Folders not selected!")
                 End If
             Else
@@ -14847,15 +14847,15 @@ Public Class Form1
                 Preferences.usefoldernames = True
                 cbMovieAllInFolders.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
-                cbFanartInFolders.Enabled = True
+                cbMovieFanartInFolders.Enabled = True
                 cbMoviePosterInFolder.Enabled = True
             Else
                 Preferences.usefoldernames = False
                 If Not Preferences.allfolders then
                     cbMovCreateFolderjpg.Checked = False
                     cbMovCreateFolderjpg.Enabled = False
-                    cbFanartInFolders.Checked = False
-                    cbFanartInFolders.Enabled = False
+                    cbMovieFanartInFolders.Checked = False
+                    cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = False
                     cbMoviePosterInFolder.Enabled = False
                     'Preferences.createfolderjpg = False
@@ -14874,14 +14874,14 @@ Public Class Form1
             If cbMovieAllInFolders.Checked = True Then 
                 cbMovieUseFolderNames.Checked = False
                 cbMovCreateFolderjpg.Enabled = True
-                cbFanartInFolders.Enabled = True
+                cbMovieFanartInFolders.Enabled = True
                 cbMoviePosterInFolder.Enabled = True
             Else
                 If Not Preferences.usefoldernames Then
                     cbMovCreateFolderjpg.Enabled = False
                     cbMovCreateFolderjpg.Checked = False
-                    cbFanartInFolders.Checked = False
-                    cbFanartInFolders.Enabled = False
+                    cbMovieFanartInFolders.Checked = False
+                    cbMovieFanartInFolders.Enabled = False
                     cbMoviePosterInFolder.Checked = False
                     cbMoviePosterInFolder.Enabled = False
                 End If
