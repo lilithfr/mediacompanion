@@ -9061,7 +9061,10 @@ Public Class Form1
                     'Dim res As HttpWebResponse = req.GetResponse()
                     'Dim contents As Stream = res.GetResponseStream()
                     'Dim bmp As New Bitmap(contents)
-                    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
+                    Dim FanartOrExtra As String = Tv_FanartORExtrathumbPath 
+                    Dim xtra As Boolean = False
+                    If rbTvFanart1.Checked or rbTvFanart2.Checked or rbTvFanart3.Checked or rbTvFanart4.Checked Then xtra = True
+                    Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", FanartOrExtra)
 
                     'Dim bytesToRead As Integer = CInt(buffer.Length)
 
@@ -9113,9 +9116,11 @@ Public Class Form1
                         Try
                             util_ImageLoad(PictureBox10, savepath, Utilities.DefaultFanartPath)
                             PictureBox11.Image = PictureBox10.Image
-                            If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                                tv_PictureBoxLeft.ImageLocation = savepath
-                                tv_PictureBoxLeft.Load()
+                            If Not xtra Then
+                                If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                                    tv_PictureBoxLeft.ImageLocation = savepath
+                                    tv_PictureBoxLeft.Load()
+                                End If
                             End If
                         Catch ex As Exception
 #If SilentErrorScream Then
@@ -9126,7 +9131,7 @@ Public Class Form1
                         PictureBox10.Image = Nothing
                         PictureBox11.Image = Nothing
                     End If
-                    If Preferences.FrodoEnabled Then 
+                    If Not xtra AndAlso Preferences.FrodoEnabled Then 
                         Utilities.SafeCopyFile(savepath,savepath.Replace("fanart.jpg","season-all-fanart.jpg"),True)
                     End If
                 Catch ex As WebException
@@ -9139,6 +9144,36 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
             Preferences.savefanart=issavefanart
         End Try
+
+    End Sub
+
+    Private Function Tv_FanartORExtrathumbPath() As String
+        Dim fanartpath As String = ""
+        If rbTvFanart.Checked Then fanartpath = "fanart.jpg" : Return fanartpath
+        If rbTvFanart1.Checked Then fanartpath = "extrafanart\fanart1.jpg" : Return fanartpath
+        If rbTvFanart2.Checked Then fanartpath = "extrafanart\fanart2.jpg" : Return fanartpath
+        If rbTvFanart3.Checked Then fanartpath = "extrafanart\fanart3.jpg" : Return fanartpath
+        If rbTvFanart4.Checked Then fanartpath = "extrafanart\fanart4.jpg" : Return fanartpath
+        Return fanartpath
+    End Function
+
+    Private Sub rbTvFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart.CheckedChanged
+
+    End Sub
+
+    Private Sub rbTvFanart1_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart1.CheckedChanged
+
+    End Sub
+
+    Private Sub rbTvFanart2_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart2.CheckedChanged
+
+    End Sub
+
+    Private Sub rbTvFanart3_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart3.CheckedChanged
+
+    End Sub
+
+    Private Sub rbTvFanart4_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart4.CheckedChanged
 
     End Sub
 
@@ -24367,6 +24402,7 @@ End Sub
 Private Sub PictureBoxFanArt_Click( sender As System.Object,  e As System.EventArgs)
 
 End Sub
+
 
 
 
