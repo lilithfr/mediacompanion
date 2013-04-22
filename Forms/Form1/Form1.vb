@@ -18858,29 +18858,52 @@ Public Class Form1
                 If moviethumburl <> "" And moviethumburl <> "na" Then
 
                     Try
+                        Dim i1 As New PictureBox
+                        Dim backup As String = ""
+
+                        With i1
+                            .WaitOnLoad = True
+                            Try
+                                .ImageLocation = moviethumburl
+                            Catch
+                                .ImageLocation = backup
+                            End Try
+                        End With
+
+                        If Not i1.Image Is Nothing Then
+                            If i1.Image.Width < 20 Then
+                                i1.ImageLocation = backup
+                            End If
+                        End If
+                        Dim PostPaths As List(Of String) = Preferences.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
+                        For Each pth As String In PostPaths
+                            i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                            posterpath = pth
+                        Next
+
                  '      Utilities.DownloadImage(moviethumburl, posterpath)
-                        Movie.SavePosterImageToCacheAndPath(moviethumburl, posterpath)
-                        If Preferences.FrodoEnabled and isvideotspath<>"" Then
-                            If IO.File.Exists(isvideotspath) Then
-                                Utilities.SafeDeleteFile(isvideotspath)
-                            End If
-                            IO.File.Copy(posterpath,isvideotspath)
-                            GC.Collect
-                            If Not Preferences.EdenEnabled Then
-                                Utilities.SafeDeleteFile(posterpath)
-                            End If
-                            posterpath=isvideotspath
-                        End If
+                        'Movie.SavePosterImageToCacheAndPath(moviethumburl, posterpath)
+                        'If Preferences.FrodoEnabled and isvideotspath<>"" Then
+                        '    If IO.File.Exists(isvideotspath) Then
+                        '        Utilities.SafeDeleteFile(isvideotspath)
+                        '    End If
+                        '    IO.File.Copy(posterpath,isvideotspath)
+                        '    GC.Collect
+                        '    If Not Preferences.EdenEnabled Then
+                        '        Utilities.SafeDeleteFile(posterpath)
+                        '    End If
+                        '    posterpath=isvideotspath
+                        'End If
 
-                        Dim temppath As String = posterpath.Replace(System.IO.Path.GetFileName(posterpath), "folder.jpg")
-                        If Preferences.createfolderjpg = True Then
-                            If Preferences.overwritethumbs Or Not System.IO.File.Exists(temppath) Then
+                        'Dim temppath As String = posterpath.Replace(System.IO.Path.GetFileName(posterpath), "folder.jpg")
+                        'If Preferences.createfolderjpg = True Then
+                        '    If Preferences.overwritethumbs Or Not System.IO.File.Exists(temppath) Then
 
-                          '      Utilities.DownloadImage(moviethumburl, temppath)
-                                File.Copy(posterpath, temppath, True)
+                        '  '      Utilities.DownloadImage(moviethumburl, temppath)
+                        '        File.Copy(posterpath, temppath, True)
 
-                            End If
-                        End If
+                        '    End If
+                        'End If
 
                         Dim bitmap3 As New Bitmap(posterpath)
                         Dim bmp4 As New Bitmap(bitmap3)

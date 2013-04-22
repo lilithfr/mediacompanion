@@ -998,7 +998,7 @@ Public Class Movie
     End Sub
     
     Sub DoRename
-        If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+        If Preferences.MovieRenameEnable AndAlso Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
             ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
         End If
     End Sub
@@ -1450,46 +1450,68 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
-                Dim newPosterPath = edenart 
-                'DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
-                SavePosterImageToCacheAndPath(PosterUrl, newPosterPath)
-                SavePosterToPosterWallCache
+                Dim i1 As New PictureBox
+                Dim backup As String = ""
 
-                ReportProgress(MSG_OK, "Poster(s) scraped OK" & vbCrLf)
-                If frodo And Not IO.File.Exists(frodoart) And Not Preferences.basicsavemode Then
-                    IO.File.Copy(edenart, frodoart)
+                With i1
+                    .WaitOnLoad = True
+                    Try
+                        .ImageLocation = PosterUrl
+                    Catch
+                        .ImageLocation = backup
+                    End Try
+                End With
+
+                If Not i1.Image Is Nothing Then
+                    If i1.Image.Width < 20 Then
+                        i1.ImageLocation = backup
+                    End If
                 End If
+                Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
+                For Each pth As String In Paths
+                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                Next
+
+                'Dim newPosterPath = edenart 
+                '''DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
+                'SavePosterImageToCacheAndPath(PosterUrl, newPosterPath)
+                'SavePosterToPosterWallCache
+
+                'ReportProgress(MSG_OK, "Poster(s) scraped OK" & vbCrLf)
+                'If frodo And Not IO.File.Exists(frodoart) And Not Preferences.basicsavemode Then
+                '    IO.File.Copy(edenart, frodoart)
+                'End If
                 
-                If Preferences.createfolderjpg Then         'Save folder.jpg
+                'If Preferences.createfolderjpg Then         'Save folder.jpg
 
-                    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "folder.jpg")
+                '    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "folder.jpg")
 
-                    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
+                '    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
 
-                        File.Copy(PosterPath, temppath, True)
-                        ReportProgress(, "Poster also saved as ""folder.jpg"" OK" & vbCrLf)
-                    Else
-                        ReportProgress(, "! ""folder.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
-                    End If
-                End If
+                '        File.Copy(PosterPath, temppath, True)
+                '        ReportProgress(, "Poster also saved as ""folder.jpg"" OK" & vbCrLf)
+                '    Else
+                '        ReportProgress(, "! ""folder.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
+                '    End If
+                'End If
 
-                If Preferences.posterjpg Then               'Save poster.jpg
+                'If Preferences.posterjpg Then               'Save poster.jpg
 
-                    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "poster.jpg")
+                '    Dim temppath = PosterPath.Replace(Path.GetFileName(PosterPath), "poster.jpg")
 
-                    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
+                '    If Preferences.overwritethumbs Or Not IO.File.Exists(temppath) Then
 
-                        File.Copy(PosterPath, temppath, True)
-                        ReportProgress(, "Poster also saved as ""poster.jpg"" OK" & vbCrLf)
-                    Else
-                        ReportProgress(, "! ""poster.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
-                    End If
-                End If
+                '        File.Copy(PosterPath, temppath, True)
+                '        ReportProgress(, "Poster also saved as ""poster.jpg"" OK" & vbCrLf)
+                '    Else
+                '        ReportProgress(, "! ""poster.jpg"" not Saved to :- " & temppath & ", as file already exists" & vbCrLf)
+                '    End If
+                'End If
 
-                If Not eden Then
-                    GC.Collect
-                    Utilities.SafeDeleteFile(edenart)
-                End If
+                'If Not eden Then
+                '    GC.Collect
+                '    Utilities.SafeDeleteFile(edenart)
+                'End If
 
             Catch ex As Exception
                 ReportProgress(MSG_ERROR, "!!! Problem Saving Poster" & vbCrLf & "!!! Error Returned :- " & ex.Message & vbCrLf & vbCrLf)
@@ -1613,11 +1635,14 @@ Public Class Movie
         End If
         Dim newFanartPath As String = FanartPath
         If Not Rescrape Then DeleteFanart
-        If Preferences.basicsavemode or (Preferences.fanartjpg and (Preferences.usefoldernames or Preferences.allfolders)) then
+        If Preferences.basicsavemode Then
             newFanartPath = FanartPath.Replace("movie-","")
         End If
-        If Not Preferences.basicsavemode Then
-            newFanartPath = isMovieFanart
+        'If Not Preferences.basicsavemode Then
+            'newFanartPath = isMovieFanart
+        'End If
+        If Preferences.fanartjpg and Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then
+            newFanartPath = Preferences.GetFanartPath(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
         End If
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
@@ -1638,13 +1663,6 @@ Public Class Movie
                     End If
                 End If
                 GC.Collect()
-                If Preferences.fanartjpg and (Preferences.usefoldernames or Preferences.allfolders) then
-                    If IO.File.Exists(isMovieFanart) Then
-                        IO.File.Copy(isMovieFanart,isfanartjpg)
-                        GC.Collect
-                        Utilities.SafeDeleteFile(isMovieFanart)
-                    End If
-                End If
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)

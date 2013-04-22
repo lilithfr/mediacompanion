@@ -1078,12 +1078,6 @@ Public Class Preferences
             End If
 
         End If
-
-        If Not isroot andalso posterjpg Then
-            'path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
-            'lst.Add(path)
-        End If
-
         Return lst
     End Function
 
