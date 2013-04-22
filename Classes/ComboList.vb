@@ -31,11 +31,7 @@ Public Class ComboList
             Return _title
         End Get
         Set
-            Try
-                _title = Value.Trim
-            Catch
-                _title = Value
-            End Try
+            _title = Value.SafeTrim
         End Set
     End Property
 
@@ -44,11 +40,7 @@ Public Class ComboList
             Return _originaltitle
         End Get
         Set
-            Try
-                _originaltitle = Value.Trim
-            Catch
-                _originaltitle = Value
-            End Try
+            _originaltitle = Value.SafeTrim
         End Set
     End Property
 

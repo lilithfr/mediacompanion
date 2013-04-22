@@ -3,7 +3,6 @@ Imports System.Runtime.CompilerServices
 
 Public Module ModuleExtensions
 
-
     <Extension()> _
     Public Function ToInt(ByVal s As String) As Integer
         Dim num as Integer
@@ -13,7 +12,7 @@ Public Module ModuleExtensions
         Return 0
     End Function
 
-    
+  
     <Extension()> _
     Public Function ToRating(ByVal s As String) As Double
         Dim num As Double
@@ -52,6 +51,15 @@ Public Module ModuleExtensions
         If i=-1 Then Return s
         
         Return s.Substring(0,i)
+    End Function
+
+
+    <Extension()> _
+    Public Function SafeTrim(ByVal s As String) As String
+
+        If IsNothing(s) Then Return s
+
+        Return s.Trim
     End Function
 
 End Module

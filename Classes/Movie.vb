@@ -892,10 +892,10 @@ Public Class Movie
             Select Case thisresult.Name
                 Case "title"
                     If Not Preferences.keepfoldername Then
-                        _scrapedMovie.fullmoviebody.title = thisresult.InnerText
+                        _scrapedMovie.fullmoviebody.title = thisresult.InnerText.ToString.SafeTrim
                     End If
                 Case "originaltitle"
-                    _scrapedMovie.fullmoviebody.originaltitle = thisresult.InnerText
+                    _scrapedMovie.fullmoviebody.originaltitle = thisresult.InnerText.ToString.SafeTrim
                 Case "alternativetitle"
                     _scrapedMovie.alternativetitles.Add(thisresult.InnerText)
                 Case "country"
@@ -1946,7 +1946,7 @@ Public Class Movie
         Dim aFileExists As Boolean = False
         Try
             'create new filename (hopefully removing invalid chars first else Move (rename) will fail)
-            newfilename = newfilename.Replace("%T", movieDetails.title)         'replaces %T with movie title
+            newfilename = newfilename.Replace("%T", movieDetails.title.SafeTrim)  'replaces %T with movie title
             newfilename = newfilename.Replace("%Y", movieDetails.year)          'replaces %Y with year   
             newfilename = newfilename.Replace("%I", movieDetails.imdbid)        'replaces %I with imdid 
             newfilename = newfilename.Replace("%P", movieDetails.premiered)     'replaces %P with premiered date 
@@ -2449,7 +2449,7 @@ Public Class Movie
             Try
                 If Preferences.MovieRenameEnable Then
                     s = Preferences.MovieRenameTemplate
-                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title)         
+                    s = s.Replace("%T", _scrapedMovie.fullmoviebody.title.SafeTrim)         
                     s = s.Replace("%Y", _scrapedMovie.fullmoviebody.year)          
                     s = s.Replace("%I", _scrapedMovie.fullmoviebody.imdbid)        
                     s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
