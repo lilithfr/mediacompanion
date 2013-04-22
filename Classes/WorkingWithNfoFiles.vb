@@ -1268,7 +1268,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
-                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path)
+                newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path,newmovie.fileinfo.filename)
 
                 If newmovie.fullmoviebody.movieset = "" Then
                     newmovie.fullmoviebody.movieset = "-None-"

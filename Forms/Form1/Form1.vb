@@ -1578,7 +1578,7 @@ Public Class Form1
                 workingMovieDetails.fileinfo.path = IO.Path.GetFullPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.foldername = workingMovie.foldername
                 workingMovieDetails.fileinfo.posterpath = Preferences.GetPosterPath(workingMovie.fullpathandfilename)
-                workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename)
+                workingMovieDetails.fileinfo.fanartpath = Preferences.GetFanartPath(workingMovie.fullpathandfilename, workingMovie.filename)
 
                 '*******Removed this section - trailer must be the same name as the movie file with '-trailer.xxx' appended
                 'tempstring = Utilities.GetStackName(workingMovieDetails.fileinfo.filename, workingMovieDetails.fileinfo.fullpathandfilename)
@@ -5373,11 +5373,11 @@ Public Class Form1
                                     Utilities.SafeDeleteFile(OldFanartPath)
                                 End If
                             ElseIf Preferences.fanartjpg Then
-                                Dim fanartjpgpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(workingMovieDetails.fileinfo.filename,"fanart.jpg")
-                                    If IO.File.Exists(fanartjpgpath) Then
-                                        Utilities.SafeDeleteFile(fanartjpgpath)
-                                    End If
-                                IO.File.Copy(FanartOrExtraPath,fanartjpgpath)
+                                'Dim fanartjpgpath As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(workingMovieDetails.fileinfo.filename,"fanart.jpg")
+                                    'If IO.File.Exists(fanartjpgpath) Then
+                                        'Utilities.SafeDeleteFile(fanartjpgpath)
+                                    'End If
+                                'IO.File.Copy(FanartOrExtraPath,fanartjpgpath)
                             End If
                         End If
                         Preferences.savefanart = issavefanart

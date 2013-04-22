@@ -1074,10 +1074,24 @@ Public Class Preferences
 
 
 
-    Public Shared Function GetFanartPath(ByVal FullPath As String) As String
+    Public Shared Function GetFanartPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
         Dim fanartPath As String = FullPath
+        'If Not IsNothing(MovFilePath) Then
+            'Dim MovPath As String = FullPath.Replace(MovFilePath,"")
+        'End If
         If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Preferences.basicsavemode,Preferences.fanartjpg) Then
-            fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso Not IsNothing(MovFilePath) Then
+                Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
+                Return MovPath
+            Else
+                fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+            End If
+            'fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+        Else
+            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso Not IsNothing(MovFilePath) Then
+                Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
+                Return MovPath
+            End If
         End If
         Return fanartPath
 
@@ -1125,6 +1139,19 @@ Public Class Preferences
         Finally
 
         End Try
+    End Function
+
+    Public Shared Function GetRootFolderCheck(ByVal fullpath) As Boolean
+        Dim isroot As Boolean = False
+        If Preferences.movrootfoldercheck Then
+            Dim lastfolder As String = Utilities.GetLastFolder(fullpath)
+            Dim rtfolder As String = Nothing
+            For Each rfolder in Preferences.movieFolders 
+                rtfolder = Path.GetFileName(rfolder)
+                If rtfolder = lastfolder Then isroot = True
+            Next
+        End If
+        Return isroot
     End Function
 
     Public Shared Function Get_HdTags(ByVal filename As String) As FullFileDetails
