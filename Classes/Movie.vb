@@ -2332,7 +2332,7 @@ Public Class Movie
         Dim isStack         = False
         Dim isFirstPart     = True
         Dim newextension    = IO.Path.GetExtension(mediaFile)
-        Dim newfilename     = UserDefinedFileName
+        Dim newfilename     = UserDefinedBaseFileName
 
         Dim movieStackList As New List(Of String)(New String() {mediaFile})
         
@@ -2410,31 +2410,7 @@ Public Class Movie
         Return log
     End Function
 
-
-
-    '
-    ' Returns the Nfo filename based on the user configured rename pattern & name mode (1=include first stack part name e.g CD1)
-    '
-    ReadOnly Property DesiredNfoFileName As String
-        Get
-            Dim stackName       = mediapathandfilename
-            Dim isFirstPart     = True
-            Dim stackdesignator = ""
-            Dim nextStackPart   = ""
-            Dim result          = UserDefinedFileName
-
-            Utilities.isMultiPartMedia(stackName, False, isFirstPart, stackdesignator, nextStackPart)
-
-            If isFirstPart And Preferences.namemode="1" Then
-                Dim i As Integer  
-                result &= stackdesignator & If(Integer.TryParse(nextStackPart, i), "1".PadLeft(nextStackPart.Length, "0"), "A")
-            End If
-
-            Return result & ".nfo"
-        End Get
-    End Property
-
-
+  
 
     Public Function GetActualName(anciliaryFile As String) As String
       
@@ -2466,7 +2442,7 @@ Public Class Movie
     End Function
 
 
-    ReadOnly Property UserDefinedFileName As String
+    ReadOnly Property UserDefinedBaseFileName As String
         Get
             Dim s As String = Path.GetFileNameWithoutExtension(NfoPathAndFilename)
 
