@@ -384,15 +384,19 @@ Public Class Movie
     ReadOnly Property Title As String
         Get
             If Preferences.usefoldernames Or Extension.ToLower = ".ifo" Then
-                If Preferences.movrootfoldercheck Then
-                    Dim lastfolder As String = Utilities.GetLastFolder(nfopathandfilename)
-                    Dim rtfolder As String = Nothing
-                    For Each rfolder in Preferences.movieFolders 
-                        rtfolder = Path.GetFileName(rfolder)
-                        If rtfolder = lastfolder Then Return Path.GetFileNameWithoutExtension(TitleFull)
-                    Next
-                End If
+                Dim rtfolder As Boolean = Preferences.GetRootFolderCheck(NfoPathAndFilename)
+                If rtfolder Then
+                    Return Path.GetFileNameWithoutExtension(TitleFull)
+                'If Preferences.movrootfoldercheck Then
+                    'Dim lastfolder As String = Utilities.GetLastFolder(nfopathandfilename)
+                    'Dim rtfolder As Boolean = Preferences.GetRootFolderCheck(NfoPathAndFilename)
+                    'For Each rfolder in Preferences.movieFolders 
+                        'rtfolder = Path.GetFileName(rfolder)
+                        'If rtfolder Then Return Path.GetFileNameWithoutExtension(TitleFull)
+                    'Next
+                Else
                 Return Utilities.GetLastFolder(nfopathandfilename)
+                End If
             Else
                 Return Path.GetFileNameWithoutExtension(TitleFull) 
             End If

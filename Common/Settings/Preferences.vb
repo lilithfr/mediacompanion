@@ -1016,7 +1016,7 @@ Public Class Preferences
     End Function
 
 
-    Public Shared Function GetPosterPath(ByVal FullPath As String) As String
+    Public Shared Function GetPosterPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
         Dim posterpath As String = FullPath
         If Not Utilities.findFileOfType(posterpath, ".tbn") Then
             'Check Frodo naming convention
@@ -1028,6 +1028,9 @@ Public Class Preferences
                 End If
             End If
         End If
+        If  Preferences.posterjpg AndAlso Not IsNothing(MovFilePath) AndAlso Not GetRootFolderCheck(FullPath) Then
+            posterpath = FullPath.Replace(MovFilePath,"") & "poster.jpg"
+        End If
         Return posterpath
     End Function
 
@@ -1036,37 +1039,50 @@ Public Class Preferences
     Public Shared Function GetPosterPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
         Dim lst=New List(Of String)
         Dim path As String = FullPath
+        Dim isroot As Boolean = Preferences.GetRootFolderCheck(FullPath)
+        Dim posterjpg As Boolean = Preferences.posterjpg 
 
-        If Preferences.EdenEnabled Then
-            If Not Preferences.basicsavemode Then
-                path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                lst.Add(path)
+        If posterjpg AndAlso Not isroot Then
+            path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
+            lst.Add(path)
+        Else
+            If Preferences.EdenEnabled Then
+                If Not Preferences.basicsavemode Then
+                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                    lst.Add(path)
+                End If
+            
+                'If Not Utilities.findFileOfType(path, ".tbn") Then
+                '    If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
+                '        path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                '    Else
+                '        path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                '    End If
+                'End If
+
+                'lst.Add(path)
             End If
             IF Preferences.basicsavemode or Preferences.createfolderjpg Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                 lst.Add(path)
             End If
-            'If Not Utilities.findFileOfType(path, ".tbn") Then
-            '    If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
-            '        path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-            '    Else
-            '        path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-            '    End If
-            'End If
 
+            If Preferences.FrodoEnabled Then
+                If videots = "" Then        
+                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-poster.jpg")
+                    lst.Add( path )
+                Else
+                    path = videots+"poster.jpg"
+                    lst.Add(path)
+                End If
+            End If
+
+        End If
+
+        If Not isroot andalso posterjpg Then
+            'path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
             'lst.Add(path)
         End If
-
-        If Preferences.FrodoEnabled Then
-            If videots = "" Then        
-                path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-poster.jpg")
-                lst.Add( path )
-            Else
-                path = videots+"poster.jpg"
-                lst.Add(path)
-            End If
-        End If
-        
 
         Return lst
     End Function

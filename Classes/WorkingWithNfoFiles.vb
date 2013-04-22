@@ -1265,7 +1265,7 @@ Public Class WorkingWithNfoFiles
                 Else
                     newmovie.fileinfo.videotspath=""
                 End If
-                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path)
+                newmovie.fileinfo.posterpath = Preferences.GetPosterPath(path,newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path)
                 newmovie.fileinfo.fanartpath = Preferences.GetFanartPath(path,newmovie.fileinfo.filename)
