@@ -17,7 +17,7 @@ Imports System.Linq
 
 Public Class Form1
 
-    Const NFO_INDEX As Integer = 1
+    Const NFO_INDEX As Integer = 2
 
     Public Dim WithEvents BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker

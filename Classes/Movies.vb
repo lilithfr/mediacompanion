@@ -933,6 +933,7 @@ Public Class Movies
                                     Next
                                     newmovie.Audio.Add(audio)
 
+                            Case "Premiered" : newmovie.Premiered= detail.InnerText
 
                         End Select
                     Next
@@ -1106,6 +1107,7 @@ Public Class Movies
                 child.AppendChild(item.GetChild(doc))
             Next
 
+            child.AppendChild(doc, "Premiered", movie.Premiered)
             root.AppendChild(child)
         Next
 

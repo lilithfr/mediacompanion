@@ -31,6 +31,7 @@ Public Class Data_GridViewMovie
 
     Property Resolution As Integer = -1
     Property Audio      As New List(Of AudioDetails)
+    Property Premiered As String
 
     Sub New 
     End Sub
@@ -67,6 +68,7 @@ Public Class Data_GridViewMovie
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
         Resolution = movie.Resolution
         AssignAudio(movie.Audio)
+        Premiered = movie.Premiered
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -97,7 +99,8 @@ Public Class Data_GridViewMovie
                                                   .source = Me.source,
                                                   .Votes = Me.Votes,
                                                   .Resolution = Me.Resolution,
-                                                  .Audio      = Me.Audio
+                                                  .Audio      = Me.Audio,
+                                                  .Premiered  = Me.Premiered
                                                  }
         Return convertedMovie
     End Function
@@ -546,7 +549,7 @@ Public Class Data_GridViewMovie
             s = s.Replace("%T", title)
             s = s.Replace("%Y", year)
             s = s.Replace("%I", id)
-            '           s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
+            s = s.Replace("%P", Premiered)     
             s = s.Replace("%R", rating)
             s = s.Replace("%L", runtime)
             s = s.Replace("%S", source)

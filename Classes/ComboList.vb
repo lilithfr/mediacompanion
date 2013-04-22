@@ -25,6 +25,7 @@ Public Class ComboList
     Property Votes               As Integer= 0
     Property Resolution          As Integer= -1
     Property Audio               As New List(Of AudioDetails)
+    Property Premiered           As String = ""
 
     Public Property title As String
         Get
@@ -167,7 +168,7 @@ Public Class ComboList
             s = s.Replace("%T", title)
             s = s.Replace("%Y", year)
             s = s.Replace("%I", id)
-            '           s = s.Replace("%P", _scrapedMovie.fullmoviebody.premiered)     
+            s = s.Replace("%P", Premiered)     
             s = s.Replace("%R", rating)
             s = s.Replace("%L", runtime)
             s = s.Replace("%S", source)
@@ -200,7 +201,8 @@ Public Class ComboList
         Me.source              = From.source             
         Me.Votes               = From.Votes              
         Me.Resolution          = From.Resolution    
-        
+        Me.Premiered           = From.Premiered
+
         AssignAudio(From.Audio)
     End Sub
 
