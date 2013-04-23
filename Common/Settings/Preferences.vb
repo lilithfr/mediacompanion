@@ -1044,12 +1044,14 @@ Public Class Preferences
 
         If posterjpg AndAlso Not isroot Then
             If videots<>"" Then
-                If Preferences.XBMC_version = 0 Then
+                If Preferences.EdenEnabled Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                Else
-                    path = videots+"poster.jpg"
+                    lst.Add(path)
                 End If
-                lst.Add(path)
+                If Preferences.FrodoEnabled Then
+                    path = videots+"poster.jpg"
+                    lst.Add(path)
+                End If
             Else
                 path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
                 lst.Add(path)
@@ -1057,12 +1059,13 @@ Public Class Preferences
                     path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                     lst.Add(path)
                 End If
+                If Preferences.EdenEnabled Then
+                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                    lst.Add(path)
+                End If
             End If
             
-            If Preferences.XBMC_version = 1 Then
-                path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                lst.Add(path)
-            End If
+            
             
         Else
             If Preferences.EdenEnabled Then
@@ -1100,7 +1103,52 @@ Public Class Preferences
         Return lst
     End Function
 
+    Public Shared Function GetFanartPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
+        Dim lst=New List(Of String)
+        Dim path As String = FullPath
+        Dim isroot As Boolean = Preferences.GetRootFolderCheck(FullPath)
+        Dim fanartjpg As Boolean = Preferences.fanartjpg
 
+        If fanartjpg AndAlso Not isroot Then
+            If videots<>"" Then
+                If Preferences.EdenEnabled Then
+                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                    lst.Add(path)
+                End If
+                If Preferences.FrodoEnabled Then
+                    path = videots+"fanart.jpg"
+                    lst.Add(path)
+                End If
+            Else
+                path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
+                lst.Add(path)
+                If Preferences.EdenEnabled Then
+                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+                    lst.Add(path)
+                End If
+            End If
+
+        Else
+            If Preferences.EdenEnabled Then
+                path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+                    lst.Add( path )
+            End If
+            If Preferences.FrodoEnabled Then
+                If videots = "" Then        
+                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+                    lst.Add( path )
+                Else
+                    path = videots+"fanart.jpg"
+                    lst.Add(path)
+                End If
+            End If
+            If Preferences.basicsavemode Then
+                path = ""
+            End If
+        End If
+
+        Return lst
+    End Function
 
 
     Public Shared Function GetFanartPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String

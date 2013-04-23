@@ -1634,18 +1634,18 @@ Public Class Movie
             ReportProgress(,"Fanart already exists -> Skipping" & vbCrLf)
             Exit Sub
         End If
-        Dim newFanartPath As String = FanartPath
-        If Not Rescrape Then DeleteFanart
-        If Preferences.basicsavemode Then
-            newFanartPath = FanartPath.Replace("movie-","")
-        End If
-        'If Not Preferences.basicsavemode Then
-            'newFanartPath = isMovieFanart
+        'Dim newFanartPath As String = FanartPath
+        'If Not Rescrape Then DeleteFanart
+        'If Preferences.basicsavemode Then
+        '    newFanartPath = FanartPath.Replace("movie-","")
         'End If
-        If Preferences.fanartjpg and Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then
-            Dim thisnfopath As String = Utilities.GetFileNameFromPath(NfoPathAndFilename)
-            newFanartPath = Preferences.GetFanartPath(NfoPathPrefName,thisnfopath) 'If(_videotsrootpath<>"",_videotsrootpath,thisnfopath)
-        End If
+        ''If Not Preferences.basicsavemode Then
+        '    'newFanartPath = isMovieFanart
+        ''End If
+        'If Preferences.fanartjpg and Not Preferences.GetRootFolderCheck(NfoPathPrefName) Then
+        '    Dim thisnfopath As String = Utilities.GetFileNameFromPath(NfoPathAndFilename)
+        '    newFanartPath = Preferences.GetFanartPath(NfoPathPrefName,thisnfopath) 'If(_videotsrootpath<>"",_videotsrootpath,thisnfopath)
+        'End If
         Dim FanartUrl As String=tmdb.GetBackDropUrl
 
         If IsNothing(FanartUrl) then
@@ -1653,32 +1653,53 @@ Public Class Movie
         Else
             ReportProgress("Fanart",)
             Try
-   '            Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
-                SaveFanartImageToCacheAndPath(FanartUrl, newFanartPath)
-                If _videotsrootpath<>"" Then
-                    If Preferences.FrodoEnabled Then
-                        If Not IO.File.Exists(frodoart) Then
-                            IO.File.Copy(newFanartPath,frodoart)
-                        End If
-                    End If
-                    If Not Preferences.EdenEnabled Then
-                        GC.Collect
-                        Utilities.SafeDeleteFile(newFanartPath)
-                    Else
-                        If newFanartPath <> isMovieFanart  AndAlso Not IO.File.Exists(isMovieFanart) Then
-                            IO.File.Copy(newFanartPath,isMovieFanart)
-                            GC.Collect
-                            Utilities.SafeDeleteFile(newFanartPath)
-                        End If
-                    End If
-                Else
-                    If Preferences.XBMC_version = 1
-                        If Not IO.File.Exists(isMovieFanart) Then
-                            IO.File.Copy(newFanartPath,isMovieFanart)
-                            GC.Collect
-                        End If
+                Dim i1 As New PictureBox
+                Dim backup As String = ""
+
+                With i1
+                    .WaitOnLoad = True
+                    Try
+                        .ImageLocation = FanartUrl 
+                    Catch
+                        .ImageLocation = backup
+                    End Try
+                End With
+
+                If Not i1.Image Is Nothing Then
+                    If i1.Image.Width < 20 Then
+                        i1.ImageLocation = backup
                     End If
                 End If
+                Dim paths As List(Of String) = Preferences.GetfanartPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
+                For Each pth As String In Paths
+                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                Next
+   '            Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
+                'SaveFanartImageToCacheAndPath(FanartUrl, newFanartPath)
+                'If _videotsrootpath<>"" Then
+                '    If Preferences.FrodoEnabled Then
+                '        If Not IO.File.Exists(frodoart) Then
+                '            IO.File.Copy(newFanartPath,frodoart)
+                '        End If
+                '    End If
+                '    If Not Preferences.EdenEnabled Then
+                '        GC.Collect
+                '        Utilities.SafeDeleteFile(newFanartPath)
+                '    Else
+                '        If newFanartPath <> isMovieFanart  AndAlso Not IO.File.Exists(isMovieFanart) Then
+                '            IO.File.Copy(newFanartPath,isMovieFanart)
+                '            GC.Collect
+                '            Utilities.SafeDeleteFile(newFanartPath)
+                '        End If
+                '    End If
+                'Else
+                '    If Preferences.EdenEnabled Then
+                '        If Not IO.File.Exists(isMovieFanart) Then
+                '            IO.File.Copy(newFanartPath,isMovieFanart)
+                '            GC.Collect
+                '        End If
+                '    End If
+                'End If
                 GC.Collect()
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
