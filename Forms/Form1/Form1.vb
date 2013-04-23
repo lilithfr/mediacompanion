@@ -18714,37 +18714,64 @@ Public Class Form1
         If IsNothing(FanartUrl) then
             MsgBox("No Fanart Found on TMDB")
         Else
+            Try
+                Dim i1 As New PictureBox
+                Dim backup As String = ""
 
-            'If Utilities.DownloadImage(FanartUrl, FanartPath) then
-            If Movie.SaveFanartImageToCacheAndPath(FanartUrl, FanartPath) then
-                If isvideotspath<>"" Then
-                    If Preferences.FrodoEnabled Then
-                        If IO.File.Exists(isvideotspath) Then
-                            Utilities.SafeDeleteFile(isvideotspath)
-                        End If
-                        IO.File.Copy(FanartPath,isvideotspath)
-                        GC.Collect
-                        FanartPath=isvideotspath
-                    End If
-                    If Not Preferences.EdenEnabled Then
-                        Utilities.SafeDeleteFile(FanartPath)
-                    Else
-                        Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo","-fanart.jpg")
-                        If FanartPath <> edenart Then
-		                    Utilities.SafeCopyFile(FanartPath,edenart,True)
-		                    GC.Collect
-		                    Utilities.SafeDeleteFile(FanartPath)
-	                    End If
-                        FanartPath=edenart
-                    End If
-                Else
-                    If Preferences.EdenEnabled Then
-                        Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo","-fanart.jpg")
-                        If edenart <> FanartPath Then
-                            Utilities.SafeCopyFile(FanartPath,edenart)
-                        End If
+                With i1
+                    .WaitOnLoad = True
+                    Try
+                        .ImageLocation = FanartUrl 
+                    Catch
+                        .ImageLocation = backup
+                    End Try
+                End With
+
+                If Not i1.Image Is Nothing Then
+                    If i1.Image.Width < 20 Then
+                        i1.ImageLocation = backup
                     End If
                 End If
+                Dim paths As List(Of String) = Preferences.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
+                For Each pth As String In Paths
+                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                    FanartPath = pth
+                Next
+
+            Catch ex As Exception
+
+            End Try
+
+            'If Utilities.DownloadImage(FanartUrl, FanartPath) then
+            'If Movie.SaveFanartImageToCacheAndPath(FanartUrl, FanartPath) then
+            '    If isvideotspath<>"" Then
+            '        If Preferences.FrodoEnabled Then
+            '            If IO.File.Exists(isvideotspath) Then
+            '                Utilities.SafeDeleteFile(isvideotspath)
+            '            End If
+            '            IO.File.Copy(FanartPath,isvideotspath)
+            '            GC.Collect
+            '            FanartPath=isvideotspath
+            '        End If
+            '        If Not Preferences.EdenEnabled Then
+            '            Utilities.SafeDeleteFile(FanartPath)
+            '        Else
+            '            Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo","-fanart.jpg")
+            '            If FanartPath <> edenart Then
+		          '          Utilities.SafeCopyFile(FanartPath,edenart,True)
+		          '          GC.Collect
+		          '          Utilities.SafeDeleteFile(FanartPath)
+	           '         End If
+            '            FanartPath=edenart
+            '        End If
+            '    Else
+            '        If Preferences.EdenEnabled Then
+            '            Dim edenart As String = workingMovieDetails.fileinfo.fullpathandfilename.Replace(".nfo","-fanart.jpg")
+            '            If edenart <> FanartPath Then
+            '                Utilities.SafeCopyFile(FanartPath,edenart)
+            '            End If
+            '        End If
+            '    End If
 
                 For Each paths In Preferences.offlinefolders
                     Dim offlinepath As String = paths & "\"
@@ -18761,7 +18788,6 @@ Public Class Form1
                 PictureBoxFanArt.Image = bmp4
                 PictureBox2.Image = bmp4
  '               Rating1.PictureInit = bmp4
-            End If
         End If
 
         messbox.Close()

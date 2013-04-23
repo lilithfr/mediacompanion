@@ -1028,7 +1028,7 @@ Public Class Preferences
                 End If
             End If
         End If
-        If  Preferences.posterjpg AndAlso Not IsNothing(MovFilePath) AndAlso Not GetRootFolderCheck(FullPath) Then
+        If  Preferences.posterjpg AndAlso Not IsNothing(MovFilePath) AndAlso Not GetRootFolderCheck(FullPath) AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
             posterpath = FullPath.Replace(MovFilePath,"") & "poster.jpg"
         End If
         Return posterpath
@@ -1112,7 +1112,7 @@ Public Class Preferences
         If fanartjpg AndAlso Not isroot Then
             If videots<>"" Then
                 If Preferences.EdenEnabled Then
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
+                    path = FullPath.Replace(".nfo", "-fanart.jpg")
                     lst.Add(path)
                 End If
                 If Preferences.FrodoEnabled Then
@@ -1123,7 +1123,7 @@ Public Class Preferences
                 path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
                 lst.Add(path)
                 If Preferences.EdenEnabled Then
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+                    path = FullPath.Replace(".nfo", "-fanart.jpg")
                     lst.Add(path)
                 End If
             End If
@@ -1166,7 +1166,7 @@ Public Class Preferences
             End If
             'fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
         Else
-            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso Not IsNothing(MovFilePath) Then
+            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso Not IsNothing(MovFilePath) AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
                 Return MovPath
             End If
