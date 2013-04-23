@@ -969,6 +969,9 @@ Public Class Preferences
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
             Return IO.File.Exists(NfoPathPrefName+"poster.jpg")
         End If
+        If Not Preferences.EdenEnabled AndAlso Preferences.posterjpg AndAlso Not GetRootFolderCheck(NfoPathPrefName)Then
+            Return IO.File.Exists(IO.Path.GetDirectoryName(NfoPathPrefName) & "\poster.jpg")
+        End If
 
         Return IO.File.Exists(Preferences.GetPosterPath(NfoPathPrefName))
     End Function

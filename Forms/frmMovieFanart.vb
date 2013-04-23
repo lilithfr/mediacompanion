@@ -11,6 +11,8 @@ Public Class frmMovieFanart
     Dim WithEvents labels As Label
     Dim WithEvents savebutton As Button
     Dim fanartpath As String = Form1.workingMovieDetails.fileinfo.fanartpath
+    Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
+    Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
     Dim fanartList As New List(Of str_ListOfPosters)
     Dim mainfanart As PictureBox
     Dim resolutionlbl As Label
@@ -295,10 +297,31 @@ Public Class frmMovieFanart
             Else
                 Try
                     Panel1.Controls.Remove(Label1)
+                    Dim i1 As New PictureBox
+                    Dim backup As String = ""
 
+                    With i1
+                        .WaitOnLoad = True
+                        Try
+                            .ImageLocation = tempstring2 
+                        Catch
+                            .ImageLocation = backup
+                        End Try
+                    End With
+
+                    If Not i1.Image Is Nothing Then
+                        If i1.Image.Width < 20 Then
+                            i1.ImageLocation = backup
+                        End If
+                    End If
+                    Dim paths As List(Of String) = Preferences.GetfanartPaths(fullpathandfilename,If(videotspath <>"",videotspath,""))
+                    For Each pth As String In Paths
+                        i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                        fanartpath = pth
+                    Next
 
                  '  If Utilities.DownloadImage(tempstring2, fanartpath, True, Preferences.resizefanart) Then
-                    If Movie.SaveFanartImageToCacheAndPath(tempstring2, fanartpath) Then
+                    If IO.File.Exists(fanartpath) Then 'Movie.SaveFanartImageToCacheAndPath(tempstring2, fanartpath) Then
 
                         'mainfanart = New PictureBox
                         'Dim OriginalImage As New Bitmap(fanartpath)

@@ -26,6 +26,7 @@ Public Class frmCoverArt
     Dim folderjpgpath As String
     Dim tmdbid As String = Form1.workingMovieDetails.fullmoviebody.imdbid
     Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
+    Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
     Dim applicationPath As String = Preferences.applicationPath
 
 
@@ -145,17 +146,18 @@ Public Class frmCoverArt
                 End If
             Next
             If allok = True Then
-                Button5.Visible = True
-                Button6.Visible = True
+                btnSaveSmall.Visible = True
+                btnSaveBig.Visible = True
             Else
-                Button5.Visible = False
-                Button6.Visible = False
+                btnSaveSmall.Visible = False
+                btnSaveBig.Visible = False
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
 
     End Sub
+
 
     Private Sub zoomimage(ByVal sender As Object, ByVal e As EventArgs)
         Try
@@ -241,7 +243,7 @@ Public Class frmCoverArt
         End Try
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btnSourceTMDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceTMDB.Click
         Try
             Call initialise()
 
@@ -342,7 +344,7 @@ Public Class frmCoverArt
 
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+    Private Sub btnSourceMPDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceMPDB.Click
         Try
             Call initialise()
 
@@ -465,7 +467,7 @@ Public Class frmCoverArt
 
     End Sub
 
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+    Private Sub btnSourceIMDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceIMDB.Click
         Try
             Call initialise()
             Dim fanarturl As String
@@ -575,7 +577,7 @@ Public Class frmCoverArt
 
     End Sub
 
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+    Private Sub btnSourceIMPA_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceIMPA.Click
         Try
             Call initialise()
 
@@ -885,9 +887,9 @@ Public Class frmCoverArt
         End Try
     End Sub
 
-    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
+    Private Sub btnScrollNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScrollNext.Click
         Try
-            Button5.Visible = False
+            btnSaveSmall.Visible = False
             Me.Controls.Remove(panel2)
             panel2 = Nothing
             picboxes = Nothing
@@ -903,12 +905,12 @@ Public Class frmCoverArt
             Me.Controls.Add(panel2)
 
             currentpage += 1
-            Button7.Enabled = True
+            btnScrollPrev.Enabled = True
 
             If currentpage = pagecount Then
-                Button8.Enabled = False
+                btnScrollNext.Enabled = False
             Else
-                Button8.Enabled = True
+                btnScrollNext.Enabled = True
             End If
 
 
@@ -968,9 +970,9 @@ Public Class frmCoverArt
 
     End Sub
 
-    Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
+    Private Sub btnScrollPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScrollPrev.Click
         Try
-            Button5.Visible = False
+            btnSaveSmall.Visible = False
             Me.Controls.Remove(panel2)
             panel2 = Nothing
             picboxes = Nothing
@@ -986,16 +988,16 @@ Public Class frmCoverArt
             Me.Controls.Add(panel2)
 
             currentpage -= 1
-            Button7.Enabled = True
+            btnScrollPrev.Enabled = True
             If currentpage <= 1 Then
-                Button7.Enabled = False
+                btnScrollPrev.Enabled = False
             Else
-                Button7.Enabled = True
+                btnScrollPrev.Enabled = True
             End If
             If currentpage = pagecount Then
-                Button8.Enabled = False
+                btnScrollNext.Enabled = False
             Else
-                Button8.Enabled = True
+                btnScrollNext.Enabled = True
             End If
             Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
             Dim tempint2 As Integer = currentpage * maxthumbs
@@ -1077,19 +1079,19 @@ Public Class frmCoverArt
 
             Label7.Visible = True
             If pagecount > 1 Then
-                Button7.Visible = True
-                Button8.Visible = True
+                btnScrollPrev.Visible = True
+                btnScrollNext.Visible = True
                 If count >= maxthumbs Then
                     Label7.Text = "Displaying 1 to " & maxthumbs.ToString & " of " & count.ToString & " Images"
                 Else
                     Label7.Text = "Displaying 1 to " & count.ToString & " of " & count.ToString & " Images"
                 End If
                 currentpage = 1
-                Button7.Enabled = False
-                Button8.Enabled = True
+                btnScrollPrev.Enabled = False
+                btnScrollNext.Enabled = True
             Else
-                Button7.Visible = False
-                Button8.Visible = False
+                btnScrollPrev.Visible = False
+                btnScrollNext.Visible = False
                 If count >= maxthumbs Then
                     Label7.Text = "Displaying 1 to " & maxthumbs.ToString & " of " & count.ToString & " Images"
                 Else
@@ -1166,8 +1168,8 @@ Public Class frmCoverArt
             Preferences.maximumthumbs = 10
         End If
 
-        Button5.Visible = False
-        Button6.Visible = False
+        btnSaveSmall.Visible = False
+        btnSaveBig.Visible = False
         Me.Controls.Remove(panel2)
         panel2 = Nothing
         picboxes = Nothing
@@ -1192,7 +1194,7 @@ Public Class frmCoverArt
     End Sub
 
 
-    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+    Private Sub btnSaveSmall_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveSmall.Click
         Try
             Dim tempstring As String
             Dim realnumber As Integer = 0
@@ -1222,15 +1224,20 @@ Public Class frmCoverArt
                         Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
                         If Not b1.Image Is Nothing Then
                             If b1.Image.Width > 20 Then
-                                b1.Image.Save(posterpath)
-                                If Preferences.createfolderjpg = True Then
-                                    b1.Image.Save(folderjpgpath)
-                                End If
-                                If Preferences.FrodoEnabled and Preferences.EdenEnabled then
-                                    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
-                                    b1.Image.Save(frodopath)
-                                    posterpath=frodopath
-                                End If
+                                Dim paths As List(Of String) = Preferences.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
+                                For Each pth As String In Paths
+                                    b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                                    posterpath = pth
+                                Next
+                                'b1.Image.Save(posterpath)
+                                'If Preferences.createfolderjpg = True Then
+                                '    b1.Image.Save(folderjpgpath)
+                                'End If
+                                'If Preferences.FrodoEnabled and Preferences.EdenEnabled then
+                                '    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
+                                '    b1.Image.Save(frodopath)
+                                '    posterpath=frodopath
+                                'End If
                                 Form2.moviethumb.Image = b1.Image
                                 Form1.moviethumb.Image = b1.Image
                                 mainposter.Image = b1.Image
@@ -1274,7 +1281,7 @@ Public Class frmCoverArt
 
     End Sub
 
-    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
+    Private Sub btnSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveBig.Click
         Try
             Dim tempstring As String
             Dim tempint As Integer = 0
@@ -1312,15 +1319,20 @@ Public Class frmCoverArt
                                         .ImageLocation = (posterurls(realnumber + 1, 1))
                                     End Try
                                 End With
-                                b1.Image.Save(posterpath)
-                                If Preferences.createfolderjpg = True Then
-                                    b1.Image.Save(folderjpgpath)
-                                End If
-                                If Preferences.FrodoEnabled and Preferences.EdenEnabled then
-                                    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
-                                    b1.Image.Save(frodopath)
-                                    posterpath=frodopath
-                                End If
+                                Dim paths As List(Of String) = Preferences.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
+                                For Each pth As String In Paths
+                                    b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                                    posterpath = pth
+                                Next
+                                'b1.Image.Save(posterpath)
+                                'If Preferences.createfolderjpg = True Then
+                                '    b1.Image.Save(folderjpgpath)
+                                'End If
+                                'If Preferences.FrodoEnabled and Preferences.EdenEnabled then
+                                '    Dim frodopath As String = posterpath.Replace(".tbn","-poster.jpg")
+                                '    b1.Image.Save(frodopath)
+                                '    posterpath=frodopath
+                                'End If
                                 Form2.moviethumb.Image = b1.Image
                                 Form1.moviethumb.Image = b1.Image
                                 mainposter.Image = b1.Image
@@ -1426,7 +1438,7 @@ Public Class frmCoverArt
 
     End Sub
 
-    Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
+    Private Sub btnSourceManual_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSourceManual.Click
         Try
             Panel3.Visible = True
         Catch ex As Exception
