@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Linq
 Imports System.Xml
 Imports Media_Companion
+Imports MC_UserControls
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
@@ -1631,6 +1632,29 @@ Public Class Movies
                         m
                     Distinct
     End Function
+
+
+
+    Function ApplyGenreFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim i     As Integer = 0
+        Dim state As CheckState
+
+        For Each item As CCBoxItem In ccb.Items
+
+            state = ccb.GetItemCheckState(i)
+
+            Select state
+                Case CheckState.Checked   : recs = From m In recs Where     m.genre.Contains(item.Name.RemoveAfterMatch)
+                Case CheckState.Unchecked : recs = From m In recs Where Not m.genre.Contains(item.Name.RemoveAfterMatch)
+            End Select
+
+            i += 1
+        Next
+
+        Return recs
+    End Function
+
+
 
 #End Region
 

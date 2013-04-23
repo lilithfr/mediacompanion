@@ -3326,7 +3326,7 @@ Public Class Form1
         RadioButtonTitleAndYear.Checked = True
           
         cbFilterGeneral       .SelectedIndex = 0
-        cbFilterGenre         .SelectedIndex = 0
+'       cbFilterGenre         .SelectedIndex = 0
         cbFilterSet           .SelectedIndex = 0
         cbFilterActor         .SelectedIndex = 0
         cbFilterSource        .SelectedIndex = 0
@@ -3336,13 +3336,14 @@ Public Class Form1
         cbFilterAudioBitrates .SelectedIndex = 0
         cbFilterAudioChannels .SelectedIndex = 0
         cbFilterNumAudioTracks.SelectedIndex = 0
+        
 
         UpdateMinMaxMovieFilters
 
-        cbFilterVotes         .Reset
-        cbFilterRating        .Reset
-        cbFilterYear          .Reset
-
+        cbFilterVotes .Reset
+        cbFilterRating.Reset
+        cbFilterYear  .Reset
+        cbFilterGenre .Reset
 
         State=ProgramState.Other
     End Sub
@@ -23099,7 +23100,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterGenre.SelectedValueChanged, cbFilterSource.SelectedValueChanged
+    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource.SelectedValueChanged,  cbFilterGenre.TextChanged
         ApplyMovieFilters
     End Sub
      
@@ -23415,7 +23416,7 @@ Public Class Form1
         Assign_FilterGeneral
         Assign_FilterActor
         Assign_MovieFilter( cbFilterResolution     , oMovies.ResolutionFilter     , ResolutionFilter.Replace("-1","Unknown") )
-        Assign_MovieFilter( cbFilterGenre          , oMovies.Genres               , cbFilterGenre.Text   )
+'       Assign_MovieFilter( cbFilterGenre          , oMovies.Genres               , cbFilterGenre.Text   )
         Assign_MovieFilter( cbFilterSet            , oMovies.SetsFilter           , SetFilter            )
         Assign_MovieFilter( cbFilterAudioLanguages , oMovies.AudioLanguagesFilter , AudioLanguagesFilter )
         Assign_MovieFilter( cbFilterAudioChannels  , oMovies.AudioChannelsFilter  , AudioChannelsFilter  )
@@ -23423,6 +23424,11 @@ Public Class Form1
         Assign_MovieFilter( cbFilterAudioCodecs    , oMovies.AudioCodecsFilter    , AudioCodecsFilter    )
         Assign_MovieFilter( cbFilterNumAudioTracks , oMovies.NumAudioTracks       , NumAudioTracksFilter )
         UpdateMinMaxMovieFilters
+
+        cbFilterGenre.Items.Clear
+        cbFilterGenre.AddItems(oMovies.Genres)
+        cbFilterGenre.Reset()
+
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23444,26 +23450,11 @@ Public Class Form1
     End Sub
 
 
-'    Sub Assign_FilterGenre
-        'Dim selected = cbFilterGenre.Text
+    Private Sub cbFilterGenre_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles cbFilterGenre.ItemCheck
+        Dim iState As Integer = e.CurrentValue
 
-        'cbFilterGenre.Items.Clear
-        'cbFilterGenre.Items.Add("All")
-        'For Each item In oMovies.Genres
-        '    cbFilterGenre.Items.Add(item)
-        'Next
-
-        'If cbFilterGenre.Text = "" Then cbFilterGenre.Text = "All"
-
-        'If selected<>"" Then
-        '    For Each item As String In cbFilterGenre.Items
-        '        If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
-        '            cbFilterGenre.SelectedItem=item    
-        '            Exit For
-        '        End If
-        '    Next
-        'End If
-'    End Sub
+        e.NewValue = (iState + 1) Mod 3
+    End Sub
 
 
     Sub Assign_FilterActor
@@ -24471,7 +24462,6 @@ End Sub
 Private Sub PictureBoxFanArt_Click( sender As System.Object,  e As System.EventArgs)
 
 End Sub
-
 
 
 

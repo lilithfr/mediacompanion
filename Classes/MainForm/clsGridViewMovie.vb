@@ -246,11 +246,11 @@ Public Class clsGridViewMovie
        
 
         'Genre
-        If Form1.cbFilterGenre.Text <> "All" Then
-            b = From f In b Where f.genre.Contains(Form1.cbFilterGenre.Text.RemoveAfterMatch)
-            If Yield Then Return
-        End If
-        
+        'If Form1.cbFilterGenre.Text <> "All" Then
+        '    b = From f In b Where f.genre.Contains(Form1.cbFilterGenre.Text.RemoveAfterMatch)
+        '    If Yield Then Return
+        'End If
+        b = Form1.oMovies.ApplyGenreFilter( b , Form1.cbFilterGenre )
 
         'Set
         If Form1.SetFilter<>"" Then
