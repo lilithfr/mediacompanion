@@ -3316,6 +3316,7 @@ Public Class Form1
         AudioLanguagesFilter=""
         AudioChannelsFilter =""
         AudioBitratesFilter =""
+        NumAudioTracksFilter=""
         filterOverride = False
         TextBox1.Text = ""
         txt_titlesearch.Text = ""
