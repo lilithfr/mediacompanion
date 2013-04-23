@@ -552,6 +552,11 @@ Public Class Movie
             Return False
         End If
 
+        If fileInfo.Name.Substring(0,2)="._" Then 
+            log &= fileInfo.Name & " ignored"
+            Return False 
+        End If
+
         If Preferences.usefoldernames = True Then
             log &= "  '" & fileInfo.Directory.Name.ToString & "'"     'log directory name as Title due to use FOLDERNAMES
         Else

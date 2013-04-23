@@ -575,7 +575,7 @@ Public Class Movies
         Next
     End Sub
 
-    Public Sub AddNewMovies(DirPath As String)
+    Public Sub AddNewMovies(DirPath As String)   'Search for valid video file
         Dim dirInfo As New DirectoryInfo(DirPath)
         Dim found   As Integer = 0
 
