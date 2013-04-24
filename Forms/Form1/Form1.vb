@@ -8856,6 +8856,7 @@ Public Class Form1
 
     Private Sub tv_Fanart_Load()
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        rbTvFanart.Checked = CheckState.Checked
         Me.Panel13.Controls.Clear()
         listOfTvFanarts.Clear()
         Button40.Visible = False
@@ -9029,6 +9030,32 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub Tv_FanartDisplay()
+        Dim fanartorextrapath As String = Tv_FanartORExtrathumbPath
+        Dim xtra As Boolean = False
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        If IsNothing(WorkingTvShow) Then Exit Sub
+        If rbTvFanart1.Checked or rbTvFanart2.Checked or rbTvFanart3.Checked or rbTvFanart4.Checked Then xtra = True
+        If Not xtra Then
+        If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+            If Not tv_PictureBoxLeft.Image Is Nothing Then
+                PictureBox10.Image = tv_PictureBoxLeft.Image
+                PictureBox11.Image = tv_PictureBoxLeft.Image
+            Else
+                PictureBox10.Image = Nothing
+                PictureBox11.Image = Nothing
+            End If
+        Else
+            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath)
+            util_ImageLoad(PictureBox11, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg"), Utilities.DefaultFanartPath)
+
+        End If
+        Else
+            util_ImageLoad(PictureBox10, WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", fanartorextrapath), Utilities.DefaultFanartPath)
+        End If
+
+    End Sub
+
     Private Sub Button42_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button42.Click
         Dim issavefanart As Boolean = Preferences.savefanart
         Preferences.savefanart =true
@@ -9166,23 +9193,23 @@ Public Class Form1
     End Function
 
     Private Sub rbTvFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart.CheckedChanged
-
+        tv_FanartDisplay()
     End Sub
 
     Private Sub rbTvFanart1_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart1.CheckedChanged
-
+        tv_FanartDisplay()
     End Sub
 
     Private Sub rbTvFanart2_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart2.CheckedChanged
-
+        tv_FanartDisplay()
     End Sub
 
     Private Sub rbTvFanart3_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart3.CheckedChanged
-
+        tv_FanartDisplay()
     End Sub
 
     Private Sub rbTvFanart4_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles rbTvFanart4.CheckedChanged
-
+        tv_FanartDisplay()
     End Sub
 
     Private Sub tv_FanartCropTop()
