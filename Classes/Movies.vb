@@ -1637,15 +1637,15 @@ Public Class Movies
 
     Function ApplyGenreFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim i     As Integer = 0
-        Dim state As CheckState
+        Dim genre As String
 
         For Each item As CCBoxItem In ccb.Items
 
-            state = ccb.GetItemCheckState(i)
+            genre = item.Name.RemoveAfterMatch
 
-            Select state
-                Case CheckState.Checked   : recs = From m In recs Where     m.genre.Contains(item.Name.RemoveAfterMatch)
-                Case CheckState.Unchecked : recs = From m In recs Where Not m.genre.Contains(item.Name.RemoveAfterMatch)
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = (From m In recs Where     m.genre.Contains(genre)).ToList
+                Case CheckState.Unchecked : recs = (From m In recs Where Not m.genre.Contains(genre)).ToList
             End Select
 
             i += 1
