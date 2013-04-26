@@ -361,6 +361,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return returnCode
     End Function
 
+    Public Shared Function GetFileSize(ByVal filePath As String) As Long
+        If File.Exists(filePath) Then
+            Dim file As New IO.FileInfo(filePath)
+            Return file.Length
+        End If
+        Return 0
+    End Function
+
     Public Shared Function testForFileByName(ByVal targetMovieFile As String, ByVal fileType As String) As Boolean
         Dim aFileExists As Boolean = False
         Dim fileTypes As New ArrayList

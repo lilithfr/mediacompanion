@@ -246,7 +246,7 @@ Public Class MediaInfoExport
                     strNFOprop = If(movie.runtime <> Nothing, movie.runtime, "")
 
                 Case "outline"
-                    strNFOprop = If(movie.outline <> Nothing, movie.outline, "")
+                    strNFOprop = If(movie.outline <> Nothing, Security.SecurityElement.Escape(movie.outline), "")
 
                 Case "fullpathandfilename"
                     strNFOprop = If(movie.fullpathandfilename <> Nothing, movie.fullpathandfilename, "")
@@ -257,7 +257,7 @@ Public Class MediaInfoExport
                     newplotdetails = mediaExportNfoFunction.mov_NfoLoadFull(movie.fullpathandfilename)
                     If Not IsNothing(newplotdetails) Then
                         If tokenInstr(0) = "fullplot" Then
-                            strNFOprop = newplotdetails.fullmoviebody.plot
+                            strNFOprop = Security.SecurityElement.Escape(newplotdetails.fullmoviebody.plot)
                         End If
                         If tokenInstr(0) = "director" Then
                             strNFOprop = newplotdetails.fullmoviebody.director
@@ -399,6 +399,8 @@ Public Class MediaInfoExport
                                                     End If
                                                     i += 1
                                                 Next
+                                            Case "filesize"
+                                                strNFOprop = Utilities.GetFileSize(movie.MoviePathAndFileName)
                                         End Select
                                     Case "title"
                                         strNFOprop = newplotdetails.fullmoviebody.title
@@ -451,9 +453,9 @@ Public Class MediaInfoExport
                                     Case "top250"
                                         strNFOprop = newplotdetails.fullmoviebody.top250
                                     Case "outline"
-                                        strNFOprop = newplotdetails.fullmoviebody.outline
+                                        strNFOprop = Security.SecurityElement.Escape(newplotdetails.fullmoviebody.outline)
                                     Case "plot"
-                                        strNFOprop = newplotdetails.fullmoviebody.plot
+                                        strNFOprop = Security.SecurityElement.Escape(newplotdetails.fullmoviebody.plot)
                                     Case "tagline"
                                         strNFOprop = newplotdetails.fullmoviebody.tagline
                                     Case "country"
