@@ -20281,12 +20281,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Function util_FileSizeGet(ByVal MyFilePath As String) As Long
-        Dim MyFile As New IO.FileInfo(MyFilePath)
-        Dim FileSize As Long = MyFile.Length
-        Return FileSize
-    End Function
-
     Private Sub ExportmoviesMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripExportMovies.Click
         Try
             listoffilestomove.Clear()
@@ -20339,7 +20333,7 @@ Public Class Form1
 
                 totalfilesize = 0
                 For Each item In listoffilestomove
-                    totalfilesize = totalfilesize + util_FileSizeGet(item)
+                    totalfilesize = totalfilesize + Utilities.GetFileSize(item)
                 Next
 
 
