@@ -1456,27 +1456,31 @@ Public Class Movie
             ReportProgress("Poster")
 
             Try
-                Dim i1 As New PictureBox
-                Dim backup As String = ""
+                'Dim i1 As New PictureBox
+                'Dim backup As String = ""
 
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = PosterUrl
-                    Catch
-                        .ImageLocation = backup
-                    End Try
-                End With
+                'With i1
+                '    .WaitOnLoad = True
+                '    Try
+                '        .ImageLocation = PosterUrl
+                '    Catch
+                '        .ImageLocation = backup
+                '    End Try
+                'End With
 
-                If Not i1.Image Is Nothing Then
-                    If i1.Image.Width < 20 Then
-                        i1.ImageLocation = backup
-                    End If
-                End If
+                'If Not i1.Image Is Nothing Then
+                '    If i1.Image.Width < 20 Then
+                '        i1.ImageLocation = backup
+                '    End If
+                'End If
                 Dim paths As List(Of String) = Preferences.GetPosterPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
-                For Each pth As String In Paths
-                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                Next
+
+                SavePosterImageToCacheAndPaths(PosterUrl, paths)
+                SavePosterToPosterWallCache 
+
+                'For Each pth As String In Paths
+                '    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                'Next
 
                 'Dim newPosterPath = edenart 
                 '''DownloadCache.SaveImageToCacheAndPath(PosterUrl, PosterPath, Preferences.overwritethumbs, ,GetHeightResolution(Preferences.PosterResolutionSI))
@@ -2326,6 +2330,12 @@ Public Class Movie
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Preferences.overwritethumbs, , height  )
     End Function
 
+        Shared Function SavePosterImageToCacheAndPaths(url As String, paths As List(Of String)) As Boolean
+
+        Dim Height = GetHeightResolution(Preferences.PosterResolutionSI)
+
+        Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs, , height)
+    End Function
 
 
     Sub SavePosterToPosterWallCache
