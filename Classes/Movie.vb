@@ -1658,27 +1658,33 @@ Public Class Movie
         Else
             ReportProgress("Fanart",)
             Try
-                Dim i1 As New PictureBox
-                Dim backup As String = ""
+                'Dim i1 As New PictureBox
+                'Dim backup As String = ""
 
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = FanartUrl 
-                    Catch
-                        .ImageLocation = backup
-                    End Try
-                End With
+                'With i1
+                '    .WaitOnLoad = True
+                '    Try
+                '        .ImageLocation = FanartUrl 
+                '    Catch
+                '        .ImageLocation = backup
+                '    End Try
+                'End With
 
-                If Not i1.Image Is Nothing Then
-                    If i1.Image.Width < 20 Then
-                        i1.ImageLocation = backup
-                    End If
-                End If
+                'If Not i1.Image Is Nothing Then
+                '    If i1.Image.Width < 20 Then
+                '        i1.ImageLocation = backup
+                '    End If
+                'End If
+
                 Dim paths As List(Of String) = Preferences.GetfanartPaths(NfoPathPrefName,If(_videotsrootpath<>"",_videotsrootpath,""))
-                For Each pth As String In Paths
-                    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                Next
+
+                'For Each pth As String In Paths
+                '    i1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
+                'Next
+
+                SaveFanartImageToCacheAndPaths(FanartUrl, paths)
+
+
    '            Utilities.DownloadImage(FanartUrl, FanartPath, True, Preferences.resizefanart)
                 'SaveFanartImageToCacheAndPath(FanartUrl, newFanartPath)
                 'If _videotsrootpath<>"" Then
@@ -1705,7 +1711,7 @@ Public Class Movie
                 '        End If
                 '    End If
                 'End If
-                GC.Collect()
+   '             GC.Collect()
                 ReportProgress(MSG_OK,"Fanart URL Scraped OK" & vbCrLf)
             Catch ex As Exception
                 ReportProgress(MSG_ERROR,"!!! Problem Saving Fanart" & vbCrLf & "!!! Error Returned :- " & ex.ToString & vbCrLf & vbCrLf)
@@ -2281,7 +2287,17 @@ Public Class Movie
 
         _parent.Data_GridViewMovieCache.RemoveAll(Function(c) c.fullpathandfilename = key)
     End Sub
- 
+  
+  
+    Shared Function SaveFanartImageToCacheAndPaths(url As String, paths As List(Of String))
+
+        If Not Preferences.savefanart Then Return False
+
+        Dim point = Movie.GetBackDropResolution(Preferences.BackDropResolutionSI)
+
+        Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Preferences.overwritethumbs, point.X, point.Y)
+    End Function
+
   
     Shared Function SaveFanartImageToCacheAndPath(url As String, path As String)
 

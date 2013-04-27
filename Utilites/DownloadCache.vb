@@ -44,6 +44,28 @@ Public Class DownloadCache
         Return True
     End Function
 
+
+    Public Shared Function SaveImageToCacheAndPaths(ByVal URL As String, Paths As List(Of String), Optional ByVal ForceDownload As Boolean = False, _
+                                           Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0) As Boolean
+
+        If Not SaveImageToCache(URL, Paths(0), ForceDownload) Then Return False
+
+        Dim CachePath = IO.Path.Combine(CacheFolder, GetCacheFileName(URL))
+
+        IfNotValidImage_Delete(CachePath)
+
+
+        'Resize cache image only if need to
+        CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
+
+        For Each path In Paths
+            Utilities.EnsureFolderExists(path)
+            File.Copy(CachePath, path, True)
+        Next
+
+        Return True
+    End Function
+
     Public Shared Sub IfNotValidImage_Delete(filename As String)
         Try
             Dim testImage = new Drawing.Bitmap(filename)
