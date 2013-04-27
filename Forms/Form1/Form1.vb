@@ -23472,9 +23472,7 @@ Public Class Form1
         Assign_MovieFilter( cbFilterNumAudioTracks , oMovies.NumAudioTracks       , NumAudioTracksFilter )
         UpdateMinMaxMovieFilters
 
-        cbFilterGenre.Items.Clear
-        cbFilterGenre.AddItems(oMovies.Genres)
-        cbFilterGenre.Reset()
+        cbFilterGenre.UpdateItems(oMovies.Genres)
 
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
