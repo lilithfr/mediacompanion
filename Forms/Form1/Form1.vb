@@ -8860,7 +8860,7 @@ Public Class Form1
         Me.Panel13.Controls.Clear()
         listOfTvFanarts.Clear()
         Button40.Visible = False
-        Button39.Visible = False
+        btnTvFanartSaveCropped.Visible = False
         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
             If Not tv_PictureBoxLeft.Image Is Nothing Then
                 PictureBox10.Image = tv_PictureBoxLeft.Image
@@ -9056,7 +9056,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button42_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button42.Click
+    Private Sub btnTvFanartSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSave.Click
         Dim issavefanart As Boolean = Preferences.savefanart
         Preferences.savefanart =true
         Try
@@ -9246,7 +9246,7 @@ Public Class Form1
             If PictureBox10.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
             Button40.Visible = True
-            Button39.Visible = True
+            btnTvFanartSaveCropped.Visible = True
             cropString = "top"
             Timer4.Enabled = True
         Catch ex As Exception
@@ -9260,7 +9260,7 @@ Public Class Form1
             If PictureBox10.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
             Button40.Visible = True
-            Button39.Visible = True
+            btnTvFanartSaveCropped.Visible = True
             cropString = "bottom"
             Timer4.Enabled = True
         Catch ex As Exception
@@ -9273,7 +9273,7 @@ Public Class Form1
             If PictureBox10.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
             Button40.Visible = True
-            Button39.Visible = True
+            btnTvFanartSaveCropped.Visible = True
             cropString = "left"
             Timer4.Enabled = True
         Catch ex As Exception
@@ -9287,7 +9287,7 @@ Public Class Form1
             If PictureBox10.Image Is Nothing Then Exit Sub
             thumbedItsMade = True
             Button40.Visible = True
-            Button39.Visible = True
+            btnTvFanartSaveCropped.Visible = True
             cropString = "right"
             Timer4.Enabled = True
         Catch ex As Exception
@@ -9348,13 +9348,13 @@ Public Class Form1
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
             Button40.Visible = False
-            Button39.Visible = False
+            btnTvFanartSaveCropped.Visible = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub Button39_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button39.Click
+    Private Sub btnTvFanartSaveCropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSaveCropped.Click
         Try
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Try
@@ -9367,7 +9367,7 @@ Public Class Form1
                 Label58.Text = PictureBox10.Image.Height.ToString
                 Label59.Text = PictureBox10.Image.Width.ToString
                 Button40.Visible = False
-                Button39.Visible = False
+                btnTvFanartSaveCropped.Visible = False
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -9378,7 +9378,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button41_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button41.Click
+    Private Sub btnTvFanartUrl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartUrl.Click
         Try
             Panel11.Visible = True
         Catch ex As Exception
@@ -10984,7 +10984,7 @@ Public Class Form1
             'tvdb specific
             tvdbmode = True
             usedlist.Clear()
-            Button56.Visible = False
+            btnTvPosterSaveBig.Visible = False
             'Button57.Visible = False
             If tvdbposterlist.Count = 0 Then
                 Call tv_TvdbThumbsGet()
@@ -11022,9 +11022,14 @@ Public Class Form1
                 For Each poster In tvdbposterlist
                     If poster.Season = tempseason Then
                         If rbTVbanner.Checked = True Then
-                            If poster.Resolution = "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "poster" Then usedlist.Add(poster)
-                        ElseIf rbTVposter.Checked = True Then
-                            If poster.Resolution <> "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "banner" Then usedlist.Add(poster)
+                            If poster.Resolution = "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "poster" Then 
+                                usedlist.Add(poster)
+                            End If
+                        End If
+                        If rbTVposter.Checked = True Then
+                            If poster.Resolution <> "seasonwide" And poster.BannerType <> "fanart" And poster.BannerType <> "banner" Then
+                                usedlist.Add(poster)
+                            End If
                         End If
                     End If
                 Next
@@ -11044,6 +11049,7 @@ Public Class Form1
             Label72.Text = "Displaying 0 of 0 Images"
             Button54.Visible = False
             Button55.Visible = False
+            Call tv_PosterPanelClear()
             Exit Sub
         End If
 
@@ -11073,6 +11079,12 @@ Public Class Form1
             Application.DoEvents()
         End If
         Call tv_PosterSelectionDisplay()
+    End Sub
+
+    Private Sub tv_PosterPanelClear()
+        For i = Panel16.Controls.Count - 1 To 0 Step -1
+            Panel16.Controls.RemoveAt(i)
+        Next
     End Sub
 
     Private Sub tv_PosterSelectionDisplay()
@@ -11259,15 +11271,15 @@ Public Class Form1
             'Button57.Tag = lores(1)
             'Button57.Text = lores(0)
             If tvdbmode = True Then
-                Button56.Text = hires(0)
-                Button56.Visible = True
-                Button56.Tag = hires(1)
+                btnTvPosterSaveBig.Text = hires(0)
+                btnTvPosterSaveBig.Visible = True
+                btnTvPosterSaveBig.Tag = hires(1)
             Else
-                Button56.Visible = False
+                btnTvPosterSaveBig.Visible = False
             End If
 
         Else
-            Button56.Visible = False
+            btnTvPosterSaveBig.Visible = False
             'Button57.Visible = False
         End If
     End Sub
@@ -11296,7 +11308,7 @@ Public Class Form1
             'tvdb all
             tvdbmode = True
             usedlist.Clear()
-            Button56.Visible = False
+            btnTvPosterSaveBig.Visible = False
             'Button57.Visible = False
             If tvdbposterlist.Count = 0 Then
                 Call tv_TvdbThumbsGet()
@@ -11326,14 +11338,15 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button56_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button56.Click
+    Private Sub btnTvPosterSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveBig.Click
         Try
             Dim witherror As Boolean = False
             Dim witherror2 As Boolean = False
+            Dim imageUrl As String = btnTvPosterSaveBig.Tag
             Dim path As String = ""
             Dim eden As Int16=0
             Dim frodo As Int16=0
-            Dim imagePaths As New ArrayList
+            Dim imagePaths As New List(Of String)
             Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             Dim workingposterpath = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "folder.jpg")
             If ComboBox2.Text.ToLower = "main image" Then
@@ -11402,10 +11415,11 @@ Public Class Form1
                     End If
                 End If
             End If
-            If PictureBox13.ImageLocation = Button56.Tag And Not PictureBox13.Image Is Nothing Then
+            If PictureBox13.ImageLocation = btnTvPosterSaveBig.Tag And Not PictureBox13.Image Is Nothing Then
                 For Each savepath As String In imagePaths
                     PictureBox13.Image.Save(savepath, Imaging.ImageFormat.Jpeg)
                 Next
+                'DownloadCache.SaveImageToCacheAndPaths(imageUrl, ImagePaths, True)
                 GC.Collect()
                 If combostart = ComboBox2.SelectedItem Then
                     If rbTVbanner.Checked = True Then
@@ -11422,40 +11436,44 @@ Public Class Form1
                 messbox.Show()
                 Me.Refresh()
                 messbox.Refresh()
-                Dim i1 As New PictureBox
+                'Dim i1 As New PictureBox
 
-                With i1
-                    .WaitOnLoad = True
-                    Try
-                        .ImageLocation = Button56.Tag
-                    Catch
-                        witherror = True
-                    End Try
-                End With
+                'With i1
+                '    .WaitOnLoad = True
+                '    Try
+                '        .ImageLocation = btnTvPosterSaveBig.Tag
+                '    Catch
+                '        witherror = True
+                '    End Try
+                'End With
 
                 Try
-                    If Not i1 Is Nothing Then
-                        For Each savepath As String In imagePaths
-                            i1.Image.Save(savepath, Imaging.ImageFormat.Jpeg)
-                            path = savepath
-                        Next
-                        Dim OriginalImage As New Bitmap(path)
-                        Dim Image2 As New Bitmap(OriginalImage)
-                        OriginalImage.Dispose()
+                    If Not IsNothing(imageUrl) Then
+                        'For Each savepath As String In imagePaths
+                        '    i1.Image.Save(savepath, Imaging.ImageFormat.Jpeg)
+                        '    path = savepath
+                        'Next
+                        witherror = Not DownloadCache.SaveImageToCacheAndPaths(imageUrl, ImagePaths, True)
+                        If Not witherror Then
+                            path = imagePaths(0)
+                            Dim OriginalImage As New Bitmap(path)
+                            Dim Image2 As New Bitmap(OriginalImage)
+                            OriginalImage.Dispose()
 
-                        'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-                        If rbTVbanner.Checked Then
-                            tv_PictureBoxBottom.ImageLocation = path
-                            tv_PictureBoxBottom.Load()
-                        End If
-                        If rbTVposter.Checked Then
-                            tv_PictureBoxRight.ImageLocation = path
-                            tv_PictureBoxRight.Load()
-                        End If
-                        'End If
+                            'If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+                            If rbTVbanner.Checked Then
+                                tv_PictureBoxBottom.ImageLocation = path
+                                tv_PictureBoxBottom.Load()
+                            End If
+                            If rbTVposter.Checked Then
+                                tv_PictureBoxRight.ImageLocation = path
+                                tv_PictureBoxRight.Load()
+                            End If
+                            'End If
 
-                        PictureBox12.Image = Image2
-                        Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                            PictureBox12.Image = Image2
+                            Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
+                        End If
                     End If
 
                     If witherror = True  Then
@@ -11484,7 +11502,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button57_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button57.Click ' disabled
+    Private Sub btnTvPosterSaveSmall_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveSmall.Click ' disabled
         'Try
         '    'savesmall
         '    Dim postname As String = ""
@@ -11676,7 +11694,7 @@ Public Class Form1
     Private Sub Button54_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button54.Click
         Try
             tvposterpage += 1
-            Button56.Visible = False
+            btnTvPosterSaveBig.Visible = False
             'Button57.Visible = False
             If usedlist.Count < 10 * tvposterpage Then
                 Button54.Enabled = False
@@ -11691,7 +11709,7 @@ Public Class Form1
     Private Sub Button55_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button55.Click
         Try
             tvposterpage -= 1
-            Button56.Visible = False
+            btnTvPosterSaveBig.Visible = False
             'Button57.Visible = False
             If tvposterpage = 1 Then
                 Button55.Enabled = False
