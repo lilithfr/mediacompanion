@@ -562,7 +562,7 @@ Public Class Preferences
         Next
 
         
-
+        
         'Movie Prefs ------------------------------------------------------------
         root.AppendChild(doc, "DownloadTrailerDuringScrape",        DownloadTrailerDuringScrape)        'cbDlTrailerDuringScrape
         root.AppendChild(doc, "gettrailer",                         gettrailer)                         'CheckBox11
@@ -934,6 +934,7 @@ Public Class Preferences
                 End Select
             End If
         Next
+        If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
 
     End Sub
 
