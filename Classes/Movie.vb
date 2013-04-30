@@ -564,7 +564,7 @@ Public Class Movie
         End If
 
         Dim movieNfoFile As String = fileInfo.FullName
-        If Utilities.findFileOfType(movieNfoFile, ".nfo") Then
+        If Utilities.findFileOfType(movieNfoFile, ".nfo",Preferences.basicsavemode) Then
             Try
                 Dim filechck As StreamReader = File.OpenText(movieNfoFile)
                 Dim tempstring As String

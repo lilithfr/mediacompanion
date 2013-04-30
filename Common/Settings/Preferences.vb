@@ -1024,7 +1024,7 @@ Public Class Preferences
         Dim posterpath As String = FullPath
         If Not Utilities.findFileOfType(posterpath, ".tbn") Then
             'Check Frodo naming convention
-            If Not Utilities.findFileOfType(posterpath, "-poster.jpg") Then
+            If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Preferences.basicsavemode) Then
                 If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
                     posterpath = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                 Else
@@ -1113,7 +1113,7 @@ Public Class Preferences
         Dim isroot As Boolean = Preferences.GetRootFolderCheck(FullPath)
         Dim fanartjpg As Boolean = Preferences.fanartjpg
 
-        If fanartjpg AndAlso Not isroot Then
+        If (fanartjpg or Preferences.basicsavemode) AndAlso Not isroot Then
             If videots<>"" Then
                 If Preferences.EdenEnabled Then
                     path = FullPath.Replace(".nfo", "-fanart.jpg")
@@ -1147,7 +1147,7 @@ Public Class Preferences
                 End If
             End If
             If Preferences.basicsavemode Then
-                path = ""
+                path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
             End If
         End If
 
