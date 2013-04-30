@@ -14424,7 +14424,7 @@ Public Class Form1
         cbMovieAllInFolders.CheckState          = If(Preferences.allfolders, CheckState.Checked, CheckState.Unchecked)
         cbMovCreateFolderjpg.CheckState         = If(Preferences.createfolderjpg, CheckState.Checked, CheckState.Unchecked)
         cbMovRootFolderCheck.CheckState         = If(Preferences.movrootfoldercheck, CheckState.Checked, CheckState.Unchecked)
-        chkbx_basicsave.CheckState              = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
+        cbMovieBasicSave.CheckState              = If(Preferences.basicsavemode, CheckState.Checked, CheckState.Unchecked)
         cbxNameMode.CheckState                  = If(Preferences.namemode, CheckState.Checked, CheckState.Unchecked)
         cbxCleanFilenameIgnorePart.CheckState   = If(Preferences.movieignorepart, CheckState.Checked, CheckState.Unchecked)
         ScrapeFullCertCheckBox.CheckState       = If(Preferences.scrapefullcert, CheckState.Checked, CheckState.Unchecked)
@@ -14950,6 +14950,36 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Sub cbMovieBasicSave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieBasicSave.CheckedChanged 
+        Try
+            If cbMovieBasicSave.CheckState = CheckState.Checked Then
+                If Preferences.usefoldernames or Preferences.allfolders Then
+                    Preferences.basicsavemode = True
+                    cbMovieFanartInFolders.Checked =CheckState.Unchecked
+                    cbMovieFanartInFolders.Enabled = False
+                    cbMoviePosterInFolder.Checked = CheckState.Unchecked
+                    cbMoviePosterInFolder.Enabled = False
+                Else
+                    If (Not Preferences.usefoldernames AndAlso Not Preferences.allfolders) Then
+                    MsgBox("Either Use Foldername or Movies In Folders" & vbCrLf & "must be selected")
+                    End If
+                    Preferences.basicsavemode = False
+                    cbMovieFanartInFolders.Enabled = True 
+                    cbMoviePosterInFolder.Enabled = True
+                    cbMovieBasicSave.Checked = False
+                End If
+            Else
+                Preferences.basicsavemode = False
+                cbMovieFanartInFolders.Enabled = True 
+                cbMoviePosterInFolder.Enabled = True 
+            End If
+            movieprefschanged = True
+            btnMoviePrefSaveChanges.Enabled = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
     Private Sub cbMovCreateFolderjpg_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovCreateFolderjpg.CheckedChanged 
         Try
             If cbMovCreateFolderjpg.CheckState = CheckState.Checked and (Preferences.usefoldernames or Preferences.allfolders) Then
@@ -15162,19 +15192,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub chkbx_basicsave_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_basicsave.CheckedChanged
-        Try
-            If chkbx_basicsave.CheckState = CheckState.Checked Then
-                Preferences.basicsavemode = True
-            Else
-                Preferences.basicsavemode = False
-            End If
-            movieprefschanged = True
-            btnMoviePrefSaveChanges.Enabled = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+ 
 
     Private Sub TabPage26_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage26.Leave
         Try

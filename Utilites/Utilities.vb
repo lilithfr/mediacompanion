@@ -342,14 +342,14 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String, Optional ByVal basicsave As Boolean = False, Optional ByVal fanartjpg as Boolean = False) As Boolean
         Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"
         Dim returnCode As Boolean = False
-        Dim typeOfFile(2) As String
-        typeOfFile(0) = pathOnly & GetStackName(fullPath) & fileType                            'multi-part string removed
-        typeOfFile(1) = pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType     'match filename sans extension
+        Dim typeOfFile As New List(Of String)
+        typeOfFile.Add(pathOnly & GetStackName(fullPath) & fileType)                             'multi-part string removed
+        typeOfFile.Add(pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType)      'match filename sans extension
         If basicsave Then
-            typeOfFile(2) = pathOnly & Regex.Replace("movie" & fileType, "movie-", "")              'special case where using folder-per-movie
+            typeOfFile.Add(pathOnly & Regex.Replace("movie" & fileType, "movie-", ""))              'special case where using folder-per-movie
         End If
         If fanartjpg Then
-            typeOfFile(2) = pathOnly & "fanart.jpg"
+            typeOfFile.Add(pathOnly & "fanart.jpg")
         End If
         For Each file As String In typeOfFile
             If IO.File.Exists(file) Then

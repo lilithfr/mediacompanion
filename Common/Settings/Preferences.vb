@@ -1022,7 +1022,7 @@ Public Class Preferences
 
     Public Shared Function GetPosterPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
         Dim posterpath As String = FullPath
-        If Not Utilities.findFileOfType(posterpath, ".tbn") Then
+        If Not Utilities.findFileOfType(posterpath, ".tbn", Preferences.basicsavemode) Then
             'Check Frodo naming convention
             If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Preferences.basicsavemode) Then
                 If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
@@ -1046,7 +1046,7 @@ Public Class Preferences
         Dim isroot As Boolean = Preferences.GetRootFolderCheck(FullPath)
         Dim posterjpg As Boolean = Preferences.posterjpg 
 
-        If posterjpg AndAlso Not isroot Then
+        If (posterjpg or Preferences.basicsavemode) AndAlso Not isroot Then
             If videots<>"" Then
                 If Preferences.EdenEnabled Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
@@ -1057,13 +1057,19 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             Else
-                path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
-                lst.Add(path)
-                IF Preferences.basicsavemode or Preferences.createfolderjpg Then
+                If posterjpg Then
+                    path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
+                    lst.Add(path)
+                End If
+                IF Preferences.basicsavemode 
+                    'path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                    'lst.Add(path)
+                End If
+                If Preferences.createfolderjpg Then
                     path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                     lst.Add(path)
                 End If
-                If Preferences.EdenEnabled Then
+                If Preferences.EdenEnabled Or Preferences.basicsavemode Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
                     lst.Add(path)
                 End If
@@ -1073,10 +1079,10 @@ Public Class Preferences
             
         Else
             If Preferences.EdenEnabled Then
-                If Not Preferences.basicsavemode Then
+                'If Not Preferences.basicsavemode Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
                     lst.Add(path)
-                End If
+                'End If
             
                 'If Not Utilities.findFileOfType(path, ".tbn") Then
                 '    If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
@@ -1126,7 +1132,7 @@ Public Class Preferences
             Else
                 path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
                 lst.Add(path)
-                If Preferences.EdenEnabled Then
+                If Not Preferences.basicsavemode AndAlso Preferences.EdenEnabled Then
                     path = FullPath.Replace(".nfo", "-fanart.jpg")
                     lst.Add(path)
                 End If
@@ -1155,14 +1161,14 @@ Public Class Preferences
     End Function
 
 
-    Public Shared Function GetFanartPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = Nothing) As String
+    Public Shared Function GetFanartPath(ByVal FullPath As String, Optional ByVal MovFilePath As String = "") As String
         Dim fanartPath As String = FullPath
-        If MovFilePath = "" Then MovFilePath = Nothing
+        'If MovFilePath = "" Then MovFilePath = Nothing
         'If Not IsNothing(MovFilePath) Then
             'Dim MovPath As String = FullPath.Replace(MovFilePath,"")
         'End If
         If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Preferences.basicsavemode,Preferences.fanartjpg) Then
-            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso Not IsNothing(MovFilePath) Then
+            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso MovFilePath<>"" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
                 Return MovPath
             Else
@@ -1170,7 +1176,7 @@ Public Class Preferences
             End If
             'fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
         Else
-            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso Not IsNothing(MovFilePath) AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
+            If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso MovFilePath<>"" AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
                 Return MovPath
             End If
