@@ -525,7 +525,7 @@ Public Class Movie
 
         Dim titleDir As String = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
 
-        If fileInfo.Extension.ToLower = ".vob" Then
+        If fileInfo.Extension.ToLower = ".vob" Then   'Check if DVD Structure
             If IO.File.Exists(titleDir & "video_ts.ifo") Then
                 Return False
             End If
