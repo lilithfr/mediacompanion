@@ -43,6 +43,19 @@ Public Class Movies
     End Property
 
 
+    Public ReadOnly Property Certificates As List(Of String)
+        Get
+            Dim q = From x In MovieCache Select field=x.Certificate
+                        Group By field Into Num=Count
+                        Order By field
+                        Select field & " (" & Num.ToString & ")" 
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property    
+
+
+
     Public ReadOnly Property Genres As List(Of String)
         Get
             Dim q = From x In MovieCache Select ms=x.genre.Split(" / ")
@@ -116,6 +129,7 @@ Public Class Movies
             lst.Add( Unwatched                )
             lst.Add( Duplicates               )
             lst.Add( NotMatchingRenamePattern )
+            lst.Add( MissingCertificate       )
             lst.Add( MissingFanart            )
             lst.Add( MissingGenre             )
             lst.Add( MissingOutline           )
@@ -136,6 +150,14 @@ Public Class Movies
             Return "Not matching rename pattern (" & (From x In MovieCache Where Not x.ActualNfoFileNameMatchesDesired).Count & ")" 
         End Get
     End Property    
+
+
+    Public ReadOnly Property MissingCertificate As String
+        Get
+            Return "Missing Certificate (" & (From x In MovieCache Where x.MissingCertificate).Count & ")" 
+        End Get
+    End Property    
+
 
     Public ReadOnly Property MissingFanart As String
         Get
@@ -934,7 +956,8 @@ Public Class Movies
                                     Next
                                     newmovie.Audio.Add(audio)
 
-                            Case "Premiered" : newmovie.Premiered= detail.InnerText
+                            Case "Premiered"   : newmovie.Premiered   = detail.InnerText
+                            Case "Certificate" : newmovie.Certificate = detail.InnerText
 
                         End Select
                     Next
@@ -1108,7 +1131,8 @@ Public Class Movies
                 child.AppendChild(item.GetChild(doc))
             Next
 
-            child.AppendChild(doc, "Premiered", movie.Premiered)
+            child.AppendChild(doc, "Premiered"  , movie.Premiered  )
+            child.AppendChild(doc, "Certificate", movie.Certificate)
             root.AppendChild(child)
         Next
 
@@ -1640,11 +1664,35 @@ Public Class Movies
 
         For Each item As CCBoxItem In ccb.Items
 
-            Dim genre As String = item.Name.RemoveAfterMatch
+            Dim value As String = item.Name.RemoveAfterMatch
 
             Select ccb.GetItemCheckState(i)
-                Case CheckState.Checked   : recs = (From m In recs Where     m.genre.Contains(genre)).ToList
-                Case CheckState.Unchecked : recs = (From m In recs Where Not m.genre.Contains(genre)).ToList
+                Case CheckState.Checked   : recs = (From m In recs Where     m.genre.Contains(value)).ToList
+                Case CheckState.Unchecked : recs = (From m In recs Where Not m.genre.Contains(value)).ToList
+            End Select
+
+            i += 1
+        Next
+
+        Return recs
+    End Function
+
+
+    '
+    ' Exclude list is an AND = As IS
+    '
+    ' Include list is an OR
+    '
+    Function ApplyCertificateFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim i As Integer = 0
+
+        For Each item As CCBoxItem In ccb.Items
+
+            Dim value As String = item.Name.RemoveAfterMatch
+
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = (From m In recs Where     m.Certificate=value).ToList
+                Case CheckState.Unchecked : recs = (From m In recs Where Not m.Certificate=value).ToList
             End Select
 
             i += 1

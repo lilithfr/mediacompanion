@@ -26,6 +26,7 @@ Public Class ComboList
     Property Resolution          As Integer= -1
     Property Audio               As New List(Of AudioDetails)
     Property Premiered           As String = ""
+    Property Certificate         As String = ""
 
     Public Property title As String
         Get
@@ -67,6 +68,13 @@ Public Class ComboList
     Public ReadOnly Property MissingRating As Boolean
         Get
             Return rating=0     '.ToString.Trim=""
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property MissingCertificate As Boolean
+        Get
+            Return Certificate.ToString.Trim=""
         End Get
     End Property  
 

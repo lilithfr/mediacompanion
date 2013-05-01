@@ -232,6 +232,7 @@ Public Class clsGridViewMovie
             Case "Missing Runtime"             : b = From f In b Where f.MissingRuntime
             Case "Missing Votes"               : b = From f In b Where f.MissingVotes
             Case "Missing Year"                : b = From f In b Where f.MissingYear
+            Case "Missing Certificate"         : b = From f In b Where f.MissingCertificate
 
             Case "Not matching rename pattern" : b = From f In b Where Not f.ActualNfoFileNameMatchesDesired
   
@@ -244,14 +245,9 @@ Public Class clsGridViewMovie
         b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
         b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
        
-
-        'Genre
-        'If Form1.cbFilterGenre.Text <> "All" Then
-        '    b = From f In b Where f.genre.Contains(Form1.cbFilterGenre.Text.RemoveAfterMatch)
-        '    If Yield Then Return
-        'End If
-        b = Form1.oMovies.ApplyGenreFilter( b , Form1.cbFilterGenre )
-
+        b = Form1.oMovies.ApplyGenreFilter      ( b , Form1.cbFilterGenre       )
+        b = Form1.oMovies.ApplyCertificateFilter( b , Form1.cbFilterCertificate )
+        
         'Set
         If Form1.SetFilter<>"" Then
 '            b = From f In b Where f.movieset.Contains(Form1.SetFilter)

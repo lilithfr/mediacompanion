@@ -868,11 +868,12 @@ Public Class Movie
         Else
             _movieCache.createdate = _scrapedMovie.fileinfo.createdate
         End If
-        _movieCache.id        = _scrapedMovie.fullmoviebody.imdbid
-        _movieCache.rating    = _scrapedMovie.fullmoviebody.rating.ToRating
-        _movieCache.top250    = _scrapedMovie.fullmoviebody.top250
-        _movieCache.genre     = _scrapedMovie.fullmoviebody.genre
-        _movieCache.playcount = _scrapedMovie.fullmoviebody.playcount
+        _movieCache.id          = _scrapedMovie.fullmoviebody.imdbid
+        _movieCache.rating      = _scrapedMovie.fullmoviebody.rating.ToRating
+        _movieCache.top250      = _scrapedMovie.fullmoviebody.top250
+        _movieCache.genre       = _scrapedMovie.fullmoviebody.genre
+        _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
+        _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         AssignMovieToAddMissingData
     End Sub
 

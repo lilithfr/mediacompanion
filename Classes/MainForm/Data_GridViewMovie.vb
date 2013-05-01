@@ -69,6 +69,7 @@ Public Class Data_GridViewMovie
         Resolution = movie.Resolution
         AssignAudio(movie.Audio)
         Premiered = movie.Premiered
+        Certificate = movie.Certificate
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -98,9 +99,10 @@ Public Class Data_GridViewMovie
                                                   .plot = Me.plot.Trim,
                                                   .source = Me.source,
                                                   .Votes = Me.Votes,
-                                                  .Resolution = Me.Resolution,
-                                                  .Audio      = Me.Audio,
-                                                  .Premiered  = Me.Premiered
+                                                  .Resolution  = Me.Resolution,
+                                                  .Audio       = Me.Audio,
+                                                  .Premiered   = Me.Premiered,
+                                                  .Certificate = Me.Certificate
                                                  }
         Return convertedMovie
     End Function
@@ -449,6 +451,12 @@ Public Class Data_GridViewMovie
         End Get
     End Property  
 
+    Public ReadOnly Property MissingCertificate As Boolean
+        Get
+            Return Certificate.ToString.Trim=""
+        End Get
+    End Property  
+
 
     Public ReadOnly Property MissingOutline As Boolean
         Get
@@ -559,5 +567,7 @@ Public Class Data_GridViewMovie
         End Get
     End Property
 
+
+    Public Property Certificate As String
 
 End Class

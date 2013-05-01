@@ -3336,10 +3336,11 @@ Public Class Form1
 
         UpdateMinMaxMovieFilters
 
-        cbFilterVotes .Reset
-        cbFilterRating.Reset
-        cbFilterYear  .Reset
-        cbFilterGenre .Reset
+        cbFilterVotes      .Reset
+        cbFilterRating     .Reset
+        cbFilterYear       .Reset
+        cbFilterGenre      .Reset
+        cbFilterCertificate.Reset
 
         State=ProgramState.Other
     End Sub
@@ -17179,7 +17180,7 @@ Public Class Form1
                     cbFilterAudioBitrates .Font = newFont
                     cbFilterAudioChannels .Font = newFont
                     cbFilterNumAudioTracks.Font = newFont
-
+                    cbFilterCertificate   .Font = newFont
                     LabelCountFilter.Font = newFont
 
                     Me.Refresh()
@@ -23163,7 +23164,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource.SelectedValueChanged,  cbFilterGenre.TextChanged
+    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource.SelectedValueChanged,  cbFilterGenre.TextChanged, cbFilterCertificate.TextChanged
         ApplyMovieFilters
     End Sub
      
@@ -23538,8 +23539,8 @@ Public Class Form1
         Assign_MovieFilter( cbFilterNumAudioTracks , oMovies.NumAudioTracks       , NumAudioTracksFilter )
         UpdateMinMaxMovieFilters
 
-        cbFilterGenre.UpdateItems(oMovies.Genres)
-
+        cbFilterGenre      .UpdateItems(oMovies.Genres      )
+        cbFilterCertificate.UpdateItems(oMovies.Certificates)
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23561,14 +23562,14 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cbFilterGenre_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles cbFilterGenre.ItemCheck
+    Private Sub TriStateFilter_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles cbFilterGenre.ItemCheck, cbFilterCertificate.ItemCheck
         Dim iState As Integer = e.CurrentValue
 
         e.NewValue = (iState + 1) Mod 3
     End Sub
 
 
-    Private Function cbFilterGenre_OnFormatItem(item As String) As String Handles cbFilterGenre.OnFormatItem
+    Private Function TriStateFilter_OnFormatItem(item As String) As String Handles cbFilterGenre.OnFormatItem, cbFilterCertificate.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 

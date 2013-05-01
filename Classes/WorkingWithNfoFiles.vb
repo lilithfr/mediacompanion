@@ -902,6 +902,8 @@ Public Class WorkingWithNfoFiles
                             Case "votes"
                                 newmovie.Votes = thisresult.InnerText.ToInt
 
+                            Case "mpaa"    'aka Certificate
+                                newmovie.Certificate = thisresult.InnerText
 
                             Case "fileinfo"
 
