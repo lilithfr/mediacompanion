@@ -613,8 +613,6 @@ Public Class Form1
 
             'ToolStrip1.Enabled = True
 
-            'Below shows the current screensize on initial start
-            DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
             mov_SplitContainerAutoPosition()
             tv_ShowSelectedCurrently()
             'Panel4.Location = New Point(SplitContainer4.Location.X, SplitContainer4.Location.Y + SplitContainer4.Height + 5)
@@ -623,7 +621,6 @@ Public Class Form1
             tv_SplitContainerAutoPosition()
         End If
 
-        '       PictureBoxFanArt.Image = Rating1.BitmapRating(PictureBoxFanArt.Image, PictureBoxFanArt.Width, PictureBoxFanArt.Height, ratingtxt.Text)
         Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
 
         'Parameters to display the movie grid at startup
@@ -907,7 +904,6 @@ Public Class Form1
             If Preferences.formwidth <> Me.Width Or Preferences.formheight <> Me.Height Then
                 Preferences.formwidth = Me.Width
                 Preferences.formheight = Me.Height
-                DebugScreenSizeLabel.Text = Me.Width & " x " & Me.Height
 
                 'Preferences.saveconfig()           'no need to save position, we do that when MC closes
                 Dim maxcount2 As Integer = Convert.ToInt32((TabPage22.Width - 100) / 150)
@@ -20946,12 +20942,6 @@ Public Class Form1
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
 
         Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
-
-        Try
-            DebugSplitter1PosLabel.Text = SplitContainer1.SplitterDistance
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
     End Sub
 
     Private Sub SplitContainer5_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer5.SplitterMoved
@@ -20964,32 +20954,6 @@ Public Class Form1
         End Try
     End Sub
 
-
-    Private Sub ExtraDebugEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExtraDebugEnable.CheckedChanged
-        Try
-            If ExtraDebugEnable.Checked = True Then
-                DebugSplitter1PosLabel.Visible = True
-                DebugSplitter2PosLabel.Visible = True
-                DebugSplitter5PosLabel.Visible = True
-                DebugScreenSizeLabel.Visible = True
-            Else
-                DebugSplitter1PosLabel.Visible = False
-                DebugSplitter2PosLabel.Visible = False
-                DebugSplitter5PosLabel.Visible = False
-                DebugScreenSizeLabel.Visible = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub SplitContainer2_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer2.SplitterMoved
-        Try
-            DebugSplitter2PosLabel.Text = SplitContainer2.SplitterDistance
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
     Private Sub ScrapeFullCertCheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ScrapeFullCertCheckBox.CheckedChanged
         Try
