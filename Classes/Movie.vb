@@ -1005,7 +1005,7 @@ Public Class Movie
     End Sub
     
     Sub DoRename
-        If Preferences.MovieRenameEnable AndAlso Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then
+        If Preferences.MovieRenameEnable AndAlso Not Preferences.usefoldernames AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not Preferences.basicsavemode Then  'Preferences.GetRootFolderCheck(NfoPathAndFilename) OrElse 
             ReportProgress(,fileRename(_scrapedMovie.fullmoviebody, me))
         End If
     End Sub
