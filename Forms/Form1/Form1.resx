@@ -2727,6 +2727,12 @@ If you do not wish to edit a field then leave it blank, only fields that contain
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="cbMovCreateFolderjpg.ToolTip" xml:space="preserve">
+    <value>Enabling this option will allow Media Companion to save the Poster as folder.jpg.
+This will allow XBMC to display the poster when browsing movies in file mode.
+Either "Use Foldernames" or "All Movies in Folders" must be enabled.
+</value>
+  </data>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>209, 56</value>
   </metadata>
@@ -2804,6 +2810,27 @@ offline movie folder roots.</value>
   <metadata name="btnMoviePrefSaveChanges.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="cbMovieBasicSave.ToolTip" xml:space="preserve">
+    <value>Saving movies in Basic Save Mode is only possible if
+"Use Foder Names for Scraping", or "All Movies are in Folders"
+is also selected.
+Saving of fanart.jpg or poster.jpg is disabled as per XBMC
+requirements.</value>
+  </data>
+  <data name="cbMoviePosterInFolder.ToolTip" xml:space="preserve">
+    <value>Drops filename from in front of poster.jpg.
+Either "Use Foldernames" or "All Movies in Folders"
+must be enabled.
+If Both artwork model is selected, Pre-Frodo artwork
+is still saved, as it should be.</value>
+  </data>
+  <data name="cbMovieFanartInFolders.ToolTip" xml:space="preserve">
+    <value>Drops filename from in front of fanart.jpg.
+Either "Use Foldernames" or "All Movies in Folders"
+must be enabled.
+If Both artwork model is selected, Pre-Frodo artwork
+is still saved, as it should be.</value>
+  </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>613, 56</value>
   </metadata>
