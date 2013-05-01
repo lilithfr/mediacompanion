@@ -84,7 +84,7 @@ Public Class Form1
 
     'Replace the list of structure by a list of objects
 
-    Private ToolTipGridMoviePosition As Point
+ '   Private ToolTipGridMoviePosition As Point
 
     Public Data_GridViewMovie As Data_GridViewMovie
     'Public filteredListObj As New List(Of Data_GridViewMovie)
@@ -23266,56 +23266,106 @@ Public Class Form1
         TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
     End Sub
 
+
+
+    'Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
+
+    '    'If ToolTipGridMoviePosition.X <> e.X Or ToolTipGridMoviePosition.Y <> e.Y Then
+    '    '    TooltipGridViewMovies1.Visible = False
+    '    '    TimerToolTip.Enabled = True
+    '    '    ToolTipGridMoviePosition.X = e.X
+    '    '    ToolTipGridMoviePosition.Y = e.Y
+    '    'End If
+
+
+    '    Try
+    '        Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
+    '        Dim objHitTestInfo As DataGridView.HitTestInfo
+    '        objHitTestInfo = DataGridViewMovies.HitTest(objMousePosition.X, objMousePosition.Y)
+    '        Dim indexunderthemouse As Integer = objHitTestInfo.RowIndex
+
+    '        Dim Runtime As String = ""
+    '        Dim RatingRuntime As String = ""
+
+    '        TimerToolTip.Enabled = True
+    ' '       ToolTipGridMoviePosition.X = objMousePosition.X
+    ' '      ToolTipGridMoviePosition.Y = objMousePosition.Y
+
+
+    '        If indexunderthemouse > -1 Then
+    '            Dim movietitle As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(5).Value.ToString
+    '            Dim movieYear As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(9).Value.ToString
+    '            Dim Rating As String = "Rating: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(12).Value.ToString
+    '            If DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.Length > 3 Then
+    '                Runtime = "Runtime: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.Substring(0, DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.IndexOf("min") + 3)
+    '            End If
+    '            RatingRuntime = Rating & "     " & Runtime
+
+    '            Dim Plot As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(17).Value.ToString
+
+    '            If objHitTestInfo.RowY > -1 Then
+    '                'TooltipGridViewMovies1.Visible = True
+    '           '     TooltipGridViewMovies1.Top = 116
+    '                'TooltipGridViewMovies1.Left = MousePositionX + 100
+    ''                TooltipGridViewMovies1.Left = 0
+
+    '                TooltipGridViewMovies1.Left = objMousePosition.X
+    '                TooltipGridViewMovies1.Top  = objMousePosition.Y
+
+    '                TooltipGridViewMovies1.Textinfo(Plot)
+    '                TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
+    '                TooltipGridViewMovies1.TextMovieName(movietitle)
+    '                TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+
+    'End Sub
+
+
+
     Private Sub DataGridViewMovies_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseMove
-        If ToolTipGridMoviePosition.X <> e.X Or ToolTipGridMoviePosition.Y <> e.Y Then
-            TooltipGridViewMovies1.Visible = False
-            TimerToolTip.Enabled = True
-            ToolTipGridMoviePosition.X = e.X
-            ToolTipGridMoviePosition.Y = e.Y
-        End If
-
-
         Try
-            Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
-            Dim objHitTestInfo As DataGridView.HitTestInfo
-            objHitTestInfo = DataGridViewMovies.HitTest(objMousePosition.X, objMousePosition.Y)
-            Dim indexunderthemouse As Integer = objHitTestInfo.RowIndex
-
-            Dim Runtime As String = ""
-            Dim RatingRuntime As String = ""
-
+            Dim MousePos       As Point                    = DataGridViewMovies.PointToClient(Control.MousePosition)
+            Dim objHitTestInfo As DataGridView.HitTestInfo = DataGridViewMovies.HitTest      (MousePos.X, MousePos.Y)
+            Dim MouseRowIndex  As Integer                  = objHitTestInfo.RowIndex
+ 
             TimerToolTip.Enabled = True
-            ToolTipGridMoviePosition.X = objMousePosition.X
-            ToolTipGridMoviePosition.Y = objMousePosition.Y
 
+            If MouseRowIndex > -1 Then
+                Dim Runtime       As String = ""
+                Dim RatingRuntime As String = ""
+                Dim movietitle    As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Title" ).Value.ToString
+                Dim movieYear     As String =              DataGridViewMovies.Rows(MouseRowIndex).Cells("Year"  ).Value.ToString
+                Dim Rating        As String = "Rating: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("Rating").Value.ToString.FormatRating
 
-            If indexunderthemouse > -1 Then
-                Dim movietitle As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(5).Value.ToString
-                Dim movieYear As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(9).Value.ToString
-                Dim Rating As String = "Rating: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(12).Value.ToString
-                If DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.Length > 3 Then
-                    Runtime = "Runtime: " & DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.Substring(0, DataGridViewMovies.Rows(indexunderthemouse).Cells(18).Value.ToString.IndexOf("min") + 3)
+                If DataGridViewMovies.Rows(MouseRowIndex).Cells("Runtime").Value.ToString.Length > 3 Then
+                    Runtime = "Runtime: " & DataGridViewMovies.Rows(MouseRowIndex).Cells("IntRuntime").Value.ToString
                 End If
+
                 RatingRuntime = Rating & "     " & Runtime
 
-                Dim Plot As String = DataGridViewMovies.Rows(indexunderthemouse).Cells(17).Value.ToString
+                Dim Plot As String = DataGridViewMovies.Rows(MouseRowIndex).Cells("Plot").Value.ToString
 
                 If objHitTestInfo.RowY > -1 Then
-                    'TooltipGridViewMovies1.Visible = True
-                    TooltipGridViewMovies1.Top = 116
-                    'TooltipGridViewMovies1.Left = MousePositionX + 100
-                    TooltipGridViewMovies1.Left = 0
+                    TooltipGridViewMovies1.Visible = Preferences.ShowMovieGridToolTip
+
                     TooltipGridViewMovies1.Textinfo(Plot)
                     TooltipGridViewMovies1.TextLabelMovieYear(movieYear)
                     TooltipGridViewMovies1.TextMovieName(movietitle)
                     TooltipGridViewMovies1.TextLabelRatingRuntime(RatingRuntime)
+
+                    TooltipGridViewMovies1.Left = MousePos.X+10
+                    TooltipGridViewMovies1.Top  = MousePos.Y+TooltipGridViewMovies1.Height+30
                 End If
             End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+        Catch
         End Try
-
     End Sub
+
+
 
     Private Sub DataGridViewMovies_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseLeave
         TooltipGridViewMovies1.Visible = False
