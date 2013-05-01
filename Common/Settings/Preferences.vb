@@ -515,12 +515,12 @@ Public Class Preferences
         root.AppendChild(child)
 
         child = doc.CreateElement("movietags")  'preparing new movie tags
-        Dim childchild As XmlElement
+        Dim childchild3 As XmlElement
         For Each movietag In movietags
             If movietag <> "" or Not IsNothing(movietag) Then
-                childchild = doc.CreateElement("tag")
-                childchild.InnerText = movietag
-                child.AppendChild(childchild)
+                childchild3 = doc.CreateElement("tag")
+                childchild3.InnerText = movietag
+                child.AppendChild(childchild3)
             End If
         Next
 
@@ -731,7 +731,7 @@ Public Class Preferences
                         For Each thisset In thisresult.ChildNodes
                             Select Case thisset.Name
                                 Case "tag"
-                                    If thisset.InnerText <> "" Then movietagss.Add(thisset.InnerText)
+                                    If thisset.InnerText <> "" Then movietags.Add(thisset.InnerText)
                             End Select
                         Next
                     Case "table"

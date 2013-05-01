@@ -24556,15 +24556,4 @@ End Sub
         Next
     End Sub
 
-
-
-Private Sub tv_PictureBoxLeft_Click( sender As System.Object,  e As System.EventArgs)
-
-End Sub
-Private Sub PictureBoxFanArt_Click( sender As System.Object,  e As System.EventArgs)
-
-End Sub
-
-
-
 End Class
