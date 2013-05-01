@@ -209,6 +209,7 @@ Public Class Preferences
     Public Shared moviesortorder As Integer
     Public Shared movieinvertorder As Boolean
     Public Shared moviesets As New List(Of String)
+    Public Shared movietags As New List(Of String)
     Public Shared moviethumbpriority() As String
     Public Shared certificatepriority() As String
     Public Shared releaseformat() As String
@@ -513,6 +514,16 @@ Public Class Preferences
         Next
         root.AppendChild(child)
 
+        child = doc.CreateElement("movietags")  'preparing new movie tags
+        Dim childchild As XmlElement
+        For Each movietag In movietags
+            If movietag <> "" or Not IsNothing(movietag) Then
+                childchild = doc.CreateElement("tag")
+                childchild.InnerText = movietag
+                child.AppendChild(childchild)
+            End If
+        Next
+
         child = doc.CreateElement("table")
         Dim childchild2 As XmlElement
         childchild2 = doc.CreateElement("sort")
@@ -682,6 +693,7 @@ Public Class Preferences
         commandlist.Clear()
         moviesets.Clear()
         moviesets.Add("-None-")
+        movietags.Clear()
         movieFolders.Clear()
         offlinefolders.Clear()
         tvFolders.Clear()
@@ -712,6 +724,14 @@ Public Class Preferences
                             Select Case thisset.Name
                                 Case "set"
                                     If thisset.InnerText <> "" Then moviesets.Add(thisset.InnerText)
+                            End Select
+                        Next
+                    Case "movietags"
+
+                        For Each thisset In thisresult.ChildNodes
+                            Select Case thisset.Name
+                                Case "tag"
+                                    If thisset.InnerText <> "" Then movietagss.Add(thisset.InnerText)
                             End Select
                         Next
                     Case "table"
