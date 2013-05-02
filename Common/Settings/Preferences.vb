@@ -1053,9 +1053,14 @@ Public Class Preferences
                 End If
             End If
         End If
+        Try
         If  Preferences.posterjpg AndAlso Not IsNothing(MovFilePath) AndAlso Not GetRootFolderCheck(FullPath) AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
-            posterpath = FullPath.Replace(MovFilePath,"") & "poster.jpg"
+            Dim ispath as Boolean = IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg")
+            If ispath Then posterpath = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
+            'posterpath = FullPath.Replace(MovFilePath,"") & "poster.jpg"
         End If
+        Catch
+        End Try
         Return posterpath
     End Function
 
@@ -1199,7 +1204,8 @@ Public Class Preferences
         Else
             If Not GetRootFolderCheck(FullPath) AndAlso Preferences.fanartjpg AndAlso MovFilePath<>"" AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath,"") & "fanart.jpg"
-                Return MovPath
+                If IO.File.Exists(MovPath) Then Return MovPath
+                'Return MovPath
             End If
         End If
         Return fanartPath
