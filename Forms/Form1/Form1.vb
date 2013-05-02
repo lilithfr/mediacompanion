@@ -4927,6 +4927,10 @@ Public Class Form1
             For Each mset In Preferences.moviesets
                 If mset <> "-None-" Then ListofMovieSets.Items.Add(mset)
             Next
+            TagListBox.Items.Clear()
+            For Each mtag In Preferences.movietags
+                If Not IsNothing(mtag) then TagListBox.Items.Add(mtag)
+            Next
 
         ElseIf tab.ToLower = "movie preferences" Then
             Call mov_PreferencesSetup()
@@ -13015,43 +13019,22 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button14.Click
+    Private Sub btnMovieSetAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetAdd.Click
         Try
-            If TextBox38.Text <> "" Then
+            If tbMovSetEntry.Text <> "" Then
                 Dim ex As Boolean = False
                 For Each mset In Preferences.moviesets
-                    If mset.ToLower = TextBox38.Text.ToLower Then
+                    If mset.ToLower = tbMovSetEntry.Text.ToLower Then
                         ex = True
                         Exit For
                     End If
                 Next
                 If ex = False Then
-                    Preferences.moviesets.Add(TextBox38.Text)
-                    ListofMovieSets.Items.Add(TextBox38.Text)
+                    Preferences.moviesets.Add(tbMovSetEntry.Text)
+                    ListofMovieSets.Items.Add(tbMovSetEntry.Text)
                    
                     pop_cbMovieDisplay_MovieSet
-
-                    'If workingMovieDetails.fullmoviebody.movieset <> Nothing Then
-                    '    Dim add As Boolean = True
-                    '    For Each mset In Preferences.moviesets
-                    '        If mset = workingMovieDetails.fullmoviebody.movieset Then
-                    '            add = False
-                    '        End If
-                    '    Next
-                    '    If add = True Then
-                    '        Preferences.moviesets.Add(workingMovieDetails.fullmoviebody.movieset)
-                    '    End If
-
-
-                    '    For f = 0 To cbMovieDisplay_MovieSet.Items.Count - 1
-                    '        If cbMovieDisplay_MovieSet.Items(f) = workingMovieDetails.fullmoviebody.movieset Then
-                    '            cbMovieDisplay_MovieSet.SelectedIndex = f
-                    '            Exit For
-                    '        End If
-                    '    Next
-                    'Else
-                    '    cbMovieDisplay_MovieSet.SelectedIndex = 0
-                    'End If
+                    tbMovSetEntry.Clear()
                 Else
                     MsgBox("This Movie Set Already Exists")
                 End If
@@ -13062,7 +13045,20 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button65_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button65.Click
+    Private Sub tbMovSetEntry_KeyPress( sender As System.Object,  e As System.Windows.Forms.KeyPressEventArgs) Handles tbMovSetEntry.KeyPress
+        If e.KeyChar = Convert.ToChar(Keys.Enter) Then
+      
+            btnMovieSetAdd.PerformClick
+
+            'This tells the system not to process
+            'the key, as you've already taken care 
+            'of it 
+            e.Handled = True 
+        End If
+
+    End Sub
+
+    Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
         Try
             For i = 0 To ListofMovieSets.SelectedItems.Count - 1
                 Dim tempboolean As Boolean = False
@@ -24570,5 +24566,87 @@ End Sub
 	        End If
         Next
     End Sub
+'Tag(s) section
+    Private Sub btnMovTagListAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagListAdd.Click
+        Try
+            If txtbxMovTagEntry.Text  <> "" Then
+                Dim ex As Boolean = False
+                For Each mtag In Preferences.movietags 
+                    If mtag.ToLower = txtbxMovTagEntry.Text.ToLower Then
+                        ex = True
+                        Exit For
+                    End If
+                Next
+                If ex = False Then
+                    Preferences.movietags.Add(txtbxMovTagEntry.Text)
+                    TagListBox.Items.Add(txtbxMovTagEntry.Text)
+                    txtbxMovTagEntry.Clear()
+                Else
+                    MsgBox("This Movie Tag Already Exists")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
+    Private Sub btnMovTagListRemove_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagListRemove.Click
+        Try
+            For i = 0 To TagListBox.SelectedItems.Count - 1
+                Dim tempboolean As Boolean = False
+                If TagListBox.SelectedItems(i) <> Nothing And TagListBox.SelectedItems(i) <> "" Then
+                    For Each mtag In Preferences.movietags
+                        If mtag = TagListBox.SelectedItems(i) Then
+                            Preferences.movietags.Remove(mtag)
+                            'tempboolean = True
+                            Exit For
+                        End If
+                    Next
+                    'If tempboolean = False Then
+                    '    Preferences.movietags.Remove(TagListBox.SelectedItems(i))
+                    'Else
+                    '    MsgBox("Unable to remove """ & TagListBox.SelectedItems(i) & """, it is being used by the selected Movie")
+                    'End If
+                    'Exit For
+                End If
+            Next
+
+            TagListBox.Items.Clear()
+
+            For Each mset In Preferences.movietags
+                If Not IsNothing(mset) Then TagListBox.Items.Add(mset)
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnMovTagListRefresh_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagListRefresh.Click
+
+    End Sub
+
+    Private Sub btnMovTagAdd_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagAdd.Click
+
+    End Sub
+
+    Private Sub btnMovTagRemove_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagRemove.Click
+
+    End Sub
+
+    Private Sub btnMovTagSavetoNfo_Click( sender As System.Object,  e As System.EventArgs) Handles btnMovTagSavetoNfo.Click
+
+End Sub
+
+    Private Sub txtbxMovTagEntry_KeyPress( sender As System.Object,  e As System.Windows.Forms.KeyPressEventArgs) Handles txtbxMovTagEntry.KeyPress
+        If e.KeyChar = Convert.ToChar(Keys.Enter) Then
+      
+            btnMovTagListAdd.PerformClick
+
+            'This tells the system not to process
+            'the key, as you've already taken care 
+            'of it 
+            e.Handled = True 
+        End If
+
+    End Sub
 End Class

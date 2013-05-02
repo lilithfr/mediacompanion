@@ -517,12 +517,13 @@ Public Class Preferences
         child = doc.CreateElement("movietags")  'preparing new movie tags
         Dim childchild3 As XmlElement
         For Each movietag In movietags
-            If movietag <> "" or Not IsNothing(movietag) Then
+            If movietag <> "" And Not IsNothing(movietag) Then
                 childchild3 = doc.CreateElement("tag")
                 childchild3.InnerText = movietag
                 child.AppendChild(childchild3)
             End If
         Next
+        root.AppendChild(child)
 
         child = doc.CreateElement("table")
         Dim childchild2 As XmlElement
