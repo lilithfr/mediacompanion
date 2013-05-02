@@ -1687,16 +1687,30 @@ Public Class Movies
         Dim i As Integer = 0
 
         For Each item As CCBoxItem In ccb.Items
-
             Dim value As String = item.Name.RemoveAfterMatch
 
             Select ccb.GetItemCheckState(i)
-                Case CheckState.Checked   : recs = (From m In recs Where     m.Certificate=value).ToList
                 Case CheckState.Unchecked : recs = (From m In recs Where Not m.Certificate=value).ToList
             End Select
 
             i += 1
         Next
+
+        i=0
+        Dim filter As New List(Of String)
+
+        For Each item As CCBoxItem In ccb.Items
+            Dim value As String = item.Name.RemoveAfterMatch
+
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : filter.Add(value)
+            End Select
+            i += 1
+        Next
+
+        If filter.Count>0 Then
+            recs = recs.Where( Function(x) filter.Contains(x.Certificate) )
+        End If
 
         Return recs
     End Function
