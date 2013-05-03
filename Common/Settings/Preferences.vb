@@ -1083,7 +1083,7 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             Else
-                If posterjpg Then
+                If posterjpg And Preferences.FrodoEnabled Then
                     path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
                     lst.Add(path)
                 End If
@@ -1120,7 +1120,7 @@ Public Class Preferences
 
                 'lst.Add(path)
             End If
-            IF Preferences.basicsavemode or Preferences.createfolderjpg Then
+            IF Preferences.basicsavemode or Preferences.createfolderjpg And Not isroot Then
                 path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                 lst.Add(path)
             End If
@@ -1156,8 +1156,10 @@ Public Class Preferences
                     lst.Add(path)
                 End If
             Else
-                path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
-                lst.Add(path)
+                If (fanartjpg and Preferences.FrodoEnabled) or Preferences.basicsavemode Then
+                    path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
+                    lst.Add(path)
+                End If
                 If Not Preferences.basicsavemode AndAlso Preferences.EdenEnabled Then
                     path = FullPath.Replace(".nfo", "-fanart.jpg")
                     lst.Add(path)
