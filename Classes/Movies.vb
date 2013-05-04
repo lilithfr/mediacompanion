@@ -48,7 +48,7 @@ Public Class Movies
             Dim q = From x In MovieCache Select field=x.Certificate
                         Group By field Into Num=Count
                         Order By field
-                        Select field & " (" & Num.ToString & ")" 
+                        Select If(field="","Missing",field) & " (" & Num.ToString & ")" 
 
             Return q.AsEnumerable.ToList
         End Get
@@ -1689,6 +1689,8 @@ Public Class Movies
         For Each item As CCBoxItem In ccb.Items
             Dim value As String = item.Name.RemoveAfterMatch
 
+            value = If(value="Missing","",value)
+
             Select ccb.GetItemCheckState(i)
                 Case CheckState.Unchecked : recs = (From m In recs Where Not m.Certificate=value).ToList
             End Select
@@ -1701,6 +1703,8 @@ Public Class Movies
 
         For Each item As CCBoxItem In ccb.Items
             Dim value As String = item.Name.RemoveAfterMatch
+
+            value = If(value="Missing","",value)
 
             Select ccb.GetItemCheckState(i)
                 Case CheckState.Checked   : filter.Add(value)
