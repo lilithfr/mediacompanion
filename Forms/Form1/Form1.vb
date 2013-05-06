@@ -24653,10 +24653,66 @@ End Sub
 
     Private Sub ResetFilter( sender As Control,  e As EventArgs) Handles lblFilterVotes.Click, lblFilterRating.Click, lblFilterCertificate.Click, lblFilterGenre.Click, lblFilterYear.Click
 
-        Dim filter As Object = sender.Parent.Controls("cb" + sender.Name.SubString(3,sender.Name.Length-3) )
+        Dim filter As Object = GetFilterFromLabel(sender)
 
+        State=ProgramState.ResettingFilters
         filter.Reset
         filter.Refresh
+        State=ProgramState.Other
+
+        UpdateFilteredList
+    End Sub
+
+    Private Function GetFilterFromLabel(lbl As Label)
+        Return lbl.Parent.Controls("cb" + lbl.Name.SubString(3,lbl.Name.Length-3) )
+    End Function
+
+    Private Sub ResetCbGeneralFilter( sender As Control,  e As EventArgs) Handles lblFilterGeneral.Click
+        cbFilterGeneral.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbSetFilter( sender As Control,  e As EventArgs) Handles lblFilterSet.Click
+        SetFilter=""
+        cbFilterSet.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbActorFilter( sender As Control,  e As EventArgs) Handles lblFilterActor.Click
+        ActorFilter=""
+        cbFilterActor.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbResolutionFilter( sender As Control,  e As EventArgs) Handles lblFilterResolution.Click
+        ResolutionFilter=""
+        cbFilterResolution.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbAudioCodecsFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioCodecs.Click
+        AudioCodecsFilter=""
+        cbFilterAudioCodecs.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbAudioLanguagesFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioLanguages.Click
+        AudioLanguagesFilter=""
+        cbFilterAudioLanguages.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbAudioBitratesFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioBitrates.Click
+        AudioBitratesFilter=""
+        cbFilterAudioBitrates.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbAudioChannelsFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioChannels.Click
+        AudioChannelsFilter=""
+        cbFilterAudioChannels.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbFilterNumAudioTracks( sender As Control,  e As EventArgs) Handles lblFilterNumAudioTracks.Click
+        NumAudioTracksFilter=""
+        cbFilterNumAudioTracks.SelectedIndex = 0
+    End Sub
+
+    Private Sub ResetCbFilterSource( sender As Control,  e As EventArgs) Handles lblFilterSource.Click
+        cbFilterSource.SelectedIndex = 0
     End Sub
 
 
