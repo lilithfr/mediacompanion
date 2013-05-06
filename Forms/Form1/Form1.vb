@@ -24649,4 +24649,15 @@ End Sub
         End If
 
     End Sub
+
+
+    Private Sub ResetFilter( sender As Control,  e As EventArgs) Handles lblFilterVotes.Click, lblFilterRating.Click, lblFilterCertificate.Click, lblFilterGenre.Click, lblFilterYear.Click
+
+        Dim filter As Object = sender.Parent.Controls("cb" + sender.Name.SubString(3,sender.Name.Length-3) )
+
+        filter.Reset
+        filter.Refresh
+    End Sub
+
+
 End Class
