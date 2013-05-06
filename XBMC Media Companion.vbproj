@@ -734,6 +734,7 @@
     </None>
     <None Include="Classes\DefaultCertificateMappings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Classes\tmdb_languages.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
