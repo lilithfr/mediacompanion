@@ -23,12 +23,17 @@ End Class
 
 Public Class CertificateMappings
 
-    Public MappingsFile = Preferences.applicationPath & "\classes\CertificateMappings.xml"
+    Public MappingsFile        = Preferences.applicationPath & "\classes\CertificateMappings.xml"
+    Public DefaultMappingsFile = Preferences.applicationPath & "\classes\DefaultCertificateMappings.xml"
 
     Public Property List As New List(Of CertificateMapping)
 
     Public ReadOnly Property XDoc As XDocument
         Get
+            If Not File.Exists(MappingsFile) Then
+                File.Copy(DefaultMappingsFile,MappingsFile)
+            End If
+
             Return XDocument.Load(MappingsFile)
         End Get 
     End Property

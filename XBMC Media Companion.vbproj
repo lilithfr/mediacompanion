@@ -732,7 +732,7 @@
     <None Include="Assets\wfcl_MC.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Classes\CertificateMappings.xml">
+    <None Include="Classes\DefaultCertificateMappings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Classes\tmdb_languages.xml">
