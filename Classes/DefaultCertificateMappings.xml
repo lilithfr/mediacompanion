@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+  Usage
+  =====
+  1. Make your changes in CertificateMappings.xml, not DefaultCertificateMappings.xml.
+  2. Add\remove\edit entries as you see fit to manage your certificates.
+  3. Append a '*' to the end of the find string to match all trailing characters.
+
+  Notes
+  =====
+  1. Add present these mappings only affect the Certificate movie filter list, i.e. changes ARE NOT written back to the NFO files.
+  2. The find text isn't case sensitive.
+  
+  Please subject corrections\improvements by raising a new Issue here: https://mediacompanion.codeplex.com/workitem/list/basic
 -->
+
 <Certificates>
   <Certificate find="11" replace="12" />
   <Certificate find="12A" replace="12" />
@@ -28,16 +41,12 @@
   <Certificate find="NC-16" replace="15" />
   <Certificate find="Not Rated" replace="12" />
   <Certificate find="o.Al." replace="12" />
-  <Certificate find="PG" replace="12" />
-  <Certificate find="PG13" replace="12" />
-  <Certificate find="PG-13" replace="12" />
+  <Certificate find="PG*" replace="12" />
   <Certificate find="R" replace="18" />
   <Certificate find="R18" replace="18" />
   <Certificate find="Rated NC-17*" replace="18" />
-  <Certificate find="Rated PG *" replace="12" />
-  <Certificate find="Rated PG-13*" replace="12" />
+  <Certificate find="Rated PG*" replace="12" />
   <Certificate find="Rated R *" replace="18" />
-  <Certificate find="rated R *" replace="18" />
   <Certificate find="Refused Classification" replace="Refused" />
   <Certificate find="TV-14" replace="12" />
   <Certificate find="TV-MA" replace="12" />

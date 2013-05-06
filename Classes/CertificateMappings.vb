@@ -57,12 +57,12 @@ Public Class CertificateMappings
 
     Function GetMapping(certificate As String) As String
         
-        Dim q = From x In List Select x Where x.find = certificate
+        Dim q = From x In List Select x Where x.find.ToUpper = certificate.ToUpper
 
         If q.Count=1 Then Return q(0).Replace
 
 
-        q = From x In List Select x Where x.Find.GetLastChar="*" and certificate.IndexOf(x.Find.RemoveLastChar)=0
+        q = From x In List Select x Where x.Find.GetLastChar="*" and certificate.ToUpper.IndexOf(x.Find.ToUpper.RemoveLastChar)=0
 
         If q.Count=1 Then Return q(0).Replace
 
