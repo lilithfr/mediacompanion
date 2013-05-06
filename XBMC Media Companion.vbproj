@@ -136,6 +136,7 @@
   <ItemGroup>
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\ActorDatabase.vb" />
+    <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
     <Compile Include="Classes\NewVersionCheckResult.vb" />
     <Compile Include="Classes\MovieProgress.vb" />
@@ -729,6 +730,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\wfcl_MC.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Classes\CertificateMappings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Classes\tmdb_languages.xml">

@@ -416,17 +416,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
                     If strict Then pattern = IO.Path.GetFileNameWithoutExtension(path) & "*" & VideoExtensions(f)
 
-                    Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
-                    For Each fs_info As System.IO.FileInfo In fs_infos
-                        'Application.DoEvents()
-                        If IO.File.Exists(fs_info.FullName) Then
-                            tempstring = fs_info.FullName.ToLower
-                            If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
-                                possiblemoviescount += 1
-                                possiblemovies(possiblemoviescount) = fs_info.FullName
+                    Try
+                        Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
+
+                        For Each fs_info As IO.FileInfo In fs_infos
+                            'Application.DoEvents()
+                            If IO.File.Exists(fs_info.FullName) Then
+                                tempstring = fs_info.FullName.ToLower
+                                If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
+                                    possiblemoviescount += 1
+                                    possiblemovies(possiblemoviescount) = fs_info.FullName
+                                End If
                             End If
-                        End If
-                    Next
+                        Next
+                    Catch
+                    End Try
+
                 Next
                 If possiblemoviescount = 1 Then
                     actualpathandfilename = possiblemovies(possiblemoviescount)

@@ -55,6 +55,17 @@ Public Module ModuleExtensions
 
 
     <Extension()> _
+    Public Function RemoveLastChar(ByVal s As String) As String
+        Return s.Remove(s.Length-1)
+    End Function
+
+    <Extension()> _
+    Public Function GetLastChar(ByVal s As String) As String
+        Return s(s.Length-1)
+    End Function
+
+    
+    <Extension()> _
     Public Function SafeTrim(ByVal s As String) As String
 
         If IsNothing(s) Then Return s

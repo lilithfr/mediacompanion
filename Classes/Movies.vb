@@ -23,6 +23,7 @@ Public Class Movies
     Public Event FileDownloadComplete    ()
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
+    Private _CertificateMappings As CertificateMappings
     Private _actorDb As New List(Of ActorDatabase)
     Public _tmpActorDb As New List(Of ActorDatabase)
 
@@ -36,6 +37,17 @@ Public Class Movies
     Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
 
 
+    Public ReadOnly Property CertificateMappings As CertificateMappings
+        Get
+            If IsNothing(_CertificateMappings) Then
+                _CertificateMappings = New CertificateMappings 
+            End If
+
+            Return _CertificateMappings
+        End Get
+    End Property
+
+
     Public ReadOnly Property Data_GridViewMovieCache As List(Of Data_GridViewMovie)
         Get
             Return _data_GridViewMovieCache
@@ -45,7 +57,7 @@ Public Class Movies
 
     Public ReadOnly Property Certificates As List(Of String)
         Get
-            Dim q = From x In MovieCache Select field=x.Certificate
+            Dim q = From x In MovieCache Select field=CertificateMappings.GetMapping(x.Certificate)
                         Group By field Into Num=Count
                         Order By field
                         Select If(field="","Missing",field) & " (" & Num.ToString & ")" 
@@ -1692,7 +1704,7 @@ Public Class Movies
             value = If(value="Missing","",value)
 
             Select ccb.GetItemCheckState(i)
-                Case CheckState.Unchecked : recs = (From m In recs Where Not m.Certificate=value).ToList
+                Case CheckState.Unchecked : recs = (From x In recs Where Not CertificateMappings.GetMapping(x.Certificate)=value).ToList
             End Select
 
             i += 1
@@ -1713,7 +1725,7 @@ Public Class Movies
         Next
 
         If filter.Count>0 Then
-            recs = recs.Where( Function(x) filter.Contains(x.Certificate) )
+            recs = recs.Where( Function(x) filter.Contains(CertificateMappings.GetMapping(x.Certificate)) )
         End If
 
         Return recs
