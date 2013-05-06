@@ -23558,11 +23558,11 @@ Public Class Form1
     End Sub
 
 
-    Private Sub TriStateFilter_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles cbFilterGenre.ItemCheck, cbFilterCertificate.ItemCheck
-        Dim iState As Integer = e.CurrentValue
+    'Private Sub TriStateFilter_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles cbFilterGenre.ItemCheck, cbFilterCertificate.ItemCheck
+    '    Dim iState As Integer = e.CurrentValue
 
-        e.NewValue = (iState + 1) Mod 3
-    End Sub
+    '    e.NewValue = (iState + 1) Mod 3
+    'End Sub
 
 
     Private Function TriStateFilter_OnFormatItem(item As String) As String Handles cbFilterGenre.OnFormatItem, cbFilterCertificate.OnFormatItem
