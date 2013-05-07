@@ -372,7 +372,7 @@ Public Class Movies
 
 
 
-    Public ReadOnly Property SetsFilter As List(Of String)
+    Public ReadOnly Property Sets As List(Of String)
         Get
             Dim q = From x In MovieCache 
                 Group By x.MovieSet Into NumFilms=Count
@@ -1695,42 +1695,69 @@ Public Class Movies
     '
     ' Include list is an OR
     '
+    'Function ApplyCertificateFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    '    Dim i As Integer = 0
+
+    '    For Each item As CCBoxItem In ccb.Items
+    '        Dim value As String = item.Name.RemoveAfterMatch
+
+    '        value = If(value="Missing","",value)
+
+    '        Select ccb.GetItemCheckState(i)
+    '            Case CheckState.Unchecked : recs = (From x In recs Where Not CertificateMappings.GetMapping(x.Certificate)=value).ToList
+    '        End Select
+
+    '        i += 1
+    '    Next
+
+    '    i=0
+    '    Dim filter As New List(Of String)
+
+    '    For Each item As CCBoxItem In ccb.Items
+    '        Dim value As String = item.Name.RemoveAfterMatch
+
+    '        value = If(value="Missing","",value)
+
+    '        Select ccb.GetItemCheckState(i)
+    '            Case CheckState.Checked   : filter.Add(value)
+    '        End Select
+    '        i += 1
+    '    Next
+
+    '    If filter.Count>0 Then
+    '        recs = recs.Where( Function(x) filter.Contains(CertificateMappings.GetMapping(x.Certificate)) )
+    '    End If
+
+    '    Return recs
+    'End Function
+
+
     Function ApplyCertificateFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
-        Dim i As Integer = 0
-
-        For Each item As CCBoxItem In ccb.Items
-            Dim value As String = item.Name.RemoveAfterMatch
-
-            value = If(value="Missing","",value)
-
-            Select ccb.GetItemCheckState(i)
-                Case CheckState.Unchecked : recs = (From x In recs Where Not CertificateMappings.GetMapping(x.Certificate)=value).ToList
-            End Select
-
-            i += 1
-        Next
-
-        i=0
-        Dim filter As New List(Of String)
-
-        For Each item As CCBoxItem In ccb.Items
-            Dim value As String = item.Name.RemoveAfterMatch
-
-            value = If(value="Missing","",value)
-
-            Select ccb.GetItemCheckState(i)
-                Case CheckState.Checked   : filter.Add(value)
-            End Select
-            i += 1
-        Next
-
-        If filter.Count>0 Then
-            recs = recs.Where( Function(x) filter.Contains(CertificateMappings.GetMapping(x.Certificate)) )
+        Dim fi As New FilteredItems(ccb,"Missing","")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where(  Function(x)     fi.Include.Contains( CertificateMappings.GetMapping(x.Certificate) )  )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where(  Function(x) Not fi.Exclude.Contains( CertificateMappings.GetMapping(x.Certificate) )  )
         End If
 
         Return recs
     End Function
 
+
+    Function ApplySetFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb)
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.movieset) )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.movieset) )
+        End If
+
+        Return recs
+    End Function
 
 
 #End Region

@@ -138,6 +138,7 @@
     <Compile Include="Classes\ActorDatabase.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
+    <Compile Include="Classes\FilteredItems.vb" />
     <Compile Include="Classes\NewVersionCheckResult.vb" />
     <Compile Include="Classes\MovieProgress.vb" />
     <Compile Include="Classes\FrodoFanartThumb.vb" />

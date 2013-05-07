@@ -58,7 +58,7 @@ Public Class Form1
     Public _yield               As Boolean
     Public LastMovieDisplayed   As String=""
     Public ActorFilter          As String=""
-    Public SetFilter            As String=""
+'    Public SetFilter            As String=""
     Public ResolutionFilter     As String=""
     Public AudioCodecsFilter    As String=""
     Public AudioLanguagesFilter As String=""
@@ -3307,7 +3307,7 @@ Public Class Form1
     Sub ResetFilters
         State=ProgramState.ResettingFilters
         ActorFilter=""
-        SetFilter=""
+ '       SetFilter=""
         ResolutionFilter=""
         AudioCodecsFilter=""
         AudioLanguagesFilter=""
@@ -3323,8 +3323,6 @@ Public Class Form1
         RadioButtonTitleAndYear.Checked = True
           
         cbFilterGeneral       .SelectedIndex = 0
-'       cbFilterGenre         .SelectedIndex = 0
-        cbFilterSet           .SelectedIndex = 0
         cbFilterActor         .SelectedIndex = 0
         cbFilterSource        .SelectedIndex = 0
         cbFilterResolution    .SelectedIndex = 0
@@ -3342,6 +3340,7 @@ Public Class Form1
         cbFilterYear       .Reset
         cbFilterGenre      .Reset
         cbFilterCertificate.Reset
+        cbFilterSet        .Reset
 
         State=ProgramState.Other
     End Sub
@@ -13099,9 +13098,14 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btnMovieDisplay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay.Click
+    Private Sub btnMovieDisplay_SetFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_SetFilter.Click
         Try
-            SetFilter=cbMovieDisplay_MovieSet.Text
+            'SetFilter=cbMovieDisplay_MovieSet.Text
+
+            State=ProgramState.ResettingFilters
+            cbFilterSet.SelectItem(cbMovieDisplay_MovieSet.Text)
+            State=ProgramState.Other
+
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -23149,8 +23153,9 @@ Public Class Form1
                 m.ClearStoredCalculatedFields()
             Next
 
-            Assign_MovieFilter(cbFilterSet, oMovies.SetsFilter, SetFilter)
-            Assign_FilterActor
+            'Assign_MovieFilter(cbFilterSet, oMovies.SetsFilter, SetFilter)
+            'Assign_FilterActor
+            UpdateFilteredList
 
             Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
             Mc.clsGridViewMovie.GridviewMovieDesign(Me)
@@ -23164,13 +23169,13 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource.SelectedValueChanged,  cbFilterGenre.TextChanged, cbFilterCertificate.TextChanged
+    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource.SelectedValueChanged,  cbFilterGenre.TextChanged, cbFilterCertificate.TextChanged, cbFilterSet.TextChanged
         ApplyMovieFilters
     End Sub
      
-    Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterSet.SelectedValueChanged
-        HandleMovieFilter_SelectedValueChanged(cbFilterSet,SetFilter)
-    End Sub
+    'Private Sub cbSetFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    HandleMovieFilter_SelectedValueChanged(cbFilterSet,SetFilter)
+    'End Sub
      
     Private Sub cbFilterResolutionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterResolution.SelectedValueChanged
         HandleMovieFilter_SelectedValueChanged(cbFilterResolution,ResolutionFilter,True)
@@ -23531,7 +23536,7 @@ Public Class Form1
         Assign_FilterActor
         Assign_MovieFilter( cbFilterResolution     , oMovies.ResolutionFilter     , ResolutionFilter.Replace("-1","Unknown") )
 '       Assign_MovieFilter( cbFilterGenre          , oMovies.Genres               , cbFilterGenre.Text   )
-        Assign_MovieFilter( cbFilterSet            , oMovies.SetsFilter           , SetFilter            )
+'       Assign_MovieFilter( cbFilterSet            , oMovies.SetsFilter           , SetFilter            )
         Assign_MovieFilter( cbFilterAudioLanguages , oMovies.AudioLanguagesFilter , AudioLanguagesFilter )
         Assign_MovieFilter( cbFilterAudioChannels  , oMovies.AudioChannelsFilter  , AudioChannelsFilter  )
         Assign_MovieFilter( cbFilterAudioBitrates  , oMovies.AudioBitratesFilter  , AudioBitratesFilter  )
@@ -23541,6 +23546,7 @@ Public Class Form1
 
         cbFilterGenre      .UpdateItems(oMovies.Genres      )
         cbFilterCertificate.UpdateItems(oMovies.Certificates)
+        cbFilterSet        .UpdateItems(oMovies.Sets        )
 
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23569,7 +23575,7 @@ Public Class Form1
     'End Sub
 
 
-    Private Function TriStateFilter_OnFormatItem(item As String) As String Handles cbFilterGenre.OnFormatItem, cbFilterCertificate.OnFormatItem
+    Private Function TriStateFilter_OnFormatItem(item As String) As String Handles cbFilterGenre.OnFormatItem, cbFilterCertificate.OnFormatItem, cbFilterSet.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -24658,7 +24664,7 @@ End Sub
     End Sub
 
 
-    Private Sub ResetFilter( sender As Control,  e As EventArgs) Handles lblFilterVotes.Click, lblFilterRating.Click, lblFilterCertificate.Click, lblFilterGenre.Click, lblFilterYear.Click
+    Private Sub ResetFilter( sender As Control,  e As EventArgs) Handles lblFilterSet.Click, lblFilterVotes.Click, lblFilterRating.Click, lblFilterCertificate.Click, lblFilterGenre.Click, lblFilterYear.Click
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -24678,10 +24684,10 @@ End Sub
         cbFilterGeneral.SelectedIndex = 0
     End Sub
 
-    Private Sub ResetCbSetFilter( sender As Control,  e As EventArgs) Handles lblFilterSet.Click
-        SetFilter=""
-        cbFilterSet.SelectedIndex = 0
-    End Sub
+    'Private Sub ResetCbSetFilter( sender As Control,  e As EventArgs) Handles lblFilterSet.Click
+    '    SetFilter=""
+    '    cbFilterSet.SelectedIndex = 0
+    'End Sub
 
     Private Sub ResetCbActorFilter( sender As Control,  e As EventArgs) Handles lblFilterActor.Click
         ActorFilter=""

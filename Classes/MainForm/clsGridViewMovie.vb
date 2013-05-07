@@ -247,13 +247,14 @@ Public Class clsGridViewMovie
        
         b = Form1.oMovies.ApplyGenreFilter      ( b , Form1.cbFilterGenre       )
         b = Form1.oMovies.ApplyCertificateFilter( b , Form1.cbFilterCertificate )
+        b = Form1.oMovies.ApplySetFilter        ( b , Form1.cbFilterSet         )
         
-        'Set
-        If Form1.SetFilter<>"" Then
-'            b = From f In b Where f.movieset.Contains(Form1.SetFilter)
-            b = From f In b Where f.movieset=Form1.SetFilter
-            If Yield Then Return
-        End If
+'        'Set
+'        If Form1.SetFilter<>"" Then
+''            b = From f In b Where f.movieset.Contains(Form1.SetFilter)
+'            b = From f In b Where f.movieset=Form1.SetFilter
+'            If Yield Then Return
+'        End If
 
         'Resolution
         If Form1.ResolutionFilter<>"" Then
