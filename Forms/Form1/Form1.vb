@@ -201,6 +201,7 @@ Public Class Form1
     Dim currenttitle As String
     Public homemovietabindex As Integer = 0
 
+    Dim MoviesFiltersResizeCalled As Boolean = False
 
     Private Sub Form1_BackgroundImageChanged(sender As Object, e As System.EventArgs) Handles Me.BackgroundImageChanged
 
@@ -23054,8 +23055,11 @@ Public Class Form1
             Case = "regex" 
                 RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist) '   applicationPath & "\settings\regex.xml"
             Case "movies"
-                Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
-                UpdateMovieFiltersPanel
+                If Not MoviesFiltersResizeCalled Then
+                    MoviesFiltersResizeCalled = True
+                    Preferences.movie_filters.SetMovieFiltersVisibility(SplitContainer5.Panel2)
+                    UpdateMovieFiltersPanel
+                End If
         End Select
 
     End Sub
