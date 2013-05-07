@@ -24366,6 +24366,9 @@ Public Class Form1
 
         DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 140
 
+        SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, height-10)
+
+
         State = ProgramState.Other
     End Sub
 
