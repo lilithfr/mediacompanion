@@ -24,4 +24,22 @@ Public Class FilteredItems
         Next
     End Sub
 
+    Sub FindAndReplace(Find As String, Replace As String)
+
+        FindAndReplace(Include,Find,Replace)
+        FindAndReplace(Exclude,Find,Replace)
+
+    End Sub
+
+
+    Sub FindAndReplace(lst As List(Of String), Find As String, Replace As String)
+
+        For i=0 to lst.Count-1
+            If lst(i)=Find Then
+                lst(i)=Replace
+            End If
+        Next
+
+    End Sub
+
 End Class

@@ -1616,12 +1616,12 @@ Public Class Movies
 
 #Region "Filters"
 
-    Function ApplyAudioCodecFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
+    'Function ApplyAudioCodecFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
-        Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Codec.Value="","Unknown",a.Codec.Value)
+    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Codec.Value="","Unknown",a.Codec.Value)
 
-        Return Filter(b,filterValue,leftOuterJoinTable)
-    End Function
+    '    Return Filter(b,filterValue,leftOuterJoinTable)
+    'End Function
 
     Function ApplyAudioLanguageFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
@@ -1690,48 +1690,6 @@ Public Class Movies
     End Function
 
 
-    '
-    ' Exclude list is an AND = As IS
-    '
-    ' Include list is an OR
-    '
-    'Function ApplyCertificateFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
-    '    Dim i As Integer = 0
-
-    '    For Each item As CCBoxItem In ccb.Items
-    '        Dim value As String = item.Name.RemoveAfterMatch
-
-    '        value = If(value="Missing","",value)
-
-    '        Select ccb.GetItemCheckState(i)
-    '            Case CheckState.Unchecked : recs = (From x In recs Where Not CertificateMappings.GetMapping(x.Certificate)=value).ToList
-    '        End Select
-
-    '        i += 1
-    '    Next
-
-    '    i=0
-    '    Dim filter As New List(Of String)
-
-    '    For Each item As CCBoxItem In ccb.Items
-    '        Dim value As String = item.Name.RemoveAfterMatch
-
-    '        value = If(value="Missing","",value)
-
-    '        Select ccb.GetItemCheckState(i)
-    '            Case CheckState.Checked   : filter.Add(value)
-    '        End Select
-    '        i += 1
-    '    Next
-
-    '    If filter.Count>0 Then
-    '        recs = recs.Where( Function(x) filter.Contains(CertificateMappings.GetMapping(x.Certificate)) )
-    '    End If
-
-    '    Return recs
-    'End Function
-
-
     Function ApplyCertificateFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb,"Missing","")
        
@@ -1768,6 +1726,56 @@ Public Class Movies
         End If
         If fi.Exclude.Count>0 Then
             recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.Resolution) )
+        End If
+
+        Return recs
+    End Function
+
+
+    Function ApplyAudioCodecsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+
+        Dim fi As New FilteredItems(ccb)
+
+        Dim leftOuterJoinTable = From m In recs From a In m.Audio Select m.fullpathandfilename, field=If(a.Codec.Value="","Unknown",a.Codec.Value)
+        
+        Return Filter(recs, leftOuterJoinTable, fi)
+             
+    End Function
+
+
+
+    Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
+
+        If fi.Include.Count>0 Then
+
+            recs = From m In recs
+                    Group Join 
+                        a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
+                    Into
+                        ResultList = Group
+                    From
+                        result In ResultList.DefaultIfEmpty
+                    Where
+                        fi.Include.Contains(If( result Is Nothing, "Unassigned", result.field ))
+                    Select 
+                        m
+                    Distinct
+        End If
+
+        If fi.Exclude.Count>0 Then
+
+            recs = From m In recs
+                    Group Join 
+                        a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
+                    Into
+                        ResultList = Group
+                    From
+                        result In ResultList.DefaultIfEmpty
+                    Where
+                        Not fi.Exclude.Contains(If( result Is Nothing, "Unassigned", result.field ))
+                    Select 
+                        m
+                    Distinct
         End If
 
         Return recs
