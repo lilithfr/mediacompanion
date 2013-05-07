@@ -24338,9 +24338,9 @@ Public Class Form1
 
     Sub UpdateMovieFiltersPanel
         'ResizeBottomLHSPanel
-        Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
         Preferences.movie_filters.UpdateFromPanel     (SplitContainer5.Panel2)
         ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
+        Preferences.movie_filters.PositionMovieFilters(SplitContainer5.Panel2)
     End Sub
 
     ReadOnly Property MovieFiltersPanelMaxHeight As Integer
