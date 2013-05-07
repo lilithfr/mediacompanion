@@ -248,6 +248,7 @@ Public Class clsGridViewMovie
         b = Form1.oMovies.ApplyGenreFilter      ( b , Form1.cbFilterGenre       )
         b = Form1.oMovies.ApplyCertificateFilter( b , Form1.cbFilterCertificate )
         b = Form1.oMovies.ApplySetFilter        ( b , Form1.cbFilterSet         )
+        b = Form1.oMovies.ApplyResolutionFilter ( b , Form1.cbFilterResolution  )
         
 '        'Set
 '        If Form1.SetFilter<>"" Then
@@ -257,10 +258,10 @@ Public Class clsGridViewMovie
 '        End If
 
         'Resolution
-        If Form1.ResolutionFilter<>"" Then
-            b = From f In b Where f.Resolution=Convert.ToInt32(Form1.ResolutionFilter)
-            If Yield Then Return
-        End If
+        'If Form1.ResolutionFilter<>"" Then
+        '    b = From f In b Where f.Resolution=Convert.ToInt32(Form1.ResolutionFilter)
+        '    If Yield Then Return
+        'End If
 
 
         If Form1.AudioCodecsFilter    <>"" Then b = Form1.oMovies.ApplyAudioCodecFilter     ( b , Form1.AudioCodecsFilter    )

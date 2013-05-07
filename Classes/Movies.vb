@@ -1760,6 +1760,20 @@ Public Class Movies
     End Function
 
 
+    Function ApplyResolutionFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+        Dim fi As New FilteredItems(ccb,"Unknown","-1")
+       
+        If fi.Include.Count>0 Then
+            recs = recs.Where( Function(x)     fi.Include.Contains(x.Resolution) )
+        End If
+        If fi.Exclude.Count>0 Then
+            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.Resolution) )
+        End If
+
+        Return recs
+    End Function
+
+
 #End Region
 
  
