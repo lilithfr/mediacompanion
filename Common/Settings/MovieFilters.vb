@@ -70,19 +70,25 @@ Public Class MovieFilters
 
 
     Public Sub SetMovieFiltersVisibility(oPanel As Panel)
-        Dim c     As Control
-        Dim lbl   As Label
-        Dim item  As MovieFilter
+        Dim c       As Control
+        Dim lbl     As Label
+        Dim lblMode As Label
+        Dim item    As MovieFilter
 
         For i=Items.Count-1 To 0 Step -1
 
-            item = Items(i)
-            c    = oPanel.Controls(item.Name)
-            lbl  = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
+            item    = Items(i)
+            c       = oPanel.Controls(item.Name)
+            lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
+            lblMode = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
 
             c  .Tag     = item.Tag
             c  .Visible = item.Visible
             lbl.Visible = item.Visible
+
+            If Not IsNothing(lblMode) Then
+                lblMode.Visible = item.Visible
+            End If
         Next
     End Sub
 
@@ -99,17 +105,23 @@ Public Class MovieFilters
         Dim count       As Integer =  0
         Dim Y           As Integer
         Dim lbl         As Label
-        Dim width       As Integer = oPanel.Width - (124+(15*2))
+        Dim lblMode     As Label
+        Dim width       As Integer = oPanel.Width - 154
 
         Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible Order by Convert.ToInt16(c.Tag.ToString) Descending
 
         For Each c As Control In query
-            lbl = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
-            Y   = oPanel.Height - (index*FilterSpace)
+            lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
+            lblMode = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
+            Y       = oPanel.Height - (index*FilterSpace)
 
             c.Width      = width
             c  .Location = New Point( c .Location.X, Y )
             lbl.Location = New Point( lbl.Location.X, Y )
+
+            If Not IsNothing(lblMode) Then
+                lblMode.Location = New Point( lblMode.Location.X, Y )
+            End If
 
             index += 1
         Next

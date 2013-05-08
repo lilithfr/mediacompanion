@@ -23174,6 +23174,14 @@ Public Class Form1
     Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource     .SelectedValueChanged,  
                                                                                                     cbFilterGenre  .TextChanged,           cbFilterCertificate.TextChanged, 
                                                                                                     cbFilterSet    .TextChanged,           cbFilterResolution  .TextChanged, cbFilterAudioCodecs.TextChanged
+        If TypeName(sender) = "TriStateCheckedComboBox" Then
+            Dim x As MC_UserControls.TriStateCheckedComboBox = sender
+
+            If x.opState<>0 Then
+                Return
+            End If
+        End If
+
         ApplyMovieFilters
     End Sub
      
@@ -24686,8 +24694,23 @@ End Sub
         UpdateFilteredList
     End Sub
 
-    Private Function GetFilterFromLabel(lbl As Label)
-        Return lbl.Parent.Controls("cb" + lbl.Name.SubString(3,lbl.Name.Length-3) )
+
+    Private Sub ChangeFilterMode( lbl As Label,  e As EventArgs) Handles lblFilterGenreMode      .Click, lblFilterSetMode        .Click, lblFilterResolutionMode.Click, 
+                                                                         lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click
+
+        Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
+
+        filter.QuickSelect = Not filter.QuickSelect
+
+        lbl.Text = If(filter.QuickSelect, "S", "M" )
+    End Sub
+
+    
+    Private Function GetFilterFromLabel(ctl As Control)
+
+        Dim name As String = ctl.Name.RemoveAfterMatch("Mode")
+
+        Return ctl.Parent.Controls("cb" + name.SubString(3,name.Length-3) )
     End Function
 
     Private Sub ResetCbGeneralFilter( sender As Control,  e As EventArgs) Handles lblFilterGeneral.Click
