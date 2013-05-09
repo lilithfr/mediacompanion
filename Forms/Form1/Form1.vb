@@ -1730,9 +1730,9 @@ Public Class Form1
 
                 pop_cbMovieDisplay_MovieSet
 
-                For f = 0 To ComboBoxFormatSource.Items.Count - 1
-                    If ComboBoxFormatSource.Items(f) = workingMovieDetails.fullmoviebody.source Then
-                        ComboBoxFormatSource.SelectedIndex = f
+                For f = 0 To cbMovieDisplay_Source.Items.Count - 1
+                    If cbMovieDisplay_Source.Items(f) = workingMovieDetails.fullmoviebody.source Then
+                        cbMovieDisplay_Source.SelectedIndex = f
                     End If
                 Next
 
@@ -3303,7 +3303,6 @@ Public Class Form1
     Sub ResetFilters
         State=ProgramState.ResettingFilters
 
- '      ActorFilter    = ""
         filterOverride = False
         TextBox1       .Text = ""
         txt_titlesearch.Text = ""
@@ -3313,8 +3312,7 @@ Public Class Form1
         RadioButtonTitleAndYear.Checked = True
           
         cbFilterGeneral       .SelectedIndex = 0
-'        cbFilterActor         .SelectedIndex = 0
-        cbFilterSource        .SelectedIndex = 0
+'       cbFilterSource        .SelectedIndex = 0
 
         UpdateMinMaxMovieFilters
 
@@ -3532,7 +3530,7 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.mpaa      = certtxt.Text
             movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
             movie.ScrapedMovie.fullmoviebody.movieset = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-            movie.ScrapedMovie.fullmoviebody.source   = If(ComboBoxFormatSource.SelectedIndex=0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
+            movie.ScrapedMovie.fullmoviebody.source   = If(cbMovieDisplay_Source.SelectedIndex=0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
 
             movie.AssignMovieToCache
             movie.UpdateMovieCache
@@ -3605,7 +3603,7 @@ Public Class Form1
                     'Else
                     'movie.ScrapedMovie.fullmoviebody.movieset = Nothing
                     'End If
-                    movie.ScrapedMovie.fullmoviebody.source = If(ComboBoxFormatSource.SelectedIndex = 0, Nothing, ComboBoxFormatSource.Items(ComboBoxFormatSource.SelectedIndex))
+                    movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex = 0, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
 
                     movie.AssignMovieToCache
                     movie.UpdateMovieCache
@@ -21856,18 +21854,21 @@ Public Class Form1
 
     Private Sub mov_VideoSourcePopulate()
         Try
-            ComboBoxFormatSource.Items.Clear()
-            ComboBoxFormatSource.Items.Add("")
+            cbMovieDisplay_Source.Items.Clear()
+            cbMovieDisplay_Source.Items.Add("")
             For Each mset In Preferences.releaseformat
-                ComboBoxFormatSource.Items.Add(mset)
-                cbFilterSource.Items.Add(mset)
+                cbMovieDisplay_Source.Items.Add(mset)
+ '              cbFilterSource.Items.Add(mset)
             Next
-            ComboBoxFormatSource.SelectedIndex = 0
+                
+            cbFilterSource.UpdateItems( Preferences.releaseformat.ToList )
+
+            cbMovieDisplay_Source.SelectedIndex = 0
             If IsNothing(workingMovieDetails) = False Then
                 If workingMovieDetails.fullmoviebody.source <> "" Then
-                    For te = 0 To ComboBoxFormatSource.Items.Count - 1
-                        If ComboBoxFormatSource.Items(te) = workingMovieDetails.fullmoviebody.source Then
-                            ComboBoxFormatSource.SelectedIndex = te
+                    For te = 0 To cbMovieDisplay_Source.Items.Count - 1
+                        If cbMovieDisplay_Source.Items(te) = workingMovieDetails.fullmoviebody.source Then
+                            cbMovieDisplay_Source.SelectedIndex = te
                             Exit For
                         End If
                     Next
@@ -21892,7 +21893,7 @@ Public Class Form1
         Dim idxSelected = lbVideoSource.SelectedIndex
 
         Try
-            If ComboBoxFormatSource.Text = strSelected Then ComboBoxFormatSource.SelectedIndex = 0
+            If cbMovieDisplay_Source.Text = strSelected Then cbMovieDisplay_Source.SelectedIndex = 0
             lbVideoSource.Items.RemoveAt(idxSelected)
             mov_VideoSourcePopulate()
             movieprefschanged = True
@@ -23147,12 +23148,12 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral       .SelectedValueChanged,  cbFilterSource        .SelectedValueChanged,  
+    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral       .SelectedValueChanged,  cbFilterSource        .TextChanged,
                                                                                                     cbFilterGenre         .TextChanged,           cbFilterCertificate   .TextChanged, 
                                                                                                     cbFilterSet           .TextChanged,           cbFilterResolution    .TextChanged, 
                                                                                                     cbFilterAudioCodecs   .TextChanged,           cbFilterAudioChannels .TextChanged, 
                                                                                                     cbFilterAudioBitrates .TextChanged,           cbFilterNumAudioTracks.TextChanged, 
-                                                                                                    cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged
+                                                                                                    cbFilterAudioLanguages.TextChanged,           cbFilterActor         .TextChanged
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
 
@@ -23531,7 +23532,8 @@ Public Class Form1
                                                                                     cbFilterSet           .OnFormatItem,  cbFilterResolution    .OnFormatItem, 
                                                                                     cbFilterAudioCodecs   .OnFormatItem,  cbFilterAudioChannels .OnFormatItem, 
                                                                                     cbFilterAudioBitrates .OnFormatItem,  cbFilterNumAudioTracks.OnFormatItem, 
-                                                                                    cbFilterAudioLanguages.OnFormatItem,  cbFilterActor         .OnFormatItem
+                                                                                    cbFilterAudioLanguages.OnFormatItem,  cbFilterActor         .OnFormatItem, 
+                                                                                    cbFilterSource        .OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -24623,7 +24625,7 @@ End Sub
     Private Sub ResetFilter( sender As Object,  e As EventArgs) Handles lblFilterSet          .Click,  lblFilterVotes         .Click,  lblFilterRating       .Click, 
                                                                         lblFilterCertificate  .Click,  lblFilterGenre         .Click,  lblFilterYear         .Click,
                                                                         lblFilterResolution   .Click,  lblFilterAudioCodecs   .Click,  lblFilterAudioChannels.Click, 
-                                                                        lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, lblFilterActor.Click
+                                                                        lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, lblFilterActor.Click, lblFilterSource.Click
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -24638,7 +24640,7 @@ End Sub
 
     Private Sub ChangeFilterMode( sender As Object,  e As EventArgs) Handles lblFilterGenreMode        .Click,  lblFilterSetMode           .Click,  lblFilterResolutionMode   .Click, 
                                                                              lblFilterAudioCodecsMode  .Click,  lblFilterCertificateMode   .Click,  lblFilterAudioChannelsMode.Click,
-                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click, lblFilterActorMode.Click
+                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click, lblFilterActorMode.Click, lblFilterSourceMode.Click
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
@@ -24671,9 +24673,9 @@ End Sub
     'End Sub
 
 
-    Private Sub ResetCbFilterSource( sender As Control,  e As EventArgs) Handles lblFilterSource.Click
-        cbFilterSource.SelectedIndex = 0
-    End Sub
+    'Private Sub ResetCbFilterSource( sender As Control,  e As EventArgs) Handles lblFilterSource.Click
+    '    cbFilterSource.SelectedIndex = 0
+    'End Sub
 
 
 

@@ -255,6 +255,7 @@ Public Class clsGridViewMovie
         b = Form1.oMovies.ApplyNumAudioTracksFilter( b , Form1.cbFilterNumAudioTracks )
         b = Form1.oMovies.ApplyAudioLanguagesFilter( b , Form1.cbFilterAudioLanguages )
         b = Form1.oMovies.ApplyActorsFilter        ( b , Form1.cbFilterActor          )
+        b = Form1.oMovies.ApplySourcesFilter       ( b , Form1.cbFilterSource         )
 
 
         'Actor
@@ -274,10 +275,10 @@ Public Class clsGridViewMovie
 
 
         'Source
-        If Form1.cbFilterSource.Text <> "All" Then
-            b = From f In b Where f.source.Contains(Form1.cbFilterSource.Text)
-            If Yield Then Return
-        End If
+        'If Form1.cbFilterSource.Text <> "All" Then
+        '    b = From f In b Where f.source.Contains(Form1.cbFilterSource.Text)
+        '    If Yield Then Return
+        'End If
         
 
 
