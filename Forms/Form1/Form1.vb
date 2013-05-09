@@ -57,14 +57,7 @@ Public Class Form1
 
     Public _yield               As Boolean
     Public LastMovieDisplayed   As String=""
-    Public ActorFilter          As String=""
-'   Public SetFilter            As String=""
-'   Public ResolutionFilter     As String=""
-'   Public AudioCodecsFilter    As String=""
-'   Public AudioLanguagesFilter As String=""
-'   Public AudioChannelsFilter  As String=""
-'   Public AudioBitratesFilter  As String=""
-'   Public NumAudioTracksFilter As String=""
+'   Public ActorFilter          As String=""
 
     'Public Shared Preferences As New Structures
 
@@ -1656,22 +1649,25 @@ Public Class Form1
                     ButtonWatched.Refresh()
                 End If
 
-                actorcb.Items.Clear()
+                cbMovieDisplay_Actor.Items.Clear()
                 For Each actor In workingMovieDetails.listactors
-                    If actor.actorname <> Nothing Then actorcb.Items.Add(actor.actorname)
+                    If actor.actorname <> Nothing Then cbMovieDisplay_Actor.Items.Add(actor.actorname)
                 Next
 
-                If actorcb.Items.Count > 0 Then
-                    actorcb.SelectedIndex = 0
+                If cbMovieDisplay_Actor.Items.Count > 0 Then
+                    cbMovieDisplay_Actor.SelectedIndex = 0
                 Else
                     PictureBoxActor.ImageLocation = Utilities.DefaultActorPath
                     PictureBoxActor.Load()
                 End If
 
-                
-                If ActorFilter<>"" Then
-                    actorcb.SelectedItem = ActorFilter
-                End If
+                Dim fi As New FilteredItems(cbFilterActor)
+
+                fi.SelectFirstMatch(cbMovieDisplay_Actor)
+
+'                If ActorFilter<>"" Then
+'                    cbMovieDisplay_Actor.SelectedItem = ActorFilter
+'                End If
 
 
                 If Yield(yieldIng) Then Return
@@ -1747,7 +1743,7 @@ Public Class Form1
                 Rating1.BitmapRating_V2(PictureBoxFanArt, ratingtxt.Text)
             End If
         Else
-            actorcb.Items.Clear()
+            cbMovieDisplay_Actor.Items.Clear()
             PictureBoxActor.CancelAsync()
             PictureBoxActor.Image = Nothing
             PictureBoxActor.Refresh()
@@ -2783,9 +2779,9 @@ Public Class Form1
 
 
 
-    Private Sub actorcb_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles actorcb.MouseEnter
+    Private Sub actorcb_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles cbMovieDisplay_Actor.MouseEnter
         Try
-            actorcb.Focus()
+            cbMovieDisplay_Actor.Focus()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -2793,10 +2789,10 @@ Public Class Form1
     End Sub
 
     'Browse Actors
-    Private Sub actorcb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles actorcb.SelectedIndexChanged
+    Private Sub actorcb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieDisplay_Actor.SelectedIndexChanged
         Try
             For Each actor In workingMovieDetails.listactors
-                If actor.actorname = actorcb.SelectedItem Then
+                If actor.actorname = cbMovieDisplay_Actor.SelectedItem Then
                     If actor.actorrole <> "" Then
                         roletxt.Text = actor.actorrole
                     End If
@@ -3307,7 +3303,7 @@ Public Class Form1
     Sub ResetFilters
         State=ProgramState.ResettingFilters
 
-        ActorFilter    = ""
+ '      ActorFilter    = ""
         filterOverride = False
         TextBox1       .Text = ""
         txt_titlesearch.Text = ""
@@ -3317,7 +3313,7 @@ Public Class Form1
         RadioButtonTitleAndYear.Checked = True
           
         cbFilterGeneral       .SelectedIndex = 0
-        cbFilterActor         .SelectedIndex = 0
+'        cbFilterActor         .SelectedIndex = 0
         cbFilterSource        .SelectedIndex = 0
 
         UpdateMinMaxMovieFilters
@@ -4470,7 +4466,7 @@ Public Class Form1
         directortxt.Text = ""
         studiotxt.Text = ""
         pathtxt.Text = ""
-        actorcb.Items.Clear()
+        cbMovieDisplay_Actor.Items.Clear()
         ratingtxt.Text = ""
         runtimetxt.Text = ""
         votestxt.Text = ""
@@ -11881,23 +11877,20 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button11.Click
-        Try
-            ActorFilter=actorcb.Text
 
-            For Each item As String In cbFilterActor.Items
-                If item.IndexOf(ActorFilter)=0 Then
-                    cbFilterActor.SelectedItem=item
-                    Exit For
-                End If
-            Next
+    Private Sub btnMovieDisplay_ActorFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_ActorFilter.Click
+        Try
+            State=ProgramState.ResettingFilters
+            cbFilterActor.SelectItem(cbMovieDisplay_Actor.Text)
+            State=ProgramState.Other
             
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & actorcb.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
+'           LabelCountFilter.Text = "Displaying " & DataGridViewMovies.Rows.Count & " " & cbMovieDisplay_Actor.Text & " movie" & If( DataGridViewMovies.Rows.Count>1, "s", "")
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 
     Private Sub mov_WallReset()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
@@ -13086,8 +13079,6 @@ Public Class Form1
 
     Private Sub btnMovieDisplay_SetFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_SetFilter.Click
         Try
-            'SetFilter=cbMovieDisplay_MovieSet.Text
-
             State=ProgramState.ResettingFilters
             cbFilterSet.SelectItem(cbMovieDisplay_MovieSet.Text)
             State=ProgramState.Other
@@ -17120,7 +17111,7 @@ Public Class Form1
                     runtimetxt.Font = newFont
                     studiotxt.Font = newFont
                     taglinetxt.Font = newFont
-                    actorcb.Font = newFont
+                    cbMovieDisplay_Actor.Font = newFont
                     roletxt.Font = newFont
                     pathtxt.Font = newFont
                     'CheckedListBox1.Font = newFont
@@ -23160,7 +23151,7 @@ Public Class Form1
                                                                                                     cbFilterSet           .TextChanged,           cbFilterResolution    .TextChanged, 
                                                                                                     cbFilterAudioCodecs   .TextChanged,           cbFilterAudioChannels .TextChanged, 
                                                                                                     cbFilterAudioBitrates .TextChanged,           cbFilterNumAudioTracks.TextChanged, 
-                                                                                                    cbFilterAudioLanguages.TextChanged
+                                                                                                    cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
 
@@ -23173,9 +23164,9 @@ Public Class Form1
     End Sub
      
 
-    Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterActor.SelectedValueChanged
-        HandleMovieFilter_SelectedValueChanged(cbFilterActor,ActorFilter)
-    End Sub
+    'Private Sub cbActorFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    HandleMovieFilter_SelectedValueChanged(cbFilterActor,ActorFilter)
+    'End Sub
 
     Private Sub cbFilterRatingChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRating.SelectionChanged
         ApplyMovieFilters
@@ -23499,7 +23490,7 @@ Public Class Form1
         filteredList.AddRange(oMovies.MovieCache)
 
         Assign_FilterGeneral
-        Assign_FilterActor
+'       Assign_FilterActor
 
         UpdateMinMaxMovieFilters
 
@@ -23512,6 +23503,7 @@ Public Class Form1
         cbFilterAudioBitrates .UpdateItems( oMovies.AudioBitratesFilter  )
         cbFilterNumAudioTracks.UpdateItems( oMovies.NumAudioTracksFilter )
         cbFilterAudioLanguages.UpdateItems( oMovies.AudioLanguagesFilter )
+        cbFilterActor         .UpdateItems( oMovies.ActorsFilter         )
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23538,28 +23530,28 @@ Public Class Form1
                                                                                     cbFilterSet           .OnFormatItem,  cbFilterResolution    .OnFormatItem, 
                                                                                     cbFilterAudioCodecs   .OnFormatItem,  cbFilterAudioChannels .OnFormatItem, 
                                                                                     cbFilterAudioBitrates .OnFormatItem,  cbFilterNumAudioTracks.OnFormatItem, 
-                                                                                    cbFilterAudioLanguages.OnFormatItem
+                                                                                    cbFilterAudioLanguages.OnFormatItem,  cbFilterActor         .OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
 
-    Sub Assign_FilterActor
-        cbFilterActor.Items.Clear
-        cbFilterActor.Items.Add("All")
-        For Each item In oMovies.ActorsFilter
-            cbFilterActor.Items.Add(item)
-        Next
-        If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
+    'Sub Assign_FilterActor
+    '    cbFilterActor.Items.Clear
+    '    cbFilterActor.Items.Add("All")
+    '    For Each item In oMovies.ActorsFilter
+    '        cbFilterActor.Items.Add(item)
+    '    Next
+    '    If cbFilterActor.Text = "" Then cbFilterActor.Text = "All"
 
-        If ActorFilter<>"" Then
-            For Each item As String In cbFilterActor.Items
-                If item.IndexOf(ActorFilter & " (")=0 Then
-                    cbFilterActor.SelectedItem=item
-                    Exit For
-                End If
-            Next
-        End If
-    End Sub
+    '    If ActorFilter<>"" Then
+    '        For Each item As String In cbFilterActor.Items
+    '            If item.IndexOf(ActorFilter & " (")=0 Then
+    '                cbFilterActor.SelectedItem=item
+    '                Exit For
+    '            End If
+    '        Next
+    '    End If
+    'End Sub
 
 
     Sub Assign_FilterGeneral
@@ -23581,30 +23573,30 @@ Public Class Form1
     End Sub
 
 
-    Sub Assign_MovieFilter(cb As ComboBox, items As List(Of String), filterValue As String)
-        cb.Items.Clear
-        cb.Items.Add("All")
-        cb.Items.AddRange(items.ToArray)
+    'Sub Assign_MovieFilter(cb As ComboBox, items As List(Of String), filterValue As String)
+    '    cb.Items.Clear
+    '    cb.Items.Add("All")
+    '    cb.Items.AddRange(items.ToArray)
 
-        'For Each item In items
-        '    cb.Items.Add(item)
-        'Next
+    '    'For Each item In items
+    '    '    cb.Items.Add(item)
+    '    'Next
 
-        If cb.Text = "" Then cb.Text = "All"
+    '    If cb.Text = "" Then cb.Text = "All"
 
-        If filterValue<>"" Then
-            Dim found As Boolean=False
-            For Each item As String In cb.Items
-                If item.IndexOf(filterValue & " (")=0 Then    
-                    cb.SelectedItem=item    
-                    found=True
-                    Exit For
-                End If
-            Next
+    '    If filterValue<>"" Then
+    '        Dim found As Boolean=False
+    '        For Each item As String In cb.Items
+    '            If item.IndexOf(filterValue & " (")=0 Then    
+    '                cb.SelectedItem=item    
+    '                found=True
+    '                Exit For
+    '            End If
+    '        Next
 
-            If Not found Then filterValue=""
-        End If
-    End Sub
+    '        If Not found Then filterValue=""
+    '    End If
+    'End Sub
 
 
 
@@ -24630,7 +24622,7 @@ End Sub
     Private Sub ResetFilter( sender As Object,  e As EventArgs) Handles lblFilterSet          .Click,  lblFilterVotes         .Click,  lblFilterRating       .Click, 
                                                                         lblFilterCertificate  .Click,  lblFilterGenre         .Click,  lblFilterYear         .Click,
                                                                         lblFilterResolution   .Click,  lblFilterAudioCodecs   .Click,  lblFilterAudioChannels.Click, 
-                                                                        lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click
+                                                                        lblFilterAudioBitrates.Click,  lblFilterNumAudioTracks.Click,  lblFilterAudioLanguages.Click, lblFilterActor.Click
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -24645,7 +24637,7 @@ End Sub
 
     Private Sub ChangeFilterMode( sender As Object,  e As EventArgs) Handles lblFilterGenreMode        .Click,  lblFilterSetMode           .Click,  lblFilterResolutionMode   .Click, 
                                                                              lblFilterAudioCodecsMode  .Click,  lblFilterCertificateMode   .Click,  lblFilterAudioChannelsMode.Click,
-                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click
+                                                                             lblFilterAudioBitratesMode.Click,  lblFilterNumAudioTracksMode.Click,  lblFilterAudioLanguagesMode.Click, lblFilterActorMode.Click
 
         Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
@@ -24672,10 +24664,10 @@ End Sub
     End Sub
 
 
-    Private Sub ResetCbActorFilter( sender As Control,  e As EventArgs) Handles lblFilterActor.Click
-        ActorFilter=""
-        cbFilterActor.SelectedIndex = 0
-    End Sub
+    'Private Sub ResetCbActorFilter( sender As Control,  e As EventArgs) Handles lblFilterActor.Click
+    '    ActorFilter=""
+    '    cbFilterActor.SelectedIndex = 0
+    'End Sub
 
 
     Private Sub ResetCbFilterSource( sender As Control,  e As EventArgs) Handles lblFilterSource.Click

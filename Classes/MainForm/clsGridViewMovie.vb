@@ -254,22 +254,23 @@ Public Class clsGridViewMovie
         b = Form1.oMovies.ApplyAudioBitratesFilter ( b , Form1.cbFilterAudioBitrates  )
         b = Form1.oMovies.ApplyNumAudioTracksFilter( b , Form1.cbFilterNumAudioTracks )
         b = Form1.oMovies.ApplyAudioLanguagesFilter( b , Form1.cbFilterAudioLanguages )
+        b = Form1.oMovies.ApplyActorsFilter        ( b , Form1.cbFilterActor          )
 
 
         'Actor
-        If Form1.ActorFilter<>"" then
-            Dim movie_ids As New List(Of String) 
+        'If Form1.ActorFilter<>"" then
+        '    Dim movie_ids As New List(Of String) 
 
-            For Each actor In Form1.oMovies.ActorDb
-                If actor.actorname = Form1.ActorFilter Then
-                    movie_ids.Add(actor.movieid)
-                End If
-            Next
+        '    For Each actor In Form1.oMovies.ActorDb
+        '        If actor.actorname = Form1.ActorFilter Then
+        '            movie_ids.Add(actor.movieid)
+        '        End If
+        '    Next
 
-            b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
+        '    b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
 
-            If Yield Then Return
-        End If
+        '    If Yield Then Return
+        'End If
 
 
         'Source

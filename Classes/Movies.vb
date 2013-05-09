@@ -1755,6 +1755,33 @@ Public Class Movies
         Return Filter(recs,leftOuterJoinTable, fi)
     End Function
 
+    'If Form1.ActorFilter<>"" then
+    '    Dim movie_ids As New List(Of String) 
+
+    '    For Each actor In Form1.oMovies.ActorDb
+    '        If actor.actorname = Form1.ActorFilter Then
+    '            movie_ids.Add(actor.movieid)
+    '        End If
+    '    Next
+
+    '    b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
+
+    '    If Yield Then Return
+    'End If
+
+
+    Function ApplyActorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+
+        Dim leftOuterJoinTable = From m In recs, a In ActorDb 
+					Where 
+				        m.Id = a.MovieId
+                    Select 
+                        m.fullpathandfilename, field=a.ActorName  
+                    Distinct
+
+        Return Filter( recs, leftOuterJoinTable, New FilteredItems(ccb) )
+    End Function
+
 
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
 
@@ -1792,7 +1819,7 @@ Public Class Movies
 
         Return recs
     End Function
-
+     
 
 #End Region
 

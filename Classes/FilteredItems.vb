@@ -42,4 +42,12 @@ Public Class FilteredItems
 
     End Sub
 
+
+    Sub SelectFirstMatch(ByVal cb As Windows.Forms.ComboBox)
+        For Each item As String In Include
+            If cb.Items.IndexOf(item)>-1 Then 
+                cb.SelectedItem = item
+            End If
+        Next
+    End Sub
 End Class
