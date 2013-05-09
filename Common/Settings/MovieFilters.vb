@@ -150,6 +150,7 @@ Public Class MovieFilters
         For Each item In Items
             If item.Name=filterName Then Return item
         Next
+        Return Nothing
     End Function
 
     Public Sub UpdateFromPanel(oPanel As Panel)

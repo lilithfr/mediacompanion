@@ -1637,12 +1637,12 @@ Public Class Movies
         Return Filter(b,filterValue,leftOuterJoinTable)
     End Function
 
-    Function ApplyAudioChannelsFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
+    'Function ApplyAudioChannelsFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
-        Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
+    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
 
-        Return Filter(b,filterValue,leftOuterJoinTable)
-    End Function
+    '    Return Filter(b,filterValue,leftOuterJoinTable)
+    'End Function
 
 
     Function ApplyNumAudioTracksFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
@@ -1742,6 +1742,15 @@ Public Class Movies
              
     End Function
 
+
+    Function ApplyAudioChannelsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+
+        Dim fi As New FilteredItems(ccb)
+
+        Dim leftOuterJoinTable = From m In recs From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
+
+        Return Filter(recs,leftOuterJoinTable, fi)
+    End Function
 
 
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
