@@ -251,6 +251,7 @@ Public Class clsGridViewMovie
         b = Form1.oMovies.ApplyResolutionFilter   ( b , Form1.cbFilterResolution    )
         b = Form1.oMovies.ApplyAudioCodecsFilter  ( b , Form1.cbFilterAudioCodecs   )
         b = Form1.oMovies.ApplyAudioChannelsFilter( b , Form1.cbFilterAudioChannels )
+        b = Form1.oMovies.ApplyAudioBitratesFilter( b , Form1.cbFilterAudioBitrates )
         
 '        'Set
 '        If Form1.SetFilter<>"" Then
@@ -269,7 +270,7 @@ Public Class clsGridViewMovie
 '       If Form1.AudioCodecsFilter    <>"" Then b = Form1.oMovies.ApplyAudioCodecFilter     ( b , Form1.AudioCodecsFilter    )
         If Form1.AudioLanguagesFilter <>"" Then b = Form1.oMovies.ApplyAudioLanguageFilter  ( b , Form1.AudioLanguagesFilter )
 '       If Form1.AudioChannelsFilter  <>"" Then b = Form1.oMovies.ApplyAudioChannelsFilter  ( b , Form1.AudioChannelsFilter  )
-        If Form1.AudioBitratesFilter  <>"" Then b = Form1.oMovies.ApplyAudioBitrateFilter   ( b , Form1.AudioBitratesFilter  )
+'       If Form1.AudioBitratesFilter  <>"" Then b = Form1.oMovies.ApplyAudioBitrateFilter   ( b , Form1.AudioBitratesFilter  )
         If Form1.NumAudioTracksFilter <>"" Then b = Form1.oMovies.ApplyNumAudioTracksFilter ( b , Form1.NumAudioTracksFilter )
 
         ' , oMovies.NumAudioTracks   

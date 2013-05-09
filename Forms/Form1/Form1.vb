@@ -63,7 +63,7 @@ Public Class Form1
 '   Public AudioCodecsFilter    As String=""
     Public AudioLanguagesFilter As String=""
 '   Public AudioChannelsFilter  As String=""
-    Public AudioBitratesFilter  As String=""
+'   Public AudioBitratesFilter  As String=""
     Public NumAudioTracksFilter As String=""
 
     'Public Shared Preferences As New Structures
@@ -3312,7 +3312,7 @@ Public Class Form1
  '      AudioCodecsFilter=""
         AudioLanguagesFilter=""
  '      AudioChannelsFilter =""
-        AudioBitratesFilter =""
+ '      AudioBitratesFilter =""
         NumAudioTracksFilter=""
         filterOverride = False
         TextBox1.Text = ""
@@ -3328,7 +3328,7 @@ Public Class Form1
 '       cbFilterResolution    .SelectedIndex = 0
 '       cbFilterAudioCodecs   .SelectedIndex = 0
         cbFilterAudioLanguages.SelectedIndex = 0
-        cbFilterAudioBitrates .SelectedIndex = 0
+'       cbFilterAudioBitrates .SelectedIndex = 0
 '       cbFilterAudioChannels .SelectedIndex = 0
         cbFilterNumAudioTracks.SelectedIndex = 0
         
@@ -23178,9 +23178,11 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged,  cbFilterSource     .SelectedValueChanged,  
-                                                                                                    cbFilterGenre  .TextChanged,           cbFilterCertificate.TextChanged, 
-                                                                                                    cbFilterSet    .TextChanged,           cbFilterResolution  .TextChanged, cbFilterAudioCodecs.TextChanged, cbFilterAudioChannels.TextChanged
+    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral      .SelectedValueChanged,  cbFilterSource       .SelectedValueChanged,  
+                                                                                                    cbFilterGenre        .TextChanged,           cbFilterCertificate  .TextChanged, 
+                                                                                                    cbFilterSet          .TextChanged,           cbFilterResolution   .TextChanged, 
+                                                                                                    cbFilterAudioCodecs  .TextChanged,           cbFilterAudioChannels.TextChanged, 
+                                                                                                    cbFilterAudioBitrates.TextChanged
         If TypeName(sender) = "TriStateCheckedComboBox" Then
             Dim x As MC_UserControls.TriStateCheckedComboBox = sender
 
@@ -23206,9 +23208,9 @@ Public Class Form1
     End Sub
 
      
-    Private Sub cbFilterAudioBitratesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterAudioBitrates.SelectedValueChanged
-        HandleMovieFilter_SelectedValueChanged(cbFilterAudioBitrates,AudioBitratesFilter)
-    End Sub
+    'Private Sub cbFilterAudioBitratesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    '    HandleMovieFilter_SelectedValueChanged(cbFilterAudioBitrates,AudioBitratesFilter)
+    'End Sub
 
      
     'Private Sub cbFilterAudioChannelsChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
@@ -23558,9 +23560,10 @@ Public Class Form1
 '       Assign_MovieFilter( cbFilterSet            , oMovies.SetsFilter           , SetFilter            )
         Assign_MovieFilter( cbFilterAudioLanguages , oMovies.AudioLanguagesFilter , AudioLanguagesFilter )
 '       Assign_MovieFilter( cbFilterAudioChannels  , oMovies.AudioChannelsFilter  , AudioChannelsFilter  )
-        Assign_MovieFilter( cbFilterAudioBitrates  , oMovies.AudioBitratesFilter  , AudioBitratesFilter  )
+'       Assign_MovieFilter( cbFilterAudioBitrates  , oMovies.AudioBitratesFilter  , AudioBitratesFilter  )
 '       Assign_MovieFilter( cbFilterAudioCodecs    , oMovies.AudioCodecsFilter    , AudioCodecsFilter    )
         Assign_MovieFilter( cbFilterNumAudioTracks , oMovies.NumAudioTracks       , NumAudioTracksFilter )
+
         UpdateMinMaxMovieFilters
 
         cbFilterGenre        .UpdateItems(oMovies.Genres             )
@@ -23569,6 +23572,7 @@ Public Class Form1
         cbFilterResolution   .UpdateItems(oMovies.ResolutionFilter   )
         cbFilterAudioCodecs  .UpdateItems(oMovies.AudioCodecsFilter  )
         cbFilterAudioChannels.UpdateItems(oMovies.AudioChannelsFilter)
+        cbFilterAudioBitrates.UpdateItems(oMovies.AudioBitratesFilter)
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 
@@ -23597,9 +23601,10 @@ Public Class Form1
     'End Sub
 
 
-    Private Function TriStateFilter_OnFormatItem(item As String) As String Handles  cbFilterGenre      .OnFormatItem,  cbFilterCertificate.OnFormatItem, 
-                                                                                    cbFilterSet        .OnFormatItem,  cbFilterResolution .OnFormatItem, 
-                                                                                    cbFilterAudioCodecs.OnFormatItem, cbFilterAudioChannels.OnFormatItem
+    Private Function TriStateFilter_OnFormatItem(item As String) As String Handles  cbFilterGenre        .OnFormatItem,  cbFilterCertificate  .OnFormatItem, 
+                                                                                    cbFilterSet          .OnFormatItem,  cbFilterResolution   .OnFormatItem, 
+                                                                                    cbFilterAudioCodecs  .OnFormatItem,  cbFilterAudioChannels.OnFormatItem, 
+                                                                                    cbFilterAudioBitrates.OnFormatItem
         Return item.RemoveAfterMatch
     End Function
 
@@ -24688,9 +24693,10 @@ End Sub
     End Sub
 
 
-    Private Sub ResetFilter( sender As Control,  e As EventArgs) Handles lblFilterSet        .Click,  lblFilterVotes      .Click,  lblFilterRating       .Click, 
-                                                                         lblFilterCertificate.Click,  lblFilterGenre      .Click,  lblFilterYear         .Click,
-                                                                         lblFilterResolution .Click,  lblFilterAudioCodecs.Click,  lblFilterAudioChannels.Click
+    Private Sub ResetFilter( sender As Object,  e As EventArgs) Handles lblFilterSet          .Click,  lblFilterVotes      .Click,  lblFilterRating       .Click, 
+                                                                        lblFilterCertificate  .Click,  lblFilterGenre      .Click,  lblFilterYear         .Click,
+                                                                        lblFilterResolution   .Click,  lblFilterAudioCodecs.Click,  lblFilterAudioChannels.Click, 
+                                                                        lblFilterAudioBitrates.Click
 
         Dim filter As Object = GetFilterFromLabel(sender)
 
@@ -24702,10 +24708,14 @@ End Sub
         UpdateFilteredList
     End Sub
 
+ 
 
-    Private Sub ChangeFilterMode( lbl As Label,  e As EventArgs) Handles lblFilterGenreMode      .Click, lblFilterSetMode        .Click, lblFilterResolutionMode   .Click, 
-                                                                         lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click
 
+    Private Sub ChangeFilterMode( sender As Object,  e As EventArgs) Handles lblFilterGenreMode        .Click, lblFilterSetMode        .Click, lblFilterResolutionMode   .Click, 
+                                                                             lblFilterAudioCodecsMode  .Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
+                                                                             lblFilterAudioBitratesMode.Click
+
+        Dim lbl As Label = sender
         Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
 
         filter.QuickSelect = Not filter.QuickSelect
@@ -24753,10 +24763,10 @@ End Sub
         cbFilterAudioLanguages.SelectedIndex = 0
     End Sub
 
-    Private Sub ResetCbAudioBitratesFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioBitrates.Click
-        AudioBitratesFilter=""
-        cbFilterAudioBitrates.SelectedIndex = 0
-    End Sub
+    'Private Sub ResetCbAudioBitratesFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioBitrates.Click
+    '    AudioBitratesFilter=""
+    '    cbFilterAudioBitrates.SelectedIndex = 0
+    'End Sub
 
     'Private Sub ResetCbAudioChannelsFilter( sender As Control,  e As EventArgs) Handles lblFilterAudioChannels.Click
     '    AudioChannelsFilter=""
@@ -24773,7 +24783,5 @@ End Sub
     End Sub
 
 
-Private Sub ChangeFilterMode( sender As Object,  e As EventArgs) Handles lblFilterSetMode.Click, lblFilterResolutionMode.Click, lblFilterGenreMode.Click, lblFilterCertificateMode.Click, lblFilterAudioCodecsMode.Click, lblFilterAudioChannelsMode.Click
 
-End Sub
 End Class
