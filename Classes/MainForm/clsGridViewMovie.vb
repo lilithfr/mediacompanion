@@ -245,13 +245,14 @@ Public Class clsGridViewMovie
         b = From f In b Where f.Votes  >= Form1.cbFilterVotes .SelectedMin and f.Votes  <= Form1.cbFilterVotes .SelectedMax     'Votes
         b = From f In b Where f.year   >= Form1.cbFilterYear  .SelectedMin and f.year   <= Form1.cbFilterYear  .SelectedMax     'Year
        
-        b = Form1.oMovies.ApplyGenreFilter        ( b , Form1.cbFilterGenre         )
-        b = Form1.oMovies.ApplyCertificateFilter  ( b , Form1.cbFilterCertificate   )
-        b = Form1.oMovies.ApplySetFilter          ( b , Form1.cbFilterSet           )
-        b = Form1.oMovies.ApplyResolutionFilter   ( b , Form1.cbFilterResolution    )
-        b = Form1.oMovies.ApplyAudioCodecsFilter  ( b , Form1.cbFilterAudioCodecs   )
-        b = Form1.oMovies.ApplyAudioChannelsFilter( b , Form1.cbFilterAudioChannels )
-        b = Form1.oMovies.ApplyAudioBitratesFilter( b , Form1.cbFilterAudioBitrates )
+        b = Form1.oMovies.ApplyGenreFilter         ( b , Form1.cbFilterGenre          )
+        b = Form1.oMovies.ApplyCertificateFilter   ( b , Form1.cbFilterCertificate    )
+        b = Form1.oMovies.ApplySetFilter           ( b , Form1.cbFilterSet            )
+        b = Form1.oMovies.ApplyResolutionFilter    ( b , Form1.cbFilterResolution     )
+        b = Form1.oMovies.ApplyAudioCodecsFilter   ( b , Form1.cbFilterAudioCodecs    )
+        b = Form1.oMovies.ApplyAudioChannelsFilter ( b , Form1.cbFilterAudioChannels  )
+        b = Form1.oMovies.ApplyAudioBitratesFilter ( b , Form1.cbFilterAudioBitrates  )
+        b = Form1.oMovies.ApplyNumAudioTracksFilter( b , Form1.cbFilterNumAudioTracks )
         
 '        'Set
 '        If Form1.SetFilter<>"" Then
@@ -271,7 +272,7 @@ Public Class clsGridViewMovie
         If Form1.AudioLanguagesFilter <>"" Then b = Form1.oMovies.ApplyAudioLanguageFilter  ( b , Form1.AudioLanguagesFilter )
 '       If Form1.AudioChannelsFilter  <>"" Then b = Form1.oMovies.ApplyAudioChannelsFilter  ( b , Form1.AudioChannelsFilter  )
 '       If Form1.AudioBitratesFilter  <>"" Then b = Form1.oMovies.ApplyAudioBitrateFilter   ( b , Form1.AudioBitratesFilter  )
-        If Form1.NumAudioTracksFilter <>"" Then b = Form1.oMovies.ApplyNumAudioTracksFilter ( b , Form1.NumAudioTracksFilter )
+'       If Form1.NumAudioTracksFilter <>"" Then b = Form1.oMovies.ApplyNumAudioTracksFilter ( b , Form1.NumAudioTracksFilter )
 
         ' , oMovies.NumAudioTracks   
 

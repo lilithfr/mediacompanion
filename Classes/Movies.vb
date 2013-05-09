@@ -301,7 +301,7 @@ Public Class Movies
     End Property    
 
 
-    Public ReadOnly Property NumAudioTracks As List(Of String)
+    Public ReadOnly Property NumAudioTracksFilter As List(Of String)
         Get
             Dim q = From m In MovieCache 
                 Group By NumTracks=m.Audio.Count Into NumFilms=Count 
@@ -1645,12 +1645,12 @@ Public Class Movies
     'End Function
 
 
-    Function ApplyNumAudioTracksFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
+    'Function ApplyNumAudioTracksFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
-        Dim leftOuterJoinTable = From m In b Select m.fullpathandfilename, field=If(m.Audio.Count.ToString="","Unknown",m.Audio.Count.ToString)
+    '    Dim leftOuterJoinTable = From m In b Select m.fullpathandfilename, field=If(m.Audio.Count.ToString="","Unknown",m.Audio.Count.ToString)
 
-        Return Filter(b,filterValue,leftOuterJoinTable)
-    End Function
+    '    Return Filter(b,filterValue,leftOuterJoinTable)
+    'End Function
 
 
     Function Filter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String, leftOuterJoinTable As IEnumerable )
@@ -1761,6 +1761,18 @@ Public Class Movies
 
         Return Filter(recs,leftOuterJoinTable, fi)
     End Function
+
+
+    Function ApplyNumAudioTracksFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+
+        Dim fi As New FilteredItems(ccb)
+
+        Dim leftOuterJoinTable = From m In recs Select m.fullpathandfilename, field=If(m.Audio.Count.ToString="","Unknown",m.Audio.Count.ToString)
+
+        Return Filter(recs,leftOuterJoinTable, fi)
+    End Function
+
+
 
 
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
