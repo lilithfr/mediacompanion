@@ -37,10 +37,11 @@ Public Class frmConfigureMovieFilters
 
 
     Private Sub ConfigureFilters
-        Dim cb    As Control
-        Dim lbl   As Label
-        Dim show  As Boolean
-        Dim item  As String
+        Dim cb      As Control
+        Dim lbl     As Label
+        Dim lblMode As Label
+        Dim show    As Boolean
+        Dim item    As String
 
         For i=clbMovieFilters.Items.Count-1 To 0 Step -1
 
@@ -50,13 +51,22 @@ Public Class frmConfigureMovieFilters
 
             cb          = FilterContainer.Controls("cb" + lbl.Name.SubString(3,lbl.Name.Length-3) )
 
+            lblMode     = FilterContainer.Controls(lbl.Name+"Mode")
+
             show        = clbMovieFilters.GetItemChecked(i)
 
             cb .Tag     = i
             cb .Visible = show
             lbl.Visible = show
+
+            If Not IsNothing(lblMode) Then
+                lblMode.Visible = show
+            End If
+
         Next
     End Sub
+
+
 
 #Region "Drag'n Drop items"
     Private Swap_Drag_Index As Integer
