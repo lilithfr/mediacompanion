@@ -1616,62 +1616,35 @@ Public Class Movies
 
 #Region "Filters"
 
-    'Function ApplyAudioCodecFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
-    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Codec.Value="","Unknown",a.Codec.Value)
 
-    '    Return Filter(b,filterValue,leftOuterJoinTable)
-    'End Function
+    'Function ApplyAudioLanguageFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
 
-    Function ApplyAudioLanguageFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
-
-        Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
-
-        Return Filter(b,filterValue,leftOuterJoinTable)
-    End Function
-
-    'Function ApplyAudioBitrateFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
-
-    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Bitrate.Value="","Unknown",a.Bitrate.Value)
-
-    '    Return Filter(b,filterValue,leftOuterJoinTable)
-    'End Function
-
-    'Function ApplyAudioChannelsFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
-
-    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
+    '    Dim leftOuterJoinTable = From m In b From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
 
     '    Return Filter(b,filterValue,leftOuterJoinTable)
     'End Function
 
 
-    'Function ApplyNumAudioTracksFilter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String )
+    'Function Filter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String, leftOuterJoinTable As IEnumerable )
 
-    '    Dim leftOuterJoinTable = From m In b Select m.fullpathandfilename, field=If(m.Audio.Count.ToString="","Unknown",m.Audio.Count.ToString)
-
-    '    Return Filter(b,filterValue,leftOuterJoinTable)
+    '    Return From m In b
+    '                Group Join 
+    '                    a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
+    '                Into
+    '                    ResultList = Group
+    '                From
+    '                    result In ResultList.DefaultIfEmpty
+    '                Where
+    '                    If( result Is Nothing, "Unassigned", result.field ) = filterValue
+    '                Select 
+    '                    m
+    '                Distinct
     'End Function
 
 
-    Function Filter( b As IEnumerable(Of Data_GridViewMovie), filterValue As String, leftOuterJoinTable As IEnumerable )
 
-        Return From m In b
-                    Group Join 
-                        a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
-                    Into
-                        ResultList = Group
-                    From
-                        result In ResultList.DefaultIfEmpty
-                    Where
-                        If( result Is Nothing, "Unassigned", result.field ) = filterValue
-                    Select 
-                        m
-                    Distinct
-    End Function
-
-
-
-    Function ApplyGenreFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    Function ApplyGenresFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim i As Integer = 0
 
         For Each item As CCBoxItem In ccb.Items
@@ -1690,7 +1663,7 @@ Public Class Movies
     End Function
 
 
-    Function ApplyCertificateFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    Function ApplyCertificatesFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb,"Missing","")
        
         If fi.Include.Count>0 Then
@@ -1704,7 +1677,7 @@ Public Class Movies
     End Function
 
 
-    Function ApplySetFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    Function ApplySetsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb)
        
         If fi.Include.Count>0 Then
@@ -1718,7 +1691,7 @@ Public Class Movies
     End Function
 
 
-    Function ApplyResolutionFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    Function ApplyResolutionsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb,"Unknown","-1")
        
         If fi.Include.Count>0 Then
@@ -1773,6 +1746,14 @@ Public Class Movies
     End Function
 
 
+    Function ApplyAudioLanguagesFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
+
+        Dim fi As New FilteredItems(ccb)
+
+        Dim leftOuterJoinTable = From m In recs From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
+
+        Return Filter(recs,leftOuterJoinTable, fi)
+    End Function
 
 
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
