@@ -3322,6 +3322,7 @@ Public Class Form1
                 
         For Each c As Object In query
             c.Reset
+            c.Refresh
         Next
 
         State=ProgramState.Other
