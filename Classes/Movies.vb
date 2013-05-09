@@ -1755,31 +1755,25 @@ Public Class Movies
         Return Filter(recs,leftOuterJoinTable, fi)
     End Function
 
-    'If Form1.ActorFilter<>"" then
-    '    Dim movie_ids As New List(Of String) 
-
-    '    For Each actor In Form1.oMovies.ActorDb
-    '        If actor.actorname = Form1.ActorFilter Then
-    '            movie_ids.Add(actor.movieid)
-    '        End If
-    '    Next
-
-    '    b = (From f In b).Where( Function(c) movie_ids.Contains(c.id) )
-
-    '    If Yield Then Return
-    'End If
-
 
     Function ApplyActorsFilter( recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox )
 
-        Dim leftOuterJoinTable = From m In recs, a In ActorDb 
-					Where 
-				        m.Id = a.MovieId
-                    Select 
-                        m.fullpathandfilename, field=a.ActorName  
-                    Distinct
+        Dim fi As New FilteredItems(ccb)
 
-        Return Filter( recs, leftOuterJoinTable, New FilteredItems(ccb) )
+        If fi.Include.Count>0 Then 
+            Dim MovieIds = From a In ActorDb Where fi.Include.Contains(a.ActorName) Select a.MovieId
+                             
+            recs = recs.Where( Function(x)     MovieIds.Contains(x.id) )
+        End If
+
+
+        If fi.Exclude.Count>0 Then 
+            Dim MovieIds = From a In ActorDb Where fi.Exclude.Contains(a.ActorName) Select a.MovieId
+                             
+            recs = recs.Where( Function(x) Not MovieIds.Contains(x.id) )
+        End If
+
+        Return recs
     End Function
 
 
