@@ -47,7 +47,7 @@ End Class
 Public Class MovieFilters
 
     Property Border      As Integer =  4
-    Property FilterSpace As Integer = 28
+    Property FilterSpace As Integer = 22
     Property Items       As New List(Of MovieFilter)
 
 
