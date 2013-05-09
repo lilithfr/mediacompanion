@@ -24703,6 +24703,9 @@ End Sub
         filter.QuickSelect = Not filter.QuickSelect
 
         lbl.Text = If(filter.QuickSelect, "S", "M" )
+
+        movie_filters.GetItem(filter.Name).QuickSelect = filter.QuickSelect
+
     End Sub
 
     

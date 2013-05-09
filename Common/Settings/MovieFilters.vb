@@ -5,10 +5,13 @@ Imports System.Linq
 
 
 Public Class MovieFilter
-    Property Name    As String
-    Property Tag     As Integer
-    Property Visible As Boolean
 
+
+    Property Name        As String
+    Property Tag         As Integer
+    Property Visible     As Boolean
+    Property QuickSelect As Boolean
+   
 
     Public Sub New
     End Sub
@@ -18,17 +21,23 @@ Public Class MovieFilter
     End Sub
 
     Public Sub Load(node As XmlNode)
-        Name    = node.Attributes("name"    ).Value
-        Tag     = node.Attributes("tag"     ).Value
-        Visible = node.Attributes("visible" ).Value
+        Name        = node.Attributes("name"        ).Value
+        Tag         = node.Attributes("tag"         ).Value
+        Visible     = node.Attributes("visible"     ).Value
+        Try
+            QuickSelect = node.Attributes("QuickSelect" ).Value
+        Catch
+            QuickSelect = False
+        End Try
     End Sub
 
     Public Function GetChild(doc As XmlDocument) As XmlElement
         Dim child As XmlElement = doc.CreateElement("filter")
 
-        child.SetAttribute("name"   , Name    )
-        child.SetAttribute("tag"    , Tag     )
-        child.SetAttribute("visible", Visible )
+        child.SetAttribute("name"       , Name        )
+        child.SetAttribute("tag"        , Tag         )
+        child.SetAttribute("visible"    , Visible     )
+        child.SetAttribute("QuickSelect", QuickSelect )
 
         Return child
     End Function
@@ -88,6 +97,11 @@ Public Class MovieFilters
 
             If Not IsNothing(lblMode) Then
                 lblMode.Visible = item.Visible
+
+                Dim filter As MC_UserControls.TriStateCheckedComboBox = c
+                filter.QuickSelect = item.QuickSelect
+
+                lblMode.Text = If(filter.QuickSelect, "S", "M" )
             End If
         Next
     End Sub
@@ -111,12 +125,12 @@ Public Class MovieFilters
         Dim query = From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible Order by Convert.ToInt16(c.Tag.ToString) Descending
 
         For Each c As Control In query
-            lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2))
+            lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)       )
             lblMode = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
             Y       = oPanel.Height - (index*FilterSpace)
 
-            c.Width      = width
-            c  .Location = New Point( c .Location.X, Y )
+            c  .Width    = width
+            c  .Location = New Point( c  .Location.X, Y )
             lbl.Location = New Point( lbl.Location.X, Y )
 
             If Not IsNothing(lblMode) Then
@@ -127,6 +141,16 @@ Public Class MovieFilters
         Next
     End Sub
 
+    Public Function GetModeLabelName(c As Control)
+        Return "lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode"
+    End Function
+
+
+    Public Function GetItem(filterName As String) As MovieFilter
+        For Each item In Items
+            If item.Name=filterName Then Return item
+        Next
+    End Function
 
     Public Sub UpdateFromPanel(oPanel As Panel)
         '
@@ -154,6 +178,14 @@ Public Class MovieFilters
 
             item.Tag     = c.Tag
             item.Visible = c.Visible 
+
+            If TypeName(c) = "TriStateCheckedComboBox" Then
+
+                Dim lblMode As Label = oPanel.Controls(GetModeLabelName(c))
+
+                item.QuickSelect = (lblMode.Text="S")
+            End If
+
         Next
     End Sub
 
