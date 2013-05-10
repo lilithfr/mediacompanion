@@ -273,9 +273,7 @@ Public Class Movies
                 Group By 
                     x.ActorName Into NumFilms=Count 
                 Where 
-                    NumFilms>=Preferences.ActorsFilterMinFilms _
-                Or
-                    ActorsFilter_AlsoInclude.Contains(ActorName)
+                    NumFilms>=Preferences.ActorsFilterMinFilms
             
             If Preferences.MovieFilters_Actors_Order=0 Then 
                 q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
