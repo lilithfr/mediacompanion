@@ -55,7 +55,7 @@ Public Class Movies
     End Property
 
 
-    Public ReadOnly Property Certificates As List(Of String)
+    Public ReadOnly Property CertificatesFilter As List(Of String)
         Get
             Dim q = From x In MovieCache Select field=CertificateMappings.GetMapping(x.Certificate)
                         Group By field Into Num=Count
@@ -68,7 +68,7 @@ Public Class Movies
 
 
 
-    Public ReadOnly Property Genres As List(Of String)
+    Public ReadOnly Property GenresFilter As List(Of String)
         Get
             Dim q = From x In MovieCache Select ms=x.genre.Split(" / ")
              
@@ -267,11 +267,15 @@ Public Class Movies
     End Property    
 
 
-    Public ReadOnly Property ActorsFilter As List(Of String)
+    Public ReadOnly Property ActorsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In ActorDb 
-                Group By x.ActorName Into NumFilms=Count 
-                Where NumFilms>=Preferences.ActorsFilterMinFilms 
+                Group By 
+                    x.ActorName Into NumFilms=Count 
+                Where 
+                    NumFilms>=Preferences.ActorsFilterMinFilms _
+                Or
+                    ActorsFilter_AlsoInclude.Contains(ActorName)
             
             If Preferences.MovieFilters_Actors_Order=0 Then 
                 q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
@@ -279,12 +283,40 @@ Public Class Movies
                 q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
             End If
 
-            Dim r = From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxActorsInFilter
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxActorsInFilter
+        End Get
+    End Property    
 
+
+
+    Public ReadOnly Property ActorsFilter As List(Of String)
+        Get
+            Dim r = (From x In ActorsFilter_Preferences).Union(From x In ActorsFilter_Extras) 
             Return r.ToList
         End Get
     End Property    
 
+
+    Public ReadOnly Property ActorsFilter_Extras As IEnumerable(Of String)
+        Get
+            Dim q = From x In ActorDb 
+                Group By 
+                    x.ActorName Into NumFilms=Count 
+                Where 
+                    ActorsFilter_AlsoInclude.Contains(ActorName)
+            
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")"
+        End Get
+    End Property    
+
+    Property ActorsFilter_AlsoInclude As New List(Of String)
+
+    Sub ActorsFilter_AddIfMissing(actorName As String)
+
+        If Not ActorsFilter.Contains(actorName) Then
+            ActorsFilter_AlsoInclude.Add(actorName)
+        End If
+    End Sub
 
     Public ReadOnly Property ResolutionFilter As List(Of String)
         Get
@@ -371,12 +403,35 @@ Public Class Movies
     End Function
 
 
-
-    Public ReadOnly Property Sets As List(Of String)
+    Public ReadOnly Property SetsFilter_Extras As IEnumerable(Of String)
         Get
             Dim q = From x In MovieCache 
-                Group By x.MovieSet Into NumFilms=Count
-                Where NumFilms>=Preferences.SetsFilterMinFilms 
+                Group By 
+                    x.MovieSet Into NumFilms=Count
+                Where 
+                    SetsFilter_AlsoInclude.Contains(MovieSet)
+            
+            Return From x In q Select x.MovieSet & " (" & x.NumFilms.ToString & ")"
+        End Get
+    End Property    
+
+    Property SetsFilter_AlsoInclude As New List(Of String)
+
+    Sub SetsFilter_AddIfMissing(name As String)
+
+        If Not SetsFilter.Contains(name) Then
+            SetsFilter_AlsoInclude.Add(name)
+        End If
+    End Sub
+
+
+    Public ReadOnly Property SetsFilter_Preferences As IEnumerable(Of String)
+        Get
+            Dim q = From x In MovieCache 
+                Group By 
+                    x.MovieSet Into NumFilms=Count
+                Where 
+                    NumFilms>=Preferences.SetsFilterMinFilms 
 
             If Preferences.MovieFilters_Sets_Order=0 Then 
                 q = From x In q Order by x.NumFilms Descending, x.MovieSet Ascending
@@ -384,8 +439,15 @@ Public Class Movies
                 q = From x In q Order by x.MovieSet.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Dim r = From x In q Select( x.MovieSet & " (" & x.NumFilms.ToString & ")" ) Take Preferences.MaxSetsInFilter 
+            Return From x In q Select x.MovieSet & " (" & x.NumFilms.ToString & ")" Take Preferences.MaxSetsInFilter 
+        End Get
+    End Property    
 
+
+
+    Public ReadOnly Property SetsFilter As List(Of String)
+        Get
+            Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras) 
             Return r.ToList
         End Get
     End Property    
@@ -1761,14 +1823,14 @@ Public Class Movies
         Dim fi As New FilteredItems(ccb)
 
         If fi.Include.Count>0 Then 
-            Dim MovieIds = From a In ActorDb Where fi.Include.Contains(a.ActorName) Select a.MovieId
+            Dim MovieIds = (From a In ActorDb Where fi.Include.Contains(a.ActorName) Select a.MovieId).ToList
                              
             recs = recs.Where( Function(x)     MovieIds.Contains(x.id) )
         End If
 
 
         If fi.Exclude.Count>0 Then 
-            Dim MovieIds = From a In ActorDb Where fi.Exclude.Contains(a.ActorName) Select a.MovieId
+            Dim MovieIds = (From a In ActorDb Where fi.Exclude.Contains(a.ActorName) Select a.MovieId).ToList
                              
             recs = recs.Where( Function(x) Not MovieIds.Contains(x.id) )
         End If

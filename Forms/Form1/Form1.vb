@@ -3313,9 +3313,17 @@ Public Class Form1
         RadioButtonTitleAndYear.Checked = True
           
         cbFilterGeneral       .SelectedIndex = 0
-'       cbFilterSource        .SelectedIndex = 0
 
         UpdateMinMaxMovieFilters
+
+        
+        oMovies.ActorsFilter_AlsoInclude.Clear
+        oMovies.SetsFilter_AlsoInclude  .Clear
+
+        cbFilterActor.UpdateItems(oMovies.ActorsFilter)
+        cbFilterSet  .UpdateItems(oMovies.SetsFilter  )
+
+
 
         Dim query = From c As Control In SplitContainer5.Panel2.Controls Where c.Name.IndexOf("cbFilter")=0 And c.GetType().Namespace = "MC_UserControls"
                 
@@ -11880,6 +11888,8 @@ Public Class Form1
     Private Sub btnMovieDisplay_ActorFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_ActorFilter.Click
         Try
             State=ProgramState.ResettingFilters
+            oMovies.ActorsFilter_AddIfMissing(cbMovieDisplay_Actor.Text)
+            cbFilterActor.UpdateItems(oMovies.ActorsFilter)
             cbFilterActor.SelectItem(cbMovieDisplay_Actor.Text)
             State=ProgramState.Other
             
@@ -13079,7 +13089,10 @@ Public Class Form1
     Private Sub btnMovieDisplay_SetFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieDisplay_SetFilter.Click
         Try
             State=ProgramState.ResettingFilters
+            oMovies.SetsFilter_AddIfMissing(cbMovieDisplay_MovieSet.Text)
+            cbFilterSet.UpdateItems(oMovies.SetsFilter)
             cbFilterSet.SelectItem(cbMovieDisplay_MovieSet.Text)
+
             State=ProgramState.Other
 
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
@@ -23496,9 +23509,9 @@ Public Class Form1
 
         UpdateMinMaxMovieFilters
 
-        cbFilterGenre         .UpdateItems( oMovies.Genres               )
-        cbFilterCertificate   .UpdateItems( oMovies.Certificates         )
-        cbFilterSet           .UpdateItems( oMovies.Sets                 )
+        cbFilterGenre         .UpdateItems( oMovies.GenresFilter         )
+        cbFilterCertificate   .UpdateItems( oMovies.CertificatesFilter   )
+        cbFilterSet           .UpdateItems( oMovies.SetsFilter           )
         cbFilterResolution    .UpdateItems( oMovies.ResolutionFilter     )
         cbFilterAudioCodecs   .UpdateItems( oMovies.AudioCodecsFilter    )
         cbFilterAudioChannels .UpdateItems( oMovies.AudioChannelsFilter  )
