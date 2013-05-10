@@ -14,6 +14,7 @@ Public Structure str_BasicMovieNFO
     Dim runtime As String
     Dim mpaa As String
     Dim genre As String
+    Dim tag As String
     Dim credits As String
     Dim director As String
     Dim stars As String
@@ -42,6 +43,7 @@ Public Structure str_BasicMovieNFO
         runtime = ""
         mpaa = ""
         genre = ""
+        tag = ""
         credits = ""
         director = ""
         stars = ""

@@ -857,7 +857,7 @@ Public Class WorkingWithNfoFiles
                             Case "originaltitle"
                                 newmovie.originaltitle = thisresult.InnerText
                             Case "set"
-                                If newmovie.MovieSet = "" Then                     'genres in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                If newmovie.MovieSet = "" Then                     'set in nfo's are individual elements - in MC cache they are one string seperated by " / "
                                     newmovie.MovieSet = thisresult.InnerText
                                 Else
                                     newmovie.MovieSet = newmovie.MovieSet & " / " & thisresult.InnerText
@@ -875,6 +875,12 @@ Public Class WorkingWithNfoFiles
                                     newmovie.genre = thisresult.InnerText
                                 Else
                                     newmovie.genre = newmovie.genre & " / " & thisresult.InnerText
+                                End If
+                            Case "tag"
+                                If newmovie.tag = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "
+                                    newmovie.tag = thisresult.InnerText
+                                Else
+                                    newmovie.genre = newmovie.tag & " / " & thisresult.InnerText
                                 End If
                             Case "id"
                                 If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
@@ -1043,6 +1049,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.stars = ""
                     newmovie.fullmoviebody.filename = ""
                     newmovie.fullmoviebody.genre = ""
+                    newmovie.fullmoviebody.tag = ""
                     newmovie.fullmoviebody.imdbid = ""
                     newmovie.fullmoviebody.mpaa = ""
                     newmovie.fullmoviebody.outline = "This nfo file could not be loaded"
@@ -1145,6 +1152,12 @@ Public Class WorkingWithNfoFiles
                                 newmovie.fullmoviebody.genre = thisresult.InnerText
                             Else
                                 newmovie.fullmoviebody.genre = newmovie.fullmoviebody.genre & " / " & thisresult.InnerText
+                            End If
+                        Case "tag"
+                            If newmovie.fullmoviebody.tag = "" Then
+                                newmovie.fullmoviebody.tag = thisresult.InnerText
+                            Else
+                                newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & " / " & thisresult.InnerText
                             End If
                         Case "id"
                             newmovie.fullmoviebody.imdbid = thisresult.InnerText
@@ -1784,40 +1797,54 @@ Public Class WorkingWithNfoFiles
                 End Try
                 stage = 27
                 Try
+                    If movietosave.fullmoviebody.tag <> "" Then
+                        Dim strArr() As String
+                        strArr = movietosave.fullmoviebody.tag.Split("/")
+                        For count = 0 To strArr.Length - 1
+                            child = doc.CreateElement("tag")
+                            strArr(count) = strArr(count).Trim
+                            child.InnerText = strArr(count)
+                            root.AppendChild(child)
+                        Next
+                    End If
+                Catch
+                End Try
+                stage = 28
+                Try
                     child = doc.CreateElement("credits")
                     child.InnerText = movietosave.fullmoviebody.credits
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 28
+                stage = 29
                 Try
                     child = doc.CreateElement("director")
                     child.InnerText = movietosave.fullmoviebody.director
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 29
+                stage = 30
                 Try
                     child = doc.CreateElement("studio")
                     child.InnerText = movietosave.fullmoviebody.studio
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 30
+                stage = 31
                 Try
                     child = doc.CreateElement("trailer")
                     child.InnerText = movietosave.fullmoviebody.trailer
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 31
+                stage = 32
                 Try
                     child = doc.CreateElement("playcount")
                     child.InnerText = movietosave.fullmoviebody.playcount
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 32
+                stage = 33
                 Try
                     If movietosave.fullmoviebody.imdbid <> Nothing Then
                         If movietosave.fullmoviebody.imdbid <> "" Then
@@ -1857,7 +1884,7 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 33
+                stage = 34
                 Try
                     child = doc.CreateElement("stars")
                     child.InnerText = movietosave.fullmoviebody.stars
@@ -1904,11 +1931,11 @@ Public Class WorkingWithNfoFiles
                     doc.AppendChild(root)
                 Catch
                 End Try
-                stage = 34
+                stage = 35
                 Try
                     Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
                     output.Formatting = Formatting.Indented
-                    stage = 35
+                    stage = 36
                     doc.WriteTo(output)
                     output.Close()
                 Catch

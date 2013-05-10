@@ -14,6 +14,7 @@ Public Class ComboList
     Property rating              As Double = 0
     Property top250              As String = 0
     Property genre               As String = ""
+    Property tag                 As String = ""
     Property playcount           As String = ""
     Property sortorder           As String = ""
     Property outline             As String = ""
