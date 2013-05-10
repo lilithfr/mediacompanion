@@ -6,12 +6,10 @@ Imports System.Linq
 
 Public Class MovieFilter
 
-
     Property Name        As String
     Property Tag         As Integer
     Property Visible     As Boolean
     Property QuickSelect As Boolean
-   
 
     Public Sub New
     End Sub
@@ -111,7 +109,7 @@ Public Class MovieFilters
 
         Dim count As Integer = (From c As Control In oPanel.Controls Where c.Name.IndexOf("cbFilter")=0 And c.Visible).Count
 
-        Return (count*FilterSpace)+(Border*2)
+        Return (count*FilterSpace)+(Border*2) + 2
     End Function
 
     Public Sub PositionMovieFilters(oPanel As Panel)
@@ -127,7 +125,7 @@ Public Class MovieFilters
         For Each c As Control In query
             lbl     = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)       )
             lblMode = oPanel.Controls("lbl"+ c.Name.SubString(2,c.Name.Length-2)+"Mode")
-            Y       = oPanel.Height - (index*FilterSpace)
+            Y       = oPanel.Height - ((index*FilterSpace)+Border)
 
             c  .Width    = width
             c  .Location = New Point( c  .Location.X, Y )
