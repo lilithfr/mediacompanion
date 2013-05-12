@@ -3335,8 +3335,11 @@ Public Class Form1
     End Sub
 
     Sub UpdateMinMaxMovieFilters
-        cbFilterVotes         .Min = oMovies.MinVotes
-        cbFilterVotes         .Max = oMovies.MaxVotes
+'        cbFilterVotes         .Min = oMovies.MinVotes
+'        cbFilterVotes         .Max = oMovies.MaxVotes
+
+        cbFilterVotes.Values = oMovies.ListVotes
+
         cbFilterYear          .Min = oMovies.MinYear
         cbFilterYear          .Max = oMovies.MaxYear
     End Sub

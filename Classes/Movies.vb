@@ -97,6 +97,14 @@ Public Class Movies
         End Get
     End Property    
 
+    Public ReadOnly Property ListVotes As List(Of Integer)
+        Get
+            Dim q = From m In MovieCache Select m.Votes
+
+            Return q.AsEnumerable.ToList
+        End Get
+    End Property    
+
 
     Public ReadOnly Property MaxVotes As Integer
         Get
