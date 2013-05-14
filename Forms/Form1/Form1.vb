@@ -24688,14 +24688,14 @@ End Sub
         Dim g                  As Graphics = cbFilterGeneral.CreateGraphics
         Dim vertScrollBarWidth As Integer  = If(cbFilterGeneral.Items.Count>cbFilterGeneral.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
         Dim renderedWidth      As Integer
-        Dim cb                 As CheckBox = New CheckBox()
+        Dim lbl                As Label = New Label()
 
-        cb.AutoSize = True
-        cb.Font     = cbFilterGeneral.Font
+        lbl.AutoSize = True
+        lbl.Font     = cbFilterGeneral.Font
 
         For Each item As String In cbFilterGeneral.Items
-            cb.Text       = item
-            renderedWidth = cb.PreferredSize.Width + vertScrollBarWidth
+            lbl.Text      = item
+            renderedWidth = lbl.PreferredSize.Width + vertScrollBarWidth
             maxWidth      = Math.Max(maxWidth,renderedWidth)
         Next
 
